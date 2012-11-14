@@ -1,0 +1,26 @@
+\name{populateSampleColumns}
+\alias{populateSampleColumns}
+\title{Populate Sample Columns}
+\usage{
+  populateSampleColumns(rawData)
+}
+\arguments{
+  \item{rawData}{dataframe with dateTime, ConcLow,
+  ConcHigh, Uncen}
+}
+\value{
+  Sample2 dataframe
+}
+\description{
+  Creates ConcAve and ConcLow based on Uncen. Removes any
+  samples with NA values in ConcHigh
+}
+\examples{
+dateTime <- c('1985-01-01', '1985-01-02', '1985-01-03')
+ConcLow <- c(1,2,0)
+ConcHigh <- c(1,2,3)
+Uncen <- c(1,1,0)
+dataInput <- data.frame(dateTime, ConcLow, ConcHigh, Uncen, stringsAsFactors=FALSE)
+populateSampleColumns(dataInput)
+}
+

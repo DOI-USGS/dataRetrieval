@@ -1,0 +1,12 @@
+\select@language {american}
+\contentsline {section}{\numberline {1}Introduction to dataRetrieval}{1}{section.1}
+\contentsline {subsection}{\numberline {1.1}What is dataRetrieval?}{2}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}What is EGRET?}{2}{subsection.1.2}
+\contentsline {section}{\numberline {2}Getting Started}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Installing dataRetrieval from gitHub:}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Installing dataRetrieval from downloaded binary:}{3}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}A Simple Web Retrieval Example}{4}{subsection.2.3}
+\contentsline {section}{\numberline {3}Function Details}{7}{section.3}
+\contentsline {subsection}{\numberline {3.1}Daily Value Retrievals}{7}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Water Quality Retrievals}{7}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Site Information Retrievals}{7}{subsection.3.3}

@@ -1,0 +1,41 @@
+\name{compressData}
+\alias{compressData}
+\title{Compress sample data frame}
+\usage{
+  compressData(data, interactive = TRUE)
+}
+\arguments{
+  \item{data}{dataframe contains at least dateTime, value,
+  code columns}
+
+  \item{interactive}{logical Option for interactive mode.
+  If true, there is user interaction for error handling and
+  data checks.}
+}
+\value{
+  dataframe returnDataFrame data frame containing dateTime,
+  ConcHigh, ConcLow, Uncen, ConcAve
+}
+\description{
+  Using raw data that has at least dateTime, value, code,
+  populates the measured data portion of the Sample data
+  frame used in WRTDS ConcLow = Lower bound for an observed
+  concentration ConcHigh = Upper bound for an observed
+  concentration ConcAve = Average of ConcLow and ConcHigh.
+  If ConcLow is NA, then ConcAve = ConcHigh/2 Uncen = 1 if
+  uncensored, 0 if censored
+}
+\examples{
+dateTime <- c('1985-01-01', '1985-01-02', '1985-01-03')
+comment1 <- c("","","")
+value1 <- c(1,2,3)
+comment2 <- c("","<","")
+value2 <- c(2,3,4)
+comment3 <- c("","","<")
+value3 <- c(3,4,5)
+dataInput <- data.frame(dateTime, comment1, value1, comment2, value2, comment3, value3, stringsAsFactors=FALSE)
+compressData(dataInput, interactive=FALSE)
+}
+\keyword{WRTDS}
+\keyword{flow}
+

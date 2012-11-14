@@ -1,0 +1,38 @@
+\name{populateDaily}
+\alias{populateDaily}
+\title{Populate Daily data frame}
+\usage{
+  populateDaily(rawData, qConvert, interactive = TRUE)
+}
+\arguments{
+  \item{rawData}{dataframe contains at least dateTime,
+  value, code columns}
+
+  \item{qConvert}{string conversion to cubic meters per
+  second}
+
+  \item{interactive}{logical Option for interactive mode.
+  If true, there is user interaction for error handling and
+  data checks.}
+}
+\value{
+  dataframe Daily
+}
+\description{
+  Using raw data that has at least dateTime, value, code,
+  populates the rest of the basic Daily data frame used in
+  WRTDS
+}
+\examples{
+dateTime <- c('1985-01-01', '1985-01-02', '1985-01-03')
+value <- c(1,2,3)
+code <- c("","","")
+dataInput <- data.frame(dateTime, value, code, stringsAsFactors=FALSE)
+populateDaily(dataInput, 2, interactive=FALSE)
+}
+\author{
+  Robert M. Hirsch \email{rhirsch@usgs.gov}
+}
+\keyword{WRTDS}
+\keyword{flow}
+
