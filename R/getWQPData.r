@@ -1,6 +1,6 @@
 #' Data Import from Water Quality Portal
 #'
-#' Imports data from Water Quality Portal web service. This function gets the data from here: \url{http://www.waterqualitydata.us}. This function is more general than getQWData
+#' Imports data blah blah from Water Quality Portal web service. This function gets the data from here: \url{http://www.waterqualitydata.us}. This function is more general than getQWData
 #' because it allows for other agencies rather than the USGS.  Therefore, the 5-digit parameter code cannot be used.
 #' Instead, this function uses characteristicName.  A complete list can be found here \url{http://www.waterqualitydata.us/Codes/Characteristicname}
 #'
