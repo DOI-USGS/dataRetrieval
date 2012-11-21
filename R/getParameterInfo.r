@@ -1,6 +1,6 @@
 #' USGS Parameter Data Retrieval
 #'
-#' Imports data from NWIS web service concerning meaured parameter based on user-supplied parameter code.
+#' Imports data from NWIS about meaured parameter based on user-supplied parameter code.
 #' This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes}
 #'
 #' @param parameterCd string USGS parameter code.  This is usually an 5 digit number.
