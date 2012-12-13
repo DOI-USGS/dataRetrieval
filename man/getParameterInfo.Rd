@@ -18,9 +18,9 @@
   short name, units, and CAS registry numbers)
 }
 \description{
-  Imports data from NWIS web service concerning meaured
-  parameter based on user-supplied parameter code. This
-  function gets the data from here:
+  Imports data from NWIS about meaured parameter based on
+  user-supplied parameter code. This function gets the data
+  from here:
   \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes}
 }
 \examples{

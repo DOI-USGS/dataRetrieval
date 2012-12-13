@@ -15,9 +15,9 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' getWQPData('USGS-01594440','Chloride', '', '')
-#' getWQPData('USGS-05114000','Suspended Sediment Discharge;Suspended sediment concentration (SSC);Suspended sediment discharge', '1975-01-01', '1995-03-31')
-#' getWQPData('USGS-05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
+#' \dontrun{getWQPData('USGS-01594440','Chloride', '', '')}
+#' \dontrun{getWQPData('USGS-05114000','Suspended Sediment Discharge;Suspended sediment concentration (SSC);Suspended sediment discharge', '1975-01-01', '1995-03-31')}
+#' \dontrun{getWQPData('USGS-05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)}
 getWQPData <- function(siteNumber,characteristicName,StartDate,EndDate,interactive=TRUE){
 
   StartDate <- formatCheckDate(StartDate, "StartDate", interactive=interactive)

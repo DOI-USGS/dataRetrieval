@@ -15,9 +15,9 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' getStoretData('01594440','01075', '1985-01-01', '1985-03-31')
-#' getStoretData('05114000','', '1985-01-01', '1985-03-31')
-#' getStoretData('05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
+#' \dontrun{getStoretData('01594440','01075', '1985-01-01', '1985-03-31')}
+#' \dontrun{getStoretData('05114000','', '1985-01-01', '1985-03-31')}
+#' \dontrun{getStoretData('05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)}
 getStoretData <- function(siteNumber,characteristicName,StartDate,EndDate,interactive=TRUE){
   siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
   StartDate <- formatCheckDate(StartDate, "StartDate", interactive=interactive)

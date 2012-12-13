@@ -1,6 +1,6 @@
 \name{getWQPData}
 \alias{getWQPData}
-\title{Data Import for Water Quality Portal}
+\title{Data Import from Water Quality Portal}
 \usage{
   getWQPData(siteNumber, characteristicName, StartDate,
     EndDate, interactive = TRUE)
@@ -43,9 +43,9 @@
 }
 \examples{
 # These examples require an internet connection to run
-getWQPData('USGS-01594440','Chloride', '', '')
-getWQPData('USGS-05114000','Suspended Sediment Discharge;Suspended sediment concentration (SSC);Suspended sediment discharge', '1975-01-01', '1995-03-31')
-getWQPData('USGS-05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
+\dontrun{getWQPData('USGS-01594440','Chloride', '', '')}
+\dontrun{getWQPData('USGS-05114000','Suspended Sediment Discharge;Suspended sediment concentration (SSC);Suspended sediment discharge', '1975-01-01', '1995-03-31')}
+\dontrun{getWQPData('USGS-05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)}
 }
 \keyword{WQP}
 \keyword{data}

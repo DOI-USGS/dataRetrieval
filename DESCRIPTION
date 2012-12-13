@@ -47,6 +47,7 @@ Collate:
     'dataOverview.r'
     'getStoretData.r'
     'getWQPData.r'
+    'retrieveUnitNWISData.r'
 Depends:
     R (>= 2.15.0),
     zoo,

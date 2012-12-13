@@ -17,7 +17,7 @@
 #' siteNumber <- '05114000'
 #' ParameterCd <- '00060'
 #' StartDate <- '2012-05-01'
-#' EndDate <- '2012-05-31'
+#' EndDate <- '2012-05-02'
 #' # These examples require an internet connection to run
 #' retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
 retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){  
