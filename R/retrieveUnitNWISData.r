@@ -64,6 +64,6 @@ retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,inter
       ret.val <- x
     return(ret.val)})
   retval <- as.data.frame(retval, stringsAsFactors=FALSE)  
-  names(retval) <- c('agency', 'site', 'dateTime', 'value', 'code')  
+  names(retval) <- c('agency', 'site', 'dateTime', 'tzone', 'value', 'code')  
   return (retval)
 }

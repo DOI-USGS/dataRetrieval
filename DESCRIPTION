@@ -1,8 +1,8 @@
 Package: dataRetrieval
 Type: Package
 Title: Retrieval functions for USGS data
-Version: 1.2.0
-Date: 2012-07-19
+Version: 1.2.1
+Date: 2012-12-31
 Author: Robert M. Hirsch, Laura De Cicco
 Maintainer: Laura De Cicco <ldecicco@usgs.gov>
 Description: Collection of functions to help retrieve USGS data from either web
