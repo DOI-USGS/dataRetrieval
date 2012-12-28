@@ -11,7 +11,7 @@
 #' ConcHigh <- c(1,2,3)
 #' Uncen <- c(1,1,0)
 #' dataInput <- data.frame(dateTime, ConcLow, ConcHigh, Uncen, stringsAsFactors=FALSE)
-#' populateSampleColumns(dataInput)
+#' Sample <- populateSampleColumns(dataInput)
 populateSampleColumns <- function(rawData){  # rawData is a dataframe with dateTime, ConcLow, ConcHigh, Uncen
   Sample <- as.data.frame(matrix(ncol=3,nrow=length(rawData$dateTime)))
   colnames(Sample) <- c('Date', 'ConcLow','ConcHigh')

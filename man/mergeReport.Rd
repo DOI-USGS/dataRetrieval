@@ -25,9 +25,9 @@
 }
 \examples{
 # These examples require an internet connection to run
-exDaily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31', interactive=FALSE)
-exSample <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31', interactive=FALSE)
-mergeReport(localDaily = exDaily, localSample = exSample, interactive=FALSE)
+Daily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31', interactive=FALSE)
+Sample <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31', interactive=FALSE)
+Sample <- mergeReport(interactive=FALSE)
 }
 \seealso{
   \code{\link{getDVData}},

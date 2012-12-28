@@ -15,9 +15,9 @@
 #' @examples
 #' # Examples of how to use getQWDataFromFile:
 #' # Change the file path and file name to something meaningful:
-#' #filePath <- '~/RData/'  # Sample format
+#' filePath <- '~/RData/'  # Sample format
 #' fileName <- 'ChoptankRiverNitrate.csv'
-#' #getQWDataFromFile(filePath,fileName, separator=";")
+#' #rawSampleData <- getQWDataFromFile(filePath,fileName, separator=";")
 getQWDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=","){
   totalPath <- paste(filePath,fileName,sep="");
   tmp <- read.delim(  

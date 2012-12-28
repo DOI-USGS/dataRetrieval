@@ -2,54 +2,54 @@
 #'
 #' Populates INFO data frame with additional user-supplied information concerning the measured parameter.
 #'
-#' @param INFO dataframe with value and code columns
+#' @param localINFO dataframe with value and code columns. Default is INFO
 #' @param parameterCd string USGS parameter code
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
-#' @return INFO dataframe
+#' @return localINFO dataframe
 #' @export
 #' @examples
 #' #This example requires an internet connection to run
-#' exINFO <- getSiteFileData('01594440')
+#' INFO <- getSiteFileData('01594440')
 #' parameterCd <- "00175"
 #' parameterData <- getParameterInfo(parameterCd,interactive=interactive)
-#' exINFO$param.nm <- parameterData$parameter_nm
-#' exINFO$param.units <- parameterData$parameter_units
-#' exINFO$paramShortName <- parameterData$srsname
-#' exINFO$paramNumber <- parameterData$parameter_cd
-#' populateParameterINFO(exINFO, parameterCd,interactive=FALSE)
-populateParameterINFO <- function(INFO, parameterCd, interactive=TRUE){
+#' INFO$param.nm <- parameterData$parameter_nm
+#' INFO$param.units <- parameterData$parameter_units
+#' INFO$paramShortName <- parameterData$srsname
+#' INFO$paramNumber <- parameterData$parameter_cd
+#' INFO <- populateParameterINFO(parameterCd,interactive=FALSE)
+populateParameterINFO <- function(parameterCd, localINFO=INFO, interactive=TRUE){
   if (nzchar(parameterCd)){
     if(interactive){
-      cat("Your water quality data are for parameter number", INFO$paramNumber, "which has the name:'", INFO$param.nm, "'.\n")
-      cat("Typically you will want a shorter name to be used in graphs and tables. The suggested short name is:'", INFO$paramShortName, "'.\n")
+      cat("Your water quality data are for parameter number", localINFO$paramNumber, "which has the name:'", localINFO$param.nm, "'.\n")
+      cat("Typically you will want a shorter name to be used in graphs and tables. The suggested short name is:'", localINFO$paramShortName, "'.\n")
       cat("If you would like to change the short name, enter it here, otherwise just hit enter (no quotes):")
       shortNameTemp <- readline()
-      if (nchar(shortNameTemp)>0) INFO$paramShortName <- shortNameTemp
-      cat("The units for the water quality data are: ", INFO$param.units, ".\n")
+      if (nchar(shortNameTemp)>0) localINFO$paramShortName <- shortNameTemp
+      cat("The units for the water quality data are: ", localINFO$param.units, ".\n")
       cat("It is helpful to set up a constiuent abbreviation when doing multi-constituent studies, enter a unique id (three or four characters should work something like tn or tp or NO3).\nIt is case sensitive.  Even if you don't feel you need an abbreviation you need to enter something (no quotes):\n")
-      INFO$constitAbbrev <- readline()
+      localINFO$constitAbbrev <- readline()
     } else {
-      INFO$constitAbbrev <- INFO$paramShortName
+      localINFO$constitAbbrev <- localINFO$paramShortName
     }
   } else {
     if (interactive){
-      INFO$paramNumber <- NA
+      localINFO$paramNumber <- NA
       cat("Enter a long name for the water quality data (no quotes):\n")
-      INFO$param.nm <- readline()
+      localINFO$param.nm <- readline()
       cat("Enter a short name to be used in graphs and tables(no quotes):\n")
-      INFO$paramShortName <- readline()
+      localINFO$paramShortName <- readline()
       cat("It is helpful to set up a constiuent abbreviation when doing multi-constituent studies, enter a unique id (three or four characters should work something like tn or tp or NO3).\nIt is case sensitive.  Even if you don't feel you need an abbreviation you need to enter something (no quotes):\n")
-      INFO$constitAbbrev <- readline()
+      localINFO$constitAbbrev <- readline()
       cat("Enter the units of the water quality data(no quotes):\n")
-      INFO$param.units <- readline()
+      localINFO$param.units <- readline()
     } else {
-      INFO$paramNumber <- NA
-      INFO$param.nm <- NA
-      INFO$paramShortName <- NA
-      INFO$constitAbbrev <- NA
-      INFO$param.units <- NA      
+      localINFO$paramNumber <- NA
+      localINFO$param.nm <- NA
+      localINFO$paramShortName <- NA
+      localINFO$constitAbbrev <- NA
+      localINFO$param.units <- NA      
     }
   } 
   
-  return(INFO)
+  return(localINFO)
 }

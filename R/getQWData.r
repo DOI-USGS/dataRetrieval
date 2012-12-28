@@ -15,9 +15,9 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' getQWData('01594440','01075', '1985-01-01', '1985-03-31')
-#' getQWData('05114000','', '1985-01-01', '1985-03-31')
-#' getQWData('05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
+#' rawSample <- getQWData('01594440','01075', '1985-01-01', '1985-03-31')
+#' rawSampleAll <- getQWData('05114000','', '1985-01-01', '1985-03-31')
+#' rawSampleSelect <- getQWData('05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
 getQWData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
   siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
   StartDate <- formatCheckDate(StartDate, "StartDate", interactive=interactive)

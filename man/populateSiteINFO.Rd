@@ -23,8 +23,8 @@
 }
 \examples{
 #This example requires an internet connection to run
-exINFO <- getSiteFileData('01594440')
+INFO <- getSiteFileData('01594440')
 siteNumber <- "01594440"
-populateSiteINFO(exINFO, siteNumber,interactive=FALSE)
+siteINFO <- populateSiteINFO(INFO, siteNumber,interactive=FALSE)
 }
 

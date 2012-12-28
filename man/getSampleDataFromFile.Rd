@@ -31,9 +31,9 @@
 \examples{
 # Examples of how to use getSampleDataFromFile:
 # Change the file path and file name to something meaningful:
-#filePath <- '~/RData/'  # Sample format
+filePath <- '~/RData/'  # Sample format
 fileName <- 'ChoptankRiverNitrate.csv'
-#getSampleDataFromFile(filePath,fileName, separator=";",interactive=FALSE)
+#Sample <- getSampleDataFromFile(filePath,fileName, separator=";",interactive=FALSE)
 }
 \keyword{USGS}
 \keyword{WRTDS}

@@ -22,7 +22,7 @@
 }
 \examples{
 # These examples require an internet connection to run
-getSiteFileData('05114000',interactive=FALSE)
+siteINFO <- getSiteFileData('05114000',interactive=FALSE)
 }
 \keyword{USGS}
 \keyword{data}

@@ -2,11 +2,12 @@
 \alias{populateParameterINFO}
 \title{Populate Parameter Information Columns}
 \usage{
-  populateParameterINFO(INFO, parameterCd,
+  populateParameterINFO(parameterCd, localINFO = INFO,
     interactive = TRUE)
 }
 \arguments{
-  \item{INFO}{dataframe with value and code columns}
+  \item{localINFO}{dataframe with value and code columns.
+  Default is INFO}
 
   \item{parameterCd}{string USGS parameter code}
 
@@ -15,7 +16,7 @@
   data checks.}
 }
 \value{
-  INFO dataframe
+  localINFO dataframe
 }
 \description{
   Populates INFO data frame with additional user-supplied
@@ -23,13 +24,13 @@
 }
 \examples{
 #This example requires an internet connection to run
-exINFO <- getSiteFileData('01594440')
+INFO <- getSiteFileData('01594440')
 parameterCd <- "00175"
 parameterData <- getParameterInfo(parameterCd,interactive=interactive)
-exINFO$param.nm <- parameterData$parameter_nm
-exINFO$param.units <- parameterData$parameter_units
-exINFO$paramShortName <- parameterData$srsname
-exINFO$paramNumber <- parameterData$parameter_cd
-populateParameterINFO(exINFO, parameterCd,interactive=FALSE)
+INFO$param.nm <- parameterData$parameter_nm
+INFO$param.units <- parameterData$parameter_units
+INFO$paramShortName <- parameterData$srsname
+INFO$paramNumber <- parameterData$parameter_cd
+INFO <- populateParameterINFO(parameterCd,interactive=FALSE)
 }
 

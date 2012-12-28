@@ -9,7 +9,7 @@
 #' @return retval dataframe with dateTime, value, and code columns
 #' @export
 #' @examples
-#' getPreLoadedData(ChoptankRiverFlow)
+#' rawData <- getPreLoadedData(ChoptankRiverFlow)
 getPreLoadedData <- function (rawData){  
   retval <- as.data.frame(rawData, stringsAsFactors=FALSE)
   if(ncol(retval) == 2){

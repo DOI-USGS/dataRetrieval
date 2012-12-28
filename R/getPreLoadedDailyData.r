@@ -9,7 +9,7 @@
 #' @export
 #' @return Daily dataframe 
 #' @examples
-#' getPreLoadedDailyData(ChoptankRiverFlow, interactive=FALSE)
+#' Daily <- getPreLoadedDailyData(ChoptankRiverFlow, interactive=FALSE)
 getPreLoadedDailyData <- function (loadedData,qUnit=1,interactive=TRUE){
   data <- getPreLoadedData(loadedData)
   convertQ<-c(35.314667,1)

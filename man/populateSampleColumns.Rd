@@ -21,6 +21,6 @@ ConcLow <- c(1,2,0)
 ConcHigh <- c(1,2,3)
 Uncen <- c(1,1,0)
 dataInput <- data.frame(dateTime, ConcLow, ConcHigh, Uncen, stringsAsFactors=FALSE)
-populateSampleColumns(dataInput)
+Sample <- populateSampleColumns(dataInput)
 }
 

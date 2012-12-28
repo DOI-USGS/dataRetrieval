@@ -26,7 +26,7 @@
   data frame.
 }
 \examples{
-getPreLoadedDailyData(ChoptankRiverFlow, interactive=FALSE)
+Daily <- getPreLoadedDailyData(ChoptankRiverFlow, interactive=FALSE)
 }
 \keyword{WRTDS}
 \keyword{data}

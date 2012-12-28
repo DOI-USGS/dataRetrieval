@@ -19,6 +19,6 @@
 code <- c("","<","")
 value <- c(1,2,3)
 dataInput <- data.frame(value, code, stringsAsFactors=FALSE)
-populateConcentrations(dataInput)
+concentrationDF <- populateConcentrations(dataInput)
 }
 

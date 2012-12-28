@@ -9,7 +9,7 @@
 #' code <- c("","<","")
 #' value <- c(1,2,3)
 #' dataInput <- data.frame(value, code, stringsAsFactors=FALSE)
-#' populateConcentrations(dataInput)
+#' concentrationDF <- populateConcentrations(dataInput)
 populateConcentrations <- function(rawData){  # rawData is a dataframe with value, code
   concentrationColumns <- as.data.frame(matrix(ncol=3,nrow=length(rawData$value)))
   colnames(concentrationColumns) <- c('ConcLow','ConcHigh','Uncen')  

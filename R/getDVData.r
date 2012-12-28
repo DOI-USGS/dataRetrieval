@@ -15,7 +15,7 @@
 #' @seealso \code{\link{retrieveNWISData}}, \code{\link{populateDaily}}
 #' @examples
 #' # These examples require an internet connection to run
-#' getDVData('01594440','00060', '1985-01-01', '1985-03-31', interactive=FALSE)
+#' Daily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31', interactive=FALSE)
 getDVData <- function (siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
   data <- retrieveNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=interactive)
   #  need to setup conversion factor because the NWIS data are in cfs but we store in cms

@@ -15,7 +15,7 @@
 #' value <- c(1,2,3)
 #' code <- c("","","")
 #' dataInput <- data.frame(dateTime, value, code, stringsAsFactors=FALSE)
-#' populateDaily(dataInput, 2, interactive=FALSE)
+#' Daily <- populateDaily(dataInput, 2, interactive=FALSE)
 populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a dataframe with at least dateTime, value, code
   localDaily <- as.data.frame(matrix(ncol=2,nrow=length(rawData$value)))
   colnames(localDaily) <- c('Date','Q')

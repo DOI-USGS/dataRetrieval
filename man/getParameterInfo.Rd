@@ -25,8 +25,8 @@
 }
 \examples{
 # These examples require an internet connection to run
-getParameterInfo('01075')
-getParameterInfo('00931',interactive=FALSE)
+paramINFO <- getParameterInfo('01075')
+paramINFO2 <- getParameterInfo('00931',interactive=FALSE)
 }
 \keyword{USGS}
 \keyword{data}

@@ -10,8 +10,8 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' getParameterInfo('01075')
-#' getParameterInfo('00931',interactive=FALSE)
+#' paramINFO <- getParameterInfo('01075')
+#' paramINFO2 <- getParameterInfo('00931',interactive=FALSE)
 getParameterInfo <- function(parameterCd,interactive=TRUE){
   parameterCd <- formatCheckParameterCd(parameterCd, interactive=interactive)
   urlParameterCd <- paste("http://nwis.waterdata.usgs.gov/nwis/pmcodes/?radio_pm_search=pm_search&pm_search=",parameterCd,"&casrn_search=&srsname_search=&format=rdb_file&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units",sep="")

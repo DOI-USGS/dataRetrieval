@@ -28,7 +28,7 @@ dateTime <- c('1985-01-01', '1985-01-02', '1985-01-03')
 value <- c(1,2,3)
 code <- c("","","")
 dataInput <- data.frame(dateTime, value, code, stringsAsFactors=FALSE)
-populateDaily(dataInput, 2, interactive=FALSE)
+Daily <- populateDaily(dataInput, 2, interactive=FALSE)
 }
 \author{
   Robert M. Hirsch \email{rhirsch@usgs.gov}

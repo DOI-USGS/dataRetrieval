@@ -9,7 +9,7 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' getSiteFileData('05114000',interactive=FALSE)
+#' siteINFO <- getSiteFileData('05114000',interactive=FALSE)
 getSiteFileData <- function(siteNumber="",interactive=TRUE){
   siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
   urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site?format=rdb&siteOutput=Expanded&sites=",siteNumber,sep = "")

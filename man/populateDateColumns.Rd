@@ -15,6 +15,6 @@
 }
 \examples{
 dateTime <- c('1985-01-01', '1985-01-02', '1985-01-03')
-populateDateColumns(dateTime)
+expandedDateDF <- populateDateColumns(dateTime)
 }
 

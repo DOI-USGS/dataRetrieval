@@ -15,8 +15,8 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' retrieveNWISData('01594440','00060', '1985-01-01', '1985-01-31')
-#' retrieveNWISData('05114000','00010', '1985-01-01', '1985-01-31', StatCd='00001',interactive=FALSE)
+#' rawDailyFlowData <- retrieveNWISData('01594440','00060', '1985-01-01', '1985-01-31')
+#' rawDailyTemperatureData <- retrieveNWISData('05114000','00010', '1985-01-01', '1985-01-31', StatCd='00001',interactive=FALSE)
 retrieveNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,StatCd="00003",interactive=TRUE){  
   siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
   ParameterCd <- formatCheckParameterCd(ParameterCd, interactive=interactive)

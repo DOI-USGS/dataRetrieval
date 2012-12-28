@@ -26,8 +26,8 @@
   data checks.}
 }
 \value{
-  retval dataframe with agency, site, dateTime, value, and
-  code columns
+  retval dataframe with agency, site, dateTime, time zone,
+  value, and code columns
 }
 \description{
   Imports data from NWIS web service. This function gets
@@ -43,7 +43,7 @@ ParameterCd <- '00060'
 StartDate <- '2012-05-01'
 EndDate <- '2012-05-02'
 # These examples require an internet connection to run
-retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
+rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
 }
 \keyword{USGS}
 \keyword{data}

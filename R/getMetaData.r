@@ -17,7 +17,7 @@
 #' @examples
 #' # These examples require an internet connection to run
 #' # Automatically gets information about site 05114000 and temperature, no interaction with user
-#' getMetaData('05114000','00010',interactive=FALSE)
+#' INFO <- getMetaData('05114000','00010',interactive=FALSE)
 getMetaData <- function(siteNumber="", parameterCd="",interactive=TRUE){
   if (nzchar(siteNumber)){
     INFO <- getSiteFileData(siteNumber,interactive=interactive)
@@ -35,7 +35,7 @@ getMetaData <- function(siteNumber="", parameterCd="",interactive=TRUE){
     INFO$paramNumber <- parameterData$parameter_cd
   } 
   
-  INFO <- populateParameterINFO(INFO, parameterCd, interactive=interactive)
+  INFO <- populateParameterINFO(parameterCd, INFO, interactive=interactive)
   
   return(INFO)
 }

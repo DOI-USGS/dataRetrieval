@@ -7,7 +7,7 @@
 #' @export
 #' @examples
 #' dateTime <- c('1985-01-01', '1985-01-02', '1985-01-03')
-#' populateDateColumns(dateTime)
+#' expandedDateDF <- populateDateColumns(dateTime)
 populateDateColumns <- function(rawData){  # rawData is a vector of dates
   DateFrame <- as.data.frame(matrix(ncol=1,nrow=length(rawData)))
   colnames(DateFrame) <- c('Date')  

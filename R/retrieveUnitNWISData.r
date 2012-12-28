@@ -11,7 +11,7 @@
 #' @param StatCd string USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
-#' @return retval dataframe with agency, site, dateTime, value, and code columns
+#' @return retval dataframe with agency, site, dateTime, time zone, value, and code columns
 #' @export
 #' @examples
 #' siteNumber <- '05114000'
@@ -19,7 +19,7 @@
 #' StartDate <- '2012-05-01'
 #' EndDate <- '2012-05-02'
 #' # These examples require an internet connection to run
-#' retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
+#' rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
 retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){  
   siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
   ParameterCd <- formatCheckParameterCd(ParameterCd, interactive=interactive)
