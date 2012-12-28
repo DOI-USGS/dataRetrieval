@@ -1,0 +1,18 @@
+dataRetrieval 1.2.1
+===========
+
+* Improved documentation, especially example functions.
+
+* TODO: Improve user guide/vignette.
+
+* TODO: Add Storet data retrievals
+
+EGRET 1.0.5
+===========
+
+* Fixed several bugs
+
+EGRET 1.0.0
+===========
+
+* Initial release.
