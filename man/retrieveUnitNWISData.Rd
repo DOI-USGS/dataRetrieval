@@ -18,9 +18,6 @@
   \item{EndDate}{string ending date for data retrieval in
   the form YYYY-MM-DD.}
 
-  \item{StatCd}{string USGS statistic code. This is usually
-  5 digits.  Daily mean (00003) is the default.}
-
   \item{interactive}{logical Option for interactive mode.
   If true, there is user interaction for error handling and
   data checks.}

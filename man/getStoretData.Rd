@@ -9,11 +9,7 @@
   \item{siteNumber}{string USGS site number.  This is
   usually an 8 digit number}
 
-  \item{ParameterCd}{string USGS parameter code.  This is
-  usually an 5 digit number. Multiple parameter codes can
-  be inputted with a ';' separator.  Leaving this blank
-  will return all of the measured values during the
-  specified time period.}
+  \item{characteristicName}{string}
 
   \item{StartDate}{string starting date for data retrieval
   in the form YYYY-MM-DD.}

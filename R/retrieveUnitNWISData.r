@@ -8,7 +8,6 @@
 #' @param ParameterCd string USGS parameter code.  This is usually an 5 digit number.
 #' @param StartDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param EndDate string ending date for data retrieval in the form YYYY-MM-DD.
-#' @param StatCd string USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
 #' @return retval dataframe with agency, site, dateTime, time zone, value, and code columns
