@@ -21,7 +21,7 @@ Overview of EGRET:  The following are 4 major features of EGRET.
 4. It has a streamflow history component, not related to water quality, that is not a part of WRTDS, but uses some similar concepts and shares some of the basic software and data structures.  This component, called flowHistory provides a variety of table and graphical outputs looking only at flow statistics (like annual mean, annual 7-day low flow, annual 1-day maximum, or seasonal versions of these) all based on time-series smoothing.  It is designed to be used in long-term studies of streamflow change (associated with climate or land use or water use change) and works best for daily streamflow data sets of 50 years or longer.   It is put together with the WRTDS method because it uses the same data retrieval infrastructure as WRTDS and the same data structure.  
 
 Please visit the EGRET wiki for more information:
-[EGRET Wiki](https://github.com/USGS-CIDA/WRTDS/wiki)
+[EGRET Wiki](https://github.com/USGS-R/EGRET/wiki)
 
 Disclaimer
 ----------
@@ -39,23 +39,32 @@ Additionally, to subscribe to an email list concerning updates to these R packag
 Download and Package Installation
 ---------------------------------
 
-### Downloads:
-* [Download page](https://github.com/USGS-CIDA/WRTDS/downloads)
+* The latest version of dataRetrieval can be downloaded with this link:
+[dataRetrieval_1.2.1](https://github.com/USGS-R/dataRetrieval/blob/master/dataRetrieval_1.2.1.tar.gz?raw=true)
+
+* [EGRET User Guide](https://github.com/USGS-CIDA/WRTDS/raw/master/EGRET manual_4.doc) (Word Document)
 
 ### Installation:
-While the dataRetreival packages is in development (and not on CRAN), the zoo package must first be manually installed. Once dataRetrival is sent to the CRAN repository, package zoo should be automatically imported. 
+While the dataRetreival package is in development (and not on CRAN), the following packages must first be manually installed: 
+* zoo
  
-To install the dataRetrieval package:
+To install the EGRET package:
 
-Include the full path to the package to install (here is a Windows example, note the direction of the slashes -> /, this is backwards from how Windows typically defines a path ):
+Include the full path to EGRET_1.2.3.tar.gz to install the package (here is a Windows example, note the direction of the slashes -> /, this is backwards from how Windows typically defines a path ):
 
-	install.packages("zoo")
-	install.packages("C:/RPackages/Statistics/dataRetrieval_1.2.0.tar.gz", repos=NULL, type="source")
+  install.packages("zoo")
+	install.packages("C:/RPackages/Statistics/dataRetrieval_1.2.1.tar.gz", repos=NULL, type="source")
 
 A Mac example:
 
-	install.packages("/Users/userA/RPackages/Statistic/dataRetrieval_1.2.0.tar.gz", repos=NULL, type="source")
+	install.packages("/Users/userA/RPackages/Statistic/dataRetrieval_1.2.1.tar.gz", repos=NULL, type="source")
 	
+### Note on updating versions:
+Some users have found it necessary to delete the package folders before installing newer versions of either dataRetrieval or EGRET.  If you are experiencing an issue after updating a package, trying deleting the package folder, the default location for Windows is something like this:
+C:\Users\ldecicco\Documents\R\win-library\2.15\dataRetrieval
+the default for a Mac:
+/Users/ldecicco/Library/R/2.15/library/dataRetrieval
+Then, re-install the package using the directions above.  Moving to CRAN should solve this problem.
 
 Background Information
 ----------------------
