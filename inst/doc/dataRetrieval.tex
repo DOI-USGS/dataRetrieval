@@ -64,39 +64,15 @@ The dataRetrieval package was created to simplify the process of getting hydrolo
 %------------------------------------------------------------ 
 The dataRetrieval package was created to simplify hydrologic data retrieval.  The options are web or user-produced files.....
 
-%------------------------------------------------------------ 
-\subsection{What is EGRET?}
-%------------------------------------------------------------ 
-Exploration and Graphics for RivEr Trends (EGRET): An R-package for the analysis of long-term changes in water quality and streamflow, including the water-quality method Weighted Regressions on Time, Discharge, and Season (WRTDS)...
-
 \newpage
 %------------------------------------------------------------ 
 \section{Getting Started}
 %------------------------------------------------------------ 
 This section describes the options for downloading and installing the dataRetrieval package.
 %------------------------------------------------------------
-\subsection{Installing dataRetrieval from gitHub:}
-%------------------------------------------------------------
-One can easily install the latest version of dataRetrieval directly from gitHub using the devtools package.  devtools is available on CRAN.  Simpley type the following commands into R to install the latest version of dataRetrieval available on github.  
-
-\begin{Schunk}
-\begin{Sinput}
-> library(devtools)
-> install_github("dataRetrieval", "USGS-CIDA")
-\end{Sinput}
-\end{Schunk}
-To then open the library, simpley type:
-
-\begin{Schunk}
-\begin{Sinput}
-> library(dataRetrieval)
-\end{Sinput}
-\end{Schunk}
-
-%------------------------------------------------------------
 \subsection{Installing dataRetrieval from downloaded binary:}
 %------------------------------------------------------------ 
-Alternatively, the dataRetrieval pacakage is available for download at \url{https://github.com/USGS-CIDA/WRTDS/downloads}.  If the package's tar.gz file is saved in R's working directory, then the following commands will fully install the package:
+The dataRetrieval pacakage is available for download at \url{https://github.com/USGS-CIDA/WRTDS/downloads}.  If the package's tar.gz file is saved in R's working directory, then the following commands will fully install the package:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -126,6 +102,26 @@ A Mac example looks like this:
 \end{Schunk}
 
 Some users have found it necessary to delete the package folders before installing newer versions of either dataRetrieval or EGRET. If you are experiencing an issue after updating a package, trying deleting the package folder, the default location for Windows is something like this: C:/Users/ldecicco/Documents/R/win-library/2.15/dataRetrieval the default for a Mac: /Users/ldecicco/Library/R/2.15/library/dataRetrieval Then, re-install the package using the directions above. Moving to CRAN should solve this problem.
+
+
+%------------------------------------------------------------
+\subsection{Installing dataRetrieval from gitHub:}
+%------------------------------------------------------------
+Alternatively, R-developers can install the latest version of dataRetrieval directly from gitHub using the devtools package.  devtools is available on CRAN.  Simpley type the following commands into R to install the latest version of dataRetrieval available on gitHub.  Rtools (for Windows) and latex tools are required.
+
+\begin{Schunk}
+\begin{Sinput}
+> library(devtools)
+> install_github("dataRetrieval", "USGS-CIDA")
+\end{Sinput}
+\end{Schunk}
+To then open the library, simpley type:
+
+\begin{Schunk}
+\begin{Sinput}
+> library(dataRetrieval)
+\end{Sinput}
+\end{Schunk}
 
 %------------------------------------------------------------
 \subsection{A Simple Web Retrieval Example}
