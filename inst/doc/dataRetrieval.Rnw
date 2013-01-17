@@ -62,7 +62,8 @@ The dataRetrieval package was created to simplify the process of getting hydrolo
 %------------------------------------------------------------
 \subsection{What is dataRetrieval?}
 %------------------------------------------------------------ 
-The dataRetrieval package was created to simplify hydrologic data retrieval.  The options are web or user-produced files.....
+The dataRetrieval package was created to simplify hydrologic data retrieval.  The options are web or user-produced files.
+
 
 \newpage
 %------------------------------------------------------------ 
