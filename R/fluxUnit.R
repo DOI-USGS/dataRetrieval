@@ -19,9 +19,9 @@ setClass("fluxUnit",
 		unitName   = "character"
 	)	
 )
-
-testFunc <- function (fluxUnitVar=FLUX_UNIT$POUNDS_DAY){
-  unitFactorReturn <- fluxUnitVar@unitFactor
-  return(unitFactorReturn)
-}
+# 
+# testFunc <- function (fluxUnitVar=FLUX_UNIT$POUNDS_DAY){
+#   unitFactorReturn <- fluxUnitVar@unitFactor
+#   return(unitFactorReturn)
+# }
 
