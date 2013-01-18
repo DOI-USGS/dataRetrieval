@@ -1,4 +1,4 @@
-#' Data Import for Instantaneous USGS NWIS Data
+#' Raw Data Import for Instantaneous USGS NWIS Data
 #'
 #' Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
@@ -20,11 +20,15 @@
 #' # These examples require an internet connection to run
 #' rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
 retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){  
+  
+  # Checking for 8 digit site ID:
   siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
+  # Check for 5 digit parameter code:
   ParameterCd <- formatCheckParameterCd(ParameterCd, interactive=interactive)
+  # Check date format:
   StartDate <- formatCheckDate(StartDate, "StartDate", interactive=interactive)
   EndDate <- formatCheckDate(EndDate, "EndDate", interactive=interactive)
-  
+  #Check that 
   dateReturn <- checkStartEndDate(StartDate, EndDate, interactive=interactive)
   StartDate <- dateReturn[1]
   EndDate <- dateReturn[2]

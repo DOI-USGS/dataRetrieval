@@ -1,14 +1,3 @@
-#' Parameter Code Check
-#'
-#' Checks that the user-supplied parameter code is 5 digits. If not, asks the user to re-enter.
-#'
-#' @param ParameterCd string USGS parameter code
-#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
-#' @keywords data import from web service
-#' @return ParameterCd string
-#' @export
-#' @examples
-#' formatCheckParameterCd('00060')
 formatCheckParameterCd <- function(ParameterCd, interactive=TRUE){     #checks for a 5 digit number
   if (nchar(ParameterCd) != 5){
     if (interactive){

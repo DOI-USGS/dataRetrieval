@@ -1,7 +1,7 @@
 \docType{data}
 \name{exDaily}
 \alias{exDaily}
-\title{Daily Dataframe included in dataRetrieval}
+\title{Example Daily Dataframe included in dataRetrieval}
 \description{
   Initial Daily data frame from the Choptank River
 }

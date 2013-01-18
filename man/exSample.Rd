@@ -1,7 +1,7 @@
 \docType{data}
 \name{exSample}
 \alias{exSample}
-\title{Sample Dataframe included in dataRetrieval}
+\title{Example Sample Dataframe included in dataRetrieval}
 \description{
   Initial Sample data frame from the Choptank River
 }

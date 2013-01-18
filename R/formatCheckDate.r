@@ -1,15 +1,3 @@
-#' Date Formatting Correction
-#'
-#' Checks that the user-supplied date is in the format YYYY-MM-DD. If not, asks the user to re-enter.
-#'
-#' @param Date string date to check
-#' @param dateString string should be either 'StartDate' or 'EndDate'
-#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
-#' @keywords data import from web service
-#' @return Date string
-#' @export
-#' @examples
-#' formatCheckDate('1985-01-01', 'StartDate')
 formatCheckDate <- function(Date, dateString,interactive=TRUE){
   if(nzchar(Date)){
     if (!dateFormatCheck(Date)){

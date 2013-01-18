@@ -1,4 +1,4 @@
-#' Data Import for USGS NWIS Data
+#' Raw Data Import for USGS NWIS Data
 #'
 #' Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}

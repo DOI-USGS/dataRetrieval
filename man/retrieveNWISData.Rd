@@ -1,6 +1,6 @@
 \name{retrieveNWISData}
 \alias{retrieveNWISData}
-\title{Data Import for USGS NWIS Data}
+\title{Raw Data Import for USGS NWIS Data}
 \usage{
   retrieveNWISData(siteNumber, ParameterCd, StartDate,
     EndDate, StatCd = "00003", interactive = TRUE)

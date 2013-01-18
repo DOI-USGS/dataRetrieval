@@ -1,15 +1,3 @@
-#' Check Start End Dates
-#'
-#' Checks that the user-supplied starting date is before the ending date.  If not, either the user can re-enter, or the dates will be set to maximum.
-#'
-#' @param StartDate string date
-#' @param EndDate string date
-#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
-#' @keywords data import from web service
-#' @return list StartDate,EndDate
-#' @export
-#' @examples
-#' checkStartEndDate('1985-01-01', '1985-12-31')
 checkStartEndDate <- function(StartDate, EndDate,interactive=TRUE){
   start <- as.Date("1850-01-01")
   end <- as.Date(Sys.Date())
