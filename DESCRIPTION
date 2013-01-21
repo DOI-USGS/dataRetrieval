@@ -16,7 +16,6 @@ Copyright: This software is in the public domain because it contains materials
 Collate:
     'tabbedDataRetrievals.R'
     'retrieveNWISData.r'
-    'fluxUnit.R'
     'getQWData.r'
     'getSiteFileData.r'
     'getDataFromFile.r'
