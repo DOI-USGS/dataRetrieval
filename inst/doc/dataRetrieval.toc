@@ -1,11 +1,16 @@
 \select@language {american}
-\contentsline {section}{\numberline {1}Introduction to dataRetrieval}{1}{section.1}
-\contentsline {subsection}{\numberline {1.1}What is dataRetrieval?}{2}{subsection.1.1}
-\contentsline {section}{\numberline {2}Getting Started}{3}{section.2}
-\contentsline {subsection}{\numberline {2.1}Installing dataRetrieval from downloaded binary:}{3}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Installing dataRetrieval from gitHub:}{3}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}A Simple Web Retrieval Example}{4}{subsection.2.3}
-\contentsline {section}{\numberline {3}Function Details}{7}{section.3}
-\contentsline {subsection}{\numberline {3.1}Daily Value Retrievals}{7}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Water Quality Retrievals}{7}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Site Information Retrievals}{7}{subsection.3.3}
+\contentsline {section}{\numberline {1}Introduction to dataRetrieval}{2}{section.1}
+\contentsline {section}{\numberline {2}Getting Started}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}New to R?}{2}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}R User: Installing dataRetrieval from downloaded binary}{2}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}R Developers: Installing dataRetrieval from gitHub}{3}{subsection.2.3}
+\contentsline {section}{\numberline {3}Raw Data: USGS Web Retrieval Examples}{4}{section.3}
+\contentsline {subsection}{\numberline {3.1}USGS Web Retrieval Introduction}{4}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}USGS Daily Value Retrievals}{5}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}USGS Unit Value Retrievals}{6}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}USGS Site Information Retrievals}{7}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}USGS Water Quality Retrievals}{8}{subsection.3.5}
+\contentsline {section}{\numberline {4}Function Details}{11}{section.4}
+\contentsline {subsection}{\numberline {4.1}Daily Value Retrievals}{11}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Water Quality Retrievals}{11}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Site Information Retrievals}{11}{subsection.4.3}

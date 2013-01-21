@@ -57,26 +57,29 @@
 %------------------------------------------------------------
 \section{Introduction to dataRetrieval}
 %------------------------------------------------------------ 
-The dataRetrieval package was created to simplify the process of getting hydrologic data in the R enviornment. It has been specifically designed to work seamlessly with the EGRET package: Exploration and Graphics for RivEr Trends (EGRET) 
+The dataRetrieval package was created to simplify the process of getting hydrologic data in the R enviornment. It has been specifically designed to work seamlessly with the EGRET package: Exploration and Graphics for RivEr Trends (EGRET). See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET.
 
-%------------------------------------------------------------
-\subsection{What is dataRetrieval?}
-%------------------------------------------------------------ 
-The dataRetrieval package was created to simplify hydrologic data retrieval.  The options are web or user-produced files.....
+There is a plethora of hydrological data available on the web. This package is designed specifically to load United States Geological Survey (USGS) hydrologic data to the R enviornment. This includes daily values, real-time (unit values), site information, and water quality sample data. 
 
-\newpage
 %------------------------------------------------------------ 
 \section{Getting Started}
 %------------------------------------------------------------ 
 This section describes the options for downloading and installing the dataRetrieval package.
 %------------------------------------------------------------
-\subsection{Installing dataRetrieval from downloaded binary:}
+\subsection{New to R?}
 %------------------------------------------------------------ 
-The dataRetrieval pacakage is available for download at \url{https://github.com/USGS-CIDA/WRTDS/downloads}.  If the package's tar.gz file is saved in R's working directory, then the following commands will fully install the package:
+If you are new to R, you will need to first install the latest version of R, which can be found here: \url{http://www.r-project.org/}.
+
+There are many options for running and editing R code, one nice enviornment to learn R is RStudio. RStudio can be downloaded here: \url{http://rstudio.org/}. Once R and RStudio are installed, the dataRetrieval package needs to be installed as described in the next section.
+
+%------------------------------------------------------------
+\subsection{R User: Installing dataRetrieval from downloaded binary}
+%------------------------------------------------------------ 
+The latest dataRetrieval package build is available for download at \url{https://github.com/USGS-R/dataRetrieval/blob/master/dataRetrieval_1.2.1.tar.gz}.  If the package's tar.gz file is saved in R's working directory, then the following command will fully install the package:
 
 \begin{Schunk}
 \begin{Sinput}
-> install.packages("dataRetrieval_1.2.0.tar.gz", 
+> install.packages("dataRetrieval_1.2.1.tar.gz", 
 +                  repos=NULL, type="source")
 \end{Sinput}
 \end{Schunk}
@@ -86,7 +89,7 @@ If the downloaded file is stored in an alternative location, include the path in
 \begin{Schunk}
 \begin{Sinput}
 > install.packages(
-+   "C:/RPackages/Statistics/dataRetrieval_1.2.0.tar.gz", 
++   "C:/RPackages/Statistics/dataRetrieval_1.2.1.tar.gz", 
 +   repos=NULL, type="source")
 \end{Sinput}
 \end{Schunk}
@@ -96,26 +99,26 @@ A Mac example looks like this:
 \begin{Schunk}
 \begin{Sinput}
 > install.packages(
-+   "/Users/userA/RPackages/Statistic/dataRetrieval_1.2.0.tar.gz", 
++   "/Users/userA/RPackages/Statistic/dataRetrieval_1.2.1.tar.gz", 
 +   repos=NULL, type="source")
 \end{Sinput}
 \end{Schunk}
 
-Some users have found it necessary to delete the package folders before installing newer versions of either dataRetrieval or EGRET. If you are experiencing an issue after updating a package, trying deleting the package folder, the default location for Windows is something like this: C:/Users/ldecicco/Documents/R/win-library/2.15/dataRetrieval the default for a Mac: /Users/ldecicco/Library/R/2.15/library/dataRetrieval Then, re-install the package using the directions above. Moving to CRAN should solve this problem.
+It is a good idea to re-start the R enviornment after installing the package, especially if installing an updated version (that is, restart RStudio). Some users have found it necessary to delete the previous version's package folder before installing newer version of dataRetrieval. If you are experiencing issues after updating a package, trying deleting the package folder - the default location for Windows is something like this: C:/Users/userA/Documents/R/win-library/2.15/dataRetrieval, and the default for a Mac: /Users/userA/Library/R/2.15/library/dataRetrieval. Then, re-install the package using the directions above. Moving to CRAN should solve this problem.
 
 
 %------------------------------------------------------------
-\subsection{Installing dataRetrieval from gitHub:}
+\subsection{R Developers: Installing dataRetrieval from gitHub}
 %------------------------------------------------------------
 Alternatively, R-developers can install the latest version of dataRetrieval directly from gitHub using the devtools package.  devtools is available on CRAN.  Simpley type the following commands into R to install the latest version of dataRetrieval available on gitHub.  Rtools (for Windows) and latex tools are required.
 
 \begin{Schunk}
 \begin{Sinput}
 > library(devtools)
-> install_github("dataRetrieval", "USGS-CIDA")
+> install_github("dataRetrieval", "USGS-R")
 \end{Sinput}
 \end{Schunk}
-To then open the library, simpley type:
+To then open the library, simply type:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -123,9 +126,203 @@ To then open the library, simpley type:
 \end{Sinput}
 \end{Schunk}
 
+\newpage
 %------------------------------------------------------------
-\subsection{A Simple Web Retrieval Example}
+\section{Raw Data: USGS Web Retrieval Examples}
 %------------------------------------------------------------ 
+In this section, we will run through 4 examples, documenting how to get raw data from the web. This includes historical daily values, real-time current values, site information, and water quality data. 
+%------------------------------------------------------------
+\subsection{USGS Web Retrieval Introduction}
+%------------------------------------------------------------
+The United States Geological Survey organizes their hydrological data in fairly standard structure.  Gage stations are located throughout the United States, each station has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discoving this 8-digit ID. One potential tool for discovering data is Environmental Data Discovery and Transformation (EnDDaT): \url{http://cida.usgs.gov/enddat/}.  Follow the example in the User's Guide to learn how to discover USGS stations and available data from any location in the United States. Essentially, you can create a Project Location on the map, set a bounding box (in miles), then search for USGS Time Series and USGS Water Quality Data. Locations, ID's, available data, and available time periods will load on the map and appropriate tabs.
+
+Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured paramater is being requested.  A complete list of possible USGS parameter codes can be found here: 
+
+\url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&pm_search=&casrn_search=&srsname_search=&format=html_table&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}
+
+Not every station will measure all parameters. The following is a list of commonly measured parameters:
+
+% latex table generated in R 2.15.2 by xtable 1.7-0 package
+% Mon Jan 21 16:09:09 2013
+\begin{table}[ht]
+\begin{center}
+\caption{Commonly found USGS Parameter Codes}
+\begin{tabular}{rll}
+  \hline
+ & pCode & shortName \\ 
+  \hline
+1 & 00060 & Discharge [cfs] \\ 
+  2 & 00065 & Gage height [ft] \\ 
+  3 & 00010 & Temperature [C] \\ 
+  4 & 00045 & Precipitation [in] \\ 
+  5 & 00400 & pH \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+For real-time data, the parameter code and site ID will suffice.  The USGS stores historical data as daily values however.  The statistical process used to store the daily data is the final requirement for daily value retrievals.  A 5-digit 'stat code' specifies the requested processing.  A complete list of possible USGS stat codes can be found here:
+
+\url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+
+The most common stat codes are:
+% latex table generated in R 2.15.2 by xtable 1.7-0 package
+% Mon Jan 21 16:09:09 2013
+\begin{table}[ht]
+\begin{center}
+\caption{Commonly found USGS Stat Codes}
+\begin{tabular}{rll}
+  \hline
+ & StatCode & shortName \\ 
+  \hline
+1 & 00001 & Maximum \\ 
+  2 & 00002 & Minimum \\ 
+  3 & 00003 & Mean \\ 
+  4 & 00008 & Median \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate and nitrogen have been measured dating back to 1964.
+
+%------------------------------------------------------------
+\subsection{USGS Daily Value Retrievals}
+%------------------------------------------------------------
+To obtain historic daily records of USGS data, use the retrieveNWISData function. The arguments for the function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (true/false) interactive. There are 2 default argument: statCd defaults to "00003" and interactive defaults to TRUE.  If you want to use the default values, you do not need to list them in the function call. Setting the 'interactive' option to true will walk you through the function. It might make more sense to run large batch collections with the interactive option set to FALSE.
+
+The dates (start and end) need to be in the format "YYYY-MM-DD".  Setting the start date to "" will indicate to the program to ask for the earliest date, setting the end date to "" will ask for the latest available date.
+
+\begin{Schunk}
+\begin{Sinput}
+> # Using defaults:
+> siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
+> parameterCd <- "00060"  # Discharge in cubic feet per second
+> startDate <- ""
+> endDate <- ""
+> discharge <- retrieveNWISData(siteNumber, parameterCd, startDate, endDate)
+\end{Sinput}
+\end{Schunk}
+
+A dataframe is returned that looks like the following:
+\begin{Schunk}
+\begin{Soutput}
+  agency     site   dateTime value code
+1   USGS 01491000 1948-01-01   190    A
+2   USGS 01491000 1948-01-02   900    A
+3   USGS 01491000 1948-01-03   480    A
+4   USGS 01491000 1948-01-04   210    A
+5   USGS 01491000 1948-01-05   210    A
+6   USGS 01491000 1948-01-06   220    A
+\end{Soutput}
+\end{Schunk}
+The structure of the dataframe is:
+\begin{Schunk}
+\begin{Soutput}
+'data.frame':	23762 obs. of  5 variables:
+ $ agency  : chr  "USGS" "USGS" "USGS" "USGS" ...
+ $ site    : chr  "01491000" "01491000" "01491000" "01491000" ...
+ $ dateTime: Date, format: "1948-01-01" "1948-01-02" ...
+ $ value   : num  190 900 480 210 210 220 160 130 120 100 ...
+ $ code    : chr  "A" "A" "A" "A" ...
+\end{Soutput}
+\end{Schunk}
+Note that dateTime is imported as a Date, value is a number, and code is a string.  USGS codes are often "A" (approved for publication) or "P" (provisional data subject to revision). A more complete list of qualification codes can be found here:
+\url{http://waterdata.usgs.gov/usa/nwis/help?codes_help}
+
+An example that doesn't use the defaults would be a request for maximum daily temperature in early 2012:
+\begin{Schunk}
+\begin{Sinput}
+> # Using defaults:
+> siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
+> parameterCd <- "00010"  # Temperature
+> statCd <- "00001"
+> startDate <- "2012-01-01"
+> endDate <- "2012-06-30"
+> temperature <- retrieveNWISData(siteNumber, parameterCd, startDate, endDate, StatCd=statCd)
+\end{Sinput}
+\end{Schunk}
+
+%------------------------------------------------------------
+\subsection{USGS Unit Value Retrievals}
+%------------------------------------------------------------
+We can also get real-time, instantaneous measurements using the retrieveUnitNWISData function:
+\begin{Schunk}
+\begin{Sinput}
+> # Using defaults:
+> siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
+> parameterCd <- "00060"  # Discharge in cubic feet per second
+> startDate <- as.character(Sys.Date())
+> endDate <- as.character(Sys.Date())
+> dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, startDate, endDate)
+\end{Sinput}
+\end{Schunk}
+Which produces the following dataframe:
+\begin{Schunk}
+\begin{Soutput}
+  agency     site            dateTime tzone value code
+1   USGS 01491000 2013-01-21 00:00:00   EST   231    P
+2   USGS 01491000 2013-01-21 00:15:00   EST   231    P
+3   USGS 01491000 2013-01-21 00:30:00   EST   234    P
+4   USGS 01491000 2013-01-21 00:45:00   EST   231    P
+5   USGS 01491000 2013-01-21 01:00:00   EST   231    P
+6   USGS 01491000 2013-01-21 01:15:00   EST   228    P
+\end{Soutput}
+\end{Schunk}
+The structure of the dataframe is:
+\begin{Schunk}
+\begin{Soutput}
+'data.frame':	66 obs. of  6 variables:
+ $ agency  : chr  "USGS" "USGS" "USGS" "USGS" ...
+ $ site    : chr  "01491000" "01491000" "01491000" "01491000" ...
+ $ dateTime: POSIXct, format: "2013-01-21 00:00:00" "2013-01-21 00:15:00" ...
+ $ tzone   : chr  "EST" "EST" "EST" "EST" ...
+ $ value   : num  231 231 234 231 231 228 228 228 228 228 ...
+ $ code    : chr  "P" "P" "P" "P" ...
+\end{Soutput}
+\end{Schunk}
+Note that time now becomes important, so the dateTime is a POSIXct, and the time zone is included. 
+
+%------------------------------------------------------------
+\subsection{USGS Site Information Retrievals}
+%------------------------------------------------------------
+To obtain all of the available site information, use the getSiteFileData function:
+\begin{Schunk}
+\begin{Sinput}
+> # Using defaults:
+> siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
+> ChopTankInfo <- getSiteFileData(siteNumber)
+\end{Sinput}
+\end{Schunk}
+
+The available date for these for the USGS sites are:
+\begin{Schunk}
+\begin{Sinput}
+> colnames(ChopTankInfo)
+\end{Sinput}
+\begin{Soutput}
+ [1] "agency.cd"             "site.no"               "station.nm"           
+ [4] "site.tp.cd"            "lat.va"                "long.va"              
+ [7] "dec.lat.va"            "dec.long.va"           "coord.meth.cd"        
+[10] "coord.acy.cd"          "coord.datum.cd"        "dec.coord.datum.cd"   
+[13] "district.cd"           "state.cd"              "county.cd"            
+[16] "country.cd"            "land.net.ds"           "map.nm"               
+[19] "map.scale.fc"          "alt.va"                "alt.meth.cd"          
+[22] "alt.acy.va"            "alt.datum.cd"          "huc.cd"               
+[25] "basin.cd"              "topo.cd"               "instruments.cd"       
+[28] "construction.dt"       "inventory.dt"          "drain.area.va"        
+[31] "contrib.drain.area.va" "tz.cd"                 "local.time.fg"        
+[34] "reliability.cd"        "gw.file.cd"            "nat.aqfr.cd"          
+[37] "aqfr.cd"               "aqfr.type.cd"          "well.depth.va"        
+[40] "hole.depth.va"         "depth.src.cd"          "project.no"           
+[43] "queryTime"            
+\end{Soutput}
+\end{Schunk}
+
+%------------------------------------------------------------
+\subsection{USGS Water Quality Retrievals}
+%------------------------------------------------------------
+
+
 In this example, we use 3 dataRetrieval functions to get daily streamflow data and inorganic nitrogen sample results, and site information for a USGS gaging station with the ID 06934500.  The station is Missouri River at Hermann, MO (which is discovered in the INFO dataset).
 
 \begin{Schunk}

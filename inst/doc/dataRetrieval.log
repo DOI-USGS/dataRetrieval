@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  3 JAN 2013 15:51
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  21 JAN 2013 16:09
 entering extended mode
 **dataRetrieval.tex
-(D:\LADData\RCode\dataRetrievalGitorious\inst\doc\dataRetrieval.tex
+(D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -384,7 +384,7 @@ LaTeX Font Info:    Try loading font information for T1+aer on input line 100.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ae\t1aer.fd"
 File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
 ))))
-(D:\LADData\RCode\dataRetrievalGitorious\inst\doc\dataRetrieval.aux)
+(D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
 LaTeX Font Info:    ... okay on input line 42.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
@@ -421,8 +421,8 @@ LaTeX Info: Redefining \ref on input line 42.
 LaTeX Info: Redefining \pageref on input line 42.
 LaTeX Info: Redefining \nameref on input line 42.
 
-(D:\LADData\RCode\dataRetrievalGitorious\inst\doc\dataRetrieval.out)
-(D:\LADData\RCode\dataRetrievalGitorious\inst\doc\dataRetrieval.out)
+(D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.out)
+(D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.out)
 \@outlinefile=\write4
 
 (C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
@@ -438,11 +438,14 @@ LaTeX Info: Redefining \nameref on input line 42.
 \MPnumerator=\count123
 \makeMPintoPDFobject=\count124
 \everyMPtoPDFconversion=\toks21
-)
-(D:\LADData\RCode\dataRetrievalGitorious\inst\doc\dataRetrieval-concordance.tex
-) (D:\LADData\RCode\dataRetrievalGitorious\inst\doc\dataRetrieval.toc)
+) (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval-concordance.tex)
+(D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.toc)
 \tf@toc=\write5
+LaTeX Font Info:    Try loading font information for T1+aett on input line 60.
 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ae\t1aett.fd"
+File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
+)
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
@@ -453,14 +456,34 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [2]
-LaTeX Font Info:    Try loading font information for T1+aett on input line 75.
- ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ae\t1aett.fd"
-File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
-)
+Overfull \hbox (63.21521pt too wide) in paragraph at lines 107--108
+\T1/aer/m/n/10.95 library/2.15/dataRetrieval, and the de-fault for a Mac: /User
+s/userA/Library/R/2.15/library/dataRetrieval.
+ []
+
+
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [3]
+Overfull \hbox (22.21066pt too wide) in paragraph at lines 141--142
+[][]$\T1/aett/m/n/10.95 http : / / nwis . waterdata . usgs . gov / usa / nwis /
+ pmcodes ? radio _ pm _ search = param _ group&pm _$
+ []
+
+
+Overfull \hbox (23.424pt too wide) in paragraph at lines 141--142
+$\T1/aett/m/n/10.95 group = All + -[]-[] + include + all + parameter + groups&p
+m _ search = &casrn _ search = &srsname _ search =$
+ []
+
+
+Overfull \hbox (68.32622pt too wide) in paragraph at lines 141--142
+$\T1/aett/m/n/10.95 &format = html _ table&show = parameter _ group _ nm&show =
+ parameter _ nm&show = casrn&show = srsname&show =$
+ []
+
+
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
@@ -469,6 +492,20 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [5]
+LaTeX Font Info:    Try loading font information for TS1+aett on input line 221
+.
+ (C:/PROGRA~1/R/R-215~1.2/share/texmf/tex/latex\ts1aett.fd
+File: ts1aett.fd 
+)
+LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 221
+.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1cmtt.fd"
+File: ts1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `TS1/aett/m/n' in size <10.95> not available
+(Font)              Font shape `TS1/cmtt/m/n' tried instead on input line 221.
+
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
@@ -477,40 +514,57 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [7]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 261.
-
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [8]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 261.
- (D:\LADData\RCode\dataRetrievalGitorious\inst\doc\dataRetrieval.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 261.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 261.
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[9]
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[10]
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[11]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 458.
+
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[12]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 458.
+ (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 458.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 458.
 Package rerunfilecheck Info: File `dataRetrieval.out' has not changed.
-(rerunfilecheck)             Checksum: AA1F9028E8B7805EFF68E9E6E5486C08;729.
+(rerunfilecheck)             Checksum: 3FF7CAE86609DE69C211E24EAF10AC22;1129.
  ) 
 Here is how much of TeX's memory you used:
- 7312 strings out of 494045
- 104581 string characters out of 3145961
- 185875 words of memory out of 3000000
- 10452 multiletter control sequences out of 15000+200000
- 39706 words of font info for 81 fonts, out of 3000000 for 9000
+ 7355 strings out of 494045
+ 105366 string characters out of 3145961
+ 187876 words of memory out of 3000000
+ 10477 multiletter control sequences out of 15000+200000
+ 40004 words of font info for 82 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 35i,4n,28p,540b,481s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
-<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C
-:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/P
-rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Prog
-ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program
- Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Fil
-es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (
-x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsltt10.pfb><C:/Program Files (
-x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x8
-6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on dataRetrieval.pdf (8 pages, 162191 bytes).
+ 35i,8n,28p,866b,483s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\ldecicco\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi6
+00\tctt1095.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/c
+m/cmbx10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
+cmbx12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
+r10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12
+.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pf
+b><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C
+:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Pr
+ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsltt10.pfb><C:/Pr
+ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Prog
+ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on dataRetrieval.pdf (12 pages, 186676 bytes).
 PDF statistics:
- 149 PDF objects out of 1000 (max. 8388607)
- 24 named destinations out of 1000 (max. 500000)
- 85 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 211 PDF objects out of 1000 (max. 8388607)
+ 35 named destinations out of 1000 (max. 500000)
+ 125 words of extra memory for PDF output out of 10000 (max. 10000000)
 
