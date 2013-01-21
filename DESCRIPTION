@@ -52,5 +52,7 @@ Depends:
     R (>= 2.15.0),
     zoo,
     methods
+Suggests:
+    xtable
 LazyLoad: yes
 LazyData: yes
