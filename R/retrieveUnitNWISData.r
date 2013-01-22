@@ -10,13 +10,13 @@
 #' @param EndDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
-#' @return retval dataframe with agency, site, dateTime, time zone, value, and code columns
+#' @return data dataframe with agency, site, dateTime, time zone, value, and code columns
 #' @export
 #' @examples
 #' siteNumber <- '05114000'
 #' ParameterCd <- '00060'
-#' StartDate <- '2012-05-01'
-#' EndDate <- '2012-05-02'
+#' StartDate <- as.character(Sys.Date())
+#' EndDate <- as.character(Sys.Date())
 #' # These examples require an internet connection to run
 #' rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
 retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){  
@@ -55,18 +55,14 @@ retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,inter
     fill = TRUE, 
     comment.char="#")
 
-  retval <- lapply(tmp, function(x) {
-    Typ <- x[1] # The type - the first non-header row shows the type (such as 5s = a string with 5 letters, 20d = a date, etc)
-    x <- x[-c(1)] # the data - takes away the first 1st row
-    if(regexpr('d$', Typ) > 0) { # Must be date
-      ret.val <- as.POSIXct(strptime(x, "%Y-%m-%d %H:%M")) 
-    }
-    else if(regexpr('n$', Typ) > 0) # Must be numeric
-      ret.val <- as.numeric(x)
-    else # Must be character
-      ret.val <- x
-    return(ret.val)})
-  retval <- as.data.frame(retval, stringsAsFactors=FALSE)  
-  names(retval) <- c('agency', 'site', 'dateTime', 'tzone', 'value', 'code')  
-  return (retval)
+  dataType <- tmp[1,]
+  data <- tmp[-1,]
+  data[,regexpr('d$', dataType) > 0] <- as.POSIXct(strptime(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M"))
+  
+  tempDF <- data[,which(regexpr('n$', dataType) > 0)]
+  tempDF <- suppressWarnings(sapply(tempDF, function(x) as.numeric(x)))  
+  data[,which(regexpr('n$', dataType) > 0)] <- tempDF
+  row.names(data) <- NULL
+  
+  return (data)
 }
