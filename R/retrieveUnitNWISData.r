@@ -28,7 +28,7 @@ retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,inter
   # Check date format:
   StartDate <- formatCheckDate(StartDate, "StartDate", interactive=interactive)
   EndDate <- formatCheckDate(EndDate, "EndDate", interactive=interactive)
-  #Check that 
+  #Check that start date happens before end date:
   dateReturn <- checkStartEndDate(StartDate, EndDate, interactive=interactive)
   StartDate <- dateReturn[1]
   EndDate <- dateReturn[2]
@@ -47,19 +47,19 @@ retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,inter
   
   tmp <- read.delim(  
     url, 
-    header = FALSE, 
+    header = TRUE, 
     quote="\"", 
     dec=".", 
     sep='\t',
     colClasses=c('character'),
     fill = TRUE, 
     comment.char="#")
-  col.nm <- make.names(unlist(tmp[1,, drop=TRUE]), allow_=FALSE)
+
   retval <- lapply(tmp, function(x) {
-    Typ <- x[2] # The type - the second row shows the type (such as 5s = a string with 5 letters, 20d = a date, etc)
-    x <- x[-c(1,2)] # the data - takes away the first 2 rows (1st = header, 2nd = type)
+    Typ <- x[1] # The type - the first non-header row shows the type (such as 5s = a string with 5 letters, 20d = a date, etc)
+    x <- x[-c(1)] # the data - takes away the first 1st row
     if(regexpr('d$', Typ) > 0) { # Must be date
-      ret.val <- as.POSIXct(strptime(x, "%Y-%m-%d %H:%M")) # The data are in standard format, but...
+      ret.val <- as.POSIXct(strptime(x, "%Y-%m-%d %H:%M")) 
     }
     else if(regexpr('n$', Typ) > 0) # Must be numeric
       ret.val <- as.numeric(x)

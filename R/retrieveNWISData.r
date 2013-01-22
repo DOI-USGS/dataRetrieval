@@ -18,11 +18,18 @@
 #' rawDailyFlowData <- retrieveNWISData('01594440','00060', '1985-01-01', '1985-01-31')
 #' rawDailyTemperatureData <- retrieveNWISData('05114000','00010', '1985-01-01', '1985-01-31', StatCd='00001',interactive=FALSE)
 retrieveNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,StatCd="00003",interactive=TRUE){  
+  
+  # Checking for 8 digit site ID:
   siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
+  
+  # Check for 5 digit parameter code:
   ParameterCd <- formatCheckParameterCd(ParameterCd, interactive=interactive)
+  
+  # Check date format:
   StartDate <- formatCheckDate(StartDate, "StartDate", interactive=interactive)
   EndDate <- formatCheckDate(EndDate, "EndDate", interactive=interactive)
   
+  # Check that start date happens before end date:
   dateReturn <- checkStartEndDate(StartDate, EndDate, interactive=interactive)
   StartDate <- dateReturn[1]
   EndDate <- dateReturn[2]
@@ -41,28 +48,31 @@ retrieveNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,StatCd="0
   
   tmp <- read.delim(  
     url, 
-    header = FALSE, 
+    header = TRUE, 
     quote="\"", 
     dec=".", 
     sep='\t',
     colClasses=c('character'),
     fill = TRUE, 
     comment.char="#")
-  col.nm <- make.names(unlist(tmp[1,, drop=TRUE]), allow_=FALSE)
+  
   retval <- lapply(tmp, function(x) {
-    Typ <- x[2] # The type - the second row shows the type (such as 5s = a string with 5 letters, 20d = a date, etc)
-    x <- x[-c(1,2)] # the data - takes away the first 2 rows (1st = header, 2nd = type)
+    Typ <- x[1] # The type 
+    x <- x[-c(1)] # the data - takes away the first 1st row (non-header)
     if(regexpr('d$', Typ) > 0) { # Must be date
       ret.val <- try(as.Date(x)) # The data are in standard format, but...
       if(class(ret.val) == "try-error")
         ret.val <- x
     }
-    else if(regexpr('n$', Typ) > 0) # Must be numeric
+    else if(regexpr('n$', Typ) > 0) # Must be numeric...be careful of ice
       ret.val <- as.numeric(x)
     else # Must be character
       ret.val <- x
     return(ret.val)})
+  
   retval <- as.data.frame(retval, stringsAsFactors=FALSE)  
-  names(retval) <- c('agency', 'site', 'dateTime', 'value', 'code')  
+  colNames <- names(retval)
+  
+  names(retval) <- c('agency', 'site', 'dateTime', 'value', 'code')  # do a merge instead?
   return (retval)
 }
