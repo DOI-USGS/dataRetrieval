@@ -3,7 +3,7 @@
 \title{Import Daily Data for WRTDS}
 \usage{
   getDVData(siteNumber, ParameterCd, StartDate, EndDate,
-    interactive = TRUE)
+    interactive = TRUE, convert = TRUE)
 }
 \arguments{
   \item{siteNumber}{string USGS site number.  This is
@@ -21,6 +21,11 @@
   \item{interactive}{logical Option for interactive mode.
   If true, there is user interaction for error handling and
   data checks.}
+
+  \item{convert}{logical Option to include a conversion
+  from cfs to cms (35.314667). The default is TRUE, which
+  is appropriate for using NWIS data in the EGRET package.
+  Set this to FALSE to not include the conversion.}
 }
 \value{
   Daily dataframe

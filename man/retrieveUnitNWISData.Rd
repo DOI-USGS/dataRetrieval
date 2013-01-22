@@ -23,7 +23,7 @@
   data checks.}
 }
 \value{
-  retval dataframe with agency, site, dateTime, time zone,
+  data dataframe with agency, site, dateTime, time zone,
   value, and code columns
 }
 \description{
@@ -37,8 +37,8 @@
 \examples{
 siteNumber <- '05114000'
 ParameterCd <- '00060'
-StartDate <- '2012-05-01'
-EndDate <- '2012-05-02'
+StartDate <- as.character(Sys.Date())
+EndDate <- as.character(Sys.Date())
 # These examples require an internet connection to run
 rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
 }

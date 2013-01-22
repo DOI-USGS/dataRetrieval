@@ -26,7 +26,7 @@
   data checks.}
 }
 \value{
-  retval dataframe with agency, site, dateTime, value, and
+  data dataframe with agency, site, dateTime, value, and
   code columns
 }
 \description{
@@ -41,6 +41,7 @@
 # These examples require an internet connection to run
 rawDailyFlowData <- retrieveNWISData('01594440','00060', '1985-01-01', '1985-01-31')
 rawDailyTemperatureData <- retrieveNWISData('05114000','00010', '1985-01-01', '1985-01-31', StatCd='00001',interactive=FALSE)
+rawDailyFlowAndTemperatureData <- retrieveNWISData('04085427','00010,00060', '2012-01-01', '2012-06-30', interactive=FALSE)
 }
 \keyword{USGS}
 \keyword{data}
