@@ -64,15 +64,15 @@ retrieveNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,StatCd="0
       if(class(ret.val) == "try-error")
         ret.val <- x
     }
-    else if(regexpr('n$', Typ) > 0) # Must be numeric...be careful of ice
-      ret.val <- as.numeric(x)
+#     else if(regexpr('n$', Typ) > 0) # Must be numeric...be careful of ice
+#       ret.val <- as.numeric(x)
     else # Must be character
       ret.val <- x
     return(ret.val)})
   
   retval <- as.data.frame(retval, stringsAsFactors=FALSE)  
-  colNames <- names(retval)
+#   colNames <- names(retval)
   
-  names(retval) <- c('agency', 'site', 'dateTime', 'value', 'code')  # do a merge instead?
+  
   return (retval)
 }
