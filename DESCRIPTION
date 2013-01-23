@@ -48,6 +48,8 @@ Collate:
     'getStoretData.r'
     'getWQPData.r'
     'retrieveUnitNWISData.r'
+    'getRawQWData.r'
+    'processQWData.r'
 Depends:
     R (>= 2.15.0),
     zoo,

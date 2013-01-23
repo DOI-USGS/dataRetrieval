@@ -1,4 +1,4 @@
-#' Data Import for USGS NWIS Water Quality Data
+#' Raw Data Import for USGS NWIS Water Quality Data
 #'
 #' Imports data from NWIS web service. This function gets the data from here: \url{http://www.waterqualitydata.us}
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
@@ -15,74 +15,11 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' rawSample <- getQWData('01594440','01075', '1985-01-01', '1985-03-31')
-#' rawSampleAll <- getQWData('05114000','', '1985-01-01', '1985-03-31')
-#' rawSampleSelect <- getQWData('05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
+#' rawProcessedSample <- getQWData('01594440','01075', '1985-01-01', '1985-03-31')
+#' rawProcessedSampleAll <- getQWData('05114000','', '1985-01-01', '1985-03-31')
+#' rawProcessedSampleSelect <- getQWData('05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
 getQWData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
-  siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
-  StartDate <- formatCheckDate(StartDate, "StartDate", interactive=interactive)
-  EndDate <- formatCheckDate(EndDate, "EndDate", interactive=interactive)
-  
-  dateReturn <- checkStartEndDate(StartDate, EndDate, interactive=interactive)
-  StartDate <- dateReturn[1]
-  EndDate <- dateReturn[2]
-  
-  if (nzchar(StartDate)){
-    StartDate <- format(as.Date(StartDate), format="%m-%d-%Y")
-  }
-  if (nzchar(EndDate)){
-    EndDate <- format(as.Date(EndDate), format="%m-%d-%Y")
-  }
-  
-  baseURL <- "http://www.waterqualitydata.us/Result/search?siteid=USGS-"
-  url <- paste(baseURL,
-               siteNumber,
-               "&pCode=",
-               ParameterCd,   # to get multi-parameters, use a semicolen between each 5 digit code....
-               "&startDateLo=",
-               StartDate,
-               "&startDateHi=",
-               EndDate,
-               "&countrycode=US&mimeType=tsv",sep = "")
-  
-  suppressWarnings(retval <- read.delim(url, header = TRUE, quote="\"", dec=".", sep='\t', colClasses=c('character'), fill = TRUE))
-  
-  qualifier <- ifelse((
-    (
-      retval$ResultDetectionConditionText == "Not Detected"
-      & length(grep("Lower", retval$DetectionQuantitationLimitTypeName)) > 0
-    )
-    | 
-      (
-        retval$ResultMeasureValue < retval$DetectionQuantitationLimitMeasure.MeasureValue
-        & retval$ResultValueTypeName == "Actual"
-      )
-  ),
-                      "<",
-                      ""
-  )
-  
-  correctedData<-ifelse((nchar(qualifier)==0),retval$ResultMeasureValue,retval$DetectionQuantitationLimitMeasure.MeasureValue)
-  test <- data.frame(retval$USGSPCode)
-  
-  #   test$dateTime <- as.POSIXct(strptime(paste(retval$ActivityStartDate,retval$ActivityStartTime.Time,sep=" "), "%Y-%m-%d %H:%M:%S"))
-  test$dateTime <- as.Date(retval$ActivityStartDate, "%Y-%m-%d")
-  
-  originalLength <- nrow(test)
-  test$qualifier <- qualifier
-  test$value <- as.numeric(correctedData)
-  
-  test <- test[!is.na(test$dateTime),]
-  newLength <- nrow(test)
-  if (originalLength != newLength){
-    numberRemoved <- originalLength - newLength
-    warningMessage <- paste(numberRemoved, " rows removed because no date was specified", sep="")
-    warning(warningMessage)
-  }
-  
-  colnames(test)<- c("USGSPCode","dateTime","qualifier","value")
-  data <- reshape(test, idvar="dateTime", timevar = "USGSPCode", direction="wide")    
-  data$dateTime <- format(data$dateTime, "%Y-%m-%d")
-  data$dateTime <- as.Date(data$dateTime)
-  return(data)
+  rawSample <- getRawQWData(siteNumber,ParameterCd,StartDate,EndDate,interactive)
+  retval <- processQWData(rawSample)
+  return(retval)
 }
