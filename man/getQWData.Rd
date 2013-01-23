@@ -1,6 +1,6 @@
 \name{getQWData}
 \alias{getQWData}
-\title{Raw Data Import for USGS NWIS Water Quality Data}
+\title{Data Import for USGS NWIS Water Quality Data}
 \usage{
   getQWData(siteNumber, ParameterCd, StartDate, EndDate,
     interactive = TRUE)
@@ -32,9 +32,10 @@
   requested parameter codes)
 }
 \description{
-  Imports data from NWIS web service. This function gets
-  the data from here: \url{http://www.waterqualitydata.us}
-  A list of parameter codes can be found here:
+  Imports and processes data from NWIS web service. This
+  function gets the data from here:
+  \url{http://www.waterqualitydata.us} A list of parameter
+  codes can be found here:
   \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} A list
   of statistic codes can be found here:
   \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
