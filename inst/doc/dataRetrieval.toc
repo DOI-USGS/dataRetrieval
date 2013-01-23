@@ -4,11 +4,11 @@
 \contentsline {subsection}{\numberline {2.1}New to R?}{2}{subsection.2.1}
 \contentsline {subsection}{\numberline {2.2}R User: Installing dataRetrieval from downloaded binary}{2}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}R Developers: Installing dataRetrieval from gitHub}{3}{subsection.2.3}
-\contentsline {section}{\numberline {3}Raw Data: USGS Web Retrieval Examples}{4}{section.3}
+\contentsline {section}{\numberline {3}USGS Web Retrieval Examples}{4}{section.3}
 \contentsline {subsection}{\numberline {3.1}USGS Web Retrieval Introduction}{4}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}USGS Daily Value Retrievals}{5}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}USGS Unit Value Retrievals}{8}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}USGS Water Quality Retrievals}{9}{subsection.3.4}
-\contentsline {subsection}{\numberline {3.5}USGS Site Information Retrievals}{11}{subsection.3.5}
-\contentsline {subsection}{\numberline {3.6}USGS Parameter Information Retrievals}{12}{subsection.3.6}
-\contentsline {section}{\numberline {4}Polished Data: USGS Web Retrieval Examples}{12}{section.4}
+\contentsline {subsection}{\numberline {3.2}USGS Site Information Retrievals}{5}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}USGS Parameter Information Retrievals}{6}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}USGS Daily Value Retrievals}{6}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}USGS Unit Value Retrievals}{9}{subsection.3.5}
+\contentsline {subsection}{\numberline {3.6}USGS Water Quality Retrievals}{11}{subsection.3.6}
+\contentsline {section}{\numberline {4}Polished Data: USGS Web Retrieval Examples}{14}{section.4}

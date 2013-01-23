@@ -79,8 +79,8 @@ The latest dataRetrieval package build is available for download at \url{https:/
 
 \begin{Schunk}
 \begin{Sinput}
-> install.packages("dataRetrieval_1.2.1.tar.gz", 
-+                  repos=NULL, type="source")
+> install.packages("dataRetrieval_1.2.1.tar.gz", repos = NULL, 
++     type = "source")
 \end{Sinput}
 \end{Schunk}
 
@@ -88,9 +88,8 @@ If the downloaded file is stored in an alternative location, include the path in
 
 \begin{Schunk}
 \begin{Sinput}
-> install.packages(
-+   "C:/RPackages/Statistics/dataRetrieval_1.2.1.tar.gz", 
-+   repos=NULL, type="source")
+> install.packages("C:/RPackages/Statistics/dataRetrieval_1.2.1.tar.gz", 
++     repos = NULL, type = "source")
 \end{Sinput}
 \end{Schunk}
 
@@ -98,9 +97,8 @@ A Mac example looks like this:
 
 \begin{Schunk}
 \begin{Sinput}
-> install.packages(
-+   "/Users/userA/RPackages/Statistic/dataRetrieval_1.2.1.tar.gz", 
-+   repos=NULL, type="source")
+> install.packages("/Users/userA/RPackages/Statistic/dataRetrieval_1.2.1.tar.gz", 
++     repos = NULL, type = "source")
 \end{Sinput}
 \end{Schunk}
 
@@ -135,9 +133,10 @@ To then open the library, simply type:
 
 \newpage
 %------------------------------------------------------------
-\section{Raw Data: USGS Web Retrieval Examples}
+\section{USGS Web Retrieval Examples}
 %------------------------------------------------------------ 
-In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes historical daily values, real-time current values, water quality data, site information, and measured parameter information. 
+In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes historical daily values, real-time current values, water quality data, site information, and measured parameter information. We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe very friendly for R analysis.
+
 %------------------------------------------------------------
 \subsection{USGS Web Retrieval Introduction}
 %------------------------------------------------------------
@@ -150,7 +149,7 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 Not every station will measure all parameters. The following is a list of commonly measured parameters:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Wed Jan 23 14:59:25 2013
+% Wed Jan 23 17:10:13 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Parameter Codes}
@@ -173,7 +172,7 @@ For real-time data, the parameter code and site ID will suffice.  The USGS store
 
 The most common stat codes are:
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Wed Jan 23 14:59:25 2013
+% Wed Jan 23 17:10:13 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Stat Codes}
@@ -190,7 +189,84 @@ The most common stat codes are:
 \end{center}
 \end{table}
 
-We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate and nitrogen have been measured dating back to 1964.
+%------------------------------------------------------------
+\subsection{USGS Site Information Retrievals}
+%------------------------------------------------------------
+To obtain all of the available site information, use the getSiteFileData function:
+\begin{Schunk}
+\begin{Sinput}
+> siteNumber <- "01491000"
+> ChopTankInfo <- getSiteFileData(siteNumber)
+\end{Sinput}
+\end{Schunk}
+
+The available data for these for the USGS sites are:
+\begin{Schunk}
+\begin{Sinput}
+> colnames(ChopTankInfo)
+\end{Sinput}
+\begin{Soutput}
+ [1] "agency.cd"             "site.no"               "station.nm"           
+ [4] "site.tp.cd"            "lat.va"                "long.va"              
+ [7] "dec.lat.va"            "dec.long.va"           "coord.meth.cd"        
+[10] "coord.acy.cd"          "coord.datum.cd"        "dec.coord.datum.cd"   
+[13] "district.cd"           "state.cd"              "county.cd"            
+[16] "country.cd"            "land.net.ds"           "map.nm"               
+[19] "map.scale.fc"          "alt.va"                "alt.meth.cd"          
+[22] "alt.acy.va"            "alt.datum.cd"          "huc.cd"               
+[25] "basin.cd"              "topo.cd"               "instruments.cd"       
+[28] "construction.dt"       "inventory.dt"          "drain.area.va"        
+[31] "contrib.drain.area.va" "tz.cd"                 "local.time.fg"        
+[34] "reliability.cd"        "gw.file.cd"            "nat.aqfr.cd"          
+[37] "aqfr.cd"               "aqfr.type.cd"          "well.depth.va"        
+[40] "hole.depth.va"         "depth.src.cd"          "project.no"           
+[43] "queryTime"            
+\end{Soutput}
+\end{Schunk}
+Pulling out a specific example piece of information, in this case station name can be done as follows:
+\begin{Schunk}
+\begin{Sinput}
+> ChopTankInfo$station.nm
+\end{Sinput}
+\begin{Soutput}
+[1] "CHOPTANK RIVER NEAR GREENSBORO, MD"
+\end{Soutput}
+\end{Schunk}
+Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
+
+%------------------------------------------------------------
+\subsection{USGS Parameter Information Retrievals}
+%------------------------------------------------------------
+To obtain all of the available information concerning a measured parameter, use the getParameterInfo function:
+\begin{Schunk}
+\begin{Sinput}
+> parameterCd <- "00618"
+> parameterINFO <- getParameterInfo(parameterCd)
+\end{Sinput}
+\end{Schunk}
+
+The available data for these for the USGS sites are:
+\begin{Schunk}
+\begin{Sinput}
+> colnames(parameterINFO)
+\end{Sinput}
+\begin{Soutput}
+[1] "parameter_cd"       "parameter_group_nm" "parameter_nm"      
+[4] "casrn"              "srsname"            "parameter_units"   
+\end{Soutput}
+\end{Schunk}
+Pulling out a specific example piece of information, in this case station name can be done as follows:
+\begin{Schunk}
+\begin{Sinput}
+> parameterINFO$parameter_nm
+\end{Sinput}
+\begin{Soutput}
+[1] "Nitrate, water, filtered, milligrams per liter as nitrogen"
+\end{Soutput}
+\end{Schunk}
+Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+
+
 
 %------------------------------------------------------------
 \subsection{USGS Daily Value Retrievals}
@@ -201,12 +277,12 @@ The dates (start and end) need to be in the format "YYYY-MM-DD".  Setting the st
 
 \begin{Schunk}
 \begin{Sinput}
-> # Using defaults:
-> siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
-> parameterCd <- "00060"  # Discharge in cubic feet per second
+> siteNumber <- "01491000"
+> parameterCd <- "00060"
 > startDate <- ""
 > endDate <- ""
-> discharge <- retrieveNWISData(siteNumber, parameterCd, startDate, endDate)
+> discharge <- retrieveNWISData(siteNumber, parameterCd, startDate, 
++     endDate)
 \end{Sinput}
 \end{Schunk}
 
@@ -239,44 +315,46 @@ Note that dateTime is automatically imported as a Date. Each requested parameter
 Another example that doesn't use the defaults would be a request for mean and maximum daily temperature and discharge in early 2012:
 \begin{Schunk}
 \begin{Sinput}
-> # Using defaults:
-> siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
-> parameterCd <- "00010,00060"  # Temperature and discharge
-> statCd <- "00001,00003"  #mean and maximum
+> siteNumber <- "01491000"
+> parameterCd <- "00010,00060"
+> statCd <- "00001,00003"
 > startDate <- "2012-01-01"
 > endDate <- "2012-06-30"
 > temperatureAndFlow <- retrieveNWISData(siteNumber, parameterCd, 
-+                   startDate, endDate, StatCd=statCd,interactive=FALSE)
++     startDate, endDate, StatCd = statCd, interactive = FALSE)
 \end{Sinput}
 \end{Schunk}
 
 Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}. 
 
-An example of plotting the above data:
+An example of plotting the above data (Figure 1):
+
 \begin{Schunk}
 \begin{Sinput}
-> par(mar=c(5,4,4,5)+.1)
-> with(temperatureAndFlow, plot(
-+   datetime, X01_00010_00003,
-+   xlab="Date",ylab="Temperature [C]"
-+   ))
-> par(new=TRUE)
-> with(temperatureAndFlow, plot(
-+   datetime, X02_00060_00003,
-+   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
-+   ))
-> axis(4,col="red",col.axis="red")
-> mtext("Discharge [cfs]",side=4,line=3,col="red")
+> with(temperatureAndFlow, plot(datetime, X01_00010_00003, xlab = "Date", 
+     ylab = "Temperature [C]"))
+> par(new = TRUE)
+> with(temperatureAndFlow, plot(datetime, X02_00060_00003, col = "red", 
+     type = "l", xaxt = "n", yaxt = "n", xlab = "", ylab = "", 
+     axes = FALSE))
+> axis(4, col = "red", col.axis = "red")
+> mtext("Discharge [cfs]", side = 4, line = 3, col = "red")
 \end{Sinput}
 \end{Schunk}
+\newpage
+
 \begin{figure}
 \begin{center}
 \includegraphics{dataRetrieval-fig1}
 \end{center}
-\caption{Temperature and discharge plot of Choptank River.}
+\caption{Temperature and discharge plot of Choptank River in 2012.}
 \end{figure}
 
+
 There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as "Ice".  Any value that cannot be converted to a number will be reported as NA in this package.
+
+
+
 
 %------------------------------------------------------------
 \subsection{USGS Unit Value Retrievals}
@@ -284,53 +362,71 @@ There are occasions where NWIS values are not reported as numbers, instead there
 We can also get real-time, instantaneous measurements using the retrieveUnitNWISData function:
 \begin{Schunk}
 \begin{Sinput}
-> # Using defaults:
-> siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
-> parameterCd <- "00060"  # Discharge in cubic feet per second
-> startDate <- as.character(Sys.Date())
+> siteNumber <- "01491000"
+> parameterCd <- "00060"
+> startDate <- as.character(Sys.Date() - 1)
 > endDate <- as.character(Sys.Date())
-> dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, startDate, endDate)
+> dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, 
+     startDate, endDate)
 \end{Sinput}
 \end{Schunk}
 Which produces the following dataframe:
 \begin{Schunk}
 \begin{Soutput}
   agency_cd  site_no            datetime tz_cd X02_00060 X02_00060_cd
-1      USGS 01491000 2013-01-23 00:00:00   EST       190            P
-2      USGS 01491000 2013-01-23 00:15:00   EST       187            P
-3      USGS 01491000 2013-01-23 00:30:00   EST       187            P
-4      USGS 01491000 2013-01-23 00:45:00   EST       187            P
-5      USGS 01491000 2013-01-23 01:00:00   EST       192            P
-6      USGS 01491000 2013-01-23 01:15:00   EST       187            P
+1      USGS 01491000 2013-01-22 00:00:00   EST       209            P
+2      USGS 01491000 2013-01-22 00:15:00   EST       209            P
+3      USGS 01491000 2013-01-22 00:30:00   EST       209            P
+4      USGS 01491000 2013-01-22 00:45:00   EST       209            P
+5      USGS 01491000 2013-01-22 01:00:00   EST       209            P
+6      USGS 01491000 2013-01-22 01:15:00   EST       209            P
 \end{Soutput}
 \end{Schunk}
 The structure of the dataframe is:
 \begin{Schunk}
 \begin{Soutput}
-'data.frame':	62 obs. of  6 variables:
+'data.frame':	166 obs. of  6 variables:
  $ agency_cd   : chr  "USGS" "USGS" "USGS" "USGS" ...
  $ site_no     : chr  "01491000" "01491000" "01491000" "01491000" ...
- $ datetime    : POSIXct, format: "2013-01-23 00:00:00" "2013-01-23 00:15:00" ...
+ $ datetime    : POSIXct, format: "2013-01-22 00:00:00" "2013-01-22 00:15:00" ...
  $ tz_cd       : chr  "EST" "EST" "EST" "EST" ...
- $ X02_00060   : num  190 187 187 187 192 187 192 187 187 187 ...
+ $ X02_00060   : num  209 209 209 209 209 209 211 206 206 206 ...
  $ X02_00060_cd: chr  "P" "P" "P" "P" ...
 \end{Soutput}
 \end{Schunk}
 Note that time now becomes important, so the dateTime is a POSIXct, and the time zone is included. Data is pulled from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is "Ice".  Any value that cannot be converted to a number will be reported as NA in this package.
 
+A simple plotting example is shown in Figure 2:
+\begin{Schunk}
+\begin{Sinput}
+> with(dischargeToday, plot(datetime, X02_00060, xlab = "Date/Time", 
+     ylab = "Discharge [cfs]"))
+\end{Sinput}
+\end{Schunk}
+\newpage
+
+\begin{figure}
+\begin{center}
+\includegraphics{dataRetrieval-fig2}
+\end{center}
+\caption{Real-time discharge plot of Choptank River.}
+\end{figure}
+
+
 %------------------------------------------------------------
 \subsection{USGS Water Quality Retrievals}
 %------------------------------------------------------------
-Finally, we can use the dataRetrieval package to get water quality data that is available on the water quality data portal: \url{http://www.waterqualitydata.us/}. The function is getQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a ";" separator, and setting parameterCd <- "" will return all of the measured observations.
+Finally, we can use the dataRetrieval package to get water quality data that is available on the water quality data portal: \url{http://www.waterqualitydata.us/}. The raw data us obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a ";" separator, and setting parameterCd <- "" will return all of the measured observations. The raw data can be overwelming (as will be demonstrated), a simplified version of the data can be obtained using getQWData.
+
 
 \begin{Schunk}
 \begin{Sinput}
-> # Using defaults:
-> siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
-> parameterCd <- "00618;71851"  # Dissolved Nitrate parameter codes (one as mg/l as N, one as mg/l)
+> siteNumber <- "01491000"
+> parameterCd <- "00618;71851"
 > startDate <- "1964-06-11"
 > endDate <- "2012-12-18"
-> dissolvedNitrate <- getRawQWData(siteNumber, parameterCd, startDate, endDate)
+> dissolvedNitrate <- getRawQWData(siteNumber, parameterCd, startDate, 
+     endDate)
 \end{Sinput}
 \end{Schunk}
 
@@ -406,7 +502,8 @@ To get a simplified dataframe that contains only datetime, value, and qualifier,
 
 \begin{Schunk}
 \begin{Sinput}
-> dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd, startDate, endDate)
+> dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd, 
+     startDate, endDate)
 > head(dissolvedNitrateSimple)
 \end{Sinput}
 \begin{Soutput}
@@ -421,178 +518,84 @@ To get a simplified dataframe that contains only datetime, value, and qualifier,
 \end{Schunk}
 Note that in this dataframe, datatime is only imported as Dates (no times are included), and the qualifier is either blank or "<" signifying a censored value.
 
+An example of plotting the above data (Figure 3):
 
-%------------------------------------------------------------
-\subsection{USGS Site Information Retrievals}
-%------------------------------------------------------------
-To obtain all of the available site information, use the getSiteFileData function:
 \begin{Schunk}
 \begin{Sinput}
-> # Using defaults:
-> siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
-> ChopTankInfo <- getSiteFileData(siteNumber)
+> with(dissolvedNitrateSimple, plot(dateTime, value.00618, xlab = "Date", 
+     ylab = paste(parameterINFO$srsname, "[", parameterINFO$parameter_units, 
+         "]")))
 \end{Sinput}
 \end{Schunk}
+\newpage
 
-The available data for these for the USGS sites are:
-\begin{Schunk}
-\begin{Sinput}
-> colnames(ChopTankInfo)
-\end{Sinput}
-\begin{Soutput}
- [1] "agency.cd"             "site.no"               "station.nm"           
- [4] "site.tp.cd"            "lat.va"                "long.va"              
- [7] "dec.lat.va"            "dec.long.va"           "coord.meth.cd"        
-[10] "coord.acy.cd"          "coord.datum.cd"        "dec.coord.datum.cd"   
-[13] "district.cd"           "state.cd"              "county.cd"            
-[16] "country.cd"            "land.net.ds"           "map.nm"               
-[19] "map.scale.fc"          "alt.va"                "alt.meth.cd"          
-[22] "alt.acy.va"            "alt.datum.cd"          "huc.cd"               
-[25] "basin.cd"              "topo.cd"               "instruments.cd"       
-[28] "construction.dt"       "inventory.dt"          "drain.area.va"        
-[31] "contrib.drain.area.va" "tz.cd"                 "local.time.fg"        
-[34] "reliability.cd"        "gw.file.cd"            "nat.aqfr.cd"          
-[37] "aqfr.cd"               "aqfr.type.cd"          "well.depth.va"        
-[40] "hole.depth.va"         "depth.src.cd"          "project.no"           
-[43] "queryTime"            
-\end{Soutput}
-\end{Schunk}
-Pulling out a specific example piece of information, in this case station name can be done as follows:
-\begin{Schunk}
-\begin{Sinput}
-> ChopTankInfo$station.nm
-\end{Sinput}
-\begin{Soutput}
-[1] "CHOPTANK RIVER NEAR GREENSBORO, MD"
-\end{Soutput}
-\end{Schunk}
-Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
+\begin{figure}
+\begin{center}
+\includegraphics{dataRetrieval-fig3}
+\end{center}
+\caption{Nitrate plot of Choptank River.}
+\end{figure}
 
-%------------------------------------------------------------
-\subsection{USGS Parameter Information Retrievals}
-%------------------------------------------------------------
-To obtain all of the available information concerning a measured parameter, use the getParameterInfo function:
-\begin{Schunk}
-\begin{Sinput}
-> # Using defaults:
-> parameterCd <- "00618" 
-> parameterINFO <- getParameterInfo(parameterCd)
-\end{Sinput}
-\end{Schunk}
-
-The available data for these for the USGS sites are:
-\begin{Schunk}
-\begin{Sinput}
-> colnames(parameterINFO)
-\end{Sinput}
-\begin{Soutput}
-[1] "parameter_cd"       "parameter_group_nm" "parameter_nm"      
-[4] "casrn"              "srsname"            "parameter_units"   
-\end{Soutput}
-\end{Schunk}
-Pulling out a specific example piece of information, in this case station name can be done as follows:
-\begin{Schunk}
-\begin{Sinput}
-> parameterINFO$parameter_nm
-\end{Sinput}
-\begin{Soutput}
-[1] "Nitrate, water, filtered, milligrams per liter as nitrogen"
-\end{Soutput}
-\end{Schunk}
-Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
 
 
 %------------------------------------------------------------
 \section{Polished Data: USGS Web Retrieval Examples}
 %------------------------------------------------------------ 
-In this example, we use 3 dataRetrieval functions to get daily streamflow data and inorganic nitrogen sample results, and site information for a USGS gaging station with the ID 06934500.  The station is Missouri River at Hermann, MO (which is discovered in the INFO dataset). Rather than see the raw output from NWIS, we will get more polished returned data frames.  These data frames were exclusively designed to work with the EGRET R package, however can be very useful for all hydrologic studies.
+Rather than using raw data as retrieved by the web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package. In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional information that allows for efficient data analysis.
+
+In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We will need essentially the same data that was retrieved in the previous section, but we will get the daily discharge values in a dataframe called Daily, the nitrate sample data in a dataframe called Sample, and the data about the station and parameters in a dataframe called INFO. These are the dataframes that were exclusively designed to work with the EGRET R package, however can be very useful for all hydrologic studies.
+
+The funtion to obtain the daily values (discharge in this case) is getDVData.  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in the previous section, however 'convert' is a new argument, it's default is TRUE, and it tells the program to convert the values from cfs to cms. If you don't want this conversion, set convert=FALSE in the function call.
+
+The function to obtain sample data from the water quality portal is getSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive.
+
 
 
 \begin{Schunk}
 \begin{Sinput}
-> Daily <- getDVData("06934500","00060","1970-10-01","2011-09-30")
+> siteNumber <- "01491000"
+> parameterCd <- "00631"
+> startDate <- "1964-01-01"
+> endDate <- "2013-01-01"
+> Daily <- getDVData(siteNumber, "00060", startDate, endDate)
 \end{Sinput}
 \begin{Soutput}
-There are  14975 data points, and  14975 days.
+There are  17899 data points, and  17899 days.
 There are  0 zero flow days
 If there are any zero discharge days, all days had 0 cubic meters per second added to the discharge value.
 \end{Soutput}
 \begin{Sinput}
-> head(Daily)
+> Sample <- getSampleData(siteNumber, parameterCd, startDate, endDate)
+> INFO <- getMetaData(siteNumber, parameterCd, interactive = FALSE)
+> Sample <- mergeReport()
 \end{Sinput}
 \begin{Soutput}
-        Date        Q Julian Month Day  DecYear MonthSeq Qualifier i     LogQ
-1 1970-10-01 3879.408  44102    10 274 1970.747     1450         A 1 8.263438
-2 1970-10-02 3454.655  44103    10 275 1970.750     1450         A 2 8.147478
-3 1970-10-03 3029.903  44104    10 276 1970.753     1450         A 3 8.016286
-4 1970-10-04 2644.793  44105    10 277 1970.755     1450         A 4 7.880348
-5 1970-10-05 2293.665  44106    10 278 1970.758     1450         A 5 7.737906
-6 1970-10-06 2072.793  44107    10 279 1970.761     1450         A 6 7.636652
-  Q7 Q30
-1 NA  NA
-2 NA  NA
-3 NA  NA
-4 NA  NA
-5 NA  NA
-6 NA  NA
+ Discharge Record is 17899 days long, which is 49 years
+ First day of the discharge record is 1964-01-01 and last day is 2013-01-01
+ The water quality record has 627 samples
+ The first sample is from 1973-06-04 and the last sample is from 2012-12-18
+ Discharge: Minimum, mean and maximum 0.00991 4.02 246
+ Concentration: Minimum, mean and maximum 0.05 1.1 2.4
+ Percentage of the sample values that are censored is 0.16 %
 \end{Soutput}
 \begin{Sinput}
-> Sample <-getSampleData("06934500","00631","1970-10-01","2011-09-30")
 > head(Sample)
 \end{Sinput}
 \begin{Soutput}
         Date ConcLow ConcHigh Uncen ConcAve Julian Month Day  DecYear MonthSeq
-1 1979-09-26    1.10     1.10     1    1.10  47384     9 269 1979.734     1557
-2 1979-10-16    0.42     0.42     1    0.42  47404    10 289 1979.788     1558
-3 1979-11-27    2.00     2.00     1    2.00  47446    11 331 1979.903     1559
-4 1979-12-18    1.70     1.70     1    1.70  47467    12 352 1979.960     1560
-5 1980-01-29    1.30     1.30     1    1.30  47509     1  29 1980.078     1561
-6 1980-02-21    1.10     1.10     1    1.10  47532     2  52 1980.141     1562
-       SinDY      CosDY
-1 -0.9946999 -0.1028210
-2 -0.9712570  0.2380333
-3 -0.5724040  0.8199718
-4 -0.2463613  0.9691781
-5  0.4699767  0.8826788
-6  0.7733507  0.6339785
-\end{Soutput}
-\begin{Sinput}
-> INFO <-getMetaData("06934500","00631", interactive=FALSE)
-> colnames(INFO)
-\end{Sinput}
-\begin{Soutput}
- [1] "agency.cd"             "site.no"               "station.nm"           
- [4] "site.tp.cd"            "lat.va"                "long.va"              
- [7] "dec.lat.va"            "dec.long.va"           "coord.meth.cd"        
-[10] "coord.acy.cd"          "coord.datum.cd"        "dec.coord.datum.cd"   
-[13] "district.cd"           "state.cd"              "county.cd"            
-[16] "country.cd"            "map.nm"                "map.scale.fc"         
-[19] "alt.va"                "alt.meth.cd"           "alt.acy.va"           
-[22] "alt.datum.cd"          "huc.cd"                "basin.cd"             
-[25] "topo.cd"               "construction.dt"       "inventory.dt"         
-[28] "drain.area.va"         "contrib.drain.area.va" "tz.cd"                
-[31] "local.time.fg"         "reliability.cd"        "project.no"           
-[34] "queryTime"             "drainSqKm"             "staAbbrev"            
-[37] "param.nm"              "param.units"           "paramShortName"       
-[40] "paramNumber"           "constitAbbrev"        
-\end{Soutput}
-\begin{Sinput}
-> INFO$station.nm
-\end{Sinput}
-\begin{Soutput}
-[1] "Missouri River at Hermann, MO"
-\end{Soutput}
-\begin{Sinput}
-> Sample <- mergeReport()
-\end{Sinput}
-\begin{Soutput}
- Discharge Record is 14975 days long, which is 41 years
- First day of the discharge record is 1970-10-01 and last day is 2011-09-30
- The water quality record has 437 samples
- The first sample is from 1979-09-26 and the last sample is from 2011-09-29
- Discharge: Minimum, mean and maximum 394 2660 20900
- Concentration: Minimum, mean and maximum 0.02 1.3 4.2
- Percentage of the sample values that are censored is 1.4 %
+1 1973-06-04    1.30     1.30     1    1.30  45079     6 155 1973.422     1482
+2 1979-09-25    0.52     0.52     1    0.52  47383     9 268 1979.731     1557
+3 1979-10-24    0.62     0.62     1    0.62  47412    10 297 1979.810     1558
+4 1979-12-05    1.40     1.40     1    1.40  47454    12 339 1979.925     1560
+5 1979-12-21    1.20     1.20     1    1.20  47470    12 355 1979.969     1560
+6 1980-01-24    0.84     0.84     1    0.84  47504     1  24 1980.064     1561
+       SinDY      CosDY         Q     LogQ
+1  0.4699767 -0.8826788  3.256437 1.180634
+2 -0.9927882 -0.1198812  3.398022 1.223193
+3 -0.9295235  0.3687629  3.199804 1.163089
+4 -0.4547551  0.8906165  2.973269 1.089662
+5 -0.1961425  0.9805754  2.944952 1.080093
+6  0.3925740  0.9197204 10.901986 2.388945
 \end{Soutput}
 \end{Schunk}
 
