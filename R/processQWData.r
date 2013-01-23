@@ -48,7 +48,7 @@ processQWData <- function(data){
   }
   
   colnames(test)<- c("USGSPCode","dateTime","qualifier","value")
-  data <- reshape(test, idvar="dateTime", timevar = "USGSPCode", direction="wide")    
+  data <- suppressWarnings(reshape(test, idvar="dateTime", timevar = "USGSPCode", direction="wide"))  
   data$dateTime <- format(data$dateTime, "%Y-%m-%d")
   data$dateTime <- as.Date(data$dateTime)
   return(data)
