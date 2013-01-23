@@ -276,13 +276,21 @@ parameterCd <- "00618;71851"  # Dissolved Nitrate parameter codes (one as mg/l a
 startDate <- "1964-06-11"
 endDate <- "2012-12-18"
 
-dissolvedNitrate <- getQWData(siteNumber, parameterCd, startDate, endDate)
+dissolvedNitrate <- getRawQWData(siteNumber, parameterCd, startDate, endDate)
 @
 
 Producing a dataframe with the following columns:
 <<dischargeData, echo=FALSE>>=
 names(dissolvedNitrate)
 @
+
+To get a simplified dataframe that contains only datetime, value, and qualifier, use the function getQWData:
+
+<<label=getQWData, echo=TRUE>>=
+dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd, startDate, endDate)
+head(dissolvedNitrateSimple)
+@
+Note that in this dataframe, datatime is only imported as Dates (no times are included), and the qualifier is either blank or "<" signifying a censored value.
 
 
 %------------------------------------------------------------

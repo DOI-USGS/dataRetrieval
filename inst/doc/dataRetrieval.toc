@@ -9,6 +9,6 @@
 \contentsline {subsection}{\numberline {3.2}USGS Daily Value Retrievals}{5}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}USGS Unit Value Retrievals}{8}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}USGS Water Quality Retrievals}{9}{subsection.3.4}
-\contentsline {subsection}{\numberline {3.5}USGS Site Information Retrievals}{9}{subsection.3.5}
-\contentsline {subsection}{\numberline {3.6}USGS Parameter Information Retrievals}{10}{subsection.3.6}
-\contentsline {section}{\numberline {4}Polished Data: USGS Web Retrieval Examples}{11}{section.4}
+\contentsline {subsection}{\numberline {3.5}USGS Site Information Retrievals}{11}{subsection.3.5}
+\contentsline {subsection}{\numberline {3.6}USGS Parameter Information Retrievals}{12}{subsection.3.6}
+\contentsline {section}{\numberline {4}Polished Data: USGS Web Retrieval Examples}{12}{section.4}

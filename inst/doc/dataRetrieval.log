@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  22 JAN 2013 16:05
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  23 JAN 2013 14:59
 entering extended mode
 **dataRetrieval.tex
 (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.tex
@@ -466,19 +466,19 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [3]
-Overfull \hbox (22.21066pt too wide) in paragraph at lines 141--142
+Overfull \hbox (22.21066pt too wide) in paragraph at lines 148--149
 [][]$\T1/aett/m/n/10.95 http : / / nwis . waterdata . usgs . gov / usa / nwis /
  pmcodes ? radio _ pm _ search = param _ group&pm _$
  []
 
 
-Overfull \hbox (23.424pt too wide) in paragraph at lines 141--142
+Overfull \hbox (23.424pt too wide) in paragraph at lines 148--149
 $\T1/aett/m/n/10.95 group = All + -[]-[] + include + all + parameter + groups&p
 m _ search = &casrn _ search = &srsname _ search =$
  []
 
 
-Overfull \hbox (68.32622pt too wide) in paragraph at lines 141--142
+Overfull \hbox (68.32622pt too wide) in paragraph at lines 148--149
 $\T1/aett/m/n/10.95 &format = html _ table&show = parameter _ group _ nm&show =
  parameter _ nm&show = casrn&show = srsname&show =$
  []
@@ -492,25 +492,25 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [5]
-LaTeX Font Info:    Try loading font information for TS1+aett on input line 221
+LaTeX Font Info:    Try loading font information for TS1+aett on input line 228
 .
  (C:/PROGRA~1/R/R-215~1.2/share/texmf/tex/latex\ts1aett.fd
 File: ts1aett.fd 
 )
-LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 221
+LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 228
 .
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1cmtt.fd"
 File: ts1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `TS1/aett/m/n' in size <10.95> not available
-(Font)              Font shape `TS1/cmtt/m/n' tried instead on input line 221.
+(Font)              Font shape `TS1/cmtt/m/n' tried instead on input line 228.
 
 <dataRetrieval-fig1.pdf, id=117, 433.62pt x 433.62pt>
 File: dataRetrieval-fig1.pdf Graphic file (type pdf)
 
 <use dataRetrieval-fig1.pdf>
-Package pdftex.def Info: dataRetrieval-fig1.pdf used on input line 267.
+Package pdftex.def Info: dataRetrieval-fig1.pdf used on input line 274.
 (pdftex.def)             Requested size: 358.46039pt x 358.47534pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
@@ -541,27 +541,35 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [12]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 531.
-
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [13]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 531.
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[14]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 617.
+
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[15]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 617.
  (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 531.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 531.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 617.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 617.
 Package rerunfilecheck Info: File `dataRetrieval.out' has not changed.
 (rerunfilecheck)             Checksum: 54F9790A946B7ACD509E4CB46CC376FD;1017.
  ) 
 Here is how much of TeX's memory you used:
- 7359 strings out of 494045
- 105454 string characters out of 3145961
+ 7361 strings out of 494045
+ 105468 string characters out of 3145961
  187873 words of memory out of 3000000
  10479 multiletter control sequences out of 15000+200000
  40004 words of font info for 82 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 35i,8n,28p,866b,479s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 35i,8n,28p,866b,483s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\ldecicco\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi6
 00\tctt1095.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/c
 m/cmbx10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
@@ -574,9 +582,9 @@ Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Prog
 ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsltt10.pfb><C:/Prog
 ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Progra
 m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on dataRetrieval.pdf (13 pages, 216280 bytes).
+Output written on dataRetrieval.pdf (15 pages, 220421 bytes).
 PDF statistics:
- 222 PDF objects out of 1000 (max. 8388607)
- 35 named destinations out of 1000 (max. 500000)
+ 233 PDF objects out of 1000 (max. 8388607)
+ 37 named destinations out of 1000 (max. 500000)
  114 words of extra memory for PDF output out of 10000 (max. 10000000)
 
