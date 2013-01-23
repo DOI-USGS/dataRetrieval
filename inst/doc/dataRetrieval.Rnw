@@ -100,6 +100,11 @@ install.packages(
 
 It is a good idea to re-start the R enviornment after installing the package, especially if installing an updated version (that is, restart RStudio). Some users have found it necessary to delete the previous version's package folder before installing newer version of dataRetrieval. If you are experiencing issues after updating a package, trying deleting the package folder - the default location for Windows is something like this: C:/Users/userA/Documents/R/win-library/2.15/dataRetrieval, and the default for a Mac: /Users/userA/Library/R/2.15/library/dataRetrieval. Then, re-install the package using the directions above. Moving to CRAN should solve this problem.
 
+After installing the package, you need to open the library each time you re-start R.  This is done with the simple command:
+<<openLibraryTest, eval=FALSE>>=
+library(dataRetrieval)
+@
+Using RStudio, you could alternatively click on the checkbox for dataRetrieval in the Packages window.
 
 %------------------------------------------------------------
 \subsection{R Developers: Installing dataRetrieval from gitHub}
@@ -234,7 +239,7 @@ mtext("Discharge [cfs]",side=4,line=3,col="red")
 \caption{Temperature and discharge plot of Choptank River.}
 \end{figure}
 
-There are occasions where NWIS values are not reported as numbers, instead a common example is "Ice".  Any value that cannot be converted to a number will be reported as NA in this package.
+There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as "Ice".  Any value that cannot be converted to a number will be reported as NA in this package.
 
 %------------------------------------------------------------
 \subsection{USGS Unit Value Retrievals}

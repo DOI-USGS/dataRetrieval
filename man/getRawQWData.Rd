@@ -1,8 +1,8 @@
-\name{getQWData}
-\alias{getQWData}
+\name{getRawQWData}
+\alias{getRawQWData}
 \title{Raw Data Import for USGS NWIS Water Quality Data}
 \usage{
-  getQWData(siteNumber, ParameterCd, StartDate, EndDate,
+  getRawQWData(siteNumber, ParameterCd, StartDate, EndDate,
     interactive = TRUE)
 }
 \arguments{
@@ -41,9 +41,9 @@
 }
 \examples{
 # These examples require an internet connection to run
-rawProcessedSample <- getQWData('01594440','01075', '1985-01-01', '1985-03-31')
-rawProcessedSampleAll <- getQWData('05114000','', '1985-01-01', '1985-03-31')
-rawProcessedSampleSelect <- getQWData('05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
+rawSample <- getRawQWData('01594440','01075', '1985-01-01', '1985-03-31')
+rawSampleAll <- getRawQWData('05114000','', '1985-01-01', '1985-03-31')
+rawSampleSelect <- getRawQWData('05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
 }
 \keyword{USGS}
 \keyword{data}
