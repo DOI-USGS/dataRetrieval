@@ -3,7 +3,9 @@ dataRetrieval 1.2.1
 
 * Improved documentation, especially example functions.
 
-* TODO: Improve user guide/vignette.
+* Improved vignette for a more complete walk-through.
+
+* Expanded the capabilities to retrieve raw data from the web services.
 
 * TODO: Add Storet data retrievals
 
