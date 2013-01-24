@@ -15,9 +15,13 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' rawDailyFlowData <- retrieveNWISData('01594440','00060', '1985-01-01', '1985-01-31')
-#' rawDailyTemperatureData <- retrieveNWISData('05114000','00010', '1985-01-01', '1985-01-31', StatCd='00001',interactive=FALSE)
-#' rawDailyFlowAndTemperatureData <- retrieveNWISData('04085427','00010,00060', '2012-01-01', '2012-06-30', interactive=FALSE)
+#' siteNumber <- '04085427'
+#' startDate <- '2012-01-01'
+#' endDate <- '2012-06-30'
+#' pCode <- "00060"
+#' rawDailyQ <- retrieveNWISData(siteNumber,pCode, startDate, endDate)
+#' rawDailyTemperature <- retrieveNWISData(siteNumber,'00010', startDate, endDate, StatCd='00001',interactive=FALSE)
+#' rawDailyQAndTempMeanMax <- retrieveNWISData(siteNumber,'00010,00060', startDate, endDate, StatCd='00001,00003', interactive=FALSE)
 retrieveNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,StatCd="00003",interactive=TRUE){  
   
   # Checking for 8 digit site ID:
@@ -57,6 +61,7 @@ retrieveNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,StatCd="0
     fill = TRUE, 
     comment.char="#")
   
+  # This takes slightly longer than the original method, but handles "Ice" or other characters in the numeric columns without error.
   dataType <- tmp[1,]
   data <- tmp[-1,]
   data[,regexpr('d$', dataType) > 0] <- as.Date(data[,regexpr('d$', dataType) > 0])
@@ -65,6 +70,26 @@ retrieveNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,StatCd="0
   tempDF <- suppressWarnings(sapply(tempDF, function(x) as.numeric(x)))  
   data[,which(regexpr('n$', dataType) > 0)] <- tempDF
   row.names(data) <- NULL
+  
+#   originalMethod <- function(SiteFile){
+#     col.nm <- make.names(unlist(SiteFile[1,, drop=TRUE]), allow_=FALSE)
+#     retval <- lapply(SiteFile, function(x) {
+#       Typ <- x[1] # The type
+#       x <- x[-c(1)] # the data
+#       if(regexpr('d$', Typ) > 0) { # Must be date
+#         ret.val <- try(as.Date(x)) # The data are in standard format, but...
+#         if(class(ret.val) == "try-error")
+#           ret.val <- x
+#       }
+#       else if(regexpr('n$', Typ) > 0) # Must be numeric
+#         ret.val <- as.numeric(x)
+#       else # Must be character
+#         ret.val <- x
+#       return(ret.val)})
+#     data <- as.data.frame(retval, stringsAsFactors=FALSE)
+#     names(data) <- col.nm
+#     return(data)
+#   }
     
   return (data)
 }

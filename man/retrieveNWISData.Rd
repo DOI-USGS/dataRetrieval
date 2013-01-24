@@ -39,9 +39,13 @@
 }
 \examples{
 # These examples require an internet connection to run
-rawDailyFlowData <- retrieveNWISData('01594440','00060', '1985-01-01', '1985-01-31')
-rawDailyTemperatureData <- retrieveNWISData('05114000','00010', '1985-01-01', '1985-01-31', StatCd='00001',interactive=FALSE)
-rawDailyFlowAndTemperatureData <- retrieveNWISData('04085427','00010,00060', '2012-01-01', '2012-06-30', interactive=FALSE)
+siteNumber <- '04085427'
+startDate <- '2012-01-01'
+endDate <- '2012-06-30'
+pCode <- "00060"
+rawDailyQ <- retrieveNWISData(siteNumber,pCode, startDate, endDate)
+rawDailyTemperature <- retrieveNWISData(siteNumber,'00010', startDate, endDate, StatCd='00001',interactive=FALSE)
+rawDailyQAndTempMeanMax <- retrieveNWISData(siteNumber,'00010,00060', startDate, endDate, StatCd='00001,00003', interactive=FALSE)
 }
 \keyword{USGS}
 \keyword{data}
