@@ -20,7 +20,7 @@
 #' #getDailyDataFromFile(filePath,fileName,separator="\t")
 getDailyDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=",",qUnit=1,interactive=TRUE){
   data <- getDataFromFile(filePath,fileName,hasHeader=hasHeader,separator=separator)
-  convertQ<-c(35.314667,1)
+  convertQ<-c(35.314667,1,0.035314667,0.001)
   qConvert<-convertQ[qUnit]
   if (interactive){
     if(qUnit==1) cat("\n the input discharge are assumed to be in cubic feet per second\nif they are in cubic meters per second, then the call to getDailyDataFromFile should specify qUnit=2\n")
