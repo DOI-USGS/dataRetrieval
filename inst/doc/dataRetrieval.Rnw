@@ -344,6 +344,70 @@ Sample <- mergeReport()
 head(Sample)
 @
 
+The difference between these dataframes, and the dataframes in the previous sections is that ...
+
+
+\newpage
+%------------------------------------------------------------ 
+\section{Retrieving User-Generated Data Files}
+%------------------------------------------------------------ 
+Aside from retrieving data from the USGS web services, the dataRetrieval package includes functions to generate the Daily and Sample data frame from local files.
+
+%------------------------------------------------------------ 
+\subsection{getDailyDataFromFile}
+%------------------------------------------------------------ 
+getDailyDataFromFile will load a user-supplied text file and convert it to the Daily dataframe. The file should have two columns, the first dates, the second values.  The dates should be formatted either mm/dd/yyyy or yyyy-mm-dd. Using a 4-digit year is required. This function has the following inputs: filePath, fileName,hasHeader (TRUE/FALSE), separator, qUnit, and interactive (TRUE/FALSE). filePath is a string that defines the path to your file. This can either be a full path, or path relative to your R working directory. The input fileName is a string that defines the file name (including the extension).
+
+Text files that contain this sort of data require some sort of a separator, for example, a 'csv' file (aka 'comma-separated value') file uses a comma to separate the date and value column. A tab delimited file would use a tab ("\verb@\t@") rather than the comma (","). The type of separator you use can be defined in the function call in the 'separator' argument, the default is ",". Another function input is a logical variable: hasHeader.  The default is TRUE. If your data does not have column names, set this variable to FALSE.
+
+Finally, qUnit is a numeric input that defines the discharge/flow units. Flow from the NWIS web results are typically given in cubic feet per second (qUnit=1), but the EGRET package requires flow to be given in cubic meters per second (qUnit=2). Other allowed values are 10^3 cubic feet per second (qUnit=3) and 10^3 cubic meters per second (qUnit=4). If you do not want your data to be converted, use qUnit=2. The default is qUnit=1 (assumes flow is in cubic feet per second).
+
+So, if you have a file called "ChoptankRiverFlow.txt" located in a folder called "RData" on your C drive (this is a Window's example), and the file is structured as follows (tab-separated):
+\begin{verbatim}
+date  Qdaily
+10/1/1999	3.029902561
+10/2/1999	2.406931941
+10/3/1999	2.152080324
+10/4/1999	2.152080324
+10/5/1999	3.19980364
+10/6/1999	2.775050944
+...
+\end{verbatim}
+
+The call to open this file, convert the flow to cubic meters per second, and populate the Daily data frame would be:
+<<openDaily, eval = TRUE>>=
+fileName <- 'ChoptankRiverFlow.txt'
+filePath <-  '~/RData/'
+Daily <- getDailyDataFromFile(filePath,fileName,separator="\t",interactive=FALSE)
+head(Daily)
+@
+
+%------------------------------------------------------------ 
+\subsection{getSampleDataFromFile}
+%------------------------------------------------------------ 
+Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and flow data is that the code requires a third column that contains a remark code, either blank or "<", which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.  If multiple constituents are going to be used, the format can be date, remark_A, value_A, remark_b, value_b, etc... An example of a comma-delimited file would be:
+
+\begin{verbatim}
+cdate;remarkCode;Nitrate
+10/7/1999;;1.4
+11/4/1999;<;0.99
+12/3/1999;;1.42
+1/4/2000;;1.59
+2/3/2000;;1.54
+...
+\end{verbatim}
+The call to open this file, and populate the Sample dataframe would be:
+The call to open this file, convert the flow to cubic meters per second, and populate the Daily data frame would be:
+<<openSample, eval = TRUE>>=
+fileName <- 'ChoptankRiverNitrate.csv'
+filePath <-  '~/RData/'
+Sample <- getSampleDataFromFile(filePath,fileName,separator=";",interactive=FALSE)
+head(Sample)
+@
+
+
+
+
 \newpage
 %------------------------------------------------------------ 
 \section{Appendix 1: Getting Started}
