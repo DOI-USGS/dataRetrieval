@@ -402,7 +402,7 @@ install_github("dataRetrieval", "USGS-R")
 @
 To then open the library, simply type:
 
-<<openLibrary>>=
+<<openLibrary, eval=FALSE>>=
 library(dataRetrieval)
 @
 
@@ -424,10 +424,13 @@ endDate <- "2013-01-01"
 %------------------------------------------------------------
 \subsection{getSiteFileData}
 %------------------------------------------------------------
-<<siteColnames, echo=TRUE>>=
+<<siteColnames, echo=TRUE, eval=FALSE>>=
 ChoptankInfo <- getSiteFileData(siteNumber)
+@
+<<siteColnames2, echo=TRUE, eval=TRUE>>=
 str(ChoptankInfo)
 @
+
 
 %------------------------------------------------------------
 \subsection{getParameterInfo}

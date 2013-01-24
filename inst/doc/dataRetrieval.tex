@@ -81,7 +81,7 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 Not every station will measure all parameters. The following is a list of commonly measured parameters:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Thu Jan 24 10:22:25 2013
+% Thu Jan 24 10:35:50 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Parameter Codes}
@@ -104,7 +104,7 @@ For real-time data, the parameter code and site ID will suffice.  The USGS store
 
 The most common stat codes are:
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Thu Jan 24 10:22:25 2013
+% Thu Jan 24 10:35:50 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Stat Codes}
@@ -497,6 +497,7 @@ To then open the library, simply type:
 \end{Sinput}
 \end{Schunk}
 
+\newpage
 %------------------------------------------------------------ 
 \section{Appendix 2: Dataframe column names and data types}
 %------------------------------------------------------------ 
@@ -518,6 +519,10 @@ This section shows the returned dataframe structures for the functions.  The req
 \begin{Schunk}
 \begin{Sinput}
 > ChoptankInfo <- getSiteFileData(siteNumber)
+\end{Sinput}
+\end{Schunk}
+\begin{Schunk}
+\begin{Sinput}
 > str(ChoptankInfo)
 \end{Sinput}
 \begin{Soutput}
@@ -564,9 +569,10 @@ This section shows the returned dataframe structures for the functions.  The req
  $ hole.depth.va        : chr ""
  $ depth.src.cd         : chr ""
  $ project.no           : chr "442400300"
- $ queryTime            : POSIXct, format: "2013-01-24 10:22:34"
+ $ queryTime            : POSIXct, format: "2013-01-24 10:35:51"
 \end{Soutput}
 \end{Schunk}
+
 
 %------------------------------------------------------------
 \subsection{getParameterInfo}
@@ -630,7 +636,7 @@ This section shows the returned dataframe structures for the functions.  The req
  $ local.time.fg        : chr "N"
  $ reliability.cd       : chr ""
  $ project.no           : chr "442400300"
- $ queryTime            : POSIXct, format: "2013-01-24 10:22:35"
+ $ queryTime            : POSIXct, format: "2013-01-24 10:36:02"
  $ drainSqKm            : num 293
  $ staAbbrev            : logi NA
  $ param.nm             : chr "Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen"
@@ -683,7 +689,7 @@ This section shows the returned dataframe structures for the functions.  The req
 > str(dischargeToday)
 \end{Sinput}
 \begin{Soutput}
-'data.frame':	138 obs. of  6 variables:
+'data.frame':	142 obs. of  6 variables:
  $ agency_cd   : chr  "USGS" "USGS" "USGS" "USGS" ...
  $ site_no     : chr  "01491000" "01491000" "01491000" "01491000" ...
  $ datetime    : POSIXct, format: "2013-01-23 00:00:00" "2013-01-23 00:15:00" ...
