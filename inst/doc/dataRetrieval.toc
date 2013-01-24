@@ -1,14 +1,24 @@
 \select@language {american}
-\contentsline {section}{\numberline {1}Introduction to dataRetrieval}{1}{section.1}
-\contentsline {section}{\numberline {2}Getting Started}{2}{section.2}
-\contentsline {subsection}{\numberline {2.1}New to R?}{2}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}R User: Installing dataRetrieval from downloaded binary}{2}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}R Developers: Installing dataRetrieval from gitHub}{3}{subsection.2.3}
-\contentsline {section}{\numberline {3}USGS Web Retrieval Examples}{4}{section.3}
-\contentsline {subsection}{\numberline {3.1}USGS Web Retrieval Introduction}{4}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}USGS Site Information Retrievals}{5}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}USGS Parameter Information Retrievals}{6}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}USGS Daily Value Retrievals}{6}{subsection.3.4}
-\contentsline {subsection}{\numberline {3.5}USGS Unit Value Retrievals}{9}{subsection.3.5}
-\contentsline {subsection}{\numberline {3.6}USGS Water Quality Retrievals}{11}{subsection.3.6}
-\contentsline {section}{\numberline {4}Polished Data: USGS Web Retrieval Examples}{14}{section.4}
+\contentsline {section}{\numberline {1}Introduction to dataRetrieval}{2}{section.1}
+\contentsline {section}{\numberline {2}USGS Web Retrieval Examples}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}USGS Web Retrieval Introduction}{2}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}USGS Site Information Retrievals}{4}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}USGS Parameter Information Retrievals}{4}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}USGS Daily Value Retrievals}{5}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}USGS Unit Value Retrievals}{7}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}USGS Water Quality Retrievals}{9}{subsection.2.6}
+\contentsline {section}{\numberline {3}Polished Data: USGS Web Retrieval Examples}{11}{section.3}
+\contentsline {section}{\numberline {4}Appendix 1: Getting Started}{14}{section.4}
+\contentsline {subsection}{\numberline {4.1}New to R?}{14}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}R User: Installing dataRetrieval from downloaded binary}{14}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}R Developers: Installing dataRetrieval from gitHub}{15}{subsection.4.3}
+\contentsline {section}{\numberline {5}Appendix 2: Dataframe column names and data types}{15}{section.5}
+\contentsline {subsection}{\numberline {5.1}getSiteFileData}{16}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}getParameterInfo}{17}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}getMetaData}{17}{subsection.5.3}
+\contentsline {subsection}{\numberline {5.4}retrieveNWISData}{18}{subsection.5.4}
+\contentsline {subsection}{\numberline {5.5}retrieveUnitNWISData}{19}{subsection.5.5}
+\contentsline {subsection}{\numberline {5.6}getDVData}{19}{subsection.5.6}
+\contentsline {subsection}{\numberline {5.7}getRawQWData}{20}{subsection.5.7}
+\contentsline {subsection}{\numberline {5.8}getQWData}{21}{subsection.5.8}
+\contentsline {subsection}{\numberline {5.9}getSampleData}{22}{subsection.5.9}
