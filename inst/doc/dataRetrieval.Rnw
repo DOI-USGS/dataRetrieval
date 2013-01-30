@@ -67,20 +67,22 @@ For information on getting started in R, downloading and installing the package,
 %------------------------------------------------------------
 \section{USGS Web Retrieval Examples}
 %------------------------------------------------------------ 
-In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes historical daily values, real-time current values, water quality data, site information, and measured parameter information. We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe very friendly for R analysis.
+In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes historical daily values, real-time current values, water quality data, site information, and measured parameter information. We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis.
 
 %------------------------------------------------------------
 \subsection{USGS Web Retrieval Introduction}
 %------------------------------------------------------------
 The United States Geological Survey organizes their hydrological data in fairly standard structure.  Gage stations are located throughout the United States, each station has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discoving this 8-digit ID. One potential tool for discovering data is Environmental Data Discovery and Transformation (EnDDaT): \url{http://cida.usgs.gov/enddat/}.  Follow the example in the User's Guide to learn how to discover USGS stations and available data from any location in the United States. Essentially, you can create a Project Location on the map, set a bounding box (in miles), then search for USGS Time Series and USGS Water Quality Data. Locations, ID's, available data, and available time periods will load on the map and appropriate tabs.
 
-Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured paramater is being requested.  A complete list of possible USGS parameter codes can be found here: 
+Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured paramater is being requested.  A complete list of possible USGS parameter codes can be found at \href{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&pm_search=&casrn_search=&srsname_search=&format=html_table&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}{nwis.waterdata.usgs.gov}. Not every station will measure all parameters. The following is a list of commonly measured parameters:
 
-\url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&pm_search=&casrn_search=&srsname_search=&format=html_table&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}
-
-Not every station will measure all parameters. The following is a list of commonly measured parameters:
 <<openLibrary, echo=FALSE>>=
 library(xtable)
+options(continue=" ")
+options(SweaveHooks=list(fig=function()
+  par(mar=c(4.1,4.1,1.1,4.1),oma=c(0,0,0,0))))
+@
+
 @
 
 <<label=tableParameterCodes, echo=FALSE,results=tex>>=
@@ -124,7 +126,18 @@ siteNumber <- "01491000"
 ChoptankInfo <- getSiteFileData(siteNumber)
 @
 
-The available returned data for these for the USGS sites can be viewed in Appendix 2: getSiteFileData. Pulling out a specific example piece of information, in this case station name can be done as follows:
+
+<<label=tableSiteInfo, echo=FALSE,results=tex>>=
+
+infoDF <- data.frame(ColumnNames=names(ChoptankInfo[1:11]),ColumnNames=names(ChoptankInfo[12:22]),
+                     ColumnNames=names(ChoptankInfo[23:33]),ColumnNames=names(c(ChoptankInfo[34:43],"")))
+data.table <- xtable(infoDF,
+                     caption="Column names in ChoptankInfo")
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
+@
+\\*
+
+Pulling out a specific example piece of information, in this case station name can be done as follows:
 <<siteNames, echo=TRUE>>=
 ChoptankInfo$station.nm
 @
@@ -138,9 +151,10 @@ To obtain all of the available information concerning a measured parameter, use 
 # Using defaults:
 parameterCd <- "00618" 
 parameterINFO <- getParameterInfo(parameterCd)
+colnames(parameterINFO)
 @
 
-The available data for these parameters can be seen in Appendix 2: getParameterInfo. Pulling out a specific example piece of information, in this case station name can be done as follows:
+Pulling out a specific example piece of information, in this case station name can be done as follows:
 <<siteNames, echo=TRUE>>=
 parameterINFO$parameter_nm
 @
@@ -155,10 +169,10 @@ The dates (start and end) need to be in the format "YYYY-MM-DD".  Setting the st
 
 <<label=getNWISDaily, echo=TRUE>>=
 # Using defaults:
-siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
+siteNumber <- "01491000"
 parameterCd <- "00060"  # Discharge in cubic feet per second
-startDate <- ""  # Will ask to start request at earliest date
-endDate <- "" # Will ask to finish request at latest date
+startDate <- ""  # Will request earliest date
+endDate <- "" # Will request latest date
 
 discharge <- retrieveNWISData(siteNumber, parameterCd, startDate, endDate)
 @
@@ -167,15 +181,16 @@ A dataframe is returned that looks like the following:
 <<dischargeData, echo=FALSE>>=
 head(discharge)
 @
-The structure of the dataframe can be seen in Appendix 2: retrieveNWISData. The variable datetime is automatically imported as a Date. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS remark codes are often "A" (approved for publication) or "P" (provisional data subject to revision). A more complete list of remark codes can be found here:
+
+The variable datetime is automatically imported as a Date. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS remark codes are often "A" (approved for publication) or "P" (provisional data subject to revision). A more complete list of remark codes can be found here:
 \url{http://waterdata.usgs.gov/usa/nwis/help?codes_help}
 
 Another example that doesn't use the defaults would be a request for mean and maximum daily temperature and discharge in early 2012:
 <<label=getNWIStemperature, echo=TRUE>>=
 # Using defaults:
-siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
+siteNumber <- "01491000" 
 parameterCd <- "00010,00060"  # Temperature and discharge
-statCd <- "00001,00003"  #mean and maximum
+statCd <- "00001,00003"  # Mean and maximum
 startDate <- "2012-01-01"
 endDate <- "2012-06-30"
 
@@ -186,11 +201,6 @@ temperatureAndFlow <- retrieveNWISData(siteNumber, parameterCd,
 Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}. 
 
 An example of plotting the above data (Figure 1):
-<<echo=FALSE>>=
-options(continue=" ")
-options(SweaveHooks=list(fig=function()
-  par(mar=c(4.1,4.1,1.1,4.1),oma=c(0,0,0,0))))
-@
 
 <<label=getNWIStemperaturePlot, echo=TRUE>>=
 
@@ -221,14 +231,11 @@ mtext("Discharge [cfs]",side=4,line=3,col="red")
 There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as "Ice".  Any value that cannot be converted to a number will be reported as NA in this package.
 
 
-
-
 %------------------------------------------------------------
 \subsection{USGS Unit Value Retrievals}
 %------------------------------------------------------------
 We can also get real-time, instantaneous measurements using the retrieveUnitNWISData function:
 <<label=getNWISUnit, echo=TRUE>>=
-# Using defaults:
 siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
 parameterCd <- "00060"  # Discharge in cubic feet per second
 startDate <- as.character(Sys.Date()-1) # Yesterday 
@@ -236,20 +243,21 @@ startDate <- as.character(Sys.Date()-1) # Yesterday
 endDate <- as.character(Sys.Date()) # Today 
   # (or, the day the dataRetrieval package was built)
 
-dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, startDate, endDate)
+dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, 
+        startDate, endDate)
 @
 Which produces the following dataframe:
 <<dischargeData, echo=FALSE>>=
 head(dischargeToday)
 @
-The structure of the dataframe is can be seen in Appendix 2: retrieveUnitNWISData. Note that time now becomes important, so the variable datetime is a POSIXct, and the time zone is included in a separate column. Data is pulled from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is "Ice".  Any value that cannot be converted to a number will be reported as NA in this package.
+
+Note that time now becomes important, so the variable datetime is a POSIXct, and the time zone is included in a separate column. Data is pulled from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is "Ice".  Any value that cannot be converted to a number will be reported as NA in this package.
 
 A simple plotting example is shown in Figure 2:
 <<label=getNWISUnit, echo=TRUE>>=
-
 with(dischargeToday, plot(
   datetime, X02_00060,
-  xlab="Date/Time",ylab="Discharge [cfs]"
+  ylab="Discharge [cfs]"
   ))
 @
 \newpage
@@ -271,33 +279,33 @@ Finally, we can use the dataRetrieval package to get water quality data that is 
 
 
 <<label=getQW, echo=TRUE>>=
-# Using defaults:
 siteNumber <- "01491000" 
-# Dissolved Nitrate parameter codes (one as mg/l as N, one as mg/l):
+# Dissolved Nitrate parameter codes:
 parameterCd <- "00618;71851"  
 startDate <- "1964-06-11"
 endDate <- "2012-12-18"
 
-dissolvedNitrate <- getRawQWData(siteNumber, parameterCd, startDate, endDate)
+dissolvedNitrate <- getRawQWData(siteNumber, parameterCd, 
+      startDate, endDate)
 @
 
 There is a large amount of data returned for each observation. The available data can be viewed in Appendix 2: getRawQWData. To get a simplified dataframe that contains only datetime, value, and qualifier, use the function getQWData:
 
 <<label=getQWData, echo=TRUE>>=
-dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd, startDate, endDate)
+dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd, 
+        startDate, endDate)
 @
 Note that in this dataframe, datatime is only imported as Dates (no times are included), and the qualifier is either blank or \verb@"<"@ signifying a censored value.
 
 An example of plotting the above data (Figure 3):
 
 <<label=getQWtemperaturePlot, echo=TRUE>>=
-
 with(dissolvedNitrateSimple, plot(
   dateTime, value.00618,
-  xlab="Date",ylab = paste(parameterINFO$srsname, "[",parameterINFO$parameter_units,"]")
+  xlab="Date",ylab = paste(parameterINFO$srsname,
+      "[",parameterINFO$parameter_units,"]")
   ))
 @
-\newpage
 
 \begin{figure}
 \begin{center}
@@ -327,13 +335,13 @@ The structure of each dataframe can be seen in Appendix 2.
 
 
 <<firstExample>>=
-siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
+siteNumber <- "01491000"
 parameterCd <- "00631"  # Nitrate
 startDate <- "1964-01-01"
 endDate <- "2013-01-01"
 
-Daily <- getDVData(siteNumber, "00060", startDate, endDate)
-Sample <-getSampleData(siteNumber,parameterCd,startDate, endDate)
+Daily <- getDVData(siteNumber, "00060", startDate, endDate,interactive=FALSE)
+Sample <-getSampleData(siteNumber,parameterCd,startDate, endDate,interactive=FALSE)
 INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
 
 Sample <- mergeReport()
