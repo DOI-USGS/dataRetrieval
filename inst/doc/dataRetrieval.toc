@@ -1,27 +1,17 @@
 \select@language {american}
 \contentsline {section}{\numberline {1}Introduction to dataRetrieval}{2}{section.1}
 \contentsline {section}{\numberline {2}USGS Web Retrieval Examples}{2}{section.2}
-\contentsline {subsection}{\numberline {2.1}USGS Web Retrieval Introduction}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.1}USGS Web Retrieval Introduction}{2}{subsection.2.1}
 \contentsline {subsection}{\numberline {2.2}USGS Site Information Retrievals}{3}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}USGS Parameter Information Retrievals}{4}{subsection.2.3}
 \contentsline {subsection}{\numberline {2.4}USGS Daily Value Retrievals}{5}{subsection.2.4}
 \contentsline {subsection}{\numberline {2.5}USGS Unit Value Retrievals}{7}{subsection.2.5}
 \contentsline {subsection}{\numberline {2.6}USGS Water Quality Retrievals}{9}{subsection.2.6}
 \contentsline {section}{\numberline {3}Polished Data: USGS Web Retrieval Examples}{11}{section.3}
-\contentsline {section}{\numberline {4}Retrieving User Generated Data Files}{14}{section.4}
-\contentsline {subsection}{\numberline {4.1}getDailyDataFromFile}{14}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}getSampleDataFromFile}{15}{subsection.4.2}
-\contentsline {section}{\numberline {5}Appendix 1: Getting Started}{17}{section.5}
-\contentsline {subsection}{\numberline {5.1}New to R?}{17}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}R User: Installing dataRetrieval from downloaded binary}{17}{subsection.5.2}
-\contentsline {subsection}{\numberline {5.3}R Developers: Installing dataRetrieval from gitHub}{18}{subsection.5.3}
-\contentsline {section}{\numberline {6}Appendix 2: Dataframe column names and data types}{19}{section.6}
-\contentsline {subsection}{\numberline {6.1}getSiteFileData}{19}{subsection.6.1}
-\contentsline {subsection}{\numberline {6.2}getParameterInfo}{20}{subsection.6.2}
-\contentsline {subsection}{\numberline {6.3}getMetaData}{20}{subsection.6.3}
-\contentsline {subsection}{\numberline {6.4}retrieveNWISData}{21}{subsection.6.4}
-\contentsline {subsection}{\numberline {6.5}retrieveUnitNWISData}{22}{subsection.6.5}
-\contentsline {subsection}{\numberline {6.6}getDVData}{22}{subsection.6.6}
-\contentsline {subsection}{\numberline {6.7}getRawQWData}{23}{subsection.6.7}
-\contentsline {subsection}{\numberline {6.8}getQWData}{25}{subsection.6.8}
-\contentsline {subsection}{\numberline {6.9}getSampleData}{25}{subsection.6.9}
+\contentsline {section}{\numberline {4}Retrieving User-Generated Data Files}{16}{section.4}
+\contentsline {subsection}{\numberline {4.1}getDailyDataFromFile}{16}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}getSampleDataFromFile}{17}{subsection.4.2}
+\contentsline {section}{\numberline {5}Appendix 1: Getting Started}{19}{section.5}
+\contentsline {subsection}{\numberline {5.1}New to R?}{19}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}R User: Installing dataRetrieval from downloaded binary}{19}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}R Developers: Installing dataRetrieval from gitHub}{20}{subsection.5.3}

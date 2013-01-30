@@ -257,7 +257,7 @@ A simple plotting example is shown in Figure 2:
 <<label=getNWISUnit, echo=TRUE>>=
 with(dischargeToday, plot(
   datetime, X02_00060,
-  ylab="Discharge [cfs]"
+  ylab="Discharge [cfs]",xlab=""
   ))
 @
 \newpage
@@ -289,13 +289,25 @@ dissolvedNitrate <- getRawQWData(siteNumber, parameterCd,
       startDate, endDate)
 @
 
-There is a large amount of data returned for each observation. The available data can be viewed in Appendix 2: getRawQWData. To get a simplified dataframe that contains only datetime, value, and qualifier, use the function getQWData:
+There is a large amount of data returned for each observation. The column names are listed below:
+
+
+<<label=colNamesQW, echo=FALSE,results=tex>>=
+infoDF <- data.frame(ColumnNames=names(dissolvedNitrate[1:31]),ColumnNames=names(dissolvedNitrate[32:62]))
+data.table <- xtable(infoDF,
+                     caption="Column names in dissolvedNitrate")
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
+@
+
+\\*
+To get a simplified dataframe that contains only datetime, value, and qualifier, use the function getQWData:
 
 <<label=getQWData, echo=TRUE>>=
 dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd, 
         startDate, endDate)
+names(dissolvedNitrateSimple)
 @
-Note that in this dataframe, datatime is only imported as Dates (no times are included), and the qualifier is either blank or \verb@"<"@ signifying a censored value.
+Note that in this dataframe, datatime is imported as Dates (no times are included), and the qualifier is either blank or \verb@"<"@ signifying a censored value.
 
 An example of plotting the above data (Figure 3):
 
@@ -321,18 +333,11 @@ with(dissolvedNitrateSimple, plot(
 %------------------------------------------------------------
 \section{Polished Data: USGS Web Retrieval Examples}
 %------------------------------------------------------------ 
-Rather than using raw data as retrieved by the web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional information that allows for efficient data analysis.
+Rather than using the raw data as retrieved by the web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
 
 In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We will need essentially the same data that was retrieved in the previous section, but we will get the daily discharge values in a dataframe called Daily, the nitrate sample data in a dataframe called Sample, and the data about the station and parameters in a dataframe called INFO. These are the dataframes that were exclusively designed to work with the EGRET R package, however can be very useful for all hydrologic studies.
 
 The funtion to obtain the daily values (discharge in this case) is getDVData.  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in the previous section, however 'convert' is a new argument, it's default is TRUE, and it tells the program to convert the values from cfs to cms. If you don't want this conversion, set convert=FALSE in the function call.
-
-The function to obtain sample data from the water quality portal is getSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
-
-The function to obtain "metadata", data about the gage station and measured parameters is getMetaData. This function essentially combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
-
-The structure of each dataframe can be seen in Appendix 2.
-
 
 <<firstExample>>=
 siteNumber <- "01491000"
@@ -341,9 +346,35 @@ startDate <- "1964-01-01"
 endDate <- "2013-01-01"
 
 Daily <- getDVData(siteNumber, "00060", startDate, endDate,interactive=FALSE)
-Sample <-getSampleData(siteNumber,parameterCd,startDate, endDate,interactive=FALSE)
-INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
+summary(Daily)
+@
 
+Date is a column with dates stored in an R Date type. Julian is an integer number of days since January 1, 1850.  Month and Day are integers from the start of each year. DecYear is the decimal year. MonthSeq is the (integer) number of months since 1850. Qualifier is the code from NWIS as mentioned in the raw data section. i is a count of observations.  LogQ is the natural logarithm of Q. The code will shift the discharge values to 0.001 times the mean if there are zero values detected in order to perform the logarithm. Columns Q7 and Q30 are 7 and 30 day running averages. 
+
+The function to obtain sample data from the water quality portal is getSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
+
+<<secondExample>>=
+Sample <-getSampleData(siteNumber,parameterCd,startDate, endDate,interactive=FALSE)
+summary(Sample)
+@
+
+The function to obtain "metadata", data about the gage station and measured parameters is getMetaData. This function essentially combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
+
+<<ThirdExample>>=
+INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
+@
+
+<<label=colNamesQW, echo=FALSE,results=tex>>=
+infoDF <- data.frame(ColumnNames=names(INFO[1:21]),ColumnNames=names(c(INFO[22:41],"")))
+data.table <- xtable(infoDF,
+                     caption="Column names in the INFO dataframe")
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
+@
+
+\\*
+
+
+<<forthExample>>=
 Sample <- mergeReport()
 head(Sample)
 @
