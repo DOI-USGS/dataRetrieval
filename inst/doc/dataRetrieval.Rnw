@@ -119,9 +119,8 @@ print(data.table,
 To obtain all of the available site information, use the getSiteFileData function:
 <<label=getSite, echo=TRUE>>=
 library(dataRetrieval)
-
-# Using defaults:
-siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
+# Site ID for Choptank River near Greensboro, MD
+siteNumber <- "01491000" 
 ChoptankInfo <- getSiteFileData(siteNumber)
 @
 
@@ -146,8 +145,6 @@ The available data for these parameters can be seen in Appendix 2: getParameterI
 parameterINFO$parameter_nm
 @
 Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-
-
 
 %------------------------------------------------------------
 \subsection{USGS Daily Value Retrievals}
@@ -275,7 +272,7 @@ Finally, we can use the dataRetrieval package to get water quality data that is 
 
 <<label=getQW, echo=TRUE>>=
 # Using defaults:
-siteNumber <- "01491000" # Site ID for Choptank River
+siteNumber <- "01491000" 
 # Dissolved Nitrate parameter codes (one as mg/l as N, one as mg/l):
 parameterCd <- "00618;71851"  
 startDate <- "1964-06-11"
@@ -288,9 +285,8 @@ There is a large amount of data returned for each observation. The available dat
 
 <<label=getQWData, echo=TRUE>>=
 dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd, startDate, endDate)
-head(dissolvedNitrateSimple)
 @
-Note that in this dataframe, datatime is only imported as Dates (no times are included), and the qualifier is either blank or "<" signifying a censored value.
+Note that in this dataframe, datatime is only imported as Dates (no times are included), and the qualifier is either blank or \verb@"<"@ signifying a censored value.
 
 An example of plotting the above data (Figure 3):
 
@@ -360,12 +356,12 @@ getDailyDataFromFile will load a user-supplied text file and convert it to the D
 
 Text files that contain this sort of data require some sort of a separator, for example, a 'csv' file (aka 'comma-separated value') file uses a comma to separate the date and value column. A tab delimited file would use a tab ("\verb@\t@") rather than the comma (","). The type of separator you use can be defined in the function call in the 'separator' argument, the default is ",". Another function input is a logical variable: hasHeader.  The default is TRUE. If your data does not have column names, set this variable to FALSE.
 
-Finally, qUnit is a numeric input that defines the discharge/flow units. Flow from the NWIS web results are typically given in cubic feet per second (qUnit=1), but the EGRET package requires flow to be given in cubic meters per second (qUnit=2). Other allowed values are 10^3 cubic feet per second (qUnit=3) and 10^3 cubic meters per second (qUnit=4). If you do not want your data to be converted, use qUnit=2. The default is qUnit=1 (assumes flow is in cubic feet per second).
+Finally, qUnit is a numeric input that defines the discharge/flow units. Flow from the NWIS web results are typically given in cubic feet per second (qUnit=1), but the EGRET package requires flow to be given in cubic meters per second (qUnit=2). Other allowed values are 10\verb@^@3 cubic feet per second (qUnit=3) and 10\verb@^@3 cubic meters per second (qUnit=4). If you do not want your data to be converted, use qUnit=2. The default is qUnit=1 (assumes flow is in cubic feet per second).
 
 So, if you have a file called "ChoptankRiverFlow.txt" located in a folder called "RData" on your C drive (this is a Window's example), and the file is structured as follows (tab-separated):
 \begin{verbatim}
 date  Qdaily
-10/1/1999	3.029902561
+10/1/1999  3.029902561
 10/2/1999	2.406931941
 10/3/1999	2.152080324
 10/4/1999	2.152080324
@@ -376,8 +372,8 @@ date  Qdaily
 
 The call to open this file, convert the flow to cubic meters per second, and populate the Daily data frame would be:
 <<openDaily, eval = TRUE>>=
-fileName <- 'ChoptankRiverFlow.txt'
-filePath <-  '~/RData/'
+fileName <- "ChoptankRiverFlow.txt"
+filePath <-  "~/RData/"
 Daily <- getDailyDataFromFile(filePath,fileName,separator="\t",interactive=FALSE)
 head(Daily)
 @
@@ -385,7 +381,7 @@ head(Daily)
 %------------------------------------------------------------ 
 \subsection{getSampleDataFromFile}
 %------------------------------------------------------------ 
-Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and flow data is that the code requires a third column that contains a remark code, either blank or "<", which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.  If multiple constituents are going to be used, the format can be date, remark_A, value_A, remark_b, value_b, etc... An example of a comma-delimited file would be:
+Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and flow data is that the code requires a third column that contains a remark code, either blank or \verb@"<"@, which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.  If multiple constituents are going to be used, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... An example of a comma-delimited file would be:
 
 \begin{verbatim}
 cdate;remarkCode;Nitrate
@@ -397,15 +393,12 @@ cdate;remarkCode;Nitrate
 ...
 \end{verbatim}
 The call to open this file, and populate the Sample dataframe would be:
-The call to open this file, convert the flow to cubic meters per second, and populate the Daily data frame would be:
 <<openSample, eval = TRUE>>=
-fileName <- 'ChoptankRiverNitrate.csv'
-filePath <-  '~/RData/'
+fileName <- "ChoptankRiverNitrate.csv"
+filePath <-  "~/RData/"
 Sample <- getSampleDataFromFile(filePath,fileName,separator=";",interactive=FALSE)
 head(Sample)
 @
-
-
 
 
 \newpage
@@ -471,109 +464,6 @@ library(dataRetrieval)
 @
 
 \newpage
-%------------------------------------------------------------ 
-\section{Appendix 2: Dataframe column names and data types}
-%------------------------------------------------------------ 
-This section shows the returned dataframe structures for the functions.  The requested data is the same as in earlier sections of this document:
-<<label=appendix1, echo=TRUE, eval=FALSE>>=
-library(dataRetrieval)
-
-siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
-parameterCd <- "00631"  # Nitrate
-startDate <- "1964-01-01"
-endDate <- "2013-01-01"
-
-@
-
-%------------------------------------------------------------
-\subsection{getSiteFileData}
-%------------------------------------------------------------
-<<siteColnames, echo=TRUE, eval=FALSE>>=
-ChoptankInfo <- getSiteFileData(siteNumber)
-@
-<<siteColnames2, echo=TRUE, eval=TRUE>>=
-str(ChoptankInfo)
-@
-
-
-%------------------------------------------------------------
-\subsection{getParameterInfo}
-%------------------------------------------------------------
-<<parameterINFOData, echo=TRUE>>=
-parameterINFO <- getParameterInfo(parameterCd, interactive=FALSE)
-str(parameterINFO)
-@
-
-%------------------------------------------------------------
-\subsection{getMetaData}
-%------------------------------------------------------------
-<<InfoData, echo=TRUE>>=
-INFO <- getMetaData(siteNumber,parameterCd, interactive=FALSE)
-str(INFO)
-@
-
-%------------------------------------------------------------
-\subsection{retrieveNWISData}
-%------------------------------------------------------------
-<<temperatureAndFlowInfo, echo=TRUE>>=
-parameterCd <- "00010,00060"  # Temperature and discharge
-statCd <- "00001,00003"  #mean and maximum
-startDate <- "2012-01-01"
-endDate <- "2012-06-30"
-
-temperatureAndFlow <- retrieveNWISData(siteNumber, parameterCd, 
-       startDate, endDate, StatCd=statCd,interactive=FALSE)
-str(temperatureAndFlow)
-@
-
-%------------------------------------------------------------
-\subsection{retrieveUnitNWISData}
-%------------------------------------------------------------
-<<dischargeToday, echo=TRUE>>=
-parameterCd <- "00060"  # Discharge in cubic feet per second
-startDate <- as.character(Sys.Date()-1) # Yesterday 
-  # (or, the day before the dataRetrieval package was built)
-endDate <- as.character(Sys.Date()) # Today 
-  # (or, the day the dataRetrieval package was built)
-
-dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, startDate, endDate)
-str(dischargeToday)
-@
-
-%------------------------------------------------------------
-\subsection{getDVData}
-%------------------------------------------------------------
-<<getDVData, echo=TRUE>>=
-startDate <- "1964-01-01"
-endDate <- "2013-01-01"
-Daily <- getDVData(siteNumber, "00060", startDate, endDate)
-str(Daily)
-@
-
-%------------------------------------------------------------
-\subsection{getRawQWData}
-%------------------------------------------------------------
-<<dissolvedNitrateData, echo=TRUE>>=
-parameterCd <- "00618;71851"  
-dissolvedNitrate <- getRawQWData(siteNumber, parameterCd, startDate, endDate)
-str(dissolvedNitrate)
-@
-
-%------------------------------------------------------------
-\subsection{getQWData}
-%------------------------------------------------------------
-<<QWData, echo=TRUE>>=
-dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd, startDate, endDate)
-str(dissolvedNitrateSimple)
-@
-
-%------------------------------------------------------------
-\subsection{getSampleData}
-%------------------------------------------------------------
-<<sampleData, echo=TRUE>>=
-Sample <-getSampleData(siteNumber,parameterCd,startDate, endDate)
-str(Sample)
-@
 
 
 %------------------------------------------------------------
