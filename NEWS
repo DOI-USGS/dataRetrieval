@@ -7,7 +7,7 @@ dataRetrieval 1.2.1
 
 * Expanded the capabilities to retrieve raw data from the web services.
 
-* TODO: Add Storet data retrievals
+* Added Storet data retrievals in getWQPData function
 
 EGRET 1.0.5
 ===========

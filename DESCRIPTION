@@ -45,7 +45,6 @@ Collate:
     'getMetaData.r'
     'mergeReport.r'
     'dataOverview.r'
-    'getStoretData.r'
     'getWQPData.r'
     'retrieveUnitNWISData.r'
     'getRawQWData.r'
