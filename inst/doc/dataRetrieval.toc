@@ -7,7 +7,8 @@
 \contentsline {subsection}{\numberline {2.4}USGS Daily Value Retrievals}{5}{subsection.2.4}
 \contentsline {subsection}{\numberline {2.5}USGS Unit Value Retrievals}{7}{subsection.2.5}
 \contentsline {subsection}{\numberline {2.6}USGS Water Quality Retrievals}{9}{subsection.2.6}
-\contentsline {section}{\numberline {3}Polished Data: USGS Web Retrieval Examples}{11}{section.3}
+\contentsline {subsection}{\numberline {2.7}Water Quality Retrievals}{11}{subsection.2.7}
+\contentsline {section}{\numberline {3}Polished Data: USGS Web Retrieval Examples}{12}{section.3}
 \contentsline {section}{\numberline {4}Retrieving User-Generated Data Files}{16}{section.4}
 \contentsline {subsection}{\numberline {4.1}getDailyDataFromFile}{16}{subsection.4.1}
 \contentsline {subsection}{\numberline {4.2}getSampleDataFromFile}{17}{subsection.4.2}

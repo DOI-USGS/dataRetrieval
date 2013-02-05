@@ -328,6 +328,16 @@ with(dissolvedNitrateSimple, plot(
 \caption{Nitrate plot of Choptank River.}
 \end{figure}
 
+%------------------------------------------------------------
+\subsection{Water Quality Retrievals}
+%------------------------------------------------------------
+Additionally, there are additional data sets available on the Water Quality Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET or NWIS database.  Since STORET does not use USGS parameter codes, a 'characteristic name' must be supplied.  The following example retrieves specific conductance from a DNR site in Wisconsin.
+
+<<label=getQWData, echo=TRUE>>=
+specificCond <- getWQPData('WIDNR_WQX-10032762', 
+        'Specific conductance', '', '')
+head(specificCond)
+@
 
 
 %------------------------------------------------------------
@@ -349,14 +359,40 @@ Daily <- getDVData(siteNumber, "00060", startDate, endDate,interactive=FALSE)
 summary(Daily)
 @
 
-Date is a column with dates stored in an R Date type. Julian is an integer number of days since January 1, 1850.  Month and Day are integers from the start of each year. DecYear is the decimal year. MonthSeq is the (integer) number of months since 1850. Qualifier is the code from NWIS as mentioned in the raw data section. i is a count of observations.  LogQ is the natural logarithm of Q. The code will shift the discharge values to 0.001 times the mean if there are zero values detected in order to perform the logarithm. Columns Q7 and Q30 are 7 and 30 day running averages. 
+<<label=colNamesDaily, echo=FALSE,results=tex>>=
+ColumnName <- c("Date", "Q", "Julian","Month","Day","DecYear","MonthSeq","Qualifier","i","LogQ","Q7","Q30")
+Type <- c("Date", "number", "number","integer","integer","number","integer","string","integer","number","number","number")
+Description <- c("Date", "Discharge in cms", "Number of days since January 1, 1850", "Month of the year [1-12]", "Day of the year [1-366]", "Decimal year", "Number of months since January 1, 1850", "Qualifing code", "Index", "Natural logarithm of Q", "7 day running average of Q", "30 running average of Q")
+
+DF <- data.frame(ColumnName,Type,Description)
+
+data.table <- xtable(DF,
+                     caption="Daily dataframe")
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
+@
+\\*
+The code will shift the discharge values to 0.001 times the mean if there are zero values detected in order to perform the logarithm. Columns Q7 and Q30 are 7 and 30 day running averages. 
 
 The function to obtain sample data from the water quality portal is getSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
 
 <<secondExample>>=
-Sample <-getSampleData(siteNumber,parameterCd,startDate, endDate,interactive=FALSE)
+Sample <-getSampleData(siteNumber,parameterCd,
+      startDate, endDate,interactive=FALSE)
 summary(Sample)
 @
+
+<<label=colNamesQW, echo=FALSE,results=tex>>=
+ColumnName <- c("Date", "ConcLow", "ConcHigh", "Uncen", "ConcAve", "Julian","Month","Day","DecYear","MonthSeq","SinDY","CosDY","Q","LogQ")
+Type <- c("Date", "number","number","integer","number", "number","integer","integer","number","integer","number","number","number","number")
+Description <- c("Date", "Lower limit of concentration", "Upper limit of concentration", "Uncensored data (1=true, 0=false)", "Average concentration","Number of days since January 1, 1850", "Month of the year [1-12]", "Day of the year [1-366]", "Decimal year", "Number of months since January 1, 1850", "Sine of ...", "Cosine of ...", "Discharge in cms", "Natural logarithm of flow")
+
+DF <- data.frame(ColumnName,Type,Description)
+
+data.table <- xtable(DF,
+                     caption="Sample dataframe")
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
+@
+
 
 The function to obtain "metadata", data about the gage station and measured parameters is getMetaData. This function essentially combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
 
@@ -372,14 +408,6 @@ print(data.table, caption.placement="top",floating="FALSE",latex.environments=NU
 @
 
 \\*
-
-
-<<forthExample>>=
-Sample <- mergeReport()
-head(Sample)
-@
-
-The difference between these dataframes, and the dataframes in the previous sections is that ...
 
 
 \newpage

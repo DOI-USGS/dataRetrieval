@@ -79,7 +79,7 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Wed Jan 30 16:51:39 2013
+% Tue Feb 05 15:37:17 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Parameter Codes}
@@ -102,7 +102,7 @@ For real-time data, the parameter code and site ID will suffice.  The USGS store
 
 The most common stat codes are:
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Wed Jan 30 16:51:39 2013
+% Tue Feb 05 15:37:17 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Stat Codes}
@@ -134,7 +134,7 @@ To obtain all of the available site information, use the getSiteFileData functio
 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Wed Jan 30 16:51:40 2013
+% Tue Feb 05 15:37:18 2013
 \begin{tabular}{rllll}
   \hline
  & ColumnNames & ColumnNames.1 & ColumnNames.2 & ColumnNames.3 \\ 
@@ -293,12 +293,12 @@ Which produces the following dataframe:
 \begin{Schunk}
 \begin{Soutput}
   agency_cd  site_no            datetime tz_cd X02_00060 X02_00060_cd
-1      USGS 01491000 2013-01-29 00:00:00   EST       138            P
-2      USGS 01491000 2013-01-29 00:15:00   EST       135            P
-3      USGS 01491000 2013-01-29 00:30:00   EST       135            P
-4      USGS 01491000 2013-01-29 00:45:00   EST       135            P
-5      USGS 01491000 2013-01-29 01:00:00   EST       135            P
-6      USGS 01491000 2013-01-29 01:15:00   EST       140            P
+1      USGS 01491000 2013-02-04 00:00:00   EST       175            P
+2      USGS 01491000 2013-02-04 00:15:00   EST       175            P
+3      USGS 01491000 2013-02-04 00:30:00   EST       178            P
+4      USGS 01491000 2013-02-04 00:45:00   EST       178            P
+5      USGS 01491000 2013-02-04 01:00:00   EST       178            P
+6      USGS 01491000 2013-02-04 01:15:00   EST       178            P
 \end{Soutput}
 \end{Schunk}
 
@@ -345,7 +345,7 @@ There is a large amount of data returned for each observation. The column names 
 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Wed Jan 30 16:51:43 2013
+% Tue Feb 05 15:37:22 2013
 \begin{tabular}{rll}
   \hline
  & ColumnNames & ColumnNames.1 \\ 
@@ -418,6 +418,27 @@ An example of plotting the above data (Figure 3):
 \caption{Nitrate plot of Choptank River.}
 \end{figure}
 
+%------------------------------------------------------------
+\subsection{Water Quality Retrievals}
+%------------------------------------------------------------
+Additionally, there are additional data sets available on the Water Quality Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET or NWIS database.  Since STORET does not use USGS parameter codes, a 'characteristic name' must be supplied.  The following example retrieves specific conductance from a DNR site in Wisconsin.
+
+\begin{Schunk}
+\begin{Sinput}
+> specificCond <- getWQPData('WIDNR_WQX-10032762', 
+         'Specific conductance', '', '')
+> head(specificCond)
+\end{Sinput}
+\begin{Soutput}
+    dateTime qualifier.Specific conductance value.Specific conductance
+1 2011-02-14                                                      1360
+2 2011-02-17                                                      1930
+3 2011-03-03                                                      1240
+4 2011-03-10                                                      1480
+5 2011-03-29                                                      1130
+6 2011-04-07                                                      1200
+\end{Soutput}
+\end{Schunk}
 
 
 %------------------------------------------------------------
@@ -443,7 +464,7 @@ The funtion to obtain the daily values (discharge in this case) is getDVData.  I
  Min.   :1964-01-01   Min.   :  0.00991   Min.   :41637   Min.   : 1.000  
  1st Qu.:1976-04-01   1st Qu.:  0.87782   1st Qu.:46112   1st Qu.: 4.000  
  Median :1988-07-02   Median :  2.26535   Median :50586   Median : 7.000  
- Mean   :1988-07-02   Mean   :  4.01796   Mean   :50586   Mean   : 6.522  
+ Mean   :1988-07-02   Mean   :  4.01787   Mean   :50586   Mean   : 6.522  
  3rd Qu.:2000-10-01   3rd Qu.:  4.55901   3rd Qu.:55061   3rd Qu.:10.000  
  Max.   :2013-01-01   Max.   :246.35656   Max.   :59535   Max.   :12.000  
                                                                           
@@ -459,20 +480,41 @@ The funtion to obtain the daily values (discharge in this case) is getDVData.  I
  Min.   :    1   Min.   :-4.6141   Min.   : 0.01808   Min.   : 0.09606  
  1st Qu.: 4476   1st Qu.:-0.1303   1st Qu.: 0.92232   1st Qu.: 1.05811  
  Median : 8950   Median : 0.8177   Median : 2.45143   Median : 2.83074  
- Mean   : 8950   Mean   : 0.7258   Mean   : 4.01658   Mean   : 4.01178  
+ Mean   : 8950   Mean   : 0.7258   Mean   : 4.01655   Mean   : 4.01178  
  3rd Qu.:13424   3rd Qu.: 1.5171   3rd Qu.: 4.92309   3rd Qu.: 5.61594  
  Max.   :17899   Max.   : 5.5068   Max.   :84.00395   Max.   :25.47478  
                                    NA's   :6          NA's   :29        
 \end{Soutput}
 \end{Schunk}
 
-Date is a column with dates stored in an R Date type. Julian is an integer number of days since January 1, 1850.  Month and Day are integers from the start of each year. DecYear is the decimal year. MonthSeq is the (integer) number of months since 1850. Qualifier is the code from NWIS as mentioned in the raw data section. i is a count of observations.  LogQ is the natural logarithm of Q. The code will shift the discharge values to 0.001 times the mean if there are zero values detected in order to perform the logarithm. Columns Q7 and Q30 are 7 and 30 day running averages. 
+% latex table generated in R 2.15.2 by xtable 1.7-0 package
+% Tue Feb 05 15:37:28 2013
+\begin{tabular}{rlll}
+  \hline
+ & ColumnName & Type & Description \\ 
+  \hline
+1 & Date & Date & Date \\ 
+  2 & Q & number & Discharge in cms \\ 
+  3 & Julian & number & Number of days since January 1, 1850 \\ 
+  4 & Month & integer & Month of the year [1-12] \\ 
+  5 & Day & integer & Day of the year [1-366] \\ 
+  6 & DecYear & number & Decimal year \\ 
+  7 & MonthSeq & integer & Number of months since January 1, 1850 \\ 
+  8 & Qualifier & string & Qualifing code \\ 
+  9 & i & integer & Index \\ 
+  10 & LogQ & number & Natural logarithm of Q \\ 
+  11 & Q7 & number & 7 day running average of Q \\ 
+  12 & Q30 & number & 30 running average of Q \\ 
+   \hline
+\end{tabular}\\*
+The code will shift the discharge values to 0.001 times the mean if there are zero values detected in order to perform the logarithm. Columns Q7 and Q30 are 7 and 30 day running averages. 
 
 The function to obtain sample data from the water quality portal is getSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
 
 \begin{Schunk}
 \begin{Sinput}
-> Sample <-getSampleData(siteNumber,parameterCd,startDate, endDate,interactive=FALSE)
+> Sample <-getSampleData(siteNumber,parameterCd,
+       startDate, endDate,interactive=FALSE)
 > summary(Sample)
 \end{Sinput}
 \begin{Soutput}
@@ -502,6 +544,29 @@ The function to obtain sample data from the water quality portal is getSampleDat
 \end{Soutput}
 \end{Schunk}
 
+% latex table generated in R 2.15.2 by xtable 1.7-0 package
+% Tue Feb 05 15:37:29 2013
+\begin{tabular}{rlll}
+  \hline
+ & ColumnName & Type & Description \\ 
+  \hline
+1 & Date & Date & Date \\ 
+  2 & ConcLow & number & Lower limit of concentration \\ 
+  3 & ConcHigh & number & Upper limit of concentration \\ 
+  4 & Uncen & integer & Uncensored data (1=true, 0=false) \\ 
+  5 & ConcAve & number & Average concentration \\ 
+  6 & Julian & number & Number of days since January 1, 1850 \\ 
+  7 & Month & integer & Month of the year [1-12] \\ 
+  8 & Day & integer & Day of the year [1-366] \\ 
+  9 & DecYear & number & Decimal year \\ 
+  10 & MonthSeq & integer & Number of months since January 1, 1850 \\ 
+  11 & SinDY & number & Sine of ... \\ 
+  12 & CosDY & number & Cosine of ... \\ 
+  13 & Q & number & Discharge in cms \\ 
+  14 & LogQ & number & Natural logarithm of flow \\ 
+   \hline
+\end{tabular}
+
 The function to obtain "metadata", data about the gage station and measured parameters is getMetaData. This function essentially combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
 
 \begin{Schunk}
@@ -511,7 +576,7 @@ The function to obtain "metadata", data about the gage station and measured para
 \end{Schunk}
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Wed Jan 30 16:51:49 2013
+% Tue Feb 05 15:37:30 2013
 \begin{tabular}{rll}
   \hline
  & ColumnNames & ColumnNames.1 \\ 
@@ -540,43 +605,6 @@ The function to obtain "metadata", data about the gage station and measured para
    \hline
 \end{tabular}
 \\*
-
-
-\begin{Schunk}
-\begin{Sinput}
-> Sample <- mergeReport()
-\end{Sinput}
-\begin{Soutput}
- Discharge Record is 17899 days long, which is 49 years
- First day of the discharge record is 1964-01-01 and last day is 2013-01-01
- The water quality record has 627 samples
- The first sample is from 1973-06-04 and the last sample is from 2012-12-18
- Discharge: Minimum, mean and maximum 0.00991 4.02 246
- Concentration: Minimum, mean and maximum 0.05 1.1 2.4
- Percentage of the sample values that are censored is 0.16 %
-\end{Soutput}
-\begin{Sinput}
-> head(Sample)
-\end{Sinput}
-\begin{Soutput}
-        Date ConcLow ConcHigh Uncen ConcAve Julian Month Day  DecYear MonthSeq
-1 1973-06-04    1.30     1.30     1    1.30  45079     6 155 1973.422     1482
-2 1979-09-25    0.52     0.52     1    0.52  47383     9 268 1979.731     1557
-3 1979-10-24    0.62     0.62     1    0.62  47412    10 297 1979.810     1558
-4 1979-12-05    1.40     1.40     1    1.40  47454    12 339 1979.925     1560
-5 1979-12-21    1.20     1.20     1    1.20  47470    12 355 1979.969     1560
-6 1980-01-24    0.84     0.84     1    0.84  47504     1  24 1980.064     1561
-       SinDY      CosDY         Q     LogQ
-1  0.4699767 -0.8826788  3.256437 1.180634
-2 -0.9927882 -0.1198812  3.398022 1.223193
-3 -0.9295235  0.3687629  3.199804 1.163089
-4 -0.4547551  0.8906165  2.973269 1.089662
-5 -0.1961425  0.9805754  2.944952 1.080093
-6  0.3925740  0.9197204 10.901986 2.388945
-\end{Soutput}
-\end{Schunk}
-
-The difference between these dataframes, and the dataframes in the previous sections is that ...
 
 
 \newpage

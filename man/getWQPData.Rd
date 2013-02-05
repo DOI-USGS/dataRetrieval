@@ -9,10 +9,7 @@
   \item{siteNumber}{string site number.  If USGS, it should
   be in the form :'USGS-XXXXXXXXX...'}
 
-  \item{characteristicName}{string USGS parameter code.
-  Multiple names can be input with a ';' separator.
-  Leaving this blank will return all of the measured values
-  during the specified time period.}
+  \item{characteristicName}{string}
 
   \item{StartDate}{string starting date for data retrieval
   in the form YYYY-MM-DD.}
@@ -43,9 +40,8 @@
 }
 \examples{
 # These examples require an internet connection to run
-\dontrun{getWQPData('USGS-01594440','Chloride', '', '')}
-\dontrun{getWQPData('USGS-05114000','Suspended Sediment Discharge;Suspended sediment concentration (SSC);Suspended sediment discharge', '1975-01-01', '1995-03-31')}
-\dontrun{getWQPData('USGS-05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)}
+getWQPData('USGS-01594440','Chloride', '', '')
+getWQPData('WIDNR_WQX-10032762','Specific conductance', '', '')
 }
 \keyword{WQP}
 \keyword{data}
