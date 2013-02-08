@@ -58,6 +58,12 @@ Include the full path to EGRET_1.2.3.tar.gz to install the package (here is a Wi
 A Mac example:
 
 	install.packages("/Users/userA/RPackages/Statistic/dataRetrieval_1.2.1.tar.gz", repos=NULL, type="source")
+
+Another easy way to find and install a package, simply use:
+
+	install.packages(file.choose(), repos=NULL)
+	
+And a window will open allowing you to browse to the package.
 	
 ### Note on updating versions:
 Some users have found it necessary to delete the package folders before installing newer versions of either dataRetrieval or EGRET.  If you are experiencing an issue after updating a package, trying deleting the package folder, the default location for Windows is something like this:
