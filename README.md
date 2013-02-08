@@ -1,7 +1,7 @@
 dataRetrieval
 =============
 
-R package source for data retrieval specifically for the EGRET R package: TEST@
+R package source for data retrieval specifically for the EGRET R package:
 
 Exploration and Graphics for RivEr Time-series (EGRET)
 =============
@@ -39,8 +39,8 @@ Additionally, to subscribe to an email list concerning updates to these R packag
 Download and Package Installation
 ---------------------------------
 
-* The latest version of dataRetrieval can be downloaded with this link:
-[dataRetrieval_1.2.1](https://github.com/USGS-R/dataRetrieval/blob/master/dataRetrieval_1.2.1.tar.gz?raw=true)
+* The latest stable version of dataRetrieval can be downloaded with this link:
+[dataRetrieval_1.2.1](https://github.com/USGS-R/dataRetrieval/blob/packageBuilds/dataRetrieval_1.2.1.tar.gz?raw=true)
 
 * [EGRET User Guide](https://github.com/USGS-CIDA/WRTDS/raw/master/EGRET manual_4.doc) (Word Document)
 
