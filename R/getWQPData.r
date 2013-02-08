@@ -14,7 +14,7 @@
 #' (subsequent qualifier/value columns could follow depending on requested parameter codes)
 #' @export
 #' @examples
-#' # These examples require an internet connection
+#' # These examples require an internet connection to run
 #' getWQPData('USGS-01594440','Chloride', '', '')
 #' getWQPData('WIDNR_WQX-10032762','Specific conductance', '', '')
 getWQPData <- function(siteNumber,characteristicName,StartDate,EndDate,interactive=TRUE){
