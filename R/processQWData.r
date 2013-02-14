@@ -15,19 +15,24 @@
 #' rawSampleSelect <- processQWData(rawSample)
 processQWData <- function(data){
 
-  qualifier <- ifelse(
-    (
-      (
-        data$ResultDetectionConditionText == "Not Detected"
-        & length(grep("Lower", data$DetectionQuantitationLimitTypeName)) > 0
-      )
-    | 
-      (
-        data$ResultMeasureValue < data$DetectionQuantitationLimitMeasure.MeasureValue
-        & data$ResultValueTypeName == "Actual"
-      )
-    ),"<",""
-  )
+    qualifier <- ifelse((rawData$ResultDetectionConditionText == "Not Detected" | 
+           rawData$ResultDetectionConditionText == "Detected Not Quantified" |
+           data$ResultMeasureValue < data$DetectionQuantitationLimitMeasure.MeasureValue),"<","")
+                        
+    
+#   qualifier <- ifelse(
+#     (
+#       (
+#         data$ResultDetectionConditionText == "Not Detected"
+#         & length(grep("Lower", data$DetectionQuantitationLimitTypeName)) > 0
+#       )
+#     | 
+#       (
+#         data$ResultMeasureValue < data$DetectionQuantitationLimitMeasure.MeasureValue
+#         & data$ResultValueTypeName == "Actual"
+#       )
+#     ),"<",""
+#   )
   
   correctedData<-ifelse((nchar(qualifier)==0),data$ResultMeasureValue,data$DetectionQuantitationLimitMeasure.MeasureValue)
   test <- data.frame(data$USGSPCode)
