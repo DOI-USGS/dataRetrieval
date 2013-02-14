@@ -404,6 +404,43 @@ data.table <- xtable(DF,
 print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
 @
 
+In a more complex situation, the Sample data frame will combine all of the measured parameters.  An example is provided to explain how the values are combined:
+
+%------------------------------------------------------------
+\subsection{Complex Sample Data Example}
+%------------------------------------------------------------
+As an example, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). Form 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
+
+<<label=exampleComplexQW, echo=FALSE,results=tex>>=
+cdate <- c("2003-02-15","2003-06-30","2004-09-15","2005-01-30","2005-05-30","2005-10-30")
+rdp <- c("", "<","<","","","")
+dp <- c(0.02,0.01,0.005,NA,NA,NA)
+rpp <- c("", "","<","","","")
+pp <- c(0.5,0.3,0.2,NA,NA,NA)
+rtp <- c("","","","","<","<")
+tp <- c(NA,NA,NA,0.43,0.05,0.02)
+
+DF <- data.frame(cdate,rdp,dp,rpp,pp,rtp,tp)
+
+data.table <- xtable(DF,
+                     caption="Example data")
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
+@
+\\*
+
+The dataRetrieval package will "add up" all the values in a given row to form the total for that sample. Thus, you only want to enter data that should be added together. For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not suppose to add it in to the values in 2005.
+
+For every sample, the EGRET package requires a pair of numbers to define an interval in which the true value lies (ConcLow and ConcHigh). In a simple non-censored case (the reported value is above the detection limit), ConcLow equals ConcHigh and the interval collapses down to a single point.In a simple censored case, the value might be reported as <0.2, then ConcLow=NA and ConcHigh=0.2. We use NA instead of 0 as a way to elegantly handle future logarithm calculations.
+
+For the more complex example case, let us say dp is reported as <0.01 and pp is reported as 0.3. We know that the total must be at least 0.3 and could be as much as 0.31. Therefore, ConcLow=0.3 and ConcHigh=0.31. Another case would be if dp is reported as <0.005 and pp is reported <0.2. We know in this case that the true value could be as low as zero, but could be as high as 0.205. Therefore, in this case, ConcLow=NA and ConcHigh=0.205. The Sample dataframe for the example data is therefore:
+
+<<thirdExample,echo=FALSE>>=
+getPreLoadedSampleData(DF)
+
+@
+
+
+
 %------------------------------------------------------------
 \subsection{INFO Data}
 %------------------------------------------------------------

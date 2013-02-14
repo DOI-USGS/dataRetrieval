@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  5 FEB 2013 15:37
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  14 FEB 2013 17:09
 entering extended mode
 **dataRetrieval.tex
 (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.tex
@@ -439,15 +439,14 @@ LaTeX Info: Redefining \nameref on input line 42.
 \makeMPintoPDFobject=\count124
 \everyMPtoPDFconversion=\toks21
 ) (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval-concordance.tex)
-(D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.toc)
-\tf@toc=\write5
-
+(D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.toc
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [1
 
-{C:/Users/ldecicco/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+{C:/Users/ldecicco/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}])
+\tf@toc=\write5
 LaTeX Font Info:    Try loading font information for T1+aett on input line 60.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ae\t1aett.fd"
@@ -477,7 +476,7 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[6] <dataRetrieval-fig1.pdf, id=137, 433.62pt x 289.08pt>
+[6] <dataRetrieval-fig1.pdf, id=157, 433.62pt x 289.08pt>
 File: dataRetrieval-fig1.pdf Graphic file (type pdf)
 
 <use dataRetrieval-fig1.pdf>
@@ -491,7 +490,7 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[8] <dataRetrieval-fig2.pdf, id=155, 433.62pt x 289.08pt>
+[8] <dataRetrieval-fig2.pdf, id=175, 433.62pt x 289.08pt>
 File: dataRetrieval-fig2.pdf Graphic file (type pdf)
 
 <use dataRetrieval-fig2.pdf>
@@ -510,7 +509,7 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[10] <dataRetrieval-fig3.pdf, id=172, 433.62pt x 289.08pt>
+[10] <dataRetrieval-fig3.pdf, id=192, 433.62pt x 289.08pt>
 File: dataRetrieval-fig3.pdf Graphic file (type pdf)
 
 <use dataRetrieval-fig3.pdf>
@@ -541,13 +540,9 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 [12]
 LaTeX Font Info:    Font shape `TS1/aett/m/n' in size <10.95> not available
-(Font)              Font shape `TS1/cmtt/m/n' tried instead on input line 486.
+(Font)              Font shape `TS1/cmtt/m/n' tried instead on input line 489.
 
-Overfull \vbox (21.68121pt too high) has occurred while \output is active []
-
-
-[13]
-Underfull \hbox (badness 10000) in paragraph at lines 580--608
+Underfull \hbox (badness 10000) in paragraph at lines 497--515
 
  []
 
@@ -555,11 +550,25 @@ Underfull \hbox (badness 10000) in paragraph at lines 580--608
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
+[13]
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
 [14]
+Underfull \hbox (badness 10000) in paragraph at lines 589--601
+
+ []
+
+
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [15]
+Underfull \hbox (badness 10000) in paragraph at lines 644--672
+
+ []
+
+
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
@@ -572,12 +581,6 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [18]
-Overfull \hbox (63.21521pt too wide) in paragraph at lines 742--743
-\T1/aer/m/n/10.95 library/2.15/dataRetrieval, and the de-fault for a Mac: /User
-s/userA/Library/R/2.15/library/dataRetrieval.
- []
-
-
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
@@ -586,24 +589,38 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [20]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 790.
+Overfull \hbox (63.21521pt too wide) in paragraph at lines 806--807
+\T1/aer/m/n/10.95 library/2.15/dataRetrieval, and the de-fault for a Mac: /User
+s/userA/Library/R/2.15/library/dataRetrieval.
+ []
+
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [21]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 790.
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[22]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 854.
+
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[23]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 854.
  (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 790.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 790.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 854.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 854.
 Package rerunfilecheck Info: File `dataRetrieval.out' has not changed.
-(rerunfilecheck)             Checksum: EC7004D55096E88EE19A0D81007FF8E5;1310.
+(rerunfilecheck)             Checksum: 02DBB41E477B3A8A750BA3946A061AE5;1577.
  ) 
 Here is how much of TeX's memory you used:
- 7390 strings out of 494045
- 105940 string characters out of 3145961
- 191876 words of memory out of 3000000
- 10493 multiletter control sequences out of 15000+200000
+ 7400 strings out of 494045
+ 106074 string characters out of 3145961
+ 191879 words of memory out of 3000000
+ 10497 multiletter control sequences out of 15000+200000
  40303 words of font info for 83 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
  35i,8n,28p,866b,483s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -621,9 +638,9 @@ cmr7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8
 .pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.p
 fb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb
 >
-Output written on dataRetrieval.pdf (21 pages, 290588 bytes).
+Output written on dataRetrieval.pdf (23 pages, 297741 bytes).
 PDF statistics:
- 300 PDF objects out of 1000 (max. 8388607)
- 49 named destinations out of 1000 (max. 500000)
- 156 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 329 PDF objects out of 1000 (max. 8388607)
+ 55 named destinations out of 1000 (max. 500000)
+ 188 words of extra memory for PDF output out of 10000 (max. 10000000)
 
