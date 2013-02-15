@@ -17,5 +17,6 @@ populateConcentrations <- function(rawData){  # rawData is a dataframe with valu
   concentrationColumns$ConcHigh <- as.numeric(rawData$value)
   tempConcLow<-ifelse((rawData$code!="<" | is.na(rawData$code)),rawData$value,0)
   concentrationColumns$Uncen <- ifelse(tempConcLow==0,0,1)  
+  #Add if value = NA?
   return (concentrationColumns)  # returns ConcLow, ConcHigh, Uncen (0 if censored, 1 if uncensored)
 }
