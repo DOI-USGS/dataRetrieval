@@ -17,10 +17,10 @@
 \contentsline {section}{\numberline {4}Retrieving User-Generated Data Files}{17}{section.4}
 \contentsline {subsection}{\numberline {4.1}getDailyDataFromFile}{17}{subsection.4.1}
 \contentsline {subsection}{\numberline {4.2}getSampleDataFromFile}{18}{subsection.4.2}
-\contentsline {section}{\numberline {5}Appendix 1: Getting Started}{20}{section.5}
-\contentsline {subsection}{\numberline {5.1}New to R?}{20}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}R User: Installing dataRetrieval from downloaded binary}{20}{subsection.5.2}
-\contentsline {subsection}{\numberline {5.3}R Developers: Installing dataRetrieval from gitHub}{21}{subsection.5.3}
-\contentsline {section}{\numberline {6}Appendix 2: Columns Names}{23}{section.6}
-\contentsline {subsection}{\numberline {6.1}INFO dataframe}{23}{subsection.6.1}
-\contentsline {subsection}{\numberline {6.2}Water Quality Portal}{24}{subsection.6.2}
+\contentsline {section}{\numberline {5}Appendix 1: Getting Started}{19}{section.5}
+\contentsline {subsection}{\numberline {5.1}New to R?}{19}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}R User: Installing dataRetrieval from downloaded binary}{19}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}R Developers: Installing dataRetrieval from gitHub}{20}{subsection.5.3}
+\contentsline {section}{\numberline {6}Appendix 2: Columns Names}{22}{section.6}
+\contentsline {subsection}{\numberline {6.1}INFO dataframe}{22}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}Water Quality Portal}{23}{subsection.6.2}

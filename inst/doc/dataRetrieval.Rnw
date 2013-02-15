@@ -479,11 +479,10 @@ date  Qdaily
 \end{verbatim}
 
 The call to open this file, convert the flow to cubic meters per second, and populate the Daily data frame would be:
-<<openDaily, eval = TRUE>>=
+<<openDaily, eval = FALSE>>=
 fileName <- "ChoptankRiverFlow.txt"
-filePath <-  "~/RData/"
+filePath <-  "C:/RData/"
 Daily <- getDailyDataFromFile(filePath,fileName,separator="\t",interactive=FALSE)
-head(Daily)
 @
 
 %------------------------------------------------------------ 
@@ -501,11 +500,10 @@ cdate;remarkCode;Nitrate
 ...
 \end{verbatim}
 The call to open this file, and populate the Sample dataframe would be:
-<<openSample, eval = TRUE>>=
+<<openSample, eval = FALSE>>=
 fileName <- "ChoptankRiverNitrate.csv"
 filePath <-  "C:/RData/"
 Sample <- getSampleDataFromFile(filePath,fileName,separator=",",interactive=FALSE)
-head(Sample)
 @
 
 

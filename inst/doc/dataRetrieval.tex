@@ -79,7 +79,7 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 11:39:15 2013
+% Fri Feb 15 13:18:37 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Parameter Codes}
@@ -102,7 +102,7 @@ For real-time data, the parameter code and site ID will suffice.  The USGS store
 
 The most common stat codes are:
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 11:39:15 2013
+% Fri Feb 15 13:18:37 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Stat Codes}
@@ -448,7 +448,7 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 11:39:24 2013
+% Fri Feb 15 13:18:45 2013
 \begin{tabular}{rlll}
   \hline
  & ColumnName & Type & Description \\ 
@@ -511,7 +511,7 @@ The function to obtain sample data from the water quality portal is getSampleDat
 Details of the Sample dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 11:39:25 2013
+% Fri Feb 15 13:18:46 2013
 \begin{tabular}{rlll}
   \hline
  & ColumnName & Type & Description \\ 
@@ -540,7 +540,7 @@ In a more complex situation, the Sample data frame will combine all of the measu
 As an example, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). Form 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 11:39:25 2013
+% Fri Feb 15 13:18:46 2013
 \begin{tabular}{rllrlrlr}
   \hline
  & cdate & rdp & dp & rpp & pp & rtp & tp \\ 
@@ -646,19 +646,9 @@ The call to open this file, convert the flow to cubic meters per second, and pop
 \begin{Schunk}
 \begin{Sinput}
 > fileName <- "ChoptankRiverFlow.txt"
-> filePath <-  "~/RData/"
+> filePath <-  "C:/RData/"
 > Daily <- getDailyDataFromFile(filePath,fileName,separator="\t",interactive=FALSE)
-> head(Daily)
 \end{Sinput}
-\begin{Soutput}
-        Date          Q Julian Month Day  DecYear MonthSeq i      LogQ Q7 Q30
-1 1999-10-01 0.08579729  54694    10 274 1999.747     1798 1 -2.455768 NA  NA
-2 1999-10-02 0.06815672  54695    10 275 1999.750     1798 2 -2.685945 NA  NA
-3 1999-10-03 0.06094013  54696    10 276 1999.753     1798 3 -2.797863 NA  NA
-4 1999-10-04 0.06094013  54697    10 277 1999.755     1798 4 -2.797863 NA  NA
-5 1999-10-05 0.09060835  54698    10 278 1999.758     1798 5 -2.401209 NA  NA
-6 1999-10-06 0.07858069  54699    10 279 1999.761     1798 6 -2.543629 NA  NA
-\end{Soutput}
 \end{Schunk}
 
 %------------------------------------------------------------ 
@@ -681,24 +671,7 @@ The call to open this file, and populate the Sample dataframe would be:
 > fileName <- "ChoptankRiverNitrate.csv"
 > filePath <-  "C:/RData/"
 > Sample <- getSampleDataFromFile(filePath,fileName,separator=",",interactive=FALSE)
-> head(Sample)
 \end{Sinput}
-\begin{Soutput}
-        Date ConcLow ConcHigh Uncen ConcAve Julian Month Day  DecYear MonthSeq
-1 1999-10-07    1.40     1.40     1   1.400  54700    10 280 1999.764     1798
-2 1999-11-04      NA     0.99     0   0.495  54728    11 308 1999.840     1799
-3 1999-12-03    1.42     1.42     1   1.420  54757    12 337 1999.919     1800
-4 2000-01-04    1.59     1.59     1   1.590  54789     1   4 2000.010     1801
-5 2000-02-03    1.54     1.54     1   1.540  54819     2  34 2000.092     1802
-6 2000-02-15    1.37     1.37     1   1.370  54831     2  46 2000.124     1802
-        SinDY     CosDY
-1 -0.99631836 0.0857305
-2 -0.84377556 0.5366962
-3 -0.48505985 0.8744810
-4  0.06004896 0.9981954
-5  0.54391895 0.8391378
-6  0.70406552 0.7101350
-\end{Soutput}
 \end{Schunk}
 
 
@@ -785,7 +758,7 @@ To then open the library, simply type:
 %------------------------------------------------------------
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 11:39:26 2013
+% Fri Feb 15 13:18:46 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -841,7 +814,7 @@ agency.cd \\
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 11:39:26 2013
+% Fri Feb 15 13:18:46 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -889,7 +862,7 @@ OrganizationIdentifier \\
 \end{tabular}\\*
 \newpage
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 11:39:26 2013
+% Fri Feb 15 13:18:46 2013
 \begin{tabular}{l}
   \hline
   \hline
