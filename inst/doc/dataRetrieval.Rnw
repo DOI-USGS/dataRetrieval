@@ -523,7 +523,7 @@ There are many options for running and editing R code, one nice enviornment to l
 %------------------------------------------------------------
 \subsection{R User: Installing dataRetrieval from downloaded binary}
 %------------------------------------------------------------ 
-The latest dataRetrieval package build is available for download at \url{https://github.com/USGS-R/dataRetrieval/blob/master/dataRetrieval_1.2.1.tar.gz}.  If the package's tar.gz file is saved in R's working directory, then the following command will fully install the package:
+The latest dataRetrieval package build is available for download at \url{https://github.com/USGS-R/dataRetrieval/raw/packageBuilds/dataRetrieval_1.2.1.tar.gz}.  If the package's tar.gz file is saved in R's working directory, then the following command will fully install the package:
 
 <<installFromWD,eval = FALSE>>=
 install.packages("dataRetrieval_1.2.1.tar.gz", 
