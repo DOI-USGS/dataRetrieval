@@ -61,7 +61,7 @@ A Mac example:
 
 Another easy way to find and install a package, simply use:
 
-	install.packages(file.choose(), repos=NULL)
+	install.packages(file.choose(), repos=NULL, type="source")
 	
 And a window will open allowing you to browse to the package.
 	
