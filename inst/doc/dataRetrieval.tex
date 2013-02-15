@@ -79,7 +79,7 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Thu Feb 14 17:09:15 2013
+% Fri Feb 15 11:39:15 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Parameter Codes}
@@ -102,7 +102,7 @@ For real-time data, the parameter code and site ID will suffice.  The USGS store
 
 The most common stat codes are:
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Thu Feb 14 17:09:16 2013
+% Fri Feb 15 11:39:15 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Stat Codes}
@@ -132,28 +132,8 @@ To obtain all of the available site information, use the getSiteFileData functio
 \end{Sinput}
 \end{Schunk}
 
+A list of the available columns are found in Appendix 2: INFO dataframe. Pulling out a specific example piece of information, in this case station name can be done as follows:
 
-% latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Thu Feb 14 17:09:16 2013
-\begin{tabular}{rllll}
-  \hline
- & ColumnNames & ColumnNames.1 & ColumnNames.2 & ColumnNames.3 \\ 
-  \hline
-1 & agency.cd & dec.coord.datum.cd & alt.datum.cd & reliability.cd \\ 
-  2 & site.no & district.cd & huc.cd & gw.file.cd \\ 
-  3 & station.nm & state.cd & basin.cd & nat.aqfr.cd \\ 
-  4 & site.tp.cd & county.cd & topo.cd & aqfr.cd \\ 
-  5 & lat.va & country.cd & instruments.cd & aqfr.type.cd \\ 
-  6 & long.va & land.net.ds & construction.dt & well.depth.va \\ 
-  7 & dec.lat.va & map.nm & inventory.dt & hole.depth.va \\ 
-  8 & dec.long.va & map.scale.fc & drain.area.va & depth.src.cd \\ 
-  9 & coord.meth.cd & alt.va & contrib.drain.area.va & project.no \\ 
-  10 & coord.acy.cd & alt.meth.cd & tz.cd & queryTime \\ 
-  11 & coord.datum.cd & alt.acy.va & local.time.fg &  \\ 
-   \hline
-\end{tabular}\\*
-
-Pulling out a specific example piece of information, in this case station name can be done as follows:
 \begin{Schunk}
 \begin{Sinput}
 > ChoptankInfo$station.nm
@@ -257,6 +237,7 @@ An example of plotting the above data (Figure 1):
    ))
 > axis(4,col="red",col.axis="red")
 > mtext("Discharge [cfs]",side=4,line=3,col="red")
+> title(paste(ChoptankInfo$station.nm,"2012",sep=" "))
 \end{Sinput}
 \end{Schunk}
 \newpage
@@ -278,8 +259,8 @@ There are occasions where NWIS values are not reported as numbers, instead there
 We can also get real-time, instantaneous measurements using the retrieveUnitNWISData function:
 \begin{Schunk}
 \begin{Sinput}
-> siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
-> parameterCd <- "00060"  # Discharge in cubic feet per second
+> siteNumber <- "01491000"
+> parameterCd <- "00060"  # Discharge (cfs)
 > startDate <- as.character(Sys.Date()-1) # Yesterday 
 >   # (or, the day before the dataRetrieval package was built)
 > endDate <- as.character(Sys.Date()) # Today 
@@ -293,12 +274,12 @@ Which produces the following dataframe:
 \begin{Schunk}
 \begin{Soutput}
   agency_cd  site_no            datetime tz_cd X02_00060 X02_00060_cd
-1      USGS 01491000 2013-02-13 00:00:00   EST       209            P
-2      USGS 01491000 2013-02-13 00:15:00   EST       209            P
-3      USGS 01491000 2013-02-13 00:30:00   EST       211            P
-4      USGS 01491000 2013-02-13 00:45:00   EST       209            P
-5      USGS 01491000 2013-02-13 01:00:00   EST       206            P
-6      USGS 01491000 2013-02-13 01:15:00   EST       206            P
+1      USGS 01491000 2013-02-14 00:00:00   EST       197            P
+2      USGS 01491000 2013-02-14 00:15:00   EST       197            P
+3      USGS 01491000 2013-02-14 00:30:00   EST       202            P
+4      USGS 01491000 2013-02-14 00:45:00   EST       197            P
+5      USGS 01491000 2013-02-14 01:00:00   EST       197            P
+6      USGS 01491000 2013-02-14 01:15:00   EST       197            P
 \end{Soutput}
 \end{Schunk}
 
@@ -311,6 +292,7 @@ A simple plotting example is shown in Figure 2:
    datetime, X02_00060,
    ylab="Discharge [cfs]",xlab=""
    ))
+> title(ChoptankInfo$station.nm)
 \end{Sinput}
 \end{Schunk}
 \newpage
@@ -341,49 +323,8 @@ Finally, we can use the dataRetrieval package to get USGS water quality data tha
 \end{Sinput}
 \end{Schunk}
 
-There is a large amount of data returned for each observation. The column names are listed below:
+There is a large amount of data returned for each observation. The column names are listed in Appendix 2.
 
-
-% latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Thu Feb 14 17:09:20 2013
-\begin{tabular}{rll}
-  \hline
- & ColumnNames & ColumnNames.1 \\ 
-  \hline
-1 & OrganizationIdentifier & CharacteristicName \\ 
-  2 & OrganizationFormalName & ResultSampleFractionText \\ 
-  3 & ActivityIdentifier & ResultMeasureValue \\ 
-  4 & ActivityTypeCode & ResultMeasure.MeasureUnitCode \\ 
-  5 & ActivityMediaName & MeasureQualifierCode \\ 
-  6 & ActivityMediaSubdivisionName & ResultStatusIdentifier \\ 
-  7 & ActivityStartDate & StatisticalBaseCode \\ 
-  8 & ActivityStartTime.Time & ResultValueTypeName \\ 
-  9 & ActivityStartTime.TimeZoneCode & ResultWeightBasisText \\ 
-  10 & ActivityEndDate & ResultTimeBasisText \\ 
-  11 & ActivityEndTime.Time & ResultTemperatureBasisText \\ 
-  12 & ActivityEndTime.TimeZoneCode & ResultParticleSizeBasisText \\ 
-  13 & ActivityDepthHeightMeasure.MeasureValue & PrecisionValue \\ 
-  14 & ActivityDepthHeightMeasure.MeasureUnitCode & ResultCommentText \\ 
-  15 & ActivityDepthAltitudeReferencePointText & USGSPCode \\ 
-  16 & ActivityTopDepthHeightMeasure.MeasureValue & ResultDepthHeightMeasure.MeasureValue \\ 
-  17 & ActivityTopDepthHeightMeasure.MeasureUnitCode & ResultDepthHeightMeasure.MeasureUnitCode \\ 
-  18 & ActivityBottomDepthHeightMeasure.MeasureValue & ResultDepthAltitudeReferencePointText \\ 
-  19 & ActivityBottomDepthHeightMeasure.MeasureUnitCode & SubjectTaxonomicName \\ 
-  20 & ProjectIdentifier & SampleTissueAnatomyName \\ 
-  21 & ActivityConductingOrganizationText & ResultAnalyticalMethod.MethodIdentifier \\ 
-  22 & MonitoringLocationIdentifier & ResultAnalyticalMethod.MethodIdentifierContext \\ 
-  23 & ActivityCommentText & ResultAnalyticalMethod.MethodName \\ 
-  24 & SampleAquifer & MethodDescriptionText \\ 
-  25 & HydrologicCondition & LaboratoryName \\ 
-  26 & HydrologicEvent & AnalysisStartDate \\ 
-  27 & SampleCollectionMethod.MethodIdentifier & ResultLaboratoryCommentText \\ 
-  28 & SampleCollectionMethod.MethodIdentifierContext & DetectionQuantitationLimitTypeName \\ 
-  29 & SampleCollectionMethod.MethodName & DetectionQuantitationLimitMeasure.MeasureValue \\ 
-  30 & SampleCollectionEquipmentName & DetectionQuantitationLimitMeasure.MeasureUnitCode \\ 
-  31 & ResultDetectionConditionText & PreparationStartDate \\ 
-   \hline
-\end{tabular}
-\\*
 To get a simplified dataframe that contains only datetime, value, and qualifier, use the function getQWData:
 
 \begin{Schunk}
@@ -408,6 +349,7 @@ An example of plotting the above data (Figure 3):
    xlab="Date",ylab = paste(parameterINFO$srsname,
        "[",parameterINFO$parameter_units,"]")
    ))
+> title(ChoptankInfo$station.nm)
 \end{Sinput}
 \end{Schunk}
 
@@ -447,6 +389,19 @@ Additionally, there are additional data sets available on the Water Quality Port
 Rather than using the raw data as retrieved by the web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
 
 In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We will need essentially the same data that was retrieved in the previous section, but we will get the daily discharge values in a dataframe called Daily, the nitrate sample data in a dataframe called Sample, and the data about the station and parameters in a dataframe called INFO. These are the dataframes that were exclusively designed to work with the EGRET R package, however can be very useful for all hydrologic studies.
+
+%------------------------------------------------------------
+\subsection{INFO Data}
+%------------------------------------------------------------
+The function to obtain "metadata", data about the gage station and measured parameters is getMetaData. This function essentially combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
+
+\begin{Schunk}
+\begin{Sinput}
+> INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
+\end{Sinput}
+\end{Schunk}
+
+Column names in the INFO dataframe are listed in Appendix 2.
 
 %------------------------------------------------------------
 \subsection{Daily Data}
@@ -493,7 +448,7 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Thu Feb 14 17:09:24 2013
+% Fri Feb 15 11:39:24 2013
 \begin{tabular}{rlll}
   \hline
  & ColumnName & Type & Description \\ 
@@ -556,7 +511,7 @@ The function to obtain sample data from the water quality portal is getSampleDat
 Details of the Sample dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Thu Feb 14 17:09:25 2013
+% Fri Feb 15 11:39:25 2013
 \begin{tabular}{rlll}
   \hline
  & ColumnName & Type & Description \\ 
@@ -585,7 +540,7 @@ In a more complex situation, the Sample data frame will combine all of the measu
 As an example, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). Form 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Thu Feb 14 17:09:25 2013
+% Fri Feb 15 11:39:25 2013
 \begin{tabular}{rllrlrlr}
   \hline
  & cdate & rdp & dp & rpp & pp & rtp & tp \\ 
@@ -624,51 +579,40 @@ For the more complex example case, let us say dp is reported as <0.01 and pp is 
 \end{Soutput}
 \end{Schunk}
 
-
-
 %------------------------------------------------------------
-\subsection{INFO Data}
+\subsection{Merge Report}
 %------------------------------------------------------------
-The function to obtain "metadata", data about the gage station and measured parameters is getMetaData. This function essentially combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
+Finally, there is a function called mergeReport that will look at both the Daily and Sample dataframe, and populate Q and LogQ columns into the Sample dataframe. The default arguments are Daily and Sample, however if you want to use other similarly structured dataframes, you can specify localDaily or localSample.
 
 \begin{Schunk}
 \begin{Sinput}
-> INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
+> startDate <-'1985-01-01' 
+> endDate <- '1985-03-31'
+> site <- '01594440'
+> Daily <- getDVData(site,'00060', startDate, endDate, interactive=FALSE)
+> Sample <- getSampleData(site,'01075', startDate, endDate, interactive=FALSE)
+> Sample <- mergeReport()
 \end{Sinput}
+\begin{Soutput}
+ Discharge Record is 90 days long, which is 0 years
+ First day of the discharge record is 1985-01-01 and last day is 1985-03-31
+ The water quality record has 1 samples
+ The first sample is from 1985-03-13 and the last sample is from 1985-03-13
+ Discharge: Minimum, mean and maximum 2.83 8.41 106
+ Concentration: Minimum, mean and maximum 1 1 1
+ Percentage of the sample values that are censored is 100 %
+\end{Soutput}
+\begin{Sinput}
+> head(Sample)
+\end{Sinput}
+\begin{Soutput}
+        Date ConcLow ConcHigh Uncen ConcAve Julian Month Day  DecYear MonthSeq
+1 1985-03-13      NA        1     0     0.5  49379     3  72 1985.195     1623
+      SinDY     CosDY      Q     LogQ
+1 0.9416344 0.3366373 5.2103 1.650637
+\end{Soutput}
 \end{Schunk}
 
-Column names in the INFO dataframe are listed below:
-
-% latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Thu Feb 14 17:09:26 2013
-\begin{tabular}{rll}
-  \hline
- & ColumnNames & ColumnNames.1 \\ 
-  \hline
-1 & agency.cd & alt.datum.cd \\ 
-  2 & site.no & huc.cd \\ 
-  3 & station.nm & basin.cd \\ 
-  4 & site.tp.cd & topo.cd \\ 
-  5 & lat.va & construction.dt \\ 
-  6 & long.va & inventory.dt \\ 
-  7 & dec.lat.va & drain.area.va \\ 
-  8 & dec.long.va & contrib.drain.area.va \\ 
-  9 & coord.meth.cd & tz.cd \\ 
-  10 & coord.acy.cd & local.time.fg \\ 
-  11 & coord.datum.cd & reliability.cd \\ 
-  12 & dec.coord.datum.cd & project.no \\ 
-  13 & district.cd & queryTime \\ 
-  14 & state.cd & drainSqKm \\ 
-  15 & county.cd & staAbbrev \\ 
-  16 & country.cd & param.nm \\ 
-  17 & map.nm & param.units \\ 
-  18 & map.scale.fc & paramShortName \\ 
-  19 & alt.va & paramNumber \\ 
-  20 & alt.meth.cd & constitAbbrev \\ 
-  21 & alt.acy.va &  \\ 
-   \hline
-\end{tabular}
-\\*
 
 
 \newpage
@@ -832,9 +776,148 @@ To then open the library, simply type:
 \end{Sinput}
 \end{Schunk}
 
+
+%------------------------------------------------------------ 
+\section{Appendix 2: Columns Names}
+%------------------------------------------------------------ 
+%------------------------------------------------------------
+\subsection{INFO dataframe}
+%------------------------------------------------------------
+
+% latex table generated in R 2.15.2 by xtable 1.7-0 package
+% Fri Feb 15 11:39:26 2013
+\begin{tabular}{l}
+  \hline
+  \hline
+agency.cd \\ 
+  site.no \\ 
+  station.nm \\ 
+  site.tp.cd \\ 
+  lat.va \\ 
+  long.va \\ 
+  dec.lat.va \\ 
+  dec.long.va \\ 
+  coord.meth.cd \\ 
+  coord.acy.cd \\ 
+  coord.datum.cd \\ 
+  dec.coord.datum.cd \\ 
+  district.cd \\ 
+  state.cd \\ 
+  county.cd \\ 
+  country.cd \\ 
+  map.nm \\ 
+  map.scale.fc \\ 
+  alt.va \\ 
+  alt.meth.cd \\ 
+  alt.acy.va \\ 
+  alt.datum.cd \\ 
+  huc.cd \\ 
+  basin.cd \\ 
+  topo.cd \\ 
+  construction.dt \\ 
+  inventory.dt \\ 
+  drain.area.va \\ 
+  contrib.drain.area.va \\ 
+  tz.cd \\ 
+  local.time.fg \\ 
+  reliability.cd \\ 
+  project.no \\ 
+  queryTime \\ 
+  drainSqKm \\ 
+  staAbbrev \\ 
+  param.nm \\ 
+  param.units \\ 
+  paramShortName \\ 
+  paramNumber \\ 
+  constitAbbrev \\ 
+   \hline
+\end{tabular}
+\\*
+
+
+%------------------------------------------------------------
+\subsection{Water Quality Portal}
+%------------------------------------------------------------
+There are 62 columns returned from the water quality portal. 
+
+% latex table generated in R 2.15.2 by xtable 1.7-0 package
+% Fri Feb 15 11:39:26 2013
+\begin{tabular}{l}
+  \hline
+  \hline
+OrganizationIdentifier \\ 
+  OrganizationFormalName \\ 
+  ActivityIdentifier \\ 
+  ActivityTypeCode \\ 
+  ActivityMediaName \\ 
+  ActivityMediaSubdivisionName \\ 
+  ActivityStartDate \\ 
+  ActivityStartTime.Time \\ 
+  ActivityStartTime.TimeZoneCode \\ 
+  ActivityEndDate \\ 
+  ActivityEndTime.Time \\ 
+  ActivityEndTime.TimeZoneCode \\ 
+  ActivityDepthHeightMeasure.MeasureValue \\ 
+  ActivityDepthHeightMeasure.MeasureUnitCode \\ 
+  ActivityDepthAltitudeReferencePointText \\ 
+  ActivityTopDepthHeightMeasure.MeasureValue \\ 
+  ActivityTopDepthHeightMeasure.MeasureUnitCode \\ 
+  ActivityBottomDepthHeightMeasure.MeasureValue \\ 
+  ActivityBottomDepthHeightMeasure.MeasureUnitCode \\ 
+  ProjectIdentifier \\ 
+  ActivityConductingOrganizationText \\ 
+  MonitoringLocationIdentifier \\ 
+  ActivityCommentText \\ 
+  SampleAquifer \\ 
+  HydrologicCondition \\ 
+  HydrologicEvent \\ 
+  SampleCollectionMethod.MethodIdentifier \\ 
+  SampleCollectionMethod.MethodIdentifierContext \\ 
+  SampleCollectionMethod.MethodName \\ 
+  SampleCollectionEquipmentName \\ 
+  ResultDetectionConditionText \\ 
+  CharacteristicName \\ 
+  ResultSampleFractionText \\ 
+  ResultMeasureValue \\ 
+  ResultMeasure.MeasureUnitCode \\ 
+  MeasureQualifierCode \\ 
+  ResultStatusIdentifier \\ 
+  StatisticalBaseCode \\ 
+  ResultValueTypeName \\ 
+  ResultWeightBasisText \\ 
+   \hline
+\end{tabular}\\*
 \newpage
-
-
+% latex table generated in R 2.15.2 by xtable 1.7-0 package
+% Fri Feb 15 11:39:26 2013
+\begin{tabular}{l}
+  \hline
+  \hline
+ResultTimeBasisText \\ 
+  ResultTemperatureBasisText \\ 
+  ResultParticleSizeBasisText \\ 
+  PrecisionValue \\ 
+  ResultCommentText \\ 
+  USGSPCode \\ 
+  ResultDepthHeightMeasure.MeasureValue \\ 
+  ResultDepthHeightMeasure.MeasureUnitCode \\ 
+  ResultDepthAltitudeReferencePointText \\ 
+  SubjectTaxonomicName \\ 
+  SampleTissueAnatomyName \\ 
+  ResultAnalyticalMethod.MethodIdentifier \\ 
+  ResultAnalyticalMethod.MethodIdentifierContext \\ 
+  ResultAnalyticalMethod.MethodName \\ 
+  MethodDescriptionText \\ 
+  LaboratoryName \\ 
+  AnalysisStartDate \\ 
+  ResultLaboratoryCommentText \\ 
+  DetectionQuantitationLimitTypeName \\ 
+  DetectionQuantitationLimitMeasure.MeasureValue \\ 
+  DetectionQuantitationLimitMeasure.MeasureUnitCode \\ 
+  PreparationStartDate \\ 
+   \hline
+\end{tabular}\\*
+\newpage
 %------------------------------------------------------------
 % BIBLIO
 %------------------------------------------------------------

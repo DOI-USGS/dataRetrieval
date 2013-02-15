@@ -48,6 +48,7 @@ Collate:
     'getWQPData.r'
     'retrieveUnitNWISData.r'
     'getRawQWData.r'
+    'retrieveNWISqwData.r'
     'processQWData.r'
 Depends:
     R (>= 2.15.0),

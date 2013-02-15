@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  14 FEB 2013 17:09
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  15 FEB 2013 11:39
 entering extended mode
 **dataRetrieval.tex
 (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.tex
@@ -456,11 +456,6 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 138--155
-
- []
-
-
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
@@ -476,11 +471,11 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[6] <dataRetrieval-fig1.pdf, id=157, 433.62pt x 289.08pt>
+[6] <dataRetrieval-fig1.pdf, id=177, 433.62pt x 289.08pt>
 File: dataRetrieval-fig1.pdf Graphic file (type pdf)
 
 <use dataRetrieval-fig1.pdf>
-Package pdftex.def Info: dataRetrieval-fig1.pdf used on input line 266.
+Package pdftex.def Info: dataRetrieval-fig1.pdf used on input line 247.
 (pdftex.def)             Requested size: 358.46039pt x 238.98355pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
@@ -490,59 +485,56 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[8] <dataRetrieval-fig2.pdf, id=175, 433.62pt x 289.08pt>
+[8] <dataRetrieval-fig2.pdf, id=196, 433.62pt x 289.08pt>
 File: dataRetrieval-fig2.pdf Graphic file (type pdf)
 
 <use dataRetrieval-fig2.pdf>
-Package pdftex.def Info: dataRetrieval-fig2.pdf used on input line 320.
+Package pdftex.def Info: dataRetrieval-fig2.pdf used on input line 302.
 (pdftex.def)             Requested size: 358.46039pt x 238.98355pt.
-
-Overfull \hbox (144.33714pt too wide) in paragraph at lines 349--388
-[][] 
- []
-
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [9 <D:/LADData/RCode/dataRetrieval/inst/doc/dataRetrieval-fig2.pdf>]
-Overfull \vbox (21.68121pt too high) has occurred while \output is active []
-
-
-[10] <dataRetrieval-fig3.pdf, id=192, 433.62pt x 289.08pt>
+<dataRetrieval-fig3.pdf, id=210, 433.62pt x 289.08pt>
 File: dataRetrieval-fig3.pdf Graphic file (type pdf)
 
 <use dataRetrieval-fig3.pdf>
-Package pdftex.def Info: dataRetrieval-fig3.pdf used on input line 416.
+Package pdftex.def Info: dataRetrieval-fig3.pdf used on input line 358.
 (pdftex.def)             Requested size: 358.46039pt x 238.98355pt.
-LaTeX Font Info:    Try loading font information for TS1+aett on input line 428
+
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[10 <D:/LADData/RCode/dataRetrieval/inst/doc/dataRetrieval-fig3.pdf>]
+LaTeX Font Info:    Try loading font information for TS1+aett on input line 370
 .
 
 (C:/PROGRA~1/R/R-215~1.2/share/texmf/tex/latex\ts1aett.fd
 File: ts1aett.fd 
 )
-LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 428
+LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 370
 .
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1cmtt.fd"
 File: ts1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `TS1/aett/m/sl' in size <10.95> not available
-(Font)              Font shape `TS1/cmtt/m/sl' tried instead on input line 428.
+(Font)              Font shape `TS1/cmtt/m/sl' tried instead on input line 370.
 
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[11 <D:/LADData/RCode/dataRetrieval/inst/doc/dataRetrieval-fig3.pdf>]
+[11]
+LaTeX Font Info:    Font shape `TS1/aett/m/n' in size <10.95> not available
+(Font)              Font shape `TS1/cmtt/m/n' tried instead on input line 444.
+
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [12]
-LaTeX Font Info:    Font shape `TS1/aett/m/n' in size <10.95> not available
-(Font)              Font shape `TS1/cmtt/m/n' tried instead on input line 489.
-
-Underfull \hbox (badness 10000) in paragraph at lines 497--515
+Underfull \hbox (badness 10000) in paragraph at lines 452--470
 
  []
 
@@ -551,24 +543,19 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [13]
+Underfull \hbox (badness 10000) in paragraph at lines 544--556
+
+ []
+
+
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [14]
-Underfull \hbox (badness 10000) in paragraph at lines 589--601
-
- []
-
-
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [15]
-Underfull \hbox (badness 10000) in paragraph at lines 644--672
-
- []
-
-
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
@@ -585,13 +572,18 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [19]
+Overfull \hbox (63.21521pt too wide) in paragraph at lines 750--751
+\T1/aer/m/n/10.95 library/2.15/dataRetrieval, and the de-fault for a Mac: /User
+s/userA/Library/R/2.15/library/dataRetrieval.
+ []
+
+
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [20]
-Overfull \hbox (63.21521pt too wide) in paragraph at lines 806--807
-\T1/aer/m/n/10.95 library/2.15/dataRetrieval, and the de-fault for a Mac: /User
-s/userA/Library/R/2.15/library/dataRetrieval.
+Underfull \hbox (badness 10000) in paragraph at lines 789--836
+
  []
 
 
@@ -603,27 +595,52 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [22]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 854.
+Overfull \vbox (8.06836pt too high) has occurred while \output is active []
+
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [23]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 854.
+Underfull \hbox (badness 10000) in paragraph at lines 845--890
+
+ []
+
+
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[24]
+Underfull \hbox (badness 10000) in paragraph at lines 893--920
+
+ []
+
+
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[25]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 937.
+
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[26]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 937.
  (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 854.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 854.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 937.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 937.
 Package rerunfilecheck Info: File `dataRetrieval.out' has not changed.
-(rerunfilecheck)             Checksum: 02DBB41E477B3A8A750BA3946A061AE5;1577.
+(rerunfilecheck)             Checksum: 714C14B70CC8894AA95BF939CF4C69F9;1838.
  ) 
 Here is how much of TeX's memory you used:
- 7400 strings out of 494045
- 106074 string characters out of 3145961
- 191879 words of memory out of 3000000
- 10497 multiletter control sequences out of 15000+200000
+ 7411 strings out of 494045
+ 106205 string characters out of 3145961
+ 189882 words of memory out of 3000000
+ 10501 multiletter control sequences out of 15000+200000
  40303 words of font info for 83 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 35i,8n,28p,866b,483s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 35i,8n,28p,866b,487s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\ldecicco\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi6
 00\tctt1095.pk> <C:\Users\ldecicco\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jkn
 appen\ec\dpi600\tcst1095.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publ
@@ -638,9 +655,9 @@ cmr7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8
 .pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.p
 fb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb
 >
-Output written on dataRetrieval.pdf (23 pages, 297741 bytes).
+Output written on dataRetrieval.pdf (26 pages, 303019 bytes).
 PDF statistics:
- 329 PDF objects out of 1000 (max. 8388607)
- 55 named destinations out of 1000 (max. 500000)
- 188 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 366 PDF objects out of 1000 (max. 8388607)
+ 62 named destinations out of 1000 (max. 500000)
+ 220 words of extra memory for PDF output out of 10000 (max. 10000000)
 

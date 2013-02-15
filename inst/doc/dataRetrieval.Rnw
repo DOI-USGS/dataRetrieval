@@ -126,18 +126,8 @@ siteNumber <- "01491000"
 ChoptankInfo <- getSiteFileData(siteNumber)
 @
 
+A list of the available columns are found in Appendix 2: INFO dataframe. Pulling out a specific example piece of information, in this case station name can be done as follows:
 
-<<label=tableSiteInfo, echo=FALSE,results=tex>>=
-
-infoDF <- data.frame(ColumnNames=names(ChoptankInfo[1:11]),ColumnNames=names(ChoptankInfo[12:22]),
-                     ColumnNames=names(ChoptankInfo[23:33]),ColumnNames=names(c(ChoptankInfo[34:43],"")))
-data.table <- xtable(infoDF,
-                     caption="Column names in ChoptankInfo")
-print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
-@
-\\*
-
-Pulling out a specific example piece of information, in this case station name can be done as follows:
 <<siteNames, echo=TRUE>>=
 ChoptankInfo$station.nm
 @
@@ -215,6 +205,7 @@ with(temperatureAndFlow, plot(
   ))
 axis(4,col="red",col.axis="red")
 mtext("Discharge [cfs]",side=4,line=3,col="red")
+title(paste(ChoptankInfo$station.nm,"2012",sep=" "))
 @
 \newpage
 
@@ -236,8 +227,8 @@ There are occasions where NWIS values are not reported as numbers, instead there
 %------------------------------------------------------------
 We can also get real-time, instantaneous measurements using the retrieveUnitNWISData function:
 <<label=getNWISUnit, echo=TRUE>>=
-siteNumber <- "01491000" # Site ID for Choptank River near Greensboro, MD
-parameterCd <- "00060"  # Discharge in cubic feet per second
+siteNumber <- "01491000"
+parameterCd <- "00060"  # Discharge (cfs)
 startDate <- as.character(Sys.Date()-1) # Yesterday 
   # (or, the day before the dataRetrieval package was built)
 endDate <- as.character(Sys.Date()) # Today 
@@ -259,6 +250,7 @@ with(dischargeToday, plot(
   datetime, X02_00060,
   ylab="Discharge [cfs]",xlab=""
   ))
+title(ChoptankInfo$station.nm)
 @
 \newpage
 
@@ -289,17 +281,8 @@ dissolvedNitrate <- getRawQWData(siteNumber, parameterCd,
       startDate, endDate)
 @
 
-There is a large amount of data returned for each observation. The column names are listed below:
+There is a large amount of data returned for each observation. The column names are listed in Appendix 2.
 
-
-<<label=colNamesQW, echo=FALSE,results=tex>>=
-infoDF <- data.frame(ColumnNames=names(dissolvedNitrate[1:31]),ColumnNames=names(dissolvedNitrate[32:62]))
-data.table <- xtable(infoDF,
-                     caption="Column names in dissolvedNitrate")
-print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
-@
-
-\\*
 To get a simplified dataframe that contains only datetime, value, and qualifier, use the function getQWData:
 
 <<label=getQWData, echo=TRUE>>=
@@ -317,6 +300,7 @@ with(dissolvedNitrateSimple, plot(
   xlab="Date",ylab = paste(parameterINFO$srsname,
       "[",parameterINFO$parameter_units,"]")
   ))
+title(ChoptankInfo$station.nm)
 @
 
 \begin{figure}
@@ -346,6 +330,17 @@ head(specificCond)
 Rather than using the raw data as retrieved by the web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
 
 In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We will need essentially the same data that was retrieved in the previous section, but we will get the daily discharge values in a dataframe called Daily, the nitrate sample data in a dataframe called Sample, and the data about the station and parameters in a dataframe called INFO. These are the dataframes that were exclusively designed to work with the EGRET R package, however can be very useful for all hydrologic studies.
+
+%------------------------------------------------------------
+\subsection{INFO Data}
+%------------------------------------------------------------
+The function to obtain "metadata", data about the gage station and measured parameters is getMetaData. This function essentially combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
+
+<<ThirdExample>>=
+INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
+@
+
+Column names in the INFO dataframe are listed in Appendix 2.
 
 %------------------------------------------------------------
 \subsection{Daily Data}
@@ -439,27 +434,21 @@ getPreLoadedSampleData(DF)
 
 @
 
-
-
 %------------------------------------------------------------
-\subsection{INFO Data}
+\subsection{Merge Report}
 %------------------------------------------------------------
-The function to obtain "metadata", data about the gage station and measured parameters is getMetaData. This function essentially combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
+Finally, there is a function called mergeReport that will look at both the Daily and Sample dataframe, and populate Q and LogQ columns into the Sample dataframe. The default arguments are Daily and Sample, however if you want to use other similarly structured dataframes, you can specify localDaily or localSample.
 
-<<ThirdExample>>=
-INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
+<<mergeExample>>=
+startDate <-'1985-01-01' 
+endDate <- '1985-03-31'
+site <- '01594440'
+Daily <- getDVData(site,'00060', startDate, endDate, interactive=FALSE)
+Sample <- getSampleData(site,'01075', startDate, endDate, interactive=FALSE)
+Sample <- mergeReport()
+head(Sample)
 @
 
-Column names in the INFO dataframe are listed below:
-
-<<label=colNamesQW, echo=FALSE,results=tex>>=
-infoDF <- data.frame(ColumnNames=names(INFO[1:21]),ColumnNames=names(c(INFO[22:41],"")))
-data.table <- xtable(infoDF,
-                     caption="Column names in the INFO dataframe")
-print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
-@
-
-\\*
 
 
 \newpage
@@ -582,9 +571,47 @@ To then open the library, simply type:
 library(dataRetrieval)
 @
 
+
+%------------------------------------------------------------ 
+\section{Appendix 2: Columns Names}
+%------------------------------------------------------------ 
+%------------------------------------------------------------
+\subsection{INFO dataframe}
+%------------------------------------------------------------
+
+<<label=colNamesQW, echo=FALSE,results=tex>>=
+infoDF <- data.frame(ColumnNames=names(INFO))
+data.table <- xtable(infoDF,
+                     caption="Column names in the INFO dataframe")
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,include.rownames=FALSE,include.colnames=FALSE)
+@
+
+\\*
+
+
+%------------------------------------------------------------
+\subsection{Water Quality Portal}
+%------------------------------------------------------------
+There are 62 columns returned from the water quality portal. 
+
+<<label=colNamesQW, echo=FALSE,results=tex>>=
+infoDF <- data.frame(ColumnNames=names(dissolvedNitrate[1:40]))
+data.table <- xtable(infoDF,
+                     caption="Column names in dissolvedNitrate")
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,
+      include.rownames=FALSE,include.colnames=FALSE)
+@
+\\*
 \newpage
-
-
+<<label=colNamesQW2, echo=FALSE,results=tex>>=
+infoDF <- data.frame(ColumnNames_Continued=names(dissolvedNitrate[41:62]))
+data.table <- xtable(infoDF,
+                     caption="Column names in dissolvedNitrate")
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,
+      include.rownames=FALSE,include.colnames=FALSE)
+@
+\\*
+\newpage
 %------------------------------------------------------------
 % BIBLIO
 %------------------------------------------------------------
