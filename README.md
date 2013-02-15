@@ -42,7 +42,7 @@ Download and Package Installation
 * The latest stable version of dataRetrieval can be downloaded with this link:
 [dataRetrieval_1.2.1](https://github.com/USGS-R/dataRetrieval/blob/packageBuilds/dataRetrieval_1.2.1.tar.gz?raw=true)
 
-* [EGRET User Guide](https://github.com/USGS-CIDA/WRTDS/raw/master/EGRET manual_4.doc) (Word Document)
+* [EGRET User Guide](https://github.com/USGS-R/dataRetrieval/raw/Documentation/EGRET%20manual_4.doc) (Word Document)
 
 ### Installation:
 While the dataRetreival package is in development (and not on CRAN), the following packages must first be manually installed: 
