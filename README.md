@@ -72,10 +72,12 @@ the default for a Mac:
 /Users/ldecicco/Library/R/2.15/library/dataRetrieval
 Then, re-install the package using the directions above.  Moving to CRAN should solve this problem.
 
-If you are an experienced R developer, with the devtools package and all associated LaTeX tools installed, the following command will install the dataRetrieval package directly from gitHub:
+If you are an experienced R developer, with the devtools package and all associated LaTeX tools installed, the following command will install the working version of the dataRetrieval package directly from gitHub:
 
 	library(devtools)
 	install_github("dataRetrieval", "USGS-R")
+
+Stable releases are archived on the packageBuild branch of this repository: [https://github.com/USGS-R/dataRetrieval/tree/packageBuilds](https://github.com/USGS-R/dataRetrieval/tree/packageBuilds)
 
 Background Information
 ----------------------
