@@ -415,6 +415,8 @@ In a more complex situation, the Sample data frame will combine all of the measu
 %------------------------------------------------------------
 As an example, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). Form 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
 
+\begin{center}
+
 <<label=exampleComplexQW, echo=FALSE,results=tex>>=
 cdate <- c("2003-02-15","2003-06-30","2004-09-15","2005-01-30","2005-05-30","2005-10-30")
 rdp <- c("", "<","<","","","")
@@ -430,7 +432,9 @@ data.table <- xtable(DF,
                      caption="Example data")
 print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,include.rownames=FALSE)
 @
-\\*
+
+\end{center}
+
 
 The dataRetrieval package will "add up" all the values in a given row to form the total for that sample. Thus, you only want to enter data that should be added together. For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not suppose to add it in to the values in 2005.
 

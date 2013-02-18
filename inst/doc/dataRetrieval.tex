@@ -79,19 +79,19 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 14:45:13 2013
+% Mon Feb 18 16:25:25 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Parameter Codes}
-\begin{tabular}{rll}
+\begin{tabular}{ll}
   \hline
- & pCode & shortName \\ 
+pCode & shortName \\ 
   \hline
-1 & 00060 & Discharge [cfs] \\ 
-  2 & 00065 & Gage height [ft] \\ 
-  3 & 00010 & Temperature [C] \\ 
-  4 & 00045 & Precipitation [in] \\ 
-  5 & 00400 & pH \\ 
+00060 & Discharge [cfs] \\ 
+  00065 & Gage height [ft] \\ 
+  00010 & Temperature [C] \\ 
+  00045 & Precipitation [in] \\ 
+  00400 & pH \\ 
    \hline
 \end{tabular}
 \end{center}
@@ -102,18 +102,18 @@ For real-time data, the parameter code and site ID will suffice.  The USGS store
 
 The most common stat codes are:
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 14:45:13 2013
+% Mon Feb 18 16:25:25 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Stat Codes}
-\begin{tabular}{rll}
+\begin{tabular}{ll}
   \hline
- & StatCode & shortName \\ 
+StatCode & shortName \\ 
   \hline
-1 & 00001 & Maximum \\ 
-  2 & 00002 & Minimum \\ 
-  3 & 00003 & Mean \\ 
-  4 & 00008 & Median \\ 
+00001 & Maximum \\ 
+  00002 & Minimum \\ 
+  00003 & Mean \\ 
+  00008 & Median \\ 
    \hline
 \end{tabular}
 \end{center}
@@ -427,23 +427,23 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 14:45:22 2013
-\begin{tabular}{rllll}
+% Mon Feb 18 16:25:34 2013
+\begin{tabular}{llll}
   \hline
- & ColumnName & Type & Description & Units \\ 
+ColumnName & Type & Description & Units \\ 
   \hline
-1 & Date & Date & Date & date \\ 
-  2 & Q & number & Discharge in cms & cms \\ 
-  3 & Julian & number & Number of days since January 1, 1850 & days \\ 
-  4 & Month & integer & Month of the year [1-12] & months \\ 
-  5 & Day & integer & Day of the year [1-366] & days \\ 
-  6 & DecYear & number & Decimal year & years \\ 
-  7 & MonthSeq & integer & Number of months since January 1, 1850 & months \\ 
-  8 & Qualifier & string & Qualifing code & character \\ 
-  9 & i & integer & Index of days from the start of the data frame & days \\ 
-  10 & LogQ & number & Natural logarithm of Q & numeric \\ 
-  11 & Q7 & number & 7 day running average of Q & cms \\ 
-  12 & Q30 & number & 30 running average of Q & cms \\ 
+Date & Date & Date & date \\ 
+  Q & number & Discharge in cms & cms \\ 
+  Julian & number & Number of days since January 1, 1850 & days \\ 
+  Month & integer & Month of the year [1-12] & months \\ 
+  Day & integer & Day of the year [1-366] & days \\ 
+  DecYear & number & Decimal year & years \\ 
+  MonthSeq & integer & Number of months since January 1, 1850 & months \\ 
+  Qualifier & string & Qualifing code & character \\ 
+  i & integer & Index of days from the start of the data frame & days \\ 
+  LogQ & number & Natural logarithm of Q & numeric \\ 
+  Q7 & number & 7 day running average of Q & cms \\ 
+  Q30 & number & 30 running average of Q & cms \\ 
    \hline
 \end{tabular}\\*
 
@@ -464,25 +464,25 @@ The function to obtain sample data from the water quality portal is getSampleDat
 Details of the Sample dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 14:45:22 2013
-\begin{tabular}{rllll}
+% Mon Feb 18 16:25:35 2013
+\begin{tabular}{llll}
   \hline
- & ColumnName & Type & Description & Units \\ 
+ColumnName & Type & Description & Units \\ 
   \hline
-1 & Date & Date & Date & date \\ 
-  2 & ConcLow & number & Lower limit of concentration & mg/L \\ 
-  3 & ConcHigh & number & Upper limit of concentration & mg/L \\ 
-  4 & Uncen & integer & Uncensored data (1=true, 0=false) & integer \\ 
-  5 & ConcAve & number & Average concentration & mg/L \\ 
-  6 & Julian & number & Number of days since January 1, 1850 & days \\ 
-  7 & Month & integer & Month of the year [1-12] & months \\ 
-  8 & Day & integer & Day of the year [1-366] & days \\ 
-  9 & DecYear & number & Decimal year & years \\ 
-  10 & MonthSeq & integer & Number of months since January 1, 1850 & months \\ 
-  11 & SinDY & number & Sine of DecYear & numeric \\ 
-  12 & CosDY & number & Cosine of DecYear & numeric \\ 
-  13 & Q & number & Discharge ** & cms \\ 
-  14 & LogQ & number & Natural logarithm of flow ** & numeric \\ 
+Date & Date & Date & date \\ 
+  ConcLow & number & Lower limit of concentration & mg/L \\ 
+  ConcHigh & number & Upper limit of concentration & mg/L \\ 
+  Uncen & integer & Uncensored data (1=true, 0=false) & integer \\ 
+  ConcAve & number & Average concentration & mg/L \\ 
+  Julian & number & Number of days since January 1, 1850 & days \\ 
+  Month & integer & Month of the year [1-12] & months \\ 
+  Day & integer & Day of the year [1-366] & days \\ 
+  DecYear & number & Decimal year & years \\ 
+  MonthSeq & integer & Number of months since January 1, 1850 & months \\ 
+  SinDY & number & Sine of DecYear & numeric \\ 
+  CosDY & number & Cosine of DecYear & numeric \\ 
+  Q & number & Discharge ** & cms \\ 
+  LogQ & number & Natural logarithm of flow ** & numeric \\ 
    \hline
 \end{tabular}\\
 ** Flow columns are populated from data in the Daily dataframe after calling the mergeReport function.
@@ -495,20 +495,24 @@ In a more complex situation, the Sample data frame will combine all of the measu
 %------------------------------------------------------------
 As an example, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). Form 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
 
+\begin{center}
+
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 14:45:23 2013
-\begin{tabular}{rllrlrlr}
+% Mon Feb 18 16:25:35 2013
+\begin{tabular}{llrlrlr}
   \hline
- & cdate & rdp & dp & rpp & pp & rtp & tp \\ 
+cdate & rdp & dp & rpp & pp & rtp & tp \\ 
   \hline
-1 & 2003-02-15 &  & 0.02 &  & 0.50 &  &  \\ 
-  2 & 2003-06-30 & $<$ & 0.01 &  & 0.30 &  &  \\ 
-  3 & 2004-09-15 & $<$ & 0.00 & $<$ & 0.20 &  &  \\ 
-  4 & 2005-01-30 &  &  &  &  &  & 0.43 \\ 
-  5 & 2005-05-30 &  &  &  &  & $<$ & 0.05 \\ 
-  6 & 2005-10-30 &  &  &  &  & $<$ & 0.02 \\ 
+2003-02-15 &  & 0.02 &  & 0.50 &  &  \\ 
+  2003-06-30 & $<$ & 0.01 &  & 0.30 &  &  \\ 
+  2004-09-15 & $<$ & 0.00 & $<$ & 0.20 &  &  \\ 
+  2005-01-30 &  &  &  &  &  & 0.43 \\ 
+  2005-05-30 &  &  &  &  & $<$ & 0.05 \\ 
+  2005-10-30 &  &  &  &  & $<$ & 0.02 \\ 
    \hline
-\end{tabular}\\*
+\end{tabular}
+\end{center}
+
 
 The dataRetrieval package will "add up" all the values in a given row to form the total for that sample. Thus, you only want to enter data that should be added together. For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not suppose to add it in to the values in 2005.
 
@@ -717,7 +721,7 @@ To then open the library, simply type:
 %------------------------------------------------------------
 \label{sec:appendix2INFO}
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 14:45:23 2013
+% Mon Feb 18 16:25:35 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -756,6 +760,7 @@ agency.cd \\
   project.no \\ 
   queryTime \\ 
   drainSqKm \\ 
+  shortName \\ 
   staAbbrev \\ 
   param.nm \\ 
   param.units \\ 
@@ -774,7 +779,7 @@ agency.cd \\
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 14:45:23 2013
+% Mon Feb 18 16:25:35 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -822,7 +827,7 @@ OrganizationIdentifier \\
 \end{tabular}\\*
 \newpage
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 14:45:23 2013
+% Mon Feb 18 16:25:35 2013
 \begin{tabular}{l}
   \hline
   \hline
