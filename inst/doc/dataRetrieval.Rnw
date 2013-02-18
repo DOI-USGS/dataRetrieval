@@ -94,7 +94,7 @@ data.df <- data.frame(pCode, shortName, stringsAsFactors=FALSE)
 data.table <- xtable(data.df,
                      caption="Commonly found USGS Parameter Codes")
 print(data.table, 
-      caption.placement="top")
+      caption.placement="top",include.rownames=FALSE)
 @
 
 For real-time data, the parameter code and site ID will suffice.  The USGS stores historical data as daily values however.  The statistical process used to store the daily data is the final requirement for daily value retrievals.  A 5-digit 'stat code' specifies the requested processing.  A complete list of possible USGS stat codes can be found here:
@@ -111,7 +111,7 @@ data.df <- data.frame(StatCode, shortName, stringsAsFactors=FALSE)
 data.table <- xtable(data.df,
                      caption="Commonly found USGS Stat Codes")
 print(data.table, 
-      caption.placement="top")
+      caption.placement="top",include.rownames=FALSE)
 @
 
 
@@ -374,7 +374,7 @@ DF <- data.frame(ColumnName,Type,Description,Units)
 
 data.table <- xtable(DF,
                      caption="Daily dataframe")
-print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,include.rownames=FALSE)
 @
 \\*
 
@@ -402,7 +402,7 @@ DF <- data.frame(ColumnName,Type,Description,Units)
 
 data.table <- xtable(DF,
                      caption="Sample dataframe")
-print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,include.rownames=FALSE)
 @
 \\
 ** Flow columns are populated from data in the Daily dataframe after calling the mergeReport function.
@@ -428,7 +428,7 @@ DF <- data.frame(cdate,rdp,dp,rpp,pp,rtp,tp)
 
 data.table <- xtable(DF,
                      caption="Example data")
-print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL)
+print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,include.rownames=FALSE)
 @
 \\*
 
