@@ -71,6 +71,7 @@ populateSiteINFO <- function(INFO, siteNumber,interactive=TRUE){
       INFO$drain.area.va <- as.numeric(INFO$drain.area.va)
       INFO$contrib.drain.area.va <- as.numeric(INFO$contrib.drain.area.va)
       INFO$drainSqKm <- INFO$drain.area.va * 2.5899881      
+      INFO$shortName <- station.nm
     }    
   } else {
     if (interactive){
