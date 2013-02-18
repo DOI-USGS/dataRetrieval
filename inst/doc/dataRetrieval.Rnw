@@ -61,13 +61,13 @@ The dataRetrieval package was created to simplify the process of getting hydrolo
 
 There is a plethora of hydrological data available on the web. This package is designed specifically to load United States Geological Survey (USGS) hydrologic data to the R enviornment. This includes daily values, real-time (unit values), site information, and water quality sample data. 
 
-For information on getting started in R, downloading and installing the package, see Appendix 1: Getting Started.
+For information on getting started in R, downloading and installing the package, see Appendix 1: Getting Started (\ref{sec:appendix1}).
 
 
 %------------------------------------------------------------
 \section{USGS Web Retrieval Examples}
 %------------------------------------------------------------ 
-In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes historical daily values, real-time current values, water quality data, site information, and measured parameter information. We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis.
+In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), real-time current values (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis.
 
 %------------------------------------------------------------
 \subsection{USGS Web Retrieval Introduction}
@@ -117,6 +117,7 @@ print(data.table,
 
 %------------------------------------------------------------
 \subsection{USGS Site Information Retrievals}
+\label{sec:usgsSite}
 %------------------------------------------------------------
 To obtain all of the available site information, use the getSiteFileData function:
 <<label=getSite, echo=TRUE>>=
@@ -126,7 +127,7 @@ siteNumber <- "01491000"
 ChoptankInfo <- getSiteFileData(siteNumber)
 @
 
-A list of the available columns are found in Appendix 2: INFO dataframe. Pulling out a specific example piece of information, in this case station name can be done as follows:
+A list of the available columns are found in Appendix 2: INFO dataframe (\ref{sec:appendix2INFO}). Pulling out a specific example piece of information, in this case station name can be done as follows:
 
 <<siteNames, echo=TRUE>>=
 ChoptankInfo$station.nm
@@ -135,6 +136,7 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 
 %------------------------------------------------------------
 \subsection{USGS Parameter Information Retrievals}
+\label{sec:usgsParams}
 %------------------------------------------------------------
 To obtain all of the available information concerning a measured parameter, use the getParameterInfo function:
 <<label=getSite, echo=TRUE>>=
@@ -152,6 +154,7 @@ Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/
 
 %------------------------------------------------------------
 \subsection{USGS Daily Value Retrievals}
+\label{sec:usgsDaily}
 %------------------------------------------------------------
 To obtain historic daily records of USGS data, use the retrieveNWISData function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (true/false) interactive. There are 2 default argument: statCd defaults to "00003" and interactive defaults to TRUE.  If you want to use the default values, you do not need to list them in the function call. Setting the 'interactive' option to true will walk you through the function. It might make more sense to run large batch collections with the interactive option set to FALSE. 
 
@@ -224,6 +227,7 @@ There are occasions where NWIS values are not reported as numbers, instead there
 
 %------------------------------------------------------------
 \subsection{USGS Unit Value Retrievals}
+\label{sec:usgsRT}
 %------------------------------------------------------------
 We can also get real-time, instantaneous measurements using the retrieveUnitNWISData function:
 <<label=getNWISUnit, echo=TRUE>>=
@@ -266,6 +270,7 @@ title(ChoptankInfo$station.nm)
 
 %------------------------------------------------------------
 \subsection{USGS Water Quality Retrievals}
+\label{sec:usgsWQP}
 %------------------------------------------------------------
 Finally, we can use the dataRetrieval package to get USGS water quality data that is available on the water quality data portal: \url{http://www.waterqualitydata.us/}. The raw data us obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a ";" separator, and setting parameterCd <- "" will return all of the measured observations. The raw data can be overwelming (as will be demonstrated), a simplified version of the data can be obtained using getQWData.
 
@@ -281,7 +286,7 @@ dissolvedNitrate <- getRawQWData(siteNumber, parameterCd,
       startDate, endDate)
 @
 
-There is a large amount of data returned for each observation. The column names are listed in Appendix 2.
+There is a large amount of data returned for each observation. The column names are listed in Appendix 2 (\ref{sec:appendix2WQP}).
 
 To get a simplified dataframe that contains only datetime, value, and qualifier, use the function getQWData:
 
@@ -314,6 +319,7 @@ title(ChoptankInfo$station.nm)
 
 %------------------------------------------------------------
 \subsection{Other Water Quality Retrievals}
+\label{sec:usgsSTORET}
 %------------------------------------------------------------
 Additionally, there are additional data sets available on the Water Quality Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET or NWIS database.  Since STORET does not use USGS parameter codes, a 'characteristic name' must be supplied.  The following example retrieves specific conductance from a DNR site in Wisconsin.
 
@@ -340,7 +346,7 @@ The function to obtain "metadata", data about the gage station and measured para
 INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
 @
 
-Column names in the INFO dataframe are listed in Appendix 2.
+Column names in the INFO dataframe are listed in Appendix 2 (\ref{sec:appendix2INFO}).
 
 %------------------------------------------------------------
 \subsection{Daily Data}
@@ -508,8 +514,10 @@ Sample <- getSampleDataFromFile(filePath,fileName,separator=",",interactive=FALS
 
 
 \newpage
+\appendix
 %------------------------------------------------------------ 
 \section{Appendix 1: Getting Started}
+\label{sec:appendix1}
 %------------------------------------------------------------ 
 This section describes the options for downloading and installing the dataRetrieval package.
 
@@ -573,10 +581,11 @@ library(dataRetrieval)
 %------------------------------------------------------------ 
 \section{Appendix 2: Columns Names}
 %------------------------------------------------------------ 
+\label{sec:appendix2}
 %------------------------------------------------------------
 \subsection{INFO dataframe}
 %------------------------------------------------------------
-
+\label{sec:appendix2INFO}
 <<label=colNamesQW, echo=FALSE,results=tex>>=
 infoDF <- data.frame(ColumnNames=names(INFO))
 data.table <- xtable(infoDF,
@@ -590,6 +599,7 @@ print(data.table, caption.placement="top",floating="FALSE",latex.environments=NU
 %------------------------------------------------------------
 \subsection{Water Quality Portal}
 %------------------------------------------------------------
+\label{sec:appendix2WQP}
 There are 62 columns returned from the water quality portal. 
 
 <<label=colNamesQW, echo=FALSE,results=tex>>=
