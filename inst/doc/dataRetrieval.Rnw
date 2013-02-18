@@ -79,11 +79,11 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 <<openLibrary, echo=FALSE>>=
 library(xtable)
 options(continue=" ")
+# options(width=70)
 options(SweaveHooks=list(fig=function()
   par(mar=c(4.1,4.1,1.1,4.1),oma=c(0,0,0,0))))
 @
 
-@
 
 <<label=tableParameterCodes, echo=FALSE,results=tex>>=
 pCode <- c('00060', '00065', '00010','00045','00400')
@@ -518,7 +518,7 @@ This section describes the options for downloading and installing the dataRetrie
 %------------------------------------------------------------ 
 If you are new to R, you will need to first install the latest version of R, which can be found here: \url{http://www.r-project.org/}.
 
-There are many options for running and editing R code, one nice enviornment to learn R is RStudio. RStudio can be downloaded here: \url{http://rstudio.org/}. Once R and RStudio are installed, the dataRetrieval package needs to be installed as described in the next section.
+There are many options for running and editing R code, one nice environment to learn R is RStudio. RStudio can be downloaded here: \url{http://rstudio.org/}. Once R and RStudio are installed, the dataRetrieval package needs to be installed as described in the next section.
 
 %------------------------------------------------------------
 \subsection{R User: Installing dataRetrieval from downloaded binary}
