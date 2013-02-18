@@ -61,13 +61,13 @@ The dataRetrieval package was created to simplify the process of getting hydrolo
 
 There is a plethora of hydrological data available on the web. This package is designed specifically to load United States Geological Survey (USGS) hydrologic data to the R enviornment. This includes daily values, real-time (unit values), site information, and water quality sample data. 
 
-For information on getting started in R, downloading and installing the package, see Appendix 1: Getting Started.
+For information on getting started in R, downloading and installing the package, see Appendix 1: Getting Started (\ref{sec:appendix1}).
 
 
 %------------------------------------------------------------
 \section{USGS Web Retrieval Examples}
 %------------------------------------------------------------ 
-In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes historical daily values, real-time current values, water quality data, site information, and measured parameter information. We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis.
+In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), real-time current values (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis.
 
 %------------------------------------------------------------
 \subsection{USGS Web Retrieval Introduction}
@@ -79,7 +79,7 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 13:18:37 2013
+% Mon Feb 18 11:57:57 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Parameter Codes}
@@ -102,7 +102,7 @@ For real-time data, the parameter code and site ID will suffice.  The USGS store
 
 The most common stat codes are:
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 13:18:37 2013
+% Mon Feb 18 11:57:57 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Stat Codes}
@@ -121,6 +121,7 @@ The most common stat codes are:
 
 %------------------------------------------------------------
 \subsection{USGS Site Information Retrievals}
+\label{sec:usgsSite}
 %------------------------------------------------------------
 To obtain all of the available site information, use the getSiteFileData function:
 \begin{Schunk}
@@ -132,7 +133,7 @@ To obtain all of the available site information, use the getSiteFileData functio
 \end{Sinput}
 \end{Schunk}
 
-A list of the available columns are found in Appendix 2: INFO dataframe. Pulling out a specific example piece of information, in this case station name can be done as follows:
+A list of the available columns are found in Appendix 2: INFO dataframe (\ref{sec:appendix2INFO}). Pulling out a specific example piece of information, in this case station name can be done as follows:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -146,6 +147,7 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 
 %------------------------------------------------------------
 \subsection{USGS Parameter Information Retrievals}
+\label{sec:usgsParams}
 %------------------------------------------------------------
 To obtain all of the available information concerning a measured parameter, use the getParameterInfo function:
 \begin{Schunk}
@@ -174,6 +176,7 @@ Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/
 
 %------------------------------------------------------------
 \subsection{USGS Daily Value Retrievals}
+\label{sec:usgsDaily}
 %------------------------------------------------------------
 To obtain historic daily records of USGS data, use the retrieveNWISData function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (true/false) interactive. There are 2 default argument: statCd defaults to "00003" and interactive defaults to TRUE.  If you want to use the default values, you do not need to list them in the function call. Setting the 'interactive' option to true will walk you through the function. It might make more sense to run large batch collections with the interactive option set to FALSE. 
 
@@ -255,6 +258,7 @@ There are occasions where NWIS values are not reported as numbers, instead there
 
 %------------------------------------------------------------
 \subsection{USGS Unit Value Retrievals}
+\label{sec:usgsRT}
 %------------------------------------------------------------
 We can also get real-time, instantaneous measurements using the retrieveUnitNWISData function:
 \begin{Schunk}
@@ -274,12 +278,12 @@ Which produces the following dataframe:
 \begin{Schunk}
 \begin{Soutput}
   agency_cd  site_no            datetime tz_cd X02_00060 X02_00060_cd
-1      USGS 01491000 2013-02-14 00:00:00   EST       197            P
-2      USGS 01491000 2013-02-14 00:15:00   EST       197            P
-3      USGS 01491000 2013-02-14 00:30:00   EST       202            P
-4      USGS 01491000 2013-02-14 00:45:00   EST       197            P
-5      USGS 01491000 2013-02-14 01:00:00   EST       197            P
-6      USGS 01491000 2013-02-14 01:15:00   EST       197            P
+1      USGS 01491000 2013-02-17 00:00:00   EST       202            P
+2      USGS 01491000 2013-02-17 00:15:00   EST       199            P
+3      USGS 01491000 2013-02-17 00:30:00   EST       204            P
+4      USGS 01491000 2013-02-17 00:45:00   EST       202            P
+5      USGS 01491000 2013-02-17 01:00:00   EST       202            P
+6      USGS 01491000 2013-02-17 01:15:00   EST       202            P
 \end{Soutput}
 \end{Schunk}
 
@@ -307,6 +311,7 @@ A simple plotting example is shown in Figure 2:
 
 %------------------------------------------------------------
 \subsection{USGS Water Quality Retrievals}
+\label{sec:usgsWQP}
 %------------------------------------------------------------
 Finally, we can use the dataRetrieval package to get USGS water quality data that is available on the water quality data portal: \url{http://www.waterqualitydata.us/}. The raw data us obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a ";" separator, and setting parameterCd <- "" will return all of the measured observations. The raw data can be overwelming (as will be demonstrated), a simplified version of the data can be obtained using getQWData.
 
@@ -323,7 +328,7 @@ Finally, we can use the dataRetrieval package to get USGS water quality data tha
 \end{Sinput}
 \end{Schunk}
 
-There is a large amount of data returned for each observation. The column names are listed in Appendix 2.
+There is a large amount of data returned for each observation. The column names are listed in Appendix 2 (\ref{sec:appendix2WQP}).
 
 To get a simplified dataframe that contains only datetime, value, and qualifier, use the function getQWData:
 
@@ -362,6 +367,7 @@ An example of plotting the above data (Figure 3):
 
 %------------------------------------------------------------
 \subsection{Other Water Quality Retrievals}
+\label{sec:usgsSTORET}
 %------------------------------------------------------------
 Additionally, there are additional data sets available on the Water Quality Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET or NWIS database.  Since STORET does not use USGS parameter codes, a 'characteristic name' must be supplied.  The following example retrieves specific conductance from a DNR site in Wisconsin.
 
@@ -401,7 +407,7 @@ The function to obtain "metadata", data about the gage station and measured para
 \end{Sinput}
 \end{Schunk}
 
-Column names in the INFO dataframe are listed in Appendix 2.
+Column names in the INFO dataframe are listed in Appendix 2 (\ref{sec:appendix2INFO}).
 
 %------------------------------------------------------------
 \subsection{Daily Data}
@@ -448,7 +454,7 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 13:18:45 2013
+% Mon Feb 18 11:58:08 2013
 \begin{tabular}{rlll}
   \hline
  & ColumnName & Type & Description \\ 
@@ -511,7 +517,7 @@ The function to obtain sample data from the water quality portal is getSampleDat
 Details of the Sample dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 13:18:46 2013
+% Mon Feb 18 11:58:08 2013
 \begin{tabular}{rlll}
   \hline
  & ColumnName & Type & Description \\ 
@@ -540,7 +546,7 @@ In a more complex situation, the Sample data frame will combine all of the measu
 As an example, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). Form 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 13:18:46 2013
+% Mon Feb 18 11:58:09 2013
 \begin{tabular}{rllrlrlr}
   \hline
  & cdate & rdp & dp & rpp & pp & rtp & tp \\ 
@@ -676,8 +682,10 @@ The call to open this file, and populate the Sample dataframe would be:
 
 
 \newpage
+\appendix
 %------------------------------------------------------------ 
 \section{Appendix 1: Getting Started}
+\label{sec:appendix1}
 %------------------------------------------------------------ 
 This section describes the options for downloading and installing the dataRetrieval package.
 
@@ -686,12 +694,12 @@ This section describes the options for downloading and installing the dataRetrie
 %------------------------------------------------------------ 
 If you are new to R, you will need to first install the latest version of R, which can be found here: \url{http://www.r-project.org/}.
 
-There are many options for running and editing R code, one nice enviornment to learn R is RStudio. RStudio can be downloaded here: \url{http://rstudio.org/}. Once R and RStudio are installed, the dataRetrieval package needs to be installed as described in the next section.
+There are many options for running and editing R code, one nice environment to learn R is RStudio. RStudio can be downloaded here: \url{http://rstudio.org/}. Once R and RStudio are installed, the dataRetrieval package needs to be installed as described in the next section.
 
 %------------------------------------------------------------
 \subsection{R User: Installing dataRetrieval from downloaded binary}
 %------------------------------------------------------------ 
-The latest dataRetrieval package build is available for download at \url{https://github.com/USGS-R/dataRetrieval/blob/master/dataRetrieval_1.2.1.tar.gz}.  If the package's tar.gz file is saved in R's working directory, then the following command will fully install the package:
+The latest dataRetrieval package build is available for download at \url{https://github.com/USGS-R/dataRetrieval/raw/packageBuilds/dataRetrieval_1.2.1.tar.gz}.  If the package's tar.gz file is saved in R's working directory, then the following command will fully install the package:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -753,12 +761,13 @@ To then open the library, simply type:
 %------------------------------------------------------------ 
 \section{Appendix 2: Columns Names}
 %------------------------------------------------------------ 
+\label{sec:appendix2}
 %------------------------------------------------------------
 \subsection{INFO dataframe}
 %------------------------------------------------------------
-
+\label{sec:appendix2INFO}
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 13:18:46 2013
+% Mon Feb 18 11:58:09 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -811,10 +820,11 @@ agency.cd \\
 %------------------------------------------------------------
 \subsection{Water Quality Portal}
 %------------------------------------------------------------
+\label{sec:appendix2WQP}
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 13:18:46 2013
+% Mon Feb 18 11:58:09 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -862,7 +872,7 @@ OrganizationIdentifier \\
 \end{tabular}\\*
 \newpage
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Fri Feb 15 13:18:46 2013
+% Mon Feb 18 11:58:09 2013
 \begin{tabular}{l}
   \hline
   \hline
