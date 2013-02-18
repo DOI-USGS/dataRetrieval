@@ -11,16 +11,16 @@
 \contentsline {section}{\numberline {3}Polished Data: USGS Web Retrieval Examples}{11}{section.3}
 \contentsline {subsection}{\numberline {3.1}INFO Data}{11}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Daily Data}{12}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Sample Data}{13}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Complex Sample Data Example}{14}{subsection.3.4}
-\contentsline {subsection}{\numberline {3.5}Merge Report}{16}{subsection.3.5}
-\contentsline {section}{\numberline {4}Retrieving User-Generated Data Files}{17}{section.4}
-\contentsline {subsection}{\numberline {4.1}getDailyDataFromFile}{17}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}getSampleDataFromFile}{18}{subsection.4.2}
-\contentsline {section}{\numberline {A}Appendix 1: Getting Started}{19}{appendix.A}
-\contentsline {subsection}{\numberline {A.1}New to R?}{19}{subsection.A.1}
-\contentsline {subsection}{\numberline {A.2}R User: Installing dataRetrieval from downloaded binary}{19}{subsection.A.2}
-\contentsline {subsection}{\numberline {A.3}R Developers: Installing dataRetrieval from gitHub}{20}{subsection.A.3}
-\contentsline {section}{\numberline {B}Appendix 2: Columns Names}{22}{appendix.B}
-\contentsline {subsection}{\numberline {B.1}INFO dataframe}{22}{subsection.B.1}
-\contentsline {subsection}{\numberline {B.2}Water Quality Portal}{23}{subsection.B.2}
+\contentsline {subsection}{\numberline {3.3}Sample Data}{12}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Complex Sample Data Example}{13}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}Merge Report}{14}{subsection.3.5}
+\contentsline {section}{\numberline {4}Retrieving User-Generated Data Files}{16}{section.4}
+\contentsline {subsection}{\numberline {4.1}getDailyDataFromFile}{16}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}getSampleDataFromFile}{17}{subsection.4.2}
+\contentsline {section}{\numberline {A}Appendix 1: Getting Started}{18}{appendix.A}
+\contentsline {subsection}{\numberline {A.1}New to R?}{18}{subsection.A.1}
+\contentsline {subsection}{\numberline {A.2}R User: Installing dataRetrieval from downloaded binary}{18}{subsection.A.2}
+\contentsline {subsection}{\numberline {A.3}R Developers: Installing dataRetrieval from gitHub}{19}{subsection.A.3}
+\contentsline {section}{\numberline {B}Appendix 2: Columns Names}{21}{appendix.B}
+\contentsline {subsection}{\numberline {B.1}INFO dataframe}{21}{subsection.B.1}
+\contentsline {subsection}{\numberline {B.2}Water Quality Portal}{22}{subsection.B.2}

@@ -79,7 +79,7 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 11:57:57 2013
+% Mon Feb 18 14:20:11 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Parameter Codes}
@@ -102,7 +102,7 @@ For real-time data, the parameter code and site ID will suffice.  The USGS store
 
 The most common stat codes are:
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 11:57:57 2013
+% Mon Feb 18 14:20:11 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Stat Codes}
@@ -421,56 +421,29 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 > startDate <- "1964-01-01"
 > endDate <- "2013-01-01"
 > Daily <- getDVData(siteNumber, "00060", startDate, endDate,interactive=FALSE)
-> summary(Daily)
 \end{Sinput}
-\begin{Soutput}
-      Date                  Q                 Julian          Month       
- Min.   :1964-01-01   Min.   :  0.00991   Min.   :41637   Min.   : 1.000  
- 1st Qu.:1976-04-01   1st Qu.:  0.87782   1st Qu.:46112   1st Qu.: 4.000  
- Median :1988-07-02   Median :  2.26535   Median :50586   Median : 7.000  
- Mean   :1988-07-02   Mean   :  4.01787   Mean   :50586   Mean   : 6.522  
- 3rd Qu.:2000-10-01   3rd Qu.:  4.55901   3rd Qu.:55061   3rd Qu.:10.000  
- Max.   :2013-01-01   Max.   :246.35656   Max.   :59535   Max.   :12.000  
-                                                                          
-      Day           DecYear        MonthSeq     Qualifier        
- Min.   :  1.0   Min.   :1964   Min.   :1369   Length:17899      
- 1st Qu.: 92.0   1st Qu.:1976   1st Qu.:1516   Class :character  
- Median :183.0   Median :1989   Median :1663   Mode  :character  
- Mean   :183.1   Mean   :1989   Mean   :1663                     
- 3rd Qu.:274.0   3rd Qu.:2001   3rd Qu.:1810                     
- Max.   :366.0   Max.   :2013   Max.   :1957                     
-                                                                 
-       i              LogQ               Q7                Q30          
- Min.   :    1   Min.   :-4.6141   Min.   : 0.01808   Min.   : 0.09606  
- 1st Qu.: 4476   1st Qu.:-0.1303   1st Qu.: 0.92232   1st Qu.: 1.05811  
- Median : 8950   Median : 0.8177   Median : 2.45143   Median : 2.83074  
- Mean   : 8950   Mean   : 0.7258   Mean   : 4.01655   Mean   : 4.01178  
- 3rd Qu.:13424   3rd Qu.: 1.5171   3rd Qu.: 4.92309   3rd Qu.: 5.61594  
- Max.   :17899   Max.   : 5.5068   Max.   :84.00395   Max.   :25.47478  
-                                   NA's   :6          NA's   :29        
-\end{Soutput}
 \end{Schunk}
 
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 11:58:08 2013
-\begin{tabular}{rlll}
+% Mon Feb 18 14:20:19 2013
+\begin{tabular}{rllll}
   \hline
- & ColumnName & Type & Description \\ 
+ & ColumnName & Type & Description & Units \\ 
   \hline
-1 & Date & Date & Date \\ 
-  2 & Q & number & Discharge in cms \\ 
-  3 & Julian & number & Number of days since January 1, 1850 \\ 
-  4 & Month & integer & Month of the year [1-12] \\ 
-  5 & Day & integer & Day of the year [1-366] \\ 
-  6 & DecYear & number & Decimal year \\ 
-  7 & MonthSeq & integer & Number of months since January 1, 1850 \\ 
-  8 & Qualifier & string & Qualifing code \\ 
-  9 & i & integer & Index \\ 
-  10 & LogQ & number & Natural logarithm of Q \\ 
-  11 & Q7 & number & 7 day running average of Q \\ 
-  12 & Q30 & number & 30 running average of Q \\ 
+1 & Date & Date & Date & date \\ 
+  2 & Q & number & Discharge in cms & cms \\ 
+  3 & Julian & number & Number of days since January 1, 1850 & days \\ 
+  4 & Month & integer & Month of the year [1-12] & months \\ 
+  5 & Day & integer & Day of the year [1-366] & days \\ 
+  6 & DecYear & number & Decimal year & years \\ 
+  7 & MonthSeq & integer & Number of months since January 1, 1850 & months \\ 
+  8 & Qualifier & string & Qualifing code & character \\ 
+  9 & i & integer & Index of days from the start of the data frame & days \\ 
+  10 & LogQ & number & Natural logarithm of Q & numeric \\ 
+  11 & Q7 & number & 7 day running average of Q & cms \\ 
+  12 & Q30 & number & 30 running average of Q & cms \\ 
    \hline
 \end{tabular}\\*
 
@@ -485,59 +458,36 @@ The function to obtain sample data from the water quality portal is getSampleDat
 \begin{Sinput}
 > Sample <-getSampleData(siteNumber,parameterCd,
        startDate, endDate,interactive=FALSE)
-> summary(Sample)
 \end{Sinput}
-\begin{Soutput}
-      Date               ConcLow         ConcHigh         Uncen       
- Min.   :1973-06-04   Min.   :0.176   Min.   :0.050   Min.   :0.0000  
- 1st Qu.:1989-01-31   1st Qu.:0.900   1st Qu.:0.900   1st Qu.:1.0000  
- Median :1995-02-15   Median :1.150   Median :1.150   Median :1.0000  
- Mean   :1996-04-07   Mean   :1.145   Mean   :1.143   Mean   :0.9984  
- 3rd Qu.:2003-08-26   3rd Qu.:1.400   3rd Qu.:1.400   3rd Qu.:1.0000  
- Max.   :2012-12-18   Max.   :2.430   Max.   :2.430   Max.   :1.0000  
-                      NA's   :1                                       
-    ConcAve          Julian          Month             Day       
- Min.   :0.025   Min.   :45079   Min.   : 1.000   Min.   :  2.0  
- 1st Qu.:0.900   1st Qu.:50799   1st Qu.: 3.000   1st Qu.: 81.0  
- Median :1.150   Median :53005   Median : 6.000   Median :161.0  
- Mean   :1.143   Mean   :53423   Mean   : 6.155   Mean   :170.7  
- 3rd Qu.:1.400   3rd Qu.:56119   3rd Qu.: 9.000   3rd Qu.:261.0  
- Max.   :2.430   Max.   :59521   Max.   :12.000   Max.   :363.0  
-                                                                 
-    DecYear        MonthSeq        SinDY              CosDY         
- Min.   :1973   Min.   :1482   Min.   :-1.00000   Min.   :-0.99996  
- 1st Qu.:1989   1st Qu.:1670   1st Qu.:-0.65358   1st Qu.:-0.66655  
- Median :1995   Median :1742   Median : 0.16237   Median : 0.03433  
- Mean   :1996   Mean   :1756   Mean   : 0.06474   Mean   : 0.02331  
- 3rd Qu.:2004   3rd Qu.:1844   3rd Qu.: 0.76785   3rd Qu.: 0.72212  
- Max.   :2013   Max.   :1956   Max.   : 0.99985   Max.   : 0.99967  
-\end{Soutput}
 \end{Schunk}
 
 Details of the Sample dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 11:58:08 2013
-\begin{tabular}{rlll}
+% Mon Feb 18 14:20:20 2013
+\begin{tabular}{rllll}
   \hline
- & ColumnName & Type & Description \\ 
+ & ColumnName & Type & Description & Units \\ 
   \hline
-1 & Date & Date & Date \\ 
-  2 & ConcLow & number & Lower limit of concentration \\ 
-  3 & ConcHigh & number & Upper limit of concentration \\ 
-  4 & Uncen & integer & Uncensored data (1=true, 0=false) \\ 
-  5 & ConcAve & number & Average concentration \\ 
-  6 & Julian & number & Number of days since January 1, 1850 \\ 
-  7 & Month & integer & Month of the year [1-12] \\ 
-  8 & Day & integer & Day of the year [1-366] \\ 
-  9 & DecYear & number & Decimal year \\ 
-  10 & MonthSeq & integer & Number of months since January 1, 1850 \\ 
-  11 & SinDY & number & Sine of ... \\ 
-  12 & CosDY & number & Cosine of ... \\ 
-  13 & Q & number & Discharge in cms \\ 
-  14 & LogQ & number & Natural logarithm of flow \\ 
+1 & Date & Date & Date & date \\ 
+  2 & ConcLow & number & Lower limit of concentration & mg/L \\ 
+  3 & ConcHigh & number & Upper limit of concentration & mg/L \\ 
+  4 & Uncen & integer & Uncensored data (1=true, 0=false) & integer \\ 
+  5 & ConcAve & number & Average concentration & mg/L \\ 
+  6 & Julian & number & Number of days since January 1, 1850 & days \\ 
+  7 & Month & integer & Month of the year [1-12] & months \\ 
+  8 & Day & integer & Day of the year [1-366] & days \\ 
+  9 & DecYear & number & Decimal year & years \\ 
+  10 & MonthSeq & integer & Number of months since January 1, 1850 & months \\ 
+  11 & SinDY & number & Sine of DecYear & numeric \\ 
+  12 & CosDY & number & Cosine of DecYear & numeric \\ 
+  13 & Q & number & Discharge ** & cms \\ 
+  14 & LogQ & number & Natural logarithm of flow ** & numeric \\ 
    \hline
-\end{tabular}
+\end{tabular}\\
+** Flow columns are populated from data in the Daily dataframe after calling the mergeReport function.
+
+
 In a more complex situation, the Sample data frame will combine all of the measured parameters.  An example is provided to explain how the values are combined:
 
 %------------------------------------------------------------
@@ -546,7 +496,7 @@ In a more complex situation, the Sample data frame will combine all of the measu
 As an example, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). Form 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 11:58:09 2013
+% Mon Feb 18 14:20:20 2013
 \begin{tabular}{rllrlrlr}
   \hline
  & cdate & rdp & dp & rpp & pp & rtp & tp \\ 
@@ -767,7 +717,7 @@ To then open the library, simply type:
 %------------------------------------------------------------
 \label{sec:appendix2INFO}
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 11:58:09 2013
+% Mon Feb 18 14:20:21 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -824,7 +774,7 @@ agency.cd \\
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 11:58:09 2013
+% Mon Feb 18 14:20:21 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -872,7 +822,7 @@ OrganizationIdentifier \\
 \end{tabular}\\*
 \newpage
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 11:58:09 2013
+% Mon Feb 18 14:20:21 2013
 \begin{tabular}{l}
   \hline
   \hline
