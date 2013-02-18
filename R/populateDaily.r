@@ -44,9 +44,10 @@ populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a da
   if(nz>0) {
 
     qshift<- 0.001*mean(localDaily$Q, na.rm=TRUE) 
-    
-    cat("There were ", as.character(nz), " zero flow days \n")
-    cat("All days therefore had",as.character(qshift),"cms added to the discharge value.\n")
+    if (interactive){
+      cat("There were ", as.character(nz), " zero flow days \n")
+      cat("All days therefore had",as.character(qshift),"cms added to the discharge value.\n")
+    }
   } else {
     qshift<-0.0
   }
