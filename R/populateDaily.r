@@ -41,7 +41,16 @@ populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a da
   
   nz<-length(zeros)
   
-  if(nz>0) qshift<-0.001*mean(localDaily$Q, na.rm=TRUE) else qshift<-0.0
+  if(nz>0) {
+
+    qshift<- 0.001*mean(localDaily$Q, na.rm=TRUE) 
+    
+    cat("There were ", as.character(nz), " zero flow days \n")
+    cat("All days therefore had",as.character(qshift),"cms added to the discharge value.\n")
+  } else {
+    qshift<-0.0
+  }
+  
   
   localDaily$Q<-localDaily$Q+qshift
   
@@ -63,8 +72,7 @@ populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a da
   difference <- (localDaily$Julian[dataPoints] - localDaily$Julian[1])+1  
   if (interactive){
     cat("There are ", as.character(dataPoints), "data points, and ", as.character(difference), "days.\n")
-    cat("There are ",as.character(nz), "zero flow days\n")
-    cat("If there are any zero discharge days, all days had",as.character(qshift),"cubic meters per second added to the discharge value.\n")
+
     #these next two lines show the user where the gaps in the data are if there are any
     n<-nrow(localDaily)
     for(i in 2:n) {if((localDaily$Julian[i]-localDaily$Julian[i-1])>1) cat("\n discharge data jumps from",as.character(localDaily$Date[i-1]),"to",as.character(localDaily$Date[i]))}
