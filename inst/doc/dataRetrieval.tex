@@ -79,7 +79,7 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 16:25:25 2013
+% Tue Feb 19 13:33:06 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Parameter Codes}
@@ -102,7 +102,7 @@ For real-time data, the parameter code and site ID will suffice.  The USGS store
 
 The most common stat codes are:
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 16:25:25 2013
+% Tue Feb 19 13:33:06 2013
 \begin{table}[ht]
 \begin{center}
 \caption{Commonly found USGS Stat Codes}
@@ -225,7 +225,7 @@ Another example that doesn't use the defaults would be a request for mean and ma
 
 Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}. 
 
-An example of plotting the above data (Figure 1):
+An example of plotting the above data (Figure \ref{fig:TD}):
 
 \begin{Schunk}
 \begin{Sinput}
@@ -250,6 +250,7 @@ An example of plotting the above data (Figure 1):
 \includegraphics{dataRetrieval-fig1}
 \end{center}
 \caption{Temperature and discharge plot of Choptank River in 2012.}
+\label{fig:TD}
 \end{figure}
 
 
@@ -278,18 +279,18 @@ Which produces the following dataframe:
 \begin{Schunk}
 \begin{Soutput}
   agency_cd  site_no            datetime tz_cd X02_00060 X02_00060_cd
-1      USGS 01491000 2013-02-17 00:00:00   EST       202            P
-2      USGS 01491000 2013-02-17 00:15:00   EST       199            P
-3      USGS 01491000 2013-02-17 00:30:00   EST       204            P
-4      USGS 01491000 2013-02-17 00:45:00   EST       202            P
-5      USGS 01491000 2013-02-17 01:00:00   EST       202            P
-6      USGS 01491000 2013-02-17 01:15:00   EST       202            P
+1      USGS 01491000 2013-02-18 00:00:00   EST       202            P
+2      USGS 01491000 2013-02-18 00:15:00   EST       204            P
+3      USGS 01491000 2013-02-18 00:30:00   EST       199            P
+4      USGS 01491000 2013-02-18 00:45:00   EST       199            P
+5      USGS 01491000 2013-02-18 01:00:00   EST       204            P
+6      USGS 01491000 2013-02-18 01:15:00   EST       202            P
 \end{Soutput}
 \end{Schunk}
 
 Note that time now becomes important, so the variable datetime is a POSIXct, and the time zone is included in a separate column. Data is pulled from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is "Ice".  Any value that cannot be converted to a number will be reported as NA in this package.
 
-A simple plotting example is shown in Figure 2:
+A simple plotting example is shown in Figure \ref{fig:RT}:
 \begin{Schunk}
 \begin{Sinput}
 > with(dischargeToday, plot(
@@ -306,6 +307,7 @@ A simple plotting example is shown in Figure 2:
 \includegraphics{dataRetrieval-fig2}
 \end{center}
 \caption{Real-time discharge plot of Choptank River.}
+\label{fig:RT}
 \end{figure}
 
 
@@ -345,7 +347,7 @@ To get a simplified dataframe that contains only datetime, value, and qualifier,
 \end{Schunk}
 Note that in this dataframe, datatime is imported as Dates (no times are included), and the qualifier is either blank or \verb@"<"@ signifying a censored value.
 
-An example of plotting the above data (Figure 3):
+An example of plotting the above data (Figure \ref{fig:nitrate}):
 
 \begin{Schunk}
 \begin{Sinput}
@@ -363,6 +365,7 @@ An example of plotting the above data (Figure 3):
 \includegraphics{dataRetrieval-fig3}
 \end{center}
 \caption{Nitrate plot of Choptank River.}
+\label{fig:nitrate}
 \end{figure}
 
 %------------------------------------------------------------
@@ -427,7 +430,7 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 16:25:34 2013
+% Tue Feb 19 13:33:18 2013
 \begin{tabular}{llll}
   \hline
 ColumnName & Type & Description & Units \\ 
@@ -464,7 +467,7 @@ The function to obtain sample data from the water quality portal is getSampleDat
 Details of the Sample dataframe are listed below:
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 16:25:35 2013
+% Tue Feb 19 13:33:19 2013
 \begin{tabular}{llll}
   \hline
 ColumnName & Type & Description & Units \\ 
@@ -498,7 +501,7 @@ As an example, let us say that in 2004 and earlier, we computed a total phosphor
 \begin{center}
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 16:25:35 2013
+% Tue Feb 19 13:33:19 2013
 \begin{tabular}{llrlrlr}
   \hline
 cdate & rdp & dp & rpp & pp & rtp & tp \\ 
@@ -721,7 +724,7 @@ To then open the library, simply type:
 %------------------------------------------------------------
 \label{sec:appendix2INFO}
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 16:25:35 2013
+% Tue Feb 19 13:33:20 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -779,7 +782,7 @@ agency.cd \\
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 16:25:35 2013
+% Tue Feb 19 13:33:20 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -827,7 +830,7 @@ OrganizationIdentifier \\
 \end{tabular}\\*
 \newpage
 % latex table generated in R 2.15.2 by xtable 1.7-0 package
-% Mon Feb 18 16:25:35 2013
+% Tue Feb 19 13:33:20 2013
 \begin{tabular}{l}
   \hline
   \hline

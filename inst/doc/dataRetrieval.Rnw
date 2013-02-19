@@ -193,7 +193,7 @@ temperatureAndFlow <- retrieveNWISData(siteNumber, parameterCd,
 
 Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}. 
 
-An example of plotting the above data (Figure 1):
+An example of plotting the above data (Figure \ref{fig:TD}):
 
 <<label=getNWIStemperaturePlot, echo=TRUE>>=
 
@@ -219,6 +219,7 @@ title(paste(ChoptankInfo$station.nm,"2012",sep=" "))
 @
 \end{center}
 \caption{Temperature and discharge plot of Choptank River in 2012.}
+\label{fig:TD}
 \end{figure}
 
 
@@ -248,7 +249,7 @@ head(dischargeToday)
 
 Note that time now becomes important, so the variable datetime is a POSIXct, and the time zone is included in a separate column. Data is pulled from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is "Ice".  Any value that cannot be converted to a number will be reported as NA in this package.
 
-A simple plotting example is shown in Figure 2:
+A simple plotting example is shown in Figure \ref{fig:RT}:
 <<label=getNWISUnit, echo=TRUE>>=
 with(dischargeToday, plot(
   datetime, X02_00060,
@@ -265,6 +266,7 @@ title(ChoptankInfo$station.nm)
 @
 \end{center}
 \caption{Real-time discharge plot of Choptank River.}
+\label{fig:RT}
 \end{figure}
 
 
@@ -297,7 +299,7 @@ names(dissolvedNitrateSimple)
 @
 Note that in this dataframe, datatime is imported as Dates (no times are included), and the qualifier is either blank or \verb@"<"@ signifying a censored value.
 
-An example of plotting the above data (Figure 3):
+An example of plotting the above data (Figure \ref{fig:nitrate}):
 
 <<label=getQWtemperaturePlot, echo=TRUE>>=
 with(dissolvedNitrateSimple, plot(
@@ -315,6 +317,7 @@ title(ChoptankInfo$station.nm)
 @
 \end{center}
 \caption{Nitrate plot of Choptank River.}
+\label{fig:nitrate}
 \end{figure}
 
 %------------------------------------------------------------
