@@ -539,29 +539,13 @@ If you are new to R, you will need to first install the latest version of R, whi
 There are many options for running and editing R code, one nice environment to learn R is RStudio. RStudio can be downloaded here: \url{http://rstudio.org/}. Once R and RStudio are installed, the dataRetrieval package needs to be installed as described in the next section.
 
 %------------------------------------------------------------
-\subsection{R User: Installing dataRetrieval from downloaded binary}
+\subsection{R User: Installing dataRetrieval}
 %------------------------------------------------------------ 
-The latest dataRetrieval package build is available for download at \url{https://github.com/USGS-R/dataRetrieval/raw/packageBuilds/dataRetrieval_1.2.1.tar.gz}.  If the package's tar.gz file is saved in R's working directory, then the following command will fully install the package:
+Before installing dataRetrieval, the zoo packages must be installed from CRAN:
 
-<<installFromWD,eval = FALSE>>=
-install.packages("dataRetrieval_1.2.1.tar.gz", 
-                 repos=NULL, type="source")
-@
-
-If the downloaded file is stored in an alternative location, include the path in the install command.  A Windows example looks like this (notice the direction of the slashes, they are in the opposite direction that Windows normally creates paths):
-
-<<installFromFile,eval = FALSE>>=
-install.packages(
-  "C:/RPackages/Statistics/dataRetrieval_1.2.1.tar.gz", 
-  repos=NULL, type="source")
-@
-
-A Mac example looks like this:
-
-<<maxExample,eval = FALSE>>=
-install.packages(
-  "/Users/userA/RPackages/Statistic/dataRetrieval_1.2.1.tar.gz", 
-  repos=NULL, type="source")
+<<installFromCran,eval = FALSE>>=
+install.packages("zoo")
+install.packages("dataRetrieval", repos="http://usgs-r.github.com/EGRET/", type="source")
 @
 
 It is a good idea to re-start the R enviornment after installing the package, especially if installing an updated version (that is, restart RStudio). Some users have found it necessary to delete the previous version's package folder before installing newer version of dataRetrieval. If you are experiencing issues after updating a package, trying deleting the package folder - the default location for Windows is something like this: C:/Users/userA/Documents/R/win-library/2.15/dataRetrieval, and the default for a Mac: /Users/userA/Library/R/2.15/library/dataRetrieval. Then, re-install the package using the directions above. Moving to CRAN should solve this problem.
@@ -575,7 +559,8 @@ Using RStudio, you could alternatively click on the checkbox for dataRetrieval i
 %------------------------------------------------------------
 \subsection{R Developers: Installing dataRetrieval from gitHub}
 %------------------------------------------------------------
-Alternatively, R-developers can install the latest version of dataRetrieval directly from gitHub using the devtools package.  devtools is available on CRAN.  Simpley type the following commands into R to install the latest version of dataRetrieval available on gitHub.  Rtools (for Windows) and appropriate \LaTeX\ tools are required.
+Alternatively, R-developers can install the latest working version of dataRetrieval directly from gitHub using the devtools package (available on CRAN).  Rtools (for Windows) and appropriate \LaTeX\ tools are required. Be aware that the version installed using this method isn't necessarily the same as the version in the stable release branch.  
+
 
 <<gitInstal,eval = FALSE>>=
 library(devtools)
