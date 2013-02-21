@@ -50,20 +50,8 @@ While the dataRetreival package is in development (and not on CRAN), the followi
  
 To install the EGRET package:
 
-Include the full path to EGRET_1.2.3.tar.gz to install the package (here is a Windows example, note the direction of the slashes -> /, this is backwards from how Windows typically defines a path ):
-
 	install.packages("zoo")
-	install.packages("C:/RPackages/Statistics/dataRetrieval_1.2.1.tar.gz", repos=NULL, type="source")
-
-A Mac example:
-
-	install.packages("/Users/userA/RPackages/Statistic/dataRetrieval_1.2.1.tar.gz", repos=NULL, type="source")
-
-Another easy way to find and install a package, simply use:
-
-	install.packages(file.choose(), repos=NULL, type="source")
-	
-And a window will open allowing you to browse to the package.
+	install.packages("dataRetrieval", repos="http://usgs-r.github.com/EGRET/", type="source")
 	
 ### Note on updating versions:
 Some users have found it necessary to delete the package folders before installing newer versions of either dataRetrieval or EGRET.  If you are experiencing an issue after updating a package, trying deleting the package folder, the default location for Windows is something like this:
@@ -71,11 +59,6 @@ C:\Users\ldecicco\Documents\R\win-library\2.15\dataRetrieval
 the default for a Mac:
 /Users/ldecicco/Library/R/2.15/library/dataRetrieval
 Then, re-install the package using the directions above.  Moving to CRAN should solve this problem.
-
-If you are an experienced R developer, with the devtools package and all associated LaTeX tools installed, the following command will install the working version of the dataRetrieval package directly from gitHub:
-
-	library(devtools)
-	install_github("dataRetrieval", "USGS-R")
 
 Stable releases are archived on the packageBuild branch of this repository: [https://github.com/USGS-R/dataRetrieval/tree/packageBuilds](https://github.com/USGS-R/dataRetrieval/tree/packageBuilds)
 
