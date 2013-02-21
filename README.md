@@ -36,15 +36,8 @@ egret_comments@usgs.gov
 
 Additionally, to subscribe to an email list concerning updates to these R packages, please send a request to egret_comments@usgs.gov.
 
-Download and Package Installation
+Package Installation
 ---------------------------------
-
-* The latest stable version of dataRetrieval can be downloaded with this link:
-[dataRetrieval_1.2.1](https://github.com/USGS-R/dataRetrieval/blob/packageBuilds/dataRetrieval_1.2.1.tar.gz?raw=true)
-
-* [EGRET User Guide](https://github.com/USGS-R/dataRetrieval/raw/Documentation/EGRET%20manual_4.doc) (Word Document)
-
-### Installation:
 While the dataRetreival package is in development (and not on CRAN), the following packages must first be manually installed: 
 * zoo
  
@@ -62,6 +55,10 @@ Then, re-install the package using the directions above.  Moving to CRAN should 
 
 Stable releases are archived on the packageBuild branch of this repository: [https://github.com/USGS-R/dataRetrieval/tree/packageBuilds](https://github.com/USGS-R/dataRetrieval/tree/packageBuilds)
 
+* The latest stable version of dataRetrieval can be downloaded directly with this link:
+[dataRetrieval_1.2.1](https://github.com/USGS-R/dataRetrieval/blob/packageBuilds/dataRetrieval_1.2.1.tar.gz?raw=true)
+
+
 Background Information
 ----------------------
 
@@ -77,16 +74,21 @@ The second is an application to nitrate data for 8 monitoring sites on the Missi
 
 The manual available here assumes that the user understands the concepts underlying WRTDS.  Thus, reading at least the first of these papers is necessary to understanding the manual.
 
+[EGRET User Guide](https://github.com/USGS-R/dataRetrieval/raw/Documentation/EGRET%20manual_4.doc) (Word Document)
 
 Version updates
 ---------------
+* Version 1.2.1:	Feburary 20, 2013
+
+	* Improved documentation, especially example functions.
+	* Improved vignette for a more complete walk-through.
+	* Expanded the capabilities to retrieve raw data from the web services.
+	* Added Storet data retrievals in getWQPData function
 
 * Version 1.2.0:	October 13, 2012
 
 	* Fixed a bug that caused problems if not explicitly defining Daily and Sample in mergeReport().
 	* Updating documentation (in progress)
-
-
 
 Sample Workflow
 ---------------
