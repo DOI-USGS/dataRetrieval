@@ -38,10 +38,7 @@ Additionally, to subscribe to an email list concerning updates to these R packag
 
 Package Installation
 ---------------------------------
-While the dataRetreival package is in development (and not on CRAN), the following packages must first be manually installed: 
-* zoo
- 
-To install the EGRET package:
+While the dataRetreival package is in development (and not on CRAN), the zoo package must first be manually installed. To install the dataRetrieval package:
 
 	install.packages("zoo")
 	install.packages("dataRetrieval", repos="http://usgs-r.github.com/EGRET/", type="source")
