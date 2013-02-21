@@ -7,6 +7,7 @@
     <meta name="description" content="dataRetrieval : R package source for USGS data retrieval" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="shortcut icon" href="images/favicon.ico">
 
     <title>dataRetrieval</title>
   </head>
@@ -23,7 +24,7 @@
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/USGS-R/dataRetrieval/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/USGS-R/dataRetrieval/tarball/master">Download this project as a tar.gz file</a>
+              <a class="tar_download_link" href="https://github.com/USGS-R/dataRetrieval/raw/packageBuilds/dataRetrieval_1.2.1.tar.gz">Download the package tar.gz source file</a>
             </section>
         </header>
     </div>
@@ -46,27 +47,22 @@ Once you have set up your R enviornment, you can follow the directions <a href="
 </p>
 
 <h4> - R User?</h4>
-<p>Download the package from the EGRET page:</p>
-<a href="https://github.com/USGS-R/EGRET" target="_blank">https://github.com/USGS-R/EGRET</a>
-<p>To install the downloaded package, use the following command:</p>
+<p>To install the downloaded package, first install the required zoo package from CRAN,then install the dataRetrieval package:</p>
 <pre><code>
-install.packages(".../dataRetrieval_1.2.1.tar.gz", repos=NULL, type="source")
-#Replace ... with full path to download
+install.packages("zoo")
+install.packages("dataRetrieval", repos="http://usgs-r.github.com/EGRET/", type="source")
 </code></pre>
-<p>Further instructions on installation can be found <a href="https://github.com/USGS-R/EGRET/wiki" target="_blank">here</a>.</p>
 
 <h4> - R Developer?</h4>
-<p>If you are an experienced R developer, and have the package 'devtools', as well as all the required LaTex tools installed to create packages, you can easily build this package directly from gitHub.
+<p>If you are an experienced R developer, and have the package 'devtools' and all the required LaTex tools installed to create packages, you can build the working version of this package directly from gitHub.
 
 Windows tools can be found <a href="http://cran.r-project.org/bin/windows/Rtools/" target="_blank">here</a>. Carefully follow the directions, and note that you need to install Rtools from that page, as well as <a href="http://www.miktex.org/download" target="_blank">MikTex</a> (the Windows set of LaTex tools). The full set of Mac LaTex tools can be found <a href="http://www.tug.org/mactex/downloading.html" target="_blank">here</a>.</p>
 
 <p>Once you have the required tools for building R packages, you can simply type the following commands in R to build the dataRetrieval package on your system:</p>
 
-<pre><code>install.packages('devtools') #if not already installed
-library('devtools')
-</code></pre>
-Once that is installed, you can use the function install_github to install this package directly from github:
-<pre><code>install_github("dataRetrieval", "USGS-R")
+<pre><code>
+library("devtools")
+install_github("dataRetrieval", "USGS-R")
 </code></pre>
 This will install the latest code that is currently committed to gitHub.
 </p>
