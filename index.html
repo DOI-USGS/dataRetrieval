@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="dataRetrieval : R package source for USGS data retrieval" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>dataRetrieval</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/USGS-R/dataRetrieval">View on GitHub</a>
+
+          <h1 id="project_title">dataRetrieval</h1>
+          <h2 id="project_tagline">R package source for USGS data retrieval</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/USGS-R/dataRetrieval/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/USGS-R/dataRetrieval/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>Introduction</h3>
+
+<p>The dataRetrieval package was created to simplify the process of getting hydrologic data in the R enviornment. It has been specifically designed to work seamlessly with the <a href="https://github.com/USGS-R/EGRET/wiki" target="_blank">EGRET package</a>:
+Exploration and Graphics for RivEr Trends (EGRET)
+</p>
+
+<h3>Download and Installation Options:</h3>
+
+<h4> - New to R?</h4>
+<p>If you are new to R, you will need to first install the latest version of R, which can be found <a href="http://www.r-project.org/" target="_blank">here</a>.
+Although there are many options for running and editing R code, a nice enviornment to learn R is RStudio. RStudio can be downloaded <a href="http://rstudio.org/" target="_blank">here</a>.
+Once you have set up your R enviornment, you can follow the directions <a href="https://github.com/USGS-CIDA/WRTDS/wiki" target="_blank">here</a> to download and install the dataRetrieval package.
+</p>
+
+<h4> - R User?</h4>
+<p>Download the package from the EGRET page:</p>
+<a href="https://github.com/USGS-R/EGRET" target="_blank">https://github.com/USGS-R/EGRET</a>
+<p>To install the downloaded package, use the following command:</p>
+<pre><code>
+install.packages(".../dataRetrieval_1.2.1.tar.gz", repos=NULL, type="source")
+#Replace ... with full path to download
+</code></pre>
+<p>Further instructions on installation can be found <a href="https://github.com/USGS-R/EGRET/wiki" target="_blank">here</a>.</p>
+
+<h4> - R Developer?</h4>
+<p>If you are an experienced R developer, and have the package 'devtools', as well as all the required LaTex tools installed to create packages, you can easily build this package directly from gitHub.
+
+Windows tools can be found <a href="http://cran.r-project.org/bin/windows/Rtools/" target="_blank">here</a>. Carefully follow the directions, and note that you need to install Rtools from that page, as well as <a href="http://www.miktex.org/download" target="_blank">MikTex</a> (the Windows set of LaTex tools). The full set of Mac LaTex tools can be found <a href="http://www.tug.org/mactex/downloading.html" target="_blank">here</a>.</p>
+
+<p>Once you have the required tools for building R packages, you can simply type the following commands in R to build the dataRetrieval package on your system:</p>
+
+<pre><code>install.packages('devtools') #if not already installed
+library('devtools')
+</code></pre>
+Once that is installed, you can use the function install_github to install this package directly from github:
+<pre><code>install_github("dataRetrieval", "USGS-R")
+</code></pre>
+This will install the latest code that is currently committed to gitHub.
+</p>
+
+
+<h3>Authors and Contributors</h3>
+
+<p>Robert Hirsch and Laura De Cicco</p>
+<p>For questions, please contact <a href="https://github.com/ldecicco-USGS" class="user-mention">@ldecicco-USGS</a>, or email <a href="mailto:egret_comments@usgs.gov">egret_comments@usgs.gov</a></p>
+
+
+      </section>
+    </div>
+
+    <!-- FOOTER -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">dataRetrieval maintained by <a href="https://github.com/USGS-R">USGS-R</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
