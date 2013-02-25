@@ -51,9 +51,9 @@ Collate:
     'retrieveNWISqwData.r'
     'processQWData.r'
 Depends:
-    R (>= 2.15.0),
-    zoo,
-    methods
+    R (>= 2.15.0)
+Imports:
+    zoo
 Suggests:
     xtable
 LazyLoad: yes

@@ -538,6 +538,18 @@ If you are new to R, you will need to first install the latest version of R, whi
 
 There are many options for running and editing R code, one nice environment to learn R is RStudio. RStudio can be downloaded here: \url{http://rstudio.org/}. Once R and RStudio are installed, the dataRetrieval package needs to be installed as described in the next section.
 
+At any time, you can get information about any function in R by typing a question mark before the functions name.  This will open a file (in RStudio, in the Help window) that describes the function, the required arguments, and provides working examples.
+
+<<helpFunc,eval = FALSE>>=
+?removeDuplicates
+@
+
+To see the raw code for a particular code, type the name of the function:
+<<rawFunc,eval = TRUE>>=
+removeDuplicates
+@
+
+
 %------------------------------------------------------------
 \subsection{R User: Installing dataRetrieval}
 %------------------------------------------------------------ 
