@@ -1,3 +1,14 @@
+#' dateFormatCheck
+#'
+#' Checks to see if format is YYYY-MM-DD. Also performs a few other date checks.
+#'
+#' @param date string
+#' @keywords WRTDS flow
+#' @return condition logical if TRUE, 
+#' @export
+#' @examples
+#' date <- '1985-01-01'
+#' dateFormatCheck(date)
 dateFormatCheck <- function(date){  # checks for the format YYYY-MM-DD
   parts <- strsplit(date,"-",fixed=TRUE)
   condition <- FALSE

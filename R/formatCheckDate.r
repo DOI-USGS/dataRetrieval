@@ -1,3 +1,17 @@
+#' formatCheckDate 
+#'
+#' Response to the date format checker.  If the date is not formated correctly, it will give the user the opportunity to correct, otherwise will create a warning.
+#'
+#' @param Date string
+#' @param dateString string used in either error message or interactive message. An example would be "startDate"
+#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
+#' @keywords WRTDS flow
+#' @return condition logical if TRUE, 
+#' @export
+#' @examples
+#' Date <- '1985-01-01'
+#' dateString <- 'StartDate'
+#' formatCheckDate(Date, dateString, interactive = FALSE)
 formatCheckDate <- function(Date, dateString,interactive=TRUE){
   if(nzchar(Date)){
     if (!dateFormatCheck(Date)){

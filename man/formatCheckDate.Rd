@@ -1,0 +1,32 @@
+\name{formatCheckDate}
+\alias{formatCheckDate}
+\title{formatCheckDate}
+\usage{
+  formatCheckDate(Date, dateString, interactive = TRUE)
+}
+\arguments{
+  \item{Date}{string}
+
+  \item{dateString}{string used in either error message or
+  interactive message. An example would be "startDate"}
+
+  \item{interactive}{logical Option for interactive mode.
+  If true, there is user interaction for error handling and
+  data checks.}
+}
+\value{
+  condition logical if TRUE,
+}
+\description{
+  Response to the date format checker.  If the date is not
+  formated correctly, it will give the user the opportunity
+  to correct, otherwise will create a warning.
+}
+\examples{
+Date <- '1985-01-01'
+dateString <- 'StartDate'
+formatCheckDate(Date, dateString, interactive = FALSE)
+}
+\keyword{WRTDS}
+\keyword{flow}
+

@@ -1,3 +1,14 @@
+#' formatCheckSiteNumber
+#'
+#' Checks that the site code is 8 digits. If it is not 8 digits, it confirms with the user.
+#' @param siteNumber string to check
+#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
+#' @keywords WRTDS flow
+#' @return siteNumber string
+#' @export
+#' @examples
+#' site<- '01234567'
+#' formatCheckSiteNumber(site, interactive = FALSE)
 formatCheckSiteNumber <- function(siteNumber, interactive=TRUE){  #checks for a 8 digit number
   if (nchar(siteNumber) != 8){
     if (interactive){

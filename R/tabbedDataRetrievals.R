@@ -44,28 +44,3 @@ NULL
 #' @author Robert M. Hirsch \email{rhirsch@@usgs.gov}
 #' @keywords water flow data
 NULL
-
-#' Example Sample Dataframe included in dataRetrieval
-#'
-#' Initial Sample data frame from the Choptank River
-#'
-#' @name exSample
-#' @docType data
-#' @author Robert M. Hirsch \email{rhirsch@@usgs.gov}
-#' @keywords water flow data
-NULL
-
-#' Example Daily Dataframe included in dataRetrieval
-#'
-#' Initial Daily data frame from the Choptank River
-#'
-#' @name exDaily
-#' @docType data
-#' @author Robert M. Hirsch \email{rhirsch@@usgs.gov}
-#' @keywords water flow data
-NULL
-
-
-
-
-
