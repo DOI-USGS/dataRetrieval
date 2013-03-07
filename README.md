@@ -41,7 +41,7 @@ Package Installation
 While the dataRetreival package is in development (and not on CRAN), the zoo package must first be manually installed. To install the dataRetrieval package:
 
 	install.packages("zoo")
-	install.packages("dataRetrieval", repos="http://usgs-r.github.com/EGRET/", type="source")
+	install.packages("dataRetrieval", repos="http://usgs-r.github.com", type="source")
 	
 ### Note on updating versions:
 Some users have found it necessary to delete the package folders before installing newer versions of either dataRetrieval or EGRET.  If you are experiencing an issue after updating a package, trying deleting the package folder, the default location for Windows is something like this:
