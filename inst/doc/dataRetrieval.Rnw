@@ -57,9 +57,10 @@
 %------------------------------------------------------------
 \section{Introduction to dataRetrieval}
 %------------------------------------------------------------ 
-The dataRetrieval package was created to simplify the process of getting hydrologic data in the R enviornment. It has been specifically designed to work seamlessly with the EGRET package: Exploration and Graphics for RivEr Trends (EGRET). See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET.
+The dataRetrieval package was created to simplify the process of getting hydrologic data in the R enviornment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends (EGRET). See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the WRTDS method of data analysis (WRTDS is Weighted Regressions on Time, Discharge and Season) as well as analysis of streamflow trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
 
-There is a plethora of hydrological data available on the web. This package is designed specifically to load United States Geological Survey (USGS) hydrologic data to the R enviornment. This includes daily values, real-time (unit values), site information, and water quality sample data. 
+
+The dataRetrieval package is designed to retrieve many of the major data types of USGS hydrologic data that are available on the web, but also allows users to make use of other data that they supply from spreadsheets.  Section 2 provides examples of how one can obtain raw data from USGS sources on the web and ingest them into data frames within the R environment.  The functionality described in section 2 is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section 3 is tailored specifically to obtaining input from the web and structuring them specifically for use in the EGRET package.  The functionality described in section 4 is for converting hydrologic data from user-supplied spreadsheets and structuring them specifically for use in the EGRET package.
 
 For information on getting started in R, downloading and installing the package, see Appendix 1: Getting Started (\ref{sec:appendix1}).
 
@@ -274,7 +275,7 @@ title(ChoptankInfo$station.nm)
 \subsection{USGS Water Quality Retrievals}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-Finally, we can use the dataRetrieval package to get USGS water quality data that is available on the water quality data portal: \url{http://www.waterqualitydata.us/}. The raw data us obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a \texttt{"};\texttt{"} separator, and setting parameterCd <- \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming (as will be demonstrated), a simplified version of the data can be obtained using getQWData.
+Finally, we can use the dataRetrieval package to get USGS water quality data that is available on the water quality data portal: \url{http://www.waterqualitydata.us/}. The raw data us obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a \texttt{"};\texttt{"} separator, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming (as will be demonstrated), a simplified version of the data can be obtained using getQWData.
 
 
 <<label=getQW, echo=TRUE>>=
@@ -297,7 +298,7 @@ dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd,
         startDate, endDate)
 names(dissolvedNitrateSimple)
 @
-Note that in this dataframe, datatime is imported as Dates (no times are included), and the qualifier is either blank or \texttt{"}\verb@<@\texttt{"} signifying a censored value.
+Note that in this dataframe, datetime is imported as Dates (no times are included), and the qualifier is either blank or \texttt{"}\verb@<@\texttt{"} signifying a censored value.
 
 An example of plotting the above data (Figure \ref{fig:nitrate}):
 
@@ -324,7 +325,7 @@ title(ChoptankInfo$station.nm)
 \subsection{Other Water Quality Retrievals}
 \label{sec:usgsSTORET}
 %------------------------------------------------------------
-Additionally, there are additional data sets available on the Water Quality Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET or NWIS database.  Since STORET does not use USGS parameter codes, a 'characteristic name' must be supplied.  The following example retrieves specific conductance from a DNR site in Wisconsin.
+There are additional data sets available on the Water Quality Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET or NWIS database.  Since STORET does not use USGS parameter codes, a 'characteristic name' must be supplied.  The following example retrieves specific conductance from a DNR site in Wisconsin.
 
 <<label=getQWData, echo=TRUE>>=
 specificCond <- getWQPData('WIDNR_WQX-10032762', 
@@ -343,7 +344,7 @@ In this section, we use 3 dataRetrieval functions to get sufficient data to perf
 %------------------------------------------------------------
 \subsection{INFO Data}
 %------------------------------------------------------------
-The function to obtain "metadata", data about the gage station and measured parameters is getMetaData. This function essentially combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
+The function to obtain \texttt{"}metadata\texttt{"}, data about the streamgage and measured parameters is getMetaData. This function essentially combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
 
 <<ThirdExample>>=
 INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
@@ -354,7 +355,7 @@ Column names in the INFO dataframe are listed in Appendix 2 (\ref{sec:appendix2I
 %------------------------------------------------------------
 \subsection{Daily Data}
 %------------------------------------------------------------
-The function to obtain the daily values (discharge in this case) is getDVData.  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in the previous section, however 'convert' is a new argument, it's default is TRUE, and it tells the program to convert the values from cfs to cms. If you don't want this conversion, set convert=FALSE in the function call.
+The function to obtain the daily values (discharge in this case) is getDVData.  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in the previous section, however 'convert' is a new argument, the default is TRUE, and it tells the program to convert the values from cubic feet per second (cfs) to cubic meters per second (cms). For EGRET applications do not use this argument (the default is TRUE), EGRET assumes that discharge is always in cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
 
 <<firstExample>>=
 siteNumber <- "01491000"
@@ -370,7 +371,7 @@ Details of the Daily dataframe are listed below:
 <<label=colNamesDaily, echo=FALSE,results=tex>>=
 ColumnName <- c("Date", "Q", "Julian","Month","Day","DecYear","MonthSeq","Qualifier","i","LogQ","Q7","Q30")
 Type <- c("Date", "number", "number","integer","integer","number","integer","string","integer","number","number","number")
-Description <- c("Date", "Discharge in cms", "Number of days since January 1, 1850", "Month of the year [1-12]", "Day of the year [1-366]", "Decimal year", "Number of months since January 1, 1850", "Qualifing code", "Index of days from the start of the data frame", "Natural logarithm of Q", "7 day running average of Q", "30 running average of Q")
+Description <- c("Date", "Discharge", "Number of days since January 1, 1850", "Month of the year [1-12]", "Day of the year [1-366]", "Decimal year", "Number of months since January 1, 1850", "Qualifing code", "Index of days from the start of the data frame", "Natural logarithm of Q", "7 day running average of Q", "30 running average of Q")
 Units <- c("date", "cms","days", "months","days","years","months", "character","days","numeric","cms","cms")
 
 DF <- data.frame(ColumnName,Type,Description,Units)
@@ -398,7 +399,7 @@ Details of the Sample dataframe are listed below:
 <<label=colNamesQW, echo=FALSE,results=tex>>=
 ColumnName <- c("Date", "ConcLow", "ConcHigh", "Uncen", "ConcAve", "Julian","Month","Day","DecYear","MonthSeq","SinDY","CosDY","Q","LogQ")
 Type <- c("Date", "number","number","integer","number", "number","integer","integer","number","integer","number","number","number","number")
-Description <- c("Date", "Lower limit of concentration", "Upper limit of concentration", "Uncensored data (1=true, 0=false)", "Average concentration","Number of days since January 1, 1850", "Month of the year [1-12]", "Day of the year [1-366]", "Decimal year", "Number of months since January 1, 1850", "Sine of DecYear", "Cosine of DecYear", "Discharge **", "Natural logarithm of flow **")
+Description <- c("Date", "Lower limit of concentration", "Upper limit of concentration", "Uncensored data (1=true, 0=false)", "Average of ConcLow and ConcHigh","Number of days since January 1, 1850", "Month of the year [1-12]", "Day of the year [1-366]", "Decimal year", "Number of months since January 1, 1850", "Sine of DecYear", "Cosine of DecYear", "Discharge **", "Natural logarithm of flow **")
 Units <- c("date","mg/L","mg/L","integer","mg/L","days","months","days","years","months","numeric","numeric","cms", "numeric")
 
 DF <- data.frame(ColumnName,Type,Description,Units)
@@ -416,7 +417,7 @@ In a more complex situation, the Sample data frame will combine all of the measu
 %------------------------------------------------------------
 \subsection{Complex Sample Data Example}
 %------------------------------------------------------------
-As an example, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). Form 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
+As an example, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). From 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
 
 \begin{center}
 
@@ -439,7 +440,7 @@ print(data.table, caption.placement="top",floating="FALSE",latex.environments=NU
 \end{center}
 
 
-The dataRetrieval package will "add up" all the values in a given row to form the total for that sample. Thus, you only want to enter data that should be added together. For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not suppose to add it in to the values in 2005.
+The dataRetrieval package will \texttt{"}add up\texttt{"} all the values in a given row to form the total for that sample. Thus, you only want to enter data that should be added together. For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not suppose to add it in to the values in 2005.
 
 For every sample, the EGRET package requires a pair of numbers to define an interval in which the true value lies (ConcLow and ConcHigh). In a simple non-censored case (the reported value is above the detection limit), ConcLow equals ConcHigh and the interval collapses down to a single point.In a simple censored case, the value might be reported as <0.2, then ConcLow=NA and ConcHigh=0.2. We use NA instead of 0 as a way to elegantly handle future logarithm calculations.
 
@@ -478,11 +479,11 @@ Aside from retrieving data from the USGS web services, the dataRetrieval package
 %------------------------------------------------------------ 
 getDailyDataFromFile will load a user-supplied text file and convert it to the Daily dataframe. The file should have two columns, the first dates, the second values.  The dates should be formatted either mm/dd/yyyy or yyyy-mm-dd. Using a 4-digit year is required. This function has the following inputs: filePath, fileName,hasHeader (TRUE/FALSE), separator, qUnit, and interactive (TRUE/FALSE). filePath is a string that defines the path to your file. This can either be a full path, or path relative to your R working directory. The input fileName is a string that defines the file name (including the extension).
 
-Text files that contain this sort of data require some sort of a separator, for example, a 'csv' file (aka 'comma-separated value') file uses a comma to separate the date and value column. A tab delimited file would use a tab ("\verb@\t@") rather than the comma (","). The type of separator you use can be defined in the function call in the 'separator' argument, the default is ",". Another function input is a logical variable: hasHeader.  The default is TRUE. If your data does not have column names, set this variable to FALSE.
+Text files that contain this sort of data require some sort of a separator, for example, a 'csv' file (comma-separated value) file uses a comma to separate the date and value column. A tab delimited file would use a tab (\texttt{"}\verb@\t@\texttt{"}) rather than the comma (\texttt{"},\texttt{"}). The type of separator you use can be defined in the function call in the \texttt{"}separator\texttt{"} argument, the default is \texttt{"},\texttt{\texttt{"}}. Another function input is a logical variable: hasHeader.  The default is TRUE. If your data does not have column names, set this variable to FALSE.
 
-Finally, qUnit is a numeric input that defines the discharge/flow units. Flow from the NWIS web results are typically given in cubic feet per second (qUnit=1), but the EGRET package requires flow to be given in cubic meters per second (qUnit=2). Other allowed values are 10\verb@^@3 cubic feet per second (qUnit=3) and 10\verb@^@3 cubic meters per second (qUnit=4). If you do not want your data to be converted, use qUnit=2. The default is qUnit=1 (assumes flow is in cubic feet per second).
+Finally, qUnit is a numeric input that defines the discharge units. Flow from the NWIS web results are typically given in cubic feet per second (qUnit=1), but the EGRET package requires flow to be given in cubic meters per second (qUnit=2). Other allowed values are 10\verb@^@3 cubic feet per second (qUnit=3) and 10\verb@^@3 cubic meters per second (qUnit=4). If you do not want your data to be converted, use qUnit=2. The default is qUnit=1 (assumes flow is in cubic feet per second).
 
-So, if you have a file called "ChoptankRiverFlow.txt" located in a folder called "RData" on your C drive (this is a Window's example), and the file is structured as follows (tab-separated):
+So, if you have a file called \texttt{"}ChoptankRiverFlow.txt\texttt{"} located in a folder called \texttt{"}RData\texttt{"} on the C drive (this is a Window's example), and the file is structured as follows (tab-separated):
 \begin{verbatim}
 date  Qdaily
 10/1/1999  3.029902561
@@ -504,7 +505,7 @@ Daily <- getDailyDataFromFile(filePath,fileName,separator="\t",interactive=FALSE
 %------------------------------------------------------------ 
 \subsection{getSampleDataFromFile}
 %------------------------------------------------------------ 
-Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and flow data is that the code requires a third column that contains a remark code, either blank or \verb@"<"@, which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.  If multiple constituents are going to be used, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... An example of a comma-delimited file would be:
+Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and flow data is that the code requires a third column that contains a remark code, either blank or \texttt{"}\verb@<@\texttt{"}, which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.  If multiple constituents are going to be used, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... An example of a comma-delimited file would be:
 
 \begin{verbatim}
 cdate;remarkCode;Nitrate
@@ -557,10 +558,10 @@ Before installing dataRetrieval, the zoo packages must be installed from CRAN:
 
 <<installFromCran,eval = FALSE>>=
 install.packages("zoo")
-install.packages("dataRetrieval", repos="http://usgs-r.github.com/EGRET/", type="source")
+install.packages("dataRetrieval", repos="http://usgs-r.github.com", type="source")
 @
 
-It is a good idea to re-start the R enviornment after installing the package, especially if installing an updated version (that is, restart RStudio). Some users have found it necessary to delete the previous version's package folder before installing newer version of dataRetrieval. If you are experiencing issues after updating a package, trying deleting the package folder - the default location for Windows is something like this: C:/Users/userA/Documents/R/win-library/2.15/dataRetrieval, and the default for a Mac: /Users/userA/Library/R/2.15/library/dataRetrieval. Then, re-install the package using the directions above. Moving to CRAN should solve this problem.
+It is a good idea to re-start the R enviornment after installing the package, especially if installing an updated version. Some users have found it necessary to delete the previous version's package folder before installing newer version of dataRetrieval. If you are experiencing issues after updating a package, trying deleting the package folder - the default location for Windows is something like this: C:/Users/userA/Documents/R/win-library/2.15/dataRetrieval, and the default for a Mac: /Users/userA/Library/R/2.15/library/dataRetrieval. Then, re-install the package using the directions above. Moving to CRAN should solve this problem.
 
 After installing the package, you need to open the library each time you re-start R.  This is done with the simple command:
 <<openLibraryTest, eval=FALSE>>=
