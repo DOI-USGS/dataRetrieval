@@ -51,6 +51,7 @@ Collate:
     'retrieveNWISqwData.r'
     'processQWData.r'
     'constructNWISURL.r'
+    'getSiteFileData.r'
 Depends:
     R (>= 2.15.0)
 Imports:

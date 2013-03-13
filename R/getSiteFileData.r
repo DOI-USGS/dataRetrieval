@@ -17,14 +17,14 @@ getSiteFileData <- function(siteNumber="",interactive=TRUE){
   
   urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site?format=rdb&siteOutput=Expanded&sites=",siteNumber,sep = "")
   
-  SiteFile <- read.delim(  
-    urlSitefile, 
-    header = TRUE, 
-    quote="\"", 
-    dec=".", 
+  SiteFile <- read.delim(
+    urlSitefile,
+    header = TRUE,
+    quote="\"",
+    dec=".",
     sep='\t',
     colClasses=c('character'),
-    fill = TRUE, 
+    fill = TRUE,
     comment.char="#")
   
   INFO <- SiteFile[-1,]

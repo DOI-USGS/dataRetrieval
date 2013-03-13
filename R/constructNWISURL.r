@@ -11,7 +11,7 @@
 #' @param statCd string USGS statistic code only used for daily value service. This is usually 5 digits.  Daily mean (00003) is the default.
 #' @param service string USGS service to call. Possible values are "dv" (daily values), "iv" (unit/instantaneous values), "qwdata" (water quality data), and "wqp" (water quality portal, which can include STORET).
 #' @keywords data import USGS web service
-#' @return data dataframe with agency, site, dateTime, value, and code columns
+#' @return url string
 #' @export
 #' @examples
 #' siteNumber <- '04085427'
