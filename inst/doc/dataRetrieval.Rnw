@@ -66,7 +66,7 @@ For information on getting started in R, downloading and installing the package,
 
 
 %------------------------------------------------------------
-\section{USGS Web Retrieval Examples}
+\section{General USGS Web Retrieval Examples}
 %------------------------------------------------------------ 
 In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), real-time current values (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis.
 
@@ -75,7 +75,11 @@ In this section, we will run through 5 examples, documenting how to get raw data
 %------------------------------------------------------------
 The United States Geological Survey organizes their hydrological data in fairly standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discoving this 8-digit ID. One potential tool for discovering data is Environmental Data Discovery and Transformation (EnDDaT): \url{http://cida.usgs.gov/enddat/}.  Follow the example on the EnDDaT web page to learn how to discover USGS stations and available data from any location in the United States. 
 
-Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured paramater is being requested.  A complete list of possible USGS parameter codes can be found at \href{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&pm_search=&casrn_search=&srsname_search=&format=html_table&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}. Not every station will measure all parameters. The following is a list of commonly measured parameters:
+Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured paramater is being requested.  A complete list of possible USGS parameter codes can be found at:
+
+\url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&pm_search=&casrn_search=&srsname_search=&format=html_table&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}
+
+Not every station will measure all parameters. A list of commonly measured parameters is shown in Table \ref{tab:params}.
 
 <<openLibrary, echo=FALSE>>=
 library(xtable)
@@ -92,24 +96,24 @@ shortName <- c("Discharge [cfs]","Gage height [ft]","Temperature [C]", "Precipit
 
 data.df <- data.frame(pCode, shortName, stringsAsFactors=FALSE)
 
-data.table <- xtable(data.df,
+data.table <- xtable(data.df,label="tab:params",
                      caption="Commonly found USGS Parameter Codes")
-print(data.table, 
+print(data.table,
       caption.placement="top",include.rownames=FALSE)
 @
 
-For real-time data, the parameter code and site ID will suffice.  The USGS stores historical data as daily values however.  The statistical process used to store the daily data is the final requirement for daily value retrievals.  A 5-digit 'stat code' specifies the requested processing.  A complete list of possible USGS stat codes can be found here:
+For real-time data, the parameter code and site ID will suffice.  For most variables that are measured on a continuous basis, the USGS stores the historical data as daily values.  These daily values may be in the form statistics such as the daily mean values, but they can also include daily maximums, minimums or medians.  These different statistics are specified by a 5-digit \texttt{"}stat code\texttt{"}.  A complete list of stat codes can be found here:
 
 \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 
-The most common stat codes are:
+Some common stat codes are shown in Table \ref{tab:stat}.
 <<label=tableStatCodes, echo=FALSE,results=tex>>=
 StatCode <- c('00001', '00002', '00003','00008')
 shortName <- c("Maximum","Minimum","Mean", "Median")
 
 data.df <- data.frame(StatCode, shortName, stringsAsFactors=FALSE)
 
-data.table <- xtable(data.df,
+data.table <- xtable(data.df,label="tab:stat",
                      caption="Commonly found USGS Stat Codes")
 print(data.table, 
       caption.placement="top",include.rownames=FALSE)
@@ -231,15 +235,13 @@ There are occasions where NWIS values are not reported as numbers, instead there
 \subsection{USGS Unit Value Retrievals}
 \label{sec:usgsRT}
 %------------------------------------------------------------
-We can also get real-time, instantaneous measurements using the retrieveUnitNWISData function:
+Any data that are collected at regular time intervals (such as 15-minute or hourly) are known as \texttt{"}Unit Values\texttt{"} - many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function retrieveUnitNWISData.  Some of these Unit Values are available for the past several years, and some are only available for a recent time period such as 120 days or a year.  Here is an example of a retrieval of such data.  
+
 <<label=getNWISUnit, echo=TRUE>>=
 siteNumber <- "01491000"
 parameterCd <- "00060"  # Discharge (cfs)
-startDate <- as.character(Sys.Date()-1) # Yesterday 
-  # (or, the day before the dataRetrieval package was built)
-endDate <- as.character(Sys.Date()) # Today 
-  # (or, the day the dataRetrieval package was built)
-
+startDate <- "2013-03-12" # or pick yesterday by the command as.character(Sys.Date()-1)
+endDate <- "2013-03-13" # Today: as.character(Sys.Date())
 dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, 
         startDate, endDate)
 @
@@ -266,7 +268,7 @@ title(ChoptankInfo$station.nm)
 <<getNWISUnit>>
 @
 \end{center}
-\caption{Real-time discharge plot of Choptank River.}
+\caption{Real-time discharge plot of Choptank River from March 12-13, 2013.}
 \label{fig:RT}
 \end{figure}
 
@@ -275,7 +277,7 @@ title(ChoptankInfo$station.nm)
 \subsection{USGS Water Quality Retrievals}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-Finally, we can use the dataRetrieval package to get USGS water quality data that is available on the water quality data portal: \url{http://www.waterqualitydata.us/}. The raw data us obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a \texttt{"};\texttt{"} separator, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming (as will be demonstrated), a simplified version of the data can be obtained using getQWData.
+To get water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the dataRetrieval package from the water quality data portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a \texttt{"};\texttt{"} separator, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming (as will be demonstrated), a simplified version of the data can be obtained using getQWData.
 
 
 <<label=getQW, echo=TRUE>>=
@@ -335,11 +337,11 @@ head(specificCond)
 
 
 %------------------------------------------------------------
-\section{Polished Data: USGS Web Retrieval Examples}
+\section{USGS Web Retrieval Examples Structured For Use In The EGRET Package}
 %------------------------------------------------------------ 
 Rather than using the raw data as retrieved by the web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
 
-In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We will need essentially the same data that was retrieved in the previous section, but we will get the daily discharge values in a dataframe called Daily, the nitrate sample data in a dataframe called Sample, and the data about the station and parameters in a dataframe called INFO. These are the dataframes that were exclusively designed to work with the EGRET R package, however can be very useful for all hydrologic studies.
+In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We will be retrieving essentially the same data that were retrieved in the previous section, but in this case it will be structured into three EGRET-specific dataframes.  The daily discharge data will be placed in a dataframe called Daily.  The nitrate sample data will be placed in a dataframe called Sample.  The data about the site and the parameter will be placed in a dataframe called INFO.  Although these dataframes were designed to work with the EGRET R package, they can be very useful for a wide range of hydrologic studies that don't use EGRET.
 
 %------------------------------------------------------------
 \subsection{INFO Data}
@@ -470,7 +472,7 @@ head(Sample)
 
 \newpage
 %------------------------------------------------------------ 
-\section{Retrieving User-Generated Data Files}
+\section{Ingesting User-Generated Data Files To Structure Them For Use In The EGRET Package}
 %------------------------------------------------------------ 
 Aside from retrieving data from the USGS web services, the dataRetrieval package includes functions to generate the Daily and Sample data frame from local files.
 

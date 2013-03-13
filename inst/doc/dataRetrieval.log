@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  19 FEB 2013 13:33
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  13 MAR 2013 17:00
 entering extended mode
 **dataRetrieval.tex
 (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.tex
@@ -30,41 +30,41 @@ File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsmath.sty"
-Package: amsmath 2000/07/18 v2.13 AMS math features
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\amsmath\amsmath.sty
+Package: amsmath 2013/01/14 v2.14 AMS math features
 \@mathmargin=\skip43
 
 For additional information on amsmath, use the `?' option.
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amstext.sty"
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\amsmath\amstext.sty
 Package: amstext 2000/06/29 v2.01
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsgen.sty"
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\amsmath\amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0
 \@emptytoks=\toks14
 \ex@=\dimen103
 ))
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsbsy.sty"
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\amsmath\amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d
 \pmbraise@=\dimen104
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsopn.sty"
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\amsmath\amsopn.sty
 Package: amsopn 1999/12/14 v2.01 operator names
 )
 \inf@bad=\count87
-LaTeX Info: Redefining \frac on input line 211.
+LaTeX Info: Redefining \frac on input line 210.
 \uproot@=\count88
 \leftroot@=\count89
-LaTeX Info: Redefining \overline on input line 307.
+LaTeX Info: Redefining \overline on input line 306.
 \classnum@=\count90
 \DOTSCASE@=\count91
-LaTeX Info: Redefining \ldots on input line 379.
-LaTeX Info: Redefining \dots on input line 382.
-LaTeX Info: Redefining \cdots on input line 467.
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
 \Mathstrutbox@=\box26
 \strutbox@=\box27
 \big@size=\dimen105
-LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
 \macc@depth=\count92
 \c@MaxMatrixCols=\count93
 \dotsspace@=\muskip10
@@ -85,8 +85,8 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
 \multlinegap=\skip44
 \multlinetaggap=\skip45
 \mathdisplay@stack=\toks18
-LaTeX Info: Redefining \[ on input line 2666.
-LaTeX Info: Redefining \] on input line 2667.
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\times.sty"
 Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
@@ -238,7 +238,7 @@ Package: authblk 2009/11/18 1.3 (PWD)
 \c@authors=\count112
 \c@affil=\count113
 )
-(C:/PROGRA~1/R/R-215~1.2/share/texmf/tex/latex\Sweave.sty
+(C:/PROGRA~1/R/R-215~1.3/share/texmf/tex/latex\Sweave.sty
 Package: Sweave 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ifthen.sty"
@@ -456,6 +456,24 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [2]
+Overfull \hbox (22.21066pt too wide) in paragraph at lines 80--81
+[][]$\T1/aett/m/n/10.95 http : / / nwis . waterdata . usgs . gov / usa / nwis /
+ pmcodes ? radio _ pm _ search = param _ group&pm _$
+ []
+
+
+Overfull \hbox (23.424pt too wide) in paragraph at lines 80--81
+$\T1/aett/m/n/10.95 group = All + -[]-[] + include + all + parameter + groups&p
+m _ search = &casrn _ search = &srsname _ search =$
+ []
+
+
+Overfull \hbox (68.32622pt too wide) in paragraph at lines 80--81
+$\T1/aett/m/n/10.95 &format = html _ table&show = parameter _ group _ nm&show =
+ parameter _ nm&show = casrn&show = srsname&show =$
+ []
+
+
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
@@ -471,11 +489,11 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[6] <dataRetrieval-fig1.pdf, id=187, 433.62pt x 289.08pt>
+[6] <dataRetrieval-fig1.pdf, id=193, 433.62pt x 289.08pt>
 File: dataRetrieval-fig1.pdf Graphic file (type pdf)
 
 <use dataRetrieval-fig1.pdf>
-Package pdftex.def Info: dataRetrieval-fig1.pdf used on input line 250.
+Package pdftex.def Info: dataRetrieval-fig1.pdf used on input line 255.
 (pdftex.def)             Requested size: 358.46039pt x 238.98355pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
@@ -485,49 +503,53 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[8] <dataRetrieval-fig2.pdf, id=207, 433.62pt x 289.08pt>
+[8] <dataRetrieval-fig2.pdf, id=213, 433.62pt x 289.08pt>
 File: dataRetrieval-fig2.pdf Graphic file (type pdf)
 
 <use dataRetrieval-fig2.pdf>
-Package pdftex.def Info: dataRetrieval-fig2.pdf used on input line 307.
+Package pdftex.def Info: dataRetrieval-fig2.pdf used on input line 310.
 (pdftex.def)             Requested size: 358.46039pt x 238.98355pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [9 <D:/LADData/RCode/dataRetrieval/inst/doc/dataRetrieval-fig2.pdf>]
-<dataRetrieval-fig3.pdf, id=222, 433.62pt x 289.08pt>
+<dataRetrieval-fig3.pdf, id=227, 433.62pt x 289.08pt>
 File: dataRetrieval-fig3.pdf Graphic file (type pdf)
 
 <use dataRetrieval-fig3.pdf>
-Package pdftex.def Info: dataRetrieval-fig3.pdf used on input line 365.
+Package pdftex.def Info: dataRetrieval-fig3.pdf used on input line 368.
 (pdftex.def)             Requested size: 358.46039pt x 238.98355pt.
 
-Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+Overfull \hbox (35.98744pt too wide) in paragraph at lines 378--379
+\T1/aer/m/n/10.95 There are ad-di-tional data sets avail-able on the Wa-ter Qua
+l-ity Por-tal ([]$\T1/aett/m/n/10.95 http : / / www . waterqualitydata .$
+ []
 
-
-[10 <D:/LADData/RCode/dataRetrieval/inst/doc/dataRetrieval-fig3.pdf>]
-LaTeX Font Info:    Try loading font information for TS1+aett on input line 379
+LaTeX Font Info:    Try loading font information for TS1+aett on input line 382
 .
-
-(C:/PROGRA~1/R/R-215~1.2/share/texmf/tex/latex\ts1aett.fd
+(C:/PROGRA~1/R/R-215~1.3/share/texmf/tex/latex\ts1aett.fd
 File: ts1aett.fd 
 )
-LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 379
+LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 382
 .
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1cmtt.fd"
 File: ts1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `TS1/aett/m/sl' in size <10.95> not available
-(Font)              Font shape `TS1/cmtt/m/sl' tried instead on input line 379.
+(Font)              Font shape `TS1/cmtt/m/sl' tried instead on input line 382.
 
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[11]
-Underfull \hbox (badness 10000) in paragraph at lines 434--452
+[10]
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[11 <D:/LADData/RCode/dataRetrieval/inst/doc/dataRetrieval-fig3.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 437--455
 
  []
 
@@ -556,17 +578,11 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [17]
-Overfull \hbox (63.21521pt too wide) in paragraph at lines 688--689
-\T1/aer/m/n/10.95 library/2.15/dataRetrieval, and the de-fault for a Mac: /User
-s/userA/Library/R/2.15/library/dataRetrieval.
- []
-
-
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [18]
-Underfull \hbox (badness 10000) in paragraph at lines 728--776
+Underfull \hbox (badness 10000) in paragraph at lines 736--784
 
  []
 
@@ -586,7 +602,7 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [21]
-Underfull \hbox (badness 10000) in paragraph at lines 786--831
+Underfull \hbox (badness 10000) in paragraph at lines 794--839
 
  []
 
@@ -595,7 +611,7 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [22]
-Underfull \hbox (badness 10000) in paragraph at lines 834--861
+Underfull \hbox (badness 10000) in paragraph at lines 842--869
 
  []
 
@@ -604,27 +620,27 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [23]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 878.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 886.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [24]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 878.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 886.
  (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 878.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 878.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 886.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 886.
 Package rerunfilecheck Info: File `dataRetrieval.out' has not changed.
-(rerunfilecheck)             Checksum: FEA45D43F3DDF55AFA8755D4D3BFEDB8;1845.
+(rerunfilecheck)             Checksum: 614BBE003F9372697FA43A46BAFF5BE8;1901.
  ) 
 Here is how much of TeX's memory you used:
- 7419 strings out of 494045
- 106333 string characters out of 3145961
- 190647 words of memory out of 3000000
- 10512 multiletter control sequences out of 15000+200000
+ 7426 strings out of 494045
+ 106538 string characters out of 3145961
+ 190779 words of memory out of 3000000
+ 10519 multiletter control sequences out of 15000+200000
  40005 words of font info for 82 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 35i,8n,28p,913b,487s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 35i,8n,28p,913b,481s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\ldecicco\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi6
 00\tcst1095.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/c
 m/cmbx10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
@@ -637,9 +653,9 @@ Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Prog
 ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsltt10.pfb><C:/Prog
 ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Progra
 m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on dataRetrieval.pdf (24 pages, 301757 bytes).
+Output written on dataRetrieval.pdf (24 pages, 307962 bytes).
 PDF statistics:
- 364 PDF objects out of 1000 (max. 8388607)
+ 368 PDF objects out of 1000 (max. 8388607)
  60 named destinations out of 1000 (max. 500000)
  220 words of extra memory for PDF output out of 10000 (max. 10000000)
 
