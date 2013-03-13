@@ -23,8 +23,8 @@
   mean (00003) is the default.}
 
   \item{service}{string USGS service to call. Possible
-  values are "dv" (daily values), "iv" (unit/instantaneous
-  values), "qwdata" (water quality data), and "wqp" (water
+  values are "dv" (daily values), "uv" (unit/instantaneous
+  values), "qw" (water quality data), and "wqp" (water
   quality portal, which can include STORET).}
 }
 \value{

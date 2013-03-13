@@ -25,7 +25,7 @@
 #' Sample <- populateSampleColumns(compressedData)
 retrieveNWISqwData <- function (siteNumber,pCodes,startDate,endDate){  
   
-  url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qwdata")
+  url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw")
   
   tmp <- read.delim(  
     url, 

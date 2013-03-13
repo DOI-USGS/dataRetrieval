@@ -9,7 +9,7 @@
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param statCd string USGS statistic code only used for daily value service. This is usually 5 digits.  Daily mean (00003) is the default.
-#' @param service string USGS service to call. Possible values are "dv" (daily values), "iv" (unit/instantaneous values), "qwdata" (water quality data), and "wqp" (water quality portal, which can include STORET).
+#' @param service string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), "qw" (water quality data), and "wqp" (water quality portal, which can include STORET).
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
@@ -33,7 +33,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
   endDate <- dateReturn[2]
   
   switch(service,
-         qwdata = {
+         qw = {
              if(length(siteNumber) > 1){    
                siteNumber <- paste(siteNumber, collapse=",")
                siteNumber <- paste("multiple_site_no",siteNumber,sep="=")
@@ -98,7 +98,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
                         endDate,
                         "&countrycode=US&mimeType=tsv",sep = "")
            },
-        { # this will be either dv or iv
+        { # this will be either dv or uv
           siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
              
           # Check for 5 digit parameter code:
@@ -107,6 +107,8 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
           } else {
             parameterCd <- formatCheckParameterCd(parameterCd, interactive=interactive)
           }
+          
+          if ("uv"==service) service <- "iv"
              
           baseURL <- paste("http://waterservices.usgs.gov/nwis/",service,sep="")  
           

@@ -21,7 +21,7 @@
 #' rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
 retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){  
   
-  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"iv",StatCd)
+  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"uv",StatCd)
   tmp <- read.delim(  
     url, 
     header = TRUE, 

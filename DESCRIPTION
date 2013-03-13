@@ -58,5 +58,6 @@ Imports:
     zoo
 Suggests:
     xtable
+    EGRET
 LazyLoad: yes
 LazyData: yes
