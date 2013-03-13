@@ -28,8 +28,7 @@
   quality portal, which can include STORET).}
 }
 \value{
-  data dataframe with agency, site, dateTime, value, and
-  code columns
+  url string
 }
 \description{
   Imports data from NWIS web service. This function gets

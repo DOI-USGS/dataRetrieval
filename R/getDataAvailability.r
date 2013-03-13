@@ -1,22 +1,22 @@
 #' USGS data availability
 #'
-#' Imports a table of available parameters, period of record, and count.
+#' Imports a table of available parameters, period of record, and count. There is also an option to load the long parameter names and additional information on the parameters with longNames=TRUE.
 #'
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
-#' @param longNames logical
+#' @param longNames logical indicates whether or not to make a web call to get long names of parameters. Be aware this could take a very long time if the station has lots of data.
 #' @keywords data import USGS web service
 #' @return retval dataframe with all information found in the expanded site file
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' siteINFO <- getSiteFileData('05114000',interactive=FALSE)
-getSiteFileData <- function(siteNumber="",interactive=TRUE){
+#' availableData <- getDataAvailablilty('05114000',interactive=FALSE)
+getDataAvailablilty <- function(siteNumber="",interactive=TRUE, longNames=FALSE){
   
   # Checking for 8 digit site ID:
-  siteNumber <- formatCheckSiteNumber(siteNumber, longNames = FALSE,interactive=interactive)
+  siteNumber <- formatCheckSiteNumber(siteNumber,interactive=interactive)
   
-  urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site?format=rdb&siteOutput=Expanded&sites=",siteNumber,sep = "")
+  urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site?format=rdb&seriesCatalogOutput=true&sites=",siteNumber,sep = "")
   
   SiteFile <- read.delim(  
     urlSitefile, 
