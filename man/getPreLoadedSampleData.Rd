@@ -23,7 +23,7 @@
 \examples{
 getPreLoadedSampleData(ChoptankRiverNitrate, interactive=FALSE)
 }
-\keyword{WRTDS}
 \keyword{data}
 \keyword{import}
+\keyword{WRTDS}
 

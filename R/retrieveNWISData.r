@@ -24,32 +24,7 @@
 #' rawDailyQAndTempMeanMax <- retrieveNWISData(siteNumber,'00010,00060', startDate, endDate, StatCd='00001,00003', interactive=FALSE)
 retrieveNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,StatCd="00003",interactive=TRUE){  
   
-  # Checking for 8 digit site ID:
-  siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
-  
-  # Check for 5 digit parameter code:
-  ParameterCd <- formatCheckParameterCd(ParameterCd, interactive=interactive)
-  
-  # Check date format:
-  StartDate <- formatCheckDate(StartDate, "StartDate", interactive=interactive)
-  EndDate <- formatCheckDate(EndDate, "EndDate", interactive=interactive)
-  
-  # Check that start date happens before end date:
-  dateReturn <- checkStartEndDate(StartDate, EndDate, interactive=interactive)
-  StartDate <- dateReturn[1]
-  EndDate <- dateReturn[2]
-  
-  baseURL <- "http://waterservices.usgs.gov/nwis/dv?site="
-  
-  url <- paste(baseURL,siteNumber, "&ParameterCd=",ParameterCd, "&StatCd=", StatCd, "&format=rdb,1.0", sep = "")
-  
-  if (nzchar(StartDate)) {
-    url <- paste(url,"&startDT=",StartDate,sep="")
-  } else url <- paste(url,"&startDT=","1851-01-01",sep="")
-  
-  if (nzchar(EndDate)) {
-    url <- paste(url,"&endDT=",EndDate,sep="")
-  }
+  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"dv",StatCd)
   
   tmp <- read.delim(  
     url, 

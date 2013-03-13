@@ -46,8 +46,8 @@ Sample_Select <- getSampleData('05114000','00915;00931', '', '', interactive=FAL
   \code{\link{compressData}},
   \code{\link{populateSampleColumns}}
 }
-\keyword{USGS}
-\keyword{WRTDS}
 \keyword{data}
 \keyword{import}
+\keyword{USGS}
+\keyword{WRTDS}
 

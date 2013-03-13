@@ -43,11 +43,11 @@
 # These examples require an internet connection to run
 rawSample <- getRawQWData('01594440','01075', '1985-01-01', '1985-03-31')
 rawSampleAll <- getRawQWData('05114000','', '1985-01-01', '1985-03-31')
-rawSampleSelect <- getRawQWData('05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
+rawSampleSelect <- getRawQWData('05114000',c('00915','00931'), '1985-01-01', '1985-04-30', interactive=FALSE)
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 

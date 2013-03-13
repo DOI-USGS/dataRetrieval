@@ -21,30 +21,7 @@
 #' rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
 retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){  
   
-  # Checking for 8 digit site ID:
-  siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
-  # Check for 5 digit parameter code:
-  ParameterCd <- formatCheckParameterCd(ParameterCd, interactive=interactive)
-  # Check date format:
-  StartDate <- formatCheckDate(StartDate, "StartDate", interactive=interactive)
-  EndDate <- formatCheckDate(EndDate, "EndDate", interactive=interactive)
-  #Check that start date happens before end date:
-  dateReturn <- checkStartEndDate(StartDate, EndDate, interactive=interactive)
-  StartDate <- dateReturn[1]
-  EndDate <- dateReturn[2]
-  
-  baseURL <- "http://waterservices.usgs.gov/nwis/iv?site="
-  
-  url <- paste(baseURL,siteNumber, "&ParameterCd=",ParameterCd, "&format=rdb,1.0", sep = "")
-  
-  if (nzchar(StartDate)) {
-    url <- paste(url,"&startDT=",StartDate,sep="")
-  } else url <- paste(url,"&startDT=","1851-01-01",sep="")
-  
-  if (nzchar(EndDate)) {
-    url <- paste(url,"&endDT=",EndDate,sep="")
-  }
-  
+  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"iv",StatCd)
   tmp <- read.delim(  
     url, 
     header = TRUE, 

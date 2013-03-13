@@ -17,33 +17,10 @@
 #' # These examples require an internet connection to run
 #' rawSample <- getRawQWData('01594440','01075', '1985-01-01', '1985-03-31')
 #' rawSampleAll <- getRawQWData('05114000','', '1985-01-01', '1985-03-31')
-#' rawSampleSelect <- getRawQWData('05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
+#' rawSampleSelect <- getRawQWData('05114000',c('00915','00931'), '1985-01-01', '1985-04-30', interactive=FALSE)
 getRawQWData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
-  siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
-  StartDate <- formatCheckDate(StartDate, "StartDate", interactive=interactive)
-  EndDate <- formatCheckDate(EndDate, "EndDate", interactive=interactive)
-  
-  dateReturn <- checkStartEndDate(StartDate, EndDate, interactive=interactive)
-  StartDate <- dateReturn[1]
-  EndDate <- dateReturn[2]
-  
-  if (nzchar(StartDate)){
-    StartDate <- format(as.Date(StartDate), format="%m-%d-%Y")
-  }
-  if (nzchar(EndDate)){
-    EndDate <- format(as.Date(EndDate), format="%m-%d-%Y")
-  }
-  
-  baseURL <- "http://www.waterqualitydata.us/Result/search?siteid=USGS-"
-  url <- paste(baseURL,
-               siteNumber,
-               "&pCode=",
-               ParameterCd,   # to get multi-parameters, use a semicolen between each 5 digit code....
-               "&startDateLo=",
-               StartDate,
-               "&startDateHi=",
-               EndDate,
-               "&countrycode=US&mimeType=tsv",sep = "")
+
+  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"wqp")
   
   suppressWarnings(retval <- read.delim(url, header = TRUE, quote="\"", dec=".", sep='\t', colClasses=c('character'), fill = TRUE))
   
