@@ -18,6 +18,6 @@
 date <- '1985-01-01'
 dateFormatCheck(date)
 }
-\keyword{WRTDS}
 \keyword{flow}
+\keyword{WRTDS}
 

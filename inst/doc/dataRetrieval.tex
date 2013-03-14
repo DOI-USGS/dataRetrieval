@@ -64,13 +64,13 @@ The dataRetrieval package was created to simplify the process of getting hydrolo
 
 The dataRetrieval package is designed to retrieve many of the major data types of USGS hydrologic data that are available on the web, but also allows users to make use of other data that they supply from spreadsheets.  Section 2 provides examples of how one can obtain raw data from USGS sources on the web and ingest them into data frames within the R environment.  The functionality described in section 2 is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section 3 is tailored specifically to obtaining input from the web and structuring them specifically for use in the EGRET package.  The functionality described in section 4 is for converting hydrologic data from user-supplied spreadsheets and structuring them specifically for use in the EGRET package.
 
-For information on getting started in R, downloading and installing the package, see Appendix 1: Getting Started (\ref{sec:appendix1}).
+For information on getting started in R and installing the package, see Appendix (\ref{sec:appendix1}): Getting Started.
 
 
 %------------------------------------------------------------
 \section{General USGS Web Retrievals}
 %------------------------------------------------------------ 
-In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), real-time current values (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis.
+In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), real-time (unit) values (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis.
 
 %------------------------------------------------------------
 \subsection{Introduction}
@@ -81,15 +81,15 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 
 \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&pm_search=&casrn_search=&srsname_search=&format=html_table&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}
 
-Not every station will measure all parameters. A list of commonly measured parameters is shown in Table \ref{tab:params}.
+Not every station will measure all parameters. A short list of commonly measured parameters is shown in Table \ref{tab:params}.
 
 
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 14:54:17 2013
+% Thu Mar 14 16:41:43 2013
 \begin{table}[ht]
 \centering
-\caption{Commonly found USGS Parameter Codes} 
+\caption{Common USGS Parameter Codes} 
 \label{tab:params}
 \begin{tabular}{ll}
   \hline
@@ -109,7 +109,7 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 14:54:17 2013
+% Thu Mar 14 16:41:43 2013
 \begin{table}[ht]
 \centering
 \caption{Commonly found USGS Stat Codes} 
@@ -147,7 +147,7 @@ Use the getSiteFileData function to obtain all of the information available for 
 \end{Sinput}
 \end{Schunk}
 
-A list of the available columns are found in Appendix 2: INFO dataframe (\ref{sec:appendix2INFO}). Pulling out a specific example piece of information, in this case station name can be done as follows:
+A list of the available columns are found in Appendix \ref{sec:appendix2INFO}: INFO dataframe. Pulling out a specific example piece of information, in this case station name can be done as follows:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -184,15 +184,16 @@ To find out the available data at a particular USGS site, including measured par
 
 There is an additional argument to the getDataAvailability called longNames, which defaults to FALSE. Setting longNames to TRUE will cause the function to make a web service call for each parameter and return expanded information on that parameter. Currently, this is a very slow process because each parameter code makes a unique web service call. If the site does not have many measured parameters, setting longNames to TRUE is reasonable.
 
-It is also possible to only request information for certain variables. In the following example, we retrieve just the daily mean parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values). 
+It is also possible to only request parameter information for a subset of variables. In the following example, we retrieve just the daily mean parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values). getMultipleParameterNames is the function that is embedded in the getDataAvailability, but here can be used as a standalone function.
+
 
 \begin{Schunk}
 \begin{Sinput}
 > # Continuing from the previous example:
 > # This pulls out just the daily data:
-> ChoptankDailyData <- ChoptankAvailableData["dv" == ChoptankAvailableData$service,]
+> ChoptankDailyData <- subset(ChoptankAvailableData,"dv" == service)
 > # This pulls out the mean:
-> ChoptankDailyData <- ChoptankDailyData["00003" == ChoptankDailyData$statCd,]
+> ChoptankDailyData <- subset(ChoptankDailyData,"00003" == statCd)
 > #Now, make a call to get all of the parameter information:
 > pCodeINFO <- getMultipleParameterNames(ChoptankDailyData$parameter_cd)
 \end{Sinput}
@@ -206,8 +207,7 @@ Percent complete:
 \end{Sinput}
 \end{Schunk}
 
-The daily data at the Choptank River site can be displayed in a nice \LaTeX table using the xtable package. See Appendix \ref{app:createWordTable} for instructions on converting an R dataframe to a nice table in Microsoft Excel or Word.
-
+The daily data at the Choptank River site can be displayed in a \LaTeX table using the xtable package. See Appendix \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft Excel or Word.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -224,7 +224,7 @@ The daily data at the Choptank River site can be displayed in a nice \LaTeX tabl
        caption.placement="top",include.rownames=FALSE)
 \end{Sinput}
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 14:54:22 2013
+% Thu Mar 14 16:41:49 2013
 \begin{table}[ht]
 \centering
 \caption{Daily mean data availabile at the Choptank River} 
@@ -277,15 +277,14 @@ Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/
 \subsection{Daily Values}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain historic daily records of USGS data, use the retrieveNWISData function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (true/false) interactive. There are 2 default argument: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. Setting the 'interactive' option to true will walk you through the function. It might make more sense to run large batch collections with the interactive option set to FALSE. 
+To obtain historic daily records of USGS data, use the retrieveNWISData function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (true/false) interactive. There are 2 default argument: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. Setting the \texttt{"}interactive\texttt{"} option to true will walk you through the function. It might make more sense to run large batch collections with the interactive option set to FALSE. 
 
 The dates (start and end) need to be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user does need to include the quotes).  Setting the start date to \texttt{"}\texttt{"} will indicate to the program to ask for the earliest date, setting the end date to \texttt{"}\texttt{"} will ask for the latest available date.
 
 \begin{Schunk}
 \begin{Sinput}
-> # Using defaults:
-> siteNumber <- "01491000"
-> parameterCd <- "00060"  # Discharge in cubic feet per second
+> # Continuing with our Choptank River example
+> parameterCd <- "00060"  # Discharge (cfs)
 > startDate <- ""  # Will request earliest date
 > endDate <- "" # Will request latest date
 > discharge <- retrieveNWISData(siteNumber, parameterCd, startDate, endDate)
@@ -311,14 +310,12 @@ The variable datetime is automatically imported as a Date. Each requested parame
 Another example that doesn't use the defaults would be a request for mean and maximum daily temperature and discharge in early 2012:
 \begin{Schunk}
 \begin{Sinput}
-> # Using defaults:
-> siteNumber <- "01491000" 
-> parameterCd <- "00010,00060"  # Temperature and discharge
-> statCd <- "00001,00003"  # Mean and maximum
+> parameterCd <- c("00010","00060")  # Temperature and discharge
+> statCd <- c("00001","00003")  # Mean and maximum
 > startDate <- "2012-01-01"
 > endDate <- "2012-06-30"
 > temperatureAndFlow <- retrieveNWISData(siteNumber, parameterCd, 
-                   startDate, endDate, StatCd=statCd,interactive=FALSE)
+         startDate, endDate, StatCd=statCd,interactive=FALSE)
 \end{Sinput}
 \end{Schunk}
 
@@ -364,10 +361,11 @@ Any data that are collected at regular time intervals (such as 15-minute or hour
 
 \begin{Schunk}
 \begin{Sinput}
-> siteNumber <- "01491000"
 > parameterCd <- "00060"  # Discharge (cfs)
-> startDate <- "2013-03-12" # or pick yesterday by the command as.character(Sys.Date()-1)
-> endDate <- "2013-03-13" # Today: as.character(Sys.Date())
+> startDate <- "2013-03-12" 
+> # or use (yesterday): startDate <- as.character(Sys.Date()-1)
+> endDate <- "2013-03-13" 
+> # or use (today):  endDate <- as.character(Sys.Date())
 > dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, 
          startDate, endDate)
 \end{Sinput}
@@ -412,25 +410,17 @@ A simple plotting example is shown in Figure \ref{fig:RT}:
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a \texttt{"};\texttt{"} separator, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming, a simplified version of the data can be obtained using getQWData.
+To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a \texttt{"};\texttt{"} separator, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming (see Appendix \ref{sec:appendix2WQP}), a simplified version of the data can be obtained using getQWData.There is a large amount of data returned for each observation. 
 
 
 \begin{Schunk}
 \begin{Sinput}
-> siteNumber <- "01491000" 
 > # Dissolved Nitrate parameter codes:
-> parameterCd <- "00618;71851"  
+> parameterCd <- c("00618","71851")
 > startDate <- "1964-06-11"
 > endDate <- "2012-12-18"
 > dissolvedNitrate <- getRawQWData(siteNumber, parameterCd, 
        startDate, endDate)
-\end{Sinput}
-\end{Schunk}
-
-There is a large amount of data returned for each observation. The column names are listed in Appendix 2 (\ref{sec:appendix2WQP}). To get a simplified dataframe that contains only datetime, value, and qualifier, use the function getQWData:
-
-\begin{Schunk}
-\begin{Sinput}
 > dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd, 
          startDate, endDate)
 > names(dissolvedNitrateSimple)
@@ -440,9 +430,7 @@ There is a large amount of data returned for each observation. The column names 
 [5] "value.00618"    
 \end{Soutput}
 \end{Schunk}
-Note that in this dataframe, datetime is imported as Dates (no times are included), and the qualifier is either blank or \texttt{"}\verb@<@\texttt{"} signifying a censored value.
-
-An example of plotting the above data (Figure \ref{fig:nitrate}):
+Note that in this dataframe, datetime is imported as Dates (no times are included), and the qualifier is either blank or \texttt{"}\verb@<@\texttt{"} signifying a censored value. A plotting example is shown in Figure \ref{fig:nitrate}.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -486,6 +474,25 @@ There are additional data sets available on the Water Quality Data Portal (\url{
 \end{Soutput}
 \end{Schunk}
 
+%------------------------------------------------------------
+\subsection{URL Construction}
+\label{sec:usgsURL}
+%------------------------------------------------------------
+There may be times when you might be interested in seeing the URL (web address) that was used to obtain the raw data. The constructNWISURL function returns the URL.  Aside from input variables that have already been described, there is a new argument \texttt{"}service\texttt{"}. The service argument can be \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (NWIS water quality values), \texttt{"}wqp\texttt{"} (general Water Quality Portal values).
+ 
+
+\begin{Schunk}
+\begin{Sinput}
+> # Dissolved Nitrate parameter codes:
+> pCode <- c("00618","71851")
+> startDate <- "1964-06-11"
+> endDate <- "2012-12-18"
+> url_qw <- constructNWISURL(siteNumber,pCode,startDate,endDate,'qw')
+> url_dv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'dv',statCd="00003")
+> url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'uv')
+\end{Sinput}
+\end{Schunk}
+
 
 %------------------------------------------------------------
 \section{Data Retrievals Structured For Use In The EGRET Package}
@@ -501,6 +508,7 @@ The function to obtain metadata, or data about the streamgage and measured param
 
 \begin{Schunk}
 \begin{Sinput}
+> parameterCd <- "00618"
 > INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
 \end{Sinput}
 \end{Schunk}
@@ -526,7 +534,7 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 14:54:30 2013
+% Thu Mar 14 16:41:59 2013
 \begin{tabular}{llll}
   \hline
 ColumnName & Type & Description & Units \\ 
@@ -563,7 +571,7 @@ The function to obtain sample data from the water quality portal is getSampleDat
 Details of the Sample dataframe are listed below:
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 14:54:32 2013
+% Thu Mar 14 16:42:01 2013
 \begin{table}[!ht]
 \centering
 \caption{Sample dataframe} 
@@ -599,7 +607,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 \begin{center}
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 14:54:32 2013
+% Thu Mar 14 16:42:01 2013
 \begin{tabular}{llrlrlr}
   \hline
 cdate & rdp & dp & rpp & pp & rtp & tp \\ 
@@ -748,8 +756,24 @@ Finally, there is a function called mergeReport that will look at both the Daily
 %------------------------------------------------------------
 \subsection{EGRET Plots}
 %------------------------------------------------------------
-The EGRET package....
+As has been mentioned, the data is specifically formatted to be used with the EGRET package. The EGRET package has powerful modeling capabilities using WRTDS, but also has a variety of graphing and tablular tools to explore the data without using the WRTDS algorithm. See the EGRET vignette, user guide, and/or wiki (\url{https://github.com/USGS-R/EGRET/wiki}) for detailed information. The following figure is an example of one of the plotting functions that can be used directly from the dataRetrieval dataframes.
 
+\begin{Schunk}
+\begin{Sinput}
+> # Continuing Choptank example from the previous sections
+> library(EGRET)
+> multiPlotDataOverview()
+\end{Sinput}
+\end{Schunk}
+
+\begin{figure}[ht]
+\begin{center}
+
+\includegraphics{dataRetrieval-figegretEx}
+\end{center}
+\caption{Default multiPlotDataOverview}
+\label{fig:multiPlotDataOverview}
+\end{figure}
 
 \clearpage
 \appendix
@@ -833,8 +857,6 @@ To then open the library, simply type:
 \end{Sinput}
 \end{Schunk}
 
-\FloatBarrier
-
 %------------------------------------------------------------ 
 \section{Columns Names}
 \label{sec:appendix2}
@@ -846,7 +868,7 @@ To then open the library, simply type:
 %------------------------------------------------------------
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 14:54:34 2013
+% Thu Mar 14 16:42:05 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -904,7 +926,7 @@ agency.cd \\
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 14:54:34 2013
+% Thu Mar 14 16:42:05 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -953,7 +975,7 @@ OrganizationIdentifier \\
 \FloatBarrier
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 14:54:34 2013
+% Thu Mar 14 16:42:05 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -987,7 +1009,7 @@ ResultTimeBasisText \\
 \section{Creating tables in Microsoft from R}
 \label{app:createWordTable}
 %------------------------------------------------------------
-There are a few steps that are required in order to create a table in a Microsoft product (Excel, Word, Powerpoint, etc.) from an R dataframe. There are actually a variety of methods, one of which is detailed here. The example we will step through here will be to create the following data.
+There are a few steps that are required in order to create a table in a Microsoft product (Excel, Word, Powerpoint, etc.) from an R dataframe. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Word based on the dataframe tableData:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -1004,21 +1026,11 @@ There are a few steps that are required in order to create a table in a Microsof
        Count=count,
        Units=parameter_units)
        )
-> tableData
 \end{Sinput}
-\begin{Soutput}
-                               shortName      Start        End Count      Units
-1                     Temperature, water 2010-10-01 2012-06-24   575      deg C
-2               Stream flow, mean. daily 1948-01-01 2013-03-13 23814        cfs
-3                   Specific conductance 2010-10-01 2012-06-24   551 uS/cm @25C
-4 Suspended sediment concentration (SSC) 1980-10-01 1991-09-30  3651       mg/l
-5           Suspended sediment discharge 1980-10-01 1991-09-30  3652   tons/day
-\end{Soutput}
 \end{Schunk}
 
-Our goal now is to get the data from the dataframe tableData to a Microsoft Word table. 
+First, save the dataframe as a tab delimited file (you don't want to use comma delimited because there are commas in some of the data elements):
 
-First, save the dataframe as a tab delimited file:
 
 \begin{Schunk}
 \begin{Sinput}

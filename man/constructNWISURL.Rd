@@ -18,9 +18,9 @@
   \item{endDate}{string ending date for data retrieval in
   the form YYYY-MM-DD.}
 
-  \item{statCd}{string USGS statistic code only used for
-  daily value service. This is usually 5 digits.  Daily
-  mean (00003) is the default.}
+  \item{statCd}{string or vector USGS statistic code only
+  used for daily value service. This is usually 5 digits.
+  Daily mean (00003) is the default.}
 
   \item{service}{string USGS service to call. Possible
   values are "dv" (daily values), "uv" (unit/instantaneous
@@ -44,15 +44,15 @@ siteNumber <- '04085427'
 startDate <- '2012-01-01'
 endDate <- '2012-06-30'
 pCode <- c("00060","00010")
-url_daily <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv')
+url_daily <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',statCd=c("00003","00001"))
 url_unit <- constructNWISURL(siteNumber,pCode,startDate,endDate,'iv')
 url_qw_single <- constructNWISURL(siteNumber,"34220",startDate,endDate,'qwdata')
 url_qw <- constructNWISURL(siteNumber,c('34247','30234','32104','34220'),startDate,endDate,'qwdata')
 url_wqp <- constructNWISURL(siteNumber,"34220",startDate,endDate,'wqp')
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 
