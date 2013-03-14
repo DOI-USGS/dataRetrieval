@@ -33,8 +33,8 @@ Sample <- mergeReport(interactive=FALSE)
   \code{\link{getDVData}},
   \code{\link{populateSampleColumns}}
 }
-\keyword{data}
-\keyword{import}
 \keyword{USGS}
 \keyword{WRTDS}
+\keyword{data}
+\keyword{import}
 

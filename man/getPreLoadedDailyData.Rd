@@ -28,7 +28,7 @@
 \examples{
 Daily <- getPreLoadedDailyData(ChoptankRiverFlow, interactive=FALSE)
 }
+\keyword{WRTDS}
 \keyword{data}
 \keyword{import}
-\keyword{WRTDS}
 

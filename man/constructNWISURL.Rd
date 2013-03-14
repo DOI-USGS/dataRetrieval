@@ -50,9 +50,9 @@ url_qw_single <- constructNWISURL(siteNumber,"34220",startDate,endDate,'qwdata')
 url_qw <- constructNWISURL(siteNumber,c('34247','30234','32104','34220'),startDate,endDate,'qwdata')
 url_wqp <- constructNWISURL(siteNumber,"34220",startDate,endDate,'wqp')
 }
+\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
-\keyword{USGS}
 \keyword{web}
 

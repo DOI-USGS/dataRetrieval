@@ -1,4 +1,4 @@
-Package: dataRetrievalSNAPSHOT
+Package: dataRetrieval
 Type: Package
 Title: Retrieval functions for USGS data
 Version: 1.2.2
@@ -51,6 +51,7 @@ Collate:
     'processQWData.r'
     'constructNWISURL.r'
     'getDataAvailability.r'
+    'getMultipleParameterNames.r'
 Depends:
     R (>= 2.15.0)
 Imports:
