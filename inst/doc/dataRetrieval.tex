@@ -86,8 +86,8 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 16:41:43 2013
-\begin{table}[ht]
+% Thu Mar 14 17:51:22 2013
+\begin{table}[!ht]
 \centering
 \caption{Common USGS Parameter Codes} 
 \label{tab:params}
@@ -109,8 +109,8 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 16:41:43 2013
-\begin{table}[ht]
+% Thu Mar 14 17:51:22 2013
+\begin{table}[!ht]
 \centering
 \caption{Commonly found USGS Stat Codes} 
 \label{tab:stat}
@@ -125,7 +125,7 @@ StatCode & shortName \\
    \hline
 \end{tabular}
 \end{table}
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Site Information}
 \label{sec:usgsSite}
@@ -158,7 +158,7 @@ A list of the available columns are found in Appendix \ref{sec:appendix2INFO}: I
 \end{Soutput}
 \end{Schunk}
 Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsubsection{getDataAvailability}
 \label{sec:usgsDataAvailability}
@@ -224,7 +224,7 @@ The daily data at the Choptank River site can be displayed in a \LaTeX table usi
        caption.placement="top",include.rownames=FALSE)
 \end{Sinput}
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 16:41:49 2013
+% Thu Mar 14 17:51:27 2013
 \begin{table}[ht]
 \centering
 \caption{Daily mean data availabile at the Choptank River} 
@@ -243,7 +243,7 @@ Temperature, water & 2010-10-01 & 2012-06-24 & 575 & deg C \\
 \end{table}\end{Schunk}
 
 
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Parameter Information}
 \label{sec:usgsParams}
@@ -272,7 +272,7 @@ Pulling out a specific example piece of information, in this case parameter name
 \end{Soutput}
 \end{Schunk}
 Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Daily Values}
 \label{sec:usgsDaily}
@@ -339,7 +339,7 @@ An example of plotting the above data (Figure \ref{fig:TD}):
 > title(paste(ChoptankInfo$station.nm,"2012",sep=" "))
 \end{Sinput}
 \end{Schunk}
-\newpage
+
 
 \begin{figure}
 \begin{center}
@@ -352,7 +352,7 @@ An example of plotting the above data (Figure \ref{fig:TD}):
 
 There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as \texttt{"}Ice\texttt{"}.  Any value that cannot be converted to a number will be reported as NA in this package.
 
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Unit Values}
 \label{sec:usgsRT}
@@ -405,7 +405,7 @@ A simple plotting example is shown in Figure \ref{fig:RT}:
 \label{fig:RT}
 \end{figure}
 
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
@@ -417,7 +417,7 @@ To get USGS water quality data from water samples collected at the streamgage (a
 \begin{Sinput}
 > # Dissolved Nitrate parameter codes:
 > parameterCd <- c("00618","71851")
-> startDate <- "1964-06-11"
+> startDate <- "1979-10-11"
 > endDate <- "2012-12-18"
 > dissolvedNitrate <- getRawQWData(siteNumber, parameterCd, 
        startDate, endDate)
@@ -451,6 +451,7 @@ Note that in this dataframe, datetime is imported as Dates (no times are include
 \label{fig:nitrate}
 \end{figure}
 
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{STORET Water Quality Retrievals}
 \label{sec:usgsSTORET}
@@ -474,11 +475,12 @@ There are additional data sets available on the Water Quality Data Portal (\url{
 \end{Soutput}
 \end{Schunk}
 
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{URL Construction}
 \label{sec:usgsURL}
 %------------------------------------------------------------
-There may be times when you might be interested in seeing the URL (web address) that was used to obtain the raw data. The constructNWISURL function returns the URL.  Aside from input variables that have already been described, there is a new argument \texttt{"}service\texttt{"}. The service argument can be \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (NWIS water quality values), \texttt{"}wqp\texttt{"} (general Water Quality Portal values).
+There may be times when you might be interested in seeing the URL (web address) that was used to obtain the raw data. The constructNWISURL function returns the URL.  Aside from input variables that have already been described, there is a new argument \texttt{"}service\texttt{"}. The service argument can be \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (NWIS water quality values), or \texttt{"}wqp\texttt{"} (general Water Quality Portal values).
  
 
 \begin{Schunk}
@@ -493,7 +495,7 @@ There may be times when you might be interested in seeing the URL (web address) 
 \end{Sinput}
 \end{Schunk}
 
-
+\FloatBarrier
 %------------------------------------------------------------
 \section{Data Retrievals Structured For Use In The EGRET Package}
 %------------------------------------------------------------ 
@@ -515,6 +517,7 @@ The function to obtain metadata, or data about the streamgage and measured param
 
 Column names in the INFO dataframe are listed in Appendix 2 (\ref{sec:appendix2INFO}).
 
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Daily Data}
 %------------------------------------------------------------
@@ -534,7 +537,7 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 16:41:59 2013
+% Thu Mar 14 17:51:38 2013
 \begin{tabular}{llll}
   \hline
 ColumnName & Type & Description & Units \\ 
@@ -554,8 +557,9 @@ Date & Date & Date & date \\
    \hline
 \end{tabular}\\*
 
-If there are discharge values of zero, the code will add a small constant to all of the daily discharges.  This constant is 0.001 times the mean discharge.  The code will also report on the number of zero values and the size of the constant.  EGRET should only be used if the number of zero values is a very small fraction of the total days in the record (say less than 0.1\% of the days).  Columns Q7 and Q30 are the 7 and 30 day running averages for the 7 or 30 days ending on this specific date." 
+If there are discharge values of zero, the code will add a small constant to all of the daily discharges.  This constant is 0.001 times the mean discharge.  The code will also report on the number of zero values and the size of the constant.  EGRET should only be used if the number of zero values is a very small fraction of the total days in the record (say less than 0.1\% of the days).  Columns Q7 and Q30 are the 7 and 30 day running averages for the 7 or 30 days ending on this specific date.
 
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Sample Data}
 %------------------------------------------------------------
@@ -571,7 +575,7 @@ The function to obtain sample data from the water quality portal is getSampleDat
 Details of the Sample dataframe are listed below:
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 16:42:01 2013
+% Thu Mar 14 17:51:40 2013
 \begin{table}[!ht]
 \centering
 \caption{Sample dataframe} 
@@ -597,17 +601,18 @@ Date & Date & Date & date \\
 \end{tabular}
 \end{table}\footnotetext[1]{Flow columns are populated from data in the Daily dataframe after calling the mergeReport function.}
 
+\FloatBarrier
 %------------------------------------------------------------
-\subsection{Censored Data Evaluation}
+\subsection{Censored Values: Summation Explanation}
 %------------------------------------------------------------
-In the typical case where none of the data are censored (that is, no values are reported as \texttt{"}less-than\texttt{"} values) the ConcLow = ConcHigh = ConcAve all of which are equal to the reported value and Uncen=0.  In the typical form of censoring where a value is reported as less than the reporting limit, then ConcLow = NA, ConcHigh = reporting limit, ConcAve = 0.5 * reporting limit, and Uncen = 1.  The next section describes a more complex situation where concentrations are computed as the sum of one or more measured parameters.
+In the typical case where none of the data are censored (that is, no values are reported as \texttt{"}less-than\texttt{"} values) the ConcLow = ConcHigh = ConcAve all of which are equal to the reported value and Uncen=0.  In the typical form of censoring where a value is reported as less than the reporting limit, then ConcLow = NA, ConcHigh = reporting limit, ConcAve = 0.5 * reporting limit, and Uncen = 1.
 
 As an example to understand how the dataRetrieval package handles a more complex censoring problem, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). From 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
 
 \begin{center}
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 16:42:01 2013
+% Thu Mar 14 17:51:40 2013
 \begin{tabular}{llrlrlr}
   \hline
 cdate & rdp & dp & rpp & pp & rtp & tp \\ 
@@ -648,6 +653,7 @@ For the more complex example case, let us say dp is reported as <0.01 and pp is 
 \end{Soutput}
 \end{Schunk}
 
+\FloatBarrier
 %------------------------------------------------------------ 
 \subsection{User-Generated Data Files}
 %------------------------------------------------------------ 
@@ -683,6 +689,7 @@ The call to open this file, convert the flow to cubic meters per second, and pop
 \end{Sinput}
 \end{Schunk}
 
+\FloatBarrier
 %------------------------------------------------------------ 
 \subsubsection{getSampleDataFromFile}
 %------------------------------------------------------------ 
@@ -706,6 +713,7 @@ The call to open this file, and populate the Sample dataframe would be:
 \end{Sinput}
 \end{Schunk}
 
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Merge Report}
 %------------------------------------------------------------
@@ -752,7 +760,7 @@ Finally, there is a function called mergeReport that will look at both the Daily
 \end{Soutput}
 \end{Schunk}
 
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{EGRET Plots}
 %------------------------------------------------------------
@@ -804,11 +812,10 @@ To see the raw code for a particular code, type the name of the function:
 > removeDuplicates
 \end{Sinput}
 \begin{Soutput}
-function (localSample = Sample) 
-{
-    Sample1 <- localSample[!duplicated(localSample[c("DecYear", 
-        "ConcHigh")]), ]
-    return(Sample1)
+function(localSample=Sample) {  
+  Sample1 <- localSample[!duplicated(localSample[c("DecYear","ConcHigh")]),]
+  
+  return(Sample1)
 }
 <environment: namespace:dataRetrieval>
 \end{Soutput}
@@ -868,7 +875,7 @@ To then open the library, simply type:
 %------------------------------------------------------------
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 16:42:05 2013
+% Thu Mar 14 17:51:44 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -926,7 +933,7 @@ agency.cd \\
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 16:42:05 2013
+% Thu Mar 14 17:51:44 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -975,7 +982,7 @@ OrganizationIdentifier \\
 \FloatBarrier
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 16:42:05 2013
+% Thu Mar 14 17:51:44 2013
 \begin{tabular}{l}
   \hline
   \hline

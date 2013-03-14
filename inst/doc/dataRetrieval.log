@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  14 MAR 2013 16:42
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  14 MAR 2013 17:51
 entering extended mode
 **dataRetrieval.tex
 (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.tex
@@ -506,17 +506,17 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[7]
-Overfull \vbox (21.68121pt too high) has occurred while \output is active []
-
-
-[8] <dataRetrieval-fig1.pdf, id=228, 433.62pt x 289.08pt>
+[7] <dataRetrieval-fig1.pdf, id=223, 433.62pt x 289.08pt>
 File: dataRetrieval-fig1.pdf Graphic file (type pdf)
 
 <use dataRetrieval-fig1.pdf>
 Package pdftex.def Info: dataRetrieval-fig1.pdf used on input line 346.
 (pdftex.def)             Requested size: 358.46039pt x 238.98355pt.
 
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
+[8]
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
@@ -542,24 +542,24 @@ File: dataRetrieval-fig3.pdf Graphic file (type pdf)
 Package pdftex.def Info: dataRetrieval-fig3.pdf used on input line 448.
 (pdftex.def)             Requested size: 358.46039pt x 238.98355pt.
 
-Overfull \hbox (0.79091pt too wide) in paragraph at lines 458--459
+Overfull \hbox (0.79091pt too wide) in paragraph at lines 459--460
 \T1/aer/m/n/10.95 EPA) or NWIS database. Since STORET does not use USGS pa-ram-
 e-ter codes, a \T1/aett/m/n/10.95 "\T1/aer/m/n/10.95 characteristic
  []
 
-LaTeX Font Info:    Try loading font information for TS1+aett on input line 462
+LaTeX Font Info:    Try loading font information for TS1+aett on input line 463
 .
 (C:/PROGRA~1/R/R-215~1.3/share/texmf/tex/latex\ts1aett.fd
 File: ts1aett.fd 
 )
-LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 462
+LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 463
 .
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1cmtt.fd"
 File: ts1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `TS1/aett/m/sl' in size <10.95> not available
-(Font)              Font shape `TS1/cmtt/m/sl' tried instead on input line 462.
+(Font)              Font shape `TS1/cmtt/m/sl' tried instead on input line 463.
 
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
@@ -570,7 +570,7 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [13]
-Underfull \hbox (badness 10000) in paragraph at lines 538--556
+Underfull \hbox (badness 10000) in paragraph at lines 541--559
 
  []
 
@@ -602,7 +602,7 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 File: dataRetrieval-figegretEx.pdf Graphic file (type pdf)
 
 <use dataRetrieval-figegretEx.pdf>
-Package pdftex.def Info: dataRetrieval-figegretEx.pdf used on input line 772.
+Package pdftex.def Info: dataRetrieval-figegretEx.pdf used on input line 780.
 (pdftex.def)             Requested size: 358.46039pt x 358.47534pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
@@ -650,14 +650,14 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 ] <table1.png, id=361, 554.07pt x 125.71968pt>
 File: table1.png Graphic file (type png)
  <use table1.png>
-Package pdftex.def Info: table1.png used on input line 1070.
+Package pdftex.def Info: table1.png used on input line 1077.
 (pdftex.def)             Requested size: 358.46039pt x 81.33507pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [29 <D:/LADData/RCode/dataRetrieval/inst/doc/table1.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1092.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1099.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
@@ -665,13 +665,13 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 [30
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1092.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1099.
  (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1092.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1092.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1099.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1099.
 
 Package rerunfilecheck Info: File `dataRetrieval.out' has not changed.
-(rerunfilecheck)             Checksum: 13FFD1C75CB55F2DDE6E037E39171B97;2105.
+(rerunfilecheck)             Checksum: 3B1480473EC95CC4090ED48BB3268644;2119.
  ) 
 Here is how much of TeX's memory you used:
  7546 strings out of 494045
@@ -695,7 +695,7 @@ Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program File
 s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsltt10.pfb><C:/Program File
 s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files 
 (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on dataRetrieval.pdf (30 pages, 475780 bytes).
+Output written on dataRetrieval.pdf (30 pages, 470824 bytes).
 PDF statistics:
  455 PDF objects out of 1000 (max. 8388607)
  84 named destinations out of 1000 (max. 500000)

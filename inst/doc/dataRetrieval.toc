@@ -15,7 +15,7 @@
 \contentsline {subsection}{\numberline {3.1}INFO Data}{14}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Daily Data}{14}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Sample Data}{15}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Censored Data Evaluation}{15}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.4}Censored Values: Summation Explanation}{16}{subsection.3.4}
 \contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{17}{subsection.3.5}
 \contentsline {subsubsection}{\numberline {3.5.1}getDailyDataFromFile}{17}{subsubsection.3.5.1}
 \contentsline {subsubsection}{\numberline {3.5.2}getSampleDataFromFile}{18}{subsubsection.3.5.2}

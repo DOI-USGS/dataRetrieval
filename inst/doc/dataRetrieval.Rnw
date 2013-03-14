@@ -101,7 +101,7 @@ data.df <- data.frame(pCode, shortName, stringsAsFactors=FALSE)
 data.table <- xtable(data.df,label="tab:params",
                      caption="Common USGS Parameter Codes")
 print(data.table,
-      caption.placement="top",include.rownames=FALSE)
+      caption.placement="top",include.rownames=FALSE, table.placement="!ht")
 @
 
 For real-time data, the parameter code and site ID will suffice.  For most variables that are measured on a continuous basis, the USGS stores the historical data as daily values.  These daily values may be in the form of statistics such as the daily mean values, but they can also include daily maximums, minimums or medians.  These different statistics are specified by a 5-digit \texttt{"}stat code\texttt{"}.  A complete list of stat codes can be found here:
@@ -118,10 +118,10 @@ data.df <- data.frame(StatCode, shortName, stringsAsFactors=FALSE)
 data.table <- xtable(data.df,label="tab:stat",
                      caption="Commonly found USGS Stat Codes")
 print(data.table, 
-      caption.placement="top",include.rownames=FALSE)
+      caption.placement="top",include.rownames=FALSE, table.placement="!ht")
 @
 
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Site Information}
 \label{sec:usgsSite}
@@ -147,7 +147,7 @@ A list of the available columns are found in Appendix \ref{sec:appendix2INFO}: I
 ChoptankInfo$station.nm
 @
 Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsubsection{getDataAvailability}
 \label{sec:usgsDataAvailability}
@@ -199,7 +199,7 @@ print(data.table,
 @
 
 
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Parameter Information}
 \label{sec:usgsParams}
@@ -217,7 +217,7 @@ Pulling out a specific example piece of information, in this case parameter name
 parameterINFO$parameter_nm
 @
 Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Daily Values}
 \label{sec:usgsDaily}
@@ -273,7 +273,7 @@ axis(4,col="red",col.axis="red")
 mtext("Discharge [cfs]",side=4,line=3,col="red")
 title(paste(ChoptankInfo$station.nm,"2012",sep=" "))
 @
-\newpage
+
 
 \begin{figure}
 \begin{center}
@@ -288,7 +288,7 @@ title(paste(ChoptankInfo$station.nm,"2012",sep=" "))
 
 There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as \texttt{"}Ice\texttt{"}.  Any value that cannot be converted to a number will be reported as NA in this package.
 
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Unit Values}
 \label{sec:usgsRT}
@@ -331,7 +331,7 @@ title(ChoptankInfo$station.nm)
 \label{fig:RT}
 \end{figure}
 
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
@@ -374,6 +374,7 @@ title(ChoptankInfo$station.nm)
 \label{fig:nitrate}
 \end{figure}
 
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{STORET Water Quality Retrievals}
 \label{sec:usgsSTORET}
@@ -386,6 +387,7 @@ specificCond <- getWQPData('WIDNR_WQX-10032762',
 head(specificCond)
 @
 
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{URL Construction}
 \label{sec:usgsURL}
@@ -403,7 +405,7 @@ url_dv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'dv',statCd="000
 url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'uv')
 @
 
-
+\FloatBarrier
 %------------------------------------------------------------
 \section{Data Retrievals Structured For Use In The EGRET Package}
 %------------------------------------------------------------ 
@@ -423,6 +425,7 @@ INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
 
 Column names in the INFO dataframe are listed in Appendix 2 (\ref{sec:appendix2INFO}).
 
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Daily Data}
 %------------------------------------------------------------
@@ -453,8 +456,9 @@ print(data.table, caption.placement="top",floating="FALSE",latex.environments=NU
 @
 \\*
 
-If there are discharge values of zero, the code will add a small constant to all of the daily discharges.  This constant is 0.001 times the mean discharge.  The code will also report on the number of zero values and the size of the constant.  EGRET should only be used if the number of zero values is a very small fraction of the total days in the record (say less than 0.1\% of the days).  Columns Q7 and Q30 are the 7 and 30 day running averages for the 7 or 30 days ending on this specific date." 
+If there are discharge values of zero, the code will add a small constant to all of the daily discharges.  This constant is 0.001 times the mean discharge.  The code will also report on the number of zero values and the size of the constant.  EGRET should only be used if the number of zero values is a very small fraction of the total days in the record (say less than 0.1\% of the days).  Columns Q7 and Q30 are the 7 and 30 day running averages for the 7 or 30 days ending on this specific date.
 
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Sample Data}
 %------------------------------------------------------------
@@ -482,10 +486,11 @@ print(data.table, caption.placement="top",include.rownames=FALSE,table.placement
 @
 \footnotetext[1]{Flow columns are populated from data in the Daily dataframe after calling the mergeReport function.}
 
+\FloatBarrier
 %------------------------------------------------------------
-\subsection{Censored Data Evaluation}
+\subsection{Censored Values: Summation Explanation}
 %------------------------------------------------------------
-In the typical case where none of the data are censored (that is, no values are reported as \texttt{"}less-than\texttt{"} values) the ConcLow = ConcHigh = ConcAve all of which are equal to the reported value and Uncen=0.  In the typical form of censoring where a value is reported as less than the reporting limit, then ConcLow = NA, ConcHigh = reporting limit, ConcAve = 0.5 * reporting limit, and Uncen = 1.  The next section describes a more complex situation where concentrations are computed as the sum of one or more measured parameters.
+In the typical case where none of the data are censored (that is, no values are reported as \texttt{"}less-than\texttt{"} values) the ConcLow = ConcHigh = ConcAve all of which are equal to the reported value and Uncen=0.  In the typical form of censoring where a value is reported as less than the reporting limit, then ConcLow = NA, ConcHigh = reporting limit, ConcAve = 0.5 * reporting limit, and Uncen = 1.
 
 As an example to understand how the dataRetrieval package handles a more complex censoring problem, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). From 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
 
@@ -521,6 +526,7 @@ getPreLoadedSampleData(DF)
 
 @
 
+\FloatBarrier
 %------------------------------------------------------------ 
 \subsection{User-Generated Data Files}
 %------------------------------------------------------------ 
@@ -554,6 +560,7 @@ filePath <-  "C:/RData/"
 Daily <- getDailyDataFromFile(filePath,fileName,separator="\t",interactive=FALSE)
 @
 
+\FloatBarrier
 %------------------------------------------------------------ 
 \subsubsection{getSampleDataFromFile}
 %------------------------------------------------------------ 
@@ -575,6 +582,7 @@ filePath <-  "C:/RData/"
 Sample <- getSampleDataFromFile(filePath,fileName,separator=",",interactive=FALSE)
 @
 
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{Merge Report}
 %------------------------------------------------------------
@@ -593,7 +601,7 @@ Sample <- mergeReport()
 head(Sample)
 @
 
-
+\FloatBarrier
 %------------------------------------------------------------
 \subsection{EGRET Plots}
 %------------------------------------------------------------
