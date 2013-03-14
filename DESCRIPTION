@@ -21,7 +21,6 @@ Collate:
     'getDataFromFile.r'
     'getParameterInfo.r'
     'getPreLoadedData.r'
-    'getPreLoadedQWData.r'
     'checkStartEndDate.r'
     'dateFormatCheck.r'
     'formatCheckDate.r'
