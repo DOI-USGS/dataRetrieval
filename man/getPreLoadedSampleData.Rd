@@ -21,7 +21,7 @@
   data frame.
 }
 \examples{
-getPreLoadedSampleData(ChoptankRiverNitrate, interactive=FALSE)
+Sample <- getPreLoadedSampleData(ChoptankRiverNitrate, interactive=FALSE)
 }
 \keyword{data}
 \keyword{import}

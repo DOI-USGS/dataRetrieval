@@ -8,11 +8,10 @@
 #' @export
 #' @return Sample dataframe 
 #' @examples
-#' getPreLoadedSampleData(ChoptankRiverNitrate, interactive=FALSE)
+#' Sample <- getPreLoadedSampleData(ChoptankRiverNitrate, interactive=FALSE)
 getPreLoadedSampleData <- function (loadedData,interactive=TRUE){
-  #   data <- as.data.frame(loadedData, stringsAsFactors=FALSE)
-  data <- getPreLoadedQWData(loadedData)
-  compressedData <- compressData(data,interactive=interactive)
+
+  compressedData <- compressData(loadedData,interactive=interactive)
   Sample <- populateSampleColumns(compressedData)
   return(Sample)
 }

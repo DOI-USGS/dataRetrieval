@@ -20,7 +20,9 @@
   contains any remark codes.
 }
 \examples{
+ChoptankRiverFlow <- ChoptankRiverFlow
 rawData <- getPreLoadedData(ChoptankRiverFlow)
+rawDataSample <- getPreLoadedData(ChoptankRiverNitrate)
 }
 \keyword{data}
 \keyword{import}

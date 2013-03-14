@@ -36,9 +36,9 @@
 \examples{
 # Examples of how to use getDailyDataFromFile:
 # Change the file path and file name to something meaningful:
-#filePath <-  '~/RData/'  # Sample format
+filePath <-  '~/RData/'  # Sample format
 fileName <- 'ChoptankRiverFlow.txt'
-#getDailyDataFromFile(filePath,fileName,separator="\\t")
+\dontrun{getDailyDataFromFile(filePath,fileName,separator="\\t")}
 }
 \keyword{data}
 \keyword{file}
