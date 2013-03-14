@@ -1,3 +1,11 @@
+dataRetrieval 1.2.2
+===========
+
+* Added getDataAvailability function to find measured parameters and period of record information for a requested station
+
+* Added constructNWISURL function to get the URL that is used to retrieve the data
+
+
 dataRetrieval 1.2.1
 ===========
 
@@ -8,13 +16,3 @@ dataRetrieval 1.2.1
 * Expanded the capabilities to retrieve raw data from the web services.
 
 * Added Storet data retrievals in getWQPData function
-
-EGRET 1.0.5
-===========
-
-* Fixed several bugs
-
-EGRET 1.0.0
-===========
-
-* Initial release.

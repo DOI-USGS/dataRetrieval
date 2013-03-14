@@ -57,7 +57,7 @@ Depends:
 Imports:
     zoo
 Suggests:
-    xtable
+    xtable,
     EGRET
 LazyLoad: yes
 LazyData: yes

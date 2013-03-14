@@ -15,9 +15,9 @@
 #' @examples
 #' # Examples of how to use getDailyDataFromFile:
 #' # Change the file path and file name to something meaningful:
-#' #filePath <-  '~/RData/'  # Sample format
+#' filePath <-  '~/RData/'  # Sample format
 #' fileName <- 'ChoptankRiverFlow.txt'
-#' #getDailyDataFromFile(filePath,fileName,separator="\t")
+#' \dontrun{getDailyDataFromFile(filePath,fileName,separator="\t")}
 getDailyDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=",",qUnit=1,interactive=TRUE){
   data <- getDataFromFile(filePath,fileName,hasHeader=hasHeader,separator=separator)
   convertQ<-c(35.314667,1,0.035314667,0.001)

@@ -9,13 +9,15 @@
 #' @return retval dataframe with dateTime, value, and code columns
 #' @export
 #' @examples
+#' ChoptankRiverFlow <- ChoptankRiverFlow
 #' rawData <- getPreLoadedData(ChoptankRiverFlow)
+#' rawDataSample <- getPreLoadedData(ChoptankRiverNitrate)
 getPreLoadedData <- function (rawData){  
   retval <- as.data.frame(rawData, stringsAsFactors=FALSE)
   if(ncol(retval) == 2){
     names(retval) <- c('dateTime', 'value')
   } else if (ncol(retval) == 3){
-    names(retval) <- c('dateTime', 'value', 'code')
+    names(retval) <- c('dateTime', 'code', 'value')
   }
   retval$dateTime <- as.character(retval$dateTime)
   if(dateFormatCheck(retval$dateTime)){
