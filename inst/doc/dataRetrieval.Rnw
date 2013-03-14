@@ -13,6 +13,7 @@
 \usepackage[american]{babel}
 \usepackage{authblk}
 \usepackage{footnote}
+\usepackage{placeins}
 \renewcommand\Affilfont{\itshape\small}
 \usepackage{Sweave}
 \renewcommand{\topfraction}{0.85}
@@ -151,31 +152,49 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 \subsubsection{getDataAvailability}
 \label{sec:usgsDataAvailability}
 %------------------------------------------------------------
-To find out the data available at a particular USGS site, such as measured parameters, period of record, and number of samples (count), use the getDataAvailability function:
+To find out the available data at a particular USGS site, including measured parameters, period of record, and number of samples (count), use the getDataAvailability function:
 
-<<label=getSite, echo=TRUE>>=
-# Site ID for Choptank River near Greensboro, MD
-siteNumber <- "01491000" 
+<<label=getSiteAvailability, echo=TRUE>>=
+# Continuing from the previous example:
 ChoptankAvailableData <- getDataAvailability(siteNumber)
 head(ChoptankAvailableData)
 @
 
 There is an additional argument to the getDataAvailability called longNames, which defaults to FALSE. Setting longNames to TRUE will cause the function to make a web service call for each parameter and return expanded information on that parameter. Currently, this is a very slow process because each parameter code makes a unique web service call. If the site does not have many measured parameters, setting longNames to TRUE is reasonable.
 
-It is also possible to only request information for certain variables. In the following example, we retrieve just the daily value (dv) parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values). 
+It is also possible to only request information for certain variables. In the following example, we retrieve just the daily mean parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values). 
 
-<<label=getSite, echo=TRUE>>=
+<<label=getSiteExtended, echo=TRUE>>=
 # Continuing from the previous example:
 # This pulls out just the daily data:
 ChoptankDailyData <- ChoptankAvailableData["dv" == ChoptankAvailableData$service,]
+# This pulls out the mean:
+ChoptankDailyData <- ChoptankDailyData["00003" == ChoptankDailyData$statCd,]
 
 #Now, make a call to get all of the parameter information:
 pCodeINFO <- getMultipleParameterNames(ChoptankDailyData$parameter_cd)
 
 #Merge the available dataframe with the parameter information dataframe:
 ChoptankDailyData <- merge(ChoptankDailyData,pCodeINFO,by="parameter_cd")
-head(ChoptankDailyData)
+@
 
+The daily data at the Choptank River site can be displayed in a nice \LaTeX table using the xtable package. See Appendix \ref{app:createWordTable} for instructions on converting an R dataframe to a nice table in Microsoft Excel or Word.
+
+
+<<label=tablegda, echo=TRUE,results=tex>>=
+tableData <- with(ChoptankDailyData, 
+      data.frame(shortName=srsname, 
+      Start=as.character(startDate), 
+      End=as.character(endDate), 
+      Count=as.character(count),
+      Units=parameter_units)
+      )
+
+
+data.table <- xtable(tableData,label="tab:gda",
+    caption="Daily mean data availabile at the Choptank River")
+print(data.table, 
+      caption.placement="top",include.rownames=FALSE)
 @
 
 
@@ -569,9 +588,11 @@ head(Sample)
 %------------------------------------------------------------
 The EGRET package....
 
+
+\clearpage
 \appendix
 %------------------------------------------------------------ 
-\section{Appendix 1: Getting Started}
+\section{Getting Started in R}
 \label{sec:appendix1}
 %------------------------------------------------------------ 
 This section describes the options for downloading and installing the dataRetrieval package.
@@ -629,15 +650,18 @@ To then open the library, simply type:
 library(dataRetrieval)
 @
 
+\FloatBarrier
 
 %------------------------------------------------------------ 
-\section{Appendix 2: Columns Names}
-%------------------------------------------------------------ 
+\section{Columns Names}
 \label{sec:appendix2}
+%------------------------------------------------------------ 
+
 %------------------------------------------------------------
 \subsection{INFO dataframe}
-%------------------------------------------------------------
 \label{sec:appendix2INFO}
+%------------------------------------------------------------
+
 <<label=colNamesQW, echo=FALSE,results=tex>>=
 infoDF <- data.frame(ColumnNames=names(INFO))
 data.table <- xtable(infoDF,
@@ -645,13 +669,13 @@ data.table <- xtable(infoDF,
 print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,include.rownames=FALSE,include.colnames=FALSE)
 @
 
-\\*
-
+\FloatBarrier
 
 %------------------------------------------------------------
 \subsection{Water Quality Portal}
-%------------------------------------------------------------
 \label{sec:appendix2WQP}
+%------------------------------------------------------------
+
 There are 62 columns returned from the water quality portal. 
 
 <<label=colNamesQW, echo=FALSE,results=tex>>=
@@ -661,8 +685,9 @@ data.table <- xtable(infoDF,
 print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,
       include.rownames=FALSE,include.colnames=FALSE)
 @
-\\*
-\newpage
+
+\FloatBarrier
+
 <<label=colNamesQW2, echo=FALSE,results=tex>>=
 infoDF <- data.frame(ColumnNames_Continued=names(dissolvedNitrate[41:62]))
 data.table <- xtable(infoDF,
@@ -670,8 +695,76 @@ data.table <- xtable(infoDF,
 print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,
       include.rownames=FALSE,include.colnames=FALSE)
 @
-\\*
-\newpage
+
+\clearpage
+
+%------------------------------------------------------------ 
+\section{Creating tables in Microsoft from R}
+\label{app:createWordTable}
+%------------------------------------------------------------
+There are a few steps that are required in order to create a table in a Microsoft product (Excel, Word, Powerpoint, etc.) from an R dataframe. There are actually a variety of methods, one of which is detailed here. The example we will step through here will be to create the following data.
+
+<<label=getSiteApp, echo=TRUE>>=
+ChoptankAvailableData <- getDataAvailability(siteNumber)
+ChoptankDailyData <- ChoptankAvailableData["dv" == ChoptankAvailableData$service,]
+ChoptankDailyData <- ChoptankDailyData["00003" == ChoptankDailyData$statCd,]
+pCodeINFO <- getMultipleParameterNames(ChoptankDailyData$parameter_cd, interactive=FALSE)
+ChoptankDailyData <- merge(ChoptankDailyData,pCodeINFO,by="parameter_cd")
+
+tableData <- with(ChoptankDailyData, 
+      data.frame(
+      shortName=srsname, 
+      Start=startDate, 
+      End=endDate, 
+      Count=count,
+      Units=parameter_units)
+      )
+tableData
+@
+
+Our goal now is to get the data from the dataframe tableData to a Microsoft Word table. 
+
+First, save the dataframe as a tab delimited file:
+
+<<label=saveData, echo=TRUE, eval=FALSE>>=
+write.table(tableData, file="tableData.tsv",sep="\t",
+            row.names = FALSE,quote=FALSE)
+@
+
+This will save a file in your working directory called tableData.tsv.  You can see your working directory by typing getwd() in the R console. Opening the file in a general-purpose text editor, you should see the following:
+
+\begin{verbatim}
+shortName  Start	End	Count	Units
+Temperature, water	2010-10-01	2012-06-24	575	deg C
+Stream flow, mean. daily	1948-01-01	2013-03-13	23814	cfs
+Specific conductance	2010-10-01	2012-06-24	551	uS/cm @25C
+Suspended sediment concentration (SSC)	1980-10-01	1991-09-30	3651	mg/l
+Suspended sediment discharge	1980-10-01	1991-09-30	3652	tons/day
+\end{verbatim}
+
+To open this file in Excel:
+\begin{enumerate}
+\item Open Excel
+\item Click on the File tab
+\item Click on the Open option
+\item Browse to the working directory (as shown in the results of getwd())
+\item Next to the File name text box, change the dropdown type to All Files (*.*)
+\item Double click tableData.tsv
+\item A text import wizard will open up, in the first window, choose the Delimited radio button if it is not automatically picked, then click on Next.
+\item In the second window, click on the Tab delimiter if it is not automatically checked, then click Finished.
+\item Use the many formatting tools within Excel to customize the table
+\end{enumerate}
+
+From Excel, it is simple to copy and paste the tables in other Microsoft products. An example using one of the default Excel table formats is here.
+
+\begin{figure}[ht!]
+\centering
+ \resizebox{0.9\textwidth}{!}{\includegraphics{table1.png}} 
+\caption{A simple table produced in Microsoft Excel}
+\label{overflow}
+\end{figure}
+
+\clearpage
 %------------------------------------------------------------
 % BIBLIO
 %------------------------------------------------------------

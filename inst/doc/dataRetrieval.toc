@@ -1,26 +1,30 @@
 \select@language {american}
 \contentsline {section}{\numberline {1}Introduction to dataRetrieval}{2}{section.1}
-\contentsline {section}{\numberline {2}General USGS Web Retrieval Examples}{3}{section.2}
-\contentsline {subsection}{\numberline {2.1}USGS Web Retrieval Introduction}{3}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}USGS Site Information Retrievals}{4}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}USGS Parameter Information Retrievals}{4}{subsection.2.3}
-\contentsline {subsection}{\numberline {2.4}USGS Daily Value Retrievals}{5}{subsection.2.4}
-\contentsline {subsection}{\numberline {2.5}USGS Unit Value Retrievals}{7}{subsection.2.5}
-\contentsline {subsection}{\numberline {2.6}USGS Water Quality Retrievals}{9}{subsection.2.6}
-\contentsline {subsection}{\numberline {2.7}Other Water Quality Retrievals}{10}{subsection.2.7}
-\contentsline {section}{\numberline {3}USGS Web Retrieval Examples Structured For Use In The EGRET Package}{11}{section.3}
-\contentsline {subsection}{\numberline {3.1}INFO Data}{11}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Daily Data}{12}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Sample Data}{13}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Complex Sample Data Example}{13}{subsection.3.4}
-\contentsline {subsection}{\numberline {3.5}Merge Report}{15}{subsection.3.5}
-\contentsline {section}{\numberline {4}Ingesting User-Generated Data Files To Structure Them For Use In The EGRET Package}{16}{section.4}
-\contentsline {subsection}{\numberline {4.1}getDailyDataFromFile}{16}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}getSampleDataFromFile}{17}{subsection.4.2}
-\contentsline {section}{\numberline {A}Appendix 1: Getting Started}{18}{appendix.A}
-\contentsline {subsection}{\numberline {A.1}New to R?}{18}{subsection.A.1}
-\contentsline {subsection}{\numberline {A.2}R User: Installing dataRetrieval}{18}{subsection.A.2}
-\contentsline {subsection}{\numberline {A.3}R Developers: Installing dataRetrieval from gitHub}{19}{subsection.A.3}
-\contentsline {section}{\numberline {B}Appendix 2: Columns Names}{21}{appendix.B}
-\contentsline {subsection}{\numberline {B.1}INFO dataframe}{21}{subsection.B.1}
-\contentsline {subsection}{\numberline {B.2}Water Quality Portal}{22}{subsection.B.2}
+\contentsline {section}{\numberline {2}General USGS Web Retrievals}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Introduction}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Site Information}{4}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}getSiteFileData}{4}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}getDataAvailability}{5}{subsubsection.2.2.2}
+\contentsline {subsection}{\numberline {2.3}Parameter Information}{6}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Daily Values}{7}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}Unit Values}{9}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}Water Quality Values}{11}{subsection.2.6}
+\contentsline {subsection}{\numberline {2.7}STORET Water Quality Retrievals}{13}{subsection.2.7}
+\contentsline {section}{\numberline {3}Data Retrievals Structured For Use In The EGRET Package}{13}{section.3}
+\contentsline {subsection}{\numberline {3.1}INFO Data}{13}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Daily Data}{14}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Sample Data}{15}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Censored Data Evaluation}{15}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{17}{subsection.3.5}
+\contentsline {subsubsection}{\numberline {3.5.1}getDailyDataFromFile}{17}{subsubsection.3.5.1}
+\contentsline {subsubsection}{\numberline {3.5.2}getSampleDataFromFile}{18}{subsubsection.3.5.2}
+\contentsline {subsection}{\numberline {3.6}Merge Report}{18}{subsection.3.6}
+\contentsline {subsection}{\numberline {3.7}EGRET Plots}{19}{subsection.3.7}
+\contentsline {section}{\numberline {A}Getting Started in R}{20}{appendix.A}
+\contentsline {subsection}{\numberline {A.1}New to R?}{20}{subsection.A.1}
+\contentsline {subsection}{\numberline {A.2}R User: Installing dataRetrieval}{20}{subsection.A.2}
+\contentsline {subsection}{\numberline {A.3}R Developers: Installing dataRetrieval from gitHub}{21}{subsection.A.3}
+\contentsline {section}{\numberline {B}Columns Names}{23}{appendix.B}
+\contentsline {subsection}{\numberline {B.1}INFO dataframe}{23}{subsection.B.1}
+\contentsline {subsection}{\numberline {B.2}Water Quality Portal}{24}{subsection.B.2}
+\contentsline {section}{\numberline {C}Creating tables in Microsoft from R}{26}{appendix.C}

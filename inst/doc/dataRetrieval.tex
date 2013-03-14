@@ -12,6 +12,8 @@
 \usepackage[numbers, round]{natbib}
 \usepackage[american]{babel}
 \usepackage{authblk}
+\usepackage{footnote}
+\usepackage{placeins}
 \renewcommand\Affilfont{\itshape\small}
 \usepackage{Sweave}
 \renewcommand{\topfraction}{0.85}
@@ -43,7 +45,7 @@
 \input{dataRetrieval-concordance}
 
 %------------------------------------------------------------
-\title{Introduction to the dataRetrieval package}
+\title{The dataRetrieval R package}
 %------------------------------------------------------------
 \author[1]{Laura De Cicco}
 \author[1]{Robert Hirsch}
@@ -66,14 +68,14 @@ For information on getting started in R, downloading and installing the package,
 
 
 %------------------------------------------------------------
-\section{General USGS Web Retrieval Examples}
+\section{General USGS Web Retrievals}
 %------------------------------------------------------------ 
 In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), real-time current values (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis.
 
 %------------------------------------------------------------
-\subsection{USGS Web Retrieval Introduction}
+\subsection{Introduction}
 %------------------------------------------------------------
-The United States Geological Survey organizes their hydrological data in fairly standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discoving this 8-digit ID. One potential tool for discovering data is Environmental Data Discovery and Transformation (EnDDaT): \url{http://cida.usgs.gov/enddat/}.  Follow the example on the EnDDaT web page to learn how to discover USGS stations and available data from any location in the United States. 
+The United States Geological Survey organizes their hydrological data in standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discoving this 8-digit ID. One potential tool for discovering data is Environmental Data Discovery and Transformation (EnDDaT): \url{http://cida.usgs.gov/enddat/}.  Follow the example on the EnDDaT web page to learn how to discover USGS stations and available data from any location in the United States. 
 
 Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured paramater is being requested.  A complete list of possible USGS parameter codes can be found at:
 
@@ -84,7 +86,7 @@ Not every station will measure all parameters. A list of commonly measured param
 
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Wed Mar 13 16:59:57 2013
+% Thu Mar 14 14:54:17 2013
 \begin{table}[ht]
 \centering
 \caption{Commonly found USGS Parameter Codes} 
@@ -101,13 +103,13 @@ pCode & shortName \\
    \hline
 \end{tabular}
 \end{table}
-For real-time data, the parameter code and site ID will suffice.  For most variables that are measured on a continuous basis, the USGS stores the historical data as daily values.  These daily values may be in the form statistics such as the daily mean values, but they can also include daily maximums, minimums or medians.  These different statistics are specified by a 5-digit \texttt{"}stat code\texttt{"}.  A complete list of stat codes can be found here:
+For real-time data, the parameter code and site ID will suffice.  For most variables that are measured on a continuous basis, the USGS stores the historical data as daily values.  These daily values may be in the form of statistics such as the daily mean values, but they can also include daily maximums, minimums or medians.  These different statistics are specified by a 5-digit \texttt{"}stat code\texttt{"}.  A complete list of stat codes can be found here:
 
 \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Wed Mar 13 16:59:57 2013
+% Thu Mar 14 14:54:17 2013
 \begin{table}[ht]
 \centering
 \caption{Commonly found USGS Stat Codes} 
@@ -125,10 +127,17 @@ StatCode & shortName \\
 \end{table}
 
 %------------------------------------------------------------
-\subsection{USGS Site Information Retrievals}
+\subsection{Site Information}
 \label{sec:usgsSite}
 %------------------------------------------------------------
-To obtain all of the available site information, use the getSiteFileData function:
+
+%------------------------------------------------------------
+\subsubsection{getSiteFileData}
+\label{sec:usgsSiteFileData}
+%------------------------------------------------------------
+Use the getSiteFileData function to obtain all of the information available for a particular USGS site such as full station name, drainage area, latitude, and longitude:
+
+
 \begin{Schunk}
 \begin{Sinput}
 > library(dataRetrieval)
@@ -151,7 +160,92 @@ A list of the available columns are found in Appendix 2: INFO dataframe (\ref{se
 Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
 
 %------------------------------------------------------------
-\subsection{USGS Parameter Information Retrievals}
+\subsubsection{getDataAvailability}
+\label{sec:usgsDataAvailability}
+%------------------------------------------------------------
+To find out the available data at a particular USGS site, including measured parameters, period of record, and number of samples (count), use the getDataAvailability function:
+
+\begin{Schunk}
+\begin{Sinput}
+> # Continuing from the previous example:
+> ChoptankAvailableData <- getDataAvailability(siteNumber)
+> head(ChoptankAvailableData)
+\end{Sinput}
+\begin{Soutput}
+  parameter_cd statCd  startDate    endDate count service
+2        00010  00001 1988-10-01 2012-06-24   940      dv
+3        00010  00002 2010-10-01 2012-06-24   575      dv
+4        00010  00003 2010-10-01 2012-06-24   575      dv
+5        00060  00003 1948-01-01 2013-03-13 23814      dv
+6        00095  00001 2010-10-01 2012-06-24   551      dv
+7        00095  00002 2010-10-01 2012-06-24   551      dv
+\end{Soutput}
+\end{Schunk}
+
+There is an additional argument to the getDataAvailability called longNames, which defaults to FALSE. Setting longNames to TRUE will cause the function to make a web service call for each parameter and return expanded information on that parameter. Currently, this is a very slow process because each parameter code makes a unique web service call. If the site does not have many measured parameters, setting longNames to TRUE is reasonable.
+
+It is also possible to only request information for certain variables. In the following example, we retrieve just the daily mean parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values). 
+
+\begin{Schunk}
+\begin{Sinput}
+> # Continuing from the previous example:
+> # This pulls out just the daily data:
+> ChoptankDailyData <- ChoptankAvailableData["dv" == ChoptankAvailableData$service,]
+> # This pulls out the mean:
+> ChoptankDailyData <- ChoptankDailyData["00003" == ChoptankDailyData$statCd,]
+> #Now, make a call to get all of the parameter information:
+> pCodeINFO <- getMultipleParameterNames(ChoptankDailyData$parameter_cd)
+\end{Sinput}
+\begin{Soutput}
+Percent complete: 
+20 	40 	60 	80 	100 	
+\end{Soutput}
+\begin{Sinput}
+> #Merge the available dataframe with the parameter information dataframe:
+> ChoptankDailyData <- merge(ChoptankDailyData,pCodeINFO,by="parameter_cd")
+\end{Sinput}
+\end{Schunk}
+
+The daily data at the Choptank River site can be displayed in a nice \LaTeX table using the xtable package. See Appendix \ref{app:createWordTable} for instructions on converting an R dataframe to a nice table in Microsoft Excel or Word.
+
+
+\begin{Schunk}
+\begin{Sinput}
+> tableData <- with(ChoptankDailyData, 
+       data.frame(shortName=srsname, 
+       Start=as.character(startDate), 
+       End=as.character(endDate), 
+       Count=as.character(count),
+       Units=parameter_units)
+       )
+> data.table <- xtable(tableData,label="tab:gda",
+     caption="Daily mean data availabile at the Choptank River")
+> print(data.table, 
+       caption.placement="top",include.rownames=FALSE)
+\end{Sinput}
+% latex table generated in R 2.15.3 by xtable 1.7-1 package
+% Thu Mar 14 14:54:22 2013
+\begin{table}[ht]
+\centering
+\caption{Daily mean data availabile at the Choptank River} 
+\label{tab:gda}
+\begin{tabular}{lllll}
+  \hline
+shortName & Start & End & Count & Units \\ 
+  \hline
+Temperature, water & 2010-10-01 & 2012-06-24 & 575 & deg C \\ 
+  Stream flow, mean. daily & 1948-01-01 & 2013-03-13 & 23814 & cfs \\ 
+  Specific conductance & 2010-10-01 & 2012-06-24 & 551 & uS/cm @25C \\ 
+  Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
+  Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
+   \hline
+\end{tabular}
+\end{table}\end{Schunk}
+
+
+
+%------------------------------------------------------------
+\subsection{Parameter Information}
 \label{sec:usgsParams}
 %------------------------------------------------------------
 To obtain all of the available information concerning a measured parameter, use the getParameterInfo function:
@@ -180,12 +274,12 @@ Pulling out a specific example piece of information, in this case parameter name
 Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
 
 %------------------------------------------------------------
-\subsection{USGS Daily Value Retrievals}
+\subsection{Daily Values}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain historic daily records of USGS data, use the retrieveNWISData function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (true/false) interactive. There are 2 default argument: statCd defaults to \texttt{"}00003\texttt{"} and interactive defaults to TRUE.  If you want to use the default values, you do not need to list them in the function call. Setting the 'interactive' option to true will walk you through the function. It might make more sense to run large batch collections with the interactive option set to FALSE. 
+To obtain historic daily records of USGS data, use the retrieveNWISData function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (true/false) interactive. There are 2 default argument: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. Setting the 'interactive' option to true will walk you through the function. It might make more sense to run large batch collections with the interactive option set to FALSE. 
 
-The dates (start and end) need to be in the format \texttt{"}YYYY-MM-DD\texttt{"}.  Setting the start date to \texttt{"}\texttt{"} will indicate to the program to ask for the earliest date, setting the end date to \texttt{"}\texttt{"} will ask for the latest available date.
+The dates (start and end) need to be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user does need to include the quotes).  Setting the start date to \texttt{"}\texttt{"} will indicate to the program to ask for the earliest date, setting the end date to \texttt{"}\texttt{"} will ask for the latest available date.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -263,7 +357,7 @@ There are occasions where NWIS values are not reported as numbers, instead there
 
 
 %------------------------------------------------------------
-\subsection{USGS Unit Value Retrievals}
+\subsection{Unit Values}
 \label{sec:usgsRT}
 %------------------------------------------------------------
 Any data that are collected at regular time intervals (such as 15-minute or hourly) are known as \texttt{"}Unit Values\texttt{"} - many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function retrieveUnitNWISData.  Some of these Unit Values are available for the past several years, and some are only available for a recent time period such as 120 days or a year.  Here is an example of a retrieval of such data.  
@@ -315,10 +409,10 @@ A simple plotting example is shown in Figure \ref{fig:RT}:
 
 
 %------------------------------------------------------------
-\subsection{USGS Water Quality Retrievals}
+\subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the dataRetrieval package from the water quality data portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a \texttt{"};\texttt{"} separator, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming (as will be demonstrated), a simplified version of the data can be obtained using getQWData.
+To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a \texttt{"};\texttt{"} separator, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming, a simplified version of the data can be obtained using getQWData.
 
 
 \begin{Schunk}
@@ -333,9 +427,7 @@ To get water quality data from water samples collected at the streamgage (as dis
 \end{Sinput}
 \end{Schunk}
 
-There is a large amount of data returned for each observation. The column names are listed in Appendix 2 (\ref{sec:appendix2WQP}).
-
-To get a simplified dataframe that contains only datetime, value, and qualifier, use the function getQWData:
+There is a large amount of data returned for each observation. The column names are listed in Appendix 2 (\ref{sec:appendix2WQP}). To get a simplified dataframe that contains only datetime, value, and qualifier, use the function getQWData:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -372,10 +464,10 @@ An example of plotting the above data (Figure \ref{fig:nitrate}):
 \end{figure}
 
 %------------------------------------------------------------
-\subsection{Other Water Quality Retrievals}
+\subsection{STORET Water Quality Retrievals}
 \label{sec:usgsSTORET}
 %------------------------------------------------------------
-There are additional data sets available on the Water Quality Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET or NWIS database.  Since STORET does not use USGS parameter codes, a 'characteristic name' must be supplied.  The following example retrieves specific conductance from a DNR site in Wisconsin.
+There are additional data sets available on the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET (data from EPA) or NWIS database.  Since STORET does not use USGS parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The following example retrieves specific conductance from a DNR site in Wisconsin.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -396,7 +488,7 @@ There are additional data sets available on the Water Quality Portal (\url{http:
 
 
 %------------------------------------------------------------
-\section{USGS Web Retrieval Examples Structured For Use In The EGRET Package}
+\section{Data Retrievals Structured For Use In The EGRET Package}
 %------------------------------------------------------------ 
 Rather than using the raw data as retrieved by the web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
 
@@ -405,7 +497,7 @@ In this section, we use 3 dataRetrieval functions to get sufficient data to perf
 %------------------------------------------------------------
 \subsection{INFO Data}
 %------------------------------------------------------------
-The function to obtain \texttt{"}metadata\texttt{"}, data about the streamgage and measured parameters is getMetaData. This function essentially combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
+The function to obtain metadata, or data about the streamgage and measured parameters is getMetaData. This function combines getSiteFileData and getParameterInfo, producing one dataframe called INFO.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -418,14 +510,15 @@ Column names in the INFO dataframe are listed in Appendix 2 (\ref{sec:appendix2I
 %------------------------------------------------------------
 \subsection{Daily Data}
 %------------------------------------------------------------
-The function to obtain the daily values (discharge in this case) is getDVData.  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in the previous section, however 'convert' is a new argument, the default is TRUE, and it tells the program to convert the values from cubic feet per second (cfs) to cubic meters per second (cms). For EGRET applications do not use this argument (the default is TRUE), EGRET assumes that discharge is always in cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
+The function to obtain the daily values (discharge in this case) is getDVData.  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in the previous section, however \texttt{"}convert\texttt{"} is a new argument (defaults to TRUE), and it tells the program to convert the values from cubic feet per second (cfs) to cubic meters per second (cms). For EGRET applications with NWIS web retrieval, do not use this argument (the default is TRUE), EGRET assumes that discharge is always in cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
 
 \begin{Schunk}
 \begin{Sinput}
 > siteNumber <- "01491000"
-> parameterCd <- "00631"  # Nitrate
 > startDate <- "1964-01-01"
 > endDate <- "2013-01-01"
+> # This call will get NWIS data that is in cfs, and convert it
+> # to cms since we didn't override the default in the convert argument:
 > Daily <- getDVData(siteNumber, "00060", startDate, endDate,interactive=FALSE)
 \end{Sinput}
 \end{Schunk}
@@ -433,7 +526,7 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Wed Mar 13 17:00:07 2013
+% Thu Mar 14 14:54:30 2013
 \begin{tabular}{llll}
   \hline
 ColumnName & Type & Description & Units \\ 
@@ -453,7 +546,7 @@ Date & Date & Date & date \\
    \hline
 \end{tabular}\\*
 
-The code will shift the discharge values to 0.001 times the mean if there are zero values detected in order to perform the logarithm. Columns Q7 and Q30 are 7 and 30 day running averages. 
+If there are discharge values of zero, the code will add a small constant to all of the daily discharges.  This constant is 0.001 times the mean discharge.  The code will also report on the number of zero values and the size of the constant.  EGRET should only be used if the number of zero values is a very small fraction of the total days in the record (say less than 0.1\% of the days).  Columns Q7 and Q30 are the 7 and 30 day running averages for the 7 or 30 days ending on this specific date." 
 
 %------------------------------------------------------------
 \subsection{Sample Data}
@@ -470,7 +563,10 @@ The function to obtain sample data from the water quality portal is getSampleDat
 Details of the Sample dataframe are listed below:
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Wed Mar 13 17:00:08 2013
+% Thu Mar 14 14:54:32 2013
+\begin{table}[!ht]
+\centering
+\caption{Sample dataframe} 
 \begin{tabular}{llll}
   \hline
 ColumnName & Type & Description & Units \\ 
@@ -487,24 +583,23 @@ Date & Date & Date & date \\
   MonthSeq & integer & Number of months since January 1, 1850 & months \\ 
   SinDY & number & Sine of DecYear & numeric \\ 
   CosDY & number & Cosine of DecYear & numeric \\ 
-  Q & number & Discharge ** & cms \\ 
-  LogQ & number & Natural logarithm of flow ** & numeric \\ 
+  Q \footnotemark[1] & number & Discharge & cms \\ 
+  LogQ \footnotemark[1] & number & Natural logarithm of flow & numeric \\ 
    \hline
-\end{tabular}\\
-** Flow columns are populated from data in the Daily dataframe after calling the mergeReport function.
-
-
-In a more complex situation, the Sample data frame will combine all of the measured parameters.  An example is provided to explain how the values are combined:
+\end{tabular}
+\end{table}\footnotetext[1]{Flow columns are populated from data in the Daily dataframe after calling the mergeReport function.}
 
 %------------------------------------------------------------
-\subsection{Complex Sample Data Example}
+\subsection{Censored Data Evaluation}
 %------------------------------------------------------------
-As an example, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). From 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
+In the typical case where none of the data are censored (that is, no values are reported as \texttt{"}less-than\texttt{"} values) the ConcLow = ConcHigh = ConcAve all of which are equal to the reported value and Uncen=0.  In the typical form of censoring where a value is reported as less than the reporting limit, then ConcLow = NA, ConcHigh = reporting limit, ConcAve = 0.5 * reporting limit, and Uncen = 1.  The next section describes a more complex situation where concentrations are computed as the sum of one or more measured parameters.
+
+As an example to understand how the dataRetrieval package handles a more complex censoring problem, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). From 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
 
 \begin{center}
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Wed Mar 13 17:00:08 2013
+% Thu Mar 14 14:54:32 2013
 \begin{tabular}{llrlrlr}
   \hline
 cdate & rdp & dp & rpp & pp & rtp & tp \\ 
@@ -529,12 +624,12 @@ For the more complex example case, let us say dp is reported as <0.01 and pp is 
 \begin{Schunk}
 \begin{Soutput}
         Date ConcLow ConcHigh Uncen ConcAve Julian Month Day  DecYear MonthSeq
-1 2003-02-15    0.52    0.520     1  0.5200  55927     2  46 2003.124     1838
-2 2003-06-30    0.30    0.310     0  0.3050  56062     6 181 2003.493     1842
-3 2004-09-15      NA    0.205     0  0.1025  56505     9 259 2004.706     1857
-4 2005-01-30    0.43    0.430     1  0.4300  56642     1  30 2005.081     1861
-5 2005-05-30      NA    0.050     0  0.0250  56762     5 150 2005.408     1865
-6 2005-10-30      NA    0.020     0  0.0100  56915    10 303 2005.827     1870
+1 2003-02-15   0.520    0.520     1   0.520  55927     2  46 2003.124     1838
+2 2003-06-30   0.310    0.310     1   0.310  56062     6 181 2003.493     1842
+3 2004-09-15   0.205    0.205     1   0.205  56505     9 259 2004.706     1857
+4 2005-01-30   0.430    0.430     1   0.430  56642     1  30 2005.081     1861
+5 2005-05-30   0.050    0.050     1   0.050  56762     5 150 2005.408     1865
+6 2005-10-30   0.020    0.020     1   0.020  56915    10 303 2005.827     1870
         SinDY      CosDY
 1  0.70406552  0.7101350
 2  0.04290476 -0.9990792
@@ -545,66 +640,29 @@ For the more complex example case, let us say dp is reported as <0.01 and pp is 
 \end{Soutput}
 \end{Schunk}
 
-%------------------------------------------------------------
-\subsection{Merge Report}
-%------------------------------------------------------------
-Finally, there is a function called mergeReport that will look at both the Daily and Sample dataframe, and populate Q and LogQ columns into the Sample dataframe. The default arguments are Daily and Sample, however if you want to use other similarly structured dataframes, you can specify localDaily or localSample.
-
-\begin{Schunk}
-\begin{Sinput}
-> startDate <-'1985-01-01' 
-> endDate <- '1985-03-31'
-> site <- '01594440'
-> Daily <- getDVData(site,'00060', startDate, endDate, interactive=FALSE)
-> Sample <- getSampleData(site,'01075', startDate, endDate, interactive=FALSE)
-> Sample <- mergeReport()
-\end{Sinput}
-\begin{Soutput}
- Discharge Record is 90 days long, which is 0 years
- First day of the discharge record is 1985-01-01 and last day is 1985-03-31
- The water quality record has 1 samples
- The first sample is from 1985-03-13 and the last sample is from 1985-03-13
- Discharge: Minimum, mean and maximum 2.83 8.41 106
- Concentration: Minimum, mean and maximum 1 1 1
- Percentage of the sample values that are censored is 100 %
-\end{Soutput}
-\begin{Sinput}
-> head(Sample)
-\end{Sinput}
-\begin{Soutput}
-        Date ConcLow ConcHigh Uncen ConcAve Julian Month Day  DecYear MonthSeq
-1 1985-03-13      NA        1     0     0.5  49379     3  72 1985.195     1623
-      SinDY     CosDY      Q     LogQ
-1 0.9416344 0.3366373 5.2103 1.650637
-\end{Soutput}
-\end{Schunk}
-
-
-
-\newpage
 %------------------------------------------------------------ 
-\section{Ingesting User-Generated Data Files To Structure Them For Use In The EGRET Package}
+\subsection{User-Generated Data Files}
 %------------------------------------------------------------ 
 Aside from retrieving data from the USGS web services, the dataRetrieval package includes functions to generate the Daily and Sample data frame from local files.
 
 %------------------------------------------------------------ 
-\subsection{getDailyDataFromFile}
+\subsubsection{getDailyDataFromFile}
 %------------------------------------------------------------ 
 getDailyDataFromFile will load a user-supplied text file and convert it to the Daily dataframe. The file should have two columns, the first dates, the second values.  The dates should be formatted either mm/dd/yyyy or yyyy-mm-dd. Using a 4-digit year is required. This function has the following inputs: filePath, fileName,hasHeader (TRUE/FALSE), separator, qUnit, and interactive (TRUE/FALSE). filePath is a string that defines the path to your file. This can either be a full path, or path relative to your R working directory. The input fileName is a string that defines the file name (including the extension).
 
 Text files that contain this sort of data require some sort of a separator, for example, a 'csv' file (comma-separated value) file uses a comma to separate the date and value column. A tab delimited file would use a tab (\texttt{"}\verb@\t@\texttt{"}) rather than the comma (\texttt{"},\texttt{"}). The type of separator you use can be defined in the function call in the \texttt{"}separator\texttt{"} argument, the default is \texttt{"},\texttt{\texttt{"}}. Another function input is a logical variable: hasHeader.  The default is TRUE. If your data does not have column names, set this variable to FALSE.
 
-Finally, qUnit is a numeric input that defines the discharge units. Flow from the NWIS web results are typically given in cubic feet per second (qUnit=1), but the EGRET package requires flow to be given in cubic meters per second (qUnit=2). Other allowed values are 10\verb@^@3 cubic feet per second (qUnit=3) and 10\verb@^@3 cubic meters per second (qUnit=4). If you do not want your data to be converted, use qUnit=2. The default is qUnit=1 (assumes flow is in cubic feet per second).
+Finally, qUnit is a numeric argument that defines the discharge units used in the input file.  The default is qUnit = 1 which assumes discharge is in cubic feet per second.  If the discharge in the file is already in cubic meters per second then set qUnit = 2.  If it is in some other units (like liters per second or acre-feet per day), the user will have to pre-process the data with a unit conversion that changes it to either cubic feet per second or cubic meters per second.
 
 So, if you have a file called \texttt{"}ChoptankRiverFlow.txt\texttt{"} located in a folder called \texttt{"}RData\texttt{"} on the C drive (this is a Window's example), and the file is structured as follows (tab-separated):
 \begin{verbatim}
 date  Qdaily
-10/1/1999  3.029902561
-10/2/1999	2.406931941
-10/3/1999	2.152080324
-10/4/1999	2.152080324
-10/5/1999	3.19980364
-10/6/1999	2.775050944
+10/1/1999  107
+10/2/1999	85
+10/3/1999	76
+10/4/1999	76
+10/5/1999	113
+10/6/1999	98
 ...
 \end{verbatim}
 
@@ -618,7 +676,7 @@ The call to open this file, convert the flow to cubic meters per second, and pop
 \end{Schunk}
 
 %------------------------------------------------------------ 
-\subsection{getSampleDataFromFile}
+\subsubsection{getSampleDataFromFile}
 %------------------------------------------------------------ 
 Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and flow data is that the code requires a third column that contains a remark code, either blank or \texttt{"}\verb@<@\texttt{"}, which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.  If multiple constituents are going to be used, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... An example of a comma-delimited file would be:
 
@@ -640,11 +698,63 @@ The call to open this file, and populate the Sample dataframe would be:
 \end{Sinput}
 \end{Schunk}
 
+%------------------------------------------------------------
+\subsection{Merge Report}
+%------------------------------------------------------------
+Finally, there is a function called mergeReport that will look at both the Daily and Sample dataframe, and populate Q and LogQ columns into the Sample dataframe. The default arguments are Daily and Sample, however if you want to use other similarly structured dataframes, you can specify localDaily or localSample. Once mergeReport has been run, the Sample dataframe will be augumented with the daily discharges for all the days with samples.  None of the water quality functions in EGRET will work without first having run the mergeReport function.
 
-\newpage
+
+\begin{Schunk}
+\begin{Sinput}
+> siteNumber <- "01491000"
+> parameterCd <- "00631"  # Nitrate
+> startDate <- "1964-01-01"
+> endDate <- "2013-01-01"
+> Daily <- getDVData(siteNumber, "00060", startDate, endDate,interactive=FALSE)
+> Sample <- getSampleData(siteNumber,parameterCd, startDate, endDate, interactive=FALSE)
+> Sample <- mergeReport()
+\end{Sinput}
+\begin{Soutput}
+ Discharge Record is 17899 days long, which is 49 years
+ First day of the discharge record is 1964-01-01 and last day is 2013-01-01
+ The water quality record has 627 samples
+ The first sample is from 1973-06-04 and the last sample is from 2012-12-18
+ Discharge: Minimum, mean and maximum 0.00991 4.02 246
+ Concentration: Minimum, mean and maximum 0.05 1.1 2.4
+ Percentage of the sample values that are censored is 0.16 %
+\end{Soutput}
+\begin{Sinput}
+> head(Sample)
+\end{Sinput}
+\begin{Soutput}
+        Date ConcLow ConcHigh Uncen ConcAve Julian Month Day  DecYear MonthSeq
+1 1973-06-04    1.30     1.30     1    1.30  45079     6 155 1973.422     1482
+2 1979-09-25    0.52     0.52     1    0.52  47383     9 268 1979.731     1557
+3 1979-10-24    0.62     0.62     1    0.62  47412    10 297 1979.810     1558
+4 1979-12-05    1.40     1.40     1    1.40  47454    12 339 1979.925     1560
+5 1979-12-21    1.20     1.20     1    1.20  47470    12 355 1979.969     1560
+6 1980-01-24    0.84     0.84     1    0.84  47504     1  24 1980.064     1561
+       SinDY      CosDY         Q     LogQ
+1  0.4699767 -0.8826788  3.256437 1.180634
+2 -0.9927882 -0.1198812  3.398022 1.223193
+3 -0.9295235  0.3687629  3.199804 1.163089
+4 -0.4547551  0.8906165  2.973269 1.089662
+5 -0.1961425  0.9805754  2.944952 1.080093
+6  0.3925740  0.9197204 10.901986 2.388945
+\end{Soutput}
+\end{Schunk}
+
+
+%------------------------------------------------------------
+\subsection{EGRET Plots}
+%------------------------------------------------------------
+The EGRET package....
+
+
+\clearpage
 \appendix
 %------------------------------------------------------------ 
-\section{Appendix 1: Getting Started}
+\section{Getting Started in R}
 \label{sec:appendix1}
 %------------------------------------------------------------ 
 This section describes the options for downloading and installing the dataRetrieval package.
@@ -670,10 +780,11 @@ To see the raw code for a particular code, type the name of the function:
 > removeDuplicates
 \end{Sinput}
 \begin{Soutput}
-function(localSample=Sample) {  
-  Sample1 <- localSample[!duplicated(localSample[c("DecYear","ConcHigh")]),]
-  
-  return(Sample1)
+function (localSample = Sample) 
+{
+    Sample1 <- localSample[!duplicated(localSample[c("DecYear", 
+        "ConcHigh")]), ]
+    return(Sample1)
 }
 <environment: namespace:dataRetrieval>
 \end{Soutput}
@@ -722,17 +833,20 @@ To then open the library, simply type:
 \end{Sinput}
 \end{Schunk}
 
+\FloatBarrier
 
 %------------------------------------------------------------ 
-\section{Appendix 2: Columns Names}
-%------------------------------------------------------------ 
+\section{Columns Names}
 \label{sec:appendix2}
+%------------------------------------------------------------ 
+
 %------------------------------------------------------------
 \subsection{INFO dataframe}
-%------------------------------------------------------------
 \label{sec:appendix2INFO}
+%------------------------------------------------------------
+
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Wed Mar 13 17:00:09 2013
+% Thu Mar 14 14:54:34 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -780,17 +894,17 @@ agency.cd \\
   constitAbbrev \\ 
    \hline
 \end{tabular}
-\\*
-
+\FloatBarrier
 
 %------------------------------------------------------------
 \subsection{Water Quality Portal}
-%------------------------------------------------------------
 \label{sec:appendix2WQP}
+%------------------------------------------------------------
+
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Wed Mar 13 17:00:09 2013
+% Thu Mar 14 14:54:34 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -835,10 +949,11 @@ OrganizationIdentifier \\
   ResultValueTypeName \\ 
   ResultWeightBasisText \\ 
    \hline
-\end{tabular}\\*
-\newpage
+\end{tabular}
+\FloatBarrier
+
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Wed Mar 13 17:00:09 2013
+% Thu Mar 14 14:54:34 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -865,8 +980,87 @@ ResultTimeBasisText \\
   DetectionQuantitationLimitMeasure.MeasureUnitCode \\ 
   PreparationStartDate \\ 
    \hline
-\end{tabular}\\*
-\newpage
+\end{tabular}
+\clearpage
+
+%------------------------------------------------------------ 
+\section{Creating tables in Microsoft from R}
+\label{app:createWordTable}
+%------------------------------------------------------------
+There are a few steps that are required in order to create a table in a Microsoft product (Excel, Word, Powerpoint, etc.) from an R dataframe. There are actually a variety of methods, one of which is detailed here. The example we will step through here will be to create the following data.
+
+\begin{Schunk}
+\begin{Sinput}
+> ChoptankAvailableData <- getDataAvailability(siteNumber)
+> ChoptankDailyData <- ChoptankAvailableData["dv" == ChoptankAvailableData$service,]
+> ChoptankDailyData <- ChoptankDailyData["00003" == ChoptankDailyData$statCd,]
+> pCodeINFO <- getMultipleParameterNames(ChoptankDailyData$parameter_cd, interactive=FALSE)
+> ChoptankDailyData <- merge(ChoptankDailyData,pCodeINFO,by="parameter_cd")
+> tableData <- with(ChoptankDailyData, 
+       data.frame(
+       shortName=srsname, 
+       Start=startDate, 
+       End=endDate, 
+       Count=count,
+       Units=parameter_units)
+       )
+> tableData
+\end{Sinput}
+\begin{Soutput}
+                               shortName      Start        End Count      Units
+1                     Temperature, water 2010-10-01 2012-06-24   575      deg C
+2               Stream flow, mean. daily 1948-01-01 2013-03-13 23814        cfs
+3                   Specific conductance 2010-10-01 2012-06-24   551 uS/cm @25C
+4 Suspended sediment concentration (SSC) 1980-10-01 1991-09-30  3651       mg/l
+5           Suspended sediment discharge 1980-10-01 1991-09-30  3652   tons/day
+\end{Soutput}
+\end{Schunk}
+
+Our goal now is to get the data from the dataframe tableData to a Microsoft Word table. 
+
+First, save the dataframe as a tab delimited file:
+
+\begin{Schunk}
+\begin{Sinput}
+> write.table(tableData, file="tableData.tsv",sep="\t",
+             row.names = FALSE,quote=FALSE)
+\end{Sinput}
+\end{Schunk}
+
+This will save a file in your working directory called tableData.tsv.  You can see your working directory by typing getwd() in the R console. Opening the file in a general-purpose text editor, you should see the following:
+
+\begin{verbatim}
+shortName  Start	End	Count	Units
+Temperature, water	2010-10-01	2012-06-24	575	deg C
+Stream flow, mean. daily	1948-01-01	2013-03-13	23814	cfs
+Specific conductance	2010-10-01	2012-06-24	551	uS/cm @25C
+Suspended sediment concentration (SSC)	1980-10-01	1991-09-30	3651	mg/l
+Suspended sediment discharge	1980-10-01	1991-09-30	3652	tons/day
+\end{verbatim}
+
+To open this file in Excel:
+\begin{enumerate}
+\item Open Excel
+\item Click on the File tab
+\item Click on the Open option
+\item Browse to the working directory (as shown in the results of getwd())
+\item Next to the File name text box, change the dropdown type to All Files (*.*)
+\item Double click tableData.tsv
+\item A text import wizard will open up, in the first window, choose the Delimited radio button if it is not automatically picked, then click on Next.
+\item In the second window, click on the Tab delimiter if it is not automatically checked, then click Finished.
+\item Use the many formatting tools within Excel to customize the table
+\end{enumerate}
+
+From Excel, it is simple to copy and paste the tables in other Microsoft products. An example using one of the default Excel table formats is here.
+
+\begin{figure}[ht!]
+\centering
+ \resizebox{0.9\textwidth}{!}{\includegraphics{table1.png}} 
+\caption{A simple table produced in Microsoft Excel}
+\label{overflow}
+\end{figure}
+
+\clearpage
 %------------------------------------------------------------
 % BIBLIO
 %------------------------------------------------------------
