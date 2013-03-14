@@ -42,9 +42,9 @@ EndDate <- as.character(Sys.Date())
 # These examples require an internet connection to run
 rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 

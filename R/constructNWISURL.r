@@ -8,7 +8,7 @@
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
-#' @param statCd string USGS statistic code only used for daily value service. This is usually 5 digits.  Daily mean (00003) is the default.
+#' @param statCd string or vector USGS statistic code only used for daily value service. This is usually 5 digits.  Daily mean (00003) is the default.
 #' @param service string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), "qw" (water quality data), and "wqp" (water quality portal, which can include STORET).
 #' @keywords data import USGS web service
 #' @return url string
@@ -18,7 +18,7 @@
 #' startDate <- '2012-01-01'
 #' endDate <- '2012-06-30'
 #' pCode <- c("00060","00010")
-#' url_daily <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv')
+#' url_daily <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',statCd=c("00003","00001"))
 #' url_unit <- constructNWISURL(siteNumber,pCode,startDate,endDate,'iv')
 #' url_qw_single <- constructNWISURL(siteNumber,"34220",startDate,endDate,'qwdata')
 #' url_qw <- constructNWISURL(siteNumber,c('34247','30234','32104','34220'),startDate,endDate,'qwdata')
@@ -115,6 +115,10 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
           url <- paste(baseURL,"?site=",siteNumber, "&ParameterCd=",parameterCd, "&format=rdb,1.0", sep = "")
           
           if("dv"==service) {
+            if(length(statCd) > 1){
+              statCd <- paste(statCd, collapse=",")
+            }            
+            
             url <- paste(url, "&StatCd=", statCd, sep = "")
           }
           

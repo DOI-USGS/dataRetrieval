@@ -25,9 +25,9 @@
 rawSample <- getRawQWData('01594440','01075', '1985-01-01', '1985-03-31')
 rawSampleSelect <- processQWData(rawSample)
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 

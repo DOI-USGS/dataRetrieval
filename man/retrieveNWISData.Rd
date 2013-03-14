@@ -45,11 +45,11 @@ endDate <- '2012-06-30'
 pCode <- "00060"
 rawDailyQ <- retrieveNWISData(siteNumber,pCode, startDate, endDate)
 rawDailyTemperature <- retrieveNWISData(siteNumber,'00010', startDate, endDate, StatCd='00001',interactive=FALSE)
-rawDailyQAndTempMeanMax <- retrieveNWISData(siteNumber,'00010,00060', startDate, endDate, StatCd='00001,00003', interactive=FALSE)
+rawDailyQAndTempMeanMax <- retrieveNWISData(siteNumber,c('00010','00060'), startDate, endDate, StatCd=c('00001','00003'), interactive=FALSE)
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 
