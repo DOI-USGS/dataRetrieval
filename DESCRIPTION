@@ -52,8 +52,11 @@ Collate:
     'constructNWISURL.r'
     'getDataAvailability.r'
     'getMultipleParameterNames.r'
+    'getWaterML1Data.r'
+    'padVariable.r'
 Depends:
-    R (>= 2.15.0)
+    R (>= 2.15.0),
+    XML
 Imports:
     zoo
 Suggests:
