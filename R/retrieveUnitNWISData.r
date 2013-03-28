@@ -22,24 +22,7 @@
 retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){  
   
   url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"uv")
-  tmp <- read.delim(  
-    url, 
-    header = TRUE, 
-    quote="\"", 
-    dec=".", 
-    sep='\t',
-    colClasses=c('character'),
-    fill = TRUE, 
-    comment.char="#")
+  data <- getWaterML1Data(url)
 
-  dataType <- tmp[1,]
-  data <- tmp[-1,]
-  data[,regexpr('d$', dataType) > 0] <- as.POSIXct(strptime(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M"))
-  
-  tempDF <- data[,which(regexpr('n$', dataType) > 0)]
-  tempDF <- suppressWarnings(sapply(tempDF, function(x) as.numeric(x)))  
-  data[,which(regexpr('n$', dataType) > 0)] <- tempDF
-  row.names(data) <- NULL
-  
   return (data)
 }
