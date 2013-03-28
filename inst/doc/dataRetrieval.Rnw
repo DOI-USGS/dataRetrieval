@@ -226,7 +226,8 @@ To obtain historic daily records of USGS data, use the retrieveNWISData function
 
 The dates (start and end) need to be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user does need to include the quotes).  Setting the start date to \texttt{"}\texttt{"} will indicate to the program to ask for the earliest date, setting the end date to \texttt{"}\texttt{"} will ask for the latest available date.
 
-<<label=getNWISDaily, echo=TRUE>>=
+<<label=getNWISDaily, echo=TRUE, eval=FALSE>>=
+
 # Continuing with our Choptank River example
 parameterCd <- "00060"  # Discharge (cfs)
 startDate <- ""  # Will request earliest date
@@ -235,16 +236,12 @@ endDate <- "" # Will request latest date
 discharge <- retrieveNWISData(siteNumber, parameterCd, startDate, endDate)
 @
 
-A dataframe is returned that looks like the following:
-<<dischargeData, echo=FALSE>>=
-head(discharge)
-@
-
 The variable datetime is automatically imported as a Date. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS remark codes are often \texttt{"}A\texttt{"} (approved for publication) or \texttt{"}P\texttt{"} (provisional data subject to revision). A more complete list of remark codes can be found here:
 \url{http://waterdata.usgs.gov/usa/nwis/help?codes_help}
 
 Another example that doesn't use the defaults would be a request for mean and maximum daily temperature and discharge in early 2012:
 <<label=getNWIStemperature, echo=TRUE>>=
+
 parameterCd <- c("00010","00060")  # Temperature and discharge
 statCd <- c("00001","00003")  # Mean and maximum
 startDate <- "2012-01-01"
@@ -252,6 +249,7 @@ endDate <- "2012-06-30"
 
 temperatureAndFlow <- retrieveNWISData(siteNumber, parameterCd, 
         startDate, endDate, StatCd=statCd,interactive=FALSE)
+
 @
 
 Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}. 
@@ -259,14 +257,14 @@ Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.h
 An example of plotting the above data (Figure \ref{fig:TD}):
 
 <<label=getNWIStemperaturePlot, echo=TRUE>>=
-
+colnames <- names(temperatureAndFlow)
 with(temperatureAndFlow, plot(
-  datetime, X01_00010_00003,
+  get(colnames[3]), get(colnames[6]),
   xlab="Date",ylab="Temperature [C]"
   ))
 par(new=TRUE)
 with(temperatureAndFlow, plot(
-  datetime, X02_00060_00003,
+  get(colnames[3]), get(colnames[8]),
   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
   ))
 axis(4,col="red",col.axis="red")
@@ -297,9 +295,9 @@ Any data that are collected at regular time intervals (such as 15-minute or hour
 
 <<label=getNWISUnit, echo=TRUE>>=
 parameterCd <- "00060"  # Discharge (cfs)
-startDate <- "2013-03-12" 
+startDate <- "2012-05-12" 
 # or use (yesterday): startDate <- as.character(Sys.Date()-1)
-endDate <- "2013-03-13" 
+endDate <- "2012-05-13" 
 # or use (today):  endDate <- as.character(Sys.Date())
 dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, 
         startDate, endDate)
@@ -313,11 +311,13 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 
 A simple plotting example is shown in Figure \ref{fig:RT}:
 <<label=getNWISUnit, echo=TRUE>>=
+colnames <- names(dischargeToday)
 with(dischargeToday, plot(
-  datetime, X02_00060,
+  get(colnames[3]), get(colnames[4]),
   ylab="Discharge [cfs]",xlab=""
   ))
 title(ChoptankInfo$station.nm)
+
 @
 \newpage
 
@@ -327,7 +327,7 @@ title(ChoptankInfo$station.nm)
 <<getNWISUnit>>
 @
 \end{center}
-\caption{Real-time discharge plot of Choptank River from March 12-13, 2013.}
+\caption{Real-time discharge plot of Choptank River from May 12-13, 2012.}
 \label{fig:RT}
 \end{figure}
 

@@ -86,7 +86,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 17:51:22 2013
+% Thu Mar 28 14:04:21 2013
 \begin{table}[!ht]
 \centering
 \caption{Common USGS Parameter Codes} 
@@ -109,7 +109,7 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 17:51:22 2013
+% Thu Mar 28 14:04:21 2013
 \begin{table}[!ht]
 \centering
 \caption{Commonly found USGS Stat Codes} 
@@ -176,7 +176,7 @@ To find out the available data at a particular USGS site, including measured par
 2        00010  00001 1988-10-01 2012-06-24   940      dv
 3        00010  00002 2010-10-01 2012-06-24   575      dv
 4        00010  00003 2010-10-01 2012-06-24   575      dv
-5        00060  00003 1948-01-01 2013-03-13 23814      dv
+5        00060  00003 1948-01-01 2013-03-27 23828      dv
 6        00095  00001 2010-10-01 2012-06-24   551      dv
 7        00095  00002 2010-10-01 2012-06-24   551      dv
 \end{Soutput}
@@ -224,7 +224,7 @@ The daily data at the Choptank River site can be displayed in a \LaTeX table usi
        caption.placement="top",include.rownames=FALSE)
 \end{Sinput}
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 17:51:27 2013
+% Thu Mar 28 14:04:26 2013
 \begin{table}[ht]
 \centering
 \caption{Daily mean data availabile at the Choptank River} 
@@ -234,7 +234,7 @@ The daily data at the Choptank River site can be displayed in a \LaTeX table usi
 shortName & Start & End & Count & Units \\ 
   \hline
 Temperature, water & 2010-10-01 & 2012-06-24 & 575 & deg C \\ 
-  Stream flow, mean. daily & 1948-01-01 & 2013-03-13 & 23814 & cfs \\ 
+  Stream flow, mean. daily & 1948-01-01 & 2013-03-27 & 23828 & cfs \\ 
   Specific conductance & 2010-10-01 & 2012-06-24 & 551 & uS/cm @25C \\ 
   Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
@@ -291,19 +291,6 @@ The dates (start and end) need to be in the format \texttt{"}YYYY-MM-DD\texttt{"
 \end{Sinput}
 \end{Schunk}
 
-A dataframe is returned that looks like the following:
-\begin{Schunk}
-\begin{Soutput}
-  agency_cd  site_no   datetime X02_00060_00003 X02_00060_00003_cd
-1      USGS 01491000 1948-01-01             190                  A
-2      USGS 01491000 1948-01-02             900                  A
-3      USGS 01491000 1948-01-03             480                  A
-4      USGS 01491000 1948-01-04             210                  A
-5      USGS 01491000 1948-01-05             210                  A
-6      USGS 01491000 1948-01-06             220                  A
-\end{Soutput}
-\end{Schunk}
-
 The variable datetime is automatically imported as a Date. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS remark codes are often \texttt{"}A\texttt{"} (approved for publication) or \texttt{"}P\texttt{"} (provisional data subject to revision). A more complete list of remark codes can be found here:
 \url{http://waterdata.usgs.gov/usa/nwis/help?codes_help}
 
@@ -316,6 +303,7 @@ Another example that doesn't use the defaults would be a request for mean and ma
 > endDate <- "2012-06-30"
 > temperatureAndFlow <- retrieveNWISData(siteNumber, parameterCd, 
          startDate, endDate, StatCd=statCd,interactive=FALSE)
+> 
 \end{Sinput}
 \end{Schunk}
 
@@ -325,13 +313,14 @@ An example of plotting the above data (Figure \ref{fig:TD}):
 
 \begin{Schunk}
 \begin{Sinput}
+> colnames <- names(temperatureAndFlow)
 > with(temperatureAndFlow, plot(
-   datetime, X01_00010_00003,
+   get(colnames[3]), get(colnames[6]),
    xlab="Date",ylab="Temperature [C]"
    ))
 > par(new=TRUE)
 > with(temperatureAndFlow, plot(
-   datetime, X02_00060_00003,
+   get(colnames[3]), get(colnames[8]),
    col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
    ))
 > axis(4,col="red",col.axis="red")
@@ -362,9 +351,9 @@ Any data that are collected at regular time intervals (such as 15-minute or hour
 \begin{Schunk}
 \begin{Sinput}
 > parameterCd <- "00060"  # Discharge (cfs)
-> startDate <- "2013-03-12" 
+> startDate <- "2012-05-12" 
 > # or use (yesterday): startDate <- as.character(Sys.Date()-1)
-> endDate <- "2013-03-13" 
+> endDate <- "2012-05-13" 
 > # or use (today):  endDate <- as.character(Sys.Date())
 > dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, 
          startDate, endDate)
@@ -373,13 +362,13 @@ Any data that are collected at regular time intervals (such as 15-minute or hour
 Which produces the following dataframe:
 \begin{Schunk}
 \begin{Soutput}
-  agency_cd  site_no            datetime tz_cd X02_00060 X02_00060_cd
-1      USGS 01491000 2013-03-12 00:00:00   EST       190            P
-2      USGS 01491000 2013-03-12 00:15:00   EST       187            P
-3      USGS 01491000 2013-03-12 00:30:00   EST       187            P
-4      USGS 01491000 2013-03-12 00:45:00   EST       187            P
-5      USGS 01491000 2013-03-12 01:00:00   EST       192            P
-6      USGS 01491000 2013-03-12 01:15:00   EST       184            P
+  agency     site            dateTime X02_00060_00011 X02_00060_00011_cd
+1   USGS 01491000 2012-05-12 00:00:00              83                  A
+2   USGS 01491000 2012-05-12 00:15:00              83                  A
+3   USGS 01491000 2012-05-12 00:30:00              83                  A
+4   USGS 01491000 2012-05-12 00:45:00              83                  A
+5   USGS 01491000 2012-05-12 01:00:00              85                  A
+6   USGS 01491000 2012-05-12 01:15:00              83                  A
 \end{Soutput}
 \end{Schunk}
 
@@ -388,11 +377,13 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 A simple plotting example is shown in Figure \ref{fig:RT}:
 \begin{Schunk}
 \begin{Sinput}
+> colnames <- names(dischargeToday)
 > with(dischargeToday, plot(
-   datetime, X02_00060,
+   get(colnames[3]), get(colnames[4]),
    ylab="Discharge [cfs]",xlab=""
    ))
 > title(ChoptankInfo$station.nm)
+> 
 \end{Sinput}
 \end{Schunk}
 \newpage
@@ -401,7 +392,7 @@ A simple plotting example is shown in Figure \ref{fig:RT}:
 \begin{center}
 \includegraphics{dataRetrieval-fig2}
 \end{center}
-\caption{Real-time discharge plot of Choptank River from March 12-13, 2013.}
+\caption{Real-time discharge plot of Choptank River from May 12-13, 2012.}
 \label{fig:RT}
 \end{figure}
 
@@ -426,8 +417,8 @@ To get USGS water quality data from water samples collected at the streamgage (a
 > names(dissolvedNitrateSimple)
 \end{Sinput}
 \begin{Soutput}
-[1] "dateTime"        "qualifier.71851" "value.71851"     "qualifier.00618"
-[5] "value.00618"    
+[1] "dateTime"        "qualifier.00618" "value.00618"     "qualifier.71851"
+[5] "value.71851"    
 \end{Soutput}
 \end{Schunk}
 Note that in this dataframe, datetime is imported as Dates (no times are included), and the qualifier is either blank or \texttt{"}\verb@<@\texttt{"} signifying a censored value. A plotting example is shown in Figure \ref{fig:nitrate}.
@@ -537,7 +528,7 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 17:51:38 2013
+% Thu Mar 28 14:04:42 2013
 \begin{tabular}{llll}
   \hline
 ColumnName & Type & Description & Units \\ 
@@ -575,7 +566,7 @@ The function to obtain sample data from the water quality portal is getSampleDat
 Details of the Sample dataframe are listed below:
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 17:51:40 2013
+% Thu Mar 28 14:04:43 2013
 \begin{table}[!ht]
 \centering
 \caption{Sample dataframe} 
@@ -612,7 +603,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 \begin{center}
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 17:51:40 2013
+% Thu Mar 28 14:04:43 2013
 \begin{tabular}{llrlrlr}
   \hline
 cdate & rdp & dp & rpp & pp & rtp & tp \\ 
@@ -750,13 +741,13 @@ Finally, there is a function called mergeReport that will look at both the Daily
 4 1979-12-05    1.40     1.40     1    1.40  47454    12 339 1979.925     1560
 5 1979-12-21    1.20     1.20     1    1.20  47470    12 355 1979.969     1560
 6 1980-01-24    0.84     0.84     1    0.84  47504     1  24 1980.064     1561
-       SinDY      CosDY         Q     LogQ
-1  0.4699767 -0.8826788  3.256437 1.180634
-2 -0.9927882 -0.1198812  3.398022 1.223193
-3 -0.9295235  0.3687629  3.199804 1.163089
-4 -0.4547551  0.8906165  2.973269 1.089662
-5 -0.1961425  0.9805754  2.944952 1.080093
-6  0.3925740  0.9197204 10.901986 2.388945
+       SinDY      CosDY        Q     LogQ
+1  0.4699767 -0.8826788 3.341388 1.206386
+2 -0.9927882 -0.1198812 4.275844 1.452981
+3 -0.9295235  0.3687629 2.944952 1.080093
+4 -0.4547551  0.8906165 3.086536 1.127050
+5 -0.1961425  0.9805754 3.058219 1.117833
+6  0.3925740  0.9197204 9.089708 2.207143
 \end{Soutput}
 \end{Schunk}
 
@@ -875,7 +866,7 @@ To then open the library, simply type:
 %------------------------------------------------------------
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 17:51:44 2013
+% Thu Mar 28 14:04:54 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -933,7 +924,7 @@ agency.cd \\
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 17:51:44 2013
+% Thu Mar 28 14:04:54 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -982,7 +973,7 @@ OrganizationIdentifier \\
 \FloatBarrier
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 14 17:51:44 2013
+% Thu Mar 28 14:04:54 2013
 \begin{tabular}{l}
   \hline
   \hline

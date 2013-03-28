@@ -3,7 +3,8 @@
 \title{Construct NWIS url for data retrieval}
 \usage{
   constructNWISURL(siteNumber, parameterCd, startDate,
-    endDate, service, statCd = "00003")
+    endDate, service, statCd = "00003",
+    interactive = FALSE)
 }
 \arguments{
   \item{siteNumber}{string or vector of strings USGS site
@@ -26,6 +27,10 @@
   values are "dv" (daily values), "uv" (unit/instantaneous
   values), "qw" (water quality data), and "wqp" (water
   quality portal, which can include STORET).}
+
+  \item{interactive}{logical Option for interactive mode.
+  If true, there is user interaction for error handling and
+  data checks.}
 }
 \value{
   url string
@@ -50,9 +55,9 @@ url_qw_single <- constructNWISURL(siteNumber,"34220",startDate,endDate,'qwdata')
 url_qw <- constructNWISURL(siteNumber,c('34247','30234','32104','34220'),startDate,endDate,'qwdata')
 url_wqp <- constructNWISURL(siteNumber,"34220",startDate,endDate,'wqp')
 }
+\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
-\keyword{USGS}
 \keyword{web}
 
