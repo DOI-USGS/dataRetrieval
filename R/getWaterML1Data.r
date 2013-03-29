@@ -28,30 +28,35 @@ getWaterML1Data <- function(obs_url){
 #     test <- capture.output(tryCatch(xmlTreeParse(content, getDTD=FALSE, useInternalNodes=TRUE),"XMLParserErrorList" = function(e) {cat("incomplete",e$message)}))
 #   }
 #   doc <- htmlTreeParse(content, getDTD=TRUE, useInternalNodes=TRUE)
-  require(XML)
-  doc <- htmlParse(obs_url)
+#   require(XML)
+  
+  doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+  doc <- xmlRoot(doc)
 
-  timeSeries <- getNodeSet(doc, "//timeseries")
+  ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  
+  timeSeries <- xpathApply(doc, "//ns1:timeSeries", namespaces = ns)
   
   for (i in 1:length(timeSeries)){
 
     chunk <- xmlDoc(timeSeries[[i]])
     chunk <- xmlRoot(chunk)
-    pCode <-as.character(xpathApply(chunk, "variable/variablecode", xmlValue))
-    statCd <- as.character(xpathApply(chunk, "variable/options/option/@optioncode"))
+    chunkNS <- xmlNamespaceDefinitions(chunk, simplify = TRUE)  
+      
+    pCode <-as.character(xpathApply(chunk, "ns1:variable/ns1:variableCode", namespaces = chunkNS, xmlValue))
+    statCd <- as.character(xpathApply(chunk, "ns1:variable/ns1:options/ns1:option/@optionCode", namespaces = chunkNS))
 
-    
     valuesIndex <- as.numeric(which("values" == names(chunk)))
 
     for (j in valuesIndex){
       subChunk <- xmlRoot(xmlDoc(chunk[[j]]))
-      methodID <- as.character(xpathSApply(subChunk, "method/@methodid"))
+      
+      methodID <- as.character(xpathSApply(subChunk, "ns1:method/@methodID", namespaces = chunkNS))
       
       methodID <- padVariable(methodID,2)
       
-      value <- as.numeric(xpathSApply(subChunk, "value", xmlValue))  
-      dateTime <- strptime(xpathSApply(subChunk, "value/@datetime"),"%Y-%m-%dT%H:%M:%S.000")
-      qualifier <- as.character(xpathSApply(subChunk, "value/@qualifiers"))
+      value <- as.numeric(xpathSApply(subChunk, "ns1:value",namespaces = chunkNS, xmlValue))  
+      dateTime <- strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S.000")
+      qualifier <- as.character(xpathSApply(subChunk, "ns1:value/@qualifiers",namespaces = chunkNS))
 
       valueName <- paste(methodID,pCode,statCd,sep="_")
       qualName <- paste(methodID,pCode,statCd,"cd",sep="_")
@@ -75,8 +80,8 @@ getWaterML1Data <- function(obs_url){
     }
   }
 
-  agencyCd <- as.character(xpathSApply(timeSeries[[1]], "sourceinfo/sitecode/@agencycode"))
-  siteNo <- as.character(xpathSApply(timeSeries[[1]], "sourceinfo/sitecode", xmlValue))
+  agencyCd <- as.character(xpathSApply(timeSeries[[1]], "ns1:sourceInfo/ns1:siteCode/@agencyCode",namespaces = chunkNS))
+  siteNo <- as.character(xpathSApply(timeSeries[[1]], "ns1:sourceInfo/ns1:siteCode",namespaces = chunkNS, xmlValue))
   
   mergedDF$agency <- rep(agencyCd, nrow(mergedDF))
   mergedDF$site <- rep(siteNo, nrow(mergedDF))
