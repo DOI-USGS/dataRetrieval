@@ -294,6 +294,7 @@ There are occasions where NWIS values are not reported as numbers, instead there
 Any data that are collected at regular time intervals (such as 15-minute or hourly) are known as \texttt{"}Unit Values\texttt{"} - many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function retrieveUnitNWISData.  Some of these Unit Values are available for the past several years, and some are only available for a recent time period such as 120 days or a year.  Here is an example of a retrieval of such data.  
 
 <<label=getNWISUnit, echo=TRUE>>=
+
 parameterCd <- "00060"  # Discharge (cfs)
 startDate <- "2012-05-12" 
 # or use (yesterday): startDate <- as.character(Sys.Date()-1)
@@ -433,7 +434,7 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 
 <<firstExample>>=
 siteNumber <- "01491000"
-startDate <- "1964-01-01"
+startDate <- "2000-01-01"
 endDate <- "2013-01-01"
 # This call will get NWIS data that is in cfs, and convert it
 # to cms since we didn't override the default in the convert argument:
@@ -592,7 +593,7 @@ Finally, there is a function called mergeReport that will look at both the Daily
 <<mergeExample>>=
 siteNumber <- "01491000"
 parameterCd <- "00631"  # Nitrate
-startDate <- "1964-01-01"
+startDate <- "2000-01-01"
 endDate <- "2013-01-01"
 
 Daily <- getDVData(siteNumber, "00060", startDate, endDate,interactive=FALSE)

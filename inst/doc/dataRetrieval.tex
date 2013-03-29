@@ -86,7 +86,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 28 14:04:21 2013
+% Fri Mar 29 11:54:02 2013
 \begin{table}[!ht]
 \centering
 \caption{Common USGS Parameter Codes} 
@@ -109,7 +109,7 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 28 14:04:21 2013
+% Fri Mar 29 11:54:02 2013
 \begin{table}[!ht]
 \centering
 \caption{Commonly found USGS Stat Codes} 
@@ -176,7 +176,7 @@ To find out the available data at a particular USGS site, including measured par
 2        00010  00001 1988-10-01 2012-06-24   940      dv
 3        00010  00002 2010-10-01 2012-06-24   575      dv
 4        00010  00003 2010-10-01 2012-06-24   575      dv
-5        00060  00003 1948-01-01 2013-03-27 23828      dv
+5        00060  00003 1948-01-01 2013-03-28 23829      dv
 6        00095  00001 2010-10-01 2012-06-24   551      dv
 7        00095  00002 2010-10-01 2012-06-24   551      dv
 \end{Soutput}
@@ -224,7 +224,7 @@ The daily data at the Choptank River site can be displayed in a \LaTeX table usi
        caption.placement="top",include.rownames=FALSE)
 \end{Sinput}
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 28 14:04:26 2013
+% Fri Mar 29 11:54:09 2013
 \begin{table}[ht]
 \centering
 \caption{Daily mean data availabile at the Choptank River} 
@@ -234,7 +234,7 @@ The daily data at the Choptank River site can be displayed in a \LaTeX table usi
 shortName & Start & End & Count & Units \\ 
   \hline
 Temperature, water & 2010-10-01 & 2012-06-24 & 575 & deg C \\ 
-  Stream flow, mean. daily & 1948-01-01 & 2013-03-27 & 23828 & cfs \\ 
+  Stream flow, mean. daily & 1948-01-01 & 2013-03-28 & 23829 & cfs \\ 
   Specific conductance & 2010-10-01 & 2012-06-24 & 551 & uS/cm @25C \\ 
   Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
@@ -517,7 +517,7 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 \begin{Schunk}
 \begin{Sinput}
 > siteNumber <- "01491000"
-> startDate <- "1964-01-01"
+> startDate <- "2000-01-01"
 > endDate <- "2013-01-01"
 > # This call will get NWIS data that is in cfs, and convert it
 > # to cms since we didn't override the default in the convert argument:
@@ -528,7 +528,7 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 28 14:04:42 2013
+% Fri Mar 29 11:54:18 2013
 \begin{tabular}{llll}
   \hline
 ColumnName & Type & Description & Units \\ 
@@ -566,7 +566,7 @@ The function to obtain sample data from the water quality portal is getSampleDat
 Details of the Sample dataframe are listed below:
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 28 14:04:43 2013
+% Fri Mar 29 11:54:19 2013
 \begin{table}[!ht]
 \centering
 \caption{Sample dataframe} 
@@ -603,7 +603,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 \begin{center}
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 28 14:04:43 2013
+% Fri Mar 29 11:54:19 2013
 \begin{tabular}{llrlrlr}
   \hline
 cdate & rdp & dp & rpp & pp & rtp & tp \\ 
@@ -715,39 +715,39 @@ Finally, there is a function called mergeReport that will look at both the Daily
 \begin{Sinput}
 > siteNumber <- "01491000"
 > parameterCd <- "00631"  # Nitrate
-> startDate <- "1964-01-01"
+> startDate <- "2000-01-01"
 > endDate <- "2013-01-01"
 > Daily <- getDVData(siteNumber, "00060", startDate, endDate,interactive=FALSE)
 > Sample <- getSampleData(siteNumber,parameterCd, startDate, endDate, interactive=FALSE)
 > Sample <- mergeReport()
 \end{Sinput}
 \begin{Soutput}
- Discharge Record is 17899 days long, which is 49 years
- First day of the discharge record is 1964-01-01 and last day is 2013-01-01
- The water quality record has 627 samples
- The first sample is from 1973-06-04 and the last sample is from 2012-12-18
- Discharge: Minimum, mean and maximum 0.00991 4.02 246
- Concentration: Minimum, mean and maximum 0.05 1.1 2.4
- Percentage of the sample values that are censored is 0.16 %
+ Discharge Record is 4750 days long, which is 13 years
+ First day of the discharge record is 2000-01-01 and last day is 2013-01-01
+ The water quality record has 220 samples
+ The first sample is from 2000-01-04 and the last sample is from 2012-12-18
+ Discharge: Minimum, mean and maximum 0.00991 4.55 246
+ Concentration: Minimum, mean and maximum 0.2 1.3 2.4
+ Percentage of the sample values that are censored is 0 %
 \end{Soutput}
 \begin{Sinput}
 > head(Sample)
 \end{Sinput}
 \begin{Soutput}
         Date ConcLow ConcHigh Uncen ConcAve Julian Month Day  DecYear MonthSeq
-1 1973-06-04    1.30     1.30     1    1.30  45079     6 155 1973.422     1482
-2 1979-09-25    0.52     0.52     1    0.52  47383     9 268 1979.731     1557
-3 1979-10-24    0.62     0.62     1    0.62  47412    10 297 1979.810     1558
-4 1979-12-05    1.40     1.40     1    1.40  47454    12 339 1979.925     1560
-5 1979-12-21    1.20     1.20     1    1.20  47470    12 355 1979.969     1560
-6 1980-01-24    0.84     0.84     1    0.84  47504     1  24 1980.064     1561
-       SinDY      CosDY        Q     LogQ
-1  0.4699767 -0.8826788 3.341388 1.206386
-2 -0.9927882 -0.1198812 4.275844 1.452981
-3 -0.9295235  0.3687629 2.944952 1.080093
-4 -0.4547551  0.8906165 3.086536 1.127050
-5 -0.1961425  0.9805754 3.058219 1.117833
-6  0.3925740  0.9197204 9.089708 2.207143
+1 2000-01-04    1.59     1.59     1    1.59  54789     1   4 2000.010     1801
+2 2000-02-03    1.54     1.54     1    1.54  54819     2  34 2000.092     1802
+3 2000-02-15    1.37     1.37     1    1.37  54831     2  46 2000.124     1802
+4 2000-02-19    1.24     1.24     1    1.24  54835     2  50 2000.135     1802
+5 2000-03-23    0.52     0.52     1    0.52  54868     3  83 2000.225     1803
+6 2000-06-05    1.11     1.11     1    1.11  54942     6 157 2000.428     1806
+       SinDY      CosDY         Q      LogQ
+1 0.06004896  0.9981954  2.746734 1.0104126
+2 0.54391895  0.8391378  3.936042 1.3701756
+3 0.70406552  0.7101350 10.845352 2.3837366
+4 0.75113193  0.6601521 15.517632 2.7419769
+5 0.98808790  0.1538906 56.916861 4.0415916
+6 0.43939951 -0.8982918  1.812278 0.5945847
 \end{Soutput}
 \end{Schunk}
 
@@ -803,10 +803,11 @@ To see the raw code for a particular code, type the name of the function:
 > removeDuplicates
 \end{Sinput}
 \begin{Soutput}
-function(localSample=Sample) {  
-  Sample1 <- localSample[!duplicated(localSample[c("DecYear","ConcHigh")]),]
-  
-  return(Sample1)
+function (localSample = Sample) 
+{
+    Sample1 <- localSample[!duplicated(localSample[c("DecYear", 
+        "ConcHigh")]), ]
+    return(Sample1)
 }
 <environment: namespace:dataRetrieval>
 \end{Soutput}
@@ -866,7 +867,7 @@ To then open the library, simply type:
 %------------------------------------------------------------
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 28 14:04:54 2013
+% Fri Mar 29 11:54:22 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -924,7 +925,7 @@ agency.cd \\
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 28 14:04:54 2013
+% Fri Mar 29 11:54:23 2013
 \begin{tabular}{l}
   \hline
   \hline
@@ -973,7 +974,7 @@ OrganizationIdentifier \\
 \FloatBarrier
 
 % latex table generated in R 2.15.3 by xtable 1.7-1 package
-% Thu Mar 28 14:04:54 2013
+% Fri Mar 29 11:54:23 2013
 \begin{tabular}{l}
   \hline
   \hline
