@@ -26,6 +26,7 @@ retrieveNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,StatCd="0
   
   url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"dv",StatCd)
   data <- getWaterML1Data(url)
+  data$dateTime <- as.Date(data$dateTime)
 
   return (data)
 }
