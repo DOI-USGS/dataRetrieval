@@ -126,7 +126,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
           if (nzchar(startDate)) {
             url <- paste(url,"&startDT=",startDate,sep="")
           } else {
-            url <- paste(url,"&startDT=","1851-01-01",sep="")
+            url <- paste(url,"&startDT=","1900-01-01",sep="")
           }
           
           if (nzchar(endDate)) {
