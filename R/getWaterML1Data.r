@@ -1,11 +1,10 @@
 #' Function to return data from the NWISWeb WaterML1.1 daily values service
 #'
 #' This function accepts a url parameter that already contains the desired
-#' NWIS site, parameter code, statistic, startdate and enddate. It returns a
-#' data frame containing "Date" and "Discharge"
+#' NWIS site, parameter code, statistic, startdate and enddate. 
 #'
 #' @param obs_url string containing the url for the retrieval
-#' @return Daily a data frame containing columns 'Date' and 'Discharge'
+#' @return mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
 #' @export
 #' @examples
 #' url <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
