@@ -9,6 +9,9 @@
 #' @param StartDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param EndDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
+#' @param format string, can be "tsv" or "xml", and is only applicable for daily and unit value requests.  "tsv" returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower, 
+#' but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
+#' but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml". 
 #' @keywords data import USGS web service
 #' @return data dataframe with agency, site, dateTime, time zone, value, and code columns
 #' @export
@@ -19,10 +22,15 @@
 #' EndDate <- as.character(Sys.Date())
 #' # These examples require an internet connection to run
 #' rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
-retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){  
+#' rawData2 <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,"tsv",interactive=FALSE)
+retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,format="xml",interactive=TRUE){  
   
-  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"uv")
-  data <- getWaterML1Data(url)
+  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"uv",format=format)
+  if (format == "xml") {
+    data <- getWaterML1Data(url)
+  } else {
+    data <- getRDB1Data(url,asDateTime=TRUE)
+  }
 
   return (data)
 }

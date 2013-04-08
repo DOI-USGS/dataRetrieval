@@ -54,6 +54,7 @@ Collate:
     'getMultipleParameterNames.r'
     'getWaterML1Data.r'
     'padVariable.r'
+    'getRDB1Data.r'
 Depends:
     R (>= 2.15.0),
     XML,

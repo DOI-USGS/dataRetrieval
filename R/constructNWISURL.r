@@ -27,6 +27,7 @@
 #' url_qw_single <- constructNWISURL(siteNumber,"01075",startDate,endDate,'qw')
 #' url_qw <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDate,'qw')
 #' url_wqp <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDate,'wqp')
+#' url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',statCd=c("00003","00001"),format="tsv")
 constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,statCd="00003", format="xml",interactive=FALSE){
 
   startDate <- formatCheckDate(startDate, "StartDate", interactive=interactive)
@@ -113,23 +114,32 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
           }
           
           if ("uv"==service) service <- "iv"
+          
+          if ("xml"==format){ 
+            format <- "waterml,1.1"
+          } else if ("tsv" == format){
+            format <- "rdb,1.0"
+          } else {
+            warning("non-supported format requested, please choose xml or tsv")
+          }
              
           baseURL <- paste("http://waterservices.usgs.gov/nwis/",service,sep="")  
           
-          url <- paste(baseURL,"/?site=",siteNumber, "&ParameterCd=",parameterCd, "&format=waterml,1.1", sep = "")
+          url <- paste(baseURL,"/?site=",siteNumber, "&ParameterCd=",parameterCd, "&format=", format, sep = "")
           
           if("dv"==service) {
             if(length(statCd) > 1){
               statCd <- paste(statCd, collapse=",")
             }            
-            
             url <- paste(url, "&StatCd=", statCd, sep = "")
           }
           
           if (nzchar(startDate)) {
             url <- paste(url,"&startDT=",startDate,sep="")
           } else {
-            url <- paste(url,"&startDT=","1900-01-01",sep="")
+            startorgin <- "1850-01-01"
+            if ("uv" == service) startorgin <- "1900-01-01"            
+            url <- paste(url,"&startDT=",startorgin,sep="")
           }
           
           if (nzchar(endDate)) {

@@ -19,7 +19,7 @@
 #' multiData <- getWaterML1Data(urlMulti)
 getWaterML1Data <- function(obs_url){
 
-  # This is more elegent, but requires yet another package dependency RCurl
+  # This is more elegent, but requires yet another package dependency RCurl...which I now require for wqp
 #   content <- getURLContent(obs_url,.opts=list(timeout.ms=500000))
 #   test <- capture.output(tryCatch(xmlTreeParse(content, getDTD=FALSE, useInternalNodes=TRUE),"XMLParserErrorList" = function(e) {cat("incomplete",e$message)}))
 #   while (length(grep("<?xml",test))==0) {
