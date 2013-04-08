@@ -56,7 +56,8 @@ Collate:
     'padVariable.r'
 Depends:
     R (>= 2.15.0),
-    XML
+    XML,
+    RCurl
 Imports:
     zoo
 Suggests:

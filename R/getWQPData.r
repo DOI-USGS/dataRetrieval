@@ -45,23 +45,15 @@ getWQPData <- function(siteNumber,characteristicName,StartDate,EndDate,interacti
                "&startDateHi=",
                EndDate,
                "&countrycode=US&mimeType=tsv",sep = "")
+  h <- basicHeaderGatherer()
+  doc <- getURI(url, headerfunction = h$update)
+  numToBeReturned <- as.numeric(h$value()["Total-Result-Count"])
   
   suppressWarnings(retval <- read.delim(url, header = TRUE, quote="\"", dec=".", sep='\t', colClasses=c('character'), fill = TRUE))
   
-  qualifier <- ifelse((
-    (
-      retval$ResultDetectionConditionText == "Not Detected"
-      & length(grep("Lower", retval$DetectionQuantitationLimitTypeName)) > 0
-    )
-    | 
-      (
-        retval$ResultMeasureValue < retval$DetectionQuantitationLimitMeasure.MeasureValue
-        & retval$ResultValueTypeName == "Actual"
-      )
-  ),
-                      "<",
-                      ""
-  )
+  qualifier <- ifelse((retval$ResultDetectionConditionText == "Not Detected" | 
+                         retval$ResultDetectionConditionText == "Detected Not Quantified" |
+                         retval$ResultMeasureValue < retval$DetectionQuantitationLimitMeasure.MeasureValue),"<","")
   
   correctedData<-ifelse((nchar(qualifier)==0),retval$ResultMeasureValue,retval$DetectionQuantitationLimitMeasure.MeasureValue)
   test <- data.frame(retval$CharacteristicName)
@@ -70,6 +62,9 @@ getWQPData <- function(siteNumber,characteristicName,StartDate,EndDate,interacti
   test$dateTime <- as.Date(retval$ActivityStartDate, "%Y-%m-%d")
   
   originalLength <- nrow(test)
+  
+  if(originalLength != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", originalLength, " were returned")
+  
   test$qualifier <- qualifier
   test$value <- as.numeric(correctedData)
   
@@ -85,5 +80,6 @@ getWQPData <- function(siteNumber,characteristicName,StartDate,EndDate,interacti
   data <- reshape(test, idvar="dateTime", timevar = "CharacteristicName", direction="wide")    
   data$dateTime <- format(data$dateTime, "%Y-%m-%d")
   data$dateTime <- as.Date(data$dateTime)
+  
   return(data)
 }
