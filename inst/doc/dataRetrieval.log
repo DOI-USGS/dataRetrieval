@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  29 MAR 2013 11:54
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  8 APR 2013 10:10
 entering extended mode
 **dataRetrieval.tex
 (D:\LADData\RCode\dataRetrieval\inst\doc\dataRetrieval.tex
@@ -246,7 +246,7 @@ Package: footnote 1997/01/28 1.13 Save footnotes around boxes
 (C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\placeins\placeins.sty
 Package: placeins 2005/04/18  v 2.2
 )
-(C:/PROGRA~1/R/R-215~1.3/share/texmf/tex/latex\Sweave.sty
+(C:/PROGRA~1/R/R-30~1.0/share/texmf/tex/latex\Sweave.sty
 Package: Sweave 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ifthen.sty"
@@ -545,7 +545,7 @@ e-ter codes, a \T1/aett/m/n/10.95 "\T1/aer/m/n/10.95 characteristic
 
 LaTeX Font Info:    Try loading font information for TS1+aett on input line 454
 .
-(C:/PROGRA~1/R/R-215~1.3/share/texmf/tex/latex\ts1aett.fd
+(C:/PROGRA~1/R/R-30~1.0/share/texmf/tex/latex\ts1aett.fd
 File: ts1aett.fd 
 )
 LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 454
@@ -671,7 +671,7 @@ Package rerunfilecheck Info: File `dataRetrieval.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  7545 strings out of 494045
- 108393 string characters out of 3145961
+ 108388 string characters out of 3145961
  194722 words of memory out of 3000000
  10596 multiletter control sequences out of 15000+200000
  45443 words of font info for 92 fonts, out of 3000000 for 9000
@@ -691,7 +691,7 @@ Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program File
 s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsltt10.pfb><C:/Program File
 s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files 
 (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on dataRetrieval.pdf (29 pages, 396461 bytes).
+Output written on dataRetrieval.pdf (29 pages, 396695 bytes).
 PDF statistics:
  451 PDF objects out of 1000 (max. 8388607)
  83 named destinations out of 1000 (max. 500000)
