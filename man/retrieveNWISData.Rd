@@ -3,7 +3,8 @@
 \title{Raw Data Import for USGS NWIS Data}
 \usage{
   retrieveNWISData(siteNumber, ParameterCd, StartDate,
-    EndDate, StatCd = "00003", interactive = TRUE)
+    EndDate, StatCd = "00003", format = "xml",
+    interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string USGS site number.  This is
@@ -20,6 +21,17 @@
 
   \item{StatCd}{string USGS statistic code. This is usually
   5 digits.  Daily mean (00003) is the default.}
+
+  \item{format}{string, can be "tsv" or "xml", and is only
+  applicable for daily and unit value requests.  "tsv"
+  returns results faster, but there is a possiblitiy that
+  an incomplete file is returned without warning. XML is
+  slower, but will offer a warning if the file was
+  incomplete (for example, if there was a momentary problem
+  with the internet connection). It is possible to safely
+  use the "tsv" option, but the user must carefully check
+  the results to see if the data returns matches what is
+  expected. The default is therefore "xml".}
 
   \item{interactive}{logical Option for interactive mode.
   If true, there is user interaction for error handling and
@@ -45,11 +57,12 @@ endDate <- '2012-06-30'
 pCode <- "00060"
 rawDailyQ <- retrieveNWISData(siteNumber,pCode, startDate, endDate)
 rawDailyTemperature <- retrieveNWISData(siteNumber,'00010', startDate, endDate, StatCd='00001',interactive=FALSE)
+rawDailyTemperatureTSV <- retrieveNWISData(siteNumber,'00010', startDate, endDate, StatCd='00001',format="tsv",interactive=FALSE)
 rawDailyQAndTempMeanMax <- retrieveNWISData(siteNumber,c('00010','00060'), startDate, endDate, StatCd=c('00001','00003'), interactive=FALSE)
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 

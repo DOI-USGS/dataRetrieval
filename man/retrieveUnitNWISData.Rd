@@ -3,7 +3,7 @@
 \title{Raw Data Import for Instantaneous USGS NWIS Data}
 \usage{
   retrieveUnitNWISData(siteNumber, ParameterCd, StartDate,
-    EndDate, interactive = TRUE)
+    EndDate, format = "xml", interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string USGS site number.  This is
@@ -21,6 +21,17 @@
   \item{interactive}{logical Option for interactive mode.
   If true, there is user interaction for error handling and
   data checks.}
+
+  \item{format}{string, can be "tsv" or "xml", and is only
+  applicable for daily and unit value requests.  "tsv"
+  returns results faster, but there is a possiblitiy that
+  an incomplete file is returned without warning. XML is
+  slower, but will offer a warning if the file was
+  incomplete (for example, if there was a momentary problem
+  with the internet connection). It is possible to safely
+  use the "tsv" option, but the user must carefully check
+  the results to see if the data returns matches what is
+  expected. The default is therefore "xml".}
 }
 \value{
   data dataframe with agency, site, dateTime, time zone,
@@ -41,10 +52,11 @@ StartDate <- as.character(Sys.Date())
 EndDate <- as.character(Sys.Date())
 # These examples require an internet connection to run
 rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
+rawData2 <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,"tsv",interactive=FALSE)
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 

@@ -3,7 +3,7 @@
 \title{Construct NWIS url for data retrieval}
 \usage{
   constructNWISURL(siteNumber, parameterCd, startDate,
-    endDate, service, statCd = "00003",
+    endDate, service, statCd = "00003", format = "xml",
     interactive = FALSE)
 }
 \arguments{
@@ -28,6 +28,17 @@
   values), "qw" (water quality data), and "wqp" (water
   quality portal, which can include STORET).}
 
+  \item{format}{string, can be "tsv" or "xml", and is only
+  applicable for daily and unit value requests.  "tsv"
+  returns results faster, but there is a possiblitiy that
+  an incomplete file is returned without warning. XML is
+  slower, but will offer a warning if the file was
+  incomplete (for example, if there was a momentary problem
+  with the internet connection). It is possible to safely
+  use the "tsv" option, but the user must carefully check
+  the results to see if the data returns matches what is
+  expected. The default is therefore "xml".}
+
   \item{interactive}{logical Option for interactive mode.
   If true, there is user interaction for error handling and
   data checks.}
@@ -45,19 +56,20 @@
   \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 }
 \examples{
-siteNumber <- '04085427'
-startDate <- '2012-01-01'
-endDate <- '2012-06-30'
+siteNumber <- '01594440'
+startDate <- '1985-01-01'
+endDate <- ''
 pCode <- c("00060","00010")
 url_daily <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',statCd=c("00003","00001"))
-url_unit <- constructNWISURL(siteNumber,pCode,startDate,endDate,'iv')
-url_qw_single <- constructNWISURL(siteNumber,"34220",startDate,endDate,'qwdata')
-url_qw <- constructNWISURL(siteNumber,c('34247','30234','32104','34220'),startDate,endDate,'qwdata')
-url_wqp <- constructNWISURL(siteNumber,"34220",startDate,endDate,'wqp')
+url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
+url_qw_single <- constructNWISURL(siteNumber,"01075",startDate,endDate,'qw')
+url_qw <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDate,'qw')
+url_wqp <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDate,'wqp')
+url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',statCd=c("00003","00001"),format="tsv")
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 
