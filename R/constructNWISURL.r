@@ -10,21 +10,24 @@
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param statCd string or vector USGS statistic code only used for daily value service. This is usually 5 digits.  Daily mean (00003) is the default.
 #' @param service string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), "qw" (water quality data), and "wqp" (water quality portal, which can include STORET).
+#' @param format string, can be "tsv" or "xml", and is only applicable for daily and unit value requests.  "tsv" returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower, 
+#' but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
+#' but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml". 
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
 #' @examples
-#' siteNumber <- '04085427'
-#' startDate <- '2012-01-01'
-#' endDate <- '2012-06-30'
+#' siteNumber <- '01594440'
+#' startDate <- '1985-01-01'
+#' endDate <- ''
 #' pCode <- c("00060","00010")
 #' url_daily <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',statCd=c("00003","00001"))
-#' url_unit <- constructNWISURL(siteNumber,pCode,startDate,endDate,'iv')
-#' url_qw_single <- constructNWISURL(siteNumber,"34220",startDate,endDate,'qwdata')
-#' url_qw <- constructNWISURL(siteNumber,c('34247','30234','32104','34220'),startDate,endDate,'qwdata')
-#' url_wqp <- constructNWISURL(siteNumber,"34220",startDate,endDate,'wqp')
-constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,statCd="00003",interactive=FALSE){
+#' url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
+#' url_qw_single <- constructNWISURL(siteNumber,"01075",startDate,endDate,'qw')
+#' url_qw <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDate,'qw')
+#' url_wqp <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDate,'wqp')
+constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,statCd="00003", format="xml",interactive=FALSE){
 
   startDate <- formatCheckDate(startDate, "StartDate", interactive=interactive)
   endDate <- formatCheckDate(endDate, "EndDate", interactive=interactive)
