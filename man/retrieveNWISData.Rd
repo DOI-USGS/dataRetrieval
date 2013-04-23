@@ -3,7 +3,7 @@
 \title{Raw Data Import for USGS NWIS Data}
 \usage{
   retrieveNWISData(siteNumber, ParameterCd, StartDate,
-    EndDate, StatCd = "00003", format = "xml",
+    EndDate, StatCd = "00003", format = "tsv",
     interactive = TRUE)
 }
 \arguments{
@@ -31,7 +31,7 @@
   with the internet connection). It is possible to safely
   use the "tsv" option, but the user must carefully check
   the results to see if the data returns matches what is
-  expected. The default is therefore "xml".}
+  expected. The default is "tsv".}
 
   \item{interactive}{logical Option for interactive mode.
   If true, there is user interaction for error handling and
@@ -60,9 +60,9 @@ rawDailyTemperature <- retrieveNWISData(siteNumber,'00010', startDate, endDate, 
 rawDailyTemperatureTSV <- retrieveNWISData(siteNumber,'00010', startDate, endDate, StatCd='00001',format="tsv",interactive=FALSE)
 rawDailyQAndTempMeanMax <- retrieveNWISData(siteNumber,c('00010','00060'), startDate, endDate, StatCd=c('00001','00003'), interactive=FALSE)
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 
