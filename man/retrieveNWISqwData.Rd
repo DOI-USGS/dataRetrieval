@@ -44,9 +44,9 @@ data$dateTime <- as.Date(data$dateTime)
 compressedData <- compressData(data, interactive=interactive)
 Sample <- populateSampleColumns(compressedData)
 }
+\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
-\keyword{USGS}
 \keyword{web}
 

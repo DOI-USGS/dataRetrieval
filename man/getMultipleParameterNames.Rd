@@ -28,9 +28,9 @@
 # These examples require an internet connection to run
 availableData <- getMultipleParameterNames(c("00060", "00065", "00010"),interactive=FALSE)
 }
+\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
-\keyword{USGS}
 \keyword{web}
 

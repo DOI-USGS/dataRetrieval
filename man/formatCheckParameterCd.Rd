@@ -23,6 +23,6 @@
 pCode <- '01234'
 formatCheckParameterCd(pCode, interactive = FALSE)
 }
-\keyword{flow}
 \keyword{WRTDS}
+\keyword{flow}
 

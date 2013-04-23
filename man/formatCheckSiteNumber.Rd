@@ -22,6 +22,6 @@
 site<- '01234567'
 formatCheckSiteNumber(site, interactive = FALSE)
 }
-\keyword{flow}
 \keyword{WRTDS}
+\keyword{flow}
 
