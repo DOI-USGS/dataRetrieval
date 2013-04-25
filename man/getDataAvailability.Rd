@@ -31,9 +31,9 @@
 # These examples require an internet connection to run
 availableData <- getDataAvailability('05114000',interactive=FALSE)
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 

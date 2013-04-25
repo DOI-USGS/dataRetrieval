@@ -40,9 +40,9 @@ filePath <-  '~/RData/'  # Sample format
 fileName <- 'ChoptankRiverFlow.txt'
 \dontrun{getDailyDataFromFile(filePath,fileName,separator="\\t")}
 }
-\keyword{USGS}
-\keyword{WRTDS}
 \keyword{data}
 \keyword{file}
 \keyword{import}
+\keyword{USGS}
+\keyword{WRTDS}
 

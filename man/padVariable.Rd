@@ -20,9 +20,9 @@
 pCode <- '10'
 correctPCode <- padVariable(pCode,5)
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 

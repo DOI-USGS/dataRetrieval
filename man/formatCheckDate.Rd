@@ -27,6 +27,6 @@ Date <- '1985-01-01'
 dateString <- 'StartDate'
 formatCheckDate(Date, dateString, interactive = FALSE)
 }
-\keyword{WRTDS}
 \keyword{flow}
+\keyword{WRTDS}
 

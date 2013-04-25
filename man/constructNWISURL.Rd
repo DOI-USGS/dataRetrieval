@@ -67,9 +67,9 @@ url_qw <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDa
 url_wqp <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDate,'wqp')
 url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',statCd=c("00003","00001"),format="tsv")
 }
-\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
+\keyword{USGS}
 \keyword{web}
 
