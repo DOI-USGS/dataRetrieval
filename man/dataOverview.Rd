@@ -21,8 +21,8 @@ dataOverview(localDaily = exDaily, localSample = exSample)
 \seealso{
   \code{\link{mergeReport}}
 }
-\keyword{data}
-\keyword{import}
 \keyword{USGS}
 \keyword{WRTDS}
+\keyword{data}
+\keyword{import}
 
