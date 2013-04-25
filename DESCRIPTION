@@ -56,11 +56,11 @@ Collate:
     'padVariable.r'
     'getRDB1Data.r'
 Depends:
-    R (>= 2.15.0),
+    R (>= 2.15.0)
+Imports:
+    zoo,
     XML,
     RCurl
-Imports:
-    zoo
 Suggests:
     xtable,
     EGRET
