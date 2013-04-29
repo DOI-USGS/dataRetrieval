@@ -21,7 +21,7 @@
 getRawQWData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
 
   url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"wqp")
-  require(RCurl)
+#   require(RCurl)
   h <- basicHeaderGatherer()
   doc <- getURI(url, headerfunction = h$update)
   numToBeReturned <- as.numeric(h$value()["Total-Result-Count"])

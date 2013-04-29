@@ -18,7 +18,7 @@
 #' Daily <- populateDaily(dataInput, 2, interactive=FALSE)
 populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a dataframe with at least dateTime, value, code
   
-  require(zoo)
+#   require(zoo)
   
   localDaily <- as.data.frame(matrix(ncol=2,nrow=length(rawData$value)))
   colnames(localDaily) <- c('Date','Q')

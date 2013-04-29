@@ -27,7 +27,7 @@ getWaterML1Data <- function(obs_url){
 #     test <- capture.output(tryCatch(xmlTreeParse(content, getDTD=FALSE, useInternalNodes=TRUE),"XMLParserErrorList" = function(e) {cat("incomplete",e$message)}))
 #   }
 #   doc <- htmlTreeParse(content, getDTD=TRUE, useInternalNodes=TRUE)
-  require(XML)
+#   require(XML)
   
   doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
   doc <- xmlRoot(doc)
