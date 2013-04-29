@@ -19,6 +19,8 @@
 #' getWQPData('WIDNR_WQX-10032762','Specific conductance', '', '')
 getWQPData <- function(siteNumber,characteristicName,StartDate,EndDate,interactive=TRUE){
 
+  require(RCurl)
+  
   StartDate <- formatCheckDate(StartDate, "StartDate", interactive=interactive)
   EndDate <- formatCheckDate(EndDate, "EndDate", interactive=interactive)
   
