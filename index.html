@@ -47,9 +47,9 @@ Once you have set up your R enviornment, you can follow the directions <a href="
 </p>
 
 <h4> - R User?</h4>
-<p>To install the downloaded package, first install the required zoo package from CRAN,then install the dataRetrieval package:</p>
+<p>To install the downloaded package, first install the required zoo, XML, and RCurl packages from CRAN,then install the dataRetrieval package:</p>
 <pre><code>
-install.packages("zoo")
+install.packages(c("zoo","XML","RCurl"))
 install.packages("dataRetrieval", repos="http://usgs-r.github.com", type="source")
 </code></pre>
 
