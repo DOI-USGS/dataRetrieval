@@ -13,6 +13,7 @@
 #' @return retval dataframe with first column dateTime, and at least one qualifier and value columns
 #' (subsequent qualifier/value columns could follow depending on requested parameter codes)
 #' @export
+#' @import RCurl
 #' @examples
 #' # These examples require an internet connection to run
 #' getWQPData('USGS-01594440','Chloride', '', '')

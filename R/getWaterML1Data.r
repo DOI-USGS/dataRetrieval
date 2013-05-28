@@ -6,6 +6,7 @@
 #' @param obs_url string containing the url for the retrieval
 #' @return mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
 #' @export
+#' @import XML
 #' @examples
 #' url <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
 #' sites <- "02177000"
