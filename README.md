@@ -40,7 +40,7 @@ Package Installation
 ---------------------------------
 While the dataRetreival package is in development (and not on CRAN), the zoo package must first be manually installed. To install the dataRetrieval package:
 
-	install.packages("zoo")
+	install.packages(c("zoo","XML","RCurl))
 	install.packages("dataRetrieval", repos="http://usgs-r.github.com", type="source")
 	
 ### Note on updating versions:
