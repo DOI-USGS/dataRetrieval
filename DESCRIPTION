@@ -63,6 +63,8 @@ Imports:
     RCurl
 Suggests:
     xtable,
-    EGRET
+    EGRET,
+    knitr
 LazyLoad: yes
 LazyData: yes
+VignetteBuilder: knitr

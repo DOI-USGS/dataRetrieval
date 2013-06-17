@@ -1,8 +1,9 @@
 %\VignetteIndexEntry{Introduction to the dataRetrieval package}
+%\VignetteEngine{knitr::knitr}
 %\VignetteDepends{}
-%\VignetteSuggests{}
-%\VignetteImports{}
-%\VignettePackage{}
+%\VignetteSuggests{xtable,EGRET}
+%\VignetteImports{zoo, XML, RCurl}
+%\VignettePackage{dataRetrieval}
 
 \documentclass[a4paper,11pt]{article}
 
@@ -12,10 +13,12 @@
 \usepackage[numbers, round]{natbib}
 \usepackage[american]{babel}
 \usepackage{authblk}
-\usepackage{footnote}
+\usepackage{subfig}
 \usepackage{placeins}
+\usepackage{footnote}
+\usepackage{tabularx}
 \renewcommand\Affilfont{\itshape\small}
-\usepackage{Sweave}
+
 \renewcommand{\topfraction}{0.85}
 \renewcommand{\textfraction}{0.1}
 \usepackage{graphicx}
@@ -42,7 +45,16 @@
 \newcommand{\Rfunarg}[1]{{\texttt{#1}}}
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+
+
+<<openLibrary, echo=FALSE>>=
+library(xtable)
+options(continue=" ")
+options(width=60)
+library(knitr)
+
+@
+
 
 %------------------------------------------------------------
 \title{The dataRetrieval R package}
@@ -51,7 +63,14 @@
 \author[1]{Robert Hirsch}
 \affil[1]{United States Geological Survey}
 
-\SweaveOpts{highlight=TRUE, tidy=TRUE, keep.space=TRUE, keep.blank.space=FALSE, keep.comment=TRUE, keep.source=TRUE}
+
+<<include=TRUE ,echo=FALSE,eval=TRUE>>=
+opts_chunk$set(highlight=TRUE, tidy=TRUE, keep.space=TRUE, keep.blank.space=FALSE, keep.comment=TRUE, tidy=FALSE)
+knit_hooks$set(inline = function(x) {
+   if (is.numeric(x)) round(x, 3)})
+knit_hooks$set(crop = hook_pdfcrop)
+@
+
 
 \maketitle
 \tableofcontents
@@ -77,31 +96,20 @@ In this section, we will run through 5 examples, documenting how to get raw data
 %------------------------------------------------------------
 The United States Geological Survey organizes their hydrological data in standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discoving this 8-digit ID. One potential tool for discovering data is Environmental Data Discovery and Transformation (EnDDaT): \url{http://cida.usgs.gov/enddat/}.  Follow the example on the EnDDaT web page to learn how to discover USGS stations and available data from any location in the United States. 
 
-Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured paramater is being requested.  A complete list of possible USGS parameter codes can be found at:
-
-\url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&pm_search=&casrn_search=&srsname_search=&format=html_table&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}
+Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured paramater is being requested.  A complete list of possible USGS parameter codes can be found at \url{http://go.usa.gov/bVDz}.
 
 Not every station will measure all parameters. A short list of commonly measured parameters is shown in Table \ref{tab:params}.
 
-<<openLibrary, echo=FALSE>>=
-library(xtable)
-options(continue=" ")
-# options(width=60)
-# options(SweaveHooks=list(fig=function()
-#   par(mar=c(4.1,4.1,1.1,4.1),oma=c(0,0,0,0))))
-@
 
-
-<<label=tableParameterCodes, echo=FALSE,results=tex>>=
+<<tableParameterCodes, echo=FALSE,results='asis'>>=
 pCode <- c('00060', '00065', '00010','00045','00400')
 shortName <- c("Discharge [cfs]","Gage height [ft]","Temperature [C]", "Precipitation [in]", "pH")
 
 data.df <- data.frame(pCode, shortName, stringsAsFactors=FALSE)
 
-data.table <- xtable(data.df,label="tab:params",
+xtable(data.df,label="tab:params",
                      caption="Common USGS Parameter Codes")
-print(data.table,
-      caption.placement="top",include.rownames=FALSE, table.placement="!ht")
+
 @
 
 For real-time data, the parameter code and site ID will suffice.  For most variables that are measured on a continuous basis, the USGS stores the historical data as daily values.  These daily values may be in the form of statistics such as the daily mean values, but they can also include daily maximums, minimums or medians.  These different statistics are specified by a 5-digit \texttt{"}stat code\texttt{"}.  A complete list of stat codes can be found here:
@@ -109,19 +117,19 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 
 Some common stat codes are shown in Table \ref{tab:stat}.
-<<label=tableStatCodes, echo=FALSE,results=tex>>=
+<<tableStatCodes, echo=FALSE,results='asis'>>=
 StatCode <- c('00001', '00002', '00003','00008')
 shortName <- c("Maximum","Minimum","Mean", "Median")
 
 data.df <- data.frame(StatCode, shortName, stringsAsFactors=FALSE)
 
-data.table <- xtable(data.df,label="tab:stat",
+xtable(data.df,label="tab:stat",
                      caption="Commonly found USGS Stat Codes")
-print(data.table, 
-      caption.placement="top",include.rownames=FALSE, table.placement="!ht")
+
 @
 
 \FloatBarrier
+
 %------------------------------------------------------------
 \subsection{Site Information}
 \label{sec:usgsSite}
@@ -134,7 +142,7 @@ print(data.table,
 Use the getSiteFileData function to obtain all of the information available for a particular USGS site such as full station name, drainage area, latitude, and longitude:
 
 
-<<label=getSite, echo=TRUE>>=
+<<getSite, echo=TRUE>>=
 library(dataRetrieval)
 # Site ID for Choptank River near Greensboro, MD
 siteNumber <- "01491000" 
@@ -143,18 +151,19 @@ ChoptankInfo <- getSiteFileData(siteNumber)
 
 A list of the available columns are found in Appendix \ref{sec:appendix2INFO}: INFO dataframe. Pulling out a specific example piece of information, in this case station name can be done as follows:
 
-<<siteNames, echo=TRUE>>=
+<<siteNames2, echo=TRUE>>=
 ChoptankInfo$station.nm
 @
 Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
 \FloatBarrier
+
 %------------------------------------------------------------
 \subsubsection{getDataAvailability}
 \label{sec:usgsDataAvailability}
 %------------------------------------------------------------
 To find out the available data at a particular USGS site, including measured parameters, period of record, and number of samples (count), use the getDataAvailability function:
 
-<<label=getSiteAvailability, echo=TRUE>>=
+<<getSiteAvailability, echo=TRUE>>=
 # Continuing from the previous example:
 ChoptankAvailableData <- getDataAvailability(siteNumber)
 head(ChoptankAvailableData)
@@ -165,24 +174,28 @@ There is an additional argument to the getDataAvailability called longNames, whi
 It is also possible to only request parameter information for a subset of variables. In the following example, we retrieve just the daily mean parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values). getMultipleParameterNames is the function that is embedded in the getDataAvailability, but here can be used as a standalone function.
 
 
-<<label=getSiteExtended, echo=TRUE>>=
+<<getSiteExtended, echo=TRUE>>=
 # Continuing from the previous example:
 # This pulls out just the daily data:
-ChoptankDailyData <- subset(ChoptankAvailableData,"dv" == service)
+ChoptankDailyData <- subset(ChoptankAvailableData,
+                            "dv" == service)
 
 # This pulls out the mean:
-ChoptankDailyData <- subset(ChoptankDailyData,"00003" == statCd)
+ChoptankDailyData <- subset(ChoptankDailyData,
+                            "00003" == statCd)
 
 #Now, make a call to get all of the parameter information:
-pCodeINFO <- getMultipleParameterNames(ChoptankDailyData$parameter_cd)
+pCodeINFO <- getMultipleParameterNames(
+  ChoptankDailyData$parameter_cd)
 
-#Merge the available dataframe with the parameter information dataframe:
-ChoptankDailyData <- merge(ChoptankDailyData,pCodeINFO,by="parameter_cd")
+#Merge the available dataframes:
+ChoptankDailyData <- merge(ChoptankDailyData,
+                           pCodeINFO,by="parameter_cd")
 @
 
 The daily data at the Choptank River site can be displayed in a \LaTeX table using the xtable package. See Appendix \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft Excel or Word.
 
-<<label=tablegda, echo=TRUE,results=tex>>=
+<<tablegda, echo=TRUE,results='asis'>>=
 tableData <- with(ChoptankDailyData, 
       data.frame(shortName=srsname, 
       Start=as.character(startDate), 
@@ -192,20 +205,20 @@ tableData <- with(ChoptankDailyData,
       )
 
 
-data.table <- xtable(tableData,label="tab:gda",
+xtable(tableData,label="tab:gda",
     caption="Daily mean data availabile at the Choptank River")
-print(data.table, 
-      caption.placement="top",include.rownames=FALSE)
+
 @
 
 
 \FloatBarrier
+
 %------------------------------------------------------------
 \subsection{Parameter Information}
 \label{sec:usgsParams}
 %------------------------------------------------------------
 To obtain all of the available information concerning a measured parameter, use the getParameterInfo function:
-<<label=getSite, echo=TRUE>>=
+<<label=getPCodeInfo, echo=TRUE>>=
 # Using defaults:
 parameterCd <- "00618" 
 parameterINFO <- getParameterInfo(parameterCd)
@@ -233,7 +246,8 @@ parameterCd <- "00060"  # Discharge (cfs)
 startDate <- ""  # Will request earliest date
 endDate <- "" # Will request latest date
 
-discharge <- retrieveNWISData(siteNumber, parameterCd, startDate, endDate)
+discharge <- retrieveNWISData(siteNumber, 
+                    parameterCd, startDate, endDate)
 @
 
 The variable datetime is automatically imported as a Date. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS remark codes are often \texttt{"}A\texttt{"} (approved for publication) or \texttt{"}P\texttt{"} (provisional data subject to revision). A more complete list of remark codes can be found here:
@@ -248,15 +262,16 @@ startDate <- "2012-01-01"
 endDate <- "2012-06-30"
 
 temperatureAndFlow <- retrieveNWISData(siteNumber, parameterCd, 
-        startDate, endDate, StatCd=statCd,interactive=FALSE)
+        startDate, endDate, StatCd=statCd)
 
 @
 
 Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}. 
 
-An example of plotting the above data (Figure \ref{fig:TD}):
+An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
 
-<<label=getNWIStemperaturePlot, echo=TRUE>>=
+<<getNWIStemperaturePlot, echo=TRUE, fig.cap="Temperature and discharge plot of Choptank River in 2012.">>=
+par(mar=c(5,5,5,5))
 colnames <- names(temperatureAndFlow)
 with(temperatureAndFlow, plot(
   get(colnames[3]), get(colnames[6]),
@@ -273,20 +288,10 @@ title(paste(ChoptankInfo$station.nm,"2012",sep=" "))
 @
 
 
-\begin{figure}
-\begin{center}
-<<label=fig1, fig=TRUE,echo=FALSE,width=6,height=4>>=
-<<getNWIStemperaturePlot>>
-@
-\end{center}
-\caption{Temperature and discharge plot of Choptank River in 2012.}
-\label{fig:TD}
-\end{figure}
-
-
 There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as \texttt{"}Ice\texttt{"}.  Any value that cannot be converted to a number will be reported as NA in this package.
 
 \FloatBarrier
+
 %------------------------------------------------------------
 \subsection{Unit Values}
 \label{sec:usgsRT}
@@ -297,9 +302,7 @@ Any data that are collected at regular time intervals (such as 15-minute or hour
 
 parameterCd <- "00060"  # Discharge (cfs)
 startDate <- "2012-05-12" 
-# or use (yesterday): startDate <- as.character(Sys.Date()-1)
 endDate <- "2012-05-13" 
-# or use (today):  endDate <- as.character(Sys.Date())
 dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, 
         startDate, endDate)
 @
@@ -310,11 +313,11 @@ head(dischargeToday)
 
 Note that time now becomes important, so the variable datetime is a POSIXct, and the time zone is included in a separate column. Data is pulled from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \texttt{"}Ice\texttt{"}.  Any value that cannot be converted to a number will be reported as NA in this package.
 
-A simple plotting example is shown in Figure \ref{fig:RT}:
-<<label=getNWISUnit, echo=TRUE>>=
+A simple plotting example is shown in Figure \ref{fig:getNWISUnitPlot}:
+<<getNWISUnitPlot, echo=TRUE, fig.cap="Real-time discharge plot of Choptank River from May 12-13, 2012.">>=
 colnames <- names(dischargeToday)
 with(dischargeToday, plot(
-  get(colnames[3]), get(colnames[4]),
+  dateTime, get(colnames[4]),
   ylab="Discharge [cfs]",xlab=""
   ))
 title(ChoptankInfo$station.nm)
@@ -322,17 +325,9 @@ title(ChoptankInfo$station.nm)
 @
 \newpage
 
-\begin{figure}
-\begin{center}
-<<label=fig2, fig=TRUE,echo=FALSE,width=6,height=4>>=
-<<getNWISUnit>>
-@
-\end{center}
-\caption{Real-time discharge plot of Choptank River from May 12-13, 2012.}
-\label{fig:RT}
-\end{figure}
 
 \FloatBarrier
+
 %------------------------------------------------------------
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
@@ -354,9 +349,9 @@ dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd,
         startDate, endDate)
 names(dissolvedNitrateSimple)
 @
-Note that in this dataframe, datetime is imported as Dates (no times are included), and the qualifier is either blank or \texttt{"}\verb@<@\texttt{"} signifying a censored value. A plotting example is shown in Figure \ref{fig:nitrate}.
+Note that in this dataframe, datetime is imported as Dates (no times are included), and the qualifier is either blank or \texttt{"}\verb@<@\texttt{"} signifying a censored value. A plotting example is shown in Figure \ref{fig:getQWtemperaturePlot}.
 
-<<label=getQWtemperaturePlot, echo=TRUE>>=
+<<getQWtemperaturePlot, echo=TRUE, fig.cap="Nitrate plot of Choptank River.">>=
 with(dissolvedNitrateSimple, plot(
   dateTime, value.00618,
   xlab="Date",ylab = paste(parameterINFO$srsname,
@@ -365,17 +360,8 @@ with(dissolvedNitrateSimple, plot(
 title(ChoptankInfo$station.nm)
 @
 
-\begin{figure}
-\begin{center}
-<<label=fig3, fig=TRUE,echo=FALSE,width=6,height=4>>=
-<<getQWtemperaturePlot>>
-@
-\end{center}
-\caption{Nitrate plot of Choptank River.}
-\label{fig:nitrate}
-\end{figure}
-
 \FloatBarrier
+
 %------------------------------------------------------------
 \subsection{STORET Water Quality Retrievals}
 \label{sec:usgsSTORET}
@@ -402,11 +388,13 @@ pCode <- c("00618","71851")
 startDate <- "1964-06-11"
 endDate <- "2012-12-18"
 url_qw <- constructNWISURL(siteNumber,pCode,startDate,endDate,'qw')
-url_dv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'dv',statCd="00003")
+url_dv <- constructNWISURL(siteNumber,"00060",startDate,endDate,
+                           'dv',statCd="00003")
 url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'uv')
 @
 
 \FloatBarrier
+
 %------------------------------------------------------------
 \section{Data Retrievals Structured For Use In The EGRET Package}
 %------------------------------------------------------------ 
@@ -427,6 +415,7 @@ INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
 Column names in the INFO dataframe are listed in Appendix 2 (\ref{sec:appendix2INFO}).
 
 \FloatBarrier
+
 %------------------------------------------------------------
 \subsection{Daily Data}
 %------------------------------------------------------------
@@ -436,58 +425,77 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 siteNumber <- "01491000"
 startDate <- "2000-01-01"
 endDate <- "2013-01-01"
-# This call will get NWIS data that is in cfs, and convert it
-# to cms since we didn't override the default in the convert argument:
-Daily <- getDVData(siteNumber, "00060", startDate, endDate,interactive=FALSE)
+# This call will get NWIS (cfs) data , and convert it to cms:
+Daily <- getDVData(siteNumber, "00060", startDate, endDate)
 @
 
 Details of the Daily dataframe are listed below:
 
-<<label=colNamesDaily, echo=FALSE,results=tex>>=
+<<colNamesDaily, echo=FALSE,results='asis'>>=
 ColumnName <- c("Date", "Q", "Julian","Month","Day","DecYear","MonthSeq","Qualifier","i","LogQ","Q7","Q30")
 Type <- c("Date", "number", "number","integer","integer","number","integer","string","integer","number","number","number")
-Description <- c("Date", "Discharge", "Number of days since January 1, 1850", "Month of the year [1-12]", "Day of the year [1-366]", "Decimal year", "Number of months since January 1, 1850", "Qualifing code", "Index of days from the start of the data frame", "Natural logarithm of Q", "7 day running average of Q", "30 running average of Q")
+Description <- c("Date", "Discharge in cms", "Number of days since January 1, 1850", "Month of the year [1-12]", "Day of the year [1-366]", "Decimal year", "Number of months since January 1, 1850", "Qualifing code", "Index of days, starting with 1", "Natural logarithm of Q", "7 day running average of Q", "30 running average of Q")
 Units <- c("date", "cms","days", "months","days","years","months", "character","days","numeric","cms","cms")
 
 DF <- data.frame(ColumnName,Type,Description,Units)
 
-data.table <- xtable(DF,
-                     caption="Daily dataframe")
-print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,include.rownames=FALSE)
+xtable(DF, caption="Daily dataframe")
+
 @
-\\*
+
 
 If there are discharge values of zero, the code will add a small constant to all of the daily discharges.  This constant is 0.001 times the mean discharge.  The code will also report on the number of zero values and the size of the constant.  EGRET should only be used if the number of zero values is a very small fraction of the total days in the record (say less than 0.1\% of the days).  Columns Q7 and Q30 are the 7 and 30 day running averages for the 7 or 30 days ending on this specific date.
 
 \FloatBarrier
+
 %------------------------------------------------------------
 \subsection{Sample Data}
 %------------------------------------------------------------
 The function to obtain sample data from the water quality portal is getSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
 
 <<secondExample>>=
+parameterCd <- "00618"
 Sample <-getSampleData(siteNumber,parameterCd,
       startDate, endDate,interactive=FALSE)
 @
 
+\pagebreak
+
 Details of the Sample dataframe are listed below:
 
-<<label=colNamesQW, echo=FALSE,results=tex>>=
-ColumnName <- c("Date", "ConcLow", "ConcHigh", "Uncen", "ConcAve", "Julian","Month","Day","DecYear","MonthSeq","SinDY","CosDY","Q footnote","LogQ footnote")
-Type <- c("Date", "number","number","integer","number", "number","integer","integer","number","integer","number","number","number","number")
-Description <- c("Date", "Lower limit of concentration", "Upper limit of concentration", "Uncensored data (1=true, 0=false)", "Average of ConcLow and ConcHigh","Number of days since January 1, 1850", "Month of the year [1-12]", "Day of the year [1-366]", "Decimal year", "Number of months since January 1, 1850", "Sine of DecYear", "Cosine of DecYear", "Discharge", "Natural logarithm of flow")
-Units <- c("date","mg/L","mg/L","integer","mg/L","days","months","days","years","months","numeric","numeric","cms", "numeric")
+\begin{table}[!ht]
+\begin{minipage}{\linewidth}
+\begin{center}
+\caption{Sample dataframe} 
+\begin{tabular}{llll}
+  \hline
+ColumnName & Type & Description & Units \\ 
+  \hline
+Date & Date & Date & date \\ 
+  ConcLow & number & Lower limit of concentration & mg/L \\ 
+  ConcHigh & number & Upper limit of concentration & mg/L \\ 
+  Uncen & integer & Uncensored data (1=true, 0=false) & integer \\ 
+  ConcAve & number & Average of ConcLow and ConcHigh & mg/L \\ 
+  Julian & number & Number of days since January 1, 1850 & days \\ 
+  Month & integer & Month of the year [1-12] & months \\ 
+  Day & integer & Day of the year [1-366] & days \\ 
+  DecYear & number & Decimal year & years \\ 
+  MonthSeq & integer & Number of months since January 1, 1850 & months \\ 
+  SinDY & number & Sine of DecYear & numeric \\ 
+  CosDY & number & Cosine of DecYear & numeric \\ 
+  Q \footnotemark[1] & number & Discharge & cms \\ 
+  LogQ \footnotemark[1] & number & Natural logarithm of flow & numeric \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table}
 
-DF <- data.frame(ColumnName,Type,Description,Units)
-
-data.table <- xtable(DF,
-                     caption="Sample dataframe")
-print(data.table, caption.placement="top",include.rownames=FALSE,table.placement="!ht",
-      sanitize.text.function=function(str)gsub("footnote","\\footnotemark[1]",str,fixed=TRUE))
-@
 \footnotetext[1]{Flow columns are populated from data in the Daily dataframe after calling the mergeReport function.}
 
 \FloatBarrier
+
+
 %------------------------------------------------------------
 \subsection{Censored Values: Summation Explanation}
 %------------------------------------------------------------
@@ -497,7 +505,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 
 \begin{center}
 
-<<label=exampleComplexQW, echo=FALSE,results=tex>>=
+<<label=exampleComplexQW, echo=FALSE, eval=TRUE,results='asis'>>=
 cdate <- c("2003-02-15","2003-06-30","2004-09-15","2005-01-30","2005-05-30","2005-10-30")
 rdp <- c("", "<","<","","","")
 dp <- c(0.02,0.01,0.005,NA,NA,NA)
@@ -508,9 +516,8 @@ tp <- c(NA,NA,NA,0.43,0.05,0.02)
 
 DF <- data.frame(cdate,rdp,dp,rpp,pp,rtp,tp)
 
-data.table <- xtable(DF,
-                     caption="Example data")
-print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,include.rownames=FALSE)
+xtable(DF, caption="Example data")
+
 @
 
 \end{center}
@@ -518,9 +525,9 @@ print(data.table, caption.placement="top",floating="FALSE",latex.environments=NU
 
 The dataRetrieval package will \texttt{"}add up\texttt{"} all the values in a given row to form the total for that sample. Thus, you only want to enter data that should be added together. For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not suppose to add it in to the values in 2005.
 
-For every sample, the EGRET package requires a pair of numbers to define an interval in which the true value lies (ConcLow and ConcHigh). In a simple non-censored case (the reported value is above the detection limit), ConcLow equals ConcHigh and the interval collapses down to a single point.In a simple censored case, the value might be reported as <0.2, then ConcLow=NA and ConcHigh=0.2. We use NA instead of 0 as a way to elegantly handle future logarithm calculations.
+For every sample, the EGRET package requires a pair of numbers to define an interval in which the true value lies (ConcLow and ConcHigh). In a simple non-censored case (the reported value is above the detection limit), ConcLow equals ConcHigh and the interval collapses down to a single point.In a simple censored case, the value might be reported as \verb@<@0.2, then ConcLow=NA and ConcHigh=0.2. We use NA instead of 0 as a way to elegantly handle future logarithm calculations.
 
-For the more complex example case, let us say dp is reported as <0.01 and pp is reported as 0.3. We know that the total must be at least 0.3 and could be as much as 0.31. Therefore, ConcLow=0.3 and ConcHigh=0.31. Another case would be if dp is reported as <0.005 and pp is reported <0.2. We know in this case that the true value could be as low as zero, but could be as high as 0.205. Therefore, in this case, ConcLow=NA and ConcHigh=0.205. The Sample dataframe for the example data is therefore:
+For the more complex example case, let us say dp is reported as \verb@<@0.01 and pp is reported as 0.3. We know that the total must be at least 0.3 and could be as much as 0.31. Therefore, ConcLow=0.3 and ConcHigh=0.31. Another case would be if dp is reported as \verb@<@0.005 and pp is reported \verb@<@0.2. We know in this case that the true value could be as low as zero, but could be as high as 0.205. Therefore, in this case, ConcLow=NA and ConcHigh=0.205. The Sample dataframe for the example data is therefore:
 
 <<thirdExample,echo=FALSE>>=
 getPreLoadedSampleData(DF)
@@ -528,6 +535,7 @@ getPreLoadedSampleData(DF)
 @
 
 \FloatBarrier
+
 %------------------------------------------------------------ 
 \subsection{User-Generated Data Files}
 %------------------------------------------------------------ 
@@ -546,7 +554,7 @@ So, if you have a file called \texttt{"}ChoptankRiverFlow.txt\texttt{"} located 
 \begin{verbatim}
 date  Qdaily
 10/1/1999  107
-10/2/1999	85
+10/2/1999  85
 10/3/1999	76
 10/4/1999	76
 10/5/1999	113
@@ -558,10 +566,12 @@ The call to open this file, convert the flow to cubic meters per second, and pop
 <<openDaily, eval = FALSE>>=
 fileName <- "ChoptankRiverFlow.txt"
 filePath <-  "C:/RData/"
-Daily <- getDailyDataFromFile(filePath,fileName,separator="\t",interactive=FALSE)
+Daily <- getDailyDataFromFile(filePath,fileName,
+                    separator="\t")
 @
 
 \FloatBarrier
+
 %------------------------------------------------------------ 
 \subsubsection{getSampleDataFromFile}
 %------------------------------------------------------------ 
@@ -580,10 +590,12 @@ The call to open this file, and populate the Sample dataframe would be:
 <<openSample, eval = FALSE>>=
 fileName <- "ChoptankRiverNitrate.csv"
 filePath <-  "C:/RData/"
-Sample <- getSampleDataFromFile(filePath,fileName,separator=",",interactive=FALSE)
+Sample <- getSampleDataFromFile(filePath,fileName,
+                                separator=",")
 @
 
 \FloatBarrier
+
 %------------------------------------------------------------
 \subsection{Merge Report}
 %------------------------------------------------------------
@@ -596,37 +608,28 @@ parameterCd <- "00631"  # Nitrate
 startDate <- "2000-01-01"
 endDate <- "2013-01-01"
 
-Daily <- getDVData(siteNumber, "00060", startDate, endDate,interactive=FALSE)
-Sample <- getSampleData(siteNumber,parameterCd, startDate, endDate, interactive=FALSE)
+Daily <- getDVData(siteNumber, "00060", startDate, endDate)
+Sample <- getSampleData(siteNumber,parameterCd, startDate, endDate)
 Sample <- mergeReport()
 head(Sample)
 @
 
 \FloatBarrier
+
 %------------------------------------------------------------
 \subsection{EGRET Plots}
 %------------------------------------------------------------
 As has been mentioned, the data is specifically formatted to be used with the EGRET package. The EGRET package has powerful modeling capabilities using WRTDS, but also has a variety of graphing and tablular tools to explore the data without using the WRTDS algorithm. See the EGRET vignette, user guide, and/or wiki (\url{https://github.com/USGS-R/EGRET/wiki}) for detailed information. The following figure is an example of one of the plotting functions that can be used directly from the dataRetrieval dataframes.
 
-<<egretEx, echo=TRUE, eval=TRUE>>=
+<<egretEx, echo=TRUE, eval=TRUE, fig.cap="Default multiPlotDataOverview">>=
 # Continuing Choptank example from the previous sections
 library(EGRET)
 multiPlotDataOverview()
 @
 
-\begin{figure}[ht]
-\begin{center}
-
-<<label=figegretEx, fig=TRUE,echo=FALSE>>=
-<<egretEx>>
-@
-\end{center}
-\caption{Default multiPlotDataOverview}
-\label{fig:multiPlotDataOverview}
-\end{figure}
-
 \clearpage
 \appendix
+
 %------------------------------------------------------------ 
 \section{Getting Started in R}
 \label{sec:appendix1}
@@ -651,7 +654,6 @@ To see the raw code for a particular code, type the name of the function:
 removeDuplicates
 @
 
-
 %------------------------------------------------------------
 \subsection{R User: Installing dataRetrieval}
 %------------------------------------------------------------ 
@@ -662,27 +664,10 @@ install.packages("zoo")
 install.packages("dataRetrieval", repos="http://usgs-r.github.com", type="source")
 @
 
-It is a good idea to re-start the R enviornment after installing the package, especially if installing an updated version. Some users have found it necessary to delete the previous version's package folder before installing newer version of dataRetrieval. If you are experiencing issues after updating a package, trying deleting the package folder - the default location for Windows is something like this: C:/Users/userA/Documents/R/win-library/2.15/dataRetrieval, and the default for a Mac: /Users/userA/Library/R/2.15/library/dataRetrieval. Then, re-install the package using the directions above. Moving to CRAN should solve this problem.
+It is a good idea to re-start R after installing the package, especially if installing an updated version. Some users have found it necessary to delete the previous version's package folder before installing newer version of dataRetrieval. If you are experiencing issues after updating a package, trying deleting the package folder - the default location for Windows is something like this: C:/Users/userA/Documents/R/win-library/2.15/dataRetrieval, and the default for a Mac: /Users/userA/Library/R/2.15/library/dataRetrieval. Then, re-install the package using the directions above. Moving to CRAN should solve this problem.
 
 After installing the package, you need to open the library each time you re-start R.  This is done with the simple command:
 <<openLibraryTest, eval=FALSE>>=
-library(dataRetrieval)
-@
-Using RStudio, you could alternatively click on the checkbox for dataRetrieval in the Packages window.
-
-%------------------------------------------------------------
-\subsection{R Developers: Installing dataRetrieval from gitHub}
-%------------------------------------------------------------
-Alternatively, R-developers can install the latest working version of dataRetrieval directly from gitHub using the devtools package (available on CRAN).  Rtools (for Windows) and appropriate \LaTeX\ tools are required. Be aware that the version installed using this method isn't necessarily the same as the version in the stable release branch.  
-
-
-<<gitInstal,eval = FALSE>>=
-library(devtools)
-install_github("dataRetrieval", "USGS-R")
-@
-To then open the library, simply type:
-
-<<openLibrary, eval=FALSE>>=
 library(dataRetrieval)
 @
 
@@ -696,11 +681,10 @@ library(dataRetrieval)
 \label{sec:appendix2INFO}
 %------------------------------------------------------------
 
-<<label=colNamesQW, echo=FALSE,results=tex>>=
+<<label=colNamesINFO, echo=FALSE,results='asis'>>=
 infoDF <- data.frame(ColumnNames=names(INFO))
-data.table <- xtable(infoDF,
-                     caption="Column names in the INFO dataframe")
-print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,include.rownames=FALSE,include.colnames=FALSE)
+xtable(infoDF, caption="Column names in the INFO dataframe")
+
 @
 
 \FloatBarrier
@@ -712,22 +696,17 @@ print(data.table, caption.placement="top",floating="FALSE",latex.environments=NU
 
 There are 62 columns returned from the water quality portal. 
 
-<<label=colNamesQW, echo=FALSE,results=tex>>=
+<<colNamesQW, echo=FALSE,results='asis'>>=
 infoDF <- data.frame(ColumnNames=names(dissolvedNitrate[1:40]))
-data.table <- xtable(infoDF,
-                     caption="Column names in dissolvedNitrate")
-print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,
-      include.rownames=FALSE,include.colnames=FALSE)
+xtable(infoDF, caption="Column names in dissolvedNitrate")
+
 @
 
 \FloatBarrier
 
-<<label=colNamesQW2, echo=FALSE,results=tex>>=
+<<colNamesQW2, echo=FALSE,results='asis'>>=
 infoDF <- data.frame(ColumnNames_Continued=names(dissolvedNitrate[41:62]))
-data.table <- xtable(infoDF,
-                     caption="Column names in dissolvedNitrate")
-print(data.table, caption.placement="top",floating="FALSE",latex.environments=NULL,
-      include.rownames=FALSE,include.colnames=FALSE)
+xtable(infoDF, caption="Column names in dissolvedNitrate")
 @
 
 \clearpage
@@ -739,20 +718,21 @@ print(data.table, caption.placement="top",floating="FALSE",latex.environments=NU
 There are a few steps that are required in order to create a table in a Microsoft product (Excel, Word, Powerpoint, etc.) from an R dataframe. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Word based on the dataframe tableData:
 
 <<label=getSiteApp, echo=TRUE>>=
-ChoptankAvailableData <- getDataAvailability(siteNumber)
-ChoptankDailyData <- ChoptankAvailableData["dv" == ChoptankAvailableData$service,]
-ChoptankDailyData <- ChoptankDailyData["00003" == ChoptankDailyData$statCd,]
-pCodeINFO <- getMultipleParameterNames(ChoptankDailyData$parameter_cd, interactive=FALSE)
-ChoptankDailyData <- merge(ChoptankDailyData,pCodeINFO,by="parameter_cd")
+availableData <- getDataAvailability(siteNumber)
+dailyData <- availableData["dv" == availableData$service,]
+dailyData <- dailyData["00003" == dailyData$statCd,]
+pCodeINFO <- getMultipleParameterNames(dailyData$parameter_cd)
+dailyData <- merge(dailyData,pCodeINFO, by="parameter_cd")
 
-tableData <- with(ChoptankDailyData, 
+tableData <- with(dailyData, 
       data.frame(
-      shortName=srsname, 
-      Start=startDate, 
-      End=endDate, 
-      Count=count,
-      Units=parameter_units)
+        shortName=srsname, 
+        Start=startDate, 
+        End=endDate, 
+        Count=count,
+        Units=parameter_units)
       )
+tableData
 @
 
 First, save the dataframe as a tab delimited file (you don't want to use comma delimited because there are commas in some of the data elements):
@@ -766,7 +746,7 @@ write.table(tableData, file="tableData.tsv",sep="\t",
 This will save a file in your working directory called tableData.tsv.  You can see your working directory by typing getwd() in the R console. Opening the file in a general-purpose text editor, you should see the following:
 
 \begin{verbatim}
-shortName  Start	End	Count	Units
+shortName  Start  End	Count	Units
 Temperature, water	2010-10-01	2012-06-24	575	deg C
 Stream flow, mean. daily	1948-01-01	2013-03-13	23814	cfs
 Specific conductance	2010-10-01	2012-06-24	551	uS/cm @25C
@@ -797,6 +777,7 @@ From Excel, it is simple to copy and paste the tables in other Microsoft product
 \end{figure}
 
 \clearpage
+
 %------------------------------------------------------------
 % BIBLIO
 %------------------------------------------------------------
