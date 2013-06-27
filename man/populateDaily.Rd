@@ -33,6 +33,6 @@ Daily <- populateDaily(dataInput, 2, interactive=FALSE)
 \author{
   Robert M. Hirsch \email{rhirsch@usgs.gov}
 }
-\keyword{WRTDS}
 \keyword{flow}
+\keyword{WRTDS}
 

@@ -26,6 +26,6 @@ startDate <- '1985-01-01'
 endDate <- '1990-01-01'
 checkStartEndDate(startDate, endDate, interactive = FALSE)
 }
-\keyword{WRTDS}
 \keyword{flow}
+\keyword{WRTDS}
 
