@@ -38,7 +38,9 @@ populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a da
   localDaily$i <- 1:nrow(localDaily)
   
   noDataValue <- -999999
-  nd<-ifelse(localDaily$Q==noDataValue,T,F)
+  
+  nd <- localDaily$Q==noDataValue
+  
   localDaily$Q<-ifelse(nd,NA,localDaily$Q)
   
   zeros<-which(localDaily$Q<=0)
@@ -49,8 +51,20 @@ populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a da
 
     qshift<- 0.001*mean(localDaily$Q, na.rm=TRUE) 
     if (interactive){
-      cat("There were ", as.character(nz), " zero flow days \n")
-      cat("All days therefore had",as.character(qshift),"cms added to the discharge value.\n")
+      negNums <- length(which(localDaily$Q<0))
+      zeroNums <- length(which(localDaily$Q == 0))
+      
+      if (negNums > 0) {
+        cat("There were ", as.character(negNums), " negative flow days \n")
+        cat("Negative values are not supported in the EGRET package\n")
+      }
+      
+      if (zeroNums > 0){
+        cat("There were ", as.character(zeroNums), " zero flow days \n")
+      }
+      
+      cat("All days had",as.character(qshift),"cms added to the discharge value.\n")
+      
     }
   } else {
     qshift<-0.0
