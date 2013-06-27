@@ -15,16 +15,16 @@
 \contentsline {subsection}{\numberline {3.1}INFO Data}{15}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Daily Data}{15}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Sample Data}{16}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Censored Values: Summation Explanation}{17}{subsection.3.4}
-\contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{18}{subsection.3.5}
-\contentsline {subsubsection}{\numberline {3.5.1}getDailyDataFromFile}{18}{subsubsection.3.5.1}
-\contentsline {subsubsection}{\numberline {3.5.2}getSampleDataFromFile}{19}{subsubsection.3.5.2}
-\contentsline {subsection}{\numberline {3.6}Merge Report}{20}{subsection.3.6}
-\contentsline {subsection}{\numberline {3.7}EGRET Plots}{21}{subsection.3.7}
-\contentsline {section}{\numberline {A}Getting Started in R}{23}{appendix.A}
-\contentsline {subsection}{\numberline {A.1}New to R?}{23}{subsection.A.1}
-\contentsline {subsection}{\numberline {A.2}R User: Installing dataRetrieval}{23}{subsection.A.2}
-\contentsline {section}{\numberline {B}Columns Names}{24}{appendix.B}
-\contentsline {subsection}{\numberline {B.1}INFO dataframe}{24}{subsection.B.1}
-\contentsline {subsection}{\numberline {B.2}Water Quality Portal}{26}{subsection.B.2}
-\contentsline {section}{\numberline {C}Creating tables in Microsoft from R}{29}{appendix.C}
+\contentsline {subsection}{\numberline {3.4}Censored Values: Summation Explanation}{18}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{19}{subsection.3.5}
+\contentsline {subsubsection}{\numberline {3.5.1}getDailyDataFromFile}{19}{subsubsection.3.5.1}
+\contentsline {subsubsection}{\numberline {3.5.2}getSampleDataFromFile}{20}{subsubsection.3.5.2}
+\contentsline {subsection}{\numberline {3.6}Merge Report}{21}{subsection.3.6}
+\contentsline {subsection}{\numberline {3.7}EGRET Plots}{22}{subsection.3.7}
+\contentsline {section}{\numberline {A}Getting Started in R}{24}{appendix.A}
+\contentsline {subsection}{\numberline {A.1}New to R?}{24}{subsection.A.1}
+\contentsline {subsection}{\numberline {A.2}R User: Installing dataRetrieval}{24}{subsection.A.2}
+\contentsline {section}{\numberline {B}Columns Names}{25}{appendix.B}
+\contentsline {subsection}{\numberline {B.1}INFO dataframe}{25}{subsection.B.1}
+\contentsline {subsection}{\numberline {B.2}Water Quality Portal}{27}{subsection.B.2}
+\contentsline {section}{\numberline {C}Creating tables in Microsoft from R}{30}{appendix.C}

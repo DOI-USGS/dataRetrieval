@@ -451,13 +451,23 @@ If there are discharge values of zero, the code will add a small constant to all
 %------------------------------------------------------------
 \subsection{Sample Data}
 %------------------------------------------------------------
-The function to obtain sample data from the water quality portal is getSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
+The function to obtain USGS sample data from the water quality portal is getSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
 
 <<secondExample>>=
 parameterCd <- "00618"
 Sample <-getSampleData(siteNumber,parameterCd,
-      startDate, endDate,interactive=FALSE)
+      startDate, endDate)
 @
+
+The function to obtain STORET sample data from the water quality portal is getSTORETSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
+
+<<STORET,echo=TRUE,eval=FALSE>>=
+site <- 'WIDNR_WQX-10032762'
+characteristicName <- 'Specific conductance'
+Sample <-getSTORETSampleData(site,characteristicName,
+      startDate, endDate)
+@
+
 
 \pagebreak
 

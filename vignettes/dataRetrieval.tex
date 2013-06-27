@@ -148,7 +148,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Mon Jun 17 15:34:54 2013
+% Thu Jun 27 15:21:30 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -174,7 +174,7 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Mon Jun 17 15:34:54 2013
+% Thu Jun 27 15:21:30 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -253,7 +253,7 @@ ChoptankAvailableData <- \hlfunctioncall{getDataAvailability}(siteNumber)
 ## 2        00010  00001 1988-10-01 2012-05-09   894      dv
 ## 3        00010  00002 2010-10-01 2012-05-09   529      dv
 ## 4        00010  00003 2010-10-01 2012-05-09   529      dv
-## 5        00060  00003 1948-01-01 2013-06-16 23908      dv
+## 5        00060  00003 1948-01-01 2013-06-26 23918      dv
 ## 6        00095  00001 2010-10-01 2012-05-09   527      dv
 ## 7        00095  00002 2010-10-01 2012-05-09   527      dv
 \end{verbatim}
@@ -313,7 +313,7 @@ tableData <- \hlfunctioncall{with}(ChoptankDailyData,
     caption=\hlstring{"Daily mean data availabile at the Choptank River"})
 \end{alltt}
 \end{kframe}% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Mon Jun 17 15:35:00 2013
+% Thu Jun 27 15:21:36 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlllll}
@@ -321,7 +321,7 @@ tableData <- \hlfunctioncall{with}(ChoptankDailyData,
  & shortName & Start & End & Count & Units \\ 
   \hline
 1 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  2 & Stream flow, mean. daily & 1948-01-01 & 2013-06-16 & 23908 & cfs \\ 
+  2 & Stream flow, mean. daily & 1948-01-01 & 2013-06-26 & 23918 & cfs \\ 
   3 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   4 & Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   5 & Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
@@ -682,7 +682,7 @@ Daily <- \hlfunctioncall{getDVData}(siteNumber, \hlstring{"00060"}, startDate, e
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Mon Jun 17 15:35:10 2013
+% Thu Jun 27 15:21:46 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -716,17 +716,32 @@ If there are discharge values of zero, the code will add a small constant to all
 %------------------------------------------------------------
 \subsection{Sample Data}
 %------------------------------------------------------------
-The function to obtain sample data from the water quality portal is getSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
+The function to obtain USGS sample data from the water quality portal is getSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 parameterCd <- \hlstring{"00618"}
 Sample <-\hlfunctioncall{getSampleData}(siteNumber,parameterCd,
-      startDate, endDate,interactive=FALSE)
+      startDate, endDate)
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+
+
+The function to obtain STORET sample data from the water quality portal is getSTORETSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+site <- \hlstring{'WIDNR_WQX-10032762'}
+characteristicName <- \hlstring{'Specific conductance'}
+Sample <-\hlfunctioncall{getSTORETSampleData}(site,characteristicName,
+      startDate, endDate)
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
 
 
 \pagebreak
@@ -776,7 +791,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 \begin{center}
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Mon Jun 17 15:35:11 2013
+% Thu Jun 27 15:21:47 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllrlrlr}
@@ -1012,11 +1027,10 @@ To see the raw code for a particular code, type the name of the function:
 removeDuplicates
 \end{alltt}
 \begin{verbatim}
-## function (localSample = Sample) 
-## {
-##     Sample1 <- localSample[!duplicated(localSample[c("DecYear", 
-##         "ConcHigh")]), ]
-##     return(Sample1)
+## function(localSample=Sample) {  
+##   Sample1 <- localSample[!duplicated(localSample[c("DecYear","ConcHigh")]),]
+##   
+##   return(Sample1)
 ## }
 ## <environment: namespace:dataRetrieval>
 \end{verbatim}
@@ -1062,7 +1076,7 @@ After installing the package, you need to open the library each time you re-star
 %------------------------------------------------------------
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Mon Jun 17 15:35:14 2013
+% Thu Jun 27 15:21:50 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1128,7 +1142,7 @@ After installing the package, you need to open the library each time you re-star
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Mon Jun 17 15:35:14 2013
+% Thu Jun 27 15:21:50 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1185,7 +1199,7 @@ There are 62 columns returned from the water quality portal.
 \FloatBarrier
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Mon Jun 17 15:35:14 2013
+% Thu Jun 27 15:21:50 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1263,7 +1277,7 @@ tableData
 ## 5           Suspended sediment discharge 1980-10-01
 ##          End Count      Units
 ## 1 2012-05-09   529      deg C
-## 2 2013-06-16 23908        cfs
+## 2 2013-06-26 23918        cfs
 ## 3 2012-05-09   527 uS/cm @25C
 ## 4 1991-09-30  3651       mg/l
 ## 5 1991-09-30  3652   tons/day
