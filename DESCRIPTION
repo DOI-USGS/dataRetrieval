@@ -55,6 +55,7 @@ Collate:
     'getWaterML1Data.r'
     'padVariable.r'
     'getRDB1Data.r'
+    'getSTORETSampleData.R'
 Depends:
     R (>= 2.15.0)
 Imports:
