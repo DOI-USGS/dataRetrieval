@@ -138,7 +138,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
             url <- paste(url,"&startDT=",startDate,sep="")
           } else {
             startorgin <- "1851-01-01"
-            if ("uv" == service) startorgin <- "1900-01-01"            
+            if ("iv" == service) startorgin <- "1900-01-01"            
             url <- paste(url,"&startDT=",startorgin,sep="")
           }
           
