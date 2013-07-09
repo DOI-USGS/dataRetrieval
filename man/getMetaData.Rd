@@ -39,10 +39,10 @@
 # Automatically gets information about site 05114000 and temperature, no interaction with user
 INFO <- getMetaData('05114000','00010',interactive=FALSE)
 }
+\keyword{USGS}
+\keyword{WRTDS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
-\keyword{USGS}
 \keyword{web}
-\keyword{WRTDS}
 

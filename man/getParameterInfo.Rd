@@ -28,9 +28,9 @@
 paramINFO <- getParameterInfo('01075')
 paramINFO2 <- getParameterInfo('00931',interactive=FALSE)
 }
+\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
-\keyword{USGS}
 \keyword{web}
 

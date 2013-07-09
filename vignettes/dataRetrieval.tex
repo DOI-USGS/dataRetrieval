@@ -124,7 +124,7 @@
 %------------------------------------------------------------
 \section{Introduction to dataRetrieval}
 %------------------------------------------------------------ 
-The dataRetrieval package was created to simplify the process of getting hydrologic data in the R enviornment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends (EGRET). See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the WRTDS method of data analysis (WRTDS is Weighted Regressions on Time, Discharge and Season) as well as analysis of streamflow trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
+The dataRetrieval package was created to simplify the process of getting hydrologic data in the R enviornment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends (EGRET). See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the WRTDS method of data analysis (WRTDS is Weighted Regressions on Time, Discharge and Season) as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
 
 
 The dataRetrieval package is designed to retrieve many of the major data types of USGS hydrologic data that are available on the web, but also allows users to make use of other data that they supply from spreadsheets.  Section 2 provides examples of how one can obtain raw data from USGS sources on the web and ingest them into data frames within the R environment.  The functionality described in section 2 is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section 3 is tailored specifically to obtaining input from the web and structuring them specifically for use in the EGRET package.  The functionality described in section 4 is for converting hydrologic data from user-supplied spreadsheets and structuring them specifically for use in the EGRET package.
@@ -140,7 +140,7 @@ In this section, we will run through 5 examples, documenting how to get raw data
 %------------------------------------------------------------
 \subsection{Introduction}
 %------------------------------------------------------------
-The United States Geological Survey organizes their hydrological data in standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discoving this 8-digit ID. One potential tool for discovering data is Environmental Data Discovery and Transformation (EnDDaT): \url{http://cida.usgs.gov/enddat/}.  Follow the example on the EnDDaT web page to learn how to discover USGS stations and available data from any location in the United States. 
+The United States Geological Survey organizes their hydrological data in standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discoving this 8-digit ID. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
 Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured paramater is being requested.  A complete list of possible USGS parameter codes can be found at \url{http://go.usa.gov/bVDz}.
 
@@ -148,7 +148,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Jun 27 15:21:30 2013
+% Tue Jul 09 17:04:58 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -174,7 +174,7 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Jun 27 15:21:30 2013
+% Tue Jul 09 17:04:58 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -187,7 +187,7 @@ Some common stat codes are shown in Table \ref{tab:stat}.
   4 & 00008 & Median \\ 
    \hline
 \end{tabular}
-\caption{Commonly found USGS Stat Codes} 
+\caption{Commonly used USGS Stat Codes} 
 \label{tab:stat}
 \end{table}
 
@@ -227,7 +227,7 @@ A list of the available columns are found in Appendix \ref{sec:appendix2INFO}: I
 ChoptankInfo$station.nm
 \end{alltt}
 \begin{verbatim}
-## [1] "CHOPTANK RIVER NEAR GREENSBORO, MD"
+[1] "CHOPTANK RIVER NEAR GREENSBORO, MD"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -249,13 +249,13 @@ ChoptankAvailableData <- \hlfunctioncall{getDataAvailability}(siteNumber)
 \hlfunctioncall{head}(ChoptankAvailableData)
 \end{alltt}
 \begin{verbatim}
-##   parameter_cd statCd  startDate    endDate count service
-## 2        00010  00001 1988-10-01 2012-05-09   894      dv
-## 3        00010  00002 2010-10-01 2012-05-09   529      dv
-## 4        00010  00003 2010-10-01 2012-05-09   529      dv
-## 5        00060  00003 1948-01-01 2013-06-26 23918      dv
-## 6        00095  00001 2010-10-01 2012-05-09   527      dv
-## 7        00095  00002 2010-10-01 2012-05-09   527      dv
+  parameter_cd statCd  startDate    endDate count service
+2        00010  00001 1988-10-01 2012-05-09   894      dv
+3        00010  00002 2010-10-01 2012-05-09   529      dv
+4        00010  00003 2010-10-01 2012-05-09   529      dv
+5        00060  00003 1948-01-01 2013-07-08 23930      dv
+6        00095  00001 2010-10-01 2012-05-09   527      dv
+7        00095  00002 2010-10-01 2012-05-09   527      dv
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -283,8 +283,8 @@ pCodeINFO <- \hlfunctioncall{getMultipleParameterNames}(
   ChoptankDailyData$parameter_cd)
 \end{alltt}
 \begin{verbatim}
-## Percent complete: 
-## 20 	40 	60 	80 	100 	
+Percent complete: 
+20 	40 	60 	80 	100 	
 \end{verbatim}
 \begin{alltt}
 
@@ -296,24 +296,8 @@ ChoptankDailyData <- \hlfunctioncall{merge}(ChoptankDailyData,
 \end{knitrout}
 
 
-The daily data at the Choptank River site can be displayed in a \LaTeX table using the xtable package. See Appendix \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft Excel or Word.
-
-\begin{kframe}
-\begin{alltt}
-tableData <- \hlfunctioncall{with}(ChoptankDailyData, 
-      \hlfunctioncall{data.frame}(shortName=srsname, 
-      Start=\hlfunctioncall{as.character}(startDate), 
-      End=\hlfunctioncall{as.character}(endDate), 
-      Count=\hlfunctioncall{as.character}(count),
-      Units=parameter_units)
-      )
-
-
-\hlfunctioncall{xtable}(tableData,label=\hlstring{"tab:gda"},
-    caption=\hlstring{"Daily mean data availabile at the Choptank River"})
-\end{alltt}
-\end{kframe}% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Jun 27 15:21:36 2013
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Tue Jul 09 17:05:04 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlllll}
@@ -321,18 +305,19 @@ tableData <- \hlfunctioncall{with}(ChoptankDailyData,
  & shortName & Start & End & Count & Units \\ 
   \hline
 1 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  2 & Stream flow, mean. daily & 1948-01-01 & 2013-06-26 & 23918 & cfs \\ 
+  2 & Stream flow, mean. daily & 1948-01-01 & 2013-07-08 & 23930 & cfs \\ 
   3 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   4 & Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   5 & Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
    \hline
 \end{tabular}
-\caption{Daily mean data availabile at the Choptank River} 
+\caption{Daily mean data availabile at the Choptank River near Greensboro, MD} 
 \label{tab:gda}
 \end{table}
 
 
 
+See Appendix \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft Excel or Word.
 
 \FloatBarrier
 
@@ -350,9 +335,9 @@ parameterINFO <- \hlfunctioncall{getParameterInfo}(parameterCd)
 \hlfunctioncall{colnames}(parameterINFO)
 \end{alltt}
 \begin{verbatim}
-## [1] "parameter_cd"       "parameter_group_nm"
-## [3] "parameter_nm"       "casrn"             
-## [5] "srsname"            "parameter_units"
+[1] "parameter_cd"       "parameter_group_nm"
+[3] "parameter_nm"       "casrn"             
+[5] "srsname"            "parameter_units"   
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -365,7 +350,7 @@ Pulling out a specific example piece of information, in this case parameter name
 parameterINFO$parameter_nm
 \end{alltt}
 \begin{verbatim}
-## [1] "Nitrate, water, filtered, milligrams per liter as nitrogen"
+[1] "Nitrate, water, filtered, milligrams per liter as nitrogen"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -376,7 +361,7 @@ Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/
 \subsection{Daily Values}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain historic daily records of USGS data, use the retrieveNWISData function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (true/false) interactive. There are 2 default argument: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. Setting the \texttt{"}interactive\texttt{"} option to true will walk you through the function. It might make more sense to run large batch collections with the interactive option set to FALSE. 
+To obtain historic daily records of USGS data, use the retrieveNWISData function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. Setting the \texttt{"}interactive\texttt{"} option to TRUE will walk you through the function. It might make more sense to run large batch collections with the interactive option set to FALSE. 
 
 The dates (start and end) need to be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user does need to include the quotes).  Setting the start date to \texttt{"}\texttt{"} will indicate to the program to ask for the earliest date, setting the end date to \texttt{"}\texttt{"} will ask for the latest available date.
 
@@ -407,7 +392,7 @@ Another example that doesn't use the defaults would be a request for mean and ma
 parameterCd <- \hlfunctioncall{c}(\hlstring{"00010"},\hlstring{"00060"})  # Temperature and discharge
 statCd <- \hlfunctioncall{c}(\hlstring{"00001"},\hlstring{"00003"})  # Mean and maximum
 startDate <- \hlstring{"2012-01-01"}
-endDate <- \hlstring{"2012-06-30"}
+endDate <- \hlstring{"2012-05-01"}
 
 temperatureAndFlow <- \hlfunctioncall{retrieveNWISData}(siteNumber, parameterCd, 
         startDate, endDate, StatCd=statCd)
@@ -426,7 +411,7 @@ An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
 \hlfunctioncall{par}(mar=\hlfunctioncall{c}(5,5,5,5))
 colnames <- \hlfunctioncall{names}(temperatureAndFlow)
 \hlfunctioncall{with}(temperatureAndFlow, \hlfunctioncall{plot}(
-  \hlfunctioncall{get}(colnames[3]), \hlfunctioncall{get}(colnames[6]),
+  datetime, \hlfunctioncall{get}(colnames[6]),
   xlab=\hlstring{"Date"},ylab=\hlstring{"Temperature [C]"}
   ))
 \hlfunctioncall{par}(new=TRUE)
@@ -440,7 +425,7 @@ colnames <- \hlfunctioncall{names}(temperatureAndFlow)
 \end{alltt}
 \end{kframe}\begin{figure}[]
 
-\includegraphics[width=\maxwidth]{figure/getNWIStemperaturePlot} \caption[Temperature and discharge plot of Choptank River in 2012]{Temperature and discharge plot of Choptank River in 2012.\label{fig:getNWIStemperaturePlot}}
+\includegraphics[width=1\linewidth,height=1\linewidth]{figure/getNWIStemperaturePlot} \caption[Temperature and discharge plot of Choptank River in 2012]{Temperature and discharge plot of Choptank River in 2012.\label{fig:getNWIStemperaturePlot}}
 \end{figure}
 
 
@@ -475,45 +460,26 @@ Which produces the following dataframe:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{verbatim}
-##   agency     site            dateTime X02_00060_00011
-## 1   USGS 01491000 2012-05-12 00:00:00              83
-## 2   USGS 01491000 2012-05-12 00:15:00              83
-## 3   USGS 01491000 2012-05-12 00:30:00              83
-## 4   USGS 01491000 2012-05-12 00:45:00              83
-## 5   USGS 01491000 2012-05-12 01:00:00              85
-## 6   USGS 01491000 2012-05-12 01:15:00              83
-##   X02_00060_00011_cd
-## 1                  A
-## 2                  A
-## 3                  A
-## 4                  A
-## 5                  A
-## 6                  A
+  agency     site            dateTime X02_00060_00011
+1   USGS 01491000 2012-05-12 00:00:00              83
+2   USGS 01491000 2012-05-12 00:15:00              83
+3   USGS 01491000 2012-05-12 00:30:00              83
+4   USGS 01491000 2012-05-12 00:45:00              83
+5   USGS 01491000 2012-05-12 01:00:00              85
+6   USGS 01491000 2012-05-12 01:15:00              83
+  X02_00060_00011_cd
+1                  A
+2                  A
+3                  A
+4                  A
+5                  A
+6                  A
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
 
 Note that time now becomes important, so the variable datetime is a POSIXct, and the time zone is included in a separate column. Data is pulled from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \texttt{"}Ice\texttt{"}.  Any value that cannot be converted to a number will be reported as NA in this package.
-
-A simple plotting example is shown in Figure \ref{fig:getNWISUnitPlot}:
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-colnames <- \hlfunctioncall{names}(dischargeToday)
-\hlfunctioncall{with}(dischargeToday, \hlfunctioncall{plot}(
-  dateTime, \hlfunctioncall{get}(colnames[4]),
-  ylab=\hlstring{"Discharge [cfs]"},xlab=\hlstring{""}
-  ))
-\hlfunctioncall{title}(ChoptankInfo$station.nm)
-\end{alltt}
-\end{kframe}\begin{figure}[]
-
-\includegraphics[width=\maxwidth]{figure/getNWISUnitPlot} \caption[Real-time discharge plot of Choptank River from May 12-13, 2012]{Real-time discharge plot of Choptank River from May 12-13, 2012.\label{fig:getNWISUnitPlot}}
-\end{figure}
-
-
-\end{knitrout}
 
 \newpage
 
@@ -524,7 +490,7 @@ colnames <- \hlfunctioncall{names}(dischargeToday)
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a \texttt{"};\texttt{"} separator, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming (see Appendix \ref{sec:appendix2WQP}), a simplified version of the data can be obtained using getQWData.There is a large amount of data returned for each observation. 
+To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a vector, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming (see Appendix \ref{sec:appendix2WQP}), a simplified version of the data can be obtained using getQWData.There is a large amount of data returned for each observation. 
 
 
 \begin{knitrout}
@@ -544,8 +510,8 @@ dissolvedNitrateSimple <- \hlfunctioncall{getQWData}(siteNumber, parameterCd,
 \hlfunctioncall{names}(dissolvedNitrateSimple)
 \end{alltt}
 \begin{verbatim}
-## [1] "dateTime"        "qualifier.00618" "value.00618"    
-## [4] "qualifier.71851" "value.71851"
+[1] "dateTime"        "qualifier.00618" "value.00618"    
+[4] "qualifier.71851" "value.71851"    
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -587,20 +553,20 @@ specificCond <- \hlfunctioncall{getWQPData}(\hlstring{'WIDNR_WQX-10032762'},
 \hlfunctioncall{head}(specificCond)
 \end{alltt}
 \begin{verbatim}
-##     dateTime qualifier.Specific conductance
-## 1 2011-02-14                               
-## 2 2011-02-17                               
-## 3 2011-03-03                               
-## 4 2011-03-10                               
-## 5 2011-03-29                               
-## 6 2011-04-07                               
-##   value.Specific conductance
-## 1                       1360
-## 2                       1930
-## 3                       1240
-## 4                       1480
-## 5                       1130
-## 6                       1200
+    dateTime qualifier.Specific conductance
+1 2011-02-14                               
+2 2011-02-17                               
+3 2011-03-03                               
+4 2011-03-10                               
+5 2011-03-29                               
+6 2011-04-07                               
+  value.Specific conductance
+1                       1360
+2                       1930
+3                       1240
+4                       1480
+5                       1130
+6                       1200
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -673,7 +639,7 @@ endDate <- \hlstring{"2013-01-01"}
 Daily <- \hlfunctioncall{getDVData}(siteNumber, \hlstring{"00060"}, startDate, endDate)
 \end{alltt}
 \begin{verbatim}
-## There are  4750 data points, and  4750 days.
+There are  4750 data points, and  4750 days.
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -682,7 +648,7 @@ Daily <- \hlfunctioncall{getDVData}(siteNumber, \hlstring{"00060"}, startDate, e
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Jun 27 15:21:46 2013
+% Tue Jul 09 17:05:13 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -709,7 +675,7 @@ Details of the Daily dataframe are listed below:
 
 
 
-If there are discharge values of zero, the code will add a small constant to all of the daily discharges.  This constant is 0.001 times the mean discharge.  The code will also report on the number of zero values and the size of the constant.  EGRET should only be used if the number of zero values is a very small fraction of the total days in the record (say less than 0.1\% of the days).  Columns Q7 and Q30 are the 7 and 30 day running averages for the 7 or 30 days ending on this specific date.
+If there are discharge values of zero, the code will add a small constant to all of the daily discharges.  This constant is 0.001 times the mean discharge.  The code will also report on the number of zero and negative values and the size of the constant.  EGRET should only be used if the number of zero values is a very small fraction of the total days in the record (say less than 0.1\% of the days), and there are no negative discharge values.  Columns Q7 and Q30 are the 7 and 30 day running averages for the 7 or 30 days ending on this specific date.
 
 \FloatBarrier
 
@@ -769,14 +735,14 @@ Date & Date & Date & date \\
   SinDY & number & Sine of DecYear & numeric \\ 
   CosDY & number & Cosine of DecYear & numeric \\ 
   Q \footnotemark[1] & number & Discharge & cms \\ 
-  LogQ \footnotemark[1] & number & Natural logarithm of flow & numeric \\ 
+  LogQ \footnotemark[1] & number & Natural logarithm of discharge & numeric \\ 
    \hline
 \end{tabular}
 \end{center}
 \end{minipage}
 \end{table}
 
-\footnotetext[1]{Flow columns are populated from data in the Daily dataframe after calling the mergeReport function.}
+\footnotetext[1]{Discharge columns are populated from data in the Daily dataframe after calling the mergeReport function.}
 
 \FloatBarrier
 
@@ -791,7 +757,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 \begin{center}
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Jun 27 15:21:47 2013
+% Tue Jul 09 17:05:14 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllrlrlr}
@@ -823,20 +789,20 @@ For the more complex example case, let us say dp is reported as \verb@<@0.01 and
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{verbatim}
-##         Date ConcLow ConcHigh Uncen ConcAve Julian Month
-## 1 2003-02-15   0.520    0.520     1   0.520  55927     2
-## 2 2003-06-30   0.310    0.310     1   0.310  56062     6
-## 3 2004-09-15   0.205    0.205     1   0.205  56505     9
-## 4 2005-01-30   0.430    0.430     1   0.430  56642     1
-## 5 2005-05-30   0.050    0.050     1   0.050  56762     5
-## 6 2005-10-30   0.020    0.020     1   0.020  56915    10
-##   Day DecYear MonthSeq    SinDY   CosDY
-## 1  46    2003     1838  0.70407  0.7101
-## 2 182    2003     1842  0.02575 -0.9997
-## 3 259    2005     1857 -0.96251 -0.2712
-## 4  30    2005     1861  0.48506  0.8745
-## 5 151    2005     1865  0.52943 -0.8484
-## 6 304    2006     1870 -0.87861  0.4775
+        Date ConcLow ConcHigh Uncen ConcAve Julian Month
+1 2003-02-15   0.520    0.520     1   0.520  55927     2
+2 2003-06-30   0.310    0.310     1   0.310  56062     6
+3 2004-09-15   0.205    0.205     1   0.205  56505     9
+4 2005-01-30   0.430    0.430     1   0.430  56642     1
+5 2005-05-30   0.050    0.050     1   0.050  56762     5
+6 2005-10-30   0.020    0.020     1   0.020  56915    10
+  Day DecYear MonthSeq    SinDY   CosDY
+1  46    2003     1838  0.70407  0.7101
+2 182    2003     1842  0.02575 -0.9997
+3 259    2005     1857 -0.96251 -0.2712
+4  30    2005     1861  0.48506  0.8745
+5 151    2005     1865  0.52943 -0.8484
+6 304    2006     1870 -0.87861  0.4775
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -870,7 +836,7 @@ date  Qdaily
 ...
 \end{verbatim}
 
-The call to open this file, convert the flow to cubic meters per second, and populate the Daily data frame would be:
+The call to open this file, convert the discharge to cubic meters per second, and populate the Daily data frame would be:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -888,7 +854,7 @@ Daily <- \hlfunctioncall{getDailyDataFromFile}(filePath,fileName,
 %------------------------------------------------------------ 
 \subsubsection{getSampleDataFromFile}
 %------------------------------------------------------------ 
-Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and flow data is that the code requires a third column that contains a remark code, either blank or \texttt{"}\verb@<@\texttt{"}, which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.  If multiple constituents are going to be used, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... An example of a comma-delimited file would be:
+Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and discharge data is that the code requires a third column that contains a remark code, either blank or \texttt{"}\verb@<@\texttt{"}, which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.  If multiple constituents are going to be summed, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... An example of a comma-delimited file would be:
 
 \begin{verbatim}
 cdate;remarkCode;Nitrate
@@ -931,40 +897,40 @@ endDate <- \hlstring{"2013-01-01"}
 Daily <- \hlfunctioncall{getDVData}(siteNumber, \hlstring{"00060"}, startDate, endDate)
 \end{alltt}
 \begin{verbatim}
-## There are  4750 data points, and  4750 days.
+There are  4750 data points, and  4750 days.
 \end{verbatim}
 \begin{alltt}
 Sample <- \hlfunctioncall{getSampleData}(siteNumber,parameterCd, startDate, endDate)
 Sample <- \hlfunctioncall{mergeReport}()
 \end{alltt}
 \begin{verbatim}
-## 
-##  Discharge Record is 4750 days long, which is 13 years
-##  First day of the discharge record is 2000-01-01 and last day is 2013-01-01
-##  The water quality record has 220 samples
-##  The first sample is from 2000-01-04 and the last sample is from 2012-12-18
-##  Discharge: Minimum, mean and maximum 0.00991 4.55 246
-##  Concentration: Minimum, mean and maximum 0.2 1.3 2.4
-##  Percentage of the sample values that are censored is 0 %
+
+ Discharge Record is 4750 days long, which is 13 years
+ First day of the discharge record is 2000-01-01 and last day is 2013-01-01
+ The water quality record has 220 samples
+ The first sample is from 2000-01-04 and the last sample is from 2012-12-18
+ Discharge: Minimum, mean and maximum 0.00991 4.55 246
+ Concentration: Minimum, mean and maximum 0.2 1.3 2.4
+ Percentage of the sample values that are censored is 0 %
 \end{verbatim}
 \begin{alltt}
 \hlfunctioncall{head}(Sample)
 \end{alltt}
 \begin{verbatim}
-##         Date ConcLow ConcHigh Uncen ConcAve Julian Month
-## 1 2000-01-04    1.59     1.59     1    1.59  54789     1
-## 2 2000-02-03    1.54     1.54     1    1.54  54819     2
-## 3 2000-02-15    1.37     1.37     1    1.37  54831     2
-## 4 2000-02-19    1.24     1.24     1    1.24  54835     2
-## 5 2000-03-23    0.52     0.52     1    0.52  54868     3
-## 6 2000-06-05    1.11     1.11     1    1.11  54942     6
-##   Day DecYear MonthSeq   SinDY   CosDY      Q   LogQ
-## 1   4    2000     1801 0.06005  0.9982  2.747 1.0104
-## 2  34    2000     1802 0.54392  0.8391  3.936 1.3702
-## 3  46    2000     1802 0.70407  0.7101 10.845 2.3837
-## 4  50    2000     1802 0.75113  0.6602 15.518 2.7420
-## 5  83    2000     1803 0.98809  0.1539 56.917 4.0416
-## 6 157    2000     1806 0.43940 -0.8983  1.812 0.5946
+        Date ConcLow ConcHigh Uncen ConcAve Julian Month
+1 2000-01-04    1.59     1.59     1    1.59  54789     1
+2 2000-02-03    1.54     1.54     1    1.54  54819     2
+3 2000-02-15    1.37     1.37     1    1.37  54831     2
+4 2000-02-19    1.24     1.24     1    1.24  54835     2
+5 2000-03-23    0.52     0.52     1    0.52  54868     3
+6 2000-06-05    1.11     1.11     1    1.11  54942     6
+  Day DecYear MonthSeq   SinDY   CosDY      Q   LogQ
+1   4    2000     1801 0.06005  0.9982  2.747 1.0104
+2  34    2000     1802 0.54392  0.8391  3.936 1.3702
+3  46    2000     1802 0.70407  0.7101 10.845 2.3837
+4  50    2000     1802 0.75113  0.6602 15.518 2.7420
+5  83    2000     1803 0.98809  0.1539 56.917 4.0416
+6 157    2000     1806 0.43940 -0.8983  1.812 0.5946
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1027,12 +993,13 @@ To see the raw code for a particular code, type the name of the function:
 removeDuplicates
 \end{alltt}
 \begin{verbatim}
-## function(localSample=Sample) {  
-##   Sample1 <- localSample[!duplicated(localSample[c("DecYear","ConcHigh")]),]
-##   
-##   return(Sample1)
-## }
-## <environment: namespace:dataRetrieval>
+function (localSample = Sample) 
+{
+    Sample1 <- localSample[!duplicated(localSample[c("DecYear", 
+        "ConcHigh")]), ]
+    return(Sample1)
+}
+<environment: namespace:dataRetrieval>
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1076,7 +1043,7 @@ After installing the package, you need to open the library each time you re-star
 %------------------------------------------------------------
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Jun 27 15:21:50 2013
+% Tue Jul 09 17:05:17 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1142,7 +1109,7 @@ After installing the package, you need to open the library each time you re-star
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Jun 27 15:21:50 2013
+% Tue Jul 09 17:05:17 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1199,7 +1166,7 @@ There are 62 columns returned from the water quality portal.
 \FloatBarrier
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Jun 27 15:21:50 2013
+% Tue Jul 09 17:05:17 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1252,8 +1219,8 @@ dailyData <- dailyData[\hlstring{"00003"} == dailyData$statCd,]
 pCodeINFO <- \hlfunctioncall{getMultipleParameterNames}(dailyData$parameter_cd)
 \end{alltt}
 \begin{verbatim}
-## Percent complete: 
-## 20 	40 	60 	80 	100 	
+Percent complete: 
+20 	40 	60 	80 	100 	
 \end{verbatim}
 \begin{alltt}
 dailyData <- \hlfunctioncall{merge}(dailyData,pCodeINFO, by=\hlstring{"parameter_cd"})
@@ -1269,18 +1236,18 @@ tableData <- \hlfunctioncall{with}(dailyData,
 tableData
 \end{alltt}
 \begin{verbatim}
-##                                shortName      Start
-## 1                     Temperature, water 2010-10-01
-## 2               Stream flow, mean. daily 1948-01-01
-## 3                   Specific conductance 2010-10-01
-## 4 Suspended sediment concentration (SSC) 1980-10-01
-## 5           Suspended sediment discharge 1980-10-01
-##          End Count      Units
-## 1 2012-05-09   529      deg C
-## 2 2013-06-26 23918        cfs
-## 3 2012-05-09   527 uS/cm @25C
-## 4 1991-09-30  3651       mg/l
-## 5 1991-09-30  3652   tons/day
+                               shortName      Start
+1                     Temperature, water 2010-10-01
+2               Stream flow, mean. daily 1948-01-01
+3                   Specific conductance 2010-10-01
+4 Suspended sediment concentration (SSC) 1980-10-01
+5           Suspended sediment discharge 1980-10-01
+         End Count      Units
+1 2012-05-09   529      deg C
+2 2013-07-08 23930        cfs
+3 2012-05-09   527 uS/cm @25C
+4 1991-09-30  3651       mg/l
+5 1991-09-30  3652   tons/day
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

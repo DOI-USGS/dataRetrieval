@@ -44,8 +44,8 @@ Sample_All <- getSTORETSampleData('WIDNR_WQX-10032762','Specific conductance', '
   \code{\link{compressData}},
   \code{\link{populateSampleColumns}}
 }
-\keyword{data}
-\keyword{import}
 \keyword{USGS}
 \keyword{WRTDS}
+\keyword{data}
+\keyword{import}
 

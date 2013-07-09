@@ -43,9 +43,9 @@
 getWQPData('USGS-01594440','Chloride', '', '')
 getWQPData('WIDNR_WQX-10032762','Specific conductance', '', '')
 }
+\keyword{WQP}
 \keyword{data}
 \keyword{import}
 \keyword{service}
 \keyword{web}
-\keyword{WQP}
 
