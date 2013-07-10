@@ -43,18 +43,6 @@ While the dataRetreival package is in development (and not on CRAN), the zoo pac
 	install.packages(c("zoo","XML","RCurl))
 	install.packages("dataRetrieval", repos="http://usgs-r.github.com", type="source")
 	
-### Note on updating versions:
-Some users have found it necessary to delete the package folders before installing newer versions of either dataRetrieval or EGRET.  If you are experiencing an issue after updating a package, trying deleting the package folder, the default location for Windows is something like this:
-C:\Users\ldecicco\Documents\R\win-library\2.15\dataRetrieval
-the default for a Mac:
-/Users/ldecicco/Library/R/2.15/library/dataRetrieval
-Then, re-install the package using the directions above.  Moving to CRAN should solve this problem.
-
-Stable releases are archived on the packageBuild branch of this repository: [https://github.com/USGS-R/dataRetrieval/tree/packageBuilds](https://github.com/USGS-R/dataRetrieval/tree/packageBuilds)
-
-* The latest stable version of dataRetrieval can be downloaded directly with this link:
-[dataRetrieval_1.2.1](https://github.com/USGS-R/dataRetrieval/blob/packageBuilds/dataRetrieval_1.2.1.tar.gz?raw=true)
-
 
 Background Information
 ----------------------
@@ -71,7 +59,13 @@ The second is an application to nitrate data for 8 monitoring sites on the Missi
 
 The manual available here assumes that the user understands the concepts underlying WRTDS.  Thus, reading at least the first of these papers is necessary to understanding the manual.
 
-[EGRET User Guide](https://github.com/USGS-R/dataRetrieval/raw/Documentation/EGRET%20manual_4.doc) (Word Document)
+[dataRetrieval vignette](https://github.com/USGS-R/EGRET/raw/Documentation/dataRetrieval.pdf) (pdf)
+
+[EGRET User Guide](https://github.com/USGS-R/EGRET/raw/Documentation/EGRETmanual_5.pdf) (pdf)
+
+[EGRET vignette](https://github.com/USGS-R/EGRET/raw/Documentation/EGRET.pdf) (Word Document)
+
+
 
 Version updates
 ---------------
