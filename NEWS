@@ -1,9 +1,11 @@
 dataRetrieval 1.2.2
 ===========
 
-* Added getDataAvailability function to find measured parameters and period of record information for a requested station
+* Added getDataAvailability function to find measured parameters and period of record information for a requested station.
 
-* Added constructNWISURL function to get the URL that is used to retrieve the data
+* Added constructNWISURL function to get the URL that is used to retrieve the data.
+
+* Added getSampleSTORET function to get STORET data directly in Sample dataframe form.
 
 
 dataRetrieval 1.2.1
