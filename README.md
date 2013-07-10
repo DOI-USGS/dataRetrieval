@@ -69,12 +69,21 @@ The manual available here assumes that the user understands the concepts underly
 
 Version updates
 ---------------
+* Version 1.2.2:        July 10, 2013
+
+	* Added getDataAvailability function to find measured parameters and period of record information for a requested station.
+	* Added constructNWISURL function to get the URL that is used to retrieve the data.
+	* Added getSampleSTORET function to get STORET data directly in Sample dataframe form.
+	* Fixed a small leap year bug by changing day of year by making Feb. 29 always 59, and March 1st always 60 (even in non-leap years).
+
+
+
 * Version 1.2.1:	Feburary 20, 2013
 
 	* Improved documentation, especially example functions.
 	* Improved vignette for a more complete walk-through.
 	* Expanded the capabilities to retrieve raw data from the web services.
-	* Added Storet data retrievals in getWQPData function
+	* Added STORET data retrievals in getWQPData function
 
 * Version 1.2.0:	October 13, 2012
 
