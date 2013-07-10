@@ -57,8 +57,8 @@ Daily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31', interactive=F
   \code{\link{retrieveNWISData}},
   \code{\link{populateDaily}}
 }
-\keyword{USGS}
-\keyword{WRTDS}
 \keyword{data}
 \keyword{import}
+\keyword{USGS}
+\keyword{WRTDS}
 

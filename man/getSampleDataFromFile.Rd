@@ -35,9 +35,9 @@ filePath <- '~/RData/'  # Sample format
 fileName <- 'ChoptankRiverNitrate.csv'
 #Sample <- getSampleDataFromFile(filePath,fileName, separator=";",interactive=FALSE)
 }
-\keyword{USGS}
-\keyword{WRTDS}
 \keyword{data}
 \keyword{file}
 \keyword{import}
+\keyword{USGS}
+\keyword{WRTDS}
 
