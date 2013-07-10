@@ -7,6 +7,7 @@ dataRetrieval 1.2.2
 
 * Added getSampleSTORET function to get STORET data directly in Sample dataframe form.
 
+* Fixed a small leap year bug by changing day of year by making Feb. 29 always 59, and March 1st always 60 (even in non-leap years).
 
 dataRetrieval 1.2.1
 ===========
