@@ -4,14 +4,13 @@
 #'
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
 #' @param interactive logical Option for interactive mode.  If true, a progress indicator is printed to the console.
-#' @param longNames logical indicates whether or not to make a web call to get long names of parameters. Be aware this could take a very long time if the station has lots of data.
 #' @keywords data import USGS web service
 #' @return retval dataframe with all information found in the expanded site file
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
 #' availableData <- getDataAvailability('05114000',interactive=FALSE)
-getDataAvailability <- function(siteNumber="",interactive=TRUE, longNames=FALSE){
+getDataAvailability <- function(siteNumber="",interactive=TRUE){
   
   # Checking for 8 digit site ID:
   siteNumber <- formatCheckSiteNumber(siteNumber,interactive=interactive)
@@ -39,11 +38,9 @@ getDataAvailability <- function(siteNumber="",interactive=TRUE, longNames=FALSE)
   SiteFile$count <- as.numeric(SiteFile$count)
   
   pCodes <- unique(SiteFile$parameter_cd)
-  
-  if(longNames){
-    pcodeINFO <- getMultipleParameterNames(pCodes,interactive)
-    SiteFile <- merge(SiteFile,pcodeINFO,by="parameter_cd")
-  }
+
+  pcodeINFO <- getParameterInfo(pCodes,interactive)
+  SiteFile <- merge(SiteFile,pcodeINFO,by="parameter_cd")
   
   return(SiteFile)
 }

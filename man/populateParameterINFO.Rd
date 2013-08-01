@@ -25,8 +25,8 @@
 \examples{
 #This example requires an internet connection to run
 INFO <- getSiteFileData('01594440')
-parameterCd <- "00175"
-parameterData <- getParameterInfo(parameterCd,interactive=interactive)
+parameterCd <- "01075"
+parameterData <- getParameterInfo(parameterCd)
 INFO$param.nm <- parameterData$parameter_nm
 INFO$param.units <- parameterData$parameter_units
 INFO$paramShortName <- parameterData$srsname

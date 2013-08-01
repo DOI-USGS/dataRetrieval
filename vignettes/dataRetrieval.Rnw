@@ -171,7 +171,7 @@ head(ChoptankAvailableData)
 
 There is an additional argument to the getDataAvailability called longNames, which defaults to FALSE. Setting longNames to TRUE will cause the function to make a web service call for each parameter and return expanded information on that parameter. Currently, this is a very slow process because each parameter code makes a unique web service call. If the site does not have many measured parameters, setting longNames to TRUE is reasonable.
 
-It is also possible to only request parameter information for a subset of variables. In the following example, we retrieve just the daily mean parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values). getMultipleParameterNames is the function that is embedded in the getDataAvailability, but here can be used as a standalone function.
+It is also possible to only request parameter information for a subset of variables. In the following example, we retrieve just the daily mean parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values).
 
 
 <<getSiteExtended, echo=TRUE>>=
@@ -184,13 +184,6 @@ ChoptankDailyData <- subset(ChoptankAvailableData,
 ChoptankDailyData <- subset(ChoptankDailyData,
                             "00003" == statCd)
 
-#Now, make a call to get all of the parameter information:
-pCodeINFO <- getMultipleParameterNames(
-  ChoptankDailyData$parameter_cd)
-
-#Merge the available dataframes:
-ChoptankDailyData <- merge(ChoptankDailyData,
-                           pCodeINFO,by="parameter_cd")
 @
 
 <<tablegda, echo=FALSE,results='asis'>>=
@@ -720,8 +713,6 @@ There are a few steps that are required in order to create a table in a Microsof
 availableData <- getDataAvailability(siteNumber)
 dailyData <- availableData["dv" == availableData$service,]
 dailyData <- dailyData["00003" == dailyData$statCd,]
-pCodeINFO <- getMultipleParameterNames(dailyData$parameter_cd)
-dailyData <- merge(dailyData,pCodeINFO, by="parameter_cd")
 
 tableData <- with(dailyData, 
       data.frame(

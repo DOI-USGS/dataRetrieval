@@ -10,8 +10,8 @@
 #' @examples
 #' #This example requires an internet connection to run
 #' INFO <- getSiteFileData('01594440')
-#' parameterCd <- "00175"
-#' parameterData <- getParameterInfo(parameterCd,interactive=interactive)
+#' parameterCd <- "01075"
+#' parameterData <- getParameterInfo(parameterCd)
 #' INFO$param.nm <- parameterData$parameter_nm
 #' INFO$param.units <- parameterData$parameter_units
 #' INFO$paramShortName <- parameterData$srsname
@@ -20,13 +20,13 @@
 populateParameterINFO <- function(parameterCd, localINFO=INFO, interactive=TRUE){
   if (nzchar(parameterCd)){
     if(interactive){
-      cat("Your water quality data are for parameter number", localINFO$paramNumber, "which has the name:'", localINFO$param.nm, "'.\n")
-      cat("Typically you will want a shorter name to be used in graphs and tables. The suggested short name is:'", localINFO$paramShortName, "'.\n")
-      cat("If you would like to change the short name, enter it here, otherwise just hit enter (no quotes):")
+      message("Your water quality data are for parameter number", localINFO$paramNumber, "which has the name:'", localINFO$param.nm, "'.\n")
+      message("Typically you will want a shorter name to be used in graphs and tables. The suggested short name is:'", localINFO$paramShortName, "'.\n")
+      message("If you would like to change the short name, enter it here, otherwise just hit enter (no quotes):")
       shortNameTemp <- readline()
       if (nchar(shortNameTemp)>0) localINFO$paramShortName <- shortNameTemp
-      cat("The units for the water quality data are: ", localINFO$param.units, ".\n")
-      cat("It is helpful to set up a constiuent abbreviation when doing multi-constituent studies, enter a unique id (three or four characters should work something like tn or tp or NO3).\nIt is case sensitive.  Even if you don't feel you need an abbreviation you need to enter something (no quotes):\n")
+      message("The units for the water quality data are: ", localINFO$param.units, ".\n")
+      message("It is helpful to set up a constiuent abbreviation when doing multi-constituent studies, enter a unique id (three or four characters should work something like tn or tp or NO3).\nIt is case sensitive.  Even if you don't feel you need an abbreviation you need to enter something (no quotes):\n")
       localINFO$constitAbbrev <- readline()
     } else {
       localINFO$constitAbbrev <- localINFO$paramShortName
@@ -34,13 +34,13 @@ populateParameterINFO <- function(parameterCd, localINFO=INFO, interactive=TRUE)
   } else {
     if (interactive){
       localINFO$paramNumber <- NA
-      cat("Enter a long name for the water quality data (no quotes):\n")
+      message("Enter a long name for the water quality data (no quotes):\n")
       localINFO$param.nm <- readline()
-      cat("Enter a short name to be used in graphs and tables(no quotes):\n")
+      message("Enter a short name to be used in graphs and tables(no quotes):\n")
       localINFO$paramShortName <- readline()
-      cat("It is helpful to set up a constiuent abbreviation when doing multi-constituent studies, enter a unique id (three or four characters should work something like tn or tp or NO3).\nIt is case sensitive.  Even if you don't feel you need an abbreviation you need to enter something (no quotes):\n")
+      message("It is helpful to set up a constiuent abbreviation when doing multi-constituent studies, enter a unique id (three or four characters should work something like tn or tp or NO3).\nIt is case sensitive.  Even if you don't feel you need an abbreviation you need to enter something (no quotes):\n")
       localINFO$constitAbbrev <- readline()
-      cat("Enter the units of the water quality data(no quotes):\n")
+      message("Enter the units of the water quality data(no quotes):\n")
       localINFO$param.units <- readline()
     } else {
       localINFO$paramNumber <- NA

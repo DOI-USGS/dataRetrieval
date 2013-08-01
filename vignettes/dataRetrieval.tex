@@ -148,7 +148,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Tue Jul 09 17:04:58 2013
+% Thu Aug 01 16:23:09 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -174,7 +174,7 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Tue Jul 09 17:04:58 2013
+% Thu Aug 01 16:23:09 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -250,12 +250,40 @@ ChoptankAvailableData <- \hlfunctioncall{getDataAvailability}(siteNumber)
 \end{alltt}
 \begin{verbatim}
   parameter_cd statCd  startDate    endDate count service
-2        00010  00001 1988-10-01 2012-05-09   894      dv
-3        00010  00002 2010-10-01 2012-05-09   529      dv
-4        00010  00003 2010-10-01 2012-05-09   529      dv
-5        00060  00003 1948-01-01 2013-07-08 23930      dv
-6        00095  00001 2010-10-01 2012-05-09   527      dv
-7        00095  00002 2010-10-01 2012-05-09   527      dv
+1        00001        1974-11-04 1984-08-01   109      qw
+2        00004        2013-03-27 2013-03-27     1      qw
+3        00008        1972-10-24 1973-12-26    12      qw
+4        00009        1974-03-22 1974-03-22     1      qw
+5        00010  00001 1988-10-01 2012-05-09   894      dv
+6        00010  00002 2010-10-01 2012-05-09   529      dv
+  parameter_group_nm
+1        Information
+2           Physical
+3        Information
+4        Information
+5           Physical
+6           Physical
+                                                                 parameter_nm
+1  Location in cross section, distance from right bank looking upstream, feet
+2                                                          Stream width, feet
+3                                                    Sample accounting number
+4 Location in cross section, distance from left bank looking downstream, feet
+5                                         Temperature, water, degrees Celsius
+6                                         Temperature, water, degrees Celsius
+  casrn                              srsname
+1                                           
+2       Instream features, est. stream width
+3                                           
+4                                           
+5                         Temperature, water
+6                         Temperature, water
+  parameter_units
+1              ft
+2              ft
+3              nu
+4              ft
+5           deg C
+6           deg C
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -263,7 +291,7 @@ ChoptankAvailableData <- \hlfunctioncall{getDataAvailability}(siteNumber)
 
 There is an additional argument to the getDataAvailability called longNames, which defaults to FALSE. Setting longNames to TRUE will cause the function to make a web service call for each parameter and return expanded information on that parameter. Currently, this is a very slow process because each parameter code makes a unique web service call. If the site does not have many measured parameters, setting longNames to TRUE is reasonable.
 
-It is also possible to only request parameter information for a subset of variables. In the following example, we retrieve just the daily mean parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values). getMultipleParameterNames is the function that is embedded in the getDataAvailability, but here can be used as a standalone function.
+It is also possible to only request parameter information for a subset of variables. In the following example, we retrieve just the daily mean parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values).
 
 
 \begin{knitrout}
@@ -277,27 +305,13 @@ ChoptankDailyData <- \hlfunctioncall{subset}(ChoptankAvailableData,
 \hlcomment{# This pulls out the mean:}
 ChoptankDailyData <- \hlfunctioncall{subset}(ChoptankDailyData,
                             \hlstring{"00003"} == statCd)
-
-\hlcomment{#Now, make a call to get all of the parameter information:}
-pCodeINFO <- \hlfunctioncall{getMultipleParameterNames}(
-  ChoptankDailyData$parameter_cd)
-\end{alltt}
-\begin{verbatim}
-Percent complete: 
-20 	40 	60 	80 	100 	
-\end{verbatim}
-\begin{alltt}
-
-\hlcomment{#Merge the available dataframes:}
-ChoptankDailyData <- \hlfunctioncall{merge}(ChoptankDailyData,
-                           pCodeINFO,by=\hlstring{"parameter_cd"})
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Tue Jul 09 17:05:04 2013
+% Thu Aug 01 16:23:12 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlllll}
@@ -305,7 +319,7 @@ ChoptankDailyData <- \hlfunctioncall{merge}(ChoptankDailyData,
  & shortName & Start & End & Count & Units \\ 
   \hline
 1 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  2 & Stream flow, mean. daily & 1948-01-01 & 2013-07-08 & 23930 & cfs \\ 
+  2 & Stream flow, mean. daily & 1948-01-01 & 2013-07-31 & 23954 & cfs \\ 
   3 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   4 & Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   5 & Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
@@ -510,8 +524,8 @@ dissolvedNitrateSimple <- \hlfunctioncall{getQWData}(siteNumber, parameterCd,
 \hlfunctioncall{names}(dissolvedNitrateSimple)
 \end{alltt}
 \begin{verbatim}
-[1] "dateTime"        "qualifier.00618" "value.00618"    
-[4] "qualifier.71851" "value.71851"    
+[1] "dateTime"        "qualifier.71851" "value.71851"    
+[4] "qualifier.00618" "value.00618"    
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -648,7 +662,7 @@ There are  4750 data points, and  4750 days.
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Tue Jul 09 17:05:13 2013
+% Thu Aug 01 16:23:22 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -757,7 +771,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 \begin{center}
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Tue Jul 09 17:05:14 2013
+% Thu Aug 01 16:23:24 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllrlrlr}
@@ -993,11 +1007,10 @@ To see the raw code for a particular code, type the name of the function:
 removeDuplicates
 \end{alltt}
 \begin{verbatim}
-function (localSample = Sample) 
-{
-    Sample1 <- localSample[!duplicated(localSample[c("DecYear", 
-        "ConcHigh")]), ]
-    return(Sample1)
+function(localSample=Sample) {  
+  Sample1 <- localSample[!duplicated(localSample[c("DecYear","ConcHigh")]),]
+  
+  return(Sample1)
 }
 <environment: namespace:dataRetrieval>
 \end{verbatim}
@@ -1043,7 +1056,7 @@ After installing the package, you need to open the library each time you re-star
 %------------------------------------------------------------
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Tue Jul 09 17:05:17 2013
+% Thu Aug 01 16:23:26 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1109,7 +1122,7 @@ After installing the package, you need to open the library each time you re-star
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Tue Jul 09 17:05:17 2013
+% Thu Aug 01 16:23:26 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1166,7 +1179,7 @@ There are 62 columns returned from the water quality portal.
 \FloatBarrier
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Tue Jul 09 17:05:17 2013
+% Thu Aug 01 16:23:26 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1216,14 +1229,6 @@ There are a few steps that are required in order to create a table in a Microsof
 availableData <- \hlfunctioncall{getDataAvailability}(siteNumber)
 dailyData <- availableData[\hlstring{"dv"} == availableData$service,]
 dailyData <- dailyData[\hlstring{"00003"} == dailyData$statCd,]
-pCodeINFO <- \hlfunctioncall{getMultipleParameterNames}(dailyData$parameter_cd)
-\end{alltt}
-\begin{verbatim}
-Percent complete: 
-20 	40 	60 	80 	100 	
-\end{verbatim}
-\begin{alltt}
-dailyData <- \hlfunctioncall{merge}(dailyData,pCodeINFO, by=\hlstring{"parameter_cd"})
 
 tableData <- \hlfunctioncall{with}(dailyData, 
       \hlfunctioncall{data.frame}(
@@ -1244,7 +1249,7 @@ tableData
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2013-07-08 23930        cfs
+2 2013-07-31 23954        cfs
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day

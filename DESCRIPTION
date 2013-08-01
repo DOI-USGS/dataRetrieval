@@ -51,7 +51,6 @@ Collate:
     'processQWData.r'
     'constructNWISURL.r'
     'getDataAvailability.r'
-    'getMultipleParameterNames.r'
     'getWaterML1Data.r'
     'padVariable.r'
     'getRDB1Data.r'

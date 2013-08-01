@@ -5,7 +5,7 @@
   getParameterInfo(parameterCd, interactive = TRUE)
 }
 \arguments{
-  \item{parameterCd}{string USGS parameter code.  This is
+  \item{parameterCd}{vector USGS parameter code.  This is
   usually an 5 digit number.}
 
   \item{interactive}{logical Option for interactive mode.
@@ -25,12 +25,11 @@
 }
 \examples{
 # These examples require an internet connection to run
-paramINFO <- getParameterInfo('01075')
-paramINFO2 <- getParameterInfo('00931',interactive=FALSE)
+paramINFO <- getParameterInfo(c('01075','00060','00931'))
 }
+\keyword{USGS}
 \keyword{data}
 \keyword{import}
 \keyword{service}
-\keyword{USGS}
 \keyword{web}
 
