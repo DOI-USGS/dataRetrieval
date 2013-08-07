@@ -5,8 +5,8 @@
   getParameterInfo(parameterCd, interactive = TRUE)
 }
 \arguments{
-  \item{parameterCd}{vector USGS parameter code.  This is
-  usually an 5 digit number.}
+  \item{parameterCd}{vector of USGS parameter codes.  This
+  is usually an 5 digit number.}
 
   \item{interactive}{logical Option for interactive mode.
   If true, there is user interaction for error handling and
