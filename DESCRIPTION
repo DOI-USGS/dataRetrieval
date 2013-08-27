@@ -56,7 +56,7 @@ Collate:
     'getRDB1Data.r'
     'getSTORETSampleData.R'
 Depends:
-    R (>= 2.15.0)
+    R (>= 3.0)
 Imports:
     zoo,
     XML,
