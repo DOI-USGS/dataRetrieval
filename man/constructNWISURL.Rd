@@ -4,7 +4,7 @@
 \usage{
   constructNWISURL(siteNumber, parameterCd, startDate,
     endDate, service, statCd = "00003", format = "xml",
-    interactive = FALSE)
+    interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string or vector of strings USGS site
@@ -40,7 +40,7 @@
   expected. The default is therefore "xml".}
 
   \item{interactive}{logical Option for interactive mode.
-  If true, there is user interaction for error handling and
+  If TRUE, there is user interaction for error handling and
   data checks.}
 }
 \value{

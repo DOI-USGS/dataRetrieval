@@ -17,7 +17,7 @@
 #' # Change the file path and file name to something meaningful:
 #' filePath <- '~/RData/'  # Sample format
 #' fileName <- 'ChoptankRiverNitrate.csv'
-#' #rawSampleData <- getQWDataFromFile(filePath,fileName, separator=";")
+#' \dontrun{rawSampleData <- getQWDataFromFile(filePath,fileName, separator=";")}
 getQWDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=","){
   totalPath <- paste(filePath,fileName,sep="");
   tmp <- read.delim(  

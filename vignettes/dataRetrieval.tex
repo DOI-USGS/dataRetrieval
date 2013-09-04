@@ -5,7 +5,7 @@
 %\VignetteImports{zoo, XML, RCurl}
 %\VignettePackage{dataRetrieval}
 
-\documentclass[a4paper,11pt]{article}\usepackage{graphicx, color}
+\documentclass[a4paper,11pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
 %% maxwidth is the original width if it is less than linewidth
 %% otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \makeatletter
@@ -18,21 +18,16 @@
 }
 \makeatother
 
-\definecolor{fgcolor}{rgb}{0.2, 0.2, 0.2}
-\newcommand{\hlnumber}[1]{\textcolor[rgb]{0,0,0}{#1}}%
-\newcommand{\hlfunctioncall}[1]{\textcolor[rgb]{0.501960784313725,0,0.329411764705882}{\textbf{#1}}}%
-\newcommand{\hlstring}[1]{\textcolor[rgb]{0.6,0.6,1}{#1}}%
-\newcommand{\hlkeyword}[1]{\textcolor[rgb]{0,0,0}{\textbf{#1}}}%
-\newcommand{\hlargument}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
-\newcommand{\hlcomment}[1]{\textcolor[rgb]{0.180392156862745,0.6,0.341176470588235}{#1}}%
-\newcommand{\hlroxygencomment}[1]{\textcolor[rgb]{0.43921568627451,0.47843137254902,0.701960784313725}{#1}}%
-\newcommand{\hlformalargs}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
-\newcommand{\hleqformalargs}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
-\newcommand{\hlassignement}[1]{\textcolor[rgb]{0,0,0}{\textbf{#1}}}%
-\newcommand{\hlpackage}[1]{\textcolor[rgb]{0.588235294117647,0.709803921568627,0.145098039215686}{#1}}%
-\newcommand{\hlslot}[1]{\textit{#1}}%
-\newcommand{\hlsymbol}[1]{\textcolor[rgb]{0,0,0}{#1}}%
-\newcommand{\hlprompt}[1]{\textcolor[rgb]{0.2,0.2,0.2}{#1}}%
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
 
 \usepackage{framed}
 \makeatletter
@@ -148,7 +143,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Aug 01 16:23:09 2013
+% Wed Sep 04 12:53:33 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -174,7 +169,7 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Aug 01 16:23:09 2013
+% Wed Sep 04 12:53:33 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -210,10 +205,10 @@ Use the getSiteFileData function to obtain all of the information available for 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlfunctioncall{library}(dataRetrieval)
-\hlcomment{# Site ID for Choptank River near Greensboro, MD}
-siteNumber <- \hlstring{"01491000"} 
-ChoptankInfo <- \hlfunctioncall{getSiteFileData}(siteNumber)
+\hlkwd{library}\hlstd{(dataRetrieval)}
+\hlcom{# Site ID for Choptank River near Greensboro, MD}
+\hlstd{siteNumber} \hlkwb{<-} \hlstr{"01491000"}
+\hlstd{ChoptankInfo} \hlkwb{<-} \hlkwd{getSiteFileData}\hlstd{(siteNumber)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -224,7 +219,7 @@ A list of the available columns are found in Appendix \ref{sec:appendix2INFO}: I
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-ChoptankInfo$station.nm
+\hlstd{ChoptankInfo}\hlopt{$}\hlstd{station.nm}
 \end{alltt}
 \begin{verbatim}
 [1] "CHOPTANK RIVER NEAR GREENSBORO, MD"
@@ -244,9 +239,9 @@ To find out the available data at a particular USGS site, including measured par
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcomment{# Continuing from the previous example:}
-ChoptankAvailableData <- \hlfunctioncall{getDataAvailability}(siteNumber)
-\hlfunctioncall{head}(ChoptankAvailableData)
+\hlcom{# Continuing from the previous example:}
+\hlstd{ChoptankAvailableData} \hlkwb{<-} \hlkwd{getDataAvailability}\hlstd{(siteNumber)}
+\hlkwd{head}\hlstd{(ChoptankAvailableData)}
 \end{alltt}
 \begin{verbatim}
   parameter_cd statCd  startDate    endDate count service
@@ -297,21 +292,20 @@ It is also possible to only request parameter information for a subset of variab
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcomment{# Continuing from the previous example:}
-\hlcomment{# This pulls out just the daily data:}
-ChoptankDailyData <- \hlfunctioncall{subset}(ChoptankAvailableData,
-                            \hlstring{"dv"} == service)
-
-\hlcomment{# This pulls out the mean:}
-ChoptankDailyData <- \hlfunctioncall{subset}(ChoptankDailyData,
-                            \hlstring{"00003"} == statCd)
+\hlcom{# Continuing from the previous example:}
+\hlcom{# This pulls out just the daily data:}
+\hlstd{ChoptankDailyData} \hlkwb{<-} \hlkwd{subset}\hlstd{(ChoptankAvailableData,}
+                            \hlstr{"dv"} \hlopt{==} \hlstd{service)}
+\hlcom{# This pulls out the mean:}
+\hlstd{ChoptankDailyData} \hlkwb{<-} \hlkwd{subset}\hlstd{(ChoptankDailyData,}
+                            \hlstr{"00003"} \hlopt{==} \hlstd{statCd)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Aug 01 16:23:12 2013
+% Wed Sep 04 12:53:38 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlllll}
@@ -319,7 +313,7 @@ ChoptankDailyData <- \hlfunctioncall{subset}(ChoptankDailyData,
  & shortName & Start & End & Count & Units \\ 
   \hline
 1 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  2 & Stream flow, mean. daily & 1948-01-01 & 2013-07-31 & 23954 & cfs \\ 
+  2 & Stream flow, mean. daily & 1948-01-01 & 2013-09-03 & 23988 & ft3/s \\ 
   3 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   4 & Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   5 & Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
@@ -343,10 +337,10 @@ To obtain all of the available information concerning a measured parameter, use 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcomment{# Using defaults:}
-parameterCd <- \hlstring{"00618"} 
-parameterINFO <- \hlfunctioncall{getParameterInfo}(parameterCd)
-\hlfunctioncall{colnames}(parameterINFO)
+\hlcom{# Using defaults:}
+\hlstd{parameterCd} \hlkwb{<-} \hlstr{"00618"}
+\hlstd{parameterINFO} \hlkwb{<-} \hlkwd{getParameterInfo}\hlstd{(parameterCd)}
+\hlkwd{colnames}\hlstd{(parameterINFO)}
 \end{alltt}
 \begin{verbatim}
 [1] "parameter_cd"       "parameter_group_nm"
@@ -361,7 +355,7 @@ Pulling out a specific example piece of information, in this case parameter name
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-parameterINFO$parameter_nm
+\hlstd{parameterINFO}\hlopt{$}\hlstd{parameter_nm}
 \end{alltt}
 \begin{verbatim}
 [1] "Nitrate, water, filtered, milligrams per liter as nitrogen"
@@ -382,14 +376,12 @@ The dates (start and end) need to be in the format \texttt{"}YYYY-MM-DD\texttt{"
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-
-\hlcomment{# Continuing with our Choptank River example}
-parameterCd <- \hlstring{"00060"}  # \hlfunctioncall{Discharge} (cfs)
-startDate <- \hlstring{""}  # Will request earliest date
-endDate <- \hlstring{""} # Will request latest date
-
-discharge <- \hlfunctioncall{retrieveNWISData}(siteNumber, 
-                    parameterCd, startDate, endDate)
+\hlcom{# Continuing with our Choptank River example}
+\hlstd{parameterCd} \hlkwb{<-} \hlstr{"00060"}  \hlcom{# Discharge (cfs)}
+\hlstd{startDate} \hlkwb{<-} \hlstr{""}  \hlcom{# Will request earliest date}
+\hlstd{endDate} \hlkwb{<-} \hlstr{""} \hlcom{# Will request latest date}
+\hlstd{discharge} \hlkwb{<-} \hlkwd{retrieveNWISData}\hlstd{(siteNumber,}
+                    \hlstd{parameterCd, startDate, endDate)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -402,14 +394,13 @@ Another example that doesn't use the defaults would be a request for mean and ma
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-
-parameterCd <- \hlfunctioncall{c}(\hlstring{"00010"},\hlstring{"00060"})  # Temperature and discharge
-statCd <- \hlfunctioncall{c}(\hlstring{"00001"},\hlstring{"00003"})  # Mean and maximum
-startDate <- \hlstring{"2012-01-01"}
-endDate <- \hlstring{"2012-05-01"}
-
-temperatureAndFlow <- \hlfunctioncall{retrieveNWISData}(siteNumber, parameterCd, 
-        startDate, endDate, StatCd=statCd)
+\hlstd{parameterCd} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"00010"}\hlstd{,}\hlstr{"00060"}\hlstd{)}  \hlcom{# Temperature and discharge}
+\hlstd{statCd} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"00001"}\hlstd{,}\hlstr{"00003"}\hlstd{)}  \hlcom{# Mean and maximum}
+\hlstd{startDate} \hlkwb{<-} \hlstr{"2012-01-01"}
+\hlstd{endDate} \hlkwb{<-} \hlstr{"2012-05-01"}
+\hlstd{temperatureAndFlow} \hlkwb{<-} \hlkwd{retrieveNWISData}\hlstd{(siteNumber, parameterCd,}
+        \hlstd{startDate, endDate,} \hlkwc{StatCd}\hlstd{=statCd)}
+\hlstd{temperatureAndFlow} \hlkwb{<-} \hlkwd{renameColumns}\hlstd{(temperatureAndFlow)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -422,20 +413,19 @@ An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlfunctioncall{par}(mar=\hlfunctioncall{c}(5,5,5,5))
-colnames <- \hlfunctioncall{names}(temperatureAndFlow)
-\hlfunctioncall{with}(temperatureAndFlow, \hlfunctioncall{plot}(
-  datetime, \hlfunctioncall{get}(colnames[6]),
-  xlab=\hlstring{"Date"},ylab=\hlstring{"Temperature [C]"}
-  ))
-\hlfunctioncall{par}(new=TRUE)
-\hlfunctioncall{with}(temperatureAndFlow, \hlfunctioncall{plot}(
-  \hlfunctioncall{get}(colnames[3]), \hlfunctioncall{get}(colnames[8]),
-  col=\hlstring{"red"},type=\hlstring{"l"},xaxt=\hlstring{"n"},yaxt=\hlstring{"n"},xlab=\hlstring{""},ylab=\hlstring{""},axes=FALSE
-  ))
-\hlfunctioncall{axis}(4,col=\hlstring{"red"},col.axis=\hlstring{"red"})
-\hlfunctioncall{mtext}(\hlstring{"Discharge [cfs]"},side=4,line=3,col=\hlstring{"red"})
-\hlfunctioncall{title}(\hlfunctioncall{paste}(ChoptankInfo$station.nm,\hlstring{"2012"},sep=\hlstring{" "}))
+\hlkwd{par}\hlstd{(}\hlkwc{mar}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{5}\hlstd{,}\hlnum{5}\hlstd{,}\hlnum{5}\hlstd{,}\hlnum{5}\hlstd{))}
+\hlkwd{with}\hlstd{(temperatureAndFlow,} \hlkwd{plot}\hlstd{(}
+  \hlstd{datetime, Temperature_water_01,}
+  \hlkwc{xlab}\hlstd{=}\hlstr{"Date"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"Temperature [C]"}
+  \hlstd{))}
+\hlkwd{par}\hlstd{(}\hlkwc{new}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+\hlkwd{with}\hlstd{(temperatureAndFlow,} \hlkwd{plot}\hlstd{(}
+  \hlstd{datetime, Stream_flow_mean_daily,}
+  \hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{,}\hlkwc{type}\hlstd{=}\hlstr{"l"}\hlstd{,}\hlkwc{xaxt}\hlstd{=}\hlstr{"n"}\hlstd{,}\hlkwc{yaxt}\hlstd{=}\hlstr{"n"}\hlstd{,}\hlkwc{xlab}\hlstd{=}\hlstr{""}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{""}\hlstd{,}\hlkwc{axes}\hlstd{=}\hlnum{FALSE}
+  \hlstd{))}
+\hlkwd{axis}\hlstd{(}\hlnum{4}\hlstd{,}\hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{,}\hlkwc{col.axis}\hlstd{=}\hlstr{"red"}\hlstd{)}
+\hlkwd{mtext}\hlstd{(}\hlstr{"Discharge [cfs]"}\hlstd{,}\hlkwc{side}\hlstd{=}\hlnum{4}\hlstd{,}\hlkwc{line}\hlstd{=}\hlnum{3}\hlstd{,}\hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{)}
+\hlkwd{title}\hlstd{(}\hlkwd{paste}\hlstd{(ChoptankInfo}\hlopt{$}\hlstd{station.nm,}\hlstr{"2012"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{" "}\hlstd{))}
 \end{alltt}
 \end{kframe}\begin{figure}[]
 
@@ -460,12 +450,11 @@ Any data that are collected at regular time intervals (such as 15-minute or hour
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-
-parameterCd <- \hlstring{"00060"}  # \hlfunctioncall{Discharge} (cfs)
-startDate <- \hlstring{"2012-05-12"} 
-endDate <- \hlstring{"2012-05-13"} 
-dischargeToday <- \hlfunctioncall{retrieveUnitNWISData}(siteNumber, parameterCd, 
-        startDate, endDate)
+\hlstd{parameterCd} \hlkwb{<-} \hlstr{"00060"}  \hlcom{# Discharge (cfs)}
+\hlstd{startDate} \hlkwb{<-} \hlstr{"2012-05-12"}
+\hlstd{endDate} \hlkwb{<-} \hlstr{"2012-05-13"}
+\hlstd{dischargeToday} \hlkwb{<-} \hlkwd{retrieveUnitNWISData}\hlstd{(siteNumber, parameterCd,}
+        \hlstd{startDate, endDate)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -510,22 +499,19 @@ To get USGS water quality data from water samples collected at the streamgage (a
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
- 
-\hlcomment{# Dissolved Nitrate parameter codes:}
-parameterCd <- \hlfunctioncall{c}(\hlstring{"00618"},\hlstring{"71851"})
-startDate <- \hlstring{"1979-10-11"}
-endDate <- \hlstring{"2012-12-18"}
-
-dissolvedNitrate <- \hlfunctioncall{getRawQWData}(siteNumber, parameterCd, 
-      startDate, endDate)
-
-dissolvedNitrateSimple <- \hlfunctioncall{getQWData}(siteNumber, parameterCd, 
-        startDate, endDate)
-\hlfunctioncall{names}(dissolvedNitrateSimple)
+\hlcom{# Dissolved Nitrate parameter codes:}
+\hlstd{parameterCd} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"00618"}\hlstd{,}\hlstr{"71851"}\hlstd{)}
+\hlstd{startDate} \hlkwb{<-} \hlstr{"1979-10-11"}
+\hlstd{endDate} \hlkwb{<-} \hlstr{"2012-12-18"}
+\hlstd{dissolvedNitrate} \hlkwb{<-} \hlkwd{getRawQWData}\hlstd{(siteNumber, parameterCd,}
+      \hlstd{startDate, endDate)}
+\hlstd{dissolvedNitrateSimple} \hlkwb{<-} \hlkwd{getQWData}\hlstd{(siteNumber, parameterCd,}
+        \hlstd{startDate, endDate)}
+\hlkwd{names}\hlstd{(dissolvedNitrateSimple)}
 \end{alltt}
 \begin{verbatim}
-[1] "dateTime"        "qualifier.71851" "value.71851"    
-[4] "qualifier.00618" "value.00618"    
+[1] "dateTime"        "qualifier.00618" "value.00618"    
+[4] "qualifier.71851" "value.71851"    
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -535,12 +521,12 @@ Note that in this dataframe, datetime is imported as Dates (no times are include
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlfunctioncall{with}(dissolvedNitrateSimple, \hlfunctioncall{plot}(
-  dateTime, value.00618,
-  xlab=\hlstring{"Date"},ylab = \hlfunctioncall{paste}(parameterINFO$srsname,
-      \hlstring{"["},parameterINFO$parameter_units,\hlstring{"]"})
-  ))
-\hlfunctioncall{title}(ChoptankInfo$station.nm)
+\hlkwd{with}\hlstd{(dissolvedNitrateSimple,} \hlkwd{plot}\hlstd{(}
+  \hlstd{dateTime, value.00618,}
+  \hlkwc{xlab}\hlstd{=}\hlstr{"Date"}\hlstd{,}\hlkwc{ylab} \hlstd{=} \hlkwd{paste}\hlstd{(parameterINFO}\hlopt{$}\hlstd{srsname,}
+      \hlstr{"["}\hlstd{,parameterINFO}\hlopt{$}\hlstd{parameter_units,}\hlstr{"]"}\hlstd{)}
+  \hlstd{))}
+\hlkwd{title}\hlstd{(ChoptankInfo}\hlopt{$}\hlstd{station.nm)}
 \end{alltt}
 \end{kframe}\begin{figure}[]
 
@@ -562,9 +548,9 @@ There are additional data sets available on the Water Quality Data Portal (\url{
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-specificCond <- \hlfunctioncall{getWQPData}(\hlstring{'WIDNR_WQX-10032762'}, 
-        \hlstring{'Specific conductance'}, \hlstring{''}, \hlstring{''})
-\hlfunctioncall{head}(specificCond)
+\hlstd{specificCond} \hlkwb{<-} \hlkwd{getWQPData}\hlstd{(}\hlstr{'WIDNR_WQX-10032762'}\hlstd{,}
+        \hlstr{'Specific conductance'}\hlstd{,} \hlstr{''}\hlstd{,} \hlstr{''}\hlstd{)}
+\hlkwd{head}\hlstd{(specificCond)}
 \end{alltt}
 \begin{verbatim}
     dateTime qualifier.Specific conductance
@@ -597,14 +583,14 @@ There may be times when you might be interested in seeing the URL (web address) 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcomment{# Dissolved Nitrate parameter codes:}
-pCode <- \hlfunctioncall{c}(\hlstring{"00618"},\hlstring{"71851"})
-startDate <- \hlstring{"1964-06-11"}
-endDate <- \hlstring{"2012-12-18"}
-url_qw <- \hlfunctioncall{constructNWISURL}(siteNumber,pCode,startDate,endDate,\hlstring{'qw'})
-url_dv <- \hlfunctioncall{constructNWISURL}(siteNumber,\hlstring{"00060"},startDate,endDate,
-                           \hlstring{'dv'},statCd=\hlstring{"00003"})
-url_uv <- \hlfunctioncall{constructNWISURL}(siteNumber,\hlstring{"00060"},startDate,endDate,\hlstring{'uv'})
+\hlcom{# Dissolved Nitrate parameter codes:}
+\hlstd{pCode} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"00618"}\hlstd{,}\hlstr{"71851"}\hlstd{)}
+\hlstd{startDate} \hlkwb{<-} \hlstr{"1964-06-11"}
+\hlstd{endDate} \hlkwb{<-} \hlstr{"2012-12-18"}
+\hlstd{url_qw} \hlkwb{<-} \hlkwd{constructNWISURL}\hlstd{(siteNumber,pCode,startDate,endDate,}\hlstr{'qw'}\hlstd{)}
+\hlstd{url_dv} \hlkwb{<-} \hlkwd{constructNWISURL}\hlstd{(siteNumber,}\hlstr{"00060"}\hlstd{,startDate,endDate,}
+                           \hlstr{'dv'}\hlstd{,}\hlkwc{statCd}\hlstd{=}\hlstr{"00003"}\hlstd{)}
+\hlstd{url_uv} \hlkwb{<-} \hlkwd{constructNWISURL}\hlstd{(siteNumber,}\hlstr{"00060"}\hlstd{,startDate,endDate,}\hlstr{'uv'}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -627,8 +613,8 @@ The function to obtain metadata, or data about the streamgage and measured param
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-parameterCd <- \hlstring{"00618"}
-INFO <-\hlfunctioncall{getMetaData}(siteNumber,parameterCd, interactive=FALSE)
+\hlstd{parameterCd} \hlkwb{<-} \hlstr{"00618"}
+\hlstd{INFO} \hlkwb{<-}\hlkwd{getMetaData}\hlstd{(siteNumber,parameterCd,} \hlkwc{interactive}\hlstd{=}\hlnum{FALSE}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -646,14 +632,14 @@ The function to obtain the daily values (discharge in this case) is getDVData.  
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-siteNumber <- \hlstring{"01491000"}
-startDate <- \hlstring{"2000-01-01"}
-endDate <- \hlstring{"2013-01-01"}
-\hlcomment{# This call will get NWIS (cfs) data , and convert it to cms:}
-Daily <- \hlfunctioncall{getDVData}(siteNumber, \hlstring{"00060"}, startDate, endDate)
+\hlstd{siteNumber} \hlkwb{<-} \hlstr{"01491000"}
+\hlstd{startDate} \hlkwb{<-} \hlstr{"2000-01-01"}
+\hlstd{endDate} \hlkwb{<-} \hlstr{"2013-01-01"}
+\hlcom{# This call will get NWIS (cfs) data , and convert it to cms:}
+\hlstd{Daily} \hlkwb{<-} \hlkwd{getDVData}\hlstd{(siteNumber,} \hlstr{"00060"}\hlstd{, startDate, endDate)}
 \end{alltt}
 \begin{verbatim}
-There are  4750 data points, and  4750 days.
+There are 4750 data points, and 4750 days.
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -662,7 +648,7 @@ There are  4750 data points, and  4750 days.
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Aug 01 16:23:22 2013
+% Wed Sep 04 12:53:59 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -701,9 +687,9 @@ The function to obtain USGS sample data from the water quality portal is getSamp
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-parameterCd <- \hlstring{"00618"}
-Sample <-\hlfunctioncall{getSampleData}(siteNumber,parameterCd,
-      startDate, endDate)
+\hlstd{parameterCd} \hlkwb{<-} \hlstr{"00618"}
+\hlstd{Sample} \hlkwb{<-}\hlkwd{getSampleData}\hlstd{(siteNumber,parameterCd,}
+      \hlstd{startDate, endDate)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -714,10 +700,10 @@ The function to obtain STORET sample data from the water quality portal is getST
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-site <- \hlstring{'WIDNR_WQX-10032762'}
-characteristicName <- \hlstring{'Specific conductance'}
-Sample <-\hlfunctioncall{getSTORETSampleData}(site,characteristicName,
-      startDate, endDate)
+\hlstd{site} \hlkwb{<-} \hlstr{'WIDNR_WQX-10032762'}
+\hlstd{characteristicName} \hlkwb{<-} \hlstr{'Specific conductance'}
+\hlstd{Sample} \hlkwb{<-}\hlkwd{getSTORETSampleData}\hlstd{(site,characteristicName,}
+      \hlstd{startDate, endDate)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -771,7 +757,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 \begin{center}
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Aug 01 16:23:24 2013
+% Wed Sep 04 12:54:01 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllrlrlr}
@@ -854,10 +840,10 @@ The call to open this file, convert the discharge to cubic meters per second, an
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-fileName <- \hlstring{"ChoptankRiverFlow.txt"}
-filePath <-  \hlstring{"C:/RData/"}
-Daily <- \hlfunctioncall{getDailyDataFromFile}(filePath,fileName,
-                    separator=\hlstring{"\textbackslash{}t"})
+\hlstd{fileName} \hlkwb{<-} \hlstr{"ChoptankRiverFlow.txt"}
+\hlstd{filePath} \hlkwb{<-}  \hlstr{"C:/RData/"}
+\hlstd{Daily} \hlkwb{<-} \hlkwd{getDailyDataFromFile}\hlstd{(filePath,fileName,}
+                    \hlkwc{separator}\hlstd{=}\hlstr{"\textbackslash{}t"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -883,10 +869,10 @@ The call to open this file, and populate the Sample dataframe would be:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-fileName <- \hlstring{"ChoptankRiverNitrate.csv"}
-filePath <-  \hlstring{"C:/RData/"}
-Sample <- \hlfunctioncall{getSampleDataFromFile}(filePath,fileName,
-                                separator=\hlstring{","})
+\hlstd{fileName} \hlkwb{<-} \hlstr{"ChoptankRiverNitrate.csv"}
+\hlstd{filePath} \hlkwb{<-}  \hlstr{"C:/RData/"}
+\hlstd{Sample} \hlkwb{<-} \hlkwd{getSampleDataFromFile}\hlstd{(filePath,fileName,}
+                                \hlkwc{separator}\hlstd{=}\hlstr{","}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -903,19 +889,18 @@ Finally, there is a function called mergeReport that will look at both the Daily
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-siteNumber <- \hlstring{"01491000"}
-parameterCd <- \hlstring{"00631"}  # Nitrate
-startDate <- \hlstring{"2000-01-01"}
-endDate <- \hlstring{"2013-01-01"}
-
-Daily <- \hlfunctioncall{getDVData}(siteNumber, \hlstring{"00060"}, startDate, endDate)
+\hlstd{siteNumber} \hlkwb{<-} \hlstr{"01491000"}
+\hlstd{parameterCd} \hlkwb{<-} \hlstr{"00631"}  \hlcom{# Nitrate}
+\hlstd{startDate} \hlkwb{<-} \hlstr{"2000-01-01"}
+\hlstd{endDate} \hlkwb{<-} \hlstr{"2013-01-01"}
+\hlstd{Daily} \hlkwb{<-} \hlkwd{getDVData}\hlstd{(siteNumber,} \hlstr{"00060"}\hlstd{, startDate, endDate)}
 \end{alltt}
 \begin{verbatim}
-There are  4750 data points, and  4750 days.
+There are 4750 data points, and 4750 days.
 \end{verbatim}
 \begin{alltt}
-Sample <- \hlfunctioncall{getSampleData}(siteNumber,parameterCd, startDate, endDate)
-Sample <- \hlfunctioncall{mergeReport}()
+\hlstd{Sample} \hlkwb{<-} \hlkwd{getSampleData}\hlstd{(siteNumber,parameterCd, startDate, endDate)}
+\hlstd{Sample} \hlkwb{<-} \hlkwd{mergeReport}\hlstd{()}
 \end{alltt}
 \begin{verbatim}
 
@@ -928,7 +913,7 @@ Sample <- \hlfunctioncall{mergeReport}()
  Percentage of the sample values that are censored is 0 %
 \end{verbatim}
 \begin{alltt}
-\hlfunctioncall{head}(Sample)
+\hlkwd{head}\hlstd{(Sample)}
 \end{alltt}
 \begin{verbatim}
         Date ConcLow ConcHigh Uncen ConcAve Julian Month
@@ -960,9 +945,9 @@ As has been mentioned, the data is specifically formatted to be used with the EG
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcomment{# Continuing Choptank example from the previous sections}
-\hlfunctioncall{library}(EGRET)
-\hlfunctioncall{multiPlotDataOverview}()
+\hlcom{# Continuing Choptank example from the previous sections}
+\hlkwd{library}\hlstd{(EGRET)}
+\hlkwd{multiPlotDataOverview}\hlstd{()}
 \end{alltt}
 \end{kframe}\begin{figure}[]
 
@@ -994,7 +979,7 @@ At any time, you can get information about any function in R by typing a questio
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-?removeDuplicates
+\hlopt{?}\hlstd{removeDuplicates}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -1004,7 +989,7 @@ To see the raw code for a particular code, type the name of the function:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-removeDuplicates
+\hlstd{removeDuplicates}
 \end{alltt}
 \begin{verbatim}
 function(localSample=Sample) {  
@@ -1026,8 +1011,8 @@ Before installing dataRetrieval, the zoo packages must be installed from CRAN:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlfunctioncall{install.packages}(\hlstring{"zoo"})
-\hlfunctioncall{install.packages}(\hlstring{"dataRetrieval"}, repos=\hlstring{"http://usgs-r.github.com"}, type=\hlstring{"source"})
+\hlkwd{install.packages}\hlstd{(}\hlstr{"zoo"}\hlstd{)}
+\hlkwd{install.packages}\hlstd{(}\hlstr{"dataRetrieval"}\hlstd{,} \hlkwc{repos}\hlstd{=}\hlstr{"http://usgs-r.github.com"}\hlstd{,} \hlkwc{type}\hlstd{=}\hlstr{"source"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -1039,7 +1024,7 @@ After installing the package, you need to open the library each time you re-star
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlfunctioncall{library}(dataRetrieval)
+\hlkwd{library}\hlstd{(dataRetrieval)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -1056,7 +1041,7 @@ After installing the package, you need to open the library each time you re-star
 %------------------------------------------------------------
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Aug 01 16:23:26 2013
+% Wed Sep 04 12:54:04 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1122,7 +1107,7 @@ After installing the package, you need to open the library each time you re-star
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Aug 01 16:23:26 2013
+% Wed Sep 04 12:54:04 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1179,7 +1164,7 @@ There are 62 columns returned from the water quality portal.
 \FloatBarrier
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Thu Aug 01 16:23:26 2013
+% Wed Sep 04 12:54:04 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1226,19 +1211,18 @@ There are a few steps that are required in order to create a table in a Microsof
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-availableData <- \hlfunctioncall{getDataAvailability}(siteNumber)
-dailyData <- availableData[\hlstring{"dv"} == availableData$service,]
-dailyData <- dailyData[\hlstring{"00003"} == dailyData$statCd,]
-
-tableData <- \hlfunctioncall{with}(dailyData, 
-      \hlfunctioncall{data.frame}(
-        shortName=srsname, 
-        Start=startDate, 
-        End=endDate, 
-        Count=count,
-        Units=parameter_units)
-      )
-tableData
+\hlstd{availableData} \hlkwb{<-} \hlkwd{getDataAvailability}\hlstd{(siteNumber)}
+\hlstd{dailyData} \hlkwb{<-} \hlstd{availableData[}\hlstr{"dv"} \hlopt{==} \hlstd{availableData}\hlopt{$}\hlstd{service,]}
+\hlstd{dailyData} \hlkwb{<-} \hlstd{dailyData[}\hlstr{"00003"} \hlopt{==} \hlstd{dailyData}\hlopt{$}\hlstd{statCd,]}
+\hlstd{tableData} \hlkwb{<-} \hlkwd{with}\hlstd{(dailyData,}
+      \hlkwd{data.frame}\hlstd{(}
+        \hlkwc{shortName}\hlstd{=srsname,}
+        \hlkwc{Start}\hlstd{=startDate,}
+        \hlkwc{End}\hlstd{=endDate,}
+        \hlkwc{Count}\hlstd{=count,}
+        \hlkwc{Units}\hlstd{=parameter_units)}
+      \hlstd{)}
+\hlstd{tableData}
 \end{alltt}
 \begin{verbatim}
                                shortName      Start
@@ -1249,7 +1233,7 @@ tableData
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2013-07-31 23954        cfs
+2 2013-09-03 23988      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day
@@ -1264,8 +1248,8 @@ First, save the dataframe as a tab delimited file (you don't want to use comma d
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlfunctioncall{write.table}(tableData, file=\hlstring{"tableData.tsv"},sep=\hlstring{"\textbackslash{}t"},
-            row.names = FALSE,quote=FALSE)
+\hlkwd{write.table}\hlstd{(tableData,} \hlkwc{file}\hlstd{=}\hlstr{"tableData.tsv"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{"\textbackslash{}t"}\hlstd{,}
+            \hlkwc{row.names} \hlstd{=} \hlnum{FALSE}\hlstd{,}\hlkwc{quote}\hlstd{=}\hlnum{FALSE}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}

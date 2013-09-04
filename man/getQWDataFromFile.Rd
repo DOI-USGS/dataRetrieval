@@ -33,7 +33,7 @@
 # Change the file path and file name to something meaningful:
 filePath <- '~/RData/'  # Sample format
 fileName <- 'ChoptankRiverNitrate.csv'
-#rawSampleData <- getQWDataFromFile(filePath,fileName, separator=";")
+\dontrun{rawSampleData <- getQWDataFromFile(filePath,fileName, separator=";")}
 }
 \keyword{data}
 \keyword{file}

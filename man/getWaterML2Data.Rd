@@ -18,7 +18,7 @@
   getObservation
 }
 \examples{
-url <- "http://webvastage6.er.usgs.gov/ogc-swie/wml2/uv/sos?request=GetObservation&featureID=01446500&observedProperty=00065&offering=UNIT&beginPosition=2013-08-20"
-dataReturned <- getWaterML2Data(urlMulti)
+URL <- "http://webvastage6.er.usgs.gov/ogc-swie/wml2/dv/sos?request=GetObservation&featureID=435601087432701&observedProperty=00045&beginPosition=2012-01-01&offering=Sum"
+dataReturned3 <- getWaterML2Data(URL)
 }
 

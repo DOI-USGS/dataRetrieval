@@ -23,7 +23,7 @@
 }
 \examples{
 # These examples require an internet connection to run
-availableData <- getDataAvailability('05114000',interactive=FALSE)
+availableData <- getDataAvailability('05114000')
 }
 \keyword{USGS}
 \keyword{data}

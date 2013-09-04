@@ -16,7 +16,7 @@
 #' INFO$param.units <- parameterData$parameter_units
 #' INFO$paramShortName <- parameterData$srsname
 #' INFO$paramNumber <- parameterData$parameter_cd
-#' INFO <- populateParameterINFO(parameterCd,interactive=FALSE)
+#' INFO <- populateParameterINFO(parameterCd)
 populateParameterINFO <- function(parameterCd, localINFO=INFO, interactive=TRUE){
   if (nzchar(parameterCd)){
     if(interactive){

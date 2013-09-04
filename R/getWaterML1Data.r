@@ -1,4 +1,4 @@
-#' Function to return data from the NWISWeb WaterML1.1 daily values service
+#' Function to return data from the NWISWeb WaterML1.1 service
 #'
 #' This function accepts a url parameter that already contains the desired
 #' NWIS site, parameter code, statistic, startdate and enddate. 

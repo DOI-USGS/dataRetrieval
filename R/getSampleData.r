@@ -17,9 +17,9 @@
 #' @seealso \code{\link{compressData}}, \code{\link{populateSampleColumns}}
 #' @examples
 #' # These examples require an internet connection to run
-#' Sample_01075 <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31', interactive=FALSE)
-#' Sample_All <- getSampleData('05114000','00915;00931', '1985-01-01', '1985-03-31', interactive=FALSE)
-#' Sample_Select <- getSampleData('05114000','00915;00931', '', '', interactive=FALSE)
+#' Sample_01075 <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31')
+#' Sample_All <- getSampleData('05114000','00915;00931', '1985-01-01', '1985-03-31')
+#' Sample_Select <- getSampleData('05114000','00915;00931', '', '')
 getSampleData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
   data <- getQWData(siteNumber,ParameterCd,StartDate,EndDate,interactive=interactive)
   compressedData <- compressData(data, interactive=interactive)

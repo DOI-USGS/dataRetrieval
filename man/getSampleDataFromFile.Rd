@@ -33,7 +33,7 @@
 # Change the file path and file name to something meaningful:
 filePath <- '~/RData/'  # Sample format
 fileName <- 'ChoptankRiverNitrate.csv'
-#Sample <- getSampleDataFromFile(filePath,fileName, separator=";",interactive=FALSE)
+\dontrun{Sample <- getSampleDataFromFile(filePath,fileName, separator=";",interactive=FALSE)}
 }
 \keyword{USGS}
 \keyword{WRTDS}

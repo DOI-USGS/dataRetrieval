@@ -1,6 +1,6 @@
 \name{getWaterML1Data}
 \alias{getWaterML1Data}
-\title{Function to return data from the NWISWeb WaterML1.1 daily values service}
+\title{Function to return data from the NWISWeb WaterML1.1 service}
 \usage{
   getWaterML1Data(obs_url)
 }

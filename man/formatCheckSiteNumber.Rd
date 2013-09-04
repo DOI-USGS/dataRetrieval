@@ -20,7 +20,7 @@
 }
 \examples{
 site<- '01234567'
-formatCheckSiteNumber(site, interactive = FALSE)
+formatCheckSiteNumber(site)
 }
 \keyword{WRTDS}
 \keyword{flow}

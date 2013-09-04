@@ -62,7 +62,8 @@ Depends:
 Imports:
     zoo,
     XML,
-    RCurl
+    RCurl,
+    plyr
 Suggests:
     xtable,
     EGRET,

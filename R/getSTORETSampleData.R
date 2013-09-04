@@ -17,8 +17,8 @@
 #' @seealso \code{\link{compressData}}, \code{\link{populateSampleColumns}}
 #' @examples
 #' # These examples require an internet connection to run
-#' Sample_01075 <- getSTORETSampleData('USGS-01594440','Chloride', '', '', interactive=FALSE)
-#' Sample_All <- getSTORETSampleData('WIDNR_WQX-10032762','Specific conductance', '', '', interactive=FALSE)
+#' Sample_01075 <- getSTORETSampleData('USGS-01594440','Chloride', '', '')
+#' Sample_All <- getSTORETSampleData('WIDNR_WQX-10032762','Specific conductance', '', '')
 getSTORETSampleData <- function(siteNumber,characteristicName,StartDate,EndDate,interactive=TRUE){
   data <- getWQPData(siteNumber,characteristicName,StartDate,EndDate,interactive=interactive)
   compressedData <- compressData(data, interactive=interactive)

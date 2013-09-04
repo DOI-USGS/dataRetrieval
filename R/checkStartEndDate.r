@@ -11,7 +11,7 @@
 #' @examples
 #' startDate <- '1985-01-01'
 #' endDate <- '1990-01-01'
-#' checkStartEndDate(startDate, endDate, interactive = FALSE)
+#' checkStartEndDate(startDate, endDate)
 checkStartEndDate <- function(StartDate, EndDate,interactive=TRUE){
   start <- as.Date("1850-01-01")
   end <- as.Date(Sys.Date())

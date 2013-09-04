@@ -9,7 +9,7 @@
 #' @export
 #' @examples
 #' pCode <- '01234'
-#' formatCheckParameterCd(pCode, interactive = FALSE)
+#' formatCheckParameterCd(pCode)
 formatCheckParameterCd <- function(ParameterCd, interactive=TRUE){     #checks for a 5 digit number
   
   pCodeReturn <- rep(NA,length(ParameterCd))

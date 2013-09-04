@@ -256,6 +256,8 @@ endDate <- "2012-05-01"
 temperatureAndFlow <- retrieveNWISData(siteNumber, parameterCd, 
         startDate, endDate, StatCd=statCd)
 
+temperatureAndFlow <- renameColumns(temperatureAndFlow)
+
 @
 
 Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}. 
@@ -264,14 +266,14 @@ An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
 
 <<getNWIStemperaturePlot, echo=TRUE, fig.cap="Temperature and discharge plot of Choptank River in 2012.",out.width='1\\linewidth',out.height='1\\linewidth',fig.show='hold'>>=
 par(mar=c(5,5,5,5))
-colnames <- names(temperatureAndFlow)
+
 with(temperatureAndFlow, plot(
-  datetime, get(colnames[6]),
+  datetime, Temperature_water_01,
   xlab="Date",ylab="Temperature [C]"
   ))
 par(new=TRUE)
 with(temperatureAndFlow, plot(
-  get(colnames[3]), get(colnames[8]),
+  datetime, Stream_flow_mean_daily,
   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
   ))
 axis(4,col="red",col.axis="red")

@@ -38,9 +38,9 @@
 }
 \examples{
 # These examples require an internet connection to run
-Sample_01075 <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31', interactive=FALSE)
-Sample_All <- getSampleData('05114000','00915;00931', '1985-01-01', '1985-03-31', interactive=FALSE)
-Sample_Select <- getSampleData('05114000','00915;00931', '', '', interactive=FALSE)
+Sample_01075 <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31')
+Sample_All <- getSampleData('05114000','00915;00931', '1985-01-01', '1985-03-31')
+Sample_Select <- getSampleData('05114000','00915;00931', '', '')
 }
 \seealso{
   \code{\link{compressData}},

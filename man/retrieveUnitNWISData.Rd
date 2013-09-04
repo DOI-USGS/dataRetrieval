@@ -51,8 +51,8 @@ ParameterCd <- '00060'
 StartDate <- as.character(Sys.Date())
 EndDate <- as.character(Sys.Date())
 # These examples require an internet connection to run
-rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=FALSE)
-rawData2 <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,"tsv",interactive=FALSE)
+rawData <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate)
+rawData2 <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,"tsv")
 }
 \keyword{USGS}
 \keyword{data}

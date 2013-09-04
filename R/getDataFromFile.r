@@ -14,9 +14,9 @@
 #' @examples
 #' # Examples of how to use getDataFromFile:
 #' # Change the file path and file name to something meaningful:
-#' #filePath <- '~/RData/'  # Sample format
+#' filePath <- '~/RData/'  # Sample format
 #' fileName <- 'ChoptankRiverFlow.txt'
-#' #getDataFromFile(filePath,fileName, separator="\t")
+#' \dontrun{getDataFromFile(filePath,fileName, separator="\t")}
 getDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=","){
   totalPath <- paste(filePath,fileName,sep="");  
   tmp <- read.delim(  

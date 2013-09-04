@@ -44,7 +44,7 @@
 # These examples require an internet connection to run
 rawProcessedSample <- getQWData('01594440','01075', '1985-01-01', '1985-03-31')
 rawProcessedSampleAll <- getQWData('05114000','', '1985-01-01', '1985-03-31')
-rawProcessedSampleSelect <- getQWData('05114000','00915;00931', '1985-01-01', '1985-04-30', interactive=FALSE)
+rawProcessedSampleSelect <- getQWData('05114000','00915;00931', '1985-01-01', '1985-04-30')
 }
 \keyword{USGS}
 \keyword{data}

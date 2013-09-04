@@ -16,7 +16,7 @@
 #' value <- c(1,2,3)
 #' code <- c("","","")
 #' dataInput <- data.frame(dateTime, value, code, stringsAsFactors=FALSE)
-#' Daily <- populateDaily(dataInput, 2, interactive=FALSE)
+#' Daily <- populateDaily(dataInput, 2)
 populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a dataframe with at least dateTime, value, code
   
 #   require(zoo)
@@ -55,12 +55,12 @@ populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a da
       zeroNums <- length(which(localDaily$Q == 0))
       
       if (negNums > 0) {
-        cat("There were ", as.character(negNums), " negative flow days \n")
+        cat("There were", as.character(negNums), "negative flow days \n")
         cat("Negative values are not supported in the EGRET package\n")
       }
       
       if (zeroNums > 0){
-        cat("There were ", as.character(zeroNums), " zero flow days \n")
+        cat("There were", as.character(zeroNums), "zero flow days \n")
       }
       
       cat("All days had",as.character(qshift),"cms added to the discharge value.\n")
@@ -90,7 +90,7 @@ populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a da
   dataPoints <- nrow(localDaily)
   difference <- (localDaily$Julian[dataPoints] - localDaily$Julian[1])+1  
   if (interactive){
-    cat("There are ", as.character(dataPoints), "data points, and ", as.character(difference), "days.\n")
+    cat("There are", as.character(dataPoints), "data points, and", as.character(difference), "days.\n")
 
     #these next two lines show the user where the gaps in the data are if there are any
     n<-nrow(localDaily)

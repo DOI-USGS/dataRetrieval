@@ -8,7 +8,7 @@
 #' @export
 #' @examples
 #' site<- '01234567'
-#' formatCheckSiteNumber(site, interactive = FALSE)
+#' formatCheckSiteNumber(site)
 formatCheckSiteNumber <- function(siteNumber, interactive=TRUE){  #checks for a 8 digit number
   if (nchar(siteNumber) != 8){
     if (interactive){

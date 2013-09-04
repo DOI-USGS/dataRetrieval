@@ -21,7 +21,7 @@
 #' # To get data in Sample dataframe format:
 #' data <- rawNWISqwData[,names(rawNWISqwData) != "site"]
 #' data$dateTime <- as.Date(data$dateTime)
-#' compressedData <- compressData(data, interactive=interactive)
+#' compressedData <- compressData(data)
 #' Sample <- populateSampleColumns(compressedData)
 retrieveNWISqwData <- function (siteNumber,pCodes,startDate,endDate){  
   

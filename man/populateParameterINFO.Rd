@@ -31,6 +31,6 @@ INFO$param.nm <- parameterData$parameter_nm
 INFO$param.units <- parameterData$parameter_units
 INFO$paramShortName <- parameterData$srsname
 INFO$paramNumber <- parameterData$parameter_cd
-INFO <- populateParameterINFO(parameterCd,interactive=FALSE)
+INFO <- populateParameterINFO(parameterCd)
 }
 

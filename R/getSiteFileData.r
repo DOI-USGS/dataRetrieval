@@ -9,7 +9,7 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' siteINFO <- getSiteFileData('05114000',interactive=FALSE)
+#' siteINFO <- getSiteFileData('05114000')
 getSiteFileData <- function(siteNumber="",interactive=TRUE){
   
   # Checking for 8 digit site ID:

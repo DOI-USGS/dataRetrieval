@@ -51,7 +51,7 @@
 }
 \examples{
 # These examples require an internet connection to run
-Daily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31', interactive=FALSE)
+Daily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31')
 }
 \seealso{
   \code{\link{retrieveNWISData}},

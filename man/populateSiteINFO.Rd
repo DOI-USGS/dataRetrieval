@@ -25,6 +25,6 @@
 #This example requires an internet connection to run
 INFO <- getSiteFileData('01594440')
 siteNumber <- "01594440"
-siteINFO <- populateSiteINFO(INFO, siteNumber,interactive=FALSE)
+siteINFO <- populateSiteINFO(INFO, siteNumber)
 }
 

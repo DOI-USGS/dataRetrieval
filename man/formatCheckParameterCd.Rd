@@ -21,7 +21,7 @@
 }
 \examples{
 pCode <- '01234'
-formatCheckParameterCd(pCode, interactive = FALSE)
+formatCheckParameterCd(pCode)
 }
 \keyword{WRTDS}
 \keyword{flow}

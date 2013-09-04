@@ -56,9 +56,9 @@ startDate <- '2012-01-01'
 endDate <- '2012-06-30'
 pCode <- "00060"
 rawDailyQ <- retrieveNWISData(siteNumber,pCode, startDate, endDate)
-rawDailyTemperature <- retrieveNWISData(siteNumber,'00010', startDate, endDate, StatCd='00001',interactive=FALSE)
-rawDailyTemperatureTSV <- retrieveNWISData(siteNumber,'00010', startDate, endDate, StatCd='00001',format="tsv",interactive=FALSE)
-rawDailyQAndTempMeanMax <- retrieveNWISData(siteNumber,c('00010','00060'), startDate, endDate, StatCd=c('00001','00003'), interactive=FALSE)
+rawDailyTemperature <- retrieveNWISData(siteNumber,'00010', startDate, endDate, StatCd='00001')
+rawDailyTemperatureTSV <- retrieveNWISData(siteNumber,'00010', startDate, endDate, StatCd='00001',format="tsv")
+rawDailyQAndTempMeanMax <- retrieveNWISData(siteNumber,c('00010','00060'), startDate, endDate, StatCd=c('00001','00003'))
 }
 \keyword{USGS}
 \keyword{data}

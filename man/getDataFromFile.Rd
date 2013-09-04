@@ -29,9 +29,9 @@
 \examples{
 # Examples of how to use getDataFromFile:
 # Change the file path and file name to something meaningful:
-#filePath <- '~/RData/'  # Sample format
+filePath <- '~/RData/'  # Sample format
 fileName <- 'ChoptankRiverFlow.txt'
-#getDataFromFile(filePath,fileName, separator="\\t")
+\dontrun{getDataFromFile(filePath,fileName, separator="\\t")}
 }
 \keyword{data}
 \keyword{file}
