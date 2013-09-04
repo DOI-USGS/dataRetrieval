@@ -21,43 +21,40 @@ getWaterML2Data <- function(obs_url){
   
   ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  
   
-  timeseries <- xpathApply(doc, "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP", namespaces = ns)
-  DF <- xmlToDataFrame(timeseries,stringsAsFactors=FALSE)
-  DF$time <- gsub(":","",DF$time)
-  
-  DF$time <- ifelse(nchar(DF$time) > 18,as.POSIXct(strptime(DF$time, format="%Y-%m-%dT%H%M%S%z")),
-                    ifelse("Z" == substr(DF$time,(nchar(DF$time)),nchar(DF$time)),as.POSIXct(strptime(DF$time, format="%Y-%m-%dT%H%M%S",tz="GMT")),
-                           as.POSIXct(strptime(DF$time, format="%Y-%m-%dT%H%M%S",tz=""))))
-    
-  DF$time <- as.POSIXct(DF$time,origin=as.POSIXct(strptime("1970-01-01 00:00:00", "%Y-%m-%d %H:%M:%S", tz="UTC")))
-  DF$value<- as.numeric(DF$value)
-   
-  # Very specific to USGS:
-  defaultQualifier <- as.character(xpathApply(doc, "//wml2:defaultPointMetadata/wml2:DefaultTVPMeasurementMetadata/wml2:qualifier/@xlink:title",namespaces = ns))
-
-  defaultQualifier <- ifelse("Provisional data subject to revision." == defaultQualifier, "P",
-                           ifelse("Approved for publication. Processing and review completed." == defaultQualifier, "A", defaultQualifier))
-  qualifier <- rep(defaultQualifier,nrow(DF))
- 
-  
-  realQual <- as.character(xpathSApply(doc,"//wml2:TVPMeasurementMetadata/wml2:qualifier/@xlink:title", namespaces = ns))
-  
-  if (length(realQual) > 0){
-    timeseriesSub <- xpathApply(doc, "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP/wml2:metadata", namespaces = ns)
-    DF2 <- xmlToDataFrame(timeseriesSub,stringsAsFactors=FALSE)
-  } else {
-    if (length(qualifier) > 0){
-      DF$qualifier <- qualifier
-    }
-  }
-  
   timeseries2 <- xpathApply(doc, "//wml2:MeasurementTimeseries/wml2:point", namespaces = ns)
   
   xp <- xpathApply(doc, "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP", xpathSApply, ".//*[not(*)]", function(x)
     setNames(ifelse(nzchar(xmlValue(x)), xmlValue(x), 
-                    ifelse("qualifier" == xmlName(x),xpathSApply(x,"./@xlink:title",namespaces = ns),xmlAttrs(x))), 
+                    ifelse("qualifier" == xmlName(x),xpathSApply(x,"./@xlink:title",namespaces = ns),"")), #originally I had the "" as xmlAttr(x) 
              xmlName(x)), namespaces = ns)
   library(plyr)
-  DF <- do.call(rbind.fill.matrix, lapply(xp, t))
-  return (DF)
+  DF2 <- do.call(rbind.fill.matrix, lapply(xp, t))
+  DF2 <- as.data.frame(DF2,stringsAsFactors=FALSE)
+  DF2$time <- gsub(":","",DF2$time)
+  DF2$time <- with(DF2, ifelse(nchar(time) > 18,as.POSIXct(strptime(time, format="%Y-%m-%dT%H%M%S%z")),
+                     ifelse("Z" == substr(time,(nchar(time)),nchar(time)),as.POSIXct(strptime(time, format="%Y-%m-%dT%H%M%S",tz="GMT")),
+                            as.POSIXct(strptime(time, format="%Y-%m-%dT%H%M%S",tz="")))))
+  
+  DF2$time <- with(DF2, as.POSIXct(time,origin=as.POSIXct(strptime("1970-01-01 00:00:00", "%Y-%m-%d %H:%M:%S", tz="UTC"))))
+  
+  DF2$value <- as.numeric(gsub("true","",DF2$value))
+  
+  # Very specific to USGS:
+  defaultQualifier <- as.character(xpathApply(doc, "//wml2:defaultPointMetadata/wml2:DefaultTVPMeasurementMetadata/wml2:qualifier/@xlink:title",namespaces = ns))
+  
+  if (length(defaultQualifier) == 0 && (typeof(defaultQualifier) == "character")) {
+    defaultQualifier <- "NA"
+  }
+  
+  if("qualifier" %in% names(DF2)){
+    DF2$qualifier <- ifelse(defaultQualifier != DF2$qualifier,DF2$qualifier,defaultQualifier)
+  } else {
+    DF2$qualifier <- rep(defaultQualifier,nrow(DF2))
+  }
+  
+  
+  DF2$qualifier <- ifelse("Provisional data subject to revision." == DF2$qualifier, "P",
+                             ifelse("Approved for publication. Processing and review completed." == DF2$qualifier, "A", DF2$qualifier))
+  
+  return (DF2)
 }
