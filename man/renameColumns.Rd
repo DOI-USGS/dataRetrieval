@@ -16,8 +16,9 @@
 }
 \examples{
 # This example requires an internet connection to run
-rawData2 <- retrieveNWISData(siteNumber,c("00010","00060","00300"),"2001-01-01","2002-01-01",StatCd=c("00001","00003"))
-rawData2 <- renameColumns(rawData2)
+siteNumber <- '05114000'
+rawData <- retrieveNWISData(siteNumber,c("00010","00060","00300"),"2001-01-01","2002-01-01",StatCd=c("00001","00003"))
+rawData <- renameColumns(rawData)
 }
 \keyword{USGS}
 \keyword{data}
