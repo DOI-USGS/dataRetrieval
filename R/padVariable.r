@@ -12,7 +12,7 @@
 #' correctPCode <- padVariable(pCode,5)
 padVariable <- function(x,padTo){
   numDigits <- nchar(x)
-  if (padTo != numDigits){
+  if ((padTo-numDigits)>0){
     leadingZeros <- paste(rep("0",(padTo-numDigits)),collapse="",sep="")
     x <- paste(leadingZeros,x,sep="")
   }
