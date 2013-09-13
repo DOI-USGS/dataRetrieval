@@ -132,6 +132,194 @@ For information on getting started in R and installing the package, see Appendix
 %------------------------------------------------------------ 
 In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), real-time (unit) values (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis.
 
+\newpage
+Quick workflow example:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(dataRetrieval)}
+\hlcom{# Site ID for Choptank River near Greensboro, MD}
+\hlstd{siteNumber} \hlkwb{<-} \hlstr{"01491000"}
+\hlstd{ChoptankInfo} \hlkwb{<-} \hlkwd{getSiteFileData}\hlstd{(siteNumber)}
+\hlstd{parameterCd} \hlkwb{<-} \hlstr{"00060"}
+\hlstd{rawDailyData} \hlkwb{<-} \hlkwd{retrieveNWISData}\hlstd{(siteNumber,parameterCd,}
+                      \hlstr{"1980-01-01"}\hlstd{,}\hlstr{"2010-01-01"}\hlstd{)}
+\hlkwd{head}\hlstd{(rawDailyData)}
+\end{alltt}
+\begin{verbatim}
+  agency_cd  site_no   datetime X02_00060_00003
+1      USGS 01491000 1980-01-01             100
+2      USGS 01491000 1980-01-02              96
+3      USGS 01491000 1980-01-03              92
+4      USGS 01491000 1980-01-04              89
+5      USGS 01491000 1980-01-05              91
+6      USGS 01491000 1980-01-06             100
+  X02_00060_00003_cd
+1                  A
+2                  A
+3                  A
+4                  A
+5                  A
+6                  A
+\end{verbatim}
+\begin{alltt}
+\hlstd{Daily} \hlkwb{<-} \hlkwd{getDVData}\hlstd{(siteNumber,parameterCd,}
+                      \hlstr{"1980-01-01"}\hlstd{,}\hlstr{"2010-01-01"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+There are 10959 data points, and 10959 days.
+\end{verbatim}
+\begin{alltt}
+\hlkwd{head}\hlstd{(Daily)}
+\end{alltt}
+\begin{verbatim}
+        Date     Q Julian Month Day DecYear MonthSeq
+1 1980-01-01 2.832  47481     1   1    1980     1561
+2 1980-01-02 2.718  47482     1   2    1980     1561
+3 1980-01-03 2.605  47483     1   3    1980     1561
+4 1980-01-04 2.520  47484     1   4    1980     1561
+5 1980-01-05 2.577  47485     1   5    1980     1561
+6 1980-01-06 2.832  47486     1   6    1980     1561
+  Qualifier i   LogQ Q7 Q30
+1         A 1 1.0409 NA  NA
+2         A 2 1.0000 NA  NA
+3         A 3 0.9575 NA  NA
+4         A 4 0.9243 NA  NA
+5         A 5 0.9466 NA  NA
+6         A 6 1.0409 NA  NA
+\end{verbatim}
+\begin{alltt}
+\hlstd{ChoptankInfo} \hlkwb{<-} \hlkwd{getSiteFileData}\hlstd{(siteNumber)}
+\hlkwd{colnames}\hlstd{(ChoptankInfo)}
+\end{alltt}
+\begin{verbatim}
+ [1] "agency.cd"             "site.no"              
+ [3] "station.nm"            "site.tp.cd"           
+ [5] "lat.va"                "long.va"              
+ [7] "dec.lat.va"            "dec.long.va"          
+ [9] "coord.meth.cd"         "coord.acy.cd"         
+[11] "coord.datum.cd"        "dec.coord.datum.cd"   
+[13] "district.cd"           "state.cd"             
+[15] "county.cd"             "country.cd"           
+[17] "land.net.ds"           "map.nm"               
+[19] "map.scale.fc"          "alt.va"               
+[21] "alt.meth.cd"           "alt.acy.va"           
+[23] "alt.datum.cd"          "huc.cd"               
+[25] "basin.cd"              "topo.cd"              
+[27] "instruments.cd"        "construction.dt"      
+[29] "inventory.dt"          "drain.area.va"        
+[31] "contrib.drain.area.va" "tz.cd"                
+[33] "local.time.fg"         "reliability.cd"       
+[35] "gw.file.cd"            "nat.aqfr.cd"          
+[37] "aqfr.cd"               "aqfr.type.cd"         
+[39] "well.depth.va"         "hole.depth.va"        
+[41] "depth.src.cd"          "project.no"           
+[43] "queryTime"            
+\end{verbatim}
+\begin{alltt}
+\hlstd{ChoptankAvail} \hlkwb{<-} \hlkwd{getDataAvailability}\hlstd{(siteNumber)}
+\hlkwd{head}\hlstd{(ChoptankAvail)}
+\end{alltt}
+\begin{verbatim}
+  parameter_cd statCd  startDate    endDate count service
+1        00001        1974-11-04 1984-08-01   109      qw
+2        00004        2013-03-27 2013-03-27     1      qw
+3        00008        1972-10-24 1973-12-26    12      qw
+4        00009        1974-03-22 1974-03-22     1      qw
+5        00010  00001 1988-10-01 2012-05-09   894      dv
+6        00010  00002 2010-10-01 2012-05-09   529      dv
+  parameter_group_nm
+1        Information
+2           Physical
+3        Information
+4        Information
+5           Physical
+6           Physical
+                                                                 parameter_nm
+1  Location in cross section, distance from right bank looking upstream, feet
+2                                                          Stream width, feet
+3                                                    Sample accounting number
+4 Location in cross section, distance from left bank looking downstream, feet
+5                                         Temperature, water, degrees Celsius
+6                                         Temperature, water, degrees Celsius
+  casrn                              srsname
+1                                           
+2       Instream features, est. stream width
+3                                           
+4                                           
+5                         Temperature, water
+6                         Temperature, water
+  parameter_units
+1              ft
+2              ft
+3              nu
+4              ft
+5           deg C
+6           deg C
+\end{verbatim}
+\begin{alltt}
+\hlstd{parameterCd} \hlkwb{<-} \hlstr{"00618"} \hlcom{# Nitrate}
+\hlstd{parameterINFO} \hlkwb{<-} \hlkwd{getParameterInfo}\hlstd{(parameterCd)}
+\hlkwd{colnames}\hlstd{(parameterINFO)}
+\end{alltt}
+\begin{verbatim}
+[1] "parameter_cd"       "parameter_group_nm"
+[3] "parameter_nm"       "casrn"             
+[5] "srsname"            "parameter_units"   
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\newpage
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{ChoptankAvail} \hlkwb{<-} \hlkwd{getDataAvailability}\hlstd{(siteNumber)}
+\hlkwd{head}\hlstd{(ChoptankAvail)}
+\end{alltt}
+\begin{verbatim}
+  parameter_cd statCd  startDate    endDate count service
+1        00001        1974-11-04 1984-08-01   109      qw
+2        00004        2013-03-27 2013-03-27     1      qw
+3        00008        1972-10-24 1973-12-26    12      qw
+4        00009        1974-03-22 1974-03-22     1      qw
+5        00010  00001 1988-10-01 2012-05-09   894      dv
+6        00010  00002 2010-10-01 2012-05-09   529      dv
+  parameter_group_nm
+1        Information
+2           Physical
+3        Information
+4        Information
+5           Physical
+6           Physical
+                                                                 parameter_nm
+1  Location in cross section, distance from right bank looking upstream, feet
+2                                                          Stream width, feet
+3                                                    Sample accounting number
+4 Location in cross section, distance from left bank looking downstream, feet
+5                                         Temperature, water, degrees Celsius
+6                                         Temperature, water, degrees Celsius
+  casrn                              srsname
+1                                           
+2       Instream features, est. stream width
+3                                           
+4                                           
+5                         Temperature, water
+6                         Temperature, water
+  parameter_units
+1              ft
+2              ft
+3              nu
+4              ft
+5           deg C
+6           deg C
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
 %------------------------------------------------------------
 \subsection{Introduction}
 %------------------------------------------------------------
@@ -143,7 +331,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Wed Sep 04 12:53:33 2013
+% Fri Sep 13 16:57:38 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -169,7 +357,7 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Wed Sep 04 12:53:33 2013
+% Fri Sep 13 16:57:38 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -305,7 +493,7 @@ It is also possible to only request parameter information for a subset of variab
 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Wed Sep 04 12:53:38 2013
+% Fri Sep 13 16:57:40 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlllll}
@@ -313,7 +501,7 @@ It is also possible to only request parameter information for a subset of variab
  & shortName & Start & End & Count & Units \\ 
   \hline
 1 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  2 & Stream flow, mean. daily & 1948-01-01 & 2013-09-03 & 23988 & ft3/s \\ 
+  2 & Stream flow, mean. daily & 1948-01-01 & 2013-09-12 & 23997 & ft3/s \\ 
   3 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   4 & Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   5 & Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
@@ -648,7 +836,7 @@ There are 4750 data points, and 4750 days.
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Wed Sep 04 12:53:59 2013
+% Fri Sep 13 16:57:53 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -757,7 +945,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 \begin{center}
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Wed Sep 04 12:54:01 2013
+% Fri Sep 13 16:57:54 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllrlrlr}
@@ -1003,6 +1191,17 @@ function(localSample=Sample) {
 \end{knitrout}
 
 
+Additionally, many R packages have vignette files attached (such as this paper). To view the vignette:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{vignette}\hlstd{(dataRetrieval)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+
 %------------------------------------------------------------
 \subsection{R User: Installing dataRetrieval}
 %------------------------------------------------------------ 
@@ -1011,8 +1210,8 @@ Before installing dataRetrieval, the zoo packages must be installed from CRAN:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{install.packages}\hlstd{(}\hlstr{"zoo"}\hlstd{)}
-\hlkwd{install.packages}\hlstd{(}\hlstr{"dataRetrieval"}\hlstd{,} \hlkwc{repos}\hlstd{=}\hlstr{"http://usgs-r.github.com"}\hlstd{,} \hlkwc{type}\hlstd{=}\hlstr{"source"}\hlstd{)}
+\hlkwd{install.packages}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"zoo"}\hlstd{,}\hlstr{"XML"}\hlstd{,}\hlstr{"RCurl"}\hlstd{,}\hlstr{"plyr"}\hlstd{))}
+\hlkwd{install.packages}\hlstd{(}\hlstr{"dataRetrieval"}\hlstd{,} \hlkwc{repos}\hlstd{=}\hlstr{"http://usgs-r.github.com"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -1041,7 +1240,7 @@ After installing the package, you need to open the library each time you re-star
 %------------------------------------------------------------
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Wed Sep 04 12:54:04 2013
+% Fri Sep 13 16:57:57 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1107,7 +1306,7 @@ After installing the package, you need to open the library each time you re-star
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Wed Sep 04 12:54:04 2013
+% Fri Sep 13 16:57:57 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1164,7 +1363,7 @@ There are 62 columns returned from the water quality portal.
 \FloatBarrier
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Wed Sep 04 12:54:04 2013
+% Fri Sep 13 16:57:57 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1233,7 +1432,7 @@ There are a few steps that are required in order to create a table in a Microsof
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2013-09-03 23988      ft3/s
+2 2013-09-12 23997      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day
