@@ -21,8 +21,11 @@
 #' Sample_All <- getSampleData('05114000','00915;00931', '1985-01-01', '1985-03-31')
 #' Sample_Select <- getSampleData('05114000','00915;00931', '', '')
 getSampleData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
-  data <- getQWData(siteNumber,ParameterCd,StartDate,EndDate,interactive=interactive)
-  compressedData <- compressData(data, interactive=interactive)
+  rawSample <- retrieveNWISqwData(siteNumber,ParameterCd,StartDate,EndDate)
+  rawSample$dateTime <- strptime(rawSample$dateTime,"%Y-%m-%d %H:%M:%S")
+  rawSample$dateTime <- as.Date(rawSample$dateTime)
+  rawSample$site <- NULL
+  compressedData <- compressData(rawSample, interactive=interactive)
   Sample <- populateSampleColumns(compressedData)
   return(Sample)
 }
