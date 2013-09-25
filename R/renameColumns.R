@@ -11,6 +11,9 @@
 #' siteNumber <- '05114000' 
 #' rawData <- retrieveNWISData(siteNumber,c("00010","00060","00300"),"2001-01-01","2002-01-01",StatCd=c("00001","00003"))
 #' rawData <- renameColumns(rawData)
+#' today <- as.character(Sys.Date())
+#' rawData2 <- retrieveUnitNWISData(siteNumber,c("00010","00060"),today,today)
+#' rawData2 <- renameColumns(rawData2)
 renameColumns <- function(rawData){
   
   columnNames <- names(rawData)
@@ -34,12 +37,14 @@ renameColumns <- function(rawData){
   DDnum <- gsub("X","",DDnum)
   
   if (!any(duplicated(pCodes))){
-    dataColNames <- pcodeINFO$srsname[which(pcodeINFO$parameter_cd %in% pCodes)]    
+    dataColNames <- pcodeINFO$parameter_nm[which(pcodeINFO$parameter_cd %in% pCodes)]    
+#     dataColNames <- pcodeINFO$srsname[which(pcodeINFO$parameter_cd %in% pCodes)]  
     dataColNames <- paste(dataColNames,statCd,sep="")
   } else {
     dataColNames <- rep(NA,length(dataCol_names))    
     for (i in 1:length(dataCol_names)){
-      dataColNames[i] <- pcodeINFO$srsname[which(pcodeINFO$parameter_cd %in% pCodes[i])]
+      dataColNames[i] <- pcodeINFO$parameter_nm[which(pcodeINFO$parameter_cd %in% pCodes[i])]
+#       dataColNames[i] <- pcodeINFO$srsname[which(pcodeINFO$parameter_cd %in% pCodes[i])]
       if((!(pCodes[i] %in% duplicated(pCodes))) && (pCodes[i] != pCodes[anyDuplicated(pCodes)])){
         dataColNames[i] <- paste(dataColNames[i],statCd[i],sep="")
       } else {

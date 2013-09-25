@@ -10,7 +10,7 @@
 #' @examples
 #' # These examples require an internet connection to run
 #' availableData <- getDataAvailability('05114000')
-getDataAvailability <- function(siteNumber="",interactive=TRUE){
+getDataAvailability <- function(siteNumber,interactive=TRUE){
   
   # Checking for 8 digit site ID:
   siteNumber <- formatCheckSiteNumber(siteNumber,interactive=interactive)
@@ -41,6 +41,7 @@ getDataAvailability <- function(siteNumber="",interactive=TRUE){
 
   pcodeINFO <- getParameterInfo(pCodes,interactive)
   SiteFile <- merge(SiteFile,pcodeINFO,by="parameter_cd")
+#   SiteFile <- merge(SiteFile,pcodeINFO,by.x="parameter_cd",by.y="parm_cd")
   
   return(SiteFile)
 }

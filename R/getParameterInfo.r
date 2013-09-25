@@ -14,21 +14,22 @@
 getParameterInfo <- function(parameterCd,interactive=TRUE){
   parameterCd <- formatCheckParameterCd(parameterCd, interactive=interactive)
 
-  urlParameterCd <- "http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&pm_search=&casrn_search=&srsname_search=&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units"
-  
-  parameterCdFile <- read.delim(  
-    urlParameterCd, 
-    header = TRUE, 
-    quote="\"", 
-    dec=".", 
-    sep='\t',
-    colClasses=c('character'),
-    fill = TRUE, 
-    comment.char="#")
-  dataType <- parameterCdFile[1,]
-  parameterCdFile <- parameterCdFile[-1,]
+#   urlParameterCd <- "http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&pm_search=&casrn_search=&srsname_search=&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units"
+# #   urlParameterCd <- "http://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&group_cd=%"
+#   parameterCdFile <- read.delim(  
+#     urlParameterCd, 
+#     header = TRUE, 
+#     quote="\"", 
+#     dec=".", 
+#     sep='\t',
+#     colClasses=c('character'),
+#     fill = TRUE, 
+#     comment.char="#")
+#   dataType <- parameterCdFile[1,]
+#   parameterCdFile <- parameterCdFile[-1,]
   
   parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd,]
+#   parameterData <- parameterCdFile[parameterCdFile$parm_cd %in% parameterCd,]
 
   return(parameterData)
 }

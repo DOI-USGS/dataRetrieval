@@ -45,3 +45,12 @@ NULL
 #' @author Robert M. Hirsch \email{rhirsch@@usgs.gov}
 #' @keywords water flow data
 NULL
+
+#' List of USGS parameter codes
+#'
+#' Complete list of USGS parameter codes as of September 25, 2013.
+#'
+#' @name parameterCdFile
+#' @docType data
+#' @keywords USGS parameterCd
+NULL

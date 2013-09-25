@@ -2,7 +2,7 @@
 \alias{getDataAvailability}
 \title{USGS data availability}
 \usage{
-  getDataAvailability(siteNumber = "", interactive = TRUE)
+  getDataAvailability(siteNumber, interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string USGS site number.  This is
