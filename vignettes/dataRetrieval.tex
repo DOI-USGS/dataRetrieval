@@ -122,18 +122,11 @@
 The dataRetrieval package was created to simplify the process of getting hydrologic data in the R enviornment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends (EGRET). See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the WRTDS method of data analysis (WRTDS is Weighted Regressions on Time, Discharge and Season) as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
 
 
-The dataRetrieval package is designed to retrieve many of the major data types of USGS hydrologic data that are available on the web, but also allows users to make use of other data that they supply from spreadsheets.  Section 2 provides examples of how one can obtain raw data from USGS sources on the web and ingest them into data frames within the R environment.  The functionality described in section 2 is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section 3 is tailored specifically to obtaining input from the web and structuring them specifically for use in the EGRET package.  The functionality described in section 4 is for converting hydrologic data from user-supplied spreadsheets and structuring them specifically for use in the EGRET package.
+The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrologic data that are available on the web, but also allows users to make use of other data that they supply from spreadsheets.  Section 2 provides examples of how one can obtain raw data from USGS sources on the web and ingest them into data frames within the R environment.  The functionality described in section 2 is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section 3 is tailored specifically to obtaining input from the web and structuring them for use in the EGRET package.  The functionality described in section 4 is for converting hydrologic data from user-supplied spreadsheets and structuring them specifically for use in the EGRET package.
 
 For information on getting started in R and installing the package, see Appendix (\ref{sec:appendix1}): Getting Started.
 
-
-%------------------------------------------------------------
-\section{General USGS Web Retrievals}
-%------------------------------------------------------------ 
-In this section, we will run through 5 examples, documenting how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), real-time (unit) values (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  This may or may not be the easiest data to work with.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis.
-
-\newpage
-Quick workflow example:
+Quick workflow for major dataRetrieval functions:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -142,188 +135,39 @@ Quick workflow example:
 \hlstd{siteNumber} \hlkwb{<-} \hlstr{"01491000"}
 \hlstd{ChoptankInfo} \hlkwb{<-} \hlkwd{getSiteFileData}\hlstd{(siteNumber)}
 \hlstd{parameterCd} \hlkwb{<-} \hlstr{"00060"}
+
+\hlcom{#Raw data:}
 \hlstd{rawDailyData} \hlkwb{<-} \hlkwd{retrieveNWISData}\hlstd{(siteNumber,parameterCd,}
                       \hlstr{"1980-01-01"}\hlstd{,}\hlstr{"2010-01-01"}\hlstd{)}
-\hlkwd{head}\hlstd{(rawDailyData)}
-\end{alltt}
-\begin{verbatim}
-  agency_cd  site_no   datetime X02_00060_00003
-1      USGS 01491000 1980-01-01             100
-2      USGS 01491000 1980-01-02              96
-3      USGS 01491000 1980-01-03              92
-4      USGS 01491000 1980-01-04              89
-5      USGS 01491000 1980-01-05              91
-6      USGS 01491000 1980-01-06             100
-  X02_00060_00003_cd
-1                  A
-2                  A
-3                  A
-4                  A
-5                  A
-6                  A
-\end{verbatim}
-\begin{alltt}
+\hlcom{# Data compiled for EGRET analysis}
 \hlstd{Daily} \hlkwb{<-} \hlkwd{getDVData}\hlstd{(siteNumber,parameterCd,}
                       \hlstr{"1980-01-01"}\hlstd{,}\hlstr{"2010-01-01"}\hlstd{)}
+
+\hlcom{# Sample data Nitrate:}
+\hlstd{parameterCd} \hlkwb{<-} \hlstr{"00618"}
+\hlstd{Sample} \hlkwb{<-} \hlkwd{getSampleData}\hlstd{(siteNumber,parameterCd,}
+                      \hlstr{"1980-01-01"}\hlstd{,}\hlstr{"2010-01-01"}\hlstd{)}
+
+\hlcom{# Metadata on site and nitrate:}
+\hlstd{INFO} \hlkwb{<-} \hlkwd{getMetaData}\hlstd{(siteNumber,parameterCd)}
+
+\hlcom{# Merge discharge and nitrate data to one dataframe:}
+\hlstd{Sample} \hlkwb{<-} \hlkwd{mergeReport}\hlstd{()}
 \end{alltt}
-\begin{verbatim}
-There are 10959 data points, and 10959 days.
-\end{verbatim}
-\begin{alltt}
-\hlkwd{head}\hlstd{(Daily)}
-\end{alltt}
-\begin{verbatim}
-        Date     Q Julian Month Day DecYear MonthSeq
-1 1980-01-01 2.832  47481     1   1    1980     1561
-2 1980-01-02 2.718  47482     1   2    1980     1561
-3 1980-01-03 2.605  47483     1   3    1980     1561
-4 1980-01-04 2.520  47484     1   4    1980     1561
-5 1980-01-05 2.577  47485     1   5    1980     1561
-6 1980-01-06 2.832  47486     1   6    1980     1561
-  Qualifier i   LogQ Q7 Q30
-1         A 1 1.0409 NA  NA
-2         A 2 1.0000 NA  NA
-3         A 3 0.9575 NA  NA
-4         A 4 0.9243 NA  NA
-5         A 5 0.9466 NA  NA
-6         A 6 1.0409 NA  NA
-\end{verbatim}
-\begin{alltt}
-\hlstd{ChoptankInfo} \hlkwb{<-} \hlkwd{getSiteFileData}\hlstd{(siteNumber)}
-\hlkwd{colnames}\hlstd{(ChoptankInfo)}
-\end{alltt}
-\begin{verbatim}
- [1] "agency.cd"             "site.no"              
- [3] "station.nm"            "site.tp.cd"           
- [5] "lat.va"                "long.va"              
- [7] "dec.lat.va"            "dec.long.va"          
- [9] "coord.meth.cd"         "coord.acy.cd"         
-[11] "coord.datum.cd"        "dec.coord.datum.cd"   
-[13] "district.cd"           "state.cd"             
-[15] "county.cd"             "country.cd"           
-[17] "land.net.ds"           "map.nm"               
-[19] "map.scale.fc"          "alt.va"               
-[21] "alt.meth.cd"           "alt.acy.va"           
-[23] "alt.datum.cd"          "huc.cd"               
-[25] "basin.cd"              "topo.cd"              
-[27] "instruments.cd"        "construction.dt"      
-[29] "inventory.dt"          "drain.area.va"        
-[31] "contrib.drain.area.va" "tz.cd"                
-[33] "local.time.fg"         "reliability.cd"       
-[35] "gw.file.cd"            "nat.aqfr.cd"          
-[37] "aqfr.cd"               "aqfr.type.cd"         
-[39] "well.depth.va"         "hole.depth.va"        
-[41] "depth.src.cd"          "project.no"           
-[43] "queryTime"            
-\end{verbatim}
-\begin{alltt}
-\hlstd{ChoptankAvail} \hlkwb{<-} \hlkwd{getDataAvailability}\hlstd{(siteNumber)}
-\hlkwd{head}\hlstd{(ChoptankAvail)}
-\end{alltt}
-\begin{verbatim}
-  parameter_cd statCd  startDate    endDate count service
-1        00001        1974-11-04 1984-08-01   109      qw
-2        00004        2013-03-27 2013-03-27     1      qw
-3        00008        1972-10-24 1973-12-26    12      qw
-4        00009        1974-03-22 1974-03-22     1      qw
-5        00010  00001 1988-10-01 2012-05-09   894      dv
-6        00010  00002 2010-10-01 2012-05-09   529      dv
-  parameter_group_nm
-1        Information
-2           Physical
-3        Information
-4        Information
-5           Physical
-6           Physical
-                                                                 parameter_nm
-1  Location in cross section, distance from right bank looking upstream, feet
-2                                                          Stream width, feet
-3                                                    Sample accounting number
-4 Location in cross section, distance from left bank looking downstream, feet
-5                                         Temperature, water, degrees Celsius
-6                                         Temperature, water, degrees Celsius
-  casrn                              srsname
-1                                           
-2       Instream features, est. stream width
-3                                           
-4                                           
-5                         Temperature, water
-6                         Temperature, water
-  parameter_units
-1              ft
-2              ft
-3              nu
-4              ft
-5           deg C
-6           deg C
-\end{verbatim}
-\begin{alltt}
-\hlstd{parameterCd} \hlkwb{<-} \hlstr{"00618"} \hlcom{# Nitrate}
-\hlstd{parameterINFO} \hlkwb{<-} \hlkwd{getParameterInfo}\hlstd{(parameterCd)}
-\hlkwd{colnames}\hlstd{(parameterINFO)}
-\end{alltt}
-\begin{verbatim}
-[1] "parameter_cd"       "parameter_group_nm"
-[3] "parameter_nm"       "casrn"             
-[5] "srsname"            "parameter_units"   
-\end{verbatim}
 \end{kframe}
 \end{knitrout}
 
 
-\newpage
 
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{ChoptankAvail} \hlkwb{<-} \hlkwd{getDataAvailability}\hlstd{(siteNumber)}
-\hlkwd{head}\hlstd{(ChoptankAvail)}
-\end{alltt}
-\begin{verbatim}
-  parameter_cd statCd  startDate    endDate count service
-1        00001        1974-11-04 1984-08-01   109      qw
-2        00004        2013-03-27 2013-03-27     1      qw
-3        00008        1972-10-24 1973-12-26    12      qw
-4        00009        1974-03-22 1974-03-22     1      qw
-5        00010  00001 1988-10-01 2012-05-09   894      dv
-6        00010  00002 2010-10-01 2012-05-09   529      dv
-  parameter_group_nm
-1        Information
-2           Physical
-3        Information
-4        Information
-5           Physical
-6           Physical
-                                                                 parameter_nm
-1  Location in cross section, distance from right bank looking upstream, feet
-2                                                          Stream width, feet
-3                                                    Sample accounting number
-4 Location in cross section, distance from left bank looking downstream, feet
-5                                         Temperature, water, degrees Celsius
-6                                         Temperature, water, degrees Celsius
-  casrn                              srsname
-1                                           
-2       Instream features, est. stream width
-3                                           
-4                                           
-5                         Temperature, water
-6                         Temperature, water
-  parameter_units
-1              ft
-2              ft
-3              nu
-4              ft
-5           deg C
-6           deg C
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
+%------------------------------------------------------------
+\section{General USGS Web Retrievals}
+%------------------------------------------------------------ 
+In this section, we will run through 5 examples, which document how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), real-time (unit) values (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis, and specifically tailored to EGRET analysis.
 
 %------------------------------------------------------------
 \subsection{Introduction}
 %------------------------------------------------------------
-The United States Geological Survey organizes their hydrological data in standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discoving this 8-digit ID. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
+The USGS organizes their hydrological data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discoving this 8-digit ID. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
 Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured paramater is being requested.  A complete list of possible USGS parameter codes can be found at \url{http://go.usa.gov/bVDz}.
 
@@ -331,7 +175,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Oct 28 16:27:10 2013
+% Wed Oct 30 11:04:35 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -357,7 +201,7 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Oct 28 16:27:10 2013
+% Wed Oct 30 11:04:35 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -422,59 +266,7 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 \subsubsection{getDataAvailability}
 \label{sec:usgsDataAvailability}
 %------------------------------------------------------------
-To find out the available data at a particular USGS site, including measured parameters, period of record, and number of samples (count), use the getDataAvailability function:
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlcom{# Continuing from the previous example:}
-\hlstd{ChoptankAvailableData} \hlkwb{<-} \hlkwd{getDataAvailability}\hlstd{(siteNumber)}
-\hlkwd{head}\hlstd{(ChoptankAvailableData)}
-\end{alltt}
-\begin{verbatim}
-  parameter_cd statCd  startDate    endDate count service
-1        00001        1974-11-04 1984-08-01   109      qw
-2        00004        2013-03-27 2013-03-27     1      qw
-3        00008        1972-10-24 1973-12-26    12      qw
-4        00009        1974-03-22 1974-03-22     1      qw
-5        00010  00001 1988-10-01 2012-05-09   894      dv
-6        00010  00002 2010-10-01 2012-05-09   529      dv
-  parameter_group_nm
-1        Information
-2           Physical
-3        Information
-4        Information
-5           Physical
-6           Physical
-                                                                 parameter_nm
-1  Location in cross section, distance from right bank looking upstream, feet
-2                                                          Stream width, feet
-3                                                    Sample accounting number
-4 Location in cross section, distance from left bank looking downstream, feet
-5                                         Temperature, water, degrees Celsius
-6                                         Temperature, water, degrees Celsius
-  casrn                              srsname
-1                                           
-2       Instream features, est. stream width
-3                                           
-4                                           
-5                         Temperature, water
-6                         Temperature, water
-  parameter_units
-1              ft
-2              ft
-3              nu
-4              ft
-5           deg C
-6           deg C
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-
-There is an additional argument to the getDataAvailability called longNames, which defaults to FALSE. Setting longNames to TRUE will cause the function to make a web service call for each parameter and return expanded information on that parameter. Currently, this is a very slow process because each parameter code makes a unique web service call. If the site does not have many measured parameters, setting longNames to TRUE is reasonable.
-
-It is also possible to only request parameter information for a subset of variables. In the following example, we retrieve just the daily mean parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values).
+To find out the available data at a particular USGS site, including measured parameters, period of record, and number of samples (count), use the getDataAvailability function. It is also possible to only request parameter information for a subset of variables. In the following example, we retrieve just the daily mean parameter information from the Choptank data availability dataframe (excluding all unit value and water quality values).
 
 
 \begin{knitrout}
@@ -482,6 +274,9 @@ It is also possible to only request parameter information for a subset of variab
 \begin{alltt}
 \hlcom{# Continuing from the previous example:}
 \hlcom{# This pulls out just the daily data:}
+
+\hlstd{ChoptankAvailableData} \hlkwb{<-} \hlkwd{getDataAvailability}\hlstd{(siteNumber)}
+
 \hlstd{ChoptankDailyData} \hlkwb{<-} \hlkwd{subset}\hlstd{(ChoptankAvailableData,}
                             \hlstr{"dv"} \hlopt{==} \hlstd{service)}
 
@@ -494,7 +289,7 @@ It is also possible to only request parameter information for a subset of variab
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Oct 28 16:27:11 2013
+% Wed Oct 30 11:04:36 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlllll}
@@ -502,7 +297,7 @@ It is also possible to only request parameter information for a subset of variab
  & shortName & Start & End & Count & Units \\ 
   \hline
 1 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  2 & Stream flow, mean. daily & 1948-01-01 & 2013-10-27 & 24042 & ft3/s \\ 
+  2 & Stream flow, mean. daily & 1948-01-01 & 2013-10-29 & 24044 & ft3/s \\ 
   3 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   4 & Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   5 & Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
@@ -705,8 +500,8 @@ To get USGS water quality data from water samples collected at the streamgage (a
 \hlkwd{names}\hlstd{(dissolvedNitrateSimple)}
 \end{alltt}
 \begin{verbatim}
-[1] "dateTime"        "qualifier.00618" "value.00618"    
-[4] "qualifier.71851" "value.71851"    
+[1] "dateTime"        "qualifier.71851" "value.71851"    
+[4] "qualifier.00618" "value.00618"    
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -843,7 +638,7 @@ There are 4750 data points, and 4750 days.
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Oct 28 16:27:21 2013
+% Wed Oct 30 11:04:43 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -952,7 +747,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 \begin{center}
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Oct 28 16:27:22 2013
+% Wed Oct 30 11:04:44 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllrlrlr}
@@ -1192,7 +987,29 @@ Data Type & EGRET Functions & Other Retrieval Functions \\
 \end{minipage}
 \end{table}
 
+\begin{table}[!ht]
+\begin{minipage}{\linewidth}
+\begin{center}
+\caption{dataRetrieval miscellaneous functions} 
+\begin{tabular}{ll}
+  \hline
+Function Name & Description \\ 
+  \hline
+  compressData &  Converts value/qualifier into ConcLow, ConcHigh, Uncen\\
+  getRDB1Data & Retrieves and converts RDB data to dataframe\\
+  getWaterML1Data & Retrieves and converts WaterML1 data to dataframe\\
+  getWaterML2Data & Retrieves and converts WaterML2 data to dataframe\\
+  mergeReport & Merges flow data from the daily record into the sample record\\
+  populateDateColumns & Generates Julian, Month, Day, DecYear, and MonthSeq columns\\
+  removeDuplicates & Removes duplicated rows\\
+  renameColumns & Renames columns from raw data retrievals\\
+   \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table}
 
+\clearpage
 \appendix
 
 %------------------------------------------------------------ 
@@ -1226,10 +1043,11 @@ To see the raw code for a particular code, type the name of the function:
 \hlstd{removeDuplicates}
 \end{alltt}
 \begin{verbatim}
-function(localSample=Sample) {  
-  Sample1 <- localSample[!duplicated(localSample[c("DecYear","ConcHigh")]),]
-  
-  return(Sample1)
+function (localSample = Sample) 
+{
+    Sample1 <- localSample[!duplicated(localSample[c("DecYear", 
+        "ConcHigh")]), ]
+    return(Sample1)
 }
 <environment: namespace:dataRetrieval>
 \end{verbatim}
@@ -1286,7 +1104,7 @@ After installing the package, you need to open the library each time you re-star
 %------------------------------------------------------------
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Oct 28 16:27:25 2013
+% Wed Oct 30 11:04:46 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1352,7 +1170,7 @@ After installing the package, you need to open the library each time you re-star
 There are 62 columns returned from the water quality portal. 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Oct 28 16:27:25 2013
+% Wed Oct 30 11:04:46 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1409,7 +1227,7 @@ There are 62 columns returned from the water quality portal.
 \FloatBarrier
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Oct 28 16:27:25 2013
+% Wed Oct 30 11:04:46 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1479,7 +1297,7 @@ There are a few steps that are required in order to create a table in a Microsof
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2013-10-27 24042      ft3/s
+2 2013-10-29 24044      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day
