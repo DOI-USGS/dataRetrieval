@@ -5,26 +5,27 @@
 \contentsline {subsection}{\numberline {2.2}Site Information}{9}{subsection.2.2}
 \contentsline {subsubsection}{\numberline {2.2.1}getSiteFileData}{9}{subsubsection.2.2.1}
 \contentsline {subsubsection}{\numberline {2.2.2}getDataAvailability}{9}{subsubsection.2.2.2}
-\contentsline {subsection}{\numberline {2.3}Parameter Information}{11}{subsection.2.3}
-\contentsline {subsection}{\numberline {2.4}Daily Values}{11}{subsection.2.4}
-\contentsline {subsection}{\numberline {2.5}Unit Values}{14}{subsection.2.5}
-\contentsline {subsection}{\numberline {2.6}Water Quality Values}{15}{subsection.2.6}
-\contentsline {subsection}{\numberline {2.7}STORET Water Quality Retrievals}{17}{subsection.2.7}
-\contentsline {subsection}{\numberline {2.8}URL Construction}{17}{subsection.2.8}
-\contentsline {section}{\numberline {3}Data Retrievals Structured For Use In The EGRET Package}{18}{section.3}
-\contentsline {subsection}{\numberline {3.1}INFO Data}{18}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Daily Data}{18}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Sample Data}{19}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Censored Values: Summation Explanation}{21}{subsection.3.4}
-\contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{22}{subsection.3.5}
-\contentsline {subsubsection}{\numberline {3.5.1}getDailyDataFromFile}{22}{subsubsection.3.5.1}
-\contentsline {subsubsection}{\numberline {3.5.2}getSampleDataFromFile}{23}{subsubsection.3.5.2}
-\contentsline {subsection}{\numberline {3.6}Merge Report}{24}{subsection.3.6}
-\contentsline {subsection}{\numberline {3.7}EGRET Plots}{25}{subsection.3.7}
-\contentsline {section}{\numberline {A}Getting Started in R}{27}{appendix.A}
-\contentsline {subsection}{\numberline {A.1}New to R?}{27}{subsection.A.1}
-\contentsline {subsection}{\numberline {A.2}R User: Installing dataRetrieval}{27}{subsection.A.2}
-\contentsline {section}{\numberline {B}Columns Names}{28}{appendix.B}
-\contentsline {subsection}{\numberline {B.1}INFO dataframe}{28}{subsection.B.1}
-\contentsline {subsection}{\numberline {B.2}Water Quality Portal}{30}{subsection.B.2}
-\contentsline {section}{\numberline {C}Creating tables in Microsoft from R}{33}{appendix.C}
+\contentsline {subsection}{\numberline {2.3}Parameter Information}{12}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Daily Values}{12}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}Unit Values}{15}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}Water Quality Values}{16}{subsection.2.6}
+\contentsline {subsection}{\numberline {2.7}STORET Water Quality Retrievals}{18}{subsection.2.7}
+\contentsline {subsection}{\numberline {2.8}URL Construction}{18}{subsection.2.8}
+\contentsline {section}{\numberline {3}Data Retrievals Structured For Use In The EGRET Package}{19}{section.3}
+\contentsline {subsection}{\numberline {3.1}INFO Data}{19}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Daily Data}{19}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Sample Data}{20}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Censored Values: Summation Explanation}{22}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{23}{subsection.3.5}
+\contentsline {subsubsection}{\numberline {3.5.1}getDailyDataFromFile}{23}{subsubsection.3.5.1}
+\contentsline {subsubsection}{\numberline {3.5.2}getSampleDataFromFile}{24}{subsubsection.3.5.2}
+\contentsline {subsection}{\numberline {3.6}Merge Report}{25}{subsection.3.6}
+\contentsline {subsection}{\numberline {3.7}EGRET Plots}{26}{subsection.3.7}
+\contentsline {section}{\numberline {4}Summary}{28}{section.4}
+\contentsline {section}{\numberline {A}Getting Started in R}{28}{appendix.A}
+\contentsline {subsection}{\numberline {A.1}New to R?}{29}{subsection.A.1}
+\contentsline {subsection}{\numberline {A.2}R User: Installing dataRetrieval}{29}{subsection.A.2}
+\contentsline {section}{\numberline {B}Columns Names}{30}{appendix.B}
+\contentsline {subsection}{\numberline {B.1}INFO dataframe}{30}{subsection.B.1}
+\contentsline {subsection}{\numberline {B.2}Water Quality Portal}{32}{subsection.B.2}
+\contentsline {section}{\numberline {C}Creating tables in Microsoft from R}{35}{appendix.C}

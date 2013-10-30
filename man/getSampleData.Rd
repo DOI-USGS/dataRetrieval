@@ -27,8 +27,9 @@
 }
 \description{
   Imports data from NWIS web service. This function gets
-  the data from here: \url{http://qwwebservices.usgs.gov/}
-  A list of parameter codes can be found here:
+  the data from here:
+  \url{http://nwis.waterdata.usgs.gov/nwis/qwdata/} A list
+  of parameter codes can be found here:
   \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} A list
   of statistic codes can be found here:
   \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}

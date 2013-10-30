@@ -330,8 +330,8 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 Not every station will measure all parameters. A short list of commonly measured parameters is shown in Table \ref{tab:params}.
 
 
-% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Fri Sep 13 16:57:38 2013
+% latex table generated in R 3.0.2 by xtable 1.7-1 package
+% Mon Oct 28 16:27:10 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -356,8 +356,8 @@ For real-time data, the parameter code and site ID will suffice.  For most varia
 \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 
 Some common stat codes are shown in Table \ref{tab:stat}.
-% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Fri Sep 13 16:57:38 2013
+% latex table generated in R 3.0.2 by xtable 1.7-1 package
+% Mon Oct 28 16:27:10 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -484,6 +484,7 @@ It is also possible to only request parameter information for a subset of variab
 \hlcom{# This pulls out just the daily data:}
 \hlstd{ChoptankDailyData} \hlkwb{<-} \hlkwd{subset}\hlstd{(ChoptankAvailableData,}
                             \hlstr{"dv"} \hlopt{==} \hlstd{service)}
+
 \hlcom{# This pulls out the mean:}
 \hlstd{ChoptankDailyData} \hlkwb{<-} \hlkwd{subset}\hlstd{(ChoptankDailyData,}
                             \hlstr{"00003"} \hlopt{==} \hlstd{statCd)}
@@ -492,8 +493,8 @@ It is also possible to only request parameter information for a subset of variab
 \end{knitrout}
 
 
-% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Fri Sep 13 16:57:40 2013
+% latex table generated in R 3.0.2 by xtable 1.7-1 package
+% Mon Oct 28 16:27:11 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlllll}
@@ -501,7 +502,7 @@ It is also possible to only request parameter information for a subset of variab
  & shortName & Start & End & Count & Units \\ 
   \hline
 1 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  2 & Stream flow, mean. daily & 1948-01-01 & 2013-09-12 & 23997 & ft3/s \\ 
+  2 & Stream flow, mean. daily & 1948-01-01 & 2013-10-27 & 24042 & ft3/s \\ 
   3 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   4 & Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   5 & Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
@@ -568,6 +569,7 @@ The dates (start and end) need to be in the format \texttt{"}YYYY-MM-DD\texttt{"
 \hlstd{parameterCd} \hlkwb{<-} \hlstr{"00060"}  \hlcom{# Discharge (cfs)}
 \hlstd{startDate} \hlkwb{<-} \hlstr{""}  \hlcom{# Will request earliest date}
 \hlstd{endDate} \hlkwb{<-} \hlstr{""} \hlcom{# Will request latest date}
+
 \hlstd{discharge} \hlkwb{<-} \hlkwd{retrieveNWISData}\hlstd{(siteNumber,}
                     \hlstd{parameterCd, startDate, endDate)}
 \end{alltt}
@@ -586,8 +588,10 @@ Another example that doesn't use the defaults would be a request for mean and ma
 \hlstd{statCd} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"00001"}\hlstd{,}\hlstr{"00003"}\hlstd{)}  \hlcom{# Mean and maximum}
 \hlstd{startDate} \hlkwb{<-} \hlstr{"2012-01-01"}
 \hlstd{endDate} \hlkwb{<-} \hlstr{"2012-05-01"}
+
 \hlstd{temperatureAndFlow} \hlkwb{<-} \hlkwd{retrieveNWISData}\hlstd{(siteNumber, parameterCd,}
         \hlstd{startDate, endDate,} \hlkwc{StatCd}\hlstd{=statCd)}
+
 \hlstd{temperatureAndFlow} \hlkwb{<-} \hlkwd{renameColumns}\hlstd{(temperatureAndFlow)}
 \end{alltt}
 \end{kframe}
@@ -602,13 +606,14 @@ An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{par}\hlstd{(}\hlkwc{mar}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{5}\hlstd{,}\hlnum{5}\hlstd{,}\hlnum{5}\hlstd{,}\hlnum{5}\hlstd{))}
+
 \hlkwd{with}\hlstd{(temperatureAndFlow,} \hlkwd{plot}\hlstd{(}
-  \hlstd{datetime, Temperature_water_01,}
+  \hlstd{datetime, Temperature_water_degrees_Celsius_Max_01,}
   \hlkwc{xlab}\hlstd{=}\hlstr{"Date"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"Temperature [C]"}
   \hlstd{))}
 \hlkwd{par}\hlstd{(}\hlkwc{new}\hlstd{=}\hlnum{TRUE}\hlstd{)}
 \hlkwd{with}\hlstd{(temperatureAndFlow,} \hlkwd{plot}\hlstd{(}
-  \hlstd{datetime, Stream_flow_mean_daily,}
+  \hlstd{datetime, Discharge_cubic_feet_per_second,}
   \hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{,}\hlkwc{type}\hlstd{=}\hlstr{"l"}\hlstd{,}\hlkwc{xaxt}\hlstd{=}\hlstr{"n"}\hlstd{,}\hlkwc{yaxt}\hlstd{=}\hlstr{"n"}\hlstd{,}\hlkwc{xlab}\hlstd{=}\hlstr{""}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{""}\hlstd{,}\hlkwc{axes}\hlstd{=}\hlnum{FALSE}
   \hlstd{))}
 \hlkwd{axis}\hlstd{(}\hlnum{4}\hlstd{,}\hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{,}\hlkwc{col.axis}\hlstd{=}\hlstr{"red"}\hlstd{)}
@@ -691,8 +696,10 @@ To get USGS water quality data from water samples collected at the streamgage (a
 \hlstd{parameterCd} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"00618"}\hlstd{,}\hlstr{"71851"}\hlstd{)}
 \hlstd{startDate} \hlkwb{<-} \hlstr{"1979-10-11"}
 \hlstd{endDate} \hlkwb{<-} \hlstr{"2012-12-18"}
+
 \hlstd{dissolvedNitrate} \hlkwb{<-} \hlkwd{getRawQWData}\hlstd{(siteNumber, parameterCd,}
       \hlstd{startDate, endDate)}
+
 \hlstd{dissolvedNitrateSimple} \hlkwb{<-} \hlkwd{getQWData}\hlstd{(siteNumber, parameterCd,}
         \hlstd{startDate, endDate)}
 \hlkwd{names}\hlstd{(dissolvedNitrateSimple)}
@@ -835,8 +842,8 @@ There are 4750 data points, and 4750 days.
 
 Details of the Daily dataframe are listed below:
 
-% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Fri Sep 13 16:57:53 2013
+% latex table generated in R 3.0.2 by xtable 1.7-1 package
+% Mon Oct 28 16:27:21 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -944,8 +951,8 @@ As an example to understand how the dataRetrieval package handles a more complex
 
 \begin{center}
 
-% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Fri Sep 13 16:57:54 2013
+% latex table generated in R 3.0.2 by xtable 1.7-1 package
+% Mon Oct 28 16:27:22 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllrlrlr}
@@ -974,26 +981,7 @@ For every sample, the EGRET package requires a pair of numbers to define an inte
 
 For the more complex example case, let us say dp is reported as \verb@<@0.01 and pp is reported as 0.3. We know that the total must be at least 0.3 and could be as much as 0.31. Therefore, ConcLow=0.3 and ConcHigh=0.31. Another case would be if dp is reported as \verb@<@0.005 and pp is reported \verb@<@0.2. We know in this case that the true value could be as low as zero, but could be as high as 0.205. Therefore, in this case, ConcLow=NA and ConcHigh=0.205. The Sample dataframe for the example data is therefore:
 
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{verbatim}
-        Date ConcLow ConcHigh Uncen ConcAve Julian Month
-1 2003-02-15   0.520    0.520     1   0.520  55927     2
-2 2003-06-30   0.310    0.310     1   0.310  56062     6
-3 2004-09-15   0.205    0.205     1   0.205  56505     9
-4 2005-01-30   0.430    0.430     1   0.430  56642     1
-5 2005-05-30   0.050    0.050     1   0.050  56762     5
-6 2005-10-30   0.020    0.020     1   0.020  56915    10
-  Day DecYear MonthSeq    SinDY   CosDY
-1  46    2003     1838  0.70407  0.7101
-2 182    2003     1842  0.02575 -0.9997
-3 259    2005     1857 -0.96251 -0.2712
-4  30    2005     1861  0.48506  0.8745
-5 151    2005     1865  0.52943 -0.8484
-6 304    2006     1870 -0.87861  0.4775
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
+
 
 
 \FloatBarrier
@@ -1081,6 +1069,7 @@ Finally, there is a function called mergeReport that will look at both the Daily
 \hlstd{parameterCd} \hlkwb{<-} \hlstr{"00631"}  \hlcom{# Nitrate}
 \hlstd{startDate} \hlkwb{<-} \hlstr{"2000-01-01"}
 \hlstd{endDate} \hlkwb{<-} \hlstr{"2013-01-01"}
+
 \hlstd{Daily} \hlkwb{<-} \hlkwd{getDVData}\hlstd{(siteNumber,} \hlstr{"00060"}\hlstd{, startDate, endDate)}
 \end{alltt}
 \begin{verbatim}
@@ -1094,10 +1083,10 @@ There are 4750 data points, and 4750 days.
 
  Discharge Record is 4750 days long, which is 13 years
  First day of the discharge record is 2000-01-01 and last day is 2013-01-01
- The water quality record has 220 samples
+ The water quality record has 222 samples
  The first sample is from 2000-01-04 and the last sample is from 2012-12-18
  Discharge: Minimum, mean and maximum 0.00991 4.55 246
- Concentration: Minimum, mean and maximum 0.2 1.3 2.4
+ Concentration: Minimum, mean and maximum 0.2 1.2 2.4
  Percentage of the sample values that are censored is 0 %
 \end{verbatim}
 \begin{alltt}
@@ -1146,7 +1135,64 @@ As has been mentioned, the data is specifically formatted to be used with the EG
 \end{knitrout}
 
 
+
 \clearpage
+
+%------------------------------------------------------------
+\section{Summary}
+%------------------------------------------------------------
+
+The following table summarizes the data retrieval functions:
+
+\begin{table}[!ht]
+\begin{minipage}{\linewidth}
+\begin{center}
+\caption{dataRetrieval functions} 
+\begin{tabular}{lll}
+  \hline
+Data Type & Function Name & Description \\ 
+  \hline
+  Daily (raw) & retrieveNWISData & Raw USGS daily data \\
+  Daily & getDVData & USGS daily values \\
+  Daily & getDailyDataFromFile & User generated daily data \\
+  Sample (raw) & retrieveNWISqwData & Raw USGS water quality data \\
+  Sample (raw) & getRawQWData & Raw Water Quality Data Portal data \\
+  Sample (raw) & getQWDataFromFile & Raw user generated water quality data \\
+  Sample (processed) & getQWData & USGS Water Quality Portal data \\
+  Sample (processed) & getWQPData & General Water Quality Portal\\
+  Sample & getSampleData & USGS water quality data\\  
+  Sample & getSTORETSampleData & STORET Water Quality Data Portal data \\
+  Sample & getSampleDataFromFile & User generated sample data \\
+  Unit (raw) & retrieveUnitNWISData & Raw USGS instantaneous data \\  
+  Information & getMetaData & USGS station and parameter code information \\
+  Information & getParameterInfo & USGS parameter code information \\
+  Information & getSiteFileData & USGS station information \\
+  Information & getDataAvailability & Data available at USGS stations \\
+   \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table}
+
+\begin{table}[!ht]
+\begin{minipage}{\linewidth}
+\begin{center}
+\caption{dataRetrieval functions 2} 
+\begin{tabular}{l p{4cm} p{4cm}}
+  \hline
+Data Type & EGRET Functions & Other Retrieval Functions \\ 
+  \hline
+  Daily Data & getDVData \par getDailyDataFromFile & retrieveNWISData \\
+  Water Quality Sample Data & getSampleData \par getSTORETSampleData \par getSampleDataFromFile \par & retrieveNWISqwData \par getRawQWData \par getQWDataFromFile \par getQWData \par getWQPData\\  
+  Unit Data& & retrieveUnitNWISData \\  
+  Meta Data & getMetaData & getParameterInfo \par getSiteFileData \par getDataAvailability \\
+   \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table}
+
+
 \appendix
 
 %------------------------------------------------------------ 
@@ -1239,8 +1285,8 @@ After installing the package, you need to open the library each time you re-star
 \label{sec:appendix2INFO}
 %------------------------------------------------------------
 
-% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Fri Sep 13 16:57:57 2013
+% latex table generated in R 3.0.2 by xtable 1.7-1 package
+% Mon Oct 28 16:27:25 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1305,8 +1351,8 @@ After installing the package, you need to open the library each time you re-star
 
 There are 62 columns returned from the water quality portal. 
 
-% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Fri Sep 13 16:57:57 2013
+% latex table generated in R 3.0.2 by xtable 1.7-1 package
+% Mon Oct 28 16:27:25 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1362,8 +1408,8 @@ There are 62 columns returned from the water quality portal.
 
 \FloatBarrier
 
-% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Fri Sep 13 16:57:57 2013
+% latex table generated in R 3.0.2 by xtable 1.7-1 package
+% Mon Oct 28 16:27:25 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rl}
@@ -1413,6 +1459,7 @@ There are a few steps that are required in order to create a table in a Microsof
 \hlstd{availableData} \hlkwb{<-} \hlkwd{getDataAvailability}\hlstd{(siteNumber)}
 \hlstd{dailyData} \hlkwb{<-} \hlstd{availableData[}\hlstr{"dv"} \hlopt{==} \hlstd{availableData}\hlopt{$}\hlstd{service,]}
 \hlstd{dailyData} \hlkwb{<-} \hlstd{dailyData[}\hlstr{"00003"} \hlopt{==} \hlstd{dailyData}\hlopt{$}\hlstd{statCd,]}
+
 \hlstd{tableData} \hlkwb{<-} \hlkwd{with}\hlstd{(dailyData,}
       \hlkwd{data.frame}\hlstd{(}
         \hlkwc{shortName}\hlstd{=srsname,}
@@ -1432,7 +1479,7 @@ There are a few steps that are required in order to create a table in a Microsof
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2013-09-12 23997      ft3/s
+2 2013-10-27 24042      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day

@@ -557,7 +557,8 @@ For every sample, the EGRET package requires a pair of numbers to define an inte
 For the more complex example case, let us say dp is reported as \verb@<@0.01 and pp is reported as 0.3. We know that the total must be at least 0.3 and could be as much as 0.31. Therefore, ConcLow=0.3 and ConcHigh=0.31. Another case would be if dp is reported as \verb@<@0.005 and pp is reported \verb@<@0.2. We know in this case that the true value could be as low as zero, but could be as high as 0.205. Therefore, in this case, ConcLow=NA and ConcHigh=0.205. The Sample dataframe for the example data is therefore:
 
 <<thirdExample,echo=FALSE>>=
-getPreLoadedSampleData(DF)
+  compressedData <- compressData(DF)
+  Sample <- populateSampleColumns(compressedData)
 
 @
 
@@ -654,7 +655,64 @@ library(EGRET)
 multiPlotDataOverview()
 @
 
+
 \clearpage
+
+%------------------------------------------------------------
+\section{Summary}
+%------------------------------------------------------------
+
+The following table summarizes the data retrieval functions:
+
+\begin{table}[!ht]
+\begin{minipage}{\linewidth}
+\begin{center}
+\caption{dataRetrieval functions} 
+\begin{tabular}{lll}
+  \hline
+Data Type & Function Name & Description \\ 
+  \hline
+  Daily (raw) & retrieveNWISData & Raw USGS daily data \\
+  Daily & getDVData & USGS daily values \\
+  Daily & getDailyDataFromFile & User generated daily data \\
+  Sample (raw) & retrieveNWISqwData & Raw USGS water quality data \\
+  Sample (raw) & getRawQWData & Raw Water Quality Data Portal data \\
+  Sample (raw) & getQWDataFromFile & Raw user generated water quality data \\
+  Sample (processed) & getQWData & USGS Water Quality Portal data \\
+  Sample (processed) & getWQPData & General Water Quality Portal\\
+  Sample & getSampleData & USGS water quality data\\  
+  Sample & getSTORETSampleData & STORET Water Quality Data Portal data \\
+  Sample & getSampleDataFromFile & User generated sample data \\
+  Unit (raw) & retrieveUnitNWISData & Raw USGS instantaneous data \\  
+  Information & getMetaData & USGS station and parameter code information \\
+  Information & getParameterInfo & USGS parameter code information \\
+  Information & getSiteFileData & USGS station information \\
+  Information & getDataAvailability & Data available at USGS stations \\
+   \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table}
+
+\begin{table}[!ht]
+\begin{minipage}{\linewidth}
+\begin{center}
+\caption{dataRetrieval functions 2} 
+\begin{tabular}{l p{4cm} p{4cm}}
+  \hline
+Data Type & EGRET Functions & Other Retrieval Functions \\ 
+  \hline
+  Daily Data & getDVData \par getDailyDataFromFile & retrieveNWISData \\
+  Water Quality Sample Data & getSampleData \par getSTORETSampleData \par getSampleDataFromFile \par & retrieveNWISqwData \par getRawQWData \par getQWDataFromFile \par getQWData \par getWQPData\\  
+  Unit Data& & retrieveUnitNWISData \\  
+  Meta Data & getMetaData & getParameterInfo \par getSiteFileData \par getDataAvailability \\
+   \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table}
+
+
 \appendix
 
 %------------------------------------------------------------ 
