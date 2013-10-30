@@ -1,6 +1,6 @@
 #' Import Sample Data for WRTDS
 #'
-#' Imports data from NWIS web service. This function gets the data from here: \url{http://qwwebservices.usgs.gov/}
+#' Imports data from NWIS web service. This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/qwdata/}
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
 #' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #' For raw data, use getQWData.  This function will retrieve the raw data, and compress it (summing constituents). See
