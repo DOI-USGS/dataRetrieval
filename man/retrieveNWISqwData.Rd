@@ -3,7 +3,7 @@
 \title{Raw Data Import for USGS NWIS QW Data}
 \usage{
   retrieveNWISqwData(siteNumber, pCodes, startDate,
-    endDate)
+    endDate, interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string or vector of strings USGS site
@@ -17,6 +17,10 @@
 
   \item{endDate}{string ending date for data retrieval in
   the form YYYY-MM-DD.}
+
+  \item{interactive}{logical Option for interactive mode.
+  If true, there is user interaction for error handling and
+  data checks.}
 }
 \value{
   data dataframe with agency, site, dateTime, value, and

@@ -8,6 +8,7 @@
 #' @param pCodes string or vector of USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
 #' @return data dataframe with agency, site, dateTime, value, and code columns
 #' @export
@@ -23,9 +24,9 @@
 #' data$dateTime <- as.Date(data$dateTime)
 #' compressedData <- compressData(data)
 #' Sample <- populateSampleColumns(compressedData)
-retrieveNWISqwData <- function (siteNumber,pCodes,startDate,endDate){  
+retrieveNWISqwData <- function (siteNumber,pCodes,startDate,endDate,interactive=TRUE){  
   
-  url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw")
+  url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw",interactive=interactive)
   
   tmp <- read.delim(  
     url, 

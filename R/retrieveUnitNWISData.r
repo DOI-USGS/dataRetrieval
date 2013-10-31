@@ -25,7 +25,7 @@
 #' rawData2 <- retrieveUnitNWISData(siteNumber,ParameterCd,StartDate,EndDate,"tsv")
 retrieveUnitNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,format="xml",interactive=TRUE){  
   
-  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"uv",format=format)
+  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"uv",format=format,interactive=interactive)
   if (format == "xml") {
     data <- getWaterML1Data(url)
   } else {

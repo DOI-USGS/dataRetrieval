@@ -28,7 +28,7 @@
 #' rawDailyQAndTempMeanMax <- retrieveNWISData(siteNumber,c('00010','00060'), startDate, endDate, StatCd=c('00001','00003'))
 retrieveNWISData <- function (siteNumber,ParameterCd,StartDate,EndDate,StatCd="00003",format="tsv",interactive=TRUE){  
   
-  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"dv",statCd=StatCd,format=format)
+  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"dv",statCd=StatCd,format=format,interactive=interactive)
   
   if (format == "xml") {
     data <- getWaterML1Data(url)
