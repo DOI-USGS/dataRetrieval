@@ -25,7 +25,9 @@
   \item{convert}{logical Option to include a conversion
   from cfs to cms (35.314667). The default is TRUE, which
   is appropriate for using NWIS data in the EGRET package.
-  Set this to FALSE to not include the conversion.}
+  Set this to FALSE to not include the conversion. If the
+  parameter code is not 00060 (NWIS discharge), there is no
+  conversion applied.}
 
   \item{format}{string, can be "tsv" or "xml", and is only
   applicable for daily and unit value requests.  "tsv"
@@ -52,6 +54,8 @@
 \examples{
 # These examples require an internet connection to run
 Daily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31')
+DailyCFS <- getDVData('01594440','00060', '1985-01-01', '1985-03-31',convert=FALSE)
+DailySuspSediment <- getDVData('01594440','80154', '1985-01-01', '1985-03-31')
 }
 \seealso{
   \code{\link{retrieveNWISData}},
