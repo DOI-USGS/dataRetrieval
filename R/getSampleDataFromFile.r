@@ -1,6 +1,7 @@
 #' Import Sample Data for WRTDS
 #'
-#' Imports data from a user-supplied file, and converts it to a Sample data frame, appropriate for WRTDS calculations.
+#' Imports data from a user-supplied file, and converts it to a Sample data frame (including summing multiple constituents), appropriate for WRTDS calculations. See
+#' section 3.4 of the vignette for more details.
 #'
 #' @param filePath string specifying the path to the file
 #' @param fileName string name of file to open

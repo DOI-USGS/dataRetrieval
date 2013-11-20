@@ -25,8 +25,9 @@
 }
 \description{
   Imports data from a user-supplied file, and converts it
-  to a Sample data frame, appropriate for WRTDS
-  calculations.
+  to a Sample data frame (including summing multiple
+  constituents), appropriate for WRTDS calculations. See
+  section 3.4 of the vignette for more details.
 }
 \examples{
 # Examples of how to use getSampleDataFromFile:
