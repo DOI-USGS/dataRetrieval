@@ -4,7 +4,7 @@
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
 #' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #' For raw data, use getQWData.  This function will retrieve the raw data, and compress it (summing constituents). See
-#' chapter 7 of the EGRET user guide for more details.
+#' section 3.4 of the vignette for more details.
 #'
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
 #' @param ParameterCd string USGS parameter code.  This is usually an 5 digit number.

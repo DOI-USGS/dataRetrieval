@@ -35,7 +35,7 @@
   \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
   For raw data, use getQWData.  This function will retrieve
   the raw data, and compress it (summing constituents). See
-  chapter 7 of the EGRET user guide for more details.
+  section 3.4 of the vignette for more details.
 }
 \examples{
 # These examples require an internet connection to run
