@@ -124,7 +124,7 @@ The dataRetrieval package was created to simplify the process of getting hydrolo
 
 The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrologic data that are available on the web, but also allows users to make use of other data that they supply from spreadsheets.  Section 2 provides examples of how one can obtain raw data from USGS sources on the web and ingest them into data frames within the R environment.  The functionality described in section 2 is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section 3 is tailored specifically to obtaining input from the web and structuring them for use in the EGRET package.  The functionality described in section 4 is for converting hydrologic data from user-supplied spreadsheets and structuring them specifically for use in the EGRET package.
 
-For information on getting started in R and installing the package, see Appendix (\ref{sec:appendix1}): Getting Started.
+For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started.
 
 Quick workflow for major dataRetrieval functions:
 \begin{knitrout}
@@ -175,7 +175,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Wed Oct 30 11:04:35 2013
+% Wed Nov 20 14:06:48 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -195,13 +195,50 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 
+A complete list (as of September 25, 2013) is available as data attached to the package. It can be accessed by the following:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(dataRetrieval)}
+\hlstd{parameterCdFile} \hlkwb{<-}  \hlstd{parameterCdFile}
+\hlkwd{names}\hlstd{(parameterCdFile)}
+\end{alltt}
+\begin{verbatim}
+[1] "parameter_cd"       "parameter_group_nm"
+[3] "parameter_nm"       "casrn"             
+[5] "srsname"            "parameter_units"   
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Sorting out some common values:}
+\hlkwd{subset}\hlstd{(parameterCdFile,parameter_cd} \hlopt{%in%} \hlkwd{c}\hlstd{(}\hlstr{"00060"}\hlstd{,}\hlstr{"00010"}\hlstd{,}\hlstr{"00400"}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+     parameter_cd parameter_group_nm
+1179        00010           Physical
+1206        00060           Physical
+1266        00400           Physical
+                                     parameter_nm casrn
+1179          Temperature, water, degrees Celsius      
+1206             Discharge, cubic feet per second      
+1266 pH, water, unfiltered, field, standard units      
+                      srsname parameter_units
+1179       Temperature, water           deg C
+1206 Stream flow, mean. daily           ft3/s
+1266                       pH       std units
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+
 For real-time data, the parameter code and site ID will suffice.  For most variables that are measured on a continuous basis, the USGS stores the historical data as daily values.  These daily values may be in the form of statistics such as the daily mean values, but they can also include daily maximums, minimums or medians.  These different statistics are specified by a 5-digit \texttt{"}stat code\texttt{"}.  A complete list of stat codes can be found here:
 
 \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Wed Oct 30 11:04:35 2013
+% Wed Nov 20 14:06:49 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -237,7 +274,6 @@ Use the getSiteFileData function to obtain all of the information available for 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{library}\hlstd{(dataRetrieval)}
 \hlcom{# Site ID for Choptank River near Greensboro, MD}
 \hlstd{siteNumber} \hlkwb{<-} \hlstr{"01491000"}
 \hlstd{ChoptankInfo} \hlkwb{<-} \hlkwd{getSiteFileData}\hlstd{(siteNumber)}
@@ -246,7 +282,7 @@ Use the getSiteFileData function to obtain all of the information available for 
 \end{knitrout}
 
 
-A list of the available columns are found in Appendix \ref{sec:appendix2INFO}: INFO dataframe. Pulling out a specific example piece of information, in this case station name can be done as follows:
+Pulling out a specific example piece of information, in this case station name can be done as follows:
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -289,7 +325,7 @@ To find out the available data at a particular USGS site, including measured par
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Wed Oct 30 11:04:36 2013
+% Wed Nov 20 14:06:50 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlllll}
@@ -297,7 +333,7 @@ To find out the available data at a particular USGS site, including measured par
  & shortName & Start & End & Count & Units \\ 
   \hline
 1 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  2 & Stream flow, mean. daily & 1948-01-01 & 2013-10-29 & 24044 & ft3/s \\ 
+  2 & Stream flow, mean. daily & 1948-01-01 & 2013-11-19 & 24065 & ft3/s \\ 
   3 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   4 & Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   5 & Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
@@ -309,7 +345,7 @@ To find out the available data at a particular USGS site, including measured par
 
 
 
-See Appendix \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft Excel or Word.
+See \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft Excel or Word.
 
 \FloatBarrier
 
@@ -481,7 +517,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a vector, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming (see Appendix \ref{sec:appendix2WQP}), a simplified version of the data can be obtained using getQWData.There is a large amount of data returned for each observation. 
+To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a vector, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data may be overwelming, a simplified version of the data can be obtained using getQWData.There is a large amount of data returned for each observation. 
 
 
 \begin{knitrout}
@@ -610,7 +646,6 @@ The function to obtain metadata, or data about the streamgage and measured param
 \end{knitrout}
 
 
-Column names in the INFO dataframe are listed in Appendix 2 (\ref{sec:appendix2INFO}).
 
 \FloatBarrier
 
@@ -638,7 +673,7 @@ There are 4750 data points, and 4750 days.
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Wed Oct 30 11:04:43 2013
+% Wed Nov 20 14:06:57 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -734,6 +769,8 @@ Date & Date & Date & date \\
 
 \footnotetext[1]{Discharge columns are populated from data in the Daily dataframe after calling the mergeReport function.}
 
+The next section will talk about summing multiple constituants, including how interval censoring is used. Since the Sample data frame is structured to only contain one constituent, when more than one parameter codes are requested, the getSampleData function will sum the values of each constituent as described below.
+
 \FloatBarrier
 
 
@@ -747,7 +784,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 \begin{center}
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Wed Oct 30 11:04:44 2013
+% Wed Nov 20 14:06:59 2013
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllrlrlr}
@@ -774,10 +811,37 @@ The dataRetrieval package will \texttt{"}add up\texttt{"} all the values in a gi
 
 For every sample, the EGRET package requires a pair of numbers to define an interval in which the true value lies (ConcLow and ConcHigh). In a simple non-censored case (the reported value is above the detection limit), ConcLow equals ConcHigh and the interval collapses down to a single point.In a simple censored case, the value might be reported as \verb@<@0.2, then ConcLow=NA and ConcHigh=0.2. We use NA instead of 0 as a way to elegantly handle future logarithm calculations.
 
-For the more complex example case, let us say dp is reported as \verb@<@0.01 and pp is reported as 0.3. We know that the total must be at least 0.3 and could be as much as 0.31. Therefore, ConcLow=0.3 and ConcHigh=0.31. Another case would be if dp is reported as \verb@<@0.005 and pp is reported \verb@<@0.2. We know in this case that the true value could be as low as zero, but could be as high as 0.205. Therefore, in this case, ConcLow=NA and ConcHigh=0.205. The Sample dataframe for the example data is therefore:
+For the more complex example case, let us say dp is reported as \verb@<@0.01 and pp is reported as 0.3. We know that the total must be at least 0.3 and could be as much as 0.31. Therefore, ConcLow=0.3 and ConcHigh=0.31. Another case would be if dp is reported as \verb@<@0.005 and pp is reported \verb@<@0.2. We know in this case that the true value could be as low as zero, but could be as high as 0.205. Therefore, in this case, ConcLow=NA and ConcHigh=0.205. The Sample dataframe for the example data would be:
 
 
 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlstd{Sample}
+\end{alltt}
+\begin{verbatim}
+        Date ConcLow ConcHigh Uncen ConcAve Julian Month
+1 2003-02-15    0.52    0.520     1  0.5200  55927     2
+2 2003-06-30    0.30    0.310     0  0.3050  56062     6
+3 2004-09-15      NA    0.205     0  0.1025  56505     9
+4 2005-01-30    0.43    0.430     1  0.4300  56642     1
+5 2005-05-30      NA    0.050     0  0.0250  56762     5
+6 2005-10-30      NA    0.020     0  0.0100  56915    10
+  Day DecYear MonthSeq    SinDY   CosDY
+1  46    2003     1838  0.70407  0.7101
+2 182    2003     1842  0.02575 -0.9997
+3 259    2005     1857 -0.96251 -0.2712
+4  30    2005     1861  0.48506  0.8745
+5 151    2005     1865  0.52943 -0.8484
+6 304    2006     1870 -0.87861  0.4775
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+The next section will talk about inputting user-generated files. getSampleDataFromFile and getSampleData assume summation with interval censoring inputs, as will be discussed in those sections.
 
 \FloatBarrier
 
@@ -825,7 +889,7 @@ The call to open this file, convert the discharge to cubic meters per second, an
 %------------------------------------------------------------ 
 \subsubsection{getSampleDataFromFile}
 %------------------------------------------------------------ 
-Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and discharge data is that the code requires a third column that contains a remark code, either blank or \texttt{"}\verb@<@\texttt{"}, which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.  If multiple constituents are going to be summed, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... An example of a comma-delimited file would be:
+Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and discharge data is that the code requires a third column that contains a remark code, either blank or \texttt{"}\verb@<@\texttt{"}, which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.   An example of a comma-delimited file would be:
 
 \begin{verbatim}
 cdate;remarkCode;Nitrate
@@ -847,6 +911,31 @@ The call to open this file, and populate the Sample dataframe would be:
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+
+
+If multiple constituents are going to be summed, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... A tab-separated example might look like this, where the columns are remark dissolved phosphate (rdp), dissolved phosphate (dp), remark particulate phosphorus (rpp), particulate phosphorus (pp), remark total phosphate (rtp), and total phosphate (tp):
+\begin{verbatim}
+date  rdp	dp	rpp	pp	rtp	tp
+2003-02-15		0.02		0.5		
+2003-06-30	<	0.01		0.3		
+2004-09-15	<	0	<	0.2		
+2005-01-30						0.43
+2005-05-30					<	0.05
+2005-10-30					<	0.02
+...
+\end{verbatim}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{fileName} \hlkwb{<-} \hlstr{"ChoptankPhosphorus.txt"}
+\hlstd{filePath} \hlkwb{<-}  \hlstr{"C:/RData/"}
+\hlstd{Sample} \hlkwb{<-} \hlkwd{getSampleDataFromFile}\hlstd{(filePath,fileName,}
+                                \hlkwc{separator}\hlstd{=}\hlstr{"\textbackslash{}t"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
 
 
 \FloatBarrier
@@ -1010,7 +1099,7 @@ Function Name & Description \\
 \end{table}
 
 \clearpage
-\appendix
+
 
 %------------------------------------------------------------ 
 \section{Getting Started in R}
@@ -1093,177 +1182,6 @@ After installing the package, you need to open the library each time you re-star
 \end{knitrout}
 
 
-%------------------------------------------------------------ 
-\section{Columns Names}
-\label{sec:appendix2}
-%------------------------------------------------------------ 
-
-%------------------------------------------------------------
-\subsection{INFO dataframe}
-\label{sec:appendix2INFO}
-%------------------------------------------------------------
-
-% latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Wed Oct 30 11:04:46 2013
-\begin{table}[ht]
-\centering
-\begin{tabular}{rl}
-  \hline
- & ColumnNames \\ 
-  \hline
-1 & agency.cd \\ 
-  2 & site.no \\ 
-  3 & station.nm \\ 
-  4 & site.tp.cd \\ 
-  5 & lat.va \\ 
-  6 & long.va \\ 
-  7 & dec.lat.va \\ 
-  8 & dec.long.va \\ 
-  9 & coord.meth.cd \\ 
-  10 & coord.acy.cd \\ 
-  11 & coord.datum.cd \\ 
-  12 & dec.coord.datum.cd \\ 
-  13 & district.cd \\ 
-  14 & state.cd \\ 
-  15 & county.cd \\ 
-  16 & country.cd \\ 
-  17 & map.nm \\ 
-  18 & map.scale.fc \\ 
-  19 & alt.va \\ 
-  20 & alt.meth.cd \\ 
-  21 & alt.acy.va \\ 
-  22 & alt.datum.cd \\ 
-  23 & huc.cd \\ 
-  24 & basin.cd \\ 
-  25 & topo.cd \\ 
-  26 & construction.dt \\ 
-  27 & inventory.dt \\ 
-  28 & drain.area.va \\ 
-  29 & contrib.drain.area.va \\ 
-  30 & tz.cd \\ 
-  31 & local.time.fg \\ 
-  32 & reliability.cd \\ 
-  33 & project.no \\ 
-  34 & queryTime \\ 
-  35 & drainSqKm \\ 
-  36 & shortName \\ 
-  37 & staAbbrev \\ 
-  38 & param.nm \\ 
-  39 & param.units \\ 
-  40 & paramShortName \\ 
-  41 & paramNumber \\ 
-  42 & constitAbbrev \\ 
-   \hline
-\end{tabular}
-\caption{Column names in the INFO dataframe} 
-\end{table}
-
-
-
-\FloatBarrier
-
-%------------------------------------------------------------
-\subsection{Water Quality Portal}
-\label{sec:appendix2WQP}
-%------------------------------------------------------------
-
-There are 62 columns returned from the water quality portal. 
-
-% latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Wed Oct 30 11:04:46 2013
-\begin{table}[ht]
-\centering
-\begin{tabular}{rl}
-  \hline
- & ColumnNames \\ 
-  \hline
-1 & OrganizationIdentifier \\ 
-  2 & OrganizationFormalName \\ 
-  3 & ActivityIdentifier \\ 
-  4 & ActivityTypeCode \\ 
-  5 & ActivityMediaName \\ 
-  6 & ActivityMediaSubdivisionName \\ 
-  7 & ActivityStartDate \\ 
-  8 & ActivityStartTime.Time \\ 
-  9 & ActivityStartTime.TimeZoneCode \\ 
-  10 & ActivityEndDate \\ 
-  11 & ActivityEndTime.Time \\ 
-  12 & ActivityEndTime.TimeZoneCode \\ 
-  13 & ActivityDepthHeightMeasure.MeasureValue \\ 
-  14 & ActivityDepthHeightMeasure.MeasureUnitCode \\ 
-  15 & ActivityDepthAltitudeReferencePointText \\ 
-  16 & ActivityTopDepthHeightMeasure.MeasureValue \\ 
-  17 & ActivityTopDepthHeightMeasure.MeasureUnitCode \\ 
-  18 & ActivityBottomDepthHeightMeasure.MeasureValue \\ 
-  19 & ActivityBottomDepthHeightMeasure.MeasureUnitCode \\ 
-  20 & ProjectIdentifier \\ 
-  21 & ActivityConductingOrganizationText \\ 
-  22 & MonitoringLocationIdentifier \\ 
-  23 & ActivityCommentText \\ 
-  24 & SampleAquifer \\ 
-  25 & HydrologicCondition \\ 
-  26 & HydrologicEvent \\ 
-  27 & SampleCollectionMethod.MethodIdentifier \\ 
-  28 & SampleCollectionMethod.MethodIdentifierContext \\ 
-  29 & SampleCollectionMethod.MethodName \\ 
-  30 & SampleCollectionEquipmentName \\ 
-  31 & ResultDetectionConditionText \\ 
-  32 & CharacteristicName \\ 
-  33 & ResultSampleFractionText \\ 
-  34 & ResultMeasureValue \\ 
-  35 & ResultMeasure.MeasureUnitCode \\ 
-  36 & MeasureQualifierCode \\ 
-  37 & ResultStatusIdentifier \\ 
-  38 & StatisticalBaseCode \\ 
-  39 & ResultValueTypeName \\ 
-  40 & ResultWeightBasisText \\ 
-   \hline
-\end{tabular}
-\caption{Column names in dissolvedNitrate} 
-\end{table}
-
-
-
-\FloatBarrier
-
-% latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Wed Oct 30 11:04:46 2013
-\begin{table}[ht]
-\centering
-\begin{tabular}{rl}
-  \hline
- & ColumnNames\_Continued \\ 
-  \hline
-1 & ResultTimeBasisText \\ 
-  2 & ResultTemperatureBasisText \\ 
-  3 & ResultParticleSizeBasisText \\ 
-  4 & PrecisionValue \\ 
-  5 & ResultCommentText \\ 
-  6 & USGSPCode \\ 
-  7 & ResultDepthHeightMeasure.MeasureValue \\ 
-  8 & ResultDepthHeightMeasure.MeasureUnitCode \\ 
-  9 & ResultDepthAltitudeReferencePointText \\ 
-  10 & SubjectTaxonomicName \\ 
-  11 & SampleTissueAnatomyName \\ 
-  12 & ResultAnalyticalMethod.MethodIdentifier \\ 
-  13 & ResultAnalyticalMethod.MethodIdentifierContext \\ 
-  14 & ResultAnalyticalMethod.MethodName \\ 
-  15 & MethodDescriptionText \\ 
-  16 & LaboratoryName \\ 
-  17 & AnalysisStartDate \\ 
-  18 & ResultLaboratoryCommentText \\ 
-  19 & DetectionQuantitationLimitTypeName \\ 
-  20 & DetectionQuantitationLimitMeasure.MeasureValue \\ 
-  21 & DetectionQuantitationLimitMeasure.MeasureUnitCode \\ 
-  22 & PreparationStartDate \\ 
-   \hline
-\end{tabular}
-\caption{Column names in dissolvedNitrate} 
-\end{table}
-
-
-
-\clearpage
 
 %------------------------------------------------------------ 
 \section{Creating tables in Microsoft from R}
@@ -1297,7 +1215,7 @@ There are a few steps that are required in order to create a table in a Microsof
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2013-10-29 24044      ft3/s
+2 2013-11-19 24065      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day

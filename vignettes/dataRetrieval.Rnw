@@ -83,7 +83,7 @@ The dataRetrieval package was created to simplify the process of getting hydrolo
 
 The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrologic data that are available on the web, but also allows users to make use of other data that they supply from spreadsheets.  Section 2 provides examples of how one can obtain raw data from USGS sources on the web and ingest them into data frames within the R environment.  The functionality described in section 2 is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section 3 is tailored specifically to obtaining input from the web and structuring them for use in the EGRET package.  The functionality described in section 4 is for converting hydrologic data from user-supplied spreadsheets and structuring them specifically for use in the EGRET package.
 
-For information on getting started in R and installing the package, see Appendix (\ref{sec:appendix1}): Getting Started.
+For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started.
 
 Quick workflow for major dataRetrieval functions:
 <<workflow, echo=TRUE,eval=FALSE>>=
@@ -140,6 +140,18 @@ xtable(data.df,label="tab:params",
 
 @
 
+A complete list (as of September 25, 2013) is available as data attached to the package. It can be accessed by the following:
+
+<<tableParameterCodesDataRetrieval>>=
+library(dataRetrieval)
+parameterCdFile <-  parameterCdFile
+names(parameterCdFile)
+
+# Sorting out some common values:
+subset(parameterCdFile,parameter_cd %in% c("00060","00010","00400"))
+@
+
+
 For real-time data, the parameter code and site ID will suffice.  For most variables that are measured on a continuous basis, the USGS stores the historical data as daily values.  These daily values may be in the form of statistics such as the daily mean values, but they can also include daily maximums, minimums or medians.  These different statistics are specified by a 5-digit \texttt{"}stat code\texttt{"}.  A complete list of stat codes can be found here:
 
 \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
@@ -171,13 +183,13 @@ Use the getSiteFileData function to obtain all of the information available for 
 
 
 <<getSite, echo=TRUE>>=
-library(dataRetrieval)
+
 # Site ID for Choptank River near Greensboro, MD
 siteNumber <- "01491000" 
 ChoptankInfo <- getSiteFileData(siteNumber)
 @
 
-A list of the available columns are found in Appendix \ref{sec:appendix2INFO}: INFO dataframe. Pulling out a specific example piece of information, in this case station name can be done as follows:
+Pulling out a specific example piece of information, in this case station name can be done as follows:
 
 <<siteNames2, echo=TRUE>>=
 ChoptankInfo$station.nm
@@ -222,7 +234,7 @@ xtable(tableData,label="tab:gda",
 
 @
 
-See Appendix \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft Excel or Word.
+See \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft Excel or Word.
 
 \FloatBarrier
 
@@ -337,7 +349,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a vector, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data can be overwelming (see Appendix \ref{sec:appendix2WQP}), a simplified version of the data can be obtained using getQWData.There is a large amount of data returned for each observation. 
+To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a vector, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data may be overwelming, a simplified version of the data can be obtained using getQWData.There is a large amount of data returned for each observation. 
 
 
 <<label=getQW, echo=TRUE>>=
@@ -417,7 +429,6 @@ parameterCd <- "00618"
 INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
 @
 
-Column names in the INFO dataframe are listed in Appendix 2 (\ref{sec:appendix2INFO}).
 
 \FloatBarrier
 
@@ -508,6 +519,8 @@ Date & Date & Date & date \\
 
 \footnotetext[1]{Discharge columns are populated from data in the Daily dataframe after calling the mergeReport function.}
 
+The next section will talk about summing multiple constituants, including how interval censoring is used. Since the Sample data frame is structured to only contain one constituent, when more than one parameter codes are requested, the getSampleData function will sum the values of each constituent as described below.
+
 \FloatBarrier
 
 
@@ -529,7 +542,7 @@ pp <- c(0.5,0.3,0.2,NA,NA,NA)
 rtp <- c("","","","","<","<")
 tp <- c(NA,NA,NA,0.43,0.05,0.02)
 
-DF <- data.frame(cdate,rdp,dp,rpp,pp,rtp,tp)
+DF <- data.frame(cdate,rdp,dp,rpp,pp,rtp,tp,stringsAsFactors=FALSE)
 
 xtable(DF, caption="Example data")
 
@@ -542,13 +555,18 @@ The dataRetrieval package will \texttt{"}add up\texttt{"} all the values in a gi
 
 For every sample, the EGRET package requires a pair of numbers to define an interval in which the true value lies (ConcLow and ConcHigh). In a simple non-censored case (the reported value is above the detection limit), ConcLow equals ConcHigh and the interval collapses down to a single point.In a simple censored case, the value might be reported as \verb@<@0.2, then ConcLow=NA and ConcHigh=0.2. We use NA instead of 0 as a way to elegantly handle future logarithm calculations.
 
-For the more complex example case, let us say dp is reported as \verb@<@0.01 and pp is reported as 0.3. We know that the total must be at least 0.3 and could be as much as 0.31. Therefore, ConcLow=0.3 and ConcHigh=0.31. Another case would be if dp is reported as \verb@<@0.005 and pp is reported \verb@<@0.2. We know in this case that the true value could be as low as zero, but could be as high as 0.205. Therefore, in this case, ConcLow=NA and ConcHigh=0.205. The Sample dataframe for the example data is therefore:
+For the more complex example case, let us say dp is reported as \verb@<@0.01 and pp is reported as 0.3. We know that the total must be at least 0.3 and could be as much as 0.31. Therefore, ConcLow=0.3 and ConcHigh=0.31. Another case would be if dp is reported as \verb@<@0.005 and pp is reported \verb@<@0.2. We know in this case that the true value could be as low as zero, but could be as high as 0.205. Therefore, in this case, ConcLow=NA and ConcHigh=0.205. The Sample dataframe for the example data would be:
 
 <<thirdExample,echo=FALSE>>=
   compressedData <- compressData(DF)
   Sample <- populateSampleColumns(compressedData)
-
 @
+
+<<thirdExampleView,echo=TRUE>>=
+  Sample
+@
+
+The next section will talk about inputting user-generated files. getSampleDataFromFile and getSampleData assume summation with interval censoring inputs, as will be discussed in those sections.
 
 \FloatBarrier
 
@@ -591,7 +609,7 @@ Daily <- getDailyDataFromFile(filePath,fileName,
 %------------------------------------------------------------ 
 \subsubsection{getSampleDataFromFile}
 %------------------------------------------------------------ 
-Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and discharge data is that the code requires a third column that contains a remark code, either blank or \texttt{"}\verb@<@\texttt{"}, which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.  If multiple constituents are going to be summed, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... An example of a comma-delimited file would be:
+Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and discharge data is that the code requires a third column that contains a remark code, either blank or \texttt{"}\verb@<@\texttt{"}, which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.   An example of a comma-delimited file would be:
 
 \begin{verbatim}
 cdate;remarkCode;Nitrate
@@ -609,6 +627,26 @@ filePath <-  "C:/RData/"
 Sample <- getSampleDataFromFile(filePath,fileName,
                                 separator=",")
 @
+
+If multiple constituents are going to be summed, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... A tab-separated example might look like this, where the columns are remark dissolved phosphate (rdp), dissolved phosphate (dp), remark particulate phosphorus (rpp), particulate phosphorus (pp), remark total phosphate (rtp), and total phosphate (tp):
+\begin{verbatim}
+date  rdp	dp	rpp	pp	rtp	tp
+2003-02-15		0.02		0.5		
+2003-06-30	<	0.01		0.3		
+2004-09-15	<	0	<	0.2		
+2005-01-30						0.43
+2005-05-30					<	0.05
+2005-10-30					<	0.02
+...
+\end{verbatim}
+
+<<openSample2, eval = FALSE>>=
+fileName <- "ChoptankPhosphorus.txt"
+filePath <-  "C:/RData/"
+Sample <- getSampleDataFromFile(filePath,fileName,
+                                separator="\t")
+@
+
 
 \FloatBarrier
 
@@ -723,7 +761,7 @@ Function Name & Description \\
 \end{table}
 
 \clearpage
-\appendix
+
 
 %------------------------------------------------------------ 
 \section{Getting Started in R}
@@ -772,45 +810,6 @@ After installing the package, you need to open the library each time you re-star
 library(dataRetrieval)
 @
 
-%------------------------------------------------------------ 
-\section{Columns Names}
-\label{sec:appendix2}
-%------------------------------------------------------------ 
-
-%------------------------------------------------------------
-\subsection{INFO dataframe}
-\label{sec:appendix2INFO}
-%------------------------------------------------------------
-
-<<label=colNamesINFO, echo=FALSE,results='asis'>>=
-infoDF <- data.frame(ColumnNames=names(INFO))
-xtable(infoDF, caption="Column names in the INFO dataframe")
-
-@
-
-\FloatBarrier
-
-%------------------------------------------------------------
-\subsection{Water Quality Portal}
-\label{sec:appendix2WQP}
-%------------------------------------------------------------
-
-There are 62 columns returned from the water quality portal. 
-
-<<colNamesQW, echo=FALSE,results='asis'>>=
-infoDF <- data.frame(ColumnNames=names(dissolvedNitrate[1:40]))
-xtable(infoDF, caption="Column names in dissolvedNitrate")
-
-@
-
-\FloatBarrier
-
-<<colNamesQW2, echo=FALSE,results='asis'>>=
-infoDF <- data.frame(ColumnNames_Continued=names(dissolvedNitrate[41:62]))
-xtable(infoDF, caption="Column names in dissolvedNitrate")
-@
-
-\clearpage
 
 %------------------------------------------------------------ 
 \section{Creating tables in Microsoft from R}
