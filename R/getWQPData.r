@@ -66,23 +66,27 @@ getWQPData <- function(siteNumber,characteristicName,StartDate,EndDate,interacti
   
   originalLength <- nrow(test)
   
-  if(originalLength != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", originalLength, " were returned")
-  
-  test$qualifier <- qualifier
-  test$value <- as.numeric(correctedData)
-  
-  test <- test[!is.na(test$dateTime),]
-  newLength <- nrow(test)
-  if (originalLength != newLength){
-    numberRemoved <- originalLength - newLength
-    warningMessage <- paste(numberRemoved, " rows removed because no date was specified", sep="")
-    warning(warningMessage)
+  if (!is.na(numToBeReturned)){
+    if(originalLength != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", originalLength, " were returned")
+    
+    test$qualifier <- qualifier
+    test$value <- as.numeric(correctedData)
+    
+    test <- test[!is.na(test$dateTime),]
+    newLength <- nrow(test)
+    if (originalLength != newLength){
+      numberRemoved <- originalLength - newLength
+      warningMessage <- paste(numberRemoved, " rows removed because no date was specified", sep="")
+      warning(warningMessage)
+    }
+    
+    colnames(test)<- c("CharacteristicName","dateTime","qualifier","value")
+    data <- reshape(test, idvar="dateTime", timevar = "CharacteristicName", direction="wide")    
+    data$dateTime <- format(data$dateTime, "%Y-%m-%d")
+    data$dateTime <- as.Date(data$dateTime)
+    return(data)
+  } else {
+    warning("No data retrieved")
   }
   
-  colnames(test)<- c("CharacteristicName","dateTime","qualifier","value")
-  data <- reshape(test, idvar="dateTime", timevar = "CharacteristicName", direction="wide")    
-  data$dateTime <- format(data$dateTime, "%Y-%m-%d")
-  data$dateTime <- as.Date(data$dateTime)
-  
-  return(data)
 }
