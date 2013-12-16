@@ -117,7 +117,7 @@ Sample <- mergeReport()
 %------------------------------------------------------------
 \section{General USGS Web Retrievals}
 %------------------------------------------------------------ 
-In this section, we will run through 5 examples, which document how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), real-time (unit) values (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis, and specifically tailored to EGRET analysis.
+In this section, we will run through 5 examples, which document how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis, and specifically tailored to EGRET analysis.
 
 %------------------------------------------------------------
 \subsection{Introduction}
@@ -152,7 +152,7 @@ subset(parameterCdFile,parameter_cd %in% c("00060","00010","00400"))
 @
 
 
-For real-time data, the parameter code and site ID will suffice.  For most variables that are measured on a continuous basis, the USGS stores the historical data as daily values.  These daily values may be in the form of statistics such as the daily mean values, but they can also include daily maximums, minimums or medians.  These different statistics are specified by a 5-digit \texttt{"}stat code\texttt{"}.  A complete list of stat codes can be found here:
+For unit values data (sensor data), the parameter code and site ID will suffice.  For most variables that are measured on a continuous basis, the USGS stores the historical data as daily values.  These daily values may be in the form of statistics such as the daily mean values, but they can also include daily maximums, minimums or medians.  These different statistics are specified by a 5-digit \texttt{"}stat code\texttt{"}.  A complete list of stat codes can be found here:
 
 \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 
@@ -529,9 +529,9 @@ The next section will talk about summing multiple constituants, including how in
 %------------------------------------------------------------
 In the typical case where none of the data are censored (that is, no values are reported as \texttt{"}less-than\texttt{"} values) the ConcLow = ConcHigh = ConcAve all of which are equal to the reported value and Uncen=0.  In the typical form of censoring where a value is reported as less than the reporting limit, then ConcLow = NA, ConcHigh = reporting limit, ConcAve = 0.5 * reporting limit, and Uncen = 1.
 
-As an example to understand how the dataRetrieval package handles a more complex censoring problem, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). From 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like this:
+As an example to understand how the dataRetrieval package handles a more complex censoring problem, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). From 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like \ref{tab:exampleComplexQW}.
 
-\begin{center}
+
 
 <<label=exampleComplexQW, echo=FALSE, eval=TRUE,results='asis'>>=
 cdate <- c("2003-02-15","2003-06-30","2004-09-15","2005-01-30","2005-05-30","2005-10-30")
@@ -548,7 +548,7 @@ xtable(DF, caption="Example data")
 
 @
 
-\end{center}
+
 
 
 The dataRetrieval package will \texttt{"}add up\texttt{"} all the values in a given row to form the total for that sample. Thus, you only want to enter data that should be added together. For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not suppose to add it in to the values in 2005.
@@ -698,19 +698,19 @@ The following table summarizes the data retrieval functions:
   \hline
 Data Type & Function Name & Description \\ 
   \hline
-  Daily (raw) & retrieveNWISData & Raw USGS daily data \\
-  Daily & getDVData & USGS daily values \\
-  Daily & getDailyDataFromFile & User generated daily data \\
-  Sample (raw) & retrieveNWISqwData & Raw USGS water quality data \\
-  Sample (raw) & getRawQWData & Raw Water Quality Data Portal data \\
-  Sample (raw) & getQWDataFromFile & Raw user generated water quality data \\
-  Sample (processed) & getQWData & USGS Water Quality Portal data \\
-  Sample (processed) & getWQPData & General Water Quality Portal\\
-  Sample & getSampleData & USGS water quality data\\  
-  Sample & getSTORETSampleData & STORET Water Quality Data Portal data \\
-  Sample & getSampleDataFromFile & User generated sample data \\
-  Unit (raw) & retrieveUnitNWISData & Raw USGS instantaneous data \\  
-  Information & getMetaData & USGS station and parameter code information \\
+  Daily & retrieveNWISData & Raw USGS daily data \\
+  Daily\footnotemark[1] & getDVData & USGS daily values \\
+  Daily\footnotemark[1] & getDailyDataFromFile & User generated daily data \\
+  Sample & retrieveNWISqwData & Raw USGS water quality data \\
+  Sample & getRawQWData & Raw Water Quality Data Portal data \\
+  Sample & getQWDataFromFile & Raw user generated water quality data \\
+  Sample & getQWData & USGS Water Quality Portal data \\
+  Sample & getWQPData & General Water Quality Portal\\
+  Sample\footnotemark[1] & getSampleData & USGS water quality data\\  
+  Sample\footnotemark[1] & getSTORETSampleData & STORET Water Quality Data Portal data \\
+  Sample\footnotemark[1] & getSampleDataFromFile & User generated sample data \\
+  Unit & retrieveUnitNWISData & Raw USGS instantaneous data \\  
+  Information\footnotemark[1] & getMetaData & USGS station and parameter code information \\
   Information & getParameterInfo & USGS parameter code information \\
   Information & getSiteFileData & USGS station information \\
   Information & getDataAvailability & Data available at USGS stations \\
@@ -720,23 +720,7 @@ Data Type & Function Name & Description \\
 \end{minipage}
 \end{table}
 
-\begin{table}[!ht]
-\begin{minipage}{\linewidth}
-\begin{center}
-\caption{dataRetrieval functions 2} 
-\begin{tabular}{l p{4cm} p{4cm}}
-  \hline
-Data Type & EGRET Functions & Other Retrieval Functions \\ 
-  \hline
-  Daily Data & getDVData \par getDailyDataFromFile & retrieveNWISData \\
-  Water Quality Sample Data & getSampleData \par getSTORETSampleData \par getSampleDataFromFile \par & retrieveNWISqwData \par getRawQWData \par getQWDataFromFile \par getQWData \par getWQPData\\  
-  Unit Data& & retrieveUnitNWISData \\  
-  Meta Data & getMetaData & getParameterInfo \par getSiteFileData \par getDataAvailability \\
-   \hline
-\end{tabular}
-\end{center}
-\end{minipage}
-\end{table}
+\footnotetext[1]{Indicates that function creates a data frame suitable for use in EGRET software}
 
 \begin{table}[!ht]
 \begin{minipage}{\linewidth}

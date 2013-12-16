@@ -16,13 +16,13 @@
 \contentsline {subsection}{\numberline {3.2}Daily Data}{14}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Sample Data}{15}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}Censored Values: Summation Explanation}{16}{subsection.3.4}
-\contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{18}{subsection.3.5}
+\contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{17}{subsection.3.5}
 \contentsline {subsubsection}{\numberline {3.5.1}getDailyDataFromFile}{18}{subsubsection.3.5.1}
 \contentsline {subsubsection}{\numberline {3.5.2}getSampleDataFromFile}{19}{subsubsection.3.5.2}
 \contentsline {subsection}{\numberline {3.6}Merge Report}{20}{subsection.3.6}
 \contentsline {subsection}{\numberline {3.7}EGRET Plots}{21}{subsection.3.7}
 \contentsline {section}{\numberline {4}Summary}{23}{section.4}
-\contentsline {section}{\numberline {5}Getting Started in R}{25}{section.5}
-\contentsline {subsection}{\numberline {5.1}New to R?}{25}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}R User: Installing dataRetrieval}{25}{subsection.5.2}
-\contentsline {section}{\numberline {6}Creating tables in Microsoft from R}{26}{section.6}
+\contentsline {section}{\numberline {5}Getting Started in R}{24}{section.5}
+\contentsline {subsection}{\numberline {5.1}New to R?}{24}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}R User: Installing dataRetrieval}{24}{subsection.5.2}
+\contentsline {section}{\numberline {6}Creating tables in Microsoft from R}{25}{section.6}
