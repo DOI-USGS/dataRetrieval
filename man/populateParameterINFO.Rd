@@ -2,8 +2,7 @@
 \alias{populateParameterINFO}
 \title{Populate Parameter Information Columns}
 \usage{
-  populateParameterINFO(parameterCd, localINFO = INFO,
-    interactive = TRUE)
+populateParameterINFO(parameterCd, localINFO = INFO, interactive = TRUE)
 }
 \arguments{
   \item{localINFO}{dataframe with value and code columns.
@@ -16,11 +15,11 @@
   data checks.}
 }
 \value{
-  localINFO dataframe
+localINFO dataframe
 }
 \description{
-  Populates INFO data frame with additional user-supplied
-  information concerning the measured parameter.
+Populates INFO data frame with additional user-supplied
+information concerning the measured parameter.
 }
 \examples{
 #This example requires an internet connection to run

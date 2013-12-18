@@ -2,7 +2,7 @@
 \alias{formatCheckSiteNumber}
 \title{formatCheckSiteNumber}
 \usage{
-  formatCheckSiteNumber(siteNumber, interactive = TRUE)
+formatCheckSiteNumber(siteNumber, interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string to check}
@@ -12,15 +12,17 @@
   data checks.}
 }
 \value{
-  siteNumber string
+siteNumber string
 }
 \description{
-  Checks that the site code is 8 digits. If it is not 8
-  digits, it confirms with the user.
+Checks that the site code is at least 8 digits. If not, it
+confirms with the user.
 }
 \examples{
 site<- '01234567'
 formatCheckSiteNumber(site)
+site_incorrect <- '1234567'
+formatCheckSiteNumber(site_incorrect)
 }
 \keyword{WRTDS}
 \keyword{flow}

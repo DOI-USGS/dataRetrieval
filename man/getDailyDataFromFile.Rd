@@ -2,9 +2,8 @@
 \alias{getDailyDataFromFile}
 \title{Import Daily Data for WRTDS}
 \usage{
-  getDailyDataFromFile(filePath, fileName,
-    hasHeader = TRUE, separator = ",", qUnit = 1,
-    interactive = TRUE)
+getDailyDataFromFile(filePath, fileName, hasHeader = TRUE, separator = ",",
+  qUnit = 1, interactive = TRUE)
 }
 \arguments{
   \item{filePath}{string specifying the path to the file}
@@ -26,12 +25,11 @@
   data checks.}
 }
 \value{
-  Daily dataframe
+Daily dataframe
 }
 \description{
-  Imports data from a user-supplied file, and converts it
-  to a Daily data frame, appropriate for WRTDS
-  calculations.
+Imports data from a user-supplied file, and converts it to
+a Daily data frame, appropriate for WRTDS calculations.
 }
 \examples{
 # Examples of how to use getDailyDataFromFile:

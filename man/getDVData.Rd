@@ -2,8 +2,8 @@
 \alias{getDVData}
 \title{Import Daily Data for WRTDS}
 \usage{
-  getDVData(siteNumber, ParameterCd, StartDate, EndDate,
-    interactive = TRUE, convert = TRUE, format = "tsv")
+getDVData(siteNumber, ParameterCd, StartDate, EndDate, interactive = TRUE,
+  convert = TRUE, format = "tsv")
 }
 \arguments{
   \item{siteNumber}{string USGS site number.  This is
@@ -41,15 +41,15 @@
   expected. The default is "tsv".}
 }
 \value{
-  Daily dataframe
+Daily dataframe
 }
 \description{
-  Imports data from NWIS web service. This function gets
-  the data from here: \url{http://waterservices.usgs.gov/}
-  A list of parameter codes can be found here:
-  \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} A list
-  of statistic codes can be found here:
-  \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+Imports data from NWIS web service. This function gets the
+data from here: \url{http://waterservices.usgs.gov/} A list
+of parameter codes can be found here:
+\url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} A list
+of statistic codes can be found here:
+\url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 }
 \examples{
 # These examples require an internet connection to run
@@ -58,8 +58,7 @@ DailyCFS <- getDVData('01594440','00060', '1985-01-01', '1985-03-31',convert=FAL
 DailySuspSediment <- getDVData('01594440','80154', '1985-01-01', '1985-03-31')
 }
 \seealso{
-  \code{\link{retrieveNWISData}},
-  \code{\link{populateDaily}}
+\code{\link{retrieveNWISData}}, \code{\link{populateDaily}}
 }
 \keyword{USGS}
 \keyword{WRTDS}

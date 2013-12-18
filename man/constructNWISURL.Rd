@@ -2,9 +2,8 @@
 \alias{constructNWISURL}
 \title{Construct NWIS url for data retrieval}
 \usage{
-  constructNWISURL(siteNumber, parameterCd, startDate,
-    endDate, service, statCd = "00003", format = "xml",
-    interactive = TRUE)
+constructNWISURL(siteNumber, parameterCd, startDate, endDate, service,
+  statCd = "00003", format = "xml", interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string or vector of strings USGS site
@@ -44,16 +43,16 @@
   data checks.}
 }
 \value{
-  url string
+url string
 }
 \description{
-  Imports data from NWIS web service. This function gets
-  the data from here:
-  \url{http://nwis.waterdata.usgs.gov/nwis/qwdata} A list
-  of parameter codes can be found here:
-  \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} A list
-  of statistic codes can be found here:
-  \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+Imports data from NWIS web service. This function gets the
+data from here:
+\url{http://nwis.waterdata.usgs.gov/nwis/qwdata} A list of
+parameter codes can be found here:
+\url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} A list
+of statistic codes can be found here:
+\url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 }
 \examples{
 siteNumber <- '01594440'

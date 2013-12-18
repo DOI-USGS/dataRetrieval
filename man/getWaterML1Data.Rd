@@ -2,21 +2,21 @@
 \alias{getWaterML1Data}
 \title{Function to return data from the NWISWeb WaterML1.1 service}
 \usage{
-  getWaterML1Data(obs_url)
+getWaterML1Data(obs_url)
 }
 \arguments{
   \item{obs_url}{string containing the url for the
   retrieval}
 }
 \value{
-  mergedDF a data frame containing columns agency, site,
-  dateTime, values, and remark codes for all requested
-  combinations
+mergedDF a data frame containing columns agency, site,
+dateTime, values, and remark codes for all requested
+combinations
 }
 \description{
-  This function accepts a url parameter that already
-  contains the desired NWIS site, parameter code,
-  statistic, startdate and enddate.
+This function accepts a url parameter that already contains
+the desired NWIS site, parameter code, statistic, startdate
+and enddate.
 }
 \examples{
 url <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="

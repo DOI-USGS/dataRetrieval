@@ -2,18 +2,17 @@
 \alias{populateConcentrations}
 \title{Populate Concentration Columns}
 \usage{
-  populateConcentrations(rawData)
+populateConcentrations(rawData)
 }
 \arguments{
   \item{rawData}{vector with value and code columns}
 }
 \value{
-  concentrationColumns dataframe
+concentrationColumns dataframe
 }
 \description{
-  Creates ConcLow, ConcHigh, Uncen (0 if censored, 1 if
-  uncensored) columns for Sample data frame for WRTDS
-  study.
+Creates ConcLow, ConcHigh, Uncen (0 if censored, 1 if
+uncensored) columns for Sample data frame for WRTDS study.
 }
 \examples{
 code <- c("","<","")

@@ -2,8 +2,8 @@
 \alias{getSampleDataFromFile}
 \title{Import Sample Data for WRTDS}
 \usage{
-  getSampleDataFromFile(filePath, fileName,
-    hasHeader = TRUE, separator = ",", interactive = TRUE)
+getSampleDataFromFile(filePath, fileName, hasHeader = TRUE, separator = ",",
+  interactive = TRUE)
 }
 \arguments{
   \item{filePath}{string specifying the path to the file}
@@ -21,13 +21,13 @@
   data checks.}
 }
 \value{
-  Sample dataframe
+Sample dataframe
 }
 \description{
-  Imports data from a user-supplied file, and converts it
-  to a Sample data frame (including summing multiple
-  constituents), appropriate for WRTDS calculations. See
-  section 3.4 of the vignette for more details.
+Imports data from a user-supplied file, and converts it to
+a Sample data frame (including summing multiple
+constituents), appropriate for WRTDS calculations. See
+section 3.4 of the vignette for more details.
 }
 \examples{
 # Examples of how to use getSampleDataFromFile:
