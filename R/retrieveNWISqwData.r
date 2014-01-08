@@ -8,7 +8,9 @@
 #' @param pCodes string or vector of USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
-#' @param expanded logical defaults to FALSE. If TRUE, retrieves additional information.
+#' @param expanded logical defaults to FALSE. If TRUE, retrieves additional information. Expanded data includes
+#' remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
+#' dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
 #' @return data dataframe with agency, site, dateTime, value, and code columns
@@ -50,9 +52,14 @@ retrieveNWISqwData <- function (siteNumber,pCodes,startDate,endDate,expanded=FAL
   if(expanded){
     data$site <- with(data,paste(agency_cd,site_no,sep="-"))
     data$dateTime <- with(data, as.POSIXct(paste(sample_dt,sample_tm,sep=" "),tz="UTC"))
+    data$dateTimeEnd <- rep(as.POSIXct(NA), length(data$sample_end_tm))
     
     if (any("" != data[["sample_end_dt"]])){
-      data$dateTimeEnd <- with(data, as.POSIXct(paste(sample_end_dt,sample_end_tm,sep=" "),tz="UTC"))
+      data$sample_end_dt["" == data$sample_end_dt] <- NA
+      data$sample_end_tm["" == data$sample_end_tm] <- NA
+      
+      data$dateTimeEnd[!is.na(data$sample_end_tm) & !is.na(data$sample_end_dt)] <- as.POSIXct(paste(data$sample_end_dt[!is.na(data$sample_end_tm) & !is.na(data$sample_end_dt)],
+                            data$sample_end_tm[!is.na(data$sample_end_tm) & !is.na(data$sample_end_dt)],sep=" "),tz="UTC")
     } 
     
     data$result_va <- as.numeric(data$result_va)
@@ -63,12 +70,14 @@ retrieveNWISqwData <- function (siteNumber,pCodes,startDate,endDate,expanded=FAL
                "sample_start_time_datum_cd","anl_ent_cd","lab_std_va")
     data <- data[,!(names(data) %in% rmCol)]
     
-    longDF <- melt(data, c("parm_cd","dateTime","site"))
+    longDF <- melt(data, c("parm_cd","dateTime","site","dateTimeEnd"))
     wideDF <- dcast(longDF, ... ~ variable + parm_cd )
     wideDF[,grep("_va_",names(wideDF))] <- sapply(wideDF[,grep("_va_",names(wideDF))], function(x) as.numeric(x))
-    order(sapply(strsplit(names(wideDF)[c(-1:-2)],"_"), function(x) x[length(x)]))
     
-    data <- wideDF[,c(1,2,(2+order(sapply(strsplit(names(wideDF)[c(-1:-2)],"_"), function(x) x[length(x)]))))]
+    data <- wideDF[,c(1,2,3,(3+order(sapply(strsplit(names(wideDF)[c(-1:-3)],"_"), function(x) x[length(x)]))))]
+    if (all(is.na(data$dateTimeEnd))){
+      data$dateTimeEnd <- NULL
+    }    
     
   } else {
     data$site <- with(data,paste(agency_cd,site_no,sep="-"))
