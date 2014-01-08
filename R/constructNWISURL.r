@@ -13,6 +13,7 @@
 #' @param format string, can be "tsv" or "xml", and is only applicable for daily and unit value requests.  "tsv" returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower, 
 #' but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
 #' but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml". 
+#' @param expanded logical defaults to FALSE. If TRUE, retrieves additional information, only applicable for qw data.
 #' @param interactive logical Option for interactive mode.  If TRUE, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
 #' @return url string
@@ -28,7 +29,7 @@
 #' url_qw <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDate,'qw')
 #' url_wqp <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDate,'wqp')
 #' url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',statCd=c("00003","00001"),format="tsv")
-constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,statCd="00003", format="xml",interactive=TRUE){
+constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,statCd="00003", format="xml",expanded=FALSE,interactive=TRUE){
 
   startDate <- formatCheckDate(startDate, "StartDate", interactive=interactive)
   endDate <- formatCheckDate(endDate, "EndDate", interactive=interactive)
@@ -67,8 +68,13 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
                           "group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd",
                           "column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file",
                           "TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0",
-                          "format=rdb&qw_sample_wide=separated_wide&rdb_qw_attributes=0&date_format=YYYY-MM-DD",
+                          "format=rdb&rdb_qw_attributes=0&date_format=YYYY-MM-DD",
                           "rdb_compression=value", sep = "&")
+             if(expanded){
+               url <- paste(url,"&qw_sample_wide=0",sep="")
+             } else {
+               url <- paste(url,"&qw_sample_wide=separated_wide",sep="")
+             }
              
              if (nzchar(startDate)) {
                url <- paste(url,"&begin_date=",startDate,sep="")

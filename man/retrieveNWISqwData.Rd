@@ -2,7 +2,8 @@
 \alias{retrieveNWISqwData}
 \title{Raw Data Import for USGS NWIS QW Data}
 \usage{
-retrieveNWISqwData(siteNumber, pCodes, startDate, endDate, interactive = TRUE)
+retrieveNWISqwData(siteNumber, pCodes, startDate, endDate, expanded = FALSE,
+  interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string or vector of strings USGS site
@@ -16,6 +17,9 @@ retrieveNWISqwData(siteNumber, pCodes, startDate, endDate, interactive = TRUE)
 
   \item{endDate}{string ending date for data retrieval in
   the form YYYY-MM-DD.}
+
+  \item{expanded}{logical defaults to FALSE. If TRUE,
+  retrieves additional information.}
 
   \item{interactive}{logical Option for interactive mode.
   If true, there is user interaction for error handling and
@@ -41,6 +45,7 @@ startDate <- '2010-01-01'
 endDate <- ''
 pCodes <- c('34247','30234','32104','34220')
 rawNWISqwData <- retrieveNWISqwData(siteNumber,pCodes,startDate,endDate)
+rawNWISqwDataExpand <- retrieveNWISqwData(siteNumber,pCodes,startDate,endDate,expanded=TRUE)
 # To get data in Sample dataframe format:
 data <- rawNWISqwData[,names(rawNWISqwData) != "site"]
 data$dateTime <- as.Date(data$dateTime)

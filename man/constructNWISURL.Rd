@@ -3,7 +3,8 @@
 \title{Construct NWIS url for data retrieval}
 \usage{
 constructNWISURL(siteNumber, parameterCd, startDate, endDate, service,
-  statCd = "00003", format = "xml", interactive = TRUE)
+  statCd = "00003", format = "xml", expanded = FALSE,
+  interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string or vector of strings USGS site
@@ -37,6 +38,10 @@ constructNWISURL(siteNumber, parameterCd, startDate, endDate, service,
   use the "tsv" option, but the user must carefully check
   the results to see if the data returns matches what is
   expected. The default is therefore "xml".}
+
+  \item{expanded}{logical defaults to FALSE. If TRUE,
+  retrieves additional information, only applicable for qw
+  data.}
 
   \item{interactive}{logical Option for interactive mode.
   If TRUE, there is user interaction for error handling and
