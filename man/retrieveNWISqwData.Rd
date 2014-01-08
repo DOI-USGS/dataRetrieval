@@ -19,7 +19,12 @@ retrieveNWISqwData(siteNumber, pCodes, startDate, endDate, expanded = FALSE,
   the form YYYY-MM-DD.}
 
   \item{expanded}{logical defaults to FALSE. If TRUE,
-  retrieves additional information.}
+  retrieves additional information. Expanded data includes
+  remark_cd (remark code), result_va (result value),
+  val_qual_tx (result value qualifier code), meth_cd
+  (method code), dqi_cd (data-quality indicator code),
+  rpt_lev_va (reporting level), and rpt_lev_cd (reporting
+  level type).}
 
   \item{interactive}{logical Option for interactive mode.
   If true, there is user interaction for error handling and
