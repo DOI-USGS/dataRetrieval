@@ -119,7 +119,12 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
             parameterCd <- formatCheckParameterCd(parameterCd, interactive=interactive)
           }
           
-          if ("uv"==service) service <- "iv"
+          if ("uv"==service) {
+            service <- "iv"
+            baseURL <- paste("http://nwis.waterservices.usgs.gov/nwis/",service,sep="")  
+          } else {
+            baseURL <- paste("http://waterservices.usgs.gov/nwis/",service,sep="")  
+          }
           
           if ("xml"==format){ 
             format <- "waterml,1.1"
@@ -129,7 +134,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
             warning("non-supported format requested, please choose xml or tsv")
           }
              
-          baseURL <- paste("http://waterservices.usgs.gov/nwis/",service,sep="")  
+          
           
           url <- paste(baseURL,"/?site=",siteNumber, "&ParameterCd=",parameterCd, "&format=", format, sep = "")
           
