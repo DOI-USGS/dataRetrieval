@@ -1,0 +1,55 @@
+# ---------------------------------- WARNING ----------------------------------------
+# Provisional data are subject to revision. Go to
+# http://waterdata.usgs.gov/nwis/help/?provisional for more information.
+#
+# File-format description:  http://waterdata.usgs.gov/nwis/?tab_delimited_format_info
+# Automated-retrieval info: http://waterdata.usgs.gov/nwis/?automated_retrieval_info
+#
+# Contact:   gs-w_support_nwisweb@usgs.gov
+# retrieved: 2014-01-27 16:54:02 EST	(natwebvaas01)
+#
+# Data for the following 1 site(s) are contained in this file
+#    USGS 02177000 CHATTOOGA RIVER NEAR CLAYTON, GA
+# -----------------------------------------------------------------------------------
+#
+# Data provided for site 02177000
+#    DD parameter statistic   Description
+#    01   00060     00003     Discharge, cubic feet per second (Mean)
+#
+# Data-value qualification codes included in this output:
+#     A  Approved for publication -- Processing and review completed.
+#     P  Provisional data subject to revision.
+#
+agency_cd	site_no	datetime	01_00060_00003	01_00060_00003_cd
+5s	15s	20d	14n	10s
+USGS	02177000	2012-09-01	191	A
+USGS	02177000	2012-09-02	213	A
+USGS	02177000	2012-09-03	409	A
+USGS	02177000	2012-09-04	722	A
+USGS	02177000	2012-09-05	634	A
+USGS	02177000	2012-09-06	414	A
+USGS	02177000	2012-09-07	320	A
+USGS	02177000	2012-09-08	276	A
+USGS	02177000	2012-09-09	251	A
+USGS	02177000	2012-09-10	227	A
+USGS	02177000	2012-09-11	215	A
+USGS	02177000	2012-09-12	209	A
+USGS	02177000	2012-09-13	200	A
+USGS	02177000	2012-09-14	193	A
+USGS	02177000	2012-09-15	189	A
+USGS	02177000	2012-09-16	185	A
+USGS	02177000	2012-09-17	203	A
+USGS	02177000	2012-09-18	1470	A
+USGS	02177000	2012-09-19	1220	A
+USGS	02177000	2012-09-20	671	A
+USGS	02177000	2012-09-21	503	A
+USGS	02177000	2012-09-22	411	A
+USGS	02177000	2012-09-23	346	A
+USGS	02177000	2012-09-24	304	A
+USGS	02177000	2012-09-25	284	A
+USGS	02177000	2012-09-26	272	A
+USGS	02177000	2012-09-27	261	A
+USGS	02177000	2012-09-28	250	A
+USGS	02177000	2012-09-29	246	A
+USGS	02177000	2012-09-30	243	A
+USGS	02177000	2012-10-01	365	P
