@@ -46,7 +46,6 @@
 
 \begin{document}
 
-
 <<openLibrary, echo=FALSE>>=
 library(xtable)
 options(continue=" ")
