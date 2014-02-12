@@ -174,7 +174,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Jan 27 13:37:44 2014
+% Tue Feb 11 15:44:37 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -237,7 +237,7 @@ For unit values data (sensor data), the parameter code and site ID will suffice.
 
 Some common stat codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Jan 27 13:37:45 2014
+% Tue Feb 11 15:44:38 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -324,7 +324,7 @@ To find out the available data at a particular USGS site, including measured par
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Jan 27 13:37:46 2014
+% Tue Feb 11 15:44:38 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlllll}
@@ -332,7 +332,7 @@ To find out the available data at a particular USGS site, including measured par
  & shortName & Start & End & Count & Units \\ 
   \hline
 1 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  2 & Stream flow, mean. daily & 1948-01-01 & 2014-01-26 & 24133 & ft3/s \\ 
+  2 & Stream flow, mean. daily & 1948-01-01 & 2014-02-10 & 24148 & ft3/s \\ 
   3 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   4 & Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   5 & Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
@@ -479,17 +479,29 @@ Any data that are collected at regular time intervals (such as 15-minute or hour
 \hlstd{dischargeToday} \hlkwb{<-} \hlkwd{retrieveUnitNWISData}\hlstd{(siteNumber, parameterCd,}
         \hlstd{startDate, endDate)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error: invalid 'file' argument}}\end{kframe}
+\end{kframe}
 \end{knitrout}
 
 Which produces the following dataframe:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error: object 'dischargeToday' not found}}\end{kframe}
+\begin{verbatim}
+  agency     site            dateTime X02_00060_00011
+1   USGS 01491000 2012-05-12 00:00:00              83
+2   USGS 01491000 2012-05-12 00:15:00              83
+3   USGS 01491000 2012-05-12 00:30:00              83
+4   USGS 01491000 2012-05-12 00:45:00              83
+5   USGS 01491000 2012-05-12 01:00:00              85
+6   USGS 01491000 2012-05-12 01:15:00              83
+  X02_00060_00011_cd
+1                  A
+2                  A
+3                  A
+4                  A
+5                  A
+6                  A
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 
 
@@ -523,8 +535,8 @@ To get USGS water quality data from water samples collected at the streamgage (a
 \hlkwd{names}\hlstd{(dissolvedNitrateSimple)}
 \end{alltt}
 \begin{verbatim}
-[1] "dateTime"        "qualifier.71851" "value.71851"    
-[4] "qualifier.00618" "value.00618"    
+[1] "dateTime"        "qualifier.00618" "value.00618"    
+[4] "qualifier.71851" "value.71851"    
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -660,7 +672,7 @@ There are 4750 data points, and 4750 days.
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Jan 27 13:37:59 2014
+% Tue Feb 11 15:44:54 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -771,7 +783,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Mon Jan 27 13:38:00 2014
+% Tue Feb 11 15:44:55 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllrlrlr}
@@ -1186,7 +1198,7 @@ There are a few steps that are required in order to create a table in a Microsof
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2014-01-26 24133      ft3/s
+2 2014-02-10 24148      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day

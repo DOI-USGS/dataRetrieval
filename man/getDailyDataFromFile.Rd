@@ -32,11 +32,10 @@ Imports data from a user-supplied file, and converts it to
 a Daily data frame, appropriate for WRTDS calculations.
 }
 \examples{
-# Examples of how to use getDailyDataFromFile:
-# Change the file path and file name to something meaningful:
-filePath <-  '~/RData/'  # Sample format
-fileName <- 'ChoptankRiverFlow.txt'
-\dontrun{getDailyDataFromFile(filePath,fileName,separator="\\t")}
+filePath <- system.file("extdata", package="dataRetrieval")
+filePath <- paste(filePath,"/",sep="")
+fileName <- "ChoptankRiverFlow.txt"
+Daily <- getDailyDataFromFile(filePath,fileName,separator="\\t")
 }
 \keyword{USGS}
 \keyword{WRTDS}

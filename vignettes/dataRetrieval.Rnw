@@ -77,10 +77,10 @@ knit_hooks$set(crop = hook_pdfcrop)
 %------------------------------------------------------------
 \section{Introduction to dataRetrieval}
 %------------------------------------------------------------ 
-The dataRetrieval package was created to simplify the process of getting hydrologic data in the R enviornment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends (EGRET). See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the WRTDS method of data analysis (WRTDS is Weighted Regressions on Time, Discharge and Season) as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
+The dataRetrieval package was created to simplify the process of getting hydrology data in the R environment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends (EGRET). See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the WRTDS method of data analysis (WRTDS is Weighted Regressions on Time, Discharge and Season) as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
 
 
-The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrologic data that are available on the web, but also allows users to make use of other data that they supply from spreadsheets.  Section 2 provides examples of how one can obtain raw data from USGS sources on the web and ingest them into data frames within the R environment.  The functionality described in section 2 is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section 3 is tailored specifically to obtaining input from the web and structuring them for use in the EGRET package.  The functionality described in section 4 is for converting hydrologic data from user-supplied spreadsheets and structuring them specifically for use in the EGRET package.
+The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrology data that are available on the web, but also allows users to make use of other data that they supply from spreadsheets.  Section 2 provides examples of how one can obtain raw data from USGS sources on the web and ingest them into data frames within the R environment.  The functionality described in section 2 is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section 3 is tailored specifically to obtaining input from the web and structuring them for use in the EGRET package.  The functionality described in section 4 is for converting hydrology data from user-supplied spreadsheets and structuring them specifically for use in the EGRET package.
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started.
 
@@ -116,14 +116,14 @@ Sample <- mergeReport()
 %------------------------------------------------------------
 \section{General USGS Web Retrievals}
 %------------------------------------------------------------ 
-In this section, we will run through 5 examples, which document how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis, and specifically tailored to EGRET analysis.
+In this section, we will run through 5 examples, which document how to get raw data from the web. This includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, forms of nitrate have been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove more friendly for R analysis, and which is specifically tailored to EGRET analysis.
 
 %------------------------------------------------------------
 \subsection{Introduction}
 %------------------------------------------------------------
-The USGS organizes their hydrological data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discoving this 8-digit ID. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
+The USGS organizes their hydrology data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this 8-digit ID. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
-Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured paramater is being requested.  A complete list of possible USGS parameter codes can be found at \url{http://go.usa.gov/bVDz}.
+Once the site-ID is known, the next required input for USGS data retrievals is the 'parameter code'.  This is a 5-digit code that specifies what measured parameter is being requested.  A complete list of possible USGS parameter codes can be found at \url{http://go.usa.gov/bVDz}.
 
 Not every station will measure all parameters. A short list of commonly measured parameters is shown in Table \ref{tab:params}.
 
@@ -151,7 +151,7 @@ subset(parameterCdFile,parameter_cd %in% c("00060","00010","00400"))
 @
 
 
-For unit values data (sensor data), the parameter code and site ID will suffice.  For most variables that are measured on a continuous basis, the USGS stores the historical data as daily values.  These daily values may be in the form of statistics such as the daily mean values, but they can also include daily maximums, minimums or medians.  These different statistics are specified by a 5-digit \texttt{"}stat code\texttt{"}.  A complete list of stat codes can be found here:
+For unit values data (sensor data), knowing the parameter code and site ID is enough to make a request for data.  For most variables that are measured on a continuous basis, the USGS also stores the historical data as daily values.  These daily values may be in the form of statistics such as the daily mean values, but they can also include daily maximums, minimums or medians.  These different statistics are specified by a 5-digit \texttt{"}stat code\texttt{"}.  A complete list of stat codes can be found here:
 
 \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 
@@ -166,6 +166,8 @@ xtable(data.df,label="tab:stat",
                      caption="Commonly used USGS Stat Codes")
 
 @
+
+Examples for using these site ID's, parameter codes, and stat codes will be presented in subsequent sections.
 
 \FloatBarrier
 
@@ -220,16 +222,16 @@ ChoptankDailyData <- subset(ChoptankDailyData,
 
 <<tablegda, echo=FALSE,results='asis'>>=
 tableData <- with(ChoptankDailyData, 
-      data.frame(shortName=srsname, 
-      Start=as.character(startDate), 
-      End=as.character(endDate), 
-      Count=as.character(count),
-      Units=parameter_units)
+      data.frame( srsname=srsname, 
+      startDate=as.character(startDate), 
+      endDate=as.character(endDate), 
+      count=as.character(count),
+      units=parameter_units)
       )
 
 
 xtable(tableData,label="tab:gda",
-    caption="Daily mean data availabile at the Choptank River near Greensboro, MD")
+    caption="Daily mean data availabile at the Choptank River near Greensboro, MD. Some columns deleted for space considerations.")
 
 @
 
@@ -301,7 +303,7 @@ par(mar=c(5,5,5,5))
 
 with(temperatureAndFlow, plot(
   datetime, Temperature_water_degrees_Celsius_Max_01,
-  xlab="Date",ylab="Temperature [C]"
+  xlab="Date",ylab="Max Temperature [C]"
   ))
 par(new=TRUE)
 with(temperatureAndFlow, plot(
@@ -309,7 +311,7 @@ with(temperatureAndFlow, plot(
   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
   ))
 axis(4,col="red",col.axis="red")
-mtext("Discharge [cfs]",side=4,line=3,col="red")
+mtext("Mean Discharge [cfs]",side=4,line=3,col="red")
 title(paste(ChoptankInfo$station.nm,"2012",sep=" "))
 @
 
@@ -348,7 +350,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a vector, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data may be overwelming, a simplified version of the data can be obtained using getQWData.There is a large amount of data returned for each observation. 
+To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a vector, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data may be overwhelming, a simplified version of the data can be obtained using getQWData.There is a large amount of data returned for each observation. 
 
 
 <<label=getQW, echo=TRUE>>=
@@ -416,7 +418,7 @@ url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'uv')
 %------------------------------------------------------------ 
 Rather than using the raw data as retrieved by the web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
 
-In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We will be retrieving essentially the same data that were retrieved in the previous section, but in this case it will be structured into three EGRET-specific dataframes.  The daily discharge data will be placed in a dataframe called Daily.  The nitrate sample data will be placed in a dataframe called Sample.  The data about the site and the parameter will be placed in a dataframe called INFO.  Although these dataframes were designed to work with the EGRET R package, they can be very useful for a wide range of hydrologic studies that don't use EGRET.
+In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We will be retrieving essentially the same data that were retrieved in the previous section, but in this case it will be structured into three EGRET-specific dataframes.  The daily discharge data will be placed in a dataframe called Daily.  The nitrate sample data will be placed in a dataframe called Sample.  The data about the site and the parameter will be placed in a dataframe called INFO.  Although these dataframes were designed to work with the EGRET R package, they can be very useful for a wide range of hydrology studies that don't use EGRET.
 
 %------------------------------------------------------------
 \subsection{INFO Data}
@@ -518,7 +520,7 @@ Date & Date & Date & date \\
 
 \footnotetext[1]{Discharge columns are populated from data in the Daily dataframe after calling the mergeReport function.}
 
-The next section will talk about summing multiple constituants, including how interval censoring is used. Since the Sample data frame is structured to only contain one constituent, when more than one parameter codes are requested, the getSampleData function will sum the values of each constituent as described below.
+The next section will talk about summing multiple constituents, including how interval censoring is used. Since the Sample data frame is structured to only contain one constituent, when more than one parameter codes are requested, the getSampleData function will sum the values of each constituent as described below.
 
 \FloatBarrier
 
@@ -652,7 +654,7 @@ Sample <- getSampleDataFromFile(filePath,fileName,
 %------------------------------------------------------------
 \subsection{Merge Report}
 %------------------------------------------------------------
-Finally, there is a function called mergeReport that will look at both the Daily and Sample dataframe, and populate Q and LogQ columns into the Sample dataframe. The default arguments are Daily and Sample, however if you want to use other similarly structured dataframes, you can specify localDaily or localSample. Once mergeReport has been run, the Sample dataframe will be augumented with the daily discharges for all the days with samples.  None of the water quality functions in EGRET will work without first having run the mergeReport function.
+Finally, there is a function called mergeReport that will look at both the Daily and Sample dataframe, and populate Q and LogQ columns into the Sample dataframe. The default arguments are Daily and Sample, however if you want to use other similarly structured dataframes, you can specify localDaily or localSample. Once mergeReport has been run, the Sample dataframe will be augmented with the daily discharges for all the days with samples.  None of the water quality functions in EGRET will work without first having run the mergeReport function.
 
 
 <<mergeExample>>=
@@ -672,7 +674,7 @@ head(Sample)
 %------------------------------------------------------------
 \subsection{EGRET Plots}
 %------------------------------------------------------------
-As has been mentioned, the data is specifically formatted to be used with the EGRET package. The EGRET package has powerful modeling capabilities using WRTDS, but also has a variety of graphing and tablular tools to explore the data without using the WRTDS algorithm. See the EGRET vignette, user guide, and/or wiki (\url{https://github.com/USGS-R/EGRET/wiki}) for detailed information. The following figure is an example of one of the plotting functions that can be used directly from the dataRetrieval dataframes.
+As has been mentioned, the data is specifically formatted to be used with the EGRET package. The EGRET package has powerful modeling capabilities using WRTDS, but also has a variety of graphing and tabular tools to explore the data without using the WRTDS algorithm. See the EGRET vignette, user guide, and/or wiki (\url{https://github.com/USGS-R/EGRET/wiki}) for detailed information. The following figure is an example of one of the plotting functions that can be used directly from the dataRetrieval dataframes.
 
 <<egretEx, echo=TRUE, eval=TRUE, fig.cap="Default multiPlotDataOverview">>=
 # Continuing Choptank example from the previous sections
