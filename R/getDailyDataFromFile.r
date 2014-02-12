@@ -13,11 +13,10 @@
 #' @export
 #' @return Daily dataframe
 #' @examples
-#' # Examples of how to use getDailyDataFromFile:
-#' # Change the file path and file name to something meaningful:
-#' filePath <-  '~/RData/'  # Sample format
-#' fileName <- 'ChoptankRiverFlow.txt'
-#' \dontrun{getDailyDataFromFile(filePath,fileName,separator="\t")}
+#' filePath <- system.file("extdata", package="dataRetrieval")
+#' filePath <- paste(filePath,"/",sep="")
+#' fileName <- "ChoptankRiverFlow.txt"
+#' Daily <- getDailyDataFromFile(filePath,fileName,separator="\t")
 getDailyDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=",",qUnit=1,interactive=TRUE){
   data <- getDataFromFile(filePath,fileName,hasHeader=hasHeader,separator=separator)
   convertQ<-c(35.314667,1,0.035314667,0.001)
@@ -26,5 +25,6 @@ getDailyDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=","
     if(qUnit==1) cat("\n the input discharge are assumed to be in cubic feet per second\nif they are in cubic meters per second, then the call to getDailyDataFromFile should specify qUnit=2\n")
   }
   localDaily <- populateDaily(data,qConvert, interactive=interactive)
+  localDaily <- localDaily[!is.na(localDaily$Q),]
   return(localDaily)
 }
