@@ -363,7 +363,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a vector, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data may be overwhelming, a simplified version of the data can be obtained using getQWData.There is a large amount of data returned for each observation. 
+To get USGS water quality data from water samples collected at the streamgage (as distinct from unit values collected through some type of automatic monitor) we can use the Water Quality Data Portal: \url{http://www.waterqualitydata.us/}. The raw data are obtained from the function  getRawQWData, with the similar input arguments: siteNumber, parameterCd, startDate, endDate, and interactive. The difference is in parameterCd, in this function multiple parameters can be queried using a vector, and setting parameterCd to \texttt{"}\texttt{"} will return all of the measured observations. The raw data may be overwhelming, a simplified version of the data can be obtained using getQWData. There is a large amount of data returned for each observation. 
 
 
 <<label=getQW, echo=TRUE>>=
@@ -380,6 +380,7 @@ dissolvedNitrateSimple <- getQWData(siteNumber, parameterCd,
         startDate, endDate)
 names(dissolvedNitrateSimple)
 @
+
 Note that in this dataframe, datetime is imported as Dates (no times are included), and the qualifier is either blank or \texttt{"}\verb@<@\texttt{"} signifying a censored value. A plotting example is shown in Figure \ref{fig:getQWtemperaturePlot}.
 
 <<getQWtemperaturePlot, echo=TRUE, fig.cap="Nitrate plot of Choptank River.">>=
@@ -397,7 +398,8 @@ title(ChoptankInfo$station.nm)
 \subsection{STORET Water Quality Retrievals}
 \label{sec:usgsSTORET}
 %------------------------------------------------------------
-There are additional data sets available on the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET (data from EPA) or NWIS database.  Since STORET does not use USGS parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The following example retrieves specific conductance from a DNR site in Wisconsin.
+There are additional data sets available on the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET (data from EPA) or NWIS database.  Since STORET does not use USGS parameter codes, a `characteristic name' must be supplied.  The getWQPData function can retrieve either STORET or NWIS, but requries a characteristic name rather than parameter code. The Water Quality Data Portal includes data discovery tools, and information on characheristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
+
 
 <<label=getQWData, echo=TRUE>>=
 specificCond <- getWQPData('WIDNR_WQX-10032762', 
@@ -452,7 +454,7 @@ INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
 \subsection{Daily Data}
 \label{Dailysubsection}
 %------------------------------------------------------------
-The function to obtain the daily values (discharge in this case) is getDVData.  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in the previous section, however \texttt{"}convert\texttt{"} is a new argument (defaults to TRUE), and it tells the program to convert the values from cubic feet per second (cfs) to cubic meters per second (cms). For EGRET applications with NWIS web retrieval, do not use this argument (the default is TRUE), EGRET assumes that discharge is always in cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
+The function to obtain the daily values (discharge in this case) is getDVData.  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in the previous section, however `convert' is a new argument (defaults to TRUE). The convert arguement tells the program to convert the values from cubic feet per second (cfs) to cubic meters per second (cms). For EGRET applications with NWIS web retrieval, do not use this argument (the default is TRUE), EGRET assumes that discharge is always in cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
 
 <<firstExample>>=
 siteNumber <- "01491000"
@@ -493,7 +495,7 @@ Sample <-getSampleData(siteNumber,parameterCd,
       startDate, endDate)
 @
 
-The function to obtain STORET sample data from the water quality portal is getSTORETSampleData. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as getRawQWData or getQWData as described in the previous section.
+The function to obtain STORET sample data from the water quality portal is getSTORETSampleData. The arguments for this function are siteNumber, characteristicName, StartDate, EndDate, interactive. 
 
 <<STORET,echo=TRUE,eval=FALSE>>=
 site <- 'WIDNR_WQX-10032762'
@@ -577,9 +579,9 @@ The next section will talk about summing multiple constituents, including how in
 %------------------------------------------------------------
 \subsection{Censored Values: Summation Explanation}
 %------------------------------------------------------------
-In the typical case where none of the data are censored (that is, no values are reported as \texttt{"}less-than\texttt{"} values) the ConcLow = ConcHigh = ConcAve all of which are equal to the reported value and Uncen=0.  In the typical form of censoring where a value is reported as less than the reporting limit, then ConcLow = NA, ConcHigh = reporting limit, ConcAve = 0.5 * reporting limit, and Uncen = 1.
+In the typical case where none of the data are censored (that is, no values are reported as `less-than' values) the ConcLow = ConcHigh = ConcAve all of which are equal to the reported value and Uncen=0.  For the most common type of censoring, where a value is reported as less than the reporting limit, then ConcLow = NA, ConcHigh = reporting limit, ConcAve = 0.5 * reporting limit, and Uncen = 1.
 
-As an example to understand how the dataRetrieval package handles a more complex censoring problem, let us say that in 2004 and earlier, we computed a total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). From 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like Table \ref{tab:exampleComplexQW}.
+As an example to understand how the dataRetrieval package handles a more complex censoring problem, let us say that in 2004 and earlier, we computed total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). From 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like Table \ref{tab:exampleComplexQW}.
 
 
 
@@ -598,7 +600,9 @@ xtable(DF, caption="Example data",digits=c(0,0,0,3,0,3,0,3),label="tab:exampleCo
 
 @
 
-The dataRetrieval package will \texttt{"}add up\texttt{"} all the values in a given row to form the total for that sample. Thus, you only want to enter data that should be added together. For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not suppose to add it in to the values in 2005.
+The dataRetrieval package will \texttt{"}add up\texttt{"} all the values in a given row to form the total for that sample when using the Sample dataframe. Thus, you only want to enter data that should be added together. If you want a dataframe with multiple constituents that are not summed, do not use getSampleData, getSTORETSampleData, or getSampleDataFromFile. The raw data functions: getWQPData, retrieveNWISqwData, getRawQWData, getQWData will not sum constituents, but leave them in their individual columns. 
+
+For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not supposed to add it in to the values in 2005.
 
 For every sample, the EGRET package requires a pair of numbers to define an interval in which the true value lies (ConcLow and ConcHigh). In a simple non-censored case (the reported value is above the detection limit), ConcLow equals ConcHigh and the interval collapses down to a single point.In a simple censored case, the value might be reported as \verb@<@0.2, then ConcLow=NA and ConcHigh=0.2. We use NA instead of 0 as a way to elegantly handle future logarithm calculations.
 
@@ -620,7 +624,7 @@ The next section will talk about inputting user-generated files. getSampleDataFr
 %------------------------------------------------------------ 
 \subsection{User-Generated Data Files}
 %------------------------------------------------------------ 
-Aside from retrieving data from the USGS web services, the dataRetrieval package includes functions to generate the Daily and Sample data frame from local files.
+Aside from retrieving data from the USGS web services, the dataRetrieval package also includes functions to generate the Daily and Sample data frame from local files.
 
 %------------------------------------------------------------ 
 \subsubsection{getDailyDataFromFile}
@@ -651,12 +655,14 @@ Daily <- getDailyDataFromFile(filePath,fileName,
                     separator="\t")
 @
 
+Microsoft Excel files can be a bit tricky to import into R directly. The simplest way to get Excel data into R is to open the Excel file in Excel, then save it as a .csv file (comma-separated values). 
+
 \FloatBarrier
 
 %------------------------------------------------------------ 
 \subsubsection{getSampleDataFromFile}
 %------------------------------------------------------------ 
-Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and discharge data is that the code requires a third column that contains a remark code, either blank or \texttt{"}\verb@<@\texttt{"}, which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.   An example of a comma-delimited file would be:
+Similarly to the previous section, getSampleDataFromFile will import a user-generated file and populate the Sample dataframe. The difference between sample data and discharge data is that the code requires a third column that contains a remark code, either blank or `\verb@<@', which will tell the program that the data was 'left-censored' (or, below the detection limit of the sensor). Therefore, the data is required to be in the form: date, remark, value.   An example of a comma-delimited file would be:
 
 \begin{verbatim}
 cdate;remarkCode;Nitrate
@@ -852,17 +858,31 @@ At any time, you can get information about any function in R by typing a questio
 ?removeDuplicates
 @
 
+This will open a help file similar to Figure \ref{fig:help}.
+
+\FloatBarrier
+
 To see the raw code for a particular code, type the name of the function, without parentheses.:
 <<rawFunc,eval = TRUE>>=
 removeDuplicates
 @
+
+
+
+\begin{figure}[ht!]
+\centering
+ \resizebox{0.95\textwidth}{!}{\includegraphics{Rhelp.png}} 
+\caption{A simple R help file}
+\label{fig:help}
+\end{figure}
 
 Additionally, many R packages have vignette files attached (such as this paper). To view the vignette:
 <<seeVignette,eval = FALSE>>=
 vignette(dataRetrieval)
 @
 
-
+\FloatBarrier
+\clearpage
 %------------------------------------------------------------
 \subsection{R User: Installing dataRetrieval}
 %------------------------------------------------------------ 
