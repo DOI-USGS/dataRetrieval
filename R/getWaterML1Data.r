@@ -8,7 +8,6 @@
 #' @export
 #' @import XML
 #' @examples
-#' url <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
 #' sites <- "02177000"
 #' startDate <- "2012-09-01"
 #' endDate <- "2012-10-01"
@@ -46,7 +45,13 @@ getWaterML1Data <- function(obs_url){
     statCd <- as.character(xpathApply(chunk, "ns1:variable/ns1:options/ns1:option/@optionCode", namespaces = chunkNS))
 
     valuesIndex <- as.numeric(which("values" == names(chunk)))
+    
+    zoneAbbrievs <- c(as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:timeZoneInfo/ns1:defaultTimeZone/@zoneAbbreviation", namespaces = chunkNS)),
+                      as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:timeZoneInfo/ns1:daylightSavingsTimeZone/@zoneAbbreviation", namespaces = chunkNS)))
 
+    names(zoneAbbrievs) <- c(as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:timeZoneInfo/ns1:defaultTimeZone/@zoneOffset", namespaces = chunkNS)),
+                          as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:timeZoneInfo/ns1:daylightSavingsTimeZone/@zoneOffset", namespaces = chunkNS)))
+    
     for (j in valuesIndex){
       subChunk <- xmlRoot(xmlDoc(chunk[[j]]))
       
@@ -56,6 +61,15 @@ getWaterML1Data <- function(obs_url){
       
       value <- as.numeric(xpathSApply(subChunk, "ns1:value",namespaces = chunkNS, xmlValue))  
       dateTime <- strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S")
+      tzHours <- substr(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),
+                        23,
+                        nchar(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS)))
+      if(mean(nchar(tzHours),rm.na=TRUE) == 6){
+        tzAbbriev <- zoneAbbrievs[tzHours]
+      } else {
+        tzAbbriev <- rep(as.character(zoneAbbrievs[1]),length(dateTime))
+      }
+      
       qualifier <- as.character(xpathSApply(subChunk, "ns1:value/@qualifiers",namespaces = chunkNS))
 
       valueName <- paste(methodID,pCode,statCd,sep="_")
@@ -67,15 +81,16 @@ getWaterML1Data <- function(obs_url){
       assign(qualName,qualifier)
       
       df <- data.frame(dateTime,
+                       tzAbbriev,
                        get(valueName),
                        get(qualName)
       )
-      names(df) <- c("dateTime",valueName,qualName)
+      names(df) <- c("dateTime","tz_cd",valueName,qualName)
  
       if (1 == i & valuesIndex[1] == j){
         mergedDF <- df
       } else {
-        mergedDF <- merge(mergedDF, df,by="dateTime",all=TRUE)
+        mergedDF <- merge(mergedDF, df,by=c("dateTime","tz_cd"),all=TRUE)
       }
     }
   }
