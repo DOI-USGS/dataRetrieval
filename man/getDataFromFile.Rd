@@ -28,9 +28,10 @@ column is optional, it contains any remark codes.
 \examples{
 # Examples of how to use getDataFromFile:
 # Change the file path and file name to something meaningful:
-filePath <- '~/RData/'  # Sample format
+filePath <- system.file("extdata", package="dataRetrieval")
+filePath <- paste(filePath,"/",sep="")
 fileName <- 'ChoptankRiverFlow.txt'
-\dontrun{getDataFromFile(filePath,fileName, separator="\\t")}
+getDataFromFile(filePath,fileName, separator="\\t")
 }
 \keyword{data}
 \keyword{file}

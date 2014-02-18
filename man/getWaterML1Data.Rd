@@ -19,7 +19,6 @@ the desired NWIS site, parameter code, statistic, startdate
 and enddate.
 }
 \examples{
-url <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
 sites <- "02177000"
 startDate <- "2012-09-01"
 endDate <- "2012-10-01"
