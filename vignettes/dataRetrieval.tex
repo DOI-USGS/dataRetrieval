@@ -164,7 +164,7 @@ Quick workflow for major dataRetrieval functions:
 \section{General USGS Web Retrievals}
 \label{sec:genRetrievals}
 %------------------------------------------------------------ 
-In this section, we will run through 5 examples, which document how to get raw data from the web. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, nitrate has been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove friendier for R analysis, and is specifically tailored to EGRET analysis.
+In this section, we will run through 5 examples, which document how to get raw data from the web. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this gage station is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, nitrate has been measured dating back to 1964. The functions/examples in this section are for raw data retrieval.  In the next section, we will use functions that retrieve and process the data in a dataframe that may prove friendlier for R analysis, and is specifically tailored to EGRET analysis.
 
 %------------------------------------------------------------
 \subsection{Introduction}
@@ -177,7 +177,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Tue Feb 18 16:42:12 2014
+% Tue Feb 18 17:38:48 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -240,7 +240,7 @@ For unit values data (sensor data), knowing the parameter code and site ID is en
 
 Some common codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Tue Feb 18 16:42:12 2014
+% Tue Feb 18 17:38:48 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -329,7 +329,7 @@ To discover what data is available for a particular USGS site, including measure
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Tue Feb 18 16:42:13 2014
+% Tue Feb 18 17:38:49 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlllll}
@@ -437,7 +437,7 @@ Another example that doesn't use the defaults would be a request for mean and ma
 \end{knitrout}
 
 
-Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}. 
+Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}.
 
 The column names can be automatically adjusted based on the parameter and statistic codes using the renameColumns function. This is not necessary, but may be useful when analyzing the data. 
 
@@ -586,7 +586,7 @@ To get USGS water quality data from water samples collected at the streamgage (a
 \end{knitrout}
 
 
-Note that in this dataframe, datetime is imported as Dates (no times are included), and the qualifier is either blank or \texttt{"}\verb@<@\texttt{"} signifying a censored value. A plotting example is shown in Figure \ref{fig:getQWtemperaturePlot}.
+Note that in this `simple' dataframe, datetime is imported as Dates (no times are included), and the qualifier is either blank or \texttt{"}\verb@<@\texttt{"} signifying a censored value. A plotting example is shown in Figure \ref{fig:getQWtemperaturePlot}.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -613,7 +613,7 @@ Note that in this dataframe, datetime is imported as Dates (no times are include
 \subsection{STORET Water Quality Retrievals}
 \label{sec:usgsSTORET}
 %------------------------------------------------------------
-There are additional data sets available on the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET (data from EPA) or NWIS database.  Since STORET does not use USGS parameter codes, a `characteristic name' must be supplied.  The getWQPData function can retrieve either STORET or NWIS, but requries a characteristic name rather than parameter code. The Water Quality Data Portal includes data discovery tools, and information on characheristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
+There are additional data sets available on the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET (data from EPA) or NWIS database.  Since STORET does not use USGS parameter codes, a `characteristic name' must be supplied.  The getWQPData function can retrieve either STORET or NWIS, but requires a characteristic name rather than parameter code. The Water Quality Data Portal includes data discovery tools, and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
 
 
 \begin{knitrout}
@@ -700,7 +700,7 @@ The function to obtain metadata, or data about the streamgage and measured param
 \subsection{Daily Data}
 \label{Dailysubsection}
 %------------------------------------------------------------
-The function to obtain the daily values (discharge in this case) is getDVData.  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in the previous section, however `convert' is a new argument (defaults to TRUE). The convert arguement tells the program to convert the values from cubic feet per second (cfs) to cubic meters per second (cms). For EGRET applications with NWIS web retrieval, do not use this argument (the default is TRUE), EGRET assumes that discharge is always in cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
+The function to obtain the daily values (discharge in this case) is getDVData.  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in the previous section, however `convert' is a new argument (defaults to TRUE). The convert argument tells the program to convert the values from cubic feet per second (cfs) to cubic meters per second (cms). For EGRET applications with NWIS web retrieval, do not use this argument (the default is TRUE), EGRET assumes that discharge is always in cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -721,7 +721,7 @@ There are 4750 data points, and 4750 days.
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Tue Feb 18 16:42:26 2014
+% Tue Feb 18 17:39:02 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -865,7 +865,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Tue Feb 18 16:42:27 2014
+% Tue Feb 18 17:39:03 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllrlrlr}
@@ -996,7 +996,8 @@ The call to open this file, and populate the Sample dataframe would be:
 \end{knitrout}
 
 
-If multiple constituents are going to be summed, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... A tab-separated example might look like this, where the columns are remark dissolved phosphate (rdp), dissolved phosphate (dp), remark particulate phosphorus (rpp), particulate phosphorus (pp), remark total phosphate (rtp), and total phosphate (tp):
+When multiple constituents are to be summed, the format can be date, remark\_A, value\_A, remark\_b, value\_b, etc... A tab-separated example might look like this, where the columns are remark dissolved phosphate (rdp), dissolved phosphate (dp), remark particulate phosphorus (rpp), particulate phosphorus (pp), remark total phosphate (rtp), and total phosphate (tp):
+
 \begin{verbatim}
 date  rdp	dp	rpp	pp	rtp	tp
 2003-02-15		0.020		0.500		
