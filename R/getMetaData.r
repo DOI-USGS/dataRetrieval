@@ -36,6 +36,8 @@ getMetaData <- function(siteNumber="", parameterCd="",interactive=TRUE){
   } 
   
   INFO <- populateParameterINFO(parameterCd, INFO, interactive=interactive)
+  INFO$paStart <- 10
+  INFO$paLong <- 12
   
   return(INFO)
 }
