@@ -11,7 +11,7 @@
 \contentsline {subsection}{\numberline {2.6}Water Quality Values}{11}{subsection.2.6}
 \contentsline {subsection}{\numberline {2.7}STORET Water Quality Retrievals}{13}{subsection.2.7}
 \contentsline {subsection}{\numberline {2.8}URL Construction}{13}{subsection.2.8}
-\contentsline {section}{\numberline {3}Data Retrievals Structured For Use In The EGRET Package}{14}{section.3}
+\contentsline {section}{\numberline {3}Data Retrievals Structured For Use In The EGRET Package}{13}{section.3}
 \contentsline {subsection}{\numberline {3.1}INFO Data}{14}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Daily Data}{14}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Sample Data}{15}{subsection.3.3}
