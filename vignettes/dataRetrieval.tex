@@ -177,7 +177,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Fri Apr 11 13:45:43 2014
+% Fri Apr 18 13:37:18 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -240,7 +240,7 @@ For unit values data (sensor data measured at regular time intervals such as 15 
 
 Some common codes are shown in Table \ref{tab:stat}.
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Fri Apr 11 13:45:43 2014
+% Fri Apr 18 13:37:19 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
@@ -329,7 +329,7 @@ To discover what data is available for a particular USGS site, including measure
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Fri Apr 11 13:45:44 2014
+% Fri Apr 18 13:37:19 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlllll}
@@ -337,7 +337,7 @@ To discover what data is available for a particular USGS site, including measure
  & srsname & startDate & endDate & count & units \\ 
   \hline
 1 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  2 & Stream flow, mean. daily & 1948-01-01 & 2014-04-10 & 24207 & ft3/s \\ 
+  2 & Stream flow, mean. daily & 1948-01-01 & 2014-04-17 & 24214 & ft3/s \\ 
   3 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   4 & Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
   5 & Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
@@ -573,7 +573,10 @@ To get USGS water quality data from water samples collected at the streamgage or
 
 \hlstd{dissolvedNitrate} \hlkwb{<-} \hlkwd{getRawQWData}\hlstd{(siteNumber, parameterCd,}
       \hlstd{startDate, endDate)}
+\end{alltt}
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error: missing value where TRUE/FALSE needed}}\begin{alltt}
 \hlstd{dissolvedNitrateSimple} \hlkwb{<-} \hlkwd{getQWData}\hlstd{(siteNumber, parameterCd,}
         \hlstd{startDate, endDate)}
 \hlkwd{names}\hlstd{(dissolvedNitrateSimple)}
@@ -619,8 +622,7 @@ There are additional data sets available on the Water Quality Data Portal (\url{
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{specificCond} \hlkwb{<-} \hlkwd{getWQPData}\hlstd{(}\hlstr{'WIDNR_WQX-10032762'}\hlstd{,}
-        \hlstr{'Specific conductance'}\hlstd{,} \hlstr{''}\hlstd{,} \hlstr{''}\hlstd{)}
+\hlstd{specificCond} \hlkwb{<-} \hlkwd{getWQPData}\hlstd{(}\hlstr{'WIDNR_WQX-10032762'}\hlstd{,}\hlstr{'Specific conductance'}\hlstd{,}\hlstr{''}\hlstd{,}\hlstr{''}\hlstd{)}
 \end{alltt}
 
 
@@ -712,7 +714,7 @@ There are 4750 data points, and 4750 days.
 Details of the Daily dataframe are listed below:
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Fri Apr 11 13:46:09 2014
+% Fri Apr 18 13:37:34 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -856,7 +858,7 @@ As an example to understand how the dataRetrieval package handles a more complex
 
 
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Fri Apr 11 13:46:12 2014
+% Fri Apr 18 13:37:35 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllrlrlr}
@@ -1234,11 +1236,10 @@ To see the raw code for a particular code, type the name of the function, withou
 \hlstd{removeDuplicates}
 \end{alltt}
 \begin{verbatim}
-function (localSample = Sample) 
-{
-    Sample1 <- localSample[!duplicated(localSample[c("DecYear", 
-        "ConcHigh")]), ]
-    return(Sample1)
+function(localSample=Sample) {  
+  Sample1 <- localSample[!duplicated(localSample[c("DecYear","ConcHigh")]),]
+  
+  return(Sample1)
 }
 <environment: namespace:dataRetrieval>
 \end{verbatim}
@@ -1335,7 +1336,7 @@ There are a few steps that are required in order to create a table in a Microsof
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2014-04-10 24207      ft3/s
+2 2014-04-17 24214      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day

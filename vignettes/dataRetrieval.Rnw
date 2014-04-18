@@ -402,8 +402,7 @@ There are additional data sets available on the Water Quality Data Portal (\url{
 
 
 <<label=getQWData, echo=TRUE>>=
-specificCond <- getWQPData('WIDNR_WQX-10032762', 
-        'Specific conductance', '', '')
+specificCond <- getWQPData('WIDNR_WQX-10032762','Specific conductance','','')
 head(specificCond)
 @
 
