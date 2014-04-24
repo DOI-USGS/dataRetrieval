@@ -889,7 +889,7 @@ vignette(dataRetrieval)
 Before installing dataRetrieval, a number of packages upon which dataRetrieval depends need to be installed must be installed from CRAN:
 
 <<installFromCran,eval = FALSE>>=
-install.packages(c("zoo","XML","RCurl","plyr"))
+install.packages(c("zoo","XML","RCurl","plyr","reshape2"))
 install.packages("dataRetrieval", repos="http://usgs-r.github.com",type="both")
 @
 
