@@ -2,7 +2,8 @@
 \alias{getQWDataFromFile}
 \title{Basic Data Import}
 \usage{
-getQWDataFromFile(filePath, fileName, hasHeader = TRUE, separator = ",")
+  getQWDataFromFile(filePath, fileName, hasHeader = TRUE,
+    separator = ",")
 }
 \arguments{
   \item{filePath}{string specifying the path to the file}
@@ -16,16 +17,16 @@ getQWDataFromFile(filePath, fileName, hasHeader = TRUE, separator = ",")
   cells}
 }
 \value{
-retval dataframe
+  retval dataframe
 }
 \description{
-Imports data from user-supplied data file. Specifically
-used to import water quality data for use in the WRTDS
-package. For WRTDS usage, the first column is expected to
-be dates, the second column remarks (specifically < if
-censored data), and the third column is measured values.
-There can be additional columns of data, for each column of
-data, there should be a remark column preceeding.
+  Imports data from user-supplied data file. Specifically
+  used to import water quality data for use in the WRTDS
+  package. For WRTDS usage, the first column is expected to
+  be dates, the second column remarks (specifically < if
+  censored data), and the third column is measured values.
+  There can be additional columns of data, for each column
+  of data, there should be a remark column preceeding.
 }
 \examples{
 # Examples of how to use getQWDataFromFile:

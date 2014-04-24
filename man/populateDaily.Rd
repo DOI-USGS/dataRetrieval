@@ -2,7 +2,7 @@
 \alias{populateDaily}
 \title{Populate Daily data frame}
 \usage{
-populateDaily(rawData, qConvert, interactive = TRUE)
+  populateDaily(rawData, qConvert, interactive = TRUE)
 }
 \arguments{
   \item{rawData}{dataframe contains at least dateTime,
@@ -16,12 +16,12 @@ populateDaily(rawData, qConvert, interactive = TRUE)
   data checks.}
 }
 \value{
-dataframe Daily
+  dataframe Daily
 }
 \description{
-Using raw data that has at least dateTime, value, code,
-populates the rest of the basic Daily data frame used in
-WRTDS
+  Using raw data that has at least dateTime, value, code,
+  populates the rest of the basic Daily data frame used in
+  WRTDS
 }
 \examples{
 dateTime <- c('1985-01-01', '1985-01-02', '1985-01-03')
@@ -31,7 +31,7 @@ dataInput <- data.frame(dateTime, value, code, stringsAsFactors=FALSE)
 Daily <- populateDaily(dataInput, 2)
 }
 \author{
-Robert M. Hirsch \email{rhirsch@usgs.gov}
+  Robert M. Hirsch \email{rhirsch@usgs.gov}
 }
 \keyword{WRTDS}
 \keyword{flow}

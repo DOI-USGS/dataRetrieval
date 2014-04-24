@@ -2,7 +2,8 @@
 \alias{mergeReport}
 \title{Merge Sample and Daily Data for WRTDS}
 \usage{
-mergeReport(localDaily = Daily, localSample = Sample, interactive = TRUE)
+  mergeReport(localDaily = Daily, localSample = Sample,
+    interactive = TRUE)
 }
 \arguments{
   \item{localDaily}{dataframe containing the daily data,
@@ -16,11 +17,11 @@ mergeReport(localDaily = Daily, localSample = Sample, interactive = TRUE)
   data checks.}
 }
 \value{
-newSample dataframe with merged flow information
+  newSample dataframe with merged flow information
 }
 \description{
-Merges the flow data from the daily record into the sample
-record.
+  Merges the flow data from the daily record into the
+  sample record.
 }
 \examples{
 # These examples require an internet connection to run
@@ -29,8 +30,8 @@ Sample <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31')
 Sample <- mergeReport()
 }
 \seealso{
-\code{\link{getDVData}},
-\code{\link{populateSampleColumns}}
+  \code{\link{getDVData}},
+  \code{\link{populateSampleColumns}}
 }
 \keyword{USGS}
 \keyword{WRTDS}

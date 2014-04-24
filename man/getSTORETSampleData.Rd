@@ -2,8 +2,8 @@
 \alias{getSTORETSampleData}
 \title{Import Sample Data for WRTDS}
 \usage{
-getSTORETSampleData(siteNumber, characteristicName, StartDate, EndDate,
-  interactive = TRUE)
+  getSTORETSampleData(siteNumber, characteristicName,
+    StartDate, EndDate, interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string site number.  If USGS, it should
@@ -22,18 +22,18 @@ getSTORETSampleData(siteNumber, characteristicName, StartDate, EndDate,
   data checks.}
 }
 \value{
-Sample dataframe
+  Sample dataframe
 }
 \description{
-Imports data from NWIS web service. This function gets the
-data from here: \url{http://qwwebservices.usgs.gov/} A list
-of parameter codes can be found here:
-\url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} A list
-of statistic codes can be found here:
-\url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
-For raw data, use getQWData.  This function will retrieve
-the raw data, and compress it (summing constituents). See
-chapter 7 of the EGRET user guide for more details.
+  Imports data from NWIS web service. This function gets
+  the data from here: \url{http://qwwebservices.usgs.gov/}
+  A list of parameter codes can be found here:
+  \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} A list
+  of statistic codes can be found here:
+  \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+  For raw data, use getQWData.  This function will retrieve
+  the raw data, and compress it (summing constituents). See
+  chapter 7 of the EGRET user guide for more details.
 }
 \examples{
 # These examples require an internet connection to run
@@ -41,8 +41,8 @@ Sample_01075 <- getSTORETSampleData('USGS-01594440','Chloride', '', '')
 Sample_All <- getSTORETSampleData('WIDNR_WQX-10032762','Specific conductance', '', '')
 }
 \seealso{
-\code{\link{compressData}},
-\code{\link{populateSampleColumns}}
+  \code{\link{compressData}},
+  \code{\link{populateSampleColumns}}
 }
 \keyword{USGS}
 \keyword{WRTDS}
