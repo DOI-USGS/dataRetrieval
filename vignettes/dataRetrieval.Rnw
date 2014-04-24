@@ -890,7 +890,7 @@ Before installing dataRetrieval, a number of packages upon which dataRetrieval d
 
 <<installFromCran,eval = FALSE>>=
 install.packages(c("zoo","XML","RCurl","plyr"))
-install.packages("dataRetrieval", repos="http://usgs-r.github.com")
+install.packages("dataRetrieval", repos="http://usgs-r.github.com",type="both")
 @
 
 It is a good idea to re-start R after installing the package, especially if installing an updated version. Some users have found it necessary to delete the previous version's package folder before installing newer version of dataRetrieval. If you are experiencing issues after updating a package, trying deleting the package folder - the default location for Windows is something like:
