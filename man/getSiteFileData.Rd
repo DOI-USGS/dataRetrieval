@@ -2,7 +2,7 @@
 \alias{getSiteFileData}
 \title{USGS Site File Data Retrieval}
 \usage{
-  getSiteFileData(siteNumber = "", interactive = TRUE)
+getSiteFileData(siteNumber = "", interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string USGS site number.  This is
@@ -13,12 +13,12 @@
   data checks.}
 }
 \value{
-  retval dataframe with all information found in the
-  expanded site file
+retval dataframe with all information found in the expanded
+site file
 }
 \description{
-  Imports data from USGS site file site. This function gets
-  data from here: \url{http://waterservices.usgs.gov/}
+Imports data from USGS site file site. This function gets
+data from here: \url{http://waterservices.usgs.gov/}
 }
 \examples{
 # These examples require an internet connection to run

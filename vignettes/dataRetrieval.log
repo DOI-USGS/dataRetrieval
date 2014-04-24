@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.12.19)  18 APR 2014 13:37
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.12.19)  24 APR 2014 13:59
 entering extended mode
 **dataRetrieval.tex
 (C:\Users\jlthomps\Desktop\git\dataRetrieval\vignettes\dataRetrieval.tex
@@ -627,17 +627,17 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 [10]
 Package color Info: Redefining color shadecolor on input line 567.
-Package color Info: Redefining color shadecolor on input line 595.
+Package color Info: Redefining color shadecolor on input line 592.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 604.
+               Default added (so using `tbp') on input line 601.
 
 <figure/getQWtemperaturePlot.pdf, id=229, 505.89pt x 505.89pt>
 File: figure/getQWtemperaturePlot.pdf Graphic file (type pdf)
 
 <use figure/getQWtemperaturePlot.pdf>
-Package pdftex.def Info: figure/getQWtemperaturePlot.pdf used on input line 606
+Package pdftex.def Info: figure/getQWtemperaturePlot.pdf used on input line 603
 .
 (pdftex.def)             Requested size: 448.07378pt x 448.07928pt.
 
@@ -650,19 +650,19 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 [12 <C:/Users/jlthomps/Desktop/git/dataRetrieval/vignettes/figure/getQWtemperat
 urePlot.pdf>]
-Overfull \hbox (50.793pt too wide) in paragraph at lines 619--620
+Overfull \hbox (50.793pt too wide) in paragraph at lines 616--617
 \OT1/ptm/m/n/10.95 There are ad-di-tional data sets avail-able on the Wa-ter Qu
 al-ity Data Por-tal ([]$\OT1/pcr/m/n/10.95 http : / / www . waterqualitydata .$
 
  []
 
-Package color Info: Redefining color shadecolor on input line 623.
-LaTeX Font Info:    Try loading font information for TS1+pcr on input line 625.
+Package color Info: Redefining color shadecolor on input line 620.
+LaTeX Font Info:    Try loading font information for TS1+pcr on input line 622.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ts1pcr.fd"
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
 )
-Overfull \hbox (57.81561pt too wide) in paragraph at lines 625--625
+Overfull \hbox (57.81561pt too wide) in paragraph at lines 622--622
 [][]\OT1/pcr/m/n/10.95 specificCond[] []<-[] []\OT1/pcr/b/n/10.95 getWQPData[][
 ]\OT1/pcr/m/n/10.95 ([][]\TS1/pcr/m/n/10.95 '\OT1/pcr/m/n/10.95 WIDNR_WQX-10032
 762\TS1/pcr/m/n/10.95 '[][]\OT1/pcr/m/n/10.95 ,[][]\TS1/pcr/m/n/10.95 '\OT1/pcr
@@ -671,9 +671,9 @@ Overfull \hbox (57.81561pt too wide) in paragraph at lines 625--625
 pcr/m/n/10.95 )[][] 
  []
 
-Package color Info: Redefining color shadecolor on input line 648.
+Package color Info: Redefining color shadecolor on input line 654.
 
-Overfull \hbox (5.25568pt too wide) in paragraph at lines 657--657
+Overfull \hbox (5.25568pt too wide) in paragraph at lines 663--663
 [][]\OT1/pcr/m/n/10.95 url_uv[] []<-[] []\OT1/pcr/b/n/10.95 constructNWISURL[][
 ]\OT1/pcr/m/n/10.95 (siteNumber,[][]"00060"[][],startDate,endDate,[][]\TS1/pcr/
 m/n/10.95 '\OT1/pcr/m/n/10.95 uv\TS1/pcr/m/n/10.95 '[][]\OT1/pcr/m/n/10.95 )[][
@@ -685,15 +685,15 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [13]
-Package color Info: Redefining color shadecolor on input line 680.
-Package color Info: Redefining color shadecolor on input line 699.
+Package color Info: Redefining color shadecolor on input line 686.
+Package color Info: Redefining color shadecolor on input line 705.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [14]
-Package color Info: Redefining color shadecolor on input line 755.
-Package color Info: Redefining color shadecolor on input line 768.
+Package color Info: Redefining color shadecolor on input line 761.
+Package color Info: Redefining color shadecolor on input line 774.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
@@ -703,41 +703,41 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [16]
-Package color Info: Redefining color shadecolor on input line 894.
+Package color Info: Redefining color shadecolor on input line 900.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [17]
-Package color Info: Redefining color shadecolor on input line 950.
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 955.
+Package color Info: Redefining color shadecolor on input line 956.
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 961.
 
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
 File: omspcr.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 955.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 961.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [18]
-Package color Info: Redefining color shadecolor on input line 981.
-Package color Info: Redefining color shadecolor on input line 1006.
+Package color Info: Redefining color shadecolor on input line 987.
+Package color Info: Redefining color shadecolor on input line 1012.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [19]
-Package color Info: Redefining color shadecolor on input line 1027.
+Package color Info: Redefining color shadecolor on input line 1033.
 
-Overfull \hbox (44.67563pt too wide) in paragraph at lines 1052--1052
+Overfull \hbox (44.67563pt too wide) in paragraph at lines 1058--1058
 [] \OT1/pcr/m/n/10.95 First day of the discharge record is 2000-01-01 and last 
 day is 2013-01-01[] 
  []
 
 
-Overfull \hbox (44.67563pt too wide) in paragraph at lines 1052--1052
+Overfull \hbox (44.67563pt too wide) in paragraph at lines 1058--1058
 [] \OT1/pcr/m/n/10.95 The first sample is from 2000-01-04 and the last sample i
 s from 2012-12-18[] 
  []
@@ -747,16 +747,16 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [20]
-Package color Info: Redefining color shadecolor on input line 1084.
+Package color Info: Redefining color shadecolor on input line 1090.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 1090.
+               Default added (so using `tbp') on input line 1096.
 
 <figure/egretEx.pdf, id=293, 505.89pt x 505.89pt>
 File: figure/egretEx.pdf Graphic file (type pdf)
  <use figure/egretEx.pdf>
-Package pdftex.def Info: figure/egretEx.pdf used on input line 1092.
+Package pdftex.def Info: figure/egretEx.pdf used on input line 1098.
 (pdftex.def)             Requested size: 448.07378pt x 448.07928pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
@@ -778,20 +778,14 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [24]
-Package color Info: Redefining color shadecolor on input line 1220.
-Package color Info: Redefining color shadecolor on input line 1234.
-
-Overfull \hbox (51.24562pt too wide) in paragraph at lines 1245--1245
-[]  \OT1/pcr/m/n/10.95 Sample1 <- localSample[!duplicated(localSample[c("DecYea
-r","ConcHigh")]),][] 
- []
-
-<Rhelp.png, id=325, 433.62pt x 395.22656pt>
+Package color Info: Redefining color shadecolor on input line 1226.
+Package color Info: Redefining color shadecolor on input line 1240.
+ <Rhelp.png, id=325, 433.62pt x 395.22656pt>
 File: Rhelp.png Graphic file (type png)
  <use Rhelp.png>
-Package pdftex.def Info: Rhelp.png used on input line 1254.
+Package pdftex.def Info: Rhelp.png used on input line 1261.
 (pdftex.def)             Requested size: 433.61894pt x 395.22559pt.
-Package color Info: Redefining color shadecolor on input line 1261.
+Package color Info: Redefining color shadecolor on input line 1268.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
@@ -803,9 +797,16 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [26 <C:/Users/jlthomps/Desktop/git/dataRetrieval/vignettes/Rhelp.png>]
-Package color Info: Redefining color shadecolor on input line 1277.
-Package color Info: Redefining color shadecolor on input line 1298.
-Package color Info: Redefining color shadecolor on input line 1314.
+Package color Info: Redefining color shadecolor on input line 1284.
+
+Overfull \hbox (70.9556pt too wide) in paragraph at lines 1287--1287
+[][]\OT1/pcr/b/n/10.95 install.packages[][]\OT1/pcr/m/n/10.95 ([][]"dataRetriev
+al"[][],[] []repos[][]=[][]"http://usgs-r.github.com"[][],[][]type[][]=[][]"bot
+h"[][])[][] 
+ []
+
+Package color Info: Redefining color shadecolor on input line 1305.
+Package color Info: Redefining color shadecolor on input line 1321.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
@@ -813,9 +814,9 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 [27
 
 ]
-Package color Info: Redefining color shadecolor on input line 1352.
+Package color Info: Redefining color shadecolor on input line 1359.
 
-Overfull \hbox (11.82567pt too wide) in paragraph at lines 1370--1370
+Overfull \hbox (11.82567pt too wide) in paragraph at lines 1377--1377
 []\OT1/pcr/m/n/10.95 Suspended sediment concentration (SSC) 1980-10-01 1991-09-
 30 3651 mg/l[] 
  []
@@ -827,37 +828,37 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 [28] <table1.png, id=354, 554.07pt x 125.71968pt>
 File: table1.png Graphic file (type png)
  <use table1.png>
-Package pdftex.def Info: table1.png used on input line 1389.
+Package pdftex.def Info: table1.png used on input line 1396.
 (pdftex.def)             Requested size: 554.06865pt x 125.71936pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [29 <C:/Users/jlthomps/Desktop/git/dataRetrieval/vignettes/table1.png>]
-Underfull \hbox (badness 1983) in paragraph at lines 1405--1406
+Underfull \hbox (badness 1983) in paragraph at lines 1412--1413
 []\OT1/ptm/m/n/10.95 Hirsch, R. M., Moyer, D. L. and Arch-field, S. A. (2010), 
 Weighted Re-gres-sions on
  []
 
 
-Underfull \hbox (badness 1221) in paragraph at lines 1405--1406
+Underfull \hbox (badness 1221) in paragraph at lines 1412--1413
 \OT1/ptm/m/n/10.95 Time, Dis-charge, and Sea-son (WRTDS), with an Ap-pli-ca-tio
 n to Chesa-peake Bay River
  []
 
 
-Underfull \hbox (badness 2443) in paragraph at lines 1405--1406
+Underfull \hbox (badness 2443) in paragraph at lines 1412--1413
 \OT1/ptm/m/n/10.95 In-puts. JAWRA Jour-nal of the Amer-i-can Wa-ter Re-sources 
 As-so-ci-a-tion, 46: 857-880.
  []
 
 
-Underfull \hbox (badness 3690) in paragraph at lines 1405--1406
+Underfull \hbox (badness 3690) in paragraph at lines 1412--1413
 \OT1/ptm/m/n/10.95 doi: 10.1111/j.1752-1688.2010.00482.x []$\OT1/pcr/m/n/10.95 
 http : / / onlinelibrary . wiley . com / doi /$
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1412.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1419.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
@@ -865,14 +866,14 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 [30
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1412.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1419.
  (C:\Users\jlthomps\Desktop\git\dataRetrieval\vignettes\dataRetrieval.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1412.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1412.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1419.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1419.
 
 Package rerunfilecheck Info: File `dataRetrieval.out' has not changed.
 (rerunfilecheck)             Checksum: FA68DD2EA4402D1A5C9FB76C153FCB7A;1868.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1412.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1419.
  ) 
 Here is how much of TeX's memory you used:
  8353 strings out of 494045
@@ -891,7 +892,7 @@ les (x86)/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files (x86)
 /type1/urw/times/utmb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/
 times/utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmri
 8a.pfb>
-Output written on dataRetrieval.pdf (30 pages, 314331 bytes).
+Output written on dataRetrieval.pdf (30 pages, 314208 bytes).
 PDF statistics:
  424 PDF objects out of 1000 (max. 8388607)
  87 named destinations out of 1000 (max. 500000)

@@ -2,8 +2,7 @@
 \alias{getMetaData}
 \title{Import Metadata for USGS Data}
 \usage{
-  getMetaData(siteNumber = "", parameterCd = "",
-    interactive = TRUE)
+getMetaData(siteNumber = "", parameterCd = "", interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string USGS site number.  This is
@@ -17,22 +16,22 @@
   data checks.}
 }
 \value{
-  INFO dataframe with agency, site, dateTime, value, and
-  code columns
+INFO dataframe with agency, site, dateTime, value, and code
+columns
 }
 \description{
-  Populates INFO data frame for WRTDS study.  If either
-  station number or parameter code supplied, imports data
-  about a particular USGS site from NWIS web service. This
-  function gets the data from here:
-  \url{http://waterservices.usgs.gov/} A list of parameter
-  codes can be found here:
-  \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} If
-  either station number or parameter code is not supplied,
-  the user will be asked to input data. Additionally, the
-  user will be asked for: staAbbrev - station abbreviation,
-  will be used in naming output files and for structuring
-  batch jobs constitAbbrev - constitute abbreviation
+Populates INFO data frame for WRTDS study.  If either
+station number or parameter code supplied, imports data
+about a particular USGS site from NWIS web service. This
+function gets the data from here:
+\url{http://waterservices.usgs.gov/} A list of parameter
+codes can be found here:
+\url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} If
+either station number or parameter code is not supplied,
+the user will be asked to input data. Additionally, the
+user will be asked for: staAbbrev - station abbreviation,
+will be used in naming output files and for structuring
+batch jobs constitAbbrev - constitute abbreviation
 }
 \examples{
 # These examples require an internet connection to run
