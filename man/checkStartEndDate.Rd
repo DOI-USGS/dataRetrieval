@@ -2,7 +2,7 @@
 \alias{checkStartEndDate}
 \title{checkStartEndDate}
 \usage{
-checkStartEndDate(StartDate, EndDate, interactive = TRUE)
+  checkStartEndDate(StartDate, EndDate, interactive = TRUE)
 }
 \arguments{
   \item{StartDate}{string}
@@ -14,12 +14,12 @@ checkStartEndDate(StartDate, EndDate, interactive = TRUE)
   data checks.}
 }
 \value{
-vector where first value is StartDate, second is EndDate
+  vector where first value is StartDate, second is EndDate
 }
 \description{
-Checks that the start date is before the end date.  If not,
-it will give the user the opportunity to correct, otherwise
-will create a warning.
+  Checks that the start date is before the end date.  If
+  not, it will give the user the opportunity to correct,
+  otherwise will create a warning.
 }
 \examples{
 startDate <- '1985-01-01'

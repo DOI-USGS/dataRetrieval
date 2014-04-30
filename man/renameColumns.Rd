@@ -2,17 +2,17 @@
 \alias{renameColumns}
 \title{renameColumns}
 \usage{
-renameColumns(rawData)
+  renameColumns(rawData)
 }
 \arguments{
   \item{rawData}{dataframe returned from retrieval
   functions}
 }
 \value{
-rawData dataframe with improved column names
+  rawData dataframe with improved column names
 }
 \description{
-Rename columns coming back from NWIS data retrievals
+  Rename columns coming back from NWIS data retrievals
 }
 \examples{
 # This example requires an internet connection to run

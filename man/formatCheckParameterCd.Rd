@@ -2,7 +2,7 @@
 \alias{formatCheckParameterCd}
 \title{formatCheckParameterCd}
 \usage{
-formatCheckParameterCd(ParameterCd, interactive = TRUE)
+  formatCheckParameterCd(ParameterCd, interactive = TRUE)
 }
 \arguments{
   \item{ParameterCd}{string to check}
@@ -12,12 +12,12 @@ formatCheckParameterCd(ParameterCd, interactive = TRUE)
   data checks.}
 }
 \value{
-ParameterCd string
+  ParameterCd string
 }
 \description{
-Checks that the parameter code is 5 digits. If it is less,
-it will pad the string with zeros. If more, ask the user to
-re-enter.
+  Checks that the parameter code is 5 digits. If it is
+  less, it will pad the string with zeros. If more, ask the
+  user to re-enter.
 }
 \examples{
 pCode <- '01234'

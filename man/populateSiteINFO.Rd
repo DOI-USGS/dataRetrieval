@@ -2,7 +2,7 @@
 \alias{populateSiteINFO}
 \title{Populate Site Information Columns}
 \usage{
-populateSiteINFO(INFO, siteNumber, interactive = TRUE)
+  populateSiteINFO(INFO, siteNumber, interactive = TRUE)
 }
 \arguments{
   \item{INFO}{dataframe with value and code columns}
@@ -14,12 +14,12 @@ populateSiteINFO(INFO, siteNumber, interactive = TRUE)
   data checks.}
 }
 \value{
-INFO dataframe
+  INFO dataframe
 }
 \description{
-Populates INFO data frame with additional user-supplied
-information. Also removes fields not related to WRTDS
-study.
+  Populates INFO data frame with additional user-supplied
+  information. Also removes fields not related to WRTDS
+  study.
 }
 \examples{
 #This example requires an internet connection to run

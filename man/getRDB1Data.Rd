@@ -2,7 +2,7 @@
 \alias{getRDB1Data}
 \title{Function to return data from the NWIS RDB 1.0 format}
 \usage{
-getRDB1Data(obs_url, asDateTime = FALSE)
+  getRDB1Data(obs_url, asDateTime = FALSE)
 }
 \arguments{
   \item{obs_url}{string containing the url for the
@@ -12,14 +12,14 @@ getRDB1Data(obs_url, asDateTime = FALSE)
   as POSIXct, if FALSE, Date}
 }
 \value{
-data a data frame containing columns agency, site,
-dateTime, values, and remark codes for all requested
-combinations
+  data a data frame containing columns agency, site,
+  dateTime, values, and remark codes for all requested
+  combinations
 }
 \description{
-This function accepts a url parameter that already contains
-the desired NWIS site, parameter code, statistic, startdate
-and enddate.
+  This function accepts a url parameter that already
+  contains the desired NWIS site, parameter code,
+  statistic, startdate and enddate.
 }
 \examples{
 sites <- "02177000"

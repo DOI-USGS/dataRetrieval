@@ -2,7 +2,7 @@
 \alias{getDataAvailability}
 \title{USGS data availability}
 \usage{
-getDataAvailability(siteNumber, interactive = TRUE)
+  getDataAvailability(siteNumber, interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string USGS site number.  This is
@@ -12,14 +12,14 @@ getDataAvailability(siteNumber, interactive = TRUE)
   If true, a progress indicator is printed to the console.}
 }
 \value{
-retval dataframe with all information found in the expanded
-site file
+  retval dataframe with all information found in the
+  expanded site file
 }
 \description{
-Imports a table of available parameters, period of record,
-and count. There is also an option to load the long
-parameter names and additional information on the
-parameters with longNames=TRUE.
+  Imports a table of available parameters, period of
+  record, and count. There is also an option to load the
+  long parameter names and additional information on the
+  parameters with longNames=TRUE.
 }
 \examples{
 # These examples require an internet connection to run

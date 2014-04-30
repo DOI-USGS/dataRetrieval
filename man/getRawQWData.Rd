@@ -2,7 +2,8 @@
 \alias{getRawQWData}
 \title{Raw Data Import for USGS NWIS Water Quality Data}
 \usage{
-getRawQWData(siteNumber, ParameterCd, StartDate, EndDate, interactive = TRUE)
+  getRawQWData(siteNumber, ParameterCd, StartDate, EndDate,
+    interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string USGS site number.  This is
@@ -23,18 +24,18 @@ getRawQWData(siteNumber, ParameterCd, StartDate, EndDate, interactive = TRUE)
   data checks.}
 }
 \value{
-retval dataframe with first column dateTime, and at least
-one qualifier and value columns (subsequent qualifier/value
-columns could follow depending on requested parameter
-codes)
+  retval dataframe with first column dateTime, and at least
+  one qualifier and value columns (subsequent
+  qualifier/value columns could follow depending on
+  requested parameter codes)
 }
 \description{
-Imports data from NWIS web service. This function gets the
-data from here: \url{http://www.waterqualitydata.us} A list
-of parameter codes can be found here:
-\url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} A list
-of statistic codes can be found here:
-\url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+  Imports data from NWIS web service. This function gets
+  the data from here: \url{http://www.waterqualitydata.us}
+  A list of parameter codes can be found here:
+  \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/} A list
+  of statistic codes can be found here:
+  \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 }
 \examples{
 # These examples require an internet connection to run

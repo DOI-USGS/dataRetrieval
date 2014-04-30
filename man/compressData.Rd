@@ -2,7 +2,7 @@
 \alias{compressData}
 \title{Compress sample data frame}
 \usage{
-compressData(data, interactive = TRUE)
+  compressData(data, interactive = TRUE)
 }
 \arguments{
   \item{data}{dataframe contains at least dateTime, value,
@@ -13,17 +13,17 @@ compressData(data, interactive = TRUE)
   data checks.}
 }
 \value{
-dataframe returnDataFrame data frame containing dateTime,
-ConcHigh, ConcLow, Uncen, ConcAve
+  dataframe returnDataFrame data frame containing dateTime,
+  ConcHigh, ConcLow, Uncen, ConcAve
 }
 \description{
-Using raw data that has at least dateTime, value, code,
-populates the measured data portion of the Sample data
-frame used in WRTDS ConcLow = Lower bound for an observed
-concentration ConcHigh = Upper bound for an observed
-concentration ConcAve = Average of ConcLow and ConcHigh.
-If ConcLow is NA, then ConcAve = ConcHigh/2 Uncen = 1 if
-uncensored, 0 if censored
+  Using raw data that has at least dateTime, value, code,
+  populates the measured data portion of the Sample data
+  frame used in WRTDS ConcLow = Lower bound for an observed
+  concentration ConcHigh = Upper bound for an observed
+  concentration ConcAve = Average of ConcLow and ConcHigh.
+  If ConcLow is NA, then ConcAve = ConcHigh/2 Uncen = 1 if
+  uncensored, 0 if censored
 }
 \examples{
 dateTime <- c('1985-01-01', '1985-01-02', '1985-01-03')

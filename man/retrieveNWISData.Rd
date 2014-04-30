@@ -2,8 +2,9 @@
 \alias{retrieveNWISData}
 \title{Raw Data Import for USGS NWIS Data}
 \usage{
-retrieveNWISData(siteNumber, ParameterCd, StartDate, EndDate,
-  StatCd = "00003", format = "tsv", interactive = TRUE)
+  retrieveNWISData(siteNumber, ParameterCd, StartDate,
+    EndDate, StatCd = "00003", format = "tsv",
+    interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string USGS site number.  This is
@@ -37,16 +38,16 @@ retrieveNWISData(siteNumber, ParameterCd, StartDate, EndDate,
   data checks.}
 }
 \value{
-data dataframe with agency, site, dateTime, value, and code
-columns
+  data dataframe with agency, site, dateTime, value, and
+  code columns
 }
 \description{
-Imports data from NWIS web service. This function gets the
-data from here: \url{http://waterservices.usgs.gov/} A list
-of parameter codes can be found here:
-\url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}
-A list of statistic codes can be found here:
-\url{http://help.waterdata.usgs.gov/code/stat_code_query?fmt=html}
+  Imports data from NWIS web service. This function gets
+  the data from here: \url{http://waterservices.usgs.gov/}
+  A list of parameter codes can be found here:
+  \url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}
+  A list of statistic codes can be found here:
+  \url{http://help.waterdata.usgs.gov/code/stat_code_query?fmt=html}
 }
 \examples{
 # These examples require an internet connection to run

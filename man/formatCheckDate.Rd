@@ -2,7 +2,7 @@
 \alias{formatCheckDate}
 \title{formatCheckDate}
 \usage{
-formatCheckDate(Date, dateString, interactive = TRUE)
+  formatCheckDate(Date, dateString, interactive = TRUE)
 }
 \arguments{
   \item{Date}{string}
@@ -15,12 +15,12 @@ formatCheckDate(Date, dateString, interactive = TRUE)
   data checks.}
 }
 \value{
-condition logical if TRUE,
+  condition logical if TRUE,
 }
 \description{
-Response to the date format checker.  If the date is not
-formated correctly, it will give the user the opportunity
-to correct, otherwise will create a warning.
+  Response to the date format checker.  If the date is not
+  formated correctly, it will give the user the opportunity
+  to correct, otherwise will create a warning.
 }
 \examples{
 Date <- '1985-01-01'

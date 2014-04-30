@@ -2,7 +2,7 @@
 \alias{formatCheckSiteNumber}
 \title{formatCheckSiteNumber}
 \usage{
-formatCheckSiteNumber(siteNumber, interactive = TRUE)
+  formatCheckSiteNumber(siteNumber, interactive = TRUE)
 }
 \arguments{
   \item{siteNumber}{string to check}
@@ -12,11 +12,11 @@ formatCheckSiteNumber(siteNumber, interactive = TRUE)
   data checks.}
 }
 \value{
-siteNumber string
+  siteNumber string
 }
 \description{
-Checks that the site code is at least 8 digits. If not, it
-confirms with the user.
+  Checks that the site code is at least 8 digits. If not,
+  it confirms with the user.
 }
 \examples{
 site<- '01234567'
