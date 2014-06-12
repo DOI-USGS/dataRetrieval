@@ -43,13 +43,14 @@ Exploration and Graphics for RivEr Trends (EGRET)
 <h4> - New to R?</h4>
 <p>If you are new to R, you will need to first install the latest version of R, which can be found <a href="http://www.r-project.org/" target="_blank">here</a>.
 Although there are many options for running and editing R code, a nice enviornment to learn R is RStudio. RStudio can be downloaded <a href="http://rstudio.org/" target="_blank">here</a>.
-Once you have set up your R enviornment, you can follow the directions <a href="https://github.com/USGS-CIDA/WRTDS/wiki" target="_blank">here</a> to download and install the dataRetrieval package.
+Once you have set up your R enviornment, you can follow the directions <a href="https://github.com/USGS-R/EGRET/wiki" target="_blank">here</a> to download and install the dataRetrieval package.
 </p>
 
 <h4> - R User?</h4>
-<p>To install the downloaded package, first install the required zoo, XML, and RCurl packages from CRAN,then install the dataRetrieval package:</p>
+<p>To install the downloaded package, use the following command:</p>
 <pre><code>
-install.packages("dataRetrieval", repos=c("http://usgs-r.github.com","http://cran.us.r-project.org"),
+install.packages("dataRetrieval", 
+repos=c("http://usgs-r.github.com","http://cran.us.r-project.org"),
 dependencies=TRUE,
 type="both")
 </code></pre>
