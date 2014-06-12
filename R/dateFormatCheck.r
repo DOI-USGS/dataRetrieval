@@ -1,4 +1,4 @@
-#' dateFormatCheck
+#' Check date format
 #'
 #' Checks to see if format is YYYY-MM-DD. Also performs a few other date checks.
 #'
