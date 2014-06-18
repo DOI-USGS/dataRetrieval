@@ -27,8 +27,6 @@ NULL
 #' Example Water Quality Data included in dataRetrieval
 #'
 #' Example data representing Nitrate from the Choptank River at Greensboro, MD, USGS data
-#' \if{html}{\figure{Chop1.png}{Example Data}}
-#' \if{latex}{\figure{Chop1.png}}
 #'
 #' @name ChoptankRiverNitrate
 #' @docType data
