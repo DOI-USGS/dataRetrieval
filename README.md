@@ -3,7 +3,7 @@ dataRetrieval
 
 R package source for data retrieval specifically for the EGRET R package:
 
-Exploration and Graphics for RivEr Time-series (EGRET)
+Exploration and Graphics for RivEr Trends (EGRET)
 =============
 
 Exploration and Graphics for RivEr Trends (EGRET): 
