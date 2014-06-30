@@ -21,7 +21,7 @@
 #' rawSampleSelect <- getRawQWData('05114000',c('00915','00931'), '1985-01-01', '1985-04-30')
 getRawQWData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
 
-  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"wqp")
+  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"wqp",interactive=interactive)
 #   require(RCurl)
   h <- basicHeaderGatherer()
   doc <- getURI(url, headerfunction = h$update)
