@@ -7,8 +7,8 @@
 \tabular{ll}{
 Package: \tab dataRetrieval\cr
 Type: \tab Package\cr
-Version: \tab 1.2.1\cr
-Date: \tab 2012-12-31\cr
+Version: \tab 1.3.1\cr
+Date: \tab 2014-07-01\cr
 License: \tab Unlimited for this package, dependencies have more restrictive licensing.\cr
 Copyright: \tab This software is in the public domain because it contains materials
 that originally came from the United States Geological Survey, an agency of
