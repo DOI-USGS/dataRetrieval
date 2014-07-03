@@ -28,3 +28,4 @@ Suggests:
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
+BuildVignettes: true
