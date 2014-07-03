@@ -10,11 +10,13 @@
 #' @examples
 #' pCode <- '10'
 #' correctPCode <- padVariable(pCode,5)
+#' pCodes <- c('100','1000','0','12345','1565465465465465')
+#' correctPCodes <- padVariable(pCodes,5)
 padVariable <- function(x,padTo){
+  if(padTo <= 1) return(x)
   numDigits <- nchar(x)
-  if ((padTo-numDigits)>0){
-    leadingZeros <- paste(rep("0",(padTo-numDigits)),collapse="",sep="")
-    x <- paste(leadingZeros,x,sep="")
-  }
+  padding <- padTo-numDigits
+  padingZeros <- sapply(padding[padding > 0], function(y) paste(rep("0",y),collapse="",sep=""))
+  x[padding > 0] <- paste(padingZeros,x[padding > 0],sep="")
   return(x)
 }
