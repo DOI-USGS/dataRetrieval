@@ -1,6 +1,6 @@
 #' USGS data availability
 #'
-#' Imports a table of available parameters, period of record, and count. There is also an option to load the long parameter names and additional information on the parameters with longNames=TRUE.
+#' Imports a table of available parameters, period of record, and count.
 #'
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
 #' @param interactive logical Option for interactive mode.  If true, a progress indicator is printed to the console.
