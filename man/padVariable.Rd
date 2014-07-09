@@ -19,6 +19,8 @@ Function to pad a string with leading zeros. Useful for parameter codes and USGS
 \examples{
 pCode <- '10'
 correctPCode <- padVariable(pCode,5)
+pCodes <- c('100','1000','0','12345','1565465465465465')
+correctPCodes <- padVariable(pCodes,5)
 }
 \keyword{USGS}
 \keyword{data}
