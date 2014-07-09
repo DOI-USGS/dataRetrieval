@@ -313,7 +313,7 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 \subsubsection{getDataAvailability}
 \label{sec:usgsDataAvailability}
 %------------------------------------------------------------
-To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{getDataAvailability} function. It is possible to limit the retrieval information to a subset of types (\tttext{"}dv\tttext{"}, \tttext{"}uv\tttext{"}, or \tttext{"}qw\tttext{"}). In the following example, we limit the retrieved Choptank data to only daily data. Leaving the \tttext{"}type\tttext{"} argument blank returns all of the available data for that site.
+To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{getDataAvailability} function. It is possible to limit the retrieval information to a subset of types (\texttt{"}dv\texttt{"}, \texttt{"}uv\texttt{"}, or \texttt{"}qw\texttt{"}). In the following example, we limit the retrieved Choptank data to only daily data. Leaving the \texttt{"}type\texttt{"} argument blank returns all of the available data for that site.
 
 
 <<getSiteExtended, echo=TRUE>>=
