@@ -2,29 +2,28 @@
 #'
 #' Imports a table of available parameters, period of record, and count.
 #'
-#' @param siteNumber string USGS site number.  This is usually an 8 digit number
-#' @param interactive logical Option for interactive mode.  If true, a progress indicator is printed to the console.
+#' @param siteNumber string USGS site number.
+#' @param type vector string. Options are "uv", "dv", "qw"
 #' @keywords data import USGS web service
 #' @return retval dataframe with all information found in the expanded site file
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
 #' availableData <- getDataAvailability('05114000')
-getDataAvailability <- function(siteNumber,interactive=TRUE){
-  
-  # Checking for 8 digit site ID:
-  siteNumber <- formatCheckSiteNumber(siteNumber,interactive=interactive)
+#' # To find just unit value ('instantaneous') data:
+#' uvData <- availableData <- getDataAvailability('05114000',type="uv")
+getDataAvailability <- function(siteNumber,type=c("uv","dv","qw")){
   
   urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site?format=rdb&seriesCatalogOutput=true&sites=",siteNumber,sep = "")
   
-  SiteFile <- read.delim(  
-    urlSitefile, 
-    header = TRUE, 
-    quote="\"", 
-    dec=".", 
+  SiteFile <- read.delim(
+    urlSitefile,
+    header = TRUE,
+    quote="\"",
+    dec=".",
     sep='\t',
     colClasses=c('character'),
-    fill = TRUE, 
+    fill = TRUE,
     comment.char="#")
   
   SiteFile <- SiteFile[-1,]
@@ -38,10 +37,9 @@ getDataAvailability <- function(siteNumber,interactive=TRUE){
   SiteFile$count <- as.numeric(SiteFile$count)
   
   pCodes <- unique(SiteFile$parameter_cd)
-
-  pcodeINFO <- getParameterInfo(pCodes,interactive)
-  SiteFile <- merge(SiteFile,pcodeINFO,by="parameter_cd")
-#   SiteFile <- merge(SiteFile,pcodeINFO,by.x="parameter_cd",by.y="parm_cd")
   
+  pcodeINFO <- parameterCdFile[parameterCdFile$parameter_cd %in% pCodes,]
+  SiteFile <- merge(SiteFile,pcodeINFO,by="parameter_cd")
+  SiteFile <- SiteFile[SiteFile$service %in% type,]
   return(SiteFile)
 }
