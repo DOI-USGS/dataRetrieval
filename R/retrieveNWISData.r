@@ -5,7 +5,7 @@
 #' A list of statistic codes can be found here: \url{http://help.waterdata.usgs.gov/code/stat_code_query?fmt=html}
 #'
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
-#' @param ParameterCd string USGS parameter code.  This is usually an 5 digit number.
+#' @param ParameterCd string or vector of USGS parameter code.  This is usually an 5 digit number..
 #' @param StartDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param EndDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param StatCd string USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.
