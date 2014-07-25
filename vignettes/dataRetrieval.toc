@@ -1,0 +1,28 @@
+\select@language {american}
+\contentsline {section}{\numberline {1}Introduction to dataRetrieval}{4}{section.1}
+\contentsline {section}{\numberline {2}General USGS Web Retrievals}{5}{section.2}
+\contentsline {subsection}{\numberline {2.1}Site Information}{7}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}getSiteFileData}{7}{subsubsection.2.1.1}
+\contentsline {subsubsection}{\numberline {2.1.2}getDataAvailability}{8}{subsubsection.2.1.2}
+\contentsline {subsection}{\numberline {2.2}Parameter Information}{9}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Daily Values}{9}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Unit Values}{13}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}Water Quality Values}{14}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}STORET Water Quality Retrievals}{16}{subsection.2.6}
+\contentsline {subsection}{\numberline {2.7}URL Construction}{16}{subsection.2.7}
+\contentsline {section}{\numberline {3}Data Retrievals Structured For Use In The EGRET Package}{17}{section.3}
+\contentsline {subsection}{\numberline {3.1}INFO Data}{17}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Daily Data}{17}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Sample Data}{19}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Censored Values: Summation Explanation}{20}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{22}{subsection.3.5}
+\contentsline {subsubsection}{\numberline {3.5.1}getDailyDataFromFile}{22}{subsubsection.3.5.1}
+\contentsline {subsubsection}{\numberline {3.5.2}getSampleDataFromFile}{24}{subsubsection.3.5.2}
+\contentsline {subsection}{\numberline {3.6}Merge Report}{25}{subsection.3.6}
+\contentsline {subsection}{\numberline {3.7}EGRET Plots}{26}{subsection.3.7}
+\contentsline {section}{\numberline {4}Summary}{28}{section.4}
+\contentsline {section}{\numberline {5}Getting Started in R}{30}{section.5}
+\contentsline {subsection}{\numberline {5.1}New to R?}{30}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}R User: Installing dataRetrieval}{32}{subsection.5.2}
+\contentsline {section}{\numberline {6}Creating tables in Microsoft from R}{32}{section.6}
+\contentsfinish 
