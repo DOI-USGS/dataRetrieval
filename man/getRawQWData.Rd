@@ -27,9 +27,10 @@ A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov
 }
 \examples{
 # These examples require an internet connection to run
-rawSample <- getRawQWData('01594440','01075', '1985-01-01', '1985-03-31')
-rawSampleAll <- getRawQWData('05114000','', '1985-01-01', '1985-03-31')
-rawSampleSelect <- getRawQWData('05114000',c('00915','00931'), '1985-01-01', '1985-04-30')
+rawSample <- getRawQWData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
+rawSampleAll <- getRawQWData('USGS-05114000','', '1985-01-01', '1985-03-31')
+rawSampleSelect <- getRawQWData('USGS-05114000',c('00915','00931'), '1985-01-01', '1985-04-30')
+rawStoret <- getRawQWData('WIDNR_WQX-10032762','Specific conductance', '', '')
 }
 \keyword{USGS}
 \keyword{data}

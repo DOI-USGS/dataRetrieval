@@ -3,10 +3,12 @@
 \alias{processQWData}
 \title{Processing of USGS NWIS Water Quality Data}
 \usage{
-processQWData(data)
+processQWData(data, pCode = TRUE)
 }
 \arguments{
-\item{data}{dataframe from}
+\item{data}{dataframe from Water Quality Portal}
+
+\item{pCode}{logical if TRUE, assume data came from a pCode search, if FALSE, characteristic name.}
 }
 \value{
 data dataframe with first column dateTime, and at least one qualifier and value columns
