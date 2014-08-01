@@ -1,7 +1,7 @@
 \select@language {american}
-\contentsline {table}{\numberline {1}{\ignorespaces Common USGS Parameter Codes\relax }}{6}{table.caption.1}
-\contentsline {table}{\numberline {2}{\ignorespaces Commonly used USGS Stat Codes\relax }}{7}{table.caption.2}
-\contentsline {table}{\numberline {3}{\ignorespaces Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]\relax }}{8}{table.caption.3}
+\contentsline {table}{\numberline {1}{\ignorespaces Common USGS Parameter Codes\relax }}{5}{table.caption.1}
+\contentsline {table}{\numberline {2}{\ignorespaces Commonly used USGS Stat Codes\relax }}{6}{table.caption.2}
+\contentsline {table}{\numberline {3}{\ignorespaces Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]\relax }}{7}{table.caption.3}
 \contentsline {table}{\numberline {4}{\ignorespaces Daily dataframe\relax }}{18}{table.caption.6}
 \contentsline {table}{\numberline {5}{\ignorespaces Sample dataframe\relax }}{20}{table.caption.8}
 \contentsline {table}{\numberline {6}{\ignorespaces Example data\relax }}{21}{table.caption.9}

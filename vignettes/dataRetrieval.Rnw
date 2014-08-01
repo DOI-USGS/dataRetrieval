@@ -52,7 +52,7 @@
   {\thesubsubsection}{0.5em}{}
   
 \titlecontents{section}
-[2.3em]                 % adjust left margin
+[2em]                 % adjust left margin
 {\sffamily}             % font formatting
 {\contentslabel{2.3em}} % section label and offset
 {\hspace*{-2.3em}}
@@ -73,14 +73,14 @@
 {\titlerule*[0.25pc]{.}\contentspage}
 
 \titlecontents{table}
-[-2.3em]                 % adjust left margin
+[0em]                 % adjust left margin
 {\sffamily}             % font formatting
 {\textbf{Table}\hspace*{2em} \contentslabel {2em}} % section label and offset
 {\hspace*{4em}}
 {\titlerule*[0.25pc]{.}\contentspage}
 
 \titlecontents{figure}
-[-2.3em]                 % adjust left margin
+[0em]                 % adjust left margin
 {\sffamily}             % font formatting
 {\textbf{Figure}\hspace*{2em} \contentslabel {2em}} % section label and offset
 {\hspace*{4em}}
@@ -152,15 +152,24 @@ knit_hooks$set(inline = function(x) {
    if (is.numeric(x)) round(x, 3)})
 knit_hooks$set(crop = hook_pdfcrop)
 
-bold.colHeaders <- function(x) paste("\\multicolumn{1}{c}{\\textbf{\\textsf{", x, "}}}", sep = "")
+bold.colHeaders <- function(x) {
+  x <- gsub("\\^(\\d)","$\\^\\1$",x)
+  x <- gsub("\\%","\\\\%",x)
+  x <- gsub("\\_"," ",x)
+  returnX <- paste("\\multicolumn{1}{c}{\\textbf{\\textsf{", x, "}}}", sep = "")
+}
 addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 @
 
+\noindent{\huge\textsf{\textbf{The dataRetrieval R package}}}
 
+\noindent\textsf{By Laura De Cicco and Robert Hirsch}
 
-\maketitle
+\noindent\textsf{\today}
 
-\newpage 
+% \maketitle
+% 
+% \newpage 
 
 \tableofcontents
 \listoffigures
@@ -516,10 +525,12 @@ There are additional water quality data sets available from the Water Quality Da
 
 
 <<label=getQWData, echo=TRUE>>=
-# specificCond <- getWQPData('WIDNR_WQX-10032762',
-#                 'Specific conductance','','')
-# head(specificCond)
+specificCond <- getWQPData('WIDNR_WQX-10032762',
+                'Specific conductance','','')
+head(specificCond)
 @
+
+There are 
 
 \FloatBarrier
 %------------------------------------------------------------

@@ -25,5 +25,7 @@ obs_url <- constructNWISURL(sites,property,startDate,endDate,'dv')
 data <- getWaterML1Data(obs_url)
 urlMulti <- constructNWISURL("04085427",c("00060","00010"),startDate,endDate,'dv',statCd=c("00003","00001"))
 multiData <- getWaterML1Data(urlMulti)
+goundwaterExampleURL <- "http://waterservices.usgs.gov/nwis/gwlevels/?format=waterml&sites=431049071324301&startDT=2013-10-01&endDT=2014-06-30"
+groundWater <- getWaterML1Data(goundwaterExampleURL)
 }
 

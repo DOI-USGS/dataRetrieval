@@ -101,7 +101,7 @@
   {\thesubsubsection}{0.5em}{}
   
 \titlecontents{section}
-[2.3em]                 % adjust left margin
+[2em]                 % adjust left margin
 {\sffamily}             % font formatting
 {\contentslabel{2.3em}} % section label and offset
 {\hspace*{-2.3em}}
@@ -122,14 +122,14 @@
 {\titlerule*[0.25pc]{.}\contentspage}
 
 \titlecontents{table}
-[-2.3em]                 % adjust left margin
+[0em]                 % adjust left margin
 {\sffamily}             % font formatting
 {\textbf{Table}\hspace*{2em} \contentslabel {2em}} % section label and offset
 {\hspace*{4em}}
 {\titlerule*[0.25pc]{.}\contentspage}
 
 \titlecontents{figure}
-[-2.3em]                 % adjust left margin
+[0em]                 % adjust left margin
 {\sffamily}             % font formatting
 {\textbf{Figure}\hspace*{2em} \contentslabel {2em}} % section label and offset
 {\hspace*{4em}}
@@ -191,11 +191,15 @@
 
 
 
+\noindent{\huge\textsf{\textbf{The dataRetrieval R package}}}
 
+\noindent\textsf{By Laura De Cicco and Robert Hirsch}
 
-\maketitle
+\noindent\textsf{\today}
 
-\newpage 
+% \maketitle
+% 
+% \newpage 
 
 \tableofcontents
 \listoffigures
@@ -262,8 +266,8 @@ Once the site-ID is known, the next required input for USGS data retrievals is t
 Not every station will measure all parameters. A short list of commonly measured parameters is shown in Table \ref{tab:params}.
 
 
-% latex table generated in R 3.1.0 by xtable 1.7-3 package
-% Tue Jul 15 09:39:32 2014
+% latex table generated in R 3.1.1 by xtable 1.7-3 package
+% Fri Aug 01 16:04:17 2014
 \begin{table}[ht]
 \caption{Common USGS Parameter Codes} 
 \label{tab:params}
@@ -325,8 +329,8 @@ For unit values data (sensor data measured at regular time intervals such as 15 
 
 Some common codes are shown in Table \ref{tab:stat}.
 
-% latex table generated in R 3.1.0 by xtable 1.7-3 package
-% Tue Jul 15 09:39:33 2014
+% latex table generated in R 3.1.1 by xtable 1.7-3 package
+% Fri Aug 01 16:04:18 2014
 \begin{table}[ht]
 \caption{Commonly used USGS Stat Codes} 
 \label{tab:stat}
@@ -406,8 +410,8 @@ To discover what data is available for a particular USGS site, including measure
 \end{knitrout}
 
 
-% latex table generated in R 3.1.0 by xtable 1.7-3 package
-% Tue Jul 15 09:39:34 2014
+% latex table generated in R 3.1.1 by xtable 1.7-3 package
+% Fri Aug 01 16:04:19 2014
 \begin{table}[ht]
 \caption{Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]} 
 \label{tab:gda}
@@ -419,7 +423,7 @@ To discover what data is available for a particular USGS site, including measure
  & Temperature, water & 1988-10-01 & 2012-05-09 & 894 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-07-14 & 24302 & ft$^3$/s \\ 
+  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-07-31 & 24319 & ft$^3$/s \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
@@ -692,12 +696,30 @@ There are additional water quality data sets available from the Water Quality Da
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# specificCond <- getWQPData('WIDNR_WQX-10032762',}
-\hlcom{#                 'Specific conductance','','')}
-\hlcom{# head(specificCond)}
+\hlstd{specificCond} \hlkwb{<-} \hlkwd{getWQPData}\hlstd{(}\hlstr{'WIDNR_WQX-10032762'}\hlstd{,}
+                \hlstr{'Specific conductance'}\hlstd{,}\hlstr{''}\hlstd{,}\hlstr{''}\hlstd{)}
+\hlkwd{head}\hlstd{(specificCond)}
 \end{alltt}
+\begin{verbatim}
+    dateTime qualifier.Specific conductance
+1 2011-02-14                               
+2 2011-02-17                               
+3 2011-03-03                               
+4 2011-03-10                               
+5 2011-03-29                               
+6 2011-04-07                               
+  value.Specific conductance
+1                       1360
+2                       1930
+3                       1240
+4                       1480
+5                       1130
+6                       1200
+\end{verbatim}
 \end{kframe}
 \end{knitrout}
+
+There are 
 
 \FloatBarrier
 %------------------------------------------------------------
@@ -773,8 +795,8 @@ There are 4750 data points, and 4750 days.
 
 
 
-% latex table generated in R 3.1.0 by xtable 1.7-3 package
-% Tue Jul 15 09:39:42 2014
+% latex table generated in R 3.1.1 by xtable 1.7-3 package
+% Fri Aug 01 16:04:33 2014
 \begin{table}[ht]
 \caption{Daily dataframe} 
 \label{tab:DailyDF1}
@@ -894,8 +916,8 @@ To illustrate how the dataRetrieval package handles a more complex censoring pro
 
 
 
-% latex table generated in R 3.1.0 by xtable 1.7-3 package
-% Tue Jul 15 09:39:43 2014
+% latex table generated in R 3.1.1 by xtable 1.7-3 package
+% Fri Aug 01 16:04:34 2014
 \begin{table}[ht]
 \caption{Example data} 
 \label{tab:exampleComplexQW}
@@ -1249,11 +1271,10 @@ To see the raw code for a particular code, type the name of the function, withou
 \hlstd{removeDuplicates}
 \end{alltt}
 \begin{verbatim}
-function (localSample = Sample) 
-{
-    Sample1 <- localSample[!duplicated(localSample[c("DecYear", 
-        "ConcHigh")]), ]
-    return(Sample1)
+function(localSample=Sample) {  
+  Sample1 <- localSample[!duplicated(localSample[c("DecYear","ConcHigh")]),]
+  
+  return(Sample1)
 }
 <environment: namespace:dataRetrieval>
 \end{verbatim}
@@ -1337,7 +1358,7 @@ There are a few steps that are required in order to create a table in a Microsof
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2014-07-14 24302      ft3/s
+2 2014-07-31 24319      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day
