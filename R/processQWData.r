@@ -12,7 +12,7 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' rawSample <- getRawQWData('01594440','01075', '1985-01-01', '1985-03-31')
+#' rawSample <- getRawQWData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
 #' rawSampleSelect <- processQWData(rawSample)
 processQWData <- function(data,pCode=TRUE){
 
