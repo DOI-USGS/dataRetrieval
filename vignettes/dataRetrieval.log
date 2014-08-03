@@ -1,18 +1,18 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.1.6)  15 JUL 2014 09:39
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.8.2)  3 AUG 2014 14:57
 entering extended mode
 **dataRetrieval.tex
-(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.tex
+(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
 croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, ga
-lician, german, german-x-2009-06-19, greek, gujarati, hindi, hungarian, iceland
-ic, indonesian, interlingua, irish, italian, kannada, kurmanji, lao, latin, lat
-vian, lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerm
-an, ngerman-x-2009-06-19, nynorsk, oriya, panjabi, pinyin, polish, portuguese, 
-romanian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swis
-sgerman, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, u
-senglishmax, welsh, loaded.
+lician, german, german-x-2013-05-26, greek, gujarati, hindi, hungarian, iceland
+ic, indonesian, interlingua, irish, italian, kannada, kurmanji, latin, latvian,
+ lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerman, n
+german-x-2013-05-26, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
+ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
+an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
+ishmax, welsh, loaded.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\article.cls"
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\size11.clo"
@@ -52,10 +52,10 @@ Package graphics Info: Driver file: pdftex.def on input line 91.
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
-Package: infwarerr 2010/04/08 v1.3 Providing info/warning/message (HO)
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
-Package: ltxcmds 2011/04/18 v1.20 LaTeX kernel commands for general use (HO)
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
 \Gread@gobject=\count87
 ))
@@ -70,7 +70,7 @@ File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 130.
 )
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\framed\framed.sty
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\framed\framed.sty
 Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
 \OuterFrameSep=\skip43
 \fb@frw=\dimen105
@@ -81,24 +81,24 @@ Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\alltt.sty"
 Package: alltt 1997/06/16 v2.0g defines alltt environment
 )
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\amsmath\amsmath.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsmath.sty"
 Package: amsmath 2013/01/14 v2.14 AMS math features
 \@mathmargin=\skip44
 
 For additional information on amsmath, use the `?' option.
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\amsmath\amstext.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amstext.sty"
 Package: amstext 2000/06/29 v2.01
 
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\amsmath\amsgen.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsgen.sty"
 File: amsgen.sty 1999/11/30 v2.0
 \@emptytoks=\toks15
 \ex@=\dimen109
 ))
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\amsmath\amsbsy.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsbsy.sty"
 Package: amsbsy 1999/11/29 v1.2d
 \pmbraise@=\dimen110
 )
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\amsmath\amsopn.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsopn.sty"
 Package: amsopn 1999/12/14 v2.01 operator names
 )
 \inf@bad=\count88
@@ -143,93 +143,101 @@ LaTeX Info: Redefining \] on input line 2666.
 Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\hyperref.sty"
-Package: hyperref 2011/08/19 v6.82h Hypertext links for LaTeX
+Package: hyperref 2012/11/06 v6.83m Hypertext links for LaTeX
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\hobsub-hyperref.sty"
-Package: hobsub-hyperref 2011/04/23 v1.4 Bundle oberdiek, subset hyperref (HO)
+Package: hobsub-hyperref 2012/04/25 v1.12 Bundle oberdiek, subset hyperref (HO)
+
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\hobsub-generic.sty"
-Package: hobsub-generic 2011/04/23 v1.4 Bundle oberdiek, subset generic (HO)
-Package: hobsub 2011/04/23 v1.4 Subsetting bundle oberdiek (HO)
+Package: hobsub-generic 2012/04/25 v1.12 Bundle oberdiek, subset generic (HO)
+Package: hobsub 2012/04/25 v1.12 Construct package bundles (HO)
 Package hobsub Info: Skipping package `infwarerr' (already loaded).
 Package hobsub Info: Skipping package `ltxcmds' (already loaded).
 Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
-Package: ifvtex 2010/03/01 v1.5 Switches for detecting VTeX and its modes (HO)
+Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
 Package ifvtex Info: VTeX not detected.
-Package: intcalc 2007/09/27 v1.1 Expandable integer calculations (HO)
+Package: intcalc 2007/09/27 v1.1 Expandable calculations with integers (HO)
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
-Package: etexcmds 2011/02/16 v1.5 Prefix for e-TeX command names (HO)
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
 Package etexcmds Info: Could not find \expanded.
 (etexcmds)             That can mean that you are not using pdfTeX 1.50 or
 (etexcmds)             that some package has redefined \expanded.
 (etexcmds)             In the latter case, load this package earlier.
-Package: kvsetkeys 2011/04/07 v1.13 Key value parser (HO)
-Package: kvdefinekeys 2011/04/07 v1.3 Defining keys (HO)
-Package: pdftexcmds 2011/04/22 v0.16 Utilities of pdfTeX for LuaTeX (HO)
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-Package: pdfescape 2011/04/04 v1.12 Provides string conversions (HO)
-Package: bigintcalc 2011/01/30 v1.2 Expandable big integer calculations (HO)
-Package: bitset 2011/01/30 v1.1 Data type bit set (HO)
-Package: uniquecounter 2011/01/30 v1.2 Provides unlimited unique counter (HO)
+Package: pdfescape 2011/11/25 v1.13 Implements pdfTeX's escape features (HO)
+Package: bigintcalc 2012/04/08 v1.3 Expandable calculations on big integers (HO
+)
+Package: bitset 2011/01/30 v1.1 Handle bit-vector datatype (HO)
+Package: uniquecounter 2011/01/30 v1.2 Provide unlimited unique counter (HO)
 )
 Package hobsub Info: Skipping package `hobsub' (already loaded).
 Package: letltxmacro 2010/09/02 v1.4 Let assignment for LaTeX macros (HO)
-Package: hopatch 2011/01/30 v1.0 Wrapper for package hooks (HO)
+Package: hopatch 2011/06/24 v1.1 Wrapper for package hooks (HO)
 Package: xcolor-patch 2011/01/30 xcolor patch
-Package: atveryend 2011/04/23 v1.7 Hooks at very end of document (HO)
-Package: atbegshi 2011/01/30 v1.15 At begin shipout hook (HO)
-Package: refcount 2010/12/01 v3.2 Data extraction from references (HO)
-Package: hycolor 2011/01/30 v1.7 Color options of hyperref/bookmark (HO)
+Package: atveryend 2011/06/30 v1.8 Hooks at the very end of document (HO)
+Package atveryend Info: \enddocument detected (standard20110627).
+Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
+Package: refcount 2011/10/16 v3.4 Data extraction from label references (HO)
+Package: hycolor 2011/01/30 v1.7 Color options for hyperref/bookmark (HO)
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\oberdiek\auxhook.sty"
+Package: auxhook 2011/03/04 v1.3 Hooks for auxiliary files (HO)
+)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
-Package: kvoptions 2010/12/23 v3.10 Keyval support for LaTeX options (HO)
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
 )
 \@linkdim=\dimen118
 \Hy@linkcounter=\count100
 \Hy@pagecounter=\count101
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\pd1enc.def"
-File: pd1enc.def 2011/08/19 v6.82h Hyperref: PDFDocEncoding definition (HO)
+File: pd1enc.def 2012/11/06 v6.83m Hyperref: PDFDocEncoding definition (HO)
 )
 \Hy@SavedSpaceFactor=\count102
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\hyperref.cfg"
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
-Package hyperref Info: Hyper figures OFF on input line 4053.
-Package hyperref Info: Link nesting OFF on input line 4058.
-Package hyperref Info: Hyper index ON on input line 4061.
-Package hyperref Info: Plain pages OFF on input line 4068.
-Package hyperref Info: Backreferencing OFF on input line 4073.
+Package hyperref Info: Hyper figures OFF on input line 4443.
+Package hyperref Info: Link nesting OFF on input line 4448.
+Package hyperref Info: Hyper index ON on input line 4451.
+Package hyperref Info: Plain pages OFF on input line 4458.
+Package hyperref Info: Backreferencing OFF on input line 4463.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4291.
+Package hyperref Info: Bookmarks ON on input line 4688.
 \c@Hy@tempcnt=\count103
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ltxmisc\url.sty"
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\url\url.sty
 \Urlmuskip=\muskip11
-Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-LaTeX Info: Redefining \url on input line 4644.
+LaTeX Info: Redefining \url on input line 5041.
+\XeTeXLinkMargin=\dimen119
 \Fld@menulength=\count104
-\Field@Width=\dimen119
-\Fld@charsize=\dimen120
-Package hyperref Info: Hyper figures OFF on input line 5730.
-Package hyperref Info: Link nesting OFF on input line 5735.
-Package hyperref Info: Hyper index ON on input line 5738.
-Package hyperref Info: backreferencing OFF on input line 5745.
-Package hyperref Info: Link coloring OFF on input line 5750.
-Package hyperref Info: Link coloring with OCG OFF on input line 5755.
-Package hyperref Info: PDF/A mode OFF on input line 5760.
-LaTeX Info: Redefining \ref on input line 5800.
-LaTeX Info: Redefining \pageref on input line 5804.
+\Field@Width=\dimen120
+\Fld@charsize=\dimen121
+Package hyperref Info: Hyper figures OFF on input line 6295.
+Package hyperref Info: Link nesting OFF on input line 6300.
+Package hyperref Info: Hyper index ON on input line 6303.
+Package hyperref Info: backreferencing OFF on input line 6310.
+Package hyperref Info: Link coloring OFF on input line 6315.
+Package hyperref Info: Link coloring with OCG OFF on input line 6320.
+Package hyperref Info: PDF/A mode OFF on input line 6325.
+LaTeX Info: Redefining \ref on input line 6365.
+LaTeX Info: Redefining \pageref on input line 6369.
 \Hy@abspage=\count105
 \c@Item=\count106
 \c@Hfootnote=\count107
@@ -238,7 +246,7 @@ LaTeX Info: Redefining \pageref on input line 5804.
 Package hyperref Message: Driver (autodetected): hpdftex.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\hpdftex.def"
-File: hpdftex.def 2011/08/19 v6.82h Hyperref driver for pdfTeX
+File: hpdftex.def 2012/11/06 v6.83m Hyperref driver for pdfTeX
 \Fld@listcount=\count108
 \c@bookmark@seq@number=\count109
 
@@ -249,7 +257,7 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip47
 )
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\natbib\natbib.sty
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\natbib\natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip48
 \bibsep=\skip49
@@ -271,42 +279,43 @@ Language: english 2005/03/30 v3.3o English support from the babel system
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\babel\babel.def"
 File: babel.def 2008/07/08 v3.8m Babel common definitions
 \babel@savecnt=\count111
-\U@D=\dimen121
+\U@D=\dimen122
 )
 \l@canadian = a dialect from \language\l@american 
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
 ))
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\preprint\authblk.sty
-Package: authblk 2009/11/18 1.3 (PWD)
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\preprint\authblk.sty
+Package: authblk 2001/02/27 1.3 (PWD)
 \affilsep=\skip50
 \@affilsep=\skip51
 \c@Maxaffil=\count112
 \c@authors=\count113
 \c@affil=\count114
 )
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\subfig\subfig.sty
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\subfig\subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
 
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption.sty
-Package: caption 2013/02/03 v3.3-65 Customizing captions (AR)
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption.sty
+Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
 
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption3.sty
-Package: caption3 2013/02/03 v1.5-62 caption3 kernel (AR)
-\captionmargin=\dimen122
-\captionmargin@=\dimen123
-\captionwidth=\dimen124
-\caption@tempdima=\dimen125
-\caption@indent=\dimen126
-\caption@parindent=\dimen127
-\caption@hangindent=\dimen128
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption3.sty
+Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen123
+\captionmargin@=\dimen124
+\captionwidth=\dimen125
+\caption@tempdima=\dimen126
+\caption@indent=\dimen127
+\caption@parindent=\dimen128
+\caption@hangindent=\dimen129
 )
 \c@ContinuedFloat=\count115
 Package caption Info: hyperref package is loaded.
 )
 \c@KVtest=\count116
 \sf@farskip=\skip52
-\sf@captopadj=\dimen129
+\sf@captopadj=\dimen130
 \sf@capskip=\skip53
 \sf@nearskip=\skip54
 \c@subfigure=\count117
@@ -317,44 +326,48 @@ Package caption Info: hyperref package is loaded.
 \c@lotdepth=\count122
 \sf@top=\skip55
 \sf@bottom=\skip56
-) (C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\placeins\placeins.sty
+)
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\placeins\placeins.sty
 Package: placeins 2005/04/18  v 2.2
-) (C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\mdwtools\footnote.sty
+)
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\mdwtools\footnote.sty
 Package: footnote 1997/01/28 1.13 Save footnotes around boxes
 \fn@notes=\box28
-\fn@width=\dimen130
-) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\tabularx.sty"
+\fn@width=\dimen131
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\tabularx.sty"
 Package: tabularx 1999/01/07 v2.07 `tabularx' package (DPC)
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\array.sty"
 Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
-\col@sep=\dimen131
-\extrarowheight=\dimen132
+\col@sep=\dimen132
+\extrarowheight=\dimen133
 \NC@list=\toks20
 \extratabsurround=\skip57
 \backup@length=\skip58
 )
-\TX@col@width=\dimen133
-\TX@old@table=\dimen134
-\TX@old@col=\dimen135
-\TX@target=\dimen136
-\TX@delta=\dimen137
+\TX@col@width=\dimen134
+\TX@old@table=\dimen135
+\TX@old@col=\dimen136
+\TX@target=\dimen137
+\TX@delta=\dimen138
 \TX@cols=\count123
 \TX@ftn=\toks21
 )
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\threeparttable\threepar
-ttable.sty
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\threeparttable\threepartta
+ble.sty
 Package: threeparttable 2003/06/13  v 3.0
 \@tempboxb=\box29
 ) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ltxmisc\parskip.sty"
 Package: parskip 2001/04/09 non-zero parskip adjustments
-) (C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.sty
+)
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.sty
 Package: csquotes 2011/10/22 v5.1d context-sensitive quotations
 
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\etoolbox\etoolbox.sty
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\etoolbox\etoolbox.sty
 Package: etoolbox 2011/01/03 v2.1 e-TeX tools for LaTeX
 
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\misc\etex.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\misc\etex.sty"
 Package: etex 1998/03/26 v2.0 eTeX basic definition package (PEB)
 \et@xins=\count124
 )
@@ -368,18 +381,19 @@ Package: etex 1998/03/26 v2.0 eTeX basic definition package (PEB)
 \csq@tshold=\count131
 \csq@ltx@everypar=\toks22
 
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.def
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.def
 File: csquotes.def 2011/10/22 v5.1d csquotes generic definitions
 )
 Package csquotes Info: Trying to load configuration file 'csquotes.cfg'...
 Package csquotes Info: ... configuration file loaded successfully.
 
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.cfg
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.cfg
 File: csquotes.cfg 
-)) (C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\setspace\setspace.st
-y
+))
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\setspace\setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
-) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\mathptmx.sty"
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\mathptmx.sty"
 Package: mathptmx 2005/04/12 PSNFSS-v9.2a Times w/ Math, improved (SPQR, WaS) 
 LaTeX Font Info:    Redeclaring symbol font `operators' on input line 28.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
@@ -424,23 +438,23 @@ Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\courier.sty"
 Package: courier 2005/04/12 PSNFSS-v9.2a (WaS) 
 )
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\titlesec.sty
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\titlesec.sty
 Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
 \ttl@box=\box30
 \beforetitleunit=\skip59
 \aftertitleunit=\skip60
-\ttl@plus=\dimen138
-\ttl@minus=\dimen139
+\ttl@plus=\dimen139
+\ttl@minus=\dimen140
 \ttl@toksa=\toks23
-\titlewidth=\dimen140
-\titlewidthlast=\dimen141
-\titlewidthfirst=\dimen142
+\titlewidth=\dimen141
+\titlewidthlast=\dimen142
+\titlewidthfirst=\dimen143
 )
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\titletoc.sty
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\titletoc.sty
 Package: titletoc 2011/12/15 v1.6 TOC entries
-\ttl@leftsep=\dimen143
+\ttl@leftsep=\dimen144
 )
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\upquote\upquote.sty
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\upquote\upquote.sty
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
 
@@ -530,7 +544,7 @@ Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'american'.
 
-(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.aux)
+(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 174.
 LaTeX Font Info:    ... okay on input line 174.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 174.
@@ -559,16 +573,16 @@ LaTeX Font Info:    Try loading font information for OT1+ptm on input line 174.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
-(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
+(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count132
-\scratchdimen=\dimen144
+\scratchdimen=\dimen145
 \scratchbox=\box31
 \nofMPsegments=\count133
 \nofMParguments=\count134
 \everyMPshowfont=\toks24
 \MPscratchCnt=\count135
-\MPscratchDim=\dimen145
+\MPscratchDim=\dimen146
 \MPnumerator=\count136
 \makeMPintoPDFobject=\count137
 \everyMPtoPDFconversion=\toks25
@@ -576,7 +590,7 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 \AtBeginShipoutBox=\box32
 Package hyperref Info: Link coloring OFF on input line 174.
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
-Package: nameref 2010/04/30 v2.40 Cross-referencing by name of section
+Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
@@ -587,232 +601,236 @@ LaTeX Info: Redefining \ref on input line 174.
 LaTeX Info: Redefining \pageref on input line 174.
 LaTeX Info: Redefining \nameref on input line 174.
 
-(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.out)
-(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.out)
+(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.out)
+(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.out)
 \@outlinefile=\write3
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: threeparttable package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 19
-6.
-
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1ztmcm.fd"
-File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
-)
-LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 19
-6.
-
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omlztmcm.fd"
-File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
-)
-LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 19
-6.
-
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omsztmcm.fd"
-File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
-)
-LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 19
-6.
-
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omxztmcm.fd"
-File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
-)
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 196.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 196.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 196.
-
-Overfull \vbox (21.68121pt too high) has occurred while \output is active []
-
-
-[1
-
-{C:/Users/ldecicco/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OT1+phv on input line 200.
+LaTeX Font Info:    Try loading font information for OT1+phv on input line 194.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1phv.fd"
 File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
-(Font)              scaled to size 9.85492pt on input line 200.
+(Font)              scaled to size 18.66588pt on input line 194.
+LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <20.74> not available
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 194.
+LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
+(Font)              scaled to size 18.66588pt on input line 194.
+LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
+(Font)              scaled to size 9.85492pt on input line 196.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 200.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 204.
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 9.85492pt on input line 200.
+(Font)              scaled to size 9.85492pt on input line 204.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <17.28> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 200.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 204.
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 15.55188pt on input line 200.
+(Font)              scaled to size 15.55188pt on input line 204.
 
-(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.toc)
-\tf@toc=\write4
-
-(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.lof
+(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.toc
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[2])
+[1
+
+{C:/Users/Laura/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}])
+\tf@toc=\write4
+
+(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.lof)
 \tf@lof=\write5
- (D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.lot)
+
+(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.lot
+Overfull \hbox (1.53842pt too wide) in paragraph at lines 4--4
+[]|\OT1/phv/b/n/10.95 Table|  | [][]\OT1/phv/m/n/10.95 Daily mean data avail-ab
+ile at the Chop-tank River near Greens-boro, MD. [Some columns 
+ []
+
+)
 \tf@lot=\write6
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[3]
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 209.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 209.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 209.
-Package color Info: Redefining color shadecolor on input line 219.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 220.
+[2]
+LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 21
+3.
+ ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1ztmcm.fd"
+File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
+)
+LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 21
+3.
 
- ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omlztmcm.fd"
+File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
+)
+LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 21
+3.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omsztmcm.fd"
+File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
+)
+LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 21
+3.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omxztmcm.fd"
+File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
+)
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 213.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 213.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 213.
+Package color Info: Redefining color shadecolor on input line 223.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 224.
+
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 221.
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 225.
 LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <10.95> not available
-(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 222.
+(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 226.
 
-Underfull \vbox (badness 10000) detected at line 245
+Underfull \vbox (badness 10000) detected at line 249
  []
 
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
+[3]
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
 [4]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 275.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 275.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 275.
+LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <9> not available
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 277.
+LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
+(Font)              scaled to size 8.09995pt on input line 277.
+Package color Info: Redefining color shadecolor on input line 293.
+
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [5]
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 271.
-LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <9> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 273.
+LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <14.4> not available
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 357.
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 8.09995pt on input line 273.
-Package color Info: Redefining color shadecolor on input line 289.
+(Font)              scaled to size 12.9599pt on input line 357.
+LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
+(Font)              scaled to size 10.79993pt on input line 362.
+Package color Info: Redefining color shadecolor on input line 369.
+Package color Info: Redefining color shadecolor on input line 381.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [6]
-LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 353.
-LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 12.9599pt on input line 353.
-LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
-(Font)              scaled to size 10.79993pt on input line 358.
-Package color Info: Redefining color shadecolor on input line 365.
-Package color Info: Redefining color shadecolor on input line 377.
+Package color Info: Redefining color shadecolor on input line 401.
+
+Overfull \hbox (36.60727pt too wide) in paragraph at lines 446--447
+[]\OT1/ptm/m/n/10.95 To ob-tain all of the avail-able in-for-ma-tion con-cern-i
+ng a mea-sured pa-ram-e-ter, use the \OT1/pcr/m/n/10.95 getParameterInfo
+ []
+
+Package color Info: Redefining color shadecolor on input line 449.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [7]
-Package color Info: Redefining color shadecolor on input line 397.
-
-Overfull \hbox (36.60727pt too wide) in paragraph at lines 442--443
-[]\OT1/ptm/m/n/10.95 To ob-tain all of the avail-able in-for-ma-tion con-cern-i
-ng a mea-sured pa-ram-e-ter, use the \OT1/pcr/m/n/10.95 getParameterInfo
- []
-
-Package color Info: Redefining color shadecolor on input line 445.
+Package color Info: Redefining color shadecolor on input line 467.
+Package color Info: Redefining color shadecolor on input line 487.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [8]
-Package color Info: Redefining color shadecolor on input line 463.
-Package color Info: Redefining color shadecolor on input line 483.
+Package color Info: Redefining color shadecolor on input line 511.
+Package color Info: Redefining color shadecolor on input line 529.
 
-Overfull \vbox (21.68121pt too high) has occurred while \output is active []
-
-
-[9]
-Package color Info: Redefining color shadecolor on input line 507.
-Package color Info: Redefining color shadecolor on input line 525.
-
-Underfull \vbox (badness 10000) detected at line 551
+Underfull \vbox (badness 10000) detected at line 555
  []
 
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[10]
-Package color Info: Redefining color shadecolor on input line 557.
+[9]
+Package color Info: Redefining color shadecolor on input line 561.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 576.
+               Default added (so using `tbp') on input line 580.
 
-<figure/getNWIStemperaturePlot.pdf, id=275, 505.89pt x 505.89pt>
+<figure/getNWIStemperaturePlot.pdf, id=271, 505.89pt x 505.89pt>
 File: figure/getNWIStemperaturePlot.pdf Graphic file (type pdf)
 
 <use figure/getNWIStemperaturePlot.pdf>
 Package pdftex.def Info: figure/getNWIStemperaturePlot.pdf used on input line 5
-78.
+82.
 (pdftex.def)             Requested size: 448.07928pt x 448.07928pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[11]
+[10]
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[12 <D:/LADData/RCode/dataRetrieval/vignettes/figure/getNWIStemperaturePlot.pdf
->]
-Package color Info: Redefining color shadecolor on input line 596.
-Package color Info: Redefining color shadecolor on input line 610.
+[11 <C:/RCodes/dataRetrieval/vignettes/figure/getNWIStemperaturePlot.pdf>]
+Package color Info: Redefining color shadecolor on input line 600.
+Package color Info: Redefining color shadecolor on input line 614.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[13]
-Package color Info: Redefining color shadecolor on input line 645.
-Package color Info: Redefining color shadecolor on input line 666.
+[12]
+Package color Info: Redefining color shadecolor on input line 649.
+Package color Info: Redefining color shadecolor on input line 670.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 675.
+               Default added (so using `tbp') on input line 679.
 
-<figure/getQWtemperaturePlot.pdf, id=297, 505.89pt x 505.89pt>
+<figure/getQWtemperaturePlot.pdf, id=292, 505.89pt x 505.89pt>
 File: figure/getQWtemperaturePlot.pdf Graphic file (type pdf)
 
 <use figure/getQWtemperaturePlot.pdf>
-Package pdftex.def Info: figure/getQWtemperaturePlot.pdf used on input line 677
+Package pdftex.def Info: figure/getQWtemperaturePlot.pdf used on input line 681
 .
 (pdftex.def)             Requested size: 448.07378pt x 448.07928pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[14]
+[13]
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[15 <D:/LADData/RCode/dataRetrieval/vignettes/figure/getQWtemperaturePlot.pdf>]
-Package color Info: Redefining color shadecolor on input line 693.
-LaTeX Font Info:    Try loading font information for TS1+pcr on input line 695.
+[14 <C:/RCodes/dataRetrieval/vignettes/figure/getQWtemperaturePlot.pdf>]
+Package color Info: Redefining color shadecolor on input line 697.
+LaTeX Font Info:    Try loading font information for TS1+pcr on input line 699.
+
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ts1pcr.fd"
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
 )
-LaTeX Font Info:    Font shape `TS1/pcr/m/it' in size <10.95> not available
-(Font)              Font shape `TS1/pcr/m/sl' tried instead on input line 695.
-Package color Info: Redefining color shadecolor on input line 711.
+Package color Info: Redefining color shadecolor on input line 726.
 
-Overfull \hbox (5.25568pt too wide) in paragraph at lines 720--720
+Overfull \hbox (5.25568pt too wide) in paragraph at lines 735--735
 [][]\OT1/pcr/m/n/10.95 url_uv[] []<-[] []\OT1/pcr/b/n/10.95 constructNWISURL[][
 ]\OT1/pcr/m/n/10.95 (siteNumber,[][]"00060"[][],startDate,endDate,[][]\TS1/pcr/
 m/n/10.95 '\OT1/pcr/m/n/10.95 uv\TS1/pcr/m/n/10.95 '[][]\OT1/pcr/m/n/10.95 )[][
@@ -823,22 +841,26 @@ m/n/10.95 '\OT1/pcr/m/n/10.95 uv\TS1/pcr/m/n/10.95 '[][]\OT1/pcr/m/n/10.95 )[][
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
+[15]
+Package color Info: Redefining color shadecolor on input line 757.
+
+Overfull \vbox (21.68121pt too high) has occurred while \output is active []
+
+
 [16]
-Package color Info: Redefining color shadecolor on input line 742.
+Package color Info: Redefining color shadecolor on input line 775.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [17]
-Package color Info: Redefining color shadecolor on input line 760.
+Package color Info: Redefining color shadecolor on input line 833.
+Package color Info: Redefining color shadecolor on input line 845.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [18]
-Package color Info: Redefining color shadecolor on input line 818.
-Package color Info: Redefining color shadecolor on input line 830.
-
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
@@ -847,49 +869,46 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [20]
+Package color Info: Redefining color shadecolor on input line 945.
+
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [21]
-Package color Info: Redefining color shadecolor on input line 930.
+Package color Info: Redefining color shadecolor on input line 1006.
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 1011
+.
+ ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
+File: omspcr.fd 
+)
+LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1011.
+
+
+Underfull \vbox (badness 10000) detected at line 1013
+ []
+
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [22]
-Package color Info: Redefining color shadecolor on input line 991.
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 996.
-
- ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
-File: omspcr.fd 
-)
-LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 996.
-
-Underfull \vbox (badness 10000) detected at line 998
- []
-
+Package color Info: Redefining color shadecolor on input line 1042.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [23]
-Package color Info: Redefining color shadecolor on input line 1027.
+Package color Info: Redefining color shadecolor on input line 1067.
+Package color Info: Redefining color shadecolor on input line 1087.
 
-Overfull \vbox (21.68121pt too high) has occurred while \output is active []
-
-
-[24]
-Package color Info: Redefining color shadecolor on input line 1052.
-Package color Info: Redefining color shadecolor on input line 1072.
-
-Overfull \hbox (44.67563pt too wide) in paragraph at lines 1097--1097
+Overfull \hbox (44.67563pt too wide) in paragraph at lines 1112--1112
 [] \OT1/pcr/m/n/10.95 First day of the discharge record is 2000-01-01 and last 
 day is 2013-01-01[] 
  []
 
 
-Overfull \hbox (44.67563pt too wide) in paragraph at lines 1097--1097
+Overfull \hbox (44.67563pt too wide) in paragraph at lines 1112--1112
 [] \OT1/pcr/m/n/10.95 The first sample is from 2000-01-04 and the last sample i
 s from 2012-12-18[] 
  []
@@ -898,69 +917,75 @@ s from 2012-12-18[]
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[25]
-Package color Info: Redefining color shadecolor on input line 1128.
+[24]
+Package color Info: Redefining color shadecolor on input line 1143.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 1134.
+               Default added (so using `tbp') on input line 1149.
 
-<figure/egretEx.pdf, id=374, 505.89pt x 505.89pt>
+<figure/egretEx.pdf, id=369, 505.89pt x 505.89pt>
 File: figure/egretEx.pdf Graphic file (type pdf)
  <use figure/egretEx.pdf>
-Package pdftex.def Info: figure/egretEx.pdf used on input line 1136.
+Package pdftex.def Info: figure/egretEx.pdf used on input line 1151.
 (pdftex.def)             Requested size: 448.07378pt x 448.07928pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[26]
+[25]
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[27 <D:/LADData/RCode/dataRetrieval/vignettes/figure/egretEx.pdf>]
+[26 <C:/RCodes/dataRetrieval/vignettes/figure/egretEx.pdf>]
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[28
+[27
 
 ]
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[29]
-Package color Info: Redefining color shadecolor on input line 1234.
-Package color Info: Redefining color shadecolor on input line 1247.
- <Rhelp.png, id=403, 433.62pt x 395.22656pt>
+[28]
+Package color Info: Redefining color shadecolor on input line 1248.
+Package color Info: Redefining color shadecolor on input line 1261.
+
+Overfull \hbox (51.24562pt too wide) in paragraph at lines 1272--1272
+[]  \OT1/pcr/m/n/10.95 Sample1 <- localSample[!duplicated(localSample[c("DecYea
+r","ConcHigh")]),][] 
+ []
+
+<Rhelp.png, id=399, 433.62pt x 395.22656pt>
 File: Rhelp.png Graphic file (type png)
  <use Rhelp.png>
-Package pdftex.def Info: Rhelp.png used on input line 1266.
+Package pdftex.def Info: Rhelp.png used on input line 1279.
 (pdftex.def)             Requested size: 433.61894pt x 395.22559pt.
-Package color Info: Redefining color shadecolor on input line 1273.
+Package color Info: Redefining color shadecolor on input line 1286.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[30
+[29
 
 ]
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[31 <D:/LADData/RCode/dataRetrieval/vignettes/Rhelp.png>]
-Package color Info: Redefining color shadecolor on input line 1288.
-Package color Info: Redefining color shadecolor on input line 1300.
-Package color Info: Redefining color shadecolor on input line 1315.
+[30 <C:/RCodes/dataRetrieval/vignettes/Rhelp.png>]
+Package color Info: Redefining color shadecolor on input line 1301.
+Package color Info: Redefining color shadecolor on input line 1313.
+Package color Info: Redefining color shadecolor on input line 1328.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[32
+[31
 
 ]
-Package color Info: Redefining color shadecolor on input line 1352.
+Package color Info: Redefining color shadecolor on input line 1365.
 
-Overfull \hbox (11.82567pt too wide) in paragraph at lines 1369--1369
+Overfull \hbox (11.82567pt too wide) in paragraph at lines 1382--1382
 []\OT1/pcr/m/n/10.95 Suspended sediment concentration (SSC) 1980-10-01 1991-09-
 30 3651 mg/l[] 
  []
@@ -969,34 +994,35 @@ Overfull \hbox (11.82567pt too wide) in paragraph at lines 1369--1369
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[33] <table1.png, id=427, 554.07pt x 125.71968pt>
+[32] <table1.png, id=423, 554.07pt x 125.71968pt>
 File: table1.png Graphic file (type png)
  <use table1.png>
-Package pdftex.def Info: table1.png used on input line 1388.
+Package pdftex.def Info: table1.png used on input line 1401.
 (pdftex.def)             Requested size: 554.06865pt x 125.71936pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[34 <D:/LADData/RCode/dataRetrieval/vignettes/table1.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1413.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1413.
+[33 <C:/RCodes/dataRetrieval/vignettes/table1.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1426.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1426.
 
-(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1413.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1413.
+(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1426.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1426.
 
 Package rerunfilecheck Info: File `dataRetrieval.out' has not changed.
 (rerunfilecheck)             Checksum: 0A42302DA34F8DDBBBAD8A2EC505FAF3;1805.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1426.
  ) 
 Here is how much of TeX's memory you used:
- 9765 strings out of 494045
- 145928 string characters out of 3145961
- 248171 words of memory out of 3000000
- 12772 multiletter control sequences out of 15000+200000
- 49126 words of font info for 98 fonts, out of 3000000 for 9000
- 715 hyphenation exceptions out of 8191
- 44i,15n,42p,958b,502s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 9909 strings out of 493921
+ 147929 string characters out of 3144877
+ 248517 words of memory out of 3000000
+ 12916 multiletter control sequences out of 15000+200000
+ 45680 words of font info for 91 fonts, out of 3000000 for 9000
+ 841 hyphenation exceptions out of 8191
+ 44i,15n,42p,958b,506s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Progra
 m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program 
 Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Fi
@@ -1007,9 +1033,9 @@ les (x86)/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files (x86)
 rw/helvetic/uhvr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times
 /utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pf
 b>
-Output written on dataRetrieval.pdf (34 pages, 337808 bytes).
+Output written on dataRetrieval.pdf (33 pages, 335842 bytes).
 PDF statistics:
- 489 PDF objects out of 1000 (max. 8388607)
- 85 named destinations out of 1000 (max. 500000)
+ 484 PDF objects out of 1000 (max. 8388607)
+ 84 named destinations out of 1000 (max. 500000)
  234 words of extra memory for PDF output out of 10000 (max. 10000000)
 

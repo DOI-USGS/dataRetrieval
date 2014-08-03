@@ -17,6 +17,8 @@
 #' data <- getWaterML1Data(obs_url)
 #' urlMulti <- constructNWISURL("04085427",c("00060","00010"),startDate,endDate,'dv',statCd=c("00003","00001"))
 #' multiData <- getWaterML1Data(urlMulti)
+#' goundwaterExampleURL <- "http://waterservices.usgs.gov/nwis/gwlevels/?format=waterml&sites=431049071324301&startDT=2013-10-01&endDT=2014-06-30"
+#' groundWater <- getWaterML1Data(goundwaterExampleURL)
 getWaterML1Data <- function(obs_url){
 
   # This is more elegent, but requires yet another package dependency RCurl...which I now require for wqp
@@ -80,12 +82,20 @@ getWaterML1Data <- function(obs_url){
       assign(valueName,value)
       assign(qualName,qualifier)
       
-      df <- data.frame(dateTime,
-                       tzAbbriev,
-                       get(valueName),
-                       get(qualName)
-      )
-      names(df) <- c("dateTime","tz_cd",valueName,qualName)
+      if(length(get(qualName))!=0){
+        df <- data.frame(dateTime,
+                         tzAbbriev,
+                         get(valueName),
+                         get(qualName)
+        )
+        names(df) <- c("dateTime","tz_cd",valueName,qualName)
+      } else {
+        df <- data.frame(dateTime,
+                         tzAbbriev,
+                         get(valueName)
+        )
+        names(df) <- c("dateTime","tz_cd",valueName)       
+      }
  
       if (1 == i & valuesIndex[1] == j){
         mergedDF <- df

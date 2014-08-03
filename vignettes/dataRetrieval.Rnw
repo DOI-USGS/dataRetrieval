@@ -52,7 +52,7 @@
   {\thesubsubsection}{0.5em}{}
   
 \titlecontents{section}
-[2.3em]                 % adjust left margin
+[2em]                 % adjust left margin
 {\sffamily}             % font formatting
 {\contentslabel{2.3em}} % section label and offset
 {\hspace*{-2.3em}}
@@ -73,14 +73,14 @@
 {\titlerule*[0.25pc]{.}\contentspage}
 
 \titlecontents{table}
-[-2.3em]                 % adjust left margin
+[0em]                 % adjust left margin
 {\sffamily}             % font formatting
 {\textbf{Table}\hspace*{2em} \contentslabel {2em}} % section label and offset
 {\hspace*{4em}}
 {\titlerule*[0.25pc]{.}\contentspage}
 
 \titlecontents{figure}
-[-2.3em]                 % adjust left margin
+[0em]                 % adjust left margin
 {\sffamily}             % font formatting
 {\textbf{Figure}\hspace*{2em} \contentslabel {2em}} % section label and offset
 {\hspace*{4em}}
@@ -152,15 +152,24 @@ knit_hooks$set(inline = function(x) {
    if (is.numeric(x)) round(x, 3)})
 knit_hooks$set(crop = hook_pdfcrop)
 
-bold.colHeaders <- function(x) paste("\\multicolumn{1}{c}{\\textbf{\\textsf{", x, "}}}", sep = "")
+bold.colHeaders <- function(x) {
+  x <- gsub("\\^(\\d)","$\\^\\1$",x)
+  x <- gsub("\\%","\\\\%",x)
+  x <- gsub("\\_"," ",x)
+  returnX <- paste("\\multicolumn{1}{c}{\\textbf{\\textsf{", x, "}}}", sep = "")
+}
 addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 @
 
+\noindent{\huge\textsf{\textbf{The dataRetrieval R package}}}
 
+\noindent\textsf{By Laura De Cicco and Robert Hirsch}
 
-\maketitle
+\noindent\textsf{\today}
 
-\newpage 
+% \maketitle
+% 
+% \newpage 
 
 \tableofcontents
 \listoffigures
@@ -188,7 +197,7 @@ ChoptankInfo <- getSiteFileData(siteNumber)
 parameterCd <- "00060"
 
 #Raw daily data:
-rawDailyData <- retrieveNWISData(siteNumber,parameterCd,
+rawDailyData <- retrieveNWISdvData(siteNumber,parameterCd,
                       "1980-01-01","2010-01-01")
 # Data compiled for EGRET analysis
 Daily <- getDVData(siteNumber,parameterCd,
@@ -378,7 +387,7 @@ Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/
 \subsection{Daily Values}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain daily records of USGS data, use the \texttt{retrieveNWISData} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
+To obtain daily records of USGS data, use the \texttt{retrieveNWISdvData} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
 
 The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user must include the quotes).  Setting the start date to \texttt{"}\texttt{"} (no space) will prompt the program to ask for the earliest date, and setting the end date to \texttt{"}\texttt{"} (no space) will prompt for the latest available date.
 
@@ -389,7 +398,7 @@ parameterCd <- "00060"  # Discharge (ft3/s)
 startDate <- ""  # Will request earliest date
 endDate <- "" # Will request latest date
 
-discharge <- retrieveNWISData(siteNumber, 
+discharge <- retrieveNWISdvData(siteNumber, 
                     parameterCd, startDate, endDate)
 names(discharge)
 @
@@ -405,7 +414,7 @@ statCd <- c("00001","00003")  # Mean and maximum
 startDate <- "2012-01-01"
 endDate <- "2012-05-01"
 
-temperatureAndFlow <- retrieveNWISData(siteNumber, parameterCd, 
+temperatureAndFlow <- retrieveNWISdvData(siteNumber, parameterCd, 
         startDate, endDate, StatCd=statCd)
 
 @
@@ -451,14 +460,14 @@ There are occasions where NWIS values are not reported as numbers, instead there
 \subsection{Unit Values}
 \label{sec:usgsRT}
 %------------------------------------------------------------
-Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values}. Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{retrieveUnitNWISData}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
+Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values}. Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{retrieveNWISunitData}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
 
 <<label=getNWISUnit, echo=TRUE>>=
 
 parameterCd <- "00060"  # Discharge (ft3/s)
 startDate <- "2012-05-12" 
 endDate <- "2012-05-13" 
-dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, 
+dischargeToday <- retrieveNWISunitData(siteNumber, parameterCd, 
         startDate, endDate)
 @
 
@@ -479,7 +488,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{retrieveNWISqwData}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{retrieveUnitNWISData} and \texttt{retrieveNWISData}).
+To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{retrieveNWISqwData}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{retrieveNWISunitData} and \texttt{retrieveNWISdvData}).
 
 
 <<label=getQW, echo=TRUE>>=
@@ -516,10 +525,12 @@ There are additional water quality data sets available from the Water Quality Da
 
 
 <<label=getQWData, echo=TRUE>>=
-# specificCond <- getWQPData('WIDNR_WQX-10032762',
-#                 'Specific conductance','','')
-# head(specificCond)
+specificCond <- getWQPData('WIDNR_WQX-10032762',
+                'Specific conductance','','')
+head(specificCond)
 @
+
+There are 
 
 \FloatBarrier
 %------------------------------------------------------------
@@ -611,7 +622,7 @@ Notice that the \enquote{Day of the year} column can span from 1 to 366. The 366
 \subsection{Sample Data}
 \label{Samplesubsection}
 %------------------------------------------------------------
-The \texttt{getSampleData} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as \texttt{getRawQWData} or \texttt{getQWData} as described in the previous section.
+The \texttt{getSampleData} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as \texttt{retrieveWQPqwData} or \texttt{getWQPData} as described in the previous section.
 
 <<secondExample>>=
 parameterCd <- "00618"
@@ -708,7 +719,7 @@ print(xTab,
 
 @
 
-The dataRetrieval package will \enquote{add up} all the values in a given row to form the total for that sample when using the Sample dataframe. Thus, you only want to enter data that should be added together. If you want a dataframe with multiple constituents that are not summed, do not use getSampleData, getSTORETSampleData, or getSampleDataFromFile. The raw data functions: \texttt{getWQPData}, \texttt{retrieveNWISqwData}, \texttt{getRawQWData}, \texttt{getQWData} will not sum constituents, but leave them in their individual columns. 
+The dataRetrieval package will \enquote{add up} all the values in a given row to form the total for that sample when using the Sample dataframe. Thus, you only want to enter data that should be added together. If you want a dataframe with multiple constituents that are not summed, do not use getSampleData, getSTORETSampleData, or getSampleDataFromFile. The raw data functions: \texttt{getWQPData}, \texttt{retrieveNWISqwData}, \texttt{retrieveWQPqwData}, \texttt{getWQPData} will not sum constituents, but leave them in their individual columns. 
 
 For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not supposed to add it in to the values in 2005.
 
@@ -879,18 +890,17 @@ Tables \ref{tab:dataRetrievalFunctions1} and \ref{tab:dataRetrievalMisc} summari
 \multicolumn{1}{c}{\textbf{\textsf{Function Name}}} &
 \multicolumn{1}{c}{\textbf{\textsf{Description}}} \\ [0pt]
   \hline
-  Daily & \texttt{retrieveNWISData} & Raw USGS daily data \\ 
+  Daily & \texttt{retrieveNWISdvData} & Raw USGS daily data \\ 
   [5pt]Daily\tnote{1} & \texttt{getDVData} & USGS daily values \\ 
   [5pt]Daily\tnote{1} & \texttt{getDailyDataFromFile} & User generated daily data \\ 
   [5pt]Sample & \texttt{retrieveNWISqwData} & Raw USGS water quality data \\
-  [5pt]Sample & \texttt{getRawQWData} & Raw Water Quality Data Portal data \\ 
+  [5pt]Sample & \texttt{retrieveWQPqwData} & Raw Water Quality Data Portal data \\ 
   [5pt]Sample & \texttt{getQWDataFromFile} & Raw user generated water quality data \\ 
-  [5pt]Sample & \texttt{getQWData} & USGS Water Quality Portal data \\
   [5pt]Sample & \texttt{getWQPData} & General Water Quality Portal\\
   [5pt]Sample\tnote{1} & \texttt{getSampleData} & USGS water quality data\\
   [5pt]Sample\tnote{1} & \texttt{getSTORETSampleData} & STORET Water Quality Data Portal data \\
   [5pt]Sample\tnote{1} & \texttt{getSampleDataFromFile} & User generated sample data \\ 
-  [5pt]Unit & \texttt{retrieveUnitNWISData} & Raw USGS instantaneous data \\
+  [5pt]Unit & \texttt{retrieveNWISunitData} & Raw USGS instantaneous data \\
   [5pt]Information\tnote{1} & \texttt{getMetaData} & USGS station and parameter code information \\ 
   [5pt]Information & \texttt{getParameterInfo} & USGS parameter code information \\ 
   [5pt]Information & \texttt{getSiteFileData} & USGS station information \\ 

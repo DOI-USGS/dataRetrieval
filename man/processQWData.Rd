@@ -3,10 +3,12 @@
 \alias{processQWData}
 \title{Processing of USGS NWIS Water Quality Data}
 \usage{
-processQWData(data)
+processQWData(data, pCode = TRUE)
 }
 \arguments{
-\item{data}{dataframe from}
+\item{data}{dataframe from Water Quality Portal}
+
+\item{pCode}{logical if TRUE, assume data came from a pCode search, if FALSE, characteristic name.}
 }
 \value{
 data dataframe with first column dateTime, and at least one qualifier and value columns
@@ -19,7 +21,7 @@ conditions to determine if a value is left censored or not. Censored values are 
 }
 \examples{
 # These examples require an internet connection to run
-rawSample <- getRawQWData('01594440','01075', '1985-01-01', '1985-03-31')
+rawSample <- retrieveWQPqwData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
 rawSampleSelect <- processQWData(rawSample)
 }
 \keyword{USGS}

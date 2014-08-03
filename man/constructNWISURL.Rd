@@ -45,7 +45,7 @@ url_daily <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',statCd=c("
 url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
 url_qw_single <- constructNWISURL(siteNumber,"01075",startDate,endDate,'qw')
 url_qw <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDate,'qw')
-url_wqp <- constructNWISURL(siteNumber,c('01075','00029','00453'),startDate,endDate,'wqp')
+url_wqp <- constructNWISURL(paste("USGS",siteNumber,sep="-"),c('01075','00029','00453'),startDate,endDate,'wqp')
 url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',statCd=c("00003","00001"),format="tsv")
 }
 \keyword{USGS}

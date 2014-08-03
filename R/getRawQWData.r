@@ -16,20 +16,25 @@
 #' @import RCurl
 #' @examples
 #' # These examples require an internet connection to run
-#' rawSample <- getRawQWData('01594440','01075', '1985-01-01', '1985-03-31')
-#' rawSampleAll <- getRawQWData('05114000','', '1985-01-01', '1985-03-31')
-#' rawSampleSelect <- getRawQWData('05114000',c('00915','00931'), '1985-01-01', '1985-04-30')
-getRawQWData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
+#' rawSample <- retrieveWQPqwData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
+#' rawSampleAll <- retrieveWQPqwData('USGS-05114000','', '1985-01-01', '1985-03-31')
+#' rawSampleSelect <- retrieveWQPqwData('USGS-05114000',c('00915','00931'), '1985-01-01', '1985-04-30')
+#' rawStoret <- retrieveWQPqwData('WIDNR_WQX-10032762','Specific conductance', '', '')
+retrieveWQPqwData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
 
   url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"wqp",interactive=interactive)
-#   require(RCurl)
+
   h <- basicHeaderGatherer()
   doc <- getURI(url, headerfunction = h$update)
   numToBeReturned <- as.numeric(h$value()["Total-Result-Count"])
-  suppressWarnings(retval <- read.delim(url, header = TRUE, quote="\"", dec=".", sep='\t', colClasses=c('character'), fill = TRUE))
-  actualNumReturned <- nrow(retval)
-  
-  if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", actualNumReturned, " were returned")
-  
-  return(retval)
+  if (!is.na(numToBeReturned) | numToBeReturned != 0){  
+    suppressWarnings(retval <- read.delim(url, header = TRUE, quote="\"", dec=".", sep='\t', colClasses=c('character'), fill = TRUE))
+    actualNumReturned <- nrow(retval)
+    
+    if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", actualNumReturned, " were returned")
+    
+    return(retval)
+  } else {
+    warning("No data to retrieve")
+  }
 }

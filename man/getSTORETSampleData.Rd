@@ -21,11 +21,9 @@ getSTORETSampleData(siteNumber, characteristicName, StartDate, EndDate,
 Sample dataframe
 }
 \description{
-Imports data from NWIS web service. This function gets the data from here: \url{http://qwwebservices.usgs.gov/}
-A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
-For raw data, use getQWData.  This function will retrieve the raw data, and compress it (summing constituents). See
-chapter 7 of the EGRET user guide for more details.
+Imports data from the Water Quality Portal. This function gets the data from: \url{http://www.waterqualitydata.us}
+For raw data, use getWQPData.  This function will retrieve the raw data, and compress it (summing constituents). See
+chapter 7 of the EGRET user guide for more details, then converts it to the Sample dataframe structure.
 }
 \examples{
 # These examples require an internet connection to run

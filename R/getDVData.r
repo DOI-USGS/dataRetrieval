@@ -18,14 +18,14 @@
 #' @keywords data import USGS WRTDS
 #' @export
 #' @return Daily dataframe
-#' @seealso \code{\link{retrieveNWISData}}, \code{\link{populateDaily}}
+#' @seealso \code{\link{retrieveNWISdvData}}, \code{\link{populateDaily}}
 #' @examples
 #' # These examples require an internet connection to run
 #' Daily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31')
 #' DailyCFS <- getDVData('01594440','00060', '1985-01-01', '1985-03-31',convert=FALSE)
 #' DailySuspSediment <- getDVData('01594440','80154', '1985-01-01', '1985-03-31')
 getDVData <- function (siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE,convert=TRUE,format="tsv"){
-  data <- retrieveNWISData(siteNumber,ParameterCd,StartDate,EndDate,interactive=interactive,format=format)
+  data <- retrieveNWISdvData(siteNumber,ParameterCd,StartDate,EndDate,interactive=interactive,format=format)
   
   #  need to setup conversion factor because the NWIS data are in cfs but we store in cms
   names(data) <- c('agency', 'site', 'dateTime', 'value', 'code')  # do a merge instead?

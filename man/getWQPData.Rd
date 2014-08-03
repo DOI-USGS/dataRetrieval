@@ -22,14 +22,16 @@ retval dataframe with first column dateTime, and at least one qualifier and valu
 (subsequent qualifier/value columns could follow depending on requested parameter codes)
 }
 \description{
-Imports data from Water Quality Portal web service. This function gets the data from here: \url{http://www.waterqualitydata.us}. This function is more general than getQWData
+Imports data from Water Quality Portal web service. This function gets the data from: \url{http://www.waterqualitydata.us}. This function is more general than getQWData
 because it allows for other agencies rather than the USGS.  Therefore, the 5-digit parameter code cannot be used.
-Instead, this function uses characteristicName.  A complete list can be found here \url{http://www.waterqualitydata.us/Codes/Characteristicname}
+Instead, this function uses characteristicName.  A complete list can be found here
 }
 \examples{
 # These examples require an internet connection to run
-getWQPData('USGS-01594440','Chloride', '', '')
-getWQPData('WIDNR_WQX-10032762','Specific conductance', '', '')
+Chloride <- getWQPData('USGS-01594440','Chloride', '', '')
+SC <- getWQPData('WIDNR_WQX-10032762','Specific conductance', '', '')
+NWIS_Cl <- getWQPData('USGS-04024000','30234', '', '')
+MultipleQW <- getWQPData('USGS-04024000',c('30234','90095'), '', '')
 }
 \keyword{WQP}
 \keyword{data}

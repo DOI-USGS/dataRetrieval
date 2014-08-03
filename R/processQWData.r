@@ -4,16 +4,17 @@
 #' conditions to determine if a value is left censored or not. Censored values are given the qualifier
 #' "<".  The dataframe is also converted from a long to wide format.
 #' 
-#' @param data dataframe from 
+#' @param data dataframe from Water Quality Portal
+#' @param pCode logical if TRUE, assume data came from a pCode search, if FALSE, characteristic name.
 #' @keywords data import USGS web service
 #' @return data dataframe with first column dateTime, and at least one qualifier and value columns
 #' (subsequent qualifier/value columns could follow depending on the number of parameter codes)
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' rawSample <- getRawQWData('01594440','01075', '1985-01-01', '1985-03-31')
+#' rawSample <- retrieveWQPqwData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
 #' rawSampleSelect <- processQWData(rawSample)
-processQWData <- function(data){
+processQWData <- function(data,pCode=TRUE){
 
   qualifier <- ifelse((data$ResultDetectionConditionText == "Not Detected" | 
                     data$ResultDetectionConditionText == "Detected Not Quantified" |
@@ -37,8 +38,15 @@ processQWData <- function(data){
     warning(warningMessage)
   }
   
-  colnames(test)<- c("USGSPCode","dateTime","qualifier","value")
-  data <- suppressWarnings(reshape(test, idvar="dateTime", timevar = "USGSPCode", direction="wide"))  
+  if (pCode){
+    colnames(test)<- c("USGSPCode","dateTime","qualifier","value")
+    newTimeVar <- "USGSPCode"
+  } else {
+    colnames(test)<- c("CharacteristicName","dateTime","qualifier","value")
+    newTimeVar <- "CharacteristicName"
+  }
+  
+  data <- suppressWarnings(reshape(test, idvar="dateTime", timevar = newTimeVar, direction="wide"))  
   data$dateTime <- format(data$dateTime, "%Y-%m-%d")
   data$dateTime <- as.Date(data$dateTime)
   return(data)
