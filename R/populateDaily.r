@@ -51,14 +51,9 @@ populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a da
 
     qshift<- 0.001*mean(localDaily$Q, na.rm=TRUE) 
     if (interactive){
-      negNums <- length(which(localDaily$Q<0))
+      
       zeroNums <- length(which(localDaily$Q == 0))
-      
-      if (negNums > 0) {
-        cat("There were", as.character(negNums), "negative flow days \n")
-        cat("Negative values are not supported in the EGRET package\n")
-      }
-      
+
       if (zeroNums > 0){
         cat("There were", as.character(zeroNums), "zero flow days \n")
       }
@@ -70,6 +65,11 @@ populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a da
     qshift<-0.0
   }
   
+  negNums <- length(which(localDaily$Q<0))
+  if (negNums > 0) {
+    cat("There were", as.character(negNums), "negative flow days \n")
+    cat("Negative values are not supported in the EGRET package\n")
+  }
   
   localDaily$Q<-localDaily$Q+qshift
   
@@ -94,7 +94,20 @@ populateDaily <- function(rawData,qConvert,interactive=TRUE){  # rawData is a da
 
     #these next two lines show the user where the gaps in the data are if there are any
     n<-nrow(localDaily)
-    for(i in 2:n) {if((localDaily$Julian[i]-localDaily$Julian[i-1])>1) cat("\n discharge data jumps from",as.character(localDaily$Date[i-1]),"to",as.character(localDaily$Date[i]))}
+    for(i in 2:n) {
+      if((localDaily$Julian[i]-localDaily$Julian[i-1])>1) cat("\n discharge data jumps from",as.character(localDaily$Date[i-1]),"to",as.character(localDaily$Date[i]))
+    }
+    
+    numNAs <- sum(is.na(localDaily$Q))
+    if(numNAs > 0){
+      cat(numNAs, "discharge measurements are not reported (NA's). \nMany of the EGRET functions will not work with missing discharge measurements.")
+      if (localDaily$Julian[max(which(is.na(localDaily$Q)),na.rm = TRUE)]-
+           localDaily$Julian[min(which(is.na(localDaily$Q)),na.rm = TRUE)]+1 ==  numNAs){
+        cat("\nNA gap is from",as.character(localDaily$Date[min(which(is.na(localDaily$Q)),na.rm = TRUE)]),"to",
+            as.character(localDaily$Date[max(which(is.na(localDaily$Q)),na.rm = TRUE)]))
+      } 
+    }
+    
   }
   
   return (localDaily)  

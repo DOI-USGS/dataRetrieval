@@ -1,3 +1,11 @@
+dataRetrieval 1.3.2
+===========
+
+* Deprecated getQWData, updated getWQPData to take either parameter code or characteristic name.
+* Changed the name of raw data retrievals to: retrieveNWISqwData, retrieveNWISunitData, retrieveNWISdvData, and retrieveWQPqwData (from: retrieveNWISqwData, retrieveUnitNWISData, retrieveNWISData, getRawQWData)
+* Added NA warning to getDVData function
+
+
 dataRetrieval 1.2.2
 ===========
 

@@ -387,7 +387,7 @@ Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/
 \subsection{Daily Values}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain daily records of USGS data, use the \texttt{retrieveNWISData} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
+To obtain daily records of USGS data, use the \texttt{retrieveNWISdvData} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
 
 The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user must include the quotes).  Setting the start date to \texttt{"}\texttt{"} (no space) will prompt the program to ask for the earliest date, and setting the end date to \texttt{"}\texttt{"} (no space) will prompt for the latest available date.
 
@@ -398,7 +398,7 @@ parameterCd <- "00060"  # Discharge (ft3/s)
 startDate <- ""  # Will request earliest date
 endDate <- "" # Will request latest date
 
-discharge <- retrieveNWISData(siteNumber, 
+discharge <- retrieveNWISdvData(siteNumber, 
                     parameterCd, startDate, endDate)
 names(discharge)
 @
@@ -414,7 +414,7 @@ statCd <- c("00001","00003")  # Mean and maximum
 startDate <- "2012-01-01"
 endDate <- "2012-05-01"
 
-temperatureAndFlow <- retrieveNWISData(siteNumber, parameterCd, 
+temperatureAndFlow <- retrieveNWISdvData(siteNumber, parameterCd, 
         startDate, endDate, StatCd=statCd)
 
 @
@@ -460,14 +460,14 @@ There are occasions where NWIS values are not reported as numbers, instead there
 \subsection{Unit Values}
 \label{sec:usgsRT}
 %------------------------------------------------------------
-Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values}. Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{retrieveUnitNWISData}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
+Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values}. Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{retrieveNWISunitData}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
 
 <<label=getNWISUnit, echo=TRUE>>=
 
 parameterCd <- "00060"  # Discharge (ft3/s)
 startDate <- "2012-05-12" 
 endDate <- "2012-05-13" 
-dischargeToday <- retrieveUnitNWISData(siteNumber, parameterCd, 
+dischargeToday <- retrieveNWISunitData(siteNumber, parameterCd, 
         startDate, endDate)
 @
 

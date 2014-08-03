@@ -21,7 +21,7 @@
 #' NWIS_Cl <- getWQPData('USGS-04024000','30234', '', '')
 getWQPData <- function(siteNumber,characteristicName,StartDate,EndDate,interactive=TRUE){
   
-  retval <- getRawQWData(siteNumber=siteNumber,
+  retval <- retrieveWQPqwData(siteNumber=siteNumber,
                          ParameterCd=characteristicName,
                          StartDate=StartDate,
                          EndDate=EndDate,

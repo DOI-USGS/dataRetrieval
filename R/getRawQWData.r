@@ -16,11 +16,11 @@
 #' @import RCurl
 #' @examples
 #' # These examples require an internet connection to run
-#' rawSample <- getRawQWData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
-#' rawSampleAll <- getRawQWData('USGS-05114000','', '1985-01-01', '1985-03-31')
-#' rawSampleSelect <- getRawQWData('USGS-05114000',c('00915','00931'), '1985-01-01', '1985-04-30')
-#' rawStoret <- getRawQWData('WIDNR_WQX-10032762','Specific conductance', '', '')
-getRawQWData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
+#' rawSample <- retrieveWQPqwData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
+#' rawSampleAll <- retrieveWQPqwData('USGS-05114000','', '1985-01-01', '1985-03-31')
+#' rawSampleSelect <- retrieveWQPqwData('USGS-05114000',c('00915','00931'), '1985-01-01', '1985-04-30')
+#' rawStoret <- retrieveWQPqwData('WIDNR_WQX-10032762','Specific conductance', '', '')
+retrieveWQPqwData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
 
   url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"wqp",interactive=interactive)
 
