@@ -19,6 +19,7 @@
 #' Chloride <- getWQPData('USGS-01594440','Chloride', '', '')
 #' SC <- getWQPData('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' NWIS_Cl <- getWQPData('USGS-04024000','30234', '', '')
+#' MultipleQW <- getWQPData('USGS-04024000',c('30234','90095'), '', '')
 getWQPData <- function(siteNumber,characteristicName,StartDate,EndDate,interactive=TRUE){
   
   retval <- retrieveWQPqwData(siteNumber=siteNumber,
