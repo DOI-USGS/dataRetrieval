@@ -229,7 +229,7 @@ A quick workflow for major dataRetrieval functions:
 \hlstd{parameterCd} \hlkwb{<-} \hlstr{"00060"}
 
 \hlcom{#Raw daily data:}
-\hlstd{rawDailyData} \hlkwb{<-} \hlkwd{retrieveNWISData}\hlstd{(siteNumber,parameterCd,}
+\hlstd{rawDailyData} \hlkwb{<-} \hlkwd{retrieveNWISdvData}\hlstd{(siteNumber,parameterCd,}
                       \hlstr{"1980-01-01"}\hlstd{,}\hlstr{"2010-01-01"}\hlstd{)}
 \hlcom{# Data compiled for EGRET analysis}
 \hlstd{Daily} \hlkwb{<-} \hlkwd{getDVData}\hlstd{(siteNumber,parameterCd,}
@@ -267,7 +267,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Fri Aug 01 16:04:17 2014
+% Sun Aug 03 14:57:17 2014
 \begin{table}[ht]
 \caption{Common USGS Parameter Codes} 
 \label{tab:params}
@@ -330,7 +330,7 @@ For unit values data (sensor data measured at regular time intervals such as 15 
 Some common codes are shown in Table \ref{tab:stat}.
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Fri Aug 01 16:04:18 2014
+% Sun Aug 03 14:57:19 2014
 \begin{table}[ht]
 \caption{Commonly used USGS Stat Codes} 
 \label{tab:stat}
@@ -411,7 +411,7 @@ To discover what data is available for a particular USGS site, including measure
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Fri Aug 01 16:04:19 2014
+% Sun Aug 03 14:57:20 2014
 \begin{table}[ht]
 \caption{Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]} 
 \label{tab:gda}
@@ -423,7 +423,7 @@ To discover what data is available for a particular USGS site, including measure
  & Temperature, water & 1988-10-01 & 2012-05-09 & 894 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-07-31 & 24319 & ft$^3$/s \\ 
+  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-08-02 & 24321 & ft$^3$/s \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
@@ -479,7 +479,7 @@ Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/
 \subsection{Daily Values}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain daily records of USGS data, use the \texttt{retrieveNWISData} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
+To obtain daily records of USGS data, use the \texttt{retrieveNWISdvData} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
 
 The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user must include the quotes).  Setting the start date to \texttt{"}\texttt{"} (no space) will prompt the program to ask for the earliest date, and setting the end date to \texttt{"}\texttt{"} (no space) will prompt for the latest available date.
 
@@ -491,7 +491,7 @@ The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (
 \hlstd{startDate} \hlkwb{<-} \hlstr{""}  \hlcom{# Will request earliest date}
 \hlstd{endDate} \hlkwb{<-} \hlstr{""} \hlcom{# Will request latest date}
 
-\hlstd{discharge} \hlkwb{<-} \hlkwd{retrieveNWISData}\hlstd{(siteNumber,}
+\hlstd{discharge} \hlkwb{<-} \hlkwd{retrieveNWISdvData}\hlstd{(siteNumber,}
                     \hlstd{parameterCd, startDate, endDate)}
 \hlkwd{names}\hlstd{(discharge)}
 \end{alltt}
@@ -515,7 +515,7 @@ Another example that doesn't use the defaults would be a request for mean and ma
 \hlstd{startDate} \hlkwb{<-} \hlstr{"2012-01-01"}
 \hlstd{endDate} \hlkwb{<-} \hlstr{"2012-05-01"}
 
-\hlstd{temperatureAndFlow} \hlkwb{<-} \hlkwd{retrieveNWISData}\hlstd{(siteNumber, parameterCd,}
+\hlstd{temperatureAndFlow} \hlkwb{<-} \hlkwd{retrieveNWISdvData}\hlstd{(siteNumber, parameterCd,}
         \hlstd{startDate, endDate,} \hlkwc{StatCd}\hlstd{=statCd)}
 \end{alltt}
 \end{kframe}
@@ -594,7 +594,7 @@ There are occasions where NWIS values are not reported as numbers, instead there
 \subsection{Unit Values}
 \label{sec:usgsRT}
 %------------------------------------------------------------
-Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values}. Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{retrieveUnitNWISData}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
+Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values}. Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{retrieveNWISunitData}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -602,7 +602,7 @@ Any data collected at regular time intervals (such as 15-minute or hourly) are k
 \hlstd{parameterCd} \hlkwb{<-} \hlstr{"00060"}  \hlcom{# Discharge (ft3/s)}
 \hlstd{startDate} \hlkwb{<-} \hlstr{"2012-05-12"}
 \hlstd{endDate} \hlkwb{<-} \hlstr{"2012-05-13"}
-\hlstd{dischargeToday} \hlkwb{<-} \hlkwd{retrieveUnitNWISData}\hlstd{(siteNumber, parameterCd,}
+\hlstd{dischargeToday} \hlkwb{<-} \hlkwd{retrieveNWISunitData}\hlstd{(siteNumber, parameterCd,}
         \hlstd{startDate, endDate)}
 \end{alltt}
 \end{kframe}
@@ -642,7 +642,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{retrieveNWISqwData}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{retrieveUnitNWISData} and \texttt{retrieveNWISData}).
+To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{retrieveNWISqwData}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{retrieveNWISunitData} and \texttt{retrieveNWISdvData}).
 
 
 \begin{knitrout}
@@ -701,20 +701,13 @@ There are additional water quality data sets available from the Water Quality Da
 \hlkwd{head}\hlstd{(specificCond)}
 \end{alltt}
 \begin{verbatim}
-    dateTime qualifier.Specific conductance
-1 2011-02-14                               
-2 2011-02-17                               
-3 2011-03-03                               
-4 2011-03-10                               
-5 2011-03-29                               
-6 2011-04-07                               
-  value.Specific conductance
-1                       1360
-2                       1930
-3                       1240
-4                       1480
-5                       1130
-6                       1200
+    dateTime qualifier. value.
+1 2011-02-14              1360
+2 2011-02-17              1930
+3 2011-03-03              1240
+4 2011-03-10              1480
+5 2011-03-29              1130
+6 2011-04-07              1200
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -796,7 +789,7 @@ There are 4750 data points, and 4750 days.
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Fri Aug 01 16:04:33 2014
+% Sun Aug 03 14:57:39 2014
 \begin{table}[ht]
 \caption{Daily dataframe} 
 \label{tab:DailyDF1}
@@ -834,7 +827,7 @@ Notice that the \enquote{Day of the year} column can span from 1 to 366. The 366
 \subsection{Sample Data}
 \label{Samplesubsection}
 %------------------------------------------------------------
-The \texttt{getSampleData} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as \texttt{getRawQWData} or \texttt{getQWData} as described in the previous section.
+The \texttt{getSampleData} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as \texttt{retrieveWQPqwData} or \texttt{getWQPData} as described in the previous section.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -917,7 +910,7 @@ To illustrate how the dataRetrieval package handles a more complex censoring pro
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Fri Aug 01 16:04:34 2014
+% Sun Aug 03 14:57:40 2014
 \begin{table}[ht]
 \caption{Example data} 
 \label{tab:exampleComplexQW}
@@ -938,7 +931,7 @@ To illustrate how the dataRetrieval package handles a more complex censoring pro
 \end{table}
 
 
-The dataRetrieval package will \enquote{add up} all the values in a given row to form the total for that sample when using the Sample dataframe. Thus, you only want to enter data that should be added together. If you want a dataframe with multiple constituents that are not summed, do not use getSampleData, getSTORETSampleData, or getSampleDataFromFile. The raw data functions: \texttt{getWQPData}, \texttt{retrieveNWISqwData}, \texttt{getRawQWData}, \texttt{getQWData} will not sum constituents, but leave them in their individual columns. 
+The dataRetrieval package will \enquote{add up} all the values in a given row to form the total for that sample when using the Sample dataframe. Thus, you only want to enter data that should be added together. If you want a dataframe with multiple constituents that are not summed, do not use getSampleData, getSTORETSampleData, or getSampleDataFromFile. The raw data functions: \texttt{getWQPData}, \texttt{retrieveNWISqwData}, \texttt{retrieveWQPqwData}, \texttt{getWQPData} will not sum constituents, but leave them in their individual columns. 
 
 For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not supposed to add it in to the values in 2005.
 
@@ -1184,18 +1177,17 @@ Tables \ref{tab:dataRetrievalFunctions1} and \ref{tab:dataRetrievalMisc} summari
 \multicolumn{1}{c}{\textbf{\textsf{Function Name}}} &
 \multicolumn{1}{c}{\textbf{\textsf{Description}}} \\ [0pt]
   \hline
-  Daily & \texttt{retrieveNWISData} & Raw USGS daily data \\ 
+  Daily & \texttt{retrieveNWISdvData} & Raw USGS daily data \\ 
   [5pt]Daily\tnote{1} & \texttt{getDVData} & USGS daily values \\ 
   [5pt]Daily\tnote{1} & \texttt{getDailyDataFromFile} & User generated daily data \\ 
   [5pt]Sample & \texttt{retrieveNWISqwData} & Raw USGS water quality data \\
-  [5pt]Sample & \texttt{getRawQWData} & Raw Water Quality Data Portal data \\ 
+  [5pt]Sample & \texttt{retrieveWQPqwData} & Raw Water Quality Data Portal data \\ 
   [5pt]Sample & \texttt{getQWDataFromFile} & Raw user generated water quality data \\ 
-  [5pt]Sample & \texttt{getQWData} & USGS Water Quality Portal data \\
   [5pt]Sample & \texttt{getWQPData} & General Water Quality Portal\\
   [5pt]Sample\tnote{1} & \texttt{getSampleData} & USGS water quality data\\
   [5pt]Sample\tnote{1} & \texttt{getSTORETSampleData} & STORET Water Quality Data Portal data \\
   [5pt]Sample\tnote{1} & \texttt{getSampleDataFromFile} & User generated sample data \\ 
-  [5pt]Unit & \texttt{retrieveUnitNWISData} & Raw USGS instantaneous data \\
+  [5pt]Unit & \texttt{retrieveNWISunitData} & Raw USGS instantaneous data \\
   [5pt]Information\tnote{1} & \texttt{getMetaData} & USGS station and parameter code information \\ 
   [5pt]Information & \texttt{getParameterInfo} & USGS parameter code information \\ 
   [5pt]Information & \texttt{getSiteFileData} & USGS station information \\ 
@@ -1358,7 +1350,7 @@ There are a few steps that are required in order to create a table in a Microsof
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2014-07-31 24319      ft3/s
+2 2014-08-02 24321      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day
