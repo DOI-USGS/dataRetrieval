@@ -31,6 +31,7 @@ Instead, this function uses characteristicName.  A complete list can be found he
 Chloride <- getWQPData('USGS-01594440','Chloride', '', '')
 SC <- getWQPData('WIDNR_WQX-10032762','Specific conductance', '', '')
 NWIS_Cl <- getWQPData('USGS-04024000','30234', '', '')
+MultipleQW <- getWQPData('USGS-04024000',c('30234','90095'), '', '')
 }
 \keyword{WQP}
 \keyword{data}
