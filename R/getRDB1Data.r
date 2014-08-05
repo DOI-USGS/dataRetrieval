@@ -31,15 +31,19 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE){
   dataType <- tmp[1,]
   data <- tmp[-1,]
   
-  if (asDateTime){
-    data[,regexpr('d$', dataType) > 0] <- as.POSIXct(strptime(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M"))
-  } else {
-    data[,regexpr('d$', dataType) > 0] <- as.Date(data[,regexpr('d$', dataType) > 0])
+  if(sum(regexpr('d$', dataType) > 0) > 0){
+    if (asDateTime){
+      data[,regexpr('d$', dataType) > 0] <- as.POSIXct(strptime(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M"))
+    } else {
+      data[,regexpr('d$', dataType) > 0] <- as.Date(data[,regexpr('d$', dataType) > 0])
+    }
   }
   
-  tempDF <- data[,which(regexpr('n$', dataType) > 0)]
-  tempDF <- suppressWarnings(sapply(tempDF, function(x) as.numeric(x)))  
-  data[,which(regexpr('n$', dataType) > 0)] <- tempDF
+  if (sum(regexpr('n$', dataType) > 0) > 0){
+    tempDF <- data[,which(regexpr('n$', dataType) > 0)]
+    tempDF <- suppressWarnings(sapply(tempDF, function(x) as.numeric(x)))  
+    data[,which(regexpr('n$', dataType) > 0)] <- tempDF
+  }
   row.names(data) <- NULL
   return(data)
 }
