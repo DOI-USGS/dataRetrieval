@@ -267,7 +267,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Thu Aug 07 15:11:38 2014
+% Fri Aug 08 15:39:28 2014
 \begin{table}[ht]
 \caption{Common USGS Parameter Codes} 
 \label{tab:params}
@@ -330,7 +330,7 @@ For unit values data (sensor data measured at regular time intervals such as 15 
 Some common codes are shown in Table \ref{tab:stat}.
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Thu Aug 07 15:11:39 2014
+% Fri Aug 08 15:39:30 2014
 \begin{table}[ht]
 \caption{Commonly used USGS Stat Codes} 
 \label{tab:stat}
@@ -411,7 +411,7 @@ To discover what data is available for a particular USGS site, including measure
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Thu Aug 07 15:11:39 2014
+% Fri Aug 08 15:39:30 2014
 \begin{table}[ht]
 \caption{Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]} 
 \label{tab:gda}
@@ -423,7 +423,7 @@ To discover what data is available for a particular USGS site, including measure
  & Temperature, water & 1988-10-01 & 2012-05-09 & 894 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-08-06 & 24325 & ft$^3$/s \\ 
+  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-08-07 & 24326 & ft$^3$/s \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
@@ -789,7 +789,7 @@ There are 4750 data points, and 4750 days.
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Thu Aug 07 15:11:55 2014
+% Fri Aug 08 15:39:49 2014
 \begin{table}[ht]
 \caption{Daily dataframe} 
 \label{tab:DailyDF1}
@@ -910,7 +910,7 @@ To illustrate how the dataRetrieval package handles a more complex censoring pro
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Thu Aug 07 15:11:56 2014
+% Fri Aug 08 15:39:50 2014
 \begin{table}[ht]
 \caption{Example data} 
 \label{tab:exampleComplexQW}
@@ -1114,20 +1114,20 @@ There are 4750 data points, and 4750 days.
 \hlkwd{head}\hlstd{(Sample)}
 \end{alltt}
 \begin{verbatim}
-        Date ConcLow ConcHigh Uncen ConcAve Julian Month
-1 2000-01-04    1.59     1.59     1    1.59  54789     1
-2 2000-02-03    1.54     1.54     1    1.54  54819     2
-3 2000-02-15    1.37     1.37     1    1.37  54831     2
-4 2000-02-19    1.24     1.24     1    1.24  54835     2
-5 2000-03-23    0.52     0.52     1    0.52  54868     3
-6 2000-06-05    1.11     1.11     1    1.11  54942     6
-  Day DecYear MonthSeq   SinDY   CosDY      Q   LogQ
-1   4    2000     1801 0.06005  0.9982  2.747 1.0104
-2  34    2000     1802 0.54392  0.8391  3.936 1.3702
-3  46    2000     1802 0.70407  0.7101 10.845 2.3837
-4  50    2000     1802 0.75113  0.6602 15.518 2.7420
-5  83    2000     1803 0.98809  0.1539 56.917 4.0416
-6 157    2000     1806 0.43940 -0.8983  1.812 0.5946
+        Date      Q   LogQ ConcLow ConcHigh Uncen ConcAve
+1 2000-01-04  2.747 1.0104    1.59     1.59     1    1.59
+2 2000-02-03  3.936 1.3702    1.54     1.54     1    1.54
+3 2000-02-15 10.845 2.3837    1.37     1.37     1    1.37
+4 2000-02-19 15.518 2.7420    1.24     1.24     1    1.24
+5 2000-03-23 56.917 4.0416    0.52     0.52     1    0.52
+6 2000-06-05  1.812 0.5946    1.11     1.11     1    1.11
+  Julian Month Day DecYear MonthSeq   SinDY   CosDY
+1  54789     1   4    2000     1801 0.06005  0.9982
+2  54819     2  34    2000     1802 0.54392  0.8391
+3  54831     2  46    2000     1802 0.70407  0.7101
+4  54835     2  50    2000     1802 0.75113  0.6602
+5  54868     3  83    2000     1803 0.98809  0.1539
+6  54942     6 157    2000     1806 0.43940 -0.8983
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1351,7 +1351,7 @@ There are a few steps that are required in order to create a table in a Microsof
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2014-08-06 24325      ft3/s
+2 2014-08-07 24326      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day
