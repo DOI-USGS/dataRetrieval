@@ -17,9 +17,8 @@ Imports data from Water Quality Portal web service. This function gets the data 
 because it allows for other agencies rather than the USGS.
 }
 \examples{
-setInternet2(use=NA)
-options(timeout=120)
-pHData <- getGeneralWQPData(siteid="USGS-04024315",characteristicName="pH")
+nameToUse <- "pH"
+pHData <- getGeneralWQPData(siteid="USGS-04024315",characteristicName=nameToUse)
 }
 \keyword{WQP}
 \keyword{data}

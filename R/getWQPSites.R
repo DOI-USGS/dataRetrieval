@@ -9,13 +9,10 @@
 #' (subsequent qualifier/value columns could follow depending on requested parameter codes)
 #' @export
 #' @examples
-#' setInternet2(use=NA)
-#' options(timeout=120)
-#' \dontrun{sitesList <- getWQPSites(within=10,lat=43.06932,long=-89.4444,characteristicName="pH")
-#' siteListPH <- getWQPSites(characteristicName="pH")}
+#' siteListPH <- getWQPSites(characteristicName="pH", statecode="US:55")
 getWQPSites <- function(...){
   
-  matchReturn <- match.call()
+  matchReturn <- match.call(expand.dots = TRUE)
   
   options <- c("bBox","lat","long","within","countrycode","statecode","countycode","siteType","organization",
     "siteid","huc","sampleMedia","characteristicType","characteristicName","pCode","activityId",
@@ -23,7 +20,7 @@ getWQPSites <- function(...){
   
   if(!all(names(matchReturn[-1]) %in% options)) warning(matchReturn[!(names(matchReturn[-1]) %in% options)],"is not a valid query parameter to the Water Quality Portal")
   
-  values <- sapply(matchReturn[-1], function(x) URLencode(as.character(paste(x,collapse="",sep=""))))
+  values <- sapply(matchReturn[-1], function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   

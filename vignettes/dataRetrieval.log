@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.8.2)  3 AUG 2014 14:57
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.8.7)  13 AUG 2014 13:08
 entering extended mode
 **dataRetrieval.tex
-(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.tex
+(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -70,7 +70,7 @@ File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 130.
 )
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\framed\framed.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\framed\framed.sty
 Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
 \OuterFrameSep=\skip43
 \fb@frw=\dimen105
@@ -220,7 +220,7 @@ Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4688.
 \c@Hy@tempcnt=\count103
 
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\url\url.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\url\url.sty
 \Urlmuskip=\muskip11
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
@@ -257,7 +257,7 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip47
 )
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\natbib\natbib.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\natbib\natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip48
 \bibsep=\skip49
@@ -285,7 +285,7 @@ File: babel.def 2008/07/08 v3.8m Babel common definitions
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
 ))
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\preprint\authblk.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\preprint\authblk.sty
 Package: authblk 2001/02/27 1.3 (PWD)
 \affilsep=\skip50
 \@affilsep=\skip51
@@ -293,13 +293,13 @@ Package: authblk 2001/02/27 1.3 (PWD)
 \c@authors=\count113
 \c@affil=\count114
 )
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\subfig\subfig.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\subfig\subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
 
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption.sty
 Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
 
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption3.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption3.sty
 Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 57.
 \captionmargin=\dimen123
@@ -326,16 +326,13 @@ Package caption Info: hyperref package is loaded.
 \c@lotdepth=\count122
 \sf@top=\skip55
 \sf@bottom=\skip56
-)
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\placeins\placeins.sty
+) (C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\placeins\placeins.sty
 Package: placeins 2005/04/18  v 2.2
-)
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\mdwtools\footnote.sty
+) (C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\mdwtools\footnote.sty
 Package: footnote 1997/01/28 1.13 Save footnotes around boxes
 \fn@notes=\box28
 \fn@width=\dimen131
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\tabularx.sty"
+) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\tabularx.sty"
 Package: tabularx 1999/01/07 v2.07 `tabularx' package (DPC)
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\array.sty"
@@ -354,17 +351,16 @@ Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
 \TX@cols=\count123
 \TX@ftn=\toks21
 )
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\threeparttable\threepartta
-ble.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\threeparttable\threepar
+ttable.sty
 Package: threeparttable 2003/06/13  v 3.0
 \@tempboxb=\box29
 ) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ltxmisc\parskip.sty"
 Package: parskip 2001/04/09 non-zero parskip adjustments
-)
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.sty
+) (C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.sty
 Package: csquotes 2011/10/22 v5.1d context-sensitive quotations
 
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\etoolbox\etoolbox.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\etoolbox\etoolbox.sty
 Package: etoolbox 2011/01/03 v2.1 e-TeX tools for LaTeX
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\misc\etex.sty"
@@ -381,19 +377,18 @@ Package: etex 1998/03/26 v2.0 eTeX basic definition package (PEB)
 \csq@tshold=\count131
 \csq@ltx@everypar=\toks22
 
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.def
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.def
 File: csquotes.def 2011/10/22 v5.1d csquotes generic definitions
 )
 Package csquotes Info: Trying to load configuration file 'csquotes.cfg'...
 Package csquotes Info: ... configuration file loaded successfully.
 
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.cfg
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\csquotes\csquotes.cfg
 File: csquotes.cfg 
-))
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\setspace\setspace.sty
+)) (C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\setspace\setspace.st
+y
 Package: setspace 2011/12/19 v6.7a set line spacing
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\mathptmx.sty"
+) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\mathptmx.sty"
 Package: mathptmx 2005/04/12 PSNFSS-v9.2a Times w/ Math, improved (SPQR, WaS) 
 LaTeX Font Info:    Redeclaring symbol font `operators' on input line 28.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
@@ -438,7 +433,7 @@ Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\courier.sty"
 Package: courier 2005/04/12 PSNFSS-v9.2a (WaS) 
 )
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\titlesec.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\titlesec.sty
 Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
 \ttl@box=\box30
 \beforetitleunit=\skip59
@@ -450,11 +445,11 @@ Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
 \titlewidthlast=\dimen142
 \titlewidthfirst=\dimen143
 )
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\titletoc.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\titletoc.sty
 Package: titletoc 2011/12/15 v1.6 TOC entries
 \ttl@leftsep=\dimen144
 )
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\latex\upquote\upquote.sty
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\latex\upquote\upquote.sty
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
 
@@ -544,7 +539,7 @@ Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'american'.
 
-(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.aux)
+(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 174.
 LaTeX Font Info:    ... okay on input line 174.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 174.
@@ -573,7 +568,7 @@ LaTeX Font Info:    Try loading font information for OT1+ptm on input line 174.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
-(C:\Users\Laura\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
+(C:\Users\ldecicco\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count132
 \scratchdimen=\dimen145
@@ -601,8 +596,8 @@ LaTeX Info: Redefining \ref on input line 174.
 LaTeX Info: Redefining \pageref on input line 174.
 LaTeX Info: Redefining \nameref on input line 174.
 
-(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.out)
-(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.out)
+(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.out)
+(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.out)
 \@outlinefile=\write3
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
@@ -631,19 +626,19 @@ LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <17.28> not available
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
 (Font)              scaled to size 15.55188pt on input line 204.
 
-(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.toc
+(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.toc
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
 [1
 
-{C:/Users/Laura/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}])
+{C:/Users/ldecicco/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}])
 \tf@toc=\write4
 
-(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.lof)
+(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.lof)
 \tf@lof=\write5
 
-(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.lot
+(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.lot
 Overfull \hbox (1.53842pt too wide) in paragraph at lines 4--4
 []|\OT1/phv/b/n/10.95 Table|  | [][]\OT1/phv/m/n/10.95 Daily mean data avail-ab
 ile at the Chop-tank River near Greens-boro, MD. [Some columns 
@@ -790,7 +785,8 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[11 <C:/RCodes/dataRetrieval/vignettes/figure/getNWIStemperaturePlot.pdf>]
+[11 <D:/LADData/RCode/dataRetrieval/vignettes/figure/getNWIStemperaturePlot.pdf
+>]
 Package color Info: Redefining color shadecolor on input line 600.
 Package color Info: Redefining color shadecolor on input line 614.
 
@@ -820,10 +816,9 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[14 <C:/RCodes/dataRetrieval/vignettes/figure/getQWtemperaturePlot.pdf>]
+[14 <D:/LADData/RCode/dataRetrieval/vignettes/figure/getQWtemperaturePlot.pdf>]
 Package color Info: Redefining color shadecolor on input line 697.
 LaTeX Font Info:    Try loading font information for TS1+pcr on input line 699.
-
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ts1pcr.fd"
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
@@ -937,7 +932,7 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[26 <C:/RCodes/dataRetrieval/vignettes/figure/egretEx.pdf>]
+[26 <D:/LADData/RCode/dataRetrieval/vignettes/figure/egretEx.pdf>]
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
@@ -950,18 +945,12 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 [28]
 Package color Info: Redefining color shadecolor on input line 1248.
 Package color Info: Redefining color shadecolor on input line 1261.
-
-Overfull \hbox (51.24562pt too wide) in paragraph at lines 1272--1272
-[]  \OT1/pcr/m/n/10.95 Sample1 <- localSample[!duplicated(localSample[c("DecYea
-r","ConcHigh")]),][] 
- []
-
-<Rhelp.png, id=399, 433.62pt x 395.22656pt>
+ <Rhelp.png, id=399, 433.62pt x 395.22656pt>
 File: Rhelp.png Graphic file (type png)
  <use Rhelp.png>
-Package pdftex.def Info: Rhelp.png used on input line 1279.
+Package pdftex.def Info: Rhelp.png used on input line 1280.
 (pdftex.def)             Requested size: 433.61894pt x 395.22559pt.
-Package color Info: Redefining color shadecolor on input line 1286.
+Package color Info: Redefining color shadecolor on input line 1287.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
@@ -972,10 +961,10 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[30 <C:/RCodes/dataRetrieval/vignettes/Rhelp.png>]
-Package color Info: Redefining color shadecolor on input line 1301.
-Package color Info: Redefining color shadecolor on input line 1313.
-Package color Info: Redefining color shadecolor on input line 1328.
+[30 <D:/LADData/RCode/dataRetrieval/vignettes/Rhelp.png>]
+Package color Info: Redefining color shadecolor on input line 1302.
+Package color Info: Redefining color shadecolor on input line 1314.
+Package color Info: Redefining color shadecolor on input line 1329.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
@@ -983,9 +972,9 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 [31
 
 ]
-Package color Info: Redefining color shadecolor on input line 1365.
+Package color Info: Redefining color shadecolor on input line 1366.
 
-Overfull \hbox (11.82567pt too wide) in paragraph at lines 1382--1382
+Overfull \hbox (11.82567pt too wide) in paragraph at lines 1383--1383
 []\OT1/pcr/m/n/10.95 Suspended sediment concentration (SSC) 1980-10-01 1991-09-
 30 3651 mg/l[] 
  []
@@ -997,27 +986,27 @@ Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 [32] <table1.png, id=423, 554.07pt x 125.71968pt>
 File: table1.png Graphic file (type png)
  <use table1.png>
-Package pdftex.def Info: table1.png used on input line 1401.
+Package pdftex.def Info: table1.png used on input line 1402.
 (pdftex.def)             Requested size: 554.06865pt x 125.71936pt.
 
 Overfull \vbox (21.68121pt too high) has occurred while \output is active []
 
 
-[33 <C:/RCodes/dataRetrieval/vignettes/table1.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1426.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1426.
+[33 <D:/LADData/RCode/dataRetrieval/vignettes/table1.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1427.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1427.
 
-(C:\RCodes\dataRetrieval\vignettes\dataRetrieval.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1426.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1426.
+(D:\LADData\RCode\dataRetrieval\vignettes\dataRetrieval.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1427.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1427.
 
 Package rerunfilecheck Info: File `dataRetrieval.out' has not changed.
 (rerunfilecheck)             Checksum: 0A42302DA34F8DDBBBAD8A2EC505FAF3;1805.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1426.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1427.
  ) 
 Here is how much of TeX's memory you used:
  9909 strings out of 493921
- 147929 string characters out of 3144877
+ 148207 string characters out of 3144868
  248517 words of memory out of 3000000
  12916 multiletter control sequences out of 15000+200000
  45680 words of font info for 91 fonts, out of 3000000 for 9000
@@ -1033,7 +1022,7 @@ les (x86)/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files (x86)
 rw/helvetic/uhvr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times
 /utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pf
 b>
-Output written on dataRetrieval.pdf (33 pages, 335842 bytes).
+Output written on dataRetrieval.pdf (33 pages, 335831 bytes).
 PDF statistics:
  484 PDF objects out of 1000 (max. 8388607)
  84 named destinations out of 1000 (max. 500000)

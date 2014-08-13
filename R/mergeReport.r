@@ -18,12 +18,8 @@ mergeReport<-function(localDaily = Daily, localSample = Sample, interactive=TRUE
   if (interactive){
     dataOverview(localDaily, localSample)  
   }
-  julFirst<-localDaily$Julian[1]
-  sampleDate<-as.Date(localSample$Date)
-  sampleJulian<-as.numeric(julian(sampleDate,origin=as.Date("1850-01-01")))
-  sampleIndex <- sampleJulian-julFirst+1
-  Q <- localDaily$Q[sampleIndex]  
-  LogQ<-log(Q)
-  newSample<-data.frame(localSample,Q,LogQ)
+  
+  newSample <- merge(Daily[,c("Date","Q","LogQ")],Sample,by = "Date",all.y = TRUE)
+
   return(newSample)
 }

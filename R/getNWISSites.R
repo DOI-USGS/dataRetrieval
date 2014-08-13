@@ -13,7 +13,7 @@ getNWISSites <- function(...){
   
   matchReturn <- match.call()
 
-  values <- sapply(matchReturn[-1], function(x) URLencode(as.character(paste(x,collapse="",sep=""))))
+  values <- sapply(matchReturn[-1], function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
