@@ -17,10 +17,7 @@ Returns a list of sites from the Water Quality Portal web service. This function
 Arguments to the function should be based on \url{www.waterqualitydata.us/webservices_documentation.jsp}
 }
 \examples{
-setInternet2(use=NA)
-options(timeout=120)
-\dontrun{sitesList <- getWQPSites(within=10,lat=43.06932,long=-89.4444,characteristicName="pH")
-siteListPH <- getWQPSites(characteristicName="pH")}
+siteListPH <- getWQPSites(characteristicName="pH", statecode="US:55")
 }
 \keyword{WQP}
 \keyword{data}

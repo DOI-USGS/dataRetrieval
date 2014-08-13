@@ -15,7 +15,7 @@ DateFrame dataframe
 Creates various date columns for WRTDS study.
 }
 \examples{
-dateTime <- c('1984-01-01', '1985-01-02', '1986-01-03')
+dateTime <- c('1984-02-28 13:56', '1984-03-01', '1986-03-01')
 expandedDateDF <- populateDateColumns(dateTime)
 }
 

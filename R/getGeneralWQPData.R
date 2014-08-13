@@ -9,9 +9,8 @@
 #' (subsequent qualifier/value columns could follow depending on requested parameter codes)
 #' @export
 #' @examples
-#' setInternet2(use=NA)
-#' options(timeout=120)
-#' pHData <- getGeneralWQPData(siteid="USGS-04024315",characteristicName="pH")
+#' nameToUse <- "pH"
+#' pHData <- getGeneralWQPData(siteid="USGS-04024315",characteristicName=nameToUse)
 getGeneralWQPData <- function(...){
   
   matchReturn <- match.call()
@@ -22,7 +21,7 @@ getGeneralWQPData <- function(...){
   
   if(!all(names(matchReturn[-1]) %in% options)) warning(matchReturn[!(names(matchReturn[-1]) %in% options)],"is not a valid query parameter to the Water Quality Portal")
   
-  values <- sapply(matchReturn[-1], function(x) URLencode(as.character(paste(x,collapse="",sep=""))))
+  values <- sapply(matchReturn[-1], function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
