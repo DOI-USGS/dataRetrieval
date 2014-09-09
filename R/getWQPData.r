@@ -6,8 +6,8 @@
 #'
 #' @param siteNumber string site number.  If USGS, it should be in the form :'USGS-XXXXXXXXX...'
 #' @param characteristicName string
-#' @param StartDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param EndDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import WQP web service
 #' @return retval dataframe with first column dateTime, and at least one qualifier and value columns
@@ -20,12 +20,12 @@
 #' SC <- getWQPData('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' NWIS_Cl <- getWQPData('USGS-04024000','30234', '', '')
 #' MultipleQW <- getWQPData('USGS-04024000',c('30234','90095'), '', '')
-getWQPData <- function(siteNumber,characteristicName,StartDate,EndDate,interactive=TRUE){
+getWQPData <- function(siteNumber,characteristicName,startDate,endDate,interactive=TRUE){
   
   retval <- retrieveWQPqwData(siteNumber=siteNumber,
-                         ParameterCd=characteristicName,
-                         StartDate=StartDate,
-                         EndDate=EndDate,
+                         parameterCd=characteristicName,
+                         startDate=startDate,
+                         endDate=endDate,
                          interactive=interactive)
   #Check for pcode:
   if(all(nchar(characteristicName) == 5)){
