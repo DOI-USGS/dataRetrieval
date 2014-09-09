@@ -6,13 +6,13 @@
 \contentsline {subsubsection}{\numberline {2.1.2}getDataAvailability}{7}{subsubsection.2.1.2}
 \contentsline {subsection}{\numberline {2.2}Parameter Information}{8}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}Daily Values}{8}{subsection.2.3}
-\contentsline {subsection}{\numberline {2.4}Unit Values}{11}{subsection.2.4}
-\contentsline {subsection}{\numberline {2.5}Water Quality Values}{12}{subsection.2.5}
-\contentsline {subsection}{\numberline {2.6}STORET Water Quality Retrievals}{14}{subsection.2.6}
+\contentsline {subsection}{\numberline {2.4}Unit Values}{12}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}Water Quality Values}{13}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}STORET Water Quality Retrievals}{13}{subsection.2.6}
 \contentsline {subsection}{\numberline {2.7}URL Construction}{14}{subsection.2.7}
 \contentsline {section}{\numberline {3}Data Retrievals Structured For Use In The EGRET Package}{15}{section.3}
 \contentsline {subsection}{\numberline {3.1}INFO Data}{15}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Daily Data}{16}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.2}Daily Data}{15}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Sample Data}{17}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}Censored Values: Summation Explanation}{18}{subsection.3.4}
 \contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{20}{subsection.3.5}
@@ -24,5 +24,5 @@
 \contentsline {section}{\numberline {5}Getting Started in R}{28}{section.5}
 \contentsline {subsection}{\numberline {5.1}New to R?}{28}{subsection.5.1}
 \contentsline {subsection}{\numberline {5.2}R User: Installing dataRetrieval}{30}{subsection.5.2}
-\contentsline {section}{\numberline {6}Creating tables in Microsoft from R}{30}{section.6}
+\contentsline {section}{\numberline {6}Creating tables in Microsoft\textregistered \ software from R}{30}{section.6}
 \contentsfinish 
