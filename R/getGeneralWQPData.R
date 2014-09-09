@@ -10,7 +10,7 @@
 #' @export
 #' @examples
 #' nameToUse <- "pH"
-#' pHData <- getGeneralWQPData(siteid="USGS-04024315",characteristicName=nameToUse)
+#' pHData <- getGeneralWQPData(siteNumber="USGS-04024315",characteristicName=nameToUse)
 getGeneralWQPData <- function(...){
   
   matchReturn <- match.call()
