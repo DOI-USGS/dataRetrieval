@@ -5,9 +5,9 @@
 #' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
-#' @param ParameterCd vector of USGS 5-digit parameter code. Leaving this blank will return all of the measured values during the specified time period.
-#' @param StartDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param EndDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param parameterCd vector of USGS 5-digit parameter code. Leaving this blank will return all of the measured values during the specified time period.
+#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
 #' @return retval dataframe with first column dateTime, and at least one qualifier and value columns
@@ -20,9 +20,9 @@
 #' rawSampleAll <- retrieveWQPqwData('USGS-05114000','', '1985-01-01', '1985-03-31')
 #' rawSampleSelect <- retrieveWQPqwData('USGS-05114000',c('00915','00931'), '1985-01-01', '1985-04-30')
 #' rawStoret <- retrieveWQPqwData('WIDNR_WQX-10032762','Specific conductance', '', '')
-retrieveWQPqwData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
+retrieveWQPqwData <- function(siteNumber,parameterCd,startDate,endDate,interactive=TRUE){
 
-  url <- constructNWISURL(siteNumber,ParameterCd,StartDate,EndDate,"wqp",interactive=interactive)
+  url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"wqp",interactive=interactive)
 
   h <- basicHeaderGatherer()
   doc <- getURI(url, headerfunction = h$update)
