@@ -1,6 +1,6 @@
 dataRetrieval
 =============
-[![Build Status](https://travis-ci.org/ldecicco-USGS/dataRetrieval.png?branch=master)](https://travis-ci.org/USGS-R/dataRetrieval)
+
 R package source for data retrieval specifically for the EGRET R package:
 
 Please visit the EGRET wiki for more information:
