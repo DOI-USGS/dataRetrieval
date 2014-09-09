@@ -183,7 +183,7 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 The dataRetrieval package was created to simplify the process of loading hydrologic data into the R environment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends. See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the Weighted Regressions on Time, Discharge and Season (WRTDS) method as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
 
 
-The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrologic data that are available on the web. Users may also load data from other sources (text files, spreadsheets) using dataRetrieval.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into data frames within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRET package.  The functionality described in section \ref{sec:summary} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRET package.
+The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrologic data that are available on the Web. Users may also load data from other sources (text files, spreadsheets) using dataRetrieval.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into data frames within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRET package.  The functionality described in section \ref{sec:summary} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRET package.
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started.
 
@@ -415,7 +415,7 @@ startDate <- "2012-01-01"
 endDate <- "2012-05-01"
 
 temperatureAndFlow <- retrieveNWISdvData(siteNumber, parameterCd, 
-        startDate, endDate, StatCd=statCd)
+        startDate, endDate, statCd=statCd)
 
 @
 
@@ -537,7 +537,7 @@ There are
 \subsection{URL Construction}
 \label{sec:usgsURL}
 %------------------------------------------------------------
-There may be times when you might be interested in seeing the URL (web address) that was used to obtain the raw data. The \texttt{constructNWISURL} function returns the URL.  In addition to input variables that have been described, there is a new argument \texttt{"}service\texttt{"}. The service argument can be \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (NWIS water quality values), or \texttt{"}wqp\texttt{"} (general Water Quality Portal values).
+There may be times when you might be interested in seeing the URL (Web address) that was used to obtain the raw data. The \texttt{constructNWISURL} function returns the URL.  In addition to input variables that have been described, there is a new argument \texttt{"}service\texttt{"}. The service argument can be \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (NWIS water quality values), or \texttt{"}wqp\texttt{"} (general Water Quality Portal values).
  
 
 <<label=geturl, echo=TRUE, eval=FALSE>>=
@@ -557,7 +557,7 @@ url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'uv')
 \section{Data Retrievals Structured For Use In The EGRET Package}
 \label{sec:EGRETdfs}
 %------------------------------------------------------------ 
-Rather than using the raw data as retrieved by the web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
+Rather than using the raw data as retrieved by the Web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
 
 In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We will be retrieving essentially the same data that were retrieved in section \ref{sec:genRetrievals}, but in this case it will be structured into three EGRET-specific dataframes.  The daily discharge data will be placed in a dataframe called Daily.  The nitrate sample data will be placed in a dataframe called Sample.  The data about the site and the parameter will be placed in a dataframe called INFO.  Although these dataframes were designed to work with the EGRET R package, they can be very useful for a wide range of hydrology studies that don't use EGRET.
 
@@ -579,7 +579,7 @@ INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
 \subsection{Daily Data}
 \label{Dailysubsection}
 %------------------------------------------------------------
-The \texttt{getDVData} function retrieves the daily values (discharge in this case).  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in section \ref{sec:genRetrievals}, however \texttt{"}convert\texttt{"} is a new argument (that defaults to TRUE). The convert argument tells the program to convert the values from cubic feet per second (ft\textsuperscript{3}/s) to cubic meters per second (m\textsuperscript{3}/s) as shown in the example Daily data frame in Table \ref{tab:DailyDF1}. For EGRET applications with NWIS web retrieval, do not use this argument (the default is TRUE), EGRET assumes that discharge is always stored in units of cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
+The \texttt{getDVData} function retrieves the daily values (discharge in this case).  It requires the inputs siteNumber, parameterCd, startDate, endDate, interactive, and convert. Most of these arguments are described in section \ref{sec:genRetrievals}, however \texttt{"}convert\texttt{"} is a new argument (that defaults to TRUE). The convert argument tells the program to convert the values from cubic feet per second (ft\textsuperscript{3}/s) to cubic meters per second (m\textsuperscript{3}/s) as shown in the example Daily data frame in Table \ref{tab:DailyDF1}. For EGRET applications with NWIS Web retrieval, do not use this argument (the default is TRUE), EGRET assumes that discharge is always stored in units of cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
 
 <<firstExample>>=
 siteNumber <- "01491000"
@@ -622,7 +622,7 @@ Notice that the \enquote{Day of the year} column can span from 1 to 366. The 366
 \subsection{Sample Data}
 \label{Samplesubsection}
 %------------------------------------------------------------
-The \texttt{getSampleData} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as \texttt{retrieveWQPqwData} or \texttt{getWQPData} as described in the previous section.
+The \texttt{getSampleData} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, parameterCd, startDate, endDate, interactive. These are the same inputs as \texttt{retrieveWQPqwData} or \texttt{getWQPData} as described in the previous section.
 
 <<secondExample>>=
 parameterCd <- "00618"
@@ -630,7 +630,7 @@ Sample <-getSampleData(siteNumber,parameterCd,
       startDate, endDate)
 @
 
-The \texttt{getSTORETSampleData} function retrieves STORET sample data (or other non-NWIS data) from the water quality portal. The arguments for this function are siteNumber, characteristicName, StartDate, EndDate, interactive. Table \ref{tab:SampleDataframe} lists details of the Sample data frame. 
+The \texttt{getSTORETSampleData} function retrieves STORET sample data (or other non-NWIS data) from the water quality portal. The arguments for this function are siteNumber, characteristicName, startDate, endDate, interactive. Table \ref{tab:SampleDataframe} lists details of the Sample data frame. 
 
 <<STORET,echo=TRUE,eval=FALSE>>=
 site <- 'WIDNR_WQX-10032762'
@@ -744,7 +744,7 @@ Section \ref{sec:userFiles} discusses inputting user-generated files. The functi
 \subsection{User-Generated Data Files}
 \label{sec:userFiles}
 %------------------------------------------------------------ 
-In addition to retrieving data from the USGS web services, the dataRetrieval package also includes functions to generate the Daily and Sample data frame from local files.
+In addition to retrieving data from the USGS Web services, the dataRetrieval package also includes functions to generate the Daily and Sample data frame from local files.
 
 %------------------------------------------------------------ 
 \subsubsection{getDailyDataFromFile}

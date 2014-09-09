@@ -213,7 +213,7 @@
 The dataRetrieval package was created to simplify the process of loading hydrologic data into the R environment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends. See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the Weighted Regressions on Time, Discharge and Season (WRTDS) method as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
 
 
-The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrologic data that are available on the web. Users may also load data from other sources (text files, spreadsheets) using dataRetrieval.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into data frames within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRET package.  The functionality described in section \ref{sec:summary} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRET package.
+The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrologic data that are available on the Web. Users may also load data from other sources (text files, spreadsheets) using dataRetrieval.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into data frames within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRET package.  The functionality described in section \ref{sec:summary} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRET package.
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started.
 
@@ -267,7 +267,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Wed Aug 13 13:07:49 2014
+% Tue Sep 09 09:12:59 2014
 \begin{table}[ht]
 \caption{Common USGS Parameter Codes} 
 \label{tab:params}
@@ -330,7 +330,7 @@ For unit values data (sensor data measured at regular time intervals such as 15 
 Some common codes are shown in Table \ref{tab:stat}.
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Wed Aug 13 13:07:50 2014
+% Tue Sep 09 09:13:00 2014
 \begin{table}[ht]
 \caption{Commonly used USGS Stat Codes} 
 \label{tab:stat}
@@ -411,7 +411,7 @@ To discover what data is available for a particular USGS site, including measure
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Wed Aug 13 13:07:50 2014
+% Tue Sep 09 09:13:00 2014
 \begin{table}[ht]
 \caption{Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]} 
 \label{tab:gda}
@@ -423,7 +423,7 @@ To discover what data is available for a particular USGS site, including measure
  & Temperature, water & 1988-10-01 & 2012-05-09 & 894 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-08-12 & 24331 & ft$^3$/s \\ 
+  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-09-07 & 24357 & ft$^3$/s \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
@@ -516,9 +516,11 @@ Another example that doesn't use the defaults would be a request for mean and ma
 \hlstd{endDate} \hlkwb{<-} \hlstr{"2012-05-01"}
 
 \hlstd{temperatureAndFlow} \hlkwb{<-} \hlkwd{retrieveNWISdvData}\hlstd{(siteNumber, parameterCd,}
-        \hlstd{startDate, endDate,} \hlkwc{StatCd}\hlstd{=statCd)}
+        \hlstd{startDate, endDate,} \hlkwc{statCd}\hlstd{=statCd)}
 \end{alltt}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error: unused argument (statCd = statCd)}}\end{kframe}
 \end{knitrout}
 
 Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}.
@@ -530,29 +532,19 @@ The column names can be automatically adjusted based on the parameter and statis
 \begin{alltt}
 \hlkwd{names}\hlstd{(temperatureAndFlow)}
 \end{alltt}
-\begin{verbatim}
-[1] "agency_cd"          "site_no"           
-[3] "datetime"           "X01_00010_00001"   
-[5] "X01_00010_00001_cd" "X01_00010_00003"   
-[7] "X01_00010_00003_cd" "X02_00060_00003"   
-[9] "X02_00060_00003_cd"
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error: object 'temperatureAndFlow' not found}}\begin{alltt}
 \hlstd{temperatureAndFlow} \hlkwb{<-} \hlkwd{renameColumns}\hlstd{(temperatureAndFlow)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error: object 'temperatureAndFlow' not found}}\begin{alltt}
 \hlkwd{names}\hlstd{(temperatureAndFlow)}
 \end{alltt}
-\begin{verbatim}
-[1] "agency_cd"                                  
-[2] "site_no"                                    
-[3] "datetime"                                   
-[4] "Temperature_water_degrees_Celsius_Max_01"   
-[5] "Temperature_water_degrees_Celsius_Max_01_cd"
-[6] "Temperature_water_degrees_Celsius_01"       
-[7] "Temperature_water_degrees_Celsius_01_cd"    
-[8] "Discharge_cubic_feet_per_second"            
-[9] "Discharge_cubic_feet_per_second_cd"         
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error: object 'temperatureAndFlow' not found}}\end{kframe}
 \end{knitrout}
 
 An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
@@ -566,23 +558,44 @@ An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
   \hlstd{datetime, Temperature_water_degrees_Celsius_Max_01,}
   \hlkwc{xlab}\hlstd{=}\hlstr{"Date"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"Max Temperature [C]"}
   \hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error: object 'temperatureAndFlow' not found}}\begin{alltt}
 \hlkwd{par}\hlstd{(}\hlkwc{new}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{Warning: calling par(new=TRUE) with no plot}}\begin{alltt}
 \hlkwd{with}\hlstd{(temperatureAndFlow,} \hlkwd{plot}\hlstd{(}
   \hlstd{datetime, Discharge_cubic_feet_per_second,}
   \hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{,}\hlkwc{type}\hlstd{=}\hlstr{"l"}\hlstd{,}\hlkwc{xaxt}\hlstd{=}\hlstr{"n"}\hlstd{,}\hlkwc{yaxt}\hlstd{=}\hlstr{"n"}\hlstd{,}\hlkwc{xlab}\hlstd{=}\hlstr{""}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{""}\hlstd{,}\hlkwc{axes}\hlstd{=}\hlnum{FALSE}
   \hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error: object 'temperatureAndFlow' not found}}\begin{alltt}
 \hlkwd{axis}\hlstd{(}\hlnum{4}\hlstd{,}\hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{,}\hlkwc{col.axis}\hlstd{=}\hlstr{"red"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error: plot.new has not been called yet}}\begin{alltt}
 \hlkwd{mtext}\hlstd{(}\hlstr{"Mean Discharge [ft3/s]"}\hlstd{,}\hlkwc{side}\hlstd{=}\hlnum{4}\hlstd{,}\hlkwc{line}\hlstd{=}\hlnum{3}\hlstd{,}\hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error: plot.new has not been called yet}}\begin{alltt}
 \hlkwd{title}\hlstd{(}\hlkwd{paste}\hlstd{(ChoptankInfo}\hlopt{$}\hlstd{station.nm,}\hlstr{"2012"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{" "}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error: plot.new has not been called yet}}\begin{alltt}
 \hlkwd{legend}\hlstd{(}\hlstr{"topleft"}\hlstd{,} \hlkwd{c}\hlstd{(}\hlstr{"Max Temperature"}\hlstd{,} \hlstr{"Mean Discharge"}\hlstd{),}
        \hlkwc{col}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"black"}\hlstd{,}\hlstr{"red"}\hlstd{),}\hlkwc{lty}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{NA}\hlstd{,}\hlnum{1}\hlstd{),}\hlkwc{pch}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{NA}\hlstd{))}
 \end{alltt}
-\end{kframe}\begin{figure}[]
-
-\includegraphics[width=1\linewidth,height=1\linewidth]{figure/getNWIStemperaturePlot} \caption[Temperature and discharge plot of Choptank River in 2012]{Temperature and discharge plot of Choptank River in 2012.\label{fig:getNWIStemperaturePlot}}
-\end{figure}
 
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error: plot.new has not been called yet}}\end{kframe}
 \end{knitrout}
 
 
@@ -719,7 +732,7 @@ There are
 \subsection{URL Construction}
 \label{sec:usgsURL}
 %------------------------------------------------------------
-There may be times when you might be interested in seeing the URL (web address) that was used to obtain the raw data. The \texttt{constructNWISURL} function returns the URL.  In addition to input variables that have been described, there is a new argument \texttt{"}service\texttt{"}. The service argument can be \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (NWIS water quality values), or \texttt{"}wqp\texttt{"} (general Water Quality Portal values).
+There may be times when you might be interested in seeing the URL (Web address) that was used to obtain the raw data. The \texttt{constructNWISURL} function returns the URL.  In addition to input variables that have been described, there is a new argument \texttt{"}service\texttt{"}. The service argument can be \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (NWIS water quality values), or \texttt{"}wqp\texttt{"} (general Water Quality Portal values).
  
 
 \begin{knitrout}
@@ -743,7 +756,7 @@ There may be times when you might be interested in seeing the URL (web address) 
 \section{Data Retrievals Structured For Use In The EGRET Package}
 \label{sec:EGRETdfs}
 %------------------------------------------------------------ 
-Rather than using the raw data as retrieved by the web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
+Rather than using the raw data as retrieved by the Web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
 
 In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We will be retrieving essentially the same data that were retrieved in section \ref{sec:genRetrievals}, but in this case it will be structured into three EGRET-specific dataframes.  The daily discharge data will be placed in a dataframe called Daily.  The nitrate sample data will be placed in a dataframe called Sample.  The data about the site and the parameter will be placed in a dataframe called INFO.  Although these dataframes were designed to work with the EGRET R package, they can be very useful for a wide range of hydrology studies that don't use EGRET.
 
@@ -769,7 +782,7 @@ The \texttt{getMetaData} function obtains metadata, or data about the streamgage
 \subsection{Daily Data}
 \label{Dailysubsection}
 %------------------------------------------------------------
-The \texttt{getDVData} function retrieves the daily values (discharge in this case).  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in section \ref{sec:genRetrievals}, however \texttt{"}convert\texttt{"} is a new argument (that defaults to TRUE). The convert argument tells the program to convert the values from cubic feet per second (ft\textsuperscript{3}/s) to cubic meters per second (m\textsuperscript{3}/s) as shown in the example Daily data frame in Table \ref{tab:DailyDF1}. For EGRET applications with NWIS web retrieval, do not use this argument (the default is TRUE), EGRET assumes that discharge is always stored in units of cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
+The \texttt{getDVData} function retrieves the daily values (discharge in this case).  It requires the inputs siteNumber, parameterCd, startDate, endDate, interactive, and convert. Most of these arguments are described in section \ref{sec:genRetrievals}, however \texttt{"}convert\texttt{"} is a new argument (that defaults to TRUE). The convert argument tells the program to convert the values from cubic feet per second (ft\textsuperscript{3}/s) to cubic meters per second (m\textsuperscript{3}/s) as shown in the example Daily data frame in Table \ref{tab:DailyDF1}. For EGRET applications with NWIS Web retrieval, do not use this argument (the default is TRUE), EGRET assumes that discharge is always stored in units of cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -789,7 +802,7 @@ There are 4750 data points, and 4750 days.
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Wed Aug 13 13:08:05 2014
+% Tue Sep 09 09:13:21 2014
 \begin{table}[ht]
 \caption{Daily dataframe} 
 \label{tab:DailyDF1}
@@ -827,7 +840,7 @@ Notice that the \enquote{Day of the year} column can span from 1 to 366. The 366
 \subsection{Sample Data}
 \label{Samplesubsection}
 %------------------------------------------------------------
-The \texttt{getSampleData} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as \texttt{retrieveWQPqwData} or \texttt{getWQPData} as described in the previous section.
+The \texttt{getSampleData} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, parameterCd, startDate, endDate, interactive. These are the same inputs as \texttt{retrieveWQPqwData} or \texttt{getWQPData} as described in the previous section.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -839,7 +852,7 @@ The \texttt{getSampleData} function retrieves USGS sample data from NWIS. The ar
 \end{kframe}
 \end{knitrout}
 
-The \texttt{getSTORETSampleData} function retrieves STORET sample data (or other non-NWIS data) from the water quality portal. The arguments for this function are siteNumber, characteristicName, StartDate, EndDate, interactive. Table \ref{tab:SampleDataframe} lists details of the Sample data frame. 
+The \texttt{getSTORETSampleData} function retrieves STORET sample data (or other non-NWIS data) from the water quality portal. The arguments for this function are siteNumber, characteristicName, startDate, endDate, interactive. Table \ref{tab:SampleDataframe} lists details of the Sample data frame. 
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -910,7 +923,7 @@ To illustrate how the dataRetrieval package handles a more complex censoring pro
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Wed Aug 13 13:08:06 2014
+% Tue Sep 09 09:13:22 2014
 \begin{table}[ht]
 \caption{Example data} 
 \label{tab:exampleComplexQW}
@@ -973,7 +986,7 @@ Section \ref{sec:userFiles} discusses inputting user-generated files. The functi
 \subsection{User-Generated Data Files}
 \label{sec:userFiles}
 %------------------------------------------------------------ 
-In addition to retrieving data from the USGS web services, the dataRetrieval package also includes functions to generate the Daily and Sample data frame from local files.
+In addition to retrieving data from the USGS Web services, the dataRetrieval package also includes functions to generate the Daily and Sample data frame from local files.
 
 %------------------------------------------------------------ 
 \subsubsection{getDailyDataFromFile}
@@ -1351,7 +1364,7 @@ There are a few steps that are required in order to create a table in a Microsof
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2014-08-12 24331      ft3/s
+2 2014-09-07 24357      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day
