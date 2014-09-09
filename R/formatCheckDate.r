@@ -10,13 +10,13 @@
 #' @export
 #' @examples
 #' Date <- '1985-01-01'
-#' dateString <- 'StartDate'
+#' dateString <- 'startDate'
 #' formatCheckDate(Date, dateString, interactive = FALSE)
 formatCheckDate <- function(Date, dateString,interactive=TRUE){
   if(nzchar(Date)){
     if (!dateFormatCheck(Date)){
       if (interactive){
-        cat("Date must be entered in the form YYYY-MM-DD (no quotes), you entered: ", Date, "as the StartDate.\n")
+        cat("Date must be entered in the form YYYY-MM-DD (no quotes), you entered: ", Date, "as the startDate.\n")
         cat("Please re-enter ", dateString, ":\n")
         Date <- readline()
       } else {
