@@ -6,8 +6,8 @@
 #'
 #' @param siteNumber string site number.  If USGS, it should be in the form :'USGS-XXXXXXXXX...'
 #' @param characteristicName string
-#' @param StartDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param EndDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS WRTDS
 #' @export
@@ -17,8 +17,8 @@
 #' # These examples require an internet connection to run
 #' Sample_01075 <- getSTORETSampleData('USGS-01594440','Chloride', '', '')
 #' Sample_All <- getSTORETSampleData('WIDNR_WQX-10032762','Specific conductance', '', '')
-getSTORETSampleData <- function(siteNumber,characteristicName,StartDate,EndDate,interactive=TRUE){
-  data <- getWQPData(siteNumber,characteristicName,StartDate,EndDate,interactive=interactive)
+getSTORETSampleData <- function(siteNumber,characteristicName,startDate,endDate,interactive=TRUE){
+  data <- getWQPData(siteNumber,characteristicName,startDate,endDate,interactive=interactive)
   compressedData <- compressData(data, interactive=interactive)
   Sample <- populateSampleColumns(compressedData)
   return(Sample)

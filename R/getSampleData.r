@@ -7,9 +7,9 @@
 #' section 3.4 of the vignette for more details.
 #'
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
-#' @param ParameterCd string USGS parameter code.  This is usually an 5 digit number.
-#' @param StartDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param EndDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param parameterCd string USGS parameter code.  This is usually an 5 digit number.
+#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS WRTDS
 #' @export
@@ -20,8 +20,8 @@
 #' Sample_01075 <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31')
 #' Sample_All <- getSampleData('05114000','00915;00931', '1985-01-01', '1985-03-31')
 #' Sample_Select <- getSampleData('05114000','00915;00931', '', '')
-getSampleData <- function(siteNumber,ParameterCd,StartDate,EndDate,interactive=TRUE){
-  rawSample <- retrieveNWISqwData(siteNumber,ParameterCd,StartDate,EndDate)
+getSampleData <- function(siteNumber,parameterCd,startDate,endDate,interactive=TRUE){
+  rawSample <- retrieveNWISqwData(siteNumber,parameterCd,startDate,endDate)
   #rawSample$dateTime <- strptime(rawSample$dateTime,"%Y-%m-%d %H:%M:%S")
   rawSample$dateTime <- as.Date(rawSample$dateTime)
   rawSample$site <- NULL

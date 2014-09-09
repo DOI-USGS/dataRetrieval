@@ -2,20 +2,20 @@
 #'
 #' Checks that the parameter code is 5 digits. If it is less, it will pad the string with zeros. If more, ask the user to re-enter.
 #'
-#' @param ParameterCd string to check
+#' @param parameterCd string to check
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords WRTDS flow
-#' @return ParameterCd string
+#' @return parameterCd string
 #' @export
 #' @examples
 #' pCode <- '01234'
 #' formatCheckParameterCd(pCode)
-formatCheckParameterCd <- function(ParameterCd, interactive=TRUE){     #checks for a 5 digit number
+formatCheckParameterCd <- function(parameterCd, interactive=TRUE){     #checks for a 5 digit number
   
-  pCodeReturn <- rep(NA,length(ParameterCd))
+  pCodeReturn <- rep(NA,length(parameterCd))
   index <- 1
   
-  for (i in ParameterCd){
+  for (i in parameterCd){
   
     if (nchar(i) < 5){      
       if (interactive){
@@ -24,9 +24,9 @@ formatCheckParameterCd <- function(ParameterCd, interactive=TRUE){     #checks f
         i <- padVariable(i,5)
         message("The following parameter code will be used instead:",i,"\n")
         message("If you would like to change the parameter code, enter it here (no quotes), otherwise hit return:\n")
-        tempParameterCd <- readline()
-        if (nzchar(tempParameterCd)){
-          i <- tempParameterCd
+        tempparameterCd <- readline()
+        if (nzchar(tempparameterCd)){
+          i <- tempparameterCd
         }
       } else {
         tempText <- padVariable(i,5)

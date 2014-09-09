@@ -183,15 +183,15 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 The dataRetrieval package was created to simplify the process of loading hydrologic data into the R environment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends. See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the Weighted Regressions on Time, Discharge and Season (WRTDS) method as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
 
 
-The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrologic data that are available on the web. Users may also load data from other sources (text files, spreadsheets) using dataRetrieval.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into data frames within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRET package.  The functionality described in section \ref{sec:summary} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRET package.
+The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrologic data that are available on the Web. Users may also load data from other sources (text files, spreadsheets) using dataRetrieval.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into dataframes within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRET package.  The functionality described in section \ref{sec:summary} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRET package.
 
-For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started.
+For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
 A quick workflow for major dataRetrieval functions:
 
 <<workflow, echo=TRUE,eval=FALSE>>=
 library(dataRetrieval)
-# Site ID for Choptank River near Greensboro, MD
+# Choptank River near Greensboro, MD
 siteNumber <- "01491000" 
 ChoptankInfo <- getSiteFileData(siteNumber)
 parameterCd <- "00060"
@@ -264,7 +264,7 @@ subset(parameterCdFile,parameter_cd %in% c("00060","00010","00400"))
 @
 
 
-For unit values data (sensor data measured at regular time intervals such as 15 minutes or hourly), knowing the parameter code and site ID is enough to make a request for data.  For most variables that are measured on a continuous basis, the USGS also stores the historical data as daily values.  These daily values are statistical summaries of the continuous data, e.g. maximum, minimum, mean, or median. The different statistics are specified by a 5-digit statistics code.  A complete list of statistic codes can be found here:
+For unit values data (sensor data measured at regular time intervals such as 15 minutes or hourly), knowing the parameter code and siteNumber is enough to make a request for data.  For most variables that are measured on a continuous basis, the USGS also stores the historical data as daily values.  These daily values are statistical summaries of the continuous data, e.g. maximum, minimum, mean, or median. The different statistics are specified by a 5-digit statistics code.  A complete list of statistic codes can be found here:
 
 \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 
@@ -287,7 +287,7 @@ print(xtable(data.df,label="tab:stat",
 
 @
 
-Examples for using these site ID's, parameter codes, and stat codes will be presented in subsequent sections.
+Examples for using these siteNumber's, parameter codes, and stat codes will be presented in subsequent sections.
 
 \FloatBarrier
 
@@ -305,7 +305,7 @@ Use the \texttt{getSiteFileData} function to obtain all of the information avail
 
 <<getSite, echo=TRUE>>=
 
-# Site ID for Choptank River near Greensboro, MD
+# Choptank River near Greensboro, MD
 siteNumber <- "01491000" 
 ChoptankInfo <- getSiteFileData(siteNumber)
 @
@@ -359,7 +359,7 @@ print(xtable(tableData,label="tab:gda",
 
 @
 
-See Section \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft Excel or Word to display a data availability table similar to Table \ref{tab:gda}.
+See Section \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft\textregistered\ software Excel or Word to display a data availability table similar to Table \ref{tab:gda}. Excel, Microsoft, PowerPoint, Windows, and Word are registered trademarks of Microsoft Corporation in the United States and other countries.
 
 \FloatBarrier
 
@@ -381,7 +381,7 @@ A specific example piece of information, in this case parameter name, can be obt
 <<siteNames, echo=TRUE>>=
 parameterINFO$parameter_nm
 @
-Parameter information is obtained from \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+Parameter information can obtained from \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes}
 \FloatBarrier
 %------------------------------------------------------------
 \subsection{Daily Values}
@@ -404,7 +404,7 @@ names(discharge)
 @
 
 The column \texttt{"}datetime\texttt{"} in the returned dataframe is automatically imported as a variable of class \texttt{"}Date\texttt{"} in R. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS remark codes are often \texttt{"}A\texttt{"} (approved for publication) or \texttt{"}P\texttt{"} (provisional data subject to revision). A more complete list of remark codes can be found here:
-\url{http://waterdata.usgs.gov/usa/nwis/help?codes_help}
+\url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes}
 
 Another example that doesn't use the defaults would be a request for mean and maximum daily temperature and discharge in early 2012:
 <<label=getNWIStemperature, echo=TRUE>>=
@@ -415,7 +415,7 @@ startDate <- "2012-01-01"
 endDate <- "2012-05-01"
 
 temperatureAndFlow <- retrieveNWISdvData(siteNumber, parameterCd, 
-        startDate, endDate, StatCd=statCd)
+        startDate, endDate, statCd=statCd)
 
 @
 
@@ -452,7 +452,7 @@ legend("topleft", c("Max Temperature", "Mean Discharge"),
 @
 
 
-There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as \enquote{Ice}.  Any value that cannot be converted to a number will be reported as NA in this package (not including remark code columns).
+There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package (not including remark code columns).
 
 \FloatBarrier
 
@@ -460,7 +460,7 @@ There are occasions where NWIS values are not reported as numbers, instead there
 \subsection{Unit Values}
 \label{sec:usgsRT}
 %------------------------------------------------------------
-Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values}. Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{retrieveNWISunitData}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
+Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values.} Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{retrieveNWISunitData}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
 
 <<label=getNWISUnit, echo=TRUE>>=
 
@@ -477,7 +477,7 @@ The retrieval produces the following dataframe:
 head(dischargeToday)
 @
 
-Note that time now becomes important, so the variable datetime is a POSIXct, and the time zone is included in a separate column. Data is retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice}.  Any value that cannot be converted to a number will be reported as NA in this package.
+Note that time now becomes important, so the variable datetime is a POSIXct, and the time zone is included in a separate column. Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package.
 
 \newpage
 
@@ -495,8 +495,8 @@ To get USGS water quality data from water samples collected at the streamgage or
  
 # Dissolved Nitrate parameter codes:
 parameterCd <- c("00618","71851")
-startDate <- "1979-10-11"
-endDate <- "2012-12-18"
+startDate <- "1985-10-01"
+endDate <- "2012-09-30"
 
 dissolvedNitrate <- retrieveNWISqwData(siteNumber, parameterCd, 
       startDate, endDate)
@@ -521,7 +521,7 @@ title(ChoptankInfo$station.nm)
 \subsection{STORET Water Quality Retrievals}
 \label{sec:usgsSTORET}
 %------------------------------------------------------------
-There are additional water quality data sets available from the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET (data from EPA) or NWIS database.  Since STORET does not use USGS parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{getWQPData} function can retrieve either STORET or NWIS, but requires a characteristic name rather than parameter code. The Water Quality Data Portal includes data discovery tools, and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
+There are additional water quality data sets available from the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET (data from EPA) or NWIS database.  Because STORET does not use USGS parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{getWQPData} function can retrieve either STORET or NWIS, but requires a characteristic name rather than parameter code. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
 
 
 <<label=getQWData, echo=TRUE>>=
@@ -537,7 +537,7 @@ There are
 \subsection{URL Construction}
 \label{sec:usgsURL}
 %------------------------------------------------------------
-There may be times when you might be interested in seeing the URL (web address) that was used to obtain the raw data. The \texttt{constructNWISURL} function returns the URL.  In addition to input variables that have been described, there is a new argument \texttt{"}service\texttt{"}. The service argument can be \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (NWIS water quality values), or \texttt{"}wqp\texttt{"} (general Water Quality Portal values).
+There may be times when you might be interested in seeing the URL (Web address) that was used to obtain the raw data. The \texttt{constructNWISURL} function returns the URL.  In addition to input variables that have been described, there is a new argument \texttt{"}service\texttt{"}. The service argument can be \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (NWIS water quality values), or \texttt{"}wqp\texttt{"} (general Water Quality Portal values).
  
 
 <<label=geturl, echo=TRUE, eval=FALSE>>=
@@ -557,9 +557,9 @@ url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'uv')
 \section{Data Retrievals Structured For Use In The EGRET Package}
 \label{sec:EGRETdfs}
 %------------------------------------------------------------ 
-Rather than using the raw data as retrieved by the web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
+Rather than using the raw data as retrieved by the Web, the dataRetrieval package also includes functions that return the data in a structure that has been designed to work with the EGRET R package (\url{https://github.com/USGS-R/EGRET/wiki}). In general, these dataframes may be much more 'R-friendly' than the raw data, and will contain additional date information that allows for efficient data analysis.
 
-In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We will be retrieving essentially the same data that were retrieved in section \ref{sec:genRetrievals}, but in this case it will be structured into three EGRET-specific dataframes.  The daily discharge data will be placed in a dataframe called Daily.  The nitrate sample data will be placed in a dataframe called Sample.  The data about the site and the parameter will be placed in a dataframe called INFO.  Although these dataframes were designed to work with the EGRET R package, they can be very useful for a wide range of hydrology studies that don't use EGRET.
+In this section, we use 3 dataRetrieval functions to get sufficient data to perform an EGRET analysis.  We will continue analyzing the Choptank River. We retrieve essentially the same data that were retrieved in section \ref{sec:genRetrievals}, but in this case the data are structured into three EGRET-specific dataframes.  The daily discharge data are placed in a dataframe called Daily.  The nitrate sample data are placed in a dataframe called Sample.  The data about the site and the parameter are placed in a dataframe called INFO.  Although these dataframes were designed to work with the EGRET R package, they can be very useful for a wide range of hydrology studies that don't use EGRET.
 
 %------------------------------------------------------------
 \subsection{INFO Data}
@@ -579,7 +579,7 @@ INFO <-getMetaData(siteNumber,parameterCd, interactive=FALSE)
 \subsection{Daily Data}
 \label{Dailysubsection}
 %------------------------------------------------------------
-The \texttt{getDVData} function retrieves the daily values (discharge in this case).  It requires the inputs siteNumber, ParameterCd, StartDate, EndDate, interactive, and convert. Most of these arguments are described in section \ref{sec:genRetrievals}, however \texttt{"}convert\texttt{"} is a new argument (that defaults to TRUE). The convert argument tells the program to convert the values from cubic feet per second (ft\textsuperscript{3}/s) to cubic meters per second (m\textsuperscript{3}/s) as shown in the example Daily data frame in Table \ref{tab:DailyDF1}. For EGRET applications with NWIS web retrieval, do not use this argument (the default is TRUE), EGRET assumes that discharge is always stored in units of cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
+The \texttt{getDVData} function retrieves the daily values (discharge in this case).  It requires the inputs siteNumber, parameterCd, startDate, endDate, interactive, and convert. Most of these arguments are described in section \ref{sec:genRetrievals}, however \texttt{"}convert\texttt{"} is a new argument (that defaults to TRUE). The convert argument tells the program to convert the values from cubic feet per second (ft\textsuperscript{3}/s) to cubic meters per second (m\textsuperscript{3}/s) as shown in the example Daily data frame in Table \ref{tab:DailyDF1}. For EGRET applications with NWIS Web retrieval, do not use this argument (the default is TRUE), EGRET assumes that discharge is always stored in units of cubic meters per second. If you don't want this conversion and are not using EGRET, set convert=FALSE in the function call. 
 
 <<firstExample>>=
 siteNumber <- "01491000"
@@ -594,7 +594,7 @@ Daily <- getDVData(siteNumber, "00060", startDate, endDate)
 <<colNamesDaily, echo=FALSE,results='asis'>>=
 ColumnName <- c("Date", "Q", "Julian","Month","Day","DecYear","MonthSeq","Qualifier","i","LogQ","Q7","Q30")
 Type <- c("Date", "number", "number","integer","integer","number","integer","string","integer","number","number","number")
-Description <- c("Date", "Discharge in m3/s", "Number of days since January 1, 1850", "Month of the year [1-12]", "Day of the year [1-366]", "Decimal year", "Number of months since January 1, 1850", "Qualifing code", "Index of days, starting with 1", "Natural logarithm of Q", "7 day running average of Q", "30 day running average of Q")
+Description <- c("Date", "Discharge in m$^3$/s", "Number of days since January 1, 1850", "Month of the year [1-12]", "Day of the year [1-366]", "Decimal year", "Number of months since January 1, 1850", "Qualifying code", "Index of days, starting with 1", "Natural logarithm of Q", "7 day running average of Q", "30 day running average of Q")
 Units <- c("date", "m$^3$/s","days", "months","days","years","months", "character","days","numeric","m$^3$/s","m$^3$/s")
 
 DF <- data.frame(ColumnName,Type,Description,Units)
@@ -622,7 +622,7 @@ Notice that the \enquote{Day of the year} column can span from 1 to 366. The 366
 \subsection{Sample Data}
 \label{Samplesubsection}
 %------------------------------------------------------------
-The \texttt{getSampleData} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, ParameterCd, StartDate, EndDate, interactive. These are the same inputs as \texttt{retrieveWQPqwData} or \texttt{getWQPData} as described in the previous section.
+The \texttt{getSampleData} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, parameterCd, startDate, endDate, interactive. These are the same inputs as \texttt{retrieveWQPqwData} or \texttt{getWQPData} as described in the previous section.
 
 <<secondExample>>=
 parameterCd <- "00618"
@@ -630,7 +630,7 @@ Sample <-getSampleData(siteNumber,parameterCd,
       startDate, endDate)
 @
 
-The \texttt{getSTORETSampleData} function retrieves STORET sample data (or other non-NWIS data) from the water quality portal. The arguments for this function are siteNumber, characteristicName, StartDate, EndDate, interactive. Table \ref{tab:SampleDataframe} lists details of the Sample data frame. 
+The \texttt{getSTORETSampleData} function retrieves STORET sample data (or other non-NWIS data) from the water quality portal. The arguments for this function are siteNumber, characteristicName, startDate, endDate, interactive. Table \ref{tab:SampleDataframe} lists details of the Sample data frame. 
 
 <<STORET,echo=TRUE,eval=FALSE>>=
 site <- 'WIDNR_WQX-10032762'
@@ -681,7 +681,7 @@ Sample <-getSTORETSampleData(site,characteristicName,
 
 Notice that the \enquote{Day of the year} column can span from 1 to 366. The 366 accounts for leap years. Every day has a consistent day of the year. This means, February 28\textsuperscript{th} is always the 59\textsuperscript{th} day of the year, Feb. 29\textsuperscript{th} is always the 60\textsuperscript{th} day of the year, and March 1\textsuperscript{st} is always the 61\textsuperscript{st} day of the year whether or not it is a leap year.
 
-Section \ref{sec:cenValues} will talk about summing multiple constituents, including how interval censoring is used. Since the Sample data frame is structured to only contain one constituent, when more than one parameter codes are requested, the \texttt{getSampleData} function will sum the values of each constituent as described below.
+Section \ref{sec:cenValues} is about summing multiple constituents, including how interval censoring is used. Since the Sample data frame is structured to only contain one constituent, when more than one parameter codes are requested, the \texttt{getSampleData} function will sum the values of each constituent as described below.
 
 \FloatBarrier
 
@@ -690,7 +690,7 @@ Section \ref{sec:cenValues} will talk about summing multiple constituents, inclu
 \subsection{Censored Values: Summation Explanation}
 \label{sec:cenValues}
 %------------------------------------------------------------
-In the typical case where none of the data are censored (that is, no values are reported as \enquote{less-than} values) the ConcLow = ConcHigh = ConcAve and Uncen = 1 are equal to the reported value.  For the most common type of censoring, where a value is reported as less than the reporting limit, then ConcLow = NA, ConcHigh = reporting limit, ConcAve = 0.5 * reporting limit, and Uncen = 0.
+In the typical case where none of the data are censored (that is, no values are reported as \enquote{less-than} values), the ConcLow = ConcHigh = ConcAve and Uncen = 1 are equal to the reported value.  For the most common type of censoring, where a value is reported as less than the reporting limit, then ConcLow = NA, ConcHigh = reporting limit, ConcAve = 0.5 * reporting limit, and Uncen = 0.
 
 To illustrate how the dataRetrieval package handles a more complex censoring problem, let us say that in 2004 and earlier, we computed total phosphorus (tp) as the sum of dissolved phosphorus (dp) and particulate phosphorus (pp). From 2005 and onward, we have direct measurements of total phosphorus (tp). A small subset of this fictional data looks like Table \ref{tab:exampleComplexQW}.
 
@@ -744,7 +744,7 @@ Section \ref{sec:userFiles} discusses inputting user-generated files. The functi
 \subsection{User-Generated Data Files}
 \label{sec:userFiles}
 %------------------------------------------------------------ 
-In addition to retrieving data from the USGS web services, the dataRetrieval package also includes functions to generate the Daily and Sample data frame from local files.
+In addition to retrieving data from the USGS Web services, the dataRetrieval package also includes functions to generate the Daily and Sample data frame from local files.
 
 %------------------------------------------------------------ 
 \subsubsection{getDailyDataFromFile}
@@ -756,7 +756,7 @@ Text files that contain this sort of data require some sort of a separator, for 
 
 Finally, qUnit is a numeric argument that defines the discharge units used in the input file.  The default is qUnit = 1 which assumes discharge is in cubic feet per second.  If the discharge in the file is already in cubic meters per second then set qUnit = 2.  If it is in some other units (like liters per second or acre-feet per day), the user must pre-process the data with a unit conversion that changes it to either cubic feet per second or cubic meters per second.
 
-So, if you have a file called \enquote{ChoptankRiverFlow.txt} located in a folder called \enquote{RData} on the C drive (this is a Windows example), and the file is structured as follows (tab-separated):
+So, if you have a file called \enquote{ChoptankRiverFlow.txt} located in a folder called \enquote{RData} on the C drive (this example is for the Windows\textregistered\ operating systems), and the file is structured as follows (tab-separated):
 
 
 \singlespacing
@@ -780,7 +780,7 @@ Daily <- getDailyDataFromFile(filePath,fileName,
                     separator="\t")
 @
 
-Microsoft Excel files can be a bit tricky to import into R directly. The simplest way to get Excel data into R is to open the Excel file in Excel, then save it as a .csv file (comma-separated values). 
+Microsoft\textregistered\ Excel files can be a bit tricky to import into R directly. The simplest way to get Excel data into R is to open the Excel file in Excel, then save it as a .csv file (comma-separated values). 
 
 \FloatBarrier
 
@@ -790,7 +790,7 @@ Microsoft Excel files can be a bit tricky to import into R directly. The simples
 %------------------------------------------------------------ 
 
 \doublespacing
-The \texttt{getSampleDataFromFile} function will import a user-generated file and populate the Sample dataframe. The difference between sample data and discharge data is that the code requires a third column that contains a remark code, either blank or \verb@"<"@, which will tell the program that the data was \enquote{left-censored} (or, below the detection limit of the sensor). Therefore, the data must be in the form: date, remark, value.   An example of a comma-delimited file is:
+The \texttt{getSampleDataFromFile} function will import a user-generated file and populate the Sample dataframe. The difference between sample data and discharge data is that the code requires a third column that contains a remark code, either blank or \verb@"<"@, which will tell the program that the data were \enquote{left-censored} (or, below the detection limit of the sensor). Therefore, the data must be in the form: date, remark, value.   An example of a comma-delimited file is:
 
 \singlespacing
 \begin{verbatim}
@@ -859,7 +859,7 @@ head(Sample)
 %------------------------------------------------------------
 \subsection{EGRET Plots}
 %------------------------------------------------------------
-The Daily, Sample, and INFO data frames (described in Secs. \ref{INFOsubsection} - \ref{Samplesubsection}) are specifically formatted to be used with the EGRET package. The EGRET package has powerful modeling capabilities that use WRTDS, but EGRET also has graphing and tabular tools for exploring the data without using the WRTDS algorithm. See the EGRET vignette, user guide, and/or wiki (\url{https://github.com/USGS-R/EGRET/wiki}) for detailed information. Figure \ref{fig:egretEx} shows one of the plotting functions that can be used directly from the dataRetrieval dataframes.
+The Daily, Sample, and INFO dataframes (described in Secs. \ref{INFOsubsection} - \ref{Samplesubsection}) are specifically formatted to be used with the EGRET package. The EGRET package has powerful modeling capabilities that use WRTDS, but EGRET also has graphing and tabular tools for exploring the data without using the WRTDS algorithm. See the EGRET vignette, user guide, and/or wiki (\url{https://github.com/USGS-R/EGRET/wiki}) for detailed information. Figure \ref{fig:egretEx} shows one of the plotting functions that can be used directly from the dataRetrieval dataframes.
 
 <<egretEx, echo=TRUE, eval=TRUE, fig.cap="Default multiPlotDataOverview">>=
 # Continuing Choptank example from the previous sections
@@ -1004,10 +1004,10 @@ library(dataRetrieval)
 
 
 %------------------------------------------------------------ 
-\section{Creating tables in Microsoft from R}
+\section{Creating tables in Microsoft\textregistered\ software from R}
 \label{app:createWordTable}
 %------------------------------------------------------------
-There are a few steps that are required in order to create a table in a Microsoft product (Excel, Word, Powerpoint, etc.) from an R dataframe. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Excel based on the dataframe tableData:
+There are a few steps that are required in order to create a table in Microsoft\textregistered\ software (Excel, Word, PowerPoint, etc.) from an R dataframe. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Excel based on the dataframe tableData:
 
 <<label=getSiteApp, echo=TRUE>>=
 availableData <- getDataAvailability(siteNumber)
@@ -1049,7 +1049,7 @@ Next, follow the steps below to open this file in Excel:
 \item Open Excel
 \item Click on the File tab
 \item Click on the Open option
-\item Navigate to the working directory (as shown in the results of getwd())
+\item Navigate to the working directory (as shown in the results of \texttt{getwd()})
 \item Next to the File name text box, change the dropdown type to All Files (*.*)
 \item Double click tableData.tsv
 \item A text import wizard will open up, in the first window, choose the Delimited radio button if it is not automatically picked, then click on Next.
@@ -1057,12 +1057,12 @@ Next, follow the steps below to open this file in Excel:
 \item Use the many formatting tools within Excel to customize the table
 \end{enumerate}
 
-From Excel, it is simple to copy and paste the tables in other Microsoft products. An example using one of the default Excel table formats is here.
+From Excel, it is simple to copy and paste the tables in other Microsoft\textregistered\ software. An example using one of the default Excel table formats is here.
 
 \begin{figure}[ht!]
 \centering
  \resizebox{0.9\textwidth}{!}{\includegraphics{table1.png}} 
-\caption{A simple table produced in Microsoft Excel}
+\caption{A simple table produced in Microsoft\textregistered\ Excel. Additional formatting will be requried, for example converting u to  $\mu$ }
 \label{overflow}
 \end{figure}
 

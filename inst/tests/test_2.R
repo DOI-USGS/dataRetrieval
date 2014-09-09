@@ -8,7 +8,7 @@ expect_that(formatCheckSiteNumber('01594440'),prints_text('01594440'))
 # formatCheckParameterCd:
 expect_that(formatCheckParameterCd('00001'),prints_text('00001'))
 # formatCheckDate:
-expect_that(formatCheckDate('1985-01-01', "StartDate"),prints_text('1985-01-01'))
+expect_that(formatCheckDate('1985-01-01', "startDate"),prints_text('1985-01-01'))
 # checkStartEndDate:
 expect_that(checkStartEndDate('1985-01-01', '1985-01-31'), equals(c('1985-01-01', '1985-01-31')))
 

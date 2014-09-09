@@ -14,10 +14,10 @@
 getParameterInfo <- function(parameterCd,interactive=TRUE){
   parameterCd <- formatCheckParameterCd(parameterCd, interactive=interactive)
 
-#   urlParameterCd <- "http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&pm_search=&casrn_search=&srsname_search=&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units"
-# #   urlParameterCd <- "http://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&group_cd=%"
+#   urlparameterCd <- "http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&pm_search=&casrn_search=&srsname_search=&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units"
+# #   urlparameterCd <- "http://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&group_cd=%"
 #   parameterCdFile <- read.delim(  
-#     urlParameterCd, 
+#     urlparameterCd, 
 #     header = TRUE, 
 #     quote="\"", 
 #     dec=".", 
