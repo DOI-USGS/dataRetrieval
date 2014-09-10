@@ -8,18 +8,37 @@
 #' @return data a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
 #' @export
 #' @examples
-#' sites <- "02177000"
+#' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
 #' endDate <- "2012-10-01"
 #' offering <- '00003'
 #' property <- '00060'
-#' obs_url <- constructNWISURL(sites,property,startDate,endDate,'dv',format='tsv')
+#' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv',format='tsv')
 #' data <- getRDB1Data(obs_url)
 #' urlMulti <- constructNWISURL("04085427",c("00060","00010"),startDate,endDate,'dv',statCd=c("00003","00001"),'tsv')
 #' multiData <- getRDB1Data(urlMulti)
+#' unitDataURL <- constructNWISURL(siteNumber,property,
+#'          as.character(Sys.Date()),as.character(Sys.Date()),'uv',format='tsv')
+#' unitData <- getRDB1Data(unitDataURL, asDateT=TRUE)
 getRDB1Data <- function(obs_url,asDateTime=FALSE){
+  
+  retval = tryCatch({
+    h <- basicHeaderGatherer()
+    doc <- getURL(obs_url, headerfunction = h$update)
+    
+  }, warning = function(w) {
+    message(paste("URL caused a warning:", obs_url))
+    message(w)
+  }, error = function(e) {
+    message(paste("URL does not seem to exist:", obs_url))
+    message(e)
+    return(NA)
+  })   
+  
+#   numToBeReturned <- as.numeric(h$value()["Content-Length"])
+  
   tmp <- read.delim(  
-    obs_url, 
+    textConnection(doc), 
     header = TRUE, 
     quote="\"", 
     dec=".", 
@@ -33,7 +52,21 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE){
   
   if(sum(regexpr('d$', dataType) > 0) > 0){
     if (asDateTime){
-      data[,regexpr('d$', dataType) > 0] <- as.POSIXct(strptime(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M"))
+      
+      timeZoneLibrary <- setNames(c("America/New_York","America/New_York","America/Chicago","America/Chicago",
+                                    "America/Denver","America/Denver","America/Los_Angeles","America/Los_Angeles",
+                                    "America/Anchorage","America/Anchorage","America/Honolulu","America/Honolulu"),
+                                  c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
+      timeZone <- as.character(timeZoneLibrary[data$tz_cd])
+      if(length(unique(timeZone)) == 1){
+        data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = unique(timeZone))
+      } else {
+        warning("Mixed time zone information")
+        for(i in seq_along(row.names(data))){
+          data[i,regexpr('d$', dataType) > 0] <- as.POSIXct(data[i,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = timeZone[i])
+        }
+      }
+      
     } else {
       data[,regexpr('d$', dataType) > 0] <- as.Date(data[,regexpr('d$', dataType) > 0])
     }
