@@ -35,48 +35,52 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE){
     return(NA)
   })   
   
-#   numToBeReturned <- as.numeric(h$value()["Content-Length"])
-  
-  tmp <- read.delim(  
-    textConnection(doc), 
-    header = TRUE, 
-    quote="\"", 
-    dec=".", 
-    sep='\t',
-    colClasses=c('character'),
-    fill = TRUE, 
-    comment.char="#")
-  
-  dataType <- tmp[1,]
-  data <- tmp[-1,]
-  
-  if(sum(regexpr('d$', dataType) > 0) > 0){
-    if (asDateTime){
-      
-      timeZoneLibrary <- setNames(c("America/New_York","America/New_York","America/Chicago","America/Chicago",
-                                    "America/Denver","America/Denver","America/Los_Angeles","America/Los_Angeles",
-                                    "America/Anchorage","America/Anchorage","America/Honolulu","America/Honolulu"),
-                                  c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
-      timeZone <- as.character(timeZoneLibrary[data$tz_cd])
-      if(length(unique(timeZone)) == 1){
-        data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = unique(timeZone))
-      } else {
-        warning("Mixed time zone information")
-        for(i in seq_along(row.names(data))){
-          data[i,regexpr('d$', dataType) > 0] <- as.POSIXct(data[i,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = timeZone[i])
+  if(as.character(h$value()["Content-Type"]) == "text/plain;charset=UTF-8"){
+    
+    tmp <- read.delim(  
+      textConnection(doc), 
+      header = TRUE, 
+      quote="\"", 
+      dec=".", 
+      sep='\t',
+      colClasses=c('character'),
+      fill = TRUE, 
+      comment.char="#")
+    
+    dataType <- tmp[1,]
+    data <- tmp[-1,]
+    
+    if(sum(regexpr('d$', dataType) > 0) > 0){
+      if (asDateTime){
+        
+        timeZoneLibrary <- setNames(c("America/New_York","America/New_York","America/Chicago","America/Chicago",
+                                      "America/Denver","America/Denver","America/Los_Angeles","America/Los_Angeles",
+                                      "America/Anchorage","America/Anchorage","America/Honolulu","America/Honolulu"),
+                                    c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
+        timeZone <- as.character(timeZoneLibrary[data$tz_cd])
+        if(length(unique(timeZone)) == 1){
+          data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = unique(timeZone))
+        } else {
+          warning("Mixed time zone information")
+          for(i in seq_along(row.names(data))){
+            data[i,regexpr('d$', dataType) > 0] <- as.POSIXct(data[i,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = timeZone[i])
+          }
         }
+        
+      } else {
+        data[,regexpr('d$', dataType) > 0] <- as.Date(data[,regexpr('d$', dataType) > 0])
       }
-      
-    } else {
-      data[,regexpr('d$', dataType) > 0] <- as.Date(data[,regexpr('d$', dataType) > 0])
     }
+    
+    if (sum(regexpr('n$', dataType) > 0) > 0){
+      tempDF <- data[,which(regexpr('n$', dataType) > 0)]
+      tempDF <- suppressWarnings(sapply(tempDF, function(x) as.numeric(x)))  
+      data[,which(regexpr('n$', dataType) > 0)] <- tempDF
+    }
+    row.names(data) <- NULL
+    return(data)
+  } else {
+    message(paste("URL caused a warning:", obs_url))
+    message("Content-Type=",h$value()["Content-Type"])
   }
-  
-  if (sum(regexpr('n$', dataType) > 0) > 0){
-    tempDF <- data[,which(regexpr('n$', dataType) > 0)]
-    tempDF <- suppressWarnings(sapply(tempDF, function(x) as.numeric(x)))  
-    data[,which(regexpr('n$', dataType) > 0)] <- tempDF
-  }
-  row.names(data) <- NULL
-  return(data)
 }

@@ -19,21 +19,24 @@
 #' multiData <- getWaterML1Data(urlMulti)
 #' goundwaterExampleURL <- "http://waterservices.usgs.gov/nwis/gwlevels/?format=waterml&sites=431049071324301&startDT=2013-10-01&endDT=2014-06-30"
 #' groundWater <- getWaterML1Data(goundwaterExampleURL)
+#' unitDataURL <- constructNWISURL(siteNumber,property,
+#'          as.character(Sys.Date()),as.character(Sys.Date()),'uv',format='xml')
+#' unitData <- getWaterML1Data(unitDataURL)
 getWaterML1Data <- function(obs_url){
-
-  # This is more elegent, but requires yet another package dependency RCurl...which I now require for wqp
-#   content <- getURLContent(obs_url,.opts=list(timeout.ms=500000))
-#   test <- capture.output(tryCatch(xmlTreeParse(content, getDTD=FALSE, useInternalNodes=TRUE),"XMLParserErrorList" = function(e) {cat("incomplete",e$message)}))
-#   while (length(grep("<?xml",test))==0) {
-#     content <- getURLContent(obs_url,.opts=list(timeout.ms=500000))
-#     test <- capture.output(tryCatch(xmlTreeParse(content, getDTD=FALSE, useInternalNodes=TRUE),"XMLParserErrorList" = function(e) {cat("incomplete",e$message)}))
-#   }
-#   doc <- htmlTreeParse(content, getDTD=TRUE, useInternalNodes=TRUE)
-#   require(XML)
   
-  doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+  doc = tryCatch({
+    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+    
+  }, warning = function(w) {
+    message(paste("URL caused a warning:", obs_url))
+    message(w)
+  }, error = function(e) {
+    message(paste("URL does not seem to exist:", obs_url))
+    message(e)
+    return(NA)
+  }) 
+  
   doc <- xmlRoot(doc)
-
   ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  
   timeSeries <- xpathApply(doc, "//ns1:timeSeries", namespaces = ns)
   
@@ -62,14 +65,28 @@ getWaterML1Data <- function(obs_url){
       methodID <- padVariable(methodID,2)
       
       value <- as.numeric(xpathSApply(subChunk, "ns1:value",namespaces = chunkNS, xmlValue))  
-      dateTime <- strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S")
+      dateTime <- as.POSIXct(strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S"))
       tzHours <- substr(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),
-                        23,
+                        24,
                         nchar(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS)))
       if(mean(nchar(tzHours),rm.na=TRUE) == 6){
         tzAbbriev <- zoneAbbrievs[tzHours]
       } else {
         tzAbbriev <- rep(as.character(zoneAbbrievs[1]),length(dateTime))
+      }
+      
+      timeZoneLibrary <- setNames(c("America/New_York","America/New_York","America/Chicago","America/Chicago",
+                                    "America/Denver","America/Denver","America/Los_Angeles","America/Los_Angeles",
+                                    "America/Anchorage","America/Anchorage","America/Honolulu","America/Honolulu"),
+                                  c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
+      timeZone <- as.character(timeZoneLibrary[tzAbbriev])
+      if(length(unique(timeZone)) == 1){
+       dateTime <- as.POSIXct(as.character(dateTime), tz = unique(timeZone))
+      } else {
+        warning("Mixed time zone information")
+        for(i in seq_along(dateTime)){
+          dateTime[i] <- as.POSIXct(as.character(dateTime[i]), tz = timeZone[i])
+        }
       }
       
       qualifier <- as.character(xpathSApply(subChunk, "ns1:value/@qualifiers",namespaces = chunkNS))
