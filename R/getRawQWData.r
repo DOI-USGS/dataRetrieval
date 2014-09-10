@@ -5,7 +5,7 @@
 #' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
-#' @param parameterCd vector of USGS 5-digit parameter code. Leaving this blank will return all of the measured values during the specified time period.
+#' @param parameterCd vector of USGS 5-digit parameter code or string of characteristicNames. Leaving this blank will return all of the measured values during the specified time period.
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
@@ -24,17 +24,35 @@ retrieveWQPqwData <- function(siteNumber,parameterCd,startDate,endDate,interacti
 
   url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"wqp",interactive=interactive)
 
-  h <- basicHeaderGatherer()
-  doc <- getURI(url, headerfunction = h$update)
+  retval = tryCatch({
+    h <- basicHeaderGatherer()
+    doc <- getURL(url, headerfunction = h$update)
+
+  }, warning = function(w) {
+    message(paste("URL caused a warning:", url))
+    message(w)
+  }, error = function(e) {
+    message(paste("URL does not seem to exist:", url))
+    message(e)
+    return(NA)
+  })   
+  
   numToBeReturned <- as.numeric(h$value()["Total-Result-Count"])
-  if (!is.na(numToBeReturned) | numToBeReturned != 0){  
-    suppressWarnings(retval <- read.delim(url, header = TRUE, quote="\"", dec=".", sep='\t', colClasses=c('character'), fill = TRUE))
+  
+  if (!is.na(numToBeReturned) | numToBeReturned != 0){
+  
+    retval <- read.delim(textConnection(doc), header = TRUE, quote="\"", 
+               dec=".", sep='\t', 
+               colClasses=c('character'), 
+               fill = TRUE)    
     actualNumReturned <- nrow(retval)
     
     if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", actualNumReturned, " were returned")
     
     return(retval)
+
   } else {
     warning("No data to retrieve")
+    return(NA)
   }
 }
