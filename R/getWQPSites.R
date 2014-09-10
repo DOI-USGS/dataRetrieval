@@ -30,6 +30,36 @@ getWQPSites <- function(...){
                urlCall,
                "&mimeType=tsv",sep = "")
   
-  retval <- suppressWarnings(read.delim(urlCall, header = TRUE, quote="\"", dec=".", sep='\t', colClasses=c('character'), fill = TRUE))
-  return(retval)
+  retval = tryCatch({
+    h <- basicHeaderGatherer()
+    doc <- getURL(urlCall, headerfunction = h$update)
+    
+  }, warning = function(w) {
+    message(paste("URL caused a warning:", urlCall))
+    message(w)
+  }, error = function(e) {
+    message(paste("URL does not seem to exist:", urlCall))
+    message(e)
+    return(NA)
+  })   
+  
+  numToBeReturned <- as.numeric(h$value()["Total-Site-Count"])
+  
+  if (!is.na(numToBeReturned) | numToBeReturned != 0){
+ 
+    retval <- read.delim(textConnection(doc), header = TRUE, quote="\"", 
+                         dec=".", sep='\t', 
+                         colClasses=c('character'), 
+                         fill = TRUE)    
+    actualNumReturned <- nrow(retval)
+    
+    if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", actualNumReturned, " were returned")
+    
+    return(retval)
+    
+  } else {
+    warning("No data to retrieve")
+    return(NA)
+  }
+
 }
