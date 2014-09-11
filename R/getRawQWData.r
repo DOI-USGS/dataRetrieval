@@ -35,24 +35,32 @@ retrieveWQPqwData <- function(siteNumber,parameterCd,startDate,endDate,interacti
     message(paste("URL does not seem to exist:", url))
     message(e)
     return(NA)
-  })   
+  })
   
-  numToBeReturned <- as.numeric(h$value()["Total-Result-Count"])
+  if(h$value()["Content-Type"] == "text/tab-separated-values;charset=UTF-8"){
   
-  if (!is.na(numToBeReturned) | numToBeReturned != 0){
-  
-    retval <- read.delim(textConnection(doc), header = TRUE, quote="\"", 
-               dec=".", sep='\t', 
-               colClasses=c('character'), 
-               fill = TRUE)    
-    actualNumReturned <- nrow(retval)
+    numToBeReturned <- as.numeric(h$value()["Total-Result-Count"])
     
-    if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", actualNumReturned, " were returned")
+    if (!is.na(numToBeReturned) | numToBeReturned != 0){
     
-    return(retval)
-
+      retval <- read.delim(textConnection(doc), header = TRUE, quote="\"", 
+                 dec=".", sep='\t', 
+                 colClasses=c('character'), 
+                 fill = TRUE)    
+      actualNumReturned <- nrow(retval)
+      
+      if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", actualNumReturned, " were returned")
+      
+      return(retval)
+  
+    } else {
+      warning("No data to retrieve")
+      return(NA)
+    }
   } else {
-    warning("No data to retrieve")
+    message(paste("URL caused an error:", url))
+    message("Content-Type=",h$value()["Content-Type"])
     return(NA)
   }
+  
 }
