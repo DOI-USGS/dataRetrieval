@@ -49,6 +49,8 @@ basicWQPData <- function(url){
                            fill = TRUE)    
       actualNumReturned <- nrow(retval)
       
+      retval[,names(which(sapply(retval[,grep("MeasureValue",names(retval))], function(x)all(is.na(x)))))] <- ""
+      
       if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", actualNumReturned, " were returned")
       
       timeZoneLibrary <- setNames(c("America/New_York","America/New_York","America/Chicago","America/Chicago",

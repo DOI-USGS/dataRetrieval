@@ -24,7 +24,7 @@ processQWData <- function(data,pCode=TRUE){
   test <- data.frame(data$USGSPCode)
   
   #   test$dateTime <- as.POSIXct(strptime(paste(data$ActivityStartDate,data$ActivityStartTime.Time,sep=" "), "%Y-%m-%d %H:%M:%S"))
-  test$dateTime <- as.Date(data$ActivityStartDate, "%Y-%m-%d")
+  test$dateTime <- data$ActivityStartDate
   
   originalLength <- nrow(test)
   test$qualifier <- qualifier

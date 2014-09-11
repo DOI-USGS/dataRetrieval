@@ -261,13 +261,13 @@ In this section, five examples of Web retrievals document how to get raw data. T
 % %------------------------------------------------------------
 The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this 8-digit ID. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
-Once the site-ID is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. A complete list of possible USGS parameter codes can be found at \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?help}.
+Once the site-ID (siteNumber) is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. A complete list of possible USGS parameter codes can be found at \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?help}.
 
 Not every station will measure all parameters. A short list of commonly measured parameters is shown in Table \ref{tab:params}.
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Tue Sep 09 12:48:00 2014
+% Thu Sep 11 16:26:30 2014
 \begin{table}[ht]
 \caption{Common USGS Parameter Codes} 
 \label{tab:params}
@@ -330,7 +330,7 @@ For unit values data (sensor data measured at regular time intervals such as 15 
 Some common codes are shown in Table \ref{tab:stat}.
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Tue Sep 09 12:48:01 2014
+% Thu Sep 11 16:26:31 2014
 \begin{table}[ht]
 \caption{Commonly used USGS Stat Codes} 
 \label{tab:stat}
@@ -411,7 +411,7 @@ To discover what data is available for a particular USGS site, including measure
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Tue Sep 09 12:48:02 2014
+% Thu Sep 11 16:26:32 2014
 \begin{table}[ht]
 \caption{Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]} 
 \label{tab:gda}
@@ -423,7 +423,7 @@ To discover what data is available for a particular USGS site, including measure
  & Temperature, water & 1988-10-01 & 2012-05-09 & 894 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-09-08 & 24358 & ft$^3$/s \\ 
+  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-09-10 & 24360 & ft$^3$/s \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
@@ -613,20 +613,20 @@ The retrieval produces the following dataframe:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{verbatim}
-  agency     site            dateTime tz_cd X02_00060_00011
-1   USGS 01491000 2012-05-12 00:00:00   EST              83
-2   USGS 01491000 2012-05-12 00:15:00   EST              83
-3   USGS 01491000 2012-05-12 00:30:00   EST              83
-4   USGS 01491000 2012-05-12 00:45:00   EST              83
-5   USGS 01491000 2012-05-12 01:00:00   EST              85
-6   USGS 01491000 2012-05-12 01:15:00   EST              83
-  X02_00060_00011_cd
-1                  A
-2                  A
-3                  A
-4                  A
-5                  A
-6                  A
+  agency_cd  site_no            datetime tz_cd
+1      USGS 01491000 2012-05-12 00:00:00   EST
+2      USGS 01491000 2012-05-12 00:15:00   EST
+3      USGS 01491000 2012-05-12 00:30:00   EST
+4      USGS 01491000 2012-05-12 00:45:00   EST
+5      USGS 01491000 2012-05-12 01:00:00   EST
+6      USGS 01491000 2012-05-12 01:15:00   EST
+  X02_00060_00011 X02_00060_00011_cd
+1              83                  A
+2              83                  A
+3              83                  A
+4              83                  A
+5              85                  A
+6              83                  A
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -655,17 +655,13 @@ To get USGS water quality data from water samples collected at the streamgage or
 
 \hlstd{dissolvedNitrate} \hlkwb{<-} \hlkwd{retrieveNWISqwData}\hlstd{(siteNumber, parameterCd,}
       \hlstd{startDate, endDate)}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{Warning: cannot open: HTTP status was '0 (nil)'}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error: cannot open the connection}}\begin{alltt}
 \hlkwd{names}\hlstd{(dissolvedNitrate)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error: object 'dissolvedNitrate' not found}}\end{kframe}
+\begin{verbatim}
+[1] "dateTime"        "site"            "qualifier_00618"
+[4] "value_00618"     "qualifier_71851" "value_71851"    
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 
 % Note that in this \enquote{simple} dataframe, datetime is imported as Dates (no times are included), and the qualifier is either blank or \verb@"<"@ signifying a censored value. A plotting example is shown in Figure \ref{fig:getQWtemperaturePlot}.
@@ -678,15 +674,14 @@ To get USGS water quality data from water samples collected at the streamgage or
   \hlkwc{xlab}\hlstd{=}\hlstr{"Date"}\hlstd{,}\hlkwc{ylab} \hlstd{=} \hlkwd{paste}\hlstd{(parameterINFO}\hlopt{$}\hlstd{srsname,}
       \hlstr{"["}\hlstd{,parameterINFO}\hlopt{$}\hlstd{parameter_units,}\hlstr{"]"}\hlstd{)}
   \hlstd{))}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error: object 'dissolvedNitrate' not found}}\begin{alltt}
 \hlkwd{title}\hlstd{(ChoptankInfo}\hlopt{$}\hlstd{station.nm)}
 \end{alltt}
+\end{kframe}\begin{figure}[]
+
+\includegraphics[width=\maxwidth]{figure/getQWtemperaturePlot} \caption[Nitrate plot of Choptank River]{Nitrate plot of Choptank River.\label{fig:getQWtemperaturePlot}}
+\end{figure}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{Error: plot.new has not been called yet}}\end{kframe}
 \end{knitrout}
 
 \FloatBarrier
@@ -702,22 +697,19 @@ There are additional water quality data sets available from the Water Quality Da
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{specificCond} \hlkwb{<-} \hlkwd{getWQPData}\hlstd{(}\hlstr{'WIDNR_WQX-10032762'}\hlstd{,}
-                \hlstr{'Specific conductance'}\hlstd{,}\hlstr{''}\hlstd{,}\hlstr{''}\hlstd{)}
+                \hlstr{'Specific conductance'}\hlstd{,}\hlstr{'2011-05-01'}\hlstd{,}\hlstr{'2011-09-30'}\hlstd{)}
 \hlkwd{head}\hlstd{(specificCond)}
 \end{alltt}
 \begin{verbatim}
     dateTime qualifier. value.
-1 2011-02-14              1360
-2 2011-02-17              1930
-3 2011-03-03              1240
-4 2011-03-10              1480
-5 2011-03-29              1130
-6 2011-04-07              1200
+1 2011-05-09              1000
+2 2011-06-05               800
+3 2011-07-06               860
+4 2011-08-08               471
+5 2011-09-11               750
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-
-There are 
 
 \FloatBarrier
 %------------------------------------------------------------
@@ -794,7 +786,7 @@ There are 4750 data points, and 4750 days.
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Tue Sep 09 12:49:17 2014
+% Thu Sep 11 16:26:44 2014
 \begin{table}[ht]
 \caption{Daily dataframe} 
 \label{tab:DailyDF1}
@@ -915,7 +907,7 @@ To illustrate how the dataRetrieval package handles a more complex censoring pro
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Tue Sep 09 12:49:44 2014
+% Thu Sep 11 16:26:45 2014
 \begin{table}[ht]
 \caption{Example data} 
 \label{tab:exampleComplexQW}
@@ -1356,7 +1348,7 @@ There are a few steps that are required in order to create a table in Microsoft\
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2014-09-08 24358      ft3/s
+2 2014-09-10 24360      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day

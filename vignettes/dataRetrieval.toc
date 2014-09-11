@@ -8,21 +8,21 @@
 \contentsline {subsection}{\numberline {2.3}Daily Values}{8}{subsection.2.3}
 \contentsline {subsection}{\numberline {2.4}Unit Values}{12}{subsection.2.4}
 \contentsline {subsection}{\numberline {2.5}Water Quality Values}{13}{subsection.2.5}
-\contentsline {subsection}{\numberline {2.6}STORET Water Quality Retrievals}{13}{subsection.2.6}
-\contentsline {subsection}{\numberline {2.7}URL Construction}{14}{subsection.2.7}
-\contentsline {section}{\numberline {3}Data Retrievals Structured For Use In The EGRET Package}{15}{section.3}
-\contentsline {subsection}{\numberline {3.1}INFO Data}{15}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Daily Data}{15}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Sample Data}{17}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Censored Values: Summation Explanation}{18}{subsection.3.4}
-\contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{20}{subsection.3.5}
-\contentsline {subsubsection}{\numberline {3.5.1}getDailyDataFromFile}{20}{subsubsection.3.5.1}
-\contentsline {subsubsection}{\numberline {3.5.2}getSampleDataFromFile}{22}{subsubsection.3.5.2}
-\contentsline {subsection}{\numberline {3.6}Merge Report}{23}{subsection.3.6}
-\contentsline {subsection}{\numberline {3.7}EGRET Plots}{24}{subsection.3.7}
-\contentsline {section}{\numberline {4}Summary}{26}{section.4}
-\contentsline {section}{\numberline {5}Getting Started in R}{28}{section.5}
-\contentsline {subsection}{\numberline {5.1}New to R?}{28}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}R User: Installing dataRetrieval}{30}{subsection.5.2}
-\contentsline {section}{\numberline {6}Creating tables in Microsoft\textregistered \ software from R}{30}{section.6}
+\contentsline {subsection}{\numberline {2.6}STORET Water Quality Retrievals}{15}{subsection.2.6}
+\contentsline {subsection}{\numberline {2.7}URL Construction}{15}{subsection.2.7}
+\contentsline {section}{\numberline {3}Data Retrievals Structured For Use In The EGRET Package}{16}{section.3}
+\contentsline {subsection}{\numberline {3.1}INFO Data}{16}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Daily Data}{17}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Sample Data}{18}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Censored Values: Summation Explanation}{19}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}User-Generated Data Files}{21}{subsection.3.5}
+\contentsline {subsubsection}{\numberline {3.5.1}getDailyDataFromFile}{21}{subsubsection.3.5.1}
+\contentsline {subsubsection}{\numberline {3.5.2}getSampleDataFromFile}{23}{subsubsection.3.5.2}
+\contentsline {subsection}{\numberline {3.6}Merge Report}{24}{subsection.3.6}
+\contentsline {subsection}{\numberline {3.7}EGRET Plots}{25}{subsection.3.7}
+\contentsline {section}{\numberline {4}Summary}{27}{section.4}
+\contentsline {section}{\numberline {5}Getting Started in R}{29}{section.5}
+\contentsline {subsection}{\numberline {5.1}New to R?}{29}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}R User: Installing dataRetrieval}{31}{subsection.5.2}
+\contentsline {section}{\numberline {6}Creating tables in Microsoft\textregistered \ software from R}{31}{section.6}
 \contentsfinish 
