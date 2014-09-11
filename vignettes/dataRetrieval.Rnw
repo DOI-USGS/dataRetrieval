@@ -228,7 +228,7 @@ In this section, five examples of Web retrievals document how to get raw data. T
 % %------------------------------------------------------------
 The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this 8-digit ID. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
-Once the site-ID is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. A complete list of possible USGS parameter codes can be found at \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?help}.
+Once the site-ID (siteNumber) is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. A complete list of possible USGS parameter codes can be found at \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?help}.
 
 Not every station will measure all parameters. A short list of commonly measured parameters is shown in Table \ref{tab:params}.
 
@@ -526,11 +526,9 @@ There are additional water quality data sets available from the Water Quality Da
 
 <<label=getQWData, echo=TRUE>>=
 specificCond <- getWQPData('WIDNR_WQX-10032762',
-                'Specific conductance','','')
+                'Specific conductance','2011-05-01','2011-09-30')
 head(specificCond)
 @
-
-There are 
 
 \FloatBarrier
 %------------------------------------------------------------
