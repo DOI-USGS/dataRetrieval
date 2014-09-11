@@ -8,11 +8,30 @@
 #' @import XML
 #' @importFrom plyr rbind.fill.matrix
 #' @examples
-#' URL <- "http://webvastage6.er.usgs.gov/ogc-swie/wml2/dv/sos?request=GetObservation&featureID=435601087432701&observedProperty=00045&beginPosition=2012-01-01&offering=Sum"
-#' dataReturned3 <- getWaterML2Data(URL)
+#' URL <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0&sites=01646500&startDT=2014-09-01&endDT=2014-09-08&statCd=00003&parameterCd=00060"
+#' \dontrun{dataReturned3 <- getWaterML2Data(URL)}
 getWaterML2Data <- function(obs_url){
   
-  doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+  h <- basicHeaderGatherer()
+  doc = tryCatch({
+    returnedDoc <- getURL(obs_url, headerfunction = h$update)
+    if(h$value()["Content-Type"] == "text/xml;charset=UTF-8"){
+      xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
+    } else {
+      message(paste("URL caused an error:", obs_url))
+      message("Content-Type=",h$value()["Content-Type"])
+      return(NA)
+    }   
+    
+  }, warning = function(w) {
+    message(paste("URL caused a warning:", obs_url))
+    message(w)
+  }, error = function(e) {
+    message(paste("URL does not seem to exist:", obs_url))
+    message(e)
+    return(NA)
+  }) 
+  
   doc <- xmlRoot(doc)
   
   ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  

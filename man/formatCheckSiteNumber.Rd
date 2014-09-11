@@ -19,8 +19,6 @@ Checks that the site code is at least 8 digits. If not, it confirms with the use
 \examples{
 site<- '01234567'
 formatCheckSiteNumber(site)
-site_incorrect <- '1234567'
-formatCheckSiteNumber(site_incorrect)
 }
 \keyword{WRTDS}
 \keyword{flow}

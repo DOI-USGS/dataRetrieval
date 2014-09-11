@@ -15,25 +15,45 @@ getSiteFileData <- function(siteNumber="",interactive=TRUE){
   # Checking for 8 digit site ID:
   siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
   
-  urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site?format=rdb&siteOutput=Expanded&sites=",siteNumber,sep = "")
+  urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=Expanded&sites=",siteNumber,sep = "")
   
-  SiteFile <- read.delim(
-    urlSitefile,
-    header = TRUE,
-    quote="\"",
-    dec=".",
-    sep='\t',
-    colClasses=c('character'),
-    fill = TRUE,
-    comment.char="#")
+  doc = tryCatch({
+    h <- basicHeaderGatherer()
+    doc <- getURL(urlSitefile, headerfunction = h$update)
+    
+  }, warning = function(w) {
+    message(paste("URL caused a warning:", urlSitefile))
+    message(w)
+  }, error = function(e) {
+    message(paste("URL does not seem to exist:", urlSitefile))
+    message(e)
+    return(NA)
+  }) 
   
-  INFO <- SiteFile[-1,]
-  names(INFO) <- gsub("_",".",names(INFO))
+  if(h$value()["Content-Type"] == "text/plain;charset=UTF-8"){
   
-  INFO$queryTime <- Sys.time()
-  INFO$dec.lat.va <- as.numeric(INFO$dec.lat.va)
-  INFO$dec.long.va <- as.numeric(INFO$dec.long.va)
-  INFO$alt.va <- as.numeric(INFO$alt.va)
-  
-  return(INFO)
+    SiteFile <- read.delim(
+      textConnection(doc),
+      header = TRUE,
+      quote="\"",
+      dec=".",
+      sep='\t',
+      colClasses=c('character'),
+      fill = TRUE,
+      comment.char="#")
+    
+    INFO <- SiteFile[-1,]
+    names(INFO) <- gsub("_",".",names(INFO))
+    
+    INFO$queryTime <- Sys.time()
+    INFO$dec.lat.va <- as.numeric(INFO$dec.lat.va)
+    INFO$dec.long.va <- as.numeric(INFO$dec.long.va)
+    INFO$alt.va <- as.numeric(INFO$alt.va)
+    
+    return(INFO)
+  } else {
+    message(paste("URL caused an error:", urlSitefile))
+    message("Content-Type=",h$value()["Content-Type"])
+    return(NA)
+  }
 }
