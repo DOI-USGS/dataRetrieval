@@ -80,7 +80,7 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE){
     row.names(data) <- NULL
     return(data)
   } else {
-    message(paste("URL caused a warning:", obs_url))
+    message(paste("URL caused an error:", obs_url))
     message("Content-Type=",h$value()["Content-Type"])
   }
 }
