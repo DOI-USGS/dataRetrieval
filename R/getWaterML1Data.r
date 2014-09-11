@@ -24,8 +24,16 @@
 #' unitData <- getWaterML1Data(unitDataURL)
 getWaterML1Data <- function(obs_url){
   
+  h <- basicHeaderGatherer()
   doc = tryCatch({
-    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+    returnedDoc <- getURI(obs_url, headerfunction = h$update)
+    if(h$value()["Content-Type"] == "text/xml;charset=UTF-8"){
+      xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
+    } else {
+      message(paste("URL caused an error:", obs_url))
+      message("Content-Type=",h$value()["Content-Type"])
+      return(NA)
+    }   
     
   }, warning = function(w) {
     message(paste("URL caused a warning:", obs_url))
@@ -35,6 +43,7 @@ getWaterML1Data <- function(obs_url){
     message(e)
     return(NA)
   }) 
+  
   
   doc <- xmlRoot(doc)
   ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  
