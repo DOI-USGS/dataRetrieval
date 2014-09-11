@@ -8,7 +8,7 @@
 #' @export
 #' @import XML
 #' @examples
-#' sites <- "02177000"
+#' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
 #' endDate <- "2012-10-01"
 #' offering <- '00003'
@@ -103,15 +103,16 @@ getWaterML1Data <- function(obs_url){
         df <- data.frame(dateTime,
                          tzAbbriev,
                          get(valueName),
-                         get(qualName)
-        )
-        names(df) <- c("dateTime","tz_cd",valueName,qualName)
+                         get(qualName),
+                         stringsAsFactors=FALSE)
+        
+        names(df) <- c("datetime","tz_cd",valueName,qualName)
       } else {
         df <- data.frame(dateTime,
                          tzAbbriev,
-                         get(valueName)
-        )
-        names(df) <- c("dateTime","tz_cd",valueName)       
+                         get(valueName),stringsAsFactors=FALSE)
+        
+        names(df) <- c("datetime","tz_cd",valueName)       
       }
  
       if (1 == i & valuesIndex[1] == j){
@@ -125,8 +126,8 @@ getWaterML1Data <- function(obs_url){
   agencyCd <- as.character(xpathSApply(timeSeries[[1]], "ns1:sourceInfo/ns1:siteCode/@agencyCode",namespaces = chunkNS))
   siteNo <- as.character(xpathSApply(timeSeries[[1]], "ns1:sourceInfo/ns1:siteCode",namespaces = chunkNS, xmlValue))
   
-  mergedDF$agency <- rep(agencyCd, nrow(mergedDF))
-  mergedDF$site <- rep(siteNo, nrow(mergedDF))
+  mergedDF$agency_cd <- rep(agencyCd, nrow(mergedDF))
+  mergedDF$site_no <- rep(siteNo, nrow(mergedDF))
   
   reorder <- c(ncol(mergedDF)-1, ncol(mergedDF), 1:(ncol(mergedDF)-2))
   
