@@ -9,7 +9,7 @@ retrieveWQPqwData(siteNumber, parameterCd, startDate, endDate,
 \arguments{
 \item{siteNumber}{string USGS site number.  This is usually an 8 digit number}
 
-\item{parameterCd}{vector of USGS 5-digit parameter code. Leaving this blank will return all of the measured values during the specified time period.}
+\item{parameterCd}{vector of USGS 5-digit parameter code or string of characteristicNames. Leaving this blank will return all of the measured values during the specified time period.}
 
 \item{startDate}{string starting date for data retrieval in the form YYYY-MM-DD.}
 

@@ -18,14 +18,19 @@ This function accepts a url parameter that already contains the desired
 NWIS site, parameter code, statistic, startdate and enddate.
 }
 \examples{
-sites <- "02177000"
+siteNumber <- "02177000"
 startDate <- "2012-09-01"
 endDate <- "2012-10-01"
 offering <- '00003'
 property <- '00060'
-obs_url <- constructNWISURL(sites,property,startDate,endDate,'dv',format='tsv')
+obs_url <- constructNWISURL(siteNumber,property,
+         startDate,endDate,'dv',format='tsv')
 data <- getRDB1Data(obs_url)
-urlMulti <- constructNWISURL("04085427",c("00060","00010"),startDate,endDate,'dv',statCd=c("00003","00001"),'tsv')
+urlMulti <- constructNWISURL("04085427",c("00060","00010"),
+         startDate,endDate,'dv',statCd=c("00003","00001"),'tsv')
 multiData <- getRDB1Data(urlMulti)
+unitDataURL <- constructNWISURL(siteNumber,property,
+         as.character(Sys.Date()),as.character(Sys.Date()),'uv',format='tsv')
+unitData <- getRDB1Data(unitDataURL, asDateT=TRUE)
 }
 
