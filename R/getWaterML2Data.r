@@ -8,12 +8,13 @@
 #' @import XML
 #' @importFrom plyr rbind.fill.matrix
 #' @examples
-#' URL <- "http://webvastage6.er.usgs.gov/ogc-swie/wml2/dv/sos?request=GetObservation&featureID=435601087432701&observedProperty=00045&beginPosition=2012-01-01&offering=Sum"
-#' dataReturned3 <- getWaterML2Data(URL)
+#' URL <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0&sites=01646500&startDT=2014-09-01&endDT=2014-09-08&statCd=00003&parameterCd=00060"
+#' \dontrun{dataReturned3 <- getWaterML2Data(URL)}
 getWaterML2Data <- function(obs_url){
   
+  h <- basicHeaderGatherer()
   doc = tryCatch({
-    returnedDoc <- getURI(obs_url, headerfunction = h$update)
+    returnedDoc <- getURL(obs_url, headerfunction = h$update)
     if(h$value()["Content-Type"] == "text/xml;charset=UTF-8"){
       xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
     } else {
