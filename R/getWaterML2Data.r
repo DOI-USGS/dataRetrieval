@@ -12,7 +12,25 @@
 #' dataReturned3 <- getWaterML2Data(URL)
 getWaterML2Data <- function(obs_url){
   
-  doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+  doc = tryCatch({
+    returnedDoc <- getURI(obs_url, headerfunction = h$update)
+    if(h$value()["Content-Type"] == "text/xml;charset=UTF-8"){
+      xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
+    } else {
+      message(paste("URL caused an error:", obs_url))
+      message("Content-Type=",h$value()["Content-Type"])
+      return(NA)
+    }   
+    
+  }, warning = function(w) {
+    message(paste("URL caused a warning:", obs_url))
+    message(w)
+  }, error = function(e) {
+    message(paste("URL does not seem to exist:", obs_url))
+    message(e)
+    return(NA)
+  }) 
+  
   doc <- xmlRoot(doc)
   
   ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  
