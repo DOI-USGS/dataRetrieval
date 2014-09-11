@@ -19,7 +19,9 @@
 #' value2 <- c(2,3,4)
 #' comment3 <- c("","","<")
 #' value3 <- c(3,4,5)
-#' dataInput <- data.frame(dateTime, comment1, value1, comment2, value2, comment3, value3, stringsAsFactors=FALSE)
+#' dataInput <- data.frame(dateTime, comment1, value1, 
+#'       comment2, value2, 
+#'       comment3, value3, stringsAsFactors=FALSE)
 #' compressData(dataInput)
 compressData <- function(data, interactive=TRUE){  
   
