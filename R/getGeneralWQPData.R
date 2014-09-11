@@ -30,45 +30,7 @@ getGeneralWQPData <- function(...){
   urlCall <- paste(baseURL,
                    urlCall,
                    "&mimeType=tsv",sep = "")
-  
-  doc = tryCatch({
-    h <- basicHeaderGatherer()
-    doc <- getURL(urlCall, headerfunction = h$update)
-    
-  }, warning = function(w) {
-    message(paste("URL caused a warning:", urlCall))
-    message(w)
-  }, error = function(e) {
-    message(paste("URL does not seem to exist:", urlCall))
-    message(e)
-    return(NA)
-  })
-  
-  if(h$value()["Content-Type"] == "text/tab-separated-values;charset=UTF-8"){
-    
-    numToBeReturned <- as.numeric(h$value()["Total-Result-Count"])
-    
-    if (!is.na(numToBeReturned) | numToBeReturned != 0){
-      retval <- read.delim(textConnection(doc), header = TRUE, quote="\"", 
-                           dec=".", sep='\t', 
-                           colClasses=c('character'), 
-                           fill = TRUE)
-      
-      actualNumReturned <- nrow(retval)
-      
-      if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", actualNumReturned, " were returned")
-      
-      return(retval)
-    } else {
-      warning(paste("No data to retrieve from",urlCall))
-      return(NA)
-    }
-    
-  } else {
-    message(paste("URL caused an error:", urlCall))
-    message("Content-Type=",h$value()["Content-Type"])
-    return(NA)
-  }
-
+  retVal <- basicWQPData(urlCall)
+  return(retVal)
   
 }
