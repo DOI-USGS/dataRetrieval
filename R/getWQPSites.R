@@ -55,12 +55,12 @@ getWQPSites <- function(...){
                            fill = TRUE)    
       actualNumReturned <- nrow(retval)
       
-      if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", actualNumReturned, " were returned")
+      if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sites were expected, ", actualNumReturned, " were returned")
       
       return(retval)
       
     } else {
-      warning("No data to retrieve")
+      warning(paste("No data to retrieve from",urlCall))
       return(NA)
     }
   } else {
