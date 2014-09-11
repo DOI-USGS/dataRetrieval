@@ -129,7 +129,7 @@ getWaterML1Data <- function(obs_url){
       if (1 == i & valuesIndex[1] == j){
         mergedDF <- df
       } else {
-        mergedDF <- merge(mergedDF, df,by=c("dateTime","tz_cd"),all=TRUE)
+        mergedDF <- merge(mergedDF, df,by=c("datetime","tz_cd"),all=TRUE)
       }
     }
   }
