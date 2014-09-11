@@ -17,7 +17,7 @@
 #' filePath <- system.file("extdata", package="dataRetrieval")
 #' filePath <- paste(filePath,"/",sep="")
 #' fileName <- 'ChoptankRiverFlow.txt'
-#' getDataFromFile(filePath,fileName, separator="\t")
+#' ChopData <- getDataFromFile(filePath,fileName, separator="\t")
 getDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=","){
   totalPath <- paste(filePath,fileName,sep="");  
   tmp <- read.delim(  
