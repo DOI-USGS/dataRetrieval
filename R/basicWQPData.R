@@ -64,7 +64,7 @@ basicWQPData <- function(url){
         if(length(unique(timeZoneStart)) == 1){
           retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, ActivityStartTime.Time),format="%Y-%m-%d %H:%M:%S", tz=unique(timeZoneStart)))
         } else {
-          warning("Mixed time zone information")
+#           warning("Mixed time zone information")
           if(any(is.na(timeZoneStart))){
             warning("Missing time zone information, all dateTimes default to user's local time")
             retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, ActivityStartTime.Time), format="%Y-%m-%d %H:%M:%S"),tz=Sys.timezone())

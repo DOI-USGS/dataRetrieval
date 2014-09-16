@@ -21,7 +21,8 @@
 #' multiData <- getRDB1Data(urlMulti)
 #' unitDataURL <- constructNWISURL(siteNumber,property,
 #'          as.character(Sys.Date()),as.character(Sys.Date()),'uv',format='tsv')
-#' unitData <- getRDB1Data(unitDataURL, asDateT=TRUE)
+#' unitData <- getRDB1Data(unitDataURL, asDateTime=TRUE)
+#' mulitSites <- getRDB1Data("http://waterservices.usgs.gov/nwis/dv/?format=rdb&stateCd=OH&parameterCd=00010")
 getRDB1Data <- function(obs_url,asDateTime=FALSE){
   
   retval = tryCatch({
@@ -52,6 +53,16 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE){
     dataType <- tmp[1,]
     data <- tmp[-1,]
     
+    multiSiteCorrections <- -which(as.logical(apply(data[,1:2], 1, FUN=function(x) all(x %in% as.character(dataType[,1:2])))))
+    if(length(multiSiteCorrections) > 0){
+      data <- data[multiSiteCorrections,]
+      
+      findRowsWithHeaderInfo <- as.integer(apply(data[,1:2], 1, FUN = function(x) if(x[1] == names(data)[1] & x[2] == names(data)[2]) 1 else 0))
+      findRowsWithHeaderInfo <- which(findRowsWithHeaderInfo == 0)
+      data <- data[findRowsWithHeaderInfo,]
+      
+    }
+            
     if(sum(regexpr('d$', dataType) > 0) > 0){
       if (asDateTime){
         
@@ -63,7 +74,7 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE){
         if(length(unique(timeZone)) == 1){
           data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = unique(timeZone))
         } else {
-          warning("Mixed time zone information")
+#           warning("Mixed time zone information")
           for(i in seq_along(row.names(data))){
             data[i,regexpr('d$', dataType) > 0] <- as.POSIXct(data[i,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = timeZone[i])
           }
