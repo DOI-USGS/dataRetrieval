@@ -6,7 +6,8 @@
 getNWISData(service = "dv", ...)
 }
 \arguments{
-\item{services}{string}
+\item{service}{string. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels"
+(for groundwater levels), and "qwdata" (for water quality)}
 
 \item{\dots}{see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options}
 }
@@ -15,7 +16,7 @@ retval dataframe
 }
 \description{
 Returns data from the NWIS web service.
-Arguments to the function should be based on \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service}
+Arguments to the function should be based on \url{http://waterservices.usgs.gov} service calls.
 }
 \examples{
 dataTemp <- getNWISData(stateCd="OH",parameterCd="00010")
