@@ -74,10 +74,18 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE){
         if(length(unique(timeZone)) == 1){
           data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = unique(timeZone))
         } else {
-#           warning("Mixed time zone information")
-          for(i in seq_along(row.names(data))){
-            data[i,regexpr('d$', dataType) > 0] <- as.POSIXct(data[i,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = timeZone[i])
+          
+          mostCommonTZ <- names(sort(summary(as.factor(timeZone)),decreasing = TRUE)[1])
+
+          data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = mostCommonTZ)
+          additionalTZs <- names(sort(summary(as.factor(timeZone)),decreasing = TRUE)[-1])
+          for(i in additionalTZs){
+            data[timeZone == i,regexpr('d$', dataType) > 0] <-  as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = i)
           }
+          
+#           for(i in seq_along(row.names(data))){
+#             data[i,regexpr('d$', dataType) > 0] <- as.POSIXct(data[i,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = timeZone[i])
+#           }
         }
         
       } else {

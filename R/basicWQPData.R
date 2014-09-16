@@ -59,21 +59,27 @@ basicWQPData <- function(url){
                                   c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
       timeZoneStart <- as.character(timeZoneLibrary[retval$ActivityStartTime.TimeZoneCode])
       timeZoneEnd <- as.character(timeZoneLibrary[retval$ActivityEndTime.TimeZoneCode])
+      timeZoneStart[is.na(timeZoneStart)] <- ""
+      timeZoneEnd[is.na(timeZoneEnd)] <- ""
       
       if(any(!is.na(timeZoneStart))){
         if(length(unique(timeZoneStart)) == 1){
           retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, ActivityStartTime.Time),format="%Y-%m-%d %H:%M:%S", tz=unique(timeZoneStart)))
         } else {
-#           warning("Mixed time zone information")
-          if(any(is.na(timeZoneStart))){
-            warning("Missing time zone information, all dateTimes default to user's local time")
-            retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, ActivityStartTime.Time), format="%Y-%m-%d %H:%M:%S"),tz=Sys.timezone())
-          } else {
-            for(i in seq_along(row.names(retval))){
-              timeZone <- timeZoneStart[i]
-              retval$ActivityStartDateTime[i] <- with(retval, as.POSIXct(paste(ActivityStartDate[i], ActivityStartTime.Time[i]), format="%Y-%m-%d %H:%M:%S",tz=timeZone))
-            }
+          
+          mostCommonTZ <- names(sort(summary(as.factor(timeZoneStart)),decreasing = TRUE)[1])
+
+          retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, ActivityStartTime.Time),
+                                        format="%Y-%m-%d %H:%M:%S", 
+                                        tz=mostCommonTZ))
+          additionalTZs <- names(sort(summary(as.factor(timeZoneStart)),decreasing = TRUE)[-1])
+          for(i in additionalTZs){
+            retval$ActivityStartDateTime[timeZoneStart == i] <-  with(retval[timeZoneStart == i,], 
+                               as.POSIXct(paste(ActivityStartDate, ActivityStartTime.Time),
+                               format="%Y-%m-%d %H:%M:%S", 
+                               tz=i))      
           }
+
         }
       }
       
@@ -81,20 +87,23 @@ basicWQPData <- function(url){
         if(length(unique(timeZoneEnd)) == 1){
           retval$ActivityEndDateTime <- with(retval, as.POSIXct(paste(ActivityEndDate, ActivityEndTime.Time), format="%Y-%m-%d %H:%M:%S",tz=unique(timeZoneEnd)))
         } else {
-          warning("Mixed time zone information")
-          if(any(is.na(timeZoneEnd))){
-            warning("Missing time zone information, all dateTimes default to user's local time")
-            retval$ActivityEndDateTime <- with(retval, as.POSIXct(paste(ActivityEndDate, ActivityEndTime.Time), format="%Y-%m-%d %H:%M:%S"), tz=Sys.timezone())
-          } else {
-            for(i in seq_along(row.names(retval))){
-              retval$ActivityEndDateTime[i] <- with(retval, as.POSIXct(paste(ActivityEndDate[i], ActivityEndTime.Time[i]), format="%Y-%m-%d %H:%M:%S",tz=timeZoneEnd[i]))
-            }
+          mostCommonTZ <- names(sort(summary(as.factor(timeZoneEnd)),decreasing = TRUE)[1])
+          
+          retval$ActivityEndDateTime <- with(retval, as.POSIXct(paste(ActivityEndDate, ActivityEndTime.Time),
+                                                                  format="%Y-%m-%d %H:%M:%S", 
+                                                                  tz=mostCommonTZ))
+          additionalTZs <- names(sort(summary(as.factor(timeZoneEnd)),decreasing = TRUE)[-1])
+          for(i in additionalTZs){
+            retval$ActivityEndDateTime[timeZoneEnd == i] <-  with(retval[timeZoneEnd == i,], 
+                                                                      as.POSIXct(paste(ActivityEndDate, ActivityEndTime.Time),
+                                                                                 format="%Y-%m-%d %H:%M:%S", 
+                                                                                 tz=i))      
           }
         }
       }
       
       if(any(retval$ActivityEndDate != "")){
-        retval$ActivityEndDate <- as.Date(retval$ActivityEndDate)
+        retval$ActivityEndDate[retval$ActivityEndDate != ""] <- as.Date(retval$ActivityEndDate[retval$ActivityEndDate != ""])
       }
       
       return(retval)
