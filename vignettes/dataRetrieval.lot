@@ -1,10 +1,10 @@
 \select@language {american}
-\contentsline {table}{\numberline {1}{\ignorespaces Common USGS Parameter Codes\relax }}{5}{table.caption.1}
-\contentsline {table}{\numberline {2}{\ignorespaces Commonly used USGS Stat Codes\relax }}{6}{table.caption.2}
+\contentsline {table}{\numberline {1}{\ignorespaces Common USGS Parameter Codes\relax }}{4}{table.caption.1}
+\contentsline {table}{\numberline {2}{\ignorespaces Commonly used USGS Stat Codes\relax }}{5}{table.caption.2}
 \contentsline {table}{\numberline {3}{\ignorespaces Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]\relax }}{7}{table.caption.3}
-\contentsline {table}{\numberline {4}{\ignorespaces Daily dataframe\relax }}{17}{table.caption.6}
-\contentsline {table}{\numberline {5}{\ignorespaces Sample dataframe\relax }}{19}{table.caption.8}
-\contentsline {table}{\numberline {6}{\ignorespaces Example data\relax }}{20}{table.caption.9}
-\contentsline {table}{\numberline {7}{\ignorespaces dataRetrieval functions\relax }}{28}{table.caption.12}
-\contentsline {table}{\numberline {8}{\ignorespaces dataRetrieval miscellaneous functions\relax }}{28}{table.caption.13}
+\contentsline {table}{\numberline {4}{\ignorespaces Daily dataframe\relax }}{16}{table.caption.6}
+\contentsline {table}{\numberline {5}{\ignorespaces Sample dataframe\relax }}{17}{table.caption.8}
+\contentsline {table}{\numberline {6}{\ignorespaces Example data\relax }}{18}{table.caption.9}
+\contentsline {table}{\numberline {7}{\ignorespaces dataRetrieval functions\relax }}{25}{table.caption.12}
+\contentsline {table}{\numberline {8}{\ignorespaces dataRetrieval miscellaneous functions\relax }}{25}{table.caption.13}
 \contentsfinish 
