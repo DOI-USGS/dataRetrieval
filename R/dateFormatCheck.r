@@ -9,6 +9,8 @@
 #' @examples
 #' date <- '1985-01-01'
 #' dateFormatCheck(date)
+#' dateWrong <- '1999/1/7'
+#' dateFormatCheck(dateWrong)
 dateFormatCheck <- function(date){  # checks for the format YYYY-MM-DD
   parts <- strsplit(date,"-",fixed=TRUE)
   condition <- FALSE

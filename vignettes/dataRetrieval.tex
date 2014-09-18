@@ -72,7 +72,7 @@
 \usepackage{csquotes}
 \usepackage{setspace}
 
-\doublespacing
+% \doublespacing
 
 \renewcommand{\topfraction}{0.85}
 \renewcommand{\textfraction}{0.1}
@@ -82,7 +82,8 @@
 \usepackage{mathptmx}% Times Roman font
 \usepackage[scaled=.90]{helvet}% Helvetica, served as a model for arial
 
-\usepackage{indentfirst}
+% \usepackage{indentfirst}
+% \setlength\parindent{20pt}
 \setlength{\parskip}{0pt}
 
 \usepackage{courier}
@@ -148,7 +149,7 @@
   singlelinecheck=false
 }
 
-\setlength\parindent{20pt}
+
 
 \textwidth=6.2in
 \textheight=8.5in
@@ -266,8 +267,8 @@ Once the site-ID (siteNumber) is known, the next required input for USGS data re
 Not every station will measure all parameters. A short list of commonly measured parameters is shown in Table \ref{tab:params}.
 
 
-% latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Thu Sep 11 16:26:30 2014
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Sep 17 13:24:06 2014
 \begin{table}[ht]
 \caption{Common USGS Parameter Codes} 
 \label{tab:params}
@@ -329,8 +330,8 @@ For unit values data (sensor data measured at regular time intervals such as 15 
 
 Some common codes are shown in Table \ref{tab:stat}.
 
-% latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Thu Sep 11 16:26:31 2014
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Sep 17 13:24:07 2014
 \begin{table}[ht]
 \caption{Commonly used USGS Stat Codes} 
 \label{tab:stat}
@@ -410,8 +411,8 @@ To discover what data is available for a particular USGS site, including measure
 \end{knitrout}
 
 
-% latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Thu Sep 11 16:26:32 2014
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Sep 17 13:24:07 2014
 \begin{table}[ht]
 \caption{Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]} 
 \label{tab:gda}
@@ -423,7 +424,7 @@ To discover what data is available for a particular USGS site, including measure
  & Temperature, water & 1988-10-01 & 2012-05-09 & 894 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
   [5pt] & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
-  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-09-10 & 24360 & ft$^3$/s \\ 
+  [5pt] & Stream flow, mean. daily & 1948-01-01 & 2014-09-16 & 24366 & ft$^3$/s \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
   [5pt] & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & uS/cm @25C \\ 
@@ -785,8 +786,8 @@ There are 4750 data points, and 4750 days.
 
 
 
-% latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Thu Sep 11 16:26:44 2014
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Sep 17 13:24:23 2014
 \begin{table}[ht]
 \caption{Daily dataframe} 
 \label{tab:DailyDF1}
@@ -906,8 +907,8 @@ To illustrate how the dataRetrieval package handles a more complex censoring pro
 
 
 
-% latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Thu Sep 11 16:26:45 2014
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Wed Sep 17 13:24:25 2014
 \begin{table}[ht]
 \caption{Example data} 
 \label{tab:exampleComplexQW}
@@ -985,7 +986,7 @@ Finally, qUnit is a numeric argument that defines the discharge units used in th
 So, if you have a file called \enquote{ChoptankRiverFlow.txt} located in a folder called \enquote{RData} on the C drive (this example is for the Windows\textregistered\ operating systems), and the file is structured as follows (tab-separated):
 
 
-\singlespacing
+% \singlespacing
 \begin{verbatim}
 date  Qdaily
 10/1/1999  107
@@ -996,7 +997,7 @@ date  Qdaily
 10/6/1999	98
 ...
 \end{verbatim}
-\doublespacing
+% \doublespacing
 
 The call to open this file, convert the discharge to cubic meters per second, and populate the Daily data frame would be:
 \begin{knitrout}
@@ -1019,7 +1020,6 @@ Microsoft\textregistered\ Excel files can be a bit tricky to import into R direc
 \label{sec:SampleFile}
 %------------------------------------------------------------ 
 
-\doublespacing
 The \texttt{getSampleDataFromFile} function will import a user-generated file and populate the Sample dataframe. The difference between sample data and discharge data is that the code requires a third column that contains a remark code, either blank or \verb@"<"@, which will tell the program that the data were \enquote{left-censored} (or, below the detection limit of the sensor). Therefore, the data must be in the form: date, remark, value.   An example of a comma-delimited file is:
 
 \singlespacing
@@ -1032,7 +1032,6 @@ cdate;remarkCode;Nitrate
 2/3/2000,,1.54
 ...
 \end{verbatim}
-\doublespacing
 
 The call to open this file, and populate the Sample dataframe is:
 \begin{knitrout}
@@ -1059,7 +1058,8 @@ date  rdp	dp	rpp	pp	rtp	tp
 2005-10-30					<	0.020
 ...
 \end{verbatim}
-\doublespacing
+
+
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1348,7 +1348,7 @@ There are a few steps that are required in order to create a table in Microsoft\
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2014-09-10 24360      ft3/s
+2 2014-09-16 24366      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day

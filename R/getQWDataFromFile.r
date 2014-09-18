@@ -15,11 +15,12 @@
 #' @examples
 #' # Examples of how to use getQWDataFromFile:
 #' # Change the file path and file name to something meaningful:
-#' filePath <- '~/RData/'  # Sample format
+#' filePath <- system.file("extdata", package="dataRetrieval")
+#' filePath <- paste(filePath,"/",sep="")
 #' fileName <- 'ChoptankRiverNitrate.csv'
-#' \dontrun{rawSampleData <- getQWDataFromFile(filePath,fileName, separator=";")}
+#' rawSampleData <- getQWDataFromFile(filePath,fileName, separator=";")
 getQWDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=","){
-  totalPath <- paste(filePath,fileName,sep="");
+  totalPath <- paste(filePath,fileName,sep="")
   tmp <- read.delim(  
     totalPath, 
     header = hasHeader,
@@ -29,5 +30,17 @@ getQWDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=","){
     comment.char="#")
   
   retval <- as.data.frame(tmp, stringsAsFactors=FALSE)
-  return (retval)
+  names(retval)[1:3] <- c("dateTime","code","value")
+  
+  if(dateFormatCheck(retval$dateTime[1])){
+    retval$dateTime <- as.Date(retval$dateTime)
+    
+    compressedData <- compressData(retval)
+    Sample <- populateSampleColumns(compressedData)
+    return (Sample)    
+  } else {
+    warning("Please adjust date formatting to 'YYYY-MM-DD'")
+    return(NA)
+  }
+
 }

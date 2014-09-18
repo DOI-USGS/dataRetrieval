@@ -17,6 +17,8 @@ Checks to see if format is YYYY-MM-DD. Also performs a few other date checks.
 \examples{
 date <- '1985-01-01'
 dateFormatCheck(date)
+dateWrong <- '1999/1/7'
+dateFormatCheck(dateWrong)
 }
 \keyword{WRTDS}
 \keyword{flow}

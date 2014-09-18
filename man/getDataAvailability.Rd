@@ -20,7 +20,8 @@ Imports a table of available parameters, period of record, and count.
 # These examples require an internet connection to run
 availableData <- getDataAvailability('05114000')
 # To find just unit value ('instantaneous') data:
-uvData <- availableData <- getDataAvailability('05114000',type="uv")
+uvData <- getDataAvailability('05114000',type="uv")
+uvDataMulti <- getDataAvailability(c('05114000','09423350'),type="uv")
 }
 \keyword{USGS}
 \keyword{data}

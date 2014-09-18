@@ -11,8 +11,11 @@
 #' # These examples require an internet connection to run
 #' availableData <- getDataAvailability('05114000')
 #' # To find just unit value ('instantaneous') data:
-#' uvData <- availableData <- getDataAvailability('05114000',type="uv")
+#' uvData <- getDataAvailability('05114000',type="uv")
+#' uvDataMulti <- getDataAvailability(c('05114000','09423350'),type="uv")
 getDataAvailability <- function(siteNumber,type=c("uv","dv","qw")){
+  
+  siteNumber <- paste(siteNumber,collapse=",")
   
   urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=",siteNumber,sep = "")
  
