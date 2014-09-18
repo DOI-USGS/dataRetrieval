@@ -20,7 +20,7 @@
 #' INFO <- getMetaData('05114000','00010')
 getMetaData <- function(siteNumber="", parameterCd="",interactive=TRUE){
   if (nzchar(siteNumber)){
-    INFO <- getSiteFileData(siteNumber,interactive=interactive)
+    INFO <- getSiteFileData(siteNumber)
   } else {
     INFO <- as.data.frame(matrix(ncol = 2, nrow = 1))
     names(INFO) <- c('site.no', 'shortName')    
