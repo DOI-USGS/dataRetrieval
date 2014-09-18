@@ -18,7 +18,7 @@ getNWISSites <- function(...){
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
   
-  baseURL <- "http://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=expanded&"
+  baseURL <- "http://waterservices.usgs.gov/nwis/site/?format=rdb&"
   urlCall <- paste(baseURL,
                    urlCall,sep = "")
 
