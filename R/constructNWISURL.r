@@ -89,8 +89,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
              }
            },
          wqp = {
-           siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
-           
+      
            #Check for pcode:
            if(all(nchar(parameterCd) == 5)){
              suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
@@ -122,8 +121,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
                         "&countrycode=US&mimeType=tsv",sep = "")
            },
         { # this will be either dv or uv
-          siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
-             
+           
           # Check for 5 digit parameter code:
           if(length(parameterCd)>1){
             parameterCd <- paste(parameterCd, collapse=",")
@@ -145,8 +143,6 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
           } else {
             warning("non-supported format requested, please choose xml or tsv")
           }
-             
-          
           
           url <- paste(baseURL,"/?site=",siteNumber, "&ParameterCd=",parameterCd, "&format=", format, sep = "")
           
