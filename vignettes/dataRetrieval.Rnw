@@ -23,7 +23,7 @@
 \usepackage{csquotes}
 \usepackage{setspace}
 
-\doublespacing
+% \doublespacing
 
 \renewcommand{\topfraction}{0.85}
 \renewcommand{\textfraction}{0.1}
@@ -33,7 +33,8 @@
 \usepackage{mathptmx}% Times Roman font
 \usepackage[scaled=.90]{helvet}% Helvetica, served as a model for arial
 
-\usepackage{indentfirst}
+% \usepackage{indentfirst}
+% \setlength\parindent{20pt}
 \setlength{\parskip}{0pt}
 
 \usepackage{courier}
@@ -99,7 +100,7 @@
   singlelinecheck=false
 }
 
-\setlength\parindent{20pt}
+
 
 \textwidth=6.2in
 \textheight=8.5in
@@ -757,7 +758,7 @@ Finally, qUnit is a numeric argument that defines the discharge units used in th
 So, if you have a file called \enquote{ChoptankRiverFlow.txt} located in a folder called \enquote{RData} on the C drive (this example is for the Windows\textregistered\ operating systems), and the file is structured as follows (tab-separated):
 
 
-\singlespacing
+% \singlespacing
 \begin{verbatim}
 date  Qdaily
 10/1/1999  107
@@ -768,7 +769,7 @@ date  Qdaily
 10/6/1999	98
 ...
 \end{verbatim}
-\doublespacing
+% \doublespacing
 
 The call to open this file, convert the discharge to cubic meters per second, and populate the Daily data frame would be:
 <<openDaily, eval = FALSE>>=
@@ -787,7 +788,6 @@ Microsoft\textregistered\ Excel files can be a bit tricky to import into R direc
 \label{sec:SampleFile}
 %------------------------------------------------------------ 
 
-\doublespacing
 The \texttt{getSampleDataFromFile} function will import a user-generated file and populate the Sample dataframe. The difference between sample data and discharge data is that the code requires a third column that contains a remark code, either blank or \verb@"<"@, which will tell the program that the data were \enquote{left-censored} (or, below the detection limit of the sensor). Therefore, the data must be in the form: date, remark, value.   An example of a comma-delimited file is:
 
 \singlespacing
@@ -800,7 +800,6 @@ cdate;remarkCode;Nitrate
 2/3/2000,,1.54
 ...
 \end{verbatim}
-\doublespacing
 
 The call to open this file, and populate the Sample dataframe is:
 <<openSample, eval = FALSE>>=
@@ -823,7 +822,8 @@ date  rdp	dp	rpp	pp	rtp	tp
 2005-10-30					<	0.020
 ...
 \end{verbatim}
-\doublespacing
+
+
 <<openSample2, eval = FALSE>>=
 fileName <- "ChoptankPhosphorus.txt"
 filePath <-  "C:/RData/"
