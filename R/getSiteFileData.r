@@ -3,18 +3,16 @@
 #' Imports data from USGS site file site. This function gets data from here: \url{http://waterservices.usgs.gov/}
 #'
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
-#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
 #' @return retval dataframe with all information found in the expanded site file
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
 #' siteINFO <- getSiteFileData('05114000')
-getSiteFileData <- function(siteNumber="",interactive=TRUE){
+#' siteINFOMulti <- getSiteFileData(c('05114000','09423350'))
+getSiteFileData <- function(siteNumber){
   
-  # Checking for 8 digit site ID:
-  siteNumber <- formatCheckSiteNumber(siteNumber, interactive=interactive)
-  
+  siteNumber <- paste(siteNumber,collapse=",")
   urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=Expanded&sites=",siteNumber,sep = "")
   
   doc = tryCatch({
