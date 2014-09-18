@@ -7,6 +7,7 @@
 #' @keywords data import USGS web service
 #' @return retval dataframe with all information found in the expanded site file
 #' @export
+#' @import RCurl
 #' @examples
 #' # These examples require an internet connection to run
 #' availableData <- getDataAvailability('05114000')
@@ -45,7 +46,7 @@ getDataAvailability <- function(siteNumber,type=c("uv","dv","qw")){
     
     SiteFile <- SiteFile[-1,]
     
-    SiteFile <- with(SiteFile, data.frame(parameter_cd=parm_cd, statCd=stat_cd, startDate=begin_date,endDate=end_date, count=count_nu,service=data_type_cd,stringsAsFactors = FALSE))
+    SiteFile <- with(SiteFile, data.frame(site_no=site_no, parameter_cd=parm_cd, statCd=stat_cd, startDate=begin_date,endDate=end_date, count=count_nu,service=data_type_cd,stringsAsFactors = FALSE))
     
     SiteFile <- SiteFile[!is.na(SiteFile$parameter_cd),]
     SiteFile <- SiteFile["" != SiteFile$parameter_cd,]
