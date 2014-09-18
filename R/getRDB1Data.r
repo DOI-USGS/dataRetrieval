@@ -62,8 +62,10 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE){
       data <- data[findRowsWithHeaderInfo,]
       
     }
-            
-    if(sum(regexpr('d$', dataType) > 0) > 0){
+    
+    data[,grep('n$', dataType)] <- suppressWarnings(sapply(data[,grep('n$', dataType)], function(x) as.numeric(x)))
+    
+    if(length(grep('d$', dataType)) > 0){
       if (asDateTime){
         
         timeZoneLibrary <- setNames(c("America/New_York","America/New_York","America/Chicago","America/Chicago",
@@ -82,22 +84,17 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE){
           for(i in additionalTZs){
             data[timeZone == i,regexpr('d$', dataType) > 0] <-  as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = i)
           }
-          
-#           for(i in seq_along(row.names(data))){
-#             data[i,regexpr('d$', dataType) > 0] <- as.POSIXct(data[i,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = timeZone[i])
-#           }
         }
         
       } else {
-        data[,regexpr('d$', dataType) > 0] <- as.Date(data[,regexpr('d$', dataType) > 0])
+        for (i in grep('d$', dataType)){
+          data[,i] <- as.Date(data[,i])
+        }
+        
+        
       }
     }
     
-    if (sum(regexpr('n$', dataType) > 0) > 0){
-      tempDF <- data[,which(regexpr('n$', dataType) > 0)]
-      tempDF <- suppressWarnings(sapply(tempDF, function(x) as.numeric(x)))  
-      data[,which(regexpr('n$', dataType) > 0)] <- tempDF
-    }
     row.names(data) <- NULL
     return(data)
   } else {
