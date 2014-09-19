@@ -27,6 +27,5 @@ getNWISData <- function(service="dv", ...){
   }
   
   retval <- getRDB1Data(urlCall)
-  
   return(retval)
 }
