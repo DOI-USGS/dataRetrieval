@@ -41,11 +41,14 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
   dateReturn <- checkStartEndDate(startDate, endDate, interactive=interactive)
   startDate <- dateReturn[1]
   endDate <- dateReturn[2]
+  multipleSites <- length(siteNumber) > 1
+  multiplePcodes <- length(parameterCd)>1
+  siteNumber <- paste(siteNumber, collapse=",")
   
   switch(service,
          qw = {
-             if(length(siteNumber) > 1){    
-               siteNumber <- paste(siteNumber, collapse=",")
+             if(multipleSites){    
+               
                siteNumber <- paste("multiple_site_no",siteNumber,sep="=")
                searchCriteria <- "multiple_site_no"
              } else {
@@ -54,7 +57,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
                searchCriteria <- "search_site_no"
              }
              
-             if(length(parameterCd)>1){
+             if(multiplePcodes){
                pCodes <- paste(parameterCd, collapse=",")
                pCodes <- paste('multiple_parameter_cds', pCodes, sep="=")
                pCodes <- paste(pCodes, "param_cd_operator=OR",sep="&")
@@ -95,10 +98,11 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
              suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
            } else {
              pCodeLogic <- FALSE
+             parameterCd <- gsub(",","%2C",parameterCd)
              parameterCd <- URLencode(parameterCd)
            }
            
-           if(length(parameterCd)>1){
+           if(multiplePcodes){
              parameterCd <- paste(parameterCd, collapse=";")
            }
            
@@ -123,7 +127,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
         { # this will be either dv or uv
            
           # Check for 5 digit parameter code:
-          if(length(parameterCd)>1){
+          if(multiplePcodes){
             parameterCd <- paste(parameterCd, collapse=",")
           } else {
             parameterCd <- formatCheckParameterCd(parameterCd, interactive=interactive)
@@ -167,6 +171,6 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
         }
          
     )
-  
+
   return(url)
 }
