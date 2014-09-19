@@ -7,7 +7,7 @@ retrieveNWISdvData(siteNumber, parameterCd, startDate, endDate,
   statCd = "00003", format = "tsv", interactive = TRUE)
 }
 \arguments{
-\item{siteNumber}{string USGS site number.  This is usually an 8 digit number}
+\item{siteNumber}{string USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a string vector.}
 
 \item{parameterCd}{string or vector of USGS parameter code.  This is usually an 5 digit number..}
 
@@ -43,6 +43,8 @@ rawDailyTemperature <- retrieveNWISdvData(siteNumber,'00010',
 rawDailyTemperatureTSV <- retrieveNWISdvData(siteNumber,'00010',
        startDate, endDate, statCd='00001',format='tsv')
 rawDailyQAndTempMeanMax <- retrieveNWISdvData(siteNumber,c('00010','00060'),
+       startDate, endDate, statCd=c('00001','00003'))
+rawDailyMultiSites<- retrieveNWISdvData(c("01491000","01645000"),c('00010','00060'),
        startDate, endDate, statCd=c('00001','00003'))
 }
 \keyword{USGS}

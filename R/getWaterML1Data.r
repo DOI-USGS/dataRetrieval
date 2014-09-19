@@ -52,11 +52,15 @@ getWaterML1Data <- function(obs_url){
   timeSeries <- xpathApply(doc, "//ns1:timeSeries", namespaces = ns)
   
   for (i in 1:length(timeSeries)){
-
+    
+    
     chunk <- xmlDoc(timeSeries[[i]])
     chunk <- xmlRoot(chunk)
     chunkNS <- xmlNamespaceDefinitions(chunk, simplify = TRUE)  
       
+#     site <- as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:siteProperty[@name='hucCd']", namespaces = chunkNS, xmlValue))
+    site <- as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:siteCode", namespaces = chunkNS, xmlValue))
+    agency <- as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:siteCode/@agencyCode", namespaces = chunkNS))
     pCode <-as.character(xpathApply(chunk, "ns1:variable/ns1:variableCode", namespaces = chunkNS, xmlValue))
     statCd <- as.character(xpathApply(chunk, "ns1:variable/ns1:options/ns1:option/@optionCode", namespaces = chunkNS))
 
@@ -76,14 +80,14 @@ getWaterML1Data <- function(obs_url){
       methodID <- padVariable(methodID,2)
       
       value <- as.numeric(xpathSApply(subChunk, "ns1:value",namespaces = chunkNS, xmlValue))  
-      dateTime <- as.POSIXct(strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S"))
+      datetime <- as.POSIXct(strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S"))
       tzHours <- substr(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),
                         24,
                         nchar(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS)))
       if(mean(nchar(tzHours),rm.na=TRUE) == 6){
         tzAbbriev <- zoneAbbrievs[tzHours]
       } else {
-        tzAbbriev <- rep(as.character(zoneAbbrievs[1]),length(dateTime))
+        tzAbbriev <- rep(as.character(zoneAbbrievs[1]),length(datetime))
       }
       
       timeZoneLibrary <- setNames(c("America/New_York","America/New_York","America/Chicago","America/Chicago",
@@ -92,11 +96,11 @@ getWaterML1Data <- function(obs_url){
                                   c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
       timeZone <- as.character(timeZoneLibrary[tzAbbriev])
       if(length(unique(timeZone)) == 1){
-       dateTime <- as.POSIXct(as.character(dateTime), tz = unique(timeZone))
+       datetime <- as.POSIXct(as.character(datetime), tz = unique(timeZone))
       } else {
         warning("Mixed time zone information")
-        for(i in seq_along(dateTime)){
-          dateTime[i] <- as.POSIXct(as.character(dateTime[i]), tz = timeZone[i])
+        for(i in seq_along(datetime)){
+          datetime[i] <- as.POSIXct(as.character(datetime[i]), tz = timeZone[i])
         }
       }
       
@@ -111,38 +115,34 @@ getWaterML1Data <- function(obs_url){
       assign(qualName,qualifier)
       
       if(length(get(qualName))!=0){
-        df <- data.frame(dateTime,
+        df <- data.frame(rep(agency,length(datetime)),
+                         rep(site,length(datetime)),
+                         datetime,
                          tzAbbriev,
                          get(valueName),
                          get(qualName),
                          stringsAsFactors=FALSE)
         
-        names(df) <- c("datetime","tz_cd",valueName,qualName)
+        names(df) <- c("agency_cd","site_no","datetime","tz_cd",valueName,qualName)
       } else {
-        df <- data.frame(dateTime,
+        df <- data.frame(rep(agency,length(datetime)),
+                         rep(site,length(datetime)),
+                         datetime,
                          tzAbbriev,
                          get(valueName),stringsAsFactors=FALSE)
         
-        names(df) <- c("datetime","tz_cd",valueName)       
+        names(df) <- c("agency_cd","site_no","datetime","tz_cd",valueName)       
       }
  
       if (1 == i & valuesIndex[1] == j){
         mergedDF <- df
       } else {
-        mergedDF <- merge(mergedDF, df,by=c("datetime","tz_cd"),all=TRUE)
+        similarNames <- intersect(names(mergedDF), names(df))
+        mergedDF <- merge(mergedDF, df,by=similarNames,all=TRUE)
+#         mergedDF <- merge(mergedDF, df,by=c("agency_cd","site_no","datetime","tz_cd"),all=TRUE)
       }
     }
   }
-
-  agencyCd <- as.character(xpathSApply(timeSeries[[1]], "ns1:sourceInfo/ns1:siteCode/@agencyCode",namespaces = chunkNS))
-  siteNo <- as.character(xpathSApply(timeSeries[[1]], "ns1:sourceInfo/ns1:siteCode",namespaces = chunkNS, xmlValue))
-  
-  mergedDF$agency_cd <- rep(agencyCd, nrow(mergedDF))
-  mergedDF$site_no <- rep(siteNo, nrow(mergedDF))
-  
-  reorder <- c(ncol(mergedDF)-1, ncol(mergedDF), 1:(ncol(mergedDF)-2))
-  
-  mergedDF <- mergedDF[,reorder]
   
   return (mergedDF)
 }

@@ -22,7 +22,6 @@
 #' unitDataURL <- constructNWISURL(siteNumber,property,
 #'          as.character(Sys.Date()),as.character(Sys.Date()),'uv',format='tsv')
 #' unitData <- getRDB1Data(unitDataURL, asDateTime=TRUE)
-#' mulitSites <- getRDB1Data("http://waterservices.usgs.gov/nwis/dv/?format=rdb&stateCd=OH&parameterCd=00010")
 getRDB1Data <- function(obs_url,asDateTime=FALSE){
   
   retval = tryCatch({
@@ -79,10 +78,10 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE){
           
           mostCommonTZ <- names(sort(summary(as.factor(timeZone)),decreasing = TRUE)[1])
 
-          data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = mostCommonTZ)
+          data[,grep('d$', dataType)] <- as.POSIXct(data[,grep('d$', dataType)], "%Y-%m-%d %H:%M", tz = mostCommonTZ)
           additionalTZs <- names(sort(summary(as.factor(timeZone)),decreasing = TRUE)[-1])
           for(i in additionalTZs){
-            data[timeZone == i,regexpr('d$', dataType) > 0] <-  as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = i)
+            data[timeZone == i,grep('d$', dataType)] <-  as.POSIXct(data[,grep('d$', dataType)], "%Y-%m-%d %H:%M", tz = i)
           }
         }
         
@@ -90,8 +89,6 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE){
         for (i in grep('d$', dataType)){
           data[,i] <- as.Date(data[,i])
         }
-        
-        
       }
     }
     

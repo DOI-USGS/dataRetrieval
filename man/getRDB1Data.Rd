@@ -32,6 +32,5 @@ multiData <- getRDB1Data(urlMulti)
 unitDataURL <- constructNWISURL(siteNumber,property,
          as.character(Sys.Date()),as.character(Sys.Date()),'uv',format='tsv')
 unitData <- getRDB1Data(unitDataURL, asDateTime=TRUE)
-mulitSites <- getRDB1Data("http://waterservices.usgs.gov/nwis/dv/?format=rdb&stateCd=OH&parameterCd=00010")
 }
 

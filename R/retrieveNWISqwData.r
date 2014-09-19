@@ -4,7 +4,7 @@
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
 #' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
-#' @param siteNumber string or vector of strings USGS site number.  This is usually an 8 digit number
+#' @param siteNumber string or vector of of USGS site numbers.  This is usually an 8 digit number
 #' @param pCodes string or vector of USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
@@ -16,6 +16,8 @@
 #' @return data dataframe with agency, site, dateTime, value, and code columns
 #' @export
 #' @import reshape2
+#' @seealso \code{\link{getWQPData}}, \code{\link{getWQPSites}}, 
+#' \code{\link{retrieveWQPqwData}}, \code{\link{constructNWISURL}}
 #' @examples
 #' # These examples require an internet connection to run
 #' siteNumber <- c('04024430','04024000')
