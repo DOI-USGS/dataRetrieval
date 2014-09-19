@@ -7,7 +7,7 @@ retrieveNWISqwData(siteNumber, pCodes, startDate, endDate, expanded = FALSE,
   interactive = TRUE)
 }
 \arguments{
-\item{siteNumber}{string or vector of strings USGS site number.  This is usually an 8 digit number}
+\item{siteNumber}{string or vector of of USGS site numbers.  This is usually an 8 digit number}
 
 \item{pCodes}{string or vector of USGS parameter code.  This is usually an 5 digit number.}
 
@@ -42,6 +42,10 @@ data <- rawNWISqwData[,names(rawNWISqwData) != "site"]
 data$dateTime <- as.Date(data$dateTime)
 compressedData <- compressData(data)
 Sample <- populateSampleColumns(compressedData)
+}
+\seealso{
+\code{\link{getWQPData}}, \code{\link{getWQPSites}},
+\code{\link{retrieveWQPqwData}}, \code{\link{constructNWISURL}}
 }
 \keyword{USGS}
 \keyword{data}

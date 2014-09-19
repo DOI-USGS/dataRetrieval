@@ -76,14 +76,14 @@
 \titlecontents{table}
 [0em]                 % adjust left margin
 {\sffamily}             % font formatting
-{\textbf{Table}\hspace*{2em} \contentslabel {2em}} % section label and offset
+{Table\hspace*{2em} \contentslabel {2em}} % section label and offset
 {\hspace*{4em}}
 {\titlerule*[0.25pc]{.}\contentspage}
 
 \titlecontents{figure}
 [0em]                 % adjust left margin
 {\sffamily}             % font formatting
-{\textbf{Figure}\hspace*{2em} \contentslabel {2em}} % section label and offset
+{Figure\hspace*{2em} \contentslabel {2em}} % section label and offset
 {\hspace*{4em}}
 {\titlerule*[0.25pc]{.}\contentspage}
 
@@ -184,7 +184,7 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 The dataRetrieval package was created to simplify the process of loading hydrologic data into the R environment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends. See: \url{https://github.com/USGS-R/EGRET/wiki} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the Weighted Regressions on Time, Discharge and Season (WRTDS) method as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
 
 
-The dataRetrieval package is designed to retrieve many of the major data types of United States Geological Survey (USGS) hydrologic data that are available on the Web. Users may also load data from other sources (text files, spreadsheets) using dataRetrieval.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into dataframes within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRET package.  The functionality described in section \ref{sec:summary} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRET package.
+The dataRetrieval package is designed to retrieve many of the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web. Users may also load data from other sources (text files, spreadsheets) using dataRetrieval.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into dataframes within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRET package.  The functionality described in section \ref{sec:summary} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRET package.
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
@@ -222,14 +222,14 @@ Sample <- mergeReport()
 \section{General USGS Web Retrievals}
 \label{sec:genRetrievals}
 %------------------------------------------------------------ 
-In this section, five examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The site-ID for this streamgage is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
+In this section, five examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  The siteNumber for this streamgage is 01491000. Daily discharge measurements are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
 
 % %------------------------------------------------------------
 % \subsection{Introduction}
 % %------------------------------------------------------------
-The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID.  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this 8-digit ID. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
+The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrieval package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
-Once the site-ID (siteNumber) is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. A complete list of possible USGS parameter codes can be found at \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?help}.
+Once the siteNumber is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. A complete list of possible USGS parameter codes can be found at \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?help}.
 
 Not every station will measure all parameters. A short list of commonly measured parameters is shown in Table \ref{tab:params}.
 
@@ -259,9 +259,6 @@ A complete list (as of September 25, 2013) is available as data attached to the 
 library(dataRetrieval)
 parameterCdFile <-  parameterCdFile
 names(parameterCdFile)
-
-# Sorting out some common values:
-subset(parameterCdFile,parameter_cd %in% c("00060","00010","00400"))
 @
 
 
@@ -301,20 +298,18 @@ Examples for using these siteNumber's, parameter codes, and stat codes will be p
 \subsubsection{getSiteFileData}
 \label{sec:usgsSiteFileData}
 %------------------------------------------------------------
-Use the \texttt{getSiteFileData} function to obtain all of the information available for a particular USGS site such as full station name, drainage area, latitude, and longitude:
+Use the \texttt{getSiteFileData} function to obtain all of the information available for a particular USGS site such as full station name, drainage area, latitude, and longitude. \texttt{getSiteFileData} can also access information about multiple sites with a vector input.
 
 
 <<getSite, echo=TRUE>>=
-
-# Choptank River near Greensboro, MD
-siteNumber <- "01491000" 
-ChoptankInfo <- getSiteFileData(siteNumber)
+siteNumbers <- c("01491000","01645000") 
+siteINFO <- getSiteFileData(siteNumbers)
 @
 
 A specific example piece of information can be retrieved, in this case a station name, as follows:
 
 <<siteNames2, echo=TRUE>>=
-ChoptankInfo$station.nm
+siteINFO$station.nm
 @
 Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
 \FloatBarrier
@@ -330,23 +325,28 @@ To discover what data is available for a particular USGS site, including measure
 # Continuing from the previous example:
 # This pulls out just the daily data:
 
-ChoptankDailyData <- getDataAvailability(siteNumber,
+dailyDataAvailable <- getDataAvailability(siteNumbers,
                     type="dv")
 
 @
 
 
 <<tablegda, echo=FALSE,results='asis'>>=
-tableData <- with(ChoptankDailyData, 
-      data.frame( srsname=srsname, 
+tableData <- with(dailyDataAvailable, 
+      data.frame( 
+      siteNumber= site_no,
+      srsname=srsname, 
       startDate=as.character(startDate), 
       endDate=as.character(endDate), 
       count=as.character(count),
       units=parameter_units,
+      statCd = statCd,
       stringsAsFactors=FALSE)
       )
 
 tableData$units[which(tableData$units == "ft3/s")] <- "ft$^3$/s"
+tableData$units[which(tableData$units == "uS/cm @25C")] <- "$\\mu$S/cm @25C"
+
 
 print(xtable(tableData,label="tab:gda",
     caption="Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]"),
@@ -368,7 +368,7 @@ See Section \ref{app:createWordTable} for instructions on converting an R datafr
 \subsection{Parameter Information}
 \label{sec:usgsParams}
 %------------------------------------------------------------
-To obtain all of the available information concerning a measured parameter, use the \texttt{getParameterInfo} function:
+To obtain all of the available information concerning a measured parameter (or multiple parameters), use the \texttt{getParameterInfo} function:
 
 <<label=getPCodeInfo, echo=TRUE>>=
 # Using defaults:
@@ -395,7 +395,8 @@ The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (
 <<label=getNWISDaily, echo=TRUE, eval=TRUE>>=
 
 # Continuing with our Choptank River example
-parameterCd <- "00060"  # Discharge (ft3/s)
+siteNumber <- "01491000"
+parameterCd <- "00060"  # Discharge
 startDate <- ""  # Will request earliest date
 endDate <- "" # Will request latest date
 
@@ -446,8 +447,9 @@ with(temperatureAndFlow, plot(
   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
   ))
 axis(4,col="red",col.axis="red")
-mtext("Mean Discharge [ft3/s]",side=4,line=3,col="red")
-title(paste(ChoptankInfo$station.nm,"2012",sep=" "))
+mtext(expression(paste("Mean Discharge [ft"^"3","/s]",
+                       sep="")),side=4,line=3,col="red")
+title(paste(siteINFO$station.nm[1],"2012",sep=" "))
 legend("topleft", c("Max Temperature", "Mean Discharge"), 
        col=c("black","red"),lty=c(NA,1),pch=c(1,NA))
 @
@@ -465,7 +467,7 @@ Any data collected at regular time intervals (such as 15-minute or hourly) are k
 
 <<label=getNWISUnit, echo=TRUE>>=
 
-parameterCd <- "00060"  # Discharge (ft3/s)
+parameterCd <- "00060"  # Discharge
 startDate <- "2012-05-12" 
 endDate <- "2012-05-13" 
 dischargeToday <- retrieveNWISunitData(siteNumber, parameterCd, 
@@ -489,7 +491,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{retrieveNWISqwData}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{retrieveNWISunitData} and \texttt{retrieveNWISdvData}).
+To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{retrieveNWISqwData}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{retrieveNWISunitData} and \texttt{retrieveNWISdvData}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expaned = TRUE includes such columns as remark codes, value qualifying text, and detection level.
 
 
 <<label=getQW, echo=TRUE>>=
@@ -500,38 +502,38 @@ startDate <- "1985-10-01"
 endDate <- "2012-09-30"
 
 dissolvedNitrate <- retrieveNWISqwData(siteNumber, parameterCd, 
-      startDate, endDate)
+      startDate, endDate, expanded=TRUE)
 names(dissolvedNitrate)
+
 
 @
 
-% Note that in this \enquote{simple} dataframe, datetime is imported as Dates (no times are included), and the qualifier is either blank or \verb@"<"@ signifying a censored value. A plotting example is shown in Figure \ref{fig:getQWtemperaturePlot}.
 
-<<getQWtemperaturePlot, echo=TRUE, fig.cap="Nitrate plot of Choptank River.">>=
+<<getQWtemperaturePlot, echo=TRUE, fig.cap=paste(parameterINFO$parameter_nm, "at", siteINFO$station.nm[1])>>=
 with(dissolvedNitrate, plot(
-  dateTime, value_00618,
+  dateTime, result_va_00618,
   xlab="Date",ylab = paste(parameterINFO$srsname,
       "[",parameterINFO$parameter_units,"]")
   ))
-title(ChoptankInfo$station.nm)
+title(siteINFO$station.nm[1])
 @
 
 \FloatBarrier
+
+
 
 %------------------------------------------------------------
 \subsection{STORET Water Quality Retrievals}
 \label{sec:usgsSTORET}
 %------------------------------------------------------------
-There are additional water quality data sets available from the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET (data from EPA) or NWIS database.  Because STORET does not use USGS parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{getWQPData} function can retrieve either STORET or NWIS, but requires a characteristic name rather than parameter code. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
+There are additional water quality data sets available from the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET (data from EPA), NWIS database (data from USGS), and additional databases are slated to be included.  Because only USGS uses parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{retrieveWQPqwData} function can take either a USGS parameter code, or a more general cahracteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
 
 
-<<label=getQWData, echo=TRUE>>=
-specificCond <- getWQPData('WIDNR_WQX-10032762',
+<<label=getQWData, echo=TRUE, eval=FALSE>>=
+specificCond <- retrieveWQPqwData('WIDNR_WQX-10032762',
                 'Specific conductance','2011-05-01','2011-09-30')
-head(specificCond)
 @
 
-\FloatBarrier
 %------------------------------------------------------------
 \subsection{URL Construction}
 \label{sec:usgsURL}
@@ -549,6 +551,110 @@ url_dv <- constructNWISURL(siteNumber,"00060",startDate,endDate,
                            'dv',statCd="00003")
 url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'uv')
 @
+
+\FloatBarrier
+
+%------------------------------------------------------------
+\subsection{Generalized Retrievals}
+\label{sec:general}
+%------------------------------------------------------------
+The previous examples all took specific input arguments: siteNumber, parameterCd (or characteristic name), startDate, endDate, etc. However, the Web services that supply the data can accept a wide variety of additional arguments. 
+
+%------------------------------------------------------------
+\subsubsection{Generalized NWIS site retrievals}
+\label{sec:NWISGenSite}
+%------------------------------------------------------------
+The function \texttt{getNWISSites} can be used to discover NWIS sites based on any query that the NWIS Site Service offers. This is done by using the \texttt{"..."} argument, which allows the user to use any arbitrary input argument. We can then use the service here:
+
+\url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
+
+to discover many options for searching for NWIS sites. For example, you may want to search for sites in a lat/lon bounding box, or only sites tidal streams, or sites with water quality samples, sites above a certain altitude, etc. The results of this site query generate a URL. For example, the tool provided a search within a specified bounding box, for sites that have daily discharge (parameter code = 00060) and temperature (parameter code = 00010). The generated URL is:
+
+\url{http://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv}
+
+The following dataRetrieval code can be used to get those sites:
+
+<<siteSearch>>=
+sites <- getNWISSites(bBox="-83.0,36.5,-81.0,38.5", 
+                      parameterCd="00010,00060",
+                      hasDataTypeCd="dv")
+
+names(sites)
+nrow(sites)
+@
+
+
+%------------------------------------------------------------
+\subsubsection{Generalized NWIS data retrievals}
+\label{sec:NWISGenData}
+%------------------------------------------------------------
+For NWIS data, the function \texttt{getNWISData} can be used. The argument listed in the R help file is \texttt{"..."} and \texttt{"}service\texttt{"} (only for data requests). Table \ref{tab:NWISGeneral} describes the services are available.
+
+\begin{table}[!ht]
+\begin{minipage}{\linewidth}
+{\footnotesize
+\caption{NWIS general data calls} 
+\label{tab:NWISGeneral}
+\begin{tabular}{lll}
+  \hline
+\multicolumn{1}{c}{\textbf{\textsf{Service}}} &
+\multicolumn{1}{c}{\textbf{\textsf{Description}}}  &
+\multicolumn{1}{c}{\textbf{\textsf{Reference URL}}} \\  [0pt]
+  \hline
+  daily values &  dv & \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}\\
+  [5pt]instantaneous & iv & \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}\\
+  [5pt]groundwater levels & gwlevels & \url{http://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html}\\
+  [5pt]water quality & qwdata & \url{http://nwis.waterdata.usgs.gov/nwis/qwdata}\\
+   \hline
+\end{tabular}
+}
+\end{minipage}
+\end{table}
+
+The \texttt{"..."} argument allows the user to create their own queries based on the instructions found in the web links above. The links provide instructions on how to create a URL to request data. Perhaps you want sites only in Wisconsin, with a drainage area less than 50 mi$^2$, and the most recent daily dischage data. That request would be done as follows:
+
+<<dataExample>>=
+dischargeWI <- getNWISData(stateCd="WI",
+                           parameterCd="00060",
+                           drainAreaMin="50",
+                           statCd="00003")
+names(dischargeWI)
+nrow(dischargeWI)
+@
+
+%------------------------------------------------------------
+\subsubsection{Generalized Water Quality Portal site retrievals}
+\label{sec:WQPGenSite}
+%------------------------------------------------------------
+
+Just as with NWIS, the Water Quality Portal (WQP) offers a variety of ways to search for sites and request data. The possible Web service arguments for WQP site searches is found here:
+
+\url{http://www.waterqualitydata.us/webservices_documentation.jsp}
+
+To discover available sites in the WQP in New Jersey that have measured Chloride, use the function \texttt{getWQPSites}.
+
+<<NJChloride, eval=FALSE>>=
+
+sitesNJ <- getWQPSites(statecode="US:34",
+                       characteristicName="Chloride")
+
+@
+
+
+%------------------------------------------------------------
+\subsubsection{Generalized Water Quality Portal data retrievals}
+\label{sec:WQPGenData}
+%------------------------------------------------------------
+Finally, to get data from the WQP using generalized Web service calls, use the function \texttt{getWQPData}. For example, to get all the pH data in Wisconsin:
+
+<<phData, eval=FALSE>>=
+
+dataPH <- getWQPData(statecode="US:55", 
+                 characteristicName="pH")
+
+@
+
+
 
 \FloatBarrier
 
@@ -859,7 +965,7 @@ head(Sample)
 %------------------------------------------------------------
 The Daily, Sample, and INFO dataframes (described in Secs. \ref{INFOsubsection} - \ref{Samplesubsection}) are specifically formatted to be used with the EGRET package. The EGRET package has powerful modeling capabilities that use WRTDS, but EGRET also has graphing and tabular tools for exploring the data without using the WRTDS algorithm. See the EGRET vignette, user guide, and/or wiki (\url{https://github.com/USGS-R/EGRET/wiki}) for detailed information. Figure \ref{fig:egretEx} shows one of the plotting functions that can be used directly from the dataRetrieval dataframes.
 
-<<egretEx, echo=TRUE, eval=TRUE, fig.cap="Default multiPlotDataOverview">>=
+<<egretEx, echo=TRUE, eval=TRUE, fig.cap="Default \\texttt{multiPlotDataOverview}">>=
 # Continuing Choptank example from the previous sections
 library(EGRET)
 multiPlotDataOverview()
@@ -1065,6 +1171,11 @@ From Excel, it is simple to copy and paste the tables in other Microsoft\textreg
 \end{figure}
 
 \clearpage
+
+%-------------------------------------
+\section{Disclaimer}
+%------------------------------------
+This information is preliminary and is subject to revision. It is being provided to meet the need for timely best science. The information is provided on the condition that neither the U.S. Geological Survey nor the U.S. Government may be held liable for any damages resulting from the authorized or unauthorized use of the information.
 
 % %------------------------------------------------------------
 % % BIBLIO

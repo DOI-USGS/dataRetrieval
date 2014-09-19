@@ -23,7 +23,12 @@ retval dataframe raw data returned from the Water Quality Portal. Additionally, 
 start and end times.
 }
 \description{
-Imports data from the Water Quality Portal. This function gets the data from here: \url{http://www.waterqualitydata.us}
+Imports data from the Water Quality Portal.
+This function gets the data from here: \url{http://www.waterqualitydata.us}. There
+are four required input arguments: siteNumber, parameterCd, startDate, and endDate.
+parameterCd can either be a USGS 5-digit code, or a characteristic name. The sites can be
+either USGS, or other Water Quality Portal offered sites. It is required to use the 'full'
+site name, such as 'USGS-01234567'.
 }
 \examples{
 # These examples require an internet connection to run
@@ -31,6 +36,10 @@ rawSample <- retrieveWQPqwData('USGS-01594440','01075', '1985-01-01', '1985-03-3
 rawSampleAll <- retrieveWQPqwData('USGS-05114000','', '1985-01-01', '1985-03-31')
 rawSampleSelect <- retrieveWQPqwData('USGS-05114000',c('00915','00931'), '1985-01-01', '1985-04-30')
 rawStoret <- retrieveWQPqwData('WIDNR_WQX-10032762','Specific conductance', '', '')
+}
+\seealso{
+\code{\link{getWQPData}}, \code{\link{getWQPSites}},
+\code{\link{getSTORETSampleData}}, \code{\link{retrieveNWISqwData}}, and \code{\link{basicWQPData}}
 }
 \keyword{USGS}
 \keyword{data}
