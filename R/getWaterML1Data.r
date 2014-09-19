@@ -137,7 +137,9 @@ getWaterML1Data <- function(obs_url){
       if (1 == i & valuesIndex[1] == j){
         mergedDF <- df
       } else {
-        mergedDF <- merge(mergedDF, df,by=c("agency_cd","site_no","datetime","tz_cd"),all=TRUE)
+        similarNames <- intersect(names(mergedDF), names(df))
+        mergedDF <- merge(mergedDF, df,by=similarNames,all=TRUE)
+#         mergedDF <- merge(mergedDF, df,by=c("agency_cd","site_no","datetime","tz_cd"),all=TRUE)
       }
     }
   }
