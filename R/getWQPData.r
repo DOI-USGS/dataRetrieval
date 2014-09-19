@@ -1,45 +1,40 @@
-#' Data Import from Water Quality Portal
+#' General Data Import from Water Quality Portal
 #'
-#' Imports data from Water Quality Portal web service. This function gets the data from: \url{http://www.waterqualitydata.us}. This function is more general than getQWData
-#' because it allows for other agencies rather than the USGS.  Therefore, the 5-digit parameter code cannot be used.
-#' Instead, this function uses characteristicName.  A complete list can be found here 
+#' Imports data from Water Quality Portal web service. This function gets the data from here: \url{http://www.waterqualitydata.us}.
+#' because it allows for other agencies rather than the USGS.  
 #'
-#' @param siteNumber string site number.  If USGS, it should be in the form :'USGS-XXXXXXXXX...'
-#' @param characteristicName string
-#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
-#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
+#' @param \dots see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options
 #' @keywords data import WQP web service
 #' @return retval dataframe with first column dateTime, and at least one qualifier and value columns
 #' (subsequent qualifier/value columns could follow depending on requested parameter codes)
 #' @export
-#' @import RCurl
 #' @examples
-#' # These examples require an internet connection to run
-#' Chloride <- getWQPData('USGS-01594440','Chloride', '', '')
-#' SC <- getWQPData('WIDNR_WQX-10032762','Specific conductance', '', '')
-#' NWIS_Cl <- getWQPData('USGS-04024000','30234', '', '')
-#' MultipleQW <- getWQPData('USGS-04024000',c('30234','90095'), '', '')
-getWQPData <- function(siteNumber,characteristicName,startDate,endDate,interactive=TRUE){
+#' nameToUse <- "pH"
+#' pHData <- getWQPData(siteid="USGS-04024315",characteristicName=nameToUse)
+getWQPData <- function(...){
   
-  retval <- retrieveWQPqwData(siteNumber=siteNumber,
-                         parameterCd=characteristicName,
-                         startDate=startDate,
-                         endDate=endDate,
-                         interactive=interactive)
-  #Check for pcode:
-  if(all(nchar(characteristicName) == 5)){
-    suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(characteristicName))))
-  } else {
-    pCodeLogic <- FALSE
-  }
+  matchReturn <- match.call()
+  
+  options <- c("bBox","lat","long","within","countrycode","statecode","countycode","siteType","organization",
+               "siteid","huc","sampleMedia","characteristicType","characteristicName","pCode","activityId",
+               "startDateLo","startDateHi","mimeType","Zip","providers")
+  
+  if(!all(names(matchReturn[-1]) %in% options)) warning(matchReturn[!(names(matchReturn[-1]) %in% options)],"is not a valid query parameter to the Water Quality Portal")
+  
+  values <- sapply(matchReturn[-1], function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
+  
+  values <- gsub(",","%2C",values)
+  values <- gsub("%20","+",values)
+  
+  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
+  
+  
+  baseURL <- "http://www.waterqualitydata.us/Result/search?"
+  urlCall <- paste(baseURL,
+                   urlCall,
+                   "&mimeType=tsv",sep = "")
 
-  if(nrow(retval) > 0){
-    data <- processQWData(retval,pCodeLogic)
-  } else {
-    data <- NULL
-  }
-  
-  return(data)
+  retVal <- basicWQPData(urlCall)
+  return(retVal)
   
 }
