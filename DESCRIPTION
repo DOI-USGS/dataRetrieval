@@ -19,7 +19,7 @@ Imports:
     zoo,
     XML,
     RCurl,
-    plyr,
+    dplyr,
     reshape2
 Suggests:
     xtable,
