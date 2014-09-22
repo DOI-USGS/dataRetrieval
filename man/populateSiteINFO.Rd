@@ -20,7 +20,7 @@ Populates INFO data frame with additional user-supplied information. Also remove
 }
 \examples{
 #This example requires an internet connection to run
-INFO <- getSiteFileData('01594440')
+INFO <- getNWISSiteInfo('01594440')
 siteNumber <- "01594440"
 siteINFO <- populateSiteINFO(INFO, siteNumber)
 }

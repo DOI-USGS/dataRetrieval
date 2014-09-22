@@ -6,7 +6,7 @@
 #' @return mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
 #' @export
 #' @import XML
-#' @importFrom plyr rbind.fill.matrix
+#' @importFrom dplyr rbind_all
 #' @examples
 #' URL <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0&sites=01646500&startDT=2014-09-01&endDT=2014-09-08&statCd=00003&parameterCd=00060"
 #' \dontrun{dataReturned3 <- getWaterML2Data(URL)}
@@ -43,7 +43,7 @@ getWaterML2Data <- function(obs_url){
                     ifelse("qualifier" == xmlName(x),xpathSApply(x,"./@xlink:title",namespaces = ns),"")), #originally I had the "" as xmlAttr(x) 
              xmlName(x)), namespaces = ns)
 
-  DF2 <- do.call(rbind.fill.matrix, lapply(xp, t))
+  DF2 <- do.call(rbind_all, lapply(xp, t))
   DF2 <- as.data.frame(DF2,stringsAsFactors=FALSE)
   DF2$time <- gsub(":","",DF2$time)
   DF2$time <- with(DF2, ifelse(nchar(time) > 18,as.POSIXct(strptime(time, format="%Y-%m-%dT%H%M%S%z")),

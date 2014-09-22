@@ -23,13 +23,13 @@ getDailyDataFromFile(filePath, fileName, hasHeader = TRUE, separator = ",",
 Daily dataframe
 }
 \description{
-Imports data from a user-supplied file, and converts it to a Daily data frame, appropriate for WRTDS calculations.
+This function is being deprecated for \code{\link{getUserDaily}}.
 }
 \examples{
 filePath <- system.file("extdata", package="dataRetrieval")
 filePath <- paste(filePath,"/",sep="")
 fileName <- "ChoptankRiverFlow.txt"
-Daily <- getDailyDataFromFile(filePath,fileName,separator="\\t")
+\dontrun{Daily <- getDailyDataFromFile(filePath,fileName,separator="\\t")}
 }
 \keyword{USGS}
 \keyword{WRTDS}
