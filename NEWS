@@ -1,7 +1,7 @@
 dataRetrieval 1.3.3
 ===========
 
-* Updated getSiteFileData to retrieve multiple site file datasets at once using a vector of siteNumbers as input argument.
+* Updated getNWISSiteInfo to retrieve multiple site file datasets at once using a vector of siteNumbers as input argument.
 * Updated error-handling for Web service calls. More information is returned when errors happen
 * Added some basic processing to Water Quality Portal raw data retrievals. Date columns are returned as Date objects, value columns are numeric, and a column is created from the date/time/timezone columns that is POSIXct.
 * Added very generalized NWIS and WQP retrieval functions (getNWISData, getNWISSites, getGeneralWQPData, and getWQPSites) which allow the user to use any argument available on the Web service platform.
@@ -19,7 +19,7 @@ dataRetrieval 1.3.2
 dataRetrieval 1.2.2
 ===========
 
-* Added getDataAvailability function to find measured parameters and period of record information for a requested station.
+* Added getNWISDataAvailability function to find measured parameters and period of record information for a requested station.
 
 * Added constructNWISURL function to get the URL that is used to retrieve the data.
 

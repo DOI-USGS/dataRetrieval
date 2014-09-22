@@ -9,7 +9,7 @@
 #' @export
 #' @examples
 #' #This example requires an internet connection to run
-#' INFO <- getSiteFileData('01594440')
+#' INFO <- getNWISSiteInfo('01594440')
 #' siteNumber <- "01594440"
 #' siteINFO <- populateSiteINFO(INFO, siteNumber)
 populateSiteINFO <- function(INFO, siteNumber,interactive=TRUE){

@@ -26,7 +26,7 @@ renameColumns <- function(rawData){
   pCodes <- sapply(strsplit(dataCol_names, "_"), function(x) x[2])
   statCd <- sapply(strsplit(dataCol_names, "_"), function(x) x[3])
   
-  pcodeINFO <- getParameterInfo(pCodes,interactive=FALSE)
+  pcodeINFO <- getNWISPcodeInfo(pCodes,interactive=FALSE)
   multipleCodes <- anyDuplicated(pCodes)
   
   statCd <- sub("00001", "_Max", statCd)

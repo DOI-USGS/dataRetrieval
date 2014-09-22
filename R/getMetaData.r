@@ -20,7 +20,7 @@
 #' INFO <- getMetaData('05114000','00010')
 getMetaData <- function(siteNumber="", parameterCd="",interactive=TRUE){
   if (nzchar(siteNumber)){
-    INFO <- getSiteFileData(siteNumber)
+    INFO <- getNWISSiteInfo(siteNumber)
   } else {
     INFO <- as.data.frame(matrix(ncol = 2, nrow = 1))
     names(INFO) <- c('site.no', 'shortName')    
@@ -28,7 +28,7 @@ getMetaData <- function(siteNumber="", parameterCd="",interactive=TRUE){
   INFO <- populateSiteINFO(INFO, siteNumber, interactive=interactive)
   
   if (nzchar(parameterCd)){
-    parameterData <- getParameterInfo(parameterCd,interactive=interactive)
+    parameterData <- getNWISPcodeInfo(parameterCd,interactive=interactive)
     INFO$param.nm <- parameterData$parameter_nm
     INFO$param.units <- parameterData$parameter_units
     INFO$paramShortName <- parameterData$srsname
