@@ -39,7 +39,7 @@ rawStoret <- retrieveWQPqwData('WIDNR_WQX-10032762','Specific conductance', '', 
 }
 \seealso{
 \code{\link{getWQPData}}, \code{\link{getWQPSites}},
-\code{\link{getSTORETSampleData}}, \code{\link{retrieveNWISqwData}}, and \code{\link{basicWQPData}}
+\code{\link{getSTORETSampleData}}, \code{\link{retrieveNWISqwData}}, and \code{\link{readWQPData}}
 }
 \keyword{USGS}
 \keyword{data}
