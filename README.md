@@ -1,4 +1,4 @@
-dataRetrieval
+`dataRetrieval`
 =============
 
 [![Build status](https://ci.appveyor.com/api/projects/status/luni4ckts7j1u2k8)](https://ci.appveyor.com/project/USGS-R/dataretrieval)
@@ -9,23 +9,20 @@ R package source for data retrieval specifically for the EGRET R package:
 Please visit the EGRET wiki for more information:
 [EGRET Wiki](https://github.com/USGS-R/EGRET/wiki)
 
-Disclaimer
-----------
-This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey  (USGS), an agency of the United States Department of Interior. For more information, see the official USGS copyright policy at [http://www.usgs.gov/visual-id/credit_usgs.html#copyright](http://www.usgs.gov/visual-id/credit_usgs.html#copyright)
+##Disclaimer
+This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the [official USGS copyright policy](http://www.usgs.gov/visual-id/credit_usgs.html#copyright/ "official USGS copyright policy")
 
-Although this software program has been used by the USGS, no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.
+Although this software program has been used by the U.S. Geological Survey (USGS), no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.
 
 This software is provided "AS IS."
 
-Subscribe
----------
+##Subscribe
 Please email questions, comments, and feedback to: 
 egret_comments@usgs.gov
 
 Additionally, to subscribe to an email list concerning updates to these R packages, please send a request to egret_comments@usgs.gov.
 
-Package Installation
----------------------------------
+##Package Installation
 While the dataRetreival package is in development (and not on CRAN), the zoo package must first be manually installed. To install the dataRetrieval package, you must be using R 3.0 or greater and run the following commands:
 
 	install.packages("dataRetrieval", 
@@ -34,27 +31,31 @@ While the dataRetreival package is in development (and not on CRAN), the zoo pac
 	type="both")
 
 
-Version updates
+##Version updates
 ---------------
-dataRetrieval 1.4.0-in developement
-===========
-* Changed naming convention:
-getDVData -> getNWISDaily
-getSampleData -> getNWISSample
-getSTORETData* -> getWQPSample
-getSampleDataFromFile -> getUserSample
-getDailyDataFromFile -> getUserDaily
-getMetaData -> splits into getNWISInfo and getUserInfo
-getSiteFileData <- getNWISSiteInfo
-getParameterInfo <- getNWISPcodeInfo
-getDataAvailability <- getNWISDataAvailability
-'retrieve' functions changed to 'get'
-* Changed WaterML2 rbind fill from plyr function to dplyr. Removed plyr import, added dplyr.
-*
+###dataRetrieval 1.4.0-in developement
+Changed naming convention:
 
 
-dataRetrieval 1.3.3
-===========
+
+|Original Name | New Name |
+| ------------- |:-------------|
+|getDVData | getNWISDaily |
+|getSampleData  |     getNWISSample |
+|getSTORETData* | getWQPSample |
+|getSampleDataFromFile | getUserSample |
+|getDailyDataFromFile | getUserDaily |
+|getMetaData | splits into getNWISInfo and getUserInfo |
+|getSiteFileData | getNWISSiteInfo |
+|getParameterInfo | getNWISPcodeInfo |
+|getDataAvailability | getNWISDataAvailability |
+|'retrieve' functions | 'get' |
+
+Changed WaterML2 rbind fill from plyr function to dplyr. Removed plyr import, added dplyr.
+
+
+
+###dataRetrieval 1.3.3
 
 * Updated getNWISSiteInfo to retrieve multiple site file datasets at once using a vector of siteNumbers as input argument.
 * Updated error-handling for Web service calls. More information is returned when errors happen
@@ -62,8 +63,7 @@ dataRetrieval 1.3.3
 * Added very generalized NWIS and WQP retrieval functions (getNWISData, getNWISSites, getGeneralWQPData, and getWQPSites) which allow the user to use any argument available on the Web service platform.
 
 
-dataRetrieval 1.3.2
-===========
+###dataRetrieval 1.3.2
 
 * Deprecated getQWData, updated getWQPData to take either parameter code or characteristic name.
 * Changed the name of raw data retrievals to: getNWISqwData, getNWISunitData, getNWISdvData, and getWQPqwData (from: getNWISqwData, retrieveUnitNWISData, retrieveNWISData, getRawQWData)
@@ -71,8 +71,7 @@ dataRetrieval 1.3.2
 * Updated mergeReport to allow for Sample data with different measurements taken on the same day
 
 
-Sample Workflow
----------------
+##Sample Workflow
 
 Load data from web services:
 
