@@ -35,21 +35,7 @@ While the dataRetreival package is in development (and not on CRAN), the zoo pac
 ---------------
 ###dataRetrieval 1.4.0-in developement
 Changed naming convention:
-| Function       | Title           |
-| ------------- |:-------------|
-| `bufferPoint` | Create linear ring from point |
-| `checkProcess`  | Check status of processing request |
-| `geoknife` | Create geoknife object |
-| `getAlgorithms` | Get processing algorithms |
-| `getAttributes` | Get attributes from a shapefile at a web location |
-| `getDataIDs` | Find variables from dataset |
-| `printProcessInputs` | Print out the process request xml for diagnostic purposes |
-| `setAlgorithm<-` | Set processing algorithm |
-| `setFeature<-` | Set feature geometry for processing |
-| `setProcessInputs<-` | Set inputs for web processing |
-| `setWFS<-` | Set web feature service location |
-| `setWPS<-` | Set web processing service location |
-| `startProcess` | Submit a GDP web processing request |
+
 
 
 |Original Name | New Name |
