@@ -40,7 +40,7 @@ DailyCFS <- getNWISDaily('01594440','00060', '1985-01-01', '1985-03-31',convert=
 DailySuspSediment <- getNWISDaily('01594440','80154', '1985-01-01', '1985-03-31')
 }
 \seealso{
-\code{\link{retrieveNWISdvData}}, \code{\link{populateDaily}}
+\code{\link{getNWISdvData}}, \code{\link{populateDaily}}
 }
 \keyword{USGS}
 \keyword{WRTDS}

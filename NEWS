@@ -27,7 +27,7 @@ dataRetrieval 1.3.2
 ===========
 
 * Deprecated getQWData, updated getWQPData to take either parameter code or characteristic name.
-* Changed the name of raw data retrievals to: retrieveNWISqwData, retrieveNWISunitData, retrieveNWISdvData, and retrieveWQPqwData (from: retrieveNWISqwData, retrieveUnitNWISData, retrieveNWISData, getRawQWData)
+* Changed the name of raw data retrievals to: getNWISqwData, getNWISunitData, getNWISdvData, and getWQPqwData (from: getNWISqwData, retrieveUnitNWISData, retrieveNWISData, getRawQWData)
 * Added NA warning to getDVData function
 * Updated mergeReport to allow for Sample data with different measurements taken on the same day
 

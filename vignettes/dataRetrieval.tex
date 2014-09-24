@@ -230,7 +230,7 @@ A quick workflow for major dataRetrieval functions:
 \hlstd{parameterCd} \hlkwb{<-} \hlstr{"00060"}
 
 \hlcom{#Raw daily data:}
-\hlstd{rawDailyData} \hlkwb{<-} \hlkwd{retrieveNWISdvData}\hlstd{(siteNumber,parameterCd,}
+\hlstd{rawDailyData} \hlkwb{<-} \hlkwd{getNWISdvData}\hlstd{(siteNumber,parameterCd,}
                       \hlstr{"1980-01-01"}\hlstd{,}\hlstr{"2010-01-01"}\hlstd{)}
 \hlcom{# Data compiled for EGRET analysis}
 \hlstd{Daily} \hlkwb{<-} \hlkwd{getNWISDaily}\hlstd{(siteNumber,parameterCd,}
@@ -242,7 +242,7 @@ A quick workflow for major dataRetrieval functions:
                       \hlstr{"1980-01-01"}\hlstd{,}\hlstr{"2010-01-01"}\hlstd{)}
 
 \hlcom{# Metadata on site and nitrate:}
-\hlstd{INFO} \hlkwb{<-} \hlkwd{getMetaData}\hlstd{(siteNumber,parameterCd)}
+\hlstd{INFO} \hlkwb{<-} \hlkwd{getNWISInfo}\hlstd{(siteNumber,parameterCd)}
 
 \hlcom{# Merge discharge and nitrate data to one dataframe:}
 \hlstd{Sample} \hlkwb{<-} \hlkwd{mergeReport}\hlstd{()}
@@ -268,7 +268,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Mon Sep 22 14:18:32 2014
+% Wed Sep 24 11:46:20 2014
 \begin{table}[ht]
 \caption{Common USGS Parameter Codes} 
 \label{tab:params}
@@ -313,7 +313,7 @@ For unit values data (sensor data measured at regular time intervals such as 15 
 Some common codes are shown in Table \ref{tab:stat}.
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Mon Sep 22 14:18:33 2014
+% Wed Sep 24 11:46:21 2014
 \begin{table}[ht]
 \caption{Commonly used USGS Stat Codes} 
 \label{tab:stat}
@@ -394,7 +394,7 @@ To discover what data is available for a particular USGS site, including measure
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Mon Sep 22 14:18:34 2014
+% Wed Sep 24 11:46:22 2014
 \begin{table}[ht]
 \caption{Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]} 
 \label{tab:gda}
@@ -406,8 +406,8 @@ To discover what data is available for a particular USGS site, including measure
  & 01491000 & Temperature, water & 1988-10-01 & 2012-05-09 & 894 & deg C & 00001 \\ 
   [5pt] & 01491000 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C & 00002 \\ 
   [5pt] & 01491000 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C & 00003 \\ 
-  [5pt] & 01491000 & Stream flow, mean. daily & 1948-01-01 & 2014-09-21 & 24371 & ft$^3$/s & 00003 \\ 
-  [5pt] & 01645000 & Stream flow, mean. daily & 1930-09-26 & 2014-09-21 & 30675 & ft$^3$/s & 00003 \\ 
+  [5pt] & 01491000 & Stream flow, mean. daily & 1948-01-01 & 2014-09-23 & 24373 & ft$^3$/s & 00003 \\ 
+  [5pt] & 01645000 & Stream flow, mean. daily & 1930-09-26 & 2014-09-23 & 30677 & ft$^3$/s & 00003 \\ 
   [5pt] & 01491000 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & $\mu$S/cm @25C & 00003 \\ 
   [5pt] & 01491000 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & $\mu$S/cm @25C & 00001 \\ 
   [5pt] & 01491000 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & $\mu$S/cm @25C & 00002 \\ 
@@ -463,7 +463,7 @@ Parameter information can obtained from \url{http://nwis.waterdata.usgs.gov/usa/
 \subsection{Daily Values}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain daily records of USGS data, use the \texttt{retrieveNWISdvData} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
+To obtain daily records of USGS data, use the \texttt{getNWISdvData} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
 
 The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user must include the quotes).  Setting the start date to \texttt{"}\texttt{"} (no space) will prompt the program to ask for the earliest date, and setting the end date to \texttt{"}\texttt{"} (no space) will prompt for the latest available date.
 
@@ -476,7 +476,7 @@ The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (
 \hlstd{startDate} \hlkwb{<-} \hlstr{""}  \hlcom{# Will request earliest date}
 \hlstd{endDate} \hlkwb{<-} \hlstr{""} \hlcom{# Will request latest date}
 
-\hlstd{discharge} \hlkwb{<-} \hlkwd{retrieveNWISdvData}\hlstd{(siteNumber,}
+\hlstd{discharge} \hlkwb{<-} \hlkwd{getNWISdvData}\hlstd{(siteNumber,}
                     \hlstd{parameterCd, startDate, endDate)}
 \hlkwd{names}\hlstd{(discharge)}
 \end{alltt}
@@ -500,7 +500,7 @@ Another example that doesn't use the defaults would be a request for mean and ma
 \hlstd{startDate} \hlkwb{<-} \hlstr{"2012-01-01"}
 \hlstd{endDate} \hlkwb{<-} \hlstr{"2012-05-01"}
 
-\hlstd{temperatureAndFlow} \hlkwb{<-} \hlkwd{retrieveNWISdvData}\hlstd{(siteNumber, parameterCd,}
+\hlstd{temperatureAndFlow} \hlkwb{<-} \hlkwd{getNWISdvData}\hlstd{(siteNumber, parameterCd,}
         \hlstd{startDate, endDate,} \hlkwc{statCd}\hlstd{=statCd)}
 \end{alltt}
 \end{kframe}
@@ -580,7 +580,7 @@ There are occasions where NWIS values are not reported as numbers, instead there
 \subsection{Unit Values}
 \label{sec:usgsRT}
 %------------------------------------------------------------
-Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values.} Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{retrieveNWISunitData}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
+Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values.} Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{getNWISunitData}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -588,7 +588,7 @@ Any data collected at regular time intervals (such as 15-minute or hourly) are k
 \hlstd{parameterCd} \hlkwb{<-} \hlstr{"00060"}  \hlcom{# Discharge}
 \hlstd{startDate} \hlkwb{<-} \hlstr{"2012-05-12"}
 \hlstd{endDate} \hlkwb{<-} \hlstr{"2012-05-13"}
-\hlstd{dischargeToday} \hlkwb{<-} \hlkwd{retrieveNWISunitData}\hlstd{(siteNumber, parameterCd,}
+\hlstd{dischargeToday} \hlkwb{<-} \hlkwd{getNWISunitData}\hlstd{(siteNumber, parameterCd,}
         \hlstd{startDate, endDate)}
 \end{alltt}
 \end{kframe}
@@ -628,7 +628,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{retrieveNWISqwData}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{retrieveNWISunitData} and \texttt{retrieveNWISdvData}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expaned = TRUE includes such columns as remark codes, value qualifying text, and detection level.
+To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{getNWISqwData}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{getNWISunitData} and \texttt{getNWISdvData}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expaned = TRUE includes such columns as remark codes, value qualifying text, and detection level.
 
 
 \begin{knitrout}
@@ -639,7 +639,7 @@ To get USGS water quality data from water samples collected at the streamgage or
 \hlstd{startDate} \hlkwb{<-} \hlstr{"1985-10-01"}
 \hlstd{endDate} \hlkwb{<-} \hlstr{"2012-09-30"}
 
-\hlstd{dissolvedNitrate} \hlkwb{<-} \hlkwd{retrieveNWISqwData}\hlstd{(siteNumber, parameterCd,}
+\hlstd{dissolvedNitrate} \hlkwb{<-} \hlkwd{getNWISqwData}\hlstd{(siteNumber, parameterCd,}
       \hlstd{startDate, endDate,} \hlkwc{expanded}\hlstd{=}\hlnum{TRUE}\hlstd{)}
 \hlkwd{names}\hlstd{(dissolvedNitrate)}
 \end{alltt}
@@ -706,13 +706,13 @@ There may be times when you might be interested in seeing the URL (Web address) 
 \section{Water Quality Portal Web Retrievals}
 \label{sec:usgsSTORET}
 %------------------------------------------------------------
-There are additional water quality data sets available from the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET (data from EPA), NWIS database (data from USGS), STEWARDS database (USDA), and additional databases are slated to be included.  Because only USGS uses parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{retrieveWQPqwData} function can take either a USGS parameter code, or a more general cahracteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
+There are additional water quality data sets available from the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET (data from EPA), NWIS database (data from USGS), STEWARDS database (USDA), and additional databases are slated to be included.  Because only USGS uses parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{getWQPqwData} function can take either a USGS parameter code, or a more general cahracteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
 
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{specificCond} \hlkwb{<-} \hlkwd{retrieveWQPqwData}\hlstd{(}\hlstr{'WIDNR_WQX-10032762'}\hlstd{,}
+\hlstd{specificCond} \hlkwb{<-} \hlkwd{getWQPqwData}\hlstd{(}\hlstr{'WIDNR_WQX-10032762'}\hlstd{,}
                 \hlstr{'Specific conductance'}\hlstd{,}\hlstr{'2011-05-01'}\hlstd{,}\hlstr{'2011-09-30'}\hlstd{)}
 \end{alltt}
 \end{kframe}
@@ -872,13 +872,13 @@ In this section, we use 3 dataRetrieval functions to get sufficient data to perf
 \subsection{INFO Data}
 \label{INFOsubsection}
 %------------------------------------------------------------
-The \texttt{getMetaData} function obtains metadata, or data about the streamgage and measured parameters. This function combines \texttt{getNWISSiteInfo} and \texttt{getNWISPcodeInfo}, producing one dataframe called INFO.
+The \texttt{getNWISInfo} function obtains metadata, or data about the streamgage and measured parameters. This function combines \texttt{getNWISSiteInfo} and \texttt{getNWISPcodeInfo}, producing one dataframe called INFO.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{parameterCd} \hlkwb{<-} \hlstr{"00618"}
-\hlstd{INFO} \hlkwb{<-}\hlkwd{getMetaData}\hlstd{(siteNumber,parameterCd,} \hlkwc{interactive}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+\hlstd{INFO} \hlkwb{<-}\hlkwd{getNWISInfo}\hlstd{(siteNumber,parameterCd,} \hlkwc{interactive}\hlstd{=}\hlnum{FALSE}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -910,7 +910,7 @@ There are 4750 data points, and 4750 days.
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Mon Sep 22 14:18:43 2014
+% Wed Sep 24 11:46:34 2014
 \begin{table}[ht]
 \caption{Daily dataframe} 
 \label{tab:DailyDF1}
@@ -948,7 +948,7 @@ Notice that the \enquote{Day of the year} column can span from 1 to 366. The 366
 \subsection{Sample Data}
 \label{Samplesubsection}
 %------------------------------------------------------------
-The \texttt{getNWISSample} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, parameterCd, startDate, endDate, interactive. These are the same inputs as \texttt{retrieveWQPqwData} or \texttt{getWQPData} as described in the previous section.
+The \texttt{getNWISSample} function retrieves USGS sample data from NWIS. The arguments for this function are also siteNumber, parameterCd, startDate, endDate, interactive. These are the same inputs as \texttt{getWQPqwData} or \texttt{getWQPData} as described in the previous section.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1031,7 +1031,7 @@ To illustrate how the dataRetrieval package handles a more complex censoring pro
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Mon Sep 22 14:18:44 2014
+% Wed Sep 24 11:46:36 2014
 \begin{table}[ht]
 \caption{Example data} 
 \label{tab:exampleComplexQW}
@@ -1052,7 +1052,7 @@ To illustrate how the dataRetrieval package handles a more complex censoring pro
 \end{table}
 
 
-The dataRetrieval package will \enquote{add up} all the values in a given row to form the total for that sample when using the Sample dataframe. Thus, you only want to enter data that should be added together. If you want a dataframe with multiple constituents that are not summed, do not use getNWISSample, getWQPSample, or getUserSample. The raw data functions: \texttt{getWQPData}, \texttt{retrieveNWISqwData}, \texttt{retrieveWQPqwData}, \texttt{getWQPData} will not sum constituents, but leave them in their individual columns. 
+The dataRetrieval package will \enquote{add up} all the values in a given row to form the total for that sample when using the Sample dataframe. Thus, you only want to enter data that should be added together. If you want a dataframe with multiple constituents that are not summed, do not use getNWISSample, getWQPSample, or getUserSample. The raw data functions: \texttt{getWQPData}, \texttt{getNWISqwData}, \texttt{getWQPqwData}, \texttt{getWQPData} will not sum constituents, but leave them in their individual columns. 
 
 For example, we might know the value for dp on 5/30/2005, but we don't want to put it in the table because under the rules of this data set, we are not supposed to add it in to the values in 2005.
 
@@ -1297,17 +1297,17 @@ Tables \ref{tab:dataRetrievalFunctions1},\ref{tab:dataRetrievalOrg}, and \ref{ta
 \multicolumn{1}{c}{\textbf{\textsf{Function Name}}} &
 \multicolumn{1}{c}{\textbf{\textsf{Description}}} \\ [0pt]
   \hline
-  Daily & \texttt{retrieveNWISdvData} & Raw USGS daily data \\ 
+  Daily & \texttt{getNWISdvData} & Raw USGS daily data \\ 
   [5pt]Daily\tnote{1} & \texttt{getNWISDaily} & USGS daily values \\ 
   [5pt]Daily\tnote{1} & \texttt{getUserDaily} & User generated daily data \\ 
-  [5pt]Sample & \texttt{retrieveNWISqwData} & Raw USGS water quality data \\
-  [5pt]Sample & \texttt{retrieveWQPqwData} & Raw Water Quality Data Portal data \\ 
+  [5pt]Sample & \texttt{getNWISqwData} & Raw USGS water quality data \\
+  [5pt]Sample & \texttt{getWQPqwData} & Raw Water Quality Data Portal data \\ 
   [5pt]Sample & \texttt{getWQPData} & General Water Quality Portal\\
   [5pt]Sample\tnote{1} & \texttt{getNWISSample} & USGS water quality data\\
   [5pt]Sample\tnote{1} & \texttt{getWQPSample} & Water Quality Data Portal data \\
   [5pt]Sample\tnote{1} & \texttt{getUserSample} & User generated sample data \\ 
-  [5pt]Unit & \texttt{retrieveNWISunitData} & Raw USGS instantaneous data \\
-  [5pt]Information\tnote{1} & \texttt{getMetaData} & USGS station and parameter code information \\ 
+  [5pt]Unit & \texttt{getNWISunitData} & Raw USGS instantaneous data \\
+  [5pt]Information\tnote{1} & \texttt{getNWISInfo} & USGS station and parameter code information \\ 
   [5pt]Information & \texttt{getNWISPcodeInfo} & USGS parameter code information \\ 
   [5pt]Information & \texttt{getNWISSiteInfo} & USGS station information \\ 
   [5pt]Information & \texttt{getNWISDataAvailability} & Data available at USGS stations \\ 
@@ -1315,7 +1315,7 @@ Tables \ref{tab:dataRetrievalFunctions1},\ref{tab:dataRetrievalOrg}, and \ref{ta
 \end{tabular}
 
   \begin{tablenotes}
-    \item[1] Indicates that the function creates a data frame suitable for use in EGRET software
+    \item[1] Indicates that the function creates a data frame suitable for use in EGRET software, otherwise data is returned in the exact form that it was received.
   \end{tablenotes}
  \end{threeparttable}
 }
@@ -1325,36 +1325,39 @@ Tables \ref{tab:dataRetrievalFunctions1},\ref{tab:dataRetrievalOrg}, and \ref{ta
 \begin{table}[!ht]
 \begin{minipage}{\linewidth}
 {\footnotesize
+\begin{threeparttable}[b]
 \caption{dataRetrieval functions organization} 
 \label{tab:dataRetrievalOrg}
-\hspace*{-1.5cm}
-\begin{tabular}{|c|cccc|}
+\begin{tabular}{|c|ccc|}
 
-\multicolumn{1}{c}{\textbf{\textsf{Source}}} &
+\multicolumn{1}{c}{\textbf{\textsf{}}} &
 \multicolumn{1}{c}{\textbf{\textsf{Site Query}}} &
 \multicolumn{1}{c}{\textbf{\textsf{Meta Data}}} &
-\multicolumn{1}{c}{\textbf{\textsf{Raw Data}}} &
-\multicolumn{1}{c}{\textbf{\textsf{EGRET Data}}} \\  [0pt]
+\multicolumn{1}{c}{\textbf{\textsf{Data Retrieval}}} \\  [0pt]
 \hline
-\textbf{NWIS:} & \texttt{getNWISSites} & & \texttt{getNWISData} &  \\
-\textit{Daily} &  & \texttt{getNWISSiteInfo} & \texttt{retrieveNWISdvData} & \texttt{getNWISDaily} \\
-\textit{Unit/Instantaneous} & \texttt{getNWISDataAvailability} & \texttt{getNWISPcodeInfo} & \texttt{retrieveNWISunitData} &  \\
-\textit{Groundwater} & & \texttt{getNWISInfo} &  &  \\
-\textit{Water Quality} & & & \texttt{retrieveNWISqwDAta} & \texttt{getNWISSample}\\
+\textbf{NWIS:} & \texttt{getNWISSites} & \texttt{getNWISInfo}\tnote{1} & \texttt{getNWISData}  \\
+\textit{Daily} & \texttt{getNWISDataAvailability}& \texttt{getNWISSiteInfo} & \texttt{getNWISDaily}\tnote{1} \\
+\textit{Unit/Instantaneous} &  & \texttt{getNWISPcodeInfo} & \texttt{getNWISSample}\tnote{1} \\
+\textit{Groundwater} & &  & \texttt{getNWISdvData}   \\
+\textit{Water Quality} & & & \texttt{getNWISunitData}\\
+ & & & \texttt{getNWISqwData} \\
 \hline
-\textbf{Water Quality Portal:} & \texttt{getWQPSites} & \texttt{getWQPInfo} & \texttt{retrieveWQPqwData} & \texttt{getWQPSample} \\
-\textit{USGS} & & & \texttt{getWQPData} & \\
-\textit{EPA} & & & & \\
-\textit{USDA} & & & & \\
+\textbf{Water Quality Portal:} & \texttt{getWQPSites} & \texttt{getWQPInfo}\tnote{1} &  \texttt{getWQPSample}\tnote{1}\\
+\textit{USGS} & & & \texttt{getWQPqwData} \\
+\textit{EPA} & & & \texttt{getWQPData} \\
+\textit{USDA} & & &  \\
 \hline
-\textbf{User-supplied files:} & &  & &  \\
-\textit{Daily} & & & &  \texttt{getUserDaily}\\
-\textit{Sample} & & & & \texttt{getUserSample}\\
-\textit{Site Information} & & \texttt{getUserInfo} & & \\
+\textbf{User-supplied files:} & & \texttt{getUserInfo}\tnote{1}  & \texttt{getUserDaily}\tnote{1}  \\
+\textit{Daily} & & & \texttt{getUserSample}\tnote{1}  \\
+\textit{Sample} & & &  \\
+\textit{Site Information} & & & \\
 
    \hline
 \end{tabular}
-\hspace*{-1.5cm}
+  \begin{tablenotes}
+    \item[1] Indicates that the function creates a data frame suitable for use in EGRET software, otherwise data is returned in the exact form that it was received.
+  \end{tablenotes}
+ \end{threeparttable}
 }
 \end{minipage}
 \end{table}
@@ -1364,7 +1367,7 @@ Tables \ref{tab:dataRetrievalFunctions1},\ref{tab:dataRetrievalOrg}, and \ref{ta
 \begin{table}[!ht]
 \begin{minipage}{\linewidth}
 {\footnotesize
-\caption{dataRetrieval function organization} 
+\caption{Supplemental dataRetrieval function organization} 
 \label{tab:dataRetrievalMisc}
 \begin{tabular}{ll}
   \hline
@@ -1509,7 +1512,7 @@ There are a few steps that are required in order to create a table in Microsoft\
 5           Suspended sediment discharge 1980-10-01
          End Count      Units
 1 2012-05-09   529      deg C
-2 2014-09-21 24371      ft3/s
+2 2014-09-23 24373      ft3/s
 3 2012-05-09   527 uS/cm @25C
 4 1991-09-30  3651       mg/l
 5 1991-09-30  3652   tons/day

@@ -22,16 +22,16 @@
 #' startDate <- '2012-01-01'
 #' endDate <- '2012-06-30'
 #' pCode <- '00060'
-#' rawDailyQ <- retrieveNWISdvData(siteNumber,pCode, startDate, endDate)
-#' rawDailyTemperature <- retrieveNWISdvData(siteNumber,'00010', 
+#' rawDailyQ <- getNWISdvData(siteNumber,pCode, startDate, endDate)
+#' rawDailyTemperature <- getNWISdvData(siteNumber,'00010', 
 #'        startDate, endDate, statCd='00001')
-#' rawDailyTemperatureTSV <- retrieveNWISdvData(siteNumber,'00010', 
+#' rawDailyTemperatureTSV <- getNWISdvData(siteNumber,'00010', 
 #'        startDate, endDate, statCd='00001',format='tsv')
-#' rawDailyQAndTempMeanMax <- retrieveNWISdvData(siteNumber,c('00010','00060'),
+#' rawDailyQAndTempMeanMax <- getNWISdvData(siteNumber,c('00010','00060'),
 #'        startDate, endDate, statCd=c('00001','00003'))
-#' rawDailyMultiSites<- retrieveNWISdvData(c("01491000","01645000"),c('00010','00060'),
+#' rawDailyMultiSites<- getNWISdvData(c("01491000","01645000"),c('00010','00060'),
 #'        startDate, endDate, statCd=c('00001','00003'))
-retrieveNWISdvData <- function (siteNumber,parameterCd,startDate,endDate,statCd="00003",format="tsv",interactive=TRUE){  
+getNWISdvData <- function (siteNumber,parameterCd,startDate,endDate,statCd="00003",format="tsv",interactive=TRUE){  
   
   url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"dv",statCd=statCd,format=format,interactive=interactive)
   

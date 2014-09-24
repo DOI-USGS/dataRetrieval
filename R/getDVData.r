@@ -16,7 +16,7 @@
 #' @keywords data import USGS WRTDS
 #' @export
 #' @return Daily dataframe
-#' @seealso \code{\link{retrieveNWISdvData}}, \code{\link{populateDaily}}, \code{\link{getNWISData}}
+#' @seealso \code{\link{getNWISdvData}}, \code{\link{populateDaily}}, \code{\link{getNWISData}}
 #' @examples
 #' # These examples require an internet connection to run
 #' \dontrun{Daily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31')}
@@ -24,7 +24,7 @@
 #' \dontrun{DailySuspSediment <- getDVData('01594440','80154', '1985-01-01', '1985-03-31')}
 getDVData <- function (siteNumber,parameterCd,startDate,endDate,interactive=TRUE,convert=TRUE,format="tsv"){
   warning("This function is being deprecated, please use getNWISData")
-  data <- retrieveNWISdvData(siteNumber,parameterCd,startDate,endDate,interactive=interactive,format=format)
+  data <- getNWISdvData(siteNumber,parameterCd,startDate,endDate,interactive=interactive,format=format)
   
   #  need to setup conversion factor because the NWIS data are in cfs but we store in cms
   names(data) <- c('agency', 'site', 'dateTime', 'value', 'code')  # do a merge instead?
@@ -57,7 +57,7 @@ getDVData <- function (siteNumber,parameterCd,startDate,endDate,interactive=TRUE
 #' @keywords data import USGS WRTDS
 #' @export
 #' @return Daily dataframe
-#' @seealso \code{\link{retrieveNWISdvData}}, \code{\link{populateDaily}}
+#' @seealso \code{\link{getNWISdvData}}, \code{\link{populateDaily}}
 #' @examples
 #' # These examples require an internet connection to run
 #' Daily <- getNWISDaily('01594440','00060', '1985-01-01', '1985-03-31')
@@ -65,7 +65,7 @@ getDVData <- function (siteNumber,parameterCd,startDate,endDate,interactive=TRUE
 #' DailySuspSediment <- getNWISDaily('01594440','80154', '1985-01-01', '1985-03-31')
 getNWISDaily <- function (siteNumber,parameterCd,startDate,endDate,interactive=TRUE,convert=TRUE,format="tsv"){
 
-  data <- retrieveNWISdvData(siteNumber,parameterCd,startDate,endDate,interactive=interactive,format=format)
+  data <- getNWISdvData(siteNumber,parameterCd,startDate,endDate,interactive=interactive,format=format)
   
   #  need to setup conversion factor because the NWIS data are in cfs but we store in cms
   names(data) <- c('agency', 'site', 'dateTime', 'value', 'code')  # do a merge instead?

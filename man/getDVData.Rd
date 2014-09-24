@@ -38,7 +38,7 @@ This function is being deprecated for \code{\link{getNWISDaily}}.
 \dontrun{DailySuspSediment <- getDVData('01594440','80154', '1985-01-01', '1985-03-31')}
 }
 \seealso{
-\code{\link{retrieveNWISdvData}}, \code{\link{populateDaily}}, \code{\link{getNWISData}}
+\code{\link{getNWISdvData}}, \code{\link{populateDaily}}, \code{\link{getNWISData}}
 }
 \keyword{USGS}
 \keyword{WRTDS}

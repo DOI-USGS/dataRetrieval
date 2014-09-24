@@ -21,7 +21,7 @@ getSampleData <- function(siteNumber,parameterCd,startDate,endDate,interactive=T
   
   warning("This function is being deprecated, please use getNWISSample")
   
-  rawSample <- retrieveNWISqwData(siteNumber,parameterCd,startDate,endDate)
+  rawSample <- getNWISqwData(siteNumber,parameterCd,startDate,endDate)
   #rawSample$dateTime <- strptime(rawSample$dateTime,"%Y-%m-%d %H:%M:%S")
   rawSample$dateTime <- as.Date(rawSample$dateTime)
   rawSample$site <- NULL
@@ -54,7 +54,7 @@ getSampleData <- function(siteNumber,parameterCd,startDate,endDate,interactive=T
 #' Sample_Select <- getNWISSample('05114000','00915;00931', '', '')
 getNWISSample <- function(siteNumber,parameterCd,startDate,endDate,interactive=TRUE){
   
-  rawSample <- retrieveNWISqwData(siteNumber,parameterCd,startDate,endDate)
+  rawSample <- getNWISqwData(siteNumber,parameterCd,startDate,endDate)
   #rawSample$dateTime <- strptime(rawSample$dateTime,"%Y-%m-%d %H:%M:%S")
   rawSample$dateTime <- as.Date(rawSample$dateTime)
   rawSample$site <- NULL

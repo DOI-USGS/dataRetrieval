@@ -19,7 +19,7 @@ getSTORETSampleData <- function(siteNumber,characteristicName,startDate,endDate,
   
   warning("This function is being deprecated, please use getWQPSample")
   
-  retval <- retrieveWQPqwData(siteNumber=siteNumber,
+  retval <- getWQPqwData(siteNumber=siteNumber,
                               parameterCd=characteristicName,
                               startDate=startDate,
                               endDate=endDate,
@@ -57,7 +57,7 @@ getSTORETSampleData <- function(siteNumber,characteristicName,startDate,endDate,
 #' @export
 #' @return Sample dataframe
 #' @seealso \code{\link{getWQPData}}, \code{\link{getWQPSites}}, 
-#' \code{\link{retrieveWQPqwData}}, \code{\link{retrieveNWISqwData}}, and \code{\link{readWQPData}}, 
+#' \code{\link{getWQPqwData}}, \code{\link{getNWISqwData}}, and \code{\link{readWQPData}}, 
 #' \code{\link{compressData}}, \code{\link{populateSampleColumns}}
 #' @examples
 #' # These examples require an internet connection to run
@@ -65,7 +65,7 @@ getSTORETSampleData <- function(siteNumber,characteristicName,startDate,endDate,
 #' Sample_All <- getWQPSample('WIDNR_WQX-10032762','Specific conductance', '', '')
 getWQPSample <- function(siteNumber,characteristicName,startDate,endDate,interactive=TRUE){
   
-  retval <- retrieveWQPqwData(siteNumber=siteNumber,
+  retval <- getWQPqwData(siteNumber=siteNumber,
                               parameterCd=characteristicName,
                               startDate=startDate,
                               endDate=endDate,

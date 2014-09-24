@@ -9,11 +9,11 @@
 #' @examples
 #' # This example requires an internet connection to run
 #' siteNumber <- '05114000' 
-#' rawData <- retrieveNWISdvData(siteNumber,c("00010","00060","00300"),
+#' rawData <- getNWISdvData(siteNumber,c("00010","00060","00300"),
 #'           "2001-01-01","2002-01-01",statCd=c("00001","00003"))
 #' rawData <- renameColumns(rawData)
 #' today <- as.character(Sys.Date())
-#' rawData2 <- retrieveNWISunitData(siteNumber,c("00010","00060"),today,today)
+#' rawData2 <- getNWISunitData(siteNumber,c("00010","00060"),today,today)
 #' rawData2 <- renameColumns(rawData2)
 renameColumns <- function(rawData){
   

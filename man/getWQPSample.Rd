@@ -32,7 +32,7 @@ Sample_All <- getWQPSample('WIDNR_WQX-10032762','Specific conductance', '', '')
 }
 \seealso{
 \code{\link{getWQPData}}, \code{\link{getWQPSites}},
-\code{\link{retrieveWQPqwData}}, \code{\link{retrieveNWISqwData}}, and \code{\link{readWQPData}},
+\code{\link{getWQPqwData}}, \code{\link{getNWISqwData}}, and \code{\link{readWQPData}},
 \code{\link{compressData}}, \code{\link{populateSampleColumns}}
 }
 \keyword{USGS}

@@ -15,16 +15,16 @@
 populateSiteINFO <- function(INFO, siteNumber,interactive=TRUE){
   if (nzchar(siteNumber)){
     
-    INFO$land.net.ds <- NULL
-    INFO$instruments.cd <- NULL
-    INFO$nat.aqfr.cd <- NULL
-    INFO$aqfr.cd <- NULL
-    INFO$aqfr.type.cd <- NULL
-    INFO$well.depth.va <- NULL
-    INFO$hole.depth.va <- NULL
-    INFO$hole.depth.va <- NULL
-    INFO$depth.src.cd <- NULL
-    INFO$gw.file.cd <- NULL
+#     INFO$land.net.ds <- NULL
+#     INFO$instruments.cd <- NULL
+#     INFO$nat.aqfr.cd <- NULL
+#     INFO$aqfr.cd <- NULL
+#     INFO$aqfr.type.cd <- NULL
+#     INFO$well.depth.va <- NULL
+#     INFO$hole.depth.va <- NULL
+#     INFO$hole.depth.va <- NULL
+#     INFO$depth.src.cd <- NULL
+#     INFO$gw.file.cd <- NULL
     
     if (!nzchar(INFO$site.no)) {
       INFO$site.no <- siteNumber

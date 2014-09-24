@@ -112,8 +112,8 @@ expect_that(Daily2$dateTime[1], equals(as.Date("1985-01-01")))
 expect_that(Daily2$value[1], equals(157))
 expect_that(Daily2$code[1], equals("A"))
 
-# getSiteFileData:
-INFO1 <- getSiteFileData('01594440')
+# getNWISSiteInfo:
+INFO1 <- getNWISSiteInfo('01594440')
 expect_that(INFO1$station.nm, equals("PATUXENT RIVER NEAR BOWIE, MD"))
 
 # getQWData:
@@ -122,8 +122,8 @@ expect_that(Sample1$dateTime[1], equals(as.Date("1985-03-13")))
 expect_that(Sample1$qualifier.01075[1], equals("<"))
 expect_that(Sample1$value.01075[1], equals(1))
 
-# getParameterInfo:
-INFO2 <- getParameterInfo('01075')
+# getNWISPcodeInfo:
+INFO2 <- getNWISPcodeInfo('01075')
 expect_that(INFO2$parameter_nm, equals("Silver, water, filtered, micrograms per liter"))
 
 # populateSiteINFO:

@@ -38,7 +38,7 @@ Version updates
 ---------------
 * Version 1.2.2:        July 10, 2013
 
-	* Added getDataAvailability function to find measured parameters and period of record information for a requested station.
+	* Added getNWISDataAvailability function to find measured parameters and period of record information for a requested station.
 	* Added constructNWISURL function to get the URL that is used to retrieve the data.
 	* Added getSampleSTORET function to get STORET data directly in Sample dataframe form.
 	* Fixed a small leap year bug by changing day of year by making Feb. 29 always 59, and March 1st always 60 (even in non-leap years).
