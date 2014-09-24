@@ -39,16 +39,19 @@ Version updates
 dataRetrieval 1.4.0-in developement
 ===========
 * Changed naming convention:
-getDVData -> getNWISDaily
-getSampleData -> getNWISSample
-getSTORETData* -> getWQPSample
-getSampleDataFromFile -> getUserSample
-getDailyDataFromFile -> getUserDaily
-getMetaData -> splits into getNWISInfo and getUserInfo
-getSiteFileData <- getNWISSiteInfo
-getParameterInfo <- getNWISPcodeInfo
-getDataAvailability <- getNWISDataAvailability
-'retrieve' functions changed to 'get'
+|Original Name | New Name |
+| ------------- |:-------------|
+|getDVData | getNWISDaily |
+|getSampleData  |     getNWISSample |
+|getSTORETData* | getWQPSample |
+|getSampleDataFromFile | getUserSample |
+|getDailyDataFromFile | getUserDaily |
+|getMetaData | splits into getNWISInfo and getUserInfo |
+|getSiteFileData | getNWISSiteInfo |
+|getParameterInfo | getNWISPcodeInfo |
+|getDataAvailability | getNWISDataAvailability |
+|'retrieve' functions | 'get' |
+
 * Changed WaterML2 rbind fill from plyr function to dplyr. Removed plyr import, added dplyr.
 *
 
