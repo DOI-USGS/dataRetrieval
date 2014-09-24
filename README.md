@@ -36,26 +36,40 @@ While the dataRetreival package is in development (and not on CRAN), the zoo pac
 
 Version updates
 ---------------
-* Version 1.2.2:        July 10, 2013
+dataRetrieval 1.4.0-in developement
+===========
+* Changed naming convention:
+getDVData -> getNWISDaily
+getSampleData -> getNWISSample
+getSTORETData* -> getWQPSample
+getSampleDataFromFile -> getUserSample
+getDailyDataFromFile -> getUserDaily
+getMetaData -> splits into getNWISInfo and getUserInfo
+getSiteFileData <- getNWISSiteInfo
+getParameterInfo <- getNWISPcodeInfo
+getDataAvailability <- getNWISDataAvailability
+'retrieve' functions changed to 'get'
+* Changed WaterML2 rbind fill from plyr function to dplyr. Removed plyr import, added dplyr.
+*
 
-	* Added getNWISDataAvailability function to find measured parameters and period of record information for a requested station.
-	* Added constructNWISURL function to get the URL that is used to retrieve the data.
-	* Added getSampleSTORET function to get STORET data directly in Sample dataframe form.
-	* Fixed a small leap year bug by changing day of year by making Feb. 29 always 59, and March 1st always 60 (even in non-leap years).
+
+dataRetrieval 1.3.3
+===========
+
+* Updated getNWISSiteInfo to retrieve multiple site file datasets at once using a vector of siteNumbers as input argument.
+* Updated error-handling for Web service calls. More information is returned when errors happen
+* Added some basic processing to Water Quality Portal raw data retrievals. Date columns are returned as Date objects, value columns are numeric, and a column is created from the date/time/timezone columns that is POSIXct.
+* Added very generalized NWIS and WQP retrieval functions (getNWISData, getNWISSites, getGeneralWQPData, and getWQPSites) which allow the user to use any argument available on the Web service platform.
 
 
+dataRetrieval 1.3.2
+===========
 
-* Version 1.2.1:	Feburary 20, 2013
+* Deprecated getQWData, updated getWQPData to take either parameter code or characteristic name.
+* Changed the name of raw data retrievals to: getNWISqwData, getNWISunitData, getNWISdvData, and getWQPqwData (from: getNWISqwData, retrieveUnitNWISData, retrieveNWISData, getRawQWData)
+* Added NA warning to getDVData function
+* Updated mergeReport to allow for Sample data with different measurements taken on the same day
 
-	* Improved documentation, especially example functions.
-	* Improved vignette for a more complete walk-through.
-	* Expanded the capabilities to retrieve raw data from the web services.
-	* Added STORET data retrievals in getWQPData function
-
-* Version 1.2.0:	October 13, 2012
-
-	* Fixed a bug that caused problems if not explicitly defining Daily and Sample in mergeReport().
-	* Updating documentation (in progress)
 
 Sample Workflow
 ---------------
@@ -63,8 +77,8 @@ Sample Workflow
 Load data from web services:
 
 	library(dataRetrieval)
-	Daily <- getDVData("06934500","00060","1979-10-01","2010-09-30")
-	Sample <-getSampleData("06934500","00631","1970-10-01","2011-09-30")
-	INFO <-getMetaData("06934500","00631", interactive=FALSE)
+	Daily <- getNWISDaily("06934500","00060","1979-10-01","2010-09-30")
+	Sample <-getNWISSample("06934500","00631","1970-10-01","2011-09-30")
+	INFO <-getNWISInfo("06934500","00631", interactive=FALSE)
 	Sample <-mergeReport(Daily, Sample)
 
