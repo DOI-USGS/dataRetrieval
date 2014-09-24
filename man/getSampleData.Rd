@@ -20,20 +20,16 @@ getSampleData(siteNumber, parameterCd, startDate, endDate, interactive = TRUE)
 Sample dataframe
 }
 \description{
-Imports data from NWIS web service. This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/qwdata/}
-A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
-For raw data, use getQWData.  This function will retrieve the raw data, and compress it (summing constituents). See
-section 3.4 of the vignette for more details.
+This function is being deprecated for \code{\link{getNWISSample}}.
 }
 \examples{
 # These examples require an internet connection to run
-Sample_01075 <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31')
-Sample_All <- getSampleData('05114000','00915;00931', '1985-01-01', '1985-03-31')
-Sample_Select <- getSampleData('05114000','00915;00931', '', '')
+\dontrun{Sample_01075 <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31')}
+\dontrun{Sample_All <- getSampleData('05114000','00915;00931', '1985-01-01', '1985-03-31')}
+\dontrun{Sample_Select <- getSampleData('05114000','00915;00931', '', '')}
 }
 \seealso{
-\code{\link{compressData}}, \code{\link{populateSampleColumns}}
+\code{\link{compressData}}, \code{\link{populateSampleColumns}}, \code{\link{getNWISSample}}
 }
 \keyword{USGS}
 \keyword{WRTDS}

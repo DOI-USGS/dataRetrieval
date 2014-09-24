@@ -20,9 +20,9 @@ Populates INFO data frame with additional user-supplied information concerning t
 }
 \examples{
 #This example requires an internet connection to run
-INFO <- getSiteFileData('01594440')
+INFO <- getNWISSiteInfo('01594440')
 parameterCd <- "01075"
-parameterData <- getParameterInfo(parameterCd)
+parameterData <- getNWISPcodeInfo(parameterCd)
 INFO$param.nm <- parameterData$parameter_nm
 INFO$param.units <- parameterData$parameter_units
 INFO$paramShortName <- parameterData$srsname

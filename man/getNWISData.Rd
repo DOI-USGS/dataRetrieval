@@ -20,6 +20,7 @@ Arguments to the function should be based on \url{http://waterservices.usgs.gov}
 }
 \examples{
 dataTemp <- getNWISData(stateCd="OH",parameterCd="00010")
+dataTempUnit <- getNWISData(sites="03086500", service="iv", parameterCd="00010")
 }
 \keyword{NWIS}
 \keyword{data}

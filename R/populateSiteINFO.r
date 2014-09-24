@@ -9,22 +9,11 @@
 #' @export
 #' @examples
 #' #This example requires an internet connection to run
-#' INFO <- getSiteFileData('01594440')
+#' INFO <- getNWISSiteInfo('01594440')
 #' siteNumber <- "01594440"
 #' siteINFO <- populateSiteINFO(INFO, siteNumber)
 populateSiteINFO <- function(INFO, siteNumber,interactive=TRUE){
   if (nzchar(siteNumber)){
-    
-    INFO$land.net.ds <- NULL
-    INFO$instruments.cd <- NULL
-    INFO$nat.aqfr.cd <- NULL
-    INFO$aqfr.cd <- NULL
-    INFO$aqfr.type.cd <- NULL
-    INFO$well.depth.va <- NULL
-    INFO$hole.depth.va <- NULL
-    INFO$hole.depth.va <- NULL
-    INFO$depth.src.cd <- NULL
-    INFO$gw.file.cd <- NULL
     
     if (!nzchar(INFO$site.no)) {
       INFO$site.no <- siteNumber
@@ -52,7 +41,7 @@ populateSiteINFO <- function(INFO, siteNumber,interactive=TRUE){
       cat("The latitude and longitude of the site are: ",INFO$dec.lat.va, ", ", INFO$dec.long.va, "(degrees north and west).\n")
       if (!nzchar(INFO$drain.area.va)){
         cat("No drainage area was listed in the USGS site file for this site.\n")
-        cat("Please enter the drainage area, you can enter it in the units of your choice.\nEnter the area, then enter drainage area code, 1 is square miles, 2 is square kilometers, 3 is acres, and 4 is hectares.\n")
+        cat("Please enter the drainage area, you can enter it in the units of your choice.\nEnter the area, then enter drainage area code, \n1 is square miles\n2 is square kilometers\n3 is acres\n4 is hectares.\n")
         cat("Area(no quotes):\n")
         INFO$drain.area.va <- readline()
         INFO$drain.area.va <- as.numeric(INFO$drain.area.va)
@@ -90,7 +79,7 @@ populateSiteINFO <- function(INFO, siteNumber,interactive=TRUE){
       cat("Area(no quotes):\n")
       INFO$drain.area.va <- readline()
       INFO$drain.area.va <- as.numeric(INFO$drain.area.va)
-      cat("Unit Code (1-4, no quotes):")
+      cat("Unit Code (1-4, no quotes)\nrepresenting \n1: sq mi \n2: sq km \n3: sq m\n4: sq 100*km):")
       qUnit <- readline()
       qUnit <- as.numeric(qUnit)
       conversionVector <- c(2.5899881, 1.0, 0.0040468564, 0.01)

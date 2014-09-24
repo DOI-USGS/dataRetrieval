@@ -17,21 +17,21 @@
 #' @export
 #' @import reshape2
 #' @seealso \code{\link{getWQPData}}, \code{\link{getWQPSites}}, 
-#' \code{\link{retrieveWQPqwData}}, \code{\link{constructNWISURL}}
+#' \code{\link{getWQPqwData}}, \code{\link{constructNWISURL}}
 #' @examples
 #' # These examples require an internet connection to run
 #' siteNumber <- c('04024430','04024000')
 #' startDate <- '2010-01-01'
 #' endDate <- ''
 #' pCodes <- c('34247','30234','32104','34220')
-#' rawNWISqwData <- retrieveNWISqwData(siteNumber,pCodes,startDate,endDate)
-#' rawNWISqwDataExpand <- retrieveNWISqwData(siteNumber,pCodes,startDate,endDate,expanded=TRUE)
+#' rawNWISqwData <- getNWISqwData(siteNumber,pCodes,startDate,endDate)
+#' rawNWISqwDataExpand <- getNWISqwData(siteNumber,pCodes,startDate,endDate,expanded=TRUE)
 #' # To get data in Sample dataframe format:
 #' data <- rawNWISqwData[,names(rawNWISqwData) != "site"]
 #' data$dateTime <- as.Date(data$dateTime)
 #' compressedData <- compressData(data)
 #' Sample <- populateSampleColumns(compressedData)
-retrieveNWISqwData <- function (siteNumber,pCodes,startDate,endDate,expanded=FALSE,interactive=TRUE){  
+getNWISqwData <- function (siteNumber,pCodes,startDate,endDate,expanded=FALSE,interactive=TRUE){  
   
   url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw",expanded=expanded,interactive=interactive)
   

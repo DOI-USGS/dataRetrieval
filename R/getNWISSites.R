@@ -11,9 +11,9 @@
 #' siteListPhos <- getNWISSites(stateCd="OH",parameterCd="00665")
 getNWISSites <- function(...){
   
-  matchReturn <- match.call()
+  matchReturn <- list(...)
 
-  values <- sapply(matchReturn[-1], function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
+  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   

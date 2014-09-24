@@ -21,19 +21,15 @@ getSTORETSampleData(siteNumber, characteristicName, startDate, endDate,
 Sample dataframe
 }
 \description{
-Imports data from the Water Quality Portal, so it could be STORET, NWIS, or . This function gets the data from: \url{http://www.waterqualitydata.us}
-For raw data, use getWQPData.  This function will retrieve the raw data, and compress it (summing constituents). See
-chapter 7 of the EGRET user guide for more details, then converts it to the Sample dataframe structure.
+This function is being deprecated for \code{\link{getWQPSample}}.
 }
 \examples{
 # These examples require an internet connection to run
-Sample_01075 <- getSTORETSampleData('USGS-01594440','Chloride', '', '')
-Sample_All <- getSTORETSampleData('WIDNR_WQX-10032762','Specific conductance', '', '')
+\dontrun{Sample_01075 <- getSTORETSampleData('USGS-01594440','Chloride', '', '')}
+\dontrun{Sample_All <- getSTORETSampleData('WIDNR_WQX-10032762','Specific conductance', '', '')}
 }
 \seealso{
-\code{\link{getWQPData}}, \code{\link{getWQPSites}},
-\code{\link{retrieveWQPqwData}}, \code{\link{retrieveNWISqwData}}, and \code{\link{basicWQPData}},
-\code{\link{compressData}}, \code{\link{populateSampleColumns}}
+\code{\link{getWQPSample}}
 }
 \keyword{USGS}
 \keyword{WRTDS}

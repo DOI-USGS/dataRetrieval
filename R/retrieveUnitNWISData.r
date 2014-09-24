@@ -21,9 +21,9 @@
 #' startDate <- as.character(Sys.Date())
 #' endDate <- as.character(Sys.Date())
 #' # These examples require an internet connection to run
-#' rawData <- retrieveNWISunitData(siteNumber,parameterCd,startDate,endDate)
-#' rawData2 <- retrieveNWISunitData(siteNumber,parameterCd,startDate,endDate,"tsv")
-retrieveNWISunitData <- function (siteNumber,parameterCd,startDate,endDate,format="xml",interactive=TRUE){  
+#' rawData <- getNWISunitData(siteNumber,parameterCd,startDate,endDate)
+#' rawData2 <- getNWISunitData(siteNumber,parameterCd,startDate,endDate,"tsv")
+getNWISunitData <- function (siteNumber,parameterCd,startDate,endDate,format="xml",interactive=TRUE){  
   
   url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"uv",format=format,interactive=interactive)
   if (format == "xml") {

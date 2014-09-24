@@ -13,15 +13,15 @@
 #' pHData <- getWQPData(siteid="USGS-04024315",characteristicName=nameToUse)
 getWQPData <- function(...){
   
-  matchReturn <- match.call()
+  matchReturn <- list(...)
   
   options <- c("bBox","lat","long","within","countrycode","statecode","countycode","siteType","organization",
                "siteid","huc","sampleMedia","characteristicType","characteristicName","pCode","activityId",
                "startDateLo","startDateHi","mimeType","Zip","providers")
   
-  if(!all(names(matchReturn[-1]) %in% options)) warning(matchReturn[!(names(matchReturn[-1]) %in% options)],"is not a valid query parameter to the Water Quality Portal")
+  if(!all(names(matchReturn) %in% options)) warning(matchReturn[!(names(matchReturn) %in% options)],"is not a valid query parameter to the Water Quality Portal")
   
-  values <- sapply(matchReturn[-1], function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
+  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
   
   values <- gsub(",","%2C",values)
   values <- gsub("%20","+",values)
@@ -34,7 +34,7 @@ getWQPData <- function(...){
                    urlCall,
                    "&mimeType=tsv",sep = "")
 
-  retVal <- basicWQPData(urlCall)
+  retVal <- readWQPData(urlCall)
   return(retVal)
   
 }

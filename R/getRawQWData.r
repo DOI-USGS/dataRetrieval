@@ -19,17 +19,17 @@
 #' @export
 #' @import RCurl
 #' @seealso \code{\link{getWQPData}}, \code{\link{getWQPSites}}, 
-#' \code{\link{getSTORETSampleData}}, \code{\link{retrieveNWISqwData}}, and \code{\link{basicWQPData}}
+#' \code{\link{getSTORETSampleData}}, \code{\link{getNWISqwData}}, and \code{\link{readWQPData}}
 #' @examples
 #' # These examples require an internet connection to run
-#' rawSample <- retrieveWQPqwData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
-#' rawSampleAll <- retrieveWQPqwData('USGS-05114000','', '1985-01-01', '1985-03-31')
-#' rawSampleSelect <- retrieveWQPqwData('USGS-05114000',c('00915','00931'), '1985-01-01', '1985-04-30')
-#' rawStoret <- retrieveWQPqwData('WIDNR_WQX-10032762','Specific conductance', '', '')
-retrieveWQPqwData <- function(siteNumber,parameterCd,startDate,endDate,interactive=TRUE){
+#' rawSample <- getWQPqwData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
+#' rawSampleAll <- getWQPqwData('USGS-05114000','', '1985-01-01', '1985-03-31')
+#' rawSampleSelect <- getWQPqwData('USGS-05114000',c('00915','00931'), '1985-01-01', '1985-04-30')
+#' rawStoret <- getWQPqwData('WIDNR_WQX-10032762','Specific conductance', '', '')
+getWQPqwData <- function(siteNumber,parameterCd,startDate,endDate,interactive=TRUE){
 
   url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"wqp",interactive=interactive)
-  retVal <- basicWQPData(url)
+  retVal <- readWQPData(url)
   return(retVal)
   
 }
