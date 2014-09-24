@@ -330,7 +330,6 @@ dailyDataAvailable <- getNWISDataAvailability(siteNumbers,
 
 @
 
-
 <<tablegda, echo=FALSE,results='asis'>>=
 tableData <- with(dailyDataAvailable, 
       data.frame( 
@@ -359,6 +358,8 @@ print(xtable(tableData,label="tab:gda",
       )
 
 @
+
+
 
 See Section \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft\textregistered\ software Excel or Word to display a data availability table similar to Table \ref{tab:gda}. Excel, Microsoft, PowerPoint, Windows, and Word are registered trademarks of Microsoft Corporation in the United States and other countries.
 
@@ -671,11 +672,55 @@ In this section, we use 3 dataRetrieval functions to get sufficient data to perf
 \subsection{INFO Data}
 \label{INFOsubsection}
 %------------------------------------------------------------
-The \texttt{getNWISInfo} function obtains metadata, or data about the streamgage and measured parameters. This function combines \texttt{getNWISSiteInfo} and \texttt{getNWISPcodeInfo}, producing one dataframe called INFO.
+
+The \texttt{getNWISInfo}, \texttt{getWQPInfo}, and \texttt{getUserInfo} functions obtain metadata, or data about the streamgage and measured parameters. Any number of columns can be included in this dataframe. Table \ref{tab:INFOtable} describes fields are required for EGRET functions. 
+
+\begin{table}[!ht]
+\begin{minipage}{\linewidth}
+{\footnotesize
+\caption{INFO columns required in EGRET functions} 
+\label{tab:INFOtable}
+\begin{tabular}{lll}
+  \hline
+\multicolumn{1}{c}{\textbf{\textsf{Column Name}}} &
+\multicolumn{1}{c}{\textbf{\textsf{Type}}} &
+\multicolumn{1}{c}{\textbf{\textsf{Description}}} \\  [0pt]
+  \hline
+  constitAbbrev & string & Constituent abbrieviation, used for saving the workspace in EGRET\\
+  [5pt] drainSqKm & numeric & Drainage area in square kilometers \\
+  [5pt] paramShortName & string & Parameter name to use on graphs \\
+  [5pt] param.units & string & Parameter units \\
+  [5pt] shortName & string & Station name to use on graphs\\
+  [5pt] staAbbrev & string & Station Abbreviation \\
+   \hline
+\end{tabular}
+}
+\end{minipage}
+\end{table}
+
+The function \texttt{getNWISInfo} combines \texttt{getNWISSiteInfo} and \texttt{getNWISPcodeInfo}, producing one dataframe called INFO.
 
 <<ThirdExample>>=
 parameterCd <- "00618"
-INFO <-getNWISInfo(siteNumber,parameterCd, interactive=FALSE)
+INFO <- getNWISInfo(siteNumber,parameterCd, interactive=FALSE)
+@
+
+It is also possible to create the INFO dataframe using information from the Water Quality Portal:
+
+<<WQPInfo, eval=FALSE>>=
+parameterCd <- "00618"
+INFO_WQP <- getWQPInfo("USGS-01491000",parameterCd)
+@
+
+Finally, the function \texttt{getUserInfo} can be used to convert comma separated files into an INFO dataframe. 
+
+Any supplemental column that would be useful can be added to the INFO dataframe. 
+
+<<addInfo, eval=TRUE, echo=TRUE>>=
+
+INFO$riverInfo <- "Major tributary of the Chesapeake Bay"
+INFO$GreensboroPopulation <- 1931
+
 @
 
 
@@ -722,6 +767,8 @@ If discharge values are negative or zero, the code will set all of these values 
 
 Notice that the \enquote{Day of the year} column can span from 1 to 366. The 366 accounts for leap years. Every day has a consistent day of the year. This means, February 28\textsuperscript{th} is always the 59\textsuperscript{th} day of the year, Feb. 29\textsuperscript{th} is always the 60\textsuperscript{th} day of the year, and March 1\textsuperscript{st} is always the 61\textsuperscript{st} day of the year whether or not it is a leap year.
 
+User-generated Sample dataframes can also be created using the \texttt{getUserDaily} function. This is discused in detail in section \ref{sec:DailyFile}.
+
 \FloatBarrier
 
 %------------------------------------------------------------
@@ -745,6 +792,7 @@ Sample <-getWQPSample(site,characteristicName,
       startDate, endDate)
 @
 
+User-generated Sample dataframes can also be created using the \texttt{getUserSample} function. This is discused in detail in section \ref{sec:SampleFile}.
 
 \pagebreak
 
@@ -956,7 +1004,7 @@ endDate <- "2013-01-01"
 Daily <- getNWISDaily(siteNumber, "00060", startDate, endDate)
 Sample <- getNWISSample(siteNumber,parameterCd, startDate, endDate)
 Sample <- mergeReport()
-head(Sample)
+names(Sample)
 @
 
 \FloatBarrier
@@ -996,19 +1044,23 @@ Tables \ref{tab:dataRetrievalFunctions1},\ref{tab:dataRetrievalOrg}, and \ref{ta
 \multicolumn{1}{c}{\textbf{\textsf{Description}}} \\ [0pt]
   \hline
   Daily & \texttt{getNWISdvData} & Raw USGS daily data \\ 
+  [5pt]Daily & \texttt{getNWISData} & Raw USGS data in generalized query \\
   [5pt]Daily\tnote{1} & \texttt{getNWISDaily} & USGS daily values \\ 
-  [5pt]Daily\tnote{1} & \texttt{getUserDaily} & User generated daily data \\ 
+  [5pt]Daily\tnote{1} & \texttt{getUserDaily} & User-generated daily data \\ 
   [5pt]Sample & \texttt{getNWISqwData} & Raw USGS water quality data \\
   [5pt]Sample & \texttt{getWQPqwData} & Raw Water Quality Data Portal data \\ 
-  [5pt]Sample & \texttt{getWQPData} & General Water Quality Portal\\
+  [5pt]Sample & \texttt{getWQPData} & Raw Water Quality Portal data in generalized query\\
   [5pt]Sample\tnote{1} & \texttt{getNWISSample} & USGS water quality data\\
   [5pt]Sample\tnote{1} & \texttt{getWQPSample} & Water Quality Data Portal data \\
-  [5pt]Sample\tnote{1} & \texttt{getUserSample} & User generated sample data \\ 
+  [5pt]Sample\tnote{1} & \texttt{getUserSample} & User-generated sample data \\ 
   [5pt]Unit & \texttt{getNWISunitData} & Raw USGS instantaneous data \\
-  [5pt]Information\tnote{1} & \texttt{getNWISInfo} & USGS station and parameter code information \\ 
+  [5pt]Information\tnote{1} & \texttt{getNWISInfo} & Station and parameter code information extracted from USGS\\ 
+  [5pt]Information\tnote{1} & \texttt{getWQPInfo} & Station and parameter information extracted from Water Quality Portal \\
+  [5pt]Information\tnote{1} & \texttt{getUserInfo} & Station and parameter information extracted from user-generated file \\ 
   [5pt]Information & \texttt{getNWISPcodeInfo} & USGS parameter code information \\ 
   [5pt]Information & \texttt{getNWISSiteInfo} & USGS station information \\ 
-  [5pt]Information & \texttt{getNWISDataAvailability} & Data available at USGS stations \\ 
+  [5pt]Information & \texttt{getNWISDataAvailability} & Data available at USGS stations \\
+  [5pt]Information & \texttt{getNWISSites} & USGS station information in generalized query \\ 
    \hline
 \end{tabular}
 
