@@ -29,8 +29,6 @@ filePath <- paste(filePath,"/",sep="")
 fileName <- 'ChoptankRiverNitrate.csv'
 \dontrun{Sample <- getSampleDataFromFile(filePath,fileName, separator=";",interactive=FALSE)}
 }
-\keyword{USGS}
-\keyword{WRTDS}
 \keyword{data}
 \keyword{file}
 \keyword{import}

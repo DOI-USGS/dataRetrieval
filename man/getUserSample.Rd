@@ -21,8 +21,7 @@ getUserSample(filePath, fileName, hasHeader = TRUE, separator = ",",
 Sample dataframe
 }
 \description{
-Imports data from a user-supplied file, and converts it to a Sample data frame (including summing multiple constituents), appropriate for WRTDS calculations. See
-section 3.4 of the vignette for more details.
+Imports data from a user-supplied file, and converts it to a Sample data frame (including summing multiple constituents), appropriate for WRTDS calculations.
 }
 \examples{
 filePath <- system.file("extdata", package="dataRetrieval")
@@ -33,8 +32,6 @@ Sample <- getUserSample(filePath,fileName, separator=";",interactive=FALSE)
 \seealso{
 \code{\link{compressData}}, \code{\link{populateSampleColumns}}
 }
-\keyword{USGS}
-\keyword{WRTDS}
 \keyword{data}
 \keyword{file}
 \keyword{import}

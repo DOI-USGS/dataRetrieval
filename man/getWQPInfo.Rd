@@ -16,10 +16,7 @@ getWQPInfo(siteNumber, parameterCd, interactive = FALSE)
 INFO dataframe with agency, site, dateTime, value, and code columns
 }
 \description{
-Populates INFO data frame for EGRET study.  If either station number or parameter code supplied, imports data about a particular USGS site from NWIS web service.
-This function gets the data from here: \url{http://waterservices.usgs.gov/}
-A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-If either station number or parameter code is not supplied, the user will be asked to input data.
+Populates INFO data frame for EGRET study.
 Additionally, the user will be asked for:
 staAbbrev - station abbreviation, will be used in naming output files and for structuring batch jobs
 constitAbbrev - constitute abbreviation
