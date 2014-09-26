@@ -4,6 +4,7 @@
 #'
 #' @param rawData vector with dateTime
 #' @return DateFrame dataframe
+#' @importFrom lubridate decimal_date
 #' @export
 #' @examples
 #' dateTime <- c('1984-02-28 13:56', '1984-03-01', '1986-03-01')
