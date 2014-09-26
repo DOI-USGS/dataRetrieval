@@ -30,7 +30,6 @@ constitAbbrev - constitute abbreviation
 INFO <- getNWISInfo('05114000','00010')
 }
 \keyword{USGS}
-\keyword{WRTDS}
 \keyword{data}
 \keyword{import}
 \keyword{service}

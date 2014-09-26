@@ -8,7 +8,6 @@
 #' @param separator string character that separates data cells
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import file
-#' @keywords data import USGS WRTDS
 #' @export
 #' @return Sample dataframe
 #' @examples
@@ -28,8 +27,7 @@ getSampleDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=",
 
 #' Import user sample data for EGRET analysis
 #'
-#' Imports data from a user-supplied file, and converts it to a Sample data frame (including summing multiple constituents), appropriate for WRTDS calculations. See
-#' section 3.4 of the vignette for more details.
+#' Imports data from a user-supplied file, and converts it to a Sample data frame (including summing multiple constituents), appropriate for WRTDS calculations. 
 #'
 #' @param filePath string specifying the path to the file
 #' @param fileName string name of file to open
@@ -37,7 +35,6 @@ getSampleDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=",
 #' @param separator string character that separates data cells
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import file
-#' @keywords data import USGS WRTDS
 #' @seealso \code{\link{compressData}}, \code{\link{populateSampleColumns}}
 #' @export
 #' @return Sample dataframe

@@ -52,7 +52,7 @@ getMetaData <- function(siteNumber="", parameterCd="",interactive=TRUE){
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
 #' @param parameterCd string USGS parameter code.  This is usually an 5 digit number.
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
-#' @keywords data import USGS web service WRTDS
+#' @keywords data import USGS web service
 #' @export
 #' @return INFO dataframe with at least param.nm, param.units, parameShortName, paramNumber
 #' @examples
@@ -85,10 +85,7 @@ getNWISInfo <- function(siteNumber, parameterCd,interactive=TRUE){
 
 #' Import Metadata for Water Quality Portal Data
 #'
-#' Populates INFO data frame for EGRET study.  If either station number or parameter code supplied, imports data about a particular USGS site from NWIS web service. 
-#' This function gets the data from here: \url{http://waterservices.usgs.gov/}
-#' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-#' If either station number or parameter code is not supplied, the user will be asked to input data.
+#' Populates INFO data frame for EGRET study.  
 #' Additionally, the user will be asked for:
 #' staAbbrev - station abbreviation, will be used in naming output files and for structuring batch jobs
 #' constitAbbrev - constitute abbreviation
@@ -178,7 +175,7 @@ getWQPInfo <- function(siteNumber, parameterCd, interactive=FALSE){
   
   if(interactive){
     if(is.na(siteInfo$drainSqKm)){
-      cat("No drainage area was listed in the USGS site file for this site.\n")
+      cat("No drainage area was listed in the WQP site file for this site.\n")
       cat("Please enter the drainage area, you can enter it in the units of your choice.\nEnter the area, then enter drainage area code, \n1 is square miles, \n2 is square kilometers, \n3 is acres, \n4 is hectares.\n")
       cat("Area(no quotes):\n")
       siteInfo$drain.area.va <- readline()
@@ -188,6 +185,102 @@ getWQPInfo <- function(siteNumber, parameterCd, interactive=FALSE){
       qUnit <- as.numeric(qUnit)
       conversionVector <- c(2.5899881, 1.0, 0.0040468564, 0.01)
       siteInfo$drainSqKm <- siteInfo$drain.area.va * conversionVector[qUnit]
+    }
+  }
+  
+  siteInfo$queryTime <- Sys.time()
+  siteInfo$paStart <- 10
+  siteInfo$paLong <- 12
+  
+  return(siteInfo)
+}
+
+
+
+#' Import Metadata from User-Generated File
+#'
+#' Populates INFO data frame for EGRET study.
+#' Additionally, the user will be asked for:
+#' staAbbrev - station abbreviation, will be used in naming output files and for structuring batch jobs
+#' constitAbbrev - constitute abbreviation
+#'
+#' @param filePath string specifying the path to the file
+#' @param fileName string name of file to open
+#' @param hasHeader logical true if the first row of data is the column headers
+#' @param separator string character that separates data cells
+#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
+#' @keywords data import USGS web service WRTDS
+#' @export
+#' @return INFO dataframe with agency, site, dateTime, value, and code columns
+#' @examples
+#' filePath <- system.file("extdata", package="dataRetrieval")
+#' filePath <- paste(filePath,"/",sep="")
+#' fileName <- 'infoTest.csv'
+#' INFO <- getUserInfo(filePath,fileName, separator=",",interactive=FALSE)
+getUserInfo <- function(filePath,fileName,hasHeader=TRUE,separator=",",interactive=FALSE){
+  
+  totalPath <- paste(filePath,fileName,sep="");  
+  siteInfo <- read.delim(  
+    totalPath, 
+    header = hasHeader,
+    sep=separator,
+    colClasses=c('character'),
+    fill = TRUE, 
+    comment.char="#")
+  
+  if(interactive){
+
+    if (!nzchar(siteInfo$station.nm)){
+      cat("No station name was listed. Please enter a station name here(no quotes): \n")
+      siteInfo$station.nm <- readline()
+    }
+    cat("Your site name is", siteInfo$station.nm,",")
+    cat("but you can modify this to a short name in a style you prefer. \nThis name will be used to label graphs and tables. \n")
+    cat("If you want the program to use the name given above, just do a carriage return, otherwise enter the preferred short name(no quotes):\n")
+    siteInfo$shortName <- readline()
+    if (!nzchar(siteInfo$shortName)) siteInfo$shortName <- siteInfo$station.nm
+    
+    if (!nzchar(siteInfo$param.nm)){
+      cat("No water quality parameter name was listed.\nPlease enter the name here(no quotes): \n")
+      siteInfo$param.nm <- readline()
+    }
+    
+    cat("Your water quality data are for '", siteInfo$param.nm, "'.\n")
+    cat("Typically you will want a shorter name to be used in graphs and tables. The suggested short name is:'", siteInfo$paramShortName, "'.\n")
+    cat("If you would like to change the short name, enter it here, otherwise just hit enter (no quotes):")
+    shortNameTemp <- readline()
+    
+    if (nchar(shortNameTemp)>0) siteInfo$paramShortName <- shortNameTemp
+    
+    if (!nzchar(siteInfo$param.units)){
+      cat("No water quality parameter unit was listed.\nPlease enter the units here(no quotes): \n")
+      siteInfo$param.nm <- readline()
+    }
+    cat("The units for the water quality data are: ", siteInfo$param.units, ".\n")
+    cat("It is helpful to set up a constiuent abbreviation when doing multi-constituent studies, enter a unique id (three or four characters should work something like tn or tp or NO3).\nIt is case sensitive.  Even if you don't feel you need an abbreviation you need to enter something (no quotes):\n")
+    siteInfo$constitAbbrev <- readline()
+
+    cat("It is helpful to set up a station abbreviation when doing multi-site studies, enter a unique id (three or four characters should work).\nIt is case sensitive.  Even if you don't feel you need an abbreviation for your site you need to enter something(no quotes):\n")
+    siteInfo$staAbbrev <- readline()
+  
+    if(is.na(siteInfo$drainSqKm)){
+      cat("No drainage area was listed as a column named 'drainSqKm'.\n")
+      cat("Please enter the drainage area, you can enter it in the units of your choice.\nEnter the area, then enter drainage area code, \n1 is square miles, \n2 is square kilometers, \n3 is acres, \n4 is hectares.\n")
+      cat("Area(no quotes):\n")
+      siteInfo$drain.area.va <- readline()
+      siteInfo$drain.area.va <- as.numeric(siteInfo$drain.area.va)
+      cat("Unit Code (1-4, no quotes):")
+      qUnit <- readline()
+      qUnit <- as.numeric(qUnit)
+      conversionVector <- c(2.5899881, 1.0, 0.0040468564, 0.01)
+      siteInfo$drainSqKm <- siteInfo$drain.area.va * conversionVector[qUnit]
+    }
+  } else {
+    requiredColumns <- c("drainSqKm", "staAbbrev", "constitAbbrev", 
+                         "param.units", "paramShortName","shortName")
+    if(!all(requiredColumns %in% names(siteInfo))){
+      message("The following columns are expected in the EGRET package:\n")
+      message(requiredColumns[!(requiredColumns %in% names(siteInfo))])
     }
   }
   
