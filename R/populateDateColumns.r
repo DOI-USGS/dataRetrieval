@@ -27,15 +27,8 @@ populateDateColumns <- function(rawData){  # rawData is a vector of dates
   leapOffset <- ifelse((year%%4 == 0) & ((year%%100 != 0) | (year%%400 == 0)), 0,1)
   
   DateFrame$Day[DateFrame$Day > 59] <- DateFrame$Day[DateFrame$Day > 59] + leapOffset[DateFrame$Day > 59]
-  
-#   DateFrame$DecYear <- year + (DateFrame$Day -0.5)/366
 
-  jan1 <- as.POSIXlt(paste(year,"-01-01",sep=""),format="%Y-%m-%d")
-  jan1NextYear <- as.POSIXlt(paste(year+1,"-01-01",sep=""),format="%Y-%m-%d")
-  decimal <- as.numeric(difftime(dateTime, jan1, units = "secs"))
-  decimal <- decimal/as.numeric(difftime(jan1NextYear, jan1, units = "secs"))
-  
-  DateFrame$DecYear <- year + decimal
+  DateFrame$DecYear <- decimal_date(dateTime)
   DateFrame$MonthSeq <- ((year-1850)*12)+DateFrame$Month
   return (DateFrame)
   
