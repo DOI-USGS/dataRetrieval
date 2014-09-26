@@ -24,5 +24,15 @@ getNWISSites <- function(...){
 
   retval <- getRDB1Data(urlCall)
 
+  if("dec_lat_va" %in% names(retval)){
+    retval$dec_lat_va <- as.numeric(retval$dec_lat_va)
+  }
+  
+  if("dec_long_va" %in% names(retval)){
+    retval$dec_long_va <- as.numeric(retval$dec_long_va)
+  }
+  
+  retval$queryTime <- Sys.time()
+  
   return(retval)
 }

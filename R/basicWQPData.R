@@ -7,6 +7,7 @@
 #' start and end times.
 #' @export
 #' @import RCurl
+#' @importFrom lubridate parse_date_time
 #' @examples
 #' # These examples require an internet connection to run
 #' rawSampleURL <- constructNWISURL('USGS-01594440','01075', '1985-01-01', '1985-03-31',"wqp")
@@ -39,7 +40,6 @@ readWQPData <- function(url){
                               colClasses='character', 
                               fill = TRUE,nrow=1)
       classColumns <- setNames(rep('character',ncol(namesData)),names(namesData))
-      classColumns["ActivityStartDate"] <- "Date"
       
       classColumns[grep("MeasureValue",names(classColumns))] <- NA
       
@@ -62,6 +62,18 @@ readWQPData <- function(url){
       timeZoneStart[is.na(timeZoneStart)] <- ""
       timeZoneEnd[is.na(timeZoneEnd)] <- ""
       
+      if("ActivityStartDate" %in% names(retval)){
+        if(any(retval$ActivityStartDate != "")){
+          suppressWarnings(retval$ActivityStartDate <- as.Date(parse_date_time(retval$ActivityStartDate, c("Ymd", "mdY"))))
+        }
+      }
+
+      if("ActivityEndDate" %in% names(retval)){
+        if(any(retval$ActivityEndDate != "")){
+          suppressWarnings(retval$ActivityEndDate <- as.Date(parse_date_time(retval$ActivityEndDate, c("Ymd", "mdY"))))
+        }        
+      }
+
       if(any(!is.na(timeZoneStart))){
         if(length(unique(timeZoneStart)) == 1){
           retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, ActivityStartTime.Time),format="%Y-%m-%d %H:%M:%S", tz=unique(timeZoneStart)))
@@ -101,11 +113,7 @@ readWQPData <- function(url){
           }
         }
       }
-      
-      if(any(retval$ActivityEndDate != "")){
-        retval$ActivityEndDate[retval$ActivityEndDate != ""] <- as.Date(retval$ActivityEndDate[retval$ActivityEndDate != ""])
-      }
-      
+          
       return(retval)
       
     } else {

@@ -59,6 +59,16 @@ getWQPSites <- function(...){
       
       if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sites were expected, ", actualNumReturned, " were returned")
       
+      if("LatitudeMeasure" %in% names(retval)){
+        retval$LatitudeMeasure <- as.numeric(retval$LatitudeMeasure)
+      }
+      
+      if("LongitudeMeasure" %in% names(retval)){
+        retval$LongitudeMeasure <- as.numeric(retval$LongitudeMeasure)
+      }
+      
+      retval$queryTime <- Sys.time()
+      
       return(retval)
       
     } else {
