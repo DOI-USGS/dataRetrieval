@@ -19,7 +19,7 @@ mergeReport<-function(localDaily = Daily, localSample = Sample, interactive=TRUE
     dataOverview(localDaily, localSample)  
   }
   
-  newSample <- merge(Daily[,c("Date","Q","LogQ")],Sample,by = "Date",all.y = TRUE)
+  newSample <- merge(localDaily[,c("Date","Q","LogQ")],localSample,by = "Date",all.y = TRUE)
 
   return(newSample)
 }
