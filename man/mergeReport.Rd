@@ -20,12 +20,12 @@ Merges the flow data from the daily record into the sample record.
 }
 \examples{
 # These examples require an internet connection to run
-Daily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31')
-Sample <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31')
+Daily <- getNWISDaily('01594440','00060', '1985-01-01', '1985-03-31')
+Sample <- getNWISSample('01594440','01075', '1985-01-01', '1985-03-31')
 Sample <- mergeReport()
 }
 \seealso{
-\code{\link{getDVData}}, \code{\link{populateSampleColumns}}
+\code{\link{getNWISDaily}}, \code{\link{getNWISSample}}
 }
 \keyword{USGS}
 \keyword{WRTDS}
