@@ -85,8 +85,8 @@ getNWISInfo <- function(siteNumber, parameterCd,interactive=TRUE){
 
 #' Import Metadata for Water Quality Portal Data
 #'
-#' Populates INFO data frame for EGRET study.  
-#' Additionally, the user will be asked for:
+#' Populates INFO data frame for EGRET study. If siteNumber or parameter code (for USGS) or characteristic name 
+#' (for non-USGS) is provided, the function will make a call to the Water Quality Portal to get metadata information.
 #' staAbbrev - station abbreviation, will be used in naming output files and for structuring batch jobs
 #' constitAbbrev - constitute abbreviation
 #'
@@ -199,10 +199,11 @@ getWQPInfo <- function(siteNumber, parameterCd, interactive=FALSE){
 
 #' Import Metadata from User-Generated File
 #'
-#' Populates INFO data frame for EGRET study.
-#' Additionally, the user will be asked for:
-#' staAbbrev - station abbreviation, will be used in naming output files and for structuring batch jobs
-#' constitAbbrev - constitute abbreviation
+#' Populates INFO data frame for EGRET study. Accepts a user generated file with any metadata that might 
+#' be important for the analysis. 
+#' Additionally, EGRET analysis requires:"drainSqKm", "staAbbrev", "constitAbbrev", 
+#' "param.units", "paramShortName","shortName". If interactive=TRUE, the function will ask for these
+#' fields if they aren't supplied in the file.
 #'
 #' @param filePath string specifying the path to the file
 #' @param fileName string name of file to open
