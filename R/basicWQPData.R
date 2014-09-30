@@ -82,8 +82,8 @@ readWQPData <- function(url){
           mostCommonTZ <- names(sort(summary(as.factor(timeZoneStart)),decreasing = TRUE)[1])
 
           retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, ActivityStartTime.Time),
-                                        format="%Y-%m-%d %H:%M:%S", 
-                                        tz=mostCommonTZ))
+                                format="%Y-%m-%d %H:%M:%S", 
+                                tz=mostCommonTZ))
           additionalTZs <- names(sort(summary(as.factor(timeZoneStart)),decreasing = TRUE)[-1])
           for(i in additionalTZs){
             retval$ActivityStartDateTime[timeZoneStart == i] <-  with(retval[timeZoneStart == i,], 
@@ -91,7 +91,6 @@ readWQPData <- function(url){
                                format="%Y-%m-%d %H:%M:%S", 
                                tz=i))      
           }
-
         }
       }
       
@@ -102,14 +101,14 @@ readWQPData <- function(url){
           mostCommonTZ <- names(sort(summary(as.factor(timeZoneEnd)),decreasing = TRUE)[1])
           
           retval$ActivityEndDateTime <- with(retval, as.POSIXct(paste(ActivityEndDate, ActivityEndTime.Time),
-                                                                  format="%Y-%m-%d %H:%M:%S", 
-                                                                  tz=mostCommonTZ))
+                                      format="%Y-%m-%d %H:%M:%S", 
+                                      tz=mostCommonTZ))
           additionalTZs <- names(sort(summary(as.factor(timeZoneEnd)),decreasing = TRUE)[-1])
           for(i in additionalTZs){
             retval$ActivityEndDateTime[timeZoneEnd == i] <-  with(retval[timeZoneEnd == i,], 
-                                                                      as.POSIXct(paste(ActivityEndDate, ActivityEndTime.Time),
-                                                                                 format="%Y-%m-%d %H:%M:%S", 
-                                                                                 tz=i))      
+                          as.POSIXct(paste(ActivityEndDate, ActivityEndTime.Time),
+                                     format="%Y-%m-%d %H:%M:%S", 
+                                     tz=i))      
           }
         }
       }
