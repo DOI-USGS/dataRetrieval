@@ -38,9 +38,11 @@ pCodes <- c('34247','30234','32104','34220')
 rawNWISqwData <- getNWISqwData(siteNumber,pCodes,startDate,endDate)
 rawNWISqwDataExpand <- getNWISqwData(siteNumber,pCodes,startDate,endDate,expanded=TRUE)
 # To get data in Sample dataframe format:
-data <- rawNWISqwData[,names(rawNWISqwData) != "site"]
-data$dateTime <- as.Date(data$dateTime)
-compressedData <- compressData(data)
+dataColumns <- grep("p\\\\d{5}",names(rawNWISqwData))
+remarkColumns <- grep("r\\\\d{5}",names(rawNWISqwData))
+totalColumns <-c(grep("sample_dt",names(rawNWISqwData)), dataColumns, remarkColumns)
+totalColumns <- totalColumns[order(totalColumns)]
+compressedData <- compressData(rawNWISqwData[,totalColumns])
 Sample <- populateSampleColumns(compressedData)
 }
 \seealso{

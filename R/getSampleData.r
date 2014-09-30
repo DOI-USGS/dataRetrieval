@@ -50,15 +50,16 @@ getSampleData <- function(siteNumber,parameterCd,startDate,endDate,interactive=T
 #' @examples
 #' # These examples require an internet connection to run
 #' Sample_01075 <- getNWISSample('01594440','01075', '1985-01-01', '1985-03-31')
-#' Sample_All <- getNWISSample('05114000','00915;00931', '1985-01-01', '1985-03-31')
-#' Sample_Select <- getNWISSample('05114000','00915;00931', '', '')
+#' Sample_All2 <- getNWISSample('05114000',c('00915','00931'), '1985-01-01', '1985-03-31')
+#' Sample_Select <- getNWISSample('05114000',c('00915','00931'), '', '')
 getNWISSample <- function(siteNumber,parameterCd,startDate,endDate,interactive=TRUE){
   
   rawSample <- getNWISqwData(siteNumber,parameterCd,startDate,endDate)
-  #rawSample$dateTime <- strptime(rawSample$dateTime,"%Y-%m-%d %H:%M:%S")
-  rawSample$dateTime <- as.Date(rawSample$dateTime)
-  rawSample$site <- NULL
-  compressedData <- compressData(rawSample, interactive=interactive)
+  dataColumns <- grep("p\\d{5}",names(rawSample))
+  remarkColumns <- grep("r\\d{5}",names(rawSample))
+  totalColumns <-c(grep("sample_dt",names(rawSample)), dataColumns, remarkColumns)
+  totalColumns <- totalColumns[order(totalColumns)]
+  compressedData <- compressData(rawSample[,totalColumns], interactive=interactive)
   Sample <- populateSampleColumns(compressedData)
   return(Sample)
 }

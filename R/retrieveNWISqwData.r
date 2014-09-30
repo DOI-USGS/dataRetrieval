@@ -27,95 +27,31 @@
 #' rawNWISqwData <- getNWISqwData(siteNumber,pCodes,startDate,endDate)
 #' rawNWISqwDataExpand <- getNWISqwData(siteNumber,pCodes,startDate,endDate,expanded=TRUE)
 #' # To get data in Sample dataframe format:
-#' data <- rawNWISqwData[,names(rawNWISqwData) != "site"]
-#' data$dateTime <- as.Date(data$dateTime)
-#' compressedData <- compressData(data)
+#' dataColumns <- grep("p\\d{5}",names(rawNWISqwData))
+#' remarkColumns <- grep("r\\d{5}",names(rawNWISqwData))
+#' totalColumns <-c(grep("sample_dt",names(rawNWISqwData)), dataColumns, remarkColumns)
+#' totalColumns <- totalColumns[order(totalColumns)]
+#' compressedData <- compressData(rawNWISqwData[,totalColumns])
 #' Sample <- populateSampleColumns(compressedData)
 getNWISqwData <- function (siteNumber,pCodes,startDate,endDate,expanded=FALSE,interactive=TRUE){  
   
   url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw",expanded=expanded,interactive=interactive)
   
-  retval = tryCatch({
-    h <- basicHeaderGatherer()
-    doc <- getURL(url, headerfunction = h$update)
-    
-  }, warning = function(w) {
-    message(paste("URL caused a warning:", url))
-    message(w)
-  }, error = function(e) {
-    message(paste("URL does not seem to exist:", url))
-    message(e)
-    return(NA)
-  })   
+  data <- getRDB1Data(url,asDateTime=TRUE, qw=TRUE)
   
-  if(h$value()["Content-Type"] == "text/plain"){
-  
-    tmp <- read.delim(  
-      textConnection(doc), 
-      header = TRUE, 
-      quote="\"", 
-      dec=".", 
-      sep='\t',
-      colClasses=c('character'),
-      fill = TRUE, 
-      comment.char="#")
-  
-    dataType <- tmp[1,]
-    data <- tmp[-1,]
-    row.names(data) <- NULL
+  if(expanded){
+    columnsToMelt <- c("agency_cd","site_no","sample_dt","sample_tm",
+                       "sample_end_dt","sample_end_tm","sample_start_time_datum_cd","tm_datum_rlbty_cd",
+                       "parm_cd","startDateTime","endDateTime")
+    longDF <- melt(data, columnsToMelt)
+    wideDF <- dcast(longDF, ... ~ variable + parm_cd )
+    wideDF[,grep("_va_",names(wideDF))] <- sapply(wideDF[,grep("_va_",names(wideDF))], function(x) as.numeric(x))
     
+    groupByPCode <- as.vector(sapply(pCodes, function(x) grep(x, names(wideDF)) ))
+    data <- wideDF[,c(1:length(columnsToMelt)-1,groupByPCode)]
     
-    
-    if(expanded){
-      data$site <- with(data,paste(agency_cd,site_no,sep="-"))
-      data$dateTime <- with(data, as.POSIXct(paste(sample_dt,sample_tm,sep=" "),tz="UTC"))
-      data$dateTimeEnd <- rep(as.POSIXct(NA), length(data$sample_end_tm))
-      
-      if (any("" != data[["sample_end_dt"]])){
-        data$sample_end_dt["" == data$sample_end_dt] <- NA
-        data$sample_end_tm["" == data$sample_end_tm] <- NA
-        
-        data$dateTimeEnd[!is.na(data$sample_end_tm) & !is.na(data$sample_end_dt)] <- as.POSIXct(paste(data$sample_end_dt[!is.na(data$sample_end_tm) & !is.na(data$sample_end_dt)],
-                              data$sample_end_tm[!is.na(data$sample_end_tm) & !is.na(data$sample_end_dt)],sep=" "),tz="UTC")
-      } 
-      
-      data$result_va <- as.numeric(data$result_va)
-      data$rpt_lev_va <- as.numeric(data$rpt_lev_va)
-      rmCol <- c("agency_cd","site_no","tm_datum_rlbty_cd",
-                 "coll_ent_cd","medium_cd","tu_id","body_part_id",
-                 "sample_end_dt","sample_end_tm","sample_dt","sample_tm",
-                 "sample_start_time_datum_cd","anl_ent_cd","lab_std_va")
-      data <- data[,!(names(data) %in% rmCol)]
-      
-      longDF <- melt(data, c("parm_cd","dateTime","site","dateTimeEnd"))
-      wideDF <- dcast(longDF, ... ~ variable + parm_cd )
-      wideDF[,grep("_va_",names(wideDF))] <- sapply(wideDF[,grep("_va_",names(wideDF))], function(x) as.numeric(x))
-      
-      data <- wideDF[,c(1,2,3,(3+order(sapply(strsplit(names(wideDF)[c(-1:-3)],"_"), function(x) x[length(x)]))))]
-      if (all(is.na(data$dateTimeEnd))){
-        data$dateTimeEnd <- NULL
-      }    
-      
-    } else {
-      data$site <- with(data,paste(agency_cd,site_no,sep="-"))
-      data$dateTime <- with(data, as.POSIXct(paste(sample_dt,sample_tm,sep=" "),tz="UTC"))
-      rmCol <- c("agency_cd","site_no","tm_datum_rlbty_cd",
-                 "coll_ent_cd","medium_cd","tu_id","body_part_id",
-                 "sample_end_dt","sample_end_tm","sample_dt","sample_tm","sample_start_time_datum_cd")
-      data <- data[,!(names(data) %in% rmCol)]
-      
-      names(data) <- c(gsub("r", "qualifier_",names(data)[1:(length(names(data))-2)]),names(data)[(length(names(data))-1):length(names(data))])
-      names(data) <- c(gsub("p", "value_",names(data)[1:(length(names(data))-2)]),names(data)[(length(names(data))-1):length(names(data))])
-      
-      data[,grep("value",names(data))] <- sapply( data[,grep("value",names(data))], function(x) as.numeric(x))
-      
-      data <- data[,c(ncol(data):(ncol(data)-1),(1:(ncol(data)-2)))]
-    }
-    
-    return (data)
-  } else {
-    message(paste("URL caused an error:", url))
-    message("Content-Type=",h$value()["Content-Type"])
-    return(NA)
   }
+  
+  return (data)
+
 }
