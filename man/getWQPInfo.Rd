@@ -16,8 +16,8 @@ getWQPInfo(siteNumber, parameterCd, interactive = FALSE)
 INFO dataframe with agency, site, dateTime, value, and code columns
 }
 \description{
-Populates INFO data frame for EGRET study.
-Additionally, the user will be asked for:
+Populates INFO data frame for EGRET study. If siteNumber or parameter code (for USGS) or characteristic name
+(for non-USGS) is provided, the function will make a call to the Water Quality Portal to get metadata information.
 staAbbrev - station abbreviation, will be used in naming output files and for structuring batch jobs
 constitAbbrev - constitute abbreviation
 }

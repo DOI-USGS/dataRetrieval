@@ -3,12 +3,14 @@
 \alias{getRDB1Data}
 \title{Function to return data from the NWIS RDB 1.0 format}
 \usage{
-getRDB1Data(obs_url, asDateTime = FALSE)
+getRDB1Data(obs_url, asDateTime = FALSE, qw = FALSE)
 }
 \arguments{
 \item{obs_url}{string containing the url for the retrieval}
 
 \item{asDateTime}{logical, if TRUE returns date and time as POSIXct, if FALSE, Date}
+
+\item{qw}{logical, if TRUE parses as water quality data (where dates/times are in start and end times)}
 }
 \value{
 data a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations

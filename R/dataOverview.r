@@ -9,8 +9,8 @@
 #' @seealso \code{\link{mergeReport}}
 #' @examples
 #' # These examples require an internet connection to run
-#' exDaily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31', interactive=FALSE)
-#' exSample <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31', interactive=FALSE)
+#' exDaily <- getNWISDaily('01594440','00060', '1985-01-01', '1985-03-31', interactive=FALSE)
+#' exSample <- getNWISSample('01594440','01075', '1985-01-01', '1985-03-31', interactive=FALSE)
 #' dataOverview(localDaily = exDaily, localSample = exSample)
 dataOverview <- function(localDaily = Daily, localSample = Sample){
   numDays<-length(localDaily$Date)

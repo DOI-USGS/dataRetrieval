@@ -8,11 +8,11 @@
 #' @keywords data import USGS WRTDS
 #' @export
 #' @return newSample dataframe with merged flow information
-#' @seealso \code{\link{getDVData}}, \code{\link{populateSampleColumns}}
+#' @seealso \code{\link{getNWISDaily}}, \code{\link{getNWISSample}}
 #' @examples
 #' # These examples require an internet connection to run
-#' Daily <- getDVData('01594440','00060', '1985-01-01', '1985-03-31')
-#' Sample <- getSampleData('01594440','01075', '1985-01-01', '1985-03-31')
+#' Daily <- getNWISDaily('01594440','00060', '1985-01-01', '1985-03-31')
+#' Sample <- getNWISSample('01594440','01075', '1985-01-01', '1985-03-31')
 #' Sample <- mergeReport()
 mergeReport<-function(localDaily = Daily, localSample = Sample, interactive=TRUE){
   if (interactive){
