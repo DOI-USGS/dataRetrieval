@@ -29,8 +29,8 @@ section 3.4 of the vignette for more details.
 \examples{
 # These examples require an internet connection to run
 Sample_01075 <- getNWISSample('01594440','01075', '1985-01-01', '1985-03-31')
-Sample_All <- getNWISSample('05114000','00915;00931', '1985-01-01', '1985-03-31')
-Sample_Select <- getNWISSample('05114000','00915;00931', '', '')
+Sample_All2 <- getNWISSample('05114000',c('00915','00931'), '1985-01-01', '1985-03-31')
+Sample_Select <- getNWISSample('05114000',c('00915','00931'), '', '')
 }
 \seealso{
 \code{\link{compressData}}, \code{\link{populateSampleColumns}}, , \code{\link{getNWISSample}}
