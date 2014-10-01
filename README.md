@@ -23,12 +23,12 @@ egret_comments@usgs.gov
 Additionally, to subscribe to an email list concerning updates to these R packages, please send a request to egret_comments@usgs.gov.
 
 ##Package Installation
-While the dataRetreival package is in development (and not on CRAN), the zoo package must first be manually installed. To install the dataRetrieval package, you must be using R 3.0 or greater and run the following commands:
+To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
 
 	install.packages("dataRetrieval", 
-	repos=c("http://usgs-r.github.com","http://cran.us.r-project.org"),
-	dependencies=TRUE,
-	type="both")
+	  repos=c("http://usgs-r.github.com","http://cran.us.r-project.org"),
+	  dependencies=TRUE,
+	  type="both")
 
 
 ##Version updates
