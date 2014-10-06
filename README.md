@@ -45,10 +45,9 @@ Additionally, to subscribe to an email list concerning updates to these R packag
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
 
 	install.packages("dataRetrieval", 
-	  repos=c("http://usgs-r.github.com","http://cran.us.r-project.org"),
-	  dependencies=TRUE,
-	  type="both")
-
+	  repos=c("http://usgs-r.github.com",
+	           "http://cran.us.r-project.org"),
+	  dependencies=TRUE)
 
 ##Version updates
 ---------------
