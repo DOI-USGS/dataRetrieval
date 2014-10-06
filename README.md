@@ -9,12 +9,31 @@ R package source for data retrieval specifically for the EGRET R package:
 Please visit the EGRET wiki for more information:
 [EGRET Wiki](https://github.com/USGS-R/EGRET/wiki)
 
-##Disclaimer
-This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the [official USGS copyright policy](http://www.usgs.gov/visual-id/credit_usgs.html#copyright/ "official USGS copyright policy")
+`dataRetrieval`
+=============
 
-Although this software program has been used by the U.S. Geological Survey (USGS), no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.
+R package for data retrieval of water quality and hydrology data. This package was designed to integrate with the `EGRET` package. Please visit the `EGRET` wiki for more information:
+[EGRET Wiki](https://github.com/USGS-R/EGRET/wiki)
 
-This software is provided "AS IS."
+## Function Overview
+
+
+|Information Source | Site Query | Meta Data | Data |
+| -------------| -------------| ------------- |:-------------|
+|NWIS | `getNWISSites` | `getNWISInfo`* | `getNWISData` |
+| | `getNWISDataAvailability` | `getNWISSiteInfo` | `getNWISDaily`* |
+| | | `getNWISPcodeInfo` | `getNWISSample`* |
+| | | | `getNWISdvData` |
+| | | | `getNWISunitData` |
+| | | | `getNWISqwData` |
+| Water Quality Portal | `getWQPSites` | `getWQPInfo`* | `getWQPSample`* |
+| | | | `getWQPqwData` |
+| | | | `getWQPData` |
+| User-supplied files | | `getUserInfo`* | `getUserDaily`* |
+| | | | `getUserSample`* |
+
+`* Designed specifically to provide dataframes suitable for use by the `EGRET` package.
+
 
 ##Subscribe
 Please email questions, comments, and feedback to: 
@@ -81,3 +100,10 @@ Load data from web services:
 	INFO <-getNWISInfo("06934500","00631", interactive=FALSE)
 	Sample <-mergeReport(Daily, Sample)
 
+
+##Disclaimer
+This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the [official USGS copyright policy](http://www.usgs.gov/visual-id/credit_usgs.html#copyright/ "official USGS copyright policy")
+
+Although this software program has been used by the U.S. Geological Survey (USGS), no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.
+
+This software is provided "AS IS."
