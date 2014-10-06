@@ -10,7 +10,7 @@
 #' @export
 #' @import XML
 #' @examples
-#' siteListPhos3 <- getNWISSites(stateCd="OH",parameterCd="00665")
+#' siteListPhos <- getNWISSites(stateCd="OH",parameterCd="00665")
 getNWISSites <- function(...){
   
   matchReturn <- list(...)
