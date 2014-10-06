@@ -9,11 +9,12 @@ getNWISSites(...)
 \item{\dots}{see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options}
 }
 \value{
-retval dataframe
+retval dataframe with agency_cd, site_no, station_nm, site_tp_cd, dec_lat_va, and dec_long_va.
 }
 \description{
 Returns a list of sites from the NWIS web service. This function gets the data from: \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}.
 Arguments to the function should be based on \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service}
+Mapper format is used
 }
 \examples{
 siteListPhos <- getNWISSites(stateCd="OH",parameterCd="00665")

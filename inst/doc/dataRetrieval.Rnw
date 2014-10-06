@@ -512,7 +512,7 @@ names(dissolvedNitrate)
 
 <<getQWtemperaturePlot, echo=TRUE, fig.cap=paste(parameterINFO$parameter_nm, "at", siteINFO$station.nm[1])>>=
 with(dissolvedNitrate, plot(
-  dateTime, result_va_00618,
+  startDateTime, result_va_00618,
   xlab="Date",ylab = paste(parameterINFO$srsname,
       "[",parameterINFO$parameter_units,"]")
   ))
