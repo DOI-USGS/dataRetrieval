@@ -40,6 +40,8 @@ getRDB1Data <- function(obs_url,asDateTime=FALSE, qw=FALSE){
   
   if(as.character(h$value()["Content-Type"]) == "text/plain;charset=UTF-8" | as.character(h$value()["Content-Type"]) == "text/plain"){
     
+#     comments <- readLines(doc)
+    
     tmp <- read.delim(  
       textConnection(doc), 
       header = TRUE, 
