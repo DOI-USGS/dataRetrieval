@@ -10,8 +10,10 @@
 #' @importFrom lubridate parse_date_time
 #' @examples
 #' # These examples require an internet connection to run
+#' \dontrun{
 #' rawSampleURL <- constructNWISURL('USGS-01594440','01075', '1985-01-01', '1985-03-31',"wqp")
 #' rawSample <- readWQPData(rawSampleURL)
+#' }
 readWQPData <- function(url){
   
   h <- basicHeaderGatherer()
