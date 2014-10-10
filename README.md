@@ -71,8 +71,8 @@ Changed naming convention:
 |getDataAvailability | getNWISDataAvailability |
 |'retrieve' functions | 'get' |
 
-Changed WaterML2 rbind fill from plyr function to dplyr. Removed plyr import, added dplyr.
-
+*Changed WaterML2 rbind fill from plyr function to dplyr. Removed plyr import, added dplyr.
+*Removing WaterML2 until fixed.
 
 
 ###dataRetrieval 1.3.3
