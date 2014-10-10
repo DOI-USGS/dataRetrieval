@@ -11,6 +11,7 @@
 #' @examples
 #' # These examples require an internet connection to run
 #' \dontrun{
+#' ## Examples take longer than 5 seconds:
 #' rawSampleURL <- constructNWISURL('USGS-01594440','01075', '1985-01-01', '1985-03-31',"wqp")
 #' rawSample <- readWQPData(rawSampleURL)
 #' }
