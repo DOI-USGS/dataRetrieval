@@ -13,14 +13,18 @@
 #' endDate <- "2012-10-01"
 #' offering <- '00003'
 #' property <- '00060'
+#' urlBase <- "http://waterservices.usgs.gov/nwis"
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 #' data <- getWaterML1Data(obs_url)
 #' urlMulti <- constructNWISURL("04085427",c("00060","00010"),
 #'             startDate,endDate,'dv',statCd=c("00003","00001"))
 #' multiData <- getWaterML1Data(urlMulti)
-#' goundwaterExampleURL <- 
-#'     "http://waterservices.usgs.gov/nwis/gwlevels/?format=waterml&sites=431049071324301&startDT=2013-10-01&endDT=2014-06-30"
-#' groundWater <- getWaterML1Data(goundwaterExampleURL)
+#' groundWaterSite <- "431049071324301"
+#' startGW <- "2013-10-01"
+#' endGW <- "2014-06-30"
+#' groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
+#'           startGW,endGW, service="gwlevels", format="xml",interactive=FALSE)
+#' groundWater <- getWaterML1Data(groundwaterExampleURL)
 #' unitDataURL <- constructNWISURL(siteNumber,property,
 #'          as.character(Sys.Date()),as.character(Sys.Date()),'uv',format='xml')
 #' unitData <- getWaterML1Data(unitDataURL)
@@ -52,7 +56,6 @@ getWaterML1Data <- function(obs_url){
   timeSeries <- xpathApply(doc, "//ns1:timeSeries", namespaces = ns)
   
   for (i in 1:length(timeSeries)){
-    
     
     chunk <- xmlDoc(timeSeries[[i]])
     chunk <- xmlRoot(chunk)
