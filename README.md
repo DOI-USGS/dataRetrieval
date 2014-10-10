@@ -2,7 +2,8 @@
 =============
 Linux: ![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master) 
 
-Windows: [![Build status](https://ci.appveyor.com/api/projects/status/scett5lwuha2u53o)](https://ci.appveyor.com/project/USGS-R/dataretrieval)
+Windows: [![Build status](https://ci.appveyor.com/api/projects/status/scett5lwuha2u53o)](https://ci.appveyor.com/project/ldecicco-USGS/dataretrieval)
+
 
 
 R package source for data retrieval specifically for the EGRET R package:
