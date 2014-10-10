@@ -12,8 +12,10 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' rawSample <- getWQPqwData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
+#' \dontrun{
+#' rawSample <- getWQPqwData('USGS-01594440','', '', '')
 #' rawSampleSelect <- processQWData(rawSample)
+#' }
 processQWData <- function(data,pCode=TRUE){
 
   qualifier <- ifelse((data$ResultDetectionConditionText == "Not Detected" | 
@@ -23,7 +25,6 @@ processQWData <- function(data,pCode=TRUE){
   correctedData<-ifelse((nchar(qualifier)==0),data$ResultMeasureValue,data$DetectionQuantitationLimitMeasure.MeasureValue)
   test <- data.frame(data$USGSPCode)
   
-  #   test$dateTime <- as.POSIXct(strptime(paste(data$ActivityStartDate,data$ActivityStartTime.Time,sep=" "), "%Y-%m-%d %H:%M:%S"))
   test$dateTime <- data$ActivityStartDate
   
   originalLength <- nrow(test)
