@@ -9,6 +9,7 @@ before_install:
 
 install:
   - ./travis-tool.sh install_deps
+  - ./travis-tool.sh install_github USGS-R/EGRET
 
 script: ./travis-tool.sh run_tests
 
