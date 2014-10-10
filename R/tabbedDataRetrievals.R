@@ -3,7 +3,7 @@
 #' \tabular{ll}{
 #' Package: \tab dataRetrieval\cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.3.3\cr
+#' Version: \tab 1.4.0\cr
 #' Date: \tab 2014-09-16\cr
 #' License: \tab Unlimited for this package, dependencies have more restrictive licensing.\cr
 #' Copyright: \tab This software is in the public domain because it contains materials
@@ -23,25 +23,6 @@
 #' @keywords data, retrieval
 NULL
 
-#' Example Water Quality Data included in dataRetrieval
-#'
-#' Example data representing Nitrate from the Choptank River at Greensboro, MD, USGS data
-#'
-#' @name ChoptankRiverNitrate
-#' @docType data
-#' @author Robert M. Hirsch \email{rhirsch@@usgs.gov}
-#' @keywords water quality data
-NULL
-
-#' Example Streamflow Data included in dataRetrieval
-#'
-#' Example data representing Streamflow and Nitrate from the Choptank River at Greensboro, MD, USGS data
-#'
-#' @name ChoptankRiverFlow
-#' @docType data
-#' @author Robert M. Hirsch \email{rhirsch@@usgs.gov}
-#' @keywords water flow data
-NULL
 
 #' List of USGS parameter codes
 #'

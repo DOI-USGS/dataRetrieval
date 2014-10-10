@@ -16,7 +16,7 @@ constructNWISURL(siteNumber, parameterCd, startDate, endDate, service,
 
 \item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
 
-\item{service}{string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), "qw" (water quality data), and "wqp" (water quality portal, which can include STORET).}
+\item{service}{string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), "qw" (water quality data), "gwlevels" (groundwater),and "wqp" (water quality portal, which can include STORET).}
 
 \item{statCd}{string or vector USGS statistic code only used for daily value service. This is usually 5 digits.  Daily mean (00003) is the default.}
 

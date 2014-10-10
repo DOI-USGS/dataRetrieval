@@ -3,17 +3,17 @@
 \alias{populateParameterINFO}
 \title{Populate Parameter Information Columns}
 \usage{
-populateParameterINFO(parameterCd, localINFO = INFO, interactive = TRUE)
+populateParameterINFO(parameterCd, INFO, interactive = TRUE)
 }
 \arguments{
 \item{parameterCd}{string USGS parameter code}
 
-\item{localINFO}{dataframe with value and code columns. Default is INFO}
+\item{INFO}{dataframe with value and code columns. Default is INFO}
 
 \item{interactive}{logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.}
 }
 \value{
-localINFO dataframe
+INFO dataframe
 }
 \description{
 Populates INFO data frame with additional user-supplied information concerning the measured parameter.
@@ -27,6 +27,6 @@ INFO$param.nm <- parameterData$parameter_nm
 INFO$param.units <- parameterData$parameter_units
 INFO$paramShortName <- parameterData$srsname
 INFO$paramNumber <- parameterData$parameter_cd
-INFO <- populateParameterINFO(parameterCd)
+INFO <- populateParameterINFO(parameterCd, INFO)
 }
 

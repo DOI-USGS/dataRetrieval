@@ -2,7 +2,7 @@
 %\VignetteEngine{knitr::knitr}
 %\VignetteDepends{}
 %\VignetteSuggests{xtable,EGRET}
-%\VignetteImports{zoo, XML, RCurl}
+%\VignetteImports{zoo, XML, RCurl, dplyr, reshape2,lubridate}
 %\VignettePackage{dataRetrieval}
 
 \documentclass[a4paper,11pt]{article}
@@ -1004,7 +1004,7 @@ endDate <- "2013-01-01"
 
 Daily <- getNWISDaily(siteNumber, "00060", startDate, endDate)
 Sample <- getNWISSample(siteNumber,parameterCd, startDate, endDate)
-Sample <- mergeReport()
+Sample <- mergeReport(Daily,Sample)
 names(Sample)
 @
 

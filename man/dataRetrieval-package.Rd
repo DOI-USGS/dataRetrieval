@@ -7,7 +7,7 @@
 \tabular{ll}{
 Package: \tab dataRetrieval\cr
 Type: \tab Package\cr
-Version: \tab 1.3.3\cr
+Version: \tab 1.4.0\cr
 Date: \tab 2014-09-16\cr
 License: \tab Unlimited for this package, dependencies have more restrictive licensing.\cr
 Copyright: \tab This software is in the public domain because it contains materials

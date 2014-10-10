@@ -9,9 +9,11 @@
 #' (subsequent qualifier/value columns could follow depending on requested parameter codes)
 #' @export
 #' @examples
+#' \dontrun{
 #' site1 <- getWQPSites(siteid="USGS-01594440")
 #' type <- "Stream"
 #' sites <- getWQPSites(statecode="US:55",countycode="US:55:025",siteType=type)
+#' }
 getWQPSites <- function(...){
 
   matchReturn <- list(...)

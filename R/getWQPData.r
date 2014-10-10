@@ -9,8 +9,10 @@
 #' (subsequent qualifier/value columns could follow depending on requested parameter codes)
 #' @export
 #' @examples
+#' \dontrun{
 #' nameToUse <- "pH"
 #' pHData <- getWQPData(siteid="USGS-04024315",characteristicName=nameToUse)
+#' }
 getWQPData <- function(...){
   
   matchReturn <- list(...)

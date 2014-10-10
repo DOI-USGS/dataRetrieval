@@ -3,12 +3,12 @@
 \alias{dataOverview}
 \title{Data Overview for WRTDS}
 \usage{
-dataOverview(localDaily = Daily, localSample = Sample)
+dataOverview(Daily, Sample)
 }
 \arguments{
-\item{localDaily}{dataframe}
+\item{Daily}{dataframe}
 
-\item{localSample}{dataframe}
+\item{Sample}{dataframe}
 }
 \description{
 Gives a summary of data to be used for WRTDS analysis
@@ -17,7 +17,7 @@ Gives a summary of data to be used for WRTDS analysis
 # These examples require an internet connection to run
 exDaily <- getNWISDaily('01594440','00060', '1985-01-01', '1985-03-31', interactive=FALSE)
 exSample <- getNWISSample('01594440','01075', '1985-01-01', '1985-03-31', interactive=FALSE)
-dataOverview(localDaily = exDaily, localSample = exSample)
+dataOverview(Daily = exDaily, Sample = exSample)
 }
 \seealso{
 \code{\link{mergeReport}}

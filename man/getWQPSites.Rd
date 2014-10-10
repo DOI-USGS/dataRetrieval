@@ -17,9 +17,11 @@ Returns a list of sites from the Water Quality Portal web service. This function
 Arguments to the function should be based on \url{www.waterqualitydata.us/webservices_documentation.jsp}
 }
 \examples{
+\dontrun{
 site1 <- getWQPSites(siteid="USGS-01594440")
 type <- "Stream"
 sites <- getWQPSites(statecode="US:55",countycode="US:55:025",siteType=type)
+}
 }
 \keyword{WQP}
 \keyword{data}

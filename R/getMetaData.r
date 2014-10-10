@@ -1,46 +1,5 @@
 #' Import Metadata for USGS Data
 #'
-#' This function is being deprecated for \code{\link{getNWISInfo}}.
-#'
-#' @param siteNumber string USGS site number.  This is usually an 8 digit number
-#' @param parameterCd string USGS parameter code.  This is usually an 5 digit number.
-#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
-#' @keywords data import USGS web service WRTDS
-#' @export
-#' @return INFO dataframe with agency, site, dateTime, value, and code columns
-#' @examples
-#' # These examples require an internet connection to run
-#' # Automatically gets information about site 05114000 and temperature, no interaction with user
-#' INFO <- getMetaData('05114000','00010')
-getMetaData <- function(siteNumber="", parameterCd="",interactive=TRUE){
-  
-  warning("This function is being deprecated, please use getNWISInfo")
-  
-  if (nzchar(siteNumber)){
-    INFO <- getNWISSiteInfo(siteNumber)
-  } else {
-    INFO <- as.data.frame(matrix(ncol = 2, nrow = 1))
-    names(INFO) <- c('site.no', 'shortName')    
-  }
-  INFO <- populateSiteINFO(INFO, siteNumber, interactive=interactive)
-  
-  if (nzchar(parameterCd)){
-    parameterData <- getNWISPcodeInfo(parameterCd,interactive=interactive)
-    INFO$param.nm <- parameterData$parameter_nm
-    INFO$param.units <- parameterData$parameter_units
-    INFO$paramShortName <- parameterData$srsname
-    INFO$paramNumber <- parameterData$parameter_cd
-  } 
-  
-  INFO <- populateParameterINFO(parameterCd, INFO, interactive=interactive)
-  INFO$paStart <- 10
-  INFO$paLong <- 12
-  
-  return(INFO)
-}
-
-#' Import Metadata for USGS Data
-#'
 #' Populates INFO data frame for EGRET study.  If either station number or parameter code supplied, imports data about a particular USGS site from NWIS web service. 
 #' This function gets the data from here: \url{http://waterservices.usgs.gov/}
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
@@ -101,11 +60,13 @@ getNWISInfo <- function(siteNumber, parameterCd,interactive=TRUE){
 #' # Automatically gets information about site 01594440 and temperature, no interaction with user
 #' nameToUse <- 'Specific conductance'
 #' pcodeToUse <- '00095'
+#' \dontrun{
 #' INFO <- getWQPInfo('USGS-04024315',pcodeToUse,interactive=TRUE)
 #' INFO2 <- getWQPInfo('WIDNR_WQX-10032762',nameToUse)
 #' # To adjust the label names:
 #' INFO$shortName <- "Little"
 #' INFO$paramShortName <- "SC"
+#' }
 getWQPInfo <- function(siteNumber, parameterCd, interactive=FALSE){
   
   #Check for pcode:

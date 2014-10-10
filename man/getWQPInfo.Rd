@@ -26,11 +26,13 @@ constitAbbrev - constitute abbreviation
 # Automatically gets information about site 01594440 and temperature, no interaction with user
 nameToUse <- 'Specific conductance'
 pcodeToUse <- '00095'
+\dontrun{
 INFO <- getWQPInfo('USGS-04024315',pcodeToUse,interactive=TRUE)
 INFO2 <- getWQPInfo('WIDNR_WQX-10032762',nameToUse)
 # To adjust the label names:
 INFO$shortName <- "Little"
 INFO$paramShortName <- "SC"
+}
 }
 \keyword{USGS}
 \keyword{WRTDS}

@@ -30,16 +30,16 @@ getNWISSites <- function(...){
     if(h$value()["Content-Type"] == "text/xml;charset=UTF-8"){
       xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
     } else {
-      message(paste("URL caused an error:", obs_url))
+      message(paste("URL caused an error:", urlCall))
       message("Content-Type=",h$value()["Content-Type"])
       return(NA)
     }   
     
   }, warning = function(w) {
-    message(paste("URL caused a warning:", obs_url))
+    message(paste("URL caused a warning:", urlCall))
     message(w)
   }, error = function(e) {
-    message(paste("URL does not seem to exist:", obs_url))
+    message(paste("URL does not seem to exist:", urlCall))
     message(e)
     return(NA)
   }) 

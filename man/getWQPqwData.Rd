@@ -31,12 +31,14 @@ site name, such as 'USGS-01234567'.
 }
 \examples{
 # These examples require an internet connection to run
+\dontrun{
 rawPcode <- getWQPqwData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
 rawCharacteristicName <- getWQPqwData('WIDNR_WQX-10032762','Specific conductance', '', '')
 }
+}
 \seealso{
 \code{\link{getWQPData}}, \code{\link{getWQPSites}},
-\code{\link{getSTORETSampleData}}, \code{\link{getNWISqwData}}, and \code{\link{readWQPData}}
+\code{\link{getNWISqwData}}, and \code{\link{readWQPData}}
 }
 \keyword{USGS}
 \keyword{data}

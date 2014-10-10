@@ -2,8 +2,8 @@
 #'
 #' Merges the flow data from the daily record into the sample record.
 #'
-#' @param localDaily dataframe containing the daily data, default is Daily
-#' @param localSample dataframe containing the sample data, default is Sample
+#' @param Daily dataframe containing the daily data, default is Daily
+#' @param Sample dataframe containing the sample data, default is Sample
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS WRTDS
 #' @export
@@ -13,13 +13,14 @@
 #' # These examples require an internet connection to run
 #' Daily <- getNWISDaily('01594440','00060', '1985-01-01', '1985-03-31')
 #' Sample <- getNWISSample('01594440','01075', '1985-01-01', '1985-03-31')
-#' Sample <- mergeReport()
-mergeReport<-function(localDaily = Daily, localSample = Sample, interactive=TRUE){
+#' Sample <- mergeReport(Daily, Sample)
+mergeReport<-function(Daily, Sample, interactive=TRUE){
+  
   if (interactive){
-    dataOverview(localDaily, localSample)  
+    dataOverview(Daily, Sample)  
   }
   
-  newSample <- merge(localDaily[,c("Date","Q","LogQ")],localSample,by = "Date",all.y = TRUE)
+  newSample <- merge(Daily[,c("Date","Q","LogQ")],Sample,by = "Date",all.y = TRUE)
 
   return(newSample)
 }
