@@ -3,11 +3,13 @@ Type: Package
 Title: Retrieval functions for hydrologic data
 Version: 1.4.1.9000
 Date: 2014-10-06
-Author: Robert M. Hirsch, Laura De Cicco
-Maintainer: Laura De Cicco <ldecicco@usgs.gov>
+Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
+    email = "rhirsch@usgs.gov"),
+    person("Laura", "DeCicco", role = c("aut","cre"),
+    email = "ldecicco@usgs.gov"))
 Description: Collection of functions to help retrieve USGS data from either web
-    services or user provided data files.
-License: file LICENSE
+    services or user-provided data files.
+License: Unlimited | file LICENSE
 Copyright: This software is in the public domain because it contains materials
     that originally came from the United States Geological Survey, an agency of
     the United States Department of Interior. For more information, see the
@@ -30,3 +32,4 @@ LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
 BuildVignettes: true
+Additional_repositories: http://usgs-r.github.com
