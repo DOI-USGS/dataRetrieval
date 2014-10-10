@@ -1,7 +1,7 @@
 `dataRetrieval`
 =============
-
-[![Build status](https://ci.appveyor.com/api/projects/status/luni4ckts7j1u2k8)](https://ci.appveyor.com/project/USGS-R/dataretrieval)
+Linux: ![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master) 
+Windows: [![Build status](https://ci.appveyor.com/api/projects/status/luni4ckts7j1u2k8)](https://ci.appveyor.com/project/USGS-R/dataretrieval)
 
 
 R package source for data retrieval specifically for the EGRET R package:
