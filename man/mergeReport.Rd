@@ -3,12 +3,12 @@
 \alias{mergeReport}
 \title{Merge Sample and Daily Data for WRTDS}
 \usage{
-mergeReport(localDaily = Daily, localSample = Sample, interactive = TRUE)
+mergeReport(Daily, Sample, interactive = TRUE)
 }
 \arguments{
-\item{localDaily}{dataframe containing the daily data, default is Daily}
+\item{Daily}{dataframe containing the daily data, default is Daily}
 
-\item{localSample}{dataframe containing the sample data, default is Sample}
+\item{Sample}{dataframe containing the sample data, default is Sample}
 
 \item{interactive}{logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.}
 }
@@ -22,7 +22,7 @@ Merges the flow data from the daily record into the sample record.
 # These examples require an internet connection to run
 Daily <- getNWISDaily('01594440','00060', '1985-01-01', '1985-03-31')
 Sample <- getNWISSample('01594440','01075', '1985-01-01', '1985-03-31')
-Sample <- mergeReport()
+Sample <- mergeReport(Daily, Sample)
 }
 \seealso{
 \code{\link{getNWISDaily}}, \code{\link{getNWISSample}}

@@ -17,8 +17,10 @@ Imports data from the Water Quality Portal based on a specified url.
 }
 \examples{
 # These examples require an internet connection to run
+\dontrun{
 rawSampleURL <- constructNWISURL('USGS-01594440','01075', '1985-01-01', '1985-03-31',"wqp")
 rawSample <- readWQPData(rawSampleURL)
+}
 }
 \keyword{USGS}
 \keyword{data}

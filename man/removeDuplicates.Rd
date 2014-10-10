@@ -3,10 +3,10 @@
 \alias{removeDuplicates}
 \title{Remove Duplicates}
 \usage{
-removeDuplicates(localSample = Sample)
+removeDuplicates(Sample)
 }
 \arguments{
-\item{localSample}{dataframe with at least DecYear and ConcHigh, default name is Sample}
+\item{Sample}{dataframe with at least DecYear and ConcHigh, default name is Sample}
 }
 \value{
 Sample1 dataframe

@@ -15,7 +15,12 @@ mergedDF a data frame containing columns agency, site, dateTime, values, and rem
 This function accepts a url parameter for a WaterML2 getObservation
 }
 \examples{
-URL <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0&sites=01646500&startDT=2014-09-01&endDT=2014-09-08&statCd=00003&parameterCd=00060"
+baseURL <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
+URL <- paste(baseURL, "sites=01646500",
+     "startDT=2014-09-01",
+     "endDT=2014-09-08",
+     "statCd=00003",
+     "parameterCd=00060",sep="&")
 \dontrun{dataReturned3 <- getWaterML2Data(URL)}
 }
 

@@ -27,8 +27,10 @@ chapter 7 of the EGRET user guide for more details, then converts it to the Samp
 }
 \examples{
 # These examples require an internet connection to run
+\dontrun{
 Sample_01075 <- getWQPSample('USGS-01594440','Chloride', '', '')
 Sample_All <- getWQPSample('WIDNR_WQX-10032762','Specific conductance', '', '')
+}
 }
 \seealso{
 \code{\link{getWQPData}}, \code{\link{getWQPSites}},
