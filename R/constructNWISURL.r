@@ -9,7 +9,7 @@
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param statCd string or vector USGS statistic code only used for daily value service. This is usually 5 digits.  Daily mean (00003) is the default.
-#' @param service string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), "qw" (water quality data), and "wqp" (water quality portal, which can include STORET).
+#' @param service string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), "qw" (water quality data), "gwlevels" (groundwater),and "wqp" (water quality portal, which can include STORET).
 #' @param format string, can be "tsv" or "xml", and is only applicable for daily and unit value requests.  "tsv" returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower, 
 #' but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
 #' but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml". 
@@ -78,9 +78,9 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
                           "format=rdb&rdb_qw_attributes=0&date_format=YYYY-MM-DD",
                           "rdb_compression=value", sep = "&")
              if(expanded){
-               url <- paste(url,"&qw_sample_wide=0",sep="")
+               url <- paste0(url,"&qw_sample_wide=0")
              } else {
-               url <- paste(url,"&qw_sample_wide=separated_wide",sep="")
+               url <- paste0(url,"&qw_sample_wide=separated_wide")
              }
              
              if (nzchar(startDate)) {
@@ -114,7 +114,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
            }
            
            baseURL <- "http://www.waterqualitydata.us/Result/search?siteid="
-           url <- paste(baseURL,
+           url <- paste0(baseURL,
                         siteNumber,
                         ifelse(pCodeLogic,"&pCode=","&characteristicName="),
                         parameterCd,
@@ -122,7 +122,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
                         startDate,
                         "&startDateHi=",
                         endDate,
-                        "&countrycode=US&mimeType=tsv",sep = "")
+                        "&countrycode=US&mimeType=tsv")
            },
         { # this will be either dv or uv
            
@@ -130,43 +130,53 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
           if(multiplePcodes){
             parameterCd <- paste(parameterCd, collapse=",")
           } else {
-            parameterCd <- formatCheckParameterCd(parameterCd, interactive=interactive)
+            if("gwlevels" != service){
+              parameterCd <- formatCheckParameterCd(parameterCd, interactive=interactive)
+            }
           }
           
           if ("uv"==service) {
             service <- "iv"
-            baseURL <- paste("http://nwis.waterservices.usgs.gov/nwis/",service,sep="")  
+            baseURL <- paste0("http://nwis.waterservices.usgs.gov/nwis/",service)  
           } else {
-            baseURL <- paste("http://waterservices.usgs.gov/nwis/",service,sep="")  
+            baseURL <- paste0("http://waterservices.usgs.gov/nwis/",service)  
           }
           
           if ("xml"==format){ 
-            format <- "waterml,1.1"
+            if("gwlevels" == service){
+              format <- "waterml"
+            } else {
+              format <- "waterml,1.1"
+            }            
           } else if ("tsv" == format){
             format <- "rdb,1.0"
           } else {
             warning("non-supported format requested, please choose xml or tsv")
           }
           
-          url <- paste(baseURL,"/?site=",siteNumber, "&ParameterCd=",parameterCd, "&format=", format, sep = "")
+          url <- paste0(baseURL,"/?site=",siteNumber, "&format=", format)
+          
+          if("gwlevels"!= service){
+            url <- paste0(url, "&ParameterCd=",parameterCd)
+          }
           
           if("dv"==service) {
             if(length(statCd) > 1){
               statCd <- paste(statCd, collapse=",")
             }            
-            url <- paste(url, "&StatCd=", statCd, sep = "")
+            url <- paste0(url, "&StatCd=", statCd)
           }
           
           if (nzchar(startDate)) {
-            url <- paste(url,"&startDT=",startDate,sep="")
+            url <- paste0(url,"&startDT=",startDate)
           } else {
             startorgin <- "1851-01-01"
             if ("iv" == service) startorgin <- "1900-01-01"            
-            url <- paste(url,"&startDT=",startorgin,sep="")
+            url <- paste0(url,"&startDT=",startorgin)
           }
           
           if (nzchar(endDate)) {
-            url <- paste(url,"&endDT=",endDate,sep="")
+            url <- paste0(url,"&endDT=",endDate)
           }
         }
          
