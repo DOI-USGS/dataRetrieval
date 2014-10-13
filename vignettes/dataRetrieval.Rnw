@@ -2,7 +2,7 @@
 %\VignetteEngine{knitr::knitr}
 %\VignetteDepends{}
 %\VignetteSuggests{xtable,EGRET}
-%\VignetteImports{zoo, XML, RCurl, dplyr, reshape2,lubridate}
+%\VignetteImports{zoo, XML, RCurl, reshape2,lubridate}
 %\VignettePackage{dataRetrieval}
 
 \documentclass[a4paper,11pt]{article}
@@ -492,7 +492,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{getNWISqwData}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{getNWISunitData} and \texttt{getNWISdvData}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expaned = TRUE includes such columns as remark codes, value qualifying text, and detection level.
+To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{getNWISqwData}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{getNWISunitData} and \texttt{getNWISdvData}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level.
 
 
 <<label=getQW, echo=TRUE>>=
@@ -687,7 +687,7 @@ The \texttt{getNWISInfo}, \texttt{getWQPInfo}, and \texttt{getUserInfo} function
 \multicolumn{1}{c}{\textbf{\textsf{Type}}} &
 \multicolumn{1}{c}{\textbf{\textsf{Description}}} \\  [0pt]
   \hline
-  constitAbbrev & string & Constituent abbrieviation, used for saving the workspace in EGRET\\
+  constitAbbrev & string & Constituent abbreviation, used for saving the workspace in EGRET\\
   [5pt] drainSqKm & numeric & Drainage area in square kilometers \\
   [5pt] paramShortName & string & Parameter name to use on graphs \\
   [5pt] param.units & string & Parameter units \\
@@ -1010,19 +1010,19 @@ names(Sample)
 
 \FloatBarrier
 
-%------------------------------------------------------------
-\subsection{EGRET Plots}
-%------------------------------------------------------------
-The Daily, Sample, and INFO dataframes (described in Secs. \ref{INFOsubsection} - \ref{Samplesubsection}) are specifically formatted to be used with the EGRET package. The EGRET package has powerful modeling capabilities that use WRTDS, but EGRET also has graphing and tabular tools for exploring the data without using the WRTDS algorithm. See the EGRET vignette, user guide, and/or wiki (\url{https://github.com/USGS-R/EGRET/wiki}) for detailed information. Figure \ref{fig:egretEx} shows one of the plotting functions that can be used directly from the dataRetrieval dataframes.
-
-<<egretEx, echo=TRUE, eval=TRUE, fig.cap="Default \\texttt{multiPlotDataOverview}">>=
-# Continuing Choptank example from the previous sections
-library(EGRET)
-multiPlotDataOverview()
-@
-
-\FloatBarrier
-\clearpage
+% %------------------------------------------------------------
+% \subsection{EGRET Plots}
+% %------------------------------------------------------------
+% The Daily, Sample, and INFO dataframes (described in Secs. \ref{INFOsubsection} - \ref{Samplesubsection}) are specifically formatted to be used with the EGRET package. The EGRET package has powerful modeling capabilities that use WRTDS, but EGRET also has graphing and tabular tools for exploring the data without using the WRTDS algorithm. See the EGRET vignette, user guide, and/or wiki (\url{https://github.com/USGS-R/EGRET/wiki}) for detailed information. Figure \ref{fig:egretEx} shows one of the plotting functions that can be used directly from the dataRetrieval dataframes.
+% 
+% <<egretEx, echo=TRUE, eval=TRUE, fig.cap="Default \\texttt{multiPlotDataOverview}">>=
+% # Continuing Choptank example from the previous sections
+% library(EGRET)
+% multiPlotDataOverview()
+% @
+% 
+% \FloatBarrier
+% \clearpage
 
 
 %------------------------------------------------------------

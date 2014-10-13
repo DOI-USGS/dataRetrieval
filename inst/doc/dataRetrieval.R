@@ -364,13 +364,8 @@ endDate <- "2013-01-01"
 
 Daily <- getNWISDaily(siteNumber, "00060", startDate, endDate)
 Sample <- getNWISSample(siteNumber,parameterCd, startDate, endDate)
-Sample <- mergeReport()
+Sample <- mergeReport(Daily,Sample)
 names(Sample)
-
-## ----egretEx, echo=TRUE, eval=TRUE, fig.cap="Default \\texttt{multiPlotDataOverview}"----
-# Continuing Choptank example from the previous sections
-library(EGRET)
-multiPlotDataOverview()
 
 ## ----helpFunc,eval = FALSE--------------------------------
 #  ?removeDuplicates
