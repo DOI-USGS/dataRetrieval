@@ -12,9 +12,10 @@
 #' rawData <- getNWISdvData(siteNumber,c("00010","00060","00300"),
 #'           "2001-01-01","2002-01-01",statCd=c("00001","00003"))
 #' rawData <- renameColumns(rawData)
-#' today <- as.character(Sys.Date())
-#' rawData2 <- getNWISunitData(siteNumber,c("00010","00060"),today,today)
+#' date <- "2014-10-10"
+#' rawData2 <- getNWISunitData(siteNumber,c("00010","00060"),date,date)
 #' rawData2 <- renameColumns(rawData2)
+#' head(rawData2)
 renameColumns <- function(rawData){
   
   columnNames <- names(rawData)

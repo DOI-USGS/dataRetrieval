@@ -11,4 +11,5 @@
 ^\.Rproj\.Rhistory
 ^\.Rproj\.travis.yml
 ^\.Rproj\appveyor.yml
+appveyor.yml
 

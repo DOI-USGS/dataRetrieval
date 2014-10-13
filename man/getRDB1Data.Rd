@@ -23,16 +23,16 @@ NWIS site, parameter code, statistic, startdate and enddate.
 siteNumber <- "02177000"
 startDate <- "2012-09-01"
 endDate <- "2012-10-01"
-offering <- '00003'
-property <- '00060'
+offering <- "00003"
+property <- "00060"
 obs_url <- constructNWISURL(siteNumber,property,
-         startDate,endDate,'dv',format='tsv')
+         startDate,endDate,"dv",format="tsv")
 data <- getRDB1Data(obs_url)
 urlMulti <- constructNWISURL("04085427",c("00060","00010"),
-         startDate,endDate,'dv',statCd=c("00003","00001"),'tsv')
+         startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
 multiData <- getRDB1Data(urlMulti)
 unitDataURL <- constructNWISURL(siteNumber,property,
-         as.character(Sys.Date()),as.character(Sys.Date()),'uv',format='tsv')
+         "2014-10-10","2014-10-10","uv",format="tsv")
 unitData <- getRDB1Data(unitDataURL, asDateTime=TRUE)
 }
 
