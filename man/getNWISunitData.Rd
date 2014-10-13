@@ -32,11 +32,13 @@ A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov
 \examples{
 siteNumber <- '05114000'
 parameterCd <- '00060'
-startDate <- as.character(Sys.Date())
-endDate <- as.character(Sys.Date())
+startDate <- "2014-10-10"
+endDate <- "2014-10-10"
 # These examples require an internet connection to run
 rawData <- getNWISunitData(siteNumber,parameterCd,startDate,endDate)
+summary(rawData)
 rawData2 <- getNWISunitData(siteNumber,parameterCd,startDate,endDate,"tsv")
+summary(rawData2)
 }
 \keyword{USGS}
 \keyword{data}

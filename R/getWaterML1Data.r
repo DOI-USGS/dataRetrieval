@@ -26,7 +26,7 @@
 #'           startGW,endGW, service="gwlevels", format="xml",interactive=FALSE)
 #' groundWater <- getWaterML1Data(groundwaterExampleURL)
 #' unitDataURL <- constructNWISURL(siteNumber,property,
-#'          as.character(Sys.Date()),as.character(Sys.Date()),'uv',format='xml')
+#'          "2014-10-10","2014-10-10",'uv',format='xml')
 #' unitData <- getWaterML1Data(unitDataURL)
 getWaterML1Data <- function(obs_url){
   
