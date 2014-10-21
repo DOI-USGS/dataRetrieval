@@ -20,7 +20,7 @@
 #' ChopData <- getDataFromFile(filePath,fileName, separator="\t")
 getDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=","){
   totalPath <- paste(filePath,fileName,sep="");  
-  tmp <- read.delim(  
+  retval <- read.delim(  
     totalPath, 
     header = hasHeader,
     sep=separator,
@@ -28,19 +28,19 @@ getDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=","){
     fill = TRUE, 
     comment.char="#")
   
-  retval <- as.data.frame(tmp, stringsAsFactors=FALSE)
   if(ncol(retval) == 2){
-    names(retval) <- c('dateTime', 'value')
-  } else if (ncol(retval) == 3){
-    names(retval) <- c('dateTime', 'code','value')
-  }
-  
-  if(dateFormatCheck(retval$dateTime)){
-    retval$dateTime <- as.Date(retval$dateTime)  
+    numCol <- 2
   } else {
-    retval$dateTime <- as.Date(retval$dateTime,format="%m/%d/%Y")
+    numCol <- seq(from = 3,to = ncol(retval), by = 2)
   }
   
-  retval$value <- as.numeric(retval$value)
+  if(dateFormatCheck(retval[,1])){
+    retval[,1] <- as.Date(retval[,1])  
+  } else {
+    retval[,1] <- as.Date(retval[,1],format="%m/%d/%Y")
+  }
+  
+  retval[,numCol] <- sapply(numCol, function(x) as.numeric(retval[,x]))
+
   return (retval)
 }
