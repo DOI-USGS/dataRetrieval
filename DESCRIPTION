@@ -1,7 +1,7 @@
 Package: dataRetrieval
 Type: Package
 Title: Retrieval functions for USGS and EPA hydrologic and water quality data
-Version: 1.4.1.9000
+Version: 1.5.0.9000
 Date: 2014-10-13
 Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
     email = "rhirsch@usgs.gov"),
@@ -18,11 +18,11 @@ Copyright: This software is in the public domain because it contains materials
 Depends:
     R (>= 3.0)
 Imports:
-    zoo,
     XML,
     RCurl,
     reshape2,
-    lubridate
+    lubridate,
+    dplyr
 Suggests:
     xtable,
     EGRET,
@@ -30,6 +30,4 @@ Suggests:
     testthat
 LazyLoad: yes
 LazyData: yes
-VignetteBuilder: knitr
-BuildVignettes: true
 Additional_repositories: http://usgs-r.github.com
