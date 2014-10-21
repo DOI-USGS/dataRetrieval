@@ -58,6 +58,7 @@ getUserDaily <- function (filePath,fileName,hasHeader=TRUE,separator=",",qUnit=1
   if (interactive){
     if(qUnit==1) cat("\n the input discharge are assumed to be in cubic feet per second\nif they are in cubic meters per second, then the call to getDailyDataFromFile should specify qUnit=2\n")
   }
+  names(data) <- c("dateTime", "value")
   localDaily <- populateDaily(data,qConvert, interactive=interactive)
   localDaily <- localDaily[!is.na(localDaily$Q),]
   return(localDaily)
