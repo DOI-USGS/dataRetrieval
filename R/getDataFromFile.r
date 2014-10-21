@@ -32,7 +32,7 @@ getDataFromFile <- function (filePath,fileName,hasHeader=TRUE,separator=","){
   if(ncol(retval) == 2){
     names(retval) <- c('dateTime', 'value')
   } else if (ncol(retval) == 3){
-    names(retval) <- c('dateTime', 'value', 'code')
+    names(retval) <- c('dateTime', 'code','value')
   }
   
   if(dateFormatCheck(retval$dateTime)){
