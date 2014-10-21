@@ -18,6 +18,7 @@
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
+#' @import RCurl
 #' @examples
 #' siteNumber <- '01594440'
 #' startDate <- '1985-01-01'
@@ -181,6 +182,10 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
         }
          
     )
-
-  return(url)
+  if(url.exists(url)){
+    return(url)
+  } else {
+    stop("The following url doesn't seem to exist:\n",url)
+  }
+  
 }
