@@ -30,16 +30,16 @@ R package for data retrieval of water quality and hydrology data.
 
 
 
-Moving `EGRET` specific functions to `EGRET`:
+Moving `EGRET` specific functions to `EGRET` (version 2.0.0 and greater):
 
 
 |Information Source | Site Query | Meta Data | Data |
 | -------------| -------------| ------------- |:-------------|
-|NWIS | | `getNWISInfo`* | `getNWISSample`* |
-| |  |  | `getNWISDaily`* |
-| Water Quality Portal |  | `getWQPInfo`* | `getWQPSample`* |
-| User-supplied files | | `getUserInfo`* | `getUserDaily`* |
-| | | | `getUserSample`* |
+|NWIS | | `getNWISInfo` | `getNWISSample` |
+| |  |  | `getNWISDaily` |
+| Water Quality Portal |  | `getWQPInfo`| `getWQPSample` |
+| User-supplied files | | `getUserInfo` | `getUserDaily`|
+| | | | `getUserSample` |
 
 
 
