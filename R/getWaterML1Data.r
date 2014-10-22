@@ -23,7 +23,7 @@
 #' startGW <- "2013-10-01"
 #' endGW <- "2014-06-30"
 #' groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
-#'           startGW,endGW, service="gwlevels", format="xml",interactive=FALSE)
+#'           startGW,endGW, service="gwlevels", format="xml")
 #' groundWater <- getWaterML1Data(groundwaterExampleURL)
 #' unitDataURL <- constructNWISURL(siteNumber,property,
 #'          "2014-10-10","2014-10-10",'uv',format='xml')
