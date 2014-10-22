@@ -14,7 +14,6 @@
 #' but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
 #' but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml". 
 #' @param expanded logical defaults to FALSE. If TRUE, retrieves additional information, only applicable for qw data.
-#' @param interactive logical Option for interactive mode.  If TRUE, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
@@ -31,19 +30,11 @@
 #' url_qw_single <- constructNWISURL(siteNumber,"01075",startDate,endDate,'qw')
 #' url_qw <- constructNWISURL(siteNumber,c('01075','00029','00453'),
 #'            startDate,endDate,'qw')
-#' url_wqp <- constructNWISURL(paste("USGS",siteNumber,sep="-"),c('01075','00029','00453'),
-#'            startDate,endDate,'wqp')
 #' url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',
 #'            statCd=c("00003","00001"),format="tsv")
 #'            }
-constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,statCd="00003", format="xml",expanded=FALSE,interactive=TRUE){
+constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,statCd="00003", format="xml",expanded=FALSE){
 
-  startDate <- formatCheckDate(startDate, "StartDate", interactive=interactive)
-  endDate <- formatCheckDate(endDate, "EndDate", interactive=interactive)
-  
-  dateReturn <- checkStartEndDate(startDate, endDate, interactive=interactive)
-  startDate <- dateReturn[1]
-  endDate <- dateReturn[2]
   multipleSites <- length(siteNumber) > 1
   multiplePcodes <- length(parameterCd)>1
   siteNumber <- paste(siteNumber, collapse=",")
@@ -94,49 +85,18 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
                url <- paste(url,"&end_date=",endDate,sep="")
              }
            },
-         wqp = {
-      
-           #Check for pcode:
-           if(all(nchar(parameterCd) == 5)){
-             suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
-           } else {
-             pCodeLogic <- FALSE
-             parameterCd <- gsub(",","%2C",parameterCd)
-             parameterCd <- URLencode(parameterCd)
-           }
-           
-           if(multiplePcodes){
-             parameterCd <- paste(parameterCd, collapse=";")
-           }
-           
-           if (nzchar(startDate)){
-             startDate <- format(as.Date(startDate), format="%m-%d-%Y")
-           }
-           if (nzchar(endDate)){
-             endDate <- format(as.Date(endDate), format="%m-%d-%Y")
-           }
-           
-           baseURL <- "http://www.waterqualitydata.us/Result/search?siteid="
-           url <- paste0(baseURL,
-                        siteNumber,
-                        ifelse(pCodeLogic,"&pCode=","&characteristicName="),
-                        parameterCd,
-                        "&startDateLo=",
-                        startDate,
-                        "&startDateHi=",
-                        endDate,
-                        "&countrycode=US&mimeType=tsv")
-           },
+
         { # this will be either dv or uv
            
           # Check for 5 digit parameter code:
           if(multiplePcodes){
             parameterCd <- paste(parameterCd, collapse=",")
-          } else {
-            if("gwlevels" != service){
-              parameterCd <- formatCheckParameterCd(parameterCd, interactive=interactive)
-            }
-          }
+          } 
+#           else {
+#             if("gwlevels" != service){
+#               parameterCd <- formatCheckParameterCd(parameterCd, interactive=interactive)
+#             }
+#           }
           
           if ("uv"==service) {
             service <- "iv"
@@ -190,4 +150,72 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
     stop("The following url doesn't seem to exist:\n",url)
   }
   
+}
+
+
+
+
+
+#' Construct WQP url for data retrieval
+#'
+#' Imports data from WQP web service. This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/qwdata}
+#' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+#' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+#'
+#' @param siteNumber string or vector of strings USGS site number.  This is usually an 8 digit number
+#' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
+#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @keywords data import WQP web service
+#' @return url string
+#' @export
+#' @import RCurl
+#' @examples
+#' siteNumber <- '01594440'
+#' startDate <- '1985-01-01'
+#' endDate <- ''
+#' pCode <- c("00060","00010")
+#' url_wqp <- constructWQPURL(paste("USGS",siteNumber,sep="-"),
+#'            c('01075','00029','00453'),
+#'            startDate,endDate)
+constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate){
+  
+  multipleSites <- length(siteNumber) > 1
+  multiplePcodes <- length(parameterCd)>1
+  siteNumber <- paste(siteNumber, collapse=",")
+
+  if(all(nchar(parameterCd) == 5)){
+    suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
+  } else {
+    pCodeLogic <- FALSE
+    parameterCd <- gsub(",","%2C",parameterCd)
+    parameterCd <- URLencode(parameterCd)
+  }
+  
+  if(multiplePcodes){
+    parameterCd <- paste(parameterCd, collapse=";")
+  }
+  if (nzchar(startDate)){
+    startDate <- format(as.Date(startDate), format="%m-%d-%Y")
+  }
+  if (nzchar(endDate)){
+    endDate <- format(as.Date(endDate), format="%m-%d-%Y")
+  }
+  
+  baseURL <- "http://www.waterqualitydata.us/Result/search?siteid="
+  url <- paste0(baseURL,
+                siteNumber,
+                ifelse(pCodeLogic,"&pCode=","&characteristicName="),
+                parameterCd,
+                "&startDateLo=",
+                startDate,
+                "&startDateHi=",
+                endDate,
+                "&countrycode=US&mimeType=tsv")
+  if(url.exists(url)){
+    return(url)
+  } else {
+    stop("The following url doesn't seem to exist:\n",url)
+  }
+
 }
