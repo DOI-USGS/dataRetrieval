@@ -14,27 +14,32 @@ Please visit the EGRET wiki for more information:
 `dataRetrieval`
 =============
 
-R package for data retrieval of water quality and hydrology data. This package was designed to integrate with the `EGRET` package. Please visit the `EGRET` wiki for more information:
-[EGRET Wiki](https://github.com/USGS-R/EGRET/wiki)
+R package for data retrieval of water quality and hydrology data. 
 
 ## Function Overview
 
 
 |Information Source | Site Query | Meta Data | Data |
 | -------------| -------------| ------------- |:-------------|
-|NWIS | `getNWISSites` | `getNWISInfo`* | `getNWISData` |
-| | `getNWISDataAvailability` | `getNWISSiteInfo` | `getNWISDaily`* |
-| | | `getNWISPcodeInfo` | `getNWISSample`* |
-| | | | `getNWISdvData` |
+|NWIS | `getNWISSites` | `getNWISSiteInfo`| `getNWISData` |
+| | `getNWISDataAvailability` |  | `getNWISdvData` |
+| | | `getNWISPcodeInfo` | `getNWISqwData`|
 | | | | `getNWISunitData` |
-| | | | `getNWISqwData` |
-| Water Quality Portal | `getWQPSites` | `getWQPInfo`* | `getWQPSample`* |
+| Water Quality Portal | `getWQPSites` |  | `getWQPData` |
 | | | | `getWQPqwData` |
-| | | | `getWQPData` |
+
+
+
+
+Moving `EGRET` specific functions to `EGRET`:
+|Information Source | Site Query | Meta Data | Data |
+| -------------| -------------| ------------- |:-------------|
+|NWIS | | `getNWISInfo`* | `getNWISSample`* |
+| |  |  | `getNWISDaily`* |
+| Water Quality Portal |  | `getWQPInfo`* | `getWQPSample`* |
 | User-supplied files | | `getUserInfo`* | `getUserDaily`* |
 | | | | `getUserSample`* |
 
-`* Designed specifically to provide dataframes suitable for use by the `EGRET` package.
 
 
 ##Subscribe
