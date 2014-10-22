@@ -36,7 +36,7 @@ getWQPData <- function(...){
                    urlCall,
                    "&mimeType=tsv",sep = "")
 
-  retVal <- readWQPData(urlCall)
+  retVal <- parseWQPData(urlCall)
   return(retVal)
   
 }
