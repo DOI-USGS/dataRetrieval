@@ -12,24 +12,21 @@
 #' Leaving this blank will return all of the measured values during the specified time period.
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
-#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
 #' start and end times.
 #' @export
 #' @import RCurl
 #' @seealso \code{\link{getWQPData}}, \code{\link{getWQPSites}}, 
-#' \code{\link{getNWISqwData}}, and \code{\link{readWQPData}}
+#' \code{\link{getNWISqwData}}, and \code{\link{parseWQPData}}
 #' @examples
-#' # These examples require an internet connection to run
-#' \dontrun{
 #' rawPcode <- getWQPqwData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
 #' rawCharacteristicName <- getWQPqwData('WIDNR_WQX-10032762','Specific conductance', '', '')
-#' }
-getWQPqwData <- function(siteNumber,parameterCd,startDate,endDate,interactive=TRUE){
+#' 
+getWQPqwData <- function(siteNumber,parameterCd,startDate,endDate){
 
-  url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"wqp",interactive=interactive)
-  retVal <- readWQPData(url)
+  url <- constructWQPURL(siteNumber,parameterCd,startDate,endDate)
+  retVal <- parseWQPData(url)
   return(retVal)
   
 }
