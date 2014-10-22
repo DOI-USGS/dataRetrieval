@@ -11,7 +11,6 @@
 #' @param expanded logical defaults to FALSE. If TRUE, retrieves additional information. Expanded data includes
 #' remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
 #' dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).
-#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords data import USGS web service
 #' @return data dataframe with agency, site, dateTime, value, and code columns
 #' @export
@@ -26,16 +25,9 @@
 #' pCodes <- c('34247','30234','32104','34220')
 #' rawNWISqwData <- getNWISqwData(siteNumber,pCodes,startDate,endDate)
 #' rawNWISqwDataExpand <- getNWISqwData(siteNumber,pCodes,startDate,endDate,expanded=TRUE)
-#' # To get data in Sample dataframe format:
-#' dataColumns <- grep("p\\d{5}",names(rawNWISqwData))
-#' remarkColumns <- grep("r\\d{5}",names(rawNWISqwData))
-#' totalColumns <-c(grep("sample_dt",names(rawNWISqwData)), dataColumns, remarkColumns)
-#' totalColumns <- totalColumns[order(totalColumns)]
-#' compressedData <- compressData(rawNWISqwData[,totalColumns])
-#' Sample <- populateSampleColumns(compressedData)
-getNWISqwData <- function (siteNumber,pCodes,startDate,endDate,expanded=FALSE,interactive=TRUE){  
+getNWISqwData <- function (siteNumber,pCodes,startDate,endDate,expanded=FALSE){  
   
-  url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw",expanded=expanded,interactive=interactive)
+  url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw",expanded=expanded)
   
   data <- getRDB1Data(url,asDateTime=TRUE, qw=TRUE)
   

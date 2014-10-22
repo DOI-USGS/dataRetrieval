@@ -8,7 +8,6 @@
 #' @param parameterCd string USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
-#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @param format string, can be "tsv" or "xml", and is only applicable for daily and unit value requests.  "tsv" returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower, 
 #' but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
 #' but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml". 
@@ -25,9 +24,9 @@
 #' summary(rawData)
 #' rawData2 <- getNWISunitData(siteNumber,parameterCd,startDate,endDate,"tsv")
 #' summary(rawData2)
-getNWISunitData <- function (siteNumber,parameterCd,startDate,endDate,format="xml",interactive=TRUE){  
+getNWISunitData <- function (siteNumber,parameterCd,startDate,endDate,format="xml"){  
   
-  url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"uv",format=format,interactive=interactive)
+  url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"uv",format=format)
   if (format == "xml") {
     data <- getWaterML1Data(url)
   } else {
