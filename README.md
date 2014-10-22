@@ -5,16 +5,7 @@ Linux: [![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master)]
 Windows: [![Build status](https://ci.appveyor.com/api/projects/status/msanha92b500grr7?svg=true)](https://ci.appveyor.com/project/ldecicco-USGS/dataretrieval-787)
 
 
-
-R package source for data retrieval specifically for the EGRET R package:
-
-Please visit the EGRET wiki for more information:
-[EGRET Wiki](https://github.com/USGS-R/EGRET/wiki)
-
-`dataRetrieval`
-=============
-
-R package for data retrieval of water quality and hydrology data. 
+Retrieval functions for USGS and EPA hydrologic and water quality data.
 
 ## Function Overview
 
@@ -57,12 +48,17 @@ To install the dataRetrieval package, you must be using R 3.0 or greater and run
 	           "http://cran.us.r-project.org"),
 	  dependencies=TRUE)
 
+
 ##Version updates
 ---------------
-###dataRetrieval 1.4.0-in developement
+
+###dataRetrieval 1.5.0
+Changing naming convention one last time. Migrating `EGRET` specific retrievals to `EGRET`.
+
+
+
+###dataRetrieval 1.4.0
 Changed naming convention:
-
-
 
 |Original Name | New Name |
 | ------------- |:-------------|
