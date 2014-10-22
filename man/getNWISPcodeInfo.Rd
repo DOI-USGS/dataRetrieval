@@ -3,12 +3,10 @@
 \alias{getNWISPcodeInfo}
 \title{USGS Parameter Data Retrieval}
 \usage{
-getNWISPcodeInfo(parameterCd, interactive = TRUE)
+getNWISPcodeInfo(parameterCd)
 }
 \arguments{
 \item{parameterCd}{vector of USGS parameter codes.  This is usually an 5 digit number.}
-
-\item{interactive}{logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.}
 }
 \value{
 parameterData dataframe with all information from the USGS about the particular parameter (usually code, name, short name, units, and CAS registry numbers)

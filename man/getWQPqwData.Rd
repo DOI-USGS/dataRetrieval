@@ -3,7 +3,7 @@
 \alias{getWQPqwData}
 \title{Raw Data Import for Water Quality Portal}
 \usage{
-getWQPqwData(siteNumber, parameterCd, startDate, endDate, interactive = TRUE)
+getWQPqwData(siteNumber, parameterCd, startDate, endDate)
 }
 \arguments{
 \item{siteNumber}{string site number. This needs to include the full agency code prefix.}
@@ -14,8 +14,6 @@ Leaving this blank will return all of the measured values during the specified t
 \item{startDate}{string starting date for data retrieval in the form YYYY-MM-DD.}
 
 \item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
-
-\item{interactive}{logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.}
 }
 \value{
 retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for
@@ -38,7 +36,7 @@ rawCharacteristicName <- getWQPqwData('WIDNR_WQX-10032762','Specific conductance
 }
 \seealso{
 \code{\link{getWQPData}}, \code{\link{getWQPSites}},
-\code{\link{getNWISqwData}}, and \code{\link{readWQPData}}
+\code{\link{getNWISqwData}}, and \code{\link{parseWQPData}}
 }
 \keyword{USGS}
 \keyword{data}

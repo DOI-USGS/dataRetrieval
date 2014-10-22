@@ -4,7 +4,7 @@
 \title{Raw Data Import for USGS NWIS Data}
 \usage{
 getNWISdvData(siteNumber, parameterCd, startDate, endDate, statCd = "00003",
-  format = "tsv", interactive = TRUE)
+  format = "tsv")
 }
 \arguments{
 \item{siteNumber}{string USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a string vector.}
@@ -20,8 +20,6 @@ getNWISdvData(siteNumber, parameterCd, startDate, endDate, statCd = "00003",
 \item{format}{string, can be 'tsv' or 'xml', and is only applicable for daily and unit value requests.  'tsv' returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower,
 but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the 'tsv' option,
 but the user must carefully check the results to see if the data returns matches what is expected. The default is 'tsv'.}
-
-\item{interactive}{logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.}
 }
 \value{
 data dataframe with agency, site, dateTime, value, and code columns

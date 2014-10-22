@@ -3,8 +3,7 @@
 \alias{getNWISqwData}
 \title{Raw Data Import for USGS NWIS QW Data}
 \usage{
-getNWISqwData(siteNumber, pCodes, startDate, endDate, expanded = FALSE,
-  interactive = TRUE)
+getNWISqwData(siteNumber, pCodes, startDate, endDate, expanded = FALSE)
 }
 \arguments{
 \item{siteNumber}{string or vector of of USGS site numbers.  This is usually an 8 digit number}
@@ -18,8 +17,6 @@ getNWISqwData(siteNumber, pCodes, startDate, endDate, expanded = FALSE,
 \item{expanded}{logical defaults to FALSE. If TRUE, retrieves additional information. Expanded data includes
 remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
 dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).}
-
-\item{interactive}{logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.}
 }
 \value{
 data dataframe with agency, site, dateTime, value, and code columns
@@ -37,13 +34,6 @@ endDate <- ''
 pCodes <- c('34247','30234','32104','34220')
 rawNWISqwData <- getNWISqwData(siteNumber,pCodes,startDate,endDate)
 rawNWISqwDataExpand <- getNWISqwData(siteNumber,pCodes,startDate,endDate,expanded=TRUE)
-# To get data in Sample dataframe format:
-dataColumns <- grep("p\\\\d{5}",names(rawNWISqwData))
-remarkColumns <- grep("r\\\\d{5}",names(rawNWISqwData))
-totalColumns <-c(grep("sample_dt",names(rawNWISqwData)), dataColumns, remarkColumns)
-totalColumns <- totalColumns[order(totalColumns)]
-compressedData <- compressData(rawNWISqwData[,totalColumns])
-Sample <- populateSampleColumns(compressedData)
 }
 \seealso{
 \code{\link{getWQPData}}, \code{\link{getWQPSites}},
