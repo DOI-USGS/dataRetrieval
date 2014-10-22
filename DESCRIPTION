@@ -30,4 +30,6 @@ Suggests:
     testthat
 LazyLoad: yes
 LazyData: yes
+VignetteBuilder: knitr
+BuildVignettes: true
 Additional_repositories: http://usgs-r.github.com
