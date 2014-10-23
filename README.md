@@ -12,7 +12,7 @@ Retrieval functions for USGS and EPA hydrologic and water quality data.
 Web service retrieval functions:
 
 |Function | Inputs | Description | 
-| -------------| ----------------|:-------------|
+| -------------| ------------------------|:-------------|
 |`readNWISdata` | `...`, service | NWIS data using user-specified queries |
 |`readNWISdv` | `Common 4`, statCd | NWIS daily data with `Common 4` query |
 |`readNWISqw` | `Common 4`, expanded | NWIS water quality data with `Common 4` query |
