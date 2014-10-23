@@ -9,18 +9,15 @@ Retrieval functions for USGS and EPA hydrologic and water quality data.
 
 ## Function Overview
 
+Web service retrieval functions:
 
-|Information Source | Site Query | Meta Data | Data |
-| -------------| -------------| ------------- |:-------------|
-|NWIS | `getNWISSites` | `getNWISSiteInfo`| `getNWISData` |
-| | `getNWISDataAvailability` |  | `getNWISdvData` |
-| | | `getNWISPcodeInfo` | `readNWISqw`|
-| | | | `getNWISunitData` |
-| Water Quality Portal* | `whatWQPsites` |  | `readWQPdata` |
-| | | | `getWQPqwData` |
+|Function | Inputs | Description | 
+| -------------| -------------|:-------------|
+|`readNWISdata` | `...`, service | NWIS data using user-specified queries |
+|'readNWISdv` | `Common 4`, statCd | NWIS data with `Common 4` query |
 
 
-* Water Quality Portal includes USGS, EPA, and USDA data
+* `Common 4` = siteNumber, parameterCd, startDate, endDate
 
 
 Moving `EGRET` specific functions to `EGRET` (version 2.0.0 and greater):
