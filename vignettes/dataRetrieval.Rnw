@@ -194,26 +194,17 @@ A quick workflow for major dataRetrieval functions:
 library(dataRetrieval)
 # Choptank River near Greensboro, MD
 siteNumber <- "01491000" 
-ChoptankInfo <- getNWISSiteInfo(siteNumber)
+ChoptankInfo <- readNWISsite(siteNumber)
 parameterCd <- "00060"
 
 #Raw daily data:
-rawDailyData <- getNWISdvData(siteNumber,parameterCd,
-                      "1980-01-01","2010-01-01")
-# Data compiled for EGRET analysis
-Daily <- getNWISDaily(siteNumber,parameterCd,
+rawDailyData <- readNWISdv(siteNumber,parameterCd,
                       "1980-01-01","2010-01-01")
 
 # Sample data Nitrate:
 parameterCd <- "00618"
-Sample <- getNWISSample(siteNumber,parameterCd,
+qwData <- readNWISqw(siteNumber,parameterCd,
                       "1980-01-01","2010-01-01")
-
-# Metadata on site and nitrate:
-INFO <- getNWISInfo(siteNumber,parameterCd)
-
-# Merge discharge and nitrate data to one dataframe:
-Sample <- mergeReport()
 
 @
 
@@ -295,15 +286,15 @@ Examples for using these siteNumber's, parameter codes, and stat codes will be p
 %------------------------------------------------------------
 
 %------------------------------------------------------------
-\subsubsection{getNWISSiteInfo}
+\subsubsection{readNWISsite}
 \label{sec:usgsSiteFileData}
 %------------------------------------------------------------
-Use the \texttt{getNWISSiteInfo} function to obtain all of the information available for a particular USGS site such as full station name, drainage area, latitude, and longitude. \texttt{getNWISSiteInfo} can also access information about multiple sites with a vector input.
+Use the \texttt{readNWISsite} function to obtain all of the information available for a particular USGS site such as full station name, drainage area, latitude, and longitude. \texttt{readNWISsite} can also access information about multiple sites with a vector input.
 
 
 <<getSite, echo=TRUE>>=
 siteNumbers <- c("01491000","01645000") 
-siteINFO <- getNWISSiteInfo(siteNumbers)
+siteINFO <- readNWISsite(siteNumbers)
 @
 
 A specific example piece of information can be retrieved, in this case a station name, as follows:
@@ -315,17 +306,17 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 \FloatBarrier
 
 %------------------------------------------------------------
-\subsubsection{getNWISDataAvailability}
+\subsubsection{whatNWISData}
 \label{sec:usgsDataAvailability}
 %------------------------------------------------------------
-To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{getNWISDataAvailability} function. It is possible to limit the retrieval information to a subset of types (\texttt{"}dv\texttt{"}, \texttt{"}uv\texttt{"}, or \texttt{"}qw\texttt{"}). In the following example, we limit the retrieved Choptank data to only daily data. Leaving the \texttt{"}type\texttt{"} argument blank returns all of the available data for that site.
+To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISData} function. It is possible to limit the retrieval information to a subset of types (\texttt{"}dv\texttt{"}, \texttt{"}uv\texttt{"}, or \texttt{"}qw\texttt{"}). In the following example, we limit the retrieved Choptank data to only daily data. Leaving the \texttt{"}type\texttt{"} argument blank returns all of the available data for that site.
 
 
 <<getSiteExtended, echo=TRUE>>=
 # Continuing from the previous example:
 # This pulls out just the daily data:
 
-dailyDataAvailable <- getNWISDataAvailability(siteNumbers,
+dailyDataAvailable <- whatNWISData(siteNumbers,
                     type="dv")
 
 @
@@ -369,12 +360,12 @@ See Section \ref{app:createWordTable} for instructions on converting an R datafr
 \subsection{Parameter Information}
 \label{sec:usgsParams}
 %------------------------------------------------------------
-To obtain all of the available information concerning a measured parameter (or multiple parameters), use the \texttt{getNWISPcodeInfo} function:
+To obtain all of the available information concerning a measured parameter (or multiple parameters), use the \texttt{readNWISpCode} function:
 
 <<label=getPCodeInfo, echo=TRUE>>=
 # Using defaults:
 parameterCd <- "00618" 
-parameterINFO <- getNWISPcodeInfo(parameterCd)
+parameterINFO <- readNWISpCode(parameterCd)
 colnames(parameterINFO)
 @
 
@@ -389,7 +380,7 @@ Parameter information can obtained from \url{http://nwis.waterdata.usgs.gov/usa/
 \subsection{Daily Values}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain daily records of USGS data, use the \texttt{getNWISdvData} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
+To obtain daily records of USGS data, use the \texttt{readNWISdv} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
 
 The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user must include the quotes).  Setting the start date to \texttt{"}\texttt{"} (no space) will prompt the program to ask for the earliest date, and setting the end date to \texttt{"}\texttt{"} (no space) will prompt for the latest available date.
 
@@ -401,7 +392,7 @@ parameterCd <- "00060"  # Discharge
 startDate <- ""  # Will request earliest date
 endDate <- "" # Will request latest date
 
-discharge <- getNWISdvData(siteNumber, 
+discharge <- readNWISdv(siteNumber, 
                     parameterCd, startDate, endDate)
 names(discharge)
 @
@@ -417,7 +408,7 @@ statCd <- c("00001","00003")  # Mean and maximum
 startDate <- "2012-01-01"
 endDate <- "2012-05-01"
 
-temperatureAndFlow <- getNWISdvData(siteNumber, parameterCd, 
+temperatureAndFlow <- readNWISdv(siteNumber, parameterCd, 
         startDate, endDate, statCd=statCd)
 
 @
@@ -464,14 +455,14 @@ There are occasions where NWIS values are not reported as numbers, instead there
 \subsection{Unit Values}
 \label{sec:usgsRT}
 %------------------------------------------------------------
-Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values.} Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{getNWISunitData}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
+Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values.} Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{readNWISunit}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
 
 <<label=getNWISUnit, echo=TRUE>>=
 
 parameterCd <- "00060"  # Discharge
 startDate <- "2012-05-12" 
 endDate <- "2012-05-13" 
-dischargeToday <- getNWISunitData(siteNumber, parameterCd, 
+dischargeToday <- readNWISunit(siteNumber, parameterCd, 
         startDate, endDate)
 @
 
@@ -492,7 +483,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{getNWISqwData}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{getNWISunitData} and \texttt{getNWISdvData}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level.
+To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{readNWISunit} and \texttt{readNWISdv}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level.
 
 
 <<label=getQW, echo=TRUE>>=
@@ -502,7 +493,7 @@ parameterCd <- c("00618","71851")
 startDate <- "1985-10-01"
 endDate <- "2012-09-30"
 
-dissolvedNitrate <- getNWISqwData(siteNumber, parameterCd, 
+dissolvedNitrate <- readNWISqw(siteNumber, parameterCd, 
       startDate, endDate, expanded=TRUE)
 names(dissolvedNitrate)
 
@@ -545,11 +536,11 @@ url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'uv')
 \section{Water Quality Portal Web Retrievals}
 \label{sec:usgsSTORET}
 %------------------------------------------------------------
-There are additional water quality data sets available from the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET database (data from EPA), NWIS database (data from USGS), STEWARDS database (data from USDA), and additional databases are slated to be included.  Because only USGS uses parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{getWQPqwData} function can take either a USGS parameter code, or a more general characteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
+There are additional water quality data sets available from the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET database (data from EPA), NWIS database (data from USGS), STEWARDS database (data from USDA), and additional databases are slated to be included.  Because only USGS uses parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{readWQPqw} function can take either a USGS parameter code, or a more general characteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
 
 
 <<label=getQWData, echo=TRUE, eval=FALSE>>=
-specificCond <- getWQPqwData('WIDNR_WQX-10032762',
+specificCond <- readWQPqw('WIDNR_WQX-10032762',
                 'Specific conductance','2011-05-01','2011-09-30')
 @
 
@@ -567,7 +558,7 @@ The previous examples all took specific input arguments: siteNumber, parameterCd
 \subsubsection{NWIS sites}
 \label{sec:NWISGenSite}
 %------------------------------------------------------------
-The function \texttt{getNWISSites} can be used to discover NWIS sites based on any query that the NWIS Site Service offers. This is done by using the \texttt{"..."} argument, which allows the user to use any arbitrary input argument. We can then use the service here:
+The function \texttt{whatNWISsites} can be used to discover NWIS sites based on any query that the NWIS Site Service offers. This is done by using the \texttt{"..."} argument, which allows the user to use any arbitrary input argument. We can then use the service here:
 
 \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
 
@@ -578,7 +569,7 @@ to discover many options for searching for NWIS sites. For example, you may want
 The following dataRetrieval code can be used to get those sites:
 
 <<siteSearch>>=
-sites <- getNWISSites(bBox="-83.0,36.5,-81.0,38.5", 
+sites <- whatNWISsites(bBox="-83.0,36.5,-81.0,38.5", 
                       parameterCd="00010,00060",
                       hasDataTypeCd="dv")
 
@@ -591,7 +582,7 @@ nrow(sites)
 \subsubsection{NWIS data}
 \label{sec:NWISGenData}
 %------------------------------------------------------------
-For NWIS data, the function \texttt{getNWISData} can be used. The argument listed in the R help file is \texttt{"..."} and \texttt{"}service\texttt{"} (only for data requests). Table \ref{tab:NWISGeneral} describes the services are available.
+For NWIS data, the function \texttt{readNWISdata} can be used. The argument listed in the R help file is \texttt{"..."} and \texttt{"}service\texttt{"} (only for data requests). Table \ref{tab:NWISGeneral} describes the services are available.
 
 \begin{table}[!ht]
 \begin{minipage}{\linewidth}
@@ -617,7 +608,7 @@ For NWIS data, the function \texttt{getNWISData} can be used. The argument liste
 The \texttt{"..."} argument allows the user to create their own queries based on the instructions found in the web links above. The links provide instructions on how to create a URL to request data. Perhaps you want sites only in Wisconsin, with a drainage area less than 50 mi$^2$, and the most recent daily dischage data. That request would be done as follows:
 
 <<dataExample>>=
-dischargeWI <- getNWISData(stateCd="WI",
+dischargeWI <- readNWISdata(stateCd="WI",
                            parameterCd="00060",
                            drainAreaMin="50",
                            statCd="00003")
@@ -634,11 +625,11 @@ Just as with NWIS, the Water Quality Portal (WQP) offers a variety of ways to se
 
 \url{http://www.waterqualitydata.us/webservices_documentation.jsp}
 
-To discover available sites in the WQP in New Jersey that have measured Chloride, use the function \texttt{getWQPSites}.
+To discover available sites in the WQP in New Jersey that have measured Chloride, use the function \texttt{whatWQPsites}.
 
 <<NJChloride, eval=FALSE>>=
 
-sitesNJ <- getWQPSites(statecode="US:34",
+sitesNJ <- whatWQPsites(statecode="US:34",
                        characteristicName="Chloride")
 
 @
@@ -648,11 +639,11 @@ sitesNJ <- getWQPSites(statecode="US:34",
 \subsubsection{Water Quality Portal data}
 \label{sec:WQPGenData}
 %------------------------------------------------------------
-Finally, to get data from the WQP using generalized Web service calls, use the function \texttt{getWQPData}. For example, to get all the pH data in Wisconsin:
+Finally, to get data from the WQP using generalized Web service calls, use the function \texttt{readWQPdata}. For example, to get all the pH data in Wisconsin:
 
 <<phData, eval=FALSE>>=
 
-dataPH <- getWQPData(statecode="US:55", 
+dataPH <- readWQPdata(statecode="US:55", 
                  characteristicName="pH")
 
 @
@@ -678,7 +669,7 @@ If you are new to R, you will need to first install the latest version of R, whi
 At any time, you can get information about any function in R by typing a question mark before the functions name.  This will open a file (in RStudio, in the Help window) that describes the function, the required arguments, and provides working examples.
 
 <<helpFunc,eval = FALSE>>=
-?getNWISPcodeInfo
+?readNWISpCode
 @
 
 This will open a help file similar to Figure \ref{fig:help}.
@@ -687,7 +678,7 @@ This will open a help file similar to Figure \ref{fig:help}.
 
 To see the raw code for a particular code, type the name of the function, without parentheses.:
 <<rawFunc,eval = TRUE>>=
-getNWISPcodeInfo
+readNWISpCode
 @
 
 
@@ -730,7 +721,7 @@ library(dataRetrieval)
 There are a few steps that are required in order to create a table in Microsoft\textregistered\ software (Excel, Word, PowerPoint, etc.) from an R dataframe. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Excel based on the dataframe tableData:
 
 <<label=getSiteApp, echo=TRUE>>=
-availableData <- getNWISDataAvailability(siteNumber)
+availableData <- whatNWISData(siteNumber)
 dailyData <- availableData["dv" == availableData$service,]
 dailyData <- dailyData["00003" == dailyData$statCd,]
 
