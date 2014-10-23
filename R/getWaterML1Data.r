@@ -15,20 +15,20 @@
 #' property <- '00060'
 #' urlBase <- "http://waterservices.usgs.gov/nwis"
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
-#' data <- getWaterML1Data(obs_url)
+#' data <- importWaterML1(obs_url)
 #' urlMulti <- constructNWISURL("04085427",c("00060","00010"),
 #'             startDate,endDate,'dv',statCd=c("00003","00001"))
-#' multiData <- getWaterML1Data(urlMulti)
+#' multiData <- importWaterML1(urlMulti)
 #' groundWaterSite <- "431049071324301"
 #' startGW <- "2013-10-01"
 #' endGW <- "2014-06-30"
 #' groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
 #'           startGW,endGW, service="gwlevels", format="xml")
-#' groundWater <- getWaterML1Data(groundwaterExampleURL)
+#' groundWater <- importWaterML1(groundwaterExampleURL)
 #' unitDataURL <- constructNWISURL(siteNumber,property,
 #'          "2014-10-10","2014-10-10",'uv',format='xml')
-#' unitData <- getWaterML1Data(unitDataURL)
-getWaterML1Data <- function(obs_url){
+#' unitData <- importWaterML1(unitDataURL)
+importWaterML1 <- function(obs_url){
   
   h <- basicHeaderGatherer()
   doc = tryCatch({

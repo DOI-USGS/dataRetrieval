@@ -16,29 +16,28 @@
 #' @export
 #' @keywords data import USGS web service
 #' @examples
-#' # These examples require an internet connection to run
 #' siteNumber <- '04085427'
 #' startDate <- '2012-01-01'
 #' endDate <- '2012-06-30'
 #' pCode <- '00060'
-#' rawDailyQ <- getNWISdvData(siteNumber,pCode, startDate, endDate)
-#' rawDailyTemperature <- getNWISdvData(siteNumber,'00010', 
+#' rawDailyQ <- readNWISdv(siteNumber,pCode, startDate, endDate)
+#' rawDailyTemperature <- readNWISdv(siteNumber,'00010', 
 #'        startDate, endDate, statCd='00001')
-#' rawDailyTemperatureTSV <- getNWISdvData(siteNumber,'00010', 
+#' rawDailyTemperatureTSV <- readNWISdv(siteNumber,'00010', 
 #'        startDate, endDate, statCd='00001',format='tsv')
-#' rawDailyQAndTempMeanMax <- getNWISdvData(siteNumber,c('00010','00060'),
+#' rawDailyQAndTempMeanMax <- readNWISdv(siteNumber,c('00010','00060'),
 #'        startDate, endDate, statCd=c('00001','00003'))
-#' rawDailyMultiSites<- getNWISdvData(c("01491000","01645000"),c('00010','00060'),
+#' rawDailyMultiSites<- readNWISdv(c("01491000","01645000"),c('00010','00060'),
 #'        startDate, endDate, statCd=c('00001','00003'))
-getNWISdvData <- function (siteNumber,parameterCd,startDate,endDate,statCd="00003",format="tsv"){  
+readNWISdv <- function (siteNumber,parameterCd,startDate,endDate,statCd="00003",format="tsv"){  
   
   url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"dv",statCd=statCd,format=format)
   
   if (format == "xml") {
-    data <- getWaterML1Data(url)
+    data <- importWaterML1(url)
     data$datetime <- as.Date(data$datetime)
   } else {
-    data <- getRDB1Data(url,asDateTime=FALSE)
+    data <- importRDB1(url,asDateTime=FALSE)
   }
   
   return (data)

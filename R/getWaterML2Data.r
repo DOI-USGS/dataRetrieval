@@ -14,8 +14,8 @@
 #'      "endDT=2014-09-08",
 #'      "statCd=00003",
 #'      "parameterCd=00060",sep="&")
-#' \dontrun{dataReturned3 <- getWaterML2Data(URL)}
-getWaterML2Data <- function(obs_url){
+#' \dontrun{dataReturned3 <- importWaterML2(URL)}
+importWaterML2 <- function(obs_url){
   
   h <- basicHeaderGatherer()
   doc = tryCatch({

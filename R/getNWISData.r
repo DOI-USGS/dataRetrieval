@@ -10,9 +10,9 @@
 #' @return retval dataframe 
 #' @export
 #' @examples
-#' dataTemp <- getNWISData(stateCd="OH",parameterCd="00010")
-#' dataTempUnit <- getNWISData(sites="03086500", service="iv", parameterCd="00010")
-getNWISData <- function(service="dv", ...){
+#' dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010")
+#' dataTempUnit <- readNWISdata(sites="03086500", service="iv", parameterCd="00010")
+readNWISdata <- function(service="dv", ...){
   
   matchReturn <- list(...)
   
@@ -27,6 +27,6 @@ getNWISData <- function(service="dv", ...){
     urlCall <- paste0(urlCall,"&siteOutput=expanded")
   }
   
-  retval <- getRDB1Data(urlCall)
+  retval <- importRDB1(urlCall)
   return(retval)
 }

@@ -20,17 +20,17 @@
 #' startDate <- "2014-10-10"
 #' endDate <- "2014-10-10"
 #' # These examples require an internet connection to run
-#' rawData <- getNWISunitData(siteNumber,parameterCd,startDate,endDate)
+#' rawData <- readNWISunit(siteNumber,parameterCd,startDate,endDate)
 #' summary(rawData)
-#' rawData2 <- getNWISunitData(siteNumber,parameterCd,startDate,endDate,"tsv")
+#' rawData2 <- readNWISunit(siteNumber,parameterCd,startDate,endDate,"tsv")
 #' summary(rawData2)
-getNWISunitData <- function (siteNumber,parameterCd,startDate,endDate,format="xml"){  
+readNWISunit <- function (siteNumber,parameterCd,startDate,endDate,format="xml"){  
   
   url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"uv",format=format)
   if (format == "xml") {
-    data <- getWaterML1Data(url)
+    data <- importWaterML1(url)
   } else {
-    data <- getRDB1Data(url,asDateTime=TRUE)
+    data <- importRDB1(url,asDateTime=TRUE)
   }
 
   return (data)

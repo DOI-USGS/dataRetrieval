@@ -16,14 +16,14 @@
 #' property <- "00060"
 #' obs_url <- constructNWISURL(siteNumber,property,
 #'          startDate,endDate,"dv",format="tsv")
-#' data <- getRDB1Data(obs_url)
+#' data <- importRDB1(obs_url)
 #' urlMulti <- constructNWISURL("04085427",c("00060","00010"),
 #'          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
-#' multiData <- getRDB1Data(urlMulti)
+#' multiData <- importRDB1(urlMulti)
 #' unitDataURL <- constructNWISURL(siteNumber,property,
 #'          "2014-10-10","2014-10-10","uv",format="tsv")
-#' unitData <- getRDB1Data(unitDataURL, asDateTime=TRUE)
-getRDB1Data <- function(obs_url,asDateTime=FALSE, qw=FALSE){
+#' unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
+importRDB1 <- function(obs_url,asDateTime=FALSE, qw=FALSE){
   
   retval = tryCatch({
     h <- basicHeaderGatherer()

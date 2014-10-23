@@ -14,11 +14,13 @@ Retrieval functions for USGS and EPA hydrologic and water quality data.
 | -------------| -------------| ------------- |:-------------|
 |NWIS | `getNWISSites` | `getNWISSiteInfo`| `getNWISData` |
 | | `getNWISDataAvailability` |  | `getNWISdvData` |
-| | | `getNWISPcodeInfo` | `getNWISqwData`|
+| | | `getNWISPcodeInfo` | `readNWISqw`|
 | | | | `getNWISunitData` |
-| Water Quality Portal | `getWQPSites` |  | `getWQPData` |
+| Water Quality Portal* | `whatWQPsites` |  | `readWQPdata` |
 | | | | `getWQPqwData` |
 
+
+* Water Quality Portal includes USGS, EPA, and USDA data
 
 
 Moving `EGRET` specific functions to `EGRET` (version 2.0.0 and greater):
@@ -53,7 +55,10 @@ To install the dataRetrieval package, you must be using R 3.0 or greater and run
 ---------------
 
 ###dataRetrieval 1.5.0
-Changing naming convention one last time. Migrating `EGRET` specific retrievals to `EGRET`.
+
+* Changing naming convention one last time. Migrating `EGRET` specific retrievals to `EGRET`.
+* Added back WaterML2 parsing tool
+* Added specific groundwater, rating, peak, and surfacewater measurement functions
 
 
 
@@ -82,13 +87,13 @@ Changed naming convention:
 * Updated getNWISSiteInfo to retrieve multiple site file datasets at once using a vector of siteNumbers as input argument.
 * Updated error-handling for Web service calls. More information is returned when errors happen
 * Added some basic processing to Water Quality Portal raw data retrievals. Date columns are returned as Date objects, value columns are numeric, and a column is created from the date/time/timezone columns that is POSIXct.
-* Added very generalized NWIS and WQP retrieval functions (getNWISData, getNWISSites, getGeneralWQPData, and getWQPSites) which allow the user to use any argument available on the Web service platform.
+* Added very generalized NWIS and WQP retrieval functions (getNWISData, getNWISSites, getGeneralWQPData, and whatWQPsites) which allow the user to use any argument available on the Web service platform.
 
 
 ###dataRetrieval 1.3.2
 
-* Deprecated getQWData, updated getWQPData to take either parameter code or characteristic name.
-* Changed the name of raw data retrievals to: getNWISqwData, getNWISunitData, getNWISdvData, and getWQPqwData (from: getNWISqwData, retrieveUnitNWISData, retrieveNWISData, getRawQWData)
+* Deprecated getQWData, updated readWQPdata to take either parameter code or characteristic name.
+* Changed the name of raw data retrievals to: readNWISqw, getNWISunitData, getNWISdvData, and getWQPqwData (from: readNWISqw, retrieveUnitNWISData, retrieveNWISData, getRawQWData)
 * Added NA warning to getDVData function
 * Updated mergeReport to allow for Sample data with different measurements taken on the same day
 

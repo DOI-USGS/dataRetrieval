@@ -9,8 +9,8 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' paramINFO <- getNWISPcodeInfo(c('01075','00060','00931'))
-getNWISPcodeInfo <- function(parameterCd){
+#' paramINFO <- readNWISpCode(c('01075','00060','00931'))
+readNWISpCode <- function(parameterCd){
  
   
   parameterCdFile <- parameterCdFile

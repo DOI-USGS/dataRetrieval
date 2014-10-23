@@ -10,8 +10,8 @@
 #' @export
 #' @import XML
 #' @examples
-#' siteListPhos <- getNWISSites(stateCd="OH",parameterCd="00665")
-getNWISSites <- function(...){
+#' siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
+whatNWISsites <- function(...){
   
   matchReturn <- list(...)
 

@@ -8,9 +8,9 @@
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
-#' siteINFO <- getNWISSiteInfo('05114000')
-#' siteINFOMulti <- getNWISSiteInfo(c('05114000','09423350'))
-getNWISSiteInfo <- function(siteNumber){
+#' siteINFO <- readNWISsite('05114000')
+#' siteINFOMulti <- readNWISsite(c('05114000','09423350'))
+readNWISsite <- function(siteNumber){
   
   siteNumber <- paste(siteNumber,collapse=",")
   urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=Expanded&sites=",siteNumber,sep = "")

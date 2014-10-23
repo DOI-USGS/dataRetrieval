@@ -17,11 +17,11 @@ Rename columns coming back from NWIS data retrievals
 \examples{
 # This example requires an internet connection to run
 siteNumber <- '05114000'
-rawData <- getNWISdvData(siteNumber,c("00010","00060","00300"),
+rawData <- readNWISdv(siteNumber,c("00010","00060","00300"),
           "2001-01-01","2002-01-01",statCd=c("00001","00003"))
 rawData <- renameColumns(rawData)
 date <- "2014-10-10"
-rawData2 <- getNWISunitData(siteNumber,c("00010","00060"),date,date)
+rawData2 <- readNWISunit(siteNumber,c("00010","00060"),date,date)
 rawData2 <- renameColumns(rawData2)
 head(rawData2)
 }

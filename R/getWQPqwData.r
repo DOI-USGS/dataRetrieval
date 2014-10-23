@@ -17,16 +17,16 @@
 #' start and end times.
 #' @export
 #' @import RCurl
-#' @seealso \code{\link{getWQPData}}, \code{\link{getWQPSites}}, 
-#' \code{\link{getNWISqwData}}, and \code{\link{parseWQPData}}
+#' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
+#' \code{\link{readNWISqw}}, and \code{\link{importWQP}}
 #' @examples
-#' rawPcode <- getWQPqwData('USGS-01594440','01075', '1985-01-01', '1985-03-31')
-#' rawCharacteristicName <- getWQPqwData('WIDNR_WQX-10032762','Specific conductance', '', '')
+#' rawPcode <- readWQPqw('USGS-01594440','01075', '1985-01-01', '1985-03-31')
+#' rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' 
-getWQPqwData <- function(siteNumber,parameterCd,startDate,endDate){
+readWQPqw <- function(siteNumber,parameterCd,startDate,endDate){
 
   url <- constructWQPURL(siteNumber,parameterCd,startDate,endDate)
-  retVal <- parseWQPData(url)
+  retVal <- importWQP(url)
   return(retVal)
   
 }

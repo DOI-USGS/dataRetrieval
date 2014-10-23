@@ -11,9 +11,9 @@
 #' @examples
 #' \dontrun{
 #' nameToUse <- "pH"
-#' pHData <- getWQPData(siteid="USGS-04024315",characteristicName=nameToUse)
+#' pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
 #' }
-getWQPData <- function(...){
+readWQPdata <- function(...){
   
   matchReturn <- list(...)
   
@@ -36,7 +36,7 @@ getWQPData <- function(...){
                    urlCall,
                    "&mimeType=tsv",sep = "")
 
-  retVal <- parseWQPData(urlCall)
+  retVal <- importWQP(urlCall)
   return(retVal)
   
 }

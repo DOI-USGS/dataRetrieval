@@ -15,21 +15,20 @@
 #' @return data dataframe with agency, site, dateTime, value, and code columns
 #' @export
 #' @import reshape2
-#' @seealso \code{\link{getWQPData}}, \code{\link{getWQPSites}}, 
-#' \code{\link{getWQPqwData}}, \code{\link{constructNWISURL}}
+#' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
+#' \code{\link{readWQPqw}}, \code{\link{constructNWISURL}}
 #' @examples
-#' # These examples require an internet connection to run
 #' siteNumber <- c('04024430','04024000')
 #' startDate <- '2010-01-01'
 #' endDate <- ''
 #' pCodes <- c('34247','30234','32104','34220')
-#' rawNWISqwData <- getNWISqwData(siteNumber,pCodes,startDate,endDate)
-#' rawNWISqwDataExpand <- getNWISqwData(siteNumber,pCodes,startDate,endDate,expanded=TRUE)
-getNWISqwData <- function (siteNumber,pCodes,startDate,endDate,expanded=FALSE){  
+#' rawNWISqwData <- readNWISqw(siteNumber,pCodes,startDate,endDate)
+#' rawNWISqwDataExpand <- readNWISqw(siteNumber,pCodes,startDate,endDate,expanded=TRUE)
+readNWISqw <- function (siteNumber,pCodes,startDate,endDate,expanded=FALSE){  
   
   url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw",expanded=expanded)
   
-  data <- getRDB1Data(url,asDateTime=TRUE, qw=TRUE)
+  data <- importRDB1(url,asDateTime=TRUE, qw=TRUE)
   
   if(expanded){
     columnsToMelt <- c("agency_cd","site_no","sample_dt","sample_tm",
