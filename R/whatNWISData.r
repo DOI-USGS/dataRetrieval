@@ -3,7 +3,7 @@
 #' Imports a table of available parameters, period of record, and count.
 #'
 #' @param siteNumber string USGS site number.
-#' @param type vector string. Options are "uv", "dv", "qw"
+#' @param service vector string. Options are "uv", "dv", "qw"
 #' @keywords data import USGS web service
 #' @return retval dataframe with all information found in the expanded site file
 #' @export
@@ -11,9 +11,9 @@
 #' @examples
 #' availableData <- whatNWISData('05114000')
 #' # To find just unit value ('instantaneous') data:
-#' uvData <- whatNWISData('05114000',type="uv")
-#' uvDataMulti <- whatNWISData(c('05114000','09423350'),type="uv")
-whatNWISData <- function(siteNumber,type=c("uv","dv","qw")){
+#' uvData <- whatNWISData('05114000',service="uv")
+#' uvDataMulti <- whatNWISData(c('05114000','09423350'),service="uv")
+whatNWISData <- function(siteNumber,service=c("uv","dv","qw")){
   
   siteNumber <- paste(siteNumber,collapse=",")
   
@@ -45,7 +45,11 @@ whatNWISData <- function(siteNumber,type=c("uv","dv","qw")){
     
     SiteFile <- SiteFile[-1,]
     
-    SiteFile <- with(SiteFile, data.frame(site_no=site_no, parameter_cd=parm_cd, statCd=stat_cd, startDate=begin_date,endDate=end_date, count=count_nu,service=data_type_cd,stringsAsFactors = FALSE))
+    SiteFile <- with(SiteFile, data.frame(site_no=site_no, 
+                                          parameter_cd=parm_cd, statCd=stat_cd, 
+                                          startDate=begin_date,endDate=end_date, 
+                                          count=count_nu,service=data_type_cd,
+                                          stringsAsFactors = FALSE))
     
     SiteFile <- SiteFile[!is.na(SiteFile$parameter_cd),]
     SiteFile <- SiteFile["" != SiteFile$parameter_cd,]
@@ -59,7 +63,7 @@ whatNWISData <- function(siteNumber,type=c("uv","dv","qw")){
     
     pcodeINFO <- parameterCdFile[parameterCdFile$parameter_cd %in% pCodes,]
     SiteFile <- merge(SiteFile,pcodeINFO,by="parameter_cd")
-    SiteFile <- SiteFile[SiteFile$service %in% type,]
+    SiteFile <- SiteFile[SiteFile$service %in% service,]
     return(SiteFile)
   } else {
     message(paste("URL caused an error:", urlSitefile))

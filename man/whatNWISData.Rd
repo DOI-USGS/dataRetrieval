@@ -3,12 +3,12 @@
 \alias{whatNWISData}
 \title{USGS data availability}
 \usage{
-whatNWISData(siteNumber, type = c("uv", "dv", "qw"))
+whatNWISData(siteNumber, service = c("uv", "dv", "qw"))
 }
 \arguments{
 \item{siteNumber}{string USGS site number.}
 
-\item{type}{vector string. Options are "uv", "dv", "qw"}
+\item{service}{vector string. Options are "uv", "dv", "qw"}
 }
 \value{
 retval dataframe with all information found in the expanded site file
@@ -19,8 +19,8 @@ Imports a table of available parameters, period of record, and count.
 \examples{
 availableData <- whatNWISData('05114000')
 # To find just unit value ('instantaneous') data:
-uvData <- whatNWISData('05114000',type="uv")
-uvDataMulti <- whatNWISData(c('05114000','09423350'),type="uv")
+uvData <- whatNWISData('05114000',service="uv")
+uvDataMulti <- whatNWISData(c('05114000','09423350'),service="uv")
 }
 \keyword{USGS}
 \keyword{data}
