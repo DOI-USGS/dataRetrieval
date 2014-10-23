@@ -14,7 +14,7 @@ Web service retrieval functions:
 |Function | Inputs | Description | 
 | -------------| -------------|:-------------|
 |`readNWISdata` | `...`, service | NWIS data using user-specified queries |
-|'readNWISdv` | `Common 4`, statCd | NWIS data with `Common 4` query |
+|`readNWISdv` | `Common 4`, statCd | NWIS data with `Common 4` query |
 
 
 * `Common 4` = siteNumber, parameterCd, startDate, endDate
