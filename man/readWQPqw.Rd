@@ -28,8 +28,10 @@ either USGS, or other Water Quality Portal offered sites. It is required to use 
 site name, such as 'USGS-01234567'.
 }
 \examples{
-rawPcode <- readWQPqw('USGS-01594440','01075', '1985-01-01', '1985-03-31')
+\dontrun{
+rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
+}
 }
 \seealso{
 \code{\link{readWQPdata}}, \code{\link{whatWQPsites}},

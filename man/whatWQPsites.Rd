@@ -17,8 +17,9 @@ Returns a list of sites from the Water Quality Portal web service. This function
 Arguments to the function should be based on \url{www.waterqualitydata.us/webservices_documentation.jsp}
 }
 \examples{
-site1 <- whatWQPsites(siteid="USGS-01594440")
 \dontrun{
+site1 <- whatWQPsites(siteid="USGS-01594440")
+
 type <- "Stream"
 sites <- whatWQPsites(statecode="US:55",countycode="US:55:025",siteType=type)
 }

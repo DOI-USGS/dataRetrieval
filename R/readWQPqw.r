@@ -20,9 +20,10 @@
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
 #' \code{\link{readNWISqw}}, and \code{\link{importWQP}}
 #' @examples
+#' \dontrun{
 #' rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 #' rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
-#' 
+#' }
 readWQPqw <- function(siteNumber,parameterCd,startDate,endDate){
 
   url <- constructWQPURL(siteNumber,parameterCd,startDate,endDate)

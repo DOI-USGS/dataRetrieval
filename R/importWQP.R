@@ -3,6 +3,7 @@
 #' Imports data from the Water Quality Portal based on a specified url.
 #' 
 #' @param url string URL to Water Quality Portal#' @keywords data import USGS web service
+#' @param zip logical used to request the data in a zip format (TRUE)
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
 #' start and end times.
 #' @export
@@ -11,13 +12,14 @@
 #' @importFrom lubridate parse_date_time
 #' @examples
 #' # These examples require an internet connection to run
-#' 
+#' \dontrun{
 #' ## Examples take longer than 5 seconds:
 #' rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
 #' rawSample <- importWQP(rawSampleURL, TRUE)
 #' url2 <- paste0("http://www.waterqualitydata.us/Result/search?",
 #' "siteid=USGS-01594440&pCode=01075&mimeType=tsv")
 #' rawSample2 <- importWQP(url2, FALSE)
+#' }
 importWQP <- function(url, zip=TRUE){
   
   h <- basicHeaderGatherer()

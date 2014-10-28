@@ -3,10 +3,12 @@
 \alias{importWQP}
 \title{Basic Water Quality Portal Data grabber}
 \usage{
-importWQP(url)
+importWQP(url, zip = TRUE)
 }
 \arguments{
 \item{url}{string URL to Water Quality Portal#'}
+
+\item{zip}{logical used to request the data in a zip format (TRUE)}
 }
 \value{
 retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for
@@ -17,10 +19,14 @@ Imports data from the Water Quality Portal based on a specified url.
 }
 \examples{
 # These examples require an internet connection to run
-
+\dontrun{
 ## Examples take longer than 5 seconds:
-rawSampleURL <- constructWQPURL('USGS-01594440','01075', '1985-01-01', '1985-03-31')
-rawSample <- importWQP(rawSampleURL)
+rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
+rawSample <- importWQP(rawSampleURL, TRUE)
+url2 <- paste0("http://www.waterqualitydata.us/Result/search?",
+"siteid=USGS-01594440&pCode=01075&mimeType=tsv")
+rawSample2 <- importWQP(url2, FALSE)
+}
 }
 \keyword{USGS}
 \keyword{data}

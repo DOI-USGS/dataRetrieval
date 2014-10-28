@@ -22,7 +22,8 @@ Imports:
     RCurl,
     reshape2,
     lubridate,
-    dplyr
+    dplyr,
+    httr
 Suggests:
     xtable,
     EGRETdemo,
