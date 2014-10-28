@@ -195,27 +195,26 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate){
   if(multiplePcodes){
     parameterCd <- paste(parameterCd, collapse=";")
   }
-  if (nzchar(startDate)){
-    startDate <- format(as.Date(startDate), format="%m-%d-%Y")
-  }
-  if (nzchar(endDate)){
-    endDate <- format(as.Date(endDate), format="%m-%d-%Y")
-  }
+
+
   
   baseURL <- "http://www.waterqualitydata.us/Result/search?siteid="
   url <- paste0(baseURL,
                 siteNumber,
                 ifelse(pCodeLogic,"&pCode=","&characteristicName="),
-                parameterCd,
-                "&startDateLo=",
-                startDate,
-                "&startDateHi=",
-                endDate,
-                "&countrycode=US&mimeType=tsv")
-  if(url.exists(url)){
-    return(url)
-  } else {
-    stop("The following url doesn't seem to exist:\n",url)
+                parameterCd)
+  
+  if (nzchar(startDate)){
+    startDate <- format(as.Date(startDate), format="%m-%d-%Y")
+    url <- paste0(url, "&startDateLo=",startDate)
   }
+  
+  if (nzchar(endDate)){
+    endDate <- format(as.Date(endDate), format="%m-%d-%Y")
+    url <- paste0(url, "&startDateHi=",endDate)
+  }
+  
+  url <- paste0(url,"&countrycode=US&mimeType=tsv&zip=yes")
+  return(url)
 
 }

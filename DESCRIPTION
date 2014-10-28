@@ -1,4 +1,4 @@
-Package: dataRetrieval
+Package: dataRetrievaldemo
 Type: Package
 Title: Retrieval functions for USGS and EPA hydrologic and water quality data
 Version: 1.5.0.9000

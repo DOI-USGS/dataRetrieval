@@ -1,4 +1,4 @@
 library(testthat)
-library(dataRetrieval)
+library(dataRetrievaldemo)
 
-test_package("dataRetrieval")
+test_package("dataRetrievaldemo")

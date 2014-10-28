@@ -1,9 +1,9 @@
-%\VignetteIndexEntry{Introduction to the dataRetrieval package}
+%\VignetteIndexEntry{Introduction to the dataRetrievaldemo package}
 %\VignetteEngine{knitr::knitr}
 %\VignetteDepends{}
 %\VignetteSuggests{xtable,EGRET}
 %\VignetteImports{zoo, XML, RCurl, reshape2,lubridate}
-%\VignettePackage{dataRetrieval}
+%\VignettePackage{dataRetrievaldemo}
 
 \documentclass[a4paper,11pt]{article}
 
@@ -140,7 +140,7 @@ library(knitr)
 
 
 %------------------------------------------------------------
-\title{The dataRetrieval R package}
+\title{The dataRetrievaldemo R package}
 %------------------------------------------------------------
 \author[1]{Laura De Cicco}
 \author[1]{Robert Hirsch}
@@ -162,7 +162,7 @@ bold.colHeaders <- function(x) {
 addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 @
 
-\noindent{\huge\textsf{\textbf{The dataRetrieval R package}}}
+\noindent{\huge\textsf{\textbf{The dataRetrievaldemo R package}}}
 
 \noindent\textsf{By Laura De Cicco and Robert Hirsch}
 
@@ -179,19 +179,19 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 \newpage
 
 %------------------------------------------------------------
-\section{Introduction to dataRetrieval}
+\section{Introduction to dataRetrievaldemo}
 %------------------------------------------------------------ 
-The dataRetrieval package was created to simplify the process of loading hydrologic data into the R environment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends. See: \url{https://github.com/USGS-R/EGRET/wiki} or \url{http://dx.doi.org/10.3133/tm4A10} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the Weighted Regressions on Time, Discharge and Season (WRTDS) method as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
+The dataRetrievaldemo package was created to simplify the process of loading hydrologic data into the R environment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends. See: \url{https://github.com/USGS-R/EGRET/wiki} or \url{http://dx.doi.org/10.3133/tm4A10} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the Weighted Regressions on Time, Discharge and Season (WRTDS) method as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
 
 
-The dataRetrieval package is designed to retrieve many of the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web. Users may also load data from other sources (text files, spreadsheets) using dataRetrieval.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into dataframes within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRET package.  The functionality described in section \ref{sec:userFiles} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRET package.
+The dataRetrievaldemo package is designed to retrieve many of the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web. Users may also load data from other sources (text files, spreadsheets) using dataRetrievaldemo.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into dataframes within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRET package.  The functionality described in section \ref{sec:userFiles} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRET package.
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
-A quick workflow for major dataRetrieval functions:
+A quick workflow for major dataRetrievaldemo functions:
 
 <<workflow, echo=TRUE,eval=FALSE>>=
-library(dataRetrieval)
+library(dataRetrievaldemo)
 # Choptank River near Greensboro, MD
 siteNumber <- "01491000" 
 ChoptankInfo <- readNWISsite(siteNumber)
@@ -218,7 +218,7 @@ In this section, five examples of Web retrievals document how to get raw data. T
 % %------------------------------------------------------------
 % \subsection{Introduction}
 % %------------------------------------------------------------
-The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrieval package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
+The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrievaldemo package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
 Once the siteNumber is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. A complete list of possible USGS parameter codes can be found at \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?help}.
 
@@ -247,7 +247,7 @@ print(xtable(data.df,
 A complete list (as of September 25, 2013) is available as data attached to the package. It is accessed by the following:
 
 <<tableParameterCodesDataRetrieval>>=
-library(dataRetrieval)
+library(dataRetrievaldemo)
 parameterCdFile <-  parameterCdFile
 names(parameterCdFile)
 @
@@ -566,7 +566,7 @@ to discover many options for searching for NWIS sites. For example, you may want
 
 \url{http://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv}
 
-The following dataRetrieval code can be used to get those sites:
+The following dataRetrievaldemo code can be used to get those sites:
 
 <<siteSearch>>=
 sites <- whatNWISsites(bBox="-83.0,36.5,-81.0,38.5", 
@@ -659,7 +659,7 @@ dataPH <- readWQPdata(statecode="US:55",
 \section{Getting Started in R}
 \label{sec:appendix1}
 %------------------------------------------------------------ 
-This section describes the options for downloading and installing the dataRetrieval package.
+This section describes the options for downloading and installing the dataRetrievaldemo package.
 
 %------------------------------------------------------------
 \subsection{New to R?}
@@ -691,18 +691,18 @@ readNWISpCode
 
 Additionally, many R packages have vignette files attached (such as this paper). To view the vignette:
 <<seeVignette,eval = FALSE>>=
-vignette(dataRetrieval)
+vignette(dataRetrievaldemo)
 @
 
 \FloatBarrier
 \clearpage
 %------------------------------------------------------------
-\subsection{R User: Installing dataRetrieval}
+\subsection{R User: Installing dataRetrievaldemo}
 %------------------------------------------------------------ 
-The following command installs dataRetrieval and subsequent required packages:
+The following command installs dataRetrievaldemo and subsequent required packages:
 
 <<installFromCran,eval = FALSE>>=
-install.packages("dataRetrieval", 
+install.packages("dataRetrievaldemo", 
 repos=c("http://usgs-r.github.com","http://cran.us.r-project.org"),
 dependencies=TRUE,
 type="both")
@@ -710,7 +710,7 @@ type="both")
 
 After installing the package, you need to open the library each time you re-start R.  This is done with the simple command:
 <<openLibraryTest, eval=FALSE>>=
-library(dataRetrieval)
+library(dataRetrievaldemo)
 @
 
 

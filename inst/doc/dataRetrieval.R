@@ -20,7 +20,7 @@ bold.colHeaders <- function(x) {
 addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 
 ## ----workflow, echo=TRUE,eval=FALSE-----------------------
-#  library(dataRetrieval)
+#  library(dataRetrievaldemo)
 #  # Choptank River near Greensboro, MD
 #  siteNumber <- "01491000"
 #  ChoptankInfo <- readNWISsite(siteNumber)
@@ -55,7 +55,7 @@ print(xtable(data.df,
 
 
 ## ----tableParameterCodesDataRetrieval---------------------
-library(dataRetrieval)
+library(dataRetrievaldemo)
 parameterCdFile <-  parameterCdFile
 names(parameterCdFile)
 
@@ -256,16 +256,16 @@ nrow(dischargeWI)
 readNWISpCode
 
 ## ----seeVignette,eval = FALSE-----------------------------
-#  vignette(dataRetrieval)
+#  vignette(dataRetrievaldemo)
 
 ## ----installFromCran,eval = FALSE-------------------------
-#  install.packages("dataRetrieval",
+#  install.packages("dataRetrievaldemo",
 #  repos=c("http://usgs-r.github.com","http://cran.us.r-project.org"),
 #  dependencies=TRUE,
 #  type="both")
 
 ## ----openLibraryTest, eval=FALSE--------------------------
-#  library(dataRetrieval)
+#  library(dataRetrievaldemo)
 
 ## ----label=getSiteApp, echo=TRUE--------------------------
 availableData <- whatNWISData(siteNumber, "dv")

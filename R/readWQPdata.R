@@ -32,11 +32,11 @@ readWQPdata <- function(...){
   
   
   baseURL <- "http://www.waterqualitydata.us/Result/search?"
-  urlCall <- paste(baseURL,
+  urlCall <- paste0(baseURL,
                    urlCall,
-                   "&mimeType=tsv",sep = "")
+                   "&mimeType=tsv&zip=yes")
 
-  retVal <- importWQP(urlCall)
+  retVal <- importWQP(urlCall,TRUE)
   return(retVal)
   
 }
