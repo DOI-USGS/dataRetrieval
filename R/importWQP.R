@@ -15,12 +15,11 @@
 #' \dontrun{
 #' ## Examples take longer than 5 seconds:
 #' rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
-#' rawSample <- importWQP(rawSampleURL, TRUE)
-#' url2 <- paste0("http://www.waterqualitydata.us/Result/search?",
-#' "siteid=USGS-01594440&pCode=01075&mimeType=tsv")
-#' rawSample2 <- importWQP(url2, FALSE)
+#' rawSample <- importWQP(rawSampleURL)
+#' url2 <- paste0(rawSampleURL,"&zip=yes")
+#' rawSample2 <- importWQP(url2, TRUE)
 #' }
-importWQP <- function(url, zip=TRUE){
+importWQP <- function(url, zip=FALSE){
   
   h <- basicHeaderGatherer()
   
@@ -28,11 +27,11 @@ importWQP <- function(url, zip=TRUE){
     if(zip){
       headerInfo <- HEAD(url)$headers
       temp <- tempfile()
-      origTimeout <- getOption("timeout")
+#       origTimeout <- getOption("timeout")
       options(timeout = 120)
       download.file(url,temp, quiet=TRUE, mode='wb')
       doc <- unzip(temp)
-      options(timeout = origTimeout)
+#       options(timeout = origTimeout)
     } else {
       doc <- getURL(url, headerfunction = h$update)
       headerInfo <- h$value()

@@ -1,3 +1,4 @@
+
 #' Function to return data from the NWIS RDB 1.0 format
 #'
 #' This function accepts a url parameter that already contains the desired
@@ -166,7 +167,10 @@ importRDB1 <- function(obs_url,asDateTime=FALSE, qw=FALSE){
         
       } else {
         for (i in grep('d$', dataType)){
-          data[,i] <- as.Date(data[,i])
+          if (all(data[,i] != "")){
+            data[,i] <- as.Date(data[,i])
+          }
+          
         }
       }
     }

@@ -35,3 +35,59 @@ readNWISunit <- function (siteNumber,parameterCd,startDate,endDate,format="xml")
 
   return (data)
 }
+
+#' Reads peak flow data from NWISweb.
+#' 
+#' 
+#' 
+#' @param siteNumber string USGS site number.  This is usually an 8 digit number
+#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @export
+#' @examples
+#' siteNumber <- '01594440'
+#' data <- readNWISpeak(siteNumber, '','')
+readNWISpeak <- function (siteNumber,startDate,endDate){  
+  
+  url <- constructNWISURL(siteNumber,NA,startDate,endDate,"peak")
+  data <- importRDB1(url)
+    
+  return (data)
+}
+
+#' Reads the current rating table for an active USGS streamgage.
+#' 
+#' 
+#' 
+#' @param siteNumber string USGS site number.  This is usually an 8 digit number
+#' @param type string can be "base", "corr", or "exsa"
+#' @export
+#' @examples
+#' siteNumber <- '01594440'
+#' data <- readNWISrating(siteNumber, "base")
+readNWISrating <- function (siteNumber,type){  
+  
+  url <- constructNWISURL(siteNumber,service="rating",ratingType = type)
+  data <- importRDB1(url)
+  
+  return (data)
+}
+
+#'Reads surface-water measurement data from NWISweb.
+#'
+#'
+#'
+#' @param siteNumber string USGS site number.  This is usually an 8 digit number
+#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @export
+#' @examples
+#' siteNumber <- '01594440'
+#' data <- readNWISmeas(siteNumber, '','')
+readNWISmeas <- function (siteNumber,startDate,endDate){  
+  
+  url <- constructNWISURL(siteNumber,NA,startDate,endDate,"meas")
+  data <- importRDB1(url)
+  
+  return (data)
+}
