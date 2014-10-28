@@ -1,7 +1,7 @@
 %\VignetteIndexEntry{Introduction to the dataRetrievaldemo package}
 %\VignetteEngine{knitr::knitr}
 %\VignetteDepends{}
-%\VignetteSuggests{xtable,EGRET}
+%\VignetteSuggests{xtable,EGRETdemo}
 %\VignetteImports{zoo, XML, RCurl, reshape2,lubridate}
 %\VignettePackage{dataRetrievaldemo}
 
@@ -181,10 +181,10 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 %------------------------------------------------------------
 \section{Introduction to dataRetrievaldemo}
 %------------------------------------------------------------ 
-The dataRetrievaldemo package was created to simplify the process of loading hydrologic data into the R environment. It has been specifically designed to work seamlessly with the EGRET R package: Exploration and Graphics for RivEr Trends. See: \url{https://github.com/USGS-R/EGRET/wiki} or \url{http://dx.doi.org/10.3133/tm4A10} for information on EGRET. EGRET is designed to provide analysis of water quality data sets using the Weighted Regressions on Time, Discharge and Season (WRTDS) method as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
+The dataRetrievaldemo package was created to simplify the process of loading hydrologic data into the R environment. It has been specifically designed to work seamlessly with the EGRETdemo R package: Exploration and Graphics for RivEr Trends. See: \url{https://github.com/USGS-R/EGRETdemo/wiki} or \url{http://dx.doi.org/10.3133/tm4A10} for information on EGRETdemo. EGRETdemo is designed to provide analysis of water quality data sets using the Weighted Regressions on Time, Discharge and Season (WRTDS) method as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
 
 
-The dataRetrievaldemo package is designed to retrieve many of the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web. Users may also load data from other sources (text files, spreadsheets) using dataRetrievaldemo.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into dataframes within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRET package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRET package.  The functionality described in section \ref{sec:userFiles} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRET package.
+The dataRetrievaldemo package is designed to retrieve many of the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web. Users may also load data from other sources (text files, spreadsheets) using dataRetrievaldemo.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into dataframes within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRETdemo package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRETdemo package.  The functionality described in section \ref{sec:userFiles} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRETdemo package.
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 

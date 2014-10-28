@@ -16,7 +16,7 @@ before_script:
   - chmod 755 ./travis-tool.sh
   - "./travis-tool.sh bootstrap"
   - "./travis-tool.sh install_deps - ./travis-tool.sh install_r zoo XML RCurl dplyr reshape2 lubridate"
-  - "./travis-tool.sh install_github USGS-R/EGRET"
+  - "./travis-tool.sh install_github USGS-R/EGRETdemo"
 
 on_failure:
   - "./travis-tool.sh dump_logs"

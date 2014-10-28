@@ -25,7 +25,7 @@ Imports:
     dplyr
 Suggests:
     xtable,
-    EGRET,
+    EGRETdemo,
     knitr,
     testthat
 LazyLoad: yes

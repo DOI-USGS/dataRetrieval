@@ -31,7 +31,7 @@ Web service retrieval functions:
 * `Common 4` = siteNumber, parameterCd, startDate, endDate
 
 
-Moving `EGRET` specific functions to `EGRET` (version 2.0.0 and greater):
+Moving `EGRETdemo` specific functions to `EGRETdemo` (version 2.0.0 and greater):
 
 
 |Information Source | Site Query | Meta Data | Data |
@@ -64,7 +64,7 @@ To install the dataRetrievaldemo package, you must be using R 3.0 or greater and
 
 ###dataRetrievaldemo 1.5.0
 
-* Changing naming convention one last time. Migrating `EGRET` specific retrievals to `EGRET`.
+* Changing naming convention one last time. Migrating `EGRETdemo` specific retrievals to `EGRETdemo`.
 * Added back WaterML2 parsing tool
 * Added specific groundwater, rating, peak, and surfacewater measurement functions
 
