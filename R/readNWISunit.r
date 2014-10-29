@@ -24,13 +24,13 @@
 #' summary(rawData)
 #' rawData2 <- readNWISunit(siteNumber,parameterCd,startDate,endDate,"tsv")
 #' summary(rawData2)
-#' timeZoneChange <- readNWISunit(siteNumber,property,
-#'          "2013-11-03","2013-11-03")
+#' timeZoneChange <- readNWISunit(siteNumber,parameterCd,
+#'          "2013-11-03","2013-11-03","tsv")
 readNWISunit <- function (siteNumber,parameterCd,startDate,endDate,format="xml"){  
   
   url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"uv",format=format)
   if (format == "xml") {
-    data <- importWaterML1(url)
+    data <- importWaterML1(url,asDateTime=TRUE)
   } else {
     data <- importRDB1(url,asDateTime=TRUE)
   }
