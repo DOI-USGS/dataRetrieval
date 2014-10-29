@@ -36,6 +36,8 @@ rawData <- readNWISunit(siteNumber,parameterCd,startDate,endDate)
 summary(rawData)
 rawData2 <- readNWISunit(siteNumber,parameterCd,startDate,endDate,"tsv")
 summary(rawData2)
+timeZoneChange <- readNWISunit(siteNumber,property,
+         "2013-11-03","2013-11-03")
 }
 \keyword{USGS}
 \keyword{data}

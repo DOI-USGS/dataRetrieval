@@ -3,10 +3,12 @@
 \alias{importWaterML1}
 \title{Function to return data from the NWISWeb WaterML1.1 service}
 \usage{
-importWaterML1(obs_url)
+importWaterML1(obs_url, asDateTime = FALSE)
 }
 \arguments{
 \item{obs_url}{string containing the url for the retrieval}
+
+\item{asDateTime}{logical, if TRUE returns date and time as POSIXct, if FALSE, Date}
 }
 \value{
 mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
@@ -21,7 +23,6 @@ startDate <- "2012-09-01"
 endDate <- "2012-10-01"
 offering <- '00003'
 property <- '00060'
-urlBase <- "http://waterservices.usgs.gov/nwis"
 obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 data <- importWaterML1(obs_url)
 urlMulti <- constructNWISURL("04085427",c("00060","00010"),
@@ -34,7 +35,7 @@ groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
           startGW,endGW, service="gwlevels", format="xml")
 groundWater <- importWaterML1(groundwaterExampleURL)
 unitDataURL <- constructNWISURL(siteNumber,property,
-         "2014-10-10","2014-10-10",'uv',format='xml')
-unitData <- importWaterML1(unitDataURL)
+         "2013-11-03","2013-11-03",'uv',format='xml')
+unitData <- importWaterML1(unitDataURL,TRUE)
 }
 
