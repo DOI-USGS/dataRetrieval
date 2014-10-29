@@ -3,7 +3,8 @@
 \alias{readNWISqw}
 \title{Raw Data Import for USGS NWIS QW Data}
 \usage{
-readNWISqw(siteNumber, pCodes, startDate, endDate, expanded = FALSE)
+readNWISqw(siteNumber, pCodes, startDate, endDate, expanded = FALSE,
+  reshape = TRUE)
 }
 \arguments{
 \item{siteNumber}{string or vector of of USGS site numbers.  This is usually an 8 digit number}
@@ -17,6 +18,8 @@ readNWISqw(siteNumber, pCodes, startDate, endDate, expanded = FALSE)
 \item{expanded}{logical defaults to FALSE. If TRUE, retrieves additional information. Expanded data includes
 remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
 dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).}
+
+\item{reshape}{logical. Will reshape the data if TRUE (default)}
 }
 \value{
 data dataframe with agency, site, dateTime, value, and code columns
@@ -32,7 +35,10 @@ startDate <- '2010-01-01'
 endDate <- ''
 pCodes <- c('34247','30234','32104','34220')
 rawNWISqwData <- readNWISqw(siteNumber,pCodes,startDate,endDate)
-rawNWISqwDataExpand <- readNWISqw(siteNumber,pCodes,startDate,endDate,expanded=TRUE)
+rawNWISqwDataExpandReshaped <- readNWISqw(siteNumber,pCodes,
+          startDate,endDate,expanded=TRUE)
+rawNWISqwDataExpand <- readNWISqw(siteNumber,pCodes,
+          startDate,endDate,expanded=TRUE,reshape=FALSE)
 }
 \seealso{
 \code{\link{readWQPdata}}, \code{\link{whatWQPsites}},

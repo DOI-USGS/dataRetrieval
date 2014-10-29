@@ -13,7 +13,7 @@ importRDB1(obs_url, asDateTime = FALSE, qw = FALSE)
 \item{qw}{logical, if TRUE parses as water quality data (where dates/times are in start and end times)}
 }
 \value{
-data a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
+data a data frame containing columns agency, site, dateTime (converted to UTC), values, and remark codes for all requested combinations
 }
 \description{
 This function accepts a url parameter that already contains the desired
@@ -32,7 +32,11 @@ urlMulti <- constructNWISURL("04085427",c("00060","00010"),
          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
 multiData <- importRDB1(urlMulti)
 unitDataURL <- constructNWISURL(siteNumber,property,
-         "2014-10-10","2014-10-10","uv",format="tsv")
+         "2013-11-03","2013-11-03","uv",format="tsv") #includes timezone switch
 unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
+qwURL <- constructNWISURL(c('04024430','04024000'),
+          c('34247','30234','32104','34220'),
+         "2010-11-03","","qw",format="rdb")
+qwData <- importRDB1(qwURL, qw=TRUE)
 }
 

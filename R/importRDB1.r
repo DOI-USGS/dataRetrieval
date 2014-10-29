@@ -7,7 +7,7 @@
 #' @param obs_url string containing the url for the retrieval
 #' @param asDateTime logical, if TRUE returns date and time as POSIXct, if FALSE, Date
 #' @param qw logical, if TRUE parses as water quality data (where dates/times are in start and end times)
-#' @return data a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
+#' @return data a data frame containing columns agency, site, dateTime (converted to UTC), values, and remark codes for all requested combinations
 #' @export
 #' @examples
 #' siteNumber <- "02177000"
@@ -22,8 +22,12 @@
 #'          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
 #' multiData <- importRDB1(urlMulti)
 #' unitDataURL <- constructNWISURL(siteNumber,property,
-#'          "2014-10-10","2014-10-10","uv",format="tsv")
+#'          "2013-11-03","2013-11-03","uv",format="tsv") #includes timezone switch
 #' unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
+#' qwURL <- constructNWISURL(c('04024430','04024000'),
+#'           c('34247','30234','32104','34220'),
+#'          "2010-11-03","","qw",format="rdb") 
+#' qwData <- importRDB1(qwURL, qw=TRUE)
 importRDB1 <- function(obs_url,asDateTime=FALSE, qw=FALSE){
   
   retval = tryCatch({
@@ -72,46 +76,48 @@ importRDB1 <- function(obs_url,asDateTime=FALSE, qw=FALSE){
                                   "America/Anchorage","America/Anchorage","America/Honolulu","America/Honolulu"),
                                 c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
     
+    
+    offsetLibrary <- setNames(c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
+                                c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
+    
     data[,grep('n$', dataType)] <- suppressWarnings(sapply(data[,grep('n$', dataType)], function(x) as.numeric(x)))
     
     if(length(grep('d$', dataType)) > 0){
       if (asDateTime & !qw){
         
         if("tz_cd" %in% names(data)){
-          timeZone <- as.character(timeZoneLibrary[data$tz_cd])
+          offset <- offsetLibrary[data$tz_cd]
         } else {
-          timeZone <- NULL
+          offset <- 0
         }
+        offset[is.na(offset)] <- 0
         
-        
-        if(length(unique(timeZone)) == 1){
-          data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = unique(timeZone))
-        } else {
-          
-          mostCommonTZ <- names(sort(summary(as.factor(timeZone)),decreasing = TRUE)[1])
-
-          data[,grep('d$', dataType)] <- as.POSIXct(data[,grep('d$', dataType)], "%Y-%m-%d %H:%M", tz = mostCommonTZ)
-          additionalTZs <- names(sort(summary(as.factor(timeZone)),decreasing = TRUE)[-1])
-          for(i in additionalTZs){
-            data[timeZone == i,grep('d$', dataType)] <-  as.POSIXct(data[,grep('d$', dataType)], "%Y-%m-%d %H:%M", tz = i)
-          }
-        }
+        data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = "UTC")
+        data[,regexpr('d$', dataType) > 0] <- data[,regexpr('d$', dataType) > 0] + offset*60*60
+        data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0])
        
       } else if (qw){
         
         if("sample_start_time_datum_cd" %in% names(data)){
-          timeZoneStart <- as.character(timeZoneLibrary[data$sample_start_time_datum_cd])
+          timeZoneStartOffset <- offsetLibrary[data$sample_start_time_datum_cd]
+          timeZoneStartOffset[is.na(timeZoneStartOffset)] <- 0
         } else {
-          timeZoneStart <- NA
+          timeZoneStartOffset <- 0
         }
         
         if("sample_end_time_datum_cd" %in% names(data)){
-          timeZoneEnd <- as.character(timeZoneLibrary[data$sample_end_time_datum_cd])
+          timeZoneEndOffset <- offsetLibrary[data$sample_end_time_datum_cd]
+          timeZoneEndOffset[is.na(timeZoneEndOffset)] <- 0
+          composite <- TRUE
         } else {
-          timeZoneEnd <- NA
+          composite <- FALSE
+          if(any(data$sample_end_dt != "") & any(data$sample_end_dm != "")){
+            if(which(data$sample_end_dt != "") == which(data$sample_end_dm != "")){
+              composite <- TRUE
+            }
+          }
+          timeZoneEndOffset <- 0
         }
-        timeZoneStart[is.na(timeZoneStart)] <- ""
-        timeZoneEnd[is.na(timeZoneEnd)] <- ""
         
         if("sample_dt" %in% names(data)){
           if(any(data$sample_dt != "")){
@@ -125,44 +131,16 @@ importRDB1 <- function(obs_url,asDateTime=FALSE, qw=FALSE){
           }        
         }
         
-        if(any(!is.na(timeZoneStart))){
-          if(length(unique(timeZoneStart)) == 1){
-            data$startDateTime <- with(data, as.POSIXct(paste(sample_dt, sample_tm),format="%Y-%m-%d %H:%M", tz=unique(timeZoneStart)))
-          } else {
-            
-            mostCommonTZ <- names(sort(summary(as.factor(timeZoneStart)),decreasing = TRUE)[1])
-            
-            data$startDateTime <- with(data, as.POSIXct(paste(sample_dt, sample_tm),
-                                            format="%Y-%m-%d %H:%M", 
-                                            tz=mostCommonTZ))
-            additionalTZs <- names(sort(summary(as.factor(timeZoneStart)),decreasing = TRUE)[-1])
-            for(i in additionalTZs){
-              data$startDateTime[timeZoneStart == i] <-  with(data[timeZoneStart == i,], 
-                                  as.POSIXct(paste(sample_dt, sample_tm),
-                                             format="%Y-%m-%d %H:%M", 
-                                             tz=i))
-            }
-          }
-        }
+#         if(any(!is.na(timeZoneStartOffset))){
+        data$startDateTime <- with(data, as.POSIXct(paste(sample_dt, sample_tm),format="%Y-%m-%d %H:%M", tz = "UTC"))
+        data$startDateTime <- data$startDateTime + timeZoneStartOffset*60*60
+        data$startDateTime <- as.POSIXct(data$startDateTime)
+#         }
         
-        if(any(!is.na(timeZoneEnd))){
-          if(length(unique(timeZoneEnd)) == 1){
-            data$endDateTime <- with(data, as.POSIXct(paste(sample_end_dt, sample_end_tm),format="%Y-%m-%d %H:%M", tz=unique(timeZoneEnd)))
-          } else {
-            
-            mostCommonTZ <- names(sort(summary(as.factor(timeZoneEnd)),decreasing = TRUE)[1])
-            
-            data$endDateTime <- with(data, as.POSIXct(paste(sample_end_dt, sample_end_tm),
-                                format="%Y-%m-%d %H:%M", 
-                                tz=mostCommonTZ))
-            additionalTZs <- names(sort(summary(as.factor(timeZoneEnd)),decreasing = TRUE)[-1])
-            for(i in additionalTZs){
-              data$endDateTime[timeZoneEnd == i] <-  with(data[timeZoneStart == i,], 
-                                as.POSIXct(paste(sample_end_dt, sample_end_tm),
-                                           format="%Y-%m-%d %H:%M", 
-                                           tz=i))
-            }
-          }
+        if(composite){
+          data$endDateTime <- with(data, as.POSIXct(paste(sample_end_dt, sample_end_tm),format="%Y-%m-%d %H:%M", tz = "UTC"))
+          data$endDateTime <- data$endDateTime + timeZoneEndOffset*60*60
+          data$endDateTime <- as.POSIXct(data$endDateTime)
         }
         
       } else {
@@ -170,7 +148,6 @@ importRDB1 <- function(obs_url,asDateTime=FALSE, qw=FALSE){
           if (all(data[,i] != "")){
             data[,i] <- as.Date(data[,i])
           }
-          
         }
       }
     }
