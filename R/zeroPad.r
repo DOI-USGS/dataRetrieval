@@ -9,10 +9,10 @@
 #' @export
 #' @examples
 #' pCode <- '10'
-#' correctPCode <- padVariable(pCode,5)
+#' correctPCode <- zeroPad(pCode,5)
 #' pCodes <- c('100','1000','0','12345','1565465465465465')
-#' correctPCodes <- padVariable(pCodes,5)
-padVariable <- function(x,padTo){
+#' correctPCodes <- zeroPad(pCodes,5)
+zeroPad <- function(x,padTo){
   if(padTo <= 1) return(x)
   numDigits <- nchar(x)
   padding <- padTo-numDigits
