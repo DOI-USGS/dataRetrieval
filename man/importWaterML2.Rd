@@ -3,7 +3,7 @@
 \alias{importWaterML2}
 \title{Function to return data from the WaterML2 data}
 \usage{
-importWaterML2(obs_url)
+importWaterML2(obs_url, asDateTime = FALSE)
 }
 \arguments{
 \item{obs_url}{string containing the url for the retrieval}
@@ -21,6 +21,20 @@ URL <- paste(baseURL, "sites=01646500",
      "endDT=2014-09-08",
      "statCd=00003",
      "parameterCd=00060",sep="&")
-\dontrun{dataReturned3 <- importWaterML2(URL)}
+URL2 <- paste("http://cida.usgs.gov/noreast-sos/simple?request=GetObservation",
+     "featureID=MD-BC-BC-05",
+     "offering=RAW",
+     "observedProperty=WATER",sep="&")
+\dontrun{
+dataReturned1 <- importWaterML2(URL)
+dataReturn2 <- importWaterML2(URL2, TRUE)
+URLmulti <-  paste(baseURL,
+  "sites=04024430,04024000",
+  "startDT=2014-09-01",
+  "endDT=2014-09-08",
+  "statCd=00003",
+  "parameterCd=00060",sep="&")
+dataReturnMulti <- importWaterML2(URLmulti)
+}
 }
 
