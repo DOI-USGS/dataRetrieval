@@ -181,14 +181,11 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 %------------------------------------------------------------
 \section{Introduction to dataRetrievaldemo}
 %------------------------------------------------------------ 
-The dataRetrievaldemo package was created to simplify the process of loading hydrologic data into the R environment. It has been specifically designed to work seamlessly with the EGRETdemo R package: Exploration and Graphics for RivEr Trends. See: \url{https://github.com/USGS-R/EGRETdemo/wiki} or \url{http://dx.doi.org/10.3133/tm4A10} for information on EGRETdemo. EGRETdemo is designed to provide analysis of water quality data sets using the Weighted Regressions on Time, Discharge and Season (WRTDS) method as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
-
-
-The dataRetrievaldemo package is designed to retrieve many of the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web. Users may also load data from other sources (text files, spreadsheets) using dataRetrievaldemo.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into dataframes within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRETdemo package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRETdemo package.  The functionality described in section \ref{sec:userFiles} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRETdemo package.
+The dataRetrievaldemo package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal, which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources and load them into dataframes within the R environment.  
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
-A quick workflow for major dataRetrievaldemo functions:
+A quick workflow for USGS dataRetrievaldemo functions:
 
 <<workflow, echo=TRUE,eval=FALSE>>=
 library(dataRetrievaldemo)
@@ -206,14 +203,74 @@ parameterCd <- "00618"
 qwData <- readNWISqw(siteNumber,parameterCd,
                       "1980-01-01","2010-01-01")
 
+pCode <- readNWISpCode(parameterCd)
+
 @
 
+USGS data is made available through the National Water Information System (NWIS).
+
+Table \ref{tab:func} describes the functions available in the dataRetrievaldemo package.
+
+\begin{table}[!ht]
+\begin{minipage}{\linewidth}
+{\footnotesize
+\caption{dataRetrievaldemo functions} 
+\label{tab:func}
+\begin{tabular}{lll}
+  \hline
+\multicolumn{1}{c}{\textbf{\textsf{Function Name}}} &
+\multicolumn{1}{c}{\textbf{\textsf{Arguments}}}  &
+\multicolumn{1}{c}{\textbf{\textsf{Description}}} \\  [0pt]
+  \hline
+  \texttt{readNWISdata} &  \texttt{...} & NWIS data using user-specified queries\\
+   & service & \\
+  [5pt]\texttt{readNWISdv} & siteNumber & NWIS daily data\\
+  & parameterCd & \\
+  & startDate & \\
+  & endDate & \\
+  & statCd & \\
+  [5pt]\texttt{readNWISqw} & siteNumber & NWIS water quality data\\
+    & parameterCd & \\
+  & startDate & \\
+  & endDate & \\
+  & expanded & \\
+  [5pt]\texttt{readNWISunit} & siteNumber & NWIS water quality data\\
+  & parameterCd & \\
+  & startDate & \\
+  & endDate & \\
+  [5pt]\texttt{readNWISrating} & siteNumber & NWIS rating table for active streamgage \\
+  & type & \\
+  [5pt]\texttt{readNWISmeas} & siteNumber & NWIS surface-water measurements \\
+  & startDate & \\
+  & endDate & \\
+  [5pt]\texttt{readNWISpeak} & siteNumber & NWIS peak flow data \\
+  & startDate & \\
+  & endDate & \\
+  [5pt]\texttt{readNWISgwl} & siteNumber & NWIS groundwater level measurements \\
+  & startDate & \\
+  & endDate & \\  
+  [5pt]\texttt{readNWISpCode} & parameterCd & NWIS parameter code information\\
+  [5pt]\texttt{readNWISsite} & siteNumber & NWIS site information \\
+  [5pt]\texttt{whatNWISsites} & \texttt{...} & NWIS site search using user-specified queries \\
+  [5pt]\texttt{whatNWISdata} & siteNumber & NWIS data availability, including period of record and count \\ 
+   & service & \\
+   [5pt]\texttt{readWQPdata} & \texttt{...} & WQP data using user-specified queries \\
+   [5pt]\texttt{readWQPqw} & siteNumber & WQP data \\
+     & parameterCd (or characteristic name) & \\
+  & startDate & \\
+  & endDate & \\
+  [5pt]\texttt{whatWQPsites} & \texttt{...} & WQP site search using user-specified queries \\  
+   \hline
+\end{tabular}
+}
+\end{minipage}
+\end{table}
 
 %------------------------------------------------------------
 \section{USGS Web Retrievals}
 \label{sec:genRetrievals}
 %------------------------------------------------------------ 
-In this section, five examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  Daily discharge measurements are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
+In this section, five examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}). We will use the Choptank River near Greensboro, MD as an example.  Daily discharge measurements are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
 
 % %------------------------------------------------------------
 % \subsection{Introduction}

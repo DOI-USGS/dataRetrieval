@@ -94,3 +94,23 @@ readNWISmeas <- function (siteNumber,startDate,endDate){
   
   return (data)
 }
+
+#'Reads groundwater level measurements from NWISweb.
+#'
+#'
+#'
+#' @param siteNumber string USGS site number.  This is usually an 8 digit number
+#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @export
+#' @examples
+#' siteNumber <- "434400121275801"
+#' data <- readNWISgwl(siteNumber, '','')
+readNWISgwl <- function (siteNumber,startDate,endDate){  
+  
+  url <- constructNWISURL(siteNumber,NA,startDate,endDate,"gwlevels",format="tsv")
+  data <- importRDB1(url)
+  
+  return (data)
+}
+
