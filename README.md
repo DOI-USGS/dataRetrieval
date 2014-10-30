@@ -14,10 +14,14 @@ Web service retrieval functions:
 |Function | Inputs | Description | 
 | -------------| ------------------------|:-------------|
 |`readNWISdata` | `...`, service | NWIS data using user-specified queries |
-|`readNWISdv` | `Common 4`, statCd | NWIS daily data with `Common 4` query |
-|`readNWISqw` | `Common 4`, expanded | NWIS water quality data with `Common 4` query |
-|`readNWISunit` | `Common 4` | NWIS instantaneous data with `Common 4` query |
+|`readNWISdv` | `Common 3`, parameter code, statCd | NWIS daily data with `Common` query |
+|`readNWISqw` | `Common 3`, parameter code, expanded | NWIS water quality data with `Common` query |
+|`readNWISunit` | `Common 3`, parameter code | NWIS instantaneous data with `Common` query |
 |`readNWISpCode` | parameterCd | NWIS parameter code information |
+|`readNWISgwl` | `Common 3` | NWIS groundwater level data with `Common` query |
+|`readNWISpeak` | `Common 3` | NWIS peak flow data with `Common` query |
+|`readNWISmeas` | `Common 3` | NWIS surface-water measurement data with `Common` query |
+|`readNWISrating` | siteNumber, type | NWIS rating table for an active USGS streamgage |
 |`readNWISsite` | siteNumber | NWIS site information |
 |`whatNWISsites` | `...` | NWIS site search using user-specified queries |
 |`whatNWISdata` | siteNumber, service | NWIS data availability, including period of record and count |
@@ -25,11 +29,7 @@ Web service retrieval functions:
 |`readWQPqw` | `Common 4` | WQP data with `Common 4` query |
 |`whatWQPsites` | `...` | WQP site search using user-specified queries |
 
-
-
-
-* `Common 4` = siteNumber, parameterCd, startDate, endDate
-
+* `Common 3` = siteNumber, startDate, endDate
 
 Moving `EGRETdemo` specific functions to `EGRETdemo` (version 2.0.0 and greater):
 
