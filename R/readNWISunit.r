@@ -20,7 +20,7 @@
 #' rawData <- readNWISunit(siteNumber,parameterCd,startDate,endDate)
 #' 
 #' timeZoneChange <- readNWISunit(c('04024430','04024000'),parameterCd,
-#'          "2013-11-03","2013-11-03","tsv")
+#'          "2013-11-03","2013-11-03")
 #' firstSite <- timeZoneChange[timeZoneChange$site_no == '04024430',]
 readNWISunit <- function (siteNumber,parameterCd,startDate,endDate){  
   
