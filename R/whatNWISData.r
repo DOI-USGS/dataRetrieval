@@ -9,11 +9,11 @@
 #' @export
 #' @import RCurl
 #' @examples
-#' availableData <- whatNWISData('05114000')
+#' availableData <- whatNWISdata('05114000')
 #' # To find just unit value ('instantaneous') data:
-#' uvData <- whatNWISData('05114000',service="uv")
-#' uvDataMulti <- whatNWISData(c('05114000','09423350'),service="uv")
-whatNWISData <- function(siteNumber,service=c("uv","dv","qw")){
+#' uvData <- whatNWISdata('05114000',service="uv")
+#' uvDataMulti <- whatNWISdata(c('05114000','09423350'),service="uv")
+whatNWISdata <- function(siteNumber,service=c("uv","dv","qw")){
   
   siteNumber <- paste(siteNumber,collapse=",")
   

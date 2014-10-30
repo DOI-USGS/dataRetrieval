@@ -363,17 +363,17 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 \FloatBarrier
 
 %------------------------------------------------------------
-\subsubsection{whatNWISData}
+\subsubsection{whatNWISdata}
 \label{sec:usgsDataAvailability}
 %------------------------------------------------------------
-To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISData} function. It is possible to limit the retrieval information to a subset of services (\texttt{"}dv\texttt{"}, \texttt{"}uv\texttt{"}, or \texttt{"}qw\texttt{"}). In the following example, we limit the retrieved Choptank data to only daily data. Leaving the \texttt{"}service\texttt{"} argument blank returns all of the available data for that site.
+To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISdata} function. It is possible to limit the retrieval information to a subset of services (\texttt{"}dv\texttt{"}, \texttt{"}uv\texttt{"}, or \texttt{"}qw\texttt{"}). In the following example, we limit the retrieved Choptank data to only daily data. Leaving the \texttt{"}service\texttt{"} argument blank returns all of the available data for that site.
 
 
 <<getSiteExtended, echo=TRUE>>=
 # Continuing from the previous example:
 # This pulls out just the daily data:
 
-dailyDataAvailable <- whatNWISData(siteNumbers,
+dailyDataAvailable <- whatNWISdata(siteNumbers,
                     service="dv")
 
 @
@@ -778,7 +778,7 @@ library(dataRetrievaldemo)
 There are a few steps that are required in order to create a table in Microsoft\textregistered\ software (Excel, Word, PowerPoint, etc.) from an R dataframe. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Excel based on the dataframe tableData:
 
 <<label=getSiteApp, echo=TRUE>>=
-availableData <- whatNWISData(siteNumber, "dv")
+availableData <- whatNWISdata(siteNumber, "dv")
 dailyData <- availableData["00003" == availableData$statCd,]
 
 tableData <- with(dailyData, 
