@@ -7,6 +7,7 @@
 #' @return mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
 #' @export
 #' @import XML
+#' @import RCurl
 #' @importFrom plyr rbind.fill.matrix
 #' @examples
 #' baseURL <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
@@ -29,29 +30,37 @@
 #'   "statCd=00003",
 #'   "parameterCd=00060",sep="&")
 #' dataReturnMulti <- importWaterML2(URLmulti)
+#' filePath <- system.file("extdata", package="dataRetrievaldemo")
+#' fileName <- "WaterML2Example.xml"
+#' fullPath <- file.path(filePath, fileName)
+#' UserData <- importWaterML2(fullPath)
 #' }
 importWaterML2 <- function(obs_url, asDateTime=FALSE){
   
-  h <- basicHeaderGatherer()
-  doc = tryCatch({
-    returnedDoc <- getURL(obs_url, headerfunction = h$update)
-    if(h$value()["Content-Type"] == "text/xml;charset=UTF-8" | 
-         h$value()["Content-Type"] == "text/xml; subtype=gml/3.1.1;charset=UTF-8"){
-      xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
-    } else {
-      message(paste("URL caused an error:", obs_url))
-      message("Content-Type=",h$value()["Content-Type"])
+  if(url.exists(obs_url)){
+    doc = tryCatch({
+      h <- basicHeaderGatherer()
+      returnedDoc <- getURL(obs_url, headerfunction = h$update)
+      if(h$value()["Content-Type"] == "text/xml;charset=UTF-8" | 
+           h$value()["Content-Type"] == "text/xml; subtype=gml/3.1.1;charset=UTF-8"){
+        xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
+      } else {
+        message(paste("URL caused an error:", obs_url))
+        message("Content-Type=",h$value()["Content-Type"])
+        return(NA)
+      }   
+      
+    }, warning = function(w) {
+      message(paste("URL caused a warning:", obs_url))
+      message(w)
+    }, error = function(e) {
+      message(paste("URL does not seem to exist:", obs_url))
+      message(e)
       return(NA)
-    }   
-    
-  }, warning = function(w) {
-    message(paste("URL caused a warning:", obs_url))
-    message(w)
-  }, error = function(e) {
-    message(paste("URL does not seem to exist:", obs_url))
-    message(e)
-    return(NA)
-  }) 
+    }) 
+  } else {
+    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+  }
   
   doc <- xmlRoot(doc)
   

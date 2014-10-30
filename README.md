@@ -34,13 +34,13 @@ Web service retrieval functions:
 Moving `EGRETdemo` specific functions to `EGRETdemo` (version 2.0.0 and greater):
 
 
-|Information Source | Site Query | Meta Data | Data |
+|Information Source | Meta Data | Data |
 | -------------| -------------| ------------- |:-------------|
-|NWIS | | `getNWISInfo` | `getNWISSample` |
-| |  |  | `getNWISDaily` |
-| Water Quality Portal |  | `getWQPInfo`| `getWQPSample` |
-| User-supplied files | | `getUserInfo` | `getUserDaily`|
-| | | | `getUserSample` |
+|NWIS | `getNWISInfo` | `getNWISSample` |
+|  |  | `getNWISDaily` |
+| Water Quality Portal  | `getWQPInfo`| `getWQPSample` |
+| User-supplied files | `getUserInfo` | `getUserDaily`|
+| | | `getUserSample` |
 
 
 

@@ -37,5 +37,9 @@ groundWater <- importWaterML1(groundwaterExampleURL)
 unitDataURL <- constructNWISURL(siteNumber,property,
          "2013-11-03","2013-11-03",'uv',format='xml')
 unitData <- importWaterML1(unitDataURL,TRUE)
+filePath <- system.file("extdata", package="dataRetrievaldemo")
+fileName <- "WaterML1Example.xml"
+fullPath <- file.path(filePath, fileName)
+importUserWM1 <- importWaterML1(fullPath)
 }
 

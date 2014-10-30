@@ -38,5 +38,10 @@ qwURL <- constructNWISURL(c('04024430','04024000'),
           c('34247','30234','32104','34220'),
          "2010-11-03","","qw",format="rdb")
 qwData <- importRDB1(qwURL, qw=TRUE)
+# User file:
+filePath <- system.file("extdata", package="dataRetrievaldemo")
+fileName <- "RDB1Example.txt"
+fullPath <- file.path(filePath, fileName)
+importUserRDB <- importRDB1(fullPath)
 }
 
