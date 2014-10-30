@@ -181,14 +181,11 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 %------------------------------------------------------------
 \section{Introduction to dataRetrievaldemo}
 %------------------------------------------------------------ 
-The dataRetrievaldemo package was created to simplify the process of loading hydrologic data into the R environment. It has been specifically designed to work seamlessly with the EGRETdemo R package: Exploration and Graphics for RivEr Trends. See: \url{https://github.com/USGS-R/EGRETdemo/wiki} or \url{http://dx.doi.org/10.3133/tm4A10} for information on EGRETdemo. EGRETdemo is designed to provide analysis of water quality data sets using the Weighted Regressions on Time, Discharge and Season (WRTDS) method as well as analysis of discharge trends using robust time-series smoothing techniques.  Both of these capabilities provide both tabular and graphical analyses of long-term data sets.
-
-
-The dataRetrievaldemo package is designed to retrieve many of the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web. Users may also load data from other sources (text files, spreadsheets) using dataRetrievaldemo.  Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources on the Web and load them into dataframes within the R environment.  The functionality described in section \ref{sec:genRetrievals} is for general use and is not tailored for the specific uses of the EGRETdemo package.  The functionality described in section \ref{sec:EGRETdfs} is tailored specifically to obtaining input from the Web and structuring it for use in the EGRETdemo package.  The functionality described in section \ref{sec:userFiles} is for converting hydrologic data from user-supplied files and structuring it specifically for use in the EGRETdemo package.
+The dataRetrievaldemo package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal, which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS.   
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
-A quick workflow for major dataRetrievaldemo functions:
+A quick workflow for USGS dataRetrievaldemo functions:
 
 <<workflow, echo=TRUE,eval=FALSE>>=
 library(dataRetrievaldemo)
@@ -206,14 +203,76 @@ parameterCd <- "00618"
 qwData <- readNWISqw(siteNumber,parameterCd,
                       "1980-01-01","2010-01-01")
 
+pCode <- readNWISpCode(parameterCd)
+
 @
 
+USGS data is made available through the National Water Information System (NWIS).
+
+Table \ref{tab:func} describes the functions available in the dataRetrievaldemo package.
+
+\begin{table}[!ht]
+\begin{minipage}{\linewidth}
+{\footnotesize
+\caption{dataRetrievaldemo functions} 
+\label{tab:func}
+\begin{tabular}{lll}
+  \hline
+\multicolumn{1}{c}{\textbf{\textsf{Function Name}}} &
+\multicolumn{1}{c}{\textbf{\textsf{Arguments}}}  &
+\multicolumn{1}{c}{\textbf{\textsf{Description}}} \\  [0pt]
+  \hline
+  \texttt{readNWISdata} &  \texttt{...} & NWIS data using user-specified queries\\
+   & service & \\
+  [5pt]\texttt{readNWISdv} & siteNumber & NWIS daily data\\
+  & parameterCd & \\
+  & startDate & \\
+  & endDate & \\
+  & statCd & \\
+  [5pt]\texttt{readNWISqw} & siteNumber & NWIS water quality data\\
+    & parameterCd & \\
+  & startDate & \\
+  & endDate & \\
+  & expanded & \\
+  [5pt]\texttt{readNWISunit} & siteNumber & NWIS water quality data\\
+  & parameterCd & \\
+  & startDate & \\
+  & endDate & \\
+  [5pt]\texttt{readNWISrating} & siteNumber & NWIS rating table for active streamgage \\
+  & type & \\
+  [5pt]\texttt{readNWISmeas} & siteNumber & NWIS surface-water measurements \\
+  & startDate & \\
+  & endDate & \\
+  [5pt]\texttt{readNWISpeak} & siteNumber & NWIS peak flow data \\
+  & startDate & \\
+  & endDate & \\
+  [5pt]\texttt{readNWISgwl} & siteNumber & NWIS groundwater level measurements \\
+  & startDate & \\
+  & endDate & \\  
+  [5pt]\texttt{readNWISpCode} & parameterCd & NWIS parameter code information\\
+  [5pt]\texttt{readNWISsite} & siteNumber & NWIS site information \\
+  [5pt]\texttt{whatNWISsites} & \texttt{...} & NWIS site search using user-specified queries \\
+  [5pt]\texttt{whatNWISdata} & siteNumber & NWIS data availability, including period of record and count \\ 
+   & service & \\
+   [5pt]\texttt{readWQPdata} & \texttt{...} & WQP data using user-specified queries \\
+   [5pt]\texttt{readWQPqw} & siteNumber & WQP data \\
+     & parameterCd (or characteristic name) & \\
+  & startDate & \\
+  & endDate & \\
+  [5pt]\texttt{whatWQPsites} & \texttt{...} & WQP site search using user-specified queries \\  
+   \hline
+\end{tabular}
+}
+\end{minipage}
+\end{table}
+
+\clearpage
 
 %------------------------------------------------------------
 \section{USGS Web Retrievals}
 \label{sec:genRetrievals}
 %------------------------------------------------------------ 
-In this section, five examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}) or (\ref{sec:usgsSTORET}). We will use the Choptank River near Greensboro, MD as an example.  Daily discharge measurements are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
+In this section, five examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}). We will use the Choptank River near Greensboro, MD as an example.  Daily discharge measurements are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
 
 % %------------------------------------------------------------
 % \subsection{Introduction}
@@ -306,17 +365,17 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 \FloatBarrier
 
 %------------------------------------------------------------
-\subsubsection{whatNWISData}
+\subsubsection{whatNWISdata}
 \label{sec:usgsDataAvailability}
 %------------------------------------------------------------
-To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISData} function. It is possible to limit the retrieval information to a subset of services (\texttt{"}dv\texttt{"}, \texttt{"}uv\texttt{"}, or \texttt{"}qw\texttt{"}). In the following example, we limit the retrieved Choptank data to only daily data. Leaving the \texttt{"}service\texttt{"} argument blank returns all of the available data for that site.
+To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISdata} function. It is possible to limit the retrieval information to a subset of services (\texttt{"}dv\texttt{"}, \texttt{"}uv\texttt{"}, or \texttt{"}qw\texttt{"}). In the following example, we limit the retrieved Choptank data to only daily data. Leaving the \texttt{"}service\texttt{"} argument blank returns all of the available data for that site.
 
 
 <<getSiteExtended, echo=TRUE>>=
 # Continuing from the previous example:
 # This pulls out just the daily data:
 
-dailyDataAvailable <- whatNWISData(siteNumbers,
+dailyDataAvailable <- whatNWISdata(siteNumbers,
                     service="dv")
 
 @
@@ -380,7 +439,7 @@ Parameter information can obtained from \url{http://nwis.waterdata.usgs.gov/usa/
 \subsection{Daily Values}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain daily records of USGS data, use the \texttt{readNWISdv} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
+To obtain daily records of USGS data, use the \texttt{readNWISdv} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, and statCd (defaults to \texttt{"}00003\texttt{"}).  If you want to use the default values, you do not need to list them in the function call. 
 
 The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user must include the quotes).  Setting the start date to \texttt{"}\texttt{"} (no space) will prompt the program to ask for the earliest date, and setting the end date to \texttt{"}\texttt{"} (no space) will prompt for the latest available date.
 
@@ -468,11 +527,13 @@ dischargeToday <- readNWISunit(siteNumber, parameterCd,
 
 The retrieval produces the following dataframe:
 
-<<dischargeData, echo=FALSE>>=
+<<dischargeData, echo=TRUE>>=
 head(dischargeToday)
 @
 
-Note that time now becomes important, so the variable datetime is a POSIXct, and the time zone is included in a separate column. Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package.
+Note that time now becomes important, so the variable datetime is a POSIXct, and the reported time zone is included in a separate column. The datetime column is converted automatically to \enquote{UTC} (Coordinated Universal Time). To override the timezone
+
+Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package.
 
 \newpage
 
@@ -483,7 +544,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{readNWISunit} and \texttt{readNWISdv}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level.
+To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, and endDate and \texttt{readNWISdv}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level.
 
 
 <<label=getQW, echo=TRUE>>=
@@ -721,7 +782,7 @@ library(dataRetrievaldemo)
 There are a few steps that are required in order to create a table in Microsoft\textregistered\ software (Excel, Word, PowerPoint, etc.) from an R dataframe. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Excel based on the dataframe tableData:
 
 <<label=getSiteApp, echo=TRUE>>=
-availableData <- whatNWISData(siteNumber, "dv")
+availableData <- whatNWISdata(siteNumber, "dv")
 dailyData <- availableData["00003" == availableData$statCd,]
 
 tableData <- with(dailyData, 

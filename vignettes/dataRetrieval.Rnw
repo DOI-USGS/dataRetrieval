@@ -181,7 +181,7 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 %------------------------------------------------------------
 \section{Introduction to dataRetrievaldemo}
 %------------------------------------------------------------ 
-The dataRetrievaldemo package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal, which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Section \ref{sec:genRetrievals} provides examples of how one can obtain raw data from USGS sources and load them into dataframes within the R environment.  
+The dataRetrievaldemo package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal, which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS.   
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
@@ -265,6 +265,8 @@ Table \ref{tab:func} describes the functions available in the dataRetrievaldemo 
 }
 \end{minipage}
 \end{table}
+
+\clearpage
 
 %------------------------------------------------------------
 \section{USGS Web Retrievals}
@@ -437,7 +439,7 @@ Parameter information can obtained from \url{http://nwis.waterdata.usgs.gov/usa/
 \subsection{Daily Values}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain daily records of USGS data, use the \texttt{readNWISdv} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, statCd, and a logical (TRUE/FALSE) interactive. There are 2 default arguments: statCd (defaults to \texttt{"}00003\texttt{"}), and interactive (defaults to TRUE).  If you want to use the default values, you do not need to list them in the function call. By setting the \texttt{"}interactive\texttt{"} option to FALSE, the operation of the function will advance automatically. It might make more sense to run large batch collections with the interactive option set to FALSE. 
+To obtain daily records of USGS data, use the \texttt{readNWISdv} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, and statCd (defaults to \texttt{"}00003\texttt{"}).  If you want to use the default values, you do not need to list them in the function call. 
 
 The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user must include the quotes).  Setting the start date to \texttt{"}\texttt{"} (no space) will prompt the program to ask for the earliest date, and setting the end date to \texttt{"}\texttt{"} (no space) will prompt for the latest available date.
 
@@ -525,11 +527,13 @@ dischargeToday <- readNWISunit(siteNumber, parameterCd,
 
 The retrieval produces the following dataframe:
 
-<<dischargeData, echo=FALSE>>=
+<<dischargeData, echo=TRUE>>=
 head(dischargeToday)
 @
 
-Note that time now becomes important, so the variable datetime is a POSIXct, and the time zone is included in a separate column. Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package.
+Note that time now becomes important, so the variable datetime is a POSIXct, and the reported time zone is included in a separate column. The datetime column is converted automatically to \enquote{UTC} (Coordinated Universal Time). To override the timezone
+
+Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package.
 
 \newpage
 
@@ -540,7 +544,7 @@ Note that time now becomes important, so the variable datetime is a POSIXct, and
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, endDate, and interactive (similar to \texttt{readNWISunit} and \texttt{readNWISdv}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level.
+To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, and endDate and \texttt{readNWISdv}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level.
 
 
 <<label=getQW, echo=TRUE>>=

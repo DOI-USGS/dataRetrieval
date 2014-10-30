@@ -35,6 +35,8 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 #  qwData <- readNWISqw(siteNumber,parameterCd,
 #                        "1980-01-01","2010-01-01")
 #  
+#  pCode <- readNWISpCode(parameterCd)
+#  
 
 ## ----tableParameterCodes, echo=FALSE,results='asis'-------
 pCode <- c('00060', '00065', '00010','00045','00400')
@@ -86,7 +88,7 @@ siteINFO$station.nm
 # Continuing from the previous example:
 # This pulls out just the daily data:
 
-dailyDataAvailable <- whatNWISData(siteNumbers,
+dailyDataAvailable <- whatNWISdata(siteNumbers,
                     service="dv")
 
 
@@ -183,7 +185,7 @@ endDate <- "2012-05-13"
 dischargeToday <- readNWISunit(siteNumber, parameterCd, 
         startDate, endDate)
 
-## ----dischargeData, echo=FALSE----------------------------
+## ----dischargeData, echo=TRUE-----------------------------
 head(dischargeToday)
 
 ## ----label=getQW, echo=TRUE-------------------------------
@@ -268,7 +270,7 @@ readNWISpCode
 #  library(dataRetrievaldemo)
 
 ## ----label=getSiteApp, echo=TRUE--------------------------
-availableData <- whatNWISData(siteNumber, "dv")
+availableData <- whatNWISdata(siteNumber, "dv")
 dailyData <- availableData["00003" == availableData$statCd,]
 
 tableData <- with(dailyData, 

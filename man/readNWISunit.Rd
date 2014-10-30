@@ -3,7 +3,7 @@
 \alias{readNWISunit}
 \title{Raw Data Import for Instantaneous USGS NWIS Data}
 \usage{
-readNWISunit(siteNumber, parameterCd, startDate, endDate, format = "xml")
+readNWISunit(siteNumber, parameterCd, startDate, endDate)
 }
 \arguments{
 \item{siteNumber}{string USGS site number.  This is usually an 8 digit number}
@@ -13,10 +13,6 @@ readNWISunit(siteNumber, parameterCd, startDate, endDate, format = "xml")
 \item{startDate}{string starting date for data retrieval in the form YYYY-MM-DD.}
 
 \item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
-
-\item{format}{string, can be "tsv" or "xml", and is only applicable for daily and unit value requests.  "tsv" returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower,
-but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option,
-but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml".}
 }
 \value{
 data dataframe with agency, site, dateTime, time zone, value, and code columns
@@ -33,9 +29,7 @@ startDate <- "2014-10-10"
 endDate <- "2014-10-10"
 # These examples require an internet connection to run
 rawData <- readNWISunit(siteNumber,parameterCd,startDate,endDate)
-summary(rawData)
-rawData2 <- readNWISunit(siteNumber,parameterCd,startDate,endDate,"tsv")
-summary(rawData2)
+
 timeZoneChange <- readNWISunit(c('04024430','04024000'),parameterCd,
          "2013-11-03","2013-11-03","tsv")
 firstSite <- timeZoneChange[timeZoneChange$site_no == '04024430',]

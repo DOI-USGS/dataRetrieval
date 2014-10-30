@@ -8,9 +8,6 @@
 #' @param parameterCd string USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
-#' @param format string, can be "tsv" or "xml", and is only applicable for daily and unit value requests.  "tsv" returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower, 
-#' but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
-#' but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml". 
 #' @keywords data import USGS web service
 #' @return data dataframe with agency, site, dateTime, time zone, value, and code columns
 #' @export
@@ -21,20 +18,16 @@
 #' endDate <- "2014-10-10"
 #' # These examples require an internet connection to run
 #' rawData <- readNWISunit(siteNumber,parameterCd,startDate,endDate)
-#' summary(rawData)
-#' rawData2 <- readNWISunit(siteNumber,parameterCd,startDate,endDate,"tsv")
-#' summary(rawData2)
+#' 
 #' timeZoneChange <- readNWISunit(c('04024430','04024000'),parameterCd,
 #'          "2013-11-03","2013-11-03","tsv")
 #' firstSite <- timeZoneChange[timeZoneChange$site_no == '04024430',]
-readNWISunit <- function (siteNumber,parameterCd,startDate,endDate,format="xml"){  
+readNWISunit <- function (siteNumber,parameterCd,startDate,endDate){  
   
-  url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"uv",format=format)
-  if (format == "xml" | format == "wml1") {
-    data <- importWaterML1(url,asDateTime=TRUE)
-  } else {
-    data <- importRDB1(url,asDateTime=TRUE)
-  }
+  url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"uv",format="xml")
+
+  data <- importWaterML1(url,asDateTime=TRUE)
+  
 
   return (data)
 }

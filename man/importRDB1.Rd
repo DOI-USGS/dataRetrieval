@@ -3,7 +3,8 @@
 \alias{importRDB1}
 \title{Function to return data from the NWIS RDB 1.0 format}
 \usage{
-importRDB1(obs_url, asDateTime = FALSE, qw = FALSE)
+importRDB1(obs_url, asDateTime = FALSE, qw = FALSE, convertType = TRUE,
+  tz = "")
 }
 \arguments{
 \item{obs_url}{string containing the url for the retrieval}
@@ -11,6 +12,14 @@ importRDB1(obs_url, asDateTime = FALSE, qw = FALSE)
 \item{asDateTime}{logical, if TRUE returns date and time as POSIXct, if FALSE, Date}
 
 \item{qw}{logical, if TRUE parses as water quality data (where dates/times are in start and end times)}
+
+\item{convertType}{logical, defaults to TRUE. If TRUE, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a string.}
+
+\item{tz}{string to set timezone attribute of datetime. Default is an empty quote, which converts the
+datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \value{
 data a data frame containing columns agency, site, dateTime (converted to UTC), values, and remark codes for all requested combinations
@@ -37,7 +46,7 @@ unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
 qwURL <- constructNWISURL(c('04024430','04024000'),
           c('34247','30234','32104','34220'),
          "2010-11-03","","qw",format="rdb")
-qwData <- importRDB1(qwURL, qw=TRUE)
+qwData <- importRDB1(qwURL, qw=TRUE, tz="America/Chicago")
 # User file:
 filePath <- system.file("extdata", package="dataRetrievaldemo")
 fileName <- "RDB1Example.txt"
