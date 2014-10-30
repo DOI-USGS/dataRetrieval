@@ -5,6 +5,10 @@
 #'
 #' @param obs_url string containing the url for the retrieval
 #' @param asDateTime logical, if TRUE returns date and time as POSIXct, if FALSE, Date
+#' @param tz string to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
 #' @export
 #' @import XML
@@ -33,7 +37,7 @@
 #' fileName <- "WaterML1Example.xml"
 #' fullPath <- file.path(filePath, fileName)
 #' importUserWM1 <- importWaterML1(fullPath)
-importWaterML1 <- function(obs_url,asDateTime=FALSE){
+importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(url.exists(obs_url)){
     doc = tryCatch({
@@ -59,6 +63,13 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE){
     doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
   }
   
+  if(tz != ""){
+    tz <- match.arg(tz, c("America/New_York","America/Chicago",
+                          "America/Denver","America/Los_Angeles",
+                          "America/Anchorage","America/Honolulu",
+                          "America/Jamaica","America/Managua",
+                          "America/Phoenix","America/Metlakatla"))
+  }
   
   doc <- xmlRoot(doc)
   ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  
@@ -105,6 +116,11 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE){
         tzAbbriev <- as.character(zoneAbbrievs[tzHoursOff])
   
         datetime <- datetime - tzHours*60*60
+        
+        if(tz != ""){
+          attr(datetime, "tzone") <- tz
+        }
+        
       } else {
         datetime <- as.Date(strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S"))
       }

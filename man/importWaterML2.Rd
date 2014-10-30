@@ -3,12 +3,17 @@
 \alias{importWaterML2}
 \title{Function to return data from the WaterML2 data}
 \usage{
-importWaterML2(obs_url, asDateTime = FALSE)
+importWaterML2(obs_url, asDateTime = FALSE, tz = "")
 }
 \arguments{
 \item{obs_url}{string containing the url for the retrieval}
 
 \item{asDateTime}{logical, if TRUE returns date and time as POSIXct, if FALSE, Date}
+
+\item{tz}{string to set timezone attribute of datetime. Default is an empty quote, which converts the
+datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \value{
 mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
