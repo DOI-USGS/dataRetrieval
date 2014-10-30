@@ -7,6 +7,8 @@ importWaterML2(obs_url, asDateTime = FALSE)
 }
 \arguments{
 \item{obs_url}{string containing the url for the retrieval}
+
+\item{asDateTime}{logical, if TRUE returns date and time as POSIXct, if FALSE, Date}
 }
 \value{
 mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations

@@ -3,6 +3,7 @@
 #' This function accepts a url parameter for a WaterML2 getObservation 
 #'
 #' @param obs_url string containing the url for the retrieval
+#' @param asDateTime logical, if TRUE returns date and time as POSIXct, if FALSE, Date
 #' @return mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
 #' @export
 #' @import XML
