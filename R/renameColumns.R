@@ -7,63 +7,71 @@
 #' @return rawData dataframe with improved column names
 #' @export
 #' @examples
-#' # This example requires an internet connection to run
-#' siteNumber <- '05114000' 
-#' rawData <- readNWISdv(siteNumber,c("00010","00060","00300"),
-#'           "2001-01-01","2002-01-01",statCd=c("00001","00003"))
-#' rawData <- renameColumns(rawData)
-#' date <- "2014-10-10"
-#' rawData2 <- readNWISunit(siteNumber,c("00010","00060"),date,date)
-#' rawData2 <- renameColumns(rawData2)
-#' head(rawData2)
-renameColumns <- function(rawData){
+#' siteWithTwo <- '01480015'
+#' startDate <- "2012-09-01"
+#' endDate <- "2012-10-01"
+#' url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
+#' twoResults <- importWaterML1(url2,TRUE)
+#' twoResults <- renameColumns(twoResults)
+renameColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
+                          p00060="Flow", p00065="GH", p00095="SpecCond", p00300="DO",
+                          p00400="pH", p62611="GWL", p63680="Turb", p72019="WLBLS",
+                          ...){
   
-  columnNames <- names(rawData)
+  Cnames <- names(rawData)
   
-  dataCols <- columnNames["X" == substring(columnNames, 1, 1)]
-  dataCol_cds <- dataCols["cd" == substring(dataCols, nchar(dataCols)-1, nchar(dataCols))]
-  dataCol_names <- dataCols[!(dataCols %in% dataCol_cds)]
+  Conv <- list(...)
+  Conv$p00010 <- p00010
+  Conv$p00060 <- p00060
+  Conv$p00045 <- p00045
+  Conv$p00065 <- p00065
+  Conv$p00095 <- p00095
+  Conv$p00300 <- p00300
+  Conv$p00400 <- p00400
+  Conv$p62611 <- p62611
+  Conv$p63680 <- p63680
+  Conv$p72019 <- p72019
   
-  pCodes <- sapply(strsplit(dataCol_names, "_"), function(x) x[2])
-  statCd <- sapply(strsplit(dataCol_names, "_"), function(x) x[3])
+  Conv$s00001 <- "Max"
+  Conv$s00002 <- "Min"
+  Conv$s00003 <- ""
+  Conv$s00006 <- "Sum"
+  Conv$s00007 <- "Mode"
+  Conv$s00008 <- "Median"
+  Conv$s00011<- "Inst" # Why is this in dv?
+  Conv$s00012<- "EqMean"
+  Conv$s00021<- "HiHiTide"
+  Conv$s00022<- "LoHiTide"
+  Conv$s00023<- "HiLoTide"
+  Conv$s00024<- "LoLoTide"
+
+  dataColumns <- grep("X_", Cnames)
   
-  pcodeINFO <- readNWISpCode(pCodes)
-  multipleCodes <- anyDuplicated(pCodes)
-  
-  statCd <- sub("00001", "_Max", statCd)
-  statCd <- sub("00002", "_Min", statCd)
-  statCd <- sub("00003", "", statCd) # Leave mean blank
-  statCd <- sub("00011", "", statCd) # Also leaving blank
-  
-  DDnum <- sapply(strsplit(dataCol_names, "_"), function(x) x[1])
-  DDnum <- gsub("X","",DDnum)
-  
-  if (!any(duplicated(pCodes))){
-    dataColNames <- pcodeINFO$parameter_nm[which(pcodeINFO$parameter_cd %in% pCodes)]    
-#     dataColNames <- pcodeINFO$srsname[which(pcodeINFO$parameter_cd %in% pCodes)]  
-    dataColNames <- paste(dataColNames,statCd,sep="")
-  } else {
-    dataColNames <- rep(NA,length(dataCol_names))    
-    for (i in 1:length(dataCol_names)){
-      dataColNames[i] <- pcodeINFO$parameter_nm[which(pcodeINFO$parameter_cd %in% pCodes[i])]
-#       dataColNames[i] <- pcodeINFO$srsname[which(pcodeINFO$parameter_cd %in% pCodes[i])]
-      if((!(pCodes[i] %in% duplicated(pCodes))) && (pCodes[i] != pCodes[anyDuplicated(pCodes)])){
-        dataColNames[i] <- paste(dataColNames[i],statCd[i],sep="")
-      } else {
-        dataColNames[i] <- paste(dataColNames[i],statCd[i],"_",DDnum[i],sep="")        
-      }
-      
-    }
+  for (i in dataColumns){
+    chunks <- strsplit(Cnames[i], "_")[[1]]
     
+    #Pcodes:
+    for(j in 1:length(chunks)){
+      if(paste0("p",chunks[j]) %in% names(Conv)){
+        chunks[j] <- as.character(Conv[paste0("p",chunks[j])])
+        Cnames[i] <- paste(chunks, collapse ="_")
+        break
+      }
+    }
+    #Stat codes:
+    for(j in 1:length(chunks)){
+      if(paste0("s",chunks[j]) %in% names(Conv)){
+        chunks[j] <- as.character(Conv[paste0("s",chunks[j])])
+        chunks <- chunks[chunks != ""]
+        Cnames[i] <- paste(chunks, collapse ="_")
+        break
+      }
+    }
   }
-  dataColCDS <- paste(dataColNames, "_cd")
-  columnNames[which(columnNames %in% dataCol_names)] <- dataColNames
-  columnNames[which(columnNames %in% dataCol_cds)] <- dataColCDS
   
-  columnNames <- gsub("[$,. ]","_",columnNames)
-  columnNames <- gsub("__","_",columnNames)
-  
-  names(rawData) <- columnNames
+  Cnames <- gsub("X_","",Cnames)
+
+  names(rawData) <- Cnames
   
   return(rawData)
 }
