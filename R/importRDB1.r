@@ -196,7 +196,7 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
       } else {
         for (i in grep('d$', dataType)){
           if (all(data[,i] != "")){
-            data[,i] <- as.Date(data[,i])
+            data[,i] <- as.character(data[,i])
           }
         }
       }
