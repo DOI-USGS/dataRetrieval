@@ -234,7 +234,7 @@ Table \ref{tab:func} describes the functions available in the dataRetrievaldemo 
   & startDate & \\
   & endDate & \\
   & expanded & \\
-  [5pt]\texttt{getNWISuv} & siteNumber & NWIS water quality data\\
+  [5pt]\texttt{readNWISuv} & siteNumber & NWIS water quality data\\
   & parameterCd & \\
   & startDate & \\
   & endDate & \\
@@ -487,12 +487,12 @@ An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
 par(mar=c(5,5,5,5)) #sets the size of the plot window
 
 with(temperatureAndFlow, plot(
-  datetime, Temperature_water_degrees_Celsius_Max_01,
+  dateTime, Temperature_water_degrees_Celsius_Max_01,
   xlab="Date",ylab="Max Temperature [C]"
   ))
 par(new=TRUE)
 with(temperatureAndFlow, plot(
-  datetime, Discharge_cubic_feet_per_second,
+  dateTime, Discharge_cubic_feet_per_second,
   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
   ))
 axis(4,col="red",col.axis="red")
@@ -512,14 +512,14 @@ There are occasions where NWIS values are not reported as numbers, instead there
 \subsection{Unit Values}
 \label{sec:usgsRT}
 %------------------------------------------------------------
-Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values.} Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{getNWISuv}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
+Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values.} Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{readNWISuv}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
 
-<<label=getNWISuv, echo=TRUE>>=
+<<label=readNWISuv, echo=TRUE>>=
 
 parameterCd <- "00060"  # Discharge
 startDate <- "2012-05-12" 
 endDate <- "2012-05-13" 
-dischargeToday <- getNWISuv(siteNumber, parameterCd, 
+dischargeToday <- readNWISuv(siteNumber, parameterCd, 
         startDate, endDate)
 @
 
@@ -801,14 +801,14 @@ There are a few steps that are required in order to create a table in Microsoft\
 
 <<label=getSiteApp, echo=TRUE>>=
 availableData <- whatNWISdata(siteNumber, "dv")
-dailyData <- availableData["00003" == availableData$statCd,]
+dailyData <- availableData["00003" == availableData$stat_cd,]
 
 tableData <- with(dailyData, 
       data.frame(
         shortName=srsname, 
-        Start=startDate, 
-        End=endDate, 
-        Count=count,
+        Start=begin_date, 
+        End=end_date, 
+        Count=count_nu,
         Units=parameter_units)
       )
 tableData
