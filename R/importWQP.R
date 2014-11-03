@@ -4,6 +4,10 @@
 #' 
 #' @param url string URL to Water Quality Portal#' @keywords data import USGS web service
 #' @param zip logical used to request the data in a zip format (TRUE)
+#' @param tz string to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
 #' start and end times.
 #' @export
@@ -19,7 +23,7 @@
 #' url2 <- paste0(rawSampleURL,"&zip=yes")
 #' rawSample2 <- importWQP(url2, TRUE)
 #' }
-importWQP <- function(url, zip=FALSE){
+importWQP <- function(url, zip=FALSE, tz=""){
   
   h <- basicHeaderGatherer()
   
@@ -45,7 +49,13 @@ importWQP <- function(url, zip=FALSE){
     return(NA)
   })
   
-#   if(headerInfo["Content-Type"] == "application/zip;charset=UTF-8"){
+  if(tz != ""){
+    tz <- match.arg(tz, c("America/New_York","America/Chicago",
+                          "America/Denver","America/Los_Angeles",
+                          "America/Anchorage","America/Honolulu",
+                          "America/Jamaica","America/Managua",
+                          "America/Phoenix","America/Metlakatla"))
+  }
     
   numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
   
