@@ -13,7 +13,8 @@ readNWISgwl(siteNumber, startDate = "", endDate = "")
 \item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
 }
 \description{
-Reads groundwater level measurements from NWISweb.
+Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service
+depending on the year that the data was collected.
 }
 \examples{
 siteNumber <- "434400121275801"

@@ -29,7 +29,7 @@ endDate <- "2012-10-01"
 offering <- '00003'
 property <- '00060'
 obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
-data <- importWaterML1(obs_url)
+data <- importWaterML1(obs_url,TRUE)
 urlMulti <- constructNWISURL("04085427",c("00060","00010"),
             startDate,endDate,'dv',statCd=c("00003","00001"))
 multiData <- importWaterML1(urlMulti)
@@ -45,6 +45,9 @@ unitData <- importWaterML1(unitDataURL,TRUE)
 filePath <- system.file("extdata", package="dataRetrievaldemo")
 fileName <- "WaterML1Example.xml"
 fullPath <- file.path(filePath, fileName)
-importUserWM1 <- importWaterML1(fullPath)
+importUserWM1 <- importWaterML1(fullPath,TRUE)
+siteWithTwo <- '01480015'
+url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
+twoResults <- importWaterML1(url2,TRUE)
 }
 

@@ -3,7 +3,9 @@
 \alias{renameColumns}
 \title{renameColumns}
 \usage{
-renameColumns(rawData)
+renameColumns(rawData, p00010 = "Wtemp", p00045 = "Precip",
+  p00060 = "Flow", p00065 = "GH", p00095 = "SpecCond", p00300 = "DO",
+  p00400 = "pH", p62611 = "GWL", p63680 = "Turb", p72019 = "WLBLS", ...)
 }
 \arguments{
 \item{rawData}{dataframe returned from retrieval functions}
@@ -15,15 +17,12 @@ rawData dataframe with improved column names
 Rename columns coming back from NWIS data retrievals
 }
 \examples{
-# This example requires an internet connection to run
-siteNumber <- '05114000'
-rawData <- readNWISdv(siteNumber,c("00010","00060","00300"),
-          "2001-01-01","2002-01-01",statCd=c("00001","00003"))
-rawData <- renameColumns(rawData)
-date <- "2014-10-10"
-rawData2 <- readNWISunit(siteNumber,c("00010","00060"),date,date)
-rawData2 <- renameColumns(rawData2)
-head(rawData2)
+siteWithTwo <- '01480015'
+startDate <- "2012-09-01"
+endDate <- "2012-10-01"
+url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
+twoResults <- importWaterML1(url2,TRUE)
+twoResults <- renameColumns(twoResults)
 }
 \keyword{USGS}
 \keyword{data}

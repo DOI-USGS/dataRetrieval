@@ -37,6 +37,7 @@ rawDailyQAndTempMeanMax <- readNWISdv(siteNumber,c('00010','00060'),
        startDate, endDate, statCd=c('00001','00003'))
 rawDailyMultiSites<- readNWISdv(c("01491000","01645000"),c('00010','00060'),
        startDate, endDate, statCd=c('00001','00003'))
+x <- readNWISdv("10258500","00060", "2014-09-10", "2014-09-12")
 }
 \keyword{USGS}
 \keyword{data}

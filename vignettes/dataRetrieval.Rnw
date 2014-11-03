@@ -487,12 +487,12 @@ An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
 par(mar=c(5,5,5,5)) #sets the size of the plot window
 
 with(temperatureAndFlow, plot(
-  dateTime, Temperature_water_degrees_Celsius_Max_01,
+  dateTime, Wtemp_Max,
   xlab="Date",ylab="Max Temperature [C]"
   ))
 par(new=TRUE)
 with(temperatureAndFlow, plot(
-  dateTime, Discharge_cubic_feet_per_second,
+  dateTime, Flow,
   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
   ))
 axis(4,col="red",col.axis="red")
