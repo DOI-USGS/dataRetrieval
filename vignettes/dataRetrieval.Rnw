@@ -382,11 +382,11 @@ tableData <- with(dailyDataAvailable,
       data.frame( 
       siteNumber= site_no,
       srsname=srsname, 
-      startDate=as.character(startDate), 
-      endDate=as.character(endDate), 
-      count=as.character(count),
+      startDate=as.character(begin_date), 
+      endDate=as.character(end_date), 
+      count=as.character(count_nu),
       units=parameter_units,
-      statCd = statCd,
+      statCd = stat_cd,
       stringsAsFactors=FALSE)
       )
 
