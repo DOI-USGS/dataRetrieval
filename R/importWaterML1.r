@@ -75,6 +75,10 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  
   timeSeries <- xpathApply(doc, "//ns1:timeSeries", namespaces = ns)
   
+  if(0 == length(timeSeries)){
+    stop("No data to return for URL:", obs_url)
+  }
+  
   for (i in 1:length(timeSeries)){
     
     chunk <- xmlDoc(timeSeries[[i]])
@@ -107,7 +111,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
           
       attNames <- xpathSApply(subChunk, "ns1:value/@*",namespaces = chunkNS)
       attributeNames <- unique(names(attNames))
-      
+
       x <- lapply(attributeNames, function(x) xpathSApply(subChunk, paste0("ns1:value/@",x),namespaces = chunkNS))
       
       valueName <- paste(methodID,pCode,statCd,sep="_")      
@@ -119,8 +123,17 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
                        stringsAsFactors=FALSE)
       
       for(k in 1:length(attributeNames)){
-        df <- cbind(df, as.character(x[[k]]),stringsAsFactors=FALSE)
-        names(df)[length(df)] <- attributeNames[k]
+        attVal <- as.character(x[[k]])
+        if(length(attVal) == nrow(df)){
+          df$temp <- as.character(x[[k]])
+          
+        } else {
+          attrList <- xpathApply(subChunk, "ns1:value", namespaces = chunkNS, xmlAttrs)
+          df$temp <- sapply(1:nrow(df),function(x) as.character(attrList[[x]][attributeNames[k]]))
+          df$temp[is.na(df$temp)] <- ""
+        }
+        names(df)[which(names(df) %in% "temp")] <- attributeNames[k]
+        
       }
 
       df <- cbind(df, get(valueName))
@@ -151,7 +164,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
           df$tz_cd <- tzAbbriev
           
         } else {
-          datetime <- as.Date(strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S"))
+          datetime <- as.character(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS))
         }
         
         df$dateTime <- datetime     

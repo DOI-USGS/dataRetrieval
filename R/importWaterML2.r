@@ -81,6 +81,10 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
   
   timeSeries <- xpathApply(doc, "//wml2:Collection", namespaces = ns)
   
+  if(0 == length(timeSeries)){
+    stop("No data to return for URL:", obs_url)
+  }
+  
   for (i in 1:length(timeSeries)){
   
     chunk <- xmlDoc(timeSeries[[i]])
