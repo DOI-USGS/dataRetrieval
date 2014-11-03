@@ -150,7 +150,12 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate="",endDate="",
             rdb = "rdb,1.0",
             tsv = "rdb,1.0",
             wml2 = "waterml,2.0",
-            wml1 = "waterml,1.1"
+            wml1 = {if ("gwlevels" == service) {
+                "waterml"
+              } else {
+                "waterml,1.1"
+              }
+            }
           )
 
           
