@@ -9,9 +9,6 @@
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param statCd string USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.
-#' @param format string, can be 'tsv' or 'xml', and is only applicable for daily and unit value requests.  'tsv' returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower, 
-#' but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the 'tsv' option, 
-#' but the user must carefully check the results to see if the data returns matches what is expected. The default is 'tsv'.
 #' @return data dataframe with agency, site, dateTime, value, and code columns
 #' @export
 #' @keywords data import USGS web service
@@ -23,22 +20,15 @@
 #' rawDailyQ <- readNWISdv(siteNumber,pCode, startDate, endDate)
 #' rawDailyTemperature <- readNWISdv(siteNumber,'00010', 
 #'        startDate, endDate, statCd='00001')
-#' rawDailyTemperatureTSV <- readNWISdv(siteNumber,'00010', 
-#'        startDate, endDate, statCd='00001',format='tsv')
 #' rawDailyQAndTempMeanMax <- readNWISdv(siteNumber,c('00010','00060'),
 #'        startDate, endDate, statCd=c('00001','00003'))
 #' rawDailyMultiSites<- readNWISdv(c("01491000","01645000"),c('00010','00060'),
 #'        startDate, endDate, statCd=c('00001','00003'))
-readNWISdv <- function (siteNumber,parameterCd,startDate,endDate,statCd="00003",format="tsv"){  
+readNWISdv <- function (siteNumber,parameterCd,startDate="",endDate="",statCd="00003"){  
   
-  url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"dv",statCd=statCd,format=format)
-  
-  if (format == "xml") {
-    data <- importWaterML1(url)
-    data$datetime <- as.Date(data$datetime)
-  } else {
-    data <- importRDB1(url,asDateTime=FALSE)
-  }
-  
+  url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"dv",statCd=statCd)
+
+  data <- importWaterML1(url)
+
   return (data)
 }
