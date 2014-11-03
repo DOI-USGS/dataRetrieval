@@ -8,6 +8,10 @@
 #' @param parameterCd string USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param tz string to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @keywords data import USGS web service
 #' @return data dataframe with agency, site, dateTime, time zone, value, and code columns
 #' @export
@@ -17,16 +21,16 @@
 #' startDate <- "2014-10-10"
 #' endDate <- "2014-10-10"
 #' # These examples require an internet connection to run
-#' rawData <- readNWISunit(siteNumber,parameterCd,startDate,endDate)
+#' rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
 #' 
-#' timeZoneChange <- readNWISunit(c('04024430','04024000'),parameterCd,
+#' timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
 #'          "2013-11-03","2013-11-03")
 #' firstSite <- timeZoneChange[timeZoneChange$site_no == '04024430',]
-readNWISunit <- function (siteNumber,parameterCd,startDate,endDate){  
+readNWISuv <- function (siteNumber,parameterCd,startDate="",endDate="", tz=""){  
   
   url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"uv",format="xml")
 
-  data <- importWaterML1(url,asDateTime=TRUE)
+  data <- importWaterML1(url,asDateTime=TRUE,tz=tz)
   
 
   return (data)
@@ -42,8 +46,8 @@ readNWISunit <- function (siteNumber,parameterCd,startDate,endDate){
 #' @export
 #' @examples
 #' siteNumber <- '01594440'
-#' data <- readNWISpeak(siteNumber, '','')
-readNWISpeak <- function (siteNumber,startDate,endDate){  
+#' data <- readNWISpeak(siteNumber)
+readNWISpeak <- function (siteNumber,startDate="",endDate=""){  
   
   url <- constructNWISURL(siteNumber,NA,startDate,endDate,"peak")
   data <- importRDB1(url)
@@ -61,7 +65,7 @@ readNWISpeak <- function (siteNumber,startDate,endDate){
 #' @examples
 #' siteNumber <- '01594440'
 #' data <- readNWISrating(siteNumber, "base")
-readNWISrating <- function (siteNumber,type){  
+readNWISrating <- function (siteNumber,type="base"){  
   
   url <- constructNWISURL(siteNumber,service="rating",ratingType = type)
   data <- importRDB1(url)
@@ -76,14 +80,18 @@ readNWISrating <- function (siteNumber,type){
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param tz string to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @export
 #' @examples
 #' siteNumber <- '01594440'
-#' data <- readNWISmeas(siteNumber, '','')
-readNWISmeas <- function (siteNumber,startDate,endDate){  
+#' data <- readNWISmeas(siteNumber)
+readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){  
   
   url <- constructNWISURL(siteNumber,NA,startDate,endDate,"meas")
-  data <- importRDB1(url)
+  data <- importRDB1(url,asDateTime=TRUE,tz=tz)
   
   return (data)
 }
@@ -99,7 +107,7 @@ readNWISmeas <- function (siteNumber,startDate,endDate){
 #' @examples
 #' siteNumber <- "434400121275801"
 #' data <- readNWISgwl(siteNumber, '','')
-readNWISgwl <- function (siteNumber,startDate,endDate){  
+readNWISgwl <- function (siteNumber,startDate="",endDate=""){  
   
   url <- constructNWISURL(siteNumber,NA,startDate,endDate,"gwlevels",format="tsv")
   data <- importRDB1(url)
