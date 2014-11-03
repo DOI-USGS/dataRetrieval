@@ -3,7 +3,7 @@
 \alias{readNWISrating}
 \title{Reads the current rating table for an active USGS streamgage.}
 \usage{
-readNWISrating(siteNumber, type)
+readNWISrating(siteNumber, type = "base")
 }
 \arguments{
 \item{siteNumber}{string USGS site number.  This is usually an 8 digit number}

@@ -26,7 +26,8 @@ data a data frame containing columns agency, site, dateTime (converted to UTC), 
 }
 \description{
 This function accepts a url parameter that already contains the desired
-NWIS site, parameter code, statistic, startdate and enddate.
+NWIS site, parameter code, statistic, startdate and enddate. It is not
+recommended to use the RDB format for importing multi-site data.
 }
 \examples{
 siteNumber <- "02177000"
@@ -37,9 +38,9 @@ property <- "00060"
 obs_url <- constructNWISURL(siteNumber,property,
          startDate,endDate,"dv",format="tsv")
 data <- importRDB1(obs_url)
-urlMulti <- constructNWISURL("04085427",c("00060","00010"),
+urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),
          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
-multiData <- importRDB1(urlMulti)
+multiData <- importRDB1(urlMultiPcodes)
 unitDataURL <- constructNWISURL(siteNumber,property,
          "2013-11-03","2013-11-03","uv",format="tsv") #includes timezone switch
 unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
@@ -47,6 +48,11 @@ qwURL <- constructNWISURL(c('04024430','04024000'),
           c('34247','30234','32104','34220'),
          "2010-11-03","","qw",format="rdb")
 qwData <- importRDB1(qwURL, qw=TRUE, tz="America/Chicago")
+iceSite <- '04024430'
+start <- "2013-11-09"
+end <- "2013-11-28"
+urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
+
 # User file:
 filePath <- system.file("extdata", package="dataRetrievaldemo")
 fileName <- "RDB1Example.txt"

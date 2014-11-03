@@ -3,12 +3,17 @@
 \alias{importWQP}
 \title{Basic Water Quality Portal Data grabber}
 \usage{
-importWQP(url, zip = FALSE)
+importWQP(url, zip = FALSE, tz = "")
 }
 \arguments{
 \item{url}{string URL to Water Quality Portal#'}
 
 \item{zip}{logical used to request the data in a zip format (TRUE)}
+
+\item{tz}{string to set timezone attribute of datetime. Default is an empty quote, which converts the
+datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \value{
 retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for

@@ -3,7 +3,7 @@
 \alias{readNWISgwl}
 \title{Reads groundwater level measurements from NWISweb.}
 \usage{
-readNWISgwl(siteNumber, startDate, endDate)
+readNWISgwl(siteNumber, startDate = "", endDate = "")
 }
 \arguments{
 \item{siteNumber}{string USGS site number.  This is usually an 8 digit number}
