@@ -24,11 +24,13 @@
 #'        startDate, endDate, statCd=c('00001','00003'))
 #' rawDailyMultiSites<- readNWISdv(c("01491000","01645000"),c('00010','00060'),
 #'        startDate, endDate, statCd=c('00001','00003'))
+#' x <- readNWISdv("10258500","00060", "2014-09-10", "2014-09-12")
 readNWISdv <- function (siteNumber,parameterCd,startDate="",endDate="",statCd="00003"){  
   
   url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"dv",statCd=statCd)
 
-  data <- importWaterML1(url)
+  data <- importWaterML1(url, asDateTime=TRUE)
+  
 
   return (data)
 }
