@@ -20,7 +20,7 @@
 #' offering <- '00003'
 #' property <- '00060'
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
-#' data <- importWaterML1(obs_url)
+#' data <- importWaterML1(obs_url,TRUE)
 #' urlMulti <- constructNWISURL("04085427",c("00060","00010"),
 #'             startDate,endDate,'dv',statCd=c("00003","00001"))
 #' multiData <- importWaterML1(urlMulti)
@@ -36,7 +36,11 @@
 #' filePath <- system.file("extdata", package="dataRetrievaldemo")
 #' fileName <- "WaterML1Example.xml"
 #' fullPath <- file.path(filePath, fileName)
-#' importUserWM1 <- importWaterML1(fullPath)
+#' importUserWM1 <- importWaterML1(fullPath,TRUE)
+#' siteWithTwo <- '01480015'
+#' url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
+#' twoResults <- importWaterML1(url2,TRUE)
+#' 
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(url.exists(obs_url)){
@@ -76,7 +80,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   timeSeries <- xpathApply(doc, "//ns1:timeSeries", namespaces = ns)
   
   if(0 == length(timeSeries)){
-    stop("No data to return for URL:", obs_url)
+    message("Returning an empty dataset")
+    #TODO: return()
   }
   
   for (i in 1:length(timeSeries)){
@@ -89,7 +94,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     agency <- as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:siteCode/@agencyCode", namespaces = chunkNS))
     pCode <-as.character(xpathApply(chunk, "ns1:variable/ns1:variableCode", namespaces = chunkNS, xmlValue))
     statCd <- as.character(xpathApply(chunk, "ns1:variable/ns1:options/ns1:option/@optionCode", namespaces = chunkNS))
-
+    noValue <- as.numeric(xpathApply(chunk, "ns1:variable/ns1:noDataValue", namespaces = chunkNS, xmlValue))
+    
+  
     valuesIndex <- as.numeric(which("values" == names(chunk)))
 
         
@@ -108,60 +115,101 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       
       value <- as.numeric(xpathSApply(subChunk, "ns1:value",namespaces = chunkNS, xmlValue))  
       
+      value[value == noValue] <- NA
           
       attNames <- xpathSApply(subChunk, "ns1:value/@*",namespaces = chunkNS)
       attributeNames <- unique(names(attNames))
 
       x <- lapply(attributeNames, function(x) xpathSApply(subChunk, paste0("ns1:value/@",x),namespaces = chunkNS))
       
-      valueName <- paste(methodID,pCode,statCd,sep="_")      
-      valueName <- paste("X",valueName,sep="")      
+      
+      methodDescription <- as.character(xpathApply(subChunk, "ns1:method/ns1:methodDescription", namespaces = chunkNS, xmlValue))
+      
+      if(length(methodDescription) > 0 & methodDescription != ""){
+        valueName <- paste("X",methodDescription,pCode,statCd,sep="_") 
+      } else {
+        valueName <- paste("X",pCode,statCd,sep="_") 
+      }
+      
+       
       assign(valueName,value)
       
       df <- data.frame(agency = rep(agency,length(value)),
                        site_no = rep(site,length(value)),
                        stringsAsFactors=FALSE)
       
-      for(k in 1:length(attributeNames)){
-        attVal <- as.character(x[[k]])
-        if(length(attVal) == nrow(df)){
-          df$temp <- as.character(x[[k]])
+      if(length(attributeNames) > 0){
+        for(k in 1:length(attributeNames)){
+          attVal <- as.character(x[[k]])
+          if(length(attVal) == nrow(df)){
+            df$temp <- as.character(x[[k]])
+            
+          } else {
+            attrList <- xpathApply(subChunk, "ns1:value", namespaces = chunkNS, xmlAttrs)
+            df$temp <- sapply(1:nrow(df),function(x) as.character(attrList[[x]][attributeNames[k]]))
+            df$temp[is.na(df$temp)] <- ""
+          }
+          names(df)[which(names(df) %in% "temp")] <- attributeNames[k]
           
-        } else {
-          attrList <- xpathApply(subChunk, "ns1:value", namespaces = chunkNS, xmlAttrs)
-          df$temp <- sapply(1:nrow(df),function(x) as.character(attrList[[x]][attributeNames[k]]))
-          df$temp[is.na(df$temp)] <- ""
         }
-        names(df)[which(names(df) %in% "temp")] <- attributeNames[k]
-        
       }
-
+      
       df <- cbind(df, get(valueName))
       names(df)[length(df)] <- valueName
       
       if("qualifiers" %in% names(df)){
-        qualName <- paste(methodID,pCode,statCd,"cd",sep="_")
-        qualName <- paste("X",qualName,sep="")
+        qualName <- paste(valueName,"cd",sep="_")
         names(df)[which(names(df) == "qualifiers")] <- qualName       
       }
       
       if("dateTime" %in% attributeNames){
         if(asDateTime){
-          datetime <- as.POSIXct(strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S"), tz="UTC")
           
-          tzHours <- as.numeric(substr(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),
-                                       24,
-                                       nchar(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS))-3))
-          tzHoursOff <- substr(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),
-                               24,
-                               nchar(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS)))
-          tzAbbriev <- as.character(zoneAbbrievs[tzHoursOff])        
-          datetime <- datetime - tzHours*60*60
+          # Common options:
+          # YYYY
+          # YYYY-MM-DD
+          # YYYY-MM-DDTHH:MM
+          # YYYY-MM-DDTHH:MM:SS
+          # YYYY-MM-DDTHH:MM:SSZ
+          # YYYY-MM-DDTHH:MM:SS.000
+          # YYYY-MM-DDTHH:MM:SS.000-XX:00
+          datetime <- xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS)
+          
+          numChar <- nchar(datetime)
+          
+          if(abs(max(numChar) - min(numChar)) != 0){
+            message("Mixed date types")
+          } else {
+            numChar <- numChar[1]
+            if(numChar == 4){
+              datetime <- as.POSIXct(datetime, "%Y", tz = "UTC")
+            } else if(numChar == 10){
+              datetime <- as.POSIXct(datetime, "%Y-%m-%d", tz = "UTC")
+            } else if(numChar == 16){
+              datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M", tz = "UTC")
+            } else if(numChar == 19){
+              datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%S", tz = "UTC")
+            } else if(numChar == 20){
+              datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%S", tz = "UTC")
+            }  else if(numChar == 23){
+              datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
+            } else if(numChar == 24){
+              datetime <- substr(datetime,1,23)
+              datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
+            } else if(numChar == 29){
+              tzHours <- as.numeric(substr(datetime,24,numChar-3))
+
+              datetime <- substr(datetime,1,23)
+              datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
+              datetime <- datetime - tzHours*60*60
+              df$tz_cd <- as.character(zoneAbbrievs[tzHours]) 
+            }
+          }
           
           if(tz != ""){
             attr(datetime, "tzone") <- tz
           }
-          df$tz_cd <- tzAbbriev
+          
           
         } else {
           datetime <- as.character(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS))
@@ -170,7 +218,19 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         df$dateTime <- datetime     
         
       }
-
+      
+      colNames <- names(df)
+      
+      if( exists("qualName")){
+        columnsOrdered <- c("agency","site_no","dateTime","tz_cd",attributeNames[attributeNames != "dateTime"],qualName,valueName)
+      } else {
+        columnsOrdered <- c("agency","site_no","dateTime","tz_cd",attributeNames[attributeNames != "dateTime"],valueName)
+      }
+      
+      columnsOrderd <- columnsOrdered[columnsOrdered %in% names(df)]
+      
+      df <- df[,columnsOrderd]
+                
       if (1 == i & valuesIndex[1] == j){
         mergedDF <- df
       } else {
@@ -178,6 +238,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         mergedDF <- merge(mergedDF, df,by=similarNames,all=TRUE)
       }
     }
+    
   }
   
   return (mergedDF)
