@@ -8,14 +8,17 @@
 #' @return retval dataframe with all information found in the expanded site file
 #' @export
 #' @import RCurl
+#' @import lubridate
 #' @examples
 #' availableData <- whatNWISdata('05114000')
 #' # To find just unit value ('instantaneous') data:
 #' uvData <- whatNWISdata('05114000',service="uv")
-#' uvDataMulti <- whatNWISdata(c('05114000','09423350'),service="uv")
+#' uvDataMulti <- whatNWISdata(c('05114000','09423350'),service=c("uv","dv"))
 whatNWISdata <- function(siteNumber,service=c("uv","dv","qw")){
   
   siteNumber <- paste(siteNumber,collapse=",")
+  
+  service <- match.arg(service, c("dv","uv","qw","ad","id","pk","sv"), several.ok = TRUE)
   
   urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=",siteNumber,sep = "")
  
@@ -44,26 +47,24 @@ whatNWISdata <- function(siteNumber,service=c("uv","dv","qw")){
       comment.char="#")
     
     SiteFile <- SiteFile[-1,]
+
+    numberColumns <- grep("_va",names(SiteFile))    
+    SiteFile[,numberColumns] <- sapply(SiteFile[,numberColumns],as.numeric)
     
-    SiteFile <- with(SiteFile, data.frame(site_no=site_no, 
-                                          parameter_cd=parm_cd, statCd=stat_cd, 
-                                          startDate=begin_date,endDate=end_date, 
-                                          count=count_nu,service=data_type_cd,
-                                          stringsAsFactors = FALSE))
+    intColumns <- grep("_nu",names(SiteFile))
+    SiteFile[,intColumns] <- sapply(SiteFile[,intColumns],as.integer)
     
-    SiteFile <- SiteFile[!is.na(SiteFile$parameter_cd),]
-    SiteFile <- SiteFile["" != SiteFile$parameter_cd,]
-    SiteFile$startDate <- as.Date(SiteFile$startDate)
-    SiteFile$endDate <- as.Date(SiteFile$endDate)
-    SiteFile$count <- as.numeric(SiteFile$count)
-    
-    pCodes <- unique(SiteFile$parameter_cd)
+    pCodes <- unique(SiteFile$parm_cd)
     
     parameterCdFile <- parameterCdFile
     
     pcodeINFO <- parameterCdFile[parameterCdFile$parameter_cd %in% pCodes,]
-    SiteFile <- merge(SiteFile,pcodeINFO,by="parameter_cd")
-    SiteFile <- SiteFile[SiteFile$service %in% service,]
+    SiteFile <- merge(SiteFile,pcodeINFO,by.x="parm_cd" ,by.y="parameter_cd",all=TRUE)
+    SiteFile <- SiteFile[SiteFile$data_type_cd %in% service,]
+    
+    SiteFile$begin_date <- as.Date(parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
+    SiteFile$end_date <- as.Date(parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
+    
     return(SiteFile)
   } else {
     message(paste("URL caused an error:", urlSitefile))
