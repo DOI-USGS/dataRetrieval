@@ -13,7 +13,7 @@
 #' @export
 #' @import RCurl
 #' @import httr
-#' @importFrom lubridate parse_date_time
+#' @import lubridate
 #' @examples
 #' # These examples require an internet connection to run
 #' \dontrun{

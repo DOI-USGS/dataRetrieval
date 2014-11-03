@@ -20,7 +20,7 @@ Imports a table of available parameters, period of record, and count.
 availableData <- whatNWISdata('05114000')
 # To find just unit value ('instantaneous') data:
 uvData <- whatNWISdata('05114000',service="uv")
-uvDataMulti <- whatNWISdata(c('05114000','09423350'),service="uv")
+uvDataMulti <- whatNWISdata(c('05114000','09423350'),service=c("uv","dv"))
 }
 \keyword{USGS}
 \keyword{data}
