@@ -104,77 +104,60 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       
       value <- as.numeric(xpathSApply(subChunk, "ns1:value",namespaces = chunkNS, xmlValue))  
       
-      if(asDateTime){
-        datetime <- as.POSIXct(strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S"), tz="UTC")
-        
-        tzHours <- as.numeric(substr(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),
-                          24,
-                          nchar(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS))-3))
-        tzHoursOff <- substr(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),
-                                     24,
-                                     nchar(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS)))
-        tzAbbriev <- as.character(zoneAbbrievs[tzHoursOff])
-  
-        datetime <- datetime - tzHours*60*60
-        
-        if(tz != ""){
-          attr(datetime, "tzone") <- tz
-        }
-        
-      } else {
-        datetime <- as.Date(strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S"))
-      }
+          
+      attNames <- xpathSApply(subChunk, "ns1:value/@*",namespaces = chunkNS)
+      attributeNames <- unique(names(attNames))
       
-      qualifier <- as.character(xpathSApply(subChunk, "ns1:value/@qualifiers",namespaces = chunkNS))
-
-      valueName <- paste(methodID,pCode,statCd,sep="_")
-      qualName <- paste(methodID,pCode,statCd,"cd",sep="_")
-      valueName <- paste("X",valueName,sep="")
-      qualName <- paste("X",qualName,sep="")
+      x <- lapply(attributeNames, function(x) xpathSApply(subChunk, paste0("ns1:value/@",x),namespaces = chunkNS))
       
+      valueName <- paste(methodID,pCode,statCd,sep="_")      
+      valueName <- paste("X",valueName,sep="")      
       assign(valueName,value)
-      assign(qualName,qualifier)
       
-      if(length(get(qualName))!=0){
-        if(asDateTime){
-          df <- data.frame(rep(agency,length(datetime)),
-                           rep(site,length(datetime)),
-                           datetime,
-                           tzAbbriev,
-                           get(valueName),
-                           get(qualName),
-                           stringsAsFactors=FALSE)
-          
-          names(df) <- c("agency_cd","site_no","datetime","tz_cd",valueName,qualName)
-        } else {
-          df <- data.frame(rep(agency,length(datetime)),
-                           rep(site,length(datetime)),
-                           datetime,
-                           get(valueName),
-                           get(qualName),
-                           stringsAsFactors=FALSE)
-          
-          names(df) <- c("agency_cd","site_no","datetime",valueName,qualName)
-        }
-      } else {
-        if(asDateTime){
-          df <- data.frame(rep(agency,length(datetime)),
-                           rep(site,length(datetime)),
-                           datetime,
-                           tzAbbriev,
-                           get(valueName),stringsAsFactors=FALSE)
-          
-          names(df) <- c("agency_cd","site_no","datetime","tz_cd",valueName)
-        } else {
-          df <- data.frame(rep(agency,length(datetime)),
-                           rep(site,length(datetime)),
-                           datetime,
-                           get(valueName),stringsAsFactors=FALSE)
-          
-          names(df) <- c("agency_cd","site_no","datetime",valueName)
-        }
+      df <- data.frame(agency = rep(agency,length(value)),
+                       site_no = rep(site,length(value)),
+                       stringsAsFactors=FALSE)
+      
+      for(k in 1:length(attributeNames)){
+        df <- cbind(df, as.character(x[[k]]),stringsAsFactors=FALSE)
+        names(df)[length(df)] <- attributeNames[k]
       }
- 
+
+      df <- cbind(df, get(valueName))
+      names(df)[length(df)] <- valueName
+      
+      if("qualifiers" %in% names(df)){
+        qualName <- paste(methodID,pCode,statCd,"cd",sep="_")
+        qualName <- paste("X",qualName,sep="")
+        names(df)[which(names(df) == "qualifiers")] <- qualName       
+      }
+      
+      if("dateTime" %in% attributeNames){
+        if(asDateTime){
+          datetime <- as.POSIXct(strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S"), tz="UTC")
+          
+          tzHours <- as.numeric(substr(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),
+                                       24,
+                                       nchar(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS))-3))
+          tzHoursOff <- substr(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),
+                               24,
+                               nchar(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS)))
+          tzAbbriev <- as.character(zoneAbbrievs[tzHoursOff])        
+          datetime <- datetime - tzHours*60*60
+          
+          if(tz != ""){
+            attr(datetime, "tzone") <- tz
+          }
+          df$tz_cd <- tzAbbriev
+          
+        } else {
+          datetime <- as.Date(strptime(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS),"%Y-%m-%dT%H:%M:%S"))
+        }
+        
+        df$dateTime <- datetime     
+        
+      }
+
       if (1 == i & valuesIndex[1] == j){
         mergedDF <- df
       } else {
