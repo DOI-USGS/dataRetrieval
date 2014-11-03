@@ -234,7 +234,7 @@ Table \ref{tab:func} describes the functions available in the dataRetrievaldemo 
   & startDate & \\
   & endDate & \\
   & expanded & \\
-  [5pt]\texttt{readNWISunit} & siteNumber & NWIS water quality data\\
+  [5pt]\texttt{readNWISuv} & siteNumber & NWIS water quality data\\
   & parameterCd & \\
   & startDate & \\
   & endDate & \\
@@ -272,11 +272,8 @@ Table \ref{tab:func} describes the functions available in the dataRetrievaldemo 
 \section{USGS Web Retrievals}
 \label{sec:genRetrievals}
 %------------------------------------------------------------ 
-In this section, five examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), and water quality data (\ref{sec:usgsWQP}). We will use the Choptank River near Greensboro, MD as an example.  Daily discharge measurements are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
+In this section, examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), water quality data (\ref{sec:usgsWQP}), groundwater level data (\ref{sec:gwl}), peak flow data (\ref{sec:peak}), rating curve data (\ref{sec:rating}, and surface-water measurement data (\ref{sec:meas}). We will mainly use the Choptank River near Greensboro, MD as an example.  Daily discharge measurements are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
 
-% %------------------------------------------------------------
-% \subsection{Introduction}
-% %------------------------------------------------------------
 The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrievaldemo package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
 Once the siteNumber is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. A complete list of possible USGS parameter codes can be found at \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?help}.
@@ -385,11 +382,11 @@ tableData <- with(dailyDataAvailable,
       data.frame( 
       siteNumber= site_no,
       srsname=srsname, 
-      startDate=as.character(startDate), 
-      endDate=as.character(endDate), 
-      count=as.character(count),
+      startDate=as.character(begin_date), 
+      endDate=as.character(end_date), 
+      count=as.character(count_nu),
       units=parameter_units,
-      statCd = statCd,
+      statCd = stat_cd,
       stringsAsFactors=FALSE)
       )
 
@@ -435,6 +432,7 @@ parameterINFO$parameter_nm
 @
 Parameter information can obtained from \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes}
 \FloatBarrier
+
 %------------------------------------------------------------
 \subsection{Daily Values}
 \label{sec:usgsDaily}
@@ -489,12 +487,12 @@ An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
 par(mar=c(5,5,5,5)) #sets the size of the plot window
 
 with(temperatureAndFlow, plot(
-  datetime, Temperature_water_degrees_Celsius_Max_01,
+  dateTime, Wtemp_Max,
   xlab="Date",ylab="Max Temperature [C]"
   ))
 par(new=TRUE)
 with(temperatureAndFlow, plot(
-  datetime, Discharge_cubic_feet_per_second,
+  dateTime, Flow,
   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
   ))
 axis(4,col="red",col.axis="red")
@@ -514,14 +512,14 @@ There are occasions where NWIS values are not reported as numbers, instead there
 \subsection{Unit Values}
 \label{sec:usgsRT}
 %------------------------------------------------------------
-Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values.} Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{readNWISunit}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
+Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values.} Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{readNWISuv}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
 
-<<label=getNWISUnit, echo=TRUE>>=
+<<label=readNWISuv, echo=TRUE>>=
 
 parameterCd <- "00060"  # Discharge
 startDate <- "2012-05-12" 
 endDate <- "2012-05-13" 
-dischargeToday <- readNWISunit(siteNumber, parameterCd, 
+dischargeToday <- readNWISuv(siteNumber, parameterCd, 
         startDate, endDate)
 @
 
@@ -531,7 +529,7 @@ The retrieval produces the following dataframe:
 head(dischargeToday)
 @
 
-Note that time now becomes important, so the variable datetime is a POSIXct, and the reported time zone is included in a separate column. The datetime column is converted automatically to \enquote{UTC} (Coordinated Universal Time). To override the timezone
+Note that time now becomes important, so the variable datetime is a POSIXct, and the reported time zone is included in a separate column. The datetime column is converted automatically to \enquote{UTC} (Coordinated Universal Time). To override the timezone, 
 
 Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package.
 
@@ -572,6 +570,26 @@ title(siteINFO$station.nm[1])
 @
 
 \FloatBarrier
+
+%------------------------------------------------------------
+\subsection{Ground water level data}
+\label{sec:gwl}
+%------------------------------------------------------------
+
+%------------------------------------------------------------
+\subsection{Peak flow data}
+\label{sec:peak}
+%------------------------------------------------------------
+
+%------------------------------------------------------------
+\subsection{Rating curve data}
+\label{sec:rating}
+%------------------------------------------------------------
+
+%------------------------------------------------------------
+\subsection{Surface-water measurement data}
+\label{sec:meas}
+%------------------------------------------------------------
 
 %------------------------------------------------------------
 \subsection{URL Construction}
@@ -783,14 +801,14 @@ There are a few steps that are required in order to create a table in Microsoft\
 
 <<label=getSiteApp, echo=TRUE>>=
 availableData <- whatNWISdata(siteNumber, "dv")
-dailyData <- availableData["00003" == availableData$statCd,]
+dailyData <- availableData["00003" == availableData$stat_cd,]
 
 tableData <- with(dailyData, 
       data.frame(
         shortName=srsname, 
-        Start=startDate, 
-        End=endDate, 
-        Count=count,
+        Start=begin_date, 
+        End=end_date, 
+        Count=count_nu,
         Units=parameter_units)
       )
 tableData

@@ -97,11 +97,11 @@ tableData <- with(dailyDataAvailable,
       data.frame( 
       siteNumber= site_no,
       srsname=srsname, 
-      startDate=as.character(startDate), 
-      endDate=as.character(endDate), 
-      count=as.character(count),
+      startDate=as.character(begin_date), 
+      endDate=as.character(end_date), 
+      count=as.character(count_nu),
       units=parameter_units,
-      statCd = statCd,
+      statCd = stat_cd,
       stringsAsFactors=FALSE)
       )
 
@@ -162,12 +162,12 @@ names(temperatureAndFlow)
 par(mar=c(5,5,5,5)) #sets the size of the plot window
 
 with(temperatureAndFlow, plot(
-  datetime, Temperature_water_degrees_Celsius_Max_01,
+  dateTime, Wtemp_Max,
   xlab="Date",ylab="Max Temperature [C]"
   ))
 par(new=TRUE)
 with(temperatureAndFlow, plot(
-  datetime, Discharge_cubic_feet_per_second,
+  dateTime, Flow,
   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
   ))
 axis(4,col="red",col.axis="red")
@@ -177,12 +177,12 @@ title(paste(siteINFO$station.nm[1],"2012",sep=" "))
 legend("topleft", c("Max Temperature", "Mean Discharge"), 
        col=c("black","red"),lty=c(NA,1),pch=c(1,NA))
 
-## ----label=getNWISUnit, echo=TRUE-------------------------
+## ----label=readNWISuv, echo=TRUE--------------------------
 
 parameterCd <- "00060"  # Discharge
 startDate <- "2012-05-12" 
 endDate <- "2012-05-13" 
-dischargeToday <- readNWISunit(siteNumber, parameterCd, 
+dischargeToday <- readNWISuv(siteNumber, parameterCd, 
         startDate, endDate)
 
 ## ----dischargeData, echo=TRUE-----------------------------
@@ -271,14 +271,14 @@ readNWISpCode
 
 ## ----label=getSiteApp, echo=TRUE--------------------------
 availableData <- whatNWISdata(siteNumber, "dv")
-dailyData <- availableData["00003" == availableData$statCd,]
+dailyData <- availableData["00003" == availableData$stat_cd,]
 
 tableData <- with(dailyData, 
       data.frame(
         shortName=srsname, 
-        Start=startDate, 
-        End=endDate, 
-        Count=count,
+        Start=begin_date, 
+        End=end_date, 
+        Count=count_nu,
         Units=parameter_units)
       )
 tableData
