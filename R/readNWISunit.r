@@ -49,8 +49,10 @@ readNWISuv <- function (siteNumber,parameterCd,startDate="",endDate="", tz=""){
 #' data <- readNWISpeak(siteNumber)
 readNWISpeak <- function (siteNumber,startDate="",endDate=""){  
   
+  # Doesn't seem to be a peak xml service
   url <- constructNWISURL(siteNumber,NA,startDate,endDate,"peak")
-  data <- importRDB1(url)
+
+  data <- importRDB1(url, asDateTime=FALSE)
     
   return (data)
 }
@@ -66,9 +68,9 @@ readNWISpeak <- function (siteNumber,startDate="",endDate=""){
 #' siteNumber <- '01594440'
 #' data <- readNWISrating(siteNumber, "base")
 readNWISrating <- function (siteNumber,type="base"){  
-  
+  # Doesn't seem to be a rating xml service 
   url <- constructNWISURL(siteNumber,service="rating",ratingType = type)
-  data <- importRDB1(url)
+  data <- importRDB1(url, asDateTime=FALSE)
   
   return (data)
 }
@@ -90,15 +92,17 @@ readNWISrating <- function (siteNumber,type="base"){
 #' data <- readNWISmeas(siteNumber)
 readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){  
   
+  # Doesn't seem to be a WaterML1 format option
   url <- constructNWISURL(siteNumber,NA,startDate,endDate,"meas")
-  data <- importRDB1(url,asDateTime=TRUE,tz=tz)
+  data <- importRDB1(url,asDateTime=FALSE,tz=tz)
   
   return (data)
 }
 
-#'Reads groundwater level measurements from NWISweb.
+#' Reads groundwater level measurements from NWISweb.
 #'
-#'
+#' Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service 
+#' depending on the year that the data was collected. 
 #'
 #' @param siteNumber string USGS site number.  This is usually an 8 digit number
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
@@ -109,8 +113,8 @@ readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){
 #' data <- readNWISgwl(siteNumber, '','')
 readNWISgwl <- function (siteNumber,startDate="",endDate=""){  
   
-  url <- constructNWISURL(siteNumber,NA,startDate,endDate,"gwlevels",format="tsv")
-  data <- importRDB1(url)
+  url <- constructNWISURL(siteNumber,NA,startDate,endDate,"gwlevels",format="wml1")
+  data <- importWaterML1(url,asDateTime=FALSE)
   
   return (data)
 }
