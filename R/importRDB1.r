@@ -2,7 +2,8 @@
 #' Function to return data from the NWIS RDB 1.0 format
 #'
 #' This function accepts a url parameter that already contains the desired
-#' NWIS site, parameter code, statistic, startdate and enddate. 
+#' NWIS site, parameter code, statistic, startdate and enddate. It is not
+#' recommended to use the RDB format for importing multi-site data. 
 #'
 #' @param obs_url string containing the url for the retrieval
 #' @param asDateTime logical, if TRUE returns date and time as POSIXct, if FALSE, Date
@@ -25,9 +26,9 @@
 #' obs_url <- constructNWISURL(siteNumber,property,
 #'          startDate,endDate,"dv",format="tsv")
 #' data <- importRDB1(obs_url)
-#' urlMulti <- constructNWISURL("04085427",c("00060","00010"),
+#' urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),
 #'          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
-#' multiData <- importRDB1(urlMulti)
+#' multiData <- importRDB1(urlMultiPcodes)
 #' unitDataURL <- constructNWISURL(siteNumber,property,
 #'          "2013-11-03","2013-11-03","uv",format="tsv") #includes timezone switch
 #' unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
@@ -35,6 +36,11 @@
 #'           c('34247','30234','32104','34220'),
 #'          "2010-11-03","","qw",format="rdb") 
 #' qwData <- importRDB1(qwURL, qw=TRUE, tz="America/Chicago")
+#' iceSite <- '04024430'
+#' start <- "2013-11-09"
+#' end <- "2013-11-28"
+#' urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
+#' 
 #' # User file:
 #' filePath <- system.file("extdata", package="dataRetrievaldemo")
 #' fileName <- "RDB1Example.txt"
@@ -89,6 +95,10 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
   data <- tmp[-1,]
   
   if(convertType){
+    
+    #This will break if the 2nd (or greater) site has more columns than the first
+    #Therefore, using RDB is not recommended for multi-site queries.
+    #This correction will work if each site has the same number of columns
     multiSiteCorrections <- -which(as.logical(apply(data[,1:2], 1, FUN=function(x) all(x %in% as.character(dataType[,1:2])))))
     
     if(length(multiSiteCorrections) > 0){
@@ -102,7 +112,15 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     offsetLibrary <- setNames(c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
                                 c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
     
+    # The suppressed warning occurs when there is text (such as ice) in the numeric coluym
     data[,grep('n$', dataType)] <- suppressWarnings(sapply(data[,grep('n$', dataType)], function(x) as.numeric(x)))
+    
+    numberColumns <- grep("_va",names(data))    
+    data[,numberColumns] <- sapply(data[,numberColumns],as.numeric)
+    
+    intColumns <- grep("_nu",names(data))
+    data[,intColumns] <- sapply(data[,intColumns],as.integer)
+    
     
     if(length(grep('d$', dataType)) > 0){
       if (asDateTime & !qw){
