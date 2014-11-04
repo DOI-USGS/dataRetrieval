@@ -3,8 +3,8 @@
 \alias{readNWISqw}
 \title{Raw Data Import for USGS NWIS QW Data}
 \usage{
-readNWISqw(siteNumber, pCodes, startDate, endDate, expanded = FALSE,
-  reshape = TRUE)
+readNWISqw(siteNumber, pCodes, startDate = "", endDate = "",
+  expanded = FALSE, reshape = TRUE, tz = "")
 }
 \arguments{
 \item{siteNumber}{string or vector of of USGS site numbers.  This is usually an 8 digit number}
@@ -20,6 +20,11 @@ remark_cd (remark code), result_va (result value), val_qual_tx (result value qua
 dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).}
 
 \item{reshape}{logical. Will reshape the data if TRUE (default)}
+
+\item{tz}{string to set timezone attribute of datetime. Default is an empty quote, which converts the
+datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \value{
 data dataframe with agency, site, dateTime, value, and code columns

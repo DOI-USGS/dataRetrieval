@@ -12,6 +12,10 @@
 #' remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
 #' dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).
 #' @param reshape logical. Will reshape the data if TRUE (default)
+#' @param tz string to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @keywords data import USGS web service
 #' @return data dataframe with agency, site, dateTime, value, and code columns
 #' @export
@@ -28,11 +32,12 @@
 #'           startDate,endDate,expanded=TRUE)
 #' rawNWISqwDataExpand <- readNWISqw(siteNumber,pCodes,
 #'           startDate,endDate,expanded=TRUE,reshape=FALSE)
-readNWISqw <- function (siteNumber,pCodes,startDate,endDate,expanded=FALSE,reshape=TRUE){  
+readNWISqw <- function (siteNumber,pCodes,startDate="",endDate="",
+                        expanded=FALSE,reshape=TRUE,tz=""){  
   
   url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw",expanded=expanded)
   
-  data <- importRDB1(url,asDateTime=TRUE, qw=TRUE)
+  data <- importRDB1(url,asDateTime=TRUE, qw=TRUE, tz = tz)
   
   if(reshape & expanded){
     columnsToMelt <- c("agency_cd","site_no","sample_dt","sample_tm",
