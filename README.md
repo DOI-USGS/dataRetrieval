@@ -16,7 +16,7 @@ Web service retrieval functions:
 |`readNWISdata` | `...`, service | NWIS data using user-specified queries |
 |`readNWISdv` | `Common 3`, parameter code, statCd | NWIS daily data with `Common` query |
 |`readNWISqw` | `Common 3`, parameter code, expanded | NWIS water quality data with `Common` query |
-|`readNWISunit` | `Common 3`, parameter code | NWIS instantaneous data with `Common` query |
+|`readNWISuv` | `Common 3`, parameter code | NWIS instantaneous data with `Common` query |
 |`readNWISpCode` | parameterCd | NWIS parameter code information |
 |`readNWISgwl` | `Common 3` | NWIS groundwater level data with `Common` query |
 |`readNWISpeak` | `Common 3` | NWIS peak flow data with `Common` query |
@@ -26,7 +26,7 @@ Web service retrieval functions:
 |`whatNWISsites` | `...` | NWIS site search using user-specified queries |
 |`whatNWISdata` | siteNumber, service | NWIS data availability, including period of record and count |
 |`readWQPdata` | `...` | WQP data using user-specified queries |
-|`readWQPqw` | `Common 4` | WQP data with `Common 4` query |
+|`readWQPqw` | `Common 3` | WQP data with `Common 3` query and either parameter code or characteristic name|
 |`whatWQPsites` | `...` | WQP site search using user-specified queries |
 
 * `Common 3` = siteNumber, startDate, endDate
