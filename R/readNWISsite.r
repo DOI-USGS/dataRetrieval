@@ -15,47 +15,6 @@ readNWISsite <- function(siteNumbers){
   siteNumber <- paste(siteNumbers,collapse=",")
   urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=Expanded&sites=",siteNumber,sep = "")
   
-  if(url.exists(urlSitefile)){
-    doc = tryCatch({
-      h <- basicHeaderGatherer()
-      doc <- getURL(urlSitefile, headerfunction = h$update)
-      
-    }, warning = function(w) {
-      message(paste("URL caused a warning:", urlSitefile))
-      message(w)
-    }, error = function(e) {
-      message(paste("URL does not seem to exist:", urlSitefile))
-      message(e)
-      return(NA)
-    }) 
-    
-    if(h$value()["Content-Type"] == "text/plain;charset=UTF-8"){
-    
-      SiteFile <- read.delim(
-        textConnection(doc),
-        header = TRUE,
-        quote="\"",
-        dec=".",
-        sep='\t',
-        colClasses=c('character'),
-        fill = TRUE,
-        comment.char="#")
-      
-      INFO <- SiteFile[-1,]
-      names(INFO) <- gsub("_",".",names(INFO))
-      
-      INFO$queryTime <- Sys.time()
-      INFO$dec.lat.va <- as.numeric(INFO$dec.lat.va)
-      INFO$dec.long.va <- as.numeric(INFO$dec.long.va)
-      INFO$alt.va <- as.numeric(INFO$alt.va)
-      
-      return(INFO)
-    } else {
-      message(paste("URL caused an error:", urlSitefile))
-      message("Content-Type=",h$value()["Content-Type"])
-      return(NA)
-    }
-  } else {
-    message("URL caused an error:", urlSitefile)
-  }
+  data <- importRDB1(urlSitefile,asDateTime=FALSE)
+ 
 }

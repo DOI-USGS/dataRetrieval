@@ -88,7 +88,9 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     })
   } else {
     doc <- obs_url
-
+    fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
+    pndIndx<-regexpr("^#", fileVecChar)
+    hdr <- fileVecChar[pndIndx > 0L]
   }
   
   tmp <- read.delim(  
