@@ -3,10 +3,10 @@
 \alias{readNWISgwl}
 \title{Reads groundwater level measurements from NWISweb.}
 \usage{
-readNWISgwl(siteNumber, startDate = "", endDate = "")
+readNWISgwl(siteNumbers, startDate = "", endDate = "")
 }
 \arguments{
-\item{siteNumber}{string USGS site number.  This is usually an 8 digit number}
+\item{siteNumbers}{string USGS site number (or multiple sites).  This is usually an 8 digit number}
 
 \item{startDate}{string starting date for data retrieval in the form YYYY-MM-DD.}
 
@@ -19,5 +19,7 @@ depending on the year that the data was collected.
 \examples{
 siteNumber <- "434400121275801"
 data <- readNWISgwl(siteNumber, '','')
+sites <- c("434400121275801", "375907091432201")
+data2 <- readNWISgwl(sites, '','')
 }
 

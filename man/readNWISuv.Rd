@@ -3,10 +3,11 @@
 \alias{readNWISuv}
 \title{Raw Data Import for Instantaneous USGS NWIS Data}
 \usage{
-readNWISuv(siteNumber, parameterCd, startDate = "", endDate = "", tz = "")
+readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "",
+  tz = "")
 }
 \arguments{
-\item{siteNumber}{string USGS site number.  This is usually an 8 digit number}
+\item{siteNumbers}{string USGS site number (or multiple sites).  This is usually an 8 digit number}
 
 \item{parameterCd}{string USGS parameter code.  This is usually an 5 digit number.}
 

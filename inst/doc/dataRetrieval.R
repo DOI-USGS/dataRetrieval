@@ -155,7 +155,7 @@ temperatureAndFlow <- readNWISdv(siteNumber, parameterCd,
 ## ----label=renameColumns, echo=TRUE-----------------------
 names(temperatureAndFlow)
 
-temperatureAndFlow <- renameColumns(temperatureAndFlow)
+temperatureAndFlow <- renameNWISColumns(temperatureAndFlow)
 names(temperatureAndFlow)
 
 ## ----getNWIStemperaturePlot, echo=TRUE, fig.cap="Temperature and discharge plot of Choptank River in 2012.",out.width='1\\linewidth',out.height='1\\linewidth',fig.show='hold'----
