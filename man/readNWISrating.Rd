@@ -16,5 +16,6 @@ Reads the current rating table for an active USGS streamgage.
 \examples{
 siteNumber <- '01594440'
 data <- readNWISrating(siteNumber, "base")
+attr(data, "RATING")
 }
 

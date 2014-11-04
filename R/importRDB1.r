@@ -67,6 +67,10 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
       h <- basicHeaderGatherer()
       doc <- getURL(obs_url, headerfunction = h$update)
 
+      fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
+      pndIndx<-regexpr("^#", fileVecChar)
+      hdr <- fileVecChar[pndIndx > 0L]
+      
       if(!(as.character(h$value()["Content-Type"]) == "text/plain;charset=UTF-8" | 
            as.character(h$value()["Content-Type"]) == "text/plain")){
         message(paste("URL caused an error:", obs_url))
@@ -86,7 +90,7 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     doc <- obs_url
 
   }
-      
+  
   tmp <- read.delim(  
     doc, 
     header = TRUE, 
@@ -125,8 +129,12 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     data[,numberColumns] <- sapply(data[,numberColumns],as.numeric)
     
     intColumns <- grep("_nu",names(data))
-    data[,intColumns] <- sapply(data[,intColumns],as.integer)
     
+    if("current_rating_nu" %in% names(data)){
+      intColumns <- intColumns[!("current_rating_nu" %in% names(data)[intColumns])]
+      data$current_rating_nu <- gsub(" ", "", data$current_rating_nu)
+    }
+    data[,intColumns] <- sapply(data[,intColumns],as.integer)
     
     if(length(grep('d$', dataType)) > 0){
       if (asDateTime & !qw){
@@ -210,6 +218,9 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
   
     row.names(data) <- NULL
   }
+  
+  comment(data) <- hdr
+  
   return(data)
 
 }

@@ -24,50 +24,54 @@ whatNWISsites <- function(...){
   urlCall <- paste(baseURL,
                    urlCall,sep = "")
   
-  h <- basicHeaderGatherer()
-  doc = tryCatch({
-    returnedDoc <- getURI(urlCall, headerfunction = h$update)
-    if(h$value()["Content-Type"] == "text/xml;charset=UTF-8"){
-      xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
-    } else {
-      message(paste("URL caused an error:", urlCall))
-      message("Content-Type=",h$value()["Content-Type"])
+  if(url.exists(urlSitefile)){
+    h <- basicHeaderGatherer()
+    doc = tryCatch({
+      returnedDoc <- getURI(urlCall, headerfunction = h$update)
+      if(h$value()["Content-Type"] == "text/xml;charset=UTF-8"){
+        xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
+      } else {
+        message(paste("URL caused an error:", urlCall))
+        message("Content-Type=",h$value()["Content-Type"])
+        return(NA)
+      }   
+      
+    }, warning = function(w) {
+      message(paste("URL caused a warning:", urlCall))
+      message(w)
+    }, error = function(e) {
+      message(paste("URL does not seem to exist:", urlCall))
+      message(e)
       return(NA)
-    }   
+    }) 
     
-  }, warning = function(w) {
-    message(paste("URL caused a warning:", urlCall))
-    message(w)
-  }, error = function(e) {
-    message(paste("URL does not seem to exist:", urlCall))
-    message(e)
-    return(NA)
-  }) 
-  
-  doc <- xmlRoot(doc)
-  numChunks <- xmlSize(doc)
-  for(i in 1:numChunks){
-    chunk <- doc[[1]]
-    site_no <- as.character(xpathApply(chunk, "site/@sno"))
-    station_nm <- as.character(xpathApply(chunk, "site/@sna"))
-    site_tp_cd <- as.character(xpathApply(chunk, "site/@cat"))
-    dec_lat_va <- as.numeric(xpathApply(chunk, "site/@lat"))
-    dec_long_va <- as.numeric(xpathApply(chunk, "site/@lng"))
-    agency_cd <- as.character(xpathApply(chunk, "site/@agc"))
-    
-    df <- data.frame(agency_cd, site_no, station_nm, site_tp_cd, 
-                     dec_lat_va, dec_long_va, stringsAsFactors=FALSE) 
-    
-    if(1==i){
-      retval <- df
-    } else {
-      retval <- rbind(retval, df)
+    doc <- xmlRoot(doc)
+    numChunks <- xmlSize(doc)
+    for(i in 1:numChunks){
+      chunk <- doc[[1]]
+      site_no <- as.character(xpathApply(chunk, "site/@sno"))
+      station_nm <- as.character(xpathApply(chunk, "site/@sna"))
+      site_tp_cd <- as.character(xpathApply(chunk, "site/@cat"))
+      dec_lat_va <- as.numeric(xpathApply(chunk, "site/@lat"))
+      dec_long_va <- as.numeric(xpathApply(chunk, "site/@lng"))
+      agency_cd <- as.character(xpathApply(chunk, "site/@agc"))
+      
+      df <- data.frame(agency_cd, site_no, station_nm, site_tp_cd, 
+                       dec_lat_va, dec_long_va, stringsAsFactors=FALSE) 
+      
+      if(1==i){
+        retval <- df
+      } else {
+        retval <- rbind(retval, df)
+      }
     }
+    
+    retval <- retval[!duplicated(retval),]
+    
+    retval$queryTime <- Sys.time()
+    
+    return(retval)
+  } else {
+    message("URL caused an error:", urlCall)
   }
-  
-  retval <- retval[!duplicated(retval),]
-  
-  retval$queryTime <- Sys.time()
-  
-  return(retval)
 }

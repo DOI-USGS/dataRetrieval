@@ -51,7 +51,7 @@ readNWISpeak <- function (siteNumber,startDate="",endDate=""){
   
   # Doesn't seem to be a peak xml service
   url <- constructNWISURL(siteNumber,NA,startDate,endDate,"peak")
-
+  
   data <- importRDB1(url, asDateTime=FALSE)
     
   return (data)
@@ -67,10 +67,20 @@ readNWISpeak <- function (siteNumber,startDate="",endDate=""){
 #' @examples
 #' siteNumber <- '01594440'
 #' data <- readNWISrating(siteNumber, "base")
+#' attr(data, "RATING")
 readNWISrating <- function (siteNumber,type="base"){  
-  # Doesn't seem to be a rating xml service 
+  
+  # No rating xml service 
   url <- constructNWISURL(siteNumber,service="rating",ratingType = type)
+    
   data <- importRDB1(url, asDateTime=FALSE)
+  
+  if(type == "base") {
+    Rat <- grep("//RATING ", comment(data), value=TRUE, fixed=TRUE)
+    Rat <- sub("# //RATING ", "", Rat)
+    Rat <- scan(text=Rat, sep=" ", what="")
+    attr(data, "RATING") <- Rat
+  }
   
   return (data)
 }
@@ -94,7 +104,12 @@ readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){
   
   # Doesn't seem to be a WaterML1 format option
   url <- constructNWISURL(siteNumber,NA,startDate,endDate,"meas")
+  
   data <- importRDB1(url,asDateTime=FALSE,tz=tz)
+  
+  if("diff_from_rating_pc" %in% names(data)){
+    data$diff_from_rating_pc <- as.numeric(data$diff_from_rating_pc)
+  }
   
   return (data)
 }
@@ -115,7 +130,7 @@ readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){
 #' data2 <- readNWISgwl(sites, '','')
 readNWISgwl <- function (siteNumbers,startDate="",endDate=""){  
   
-  url <- constructNWISURL(siteNumber,NA,startDate,endDate,"gwlevels",format="wml1")
+  url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="wml1")
   data <- importWaterML1(url,asDateTime=FALSE)
   
   return (data)

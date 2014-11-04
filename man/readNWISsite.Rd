@@ -3,10 +3,10 @@
 \alias{readNWISsite}
 \title{USGS Site File Data Retrieval}
 \usage{
-readNWISsite(siteNumber)
+readNWISsite(siteNumbers)
 }
 \arguments{
-\item{siteNumber}{string USGS site number.  This is usually an 8 digit number}
+\item{siteNumbers}{string USGS site number.  This is usually an 8 digit number}
 }
 \value{
 retval dataframe with all information found in the expanded site file
