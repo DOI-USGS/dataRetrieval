@@ -57,6 +57,12 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
   }
   
   if(url.exists(obs_url)){
+    
+    # 400 bad site id
+    # 404 outside date range, wrong pcode
+    # 200 cool
+    
+    
     retval = tryCatch({
       h <- basicHeaderGatherer()
       doc <- getURL(obs_url, headerfunction = h$update)
