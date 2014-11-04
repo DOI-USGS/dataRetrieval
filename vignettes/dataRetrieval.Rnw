@@ -472,12 +472,12 @@ temperatureAndFlow <- readNWISdv(siteNumber, parameterCd,
 
 Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}.
 
-The column names can be automatically adjusted based on the parameter and statistic codes using the \texttt{renameColumns} function. This is not necessary, but may be useful when analyzing the data. 
+The column names can be automatically adjusted based on the parameter and statistic codes using the \texttt{renameNWISColumns} function. This is not necessary, but may be useful when analyzing the data. 
 
 <<label=renameColumns, echo=TRUE>>=
 names(temperatureAndFlow)
 
-temperatureAndFlow <- renameColumns(temperatureAndFlow)
+temperatureAndFlow <- renameNWISColumns(temperatureAndFlow)
 names(temperatureAndFlow)
 @
 
