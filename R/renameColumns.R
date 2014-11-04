@@ -1,10 +1,42 @@
 #' renameColumns
 #'
-#' Rename columns coming back from NWIS data retrievals
+#' Rename columns coming back from NWIS data retrievals.  Daily and unit value columns
+#' have names derived from their data descriptor, parameter, and statistic codes. This
+#' function reads information from the header and the arguments in the call to
+#' to rename those columns.
 #'
-#' @param rawData dataframe returned from retrieval functions
-#' @keywords data import USGS web service
-#' @return rawData dataframe with improved column names
+#' @param rawData the daily- or unit-values datset retrieved from NWISweb.
+#' @param p00010 the base name for parameter code 00010.
+#' @param p00045 the base name for parameter code 00045.
+#' @param p00060 the base name for parameter code 00060.
+#' @param p00065 the base name for parameter code 00065.
+#' @param p00095 the base name for parameter code 00095.
+#' @param p00300 the base name for parameter code 00300.
+#' @param p00400 the base name for parameter code 00400.
+#' @param p62611 the base name for parameter code 62611.
+#' @param p63680 the base name for parameter code 63680.
+#' @param p72019 the base name for parameter code 72019.
+#' @param \dots named arguments for the base name for any other parameter code. The
+#'form of the name must be like pXXXXX, where XXXXX is the parameter code.
+#' @return A dataset like \code{data} with selected columns renamed.
+#' @note The following statistics codes are converted by \code{renameNWISColumns}. See
+#'\url{http://help.waterdata.usgs.gov/stat_cd_nm} for information about USGS statistics codes.
+#'\describe{
+#'\item{00001}{Maximum value, suffix: Max}
+#'\item{00002}{Minimum value, suffix: Min}
+#'\item{00003}{Mean value, no suffix}
+#'\item{00006}{Sum of values, suffix: Sum}
+#'\item{00007}{Modal value, suffix: Mode}
+#'\item{00008}{Median value, suffix: Median}
+#'\item{00011}{Instantaneous Value, suffix: Inst}
+#'\item{00012}{Equivalent mean value, suffix: EqMean}
+#'\item{00021}{Tidal high-high value, suffix: HiHiTide}
+#'\item{00022}{Tidal low-high value, suffix: LoHiTide}
+#'\item{00023}{Tidal high-low value, suffix: HiLoTide}
+#'\item{00024}{Tidal low-low value, suffix: LoLoTide}
+#'}
+#' @seealso \code{\link{readNWISdv}}, \code{\link{readNWISuv}}
+#' @keywords manip IO
 #' @export
 #' @examples
 #' siteWithTwo <- '01480015'
@@ -12,8 +44,8 @@
 #' endDate <- "2012-10-01"
 #' url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
 #' twoResults <- importWaterML1(url2,TRUE)
-#' twoResults <- renameColumns(twoResults)
-renameColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
+#' twoResults <- renameNWISColumns(twoResults)
+renameNWISColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
                           p00060="Flow", p00065="GH", p00095="SpecCond", p00300="DO",
                           p00400="pH", p62611="GWL", p63680="Turb", p72019="WLBLS",
                           ...){
