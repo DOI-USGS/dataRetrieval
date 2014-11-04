@@ -4,7 +4,7 @@
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
 #' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
-#' @param siteNumber string USGS site number.  This is usually an 8 digit number
+#' @param siteNumbers string USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @param parameterCd string USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
@@ -26,9 +26,9 @@
 #' timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
 #'          "2013-11-03","2013-11-03")
 #' firstSite <- timeZoneChange[timeZoneChange$site_no == '04024430',]
-readNWISuv <- function (siteNumber,parameterCd,startDate="",endDate="", tz=""){  
+readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){  
   
-  url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"uv",format="xml")
+  url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,"uv",format="xml")
 
   data <- importWaterML1(url,asDateTime=TRUE,tz=tz)
   
@@ -104,14 +104,16 @@ readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){
 #' Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service 
 #' depending on the year that the data was collected. 
 #'
-#' @param siteNumber string USGS site number.  This is usually an 8 digit number
+#' @param siteNumbers string USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @export
 #' @examples
 #' siteNumber <- "434400121275801"
 #' data <- readNWISgwl(siteNumber, '','')
-readNWISgwl <- function (siteNumber,startDate="",endDate=""){  
+#' sites <- c("434400121275801", "375907091432201")
+#' data2 <- readNWISgwl(sites, '','')
+readNWISgwl <- function (siteNumbers,startDate="",endDate=""){  
   
   url <- constructNWISURL(siteNumber,NA,startDate,endDate,"gwlevels",format="wml1")
   data <- importWaterML1(url,asDateTime=FALSE)
