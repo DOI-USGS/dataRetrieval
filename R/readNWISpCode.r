@@ -17,5 +17,19 @@ readNWISpCode <- function(parameterCd){
   
   parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd,]
 
+  if(nrow(parameterData) == 0){
+    
+    if(length(parameterCd) == 1){
+      url <- paste0("http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=pm_search",
+                   "&pm_search=", parameterCd,
+                   "&format=rdb", "&show=parameter_group_nm",
+                   "&show=parameter_nm", "&show=casrn",
+                   "&show=srsname", "&show=parameter_units")
+      parameterData <- importRDB1(url,asDateTime = FALSE)
+    }
+    #TODO: add else...
+    
+  }
+  
   return(parameterData)
 }
