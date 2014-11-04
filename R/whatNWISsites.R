@@ -24,7 +24,7 @@ whatNWISsites <- function(...){
   urlCall <- paste(baseURL,
                    urlCall,sep = "")
   
-  if(url.exists(urlSitefile)){
+  if(url.exists(urlCall)){
     h <- basicHeaderGatherer()
     doc = tryCatch({
       returnedDoc <- getURI(urlCall, headerfunction = h$update)
