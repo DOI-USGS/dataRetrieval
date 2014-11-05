@@ -195,19 +195,47 @@ parameterCd <- c("00618","71851")
 startDate <- "1985-10-01"
 endDate <- "2012-09-30"
 
-dissolvedNitrate <- readNWISqw(siteNumber, parameterCd, 
-      startDate, endDate, expanded=TRUE)
-names(dissolvedNitrate)
+dissolvedNitrateLong <- readNWISqw(siteNumber, parameterCd, 
+      startDate, endDate, expanded=TRUE,reshape=FALSE)
+names(dissolvedNitrateLong)
 
 
 
-## ----getQWtemperaturePlot, echo=TRUE, fig.cap=paste(parameterINFO$parameter_nm, "at", siteINFO$station.nm[1])----
-with(dissolvedNitrate, plot(
-  startDateTime, result_va_00618,
-  xlab="Date",ylab = paste(parameterINFO$srsname,
-      "[",parameterINFO$parameter_units,"]")
-  ))
-title(siteINFO$station.nm[1])
+## ----label=getQWwide, echo=TRUE---------------------------
+dissolvedNitrateWide <- readNWISqw(siteNumber, parameterCd, 
+      startDate, endDate, expanded=TRUE, reshape=TRUE)
+names(dissolvedNitrateWide)
+
+
+## ----gwlexample, echo=TRUE, eval=TRUE---------------------
+siteNumber <- "434400121275801"
+groundWater <- readNWISgwl(siteNumber, '','')
+
+groundWater <- renameNWISColumns(groundWater)
+
+names(groundWater)
+
+
+## ----peakexample, echo=TRUE, eval=TRUE--------------------
+siteNumber <- '01594440'
+peakData <- readNWISpeak(siteNumber)
+
+
+names(peakData)
+
+
+## ----ratingexample, echo=TRUE, eval=TRUE------------------
+ratingData <- readNWISrating(siteNumber, "base")
+attr(ratingData, "RATING")
+
+names(ratingData)
+
+
+## ----surfexample, echo=TRUE, eval=TRUE--------------------
+surfaceData <- readNWISmeas(siteNumber)
+
+names(surfaceData)
+
 
 ## ----label=geturl, echo=TRUE, eval=FALSE------------------
 #  # Dissolved Nitrate parameter codes:

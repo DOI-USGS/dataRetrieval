@@ -545,6 +545,8 @@ Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.htm
 To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, and endDate and \texttt{readNWISdv}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level for each parameter code.
 
 
+There also includes an argument \texttt{"}reshape\texttt{"}, that converts the expanded dataset to a \texttt{"}wide\texttt{"} format.
+
 <<label=getQW, echo=TRUE>>=
  
 # Dissolved Nitrate parameter codes:
@@ -552,13 +554,20 @@ parameterCd <- c("00618","71851")
 startDate <- "1985-10-01"
 endDate <- "2012-09-30"
 
-dissolvedNitrate <- readNWISqw(siteNumber, parameterCd, 
-      startDate, endDate, expanded=TRUE)
-names(dissolvedNitrate)
+dissolvedNitrateLong <- readNWISqw(siteNumber, parameterCd, 
+      startDate, endDate, expanded=TRUE,reshape=FALSE)
+names(dissolvedNitrateLong)
 
 
 @
 
+
+<<label=getQWwide, echo=TRUE>>=
+dissolvedNitrateWide <- readNWISqw(siteNumber, parameterCd, 
+      startDate, endDate, expanded=TRUE, reshape=TRUE)
+names(dissolvedNitrateWide)
+
+@
 
 % <<getQWtemperaturePlot, echo=TRUE, fig.cap=paste(parameterINFO$parameter_nm, "at", siteINFO$station.nm[1])>>=
 % with(dissolvedNitrate, plot(

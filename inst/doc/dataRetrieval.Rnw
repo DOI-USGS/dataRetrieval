@@ -345,7 +345,7 @@ Examples for using these siteNumber's, parameter codes, and stat codes will be p
 \subsubsection{readNWISsite}
 \label{sec:usgsSiteFileData}
 %------------------------------------------------------------
-Use the \texttt{readNWISsite} function to obtain all of the information available for a particular USGS site such as full station name, drainage area, latitude, and longitude. \texttt{readNWISsite} can also access information about multiple sites with a vector input.
+Use the \texttt{readNWISsite} function to obtain all of the information available for a particular USGS site (or sites) such as full station name, drainage area, latitude, and longitude. \texttt{readNWISsite} can also access information about multiple sites with a vector input.
 
 
 <<getSite, echo=TRUE>>=
@@ -542,8 +542,10 @@ Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.htm
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, and endDate and \texttt{readNWISdv}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level.
+To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, and endDate and \texttt{readNWISdv}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level for each parameter code.
 
+
+There also includes an argument \texttt{"}reshape\texttt{"}, that converts the expanded dataset to a \texttt{"}wide\texttt{"} format.
 
 <<label=getQW, echo=TRUE>>=
  
@@ -552,44 +554,95 @@ parameterCd <- c("00618","71851")
 startDate <- "1985-10-01"
 endDate <- "2012-09-30"
 
-dissolvedNitrate <- readNWISqw(siteNumber, parameterCd, 
-      startDate, endDate, expanded=TRUE)
-names(dissolvedNitrate)
+dissolvedNitrateLong <- readNWISqw(siteNumber, parameterCd, 
+      startDate, endDate, expanded=TRUE,reshape=FALSE)
+names(dissolvedNitrateLong)
 
 
 @
 
 
-<<getQWtemperaturePlot, echo=TRUE, fig.cap=paste(parameterINFO$parameter_nm, "at", siteINFO$station.nm[1])>>=
-with(dissolvedNitrate, plot(
-  startDateTime, result_va_00618,
-  xlab="Date",ylab = paste(parameterINFO$srsname,
-      "[",parameterINFO$parameter_units,"]")
-  ))
-title(siteINFO$station.nm[1])
+<<label=getQWwide, echo=TRUE>>=
+dissolvedNitrateWide <- readNWISqw(siteNumber, parameterCd, 
+      startDate, endDate, expanded=TRUE, reshape=TRUE)
+names(dissolvedNitrateWide)
+
 @
+
+% <<getQWtemperaturePlot, echo=TRUE, fig.cap=paste(parameterINFO$parameter_nm, "at", siteINFO$station.nm[1])>>=
+% with(dissolvedNitrate, plot(
+%   startDateTime, result_va_00618,
+%   xlab="Date",ylab = paste(parameterINFO$srsname,
+%       "[",parameterINFO$parameter_units,"]")
+%   ))
+% title(siteINFO$station.nm[1])
+% @
 
 \FloatBarrier
 
 %------------------------------------------------------------
-\subsection{Ground water level data}
+\subsection{Groundwater level data}
 \label{sec:gwl}
 %------------------------------------------------------------
+Groundwater level measurements can be obtained with the \texttt{readNWISgwl} function.
+
+<<gwlexample, echo=TRUE, eval=TRUE>>=
+siteNumber <- "434400121275801"
+groundWater <- readNWISgwl(siteNumber, '','')
+
+groundWater <- renameNWISColumns(groundWater)
+
+names(groundWater)
+
+@
 
 %------------------------------------------------------------
 \subsection{Peak flow data}
 \label{sec:peak}
 %------------------------------------------------------------
 
+Peak discharge measurements can be obtained with the \texttt{readNWISpeak} function.
+
+<<peakexample, echo=TRUE, eval=TRUE>>=
+siteNumber <- '01594440'
+peakData <- readNWISpeak(siteNumber)
+
+
+names(peakData)
+
+@
+
+
 %------------------------------------------------------------
 \subsection{Rating curve data}
 \label{sec:rating}
 %------------------------------------------------------------
+Rating curves can be obtained with the \texttt{readNWISrating} function.
+
+<<ratingexample, echo=TRUE, eval=TRUE>>=
+ratingData <- readNWISrating(siteNumber, "base")
+attr(ratingData, "RATING")
+
+names(ratingData)
+
+@
+
+
 
 %------------------------------------------------------------
 \subsection{Surface-water measurement data}
 \label{sec:meas}
 %------------------------------------------------------------
+Surface-water measurement data can be obtained with the \texttt{readNWISmeas} function.
+
+<<surfexample, echo=TRUE, eval=TRUE>>=
+surfaceData <- readNWISmeas(siteNumber)
+
+names(surfaceData)
+
+@
+
+
 
 %------------------------------------------------------------
 \subsection{URL Construction}
