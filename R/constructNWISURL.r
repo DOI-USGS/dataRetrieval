@@ -44,16 +44,18 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 
   service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas"))
   
-  pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
-  
-  if(!pcodeCheck){
-    badIndex <- which(parameterCd %in% parameterCdFile$parameter_cd)
-    if(length(badIndex) > 0){
-      badPcode <- parameterCd[-badIndex]
-    } else {
-      badPcode <- parameterCd
+  if(!is.na(parameterCd)){
+    pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
+    
+    if(!pcodeCheck){
+      badIndex <- which(parameterCd %in% parameterCdFile$parameter_cd)
+      if(length(badIndex) > 0){
+        badPcode <- parameterCd[-badIndex]
+      } else {
+        badPcode <- parameterCd
+      }
+      message("The following pCodes may be unavailable:",paste(badPcode,collapse=","))
     }
-    message("The following pCodes may be unavailable:",paste(badPcode,collapse=","))
   }
   
   multipleSites <- length(siteNumber) > 1
