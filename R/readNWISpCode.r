@@ -12,6 +12,18 @@
 #' paramINFO <- readNWISpCode(c('01075','00060','00931'))
 readNWISpCode <- function(parameterCd){
  
+  pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
+  
+  if(!pcodeCheck){
+    goodIndex <- which(parameterCd %in% parameterCdFile$parameter_cd)
+    if(length(goodIndex) > 0){
+      badPcode <- parameterCd[-goodIndex]
+    } else {
+      badPcode <- parameterCd
+    }
+    message("The following pCodes seem mistyped:",paste(badPcode,collapse=","))
+    parameterCd <- parameterCd[goodIndex]
+  }
   
   parameterCdFile <- parameterCdFile
   
@@ -25,11 +37,20 @@ readNWISpCode <- function(parameterCd){
                    "&format=rdb", "&show=parameter_group_nm",
                    "&show=parameter_nm", "&show=casrn",
                    "&show=srsname", "&show=parameter_units")
-      parameterData <- importRDB1(url,asDateTime = FALSE)
+      newData <- importRDB1(url,asDateTime = FALSE)
+    } else {
+      
+      #TODO: add else...
+      fullURL <- "http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units"
+      fullPcodeDownload <- importRDB1(fullURL)
+      newData <- fullPcodeDownload[fullPcodeDownload$parameter_cd %in% parameterCd,]
+      
     }
-    #TODO: add else...
+    return(newData)
     
+  } else {
+    return(parameterData)
   }
   
-  return(parameterData)
+  
 }
