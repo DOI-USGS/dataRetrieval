@@ -7,7 +7,7 @@ getNWISSites<- function(...){
 
 #' @rdname whatNWISdata
 #' @export
-getNWISDataAvailability <- function(siteNumber,service=c("uv","dv","qw")){
+getNWISDataAvailability <- function(siteNumbers,service=c("uv","dv","qw")){
   message("This function is being deprecated. Please use whatNWISdata in the future.")
   whatNWISdata(siteNumber=siteNumber, service=service)
 }
