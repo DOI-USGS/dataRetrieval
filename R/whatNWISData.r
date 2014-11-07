@@ -2,8 +2,13 @@
 #'
 #' Imports a table of available parameters, period of record, and count.
 #'
-#' @param siteNumber string USGS site number.
-#' @param service vector string. Options are "uv", "dv", "qw"
+#' @param siteNumbers string vector of USGS site number or multiple sites.
+#' @param service vector string. Options are "all", or one or many of "dv"(daily values),
+#'      "uv","rt", or "iv"(unit values), "qw"(water-quality),"sv"(sites visits),"pk"(peak measurements),
+#'      "gw"(groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link), 
+#'      "aw" (sites monitored by the USGS Active Groundwater Level Network External Link), "id" (historical 
+#'      instantaneous values), "
+#' @param pCode string
 #' @keywords data import USGS web service
 #' @return retval dataframe with all information found in the expanded site file
 #' @export
@@ -14,11 +19,16 @@
 #' # To find just unit value ('instantaneous') data:
 #' uvData <- whatNWISdata('05114000',service="uv")
 #' uvDataMulti <- whatNWISdata(c('05114000','09423350'),service=c("uv","dv"))
-whatNWISdata <- function(siteNumber,service=c("uv","dv","qw")){
+#' siteNumbers <- c("01491000","01645000")
+#' flowAndTemp <- whatNWISdata(siteNumbers, pCode=c("00060","00010"))
+whatNWISdata <- function(siteNumbers,service="all",pCode="all",statCd="all"){
   
-  siteNumber <- paste(siteNumber,collapse=",")
+  siteNumber <- paste(siteNumbers,collapse=",")
   
-  service <- match.arg(service, c("dv","uv","qw","ad","id","pk","sv"), several.ok = TRUE)
+  if(!("all" %in% service)){
+    service <- match.arg(service, c("dv","uv","qw","ad","id","pk","sv","gw","aw","all","ad","iv","rt"), several.ok = TRUE)
+  }
+  
   
   urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=",siteNumber,sep = "")
  
@@ -60,7 +70,18 @@ whatNWISdata <- function(siteNumber,service=c("uv","dv","qw")){
     
     pcodeINFO <- parameterCdFile[parameterCdFile$parameter_cd %in% pCodes,]
     SiteFile <- merge(SiteFile,pcodeINFO,by.x="parm_cd" ,by.y="parameter_cd",all=TRUE)
-    SiteFile <- SiteFile[SiteFile$data_type_cd %in% service,]
+    
+    
+    if(!("all" %in% service)){
+      SiteFile <- SiteFile[SiteFile$data_type_cd %in% service,]
+    }
+    if(!("all" %in% statCd)){
+      SiteFile <- SiteFile[SiteFile$stat_cd %in% statCd,]
+    }
+    if(!("all" %in% pCode)){
+      SiteFile <- SiteFile[SiteFile$parm_cd %in% pCode,]
+    }
+    
     
     SiteFile$begin_date <- as.Date(parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
     SiteFile$end_date <- as.Date(parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
