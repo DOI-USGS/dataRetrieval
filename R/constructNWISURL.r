@@ -54,6 +54,7 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate="",endDate="",
       badPcode <- parameterCd
     }
     message("The following pCodes may be unavailable:",paste(badPcode,collapse=","))
+    #Take out badPcode?
   }
   
   multipleSites <- length(siteNumber) > 1
