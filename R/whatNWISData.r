@@ -8,7 +8,8 @@
 #'      "gw"(groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link), 
 #'      "aw" (sites monitored by the USGS Active Groundwater Level Network External Link), "id" (historical 
 #'      instantaneous values), "
-#' @param pCode string vector
+#' @param pCode string vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.
+#' @param statCd string vector of all statistic codes to return. Defaults to "all" which will not perform a filter.
 #' @keywords data import USGS web service
 #' @return retval dataframe with all information found in the expanded site file
 #' @export
@@ -29,7 +30,7 @@ whatNWISdata <- function(siteNumbers,service="all",pCode="all",statCd="all"){
     service <- match.arg(service, c("dv","uv","qw","ad","id","pk","sv","gw","aw","all","ad","iv","rt"), several.ok = TRUE)
   }
   
-  if(!("all" %in% pCode){
+  if(!("all" %in% pCode)){
     pcodeCheck <- all(nchar(pCode) == 5) & all(!is.na(suppressWarnings(as.numeric(pCode))))
     
     if(!pcodeCheck){
