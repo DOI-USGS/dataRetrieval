@@ -207,7 +207,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
                 datetime <- substr(datetime,1,23)
                 datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
-                datetime <- datetime - tzHours*60*60
+                datetime <- datetime + tzHours*60*60
                 df$tz_cd <- as.character(zoneAbbrievs[tzOffset]) 
               }
             }
