@@ -8,7 +8,7 @@
 #'      "gw"(groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link), 
 #'      "aw" (sites monitored by the USGS Active Groundwater Level Network External Link), "id" (historical 
 #'      instantaneous values), "
-#' @param pCode string
+#' @param pCode string vector
 #' @keywords data import USGS web service
 #' @return retval dataframe with all information found in the expanded site file
 #' @export
@@ -27,6 +27,21 @@ whatNWISdata <- function(siteNumbers,service="all",pCode="all",statCd="all"){
   
   if(!("all" %in% service)){
     service <- match.arg(service, c("dv","uv","qw","ad","id","pk","sv","gw","aw","all","ad","iv","rt"), several.ok = TRUE)
+  }
+  
+  if(!("all" %in% pCode){
+    pcodeCheck <- all(nchar(pCode) == 5) & all(!is.na(suppressWarnings(as.numeric(pCode))))
+    
+    if(!pcodeCheck){
+      goodIndex <- which(pCode %in% parameterCdFile$parameter_cd)
+      if(length(goodIndex) > 0){
+        badPcode <- pCode[-goodIndex]
+      } else {
+        badPcode <- pCode
+      }
+      message("The following pCodes seem mistyped:",paste(badPcode,collapse=","), "and will be ignored.")
+      pCode <- pCode[goodIndex]
+    }
   }
   
   
