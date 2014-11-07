@@ -8,7 +8,7 @@
 #'      "gw"(groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link), 
 #'      "aw" (sites monitored by the USGS Active Groundwater Level Network External Link), "id" (historical 
 #'      instantaneous values), "
-#' @param pCode string vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.
+#' @param parameterCd string vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.
 #' @param statCd string vector of all statistic codes to return. Defaults to "all" which will not perform a filter.
 #' @keywords data import USGS web service
 #' @return retval dataframe with all information found in the expanded site file
@@ -21,8 +21,8 @@
 #' uvData <- whatNWISdata('05114000',service="uv")
 #' uvDataMulti <- whatNWISdata(c('05114000','09423350'),service=c("uv","dv"))
 #' siteNumbers <- c("01491000","01645000")
-#' flowAndTemp <- whatNWISdata(siteNumbers, pCode=c("00060","00010"))
-whatNWISdata <- function(siteNumbers,service="all",pCode="all",statCd="all"){
+#' flowAndTemp <- whatNWISdata(siteNumbers, parameterCd=c("00060","00010"))
+whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all"){
   
   siteNumber <- paste(siteNumbers,collapse=",")
   
@@ -30,18 +30,18 @@ whatNWISdata <- function(siteNumbers,service="all",pCode="all",statCd="all"){
     service <- match.arg(service, c("dv","uv","qw","ad","id","pk","sv","gw","aw","all","ad","iv","rt"), several.ok = TRUE)
   }
   
-  if(!("all" %in% pCode)){
-    pcodeCheck <- all(nchar(pCode) == 5) & all(!is.na(suppressWarnings(as.numeric(pCode))))
+  if(!("all" %in% parameterCd)){
+    parameterCdCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     
-    if(!pcodeCheck){
-      goodIndex <- which(pCode %in% parameterCdFile$parameter_cd)
+    if(!parameterCdCheck){
+      goodIndex <- which(parameterCd %in% parameterCdFile$parameter_cd)
       if(length(goodIndex) > 0){
-        badPcode <- pCode[-goodIndex]
+        badparameterCd <- parameterCd[-goodIndex]
       } else {
-        badPcode <- pCode
+        badparameterCd <- parameterCd
       }
-      message("The following pCodes seem mistyped:",paste(badPcode,collapse=","), "and will be ignored.")
-      pCode <- pCode[goodIndex]
+      message("The following parameterCds seem mistyped:",paste(badparameterCd,collapse=","), "and will be ignored.")
+      parameterCd <- parameterCd[goodIndex]
     }
   }
   
@@ -80,12 +80,12 @@ whatNWISdata <- function(siteNumbers,service="all",pCode="all",statCd="all"){
     intColumns <- grep("_nu",names(SiteFile))
     SiteFile[,intColumns] <- sapply(SiteFile[,intColumns],as.integer)
     
-    pCodes <- unique(SiteFile$parm_cd)
+    parameterCds <- unique(SiteFile$parm_cd)
     
     parameterCdFile <- parameterCdFile
     
-    pcodeINFO <- parameterCdFile[parameterCdFile$parameter_cd %in% pCodes,]
-    SiteFile <- merge(SiteFile,pcodeINFO,by.x="parm_cd" ,by.y="parameter_cd",all=TRUE)
+    parameterCdINFO <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCds,]
+    SiteFile <- merge(SiteFile,parameterCdINFO,by.x="parm_cd" ,by.y="parameter_cd",all=TRUE)
     
     
     if(!("all" %in% service)){
@@ -94,8 +94,8 @@ whatNWISdata <- function(siteNumbers,service="all",pCode="all",statCd="all"){
     if(!("all" %in% statCd)){
       SiteFile <- SiteFile[SiteFile$stat_cd %in% statCd,]
     }
-    if(!("all" %in% pCode)){
-      SiteFile <- SiteFile[SiteFile$parm_cd %in% pCode,]
+    if(!("all" %in% parameterCd)){
+      SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd,]
     }
     
     
