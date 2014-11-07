@@ -38,7 +38,7 @@
 #' url_peak <- constructNWISURL(siteNumber, service="peak")
 #' url_meas <- constructNWISURL(siteNumber, service="meas")
 #'            }
-constructNWISURL <- function(siteNumber,parameterCd,startDate="",endDate="",
+constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate="",
                              service,statCd="00003", format="xml",expanded=FALSE,
                              ratingType="base"){
 
@@ -54,7 +54,6 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate="",endDate="",
       badPcode <- parameterCd
     }
     message("The following pCodes may be unavailable:",paste(badPcode,collapse=","))
-    #Take out badPcode?
   }
   
   multipleSites <- length(siteNumber) > 1
@@ -198,18 +197,12 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate="",endDate="",
         }
          
     )
+  
   if(url.exists(url)){
     return(url)
   } else {
-    if(!(parameterCd %in% parameterCdFile$parameter_cd)){
-      
-      message("The following url doesn't seem to exist:\n",url)
-      return(url)
-    }
-    
-  }
-
-  
+    stop("The following url doesn't seem to exist:\n",url)    
+  }  
 }
 
 
