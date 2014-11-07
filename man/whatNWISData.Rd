@@ -4,14 +4,23 @@
 \alias{whatNWISdata}
 \title{USGS data availability}
 \usage{
-getNWISDataAvailability(siteNumber, service = c("uv", "dv", "qw"))
+getNWISDataAvailability(siteNumbers, service = c("uv", "dv", "qw"))
 
-whatNWISdata(siteNumber, service = c("uv", "dv", "qw"))
+whatNWISdata(siteNumbers, service = "all", parameterCd = "all",
+  statCd = "all")
 }
 \arguments{
-\item{siteNumber}{string USGS site number.}
+\item{siteNumbers}{string vector of USGS site number or multiple sites.}
 
-\item{service}{vector string. Options are "uv", "dv", "qw"}
+\item{service}{vector string. Options are "all", or one or many of "dv"(daily values),
+"uv","rt", or "iv"(unit values), "qw"(water-quality),"sv"(sites visits),"pk"(peak measurements),
+"gw"(groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link),
+"aw" (sites monitored by the USGS Active Groundwater Level Network External Link), "id" (historical
+instantaneous values), "}
+
+\item{parameterCd}{string vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.}
+
+\item{statCd}{string vector of all statistic codes to return. Defaults to "all" which will not perform a filter.}
 }
 \value{
 retval dataframe with all information found in the expanded site file
@@ -24,6 +33,8 @@ availableData <- whatNWISdata('05114000')
 # To find just unit value ('instantaneous') data:
 uvData <- whatNWISdata('05114000',service="uv")
 uvDataMulti <- whatNWISdata(c('05114000','09423350'),service=c("uv","dv"))
+siteNumbers <- c("01491000","01645000")
+flowAndTemp <- whatNWISdata(siteNumbers, parameterCd=c("00060","00010"))
 }
 \keyword{USGS}
 \keyword{data}
