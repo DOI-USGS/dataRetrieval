@@ -1,4 +1,4 @@
-dataRetrievaldemo 1.4.0-in developement
+dataRetrieval 1.4.0-in developement
 ===========
 * Changed naming convention:
 getDVData -> getNWISDaily
@@ -15,7 +15,7 @@ getDataAvailability <- getNWISDataAvailability
 *
 
 
-dataRetrievaldemo 1.3.3
+dataRetrieval 1.3.3
 ===========
 
 * Updated getNWISSiteInfo to retrieve multiple site file datasets at once using a vector of siteNumbers as input argument.
@@ -24,7 +24,7 @@ dataRetrievaldemo 1.3.3
 * Added very generalized NWIS and WQP retrieval functions (getNWISData, getNWISSites, getGeneralWQPData, and whatWQPsites) which allow the user to use any argument available on the Web service platform.
 
 
-dataRetrievaldemo 1.3.2
+dataRetrieval 1.3.2
 ===========
 
 * Deprecated getQWData, updated readWQPdata to take either parameter code or characteristic name.
@@ -33,7 +33,7 @@ dataRetrievaldemo 1.3.2
 * Updated mergeReport to allow for Sample data with different measurements taken on the same day
 
 
-dataRetrievaldemo 1.2.2
+dataRetrieval 1.2.2
 ===========
 
 * Added getNWISDataAvailability function to find measured parameters and period of record information for a requested station.
@@ -44,7 +44,7 @@ dataRetrievaldemo 1.2.2
 
 * Fixed a small leap year bug by changing day of year by making Feb. 29 always 59, and March 1st always 60 (even in non-leap years).
 
-dataRetrievaldemo 1.2.1
+dataRetrieval 1.2.1
 ===========
 
 * Improved documentation, especially example functions.
