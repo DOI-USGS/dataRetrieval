@@ -1,4 +1,4 @@
-Package: dataRetrievaldemo
+Package: dataRetrieval
 Type: Package
 Title: Retrieval functions for USGS and EPA hydrologic and water quality data
 Version: 1.5.0.9000
@@ -26,7 +26,7 @@ Imports:
     httr
 Suggests:
     xtable,
-    EGRETdemo,
+    EGRET,
     knitr,
     testthat
 LazyLoad: yes
