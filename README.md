@@ -1,6 +1,6 @@
-`dataRetrievaldemo`
+`dataRetrieval`
 =============
-Linux: [![travis](https://travis-ci.org/USGS-R/dataRetrievaldemo.svg?branch=master)](https://travis-ci.org/USGS-R/dataRetrievaldemo)
+Linux: [![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master)](https://travis-ci.org/USGS-R/dataRetrieval)
 
 Windows: [![Build status](https://ci.appveyor.com/api/projects/status/msanha92b500grr7?svg=true)](https://ci.appveyor.com/project/ldecicco-USGS/dataretrieval-787)
 
@@ -31,7 +31,7 @@ Web service retrieval functions:
 
 * `Common 3` = siteNumber, startDate, endDate
 
-Moving `EGRETdemo` specific functions to `EGRETdemo` (version 2.0.0 and greater):
+Moving `EGRET` specific functions to `EGRET` (version 2.0.0 and greater):
 
 
 |Information Source | Meta Data | Data |
@@ -51,9 +51,9 @@ egret_comments@usgs.gov
 Additionally, to subscribe to an email list concerning updates to these R packages, please send a request to egret_comments@usgs.gov.
 
 ##Package Installation
-To install the dataRetrievaldemo package, you must be using R 3.0 or greater and run the following command:
+To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
 
-	install.packages("dataRetrievaldemo", 
+	install.packages("dataRetrieval", 
 	  repos=c("http://usgs-r.github.com",
 	           "http://cran.us.r-project.org"),
 	  dependencies=TRUE)
@@ -62,15 +62,15 @@ To install the dataRetrievaldemo package, you must be using R 3.0 or greater and
 ##Version updates
 ---------------
 
-###dataRetrievaldemo 1.5.0
+###dataRetrieval 1.5.0
 
-* Changing naming convention one last time. Migrating `EGRETdemo` specific retrievals to `EGRETdemo`.
+* Changing naming convention one last time. Migrating `dataRetrieval` specific retrievals to `dataRetrieval`.
 * Added back WaterML2 parsing tool
 * Added specific groundwater, rating, peak, and surfacewater measurement functions
 
 
 
-###dataRetrievaldemo 1.4.0
+###dataRetrieval 1.4.0
 Changed naming convention:
 
 |Original Name | New Name |
@@ -90,7 +90,7 @@ Changed naming convention:
 *Removing WaterML2 until fixed.
 
 
-###dataRetrievaldemo 1.3.3
+###dataRetrieval 1.3.3
 
 * Updated getNWISSiteInfo to retrieve multiple site file datasets at once using a vector of siteNumbers as input argument.
 * Updated error-handling for Web service calls. More information is returned when errors happen
@@ -98,7 +98,7 @@ Changed naming convention:
 * Added very generalized NWIS and WQP retrieval functions (getNWISData, getNWISSites, getGeneralWQPData, and whatWQPsites) which allow the user to use any argument available on the Web service platform.
 
 
-###dataRetrievaldemo 1.3.2
+###dataRetrieval 1.3.2
 
 * Deprecated getQWData, updated readWQPdata to take either parameter code or characteristic name.
 * Changed the name of raw data retrievals to: readNWISqw, getNWISunitData, getNWISdvData, and getWQPqwData (from: readNWISqw, retrieveUnitNWISData, retrieveNWISData, getRawQWData)
@@ -110,7 +110,7 @@ Changed naming convention:
 
 Load data from web services:
 
-	library(dataRetrievaldemo)
+	library(dataRetrieval)
 	Daily <- getNWISDaily("06934500","00060","1979-10-01","2010-09-30")
 	Sample <-getNWISSample("06934500","00631","1970-10-01","2011-09-30")
 	INFO <-getNWISInfo("06934500","00631", interactive=FALSE)
