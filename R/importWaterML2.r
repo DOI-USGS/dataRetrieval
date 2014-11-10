@@ -34,7 +34,7 @@
 #'   "statCd=00003",
 #'   "parameterCd=00060",sep="&")
 #' dataReturnMulti <- importWaterML2(URLmulti)
-#' filePath <- system.file("extdata", package="dataRetrievaldemo")
+#' filePath <- system.file("extdata", package="dataRetrieval")
 #' fileName <- "WaterML2Example.xml"
 #' fullPath <- file.path(filePath, fileName)
 #' UserData <- importWaterML2(fullPath)
