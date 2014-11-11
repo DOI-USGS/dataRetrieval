@@ -21,26 +21,32 @@
 #' property <- '00060'
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 #' data <- importWaterML1(obs_url,TRUE)
-#' urlMulti <- constructNWISURL("04085427",c("00060","00010"),
-#'             startDate,endDate,'dv',statCd=c("00003","00001"))
-#' multiData <- importWaterML1(urlMulti)
+#' 
 #' groundWaterSite <- "431049071324301"
 #' startGW <- "2013-10-01"
 #' endGW <- "2014-06-30"
 #' groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
-#'           startGW,endGW, service="gwlevels", format="xml")
+#'           startGW,endGW, service="gwlevels")
 #' groundWater <- importWaterML1(groundwaterExampleURL)
+#' 
 #' unitDataURL <- constructNWISURL(siteNumber,property,
-#'          "2013-11-03","2013-11-03",'uv',format='xml')
+#'          "2013-11-03","2013-11-03",'uv')
 #' unitData <- importWaterML1(unitDataURL,TRUE)
+#' 
 #' filePath <- system.file("extdata", package="dataRetrieval")
 #' fileName <- "WaterML1Example.xml"
 #' fullPath <- file.path(filePath, fileName)
 #' importUserWM1 <- importWaterML1(fullPath,TRUE)
-#' siteWithTwo <- '01480015'
-#' url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
-#' twoResults <- importWaterML1(url2,TRUE)
-#' 
+#'
+#' # Two sites, two pcodes, one site has two data descriptors:
+#' siteNumber <- c('01480015',"04085427")
+#' obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
+#' data <- importWaterML1(obs_url)
+#' data$dateTime <- as.Date(data$dateTime)
+#' data <- renameNWISColumns(data)
+#' names(attributes(data))
+#' attr(data, "url")
+#' attr(data, "disclaimer")
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(url.exists(obs_url)){
@@ -77,6 +83,15 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   doc <- xmlRoot(doc)
   ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  
+  queryInfo <- xmlToList(xmlRoot(xmlDoc(doc[["queryInfo"]])))
+  names(queryInfo) <- make.unique(names(queryInfo))
+  
+  noteIndex <- grep("note",names(queryInfo))
+  
+  noteTitles <- as.character(lapply(queryInfo[noteIndex], function(x) x$.attrs))
+  notes <- as.character(lapply(queryInfo[noteIndex], function(x) x$text))
+  names(notes) <- noteTitles
+  
   timeSeries <- xpathApply(doc, "//ns1:timeSeries", namespaces = ns)
   
   if(0 == length(timeSeries)){
@@ -84,19 +99,24 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     #TODO: return()
   }
   
+  attList <- list()
+  
   for (i in 1:length(timeSeries)){
     
     chunk <- xmlDoc(timeSeries[[i]])
     chunk <- xmlRoot(chunk)
     chunkNS <- xmlNamespaceDefinitions(chunk, simplify = TRUE)  
       
+    uniqueName <- as.character(xpathApply(chunk, "@name", namespaces = chunkNS))
     site <- as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:siteCode", namespaces = chunkNS, xmlValue))
     agency <- as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:siteCode/@agencyCode", namespaces = chunkNS))
     pCode <-as.character(xpathApply(chunk, "ns1:variable/ns1:variableCode", namespaces = chunkNS, xmlValue))
     statCd <- as.character(xpathApply(chunk, "ns1:variable/ns1:options/ns1:option/@optionCode", namespaces = chunkNS))
     noValue <- as.numeric(xpathApply(chunk, "ns1:variable/ns1:noDataValue", namespaces = chunkNS, xmlValue))
     
-  
+    extraSiteData <-  xmlToList(xmlRoot(xmlDoc(chunk[["sourceInfo"]])))
+    extraVariableData <-  xmlToList(xmlRoot(xmlDoc(chunk[["variable"]])))
+    
     valuesIndex <- as.numeric(which("values" == names(chunk)))
 
         
@@ -129,10 +149,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         
         valueName <- paste("X",pCode,statCd,sep="_")
         
-        if(length(methodDescription) > 0){
-          if(methodDescription != ""){
-            valueName <- paste("X",methodDescription,pCode,statCd,sep="_") 
-          } 
+        if(length(methodDescription) > 0 && methodDescription != ""){
+          valueName <- paste("X",methodDescription,pCode,statCd,sep="_") 
         }
         
          
@@ -167,22 +185,24 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         }
         
         if("dateTime" %in% attributeNames){
+          
+          datetime <- xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS)
+          
+          numChar <- nchar(datetime)
+          
           if(asDateTime){
             
             # Common options:
-            # YYYY
-            # YYYY-MM-DD
-            # YYYY-MM-DDTHH:MM
-            # YYYY-MM-DDTHH:MM:SS
-            # YYYY-MM-DDTHH:MM:SSZ
-            # YYYY-MM-DDTHH:MM:SS.000
-            # YYYY-MM-DDTHH:MM:SS.000-XX:00
-            datetime <- xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS)
-            
-            numChar <- nchar(datetime)
-            
+            # YYYY numChar=4
+            # YYYY-MM-DD numChar=10
+            # YYYY-MM-DDTHH:MM numChar=16
+            # YYYY-MM-DDTHH:MM:SS numChar=19
+            # YYYY-MM-DDTHH:MM:SSZ numChar=20
+            # YYYY-MM-DDTHH:MM:SS.000 numChar=23
+            # YYYY-MM-DDTHH:MM:SS.000-XX:00 numChar=29
+                        
             if(abs(max(numChar) - min(numChar)) != 0){
-              message("Mixed date types")
+              message("Mixed date types, not converted to POSIXct")
             } else {
               numChar <- numChar[1]
               if(numChar == 4){
@@ -200,6 +220,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
               } else if(numChar == 24){
                 datetime <- substr(datetime,1,23)
                 datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
+                df$tz_cd <- rep(zoneAbbrievs[1], nrow(df))
               } else if(numChar == 29){
                 tzOffset <- as.character(substr(datetime,24,numChar))
                 
@@ -210,6 +231,12 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
                 datetime <- datetime + tzHours*60*60
                 df$tz_cd <- as.character(zoneAbbrievs[tzOffset]) 
               }
+              
+              if(!("tz_cd" %in% names(df))){
+                df$tz_cd <- zoneAbbrievs[1]
+                tzHours <- as.numeric(substr(names(zoneAbbrievs[1]),1,3))
+                datetime <- datetime + tzHours*60*60
+              }
             }
             
             if(tz != ""){
@@ -218,7 +245,16 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
             
             
           } else {
-            datetime <- as.character(xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS))
+            
+            datetime <- as.character(datetime)
+            if(any(numChar) == 29){
+              tzOffset <- as.character(substr(datetime,24,numChar))
+              df$tz_cd <- as.character(zoneAbbrievs[tzOffset]) 
+              df$tz_cd[is.na(df$tz_cd)] <- zoneAbbrievs[1]
+            } else {
+              df$tz_cd <- zoneAbbrievs[1]
+            }
+            
           }
           
           df$dateTime <- datetime     
@@ -237,15 +273,63 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         
         df <- df[,columnsOrderd]
                   
+        names(extraSiteData) <- make.unique(names(extraSiteData))
+        
+        sitePropertyIndex <- grep("siteProperty",names(extraSiteData))
+        
+        properties <- as.character(lapply(extraSiteData[sitePropertyIndex], function(x) x$.attrs))
+        propertyValues <- as.character(lapply(extraSiteData[sitePropertyIndex], function(x) x$text))
+        names(propertyValues) <- properties
+        
+        siteInfo <- data.frame(station_nm=extraSiteData$siteName,
+                               site_no=extraSiteData$siteCode$text,
+                               agency=extraSiteData$siteCode$.attrs[["agencyCode"]],
+                               timeZoneOffset=extraSiteData$timeZoneInfo$defaultTimeZone[1],
+                               timeZoneAbbreviation=extraSiteData$timeZoneInfo$defaultTimeZone[2],
+                               dec_lat_va=as.numeric(extraSiteData$geoLocation$geogLocation$latitude),
+                               dec_lon_va=as.numeric(extraSiteData$geoLocation$geogLocation$longitude),
+                               srs=extraSiteData$geoLocation$geogLocation$.attrs[["srs"]],
+                               stringsAsFactors=FALSE)
+
+        siteInfo <- cbind(siteInfo, t(propertyValues))
+        
+        names(extraVariableData) <- make.unique(names(extraVariableData))
+        variableInfo <- data.frame(parameterCd=extraVariableData$variableCode$text,
+                                   parameter_nm=extraVariableData$variableName,
+                                   parameter_desc=extraVariableData$variableDescription,
+                                   valueType=extraVariableData$valueType,
+                                   param_units=extraVariableData$unit$unitCode,
+                                   noDataValue=as.numeric(extraVariableData$noDataValue),
+                                   stringsAsFactors=FALSE)
+        
         if (1 == i & valuesIndex[1] == j){
           mergedDF <- df
+          siteInformation <- siteInfo
+          variableInformation <- variableInfo
+          
         } else {
           similarNames <- intersect(names(mergedDF), names(df))
           mergedDF <- merge(mergedDF, df,by=similarNames,all=TRUE)
+          
+          similarSites <- intersect(names(siteInformation), names(siteInfo))
+          siteInformation <- merge(siteInformation, siteInfo, by=similarSites, all=TRUE)
+          
+          similarVariables <- intersect(names(variableInformation),names(variableInfo))
+          variableInformation <- merge(variableInformation, variableInfo, by=similarVariables, all=TRUE)
         }
       }
     }
+    attList[[uniqueName]] <- list(extraSiteData, extraVariableData)
+
+    
   }
+  row.names(mergedDF) <- NULL
+  attr(mergedDF, "url") <- obs_url
+  attr(mergedDF, "attributeList") <- attList
+  attr(mergedDF, "siteInfo") <- siteInformation
+  attr(mergedDF, "variableInfo") <- variableInformation
+  attr(mergedDF, "disclaimer") <- notes["disclaimer"]
+  attr(mergedDF, "queryInfo") <- queryInfo
   
   return (mergedDF)
 }
