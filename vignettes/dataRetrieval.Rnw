@@ -1,9 +1,9 @@
-%\VignetteIndexEntry{Introduction to the dataRetrievaldemo package}
+%\VignetteIndexEntry{Introduction to the dataRetrieval package}
 %\VignetteEngine{knitr::knitr}
 %\VignetteDepends{}
-%\VignetteSuggests{xtable,EGRETdemo}
-%\VignetteImports{zoo, XML, RCurl, reshape2,lubridate}
-%\VignettePackage{dataRetrievaldemo}
+%\VignetteSuggests{xtable}
+%\VignetteImports{XML, RCurl, reshape2,lubridate,httr,plyr}
+%\VignettePackage{dataRetrieval}
 
 \documentclass[a4paper,11pt]{article}
 
@@ -140,7 +140,7 @@ library(knitr)
 
 
 %------------------------------------------------------------
-\title{The dataRetrievaldemo R package}
+\title{The dataRetrieval R package}
 %------------------------------------------------------------
 \author[1]{Laura A. De Cicco}
 \author[1]{Robert M. Hirsch}
@@ -162,7 +162,7 @@ bold.colHeaders <- function(x) {
 addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 @
 
-\noindent{\huge\textsf{\textbf{The dataRetrievaldemo R package}}}
+\noindent{\huge\textsf{\textbf{The dataRetrieval R package}}}
 
 \noindent\textsf{By Laura A. De Cicco and Robert M. Hirsch}
 
@@ -179,18 +179,18 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 \newpage
 
 %------------------------------------------------------------
-\section{Introduction to dataRetrievaldemo}
+\section{Introduction to dataRetrieval}
 %------------------------------------------------------------ 
-The dataRetrievaldemo package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). A lot of useful information about NWIS can be obtained here:
+The dataRetrieval package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). A lot of useful information about NWIS can be obtained here:
 
 \url{http://help.waterdata.usgs.gov/}
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
-A quick workflow for USGS dataRetrievaldemo functions:
+A quick workflow for USGS dataRetrieval functions:
 
 <<workflow, echo=TRUE,eval=FALSE>>=
-library(dataRetrievaldemo)
+library(dataRetrieval)
 # Choptank River near Greensboro, MD
 siteNumber <- "01491000" 
 ChoptankInfo <- readNWISsite(siteNumber)
@@ -211,12 +211,12 @@ pCode <- readNWISpCode(parameterCd)
 
 USGS data are made available through the National Water Information System (NWIS).
 
-Table \ref{tab:func} describes the functions available in the dataRetrievaldemo package.
+Table \ref{tab:func} describes the functions available in the dataRetrieval package.
 
 \begin{table}[!ht]
 \begin{minipage}{\linewidth}
 {\footnotesize
-\caption{dataRetrievaldemo functions} 
+\caption{dataRetrieval functions} 
 \label{tab:func}
 \begin{tabular}{lll}
   \hline
@@ -276,7 +276,7 @@ Table \ref{tab:func} describes the functions available in the dataRetrievaldemo 
 %------------------------------------------------------------ 
 In this section, examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), water quality data (\ref{sec:usgsWQP}), groundwater level data (\ref{sec:gwl}), peak flow data (\ref{sec:peak}), rating curve data (\ref{sec:rating}, and surface-water measurement data (\ref{sec:meas}). We will mainly use the Choptank River near Greensboro, MD as an example.  Daily discharge data are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
 
-The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrievaldemo package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
+The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrieval package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
 Once the siteNumber is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. 
 
@@ -309,7 +309,7 @@ print(xtable(data.df,
 A complete list (as of November 7, 2014) is available as data attached to the package. It is accessed by the following:
 
 <<tableParameterCodesDataRetrieval, echo=TRUE, eval=TRUE>>=
-library(dataRetrievaldemo)
+library(dataRetrieval)
 parameterCdFile <-  parameterCdFile
 names(parameterCdFile)
 @
@@ -378,7 +378,7 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 \subsubsection{whatNWISdata}
 \label{sec:usgsDataAvailability}
 %------------------------------------------------------------
-To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISdata} function. It is possible to limit the retrieval information to a subset of services for example (\texttt{"}dv\texttt{"}, \texttt{"}uv\texttt{"}, or \texttt{"}qw\texttt{"}). In the following example, we limit the retrieved Choptank data to only daily data. The deafault for \texttt{"}service\texttt{"} is \enquote{all}, which returns all of the available data for that site. Likewise, there are arguments for parameter code (parameterCd) and statistic code (statCd) to filter the results. The default for both is to return all possible values (\enquote{all}).
+To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISdata} function. It is possible to limit the retrieval information to a subset of services for example (\texttt{"}dv\texttt{"}, \texttt{"}uv\texttt{"}, or \texttt{"}qw\texttt{"}). In the following example, we limit the retrieved Choptank data to only daily data. The deafault for \texttt{"}service\texttt{"} is \enquote{all}, which returns all of the available data for that site. Likewise, there are arguments for parameter code (parameterCd) and statistic code (statCd) to filter the results. The default for both is to return all possible values (\enquote{all}). The returned \texttt{"}count\_nu\texttt{"} for \texttt{"}uv\texttt{"} data is the count of days with returned data, not the actual count of returned values.
 
 
 <<getSiteExtended, echo=TRUE>>=
@@ -463,8 +463,8 @@ The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (
 # Continuing with our Choptank River example
 siteNumber <- "01491000"
 parameterCd <- "00060"  # Discharge
-startDate <- ""  # Will request earliest date
-endDate <- "" # Will request latest date
+startDate <- "2009-10-01"  
+endDate <- "2012-09-30" 
 
 discharge <- readNWISdv(siteNumber, 
                     parameterCd, startDate, endDate)
@@ -549,6 +549,7 @@ head(dischargeUnit)
 @
 
 To override the UTC timezone, specify a valid timezone in the tz argument. Default is \texttt{""}, which will keep the dateTime column in UTC. Other valid timezones are:
+
 \begin{verbatim}
 America/New_York
 America/Chicago
@@ -700,7 +701,7 @@ specificCond <- readWQPqw('WIDNR_WQX-10032762',
                 'Specific conductance','2011-05-01','2011-09-30')
 @
 
-Guidance for finding characteristic names can be found at: \url{http://www.waterqualitydata.us/webservices_documentation.jsp}.
+A tool for finding NWIS characteristic names can be found at: \url{http://www.waterqualitydata.us/public_srsnames.jsp}
 
 \FloatBarrier
 
@@ -722,7 +723,7 @@ to discover many options for searching for NWIS sites. For example, you may want
 
 \url{http://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv}
 
-The following dataRetrievaldemo code can be used to get those sites:
+The following dataRetrieval code can be used to get those sites:
 
 <<siteSearch>>=
 sites <- whatNWISsites(bBox="-83.0,36.5,-81.0,38.5", 
@@ -815,7 +816,7 @@ dataPH <- readWQPdata(statecode="US:55",
 \section{Getting Started in R}
 \label{sec:appendix1}
 %------------------------------------------------------------ 
-This section describes the options for downloading and installing the dataRetrievaldemo package.
+This section describes the options for downloading and installing the dataRetrieval package.
 
 %------------------------------------------------------------
 \subsection{New to R?}
@@ -841,23 +842,23 @@ At any time, you can get information about any function in R by typing a questio
 
 Additionally, many R packages have vignette files attached (such as this paper). To view the vignette:
 <<seeVignette,eval = FALSE>>=
-vignette(dataRetrievaldemo)
+vignette(dataRetrieval)
 @
 
 \FloatBarrier
 \clearpage
 %------------------------------------------------------------
-\subsection{R User: Installing dataRetrievaldemo}
+\subsection{R User: Installing dataRetrieval}
 %------------------------------------------------------------ 
-The following command installs dataRetrievaldemo and subsequent required packages:
+The following command installs dataRetrieval and subsequent required packages:
 
 <<installFromCran,eval = FALSE>>=
-install.packages("dataRetrievaldemo")
+install.packages("dataRetrieval")
 @
 
 After installing the package, you need to open the library each time you re-start R.  This is done with the simple command:
 <<openLibraryTest, eval=FALSE>>=
-library(dataRetrievaldemo)
+library(dataRetrieval)
 @
 
 
