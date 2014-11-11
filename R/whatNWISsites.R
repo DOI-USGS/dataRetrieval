@@ -69,6 +69,7 @@ whatNWISsites <- function(...){
     retval <- retval[!duplicated(retval),]
     
     retval$queryTime <- Sys.time()
+    attr(retVal, "url") <- urlCall
     
     return(retval)
   } else {
