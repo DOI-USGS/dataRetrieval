@@ -31,7 +31,6 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
   url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,"uv",format="xml")
 
   data <- importWaterML1(url,asDateTime=TRUE,tz=tz)
-  
 
   return (data)
 }
@@ -132,7 +131,6 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate=""){
   
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="wml1")
   data <- importWaterML1(url,asDateTime=FALSE)
-  
   return (data)
 }
 
