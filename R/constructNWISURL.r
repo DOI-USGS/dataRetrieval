@@ -44,7 +44,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 
   service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas"))
   
-  if(!is.na(parameterCd)){
+  if(any(!is.na(parameterCd))){
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     
     if(!pcodeCheck){
