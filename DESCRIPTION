@@ -6,7 +6,9 @@ Date: 2014-10-13
 Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
     email = "rhirsch@usgs.gov"),
     person("Laura", "DeCicco", role = c("aut","cre"),
-    email = "ldecicco@usgs.gov"))
+    email = "ldecicco@usgs.gov"),
+    person("David","Lorenz", role=c("aut"),
+    email = "lorenz@usgs.gov"))
 Description: Collection of functions to help retrieve USGS data from web
     services.
 License: Unlimited | file LICENSE
