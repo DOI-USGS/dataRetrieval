@@ -28,6 +28,7 @@ readWQPqw <- function(siteNumber,parameterCd,startDate="",endDate=""){
 
   url <- constructWQPURL(siteNumber,parameterCd,startDate,endDate)
   retVal <- importWQP(url,TRUE)
+  attr(retVal, "url") <- url
   return(retVal)
   
 }
