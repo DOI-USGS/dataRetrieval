@@ -3,8 +3,8 @@
 #' \tabular{ll}{
 #' Package: \tab dataRetrieval\cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.4.0\cr
-#' Date: \tab 2014-09-16\cr
+#' Version: \tab 1.5.0\cr
+#' Date: \tab 2014-11-16\cr
 #' License: \tab Unlimited for this package, dependencies have more restrictive licensing.\cr
 #' Copyright: \tab This software is in the public domain because it contains materials
 #' that originally came from the United States Geological Survey, an agency of
@@ -26,7 +26,7 @@ NULL
 
 #' List of USGS parameter codes
 #'
-#' Complete list of USGS parameter codes as of September 25, 2013.
+#' Complete list of USGS parameter codes as of November 7, 2014.
 #'
 #' @name parameterCdFile
 #' @docType data

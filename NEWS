@@ -21,14 +21,14 @@ dataRetrieval 1.3.3
 * Updated getNWISSiteInfo to retrieve multiple site file datasets at once using a vector of siteNumbers as input argument.
 * Updated error-handling for Web service calls. More information is returned when errors happen
 * Added some basic processing to Water Quality Portal raw data retrievals. Date columns are returned as Date objects, value columns are numeric, and a column is created from the date/time/timezone columns that is POSIXct.
-* Added very generalized NWIS and WQP retrieval functions (getNWISData, getNWISSites, getGeneralWQPData, and getWQPSites) which allow the user to use any argument available on the Web service platform.
+* Added very generalized NWIS and WQP retrieval functions (getNWISData, getNWISSites, getGeneralWQPData, and whatWQPsites) which allow the user to use any argument available on the Web service platform.
 
 
 dataRetrieval 1.3.2
 ===========
 
-* Deprecated getQWData, updated getWQPData to take either parameter code or characteristic name.
-* Changed the name of raw data retrievals to: getNWISqwData, getNWISunitData, getNWISdvData, and getWQPqwData (from: getNWISqwData, retrieveUnitNWISData, retrieveNWISData, getRawQWData)
+* Deprecated getQWData, updated readWQPdata to take either parameter code or characteristic name.
+* Changed the name of raw data retrievals to: readNWISqw, getNWISunitData, getNWISdvData, and getWQPqwData (from: readNWISqw, retrieveUnitNWISData, retrieveNWISData, getRawQWData)
 * Added NA warning to getDVData function
 * Updated mergeReport to allow for Sample data with different measurements taken on the same day
 
@@ -53,4 +53,4 @@ dataRetrieval 1.2.1
 
 * Expanded the capabilities to retrieve raw data from the web services.
 
-* Added Storet data retrievals in getWQPData function
+* Added Storet data retrievals in readWQPdata function

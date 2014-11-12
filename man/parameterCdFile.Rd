@@ -4,7 +4,7 @@
 \alias{parameterCdFile}
 \title{List of USGS parameter codes}
 \description{
-Complete list of USGS parameter codes as of September 25, 2013.
+Complete list of USGS parameter codes as of November 7, 2014.
 }
 \keyword{USGS}
 \keyword{parameterCd}

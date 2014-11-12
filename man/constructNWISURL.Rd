@@ -3,9 +3,9 @@
 \alias{constructNWISURL}
 \title{Construct NWIS url for data retrieval}
 \usage{
-constructNWISURL(siteNumber, parameterCd, startDate, endDate, service,
-  statCd = "00003", format = "xml", expanded = FALSE,
-  interactive = TRUE)
+constructNWISURL(siteNumber, parameterCd = "00060", startDate = "",
+  endDate = "", service, statCd = "00003", format = "xml",
+  expanded = FALSE, ratingType = "base")
 }
 \arguments{
 \item{siteNumber}{string or vector of strings USGS site number.  This is usually an 8 digit number}
@@ -16,7 +16,8 @@ constructNWISURL(siteNumber, parameterCd, startDate, endDate, service,
 
 \item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
 
-\item{service}{string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), "qw" (water quality data), "gwlevels" (groundwater),and "wqp" (water quality portal, which can include STORET).}
+\item{service}{string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values),
+"qw" (water quality data), "gwlevels" (groundwater),and "rating" (rating curve), "peak", "meas" (discrete streamflow measurements).}
 
 \item{statCd}{string or vector USGS statistic code only used for daily value service. This is usually 5 digits.  Daily mean (00003) is the default.}
 
@@ -26,7 +27,7 @@ but the user must carefully check the results to see if the data returns matches
 
 \item{expanded}{logical defaults to FALSE. If TRUE, retrieves additional information, only applicable for qw data.}
 
-\item{interactive}{logical Option for interactive mode.  If TRUE, there is user interaction for error handling and data checks.}
+\item{ratingType}{can be "base", "corr", or "exsa". Only applies to rating curve data.}
 }
 \value{
 url string
@@ -43,15 +44,18 @@ endDate <- ''
 pCode <- c("00060","00010")
 url_daily <- constructNWISURL(siteNumber,pCode,
            startDate,endDate,'dv',statCd=c("00003","00001"))
-url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
 \dontrun{
+# Not running for time considerations
+url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
+
 url_qw_single <- constructNWISURL(siteNumber,"01075",startDate,endDate,'qw')
 url_qw <- constructNWISURL(siteNumber,c('01075','00029','00453'),
            startDate,endDate,'qw')
-url_wqp <- constructNWISURL(paste("USGS",siteNumber,sep="-"),c('01075','00029','00453'),
-           startDate,endDate,'wqp')
 url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',
            statCd=c("00003","00001"),format="tsv")
+url_rating <- constructNWISURL(siteNumber,service="rating",ratingType="base")
+url_peak <- constructNWISURL(siteNumber, service="peak")
+url_meas <- constructNWISURL(siteNumber, service="meas")
            }
 }
 \keyword{USGS}

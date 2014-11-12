@@ -1,69 +1,109 @@
 #' renameColumns
 #'
-#' Rename columns coming back from NWIS data retrievals
+#' Rename columns coming back from NWIS data retrievals.  Daily and unit value columns
+#' have names derived from their data descriptor, parameter, and statistic codes. This
+#' function reads information from the header and the arguments in the call to
+#' to rename those columns.
 #'
-#' @param rawData dataframe returned from retrieval functions
-#' @keywords data import USGS web service
-#' @return rawData dataframe with improved column names
+#' @param rawData the daily- or unit-values datset retrieved from NWISweb.
+#' @param p00010 the base name for parameter code 00010.
+#' @param p00045 the base name for parameter code 00045.
+#' @param p00060 the base name for parameter code 00060.
+#' @param p00065 the base name for parameter code 00065.
+#' @param p00095 the base name for parameter code 00095.
+#' @param p00300 the base name for parameter code 00300.
+#' @param p00400 the base name for parameter code 00400.
+#' @param p62611 the base name for parameter code 62611.
+#' @param p63680 the base name for parameter code 63680.
+#' @param p72019 the base name for parameter code 72019.
+#' @param \dots named arguments for the base name for any other parameter code. The
+#'form of the name must be like pXXXXX, where XXXXX is the parameter code.
+#' @return A dataset like \code{data} with selected columns renamed.
+#' @note The following statistics codes are converted by \code{renameNWISColumns}. See
+#'\url{http://help.waterdata.usgs.gov/stat_cd_nm} for information about USGS statistics codes.
+#'\describe{
+#'\item{00001}{Maximum value, suffix: Max}
+#'\item{00002}{Minimum value, suffix: Min}
+#'\item{00003}{Mean value, no suffix}
+#'\item{00006}{Sum of values, suffix: Sum}
+#'\item{00007}{Modal value, suffix: Mode}
+#'\item{00008}{Median value, suffix: Median}
+#'\item{00011}{Instantaneous Value, suffix: Inst}
+#'\item{00012}{Equivalent mean value, suffix: EqMean}
+#'\item{00021}{Tidal high-high value, suffix: HiHiTide}
+#'\item{00022}{Tidal low-high value, suffix: LoHiTide}
+#'\item{00023}{Tidal high-low value, suffix: HiLoTide}
+#'\item{00024}{Tidal low-low value, suffix: LoLoTide}
+#'}
+#' @seealso \code{\link{readNWISdv}}, \code{\link{readNWISuv}}
+#' @keywords manip IO
 #' @export
 #' @examples
-#' # This example requires an internet connection to run
-#' siteNumber <- '05114000' 
-#' rawData <- getNWISdvData(siteNumber,c("00010","00060","00300"),
-#'           "2001-01-01","2002-01-01",statCd=c("00001","00003"))
-#' rawData <- renameColumns(rawData)
-#' date <- "2014-10-10"
-#' rawData2 <- getNWISunitData(siteNumber,c("00010","00060"),date,date)
-#' rawData2 <- renameColumns(rawData2)
-#' head(rawData2)
-renameColumns <- function(rawData){
+#' siteWithTwo <- '01480015'
+#' startDate <- "2012-09-01"
+#' endDate <- "2012-10-01"
+#' url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
+#' twoResults <- importWaterML1(url2,TRUE)
+#' twoResults <- renameNWISColumns(twoResults)
+renameNWISColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
+                          p00060="Flow", p00065="GH", p00095="SpecCond", p00300="DO",
+                          p00400="pH", p62611="GWL", p63680="Turb", p72019="WLBLS",
+                          ...){
   
-  columnNames <- names(rawData)
+  Cnames <- names(rawData)
   
-  dataCols <- columnNames["X" == substring(columnNames, 1, 1)]
-  dataCol_cds <- dataCols["cd" == substring(dataCols, nchar(dataCols)-1, nchar(dataCols))]
-  dataCol_names <- dataCols[!(dataCols %in% dataCol_cds)]
+  Conv <- list(...)
+  Conv$p00010 <- p00010
+  Conv$p00060 <- p00060
+  Conv$p00045 <- p00045
+  Conv$p00065 <- p00065
+  Conv$p00095 <- p00095
+  Conv$p00300 <- p00300
+  Conv$p00400 <- p00400
+  Conv$p62611 <- p62611
+  Conv$p63680 <- p63680
+  Conv$p72019 <- p72019
   
-  pCodes <- sapply(strsplit(dataCol_names, "_"), function(x) x[2])
-  statCd <- sapply(strsplit(dataCol_names, "_"), function(x) x[3])
+  Conv$s00001 <- "Max"
+  Conv$s00002 <- "Min"
+  Conv$s00003 <- ""
+  Conv$s00006 <- "Sum"
+  Conv$s00007 <- "Mode"
+  Conv$s00008 <- "Median"
+  Conv$s00011<- "Inst" # Why is this in dv?
+  Conv$s00012<- "EqMean"
+  Conv$s00021<- "HiHiTide"
+  Conv$s00022<- "LoHiTide"
+  Conv$s00023<- "HiLoTide"
+  Conv$s00024<- "LoLoTide"
+
+  dataColumns <- grep("X_", Cnames)
   
-  pcodeINFO <- getNWISPcodeInfo(pCodes,interactive=FALSE)
-  multipleCodes <- anyDuplicated(pCodes)
-  
-  statCd <- sub("00001", "_Max", statCd)
-  statCd <- sub("00002", "_Min", statCd)
-  statCd <- sub("00003", "", statCd) # Leave mean blank
-  statCd <- sub("00011", "", statCd) # Also leaving blank
-  
-  DDnum <- sapply(strsplit(dataCol_names, "_"), function(x) x[1])
-  DDnum <- gsub("X","",DDnum)
-  
-  if (!any(duplicated(pCodes))){
-    dataColNames <- pcodeINFO$parameter_nm[which(pcodeINFO$parameter_cd %in% pCodes)]    
-#     dataColNames <- pcodeINFO$srsname[which(pcodeINFO$parameter_cd %in% pCodes)]  
-    dataColNames <- paste(dataColNames,statCd,sep="")
-  } else {
-    dataColNames <- rep(NA,length(dataCol_names))    
-    for (i in 1:length(dataCol_names)){
-      dataColNames[i] <- pcodeINFO$parameter_nm[which(pcodeINFO$parameter_cd %in% pCodes[i])]
-#       dataColNames[i] <- pcodeINFO$srsname[which(pcodeINFO$parameter_cd %in% pCodes[i])]
-      if((!(pCodes[i] %in% duplicated(pCodes))) && (pCodes[i] != pCodes[anyDuplicated(pCodes)])){
-        dataColNames[i] <- paste(dataColNames[i],statCd[i],sep="")
-      } else {
-        dataColNames[i] <- paste(dataColNames[i],statCd[i],"_",DDnum[i],sep="")        
-      }
-      
-    }
+  for (i in dataColumns){
+    chunks <- strsplit(Cnames[i], "_")[[1]]
     
+    #Pcodes:
+    for(j in 1:length(chunks)){
+      if(paste0("p",chunks[j]) %in% names(Conv)){
+        chunks[j] <- as.character(Conv[paste0("p",chunks[j])])
+        Cnames[i] <- paste(chunks, collapse ="_")
+        break
+      }
+    }
+    #Stat codes:
+    for(j in 1:length(chunks)){
+      if(paste0("s",chunks[j]) %in% names(Conv)){
+        chunks[j] <- as.character(Conv[paste0("s",chunks[j])])
+        chunks <- chunks[chunks != ""]
+        Cnames[i] <- paste(chunks, collapse ="_")
+        break
+      }
+    }
   }
-  dataColCDS <- paste(dataColNames, "_cd")
-  columnNames[which(columnNames %in% dataCol_names)] <- dataColNames
-  columnNames[which(columnNames %in% dataCol_cds)] <- dataColCDS
   
-  columnNames <- gsub("[$,. ]","_",columnNames)
-  columnNames <- gsub("__","_",columnNames)
-  
-  names(rawData) <- columnNames
+  Cnames <- gsub("X_","",Cnames)
+
+  names(rawData) <- Cnames
   
   return(rawData)
 }

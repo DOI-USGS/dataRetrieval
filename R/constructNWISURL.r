@@ -9,12 +9,13 @@
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
 #' @param statCd string or vector USGS statistic code only used for daily value service. This is usually 5 digits.  Daily mean (00003) is the default.
-#' @param service string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), "qw" (water quality data), "gwlevels" (groundwater),and "wqp" (water quality portal, which can include STORET).
+#' @param service string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), 
+#'  "qw" (water quality data), "gwlevels" (groundwater),and "rating" (rating curve), "peak", "meas" (discrete streamflow measurements).
 #' @param format string, can be "tsv" or "xml", and is only applicable for daily and unit value requests.  "tsv" returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower, 
 #' but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
 #' but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml". 
 #' @param expanded logical defaults to FALSE. If TRUE, retrieves additional information, only applicable for qw data.
-#' @param interactive logical Option for interactive mode.  If TRUE, there is user interaction for error handling and data checks.
+#' @param ratingType can be "base", "corr", or "exsa". Only applies to rating curve data.
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
@@ -26,26 +27,41 @@
 #' pCode <- c("00060","00010")
 #' url_daily <- constructNWISURL(siteNumber,pCode,
 #'            startDate,endDate,'dv',statCd=c("00003","00001"))
-#' url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
 #' \dontrun{
+#' # Not running for time considerations
+#' url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
+#' 
 #' url_qw_single <- constructNWISURL(siteNumber,"01075",startDate,endDate,'qw')
 #' url_qw <- constructNWISURL(siteNumber,c('01075','00029','00453'),
 #'            startDate,endDate,'qw')
-#' url_wqp <- constructNWISURL(paste("USGS",siteNumber,sep="-"),c('01075','00029','00453'),
-#'            startDate,endDate,'wqp')
 #' url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',
 #'            statCd=c("00003","00001"),format="tsv")
+#' url_rating <- constructNWISURL(siteNumber,service="rating",ratingType="base")
+#' url_peak <- constructNWISURL(siteNumber, service="peak")
+#' url_meas <- constructNWISURL(siteNumber, service="meas")
 #'            }
-constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,statCd="00003", format="xml",expanded=FALSE,interactive=TRUE){
+constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate="",
+                             service,statCd="00003", format="xml",expanded=FALSE,
+                             ratingType="base"){
 
-  startDate <- formatCheckDate(startDate, "StartDate", interactive=interactive)
-  endDate <- formatCheckDate(endDate, "EndDate", interactive=interactive)
+  service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas"))
   
-  dateReturn <- checkStartEndDate(startDate, endDate, interactive=interactive)
-  startDate <- dateReturn[1]
-  endDate <- dateReturn[2]
+  if(any(!is.na(parameterCd))){
+    pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
+    
+    if(!pcodeCheck){
+      badIndex <- which(parameterCd %in% parameterCdFile$parameter_cd)
+      if(length(badIndex) > 0){
+        badPcode <- parameterCd[-badIndex]
+      } else {
+        badPcode <- parameterCd
+      }
+      message("The following pCodes may be unavailable:",paste(badPcode,collapse=","))
+    }
+  }
+  
   multipleSites <- length(siteNumber) > 1
-  multiplePcodes <- length(parameterCd)>1
+  
   siteNumber <- paste(siteNumber, collapse=",")
   
   switch(service,
@@ -59,6 +75,8 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
                siteNumber <- paste(siteNumber,"search_site_no_match_type=exact",sep="&")
                searchCriteria <- "search_site_no"
              }
+             
+             multiplePcodes <- length(parameterCd)>1
              
              if(multiplePcodes){
                pCodes <- paste(parameterCd, collapse=",")
@@ -94,49 +112,39 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
                url <- paste(url,"&end_date=",endDate,sep="")
              }
            },
-         wqp = {
-      
-           #Check for pcode:
-           if(all(nchar(parameterCd) == 5)){
-             suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
-           } else {
-             pCodeLogic <- FALSE
-             parameterCd <- gsub(",","%2C",parameterCd)
-             parameterCd <- URLencode(parameterCd)
-           }
-           
-           if(multiplePcodes){
-             parameterCd <- paste(parameterCd, collapse=";")
-           }
-           
-           if (nzchar(startDate)){
-             startDate <- format(as.Date(startDate), format="%m-%d-%Y")
-           }
-           if (nzchar(endDate)){
-             endDate <- format(as.Date(endDate), format="%m-%d-%Y")
-           }
-           
-           baseURL <- "http://www.waterqualitydata.us/Result/search?siteid="
-           url <- paste0(baseURL,
-                        siteNumber,
-                        ifelse(pCodeLogic,"&pCode=","&characteristicName="),
-                        parameterCd,
-                        "&startDateLo=",
-                        startDate,
-                        "&startDateHi=",
-                        endDate,
-                        "&countrycode=US&mimeType=tsv")
-           },
+        rating = {
+          ratingType <- match.arg(ratingType, c("base", "corr", "exsa"))
+          url <- paste0("http://waterdata.usgs.gov/nwisweb/get_ratings?site_no=",
+                siteNumber, "&file_type=", ratingType)
+        },
+        peak = {
+          url <- paste0("http://nwis.waterdata.usgs.gov/usa/nwis/peak/?site_no=", siteNumber,
+                "&range_selection=date_range&format=rdb")
+          if (nzchar(startDate)) {
+            url <- paste0(url,"&begin_date=",startDate)
+          }
+          if(nzchar(endDate)){
+            url <- paste0(url, "&end_date=", endDate)
+          }
+        },
+        meas = {
+          url <- paste0("http://waterdata.usgs.gov/nwis/measurements?site_no=", siteNumber,
+                "&range_selection=date_range&format=rdb")
+          if (nzchar(startDate)) {
+            url <- paste0(url,"&begin_date=",startDate)
+          }
+          if(nzchar(endDate)){
+            url <- paste0(url, "&end_date=", endDate)
+          }
+
+        },
+        
         { # this will be either dv or uv
-           
+          multiplePcodes <- length(parameterCd)>1
           # Check for 5 digit parameter code:
           if(multiplePcodes){
             parameterCd <- paste(parameterCd, collapse=",")
-          } else {
-            if("gwlevels" != service){
-              parameterCd <- formatCheckParameterCd(parameterCd, interactive=interactive)
-            }
-          }
+          } 
           
           if ("uv"==service) {
             service <- "iv"
@@ -145,19 +153,28 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
             baseURL <- paste0("http://waterservices.usgs.gov/nwis/",service)  
           }
           
-          if ("xml"==format){ 
-            if("gwlevels" == service){
-              format <- "waterml"
-            } else {
-              format <- "waterml,1.1"
-            }            
-          } else if ("tsv" == format){
-            format <- "rdb,1.0"
-          } else {
-            warning("non-supported format requested, please choose xml or tsv")
-          }
+          format <- match.arg(format, c("xml","tsv","wml1","wml2","rdb"))
           
-          url <- paste0(baseURL,"/?site=",siteNumber, "&format=", format)
+          formatURL <- switch(format,
+            xml = {if ("gwlevels" == service) {
+                "waterml"
+              } else {
+                "waterml,1.1"
+              }
+            },
+            rdb = "rdb,1.0",
+            tsv = "rdb,1.0",
+            wml2 = "waterml,2.0",
+            wml1 = {if ("gwlevels" == service) {
+                "waterml"
+              } else {
+                "waterml,1.1"
+              }
+            }
+          )
+
+          
+          url <- paste0(baseURL,"/?site=",siteNumber, "&format=", formatURL)
           
           if("gwlevels"!= service){
             url <- paste0(url, "&ParameterCd=",parameterCd)
@@ -184,10 +201,77 @@ constructNWISURL <- function(siteNumber,parameterCd,startDate,endDate,service,st
         }
          
     )
+  
   if(url.exists(url)){
     return(url)
   } else {
-    stop("The following url doesn't seem to exist:\n",url)
+    stop("The following url doesn't seem to exist:\n",url)    
+  }  
+}
+
+
+
+
+
+#' Construct WQP url for data retrieval
+#'
+#' Imports data from WQP web service. This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/qwdata}
+#' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+#' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+#'
+#' @param siteNumber string or vector of strings USGS site number.  This is usually an 8 digit number
+#' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
+#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @keywords data import WQP web service
+#' @return url string
+#' @export
+#' @import RCurl
+#' @examples
+#' siteNumber <- '01594440'
+#' startDate <- '1985-01-01'
+#' endDate <- ''
+#' pCode <- c("00060","00010")
+#' url_wqp <- constructWQPURL(paste("USGS",siteNumber,sep="-"),
+#'            c('01075','00029','00453'),
+#'            startDate,endDate)
+constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate){
+  
+  multipleSites <- length(siteNumber) > 1
+  multiplePcodes <- length(parameterCd)>1
+  siteNumber <- paste(siteNumber, collapse=",")
+
+  if(all(nchar(parameterCd) == 5)){
+    suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
+  } else {
+    pCodeLogic <- FALSE
+    parameterCd <- gsub(",","%2C",parameterCd)
+    parameterCd <- URLencode(parameterCd)
   }
   
+  if(multiplePcodes){
+    parameterCd <- paste(parameterCd, collapse=";")
+  }
+
+
+  
+  baseURL <- "http://www.waterqualitydata.us/Result/search?siteid="
+  url <- paste0(baseURL,
+                siteNumber,
+                ifelse(pCodeLogic,"&pCode=","&characteristicName="),
+                parameterCd)
+  
+  if (nzchar(startDate)){
+    startDate <- format(as.Date(startDate), format="%m-%d-%Y")
+    url <- paste0(url, "&startDateLo=",startDate)
+  }
+  
+  if (nzchar(endDate)){
+    endDate <- format(as.Date(endDate), format="%m-%d-%Y")
+    url <- paste0(url, "&startDateHi=",endDate)
+  }
+  
+  url <- paste0(url,"&countrycode=US&mimeType=tsv")
+  return(url)
+
 }
