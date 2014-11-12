@@ -24,6 +24,10 @@ Arguments to the function should be based on \url{http://waterservices.usgs.gov}
 \examples{
 dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010")
 dataTempUnit <- readNWISdata(sites="03086500", service="iv", parameterCd="00010")
+#Empty:
+multiSite <- readNWISdata(sites=c("04025000","04072150"), service="iv", parameterCd="00010")
+#Not empty:
+multiSite <- readNWISdata(sites=c("04025500","040263491"), service="iv", parameterCd="00060")
 }
 \keyword{NWIS}
 \keyword{data}

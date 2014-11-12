@@ -35,13 +35,16 @@ startDate <- '2012-01-01'
 endDate <- '2012-06-30'
 pCode <- '00060'
 rawDailyQ <- readNWISdv(siteNumber,pCode, startDate, endDate)
-rawDailyTemperature <- readNWISdv(siteNumber,'00010',
-       startDate, endDate, statCd='00001')
 rawDailyQAndTempMeanMax <- readNWISdv(siteNumber,c('00010','00060'),
        startDate, endDate, statCd=c('00001','00003'))
+rawDailyQAndTempMeanMax <- renameNWISColumns(rawDailyQAndTempMeanMax)
 rawDailyMultiSites<- readNWISdv(c("01491000","01645000"),c('00010','00060'),
        startDate, endDate, statCd=c('00001','00003'))
-x <- readNWISdv("10258500","00060", "2014-09-10", "2014-09-12")
+# Site with no data:
+x <- readNWISdv("10258500","00060", "2014-09-08", "2014-09-14")
+names(attributes(x))
+attr(x, "siteInfo")
+attr(x, "variableInfo")
 }
 \keyword{USGS}
 \keyword{data}

@@ -54,7 +54,7 @@ end <- "2013-11-28"
 urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
 
 # User file:
-filePath <- system.file("extdata", package="dataRetrievaldemo")
+filePath <- system.file("extdata", package="dataRetrieval")
 fileName <- "RDB1Example.txt"
 fullPath <- file.path(filePath, fileName)
 importUserRDB <- importRDB1(fullPath)

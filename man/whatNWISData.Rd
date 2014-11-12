@@ -16,7 +16,7 @@ whatNWISdata(siteNumbers, service = "all", parameterCd = "all",
 "uv","rt", or "iv"(unit values), "qw"(water-quality),"sv"(sites visits),"pk"(peak measurements),
 "gw"(groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link),
 "aw" (sites monitored by the USGS Active Groundwater Level Network External Link), "id" (historical
-instantaneous values), "}
+instantaneous values)}
 
 \item{parameterCd}{string vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.}
 
@@ -26,7 +26,8 @@ instantaneous values), "}
 retval dataframe with all information found in the expanded site file
 }
 \description{
-Imports a table of available parameters, period of record, and count.
+Imports a table of available parameters, period of record, and count. See \url{http://waterservices.usgs.gov/rest/Site-Service.html}
+for more information.
 }
 \examples{
 availableData <- whatNWISdata('05114000')

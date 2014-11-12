@@ -30,24 +30,31 @@ offering <- '00003'
 property <- '00060'
 obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 data <- importWaterML1(obs_url,TRUE)
-urlMulti <- constructNWISURL("04085427",c("00060","00010"),
-            startDate,endDate,'dv',statCd=c("00003","00001"))
-multiData <- importWaterML1(urlMulti)
+
 groundWaterSite <- "431049071324301"
 startGW <- "2013-10-01"
 endGW <- "2014-06-30"
 groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
-          startGW,endGW, service="gwlevels", format="xml")
+          startGW,endGW, service="gwlevels")
 groundWater <- importWaterML1(groundwaterExampleURL)
+
 unitDataURL <- constructNWISURL(siteNumber,property,
-         "2013-11-03","2013-11-03",'uv',format='xml')
+         "2013-11-03","2013-11-03",'uv')
 unitData <- importWaterML1(unitDataURL,TRUE)
-filePath <- system.file("extdata", package="dataRetrievaldemo")
+
+filePath <- system.file("extdata", package="dataRetrieval")
 fileName <- "WaterML1Example.xml"
 fullPath <- file.path(filePath, fileName)
 importUserWM1 <- importWaterML1(fullPath,TRUE)
-siteWithTwo <- '01480015'
-url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
-twoResults <- importWaterML1(url2,TRUE)
+
+# Two sites, two pcodes, one site has two data descriptors:
+siteNumber <- c('01480015',"04085427")
+obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
+data <- importWaterML1(obs_url)
+data$dateTime <- as.Date(data$dateTime)
+data <- renameNWISColumns(data)
+names(attributes(data))
+attr(data, "url")
+attr(data, "disclaimer")
 }
 
