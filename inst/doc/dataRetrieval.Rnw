@@ -274,7 +274,7 @@ Table \ref{tab:func} describes the functions available in the dataRetrieval pack
 \section{USGS Web Retrievals}
 \label{sec:genRetrievals}
 %------------------------------------------------------------ 
-In this section, examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), water quality data (\ref{sec:usgsWQP}), groundwater level data (\ref{sec:gwl}), peak flow data (\ref{sec:peak}), rating curve data (\ref{sec:rating}, and surface-water measurement data (\ref{sec:meas}). We will mainly use the Choptank River near Greensboro, MD as an example.  Daily discharge data are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
+In this section, examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), water quality data (\ref{sec:usgsWQP}), groundwater level data (\ref{sec:gwl}), peak flow data (\ref{sec:peak}), rating curve data (\ref{sec:rating}, and surface-water measurement data (\ref{sec:meas}). Section \ref{sec:metadata} shows instructions for getting metadata that is attached to each returned dataframe.
 
 The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrieval package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
@@ -372,6 +372,15 @@ A specific example piece of information can be retrieved, in this case a station
 siteINFO$station_nm
 @
 Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
+
+To get more information on the column headers, use the \texttt{comment} function to read the attached metadata (see Sec. \ref{sec:metadata}).
+
+<<siteNames3, echo=TRUE>>=
+comment(siteINFO)
+@
+
+
+
 \FloatBarrier
 
 %------------------------------------------------------------
@@ -380,7 +389,7 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 %------------------------------------------------------------
 To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISdata} function. It is possible to limit the retrieval information to a subset of services. The possible choices for services are: \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"}, \texttt{"}rt\texttt{"}, or \texttt{"}iv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (water-quality), \texttt{"}sv\texttt{"} (sites visits), \texttt{"}pk\texttt{"} (peak measurements), \texttt{"}gw\texttt{"} (groundwater levels), \texttt{"}ad\texttt{"} (sites included in USGS Annual Water Data Reports External Link), \texttt{"}aw\texttt{"} (sites monitored by the USGS Active Groundwater Level Network External Link), and \texttt{"}id\texttt{"} (historical instantaneous values).
 
-In the following example, we limit the retrieved Choptank data to only daily data. The deafault for \texttt{"}service\texttt{"} is \enquote{all}, which returns all of the available data for that site. Likewise, there are arguments for parameter code (\texttt{parameterCd}) and statistic code (\texttt{statCd}) to filter the results. The default for both is to return all possible values (\enquote{all}). The returned \texttt{"}count\_nu\texttt{"} for \texttt{"}uv\texttt{"} data is the count of days with returned data, not the actual count of returned values.
+In the following example, we limit the retrieved data to only daily data. The default for \texttt{"}service\texttt{"} is \enquote{all}, which returns all of the available data for that site. Likewise, there are arguments for parameter code (\texttt{parameterCd}) and statistic code (\texttt{statCd}) to filter the results. The default for both is to return all possible values (\enquote{all}). The returned \texttt{"}count\_nu\texttt{"} for \texttt{"}uv\texttt{"} data is the count of days with returned data, not the actual count of returned values.
 
 
 <<getSiteExtended, echo=TRUE>>=
@@ -462,7 +471,7 @@ The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (
 
 <<label=getNWISDaily, echo=TRUE, eval=TRUE>>=
 
-# Continuing with our Choptank River example
+# Choptank River near Greensboro, MD:
 siteNumber <- "01491000"
 parameterCd <- "00060"  # Discharge
 startDate <- "2009-10-01"  
@@ -478,6 +487,7 @@ The column \texttt{"}datetime\texttt{"} in the returned dataframe is automatical
 \url{http://help.waterdata.usgs.gov/codes-and-parameters/daily-value-qualification-code-dv_rmk_cd}
 
 Another example that doesn't use the defaults would be a request for mean and maximum daily temperature and discharge in early 2012:
+
 <<label=getNWIStemperature, echo=TRUE>>=
 
 parameterCd <- c("00010","00060")  # Temperature and discharge
@@ -504,22 +514,21 @@ names(temperatureAndFlow)
 An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
 
 <<getNWIStemperaturePlot, echo=TRUE, fig.cap="Temperature and discharge plot of Choptank River in 2012.",out.width='1\\linewidth',out.height='1\\linewidth',fig.show='hold'>>=
+variableInfo <- attr(temperatureAndFlow, "variableInfo")
+siteInfo <- attr(temperatureAndFlow, "siteInfo")
+
 par(mar=c(5,5,5,5)) #sets the size of the plot window
 
-with(temperatureAndFlow, plot(
-  dateTime, Wtemp_Max,
-  xlab="Date",ylab="Max Temperature [C]"
-  ))
+plot(temperatureAndFlow$dateTime, temperatureAndFlow$Wtemp_Max,
+  ylab=variableInfo$parameter_desc[1],xlab="" )
 par(new=TRUE)
-with(temperatureAndFlow, plot(
-  dateTime, Flow,
+plot(temperatureAndFlow$dateTime, temperatureAndFlow$Flow,
   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
-  ))
+  )
 axis(4,col="red",col.axis="red")
-mtext(expression(paste("Mean Discharge [ft"^"3","/s]",
-                       sep="")),side=4,line=3,col="red")
-title(paste(siteINFO$station.nm[1],"2012",sep=" "))
-legend("topleft", c("Max Temperature", "Mean Discharge"), 
+mtext(variableInfo$parameter_desc[2],side=4,line=3,col="red")
+title(paste(siteInfo$station_nm,"2012"))
+legend("topleft", variableInfo$param_units, 
        col=c("black","red"),lty=c(NA,1),pch=c(1,NA))
 @
 
@@ -576,30 +585,29 @@ Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.htm
 \subsection{Water Quality Values}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, and endDate and \texttt{readNWISdv}). Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level for each parameter code.
+To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, and endDate. Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level for each parameter code. There also includes an argument \texttt{"}reshape\texttt{"}, that converts the expanded dataset to a \texttt{"}wide\texttt{"} format (each requested parameter code gets individual columns).
 
-
-There also includes an argument \texttt{"}reshape\texttt{"}, that converts the expanded dataset to a \texttt{"}wide\texttt{"} format.
-
-<<label=getQW, echo=TRUE>>=
+<<label=getQW, echo=TRUE, eval=TRUE>>=
  
 # Dissolved Nitrate parameter codes:
 parameterCd <- c("00618","71851")
 startDate <- "1985-10-01"
 endDate <- "2012-09-30"
 
-dissolvedNitrateLong <- readNWISqw(siteNumber, parameterCd, 
+dfLong <- readNWISqw(siteNumber, parameterCd, 
       startDate, endDate, expanded=TRUE,reshape=FALSE)
-names(dissolvedNitrateLong)
 
+# Or the wide return:
+# dfWide <- readNWISqw(siteNumber, parameterCd, 
+#       startDate, endDate, expanded=TRUE, reshape=TRUE)
 
 @
 
+Metadata, such as information about the column names can be found by using the \texttt{comment} function, as described in section \ref{sec:metadata}.
 
-<<label=getQWwide, echo=TRUE>>=
-dissolvedNitrateWide <- readNWISqw(siteNumber, parameterCd, 
-      startDate, endDate, expanded=TRUE, reshape=TRUE)
-names(dissolvedNitrateWide)
+<<qwmeta, echo=TRUE, eval=TRUE>>=
+
+comment(dfLong)
 
 @
 
@@ -609,7 +617,7 @@ names(dissolvedNitrateWide)
 \subsection{Groundwater level data}
 \label{sec:gwl}
 %------------------------------------------------------------
-Groundwater level measurements can be obtained with the \texttt{readNWISgwl} function.
+Groundwater level measurements can be obtained with the \texttt{readNWISgwl} function. Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
 
 <<gwlexample, echo=TRUE, eval=TRUE>>=
 siteNumber <- "434400121275801"
@@ -624,7 +632,7 @@ names(groundWater)
 \label{sec:peak}
 %------------------------------------------------------------
 
-Peak flow data are instantaneous discharge or stage data that record the maximum values of these variables during a flood event.  They include the annual peak flood event but can also include records of other peaks that are lower than the annual maximum. Peak discharge measurements can be obtained with the \texttt{readNWISpeak} function.
+Peak flow data are instantaneous discharge or stage data that record the maximum values of these variables during a flood event.  They include the annual peak flood event but can also include records of other peaks that are lower than the annual maximum. Peak discharge measurements can be obtained with the \texttt{readNWISpeak} function. Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
 
 <<peakexample, echo=TRUE, eval=TRUE>>=
 siteNumber <- '01594440'
@@ -640,7 +648,7 @@ names(peakData)
 \subsection{Rating curve data}
 \label{sec:rating}
 %------------------------------------------------------------
-Rating curves are the calibration curves that are used to convert measurements of stage to discharge.  Because of changing hydrologic conditions these rating curves change over time.
+Rating curves are the calibration curves that are used to convert measurements of stage to discharge.  Because of changing hydrologic conditions these rating curves change over time. Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
 
 Rating curves can be obtained with the \texttt{readNWISrating} function.
 
@@ -658,7 +666,7 @@ names(ratingData)
 \subsection{Surface-water measurement data}
 \label{sec:meas}
 %------------------------------------------------------------
-These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve. 
+These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve.  Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
 
 Surface-water measurement data can be obtained with the \texttt{readNWISmeas} function.
 
@@ -818,7 +826,7 @@ dataPH <- readWQPdata(statecode="US:55",
 \section{Dataframe Metadata}
 \label{sec:metadata}
 %------------------------------------------------------------
-All dataframes returned from the Web services have some form of associated metadata. This information is included as attributes to the dataframe. All dataframes will have a \texttt{url} and \texttt{queryTime} attribute. The is the url that was used to obtain the data can be found as follows:
+All dataframes returned from the Web services have some form of associated metadata. This information is included as attributes to the dataframe. All dataframes will have a \texttt{url} and \texttt{queryTime} attribute. For example, the url and query time used to obtain the data can be found as follows:
 
 <<meta1, eval=TRUE>>=
 
@@ -848,6 +856,21 @@ variableInfo <- attr(dischargeWI, "variableInfo")
 
 @
 
+Data obtained from \texttt{readNWISpeak}, \texttt{readNWISmeas}, and \texttt{readNWISrating}, the \texttt{comment} attribute is useful.
+
+<<meta5, eval=TRUE, eval=FALSE>>=
+comment(peakData)
+
+#Which is equivalent to:
+# attr(peakData, "comment")
+@
+
+A subset (due to space considerations) of the \texttt{comment} metatdata is shown here:
+
+<<meta6, eval=TRUE, eval=TRUE>>=
+comment(peakData)[c(1:15,58:66)]
+
+@
 
 
 %------------------------------------------------------------ 

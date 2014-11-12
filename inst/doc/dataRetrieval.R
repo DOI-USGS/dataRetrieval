@@ -84,6 +84,9 @@ siteINFO <- readNWISsite(siteNumbers)
 ## ----siteNames2, echo=TRUE--------------------------------
 siteINFO$station_nm
 
+## ----siteNames3, echo=TRUE--------------------------------
+comment(siteINFO)
+
 ## ----getSiteExtended, echo=TRUE---------------------------
 # Continuing from the previous example:
 # This pulls out just the daily, mean data:
@@ -132,7 +135,7 @@ parameterINFO$parameter_nm
 
 ## ----label=getNWISDaily, echo=TRUE, eval=TRUE-------------
 
-# Continuing with our Choptank River example
+# Choptank River near Greensboro, MD:
 siteNumber <- "01491000"
 parameterCd <- "00060"  # Discharge
 startDate <- "2009-10-01"  
@@ -160,22 +163,21 @@ temperatureAndFlow <- renameNWISColumns(temperatureAndFlow)
 names(temperatureAndFlow)
 
 ## ----getNWIStemperaturePlot, echo=TRUE, fig.cap="Temperature and discharge plot of Choptank River in 2012.",out.width='1\\linewidth',out.height='1\\linewidth',fig.show='hold'----
+variableInfo <- attr(temperatureAndFlow, "variableInfo")
+siteInfo <- attr(temperatureAndFlow, "siteInfo")
+
 par(mar=c(5,5,5,5)) #sets the size of the plot window
 
-with(temperatureAndFlow, plot(
-  dateTime, Wtemp_Max,
-  xlab="Date",ylab="Max Temperature [C]"
-  ))
+plot(temperatureAndFlow$dateTime, temperatureAndFlow$Wtemp_Max,
+  ylab=variableInfo$parameter_desc[1],xlab="" )
 par(new=TRUE)
-with(temperatureAndFlow, plot(
-  dateTime, Flow,
+plot(temperatureAndFlow$dateTime, temperatureAndFlow$Flow,
   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
-  ))
+  )
 axis(4,col="red",col.axis="red")
-mtext(expression(paste("Mean Discharge [ft"^"3","/s]",
-                       sep="")),side=4,line=3,col="red")
-title(paste(siteINFO$station.nm[1],"2012",sep=" "))
-legend("topleft", c("Max Temperature", "Mean Discharge"), 
+mtext(variableInfo$parameter_desc[2],side=4,line=3,col="red")
+title(paste(siteInfo$station_nm,"2012"))
+legend("topleft", variableInfo$param_units, 
        col=c("black","red"),lty=c(NA,1),pch=c(1,NA))
 
 ## ----label=readNWISuv, echo=TRUE--------------------------
@@ -189,23 +191,24 @@ dischargeUnit <- readNWISuv(siteNumber, parameterCd,
 ## ----dischargeData, echo=TRUE-----------------------------
 head(dischargeUnit)
 
-## ----label=getQW, echo=TRUE-------------------------------
+## ----label=getQW, echo=TRUE, eval=TRUE--------------------
  
 # Dissolved Nitrate parameter codes:
 parameterCd <- c("00618","71851")
 startDate <- "1985-10-01"
 endDate <- "2012-09-30"
 
-dissolvedNitrateLong <- readNWISqw(siteNumber, parameterCd, 
+dfLong <- readNWISqw(siteNumber, parameterCd, 
       startDate, endDate, expanded=TRUE,reshape=FALSE)
-names(dissolvedNitrateLong)
+
+# Or the wide return:
+# dfWide <- readNWISqw(siteNumber, parameterCd, 
+#       startDate, endDate, expanded=TRUE, reshape=TRUE)
 
 
+## ----qwmeta, echo=TRUE, eval=TRUE-------------------------
 
-## ----label=getQWwide, echo=TRUE---------------------------
-dissolvedNitrateWide <- readNWISqw(siteNumber, parameterCd, 
-      startDate, endDate, expanded=TRUE, reshape=TRUE)
-names(dissolvedNitrateWide)
+comment(dfLong)
 
 
 ## ----gwlexample, echo=TRUE, eval=TRUE---------------------
@@ -298,6 +301,16 @@ head(siteInfo)
 
 variableInfo <- attr(dischargeWI, "variableInfo")
 
+
+
+## ----meta5, eval=TRUE, eval=FALSE-------------------------
+#  comment(peakData)
+#  
+#  #Which is equivalent to:
+#  # attr(peakData, "comment")
+
+## ----meta6, eval=TRUE, eval=TRUE--------------------------
+comment(peakData)[c(1:15,58:66)]
 
 
 ## ----helpFunc,eval = FALSE--------------------------------
