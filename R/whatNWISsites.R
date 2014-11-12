@@ -70,6 +70,7 @@ whatNWISsites <- function(...){
     
     retval$queryTime <- Sys.time()
     attr(retval, "url") <- urlCall
+    attr(retval, "queryTime") <- Sys.time()
     
     return(retval)
   } else {
