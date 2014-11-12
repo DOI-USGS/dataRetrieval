@@ -95,6 +95,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   timeSeries <- xpathApply(doc, "//ns1:timeSeries", namespaces = ns)
   
+  
   if(0 == length(timeSeries)){
     message("Returning an empty dataset")
     df <- data.frame()
@@ -103,6 +104,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   }
   
   attList <- list()
+  dataColumns <- c()
+  qualColumns <- c()
   
   for (i in 1:length(timeSeries)){
     
@@ -184,8 +187,11 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         
         if("qualifiers" %in% names(df)){
           qualName <- paste(valueName,"cd",sep="_")
-          names(df)[which(names(df) == "qualifiers")] <- qualName       
+          names(df)[which(names(df) == "qualifiers")] <- qualName
+          qualColumns <- c(qualColumns, qualName)
         }
+        
+        dataColumns <- c(dataColumns, valueName)
         
         if("dateTime" %in% attributeNames){
           
@@ -274,6 +280,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         
         columnsOrderd <- columnsOrdered[columnsOrdered %in% names(df)]
         
+        
+        
         df <- df[,columnsOrderd]
                   
         names(extraSiteData) <- make.unique(names(extraSiteData))
@@ -341,13 +349,17 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     
   }
   
-  sortingColumns <- c("agency","site_no","dateTime","tz_cd")
-  dataColumns <- names(mergedDF)[!(names(mergedDF) %in% sortingColumns)]
-  dataColumns <- dataColumns[-grep("_cd",dataColumns)]
+#   sortingColumns <- c("agency","site_no","dateTime","tz_cd")
+#   dataColumns <- names(mergedDF)[!(names(mergedDF) %in% sortingColumns)]
+#   dataColumns <- dataColumns[-grep("_cd",dataColumns)]
   
+  sortingColumns <- names(mergedDF)[!(names(mergedDF) %in% c(dataColumns,qualColumns))]
+
   meltedmergedDF  <- melt(mergedDF,id.vars=sortingColumns)
   meltedmergedDF  <- meltedmergedDF[!is.na(meltedmergedDF$value),] 
-  mergedDF2 <- dcast(meltedmergedDF, dateTime+site_no+agency+tz_cd~variable, drop=FALSE)
+
+  castFormula <- as.formula(paste(paste(sortingColumns, collapse="+"),"variable",sep="~"))
+  mergedDF2 <- dcast(meltedmergedDF, castFormula, drop=FALSE)
   dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
   mergedDF <- mergedDF2[rowSums(is.na(mergedDF2[,dataColumns2])) != sum(dataColumns2),]
 
