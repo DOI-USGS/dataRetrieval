@@ -13,6 +13,7 @@
 #' @export
 #' @import XML
 #' @import RCurl
+#' @import reshape2
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -323,6 +324,19 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
 
     
   }
+  
+  sortingColumns <- c("agency","site_no","dateTime","tz_cd")
+  dataColumns <- names(mergedDF)[!(names(mergedDF) %in% sortingColumns)]
+  dataColumns <- dataColumns[-grep("_cd",dataColumns)]
+  
+  meltedmergedDF  <- melt(mergedDF,id.vars=sortingColumns)
+  meltedmergedDF  <- meltedmergedDF[!is.na(meltedmergedDF$value),] 
+  mergedDF2 <- dcast(meltedmergedDF, dateTime+site_no+agency+tz_cd~variable, drop=FALSE)
+  dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
+  mergedDF <- mergedDF2[rowSums(is.na(mergedDF2[,dataColumns2])) != sum(dataColumns2),]
+
+  mergedDF[,dataColumns] <- lapply(mergedDF[,dataColumns], function(x) as.numeric(x))
+  
   row.names(mergedDF) <- NULL
   attr(mergedDF, "url") <- obs_url
   attr(mergedDF, "attributeList") <- attList
@@ -330,6 +344,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   attr(mergedDF, "variableInfo") <- variableInformation
   attr(mergedDF, "disclaimer") <- notes["disclaimer"]
   attr(mergedDF, "queryInfo") <- queryInfo
+  attr(mergedDF, "queryTime") <- Sys.time()
   
   return (mergedDF)
 }
