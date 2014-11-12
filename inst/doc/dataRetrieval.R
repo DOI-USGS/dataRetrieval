@@ -84,8 +84,8 @@ siteINFO <- readNWISsite(siteNumbers)
 ## ----siteNames2, echo=TRUE--------------------------------
 siteINFO$station_nm
 
-## ----siteNames3, echo=TRUE--------------------------------
-comment(siteINFO)
+## ----siteNames3, echo=TRUE, eval=FALSE--------------------
+#  comment(siteINFO)
 
 ## ----getSiteExtended, echo=TRUE---------------------------
 # Continuing from the previous example:
