@@ -223,6 +223,7 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
   
   comment(data) <- hdr
   attr(data, "url") <- obs_url
+  attr(data, "queryTime") <- Sys.time()
   
   return(data)
 
