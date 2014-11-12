@@ -20,7 +20,7 @@ bold.colHeaders <- function(x) {
 addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 
 ## ----workflow, echo=TRUE,eval=FALSE-----------------------
-#  library(dataRetrievaldemo)
+#  library(dataRetrieval)
 #  # Choptank River near Greensboro, MD
 #  siteNumber <- "01491000"
 #  ChoptankInfo <- readNWISsite(siteNumber)
@@ -56,8 +56,8 @@ print(xtable(data.df,
       )
 
 
-## ----tableParameterCodesDataRetrieval---------------------
-library(dataRetrievaldemo)
+## ----tableParameterCodesDataRetrieval, echo=TRUE, eval=TRUE----
+library(dataRetrieval)
 parameterCdFile <-  parameterCdFile
 names(parameterCdFile)
 
@@ -82,14 +82,15 @@ siteNumbers <- c("01491000","01645000")
 siteINFO <- readNWISsite(siteNumbers)
 
 ## ----siteNames2, echo=TRUE--------------------------------
-siteINFO$station.nm
+siteINFO$station_nm
 
 ## ----getSiteExtended, echo=TRUE---------------------------
 # Continuing from the previous example:
-# This pulls out just the daily data:
+# This pulls out just the daily, mean data:
 
 dailyDataAvailable <- whatNWISdata(siteNumbers,
-                    service="dv")
+                    service="dv", statCd="00003")
+
 
 
 ## ----tablegda, echo=FALSE,results='asis'------------------
@@ -101,7 +102,7 @@ tableData <- with(dailyDataAvailable,
       endDate=as.character(end_date), 
       count=as.character(count_nu),
       units=parameter_units,
-      statCd = stat_cd,
+#       statCd = stat_cd,
       stringsAsFactors=FALSE)
       )
 
@@ -110,7 +111,7 @@ tableData$units[which(tableData$units == "uS/cm @25C")] <- "$\\mu$S/cm @25C"
 
 
 print(xtable(tableData,label="tab:gda",
-    caption="Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]"),
+    caption="Reformatted version of output from \\texttt{whatNWISdata} function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]"),
        caption.placement="top",
        size = "\\footnotesize",
        latex.environment=NULL,
@@ -134,8 +135,8 @@ parameterINFO$parameter_nm
 # Continuing with our Choptank River example
 siteNumber <- "01491000"
 parameterCd <- "00060"  # Discharge
-startDate <- ""  # Will request earliest date
-endDate <- "" # Will request latest date
+startDate <- "2009-10-01"  
+endDate <- "2012-09-30" 
 
 discharge <- readNWISdv(siteNumber, 
                     parameterCd, startDate, endDate)
@@ -182,11 +183,11 @@ legend("topleft", c("Max Temperature", "Mean Discharge"),
 parameterCd <- "00060"  # Discharge
 startDate <- "2012-05-12" 
 endDate <- "2012-05-13" 
-dischargeToday <- readNWISuv(siteNumber, parameterCd, 
+dischargeUnit <- readNWISuv(siteNumber, parameterCd, 
         startDate, endDate)
 
 ## ----dischargeData, echo=TRUE-----------------------------
-head(dischargeToday)
+head(dischargeUnit)
 
 ## ----label=getQW, echo=TRUE-------------------------------
  
@@ -209,9 +210,7 @@ names(dissolvedNitrateWide)
 
 ## ----gwlexample, echo=TRUE, eval=TRUE---------------------
 siteNumber <- "434400121275801"
-groundWater <- readNWISgwl(siteNumber, '','')
-
-groundWater <- renameNWISColumns(groundWater)
+groundWater <- readNWISgwl(siteNumber)
 
 names(groundWater)
 
@@ -242,10 +241,10 @@ names(surfaceData)
 #  pCode <- c("00618","71851")
 #  startDate <- "1964-06-11"
 #  endDate <- "2012-12-18"
-#  url_qw <- constructNWISURL(siteNumber,pCode,startDate,endDate,'qw')
+#  url_qw <- constructNWISURL(siteNumber,pCode,startDate,endDate,"qw")
 #  url_dv <- constructNWISURL(siteNumber,"00060",startDate,endDate,
-#                             'dv',statCd="00003")
-#  url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'uv')
+#                             "dv",statCd="00003")
+#  url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,"uv")
 
 ## ----label=getQWData, echo=TRUE, eval=FALSE---------------
 #  specificCond <- readWQPqw('WIDNR_WQX-10032762',
@@ -260,7 +259,8 @@ names(sites)
 nrow(sites)
 
 ## ----dataExample------------------------------------------
-dischargeWI <- readNWISdata(stateCd="WI",
+dischargeWI <- readNWISdata(service="dv",
+                           stateCd="WI",
                            parameterCd="00060",
                            drainAreaMin="50",
                            statCd="00003")
@@ -279,23 +279,38 @@ nrow(dischargeWI)
 #                   characteristicName="pH")
 #  
 
+## ----meta1, eval=TRUE-------------------------------------
+
+attr(dischargeWI, "url")
+
+attr(dischargeWI, "queryTime")
+
+
+## ----meta2, eval=TRUE-------------------------------------
+
+names(attributes(dischargeWI))
+
+
+## ----meta3, eval=TRUE-------------------------------------
+
+siteInfo <- attr(dischargeWI, "siteInfo")
+head(siteInfo)
+
+variableInfo <- attr(dischargeWI, "variableInfo")
+
+
+
 ## ----helpFunc,eval = FALSE--------------------------------
 #  ?readNWISpCode
 
-## ----rawFunc,eval = TRUE----------------------------------
-readNWISpCode
-
 ## ----seeVignette,eval = FALSE-----------------------------
-#  vignette(dataRetrievaldemo)
+#  vignette(dataRetrieval)
 
 ## ----installFromCran,eval = FALSE-------------------------
-#  install.packages("dataRetrievaldemo",
-#  repos=c("http://usgs-r.github.com","http://cran.us.r-project.org"),
-#  dependencies=TRUE,
-#  type="both")
+#  install.packages("dataRetrieval")
 
 ## ----openLibraryTest, eval=FALSE--------------------------
-#  library(dataRetrievaldemo)
+#  library(dataRetrieval)
 
 ## ----label=getSiteApp, echo=TRUE--------------------------
 availableData <- whatNWISdata(siteNumber, "dv")

@@ -378,7 +378,9 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 \subsubsection{whatNWISdata}
 \label{sec:usgsDataAvailability}
 %------------------------------------------------------------
-To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISdata} function. It is possible to limit the retrieval information to a subset of services for example (\texttt{"}dv\texttt{"}, \texttt{"}uv\texttt{"}, or \texttt{"}qw\texttt{"}). In the following example, we limit the retrieved Choptank data to only daily data. The deafault for \texttt{"}service\texttt{"} is \enquote{all}, which returns all of the available data for that site. Likewise, there are arguments for parameter code (parameterCd) and statistic code (statCd) to filter the results. The default for both is to return all possible values (\enquote{all}). The returned \texttt{"}count\_nu\texttt{"} for \texttt{"}uv\texttt{"} data is the count of days with returned data, not the actual count of returned values.
+To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISdata} function. It is possible to limit the retrieval information to a subset of services. The possible choices for services are: \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"}, \texttt{"}rt\texttt{"}, or \texttt{"}iv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (water-quality), \texttt{"}sv\texttt{"} (sites visits), \texttt{"}pk\texttt{"} (peak measurements), \texttt{"}gw\texttt{"} (groundwater levels), \texttt{"}ad\texttt{"} (sites included in USGS Annual Water Data Reports External Link), \texttt{"}aw\texttt{"} (sites monitored by the USGS Active Groundwater Level Network External Link), and \texttt{"}id\texttt{"} (historical instantaneous values).
+
+In the following example, we limit the retrieved Choptank data to only daily data. The deafault for \texttt{"}service\texttt{"} is \enquote{all}, which returns all of the available data for that site. Likewise, there are arguments for parameter code (\texttt{parameterCd}) and statistic code (\texttt{statCd}) to filter the results. The default for both is to return all possible values (\enquote{all}). The returned \texttt{"}count\_nu\texttt{"} for \texttt{"}uv\texttt{"} data is the count of days with returned data, not the actual count of returned values.
 
 
 <<getSiteExtended, echo=TRUE>>=
@@ -765,7 +767,8 @@ For NWIS data, the function \texttt{readNWISdata} can be used. The argument list
 The \texttt{"..."} argument allows the user to create their own queries based on the instructions found in the web links above. The links provide instructions on how to create a URL to request data. Perhaps you want sites only in Wisconsin, with a drainage area less than 50 mi$^2$, and the most recent daily dischage data. That request would be done as follows:
 
 <<dataExample>>=
-dischargeWI <- readNWISdata(stateCd="WI",
+dischargeWI <- readNWISdata(service="dv",
+                           stateCd="WI",
                            parameterCd="00060",
                            drainAreaMin="50",
                            statCd="00003")
@@ -810,6 +813,42 @@ dataPH <- readWQPdata(statecode="US:55",
 \FloatBarrier
 
 \clearpage
+
+%------------------------------------------------------------
+\section{Dataframe Metadata}
+\label{sec:metadata}
+%------------------------------------------------------------
+All dataframes returned from the Web services have some form of associated metadata. This information is included as attributes to the dataframe. All dataframes will have a \texttt{url} and \texttt{queryTime} attribute. The is the url that was used to obtain the data can be found as follows:
+
+<<meta1, eval=TRUE>>=
+
+attr(dischargeWI, "url")
+
+attr(dischargeWI, "queryTime")
+
+@
+
+Depending on the format that the data was obtained (xml, rdb, etc), there will be additional information embedded in the dataframe as attributes. To discover the available attributes:
+
+<<meta2, eval=TRUE>>=
+
+names(attributes(dischargeWI))
+
+@
+
+For data obtained from \texttt{readNWISuv}, \texttt{readNWISdv}, \texttt{readNWISgwl} there are two attributes that are particularly useful: \texttt{siteInfo} and \texttt{variableInfo}.
+
+<<meta3, eval=TRUE>>=
+
+siteInfo <- attr(dischargeWI, "siteInfo")
+head(siteInfo)
+
+variableInfo <- attr(dischargeWI, "variableInfo")
+
+
+@
+
+
 
 
 %------------------------------------------------------------ 

@@ -1,9 +1,9 @@
-%\VignetteIndexEntry{Introduction to the dataRetrievaldemo package}
+%\VignetteIndexEntry{Introduction to the dataRetrieval package}
 %\VignetteEngine{knitr::knitr}
 %\VignetteDepends{}
-%\VignetteSuggests{xtable,EGRETdemo}
-%\VignetteImports{zoo, XML, RCurl, reshape2,lubridate}
-%\VignettePackage{dataRetrievaldemo}
+%\VignetteSuggests{xtable}
+%\VignetteImports{XML, RCurl, reshape2,lubridate,httr,plyr}
+%\VignettePackage{dataRetrieval}
 
 \documentclass[a4paper,11pt]{article}
 
@@ -140,10 +140,10 @@ library(knitr)
 
 
 %------------------------------------------------------------
-\title{The dataRetrievaldemo R package}
+\title{The dataRetrieval R package}
 %------------------------------------------------------------
-\author[1]{Laura De Cicco}
-\author[1]{Robert Hirsch}
+\author[1]{Laura A. De Cicco}
+\author[1]{Robert M. Hirsch}
 \affil[1]{United States Geological Survey}
 
 
@@ -162,9 +162,9 @@ bold.colHeaders <- function(x) {
 addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 @
 
-\noindent{\huge\textsf{\textbf{The dataRetrievaldemo R package}}}
+\noindent{\huge\textsf{\textbf{The dataRetrieval R package}}}
 
-\noindent\textsf{By Laura De Cicco and Robert Hirsch}
+\noindent\textsf{By Laura A. De Cicco and Robert M. Hirsch}
 
 \noindent\textsf{\today}
 
@@ -179,16 +179,18 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 \newpage
 
 %------------------------------------------------------------
-\section{Introduction to dataRetrievaldemo}
+\section{Introduction to dataRetrieval}
 %------------------------------------------------------------ 
-The dataRetrievaldemo package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal, which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS.   
+The dataRetrieval package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). A lot of useful information about NWIS can be obtained here:
+
+\url{http://help.waterdata.usgs.gov/}
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
-A quick workflow for USGS dataRetrievaldemo functions:
+A quick workflow for USGS dataRetrieval functions:
 
 <<workflow, echo=TRUE,eval=FALSE>>=
-library(dataRetrievaldemo)
+library(dataRetrieval)
 # Choptank River near Greensboro, MD
 siteNumber <- "01491000" 
 ChoptankInfo <- readNWISsite(siteNumber)
@@ -207,14 +209,14 @@ pCode <- readNWISpCode(parameterCd)
 
 @
 
-USGS data is made available through the National Water Information System (NWIS).
+USGS data are made available through the National Water Information System (NWIS).
 
-Table \ref{tab:func} describes the functions available in the dataRetrievaldemo package.
+Table \ref{tab:func} describes the functions available in the dataRetrieval package.
 
 \begin{table}[!ht]
 \begin{minipage}{\linewidth}
 {\footnotesize
-\caption{dataRetrievaldemo functions} 
+\caption{dataRetrieval functions} 
 \label{tab:func}
 \begin{tabular}{lll}
   \hline
@@ -272,11 +274,15 @@ Table \ref{tab:func} describes the functions available in the dataRetrievaldemo 
 \section{USGS Web Retrievals}
 \label{sec:genRetrievals}
 %------------------------------------------------------------ 
-In this section, examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), water quality data (\ref{sec:usgsWQP}), groundwater level data (\ref{sec:gwl}), peak flow data (\ref{sec:peak}), rating curve data (\ref{sec:rating}, and surface-water measurement data (\ref{sec:meas}). We will mainly use the Choptank River near Greensboro, MD as an example.  Daily discharge measurements are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
+In this section, examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), water quality data (\ref{sec:usgsWQP}), groundwater level data (\ref{sec:gwl}), peak flow data (\ref{sec:peak}), rating curve data (\ref{sec:rating}, and surface-water measurement data (\ref{sec:meas}). We will mainly use the Choptank River near Greensboro, MD as an example.  Daily discharge data are available as far back as 1948.  Additionally, nitrate has been measured since 1964. 
 
-The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrievaldemo package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
+The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrieval package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
-Once the siteNumber is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. A complete list of possible USGS parameter codes can be found at \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes?help}.
+Once the siteNumber is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. 
+
+A useful place to discover USGS codes information, along with other NWIS information is:
+
+\url{http://help.waterdata.usgs.gov/codes-and-parameters}
 
 Not every station will measure all parameters. A short list of commonly measured parameters is shown in Table \ref{tab:params}.
 
@@ -300,18 +306,25 @@ print(xtable(data.df,
 
 @
 
-A complete list (as of September 25, 2013) is available as data attached to the package. It is accessed by the following:
+A complete list (as of November 7, 2014) is available as data attached to the package. It is accessed by the following:
 
-<<tableParameterCodesDataRetrieval>>=
-library(dataRetrievaldemo)
+<<tableParameterCodesDataRetrieval, echo=TRUE, eval=TRUE>>=
+library(dataRetrieval)
 parameterCdFile <-  parameterCdFile
 names(parameterCdFile)
 @
 
+Two output columns that may not be obvious are \enquote{srsname} and \enquote{casrn}. Srsname stands for \enquote{Substance Registry Services}. More information on the srs name can be found here:
+
+\url{http://ofmpub.epa.gov/sor_internet/registry/substreg/home/overview/home.do}
+
+Casrn stands for \enquote{Chemical Abstracts Service (CAS) Registry Number}. More information on CAS can be found here:
+
+\url{http://www.cas.org/content/chemical-substances/faqs}
 
 For unit values data (sensor data measured at regular time intervals such as 15 minutes or hourly), knowing the parameter code and siteNumber is enough to make a request for data.  For most variables that are measured on a continuous basis, the USGS also stores the historical data as daily values.  These daily values are statistical summaries of the continuous data, e.g. maximum, minimum, mean, or median. The different statistics are specified by a 5-digit statistics code.  A complete list of statistic codes can be found here:
 
-\url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+\url{http://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=%25&fmt=html&inline=true}
 
 Some common codes are shown in Table \ref{tab:stat}.
 
@@ -332,7 +345,7 @@ print(xtable(data.df,label="tab:stat",
 
 @
 
-Examples for using these siteNumber's, parameter codes, and stat codes will be presented in subsequent sections.
+Examples for using these siteNumbers, parameter codes, and stat codes will be presented in subsequent sections.
 
 \FloatBarrier
 
@@ -356,7 +369,7 @@ siteINFO <- readNWISsite(siteNumbers)
 A specific example piece of information can be retrieved, in this case a station name, as follows:
 
 <<siteNames2, echo=TRUE>>=
-siteINFO$station.nm
+siteINFO$station_nm
 @
 Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
 \FloatBarrier
@@ -365,15 +378,18 @@ Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-T
 \subsubsection{whatNWISdata}
 \label{sec:usgsDataAvailability}
 %------------------------------------------------------------
-To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISdata} function. It is possible to limit the retrieval information to a subset of services (\texttt{"}dv\texttt{"}, \texttt{"}uv\texttt{"}, or \texttt{"}qw\texttt{"}). In the following example, we limit the retrieved Choptank data to only daily data. Leaving the \texttt{"}service\texttt{"} argument blank returns all of the available data for that site.
+To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the \texttt{whatNWISdata} function. It is possible to limit the retrieval information to a subset of services. The possible choices for services are: \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"}, \texttt{"}rt\texttt{"}, or \texttt{"}iv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (water-quality), \texttt{"}sv\texttt{"} (sites visits), \texttt{"}pk\texttt{"} (peak measurements), \texttt{"}gw\texttt{"} (groundwater levels), \texttt{"}ad\texttt{"} (sites included in USGS Annual Water Data Reports External Link), \texttt{"}aw\texttt{"} (sites monitored by the USGS Active Groundwater Level Network External Link), and \texttt{"}id\texttt{"} (historical instantaneous values).
+
+In the following example, we limit the retrieved Choptank data to only daily data. The deafault for \texttt{"}service\texttt{"} is \enquote{all}, which returns all of the available data for that site. Likewise, there are arguments for parameter code (\texttt{parameterCd}) and statistic code (\texttt{statCd}) to filter the results. The default for both is to return all possible values (\enquote{all}). The returned \texttt{"}count\_nu\texttt{"} for \texttt{"}uv\texttt{"} data is the count of days with returned data, not the actual count of returned values.
 
 
 <<getSiteExtended, echo=TRUE>>=
 # Continuing from the previous example:
-# This pulls out just the daily data:
+# This pulls out just the daily, mean data:
 
 dailyDataAvailable <- whatNWISdata(siteNumbers,
-                    service="dv")
+                    service="dv", statCd="00003")
+
 
 @
 
@@ -386,7 +402,7 @@ tableData <- with(dailyDataAvailable,
       endDate=as.character(end_date), 
       count=as.character(count_nu),
       units=parameter_units,
-      statCd = stat_cd,
+#       statCd = stat_cd,
       stringsAsFactors=FALSE)
       )
 
@@ -395,7 +411,7 @@ tableData$units[which(tableData$units == "uS/cm @25C")] <- "$\\mu$S/cm @25C"
 
 
 print(xtable(tableData,label="tab:gda",
-    caption="Daily mean data availabile at the Choptank River near Greensboro, MD. [Some columns deleted for space considerations]"),
+    caption="Reformatted version of output from \\texttt{whatNWISdata} function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]"),
        caption.placement="top",
        size = "\\footnotesize",
        latex.environment=NULL,
@@ -430,7 +446,10 @@ A specific example piece of information, in this case parameter name, can be obt
 <<siteNames, echo=TRUE>>=
 parameterINFO$parameter_nm
 @
-Parameter information can obtained from \url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes}
+Parameter information can obtained from:
+
+\url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}
+
 \FloatBarrier
 
 %------------------------------------------------------------
@@ -446,16 +465,17 @@ The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (
 # Continuing with our Choptank River example
 siteNumber <- "01491000"
 parameterCd <- "00060"  # Discharge
-startDate <- ""  # Will request earliest date
-endDate <- "" # Will request latest date
+startDate <- "2009-10-01"  
+endDate <- "2012-09-30" 
 
 discharge <- readNWISdv(siteNumber, 
                     parameterCd, startDate, endDate)
 names(discharge)
 @
 
-The column \texttt{"}datetime\texttt{"} in the returned dataframe is automatically imported as a variable of class \texttt{"}Date\texttt{"} in R. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS remark codes are often \texttt{"}A\texttt{"} (approved for publication) or \texttt{"}P\texttt{"} (provisional data subject to revision). A more complete list of remark codes can be found here:
-\url{http://nwis.waterdata.usgs.gov/usa/nwis/pmcodes}
+The column \texttt{"}datetime\texttt{"} in the returned dataframe is automatically imported as a variable of class \texttt{"}Date\texttt{"} in R. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS daily value qualification codes are often \texttt{"}A\texttt{"} (approved for publication) or \texttt{"}P\texttt{"} (provisional data subject to revision). A more complete list of daily value qualification codes can be found here:
+
+\url{http://help.waterdata.usgs.gov/codes-and-parameters/daily-value-qualification-code-dv_rmk_cd}
 
 Another example that doesn't use the defaults would be a request for mean and maximum daily temperature and discharge in early 2012:
 <<label=getNWIStemperature, echo=TRUE>>=
@@ -472,7 +492,7 @@ temperatureAndFlow <- readNWISdv(siteNumber, parameterCd,
 
 Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}.
 
-The column names can be automatically adjusted based on the parameter and statistic codes using the \texttt{renameNWISColumns} function. This is not necessary, but may be useful when analyzing the data. 
+The column names can be shortened and simplified using the \texttt{renameNWISColumns} function.  This is not necessary, but may streamline subsequent data analysis and presentation.
 
 <<label=renameColumns, echo=TRUE>>=
 names(temperatureAndFlow)
@@ -519,17 +539,31 @@ Any data collected at regular time intervals (such as 15-minute or hourly) are k
 parameterCd <- "00060"  # Discharge
 startDate <- "2012-05-12" 
 endDate <- "2012-05-13" 
-dischargeToday <- readNWISuv(siteNumber, parameterCd, 
+dischargeUnit <- readNWISuv(siteNumber, parameterCd, 
         startDate, endDate)
 @
 
-The retrieval produces the following dataframe:
+The retrieval produces a data frame that contains 96 rows (one for every 15 minute period in the day).  They include all data collected from the startDate through the endDate (starting and ending with midnight locally-collected time). The dateTime column is converted to \enquote{UTC} (Coordinated Universal Time), so midnight EST will be 5 hours earlier in the dateTime column (the previous day, at 7pm).
+
 
 <<dischargeData, echo=TRUE>>=
-head(dischargeToday)
+head(dischargeUnit)
 @
 
-Note that time now becomes important, so the variable datetime is a POSIXct, and the reported time zone is included in a separate column. The datetime column is converted automatically to \enquote{UTC} (Coordinated Universal Time). To override the timezone, 
+To override the UTC timezone, specify a valid timezone in the tz argument. Default is \texttt{""}, which will keep the dateTime column in UTC. Other valid timezones are:
+
+\begin{verbatim}
+America/New_York
+America/Chicago
+America/Denver
+America/Los_Angeles
+America/Anchorage
+America/Honolulu
+America/Jamaica
+America/Managua
+America/Phoenix
+America/Metlakatla
+\end{verbatim}
 
 Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package.
 
@@ -569,15 +603,6 @@ names(dissolvedNitrateWide)
 
 @
 
-% <<getQWtemperaturePlot, echo=TRUE, fig.cap=paste(parameterINFO$parameter_nm, "at", siteINFO$station.nm[1])>>=
-% with(dissolvedNitrate, plot(
-%   startDateTime, result_va_00618,
-%   xlab="Date",ylab = paste(parameterINFO$srsname,
-%       "[",parameterINFO$parameter_units,"]")
-%   ))
-% title(siteINFO$station.nm[1])
-% @
-
 \FloatBarrier
 
 %------------------------------------------------------------
@@ -588,9 +613,7 @@ Groundwater level measurements can be obtained with the \texttt{readNWISgwl} fun
 
 <<gwlexample, echo=TRUE, eval=TRUE>>=
 siteNumber <- "434400121275801"
-groundWater <- readNWISgwl(siteNumber, '','')
-
-groundWater <- renameNWISColumns(groundWater)
+groundWater <- readNWISgwl(siteNumber)
 
 names(groundWater)
 
@@ -601,7 +624,7 @@ names(groundWater)
 \label{sec:peak}
 %------------------------------------------------------------
 
-Peak discharge measurements can be obtained with the \texttt{readNWISpeak} function.
+Peak flow data are instantaneous discharge or stage data that record the maximum values of these variables during a flood event.  They include the annual peak flood event but can also include records of other peaks that are lower than the annual maximum. Peak discharge measurements can be obtained with the \texttt{readNWISpeak} function.
 
 <<peakexample, echo=TRUE, eval=TRUE>>=
 siteNumber <- '01594440'
@@ -617,6 +640,8 @@ names(peakData)
 \subsection{Rating curve data}
 \label{sec:rating}
 %------------------------------------------------------------
+Rating curves are the calibration curves that are used to convert measurements of stage to discharge.  Because of changing hydrologic conditions these rating curves change over time.
+
 Rating curves can be obtained with the \texttt{readNWISrating} function.
 
 <<ratingexample, echo=TRUE, eval=TRUE>>=
@@ -633,6 +658,8 @@ names(ratingData)
 \subsection{Surface-water measurement data}
 \label{sec:meas}
 %------------------------------------------------------------
+These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve. 
+
 Surface-water measurement data can be obtained with the \texttt{readNWISmeas} function.
 
 <<surfexample, echo=TRUE, eval=TRUE>>=
@@ -656,10 +683,10 @@ There may be times when you might be interested in seeing the URL (Web address) 
 pCode <- c("00618","71851")
 startDate <- "1964-06-11"
 endDate <- "2012-12-18"
-url_qw <- constructNWISURL(siteNumber,pCode,startDate,endDate,'qw')
+url_qw <- constructNWISURL(siteNumber,pCode,startDate,endDate,"qw")
 url_dv <- constructNWISURL(siteNumber,"00060",startDate,endDate,
-                           'dv',statCd="00003")
-url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'uv')
+                           "dv",statCd="00003")
+url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,"uv")
 @
 
 
@@ -668,7 +695,7 @@ url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,'uv')
 \section{Water Quality Portal Web Retrievals}
 \label{sec:usgsSTORET}
 %------------------------------------------------------------
-There are additional water quality data sets available from the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET database (data from EPA), NWIS database (data from USGS), STEWARDS database (data from USDA), and additional databases are slated to be included.  Because only USGS uses parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{readWQPqw} function can take either a USGS parameter code, or a more general characteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
+There are additional water quality data sets available from the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET database (data from EPA), NWIS database (data from USGS), STEWARDS database (data from USDA), and additional databases are slated to be included in the future.  Because only USGS uses parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{readWQPqw} function can take either a USGS parameter code, or a more general characteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
 
 
 <<label=getQWData, echo=TRUE, eval=FALSE>>=
@@ -676,7 +703,7 @@ specificCond <- readWQPqw('WIDNR_WQX-10032762',
                 'Specific conductance','2011-05-01','2011-09-30')
 @
 
-Guidance for finding characteristic names can be found at: \url{http://www.waterqualitydata.us/webservices_documentation.jsp}.
+A tool for finding NWIS characteristic names can be found at: \url{http://www.waterqualitydata.us/public_srsnames.jsp}
 
 \FloatBarrier
 
@@ -698,7 +725,7 @@ to discover many options for searching for NWIS sites. For example, you may want
 
 \url{http://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv}
 
-The following dataRetrievaldemo code can be used to get those sites:
+The following dataRetrieval code can be used to get those sites:
 
 <<siteSearch>>=
 sites <- whatNWISsites(bBox="-83.0,36.5,-81.0,38.5", 
@@ -740,7 +767,8 @@ For NWIS data, the function \texttt{readNWISdata} can be used. The argument list
 The \texttt{"..."} argument allows the user to create their own queries based on the instructions found in the web links above. The links provide instructions on how to create a URL to request data. Perhaps you want sites only in Wisconsin, with a drainage area less than 50 mi$^2$, and the most recent daily dischage data. That request would be done as follows:
 
 <<dataExample>>=
-dischargeWI <- readNWISdata(stateCd="WI",
+dischargeWI <- readNWISdata(service="dv",
+                           stateCd="WI",
                            parameterCd="00060",
                            drainAreaMin="50",
                            statCd="00003")
@@ -786,32 +814,61 @@ dataPH <- readWQPdata(statecode="US:55",
 
 \clearpage
 
+%------------------------------------------------------------
+\section{Dataframe Metadata}
+\label{sec:metadata}
+%------------------------------------------------------------
+All dataframes returned from the Web services have some form of associated metadata. This information is included as attributes to the dataframe. All dataframes will have a \texttt{url} and \texttt{queryTime} attribute. The is the url that was used to obtain the data can be found as follows:
+
+<<meta1, eval=TRUE>>=
+
+attr(dischargeWI, "url")
+
+attr(dischargeWI, "queryTime")
+
+@
+
+Depending on the format that the data was obtained (xml, rdb, etc), there will be additional information embedded in the dataframe as attributes. To discover the available attributes:
+
+<<meta2, eval=TRUE>>=
+
+names(attributes(dischargeWI))
+
+@
+
+For data obtained from \texttt{readNWISuv}, \texttt{readNWISdv}, \texttt{readNWISgwl} there are two attributes that are particularly useful: \texttt{siteInfo} and \texttt{variableInfo}.
+
+<<meta3, eval=TRUE>>=
+
+siteInfo <- attr(dischargeWI, "siteInfo")
+head(siteInfo)
+
+variableInfo <- attr(dischargeWI, "variableInfo")
+
+
+@
+
+
 
 %------------------------------------------------------------ 
 \section{Getting Started in R}
 \label{sec:appendix1}
 %------------------------------------------------------------ 
-This section describes the options for downloading and installing the dataRetrievaldemo package.
+This section describes the options for downloading and installing the dataRetrieval package.
 
 %------------------------------------------------------------
 \subsection{New to R?}
 %------------------------------------------------------------ 
 If you are new to R, you will need to first install the latest version of R, which can be found here: \url{http://www.r-project.org/}.
 
-At any time, you can get information about any function in R by typing a question mark before the functions name.  This will open a file (in RStudio, in the Help window) that describes the function, the required arguments, and provides working examples.
+At any time, you can get information about any function in R by typing a question mark before the functions name.  This will open a file (in RStudio, in the Help window) that describes the function, the required arguments, and provides working examples. This will open a help file similar to Figure \ref{fig:help}. To see the raw code for a particular code, type the name of the function, without parentheses.
+
 
 <<helpFunc,eval = FALSE>>=
 ?readNWISpCode
 @
 
-This will open a help file similar to Figure \ref{fig:help}.
-
 \FloatBarrier
-
-To see the raw code for a particular code, type the name of the function, without parentheses.:
-<<rawFunc,eval = TRUE>>=
-readNWISpCode
-@
 
 
 \begin{figure}[ht!]
@@ -823,26 +880,23 @@ readNWISpCode
 
 Additionally, many R packages have vignette files attached (such as this paper). To view the vignette:
 <<seeVignette,eval = FALSE>>=
-vignette(dataRetrievaldemo)
+vignette(dataRetrieval)
 @
 
 \FloatBarrier
 \clearpage
 %------------------------------------------------------------
-\subsection{R User: Installing dataRetrievaldemo}
+\subsection{R User: Installing dataRetrieval}
 %------------------------------------------------------------ 
-The following command installs dataRetrievaldemo and subsequent required packages:
+The following command installs dataRetrieval and subsequent required packages:
 
 <<installFromCran,eval = FALSE>>=
-install.packages("dataRetrievaldemo", 
-repos=c("http://usgs-r.github.com","http://cran.us.r-project.org"),
-dependencies=TRUE,
-type="both")
+install.packages("dataRetrieval")
 @
 
 After installing the package, you need to open the library each time you re-start R.  This is done with the simple command:
 <<openLibraryTest, eval=FALSE>>=
-library(dataRetrievaldemo)
+library(dataRetrieval)
 @
 
 
@@ -899,12 +953,12 @@ Next, follow the steps below to open this file in Excel:
 \item Use the many formatting tools within Excel to customize the table
 \end{enumerate}
 
-From Excel, it is simple to copy and paste the tables in other Microsoft\textregistered\ software. An example using one of the default Excel table formats is here.
+From Excel, it is simple to copy and paste the tables in other Microsoft\textregistered\ software. An example using one of the default Excel table formats is here. Additional formatting could be requried in Excel, for example converting u to  $\mu$.
 
 \begin{figure}[ht!]
 \centering
  \resizebox{0.9\textwidth}{!}{\includegraphics{table1.png}} 
-\caption{A simple table produced in Microsoft\textregistered\ Excel. Additional formatting will be requried, for example converting u to  $\mu$ }
+\caption{A simple table produced in Microsoft\textregistered\ Excel.}
 \label{overflow}
 \end{figure}
 
