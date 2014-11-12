@@ -373,9 +373,9 @@ siteINFO$station_nm
 @
 Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
 
-To get more information on the column headers, use the \texttt{comment} function to read the attached metadata (see Sec. \ref{sec:metadata}).
+Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
 
-<<siteNames3, echo=TRUE>>=
+<<siteNames3, echo=TRUE, eval=FALSE>>=
 comment(siteINFO)
 @
 
