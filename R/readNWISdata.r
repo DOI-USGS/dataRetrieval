@@ -20,13 +20,21 @@ readNWISdata <- function(service="dv", ...){
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
+  if(service %in% c("dv","iv","gwlevels")){
+    format <- "waterml"
+  } else {
+    format <- "rdb1,1"
+  }
   
-  baseURL <- paste0("http://waterservices.usgs.gov/nwis/",service,"/?format=rdb&")
+  baseURL <- paste0("http://waterservices.usgs.gov/nwis/",service,"/?format=",format,"&")
   urlCall <- paste0(baseURL,urlCall)
   if(service=="qwdata"){
     urlCall <- paste0(urlCall,"&siteOutput=expanded")
+    retval <- importRDB1(urlCall)
+  } else {
+    retval <- importWaterML1(urlCall)
   }
   
-  retval <- importRDB1(urlCall)
+  
   return(retval)
 }
