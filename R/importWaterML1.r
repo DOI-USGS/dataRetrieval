@@ -349,9 +349,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     
   }
   
-#   sortingColumns <- c("agency","site_no","dateTime","tz_cd")
-#   dataColumns <- names(mergedDF)[!(names(mergedDF) %in% sortingColumns)]
-#   dataColumns <- dataColumns[-grep("_cd",dataColumns)]
+  dataColumns <- unique(dataColumns)
+  qualColumns <- unique(qualColumns)
   
   sortingColumns <- names(mergedDF)[!(names(mergedDF) %in% c(dataColumns,qualColumns))]
 
