@@ -360,8 +360,12 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   castFormula <- as.formula(paste(paste(sortingColumns, collapse="+"),"variable",sep="~"))
   mergedDF2 <- dcast(meltedmergedDF, castFormula, drop=FALSE)
   dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
-  mergedDF <- mergedDF2[rowSums(is.na(mergedDF2[,dataColumns2])) != sum(dataColumns2),]
-
+  if(sum(dataColumns2) == 1){
+    mergedDF <- mergedDF2[!is.na(mergedDF2[,dataColumns2]),]
+  } else {
+    mergedDF <- mergedDF2[rowSums(is.na(mergedDF2[,dataColumns2])) != sum(dataColumns2),]
+  }
+  
   if(length(dataColumns) > 1){
     mergedDF[,dataColumns] <- lapply(mergedDF[,dataColumns], function(x) as.numeric(x))
   } else {
