@@ -38,6 +38,7 @@ readNWISqw <- function (siteNumber,pCodes,startDate="",endDate="",
   url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw",expanded=expanded)
   
   data <- importRDB1(url,asDateTime=TRUE, qw=TRUE, tz = tz)
+  originalHeader <- comment(data)
   
   if(reshape & expanded){
     columnsToMelt <- c("agency_cd","site_no","sample_dt","sample_tm",
@@ -50,6 +51,7 @@ readNWISqw <- function (siteNumber,pCodes,startDate="",endDate="",
     
     groupByPCode <- as.vector(sapply(pCodes, function(x) grep(x, names(wideDF)) ))
     data <- wideDF[,c(1:length(columnsToMelt)-1,groupByPCode)]
+    comment(data) <- originalHeader
     
   }
   
