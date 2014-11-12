@@ -97,7 +97,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(0 == length(timeSeries)){
     message("Returning an empty dataset")
-    #TODO: return()
+    df <- data.frame()
+    attr(df, "queryInfo") <- queryInfo
+    return(df)
   }
   
   attList <- list()
@@ -278,10 +280,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         
         sitePropertyIndex <- grep("siteProperty",names(extraSiteData))
         
-        properties <- as.character(lapply(extraSiteData[sitePropertyIndex], function(x) x$.attrs))
-        propertyValues <- as.character(lapply(extraSiteData[sitePropertyIndex], function(x) x$text))
-        names(propertyValues) <- properties
-        
         siteInfo <- data.frame(station_nm=extraSiteData$siteName,
                                site_no=extraSiteData$siteCode$text,
                                agency=extraSiteData$siteCode$.attrs[["agencyCode"]],
@@ -292,7 +290,25 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
                                srs=extraSiteData$geoLocation$geogLocation$.attrs[["srs"]],
                                stringsAsFactors=FALSE)
 
-        siteInfo <- cbind(siteInfo, t(propertyValues))
+        properties <- as.character(lapply(extraSiteData[sitePropertyIndex], function(x) {
+          if(".attrs" %in% names(x)){
+            x$.attrs
+          } else {
+            NA
+          }              
+          }))
+    
+        propertyValues <- as.character(lapply(extraSiteData[sitePropertyIndex], function(x) {
+          if("text" %in% names(x)){
+            x$text
+          } else {
+            NA
+          }              
+          }))
+        
+        names(propertyValues) <- properties
+        propertyValues <- propertyValues[propertyValues != "NA"]
+        siteInfo <- cbind(siteInfo, t(propertyValues))            
         
         names(extraVariableData) <- make.unique(names(extraVariableData))
         variableInfo <- data.frame(parameterCd=extraVariableData$variableCode$text,
@@ -335,7 +351,12 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
   mergedDF <- mergedDF2[rowSums(is.na(mergedDF2[,dataColumns2])) != sum(dataColumns2),]
 
-  mergedDF[,dataColumns] <- lapply(mergedDF[,dataColumns], function(x) as.numeric(x))
+  if(length(dataColumns) > 1){
+    mergedDF[,dataColumns] <- lapply(mergedDF[,dataColumns], function(x) as.numeric(x))
+  } else {
+    mergedDF[,dataColumns] <- as.numeric(mergedDF[,dataColumns])
+  }
+  
   
   row.names(mergedDF) <- NULL
   attr(mergedDF, "url") <- obs_url
