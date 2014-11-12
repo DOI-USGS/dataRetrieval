@@ -77,6 +77,7 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
   
   comment(SiteFile) <- headerInfo
   attr(SiteFile, "url") <- urlSitefile
+  attr(SiteFile, "queryTime") <- Sys.time()
   
   return(SiteFile)
 
