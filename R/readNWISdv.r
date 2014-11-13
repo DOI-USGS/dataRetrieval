@@ -17,6 +17,7 @@
 #' startDate <- '2012-01-01'
 #' endDate <- '2012-06-30'
 #' pCode <- '00060'
+#' \dontrun{
 #' rawDailyQ <- readNWISdv(siteNumber,pCode, startDate, endDate)
 #' rawDailyQAndTempMeanMax <- readNWISdv(siteNumber,c('00010','00060'),
 #'        startDate, endDate, statCd=c('00001','00003'))
@@ -28,6 +29,7 @@
 #' names(attributes(x))
 #' attr(x, "siteInfo")
 #' attr(x, "variableInfo")
+#' }
 readNWISdv <- function (siteNumber,parameterCd,startDate="",endDate="",statCd="00003"){  
   
   url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"dv",statCd=statCd)
