@@ -486,7 +486,7 @@ The column \texttt{"}datetime\texttt{"} in the returned dataframe is automatical
 
 \url{http://help.waterdata.usgs.gov/codes-and-parameters/daily-value-qualification-code-dv_rmk_cd}
 
-Another example that doesn't use the defaults would be a request for mean and maximum daily temperature and discharge in early 2012:
+Another example would be a request for mean and maximum daily temperature and discharge in early 2012:
 
 <<label=getNWIStemperature, echo=TRUE>>=
 
@@ -605,7 +605,7 @@ dfLong <- readNWISqw(siteNumber, parameterCd,
 
 Metadata, such as information about the column names can be found by using the \texttt{comment} function, as described in section \ref{sec:metadata}.
 
-<<qwmeta, echo=TRUE, eval=TRUE>>=
+<<qwmeta, echo=TRUE, eval=FALSE>>=
 
 comment(dfLong)
 

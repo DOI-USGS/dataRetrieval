@@ -21,6 +21,7 @@
 #' offering <- '00003'
 #' property <- '00060'
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
+#' \dontrun{
 #' data <- importWaterML1(obs_url,TRUE)
 #' 
 #' groundWaterSite <- "431049071324301"
@@ -48,6 +49,7 @@
 #' names(attributes(data))
 #' attr(data, "url")
 #' attr(data, "disclaimer")
+#' }
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(url.exists(obs_url)){

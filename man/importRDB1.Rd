@@ -35,6 +35,7 @@ startDate <- "2012-09-01"
 endDate <- "2012-10-01"
 offering <- "00003"
 property <- "00060"
+\dontrun{
 obs_url <- constructNWISURL(siteNumber,property,
          startDate,endDate,"dv",format="tsv")
 data <- importRDB1(obs_url)
@@ -58,5 +59,6 @@ filePath <- system.file("extdata", package="dataRetrieval")
 fileName <- "RDB1Example.txt"
 fullPath <- file.path(filePath, fileName)
 importUserRDB <- importRDB1(fullPath)
+}
 }
 
