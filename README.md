@@ -41,11 +41,11 @@ Moving `EGRET` specific functions to `EGRET` (version 2.0.0 and greater):
 
 |Information Source | Meta Data | Data |
 | -------------| -------------| ------------- |:-------------|
-|NWIS | `getNWISInfo` | `getNWISSample` |
-|  |  | `getNWISDaily` |
-| Water Quality Portal  | `getWQPInfo`| `getWQPSample` |
-| User-supplied files | `getUserInfo` | `getUserDaily`|
-| | | `getUserSample` |
+|NWIS | `readNWISInfo` | `readNWISSample` |
+|  |  | `readNWISDaily` |
+| Water Quality Portal  | `readWQPInfo`| `readWQPSample` |
+| User-supplied files | `readUserInfo` | `readUserDaily`|
+| | | `readUserSample` |
 
 
 
