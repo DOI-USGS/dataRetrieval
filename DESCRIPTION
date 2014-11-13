@@ -1,6 +1,6 @@
 Package: dataRetrieval
 Type: Package
-Title: Retrieval functions for USGS and EPA hydrologic and water quality data
+Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
 Version: 2.0.0
 Date: 2014-10-13
 Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
@@ -9,8 +9,13 @@ Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
     email = "ldecicco@usgs.gov"),
     person("David","Lorenz", role=c("aut"),
     email = "lorenz@usgs.gov"))
-Description: Collection of functions to help retrieve USGS and EPA water
-    quality and hydrology data from web services.
+Description: Collection of functions to help retrieve U.S. Geological Survey
+    (USGS) and U.S. Environmental Protection Agency (EPA) water quality and
+    hydrology data from web services. USGS web services are discovered from the
+    National Water Information Services (NWIS) tools found here:
+    http://waterservices.usgs.gov/ Both EPA and USGS water quality data are
+    obtained from the Water Quality Portal found here:
+    http://www.waterqualitydata.us/portal.jsp
 License: Unlimited | file LICENSE
 Copyright: This software is in the public domain because it contains materials
     that originally came from the United States Geological Survey, an agency of
@@ -34,3 +39,4 @@ LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
 BuildVignettes: true
+URL: https://github.com/USGS-R/dataRetrieval
