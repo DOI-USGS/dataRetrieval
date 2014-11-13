@@ -29,6 +29,7 @@ endDate <- "2012-10-01"
 offering <- '00003'
 property <- '00060'
 obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
+\dontrun{
 data <- importWaterML1(obs_url,TRUE)
 
 groundWaterSite <- "431049071324301"
@@ -56,5 +57,6 @@ data <- renameNWISColumns(data)
 names(attributes(data))
 attr(data, "url")
 attr(data, "disclaimer")
+}
 }
 

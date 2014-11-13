@@ -206,10 +206,10 @@ dfLong <- readNWISqw(siteNumber, parameterCd,
 #       startDate, endDate, expanded=TRUE, reshape=TRUE)
 
 
-## ----qwmeta, echo=TRUE, eval=TRUE-------------------------
-
-comment(dfLong)
-
+## ----qwmeta, echo=TRUE, eval=FALSE------------------------
+#  
+#  comment(dfLong)
+#  
 
 ## ----gwlexample, echo=TRUE, eval=TRUE---------------------
 siteNumber <- "434400121275801"
