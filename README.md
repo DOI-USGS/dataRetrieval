@@ -7,6 +7,9 @@ Windows: [![Build status](https://ci.appveyor.com/api/projects/status/msanha92b5
 
 Retrieval functions for USGS and EPA hydrologic and water quality data.
 
+A fairly large overhaul of the functions was done on November 31, 2014. Feedback from initial users was 
+
+
 ## Function Overview
 
 Web service retrieval functions:
@@ -59,32 +62,17 @@ To install the dataRetrieval package, you must be using R 3.0 or greater and run
 ##Version updates
 ---------------
 
-###dataRetrieval 1.5.0
+###dataRetrieval 2.0.0
 
-* Changing naming convention one last time. Migrating `dataRetrieval` specific retrievals to `dataRetrieval`.
+* Changing naming convention. Migrated `EGRET` specific retrievals to `EGRET`
 * Added back WaterML2 parsing tool
 * Added specific groundwater, rating, peak, and surfacewater measurement functions
-
+* Attached metadata attributes to returned dataframes
 
 
 ###dataRetrieval 1.4.0
-Changed naming convention:
+* Changed naming convention:
 
-|Original Name | New Name |
-| ------------- |:-------------|
-|getDVData | getNWISDaily |
-|getSampleData  |     getNWISSample |
-|getSTORETData* | getWQPSample |
-|getSampleDataFromFile | getUserSample |
-|getDailyDataFromFile | getUserDaily |
-|getMetaData | splits into getNWISInfo and getUserInfo |
-|getSiteFileData | getNWISSiteInfo |
-|getParameterInfo | getNWISPcodeInfo |
-|getDataAvailability | getNWISDataAvailability |
-|'retrieve' functions | 'get' |
-
-*Changed WaterML2 rbind fill from plyr function to dplyr. Removed plyr import, added dplyr.
-*Removing WaterML2 until fixed.
 
 
 ###dataRetrieval 1.3.3
