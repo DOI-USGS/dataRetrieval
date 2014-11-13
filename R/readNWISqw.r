@@ -27,11 +27,13 @@
 #' startDate <- '2010-01-01'
 #' endDate <- ''
 #' pCodes <- c('34247','30234','32104','34220')
+#' \dontrun{
 #' rawNWISqwData <- readNWISqw(siteNumber,pCodes,startDate,endDate)
 #' rawNWISqwDataExpandReshaped <- readNWISqw(siteNumber,pCodes,
 #'           startDate,endDate,expanded=TRUE)
 #' rawNWISqwDataExpand <- readNWISqw(siteNumber,pCodes,
 #'           startDate,endDate,expanded=TRUE,reshape=FALSE)
+#'           }
 readNWISqw <- function (siteNumber,pCodes,startDate="",endDate="",
                         expanded=FALSE,reshape=TRUE,tz=""){  
   

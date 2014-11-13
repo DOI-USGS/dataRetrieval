@@ -25,10 +25,10 @@
 #' startDate <- '1985-01-01'
 #' endDate <- ''
 #' pCode <- c("00060","00010")
-#' url_daily <- constructNWISURL(siteNumber,pCode,
-#'            startDate,endDate,'dv',statCd=c("00003","00001"))
 #' \dontrun{
 #' # Not running for time considerations
+#' url_daily <- constructNWISURL(siteNumber,pCode,
+#'            startDate,endDate,'dv',statCd=c("00003","00001"))
 #' url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
 #' 
 #' url_qw_single <- constructNWISURL(siteNumber,"01075",startDate,endDate,'qw')
@@ -45,6 +45,8 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
                              ratingType="base"){
 
   service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas"))
+  
+  parameterCdFile <- parameterCdFile
   
   if(any(!is.na(parameterCd))){
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
