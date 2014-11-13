@@ -9,7 +9,7 @@ getNWISSites<- function(...){
 #' @export
 getNWISDataAvailability <- function(siteNumbers,service=c("uv","dv","qw")){
   message("This function is being deprecated. Please use whatNWISdata in the future.")
-  whatNWISdata(siteNumber=siteNumber, service=service)
+  whatNWISdata(siteNumbers, service=service)
 }
 
 
@@ -52,7 +52,7 @@ getNWISdvData<- function(siteNumber,parameterCd,startDate="",endDate="",statCd="
 #' @export
 getNWISunitData<- function(siteNumbers,parameterCd,startDate="",endDate="", tz=""){
   message("This function is being deprecated. Please use readNWISuv in the future.")
-  readNWISuv(siteNumber,parameterCd,startDate,endDate, tz)
+  readNWISuv(siteNumbers,parameterCd,startDate,endDate, tz)
 }
 
 #' @rdname readNWISqw
