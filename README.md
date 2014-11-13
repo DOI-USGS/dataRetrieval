@@ -52,12 +52,9 @@ Additionally, to subscribe to an email list concerning updates to these R packag
 
 ##Package Installation
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
-
-	install.packages("dataRetrieval", 
-	  repos=c("http://usgs-r.github.com",
-	           "http://cran.us.r-project.org"),
-	  dependencies=TRUE)
-
+```R
+	install.packages("dataRetrieval")
+```
 
 ##Version updates
 ---------------
@@ -109,13 +106,13 @@ Changed naming convention:
 ##Sample Workflow
 
 Load data from web services:
-
+```R
 	library(dataRetrieval)
 	Daily <- getNWISDaily("06934500","00060","1979-10-01","2010-09-30")
 	Sample <-getNWISSample("06934500","00631","1970-10-01","2011-09-30")
 	INFO <-getNWISInfo("06934500","00631", interactive=FALSE)
 	Sample <-mergeReport(Daily, Sample)
-
+```
 
 ##Disclaimer
 This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the [official USGS copyright policy](http://www.usgs.gov/visual-id/credit_usgs.html#copyright/ "official USGS copyright policy")
