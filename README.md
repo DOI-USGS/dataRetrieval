@@ -7,7 +7,9 @@ Windows: [![Build status](https://ci.appveyor.com/api/projects/status/msanha92b5
 
 Retrieval functions for USGS and EPA hydrologic and water quality data.
 
-A fairly large overhaul of the functions was done on November 31, 2014. Feedback from initial users was 
+A fairly large overhaul of the functions was done on November 31, 2014. Feedback from initial users was incorporated. For questions, bug reports, and suggestions please create an Issue here:
+
+[dataRetrieval Issues page](https://github.com/USGS-R/dataRetrieval/issues)
 
 
 ## Function Overview
