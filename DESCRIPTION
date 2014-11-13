@@ -9,8 +9,8 @@ Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
     email = "ldecicco@usgs.gov"),
     person("David","Lorenz", role=c("aut"),
     email = "lorenz@usgs.gov"))
-Description: Collection of functions to help retrieve USGS data from web
-    services.
+Description: Collection of functions to help retrieve USGS and EPA water
+    quality and hydrology data from web services.
 License: Unlimited | file LICENSE
 Copyright: This software is in the public domain because it contains materials
     that originally came from the United States Geological Survey, an agency of

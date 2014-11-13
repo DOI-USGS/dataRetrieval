@@ -34,6 +34,7 @@ siteNumber <- '04085427'
 startDate <- '2012-01-01'
 endDate <- '2012-06-30'
 pCode <- '00060'
+\dontrun{
 rawDailyQ <- readNWISdv(siteNumber,pCode, startDate, endDate)
 rawDailyQAndTempMeanMax <- readNWISdv(siteNumber,c('00010','00060'),
        startDate, endDate, statCd=c('00001','00003'))
@@ -45,6 +46,7 @@ x <- readNWISdv("10258500","00060", "2014-09-08", "2014-09-14")
 names(attributes(x))
 attr(x, "siteInfo")
 attr(x, "variableInfo")
+}
 }
 \keyword{USGS}
 \keyword{data}
