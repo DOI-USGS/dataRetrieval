@@ -55,6 +55,12 @@ egret_comments@usgs.gov
 
 Additionally, to subscribe to an email list concerning updates to these R packages, please send a request to egret_comments@usgs.gov.
 
+##Reporting bugs
+
+Please consider reporting bugs and asking questions on the Issues page:
+
+[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
+
 ##Package Installation
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
 ```R
