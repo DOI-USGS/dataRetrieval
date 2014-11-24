@@ -23,7 +23,7 @@
 #' endDate <- "2012-10-01"
 #' offering <- "00003"
 #' property <- "00060"
-#' \dontrun{
+#' 
 #' obs_url <- constructNWISURL(siteNumber,property,
 #'          startDate,endDate,"dv",format="tsv")
 #' data <- importRDB1(obs_url)
@@ -47,7 +47,7 @@
 #' fileName <- "RDB1Example.txt"
 #' fullPath <- file.path(filePath, fileName)
 #' importUserRDB <- importRDB1(fullPath)
-#' }
+#' 
 importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, tz=""){
   
   if(tz != ""){
@@ -222,6 +222,8 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
   
     row.names(data) <- NULL
   }
+  
+  names(data) <- make.names(names(data))
   
   comment(data) <- hdr
   attr(data, "url") <- obs_url
