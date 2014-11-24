@@ -9,7 +9,7 @@ getNWISPcodeInfo(parameterCd)
 readNWISpCode(parameterCd)
 }
 \arguments{
-\item{parameterCd}{vector of USGS parameter codes.  This is usually an 5 digit number.}
+\item{parameterCd}{character of USGS parameter codes.  This is usually an 5 digit number.}
 }
 \value{
 parameterData dataframe with all information from the USGS about the particular parameter (usually code, name, short name, units, and CAS registry numbers)

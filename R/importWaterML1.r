@@ -3,17 +3,17 @@
 #' This function accepts a url parameter that already contains the desired
 #' NWIS site, parameter code, statistic, startdate and enddate. 
 #'
-#' @param obs_url string containing the url for the retrieval
+#' @param obs_url character containing the url for the retrieval
 #' @param asDateTime logical, if TRUE returns date and time as POSIXct, if FALSE, Date
-#' @param tz string to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
-#' agency \tab character \tab The NWIS code for the agency reporting the data\cr
-#' site \tab character \tab The USGS site number \cr
+#' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site_no \tab character \tab The USGS site number \cr
 #' datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
 #' \tab character \tab or raw character string (if asDateTime = FALSE) \cr
 #' tz_cd \tab character \tab The time zone code for datetime \cr
@@ -199,7 +199,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
          
         assign(valueName,value)
         
-        df <- data.frame(agency = rep(agency,length(value)),
+        df <- data.frame(agency_cd = rep(agency,length(value)),
                          site_no = rep(site,length(value)),
                          stringsAsFactors=FALSE)
         

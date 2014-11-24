@@ -6,12 +6,12 @@
 zeroPad(x, padTo)
 }
 \arguments{
-\item{x}{string}
+\item{x}{character}
 
-\item{padTo}{number Final desired length of the string}
+\item{padTo}{number Final desired length of the character}
 }
 \value{
-x string returned with leading zeros
+x character returned with leading zeros
 }
 \description{
 Function to pad a string with leading zeros. Useful for parameter codes and USGS site IDs.

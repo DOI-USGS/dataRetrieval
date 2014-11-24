@@ -2,10 +2,10 @@
 #'
 #' Function to pad a string with leading zeros. Useful for parameter codes and USGS site IDs.
 #'
-#' @param x string 
-#' @param padTo number Final desired length of the string
+#' @param x character 
+#' @param padTo number Final desired length of the character
 #' @keywords data import USGS web service
-#' @return x string returned with leading zeros
+#' @return x character returned with leading zeros
 #' @export
 #' @examples
 #' pCode <- '10'

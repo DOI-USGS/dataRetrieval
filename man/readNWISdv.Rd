@@ -11,15 +11,15 @@ readNWISdv(siteNumber, parameterCd, startDate = "", endDate = "",
   statCd = "00003")
 }
 \arguments{
-\item{siteNumber}{string USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a string vector.}
+\item{siteNumber}{character USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a character vector.}
 
-\item{parameterCd}{string or vector of USGS parameter code.  This is usually an 5 digit number..}
+\item{parameterCd}{character of USGS parameter code(s).  This is usually an 5 digit number.}
 
-\item{startDate}{string starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.}
 
-\item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
 
-\item{statCd}{string USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.}
+\item{statCd}{character USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.}
 }
 \value{
 A data frame with the following columns:

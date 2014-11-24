@@ -3,14 +3,14 @@
 #' Imports a table of available parameters, period of record, and count. See \url{http://waterservices.usgs.gov/rest/Site-Service.html}
 #' for more information.
 #'
-#' @param siteNumbers string vector of USGS site number or multiple sites.
-#' @param service vector string. Options are "all", or one or many of "dv"(daily values),
+#' @param siteNumbers character USGS site number or multiple sites.
+#' @param service character. Options are "all", or one or many of "dv"(daily values),
 #'      "uv","rt", or "iv"(unit values), "qw"(water-quality),"sv"(sites visits),"pk"(peak measurements),
 #'      "gw"(groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link), 
 #'      "aw" (sites monitored by the USGS Active Groundwater Level Network External Link), "id" (historical 
 #'      instantaneous values)
-#' @param parameterCd string vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.
-#' @param statCd string vector of all statistic codes to return. Defaults to "all" which will not perform a filter.
+#' @param parameterCd character vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.
+#' @param statCd character vector of all statistic codes to return. Defaults to "all" which will not perform a filter.
 #' @keywords data import USGS web service
 #' @return retval dataframe with all information found in the expanded site file
 #' @export

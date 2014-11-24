@@ -9,14 +9,14 @@ getWQPqwData(siteNumber, parameterCd, startDate = "", endDate = "")
 readWQPqw(siteNumber, parameterCd, startDate = "", endDate = "")
 }
 \arguments{
-\item{siteNumber}{string site number. This needs to include the full agency code prefix.}
+\item{siteNumber}{character site number. This needs to include the full agency code prefix.}
 
-\item{parameterCd}{vector of USGS 5-digit parameter code or string of characteristicNames.
+\item{parameterCd}{vector of USGS 5-digit parameter code or characteristicNames.
 Leaving this blank will return all of the measured values during the specified time period.}
 
-\item{startDate}{string starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.}
 
-\item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
 }
 \value{
 retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for

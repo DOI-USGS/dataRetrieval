@@ -4,11 +4,11 @@
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
 #' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
-#' @param siteNumbers string USGS site number (or multiple sites).  This is usually an 8 digit number
-#' @param parameterCd string USGS parameter code.  This is usually an 5 digit number.
-#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
-#' @param tz string to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
+#' @param parameterCd character USGS parameter code.  This is usually an 5 digit number.
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
+#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
@@ -65,9 +65,33 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' 
 #' 
 #' 
-#' @param siteNumber string USGS site number.  This is usually an 8 digit number
-#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param siteNumber character USGS site number.  This is usually an 8 digit number
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
+#' @return A data frame with the following columns:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site_no \tab character \tab The USGS site number \cr
+#' datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
+#' \tab character \tab or raw character string (if asDateTime = FALSE) \cr
+#' tz_cd \tab character \tab The time zone code for datetime \cr
+#' code \tab character \tab Any codes that qualify the corresponding value\cr
+#' value \tab numeric \tab The numeric value for the parameter \cr
+#' }
+#' Note that code and value are repeated for the parameters requested. The names are of the form 
+#' XD_P_S, where X is literal, 
+#' D is an option description of the parameter, 
+#' P is the parameter code, 
+#' and S is the statistic code (if applicable).
+#' 
+#' There are also several useful attributes attached to the data frame:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' url \tab character \tab The url used to generate the data \cr
+#' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' comment \tab character \tab Header comments from the RDB file \cr
+#' }
 #' @export
 #' @examples
 #' siteNumber <- '01594440'
@@ -86,8 +110,20 @@ readNWISpeak <- function (siteNumber,startDate="",endDate=""){
 #' 
 #' 
 #' 
-#' @param siteNumber string USGS site number.  This is usually an 8 digit number
-#' @param type string can be "base", "corr", or "exsa"
+#' @param siteNumber character USGS site number.  This is usually an 8 digit number
+#' @param type character can be "base", "corr", or "exsa"
+#' @return A data frame. If \code{type} is "base," then the columns are
+#'INDEP, typically the gage height, in feet; DEP, typically the streamflow,
+#'in cubic feet per second; and STOR, where "*" indicates that the pair are
+#'a fixed point of the rating curve. If \code{type} is "exsa," then an
+#'additional column, SHIFT, is included that indicates the current shift in
+#'the rating for that value of INDEP. If \code{type} is "corr," then the
+#'columns are INDEP, typically the gage height, in feet; CORR, the correction
+#'for that value; and CORRINDEP, the corrected value for CORR.\cr
+#'If \code{type} is "base," then the data frame has an attribute called "RATING"
+#'that describes the rating curve is included.
+#' @note Not all active USGS streamgages have traditional rating curves that
+#'relate flow to stage.
 #' @export
 #' @examples
 #' siteNumber <- '01594440'
@@ -114,13 +150,28 @@ readNWISrating <- function (siteNumber,type="base"){
 #'
 #'
 #'
-#' @param siteNumber string USGS site number.  This is usually an 8 digit number
-#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
-#' @param tz string to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' @param siteNumber character USGS site number.  This is usually an 8 digit number
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
+#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+#' @return A data frame with at least the following columns:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site_no \tab character \tab The USGS site number \cr
+#' tz_cd \tab character \tab The time zone code for datetime \cr
+#' }
+#' 
+#' There are also several useful attributes attached to the data frame:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' url \tab character \tab The url used to generate the data \cr
+#' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' comment \tab character \tab Header comments from the RDB file \cr
+#' }
 #' @export
 #' @examples
 #' siteNumber <- '01594440'
@@ -144,9 +195,9 @@ readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){
 #' Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service 
 #' depending on the year that the data was collected. 
 #'
-#' @param siteNumbers string USGS site number (or multiple sites).  This is usually an 8 digit number
-#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr

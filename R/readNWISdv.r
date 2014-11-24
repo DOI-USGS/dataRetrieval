@@ -4,11 +4,11 @@
 #' A list of parameter codes can be found here: \url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}
 #' A list of statistic codes can be found here: \url{http://help.waterdata.usgs.gov/code/stat_code_query?fmt=html}
 #'
-#' @param siteNumber string USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a string vector.
-#' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number..
-#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
-#' @param statCd string USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.
+#' @param siteNumber character USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a character vector.
+#' @param parameterCd character of USGS parameter code(s).  This is usually an 5 digit number.
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
+#' @param statCd character USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr

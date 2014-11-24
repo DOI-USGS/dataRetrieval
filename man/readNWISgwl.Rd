@@ -6,11 +6,11 @@
 readNWISgwl(siteNumbers, startDate = "", endDate = "")
 }
 \arguments{
-\item{siteNumbers}{string USGS site number (or multiple sites).  This is usually an 8 digit number}
+\item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
 
-\item{startDate}{string starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.}
 
-\item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
 }
 \value{
 A data frame with the following columns:

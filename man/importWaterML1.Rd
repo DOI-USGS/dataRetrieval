@@ -6,11 +6,11 @@
 importWaterML1(obs_url, asDateTime = FALSE, tz = "")
 }
 \arguments{
-\item{obs_url}{string containing the url for the retrieval}
+\item{obs_url}{character containing the url for the retrieval}
 
 \item{asDateTime}{logical, if TRUE returns date and time as POSIXct, if FALSE, Date}
 
-\item{tz}{string to set timezone attribute of datetime. Default is an empty quote, which converts the
+\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
@@ -19,8 +19,8 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 A data frame with the following columns:
 \tabular{lll}{
 Name \tab Type \tab Description \cr
-agency \tab character \tab The NWIS code for the agency reporting the data\cr
-site \tab character \tab The USGS site number \cr
+agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+site_no \tab character \tab The USGS site number \cr
 datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr
 \tab character \tab or raw character string (if asDateTime = FALSE) \cr
 tz_cd \tab character \tab The time zone code for datetime \cr

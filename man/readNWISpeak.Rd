@@ -6,11 +6,37 @@
 readNWISpeak(siteNumber, startDate = "", endDate = "")
 }
 \arguments{
-\item{siteNumber}{string USGS site number.  This is usually an 8 digit number}
+\item{siteNumber}{character USGS site number.  This is usually an 8 digit number}
 
-\item{startDate}{string starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.}
 
-\item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
+}
+\value{
+A data frame with the following columns:
+\tabular{lll}{
+Name \tab Type \tab Description \cr
+agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+site_no \tab character \tab The USGS site number \cr
+datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr
+\tab character \tab or raw character string (if asDateTime = FALSE) \cr
+tz_cd \tab character \tab The time zone code for datetime \cr
+code \tab character \tab Any codes that qualify the corresponding value\cr
+value \tab numeric \tab The numeric value for the parameter \cr
+}
+Note that code and value are repeated for the parameters requested. The names are of the form
+XD_P_S, where X is literal,
+D is an option description of the parameter,
+P is the parameter code,
+and S is the statistic code (if applicable).
+
+There are also several useful attributes attached to the data frame:
+\tabular{lll}{
+Name \tab Type \tab Description \cr
+url \tab character \tab The url used to generate the data \cr
+queryTime \tab POSIXct \tab The time the data was returned \cr
+comment \tab character \tab Header comments from the RDB file \cr
+}
 }
 \description{
 Reads peak flow data from NWISweb.
