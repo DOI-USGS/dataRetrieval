@@ -26,7 +26,7 @@
 #' and S is the statistic code (if applicable).
 #' 
 #' There are also several useful attributes attached to the data frame:
-#' \tabular{ll}{
+#' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
 #' url \tab character \tab The url used to generate the data \cr
 #' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
@@ -64,7 +64,10 @@ readNWISdv <- function (siteNumber,parameterCd,startDate="",endDate="",statCd="0
   url <- constructNWISURL(siteNumber,parameterCd,startDate,endDate,"dv",statCd=statCd)
 
   data <- importWaterML1(url, asDateTime=FALSE)
-  data$dateTime <- as.Date(data$dateTime)
+  if(nrow(data)>0){
+    data$dateTime <- as.Date(data$dateTime)
+  }
+  
 
   return (data)
 }

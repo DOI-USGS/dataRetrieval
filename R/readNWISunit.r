@@ -30,7 +30,7 @@
 #' and S is the statistic code (if applicable).
 #' 
 #' There are also several useful attributes attached to the data frame:
-#' \tabular{ll}{
+#' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
 #' url \tab character \tab The url used to generate the data \cr
 #' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
@@ -164,7 +164,7 @@ readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){
 #' and S is the statistic code (if applicable).
 #' 
 #' There are also several useful attributes attached to the data frame:
-#' \tabular{ll}{
+#' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
 #' url \tab character \tab The url used to generate the data \cr
 #' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
