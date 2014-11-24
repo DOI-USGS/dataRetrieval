@@ -12,6 +12,33 @@ readNWISgwl(siteNumbers, startDate = "", endDate = "")
 
 \item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
 }
+\value{
+A data frame with the following columns:
+\tabular{lll}{
+Name \tab Type \tab Description \cr
+agency \tab character \tab The NWIS code for the agency reporting the data\cr
+site \tab character \tab The USGS site number \cr
+datetime \tab character \tab The date and time of the value as a character \cr
+tz_cd \tab character \tab The time zone code for datetime \cr
+code \tab character \tab Any codes that qualify the corresponding value\cr
+value \tab numeric \tab The numeric value for the parameter \cr
+}
+Note that code and value are repeated for the parameters requested. The names are of the form
+X_D_P_S, where X is literal,
+D is an option description of the parameter,
+P is the parameter code,
+and S is the statistic code (if applicable).
+
+There are also several useful attributes attached to the data frame:
+\tabular{ll}{
+Name \tab Type \tab Description \cr
+url \tab character \tab The url used to generate the data \cr
+siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
+statisticInfo \tab data.frame \tab A data frame containing information on the requested statistics on the data \cr
+queryTime \tab POSIXct \tab The time the data was returned \cr
+}
+}
 \description{
 Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service
 depending on the year that the data was collected.
@@ -21,5 +48,8 @@ siteNumber <- "434400121275801"
 data <- readNWISgwl(siteNumber, '','')
 sites <- c("434400121275801", "375907091432201")
 data2 <- readNWISgwl(sites, '','')
+}
+\seealso{
+\code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
 }
 

@@ -13,7 +13,33 @@
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @keywords data import USGS web service
-#' @return data dataframe with agency, site, dateTime, time zone, value, and code columns
+#' @return A data frame with the following columns:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' agency \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site \tab character \tab The USGS site number \cr
+#' datetime \tab POSIXct \tab The date and time of the value converted to UTC \cr 
+#' tz_cd \tab character \tab The time zone code for datetime \cr
+#' code \tab character \tab Any codes that qualify the corresponding value\cr
+#' value \tab numeric \tab The numeric value for the parameter \cr
+#' }
+#' Note that code and value are repeated for the parameters requested. The names are of the form 
+#' X_D_P_S, where X is literal, 
+#' D is an option description of the parameter, 
+#' P is the parameter code, 
+#' and S is the statistic code (if applicable).
+#' 
+#' There are also several useful attributes attached to the data frame:
+#' \tabular{ll}{
+#' Name \tab Type \tab Description \cr
+#' url \tab character \tab The url used to generate the data \cr
+#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+#' variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
+#' statisticInfo \tab data.frame \tab A data frame containing information on the requested statistics on the data \cr
+#' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' }
+#' 
+#' @seealso \code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
 #' @export
 #' @examples
 #' siteNumber <- '05114000'
@@ -121,6 +147,33 @@ readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){
 #' @param siteNumbers string USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @return A data frame with the following columns:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' agency \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site \tab character \tab The USGS site number \cr
+#' datetime \tab character \tab The date and time of the value as a character \cr 
+#' tz_cd \tab character \tab The time zone code for datetime \cr
+#' code \tab character \tab Any codes that qualify the corresponding value\cr
+#' value \tab numeric \tab The numeric value for the parameter \cr
+#' }
+#' Note that code and value are repeated for the parameters requested. The names are of the form 
+#' X_D_P_S, where X is literal, 
+#' D is an option description of the parameter, 
+#' P is the parameter code, 
+#' and S is the statistic code (if applicable).
+#' 
+#' There are also several useful attributes attached to the data frame:
+#' \tabular{ll}{
+#' Name \tab Type \tab Description \cr
+#' url \tab character \tab The url used to generate the data \cr
+#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+#' variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
+#' statisticInfo \tab data.frame \tab A data frame containing information on the requested statistics on the data \cr
+#' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' }
+#' 
+#' @seealso \code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
 #' @export
 #' @examples
 #' siteNumber <- "434400121275801"

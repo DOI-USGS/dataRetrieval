@@ -3,8 +3,8 @@
 #' \tabular{ll}{
 #' Package: \tab dataRetrieval\cr
 #' Type: \tab Package\cr
-#' Version: \tab 2.0.0\cr
-#' Date: \tab 2014-11-13\cr
+#' Version: \tab 2.0.1\cr
+#' Date: \tab 2014-11-24\cr
 #' License: \tab Unlimited for this package, dependencies have more restrictive licensing.\cr
 #' Copyright: \tab This software is in the public domain because it contains materials
 #' that originally came from the United States Geological Survey, an agency of

@@ -22,7 +22,31 @@ readNWISdv(siteNumber, parameterCd, startDate = "", endDate = "",
 \item{statCd}{string USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.}
 }
 \value{
-data dataframe with agency, site, dateTime, value, and code columns
+A data frame with the following columns:
+\tabular{lll}{
+Name \tab Type \tab Description \cr
+agency \tab character \tab The NWIS code for the agency reporting the data\cr
+site \tab character \tab The USGS site number \cr
+datetime \tab Date \tab The date of the value \cr
+tz_cd \tab character \tab The time zone code for datetime \cr
+code \tab character \tab Any codes that qualify the corresponding value\cr
+value \tab numeric \tab The numeric value for the parameter \cr
+}
+Note that code and value are repeated for the parameters requested. The names are of the form
+X_D_P_S, where X is literal,
+D is an option description of the parameter,
+P is the parameter code,
+and S is the statistic code (if applicable).
+
+There are also several useful attributes attached to the data frame:
+\tabular{ll}{
+Name \tab Type \tab Description \cr
+url \tab character \tab The url used to generate the data \cr
+siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
+statisticInfo \tab data.frame \tab A data frame containing information on the requested statistics on the data \cr
+queryTime \tab POSIXct \tab The time the data was returned \cr
+}
 }
 \description{
 Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
@@ -34,7 +58,7 @@ siteNumber <- '04085427'
 startDate <- '2012-01-01'
 endDate <- '2012-06-30'
 pCode <- '00060'
-\dontrun{
+
 rawDailyQ <- readNWISdv(siteNumber,pCode, startDate, endDate)
 rawDailyQAndTempMeanMax <- readNWISdv(siteNumber,c('00010','00060'),
        startDate, endDate, statCd=c('00001','00003'))
@@ -46,7 +70,12 @@ x <- readNWISdv("10258500","00060", "2014-09-08", "2014-09-14")
 names(attributes(x))
 attr(x, "siteInfo")
 attr(x, "variableInfo")
+
+site <- "05212700"
+notActive <- readNWISdv(site, "00060", "2014-01-01","2014-01-07")
 }
+\seealso{
+\code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
 }
 \keyword{USGS}
 \keyword{data}
