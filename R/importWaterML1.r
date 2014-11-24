@@ -9,7 +9,34 @@
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
-#' @return mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
+#' @return A data frame with the following columns:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' agency \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site \tab character \tab The USGS site number \cr
+#' datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
+#' \tab character \tab or raw character string (if asDateTime = FALSE) \cr
+#' tz_cd \tab character \tab The time zone code for datetime \cr
+#' code \tab character \tab Any codes that qualify the corresponding value\cr
+#' value \tab numeric \tab The numeric value for the parameter \cr
+#' }
+#' Note that code and value are repeated for the parameters requested. The names are of the form 
+#' X_D_P_S, where X is literal, 
+#' D is an option description of the parameter, 
+#' P is the parameter code, 
+#' and S is the statistic code (if applicable).
+#' 
+#' There are also several useful attributes attached to the data frame:
+#' \tabular{ll}{
+#' Name \tab Type \tab Description \cr
+#' url \tab character \tab The url used to generate the data \cr
+#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+#' variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
+#' statisticInfo \tab data.frame \tab A data frame containing information on the requested statistics on the data \cr
+#' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' }
+#' 
+#' @seealso \code{\link{renameNWISColumns}}
 #' @export
 #' @import XML
 #' @import RCurl
@@ -21,7 +48,7 @@
 #' offering <- '00003'
 #' property <- '00060'
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
-#' \dontrun{
+#' 
 #' data <- importWaterML1(obs_url,TRUE)
 #' 
 #' groundWaterSite <- "431049071324301"
@@ -49,7 +76,14 @@
 #' names(attributes(data))
 #' attr(data, "url")
 #' attr(data, "disclaimer")
-#' }
+#' 
+#' inactiveSite <- "05212700"
+#' inactiveSite <- constructNWISURL(inactiveSite, "00060", "2014-01-01", "2014-01-10",'dv')
+#' inactiveSite <- importWaterML1(inactiveSite)
+#' 
+#' inactiveAndAcitive <- c("07334200","05212700")
+#' inactiveAndAcitive <- constructNWISURL(inactiveAndAcitive, "00060", "2014-01-01", "2014-01-10",'dv')
+#' inactiveAndAcitive <- importWaterML1(inactiveAndAcitive)
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(url.exists(obs_url)){
@@ -119,7 +153,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     site <- as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:siteCode", namespaces = chunkNS, xmlValue))
     agency <- as.character(xpathApply(chunk, "ns1:sourceInfo/ns1:siteCode/@agencyCode", namespaces = chunkNS))
     pCode <-as.character(xpathApply(chunk, "ns1:variable/ns1:variableCode", namespaces = chunkNS, xmlValue))
-    statCd <- as.character(xpathApply(chunk, "ns1:variable/ns1:options/ns1:option/@optionCode", namespaces = chunkNS))
+    statCd <- as.character(xpathApply(chunk, "ns1:variable/ns1:options/ns1:option[@name='Statistic']/@optionCode", namespaces = chunkNS))
+    statName <- as.character(xpathApply(chunk, "ns1:variable/ns1:options/ns1:option[@name='Statistic']", namespaces = chunkNS, xmlValue))
     noValue <- as.numeric(xpathApply(chunk, "ns1:variable/ns1:noDataValue", namespaces = chunkNS, xmlValue))
     
     extraSiteData <-  xmlToList(xmlRoot(xmlDoc(chunk[["sourceInfo"]])))
@@ -285,104 +320,135 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         
         
         df <- df[,columnsOrderd]
-                  
-        names(extraSiteData) <- make.unique(names(extraSiteData))
-        
-        sitePropertyIndex <- grep("siteProperty",names(extraSiteData))
-        
-        siteInfo <- data.frame(station_nm=extraSiteData$siteName,
-                               site_no=extraSiteData$siteCode$text,
-                               agency=extraSiteData$siteCode$.attrs[["agencyCode"]],
-                               timeZoneOffset=extraSiteData$timeZoneInfo$defaultTimeZone[1],
-                               timeZoneAbbreviation=extraSiteData$timeZoneInfo$defaultTimeZone[2],
-                               dec_lat_va=as.numeric(extraSiteData$geoLocation$geogLocation$latitude),
-                               dec_lon_va=as.numeric(extraSiteData$geoLocation$geogLocation$longitude),
-                               srs=extraSiteData$geoLocation$geogLocation$.attrs[["srs"]],
-                               stringsAsFactors=FALSE)
-
-        properties <- as.character(lapply(extraSiteData[sitePropertyIndex], function(x) {
-          if(".attrs" %in% names(x)){
-            x$.attrs
-          } else {
-            NA
-          }              
-          }))
-    
-        propertyValues <- as.character(lapply(extraSiteData[sitePropertyIndex], function(x) {
-          if("text" %in% names(x)){
-            x$text
-          } else {
-            NA
-          }              
-          }))
-        
-        names(propertyValues) <- properties
-        propertyValues <- propertyValues[propertyValues != "NA"]
-        siteInfo <- cbind(siteInfo, t(propertyValues))            
-        
-        names(extraVariableData) <- make.unique(names(extraVariableData))
-        variableInfo <- data.frame(parameterCd=extraVariableData$variableCode$text,
-                                   parameter_nm=extraVariableData$variableName,
-                                   parameter_desc=extraVariableData$variableDescription,
-                                   valueType=extraVariableData$valueType,
-                                   param_units=extraVariableData$unit$unitCode,
-                                   noDataValue=as.numeric(extraVariableData$noDataValue),
-                                   stringsAsFactors=FALSE)
-        
+                        
         if (1 == i & valuesIndex[1] == j){
-          mergedDF <- df
-          siteInformation <- siteInfo
-          variableInformation <- variableInfo
-          
+          mergedDF <- df          
         } else {
           similarNames <- intersect(names(mergedDF), names(df))
           mergedDF <- merge(mergedDF, df,by=similarNames,all=TRUE)
-          
-          similarSites <- intersect(names(siteInformation), names(siteInfo))
-          siteInformation <- merge(siteInformation, siteInfo, by=similarSites, all=TRUE)
-          
-          similarVariables <- intersect(names(variableInformation),names(variableInfo))
-          variableInformation <- merge(variableInformation, variableInfo, by=similarVariables, all=TRUE)
         }
+        
+      } else {
+        if (1 == i & valuesIndex[1] == j){
+          mergedDF <- NULL
+        } 
       }
+
     }
+
+    ######################
+    names(extraSiteData) <- make.unique(names(extraSiteData))
+    
+    sitePropertyIndex <- grep("siteProperty",names(extraSiteData))
+    
+    siteInfo <- data.frame(station_nm=extraSiteData$siteName,
+                           site_no=extraSiteData$siteCode$text,
+                           agency=extraSiteData$siteCode$.attrs[["agencyCode"]],
+                           timeZoneOffset=extraSiteData$timeZoneInfo$defaultTimeZone[1],
+                           timeZoneAbbreviation=extraSiteData$timeZoneInfo$defaultTimeZone[2],
+                           dec_lat_va=as.numeric(extraSiteData$geoLocation$geogLocation$latitude),
+                           dec_lon_va=as.numeric(extraSiteData$geoLocation$geogLocation$longitude),
+                           srs=extraSiteData$geoLocation$geogLocation$.attrs[["srs"]],
+                           stringsAsFactors=FALSE)
+    
+    properties <- as.character(lapply(extraSiteData[sitePropertyIndex], function(x) {
+      if(".attrs" %in% names(x)){
+        x$.attrs
+      } else {
+        NA
+      }              
+    }))
+    
+    propertyValues <- as.character(lapply(extraSiteData[sitePropertyIndex], function(x) {
+      if("text" %in% names(x)){
+        x$text
+      } else {
+        NA
+      }              
+    }))
+    
+    names(propertyValues) <- properties
+    propertyValues <- propertyValues[propertyValues != "NA"]
+    siteInfo <- cbind(siteInfo, t(propertyValues))            
+    
+    names(extraVariableData) <- make.unique(names(extraVariableData))
+    variableInfo <- data.frame(parameterCd=extraVariableData$variableCode$text,
+                               parameter_nm=extraVariableData$variableName,
+                               parameter_desc=extraVariableData$variableDescription,
+                               valueType=extraVariableData$valueType,
+                               param_units=extraVariableData$unit$unitCode,
+                               noDataValue=NA, #as.numeric(extraVariableData$noDataValue), since it's already converted
+                               stringsAsFactors=FALSE)
+    
+    statInfo <- data.frame(statisticName=statName,
+                           statisticCd=statCd,
+                           stringsAsFactors=FALSE)
+
+    if (1 == i){
+      siteInformation <- siteInfo
+      variableInformation <- variableInfo
+      statInformation <- statInfo
+      
+    } else {
+      similarSites <- intersect(names(siteInformation), names(siteInfo))
+      siteInformation <- merge(siteInformation, siteInfo, by=similarSites, all=TRUE)
+      
+      similarVariables <- intersect(names(variableInformation),names(variableInfo))
+      variableInformation <- merge(variableInformation, variableInfo, by=similarVariables, all=TRUE)
+      
+      similarStats <- intersect(names(statInformation), names(statInfo))
+      statInformation <- merge(statInformation, statInfo, by=similarStats, all=TRUE)
+    }
+
+    ######################
+
     attList[[uniqueName]] <- list(extraSiteData, extraVariableData)
 
     
   }
-  
-  dataColumns <- unique(dataColumns)
-  qualColumns <- unique(qualColumns)
-  
-  sortingColumns <- names(mergedDF)[!(names(mergedDF) %in% c(dataColumns,qualColumns))]
 
-  meltedmergedDF  <- melt(mergedDF,id.vars=sortingColumns)
-  meltedmergedDF  <- meltedmergedDF[!is.na(meltedmergedDF$value),] 
+  if(!is.null(mergedDF)){
+  
+    dataColumns <- unique(dataColumns)
+    qualColumns <- unique(qualColumns)
+    
+    
+    
+    sortingColumns <- names(mergedDF)[!(names(mergedDF) %in% c(dataColumns,qualColumns))]
+  
+    meltedmergedDF  <- melt(mergedDF,id.vars=sortingColumns)
+    meltedmergedDF  <- meltedmergedDF[!is.na(meltedmergedDF$value),] 
+  
+    castFormula <- as.formula(paste(paste(sortingColumns, collapse="+"),"variable",sep="~"))
+    mergedDF2 <- dcast(meltedmergedDF, castFormula, drop=FALSE)
+    dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
+    if(sum(dataColumns2) == 1){
+      mergedDF <- mergedDF2[!is.na(mergedDF2[,dataColumns2]),]
+    } else {
+      mergedDF <- mergedDF2[rowSums(is.na(mergedDF2[,dataColumns2])) != sum(dataColumns2),]
+    }
+    
+    if(length(dataColumns) > 1){
+      mergedDF[,dataColumns] <- lapply(mergedDF[,dataColumns], function(x) as.numeric(x))
+    } else {
+      mergedDF[,dataColumns] <- as.numeric(mergedDF[,dataColumns])
+    }
+    
+    names(mergedDF) <- make.names(names(mergedDF))
+  } else {
+    mergedDF <- data.frame()
+  }
 
-  castFormula <- as.formula(paste(paste(sortingColumns, collapse="+"),"variable",sep="~"))
-  mergedDF2 <- dcast(meltedmergedDF, castFormula, drop=FALSE)
-  dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
-  if(sum(dataColumns2) == 1){
-    mergedDF <- mergedDF2[!is.na(mergedDF2[,dataColumns2]),]
-  } else {
-    mergedDF <- mergedDF2[rowSums(is.na(mergedDF2[,dataColumns2])) != sum(dataColumns2),]
-  }
-  
-  if(length(dataColumns) > 1){
-    mergedDF[,dataColumns] <- lapply(mergedDF[,dataColumns], function(x) as.numeric(x))
-  } else {
-    mergedDF[,dataColumns] <- as.numeric(mergedDF[,dataColumns])
-  }
-  
   
   row.names(mergedDF) <- NULL
   attr(mergedDF, "url") <- obs_url
-  attr(mergedDF, "attributeList") <- attList
   attr(mergedDF, "siteInfo") <- siteInformation
   attr(mergedDF, "variableInfo") <- variableInformation
   attr(mergedDF, "disclaimer") <- notes["disclaimer"]
-  attr(mergedDF, "queryInfo") <- queryInfo
+  attr(mergedDF, "statisticInfo") <- statInformation
+  # Do we want this?
+  #   attr(mergedDF, "attributeList") <- attList
+  #   attr(mergedDF, "queryInfo") <- queryInfo
   attr(mergedDF, "queryTime") <- Sys.time()
-  
   return (mergedDF)
 }
