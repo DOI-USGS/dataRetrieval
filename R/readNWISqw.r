@@ -28,11 +28,6 @@
 #' code \tab character \tab Any codes that qualify the corresponding value\cr
 #' value \tab numeric \tab The numeric value for the parameter \cr
 #' }
-#' Note that code and value are repeated for the parameters requested. The names are of the form 
-#' X_D_P_S, where X is literal, 
-#' D is an option description of the parameter, 
-#' P is the parameter code, 
-#' and S is the statistic code (if applicable).
 #' 
 #' There are also several useful attributes attached to the data frame:
 #' \tabular{lll}{
@@ -79,6 +74,13 @@ readNWISqw <- function (siteNumber,pCodes,startDate="",endDate="",
     comment(data) <- originalHeader
     
   }
+  
+  siteInfo <- readNWISsite(siteNumber)
+  varInfo <- readNWISpCode(pCodes)
+  
+  attr(data, "siteInfo") <- siteInfo
+  attr(data, "variableInfo") <- varInfo
+  attr(data, "statisticInfo") <- NULL
   
   return (data)
 

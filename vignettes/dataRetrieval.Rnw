@@ -274,9 +274,9 @@ Table \ref{tab:func} describes the functions available in the dataRetrieval pack
 \section{USGS Web Retrievals}
 \label{sec:genRetrievals}
 %------------------------------------------------------------ 
-In this section, examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), water quality data (\ref{sec:usgsWQP}), groundwater level data (\ref{sec:gwl}), peak flow data (\ref{sec:peak}), rating curve data (\ref{sec:rating}, and surface-water measurement data (\ref{sec:meas}). Section \ref{sec:metadata} shows instructions for getting metadata that is attached to each returned dataframe.
+In this section, examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), water quality data (\ref{sec:usgsWQP}), groundwater level data (\ref{sec:gwl}), peak flow data (\ref{sec:peak}), rating curve data (\ref{sec:rating}, and surface-water measurement data (\ref{sec:meas}). Section \ref{sec:metadata} shows instructions for getting metadata that is attached to each returned data frame.
 
-The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrieval package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
+The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrieval package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits for streamgages, and 15 digits for groundwater gages.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
 
 Once the siteNumber is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. 
 
@@ -433,7 +433,7 @@ print(xtable(tableData,label="tab:gda",
 
 
 
-See Section \ref{app:createWordTable} for instructions on converting an R dataframe to a table in Microsoft\textregistered\ software Excel or Word to display a data availability table similar to Table \ref{tab:gda}. Excel, Microsoft, PowerPoint, Windows, and Word are registered trademarks of Microsoft Corporation in the United States and other countries.
+See Section \ref{app:createWordTable} for instructions on converting an R data frame to a table in Microsoft\textregistered\ software Excel or Word to display a data availability table similar to Table \ref{tab:gda}. Excel, Microsoft, PowerPoint, Windows, and Word are registered trademarks of Microsoft Corporation in the United States and other countries.
 
 \FloatBarrier
 
@@ -465,7 +465,7 @@ Parameter information can obtained from:
 \subsection{Daily Data}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain daily records of USGS data, use the \texttt{readNWISdv} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, and statCd (defaults to \texttt{"}00003\texttt{"}).  If you want to use the default values, you do not need to list them in the function call. 
+To obtain daily records of USGS data, use the \texttt{readNWISdv} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, and statCd (defaults to \texttt{"}00003\texttt{"}).  If you want to use the default values, you do not need to list them in the function call. Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}.
 
 The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user must include the quotes).  Setting the start date to \texttt{"}\texttt{"} (no space) will prompt the program to ask for the earliest date, and setting the end date to \texttt{"}\texttt{"} (no space) will prompt for the latest available date.
 
@@ -482,7 +482,7 @@ discharge <- readNWISdv(siteNumber,
 names(discharge)
 @
 
-The column \texttt{"}datetime\texttt{"} in the returned dataframe is automatically imported as a variable of class \texttt{"}Date\texttt{"} in R. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS daily value qualification codes are often \texttt{"}A\texttt{"} (approved for publication) or \texttt{"}P\texttt{"} (provisional data subject to revision). A more complete list of daily value qualification codes can be found here:
+The column \texttt{"}datetime\texttt{"} in the returned data frame is automatically imported as a variable of class \texttt{"}Date\texttt{"} in R. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS daily value qualification codes are often \texttt{"}A\texttt{"} (approved for publication) or \texttt{"}P\texttt{"} (provisional data subject to revision). A more complete list of daily value qualification codes can be found here:
 
 \url{http://help.waterdata.usgs.gov/codes-and-parameters/daily-value-qualification-code-dv_rmk_cd}
 
@@ -500,16 +500,29 @@ temperatureAndFlow <- readNWISdv(siteNumber, parameterCd,
 
 @
 
-Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}.
 
-The column names can be shortened and simplified using the \texttt{renameNWISColumns} function.  This is not necessary, but may streamline subsequent data analysis and presentation.
+The column names can be shortened and simplified using the \texttt{renameNWISColumns} function.  This is not necessary, but may streamline subsequent data analysis and presentation. Site information, daily statistic information, and measured parameter information is attached to the data frame as attributes. This is discused further in section \ref{sec:metadata}.
+
 
 <<label=renameColumns, echo=TRUE>>=
 names(temperatureAndFlow)
 
 temperatureAndFlow <- renameNWISColumns(temperatureAndFlow)
 names(temperatureAndFlow)
+
 @
+
+<<label=attr1, echo=TRUE>>=
+#Information about the data frame attributes:
+names(attributes(temperatureAndFlow))
+
+statInfo <- attr(temperatureAndFlow, "statisticInfo")
+variableInfo <- attr(temperatureAndFlow, "variableInfo")
+siteInfo <- attr(temperatureAndFlow, "siteInfo")
+
+@
+
+
 
 An example of plotting the above data (Figure \ref{fig:getNWIStemperaturePlot}):
 
@@ -550,6 +563,7 @@ startDate <- "2012-05-12"
 endDate <- "2012-05-13" 
 dischargeUnit <- readNWISuv(siteNumber, parameterCd, 
         startDate, endDate)
+dischargeUnit <- renameNWISColumns(dischargeUnit)
 @
 
 The retrieval produces a data frame that contains 96 rows (one for every 15 minute period in the day).  They include all data collected from the startDate through the endDate (starting and ending with midnight locally-collected time). The dateTime column is converted to \enquote{UTC} (Coordinated Universal Time), so midnight EST will be 5 hours earlier in the dateTime column (the previous day, at 7pm).
@@ -574,7 +588,7 @@ America/Phoenix
 America/Metlakatla
 \end{verbatim}
 
-Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package.
+Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package. Site information and measured parameter information is attached to the data frame as attributes. This is discused further in section \ref{sec:metadata}.
 
 \newpage
 
@@ -603,7 +617,7 @@ dfLong <- readNWISqw(siteNumber, parameterCd,
 
 @
 
-Metadata, such as information about the column names can be found by using the \texttt{comment} function, as described in section \ref{sec:metadata}.
+Site information and measured parameter information is attached to the data frame as attributes. This is discused further in section \ref{sec:metadata}. Additional metadata, such as information about the column names can be found by using the \texttt{comment} function, also described in section \ref{sec:metadata}.
 
 <<qwmeta, echo=TRUE, eval=FALSE>>=
 
@@ -617,7 +631,7 @@ comment(dfLong)
 \subsection{Groundwater Level Data}
 \label{sec:gwl}
 %------------------------------------------------------------
-Groundwater level measurements can be obtained with the \texttt{readNWISgwl} function. Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
+Groundwater level measurements can be obtained with the \texttt{readNWISgwl} function. Information on the returned data can be found with the \texttt{comment} function, and attached attributes as described in section \ref{sec:metadata}.
 
 <<gwlexample, echo=TRUE, eval=TRUE>>=
 siteNumber <- "434400121275801"
@@ -632,7 +646,7 @@ names(groundWater)
 \label{sec:peak}
 %------------------------------------------------------------
 
-Peak flow data are instantaneous discharge or stage data that record the maximum values of these variables during a flood event.  They include the annual peak flood event but can also include records of other peaks that are lower than the annual maximum. Peak discharge measurements can be obtained with the \texttt{readNWISpeak} function. Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
+Peak flow data are instantaneous discharge or stage data that record the maximum values of these variables during a flood event.  They include the annual peak flood event but can also include records of other peaks that are lower than the annual maximum. Peak discharge measurements can be obtained with the \texttt{readNWISpeak} function. Information on the returned data can be found with the \texttt{comment} function and attached attributes as described in section \ref{sec:metadata}.
 
 <<peakexample, echo=TRUE, eval=TRUE>>=
 siteNumber <- '01594440'
@@ -648,7 +662,7 @@ names(peakData)
 \subsection{Rating Curve Data}
 \label{sec:rating}
 %------------------------------------------------------------
-Rating curves are the calibration curves that are used to convert measurements of stage to discharge.  Because of changing hydrologic conditions these rating curves change over time. Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
+Rating curves are the calibration curves that are used to convert measurements of stage to discharge.  Because of changing hydrologic conditions these rating curves change over time. Information on the returned data can be found with the \texttt{comment} function and attached attributes as described in section \ref{sec:metadata}.
 
 Rating curves can be obtained with the \texttt{readNWISrating} function.
 
@@ -666,7 +680,7 @@ names(ratingData)
 \subsection{Surface-Water Measurement Data}
 \label{sec:meas}
 %------------------------------------------------------------
-These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve.  Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
+These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve.  Information on the returned data can be found with the \texttt{comment} function and attached attributes as described in section \ref{sec:metadata}.
 
 Surface-water measurement data can be obtained with the \texttt{readNWISmeas} function.
 
@@ -711,7 +725,7 @@ specificCond <- readWQPqw('WIDNR_WQX-10032762',
                 'Specific conductance','2011-05-01','2011-09-30')
 @
 
-A tool for finding NWIS characteristic names can be found at: \url{http://www.waterqualitydata.us/public_srsnames.jsp}
+A tool for finding NWIS characteristic names can be found at: \url{http://www.waterqualitydata.us/public_srsnames.jsp}. 
 
 \FloatBarrier
 
@@ -782,6 +796,10 @@ dischargeWI <- readNWISdata(service="dv",
                            statCd="00003")
 names(dischargeWI)
 nrow(dischargeWI)
+
+siteInfo <- attr(dischargeWI, "siteInfo")
+head(siteInfo)
+
 @
 
 %------------------------------------------------------------
@@ -823,10 +841,10 @@ dataPH <- readWQPdata(statecode="US:55",
 \clearpage
 
 %------------------------------------------------------------
-\section{Dataframe Metadata}
+\section{Embedded Metadata}
 \label{sec:metadata}
 %------------------------------------------------------------
-All dataframes returned from the Web services have some form of associated metadata. This information is included as attributes to the dataframe. All dataframes will have a \texttt{url} and \texttt{queryTime} attribute. For example, the url and query time used to obtain the data can be found as follows:
+All data frames returned from the Web services have some form of associated metadata. This information is included as attributes to the data frame. All data frames will have a \texttt{url} (returning a character of the url used to obtain the data), \texttt{siteInfo} (returning a data frame with information on sites),  and \texttt{queryTime} (returning a POSIXct datetime) attributes. For example, the url and query time used to obtain the data can be found as follows:
 
 <<meta1, eval=TRUE>>=
 
@@ -834,9 +852,11 @@ attr(dischargeWI, "url")
 
 attr(dischargeWI, "queryTime")
 
+siteInfo <- attr(dischargeWI, "siteInfo")
+
 @
 
-Depending on the format that the data was obtained (RDB, WaterML1, etc), there will be additional information embedded in the dataframe as attributes. To discover the available attributes:
+Depending on the format that the data was obtained (RDB, WaterML1, etc), there will be additional information embedded in the data frame as attributes. To discover the available attributes:
 
 <<meta2, eval=TRUE>>=
 
@@ -927,7 +947,7 @@ library(dataRetrieval)
 \section{Creating Tables in Microsoft\textregistered\ Software from R}
 \label{app:createWordTable}
 %------------------------------------------------------------
-There are a few steps that are required in order to create a table in Microsoft\textregistered\ software (Excel, Word, PowerPoint, etc.) from an R dataframe. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Excel based on the dataframe tableData:
+There are a few steps that are required in order to create a table in Microsoft\textregistered\ software (Excel, Word, PowerPoint, etc.) from an R data frame. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Excel based on the data frame tableData:
 
 <<label=getSiteApp, echo=TRUE>>=
 availableData <- whatNWISdata(siteNumber, "dv")
@@ -944,7 +964,7 @@ tableData <- with(dailyData,
 tableData
 @
 
-First, save the dataframe as a tab delimited file (you don't want to use comma delimited because there are commas in some of the data elements):
+First, save the data frame as a tab delimited file (you don't want to use comma delimited because there are commas in some of the data elements):
 
 
 <<label=saveData, echo=TRUE, eval=FALSE>>=
