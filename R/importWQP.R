@@ -1,4 +1,4 @@
-#' Basic Water Quality Portal Data grabber
+#' Basic Water Quality Portal Data parser
 #'
 #' Imports data from the Water Quality Portal based on a specified url.
 #' 
@@ -11,6 +11,7 @@
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
 #' start and end times.
 #' @export
+#' @seealso \code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
 #' @import RCurl
 #' @import httr
 #' @import lubridate
@@ -22,6 +23,8 @@
 #' rawSample <- importWQP(rawSampleURL)
 #' url2 <- paste0(rawSampleURL,"&zip=yes")
 #' rawSample2 <- importWQP(url2, TRUE)
+#' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
+#' STORETdata <- importWQP(STORETex)
 #' }
 importWQP <- function(url, zip=FALSE, tz=""){
   
@@ -109,15 +112,39 @@ importWQP <- function(url, zip=FALSE, tz=""){
       
     }
     
-    if(any(!is.na(timeZoneEnd))){
-      
+    if(any(!is.na(timeZoneEnd))){      
       retval$ActivityEndDateTime <- with(retval, as.POSIXct(paste(ActivityEndDate, ActivityEndTime.Time),format="%Y-%m-%d %H:%M:%S", tz = "UTC"))
       retval$ActivityEndDateTime <- retval$ActivityEndDateTime + timeZoneEnd*60*60
-      retval$ActivityEndDateTime <- as.POSIXct(retval$ActivityEndDateTime)
-      
-      
+      retval$ActivityEndDateTime <- as.POSIXct(retval$ActivityEndDateTime)      
     }
-        
+    
+    if(all(is.na(retval$ActivityEndDateTime))){
+      retval$ActivityEndDateTime <- NULL
+    }
+            
+    siteInfo <- whatWQPsites(siteid=paste(unique(retval$MonitoringLocationIdentifier),collapse=","))
+    
+    siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
+                                 agency_cd=siteInfo$OrganizationIdentifier,
+                                 site_no=siteInfo$MonitoringLocationIdentifier,
+                                 dec_lat_va=siteInfo$LatitudeMeasure,
+                                 dec_lon_va=siteInfo$LongitudeMeasure,
+                                 hucCd=siteInfo$HUCEightDigitCode,
+                                 stringsAsFactors=FALSE)
+    
+    siteInfo <- cbind(siteInfoCommon, siteInfo)
+                                 
+    
+    variableInfo <- data.frame(characteristicName=retval$CharacteristicName,
+                               parameterCd=retval$USGSPCode,
+                               param_units=retval$ResultMeasure.MeasureUnitCode,
+                               valueType=retval$ResultSampleFractionText,
+                               stringsAsFactors=FALSE)
+    variableInfo <- unique(variableInfo)
+    
+    attr(retval, "siteInfo") <- siteInfo
+    attr(retval, "variableInfo") <- variableInfo
+    
     return(retval)
     
   } else {
