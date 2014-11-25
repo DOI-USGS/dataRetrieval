@@ -310,9 +310,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         colNames <- names(df)
         
         if( exists("qualName")){
-          columnsOrdered <- c("agency","site_no","dateTime","tz_cd",attributeNames[attributeNames != "dateTime"],qualName,valueName)
+          columnsOrdered <- c("agency_cd","site_no","dateTime","tz_cd",attributeNames[attributeNames != "dateTime"],qualName,valueName)
         } else {
-          columnsOrdered <- c("agency","site_no","dateTime","tz_cd",attributeNames[attributeNames != "dateTime"],valueName)
+          columnsOrdered <- c("agency_cd","site_no","dateTime","tz_cd",attributeNames[attributeNames != "dateTime"],valueName)
         }
         
         columnsOrderd <- columnsOrdered[columnsOrdered %in% names(df)]
@@ -343,7 +343,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     
     siteInfo <- data.frame(station_nm=extraSiteData$siteName,
                            site_no=extraSiteData$siteCode$text,
-                           agency=extraSiteData$siteCode$.attrs[["agencyCode"]],
+                           agency_cd=extraSiteData$siteCode$.attrs[["agencyCode"]],
                            timeZoneOffset=extraSiteData$timeZoneInfo$defaultTimeZone[1],
                            timeZoneAbbreviation=extraSiteData$timeZoneInfo$defaultTimeZone[2],
                            dec_lat_va=as.numeric(extraSiteData$geoLocation$geogLocation$latitude),

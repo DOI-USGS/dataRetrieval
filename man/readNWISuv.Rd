@@ -19,8 +19,8 @@ readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "",
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
 
-\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the
-datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+\item{tz}{character to set timezone attribute of dateTime. Default is an empty quote, which converts the
+dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
@@ -28,14 +28,14 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 A data frame with the following columns:
 \tabular{lll}{
 Name \tab Type \tab Description \cr
-agency \tab character \tab The NWIS code for the agency reporting the data\cr
-site \tab character \tab The USGS site number \cr
-datetime \tab POSIXct \tab The date and time of the value converted to UTC \cr
-tz_cd \tab character \tab The time zone code for datetime \cr
+agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+site_no \tab character \tab The USGS site number \cr
+dateTime \tab POSIXct \tab The date and time of the value converted to UTC \cr
+tz_cd \tab character \tab The time zone code for dateTime \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
 }
-Note that code and value are repeated for the parameters requested. The names are of the form
+Note that code and value are repeated for the parameters requested. The names are of the form:
 X_D_P_S, where X is literal,
 D is an option description of the parameter,
 P is the parameter code,

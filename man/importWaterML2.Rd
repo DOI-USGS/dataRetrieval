@@ -16,10 +16,11 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \value{
-mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
+mergedDF a data frame time, value, description, qualifier, and identifier
 }
 \description{
-This function accepts a url parameter for a WaterML2 getObservation
+This function accepts a url parameter for a WaterML2 getObservation. This function is still under development,
+but the general functionality is correct.
 }
 \examples{
 baseURL <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"

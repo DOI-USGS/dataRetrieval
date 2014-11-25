@@ -31,3 +31,12 @@ NULL
 #' @docType data
 #' @keywords USGS parameterCd
 NULL
+
+#' Data to convert USGS parameter code to characteristic names
+#'
+#' Data pulled from Water Quality Portal on November 25, 2014.
+#'
+#' @name pCodeToName
+#' @docType data
+#' @keywords USGS parameterCd
+NULL

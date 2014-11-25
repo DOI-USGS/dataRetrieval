@@ -462,7 +462,7 @@ Parameter information can obtained from:
 \FloatBarrier
 
 %------------------------------------------------------------
-\subsection{Daily Values}
+\subsection{Daily Data}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
 To obtain daily records of USGS data, use the \texttt{readNWISdv} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, and statCd (defaults to \texttt{"}00003\texttt{"}).  If you want to use the default values, you do not need to list them in the function call. 
@@ -538,7 +538,7 @@ There are occasions where NWIS values are not reported as numbers, instead there
 \FloatBarrier
 
 %------------------------------------------------------------
-\subsection{Unit Values}
+\subsection{Unit Data}
 \label{sec:usgsRT}
 %------------------------------------------------------------
 Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values.} Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{readNWISuv}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
@@ -582,7 +582,7 @@ Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.htm
 \FloatBarrier
 
 %------------------------------------------------------------
-\subsection{Water Quality Values}
+\subsection{Water Quality Data}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
 To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, and endDate. Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level for each parameter code. There also includes an argument \texttt{"}reshape\texttt{"}, that converts the expanded dataset to a \texttt{"}wide\texttt{"} format (each requested parameter code gets individual columns).
@@ -614,7 +614,7 @@ comment(dfLong)
 \FloatBarrier
 
 %------------------------------------------------------------
-\subsection{Groundwater level data}
+\subsection{Groundwater Level Data}
 \label{sec:gwl}
 %------------------------------------------------------------
 Groundwater level measurements can be obtained with the \texttt{readNWISgwl} function. Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
@@ -628,7 +628,7 @@ names(groundWater)
 @
 
 %------------------------------------------------------------
-\subsection{Peak flow data}
+\subsection{Peak Flow Data}
 \label{sec:peak}
 %------------------------------------------------------------
 
@@ -645,7 +645,7 @@ names(peakData)
 
 
 %------------------------------------------------------------
-\subsection{Rating curve data}
+\subsection{Rating Curve Data}
 \label{sec:rating}
 %------------------------------------------------------------
 Rating curves are the calibration curves that are used to convert measurements of stage to discharge.  Because of changing hydrologic conditions these rating curves change over time. Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
@@ -663,7 +663,7 @@ names(ratingData)
 
 
 %------------------------------------------------------------
-\subsection{Surface-water measurement data}
+\subsection{Surface-Water Measurement Data}
 \label{sec:meas}
 %------------------------------------------------------------
 These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve.  Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
@@ -722,7 +722,7 @@ A tool for finding NWIS characteristic names can be found at: \url{http://www.wa
 The previous examples all took specific input arguments: siteNumber, parameterCd (or characteristic name), startDate, endDate, etc. However, the Web services that supply the data can accept a wide variety of additional arguments. 
 
 %------------------------------------------------------------
-\subsubsection{NWIS sites}
+\subsubsection{NWIS Sites}
 \label{sec:NWISGenSite}
 %------------------------------------------------------------
 The function \texttt{whatNWISsites} can be used to discover NWIS sites based on any query that the NWIS Site Service offers. This is done by using the \texttt{"..."} argument, which allows the user to use any arbitrary input argument. We can then use the service here:
@@ -746,7 +746,7 @@ nrow(sites)
 
 
 %------------------------------------------------------------
-\subsubsection{NWIS data}
+\subsubsection{NWIS Data}
 \label{sec:NWISGenData}
 %------------------------------------------------------------
 For NWIS data, the function \texttt{readNWISdata} can be used. The argument listed in the R help file is \texttt{"..."} and \texttt{"}service\texttt{"} (only for data requests). Table \ref{tab:NWISGeneral} describes the services are available.
@@ -785,7 +785,7 @@ nrow(dischargeWI)
 @
 
 %------------------------------------------------------------
-\subsubsection{Water Quality Portal sites}
+\subsubsection{WQP Sites}
 \label{sec:WQPGenSite}
 %------------------------------------------------------------
 
@@ -804,7 +804,7 @@ sitesNJ <- whatWQPsites(statecode="US:34",
 
 
 %------------------------------------------------------------
-\subsubsection{Water Quality Portal data}
+\subsubsection{WQP Data}
 \label{sec:WQPGenData}
 %------------------------------------------------------------
 Finally, to get data from the WQP using generalized Web service calls, use the function \texttt{readWQPdata}. For example, to get all the pH data in Wisconsin:
@@ -836,7 +836,7 @@ attr(dischargeWI, "queryTime")
 
 @
 
-Depending on the format that the data was obtained (xml, rdb, etc), there will be additional information embedded in the dataframe as attributes. To discover the available attributes:
+Depending on the format that the data was obtained (RDB, WaterML1, etc), there will be additional information embedded in the dataframe as attributes. To discover the available attributes:
 
 <<meta2, eval=TRUE>>=
 
@@ -924,7 +924,7 @@ library(dataRetrieval)
 
 
 %------------------------------------------------------------ 
-\section{Creating tables in Microsoft\textregistered\ software from R}
+\section{Creating Tables in Microsoft\textregistered\ Software from R}
 \label{app:createWordTable}
 %------------------------------------------------------------
 There are a few steps that are required in order to create a table in Microsoft\textregistered\ software (Excel, Word, PowerPoint, etc.) from an R dataframe. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Excel based on the dataframe tableData:

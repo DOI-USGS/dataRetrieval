@@ -1,6 +1,7 @@
 #' Function to return data from the WaterML2 data
 #'
-#' This function accepts a url parameter for a WaterML2 getObservation 
+#' This function accepts a url parameter for a WaterML2 getObservation. This function is still under development,
+#' but the general functionality is correct.
 #'
 #' @param obs_url character containing the url for the retrieval
 #' @param asDateTime logical, if TRUE returns date and time as POSIXct, if FALSE, Date
@@ -8,7 +9,7 @@
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
-#' @return mergedDF a data frame containing columns agency, site, dateTime, values, and remark codes for all requested combinations
+#' @return mergedDF a data frame time, value, description, qualifier, and identifier
 #' @export
 #' @import XML
 #' @import RCurl
