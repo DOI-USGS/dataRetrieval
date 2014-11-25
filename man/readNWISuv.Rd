@@ -11,21 +11,45 @@ readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "",
   tz = "")
 }
 \arguments{
-\item{siteNumbers}{string USGS site number (or multiple sites).  This is usually an 8 digit number}
+\item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
 
-\item{parameterCd}{string USGS parameter code.  This is usually an 5 digit number.}
+\item{parameterCd}{character USGS parameter code.  This is usually an 5 digit number.}
 
-\item{startDate}{string starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.}
 
-\item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
 
-\item{tz}{string to set timezone attribute of datetime. Default is an empty quote, which converts the
+\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \value{
-data dataframe with agency, site, dateTime, time zone, value, and code columns
+A data frame with the following columns:
+\tabular{lll}{
+Name \tab Type \tab Description \cr
+agency \tab character \tab The NWIS code for the agency reporting the data\cr
+site \tab character \tab The USGS site number \cr
+datetime \tab POSIXct \tab The date and time of the value converted to UTC \cr
+tz_cd \tab character \tab The time zone code for datetime \cr
+code \tab character \tab Any codes that qualify the corresponding value\cr
+value \tab numeric \tab The numeric value for the parameter \cr
+}
+Note that code and value are repeated for the parameters requested. The names are of the form
+X_D_P_S, where X is literal,
+D is an option description of the parameter,
+P is the parameter code,
+and S is the statistic code (if applicable).
+
+There are also several useful attributes attached to the data frame:
+\tabular{lll}{
+Name \tab Type \tab Description \cr
+url \tab character \tab The url used to generate the data \cr
+siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
+statisticInfo \tab data.frame \tab A data frame containing information on the requested statistics on the data \cr
+queryTime \tab POSIXct \tab The time the data was returned \cr
+}
 }
 \description{
 Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
@@ -43,6 +67,9 @@ rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
 timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
          "2013-11-03","2013-11-03")
 firstSite <- timeZoneChange[timeZoneChange$site_no == '04024430',]
+}
+\seealso{
+\code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
 }
 \keyword{USGS}
 \keyword{data}

@@ -7,22 +7,45 @@ importRDB1(obs_url, asDateTime = FALSE, qw = FALSE, convertType = TRUE,
   tz = "")
 }
 \arguments{
-\item{obs_url}{string containing the url for the retrieval}
+\item{obs_url}{character containing the url for the retrieval}
 
 \item{asDateTime}{logical, if TRUE returns date and time as POSIXct, if FALSE, Date}
 
 \item{qw}{logical, if TRUE parses as water quality data (where dates/times are in start and end times)}
 
 \item{convertType}{logical, defaults to TRUE. If TRUE, the function will convert the data to dates, datetimes,
-numerics based on a standard algorithm. If false, everything is returned as a string.}
+numerics based on a standard algorithm. If false, everything is returned as a character}
 
-\item{tz}{string to set timezone attribute of datetime. Default is an empty quote, which converts the
+\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \value{
-data a data frame containing columns agency, site, dateTime (converted to UTC), values, and remark codes for all requested combinations
+A data frame with the following columns:
+\tabular{lll}{
+Name \tab Type \tab Description \cr
+agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+site_no \tab character \tab The USGS site number \cr
+datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr
+\tab character \tab or raw character string (if asDateTime = FALSE) \cr
+tz_cd \tab character \tab The time zone code for datetime \cr
+code \tab character \tab Any codes that qualify the corresponding value\cr
+value \tab numeric \tab The numeric value for the parameter \cr
+}
+Note that code and value are repeated for the parameters requested. The names are of the form
+XD_P_S, where X is literal,
+D is an option description of the parameter,
+P is the parameter code,
+and S is the statistic code (if applicable).
+
+There are also several useful attributes attached to the data frame:
+\tabular{lll}{
+Name \tab Type \tab Description \cr
+url \tab character \tab The url used to generate the data \cr
+queryTime \tab POSIXct \tab The time the data was returned \cr
+comment \tab character \tab Header comments from the RDB file \cr
+}
 }
 \description{
 This function accepts a url parameter that already contains the desired
@@ -35,7 +58,7 @@ startDate <- "2012-09-01"
 endDate <- "2012-10-01"
 offering <- "00003"
 property <- "00060"
-\dontrun{
+
 obs_url <- constructNWISURL(siteNumber,property,
          startDate,endDate,"dv",format="tsv")
 data <- importRDB1(obs_url)
@@ -59,6 +82,5 @@ filePath <- system.file("extdata", package="dataRetrieval")
 fileName <- "RDB1Example.txt"
 fullPath <- file.path(filePath, fileName)
 importUserRDB <- importRDB1(fullPath)
-}
 }
 

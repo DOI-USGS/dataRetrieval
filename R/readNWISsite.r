@@ -2,9 +2,28 @@
 #'
 #' Imports data from USGS site file site. This function gets data from here: \url{http://waterservices.usgs.gov/}
 #'
-#' @param siteNumbers string USGS site number.  This is usually an 8 digit number
+#' @param siteNumbers character USGS site number.  This is usually an 8 digit number
 #' @keywords data import USGS web service
-#' @return retval dataframe with all information found in the expanded site file
+#' @return A data frame with at least the following columns:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site_no \tab character \tab The USGS site number \cr
+#' }
+#' Note that code and value are repeated for the parameters requested. The names are of the form 
+#' XD_P_S, where X is literal, 
+#' D is an option description of the parameter, 
+#' P is the parameter code, 
+#' and S is the statistic code (if applicable).
+#' 
+#' There are also several useful attributes attached to the data frame:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' url \tab character \tab The url used to generate the data \cr
+#' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' comment \tab character \tab Header comments from the RDB file \cr
+#' }
+
 #' @export
 #' @examples
 #' # These examples require an internet connection to run

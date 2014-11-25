@@ -10,17 +10,17 @@ whatNWISdata(siteNumbers, service = "all", parameterCd = "all",
   statCd = "all")
 }
 \arguments{
-\item{siteNumbers}{string vector of USGS site number or multiple sites.}
+\item{siteNumbers}{character USGS site number or multiple sites.}
 
-\item{service}{vector string. Options are "all", or one or many of "dv"(daily values),
+\item{service}{character. Options are "all", or one or many of "dv"(daily values),
 "uv","rt", or "iv"(unit values), "qw"(water-quality),"sv"(sites visits),"pk"(peak measurements),
 "gw"(groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link),
 "aw" (sites monitored by the USGS Active Groundwater Level Network External Link), "id" (historical
 instantaneous values)}
 
-\item{parameterCd}{string vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.}
+\item{parameterCd}{character vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.}
 
-\item{statCd}{string vector of all statistic codes to return. Defaults to "all" which will not perform a filter.}
+\item{statCd}{character vector of all statistic codes to return. Defaults to "all" which will not perform a filter.}
 }
 \value{
 retval dataframe with all information found in the expanded site file

@@ -4,20 +4,43 @@
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
 #' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
-#' @param siteNumber string or vector of of USGS site numbers.  This is usually an 8 digit number
-#' @param pCodes string or vector of USGS parameter code.  This is usually an 5 digit number.
-#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param siteNumber character of USGS site numbers.  This is usually an 8 digit number
+#' @param pCodes character of USGS parameter code(s).  This is usually an 5 digit number.
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
 #' @param expanded logical defaults to FALSE. If TRUE, retrieves additional information. Expanded data includes
 #' remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
 #' dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).
 #' @param reshape logical. Will reshape the data if TRUE (default)
-#' @param tz string to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @keywords data import USGS web service
-#' @return data dataframe with agency, site, dateTime, value, and code columns
+#' @return A data frame with the following columns:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site_no \tab character \tab The USGS site number \cr
+#' datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
+#' \tab character \tab or raw character string (if asDateTime = FALSE) \cr
+#' tz_cd \tab character \tab The time zone code for datetime \cr
+#' code \tab character \tab Any codes that qualify the corresponding value\cr
+#' value \tab numeric \tab The numeric value for the parameter \cr
+#' }
+#' Note that code and value are repeated for the parameters requested. The names are of the form 
+#' X_D_P_S, where X is literal, 
+#' D is an option description of the parameter, 
+#' P is the parameter code, 
+#' and S is the statistic code (if applicable).
+#' 
+#' There are also several useful attributes attached to the data frame:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' url \tab character \tab The url used to generate the data \cr
+#' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' comment \tab character \tab Header comments from the RDB file \cr
+#' }
 #' @export
 #' @import reshape2
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
@@ -27,13 +50,13 @@
 #' startDate <- '2010-01-01'
 #' endDate <- ''
 #' pCodes <- c('34247','30234','32104','34220')
-#' \dontrun{
+#' 
 #' rawNWISqwData <- readNWISqw(siteNumber,pCodes,startDate,endDate)
 #' rawNWISqwDataExpandReshaped <- readNWISqw(siteNumber,pCodes,
 #'           startDate,endDate,expanded=TRUE)
 #' rawNWISqwDataExpand <- readNWISqw(siteNumber,pCodes,
 #'           startDate,endDate,expanded=TRUE,reshape=FALSE)
-#'           }
+#'           
 readNWISqw <- function (siteNumber,pCodes,startDate="",endDate="",
                         expanded=FALSE,reshape=TRUE,tz=""){  
   
