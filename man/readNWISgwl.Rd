@@ -16,10 +16,10 @@ readNWISgwl(siteNumbers, startDate = "", endDate = "")
 A data frame with the following columns:
 \tabular{lll}{
 Name \tab Type \tab Description \cr
-agency \tab character \tab The NWIS code for the agency reporting the data\cr
-site \tab character \tab The USGS site number \cr
-datetime \tab character \tab The date and time of the value as a character \cr
-tz_cd \tab character \tab The time zone code for datetime \cr
+agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+site_no \tab character \tab The USGS site number \cr
+dateTime \tab character \tab The date and time of the value as a character \cr
+tz_cd \tab character \tab The time zone code for dateTime \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
 }
@@ -41,7 +41,8 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 \description{
 Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service
-depending on the year that the data was collected.
+depending on the year that the data was collected. See \url{http://waterdata.usgs.gov/usa/nwis/gw}
+for details about groundwater
 }
 \examples{
 siteNumber <- "434400121275801"

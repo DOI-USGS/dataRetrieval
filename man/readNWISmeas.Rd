@@ -12,8 +12,8 @@ readNWISmeas(siteNumber, startDate = "", endDate = "", tz = "")
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
 
-\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the
-datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+\item{tz}{character to set timezone attribute of dateTime. Default is an empty quote, which converts the
+dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
@@ -23,8 +23,10 @@ A data frame with at least the following columns:
 Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
-tz_cd \tab character \tab The time zone code for datetime \cr
+tz_cd \tab character \tab The time zone code for dateTime \cr
 }
+
+See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
 
 There are also several useful attributes attached to the data frame:
 \tabular{lll}{
@@ -32,6 +34,7 @@ Name \tab Type \tab Description \cr
 url \tab character \tab The url used to generate the data \cr
 queryTime \tab POSIXct \tab The time the data was returned \cr
 comment \tab character \tab Header comments from the RDB file \cr
+siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
 }
 }
 \description{
