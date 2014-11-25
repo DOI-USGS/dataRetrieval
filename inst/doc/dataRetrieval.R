@@ -162,6 +162,16 @@ names(temperatureAndFlow)
 temperatureAndFlow <- renameNWISColumns(temperatureAndFlow)
 names(temperatureAndFlow)
 
+
+## ----label=attr1, echo=TRUE-------------------------------
+#Information about the data frame attributes:
+names(attributes(temperatureAndFlow))
+
+statInfo <- attr(temperatureAndFlow, "statisticInfo")
+variableInfo <- attr(temperatureAndFlow, "variableInfo")
+siteInfo <- attr(temperatureAndFlow, "siteInfo")
+
+
 ## ----getNWIStemperaturePlot, echo=TRUE, fig.cap="Temperature and discharge plot of Choptank River in 2012.",out.width='1\\linewidth',out.height='1\\linewidth',fig.show='hold'----
 variableInfo <- attr(temperatureAndFlow, "variableInfo")
 siteInfo <- attr(temperatureAndFlow, "siteInfo")
@@ -187,6 +197,7 @@ startDate <- "2012-05-12"
 endDate <- "2012-05-13" 
 dischargeUnit <- readNWISuv(siteNumber, parameterCd, 
         startDate, endDate)
+dischargeUnit <- renameNWISColumns(dischargeUnit)
 
 ## ----dischargeData, echo=TRUE-----------------------------
 head(dischargeUnit)
@@ -270,6 +281,10 @@ dischargeWI <- readNWISdata(service="dv",
 names(dischargeWI)
 nrow(dischargeWI)
 
+siteInfo <- attr(dischargeWI, "siteInfo")
+head(siteInfo)
+
+
 ## ----NJChloride, eval=FALSE-------------------------------
 #  
 #  sitesNJ <- whatWQPsites(statecode="US:34",
@@ -287,6 +302,8 @@ nrow(dischargeWI)
 attr(dischargeWI, "url")
 
 attr(dischargeWI, "queryTime")
+
+siteInfo <- attr(dischargeWI, "siteInfo")
 
 
 ## ----meta2, eval=TRUE-------------------------------------
