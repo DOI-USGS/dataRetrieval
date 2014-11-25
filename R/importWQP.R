@@ -142,6 +142,13 @@ importWQP <- function(url, zip=FALSE, tz=""){
                                stringsAsFactors=FALSE)
     variableInfo <- unique(variableInfo)
     
+    if(any(!is.na(variableInfo$parameterCd))){
+      pCodeToName <- pCodeToName
+      varExtras <- pCodeToName[pCodeToName$parm_cd %in% unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
+      names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
+      variableInfo <- merge(variableInfo, varExtras, by="parameterCd")
+    }
+    
     attr(retval, "siteInfo") <- siteInfo
     attr(retval, "variableInfo") <- variableInfo
     
