@@ -8,22 +8,22 @@
 #' @param parameterCd character USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
-#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
-#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' @param tz character to set timezone attribute of dateTime. Default is an empty quote, which converts the 
+#' dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @keywords data import USGS web service
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
-#' agency \tab character \tab The NWIS code for the agency reporting the data\cr
-#' site \tab character \tab The USGS site number \cr
-#' datetime \tab POSIXct \tab The date and time of the value converted to UTC \cr 
-#' tz_cd \tab character \tab The time zone code for datetime \cr
+#' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site_no \tab character \tab The USGS site number \cr
+#' dateTime \tab POSIXct \tab The date and time of the value converted to UTC \cr 
+#' tz_cd \tab character \tab The time zone code for dateTime \cr
 #' code \tab character \tab Any codes that qualify the corresponding value\cr
 #' value \tab numeric \tab The numeric value for the parameter \cr
 #' }
-#' Note that code and value are repeated for the parameters requested. The names are of the form 
+#' Note that code and value are repeated for the parameters requested. The names are of the form: 
 #' X_D_P_S, where X is literal, 
 #' D is an option description of the parameter, 
 #' P is the parameter code, 
@@ -73,17 +73,12 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' Name \tab Type \tab Description \cr
 #' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 #' site_no \tab character \tab The USGS site number \cr
-#' datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
+#' dateTime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
 #' \tab character \tab or raw character string (if asDateTime = FALSE) \cr
-#' tz_cd \tab character \tab The time zone code for datetime \cr
+#' tz_cd \tab character \tab The time zone code for dateTime \cr
 #' code \tab character \tab Any codes that qualify the corresponding value\cr
 #' value \tab numeric \tab The numeric value for the parameter \cr
 #' }
-#' Note that code and value are repeated for the parameters requested. The names are of the form 
-#' XD_P_S, where X is literal, 
-#' D is an option description of the parameter, 
-#' P is the parameter code, 
-#' and S is the statistic code (if applicable).
 #' 
 #' There are also several useful attributes attached to the data frame:
 #' \tabular{lll}{
@@ -91,6 +86,7 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' url \tab character \tab The url used to generate the data \cr
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' comment \tab character \tab Header comments from the RDB file \cr
+#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
 #' }
 #' @export
 #' @examples
@@ -102,6 +98,11 @@ readNWISpeak <- function (siteNumber,startDate="",endDate=""){
   url <- constructNWISURL(siteNumber,NA,startDate,endDate,"peak")
   
   data <- importRDB1(url, asDateTime=FALSE)
+  siteInfo <- readNWISsite(siteNumber)
+  
+  attr(data, "siteInfo") <- siteInfo
+  attr(data, "variableInfo") <- NULL
+  attr(data, "statisticInfo") <- NULL
     
   return (data)
 }
@@ -143,6 +144,12 @@ readNWISrating <- function (siteNumber,type="base"){
     attr(data, "RATING") <- Rat
   }
   
+  siteInfo <- readNWISsite(siteNumber)
+  
+  attr(data, "siteInfo") <- siteInfo
+  attr(data, "variableInfo") <- NULL
+  attr(data, "statisticInfo") <- NULL
+  
   return (data)
 }
 
@@ -153,8 +160,8 @@ readNWISrating <- function (siteNumber,type="base"){
 #' @param siteNumber character USGS site number.  This is usually an 8 digit number
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
-#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
-#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' @param tz character to set timezone attribute of dateTime. Default is an empty quote, which converts the 
+#' dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return A data frame with at least the following columns:
@@ -162,8 +169,10 @@ readNWISrating <- function (siteNumber,type="base"){
 #' Name \tab Type \tab Description \cr
 #' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 #' site_no \tab character \tab The USGS site number \cr
-#' tz_cd \tab character \tab The time zone code for datetime \cr
+#' tz_cd \tab character \tab The time zone code for dateTime \cr
 #' }
+#' 
+#' See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
 #' 
 #' There are also several useful attributes attached to the data frame:
 #' \tabular{lll}{
@@ -171,6 +180,7 @@ readNWISrating <- function (siteNumber,type="base"){
 #' url \tab character \tab The url used to generate the data \cr
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' comment \tab character \tab Header comments from the RDB file \cr
+#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
 #' }
 #' @export
 #' @examples
@@ -187,13 +197,20 @@ readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){
     data$diff_from_rating_pc <- as.numeric(data$diff_from_rating_pc)
   }
   
+  siteInfo <- readNWISsite(siteNumber)
+  
+  attr(data, "siteInfo") <- siteInfo
+  attr(data, "variableInfo") <- NULL
+  attr(data, "statisticInfo") <- NULL
+  
   return (data)
 }
 
 #' Reads groundwater level measurements from NWISweb.
 #'
 #' Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service 
-#' depending on the year that the data was collected. 
+#' depending on the year that the data was collected. See \url{http://waterdata.usgs.gov/usa/nwis/gw}
+#' for details about groundwater
 #'
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
@@ -201,10 +218,10 @@ readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
-#' agency \tab character \tab The NWIS code for the agency reporting the data\cr
-#' site \tab character \tab The USGS site number \cr
-#' datetime \tab character \tab The date and time of the value as a character \cr 
-#' tz_cd \tab character \tab The time zone code for datetime \cr
+#' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site_no \tab character \tab The USGS site number \cr
+#' dateTime \tab character \tab The date and time of the value as a character \cr 
+#' tz_cd \tab character \tab The time zone code for dateTime \cr
 #' code \tab character \tab Any codes that qualify the corresponding value\cr
 #' value \tab numeric \tab The numeric value for the parameter \cr
 #' }
