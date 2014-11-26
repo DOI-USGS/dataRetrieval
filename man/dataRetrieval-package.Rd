@@ -24,6 +24,7 @@ Retrieval functions for USGS and EPA hydrologic and water quality data
 \author{
 Robert M. Hirsch \email{rhirsch@usgs.gov}, Laura De Cicco \email{ldecicco@usgs.gov}
 }
-\keyword{data,}
-\keyword{retrieval}
+\keyword{USGS,}
+\keyword{services}
+\keyword{web}
 

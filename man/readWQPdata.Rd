@@ -23,6 +23,7 @@ because it allows for other agencies rather than the USGS.
 \dontrun{
 nameToUse <- "pH"
 pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
+pHDataExpanded <- readWQPdata(bBox="-90.10,42.67,-88.64,43.35",characteristicName=nameToUse)
 }
 }
 \keyword{WQP}

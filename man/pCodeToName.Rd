@@ -4,7 +4,8 @@
 \alias{pCodeToName}
 \title{Data to convert USGS parameter code to characteristic names}
 \description{
-Data pulled from Water Quality Portal on November 25, 2014.
+Data pulled from Water Quality Portal on November 25, 2014. The data was pulled from
+\url{http://www.waterqualitydata.us/public_srsnames?mimeType=json}.
 }
 \keyword{USGS}
 \keyword{parameterCd}

@@ -4,7 +4,9 @@
 \alias{parameterCdFile}
 \title{List of USGS parameter codes}
 \description{
-Complete list of USGS parameter codes as of November 7, 2014.
+Complete list of USGS parameter codes as of November 7, 2014. The data was pulled from
+\url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&
+format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}
 }
 \keyword{USGS}
 \keyword{parameterCd}
