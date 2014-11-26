@@ -59,6 +59,11 @@ To install the dataRetrieval package, you must be using R 3.0 or greater and run
 
 ##Version updates
 ---------------
+###dataRetrieval 2.0.1
+* Improved help files and vignette documentation
+* Added siteInfo and variableInfo attributes to returned data frames
+* Removed any obsolete functions
+
 
 ###dataRetrieval 2.0.0
 
