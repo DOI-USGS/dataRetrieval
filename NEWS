@@ -1,3 +1,10 @@
+dataRetrieval 2.0.1
+===========
+* Removed deprecated functions.
+* Added siteInfo and variableInfo dataframe attributes to all data retrival functions
+* Improved help files
+* Added data file (pCodeToName) that shows the association of USGS parameter code to characteristicName
+
 dataRetrieval 2.0.0
 ===========
 * Overhaul of function names based on initial user feedback

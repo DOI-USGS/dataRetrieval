@@ -18,35 +18,29 @@ Web service retrieval functions:
 
 |Function | Inputs | Description | 
 | -------------| ------------------------|:-------------|
-|`readNWISdata` | `...`, service | NWIS data using user-specified queries |
-|`readNWISdv` | `Common 3`, parameter code, statCd | NWIS daily data with `Common` query |
-|`readNWISqw` | `Common 3`, parameter code, expanded | NWIS water quality data with `Common` query |
-|`readNWISuv` | `Common 3`, parameter code | NWIS instantaneous data with `Common` query |
-|`readNWISpCode` | parameterCd | NWIS parameter code information |
+|`readNWISdata` | `...`, `service` | NWIS data using user-specified queries |
+|`readNWISdv` | `Common 3`, `parameterCd`, `statCd` | NWIS daily data with `Common` query |
+|`readNWISqw` | `Common 3`, `parameterCd`, `expanded` | NWIS water quality data with `Common` query |
+|`readNWISuv` | `Common 3`, `parameterCd` | NWIS instantaneous data with `Common` query |
+|`readNWISpCode` | `parameterCd` | NWIS parameter code information |
 |`readNWISgwl` | `Common 3` | NWIS groundwater level data with `Common` query |
 |`readNWISpeak` | `Common 3` | NWIS peak flow data with `Common` query |
 |`readNWISmeas` | `Common 3` | NWIS surface-water measurement data with `Common` query |
-|`readNWISrating` | siteNumber, type | NWIS rating table for an active USGS streamgage |
-|`readNWISsite` | siteNumber | NWIS site information |
+|`readNWISrating` | `siteNumber`, type | NWIS rating table for an active USGS streamgage |
+|`readNWISsite` | `siteNumber` | NWIS site information |
 |`whatNWISsites` | `...` | NWIS site search using user-specified queries |
-|`whatNWISdata` | siteNumber, service | NWIS data availability, including period of record and count |
+|`whatNWISdata` | `siteNumber`, service | NWIS data availability, including period of record and count |
 |`readWQPdata` | `...` | WQP data using user-specified queries |
 |`readWQPqw` | `Common 3` | WQP data with `Common 3` query and either parameter code or characteristic name|
 |`whatWQPsites` | `...` | WQP site search using user-specified queries |
 
 * `Common 3` = siteNumber, startDate, endDate
 
-Moving `EGRET` specific functions to `EGRET` (version 2.0.0 and greater):
+##Reporting bugs
 
+Please consider reporting bugs and asking questions on the Issues page:
 
-|Information Source | Meta Data | Data |
-| -------------| -------------| ------------- |:-------------|
-|NWIS | `readNWISInfo` | `readNWISSample` |
-|  |  | `readNWISDaily` |
-| Water Quality Portal  | `readWQPInfo`| `readWQPSample` |
-| User-supplied files | `readUserInfo` | `readUserDaily`|
-| | | `readUserSample` |
-
+[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
 
 
 ##Subscribe
@@ -55,11 +49,7 @@ egret_comments@usgs.gov
 
 Additionally, to subscribe to an email list concerning updates to these R packages, please send a request to egret_comments@usgs.gov.
 
-##Reporting bugs
 
-Please consider reporting bugs and asking questions on the Issues page:
-
-[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
 
 ##Package Installation
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
@@ -72,7 +62,19 @@ To install the dataRetrieval package, you must be using R 3.0 or greater and run
 
 ###dataRetrieval 2.0.0
 
-* Changing naming convention. Migrated `EGRET` specific retrievals to `EGRET`
+* Changing naming convention. Migrated `EGRET` specific retrievals to `EGRET`:
+
+Moving `EGRET` specific functions to `EGRET` (version 2.0.0 and greater):
+
+
+|Information Source | Meta Data | Data |
+| -------------| -------------| ------------- |:-------------|
+|NWIS | `readNWISInfo` | `readNWISSample` |
+|  |  | `readNWISDaily` |
+| Water Quality Portal  | `readWQPInfo`| `readWQPSample` |
+| User-supplied files | `readUserInfo` | `readUserDaily`|
+| | | `readUserSample` |
+
 * Added back WaterML2 parsing tool
 * Added specific groundwater, rating, peak, and surfacewater measurement functions
 * Attached metadata attributes to returned dataframes
