@@ -26,10 +26,10 @@ Web service retrieval functions:
 |`readNWISgwl` | `Common 3` | NWIS groundwater level data with `Common` query |
 |`readNWISpeak` | `Common 3` | NWIS peak flow data with `Common` query |
 |`readNWISmeas` | `Common 3` | NWIS surface-water measurement data with `Common` query |
-|`readNWISrating` | `siteNumber`, type | NWIS rating table for an active USGS streamgage |
+|`readNWISrating` | `siteNumber`, `type` | NWIS rating table for an active USGS streamgage |
 |`readNWISsite` | `siteNumber` | NWIS site information |
 |`whatNWISsites` | `...` | NWIS site search using user-specified queries |
-|`whatNWISdata` | `siteNumber`, service | NWIS data availability, including period of record and count |
+|`whatNWISdata` | `siteNumber`, `service` | NWIS data availability, including period of record and count |
 |`readWQPdata` | `...` | WQP data using user-specified queries |
 |`readWQPqw` | `Common 3` | WQP data with `Common 3` query and either parameter code or characteristic name|
 |`whatWQPsites` | `...` | WQP site search using user-specified queries |
