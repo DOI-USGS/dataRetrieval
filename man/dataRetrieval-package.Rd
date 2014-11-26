@@ -19,7 +19,9 @@ LazyLoad: \tab yes\cr
 }
 }
 \details{
-Retrieval functions for USGS and EPA hydrologic and water quality data
+Retrieval functions for USGS and EPA hydrologic and water quality data.
+
+Please see \url{http://pubs.usgs.gov/tm/04/a10/} for more information.
 }
 \author{
 Robert M. Hirsch \email{rhirsch@usgs.gov}, Laura De Cicco \email{ldecicco@usgs.gov}

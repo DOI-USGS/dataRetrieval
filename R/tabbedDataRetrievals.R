@@ -14,7 +14,9 @@
 #' LazyLoad: \tab yes\cr
 #' }
 #'
-#' Retrieval functions for USGS and EPA hydrologic and water quality data
+#' Retrieval functions for USGS and EPA hydrologic and water quality data. 
+#' 
+#' Please see \url{http://pubs.usgs.gov/tm/04/a10/} for more information.
 #'
 #' @name dataRetrieval-package
 #' @docType package
