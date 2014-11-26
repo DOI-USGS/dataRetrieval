@@ -19,13 +19,15 @@
 #' @name dataRetrieval-package
 #' @docType package
 #' @author Robert M. Hirsch \email{rhirsch@@usgs.gov}, Laura De Cicco \email{ldecicco@@usgs.gov}
-#' @keywords data, retrieval
+#' @keywords USGS, web services
 NULL
 
 
 #' List of USGS parameter codes
 #'
-#' Complete list of USGS parameter codes as of November 7, 2014.
+#' Complete list of USGS parameter codes as of November 7, 2014. The data was pulled from
+#' \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&
+#' format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}
 #'
 #' @name parameterCdFile
 #' @docType data
@@ -34,7 +36,8 @@ NULL
 
 #' Data to convert USGS parameter code to characteristic names
 #'
-#' Data pulled from Water Quality Portal on November 25, 2014.
+#' Data pulled from Water Quality Portal on November 25, 2014. The data was pulled from 
+#' \url{http://www.waterqualitydata.us/public_srsnames?mimeType=json}.
 #'
 #' @name pCodeToName
 #' @docType data
