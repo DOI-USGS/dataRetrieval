@@ -39,7 +39,6 @@
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' }
 #' @export
-#' @import RCurl
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -81,7 +80,14 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
                           "America/Phoenix","America/Metlakatla"))
   }
   
-  if(url.exists(obs_url)){
+  if(file.exists(obs_url)){
+    
+    doc <- obs_url
+    fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
+    pndIndx<-regexpr("^#", fileVecChar)
+    hdr <- fileVecChar[pndIndx > 0L]
+    
+  } else {
     
     # 400 bad site id
     # 404 outside date range, wrong pcode
@@ -111,11 +117,6 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
       message(e)
       return(NA)
     })
-  } else {
-    doc <- obs_url
-    fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
-    pndIndx<-regexpr("^#", fileVecChar)
-    hdr <- fileVecChar[pndIndx > 0L]
   }
   
   tmp <- read.delim(  
