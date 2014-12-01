@@ -86,7 +86,9 @@
 #' inactiveAndAcitive <- importWaterML1(inactiveAndAcitive)
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
-  if(url.exists(obs_url)){
+  if(file.exists(obs_url)){
+    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+  } else {
     doc = tryCatch({
       h <- basicHeaderGatherer()
       returnedDoc <- getURI(obs_url, headerfunction = h$update)
@@ -106,8 +108,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       message(e)
       return(NA)
     }) 
-  } else {
-    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
   }
   
   if(tz != ""){
