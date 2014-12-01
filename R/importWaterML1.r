@@ -274,19 +274,21 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
                 datetime <- substr(datetime,1,23)
                 datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
-                datetime <- datetime + tzHours*60*60
+                datetime <- datetime - tzHours*60*60
                 df$tz_cd <- as.character(zoneAbbrievs[tzOffset]) 
               }
               
               if(!("tz_cd" %in% names(df))){
                 df$tz_cd <- zoneAbbrievs[1]
                 tzHours <- as.numeric(substr(names(zoneAbbrievs[1]),1,3))
-                datetime <- datetime + tzHours*60*60
+                datetime <- datetime - tzHours*60*60
               }
             }
             
             if(tz != ""){
               attr(datetime, "tzone") <- tz
+            } else {
+              attr(datetime, "tzone") <- "UTC"
             }
             
             
