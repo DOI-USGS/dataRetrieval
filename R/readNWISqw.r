@@ -8,7 +8,7 @@
 #' @param pCodes character of USGS parameter code(s).  This is usually an 5 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
-#' @param expanded logical defaults to FALSE. If TRUE, retrieves additional information. Expanded data includes
+#' @param expanded logical defaults to TRUE. If TRUE, retrieves additional information. Expanded data includes
 #' remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
 #' dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).
 #' @param reshape logical. Will reshape the data if TRUE (default)
@@ -53,7 +53,7 @@
 #'           startDate,endDate,expanded=TRUE,reshape=FALSE)
 #'           
 readNWISqw <- function (siteNumber,pCodes,startDate="",endDate="",
-                        expanded=FALSE,reshape=TRUE,tz=""){  
+                        expanded=TRUE,reshape=FALSE,tz=""){  
   
   url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw",expanded=expanded)
   
