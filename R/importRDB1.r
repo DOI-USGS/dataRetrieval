@@ -180,6 +180,8 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
         
         if(tz != ""){
           attr(data[,regexpr('d$', dataType) > 0], "tzone") <- tz
+        } else {
+          attr(data[,regexpr('d$', dataType) > 0], "tzone") <- "UTC"
         }
        
       } else if (qw){
@@ -223,6 +225,8 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
         
         if(tz != ""){
           attr(data$startDateTime, "tzone") <- tz
+        } else {
+          attr(data$startDateTime, "tzone") <- "UTC"
         }
         
         if(composite){
@@ -232,6 +236,8 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
           
           if(tz != ""){
             attr(data$endDateTime, "tzone") <- tz
+          } else {
+            attr(data$endDateTime, "tzone") <- "UTC"
           }
         }
         
