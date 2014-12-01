@@ -203,12 +203,13 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
         }
          
     )
-  
-  if(url.exists(url)){
-    return(url)
-  } else {
-    stop("The following url doesn't seem to exist:\n",url)    
-  }  
+# This was waaay to slow:  
+#   if(url.exists(url)){
+#     return(url)
+#   } else {
+#     stop("The following url doesn't seem to exist:\n",url)    
+#   }  
+  return(url)
 }
 
 
