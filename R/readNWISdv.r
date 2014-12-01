@@ -15,7 +15,6 @@
 #' agency \tab character \tab The NWIS code for the agency reporting the data\cr
 #' site \tab character \tab The USGS site number \cr
 #' datetime \tab Date \tab The date of the value \cr 
-#' tz_cd \tab character \tab The time zone code for datetime \cr
 #' code \tab character \tab Any codes that qualify the corresponding value\cr
 #' value \tab numeric \tab The numeric value for the parameter \cr
 #' }

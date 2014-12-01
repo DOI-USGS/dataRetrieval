@@ -4,7 +4,7 @@
 \title{Raw Data Import for USGS NWIS QW Data}
 \usage{
 readNWISqw(siteNumber, pCodes, startDate = "", endDate = "",
-  expanded = FALSE, reshape = TRUE, tz = "")
+  expanded = TRUE, reshape = FALSE, tz = "")
 }
 \arguments{
 \item{siteNumber}{character of USGS site numbers.  This is usually an 8 digit number}
@@ -15,7 +15,7 @@ readNWISqw(siteNumber, pCodes, startDate = "", endDate = "",
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
 
-\item{expanded}{logical defaults to FALSE. If TRUE, retrieves additional information. Expanded data includes
+\item{expanded}{logical defaults to TRUE. If TRUE, retrieves additional information. Expanded data includes
 remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
 dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).}
 
