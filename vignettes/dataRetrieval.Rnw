@@ -599,7 +599,7 @@ Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.htm
 \subsection{Water Quality Data}
 \label{sec:usgsWQP}
 %------------------------------------------------------------
-To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, and endDate. Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level for each parameter code. There also includes an argument \texttt{"}reshape\texttt{"}, that converts the expanded dataset to a \texttt{"}wide\texttt{"} format (each requested parameter code gets individual columns).
+To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, and endDate. Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level for each parameter code. There also includes an argument \texttt{"}reshape\texttt{"}, that converts the expanded dataset to a \texttt{"}wide\texttt{"} format (each requested parameter code gets individual columns). The defaults are expanded=TRUE, and reshape=FALSE. 
 
 <<label=getQW, echo=TRUE, eval=TRUE>>=
  
@@ -609,11 +609,11 @@ startDate <- "1985-10-01"
 endDate <- "2012-09-30"
 
 dfLong <- readNWISqw(siteNumber, parameterCd, 
-      startDate, endDate, expanded=TRUE,reshape=FALSE)
+      startDate, endDate)
 
 # Or the wide return:
 # dfWide <- readNWISqw(siteNumber, parameterCd, 
-#       startDate, endDate, expanded=TRUE, reshape=TRUE)
+#       startDate, endDate, reshape=TRUE)
 
 @
 
@@ -690,27 +690,6 @@ surfaceData <- readNWISmeas(siteNumber)
 names(surfaceData)
 
 @
-
-
-
-%------------------------------------------------------------
-\subsection{URL Construction}
-\label{sec:usgsURL}
-%------------------------------------------------------------
-There may be times when you might be interested in seeing the URL (Web address) that was used to obtain the raw data. The \texttt{constructNWISURL} function returns the URL.  In addition to input variables that have been described, there is a new argument \texttt{"}service\texttt{"}. The service argument can be \texttt{"}dv\texttt{"} (daily values), \texttt{"}uv\texttt{"} (unit values), \texttt{"}qw\texttt{"} (NWIS water quality values), or \texttt{"}wqp\texttt{"} (general Water Quality Portal values).
- 
-
-<<label=geturl, echo=TRUE, eval=FALSE>>=
-# Dissolved Nitrate parameter codes:
-pCode <- c("00618","71851")
-startDate <- "1964-06-11"
-endDate <- "2012-12-18"
-url_qw <- constructNWISURL(siteNumber,pCode,startDate,endDate,"qw")
-url_dv <- constructNWISURL(siteNumber,"00060",startDate,endDate,
-                           "dv",statCd="00003")
-url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,"uv")
-@
-
 
 
 %------------------------------------------------------------
