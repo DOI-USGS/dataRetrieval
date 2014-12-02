@@ -20,6 +20,15 @@ retrieval for the latest possible record.}
 \value{
 retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for
 start and end times.
+
+There are also several useful attributes attached to the data frame:
+\tabular{lll}{
+Name \tab Type \tab Description \cr
+url \tab character \tab The url used to generate the data \cr
+siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
+queryTime \tab POSIXct \tab The time the data was returned \cr
+}
 }
 \description{
 Imports data from the Water Quality Portal.
@@ -33,7 +42,8 @@ site name, such as 'USGS-01234567'.
 \dontrun{
 rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
-rawPHmultiSite <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')
+rawPHsites <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')
+nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','')
 }
 }
 \seealso{

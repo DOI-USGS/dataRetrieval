@@ -28,7 +28,9 @@ site_no \tab character \tab The USGS site number \cr
 tz_cd \tab character \tab The time zone code for dateTime \cr
 }
 
-See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
+See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water, and
+\url{http://waterdata.usgs.gov/nwis/help?output_formats_help#streamflow_measurement_data}
+for help on the columns and codes.
 
 There are also several useful attributes attached to the data frame:
 \tabular{lll}{
@@ -40,7 +42,8 @@ siteInfo \tab data.frame \tab A data frame containing information on the request
 }
 }
 \description{
-Reads surface-water measurement data from NWISweb.
+Reads surface-water measurement data from NWISweb. Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
+See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
 }
 \examples{
 siteNumber <- '01594440'
