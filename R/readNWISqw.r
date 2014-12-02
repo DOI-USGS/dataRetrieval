@@ -13,7 +13,8 @@
 #' @param expanded logical defaults to TRUE. If TRUE, retrieves additional information. Expanded data includes
 #' remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
 #' dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).
-#' @param reshape logical. Will reshape the data if TRUE (default)
+#' @param reshape logical. Will reshape the data to a wide format if TRUE (default is FALSE). This is only
+#' available for 'expanded' data.
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
@@ -73,6 +74,10 @@ readNWISqw <- function (siteNumbers,pCodes,startDate="",endDate="",
     data <- wideDF[,c(1:length(columnsToMelt)-1,groupByPCode)]
     comment(data) <- originalHeader
     
+  }
+  
+  if(reshape & !expanded){
+    message("Reshape can only be used with expanded data. Reshape request will be ignored.")
   }
   
   siteInfo <- readNWISsite(siteNumbers)

@@ -6,6 +6,8 @@
 readWQPqw(siteNumbers, parameterCd, startDate = "", endDate = "")
 }
 \arguments{
+\item{siteNumbers}{character site number. This needs to include the full agency code prefix.}
+
 \item{parameterCd}{vector of USGS 5-digit parameter code or characteristicNames.
 Leaving this blank will return all of the measured values during the specified time period.}
 
@@ -14,8 +16,6 @@ retrieval for the earliest possible record.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record.}
-
-\item{siteNumber}{character site number. This needs to include the full agency code prefix.}
 }
 \value{
 A data frame with at least the following columns:

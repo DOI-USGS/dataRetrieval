@@ -3,9 +3,32 @@
 \name{pCodeToName}
 \alias{pCodeToName}
 \title{Data to convert USGS parameter code to characteristic names}
+\value{
+pCodeToName data frame with information about USGS parameters and how they
+relate to characteristic names (useful for WQP requests).
+
+\tabular{lll}{
+  Name \tab Type \tab Description\cr
+  parm_cd \tab character \tab 5-digit USGS parameter code \cr
+  description \tab character \tab Parameter description\cr
+  characteristicname \tab character \tab Characteristic Name \cr
+  measureunitcode \tab character \tab Parameter units\cr
+  resultsamplefraction \tab character \tab Result sample fraction text\cr
+  resulttemperaturebasis \tab character \tab Temperature basis information\cr
+  resultstatisticalbasis \tab character \tab Statistical basis\cr
+  resulttimebasis \tab character \tab Time basis\cr
+  resultweightbasis \tab character \tab Weight basis\cr
+  resultparticlesizebasis \tab character \tab Particle size basis\cr
+  last_rev_dt \tab character \tab Latest revision of information\cr
+}
+}
 \description{
 Data pulled from Water Quality Portal on November 25, 2014. The data was pulled from
 \url{http://www.waterqualitydata.us/public_srsnames?mimeType=json}.
+}
+\examples{
+pCodeToName <- pCodeToName
+dischargeInfo <- pCodeToName[pCodeToName$parm_cd=="00060",]
 }
 \keyword{USGS}
 \keyword{parameterCd}

@@ -210,11 +210,11 @@ startDate <- "1985-10-01"
 endDate <- "2012-09-30"
 
 dfLong <- readNWISqw(siteNumber, parameterCd, 
-      startDate, endDate, expanded=TRUE,reshape=FALSE)
+      startDate, endDate)
 
 # Or the wide return:
 # dfWide <- readNWISqw(siteNumber, parameterCd, 
-#       startDate, endDate, expanded=TRUE, reshape=TRUE)
+#       startDate, endDate, reshape=TRUE)
 
 
 ## ----qwmeta, echo=TRUE, eval=FALSE------------------------
@@ -249,16 +249,6 @@ surfaceData <- readNWISmeas(siteNumber)
 
 names(surfaceData)
 
-
-## ----label=geturl, echo=TRUE, eval=FALSE------------------
-#  # Dissolved Nitrate parameter codes:
-#  pCode <- c("00618","71851")
-#  startDate <- "1964-06-11"
-#  endDate <- "2012-12-18"
-#  url_qw <- constructNWISURL(siteNumber,pCode,startDate,endDate,"qw")
-#  url_dv <- constructNWISURL(siteNumber,"00060",startDate,endDate,
-#                             "dv",statCd="00003")
-#  url_uv <- constructNWISURL(siteNumber,"00060",startDate,endDate,"uv")
 
 ## ----label=getQWData, echo=TRUE, eval=FALSE---------------
 #  specificCond <- readWQPqw('WIDNR_WQX-10032762',

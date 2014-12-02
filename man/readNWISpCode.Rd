@@ -9,7 +9,17 @@ readNWISpCode(parameterCd)
 \item{parameterCd}{character of USGS parameter codes.  This is usually an 5 digit number.}
 }
 \value{
-parameterData dataframe with all information from the USGS about the particular parameter (usually code, name, short name, units, and CAS registry numbers)
+parameterData data frame with all information from the USGS about the particular parameter.
+
+\tabular{lll}{
+  Name \tab Type \tab Description\cr
+  parameter_cd \tab character \tab 5-digit USGS parameter code \cr
+  parameter_group_nm \tab character \tab USGS parameter group name\cr
+  parameter_nm \tab character \tab USGS parameter name\cr
+  casrn \tab character \tab Chemical Abstracts Service (CAS) Registry Number\cr
+  srsname \tab character \tab Substance Registry Services Name\cr
+  parameter_units \tab character \tab Parameter units\cr
+}
 }
 \description{
 Imports data from NWIS about meaured parameter based on user-supplied parameter code.
