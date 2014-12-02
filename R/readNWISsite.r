@@ -58,7 +58,6 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' }
-
 #' @export
 #' @examples
 #' # These examples require an internet connection to run
