@@ -17,6 +17,15 @@
 #' @keywords data import USGS web service
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
 #' start and end times.
+#' 
+#' There are also several useful attributes attached to the data frame:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' url \tab character \tab The url used to generate the data \cr
+#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+#' variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
+#' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' }
 #' @export
 #' @import RCurl
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
@@ -25,7 +34,8 @@
 #' \dontrun{
 #' rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 #' rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
-#' rawPHmultiSite <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')
+#' rawPHsites <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')
+#' nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','')
 #' }
 readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate=""){
 
@@ -43,11 +53,11 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate=""){
   }
   
   if(pcodeCheck){
-    siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,";"),
-                             pCode=parameterCd, startDateLo=startDate, startDateHi=endDate)
+    siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse=";"),
+                             pCode=paste0(parameterCd,collapse=";"), startDateLo=startDate, startDateHi=endDate)
   } else {
-    siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,";"), 
-                             characteristicName=parameterCd, startDateLo=startDate, startDateHi=endDate)
+    siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse=";"), 
+                             characteristicName=paste0(parameterCd,collapse=";"), startDateLo=startDate, startDateHi=endDate)
   }
     
   siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
