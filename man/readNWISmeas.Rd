@@ -3,10 +3,10 @@
 \alias{readNWISmeas}
 \title{Reads surface-water measurement data from NWISweb.}
 \usage{
-readNWISmeas(siteNumber, startDate = "", endDate = "", tz = "")
+readNWISmeas(siteNumbers, startDate = "", endDate = "", tz = "")
 }
 \arguments{
-\item{siteNumber}{character USGS site number.  This is usually an 8 digit number}
+\item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the earliest possible record.}
@@ -46,7 +46,7 @@ Reads surface-water measurement data from NWISweb. Data is retrieved from \url{h
 See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
 }
 \examples{
-siteNumber <- '01594440'
-data <- readNWISmeas(siteNumber)
+siteNumbers <- c('01594440','040851325')
+data <- readNWISmeas(siteNumbers)
 }
 

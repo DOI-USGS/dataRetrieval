@@ -3,10 +3,10 @@
 \alias{readNWISpeak}
 \title{Reads peak flow data from NWISweb.}
 \usage{
-readNWISpeak(siteNumber, startDate = "", endDate = "")
+readNWISpeak(siteNumbers, startDate = "", endDate = "")
 }
 \arguments{
-\item{siteNumber}{character USGS site number.  This is usually an 8 digit number}
+\item{siteNumbers}{character USGS site number(or multiple sites).  This is usually an 8 digit number.}
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the earliest possible record.}
@@ -47,7 +47,7 @@ Reads peak flow from NWISweb.
 Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
 }
 \examples{
-siteNumber <- '01594440'
-data <- readNWISpeak(siteNumber)
+siteNumbers <- c('01594440','040851325')
+data <- readNWISpeak(siteNumbers)
 }
 
