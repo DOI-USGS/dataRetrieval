@@ -8,9 +8,11 @@ readNWISmeas(siteNumber, startDate = "", endDate = "", tz = "")
 \arguments{
 \item{siteNumber}{character USGS site number.  This is usually an 8 digit number}
 
-\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the earliest possible record.}
 
-\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the latest possible record.}
 
 \item{tz}{character to set timezone attribute of dateTime. Default is an empty quote, which converts the
 dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).

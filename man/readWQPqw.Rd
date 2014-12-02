@@ -3,17 +3,19 @@
 \alias{readWQPqw}
 \title{Raw Data Import for Water Quality Portal}
 \usage{
-readWQPqw(siteNumber, parameterCd, startDate = "", endDate = "")
+readWQPqw(siteNumbers, parameterCd, startDate = "", endDate = "")
 }
 \arguments{
-\item{siteNumber}{character site number. This needs to include the full agency code prefix.}
-
 \item{parameterCd}{vector of USGS 5-digit parameter code or characteristicNames.
 Leaving this blank will return all of the measured values during the specified time period.}
 
-\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the earliest possible record.}
 
-\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the latest possible record.}
+
+\item{siteNumber}{character site number. This needs to include the full agency code prefix.}
 }
 \value{
 retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for
@@ -31,6 +33,7 @@ site name, such as 'USGS-01234567'.
 \dontrun{
 rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
+rawSites <- readWQPqw(c('USGS-01594440', 'USGS-01594440'), '01075','','')
 }
 }
 \seealso{

@@ -8,9 +8,11 @@ readNWISgwl(siteNumbers, startDate = "", endDate = "")
 \arguments{
 \item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
 
-\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the earliest possible record.}
 
-\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the latest possible record.}
 }
 \value{
 A data frame with the following columns:
@@ -19,7 +21,9 @@ Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
 dateTime \tab character \tab The date and time of the value as a character \cr
-tz_cd \tab character \tab The time zone code for dateTime \cr
+dateTimeAccuracyCd \tab character \tab Information on the date/time accuracy \cr
+censorCode \tab character \tab Censoring information \cr
+sourceCode \tab character \tab Information on source of the data \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
 }
@@ -42,7 +46,9 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 \description{
 Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service
 depending on the year that the data was collected. See \url{http://waterdata.usgs.gov/usa/nwis/gw}
-for details about groundwater
+for details about groundwater. Groundwater dates and times are returned in many different formats, therefore the
+date/time information is returned as a character string. Users will need to convert to a date object.
+See \url{http://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more information.
 }
 \examples{
 siteNumber <- "434400121275801"

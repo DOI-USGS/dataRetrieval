@@ -10,8 +10,10 @@
 #' @param siteNumber character site number. This needs to include the full agency code prefix.
 #' @param parameterCd vector of USGS 5-digit parameter code or characteristicNames. 
 #' Leaving this blank will return all of the measured values during the specified time period.
-#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
-#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the earliest possible record.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the latest possible record.
 #' @keywords data import USGS web service
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
 #' start and end times.
@@ -23,10 +25,11 @@
 #' \dontrun{
 #' rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 #' rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
+#' rawSites <- readWQPqw(c('USGS-01594440', 'USGS-01594440'), '01075','','')
 #' }
-readWQPqw <- function(siteNumber,parameterCd,startDate="",endDate=""){
+readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate=""){
 
-  url <- constructWQPURL(siteNumber,parameterCd,startDate,endDate)
+  url <- constructWQPURL(siteNumbers,parameterCd,startDate,endDate)
   retval <- importWQP(url)
   
   pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
@@ -40,9 +43,11 @@ readWQPqw <- function(siteNumber,parameterCd,startDate="",endDate=""){
   }
   
   if(pcodeCheck){
-    siteInfo <- whatWQPsites(siteid=siteNumber, pCode=parameterCd, startDateLo=startDate, startDateHi=endDate)
+    siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,";"),
+                             pCode=parameterCd, startDateLo=startDate, startDateHi=endDate)
   } else {
-    siteInfo <- whatWQPsites(siteid=siteNumber, characteristicName=parameterCd, startDateLo=startDate, startDateHi=endDate)
+    siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,";"), 
+                             characteristicName=parameterCd, startDateLo=startDate, startDateHi=endDate)
   }
     
   siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,

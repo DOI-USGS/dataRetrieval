@@ -4,10 +4,12 @@
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
 #' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
-#' @param siteNumber character of USGS site numbers.  This is usually an 8 digit number
+#' @param siteNumbers character of USGS site numbers.  This is usually an 8 digit number
 #' @param pCodes character of USGS parameter code(s).  This is usually an 5 digit number.
-#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
-#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the earliest possible record.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the latest possible record.
 #' @param expanded logical defaults to TRUE. If TRUE, retrieves additional information. Expanded data includes
 #' remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
 #' dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).
@@ -41,21 +43,19 @@
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
 #' \code{\link{readWQPqw}}, \code{\link{constructNWISURL}}
 #' @examples
-#' siteNumber <- c('04024430','04024000')
+#' siteNumbers <- c('04024430','04024000')
 #' startDate <- '2010-01-01'
 #' endDate <- ''
 #' pCodes <- c('34247','30234','32104','34220')
 #' 
-#' rawNWISqwData <- readNWISqw(siteNumber,pCodes,startDate,endDate)
-#' rawNWISqwDataExpandReshaped <- readNWISqw(siteNumber,pCodes,
-#'           startDate,endDate,expanded=TRUE)
-#' rawNWISqwDataExpand <- readNWISqw(siteNumber,pCodes,
-#'           startDate,endDate,expanded=TRUE,reshape=FALSE)
+#' rawNWISqwData <- readNWISqw(siteNumbers,pCodes,startDate,endDate)
+#' rawNWISqwDataReshaped <- readNWISqw(siteNumbers,pCodes,
+#'           startDate,endDate,reshape=TRUE)
 #'           
-readNWISqw <- function (siteNumber,pCodes,startDate="",endDate="",
+readNWISqw <- function (siteNumbers,pCodes,startDate="",endDate="",
                         expanded=TRUE,reshape=FALSE,tz=""){  
   
-  url <- constructNWISURL(siteNumber,pCodes,startDate,endDate,"qw",expanded=expanded)
+  url <- constructNWISURL(siteNumbers,pCodes,startDate,endDate,"qw",expanded=expanded)
   
   data <- importRDB1(url,asDateTime=TRUE, qw=TRUE, tz = tz)
   originalHeader <- comment(data)

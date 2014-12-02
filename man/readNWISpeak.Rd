@@ -8,9 +8,11 @@ readNWISpeak(siteNumber, startDate = "", endDate = "")
 \arguments{
 \item{siteNumber}{character USGS site number.  This is usually an 8 digit number}
 
-\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the earliest possible record.}
 
-\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the latest possible record.}
 }
 \value{
 A data frame with the following columns:

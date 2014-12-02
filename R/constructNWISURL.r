@@ -6,8 +6,10 @@
 #'
 #' @param siteNumber string or vector of strings USGS site number.  This is usually an 8 digit number
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
-#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the earliest possible record.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the latest possible record.
 #' @param statCd string or vector USGS statistic code only used for daily value service. This is usually 5 digits.  Daily mean (00003) is the default.
 #' @param service string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), 
 #'  "qw" (water quality data), "gwlevels" (groundwater),and "rating" (rating curve), "peak", "meas" (discrete streamflow measurements).
@@ -224,8 +226,10 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 #'
 #' @param siteNumber string or vector of strings USGS site number.  This is usually an 8 digit number
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
-#' @param startDate string starting date for data retrieval in the form YYYY-MM-DD.
-#' @param endDate string ending date for data retrieval in the form YYYY-MM-DD.
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the earliest possible record.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the latest possible record.
 #' @keywords data import WQP web service
 #' @return url string
 #' @export
@@ -242,7 +246,7 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate){
   
   multipleSites <- length(siteNumber) > 1
   multiplePcodes <- length(parameterCd)>1
-  siteNumber <- paste(siteNumber, collapse=",")
+  siteNumber <- paste(siteNumber, collapse=";")
 
   if(all(nchar(parameterCd) == 5)){
     suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
