@@ -3,13 +3,13 @@
 \alias{readNWISqw}
 \title{Raw Data Import for USGS NWIS QW Data}
 \usage{
-readNWISqw(siteNumbers, pCodes, startDate = "", endDate = "",
+readNWISqw(siteNumbers, parameterCd, startDate = "", endDate = "",
   expanded = TRUE, reshape = FALSE, tz = "")
 }
 \arguments{
 \item{siteNumbers}{character of USGS site numbers.  This is usually an 8 digit number}
 
-\item{pCodes}{character of USGS parameter code(s).  This is usually an 5 digit number.}
+\item{parameterCd}{character of USGS parameter code(s).  This is usually an 5 digit number.}
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the earliest possible record.}
@@ -17,12 +17,14 @@ retrieval for the earliest possible record.}
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record.}
 
-\item{expanded}{logical defaults to TRUE. If TRUE, retrieves additional information. Expanded data includes
+\item{expanded}{logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional information. Expanded data includes
 remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
-dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).}
+dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type). If \code{FALSE},
+only returns remark_cd (remark code) and result_va (result value). Expanded = \code{FALSE} will not give
+sufficient information for unbiased statistical analysis.}
 
-\item{reshape}{logical. Will reshape the data to a wide format if TRUE (default is FALSE). This is only
-available for 'expanded' data.}
+\item{reshape}{logical, reshape the data. If \code{TRUE}, then return a wide data frame with all water-quality in a single row for each sample.
+If \code{FALSE} (default), then return a long data frame with each water-quality result in a single row.}
 
 \item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
@@ -48,6 +50,8 @@ Name \tab Type \tab Description \cr
 url \tab character \tab The url used to generate the data \cr
 queryTime \tab POSIXct \tab The time the data was returned \cr
 comment \tab character \tab Header comments from the RDB file \cr
+siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
 }
 }
 \description{
@@ -59,11 +63,12 @@ A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov
 siteNumbers <- c('04024430','04024000')
 startDate <- '2010-01-01'
 endDate <- ''
-pCodes <- c('34247','30234','32104','34220')
-
-rawNWISqwData <- readNWISqw(siteNumbers,pCodes,startDate,endDate)
-rawNWISqwDataReshaped <- readNWISqw(siteNumbers,pCodes,
+parameterCd <- c('34247','30234','32104','34220')
+\dontrun{
+rawNWISqwData <- readNWISqw(siteNumbers,parameterCd,startDate,endDate)
+rawNWISqwDataReshaped <- readNWISqw(siteNumbers,parameterCd,
           startDate,endDate,reshape=TRUE)
+         }
 }
 \seealso{
 \code{\link{readWQPdata}}, \code{\link{whatWQPsites}},

@@ -3,7 +3,7 @@
 #' Imports data from NWIS about meaured parameter based on user-supplied parameter code.
 #' This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes}
 #'
-#' @param parameterCd character of USGS parameter codes.  This is usually an 5 digit number.
+#' @param parameterCd character of USGS parameter codes (or multiple parameter codes).  This is usually an 5 digit number.
 #' @keywords data import USGS web service
 #' @return parameterData data frame with all information from the USGS about the particular parameter.
 #' 
@@ -19,7 +19,6 @@
 #' 
 #' @export
 #' @examples
-#' # These examples require an internet connection to run
 #' paramINFO <- readNWISpCode(c('01075','00060','00931'))
 readNWISpCode <- function(parameterCd){
  

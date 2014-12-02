@@ -16,7 +16,7 @@
 #' @param format string, can be "tsv" or "xml", and is only applicable for daily and unit value requests.  "tsv" returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower, 
 #' but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
 #' but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml". 
-#' @param expanded logical defaults to FALSE. If TRUE, retrieves additional information, only applicable for qw data.
+#' @param expanded logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional information, only applicable for qw data.
 #' @param ratingType can be "base", "corr", or "exsa". Only applies to rating curve data.
 #' @keywords data import USGS web service
 #' @return url string
@@ -43,7 +43,7 @@
 #' url_meas <- constructNWISURL(siteNumber, service="meas")
 #'            }
 constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate="",
-                             service,statCd="00003", format="xml",expanded=FALSE,
+                             service,statCd="00003", format="xml",expanded=TRUE,
                              ratingType="base"){
 
   service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas"))

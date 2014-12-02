@@ -9,11 +9,11 @@ importRDB1(obs_url, asDateTime = FALSE, qw = FALSE, convertType = TRUE,
 \arguments{
 \item{obs_url}{character containing the url for the retrieval}
 
-\item{asDateTime}{logical, if TRUE returns date and time as POSIXct, if FALSE, Date}
+\item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
 
-\item{qw}{logical, if TRUE parses as water quality data (where dates/times are in start and end times)}
+\item{qw}{logical, if \code{TRUE} parses as water quality data (where dates/times are in start and end times)}
 
-\item{convertType}{logical, defaults to TRUE. If TRUE, the function will convert the data to dates, datetimes,
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
 
 \item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the
@@ -27,7 +27,7 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
-datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr
+datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = \code{TRUE}), \cr
 \tab character \tab or raw character string (if asDateTime = FALSE) \cr
 tz_cd \tab character \tab The time zone code for datetime \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr

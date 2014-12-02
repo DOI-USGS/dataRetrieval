@@ -69,7 +69,7 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' Reads peak flow from NWISweb. 
 #' Data is retrieved from \url{http://waterdata.usgs.gov/nwis}. 
 #' 
-#' @param siteNumber character USGS site number.  This is usually an 8 digit number
+#' @param siteNumbers character USGS site number(or multiple sites).  This is usually an 8 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the earliest possible record.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
@@ -102,19 +102,19 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' }
 #' @export
 #' @examples
-#' siteNumber <- '01594440'
-#' data <- readNWISpeak(siteNumber)
-readNWISpeak <- function (siteNumber,startDate="",endDate=""){  
+#' siteNumbers <- c('01594440','040851325')
+#' data <- readNWISpeak(siteNumbers)
+readNWISpeak <- function (siteNumbers,startDate="",endDate=""){  
   
   # Doesn't seem to be a peak xml service
-  url <- constructNWISURL(siteNumber,NA,startDate,endDate,"peak")
+  url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"peak")
   
   data <- importRDB1(url, asDateTime=FALSE)
   
   data$peak_dt <- as.Date(data$peak_dt)
   data$gage_ht <- as.numeric(data$gage_ht)
   
-  siteInfo <- readNWISsite(siteNumber)
+  siteInfo <- readNWISsite(siteNumbers)
   
   attr(data, "siteInfo") <- siteInfo
   attr(data, "variableInfo") <- NULL
@@ -186,7 +186,7 @@ readNWISrating <- function (siteNumber,type="base"){
 #'Reads surface-water measurement data from NWISweb. Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
 #'See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
 #'
-#' @param siteNumber character USGS site number.  This is usually an 8 digit number
+#' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the earliest possible record.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
@@ -217,12 +217,12 @@ readNWISrating <- function (siteNumber,type="base"){
 #' }
 #' @export
 #' @examples
-#' siteNumber <- '01594440'
-#' data <- readNWISmeas(siteNumber)
-readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){  
+#' siteNumbers <- c('01594440','040851325')
+#' data <- readNWISmeas(siteNumbers)
+readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){  
   
   # Doesn't seem to be a WaterML1 format option
-  url <- constructNWISURL(siteNumber,NA,startDate,endDate,"meas")
+  url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"meas")
   
   data <- importRDB1(url,asDateTime=FALSE,tz=tz)
   
@@ -230,7 +230,7 @@ readNWISmeas <- function (siteNumber,startDate="",endDate="", tz=""){
     data$diff_from_rating_pc <- as.numeric(data$diff_from_rating_pc)
   }
   
-  siteInfo <- readNWISsite(siteNumber)
+  siteInfo <- readNWISsite(siteNumbers)
   
   attr(data, "siteInfo") <- siteInfo
   attr(data, "variableInfo") <- NULL
