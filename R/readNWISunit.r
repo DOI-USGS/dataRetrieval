@@ -140,6 +140,17 @@ readNWISpeak <- function (siteNumber,startDate="",endDate=""){
 #'for that value; and CORRINDEP, the corrected value for CORR.\cr
 #'If \code{type} is "base," then the data frame has an attribute called "RATING"
 #'that describes the rating curve is included.
+#'
+#' There are also several useful attributes attached to the data frame:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' url \tab character \tab The url used to generate the data \cr
+#' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' comment \tab character \tab Header comments from the RDB file \cr
+#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+#' RATING \tab character \tab Rating information \cr
+#' }
+#'
 #' @note Not all active USGS streamgages have traditional rating curves that
 #'relate flow to stage.
 #' @export
