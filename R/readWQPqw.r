@@ -7,7 +7,7 @@
 #' either USGS, or other Water Quality Portal offered sites. It is required to use the 'full'
 #' site name, such as 'USGS-01234567'. 
 #'
-#' @param siteNumber character site number. This needs to include the full agency code prefix.
+#' @param siteNumbers character site number. This needs to include the full agency code prefix.
 #' @param parameterCd vector of USGS 5-digit parameter code or characteristicNames. 
 #' Leaving this blank will return all of the measured values during the specified time period.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
