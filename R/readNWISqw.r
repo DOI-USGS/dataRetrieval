@@ -75,7 +75,7 @@ readNWISqw <- function (siteNumbers,pCodes,startDate="",endDate="",
     
   }
   
-  siteInfo <- readNWISsite(siteNumber)
+  siteInfo <- readNWISsite(siteNumbers)
   varInfo <- readNWISpCode(pCodes)
   
   attr(data, "siteInfo") <- siteInfo
