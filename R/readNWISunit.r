@@ -107,14 +107,14 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 readNWISpeak <- function (siteNumbers,startDate="",endDate=""){  
   
   # Doesn't seem to be a peak xml service
-  url <- constructNWISURL(siteNumber,NA,startDate,endDate,"peak")
+  url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"peak")
   
   data <- importRDB1(url, asDateTime=FALSE)
   
   data$peak_dt <- as.Date(data$peak_dt)
   data$gage_ht <- as.numeric(data$gage_ht)
   
-  siteInfo <- readNWISsite(siteNumber)
+  siteInfo <- readNWISsite(siteNumbers)
   
   attr(data, "siteInfo") <- siteInfo
   attr(data, "variableInfo") <- NULL

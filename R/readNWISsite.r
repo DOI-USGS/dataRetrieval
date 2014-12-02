@@ -2,7 +2,7 @@
 #'
 #' Imports data from USGS site file site. This function gets data from here: \url{http://waterservices.usgs.gov/}
 #'
-#' @param siteNumbers character USGS site number.  This is usually an 8 digit number
+#' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @keywords data import USGS web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{

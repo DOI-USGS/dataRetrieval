@@ -4,7 +4,7 @@
 #' NWIS site, parameter code, statistic, startdate and enddate. 
 #'
 #' @param obs_url character containing the url for the retrieval
-#' @param asDateTime logical, if TRUE returns date and time as POSIXct, if FALSE, Date
+#' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",

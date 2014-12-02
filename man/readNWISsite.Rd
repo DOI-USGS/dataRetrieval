@@ -6,7 +6,7 @@
 readNWISsite(siteNumbers)
 }
 \arguments{
-\item{siteNumbers}{character USGS site number.  This is usually an 8 digit number}
+\item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
 }
 \value{
 A data frame with at least the following columns:

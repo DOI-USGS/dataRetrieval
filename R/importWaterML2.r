@@ -4,7 +4,7 @@
 #' but the general functionality is correct.
 #'
 #' @param obs_url character containing the url for the retrieval
-#' @param asDateTime logical, if TRUE returns date and time as POSIXct, if FALSE, Date
+#' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
@@ -42,7 +42,9 @@
 #' }
 importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
   
-  if(url.exists(obs_url)){
+  if(file.exists(obs_url)){
+    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+  } else {
     doc = tryCatch({
       h <- basicHeaderGatherer()
       returnedDoc <- getURL(obs_url, headerfunction = h$update)
@@ -62,9 +64,7 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
       message(paste("URL does not seem to exist:", obs_url))
       message(e)
       return(NA)
-    }) 
-  } else {
-    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+    })
   }
   
   if(tz != ""){

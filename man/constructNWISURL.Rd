@@ -5,7 +5,7 @@
 \usage{
 constructNWISURL(siteNumber, parameterCd = "00060", startDate = "",
   endDate = "", service, statCd = "00003", format = "xml",
-  expanded = FALSE, ratingType = "base")
+  expanded = TRUE, ratingType = "base")
 }
 \arguments{
 \item{siteNumber}{string or vector of strings USGS site number.  This is usually an 8 digit number}
@@ -27,7 +27,7 @@ retrieval for the latest possible record.}
 but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option,
 but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml".}
 
-\item{expanded}{logical defaults to FALSE. If TRUE, retrieves additional information, only applicable for qw data.}
+\item{expanded}{logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional information, only applicable for qw data.}
 
 \item{ratingType}{can be "base", "corr", or "exsa". Only applies to rating curve data.}
 }
