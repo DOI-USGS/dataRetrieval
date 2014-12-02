@@ -55,7 +55,7 @@ siteNumber <- '04085427'
 startDate <- '2012-01-01'
 endDate <- '2012-06-30'
 pCode <- '00060'
-
+\dontrun{
 rawDailyQ <- readNWISdv(siteNumber,pCode, startDate, endDate)
 rawDailyQAndTempMeanMax <- readNWISdv(siteNumber,c('00010','00060'),
        startDate, endDate, statCd=c('00001','00003'))
@@ -70,6 +70,7 @@ attr(x, "variableInfo")
 
 site <- "05212700"
 notActive <- readNWISdv(site, "00060", "2014-01-01","2014-01-07")
+}
 }
 \seealso{
 \code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
