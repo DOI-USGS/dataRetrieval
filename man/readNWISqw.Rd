@@ -64,10 +64,11 @@ siteNumbers <- c('04024430','04024000')
 startDate <- '2010-01-01'
 endDate <- ''
 parameterCd <- c('34247','30234','32104','34220')
-
+\dontrun{
 rawNWISqwData <- readNWISqw(siteNumbers,parameterCd,startDate,endDate)
 rawNWISqwDataReshaped <- readNWISqw(siteNumbers,parameterCd,
           startDate,endDate,reshape=TRUE)
+         }
 }
 \seealso{
 \code{\link{readWQPdata}}, \code{\link{whatWQPsites}},

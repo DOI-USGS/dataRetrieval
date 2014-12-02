@@ -52,11 +52,11 @@
 #' startDate <- '2010-01-01'
 #' endDate <- ''
 #' parameterCd <- c('34247','30234','32104','34220')
-#' 
+#' \dontrun{
 #' rawNWISqwData <- readNWISqw(siteNumbers,parameterCd,startDate,endDate)
 #' rawNWISqwDataReshaped <- readNWISqw(siteNumbers,parameterCd,
 #'           startDate,endDate,reshape=TRUE)
-#'           
+#'          } 
 readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
                         expanded=TRUE,reshape=FALSE,tz=""){  
   
