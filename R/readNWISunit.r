@@ -66,7 +66,8 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 
 #' Reads peak flow data from NWISweb.
 #' 
-#' 
+#' Reads peak flow from NWISweb. 
+#' Data is retrieved from \url{http://waterdata.usgs.gov/nwis}. 
 #' 
 #' @param siteNumber character USGS site number.  This is usually an 8 digit number
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
@@ -78,11 +79,17 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' Name \tab Type \tab Description \cr
 #' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 #' site_no \tab character \tab The USGS site number \cr
-#' dateTime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
-#' \tab character \tab or raw character string (if asDateTime = FALSE) \cr
-#' tz_cd \tab character \tab The time zone code for dateTime \cr
-#' code \tab character \tab Any codes that qualify the corresponding value\cr
-#' value \tab numeric \tab The numeric value for the parameter \cr
+#' peak_dt \tab Date \tab Date of peak streamflow \cr
+#' peak_tm \tab character \tab Time of peak streamflow as character \cr
+#' peak_va \tab numeric \tab Annual peak streamflow value in cfs \cr
+#' peak_cd \tab character \tab Peak Discharge-Qualification codes (see \code{comment} for more information) \cr
+#' gage_ht \tab numeric \tab Gage height for the associated peak streamflow in feet \cr
+#' gage_ht_cd \tab character \tab Gage height qualification codes \cr
+#' year_last_pk \tab character \tab Peak streamflow reported is the highest since this year \cr
+#' ag_dt \tab character \tab Date of maximum gage-height for water year (if not concurrent with peak) \cr
+#' ag_tm \tab character \tab Time of maximum gage-height for water year (if not concurrent with peak) \cr
+#' ag_gage_ht \tab character \tab maximum Gage height for water year in feet (if not concurrent with peak) \cr
+#' ag_gage_ht_cd \tab character \tab maximum Gage height code \cr
 #' }
 #' 
 #' There are also several useful attributes attached to the data frame:
@@ -103,6 +110,10 @@ readNWISpeak <- function (siteNumber,startDate="",endDate=""){
   url <- constructNWISURL(siteNumber,NA,startDate,endDate,"peak")
   
   data <- importRDB1(url, asDateTime=FALSE)
+  
+  data$peak_dt <- as.Date(data$peak_dt)
+  data$gage_ht <- as.numeric(data$gage_ht)
+  
   siteInfo <- readNWISsite(siteNumber)
   
   attr(data, "siteInfo") <- siteInfo
@@ -114,7 +125,8 @@ readNWISpeak <- function (siteNumber,startDate="",endDate=""){
 
 #' Reads the current rating table for an active USGS streamgage.
 #' 
-#' 
+#' Reads current rating table for an active USGS streamgage from NWISweb. 
+#' Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
 #' 
 #' @param siteNumber character USGS site number.  This is usually an 8 digit number
 #' @param type character can be "base", "corr", or "exsa"
@@ -160,7 +172,8 @@ readNWISrating <- function (siteNumber,type="base"){
 
 #'Reads surface-water measurement data from NWISweb.
 #'
-#'
+#'Reads surface-water measurement data from NWISweb. Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
+#'See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
 #'
 #' @param siteNumber character USGS site number.  This is usually an 8 digit number
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
@@ -179,7 +192,9 @@ readNWISrating <- function (siteNumber,type="base"){
 #' tz_cd \tab character \tab The time zone code for dateTime \cr
 #' }
 #' 
-#' See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
+#' See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water, and 
+#' \url{http://waterdata.usgs.gov/nwis/help?output_formats_help#streamflow_measurement_data}
+#' for help on the columns and codes.
 #' 
 #' There are also several useful attributes attached to the data frame:
 #' \tabular{lll}{

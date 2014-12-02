@@ -7,6 +7,15 @@
 #' @keywords data import WQP web service
 #' @return retval dataframe with first column dateTime, and at least one qualifier and value columns
 #' (subsequent qualifier/value columns could follow depending on requested parameter codes)
+#' 
+#' There are also several useful attributes attached to the data frame:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' url \tab character \tab The url used to generate the data \cr
+#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+#' variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
+#' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' }
 #' @export
 #' @examples
 #' \dontrun{
