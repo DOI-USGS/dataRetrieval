@@ -178,10 +178,10 @@ siteInfo <- attr(temperatureAndFlow, "siteInfo")
 
 par(mar=c(5,5,5,5)) #sets the size of the plot window
 
-plot(temperatureAndFlow$dateTime, temperatureAndFlow$Wtemp_Max,
+plot(temperatureAndFlow$Date, temperatureAndFlow$Wtemp_Max,
   ylab=variableInfo$parameter_desc[1],xlab="" )
 par(new=TRUE)
-plot(temperatureAndFlow$dateTime, temperatureAndFlow$Flow,
+plot(temperatureAndFlow$Date, temperatureAndFlow$Flow,
   col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
   )
 axis(4,col="red",col.axis="red")
