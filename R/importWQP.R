@@ -9,7 +9,7 @@
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
-#' start and end times.
+#' start and end times, and converted to UTC. See \url{http://www.waterqualitydata.us/portal_userguide.jsp} for more information.
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
 #' @import RCurl
@@ -109,13 +109,15 @@ importWQP <- function(url, zip=FALSE, tz=""){
       retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, ActivityStartTime.Time),format="%Y-%m-%d %H:%M:%S", tz = "UTC"))
       retval$ActivityStartDateTime <- retval$ActivityStartDateTime + timeZoneStart*60*60
       retval$ActivityStartDateTime <- as.POSIXct(retval$ActivityStartDateTime)
+      attr(retval$ActivityStartDateTime, "tzone") <- "UTC"
       
     }
     
     if(any(!is.na(timeZoneEnd))){      
       retval$ActivityEndDateTime <- with(retval, as.POSIXct(paste(ActivityEndDate, ActivityEndTime.Time),format="%Y-%m-%d %H:%M:%S", tz = "UTC"))
       retval$ActivityEndDateTime <- retval$ActivityEndDateTime + timeZoneEnd*60*60
-      retval$ActivityEndDateTime <- as.POSIXct(retval$ActivityEndDateTime)      
+      retval$ActivityEndDateTime <- as.POSIXct(retval$ActivityEndDateTime)
+      attr(retval$ActivityEndDateTime, "tzone") <- "UTC"
     }
     
     if(all(is.na(retval$ActivityEndDateTime))){

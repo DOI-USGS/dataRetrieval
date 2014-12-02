@@ -12,9 +12,11 @@ constructNWISURL(siteNumber, parameterCd = "00060", startDate = "",
 
 \item{parameterCd}{string or vector of USGS parameter code.  This is usually an 5 digit number.}
 
-\item{startDate}{string starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the earliest possible record.}
 
-\item{endDate}{string ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the latest possible record.}
 
 \item{service}{string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values),
 "qw" (water quality data), "gwlevels" (groundwater),and "rating" (rating curve), "peak", "meas" (discrete streamflow measurements).}

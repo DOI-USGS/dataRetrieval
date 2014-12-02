@@ -23,7 +23,8 @@ If \code{type} is "base," then the data frame has an attribute called "RATING"
 that describes the rating curve is included.
 }
 \description{
-Reads the current rating table for an active USGS streamgage.
+Reads current rating table for an active USGS streamgage from NWISweb.
+Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
 }
 \note{
 Not all active USGS streamgages have traditional rating curves that

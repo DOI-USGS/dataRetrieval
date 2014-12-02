@@ -3,17 +3,19 @@
 \alias{readNWISqw}
 \title{Raw Data Import for USGS NWIS QW Data}
 \usage{
-readNWISqw(siteNumber, pCodes, startDate = "", endDate = "",
+readNWISqw(siteNumbers, pCodes, startDate = "", endDate = "",
   expanded = TRUE, reshape = FALSE, tz = "")
 }
 \arguments{
-\item{siteNumber}{character of USGS site numbers.  This is usually an 8 digit number}
+\item{siteNumbers}{character of USGS site numbers.  This is usually an 8 digit number}
 
 \item{pCodes}{character of USGS parameter code(s).  This is usually an 5 digit number.}
 
-\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the earliest possible record.}
 
-\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the latest possible record.}
 
 \item{expanded}{logical defaults to TRUE. If TRUE, retrieves additional information. Expanded data includes
 remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
@@ -53,16 +55,14 @@ A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov
 A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 }
 \examples{
-siteNumber <- c('04024430','04024000')
+siteNumbers <- c('04024430','04024000')
 startDate <- '2010-01-01'
 endDate <- ''
 pCodes <- c('34247','30234','32104','34220')
 
-rawNWISqwData <- readNWISqw(siteNumber,pCodes,startDate,endDate)
-rawNWISqwDataExpandReshaped <- readNWISqw(siteNumber,pCodes,
-          startDate,endDate,expanded=TRUE)
-rawNWISqwDataExpand <- readNWISqw(siteNumber,pCodes,
-          startDate,endDate,expanded=TRUE,reshape=FALSE)
+rawNWISqwData <- readNWISqw(siteNumbers,pCodes,startDate,endDate)
+rawNWISqwDataReshaped <- readNWISqw(siteNumbers,pCodes,
+          startDate,endDate,reshape=TRUE)
 }
 \seealso{
 \code{\link{readWQPdata}}, \code{\link{whatWQPsites}},

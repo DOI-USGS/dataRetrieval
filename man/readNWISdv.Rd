@@ -11,9 +11,11 @@ readNWISdv(siteNumber, parameterCd, startDate = "", endDate = "",
 
 \item{parameterCd}{character of USGS parameter code(s).  This is usually an 5 digit number.}
 
-\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.}
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the earliest possible record.}
 
-\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
+\item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+retrieval for the latest possible record.}
 
 \item{statCd}{character USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.}
 }
@@ -23,7 +25,7 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency \tab character \tab The NWIS code for the agency reporting the data\cr
 site \tab character \tab The USGS site number \cr
-datetime \tab Date \tab The date of the value \cr
+Date \tab Date \tab The date of the value \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
 }

@@ -6,7 +6,24 @@
 #'
 #' @param \dots see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options
 #' @keywords data import NWIS web service
-#' @return retval dataframe with agency_cd, site_no, station_nm, site_tp_cd, dec_lat_va, and dec_long_va.
+#' @return A data frame with at least the following columns:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site_no \tab character \tab The USGS site number \cr
+#' station_nm \tab character \tab Station name \cr
+#' site_tp_cd \tab character \tab Site type code \cr
+#' dec_lat_va \tab numeric \tab Decimal latitude \cr
+#' dec_long_va \tab numeric \tab Decimal longitude \cr
+#' queryTime \tab POSIXct \tab Query time \cr
+#' }
+#' 
+#' There are also several useful attributes attached to the data frame:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' url \tab character \tab The url used to generate the data \cr
+#' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' }
 #' @export
 #' @import XML
 #' @examples

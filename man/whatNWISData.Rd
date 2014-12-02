@@ -20,7 +20,47 @@ instantaneous values)}
 \item{statCd}{character vector of all statistic codes to return. Defaults to "all" which will not perform a filter.}
 }
 \value{
-retval dataframe with all information found in the expanded site file
+A data frame with the following columns:
+\tabular{lll}{
+Name \tab Type \tab Description \cr
+agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+site_no \tab character \tab The USGS site number \cr
+station_nm \tab character \tab Site name \cr
+site_tp_cd \tab character \tab Site type \cr
+dec_lat_va \tab numeric \tab Decimal latitude\cr
+dec_long_va \tab numeric \tab Decimal longitude \cr
+coord_acy_cd \tab character \tab Latitude-longitude accuracy \cr
+dec_coord_datum_cd \tab character \tab Decimal Latitude-longitude datum \cr
+alt_va \tab character \tab Altitude of Gage or land surface \cr
+alt_acy_va \tab character \tab Altitude accuracy \cr
+alt_datum_cd \tab character \tab Altitude datum \cr
+huc_cd \tab character \tab Hydrologic unit code \cr
+data_type_cd \tab character \tab Data type \cr
+parm_cd \tab character \tab Parameter code \cr
+stat_cd \tab character \tab Statistical code \cr
+dd_nu \tab character \tab Internal database key \cr
+loc_web_ds \tab character \tab Additional measurement description \cr
+medium_grp_cd \tab character \tab Medium group code \cr
+parm_grp_cd \tab character \tab Parameter group code \cr
+srs_id \tab character \tab SRS ID \cr
+access_cd \tab character \tab Access code \cr
+begin_date \tab Date \tab Begin date \cr
+end_date \tab Date \tab End date \cr
+count_nu \tab integer \tab Record count\cr
+parameter_group_nm \tab character \tab Parameter group name \cr
+parameter_nm \tab character \tab Parameter name \cr
+casrn \tab character \tab Chemical Abstracts Service (CAS) Registry Number \cr
+srsname \tab character \tab Substance Registry Services \cr
+parameter_units \tab character \tab Parameter units \cr
+}
+
+There are also several useful attributes attached to the data frame:
+\tabular{lll}{
+Name \tab Type \tab Description \cr
+url \tab character \tab The url used to generate the data \cr
+comment \tab character \tab Header comments from the RDB file \cr
+queryTime \tab POSIXct \tab The time the data was returned \cr
+}
 }
 \description{
 Imports a table of available parameters, period of record, and count. See \url{http://waterservices.usgs.gov/rest/Site-Service.html}
