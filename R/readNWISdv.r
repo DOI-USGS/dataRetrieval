@@ -16,7 +16,7 @@
 #' Name \tab Type \tab Description \cr
 #' agency \tab character \tab The NWIS code for the agency reporting the data\cr
 #' site \tab character \tab The USGS site number \cr
-#' datetime \tab Date \tab The date of the value \cr 
+#' Date \tab Date \tab The date of the value \cr 
 #' code \tab character \tab Any codes that qualify the corresponding value\cr
 #' value \tab numeric \tab The numeric value for the parameter \cr
 #' }
@@ -68,6 +68,8 @@ readNWISdv <- function (siteNumber,parameterCd,startDate="",endDate="",statCd="0
   if(nrow(data)>0){
     data$dateTime <- as.Date(data$dateTime)
     data$tz_cd <- NULL
+    data$Date <- data$dateTime 
+    data$dateTime <- NULL
   }
   
 
