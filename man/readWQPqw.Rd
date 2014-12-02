@@ -33,7 +33,7 @@ site name, such as 'USGS-01234567'.
 \dontrun{
 rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
-rawSites <- readWQPqw(c('USGS-01594440', 'USGS-01594440'), '01075','','')
+rawPHmultiSite <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')
 }
 }
 \seealso{
