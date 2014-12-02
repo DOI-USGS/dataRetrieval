@@ -86,7 +86,9 @@
 #' inactiveAndAcitive <- importWaterML1(inactiveAndAcitive)
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
-  if(url.exists(obs_url)){
+  if(file.exists(obs_url)){
+    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+  } else {
     doc = tryCatch({
       h <- basicHeaderGatherer()
       returnedDoc <- getURI(obs_url, headerfunction = h$update)
@@ -106,8 +108,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       message(e)
       return(NA)
     }) 
-  } else {
-    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
   }
   
   if(tz != ""){
@@ -274,19 +274,21 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
                 datetime <- substr(datetime,1,23)
                 datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
-                datetime <- datetime + tzHours*60*60
+                datetime <- datetime - tzHours*60*60
                 df$tz_cd <- as.character(zoneAbbrievs[tzOffset]) 
               }
               
               if(!("tz_cd" %in% names(df))){
                 df$tz_cd <- zoneAbbrievs[1]
                 tzHours <- as.numeric(substr(names(zoneAbbrievs[1]),1,3))
-                datetime <- datetime + tzHours*60*60
+                datetime <- datetime - tzHours*60*60
               }
             }
             
             if(tz != ""){
               attr(datetime, "tzone") <- tz
+            } else {
+              attr(datetime, "tzone") <- "UTC"
             }
             
             
