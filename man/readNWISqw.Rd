@@ -21,7 +21,8 @@ retrieval for the latest possible record.}
 remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
 dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type).}
 
-\item{reshape}{logical. Will reshape the data if TRUE (default)}
+\item{reshape}{logical. Will reshape the data to a wide format if TRUE (default is FALSE). This is only
+available for 'expanded' data.}
 
 \item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
