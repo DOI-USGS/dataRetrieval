@@ -24,6 +24,8 @@ readNWISpCode <- function(parameterCd){
  
   pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
   
+  data("parameterCdFile")
+  
   if(!pcodeCheck){
     goodIndex <- which(parameterCd %in% parameterCdFile$parameter_cd)
     if(length(goodIndex) > 0){
@@ -34,8 +36,6 @@ readNWISpCode <- function(parameterCd){
     message("The following pCodes seem mistyped:",paste(badPcode,collapse=","))
     parameterCd <- parameterCd[goodIndex]
   }
-  
-  data(parameterCdFile)
   
   parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd,]
 
