@@ -35,7 +35,7 @@ readNWISpCode <- function(parameterCd){
     parameterCd <- parameterCd[goodIndex]
   }
   
-  parameterCdFile <- parameterCdFile
+  data(parameterCdFile)
   
   parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd,]
 

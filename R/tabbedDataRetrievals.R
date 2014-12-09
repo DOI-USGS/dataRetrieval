@@ -47,7 +47,7 @@ NULL
 #' @docType data
 #' @keywords USGS parameterCd
 #' @examples
-#' parameterCdFile <- parameterCdFile
+#' data(parameterCdFile)
 #' dischargeInfo <- parameterCdFile[parameterCdFile$parameter_cd=="00060",]
 NULL
 

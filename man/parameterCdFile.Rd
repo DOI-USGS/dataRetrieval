@@ -22,7 +22,7 @@ Complete list of USGS parameter codes as of November 7, 2014. The data was pulle
 format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}
 }
 \examples{
-parameterCdFile <- parameterCdFile
+data(parameterCdFile)
 dischargeInfo <- parameterCdFile[parameterCdFile$parameter_cd=="00060",]
 }
 \keyword{USGS}
