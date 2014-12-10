@@ -73,7 +73,7 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
   }
 
   
-  data("parameterCdFile")
+  data("parameterCdFile", envir = )
   
   if(!("all" %in% parameterCd)){
     parameterCdCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
