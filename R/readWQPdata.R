@@ -153,5 +153,8 @@ readWQPdata <- function(...){
     attr(retval, "queryTime") <- Sys.time()
     
     return(retval)
+  } else {
+    message("The following url returned no data:\n")
+    message(urlCall)
   }
 }
