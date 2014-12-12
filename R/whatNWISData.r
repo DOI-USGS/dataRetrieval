@@ -71,9 +71,6 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
   if(!("all" %in% service)){
     service <- match.arg(service, c("dv","uv","qw","ad","id","pk","sv","gw","aw","all","ad","iv","rt"), several.ok = TRUE)
   }
-
-  
-  data("parameterCdFile", envir = )
   
   if(!("all" %in% parameterCd)){
     parameterCdCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))

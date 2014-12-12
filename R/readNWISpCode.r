@@ -24,8 +24,6 @@ readNWISpCode <- function(parameterCd){
  
   pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
   
-  data("parameterCdFile")
-  
   if(!pcodeCheck){
     goodIndex <- which(parameterCd %in% parameterCdFile$parameter_cd)
     if(length(goodIndex) > 0){

@@ -35,8 +35,6 @@ Suggests:
     xtable,
     knitr,
     testthat
-LazyLoad: yes
-LazyData: yes
 VignetteBuilder: knitr
 BuildVignettes: true
 URL: https://github.com/USGS-R/dataRetrieval, http://pubs.usgs.gov/tm/04/a10/
