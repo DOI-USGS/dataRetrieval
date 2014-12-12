@@ -35,8 +35,6 @@ readNWISpCode <- function(parameterCd){
     parameterCd <- parameterCd[goodIndex]
   }
   
-  parameterCdFile <- parameterCdFile
-  
   parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd,]
 
   if(nrow(parameterData) != length(parameterCd)){

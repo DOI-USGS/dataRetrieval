@@ -44,7 +44,7 @@ siteNumber <- '01594440'
 startDate <- '1985-01-01'
 endDate <- ''
 pCode <- c("00060","00010")
-\dontrun{
+\donttest{
 # Not running for time considerations
 url_daily <- constructNWISURL(siteNumber,pCode,
            startDate,endDate,'dv',statCd=c("00003","00001"))

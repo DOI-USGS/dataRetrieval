@@ -96,8 +96,6 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
   
   parameterCds <- unique(SiteFile$parm_cd)
   
-  parameterCdFile <- parameterCdFile
-  
   parameterCdINFO <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCds,]
   SiteFile <- merge(SiteFile,parameterCdINFO,by.x="parm_cd" ,by.y="parameter_cd",all=TRUE)
   
