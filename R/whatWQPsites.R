@@ -75,24 +75,20 @@ whatWQPsites <- function(...){
                urlCall,
                "&mimeType=tsv",sep = "")
   
-  retval = tryCatch({
+  possibleError <- tryCatch({
     h <- basicHeaderGatherer()
     doc <- getURL(urlCall, headerfunction = h$update)
     
   }, warning = function(w) {
     message(paste("URL caused a warning:", urlCall))
     message(w)
-  }, error = function(e) {
-    message(paste("URL does not seem to exist:", urlCall))
-    message(e)
-    return(NA)
-  })
+  }, error = function(e) e)
   
-  if(h$value()["Content-Type"] == "text/tab-separated-values;charset=UTF-8"){
-  
+  if(!inherits(possibleError, "error")){
+    
     numToBeReturned <- as.numeric(h$value()["Total-Site-Count"])
     
-    if (!is.na(numToBeReturned) | numToBeReturned != 0){
+    if (!is.na(numToBeReturned) & numToBeReturned != 0){
    
       retval <- read.delim(textConnection(doc), header = TRUE, quote="\"", 
                            dec=".", sep='\t', 
@@ -119,9 +115,6 @@ whatWQPsites <- function(...){
       return(NA)
     }
   } else {
-    message(paste("URL caused an error:", urlCall))
-    message("Content-Type=",h$value()["Content-Type"])
-    return(NA)
+    message(e)
   }
-
 }
