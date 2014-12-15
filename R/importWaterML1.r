@@ -240,7 +240,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
             # YYYY-MM-DDTHH:MM:SS.000-XX:00 numChar=29
                         
             if(abs(max(numChar) - min(numChar)) != 0){
-              message("Mixed date types, not converted to POSIXct")
+              warning("Mixed date types, not converted to POSIXct")
             } else {
               numChar <- numChar[1]
               if(numChar == 4){
