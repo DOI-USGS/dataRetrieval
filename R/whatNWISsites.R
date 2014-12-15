@@ -41,27 +41,22 @@ whatNWISsites <- function(...){
   urlCall <- paste(baseURL,
                    urlCall,sep = "")
   
-  if(url.exists(urlCall)){
+  h <- basicHeaderGatherer()
+  
+  possibleError <- tryCatch({
     h <- basicHeaderGatherer()
-    doc = tryCatch({
-      returnedDoc <- getURI(urlCall, headerfunction = h$update)
-      if(h$value()["Content-Type"] == "text/xml;charset=UTF-8"){
-        xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
-      } else {
-        message(paste("URL caused an error:", urlCall))
-        message("Content-Type=",h$value()["Content-Type"])
-        return(NA)
-      }   
-      
-    }, warning = function(w) {
-      message(paste("URL caused a warning:", urlCall))
-      message(w)
-    }, error = function(e) {
-      message(paste("URL does not seem to exist:", urlCall))
-      message(e)
-      return(NA)
-    }) 
-    
+    returnedDoc <- getURI(urlCall, headerfunction = h$update)      
+  }, warning = function(w) {
+    warning(w, "with url:", urlCall)
+  }, error = function(e) {
+    stop(e, "with url:", urlCall)
+  }) 
+  
+  headerInfo <- h$value()
+
+  if (headerInfo['status'] == "200"){
+  
+    doc <- xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
     doc <- xmlRoot(doc)
     numChunks <- xmlSize(doc)
     for(i in 1:numChunks){
@@ -91,6 +86,7 @@ whatNWISsites <- function(...){
     
     return(retval)
   } else {
-    message("URL caused an error:", urlCall)
+    stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", urlCall)
   }
+  
 }
