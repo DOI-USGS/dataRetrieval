@@ -81,7 +81,7 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   }
   
   if(reshape & !expanded){
-    message("Reshape can only be used with expanded data. Reshape request will be ignored.")
+    warning("Reshape can only be used with expanded data. Reshape request will be ignored.")
   }
   
   siteInfo <- readNWISsite(siteNumbers)

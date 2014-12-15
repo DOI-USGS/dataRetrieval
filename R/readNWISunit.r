@@ -54,7 +54,6 @@
 #' 
 #' timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
 #'          "2013-11-03","2013-11-03")
-#' firstSite <- timeZoneChange[timeZoneChange$site_no == '04024430',]
 readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){  
   
   url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,"uv",format="xml")

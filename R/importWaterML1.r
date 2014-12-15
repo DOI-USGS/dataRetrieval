@@ -87,28 +87,20 @@
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(file.exists(obs_url)){
-    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+    returnedDoc <- obs_url
   } else {
-    doc = tryCatch({
+    
+    possibleError <- tryCatch({
       h <- basicHeaderGatherer()
-      returnedDoc <- getURI(obs_url, headerfunction = h$update)
-      if(h$value()["Content-Type"] == "text/xml;charset=UTF-8"){
-        xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
-      } else {
-        message(paste("URL caused an error:", obs_url))
-        message("Content-Type=",h$value()["Content-Type"])
-        return(NA)
-      }   
-      
+      returnedDoc <- getURI(obs_url, headerfunction = h$update)      
     }, warning = function(w) {
-      message(paste("URL caused a warning:", obs_url))
-      message(w)
+      warning(w, "with url:", obs_url)
     }, error = function(e) {
-      message(paste("URL does not seem to exist:", obs_url))
-      message(e)
-      return(NA)
+      stop(e, "with url:", obs_url)
     }) 
   }
+  
+  returnedDoc <- xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
   
   if(tz != ""){
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
@@ -118,7 +110,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
                           "America/Phoenix","America/Metlakatla"))
   }
   
-  doc <- xmlRoot(doc)
+  doc <- xmlRoot(returnedDoc)
   ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  
   queryInfo <- xmlToList(xmlRoot(xmlDoc(doc[["queryInfo"]])))
   names(queryInfo) <- make.unique(names(queryInfo))
@@ -133,9 +125,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   
   if(0 == length(timeSeries)){
-    message("Returning an empty dataset")
     df <- data.frame()
     attr(df, "queryInfo") <- queryInfo
+    attr(df, "url") <- obs_url
     return(df)
   }
   

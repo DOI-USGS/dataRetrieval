@@ -7,7 +7,7 @@ readNWISpCode(parameterCd)
 }
 \arguments{
 \item{parameterCd}{character of USGS parameter codes (or multiple parameter codes).  These are 5 digit number codes
-that can be found here: \link{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}. To get a
+that can be found here: \url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}. To get a
 complete list of all current parameter codes in the USGS, use "all" as the input.}
 }
 \value{

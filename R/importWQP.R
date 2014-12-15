@@ -13,46 +13,65 @@
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
 #' @import RCurl
-#' @import httr
 #' @import lubridate
 #' @examples
 #' # These examples require an internet connection to run
-#' \dontrun{
+#' 
 #' ## Examples take longer than 5 seconds:
 #' rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
+#' \dontrun{
 #' rawSample <- importWQP(rawSampleURL)
 #' url2 <- paste0(rawSampleURL,"&zip=yes")
 #' rawSample2 <- importWQP(url2, TRUE)
+#' 
 #' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' STORETdata <- importWQP(STORETex)
 #' }
 importWQP <- function(url, zip=FALSE, tz=""){
   
+  h <- basicHeaderGatherer()
+  
   if(zip){
-    headerInfo <- HEAD(url)$headers
+    httpHEAD(url, headerfunction = h$update)
+    
     temp <- tempfile()
     options(timeout = 120)
     
-    possibleError <- tryCatch(
-      download.file(url,temp, quiet=TRUE, mode='wb'),
-      error = function(e)  e
+    possibleError <- tryCatch({
+      download.file(url,temp, quiet=TRUE, mode='wb')
+      },
+      error = function(e)  {
+        stop(e, "with url:", url)
+      }
     )
 
   } else {
-    h <- basicHeaderGatherer()
-    possibleError <- tryCatch(
-      doc <- getURL(url, headerfunction = h$update),
-      error = function(e)  e
+    
+    possibleError <- tryCatch({
+        doc <- getURL(url, headerfunction = h$update)
+      },
+      error = function(e) {
+        stop(e, "with url:", url)
+      }
     )
+    
   }
   
-  if(!inherits(possibleError, "error")){
+  headerInfo <- h$value()
+  
+  if(headerInfo['status'] != "200"){
+    
+    if(zip){
+      unlink(temp)
+    }
+    
+    stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", url)
+    
+  } else {
     
     if(zip){
       doc <- unzip(temp)
       unlink(temp)
-    } else {
-      headerInfo <- h$value()
     }
     
     if(tz != ""){
@@ -130,14 +149,8 @@ importWQP <- function(url, zip=FALSE, tz=""){
       return(retval)
     
     } else {
-      warning("No data to retrieve")
+
       return(NA)
     }
-  } else {
-    if(zip){
-      unlink(temp)
-    }
-    message(e)
-  }
-
+  } 
 }

@@ -80,11 +80,14 @@ whatWQPsites <- function(...){
     doc <- getURL(urlCall, headerfunction = h$update)
     
   }, warning = function(w) {
-    message(paste("URL caused a warning:", urlCall))
-    message(w)
-  }, error = function(e) e)
+    warning(w, "with url:", urlCall )
+  }, error = function(e) {
+    stop(e, "with url:", urlCall)
+  })
   
-  if(!inherits(possibleError, "error")){
+  headerInfo <- h$value()
+  
+  if(headerInfo['status'] == "200"){
     
     numToBeReturned <- as.numeric(h$value()["Total-Site-Count"])
     
@@ -115,6 +118,6 @@ whatWQPsites <- function(...){
       return(NA)
     }
   } else {
-    message(e)
+    stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", urlCall)
   }
 }
