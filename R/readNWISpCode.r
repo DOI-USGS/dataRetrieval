@@ -4,7 +4,7 @@
 #' This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes}
 #'
 #' @param parameterCd character of USGS parameter codes (or multiple parameter codes).  These are 5 digit number codes
-#' that can be found here: \link{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}. To get a 
+#' that can be found here: \url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}. To get a 
 #' complete list of all current parameter codes in the USGS, use "all" as the input.
 #' @keywords data import USGS web service
 #' @return parameterData data frame with all information from the USGS about the particular parameter.
@@ -31,17 +31,6 @@ readNWISpCode <- function(parameterCd){
     
   } else {
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
-  
-    if(!pcodeCheck){
-      goodIndex <- which(parameterCd %in% parameterCdFile$parameter_cd)
-      if(length(goodIndex) > 0){
-        badPcode <- parameterCd[-goodIndex]
-      } else {
-        badPcode <- parameterCd
-      }
-      message("The following pCodes seem mistyped:",paste(badPcode,collapse=","))
-      parameterCd <- parameterCd[goodIndex]
-    }
     
     parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd,]
   
@@ -62,6 +51,12 @@ readNWISpCode <- function(parameterCd){
         newData <- fullPcodeDownload[fullPcodeDownload$parameter_cd %in% parameterCd,]
         
       }
+      
+      if(nrow(newData) != length(parameterCd)){
+        badPcode <- parameterCd[!(parameterCd %in% newData$parameter_cd)]
+        warning("The following pCodes seem mistyped, and no information was returned: ",paste(badPcode,collapse=","))
+      }
+      
       return(newData)
       
     } else {
