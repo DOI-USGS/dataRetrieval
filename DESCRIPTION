@@ -29,8 +29,7 @@ Imports:
     RCurl,
     reshape2,
     lubridate,
-    plyr,
-    httr
+    plyr
 Suggests:
     xtable,
     knitr,
