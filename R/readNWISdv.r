@@ -68,8 +68,8 @@ readNWISdv <- function (siteNumber,parameterCd,startDate="",endDate="",statCd="0
   if(nrow(data)>0){
     data$dateTime <- as.Date(data$dateTime)
     data$tz_cd <- NULL
-    data$Date <- data$dateTime 
-    data$dateTime <- NULL
+    
+    names(data)[names(data) == "dateTime"] <- "Date"    
   }
   
 
