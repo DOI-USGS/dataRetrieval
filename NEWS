@@ -1,7 +1,7 @@
 dataRetrieval 2.0.2
 ===========
 * Moved data files (parameterCdFile and pCodeToName) to hidden sysdata.rda
-* 
+* Improved error handling.
 
 dataRetrieval 2.0.1
 ===========
