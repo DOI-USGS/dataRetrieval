@@ -51,9 +51,10 @@
 #' endDate <- "2014-10-10"
 #' # These examples require an internet connection to run
 #' rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
-#' 
+#' \dontrun{
 #' timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
 #'          "2013-11-03","2013-11-03")
+#' }
 readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){  
   
   url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,"uv",format="xml")
