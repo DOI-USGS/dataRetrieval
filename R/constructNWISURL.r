@@ -27,8 +27,6 @@
 #' startDate <- '1985-01-01'
 #' endDate <- ''
 #' pCode <- c("00060","00010")
-#' \donttest{
-#' # Not running for time considerations
 #' url_daily <- constructNWISURL(siteNumber,pCode,
 #'            startDate,endDate,'dv',statCd=c("00003","00001"))
 #' url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
@@ -41,7 +39,6 @@
 #' url_rating <- constructNWISURL(siteNumber,service="rating",ratingType="base")
 #' url_peak <- constructNWISURL(siteNumber, service="peak")
 #' url_meas <- constructNWISURL(siteNumber, service="meas")
-#'            }
 constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate="",
                              service,statCd="00003", format="xml",expanded=TRUE,
                              ratingType="base"){
@@ -52,14 +49,13 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     
     if(!pcodeCheck){
-      badIndex <- which(parameterCd %in% parameterCdFile$parameter_cd)
-      if(length(badIndex) > 0){
-        badPcode <- parameterCd[-badIndex]
-      } else {
-        badPcode <- parameterCd
-      }
-      warning("The following pCodes may be unavailable:",paste(badPcode,collapse=","))
+      badIndex <- which(nchar(parameterCd) != 5 | is.na(suppressWarnings(as.numeric(parameterCd))))
+
+      stop("The following pCodes appear mistyped:",paste(parameterCd[badIndex],collapse=","))
+    } else {
+      parameterCdCheck <- readNWISpCode(parameterCd)
     }
+    
   }
   
   multipleSites <- length(siteNumber) > 1
@@ -203,12 +199,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
         }
          
     )
-# This was waaay to slow:  
-#   if(url.exists(url)){
-#     return(url)
-#   } else {
-#     stop("The following url doesn't seem to exist:\n",url)    
-#   }  
+
   return(url)
 }
 
