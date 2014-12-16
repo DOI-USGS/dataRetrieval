@@ -287,6 +287,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
 #' data <- readNWISgwl(siteNumber, '','')
 #' sites <- c("434400121275801", "375907091432201")
 #' data2 <- readNWISgwl(sites, '','')
+#' data3 <- readNWISgwl("420125073193001", '','')
 readNWISgwl <- function (siteNumbers,startDate="",endDate=""){  
   
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="wml1")
