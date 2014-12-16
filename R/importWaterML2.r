@@ -25,7 +25,7 @@
 #'      "featureID=MD-BC-BC-05",
 #'      "offering=RAW",
 #'      "observedProperty=WATER",sep="&")
-#' \dontrun{
+#' 
 #' dataReturned1 <- importWaterML2(URL)
 #' dataReturn2 <- importWaterML2(URL2, TRUE)
 #' URLmulti <-  paste(baseURL,
@@ -39,26 +39,16 @@
 #' fileName <- "WaterML2Example.xml"
 #' fullPath <- file.path(filePath, fileName)
 #' UserData <- importWaterML2(fullPath)
-#' }
+#' 
 importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
   
   if(file.exists(obs_url)){
-    returnedDoc <- obs_url
+    rawData <- obs_url
   } else {
-    h <- basicHeaderGatherer()
-    
-    possibleError = tryCatch({
-      
-      returnedDoc <- getURL(obs_url, headerfunction = h$update) 
-      
-    }, warning = function(w) {
-      warning(w, "with url:", obs_url)
-    }, error = function(e) {
-      stop(e, "with url:", obs_url)
-    })
+    rawData <- getWebServiceData(obs_url)
   }
   
-  doc <- xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
+  doc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
   
   if(tz != ""){
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
@@ -90,10 +80,10 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
     xp <- xpathApply(chunk, "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP", 
                      xpathSApply, ".//*[not(*)]", 
                      function(x) setNames(ifelse(nzchar(xmlValue(x)), 
-                                                 xmlValue(x), 
-                                                    ifelse("qualifier" == xmlName(x),
-                                                           xpathSApply(x,"./@xlink:title",namespaces = ns),"")), #originally I had the "" as xmlAttr(x) 
-                                                            xmlName(x)), 
+                                       xmlValue(x), 
+                                          ifelse("qualifier" == xmlName(x),
+                                                xpathSApply(x,"./@xlink:title",namespaces = ns),"")), #originally I had the "" as xmlAttr(x) 
+                                                    xmlName(x)), 
                      namespaces = chunkNS)
   
     if(length(xpathApply(doc, 
