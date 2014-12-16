@@ -2,6 +2,7 @@ dataRetrieval 2.0.2
 ===========
 * Moved data files (parameterCdFile and pCodeToName) to hidden sysdata.rda
 * Improved error handling.
+* Fixed WaterML2 bug.
 
 dataRetrieval 2.0.1
 ===========
