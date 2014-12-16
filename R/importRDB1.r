@@ -50,6 +50,7 @@
 #' obs_url <- constructNWISURL(siteNumber,property,
 #'          startDate,endDate,"dv",format="tsv")
 #' data <- importRDB1(obs_url)
+#' \dontrun{
 #' urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),
 #'          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
 #' multiData <- importRDB1(urlMultiPcodes)
@@ -61,10 +62,12 @@
 #'          "2010-11-03","","qw",format="rdb") 
 #' qwData <- importRDB1(qwURL, qw=TRUE, tz="America/Chicago")
 #' iceSite <- '04024430'
-#' start <- "2013-11-09"
-#' end <- "2013-11-28"
+#' start <- "2014-11-09"
+#' end <- "2014-11-28"
 #' urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
-#' 
+#' ice <- importRDB1(urlIce)
+#' iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
+#' }
 #' # User file:
 #' filePath <- system.file("extdata", package="dataRetrieval")
 #' fileName <- "RDB1Example.txt"
@@ -81,181 +84,159 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
                           "America/Phoenix","America/Metlakatla"))
   }
   
+
   if(file.exists(obs_url)){
     doc <- obs_url
-    headerInfo <- setNames("200", "status")
   } else {
-    
-    # 400 bad site id
-    # 404 outside date range, wrong pcode
-    # 200 cool
-    possibleError = tryCatch({
-      h <- basicHeaderGatherer()
-      doc <- getURL(obs_url, headerfunction = h$update)
-      
-    }, warning = function(w) {
-      warning(w, "with url:", obs_url)
-    }, error = function(e) {
-      stop(e, "with url:", obs_url)
-    })
-    
-    headerInfo <- h$value()
+    rawData <- getWebServiceData(obs_url)
+    doc <- textConnection(rawData)
   }
   
+  fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
+  pndIndx<-regexpr("^#", fileVecChar)
+  hdr <- fileVecChar[pndIndx > 0L]
   
-  if (file.exists(obs_url) | headerInfo['status'] == "200"){
+  tmp <- read.delim(  
+    doc, 
+    header = TRUE, 
+    quote="\"", 
+    dec=".", 
+    sep='\t',
+    colClasses=c('character'),
+    fill = TRUE, 
+    comment.char="#")
   
-    fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
-    pndIndx<-regexpr("^#", fileVecChar)
-    hdr <- fileVecChar[pndIndx > 0L]
+  dataType <- tmp[1,]
+  data <- tmp[-1,]
+  
+  if(convertType){
     
-    if(!file.exists(obs_url)){
-      doc <- textConnection(doc)
+    #This will break if the 2nd (or greater) site has more columns than the first
+    #Therefore, using RDB is not recommended for multi-site queries.
+    #This correction will work if each site has the same number of columns
+    multiSiteCorrections <- -which(as.logical(apply(data[,1:2], 1, FUN=function(x) all(x %in% as.character(dataType[,1:2])))))
+    
+    if(length(multiSiteCorrections) > 0){
+      data <- data[multiSiteCorrections,]
+      
+      findRowsWithHeaderInfo <- as.integer(apply(data[,1:2], 1, FUN = function(x) if(x[1] == names(data)[1] & x[2] == names(data)[2]) 1 else 0))
+      findRowsWithHeaderInfo <- which(findRowsWithHeaderInfo == 0)
+      data <- data[findRowsWithHeaderInfo,]
     }
     
-    tmp <- read.delim(  
-      doc, 
-      header = TRUE, 
-      quote="\"", 
-      dec=".", 
-      sep='\t',
-      colClasses=c('character'),
-      fill = TRUE, 
-      comment.char="#")
+    offsetLibrary <- setNames(c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
+                                c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
     
-    dataType <- tmp[1,]
-    data <- tmp[-1,]
+    # The suppressed warning occurs when there is text (such as ice) in the numeric column:
+    data[,grep('n$', dataType)] <- suppressWarnings(sapply(data[,grep('n$', dataType)], function(x) as.numeric(x)))
     
-    if(convertType){
-      
-      #This will break if the 2nd (or greater) site has more columns than the first
-      #Therefore, using RDB is not recommended for multi-site queries.
-      #This correction will work if each site has the same number of columns
-      multiSiteCorrections <- -which(as.logical(apply(data[,1:2], 1, FUN=function(x) all(x %in% as.character(dataType[,1:2])))))
-      
-      if(length(multiSiteCorrections) > 0){
-        data <- data[multiSiteCorrections,]
+    numberColumns <- grep("_va",names(data))    
+    data[,numberColumns] <- sapply(data[,numberColumns],as.numeric)
+    
+    intColumns <- grep("_nu",names(data))
+    
+    if("current_rating_nu" %in% names(data)){
+      intColumns <- intColumns[!("current_rating_nu" %in% names(data)[intColumns])]
+      data$current_rating_nu <- gsub(" ", "", data$current_rating_nu)
+    }
+    data[,intColumns] <- sapply(data[,intColumns],as.integer)
+    
+    if(length(grep('d$', dataType)) > 0){
+      if (asDateTime & !qw){
         
-        findRowsWithHeaderInfo <- as.integer(apply(data[,1:2], 1, FUN = function(x) if(x[1] == names(data)[1] & x[2] == names(data)[2]) 1 else 0))
-        findRowsWithHeaderInfo <- which(findRowsWithHeaderInfo == 0)
-        data <- data[findRowsWithHeaderInfo,]
-      }
-      
-      offsetLibrary <- setNames(c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
-                                  c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
-      
-      # The suppressed warning occurs when there is text (such as ice) in the numeric coluym
-      data[,grep('n$', dataType)] <- suppressWarnings(sapply(data[,grep('n$', dataType)], function(x) as.numeric(x)))
-      
-      numberColumns <- grep("_va",names(data))    
-      data[,numberColumns] <- sapply(data[,numberColumns],as.numeric)
-      
-      intColumns <- grep("_nu",names(data))
-      
-      if("current_rating_nu" %in% names(data)){
-        intColumns <- intColumns[!("current_rating_nu" %in% names(data)[intColumns])]
-        data$current_rating_nu <- gsub(" ", "", data$current_rating_nu)
-      }
-      data[,intColumns] <- sapply(data[,intColumns],as.integer)
-      
-      if(length(grep('d$', dataType)) > 0){
-        if (asDateTime & !qw){
-          
-          if("tz_cd" %in% names(data)){
-            offset <- offsetLibrary[data$tz_cd]
-          } else {
-            offset <- 0
-          }
-          offset[is.na(offset)] <- 0
-          
-          data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = "UTC")
-          data[,regexpr('d$', dataType) > 0] <- data[,regexpr('d$', dataType) > 0] + offset*60*60
-          data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0])
-          
-          if(tz != ""){
-            attr(data[,regexpr('d$', dataType) > 0], "tzone") <- tz
-          } else {
-            attr(data[,regexpr('d$', dataType) > 0], "tzone") <- "UTC"
-          }
-         
-        } else if (qw){
-          
-          if("sample_start_time_datum_cd" %in% names(data)){
-            timeZoneStartOffset <- offsetLibrary[data$sample_start_time_datum_cd]
-            timeZoneStartOffset[is.na(timeZoneStartOffset)] <- 0
-          } else {
-            timeZoneStartOffset <- 0
-          }
-          
-          if("sample_end_time_datum_cd" %in% names(data)){
-            timeZoneEndOffset <- offsetLibrary[data$sample_end_time_datum_cd]
-            timeZoneEndOffset[is.na(timeZoneEndOffset)] <- 0
-            composite <- TRUE
-          } else {
-            composite <- FALSE
-            if(any(data$sample_end_dt != "") & any(data$sample_end_dm != "")){
-              if(which(data$sample_end_dt != "") == which(data$sample_end_dm != "")){
-                composite <- TRUE
-              }
-            }
-            timeZoneEndOffset <- 0
-          }
-          
-          if("sample_dt" %in% names(data)){
-            if(any(data$sample_dt != "")){
-              suppressWarnings(data$sample_dt <- as.Date(parse_date_time(data$sample_dt, c("Ymd", "mdY"))))
-            }
-          }
-          
-          if("sample_end_dt" %in% names(data)){
-            if(any(data$sample_end_dt != "")){
-              suppressWarnings(data$sample_end_dt <- as.Date(parse_date_time(data$sample_end_dt, c("Ymd", "mdY"))))
-            }        
-          }
-          
-          data$startDateTime <- with(data, as.POSIXct(paste(sample_dt, sample_tm),format="%Y-%m-%d %H:%M", tz = "UTC"))
-          data$startDateTime <- data$startDateTime + timeZoneStartOffset*60*60
-          data$startDateTime <- as.POSIXct(data$startDateTime)
-          
-          if(tz != ""){
-            attr(data$startDateTime, "tzone") <- tz
-          } else {
-            attr(data$startDateTime, "tzone") <- "UTC"
-          }
-          
-          if(composite){
-            data$endDateTime <- with(data, as.POSIXct(paste(sample_end_dt, sample_end_tm),format="%Y-%m-%d %H:%M", tz = "UTC"))
-            data$endDateTime <- data$endDateTime + timeZoneEndOffset*60*60
-            data$endDateTime <- as.POSIXct(data$endDateTime)
-            
-            if(tz != ""){
-              attr(data$endDateTime, "tzone") <- tz
-            } else {
-              attr(data$endDateTime, "tzone") <- "UTC"
-            }
-          }
-          
+        if("tz_cd" %in% names(data)){
+          offset <- offsetLibrary[data$tz_cd]
         } else {
-          for (i in grep('d$', dataType)){
-            if (all(data[,i] != "")){
-              data[,i] <- as.character(data[,i])
+          offset <- 0
+        }
+        offset[is.na(offset)] <- 0
+        
+        data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = "UTC")
+        data[,regexpr('d$', dataType) > 0] <- data[,regexpr('d$', dataType) > 0] + offset*60*60
+        data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0])
+        
+        if(tz != ""){
+          attr(data[,regexpr('d$', dataType) > 0], "tzone") <- tz
+        } else {
+          attr(data[,regexpr('d$', dataType) > 0], "tzone") <- "UTC"
+        }
+       
+      } else if (qw){
+        
+        if("sample_start_time_datum_cd" %in% names(data)){
+          timeZoneStartOffset <- offsetLibrary[data$sample_start_time_datum_cd]
+          timeZoneStartOffset[is.na(timeZoneStartOffset)] <- 0
+        } else {
+          timeZoneStartOffset <- 0
+        }
+        
+        if("sample_end_time_datum_cd" %in% names(data)){
+          timeZoneEndOffset <- offsetLibrary[data$sample_end_time_datum_cd]
+          timeZoneEndOffset[is.na(timeZoneEndOffset)] <- 0
+          composite <- TRUE
+        } else {
+          composite <- FALSE
+          if(any(data$sample_end_dt != "") & any(data$sample_end_dm != "")){
+            if(which(data$sample_end_dt != "") == which(data$sample_end_dm != "")){
+              composite <- TRUE
             }
+          }
+          timeZoneEndOffset <- 0
+        }
+        
+        if("sample_dt" %in% names(data)){
+          if(any(data$sample_dt != "")){
+            suppressWarnings(data$sample_dt <- as.Date(parse_date_time(data$sample_dt, c("Ymd", "mdY"))))
+          }
+        }
+        
+        if("sample_end_dt" %in% names(data)){
+          if(any(data$sample_end_dt != "")){
+            suppressWarnings(data$sample_end_dt <- as.Date(parse_date_time(data$sample_end_dt, c("Ymd", "mdY"))))
+          }        
+        }
+        
+        data$startDateTime <- with(data, as.POSIXct(paste(sample_dt, sample_tm),format="%Y-%m-%d %H:%M", tz = "UTC"))
+        data$startDateTime <- data$startDateTime + timeZoneStartOffset*60*60
+        data$startDateTime <- as.POSIXct(data$startDateTime)
+        
+        if(tz != ""){
+          attr(data$startDateTime, "tzone") <- tz
+        } else {
+          attr(data$startDateTime, "tzone") <- "UTC"
+        }
+        
+        if(composite){
+          data$endDateTime <- with(data, as.POSIXct(paste(sample_end_dt, sample_end_tm),format="%Y-%m-%d %H:%M", tz = "UTC"))
+          data$endDateTime <- data$endDateTime + timeZoneEndOffset*60*60
+          data$endDateTime <- as.POSIXct(data$endDateTime)
+          
+          if(tz != ""){
+            attr(data$endDateTime, "tzone") <- tz
+          } else {
+            attr(data$endDateTime, "tzone") <- "UTC"
+          }
+        }
+        
+      } else {
+        for (i in grep('d$', dataType)){
+          if (all(data[,i] != "")){
+            data[,i] <- as.character(data[,i])
           }
         }
       }
-    
-      row.names(data) <- NULL
     }
-    
-    names(data) <- make.names(names(data))
-    
-    comment(data) <- hdr
-    attr(data, "url") <- obs_url
-    attr(data, "queryTime") <- Sys.time()
   
-    return(data)
-  } else {
-    stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", obs_url)
+    row.names(data) <- NULL
   }
+  
+  names(data) <- make.names(names(data))
+  
+  comment(data) <- hdr
+  attr(data, "url") <- obs_url
+  attr(data, "queryTime") <- Sys.time()
+
+  return(data)
+  
 
 }

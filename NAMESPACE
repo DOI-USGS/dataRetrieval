@@ -2,6 +2,7 @@
 
 export(constructNWISURL)
 export(constructWQPURL)
+export(getWebServiceData)
 export(importRDB1)
 export(importWQP)
 export(importWaterML1)

@@ -62,6 +62,7 @@ property <- "00060"
 obs_url <- constructNWISURL(siteNumber,property,
          startDate,endDate,"dv",format="tsv")
 data <- importRDB1(obs_url)
+\dontrun{
 urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),
          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
 multiData <- importRDB1(urlMultiPcodes)
@@ -73,10 +74,12 @@ qwURL <- constructNWISURL(c('04024430','04024000'),
          "2010-11-03","","qw",format="rdb")
 qwData <- importRDB1(qwURL, qw=TRUE, tz="America/Chicago")
 iceSite <- '04024430'
-start <- "2013-11-09"
-end <- "2013-11-28"
+start <- "2014-11-09"
+end <- "2014-11-28"
 urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
-
+ice <- importRDB1(urlIce)
+iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
+}
 # User file:
 filePath <- system.file("extdata", package="dataRetrieval")
 fileName <- "RDB1Example.txt"

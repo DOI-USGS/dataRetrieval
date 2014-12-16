@@ -75,49 +75,35 @@ whatWQPsites <- function(...){
                urlCall,
                "&mimeType=tsv",sep = "")
   
-  possibleError <- tryCatch({
-    h <- basicHeaderGatherer()
-    doc <- getURL(urlCall, headerfunction = h$update)
+  doc <- getWebServiceData(urlCall)
+  headerInfo <- attr(doc, "headerInfo")
     
-  }, warning = function(w) {
-    warning(w, "with url:", urlCall )
-  }, error = function(e) {
-    stop(e, "with url:", urlCall)
-  })
+  numToBeReturned <- as.numeric(headerInfo["Total-Site-Count"])
   
-  headerInfo <- h$value()
-  
-  if(headerInfo['status'] == "200"){
+  if (!is.na(numToBeReturned) & numToBeReturned != 0){
+ 
+    retval <- read.delim(textConnection(doc), header = TRUE, quote="\"", 
+                         dec=".", sep='\t', 
+                         colClasses=c('character'), 
+                         fill = TRUE)    
+    actualNumReturned <- nrow(retval)
     
-    numToBeReturned <- as.numeric(h$value()["Total-Site-Count"])
+    if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sites were expected, ", actualNumReturned, " were returned")
     
-    if (!is.na(numToBeReturned) & numToBeReturned != 0){
-   
-      retval <- read.delim(textConnection(doc), header = TRUE, quote="\"", 
-                           dec=".", sep='\t', 
-                           colClasses=c('character'), 
-                           fill = TRUE)    
-      actualNumReturned <- nrow(retval)
-      
-      if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sites were expected, ", actualNumReturned, " were returned")
-      
-      if("LatitudeMeasure" %in% names(retval)){
-        retval$LatitudeMeasure <- as.numeric(retval$LatitudeMeasure)
-      }
-      
-      if("LongitudeMeasure" %in% names(retval)){
-        retval$LongitudeMeasure <- as.numeric(retval$LongitudeMeasure)
-      }
-      
-      retval$queryTime <- Sys.time()
-      
-      return(retval)
-      
-    } else {
-      warning(paste("No data to retrieve from",urlCall))
-      return(NA)
+    if("LatitudeMeasure" %in% names(retval)){
+      retval$LatitudeMeasure <- as.numeric(retval$LatitudeMeasure)
     }
+    
+    if("LongitudeMeasure" %in% names(retval)){
+      retval$LongitudeMeasure <- as.numeric(retval$LongitudeMeasure)
+    }
+    
+    retval$queryTime <- Sys.time()
+    
+    return(retval)
+    
   } else {
-    stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", urlCall)
+    return(NA)
   }
+
 }

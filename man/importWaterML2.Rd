@@ -33,7 +33,7 @@ URL2 <- paste("http://cida.usgs.gov/noreast-sos/simple?request=GetObservation",
      "featureID=MD-BC-BC-05",
      "offering=RAW",
      "observedProperty=WATER",sep="&")
-\dontrun{
+
 dataReturned1 <- importWaterML2(URL)
 dataReturn2 <- importWaterML2(URL2, TRUE)
 URLmulti <-  paste(baseURL,
@@ -47,6 +47,5 @@ filePath <- system.file("extdata", package="dataRetrieval")
 fileName <- "WaterML2Example.xml"
 fullPath <- file.path(filePath, fileName)
 UserData <- importWaterML2(fullPath)
-}
 }
 

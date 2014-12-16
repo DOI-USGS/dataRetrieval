@@ -3,10 +3,10 @@
 \alias{importWQP}
 \title{Basic Water Quality Portal Data parser}
 \usage{
-importWQP(url, zip = FALSE, tz = "")
+importWQP(obs_url, zip = FALSE, tz = "")
 }
 \arguments{
-\item{url}{character URL to Water Quality Portal#'}
+\item{obs_url}{character URL to Water Quality Portal#'}
 
 \item{zip}{logical used to request the data in a zip format (TRUE)}
 
@@ -26,8 +26,9 @@ Imports data from the Water Quality Portal based on a specified url.
 # These examples require an internet connection to run
 
 ## Examples take longer than 5 seconds:
-rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
 \dontrun{
+rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
+
 rawSample <- importWQP(rawSampleURL)
 url2 <- paste0(rawSampleURL,"&zip=yes")
 rawSample2 <- importWQP(url2, TRUE)
