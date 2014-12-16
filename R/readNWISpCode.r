@@ -45,7 +45,6 @@ readNWISpCode <- function(parameterCd){
         newData <- importRDB1(url,asDateTime = FALSE)
       } else {
         
-        #TODO: add else...
         fullURL <- "http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units"
         fullPcodeDownload <- importRDB1(fullURL)
         newData <- fullPcodeDownload[fullPcodeDownload$parameter_cd %in% parameterCd,]

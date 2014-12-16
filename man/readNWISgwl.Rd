@@ -20,26 +20,21 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
-dateTime \tab character \tab The date and time of the value as a character \cr
-dateTimeAccuracyCd \tab character \tab Information on the date/time accuracy \cr
-censorCode \tab character \tab Censoring information \cr
-sourceCode \tab character \tab Information on source of the data \cr
-code \tab character \tab Any codes that qualify the corresponding value\cr
-value \tab numeric \tab The numeric value for the parameter \cr
+site_tp_cd \tab character \tab Site type code \cr
+lev_dt \tab Date \tab Date level measured\cr
+lev_tm \tab character \tab Time level measured \cr
+lev_tz_cd \tab character \tab Time datum \cr
+lev_va \tab numeric \tab Water level value in feet below land surface\cr
+sl_lev_va \tab numeric \tab Water level value in feet above specific vertical datum \cr
+lev_status_cd \tab character \tab The status of the site at the time the water level was measured \cr
+lev_agency_cd \tab character \tab The agency code of the person measuring the water level \cr
 }
-Note that code and value are repeated for the parameters requested. The names are of the form
-X_D_P_S, where X is literal,
-D is an option description of the parameter,
-P is the parameter code,
-and S is the statistic code (if applicable).
 
 There are also several useful attributes attached to the data frame:
 \tabular{lll}{
 Name \tab Type \tab Description \cr
 url \tab character \tab The url used to generate the data \cr
 siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
-variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
-statisticInfo \tab data.frame \tab A data frame containing information on the requested statistics on the data \cr
 queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 }
@@ -58,6 +53,6 @@ data2 <- readNWISgwl(sites, '','')
 data3 <- readNWISgwl("420125073193001", '','')
 }
 \seealso{
-\code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
+\code{\link{importRDB1}}
 }
 

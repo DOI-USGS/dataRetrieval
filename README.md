@@ -59,6 +59,13 @@ To install the dataRetrieval package, you must be using R 3.0 or greater and run
 
 ##Version updates
 ---------------
+###dataRetrieval 2.1.0
+* Improved error handling
+* Moved parameterCdFile and pcodeToName data to sysdata.rda to assure functions using that data are available in other packages.
+* Fixed WaterML2 qualifier bug.
+
+
+
 ###dataRetrieval 2.0.1
 * Improved help files and vignette documentation
 * Added siteInfo and variableInfo attributes to returned data frames

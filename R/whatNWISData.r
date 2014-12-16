@@ -73,17 +73,17 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
   }
   
   if(!("all" %in% parameterCd)){
-    parameterCdCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
-    
-    if(parameterCdCheck){
+    if(any(!is.na(parameterCd))){
+      pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
       
-      pCodeInfo <- readNWISpCode(parameterCd)
-      
-      if(nrow(pCodeInfo) != length(parameterCd)){
-        badPcodes <- parameterCd[!(parameterCd %in% pCodeInfo$parameter_cd)]
-        warning("The following parameterCds seem mistyped:",paste(badPcodes,collapse=","), "and will be ignored.")
-        parameterCd <- unique(pCodeInfo$parameter_cd)
+      if(!pcodeCheck){
+        badIndex <- which(nchar(parameterCd) != 5 | is.na(suppressWarnings(as.numeric(parameterCd))))
+        
+        stop("The following pCodes appear mistyped:",paste(parameterCd[badIndex],collapse=","))
+      } else {
+        parameterCdCheck <- readNWISpCode(parameterCd)
       }
+      
     }
   }
   

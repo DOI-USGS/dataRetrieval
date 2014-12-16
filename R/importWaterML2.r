@@ -77,13 +77,22 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
     chunk <- xmlRoot(chunk)
     chunkNS <- xmlNamespaceDefinitions(chunk, simplify = TRUE)
     
+#     xp <- xpathApply(chunk, "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP", 
+#                      xpathSApply, ".//*[not(*)]", 
+#                      function(x) setNames(ifelse(nzchar(xmlValue(x)), 
+#                                        xmlValue(x), 
+#                                           ifelse("qualifier" == xmlName(x),
+#                                                 xpathSApply(x,"./@xlink:title",namespaces = ns),"")), #originally I had the "" as xmlAttr(x) 
+#                                                     xmlName(x)), 
+#                      namespaces = chunkNS)
+    
     xp <- xpathApply(chunk, "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP", 
                      xpathSApply, ".//*[not(*)]", 
                      function(x) setNames(ifelse(nzchar(xmlValue(x)), 
-                                       xmlValue(x), 
-                                          ifelse("qualifier" == xmlName(x),
-                                                xpathSApply(x,"./@xlink:title",namespaces = ns),"")), #originally I had the "" as xmlAttr(x) 
-                                                    xmlName(x)), 
+                                                 xmlValue(x), 
+                                                 ifelse("qualifier" == xmlName(x),
+                                                        xpathSApply(x,"./@xlink:title",namespaces = ns),"")), #originally I had the "" as xmlAttr(x) 
+                                          xmlName(x,full=TRUE)), 
                      namespaces = chunkNS)
   
     if(length(xpathApply(doc, 
@@ -91,9 +100,12 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
                   xmlValue, namespaces = ns)) != 0){
       xp <- xp[-1]
     }
-      
+
+    
     DF2 <- do.call(rbind.fill.matrix, lapply(xp, t))
     DF2 <- as.data.frame(DF2,stringsAsFactors=FALSE)
+
+    names(DF2)[grep("wml2",names(DF2))] <- sub("wml2:","",names(DF2)[grep("wml2",names(DF2))])
     
     if(asDateTime){
     
@@ -113,6 +125,8 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
     }
   
     DF2$value <- as.numeric(DF2$value)
+    
+#########################################
     # Very specific to USGS:
     defaultQualifier <- as.character(xpathApply(chunk, "//wml2:defaultPointMetadata/wml2:DefaultTVPMeasurementMetadata/wml2:qualifier/@xlink:title",namespaces = chunkNS))
     
@@ -120,17 +134,22 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
       defaultQualifier <- "NA"
     }
     
-    if("qualifier" %in% names(DF2)){
-      DF2$qualifier <- ifelse(defaultQualifier != DF2$qualifier,DF2$qualifier,defaultQualifier)
+    if("swe:value" %in% names(DF2)){
+      isQual <- as.character(xpathApply(chunk, 
+                                        "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP/wml2:metadata/wml2:TVPMeasurementMetadata/wml2:qualifier/@xlink:title",
+                                        namespaces = chunkNS))
+      DF2$qualifier <- ifelse(defaultQualifier != isQual,isQual,defaultQualifier)
+      DF2$`swe:value` <- NULL
     } else {
       DF2$qualifier <- rep(defaultQualifier,nrow(DF2))
     }
     
     
-    DF2$qualifier <- ifelse("Provisional data subject to revision." == DF2$qualifier, "P",
-                               ifelse("Approved for publication. Processing and review completed." == DF2$qualifier, "A", DF2$qualifier))
+#     DF2$qualifier <- ifelse("Provisional data subject to revision." == DF2$qualifier, "P",
+#                                ifelse("Approved for publication. Processing and review completed." == DF2$qualifier, "A", DF2$qualifier))
     
-  
+#########################################
+
     id <- as.character(xpathApply(chunk, "//gml:identifier", xmlValue, namespaces = chunkNS))
     DF2$identifier <- rep(id, nrow(DF2))
     
