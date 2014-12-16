@@ -40,53 +40,38 @@ whatNWISsites <- function(...){
   baseURL <- "http://waterservices.usgs.gov/nwis/site/?format=mapper&"
   urlCall <- paste(baseURL,
                    urlCall,sep = "")
-  
-  h <- basicHeaderGatherer()
-  
-  possibleError <- tryCatch({
-    h <- basicHeaderGatherer()
-    returnedDoc <- getURI(urlCall, headerfunction = h$update)      
-  }, warning = function(w) {
-    warning(w, "with url:", urlCall)
-  }, error = function(e) {
-    stop(e, "with url:", urlCall)
-  }) 
-  
-  headerInfo <- h$value()
 
-  if (headerInfo['status'] == "200"){
-  
-    doc <- xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
-    doc <- xmlRoot(doc)
-    numChunks <- xmlSize(doc)
-    for(i in 1:numChunks){
-      chunk <- doc[[1]]
-      site_no <- as.character(xpathApply(chunk, "site/@sno"))
-      station_nm <- as.character(xpathApply(chunk, "site/@sna"))
-      site_tp_cd <- as.character(xpathApply(chunk, "site/@cat"))
-      dec_lat_va <- as.numeric(xpathApply(chunk, "site/@lat"))
-      dec_long_va <- as.numeric(xpathApply(chunk, "site/@lng"))
-      agency_cd <- as.character(xpathApply(chunk, "site/@agc"))
-      
-      df <- data.frame(agency_cd, site_no, station_nm, site_tp_cd, 
-                       dec_lat_va, dec_long_va, stringsAsFactors=FALSE) 
-      
-      if(1==i){
-        retval <- df
-      } else {
-        retval <- rbind(retval, df)
-      }
+  rawData <- getWebServiceData(urlCall)
+
+
+  doc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
+  doc <- xmlRoot(doc)
+  numChunks <- xmlSize(doc)
+  for(i in 1:numChunks){
+    chunk <- doc[[1]]
+    site_no <- as.character(xpathApply(chunk, "site/@sno"))
+    station_nm <- as.character(xpathApply(chunk, "site/@sna"))
+    site_tp_cd <- as.character(xpathApply(chunk, "site/@cat"))
+    dec_lat_va <- as.numeric(xpathApply(chunk, "site/@lat"))
+    dec_long_va <- as.numeric(xpathApply(chunk, "site/@lng"))
+    agency_cd <- as.character(xpathApply(chunk, "site/@agc"))
+    
+    df <- data.frame(agency_cd, site_no, station_nm, site_tp_cd, 
+                     dec_lat_va, dec_long_va, stringsAsFactors=FALSE) 
+    
+    if(1==i){
+      retval <- df
+    } else {
+      retval <- rbind(retval, df)
     }
-    
-    retval <- retval[!duplicated(retval),]
-    
-    retval$queryTime <- Sys.time()
-    attr(retval, "url") <- urlCall
-    attr(retval, "queryTime") <- Sys.time()
-    
-    return(retval)
-  } else {
-    stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", urlCall)
   }
+    
+  retval <- retval[!duplicated(retval),]
+  
+  retval$queryTime <- Sys.time()
+  attr(retval, "url") <- urlCall
+  attr(retval, "queryTime") <- Sys.time()
+  
+  return(retval)
   
 }
