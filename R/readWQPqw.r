@@ -121,10 +121,12 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate=""){
   
   if(pcodeCheck){
     siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse=";"),
-                             pCode=paste0(parameterCd,collapse=";"), startDateLo=startDate, startDateHi=endDate)
+                             pCode=paste0(parameterCd,collapse=";"), 
+                             startDateLo=startDate, startDateHi=endDate)
   } else {
     siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse=";"), 
-                             characteristicName=paste0(parameterCd,collapse=";"), startDateLo=startDate, startDateHi=endDate)
+                             characteristicName=paste0(parameterCd,collapse=";"), 
+                             startDateLo=startDate, startDateHi=endDate)
   }
     
   siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
@@ -147,7 +149,8 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate=""){
   
   if(any(variableInfo$parameterCd != "")){
     pCodeToName <- pCodeToName
-    varExtras <- pCodeToName[pCodeToName$parm_cd %in% unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
+    varExtras <- pCodeToName[pCodeToName$parm_cd %in% 
+                               unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
     names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
     variableInfo <- merge(variableInfo, varExtras, by="parameterCd")
   }

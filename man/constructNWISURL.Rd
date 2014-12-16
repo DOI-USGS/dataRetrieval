@@ -44,8 +44,6 @@ siteNumber <- '01594440'
 startDate <- '1985-01-01'
 endDate <- ''
 pCode <- c("00060","00010")
-\donttest{
-# Not running for time considerations
 url_daily <- constructNWISURL(siteNumber,pCode,
            startDate,endDate,'dv',statCd=c("00003","00001"))
 url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
@@ -58,7 +56,6 @@ url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',
 url_rating <- constructNWISURL(siteNumber,service="rating",ratingType="base")
 url_peak <- constructNWISURL(siteNumber, service="peak")
 url_meas <- constructNWISURL(siteNumber, service="meas")
-           }
 }
 \keyword{USGS}
 \keyword{data}
