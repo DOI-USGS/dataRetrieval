@@ -358,13 +358,14 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     siteInfo <- cbind(siteInfo, t(propertyValues))            
     
     names(extraVariableData) <- make.unique(names(extraVariableData))
-    variableInfo <- data.frame(parameterCd=extraVariableData$variableCode$text,
+    
+    variableInfo <- c(parameterCd=extraVariableData$variableCode$text,
                                parameter_nm=extraVariableData$variableName,
                                parameter_desc=extraVariableData$variableDescription,
                                valueType=extraVariableData$valueType,
-                               param_units=extraVariableData$unit$unitCode,
-                               noDataValue=NA, #as.numeric(extraVariableData$noDataValue), since it's already converted
-                               stringsAsFactors=FALSE)
+                               param_units=extraVariableData$unit$unitCode)
+    
+    variableInfo <- data.frame(t(variableInfo), stringsAsFactors=FALSE)
     
     statInfo <- data.frame(statisticName=statName,
                            statisticCd=statCd,
@@ -387,7 +388,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     }
 
     ######################
-
+    
     attList[[uniqueName]] <- list(extraSiteData, extraVariableData)
 
     
@@ -425,6 +426,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     mergedDF <- data.frame()
   }
 
+  variableInformation$noDataValue <- rep(NA, nrow(variableInformation))
   
   row.names(mergedDF) <- NULL
   attr(mergedDF, "url") <- obs_url
