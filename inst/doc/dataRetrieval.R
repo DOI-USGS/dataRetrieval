@@ -18,6 +18,7 @@ bold.colHeaders <- function(x) {
   returnX <- paste("\\multicolumn{1}{c}{\\textbf{\\textsf{", x, "}}}", sep = "")
 }
 addSpace <- function(x) ifelse(x != "1", "[5pt]","")
+library(dataRetrieval)
 
 ## ----workflow, echo=TRUE,eval=FALSE-----------------------
 #  library(dataRetrieval)
@@ -55,11 +56,6 @@ print(xtable(data.df,
        sanitize.rownames.function = addSpace
       )
 
-
-## ----tableParameterCodesDataRetrieval, echo=TRUE, eval=TRUE----
-library(dataRetrieval)
-parameterCdFile <-  parameterCdFile
-names(parameterCdFile)
 
 ## ----tableStatCodes, echo=FALSE,results='asis'------------
 StatCode <- c('00001', '00002', '00003','00008')

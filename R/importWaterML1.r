@@ -87,28 +87,12 @@
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(file.exists(obs_url)){
-    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+    rawData <- obs_url
   } else {
-    doc = tryCatch({
-      h <- basicHeaderGatherer()
-      returnedDoc <- getURI(obs_url, headerfunction = h$update)
-      if(h$value()["Content-Type"] == "text/xml;charset=UTF-8"){
-        xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
-      } else {
-        message(paste("URL caused an error:", obs_url))
-        message("Content-Type=",h$value()["Content-Type"])
-        return(NA)
-      }   
-      
-    }, warning = function(w) {
-      message(paste("URL caused a warning:", obs_url))
-      message(w)
-    }, error = function(e) {
-      message(paste("URL does not seem to exist:", obs_url))
-      message(e)
-      return(NA)
-    }) 
+    rawData <- getWebServiceData(obs_url)
   }
+  
+  returnedDoc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
   
   if(tz != ""){
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
@@ -118,7 +102,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
                           "America/Phoenix","America/Metlakatla"))
   }
   
-  doc <- xmlRoot(doc)
+  doc <- xmlRoot(returnedDoc)
   ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  
   queryInfo <- xmlToList(xmlRoot(xmlDoc(doc[["queryInfo"]])))
   names(queryInfo) <- make.unique(names(queryInfo))
@@ -133,9 +117,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   
   if(0 == length(timeSeries)){
-    message("Returning an empty dataset")
     df <- data.frame()
     attr(df, "queryInfo") <- queryInfo
+    attr(df, "url") <- obs_url
     return(df)
   }
   
@@ -248,7 +232,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
             # YYYY-MM-DDTHH:MM:SS.000-XX:00 numChar=29
                         
             if(abs(max(numChar) - min(numChar)) != 0){
-              message("Mixed date types, not converted to POSIXct")
+              warning("Mixed date types, not converted to POSIXct")
             } else {
               numChar <- numChar[1]
               if(numChar == 4){
@@ -374,13 +358,14 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     siteInfo <- cbind(siteInfo, t(propertyValues))            
     
     names(extraVariableData) <- make.unique(names(extraVariableData))
-    variableInfo <- data.frame(parameterCd=extraVariableData$variableCode$text,
+    
+    variableInfo <- c(parameterCd=extraVariableData$variableCode$text,
                                parameter_nm=extraVariableData$variableName,
                                parameter_desc=extraVariableData$variableDescription,
                                valueType=extraVariableData$valueType,
-                               param_units=extraVariableData$unit$unitCode,
-                               noDataValue=NA, #as.numeric(extraVariableData$noDataValue), since it's already converted
-                               stringsAsFactors=FALSE)
+                               param_units=extraVariableData$unit$unitCode)
+    
+    variableInfo <- data.frame(t(variableInfo), stringsAsFactors=FALSE)
     
     statInfo <- data.frame(statisticName=statName,
                            statisticCd=statCd,
@@ -403,7 +388,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     }
 
     ######################
-
+    
     attList[[uniqueName]] <- list(extraSiteData, extraVariableData)
 
     
@@ -441,6 +426,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     mergedDF <- data.frame()
   }
 
+  variableInformation$noDataValue <- rep(NA, nrow(variableInformation))
   
   row.names(mergedDF) <- NULL
   attr(mergedDF, "url") <- obs_url

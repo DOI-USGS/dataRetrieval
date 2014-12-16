@@ -25,7 +25,7 @@
 #'      "featureID=MD-BC-BC-05",
 #'      "offering=RAW",
 #'      "observedProperty=WATER",sep="&")
-#' \dontrun{
+#' 
 #' dataReturned1 <- importWaterML2(URL)
 #' dataReturn2 <- importWaterML2(URL2, TRUE)
 #' URLmulti <-  paste(baseURL,
@@ -39,33 +39,16 @@
 #' fileName <- "WaterML2Example.xml"
 #' fullPath <- file.path(filePath, fileName)
 #' UserData <- importWaterML2(fullPath)
-#' }
+#' 
 importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
   
   if(file.exists(obs_url)){
-    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
+    rawData <- obs_url
   } else {
-    doc = tryCatch({
-      h <- basicHeaderGatherer()
-      returnedDoc <- getURL(obs_url, headerfunction = h$update)
-      if(h$value()["Content-Type"] == "text/xml;charset=UTF-8" | 
-           h$value()["Content-Type"] == "text/xml; subtype=gml/3.1.1;charset=UTF-8"){
-        xmlTreeParse(returnedDoc, getDTD = FALSE, useInternalNodes = TRUE)
-      } else {
-        message(paste("URL caused an error:", obs_url))
-        message("Content-Type=",h$value()["Content-Type"])
-        return(NA)
-      }   
-      
-    }, warning = function(w) {
-      message(paste("URL caused a warning:", obs_url))
-      message(w)
-    }, error = function(e) {
-      message(paste("URL does not seem to exist:", obs_url))
-      message(e)
-      return(NA)
-    })
+    rawData <- getWebServiceData(obs_url)
   }
+  
+  doc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
   
   if(tz != ""){
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
@@ -81,9 +64,11 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
   
   
   timeSeries <- xpathApply(doc, "//wml2:Collection", namespaces = ns)
-  
+
   if(0 == length(timeSeries)){
-    stop("No data to return for URL:", obs_url)
+    df <- data.frame()
+    attr(df, "url") <- obs_url
+    return(df)
   }
   
   for (i in 1:length(timeSeries)){
@@ -95,10 +80,10 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
     xp <- xpathApply(chunk, "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP", 
                      xpathSApply, ".//*[not(*)]", 
                      function(x) setNames(ifelse(nzchar(xmlValue(x)), 
-                                                 xmlValue(x), 
-                                                    ifelse("qualifier" == xmlName(x),
-                                                           xpathSApply(x,"./@xlink:title",namespaces = ns),"")), #originally I had the "" as xmlAttr(x) 
-                                                            xmlName(x)), 
+                                       xmlValue(x), 
+                                          ifelse("qualifier" == xmlName(x),
+                                                xpathSApply(x,"./@xlink:title",namespaces = ns),"")), #originally I had the "" as xmlAttr(x) 
+                                                    xmlName(x)), 
                      namespaces = chunkNS)
   
     if(length(xpathApply(doc, 

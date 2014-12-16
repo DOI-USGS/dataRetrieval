@@ -62,10 +62,10 @@ startDate <- "2014-10-10"
 endDate <- "2014-10-10"
 # These examples require an internet connection to run
 rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
-
+\dontrun{
 timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
          "2013-11-03","2013-11-03")
-firstSite <- timeZoneChange[timeZoneChange$site_no == '04024430',]
+}
 }
 \seealso{
 \code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}

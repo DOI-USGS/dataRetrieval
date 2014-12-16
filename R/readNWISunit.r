@@ -51,10 +51,10 @@
 #' endDate <- "2014-10-10"
 #' # These examples require an internet connection to run
 #' rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
-#' 
+#' \dontrun{
 #' timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
 #'          "2013-11-03","2013-11-03")
-#' firstSite <- timeZoneChange[timeZoneChange$site_no == '04024430',]
+#' }
 readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){  
   
   url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,"uv",format="xml")
@@ -287,6 +287,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
 #' data <- readNWISgwl(siteNumber, '','')
 #' sites <- c("434400121275801", "375907091432201")
 #' data2 <- readNWISgwl(sites, '','')
+#' data3 <- readNWISgwl("420125073193001", '','')
 readNWISgwl <- function (siteNumbers,startDate="",endDate=""){  
   
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="wml1")

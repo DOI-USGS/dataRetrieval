@@ -55,6 +55,7 @@ siteNumber <- "434400121275801"
 data <- readNWISgwl(siteNumber, '','')
 sites <- c("434400121275801", "375907091432201")
 data2 <- readNWISgwl(sites, '','')
+data3 <- readNWISgwl("420125073193001", '','')
 }
 \seealso{
 \code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}

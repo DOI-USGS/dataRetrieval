@@ -58,7 +58,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
       } else {
         badPcode <- parameterCd
       }
-      message("The following pCodes may be unavailable:",paste(badPcode,collapse=","))
+      warning("The following pCodes may be unavailable:",paste(badPcode,collapse=","))
     }
   }
   

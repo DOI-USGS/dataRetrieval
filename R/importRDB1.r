@@ -39,6 +39,7 @@
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' }
 #' @export
+#' @import RCurl
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -49,6 +50,7 @@
 #' obs_url <- constructNWISURL(siteNumber,property,
 #'          startDate,endDate,"dv",format="tsv")
 #' data <- importRDB1(obs_url)
+#' \dontrun{
 #' urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),
 #'          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
 #' multiData <- importRDB1(urlMultiPcodes)
@@ -60,10 +62,12 @@
 #'          "2010-11-03","","qw",format="rdb") 
 #' qwData <- importRDB1(qwURL, qw=TRUE, tz="America/Chicago")
 #' iceSite <- '04024430'
-#' start <- "2013-11-09"
-#' end <- "2013-11-28"
+#' start <- "2014-11-09"
+#' end <- "2014-11-28"
 #' urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
-#' 
+#' ice <- importRDB1(urlIce)
+#' iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
+#' }
 #' # User file:
 #' filePath <- system.file("extdata", package="dataRetrieval")
 #' fileName <- "RDB1Example.txt"
@@ -80,44 +84,17 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
                           "America/Phoenix","America/Metlakatla"))
   }
   
-  if(file.exists(obs_url)){
-    
-    doc <- obs_url
-    fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
-    pndIndx<-regexpr("^#", fileVecChar)
-    hdr <- fileVecChar[pndIndx > 0L]
-    
-  } else {
-    
-    # 400 bad site id
-    # 404 outside date range, wrong pcode
-    # 200 cool
-    
-    
-    retval = tryCatch({
-      h <- basicHeaderGatherer()
-      doc <- getURL(obs_url, headerfunction = h$update)
 
-      fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
-      pndIndx<-regexpr("^#", fileVecChar)
-      hdr <- fileVecChar[pndIndx > 0L]
-      
-      if(!(as.character(h$value()["Content-Type"]) == "text/plain;charset=UTF-8" | 
-           as.character(h$value()["Content-Type"]) == "text/plain")){
-        message(paste("URL caused an error:", obs_url))
-        message("Content-Type=",h$value()["Content-Type"])
-      }
-      doc <- textConnection(doc)
-      
-    }, warning = function(w) {
-      message(paste("URL caused a warning:", obs_url))
-      message(w)
-    }, error = function(e) {
-      message(paste("URL does not seem to exist:", obs_url))
-      message(e)
-      return(NA)
-    })
+  if(file.exists(obs_url)){
+    doc <- obs_url
+  } else {
+    rawData <- getWebServiceData(obs_url)
+    doc <- textConnection(rawData)
   }
+  
+  fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
+  pndIndx<-regexpr("^#", fileVecChar)
+  hdr <- fileVecChar[pndIndx > 0L]
   
   tmp <- read.delim(  
     doc, 
@@ -150,7 +127,7 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     offsetLibrary <- setNames(c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
                                 c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
     
-    # The suppressed warning occurs when there is text (such as ice) in the numeric coluym
+    # The suppressed warning occurs when there is text (such as ice) in the numeric column:
     data[,grep('n$', dataType)] <- suppressWarnings(sapply(data[,grep('n$', dataType)], function(x) as.numeric(x)))
     
     numberColumns <- grep("_va",names(data))    
@@ -258,7 +235,8 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
   comment(data) <- hdr
   attr(data, "url") <- obs_url
   attr(data, "queryTime") <- Sys.time()
-  
+
   return(data)
+  
 
 }

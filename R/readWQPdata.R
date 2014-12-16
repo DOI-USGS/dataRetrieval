@@ -116,7 +116,7 @@ readWQPdata <- function(...){
 
   retval <- importWQP(urlCall,FALSE)
   
-  if(!is.na(retval)){
+  if(!all(is.na(retval))){
     siteInfo <- whatWQPsites(...)
     
     siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
