@@ -55,6 +55,7 @@
 #' timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
 #'          "2013-11-03","2013-11-03")
 #' }
+#' 
 readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){  
   
   url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,"uv",format="xml")
@@ -66,8 +67,7 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 
 #' Reads peak flow data from NWISweb.
 #' 
-#' Reads peak flow from NWISweb. 
-#' Data is retrieved from \url{http://waterdata.usgs.gov/nwis}. 
+#' Reads peak flow from NWISweb. Data is retrieved from \url{http://waterdata.usgs.gov/nwis}. 
 #' 
 #' @param siteNumbers character USGS site number(or multiple sites).  This is usually an 8 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
@@ -100,6 +100,7 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
 #' }
+#' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
 #' @examples
 #' siteNumbers <- c('01594440','040851325')
@@ -153,6 +154,7 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate=""){
 #'
 #' @note Not all active USGS streamgages have traditional rating curves that
 #'relate flow to stage.
+#' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
 #' @examples
 #' siteNumber <- '01594440'
@@ -215,6 +217,7 @@ readNWISrating <- function (siteNumber,type="base"){
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
 #' }
+#' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
 #' @examples
 #' siteNumbers <- c('01594440','040851325')
@@ -271,11 +274,12 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
 #' url \tab character \tab The url used to generate the data \cr
-#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
+#' comment \tab character \tab Header comments from the RDB file \cr
+#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
 #' }
 #' 
-#' @seealso \code{\link{importRDB1}}
+#' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
 #' @examples
 #' siteNumber <- "434400121275801"

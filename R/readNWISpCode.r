@@ -7,8 +7,7 @@
 #' that can be found here: \url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}. To get a 
 #' complete list of all current parameter codes in the USGS, use "all" as the input.
 #' @keywords data import USGS web service
-#' @return parameterData data frame with all information from the USGS about the particular parameter.
-#' 
+#' @return parameterData data frame with the following information: 
 #' \tabular{lll}{
 #'   Name \tab Type \tab Description\cr
 #'   parameter_cd \tab character \tab 5-digit USGS parameter code \cr
@@ -20,6 +19,7 @@
 #' }
 #' 
 #' @export
+#' @seealso \code{\link{importRDB1}}
 #' @examples
 #' paramINFO <- readNWISpCode(c('01075','00060','00931'))
 readNWISpCode <- function(parameterCd){

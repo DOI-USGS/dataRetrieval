@@ -34,8 +34,9 @@ There are also several useful attributes attached to the data frame:
 \tabular{lll}{
 Name \tab Type \tab Description \cr
 url \tab character \tab The url used to generate the data \cr
-siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
 queryTime \tab POSIXct \tab The time the data was returned \cr
+comment \tab character \tab Header comments from the RDB file \cr
+siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
 }
 }
 \description{
@@ -53,6 +54,6 @@ data2 <- readNWISgwl(sites, '','')
 data3 <- readNWISgwl("420125073193001", '','')
 }
 \seealso{
-\code{\link{importRDB1}}
+\code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 }
 
