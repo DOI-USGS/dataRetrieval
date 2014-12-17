@@ -45,4 +45,7 @@ siteNumber <- '01594440'
 data <- readNWISrating(siteNumber, "base")
 attr(data, "RATING")
 }
+\seealso{
+\code{\link{constructNWISURL}}, \code{\link{importRDB1}}
+}
 

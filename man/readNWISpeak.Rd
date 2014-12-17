@@ -43,11 +43,13 @@ siteInfo \tab data.frame \tab A data frame containing information on the request
 }
 }
 \description{
-Reads peak flow from NWISweb.
-Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
+Reads peak flow from NWISweb. Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
 }
 \examples{
 siteNumbers <- c('01594440','040851325')
 data <- readNWISpeak(siteNumbers)
+}
+\seealso{
+\code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 }
 

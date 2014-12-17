@@ -49,4 +49,7 @@ See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
 siteNumbers <- c('01594440','040851325')
 data <- readNWISmeas(siteNumbers)
 }
+\seealso{
+\code{\link{constructNWISURL}}, \code{\link{importRDB1}}
+}
 
