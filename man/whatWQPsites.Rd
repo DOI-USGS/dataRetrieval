@@ -61,7 +61,7 @@ Arguments to the function should be based on \url{www.waterqualitydata.us/webser
 site1 <- whatWQPsites(siteid="USGS-01594440")
 
 type <- "Stream"
-sites <- whatWQPsites(statecode="US:55",countycode="US:55:025",siteType=type)
+sites <- whatWQPsites(countycode="US:55:025",siteType=type)
 }
 }
 \keyword{WQP}

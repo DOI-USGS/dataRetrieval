@@ -53,7 +53,7 @@
 #' site1 <- whatWQPsites(siteid="USGS-01594440")
 #' 
 #' type <- "Stream"
-#' sites <- whatWQPsites(statecode="US:55",countycode="US:55:025",siteType=type)
+#' sites <- whatWQPsites(countycode="US:55:025",siteType=type)
 #' }
 whatWQPsites <- function(...){
 
@@ -123,7 +123,13 @@ whatWQPsites <- function(...){
     return(retval)
     
   } else {
-    return(NA)
+    if(headerInfo['Total-Site-Count'] == "0"){
+      warning("No data returned")
+    }
+    
+    for(i in grep("Warning",names(headerInfo))){
+      warning(headerInfo[i])
+    }
   }
 
 }
