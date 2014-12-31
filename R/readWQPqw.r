@@ -102,7 +102,7 @@
 #' rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 #' rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' rawPHsites <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')
-#' nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','')
+#' nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','2012-12-20')
 #' }
 readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate=""){
 
@@ -148,11 +148,17 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate=""){
   variableInfo <- unique(variableInfo)
   
   if(any(variableInfo$parameterCd != "")){
+    pcodes <- unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)])
+    pcodes <- pcodes["" != pcodes]
+    paramINFO <- readNWISpCode(pcodes)
+    names(paramINFO)["parameter_cd" == names(paramINFO)] <- "parameterCd"
+    
     pCodeToName <- pCodeToName
-    varExtras <- pCodeToName[pCodeToName$parm_cd %in% 
-                               unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
+    varExtras <- pCodeToName[pCodeToName$parm_cd %in% unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
     names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
-    variableInfo <- merge(variableInfo, varExtras, by="parameterCd", all=TRUE)
+    variableInfo <- merge(variableInfo, varExtras, by="parameterCd", all = TRUE)
+    variableInfo <- merge(variableInfo, paramINFO, by="parameterCd", all = TRUE)
+    variableInfo <- unique(variableInfo)
   }
   
   attr(retval, "siteInfo") <- siteInfo

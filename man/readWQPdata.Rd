@@ -98,12 +98,10 @@ because it allows for other agencies rather than the USGS.
 \dontrun{
 nameToUse <- "pH"
 pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
-pHDataExpanded <- readWQPdata(bBox="-90.10,42.67,-88.64,43.35",characteristicName=nameToUse)
 pHDataExpanded2 <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),characteristicName=nameToUse)
-startDate <- as.Date("2008-01-01")
-nutrientPysical <- readWQPdata(statecode="US:55",siteType="Stream",
-                        samplMedia="Water",startDateLo=startDate,
-                        characteristicType=c("Nutrient","Physical))
+startDate <- as.Date("2013-01-01")
+nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
+                        characteristicType="Nutrient")
 }
 }
 \keyword{WQP}

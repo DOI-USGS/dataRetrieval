@@ -91,9 +91,8 @@
 #' pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
 #' pHDataExpanded2 <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),characteristicName=nameToUse)
 #' startDate <- as.Date("2013-01-01")
-#' nutrientPysical <- readWQPdata(statecode="US:55",siteType="Stream",
-#'                         sampleMedia="Water",startDate=startDate,
-#'                         characteristicType=c("Nutrient","Physical"))
+#' nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
+#'                         characteristicType="Nutrient")
 #' }
 readWQPdata <- function(...){
   
@@ -113,17 +112,25 @@ readWQPdata <- function(...){
 
   if(any(names(values) %in% dateNames)){
     index <- which(names(values) %in% dateNames)
-    # If a valid R date was put in, the format needs to be changed to mm-dd-yyyy for the WQP:
-    if(all(is.Date(as.Date(values[index])))){  
-      dates <- as.Date(values[index])
-      dates <- format(as.Date(dates), format="%m-%d-%Y")
-      values[index] <- dates
-    } else if (!all(is.Date(as.Date(values[index],format="%m-%d-%Y")))){
-      warning("Please check the date format for the arguments: ", paste(names(values)[index], collapse=", "))
+    
+    if("" %in% values[index]){
+      values <- values[-index[values[index] == ""]]
+      index <- which(names(values) %in% dateNames)
     }
     
-    names(values)[names(values) == 'startDate'] <- 'startDateLo'
-    names(values)[names(values) == 'endDate'] <- 'startDateHi'
+    if(length(index) > 0){
+      # If a valid R date was put in, the format needs to be changed to mm-dd-yyyy for the WQP:
+      if(any(!is.na(as.Date(values[index], format="%Y-%m-%d")))){  
+        dates <- as.Date(values[index[!is.na(as.Date(values[index], format="%Y-%m-%d"))]])
+        dates <- format(as.Date(dates), format="%m-%d-%Y")
+        values[index] <- dates
+      } else if (any(is.na(as.Date(values[index], format="%m-%d-%Y")))){
+        warning("Please check the date format for the arguments: ", paste(names(values)[index], collapse=", "))
+      }
+      
+      names(values)[names(values) == 'startDate'] <- 'startDateLo'
+      names(values)[names(values) == 'endDate'] <- 'startDateHi'
+    }
     
   }
   
@@ -161,10 +168,16 @@ readWQPdata <- function(...){
                                stringsAsFactors=FALSE)
     
     if(any(!is.na(variableInfo$parameterCd))){
+      pcodes <- unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)])
+      pcodes <- pcodes["" != pcodes]
+      paramINFO <- readNWISpCode(pcodes)
+      names(paramINFO)["parameter_cd" == names(paramINFO)] <- "parameterCd"
+      
       pCodeToName <- pCodeToName
       varExtras <- pCodeToName[pCodeToName$parm_cd %in% unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
       names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
       variableInfo <- merge(variableInfo, varExtras, by="parameterCd", all = TRUE)
+      variableInfo <- merge(variableInfo, paramINFO, by="parameterCd", all = TRUE)
       variableInfo <- unique(variableInfo)
     }
     

@@ -73,20 +73,28 @@ whatWQPsites <- function(...){
   
   if(any(names(values) %in% dateNames)){
     index <- which(names(values) %in% dateNames)
-    # If a valid R date was put in, the format needs to be changed to mm-dd-yyyy for the WQP:
-    if(all(is.Date(as.Date(values[index])))){  
-      dates <- as.Date(values[index])
-      dates <- format(as.Date(dates), format="%m-%d-%Y")
-      values[index] <- dates
-    } else if (!all(is.Date(as.Date(values[index],format="%m-%d-%Y")))){
-      warning("Please check the date format for the arguments: ", paste(names(values)[index], collapse=", "))
+    
+    if("" %in% values[index]){
+      values <- values[-index[values[index] == ""]]
+      index <- which(names(values) %in% dateNames)
     }
     
-    names(values)[names(values) == 'startDate'] <- 'startDateLo'
-    names(values)[names(values) == 'endDate'] <- 'startDateHi'
+    if(length(index) > 0){
+      # If a valid R date was put in, the format needs to be changed to mm-dd-yyyy for the WQP:
+      if(any(!is.na(as.Date(values[index], format="%Y-%m-%d")))){  
+        dates <- as.Date(values[index[!is.na(as.Date(values[index], format="%Y-%m-%d"))]])
+        dates <- format(as.Date(dates), format="%m-%d-%Y")
+        values[index] <- dates
+      } else if (any(is.na(as.Date(values[index], format="%m-%d-%Y")))){
+        warning("Please check the date format for the arguments: ", paste(names(values)[index], collapse=", "))
+      }
+      
+      names(values)[names(values) == 'startDate'] <- 'startDateLo'
+      names(values)[names(values) == 'endDate'] <- 'startDateHi'
+    }
     
   }
-  
+    
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
   
