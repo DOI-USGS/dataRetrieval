@@ -8,7 +8,7 @@ readNWISdata(service = "dv", ...)
 }
 \arguments{
 \item{service}{string. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels"
-(for groundwater levels), and "qwdata" (for water quality)}
+(for groundwater levels)}
 
 \item{\dots}{see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options}
 }
