@@ -89,12 +89,11 @@
 #' \dontrun{
 #' nameToUse <- "pH"
 #' pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
-#' pHDataExpanded <- readWQPdata(bBox="-90.10,42.67,-88.64,43.35",characteristicName=nameToUse)
 #' pHDataExpanded2 <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),characteristicName=nameToUse)
-#' startDate <- as.Date("2008-01-01")
+#' startDate <- as.Date("2013-01-01")
 #' nutrientPysical <- readWQPdata(statecode="US:55",siteType="Stream",
-#'                         samplMedia="Water",startDateLo=startDate,
-#'                         characteristicType=c("Nutrient","Physical))
+#'                         sampleMedia="Water",startDate=startDate,
+#'                         characteristicType=c("Nutrient","Physical"))
 #' }
 readWQPdata <- function(...){
   
@@ -123,7 +122,7 @@ readWQPdata <- function(...){
       warning("Please check the date format for the arguments: ", paste(names(values)[index], collapse=", "))
     }
     
-    names(values)[names(values) == 'beginDate'] <- 'startDateLo'
+    names(values)[names(values) == 'startDate'] <- 'startDateLo'
     names(values)[names(values) == 'endDate'] <- 'startDateHi'
     
   }

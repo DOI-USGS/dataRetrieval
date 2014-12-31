@@ -82,7 +82,7 @@ whatWQPsites <- function(...){
       warning("Please check the date format for the arguments: ", paste(names(values)[index], collapse=", "))
     }
     
-    names(values)[names(values) == 'beginDate'] <- 'startDateLo'
+    names(values)[names(values) == 'startDate'] <- 'startDateLo'
     names(values)[names(values) == 'endDate'] <- 'startDateHi'
     
   }
