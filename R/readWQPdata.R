@@ -143,7 +143,7 @@ readWQPdata <- function(...){
       pCodeToName <- pCodeToName
       varExtras <- pCodeToName[pCodeToName$parm_cd %in% unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
       names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
-      variableInfo <- merge(variableInfo, varExtras, by="parameterCd")
+      variableInfo <- merge(variableInfo, varExtras, by="parameterCd", all = TRUE)
       variableInfo <- unique(variableInfo)
     }
     

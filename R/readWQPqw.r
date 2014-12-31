@@ -152,7 +152,7 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate=""){
     varExtras <- pCodeToName[pCodeToName$parm_cd %in% 
                                unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
     names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
-    variableInfo <- merge(variableInfo, varExtras, by="parameterCd")
+    variableInfo <- merge(variableInfo, varExtras, by="parameterCd", all=TRUE)
   }
   
   attr(retval, "siteInfo") <- siteInfo
