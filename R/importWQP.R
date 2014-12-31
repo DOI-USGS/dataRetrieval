@@ -29,6 +29,7 @@
 #' STORETdata <- importWQP(STORETex)
 #' }
 importWQP <- function(obs_url, zip=FALSE, tz=""){
+  
   if(zip){
     h <- basicHeaderGatherer()
     httpHEAD(obs_url, headerfunction = h$update)
@@ -51,6 +52,7 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       unlink(temp)
     } else {
       unlink(temp)
+
       stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", obs_url)
     }
     
@@ -134,8 +136,16 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     return(retval)
   
   } else {
-
-    return(NA)
+    
+    if(headerInfo['Total-Result-Count'] == "0"){
+      warning("No data returned")
+    }
+    
+    for(i in grep("Warning",names(headerInfo))){
+      warning(headerInfo[i])
+    }
+    
+    
   }
 
 }
