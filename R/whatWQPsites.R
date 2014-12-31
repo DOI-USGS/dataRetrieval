@@ -53,20 +53,48 @@
 #' site1 <- whatWQPsites(siteid="USGS-01594440")
 #' 
 #' type <- "Stream"
-#' sites <- whatWQPsites(statecode="US:55",countycode="US:55:025",siteType=type)
+#' sites <- whatWQPsites(countycode="US:55:025",siteType=type)
 #' }
 whatWQPsites <- function(...){
 
   matchReturn <- list(...)
   
-  options <- c("bBox","lat","long","within","countrycode","statecode","countycode","siteType","organization",
-    "siteid","huc","sampleMedia","characteristicType","characteristicName","pCode","activityId",
-    "startDateLo","startDateHi","mimeType","Zip","providers")
-
-  if(!all(names(matchReturn) %in% options)) warning(matchReturn[!(names(matchReturn) %in% options)],"is not a valid query parameter to the Water Quality Portal")
-
-  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
+  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=";",sep=""))))
   
+  values <- gsub(",","%2C",values)
+  values <- gsub("%20","+",values)
+  values <- gsub(":","%3A",values)
+  
+  if("bBox" %in% names(values)){
+    values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
+  }
+  
+  dateNames <- c("startDateLo","startDateHi","startDate","endDate")
+  
+  if(any(names(values) %in% dateNames)){
+    index <- which(names(values) %in% dateNames)
+    
+    if("" %in% values[index]){
+      values <- values[-index[values[index] == ""]]
+      index <- which(names(values) %in% dateNames)
+    }
+    
+    if(length(index) > 0){
+      # If a valid R date was put in, the format needs to be changed to mm-dd-yyyy for the WQP:
+      if(any(!is.na(as.Date(values[index], format="%Y-%m-%d")))){  
+        dates <- as.Date(values[index[!is.na(as.Date(values[index], format="%Y-%m-%d"))]])
+        dates <- format(as.Date(dates), format="%m-%d-%Y")
+        values[index] <- dates
+      } else if (any(is.na(as.Date(values[index], format="%m-%d-%Y")))){
+        warning("Please check the date format for the arguments: ", paste(names(values)[index], collapse=", "))
+      }
+      
+      names(values)[names(values) == 'startDate'] <- 'startDateLo'
+      names(values)[names(values) == 'endDate'] <- 'startDateHi'
+    }
+    
+  }
+    
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
   
@@ -103,7 +131,13 @@ whatWQPsites <- function(...){
     return(retval)
     
   } else {
-    return(NA)
+    if(headerInfo['Total-Site-Count'] == "0"){
+      warning("No data returned")
+    }
+    
+    for(i in grep("Warning",names(headerInfo))){
+      warning(headerInfo[i])
+    }
   }
 
 }

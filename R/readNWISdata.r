@@ -4,7 +4,7 @@
 #' Arguments to the function should be based on \url{http://waterservices.usgs.gov} service calls.
 #'
 #' @param service string. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
-#' (for groundwater levels), and "qwdata" (for water quality)
+#' (for groundwater levels)
 #' @param \dots see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options
 #' @keywords data import NWIS web service
 #' @return A data frame with the following columns:
@@ -50,8 +50,17 @@ readNWISdata <- function(service="dv", ...){
   
   matchReturn <- list(...)
   
+  match.arg(service, c("dv","iv","gwlevels"))
+  
+  if(length(service) > 1){
+    stop("Only one service call allowed.")
+  }
+  
   values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
   
+  names(values)[names(values) == "startDate"] <- "startDT"
+  names(values)[names(values) == "endDate"] <- "endDT"
+
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
   if(service %in% c("dv","iv","gwlevels")){
