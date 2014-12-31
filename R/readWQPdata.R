@@ -95,11 +95,12 @@ readWQPdata <- function(...){
   
   matchReturn <- list(...)
   
-  options <- c("bBox","lat","long","within","countrycode","statecode","countycode","siteType","organization",
-               "siteid","huc","sampleMedia","characteristicType","characteristicName","pCode","activityId",
-               "startDateLo","startDateHi","mimeType","Zip","providers")
-  
-  if(!all(names(matchReturn) %in% options)) warning(matchReturn[!(names(matchReturn) %in% options)],"is not a valid query parameter to the Water Quality Portal")
+  # WQP does a better job of this in the header return:
+#   options <- c("bBox","lat","long","within","countrycode","statecode","countycode","siteType","organization",
+#                "siteid","huc","sampleMedia","characteristicType","characteristicName","pCode","activityId",
+#                "startDateLo","startDateHi","mimeType","Zip","providers")
+#   
+#   if(!all(names(matchReturn) %in% options)) warning(names(matchReturn)[!(names(matchReturn) %in% options)]," is not a valid query parameter to the Water Quality Portal")
   
   values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
   
