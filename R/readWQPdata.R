@@ -90,22 +90,43 @@
 #' nameToUse <- "pH"
 #' pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
 #' pHDataExpanded <- readWQPdata(bBox="-90.10,42.67,-88.64,43.35",characteristicName=nameToUse)
+#' pHDataExpanded2 <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),characteristicName=nameToUse)
+#' startDate <- as.Date("2008-01-01")
+#' nutrientPysical <- readWQPdata(statecode="US:55",siteType="Stream",
+#'                         samplMedia="Water",startDateLo=startDate,
+#'                         characteristicType=c("Nutrient","Physical))
 #' }
 readWQPdata <- function(...){
   
   matchReturn <- list(...)
-  
-  # WQP does a better job of this in the header return:
-#   options <- c("bBox","lat","long","within","countrycode","statecode","countycode","siteType","organization",
-#                "siteid","huc","sampleMedia","characteristicType","characteristicName","pCode","activityId",
-#                "startDateLo","startDateHi","mimeType","Zip","providers")
-#   
-#   if(!all(names(matchReturn) %in% options)) warning(names(matchReturn)[!(names(matchReturn) %in% options)]," is not a valid query parameter to the Water Quality Portal")
-  
-  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
+
+  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=";",sep=""))))
   
   values <- gsub(",","%2C",values)
   values <- gsub("%20","+",values)
+  values <- gsub(":","%3A",values)
+
+  if("bBox" %in% names(values)){
+    values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
+  }
+
+  dateNames <- c("startDateLo","startDateHi","startDate","endDate")
+
+  if(any(names(values) %in% dateNames)){
+    index <- which(names(values) %in% dateNames)
+    # If a valid R date was put in, the format needs to be changed to mm-dd-yyyy for the WQP:
+    if(all(is.Date(as.Date(values[index])))){  
+      dates <- as.Date(values[index])
+      dates <- format(as.Date(dates), format="%m-%d-%Y")
+      values[index] <- dates
+    } else if (!all(is.Date(as.Date(values[index],format="%m-%d-%Y")))){
+      warning("Please check the date format for the arguments: ", paste(names(values)[index], collapse=", "))
+    }
+    
+    names(values)[names(values) == 'beginDate'] <- 'startDateLo'
+    names(values)[names(values) == 'endDate'] <- 'startDateHi'
+    
+  }
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
@@ -114,7 +135,7 @@ readWQPdata <- function(...){
   urlCall <- paste0(baseURL,
                    urlCall,
                    "&mimeType=tsv")
-
+  
   retval <- importWQP(urlCall,FALSE)
   
   if(!all(is.na(retval))){
