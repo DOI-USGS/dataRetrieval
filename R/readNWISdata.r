@@ -50,6 +50,10 @@ readNWISdata <- function(service="dv", ...){
   
   matchReturn <- list(...)
   
+  if(length(service) > 1){
+    stop("Only one service call allowed.")
+  }
+  
   values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
