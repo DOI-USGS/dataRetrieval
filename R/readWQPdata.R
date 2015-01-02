@@ -93,6 +93,8 @@
 #' startDate <- as.Date("2013-01-01")
 #' nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
 #'                         characteristicType="Nutrient")
+#' nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate="",
+#'                         characteristicType="Nutrient")
 #' }
 readWQPdata <- function(...){
   
@@ -108,31 +110,7 @@ readWQPdata <- function(...){
     values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
   }
 
-  dateNames <- c("startDateLo","startDateHi","startDate","endDate")
-
-  if(any(names(values) %in% dateNames)){
-    index <- which(names(values) %in% dateNames)
-    
-    if("" %in% values[index]){
-      values <- values[-index[values[index] == ""]]
-      index <- which(names(values) %in% dateNames)
-    }
-    
-    if(length(index) > 0){
-      # If a valid R date was put in, the format needs to be changed to mm-dd-yyyy for the WQP:
-      if(any(!is.na(as.Date(values[index], format="%Y-%m-%d")))){  
-        dates <- as.Date(values[index[!is.na(as.Date(values[index], format="%Y-%m-%d"))]])
-        dates <- format(as.Date(dates), format="%m-%d-%Y")
-        values[index] <- dates
-      } else if (any(is.na(as.Date(values[index], format="%m-%d-%Y")))){
-        warning("Please check the date format for the arguments: ", paste(names(values)[index], collapse=", "))
-      }
-      
-      names(values)[names(values) == 'startDate'] <- 'startDateLo'
-      names(values)[names(values) == 'endDate'] <- 'startDateHi'
-    }
-    
-  }
+  values <- checkWQPdates(values)
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
