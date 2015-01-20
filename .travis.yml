@@ -3,8 +3,8 @@
 language: c
 
 os:
-- osx
-- linux
+  - osx
+  - linux
 
 env:
    global:
