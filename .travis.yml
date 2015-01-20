@@ -2,11 +2,15 @@
 
 language: c
 
+os:
+- osx
+- linux
+
 env:
    global:
      - CRAN: http://cran.rstudio.com
-     - R_BUILD_ARGS="--no-build-vignettes --no-manual"
-     - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
+#     - R_BUILD_ARGS="--no-build-vignettes --no-manual"
+     - R_CHECK_ARGS=" --as-cran"
      - BOOTSTRAP_LATEX=""
 
 script: "./travis-tool.sh run_tests"
@@ -15,7 +19,7 @@ before_script:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - "./travis-tool.sh bootstrap"
-  - "./travis-tool.sh install_deps - ./travis-tool.sh install_r XML RCurl plyr reshape2 lubridate httr"
+  - "./travis-tool.sh install_deps - ./travis-tool.sh install_r XML RCurl plyr reshape2 lubridate httr knitr xtable"
 
 on_failure:
   - "./travis-tool.sh dump_logs"
