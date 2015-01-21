@@ -66,7 +66,7 @@
 readNWISsite <- function(siteNumbers){
   
   siteNumber <- paste(siteNumbers,collapse=",")
-  urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=Expanded&sites=",siteNumber,sep = "")
+  urlSitefile <- paste0("http://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=Expanded&sites=",siteNumber)
   
   data <- importRDB1(urlSitefile,asDateTime=FALSE)
   
