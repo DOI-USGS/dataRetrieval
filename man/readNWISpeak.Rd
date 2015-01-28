@@ -48,7 +48,9 @@ Reads peak flow from NWISweb. Data is retrieved from \url{http://waterdata.usgs.
 }
 \examples{
 siteNumbers <- c('01594440','040851325')
+\dontrun{
 data <- readNWISpeak(siteNumbers)
+}
 }
 \seealso{
 \code{\link{constructNWISURL}}, \code{\link{importRDB1}}

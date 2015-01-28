@@ -49,10 +49,12 @@ See \url{http://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more inf
 }
 \examples{
 siteNumber <- "434400121275801"
+\dontrun{
 data <- readNWISgwl(siteNumber, '','')
 sites <- c("434400121275801", "375907091432201")
 data2 <- readNWISgwl(sites, '','')
 data3 <- readNWISgwl("420125073193001", '','')
+}
 }
 \seealso{
 \code{\link{constructNWISURL}}, \code{\link{importRDB1}}

@@ -10,7 +10,7 @@ readNWISqw(siteNumbers, parameterCd, startDate = "", endDate = "",
 \arguments{
 \item{siteNumbers}{character of USGS site numbers.  This is usually an 8 digit number}
 
-\item{parameterCd}{character of USGS parameter code(s).  This is usually an 5 digit number.}
+\item{parameterCd}{character of USGS parameter code(s).  This is usually an 5 digit number. Can also be "all".}
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the earliest possible record.}
@@ -68,6 +68,9 @@ parameterCd <- c('34247','30234','32104','34220')
 \dontrun{
 rawNWISqwData <- readNWISqw(siteNumbers,parameterCd,startDate,endDate)
 rawNWISqwDataReshaped <- readNWISqw(siteNumbers,parameterCd,
+          startDate,endDate,reshape=TRUE)
+parameterCd <- "all"
+rawNWISall <- readNWISqw(siteNumbers,parameterCd,
           startDate,endDate,reshape=TRUE)
          }
 }
