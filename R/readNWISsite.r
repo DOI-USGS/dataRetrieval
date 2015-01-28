@@ -60,9 +60,10 @@
 #' }
 #' @export
 #' @examples
-#' # These examples require an internet connection to run
+#' \dontrun{
 #' siteINFO <- readNWISsite('05114000')
 #' siteINFOMulti <- readNWISsite(c('05114000','09423350'))
+#' }
 readNWISsite <- function(siteNumbers){
   
   siteNumber <- paste(siteNumbers,collapse=",")

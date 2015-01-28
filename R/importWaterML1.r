@@ -48,7 +48,7 @@
 #' offering <- '00003'
 #' property <- '00060'
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
-#' 
+#' \dontrun{
 #' data <- importWaterML1(obs_url,TRUE)
 #' 
 #' groundWaterSite <- "431049071324301"
@@ -62,11 +62,6 @@
 #'          "2013-11-03","2013-11-03",'uv')
 #' unitData <- importWaterML1(unitDataURL,TRUE)
 #' 
-#' filePath <- system.file("extdata", package="dataRetrieval")
-#' fileName <- "WaterML1Example.xml"
-#' fullPath <- file.path(filePath, fileName)
-#' importUserWM1 <- importWaterML1(fullPath,TRUE)
-#'
 #' # Two sites, two pcodes, one site has two data descriptors:
 #' siteNumber <- c('01480015',"04085427")
 #' obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
@@ -84,6 +79,13 @@
 #' inactiveAndAcitive <- c("07334200","05212700")
 #' inactiveAndAcitive <- constructNWISURL(inactiveAndAcitive, "00060", "2014-01-01", "2014-01-10",'dv')
 #' inactiveAndAcitive <- importWaterML1(inactiveAndAcitive)
+#' 
+#' }
+#' filePath <- system.file("extdata", package="dataRetrieval")
+#' fileName <- "WaterML1Example.xml"
+#' fullPath <- file.path(filePath, fileName)
+#' imporFile <- importWaterML1(fullPath,TRUE)
+#'
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(file.exists(obs_url)){
