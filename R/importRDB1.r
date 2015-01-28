@@ -92,9 +92,7 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     doc <- textConnection(rawData)
   }
   
-  fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
-  pndIndx<-regexpr("^#", fileVecChar)
-  hdr <- fileVecChar[pndIndx > 0L]
+
   
   tmp <- read.delim(  
     doc, 
@@ -105,6 +103,10 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     colClasses=c('character'),
     fill = TRUE, 
     comment.char="#")
+  
+  fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
+  pndIndx<-regexpr("^#", fileVecChar)
+  hdr <- fileVecChar[pndIndx > 0L]
   
   dataType <- tmp[1,]
   data <- tmp[-1,]
