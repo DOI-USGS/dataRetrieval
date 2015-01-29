@@ -49,9 +49,9 @@
 #' parameterCd <- '00060'
 #' startDate <- "2014-10-10"
 #' endDate <- "2014-10-10"
-#' # These examples require an internet connection to run
-#' rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
 #' \dontrun{
+#' rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
+#' 
 #' timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
 #'          "2013-11-03","2013-11-03")
 #' }
