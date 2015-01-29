@@ -5,7 +5,7 @@
 #' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
 #' @param siteNumbers character of USGS site numbers.  This is usually an 8 digit number
-#' @param parameterCd character of USGS parameter code(s).  This is usually an 5 digit number.
+#' @param parameterCd character of USGS parameter code(s).  This is usually an 5 digit number. Can also be "all".
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the earliest possible record.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
@@ -56,11 +56,30 @@
 #' rawNWISqwData <- readNWISqw(siteNumbers,parameterCd,startDate,endDate)
 #' rawNWISqwDataReshaped <- readNWISqw(siteNumbers,parameterCd,
 #'           startDate,endDate,reshape=TRUE)
+#' parameterCd <- "all"
+#' rawNWISall <- readNWISqw(siteNumbers,parameterCd,
+#'           startDate,endDate,reshape=TRUE)
 #'          } 
 readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
                         expanded=TRUE,reshape=FALSE,tz=""){  
   
-  url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,"qw",expanded=expanded)
+  if(any(parameterCd == "all")){
+    siteNumbers <- paste(siteNumbers, collapse=",")
+    
+    url <- paste0("http://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=", siteNumbers,
+           "&sort_key=site_no&group_key=NONE&inventory_output=0",
+           "&begin_date=", startDate, "&end_date=", endDate,
+           "&TZoutput=0",
+           "&radio_parm_cds=all_parm_cds&qw_attributes=0&format=rdb",
+           "&qw_sample_wide=0&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD",
+           "&rdb_compression=value&list_of_search_criteria=multiple_site_no")
+
+  } else {
+    url <- constructNWISURL(siteNumbers,
+                            parameterCd,
+                            startDate,
+                            endDate,"qw",expanded=expanded)    
+  }
   
   data <- importRDB1(url,asDateTime=TRUE, qw=TRUE, tz = tz)
   originalHeader <- comment(data)
@@ -68,13 +87,19 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   if(reshape & expanded){
     columnsToMelt <- c("agency_cd","site_no","sample_dt","sample_tm",
                        "sample_end_dt","sample_end_tm","sample_start_time_datum_cd","tm_datum_rlbty_cd",
-                       "parm_cd","startDateTime","endDateTime")
+                       "parm_cd","startDateTime","endDateTime","coll_ent_cd", "medium_cd","project_cd",
+                       "aqfr_cd","tu_id","body_part_id", "hyd_cond_cd", "samp_type_cd",
+                       "hyd_event_cd","sample_lab_cm_tx")
     columnsToMelt <- columnsToMelt[columnsToMelt %in% names(data)]
-    longDF <- melt(data, columnsToMelt)
+    dataWithPcodes <- data[data$parm_cd != "",]
+    if(sum(data$parm_cd != "") > 0){
+      warning("Data returned without pCodes, will not be included in reshape")
+    }
+    longDF <- melt(dataWithPcodes, columnsToMelt)
     wideDF <- dcast(longDF, ... ~ variable + parm_cd )
     wideDF[,grep("_va_",names(wideDF))] <- sapply(wideDF[,grep("_va_",names(wideDF))], function(x) as.numeric(x))
-    
-    groupByPCode <- as.vector(sapply(parameterCd, function(x) grep(x, names(wideDF)) ))
+    pCodesReturned <- unique(dataWithPcodes$parm_cd)
+    groupByPCode <- as.vector(sapply(pCodesReturned, function(x) grep(x, names(wideDF)) ))
     data <- wideDF[,c(1:length(columnsToMelt)-1,groupByPCode)]
     comment(data) <- originalHeader
     

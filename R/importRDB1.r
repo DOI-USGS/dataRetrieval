@@ -49,8 +49,9 @@
 #' 
 #' obs_url <- constructNWISURL(siteNumber,property,
 #'          startDate,endDate,"dv",format="tsv")
-#' data <- importRDB1(obs_url)
 #' \dontrun{
+#' data <- importRDB1(obs_url)
+#' 
 #' urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),
 #'          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
 #' multiData <- importRDB1(urlMultiPcodes)
@@ -92,9 +93,7 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     doc <- textConnection(rawData)
   }
   
-  fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
-  pndIndx<-regexpr("^#", fileVecChar)
-  hdr <- fileVecChar[pndIndx > 0L]
+
   
   tmp <- read.delim(  
     doc, 
@@ -105,6 +104,10 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     colClasses=c('character'),
     fill = TRUE, 
     comment.char="#")
+  
+  fileVecChar <- scan(obs_url, what = "", sep = "\n", quiet=TRUE)
+  pndIndx<-regexpr("^#", fileVecChar)
+  hdr <- fileVecChar[pndIndx > 0L]
   
   dataType <- tmp[1,]
   data <- tmp[-1,]

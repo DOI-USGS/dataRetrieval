@@ -60,13 +60,14 @@
 #' }
 #' @export
 #' @examples
-#' # These examples require an internet connection to run
+#' \dontrun{
 #' siteINFO <- readNWISsite('05114000')
 #' siteINFOMulti <- readNWISsite(c('05114000','09423350'))
+#' }
 readNWISsite <- function(siteNumbers){
   
   siteNumber <- paste(siteNumbers,collapse=",")
-  urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=Expanded&sites=",siteNumber,sep = "")
+  urlSitefile <- paste0("http://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=Expanded&sites=",siteNumber)
   
   data <- importRDB1(urlSitefile,asDateTime=FALSE)
   

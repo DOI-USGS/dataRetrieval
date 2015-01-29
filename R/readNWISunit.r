@@ -49,9 +49,9 @@
 #' parameterCd <- '00060'
 #' startDate <- "2014-10-10"
 #' endDate <- "2014-10-10"
-#' # These examples require an internet connection to run
-#' rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
 #' \dontrun{
+#' rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
+#' 
 #' timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
 #'          "2013-11-03","2013-11-03")
 #' }
@@ -104,7 +104,9 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' @export
 #' @examples
 #' siteNumbers <- c('01594440','040851325')
+#' \dontrun{
 #' data <- readNWISpeak(siteNumbers)
+#' }
 readNWISpeak <- function (siteNumbers,startDate="",endDate=""){  
   
   # Doesn't seem to be a peak xml service
@@ -158,8 +160,10 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate=""){
 #' @export
 #' @examples
 #' siteNumber <- '01594440'
+#' \dontrun{
 #' data <- readNWISrating(siteNumber, "base")
 #' attr(data, "RATING")
+#' }
 readNWISrating <- function (siteNumber,type="base"){  
   
   # No rating xml service 
@@ -221,7 +225,9 @@ readNWISrating <- function (siteNumber,type="base"){
 #' @export
 #' @examples
 #' siteNumbers <- c('01594440','040851325')
+#' \dontrun{
 #' data <- readNWISmeas(siteNumbers)
+#' }
 readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){  
   
   # Doesn't seem to be a WaterML1 format option
@@ -283,10 +289,12 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
 #' @export
 #' @examples
 #' siteNumber <- "434400121275801"
+#' \dontrun{
 #' data <- readNWISgwl(siteNumber, '','')
 #' sites <- c("434400121275801", "375907091432201")
 #' data2 <- readNWISgwl(sites, '','')
 #' data3 <- readNWISgwl("420125073193001", '','')
+#' }
 readNWISgwl <- function (siteNumbers,startDate="",endDate=""){  
   
 #   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="wml1")

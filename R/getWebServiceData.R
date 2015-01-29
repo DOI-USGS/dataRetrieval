@@ -14,7 +14,9 @@
 #' offering <- '00003'
 #' property <- '00060'
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
+#' \dontrun{
 #' rawData <- getWebServiceData(obs_url)
+#' }
 getWebServiceData <- function(obs_url){
   possibleError <- tryCatch({
     h <- basicHeaderGatherer()

@@ -69,9 +69,10 @@ comment \tab character \tab Header comments from the RDB file \cr
 Imports data from USGS site file site. This function gets data from here: \url{http://waterservices.usgs.gov/}
 }
 \examples{
-# These examples require an internet connection to run
+\dontrun{
 siteINFO <- readNWISsite('05114000')
 siteINFOMulti <- readNWISsite(c('05114000','09423350'))
+}
 }
 \keyword{USGS}
 \keyword{data}

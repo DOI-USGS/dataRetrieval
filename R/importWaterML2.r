@@ -25,7 +25,7 @@
 #'      "featureID=MD-BC-BC-05",
 #'      "offering=RAW",
 #'      "observedProperty=WATER",sep="&")
-#' 
+#' \dontrun{
 #' dataReturned1 <- importWaterML2(URL)
 #' dataReturn2 <- importWaterML2(URL2, TRUE)
 #' URLmulti <-  paste(baseURL,
@@ -35,6 +35,7 @@
 #'   "statCd=00003",
 #'   "parameterCd=00060",sep="&")
 #' dataReturnMulti <- importWaterML2(URLmulti)
+#' }
 #' filePath <- system.file("extdata", package="dataRetrieval")
 #' fileName <- "WaterML2Example.xml"
 #' fullPath <- file.path(filePath, fileName)

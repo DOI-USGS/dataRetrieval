@@ -45,17 +45,17 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 
   service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas"))
   
-  if(any(!is.na(parameterCd))){
+  if(any(!is.na(parameterCd) & parameterCd != "all")){
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     
     if(!pcodeCheck){
       badIndex <- which(nchar(parameterCd) != 5 | is.na(suppressWarnings(as.numeric(parameterCd))))
-
       stop("The following pCodes appear mistyped:",paste(parameterCd[badIndex],collapse=","))
-    } else {
-      parameterCdCheck <- readNWISpCode(parameterCd)
     }
     
+    if(length(parameterCd) > 200){
+      stop("Maximum parameter codes allowed is 200, please adjust data request.")
+    }
   }
   
   multipleSites <- length(siteNumber) > 1

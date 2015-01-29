@@ -35,7 +35,9 @@ Arguments to the function should be based on \url{http://waterservices.usgs.gov/
 Mapper format is used
 }
 \examples{
+\dontrun{
 siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
+}
 }
 \keyword{NWIS}
 \keyword{data}

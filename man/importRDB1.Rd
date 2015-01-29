@@ -62,8 +62,9 @@ property <- "00060"
 
 obs_url <- constructNWISURL(siteNumber,property,
          startDate,endDate,"dv",format="tsv")
-data <- importRDB1(obs_url)
 \dontrun{
+data <- importRDB1(obs_url)
+
 urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),
          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
 multiData <- importRDB1(urlMultiPcodes)

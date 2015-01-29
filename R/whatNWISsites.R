@@ -27,7 +27,9 @@
 #' @export
 #' @import XML
 #' @examples
+#' \dontrun{
 #' siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
+#' }
 whatNWISsites <- function(...){
   
   matchReturn <- list(...)
