@@ -7,6 +7,7 @@ os:
   - linux
 
 env:
+   NOT_CRAN="true"   
    global:
      - CRAN: http://cran.rstudio.com
      - R_BUILD_ARGS="--no-build-vignettes --no-manual"
@@ -20,6 +21,7 @@ before_script:
   - chmod 755 ./travis-tool.sh
   - "./travis-tool.sh bootstrap"
   - "./travis-tool.sh install_deps - ./travis-tool.sh install_r XML RCurl plyr reshape2 lubridate httr knitr xtable"
+
 
 on_failure:
   - "./travis-tool.sh dump_logs"
