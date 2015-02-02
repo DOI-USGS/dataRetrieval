@@ -7,12 +7,12 @@ os:
   - linux
 
 env:
-   NOT_CRAN="true"   
    global:
      - CRAN: http://cran.rstudio.com
      - R_BUILD_ARGS="--no-build-vignettes --no-manual"
      - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
      - BOOTSTRAP_LATEX=""
+     - NOT_CRAN="true" 
 
 script: "./travis-tool.sh run_tests"
 
