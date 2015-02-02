@@ -22,8 +22,7 @@ before_script:
   - "./travis-tool.sh bootstrap"
   - "./travis-tool.sh install_deps - ./travis-tool.sh install_r XML RCurl plyr reshape2 lubridate httr knitr xtable testthat"
 
-
-on_failure:
+after_script:
   - "./travis-tool.sh dump_logs"
 
 notifications:
