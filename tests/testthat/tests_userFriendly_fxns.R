@@ -27,18 +27,6 @@ test_that("Unit value data returns correct types", {
   
 })
 
-context("importRDB")
-test_that("CRAN-friendly importRDB test", {
-  filePath <- system.file("extdata", package="dataRetrieval")
-  fileName <- "RDB1Example.txt"
-  fullPath <- file.path(filePath, fileName)
-  importUserRDB <- importRDB1(fullPath)
-  
-  # default is to turn dates to characters
-  expect_is(importUserRDB$datetime, 'character')
-  
-})
-
 context("Peak, rating, meas")
 test_that("peak, rating curves, surface-water measurements", {
   testthat::skip_on_cran()
