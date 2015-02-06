@@ -128,6 +128,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   attList <- list()
   dataColumns <- c()
   qualColumns <- c()
+  mergedDF <- NULL
   
   for (i in 1:length(timeSeries)){
     
@@ -309,7 +310,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         
         df <- df[,columnsOrderd]
                         
-        if (1 == i & valuesIndex[1] == j){
+        if (is.null(mergedDF)){
           mergedDF <- df          
         } else {
           similarNames <- intersect(names(mergedDF), names(df))
