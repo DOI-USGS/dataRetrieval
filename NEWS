@@ -3,6 +3,7 @@ dataRetrieval 2.1.1
 * Removed tests that call external web services, server upgrades have been causing false negative results
 * Added functionality to readWQPdata to allow R objects as arguments rather than just character strings
 * Added parameterCd='all' option for qw calls.
+* Exposed sysdata constants
 
 
 dataRetrieval 2.0.2
