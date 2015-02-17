@@ -132,5 +132,5 @@ test_that("External WQP tests", {
   
   STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
   STORETdata <- importWQP(STORETex)
-  expect_is(rawSample2$ActivityStartDateTime, 'POSIXct')
+  expect_is(STORETdata$ActivityStartDateTime, 'POSIXct')
 })
