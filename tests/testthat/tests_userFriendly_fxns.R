@@ -46,3 +46,25 @@ test_that("peak, rating curves, surface-water measurements", {
   expect_is(data$agency_cd, 'character')
 })
 
+context("qw")
+
+test_that("NWIS qw tests", {
+  testthat::skip_on_cran()
+  siteNumbers <- c('04024430','04024000')
+  startDate <- '2010-01-01'
+  endDate <- ''
+  parameterCd <- c('34247','30234','32104','34220')
+  
+  rawNWISqwData <- readNWISqw(siteNumbers,parameterCd,startDate,endDate)
+  expect_is(rawNWISqwData$startDateTime, 'POSIXct')
+  
+  rawNWISqwDataReshaped <- readNWISqw(siteNumbers,parameterCd,
+            startDate,endDate,reshape=TRUE)
+  expect_is(rawNWISqwDataReshaped$startDateTime, 'POSIXct')
+  
+  parameterCd <- "all"
+  rawNWISall <- readNWISqw(siteNumbers,parameterCd,
+           startDate,"2011-01-01",reshape=TRUE)
+  expect_is(rawNWISall$startDateTime, 'POSIXct')
+  
+})
