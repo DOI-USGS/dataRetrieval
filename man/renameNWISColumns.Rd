@@ -45,7 +45,7 @@ to rename those columns.
 }
 \note{
 The following statistics codes are converted by \code{renameNWISColumns}. See
-\url{http://help.waterdata.usgs.gov/stat_cd_nm} for information about USGS statistics codes.
+\url{http://help.waterdata.usgs.gov} for more information about USGS codes.
 \describe{
 \item{00001}{Maximum value, suffix: Max}
 \item{00002}{Minimum value, suffix: Min}

@@ -48,8 +48,7 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 \description{
 Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
-A list of parameter codes can be found here: \url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}
-A list of statistic codes can be found here: \url{http://help.waterdata.usgs.gov/code/stat_code_query?fmt=html}
+Information on parameter and statistics codes can be found here: \url{http://help.waterdata.usgs.gov}
 }
 \examples{
 siteNumber <- '04085427'
