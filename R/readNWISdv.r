@@ -1,8 +1,7 @@
 #' Raw Data Import for USGS NWIS Data
 #'
 #' Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
-#' A list of parameter codes can be found here: \url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}
-#' A list of statistic codes can be found here: \url{http://help.waterdata.usgs.gov/code/stat_code_query?fmt=html}
+#' Information on parameter and statistics codes can be found here: \url{http://help.waterdata.usgs.gov}
 #'
 #' @param siteNumber character USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a character vector.
 #' @param parameterCd character of USGS parameter code(s).  This is usually an 5 digit number.
