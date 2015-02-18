@@ -30,6 +30,14 @@
 #' }
 importWQP <- function(obs_url, zip=FALSE, tz=""){
   
+  if(tz != ""){
+    tz <- match.arg(tz, c("America/New_York","America/Chicago",
+                          "America/Denver","America/Los_Angeles",
+                          "America/Anchorage","America/Honolulu",
+                          "America/Jamaica","America/Managua",
+                          "America/Phoenix","America/Metlakatla"))
+  }
+  
   if(zip){
     h <- basicHeaderGatherer()
     httpHEAD(obs_url, headerfunction = h$update)
@@ -49,7 +57,6 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     
     if(headerInfo['status'] == "200"){
       doc <- unzip(temp)
-      unlink(temp)
     } else {
       unlink(temp)
 
@@ -59,14 +66,6 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
   } else {
     doc <- getWebServiceData(obs_url)
     headerInfo <- attr(doc, "headerInfo")
-  }
-    
-  if(tz != ""){
-    tz <- match.arg(tz, c("America/New_York","America/Chicago",
-                          "America/Denver","America/Los_Angeles",
-                          "America/Anchorage","America/Honolulu",
-                          "America/Jamaica","America/Managua",
-                          "America/Phoenix","America/Metlakatla"))
   }
     
   numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
@@ -132,7 +131,10 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     if(all(is.na(retval$ActivityEndDateTime))){
       retval$ActivityEndDateTime <- NULL
     }
-                
+    if(zip){
+      unlink(doc)
+    }
+    
     return(retval)
   
   } else {
