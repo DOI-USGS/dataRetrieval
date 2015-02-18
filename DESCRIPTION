@@ -2,7 +2,6 @@ Package: dataRetrieval
 Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
 Version: 2.1.2
-Date: 2015-02-01
 Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
     email = "rhirsch@usgs.gov"),
     person("Laura", "DeCicco", role = c("aut","cre"),
@@ -12,7 +11,7 @@ Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
 Description: Collection of functions to help retrieve U.S. Geological Survey
     (USGS) and U.S. Environmental Protection Agency (EPA) water quality and
     hydrology data from web services. USGS web services are discovered from the
-    National Water Information Services (NWIS) tools. Both EPA and USGS water 
+    National Water Information System (NWIS) tools. Both EPA and USGS water 
     quality data are obtained from the Water Quality Portal.
 License: CC0
 Copyright: This software is in the public domain because it contains materials
