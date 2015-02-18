@@ -142,7 +142,7 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
                          "hyd_event_cd","sample_lab_cm_tx")
       columnsToMelt <- columnsToMelt[columnsToMelt %in% names(data)]
       dataWithPcodes <- data[data$parm_cd != "",]
-      if(sum(data$parm_cd != "") > 0){
+      if(sum(data$parm_cd == "") > 0){
         warning("Some or all data returned without pCodes, those data will not be included in reshape")
       }
       longDF <- melt(dataWithPcodes, columnsToMelt)
