@@ -111,6 +111,9 @@ readWQPdata <- function(...){
   }
 
   values <- checkWQPdates(values)
+
+  names(values)[names(values) == "siteNumber"] <- "siteid"
+  names(values)[names(values) == "siteNumbers"] <- "siteid"
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
