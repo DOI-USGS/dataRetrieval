@@ -10,7 +10,8 @@ readNWISqw(siteNumbers, parameterCd, startDate = "", endDate = "",
 \arguments{
 \item{siteNumbers}{character of USGS site numbers.  This is usually an 8 digit number}
 
-\item{parameterCd}{character of USGS parameter code(s).  This is usually an 5 digit number. Can also be "all".}
+\item{parameterCd}{character that contains the code for a parameter
+group, or a character vector of 5-digit parameter codes. See \bold{Details}.}
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the earliest possible record.}
@@ -60,6 +61,28 @@ Imports data from NWIS web service. This function gets the data from here: \url{
 A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
 A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 }
+\details{
+Valid parameter code groups are "All," or group codes:
+\tabular{ll}{
+Code \tab Description\cr
+INF \tab Information \cr
+PHY \tab Physical \cr
+INM \tab Inorganics, Major, Metals (major cations) \cr
+INN \tab Inorganics, Major, Non-metals (major anions) \cr
+NUT \tab Nutrient \cr
+MBI \tab Microbiological \cr
+BIO \tab Biological \cr
+IMN \tab Inorganics, Minor, Non-metals \cr
+IMM \tab Inorganics, Minor, Metals \cr
+TOX \tab Toxicity \cr
+OPE \tab Organics, pesticide \cr
+OPC \tab Organics, PCBs \cr
+OOT \tab Organics, other \cr
+RAD \tab Radiochemical \cr
+SED \tab Sediment \cr
+POP \tab Population/community \cr
+}
+}
 \examples{
 siteNumbers <- c('04024430','04024000')
 startDate <- '2010-01-01'
@@ -71,7 +94,15 @@ rawNWISqwDataReshaped <- readNWISqw(siteNumbers,parameterCd,
           startDate,endDate,reshape=TRUE)
 parameterCd <- "all"
 rawNWISall <- readNWISqw(siteNumbers,parameterCd,
-          startDate,endDate,reshape=TRUE)
+          startDate,endDate)
+pgroup <- c("NUT")
+rawNWISNutrients <- readNWISqw(siteNumbers,pgroup,
+          startDate,endDate)
+groups <- c("NUT","OPE")
+rawNWISNutOpe <- readNWISqw(siteNumbers,groups,
+          startDate,endDate)
+rawNWISOpe <- readNWISqw(siteNumbers,"OPE",
+          startDate,endDate)
          }
 }
 \seealso{

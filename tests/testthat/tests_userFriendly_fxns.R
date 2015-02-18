@@ -27,7 +27,7 @@ test_that("Unit value data returns correct types", {
   
 })
 
-context("Peak, rating, meas")
+context("Peak, rating, meas, site")
 test_that("peak, rating curves, surface-water measurements", {
   testthat::skip_on_cran()
   
@@ -44,5 +44,79 @@ test_that("peak, rating curves, surface-water measurements", {
   siteNumbers <- c('01594440','040851325')
   data <- readNWISmeas(siteNumbers)
   expect_is(data$agency_cd, 'character')
+  
+  siteINFO <- readNWISsite('05114000')
+  expect_is(siteINFO$agency_cd, 'character')
+  
+  siteINFOMulti <- readNWISsite(c('05114000','09423350'))
+  expect_that(nrow(siteINFOMulti) == 2, is_true())
+  
 })
+
+context("qw")
+
+test_that("NWIS qw tests", {
+  testthat::skip_on_cran()
+  siteNumbers <- c('04024430','04024000')
+  startDate <- '2010-01-01'
+  endDate <- ''
+  parameterCd <- c('34247','30234','32104','34220')
+  
+  rawNWISqwData <- readNWISqw(siteNumbers,parameterCd,startDate,endDate)
+  expect_is(rawNWISqwData$startDateTime, 'POSIXct')
+  
+  rawNWISqwDataReshaped <- readNWISqw(siteNumbers,parameterCd,
+            startDate,endDate,reshape=TRUE)
+  expect_is(rawNWISqwDataReshaped$startDateTime, 'POSIXct')
+  
+  parameterCd <- "all"
+  rawNWISall <- readNWISqw(siteNumbers,parameterCd,
+           startDate,"2011-01-01",reshape=TRUE)
+  expect_is(rawNWISall$startDateTime, 'POSIXct')
+  
+  pgroup <- c("NUT")
+  rawNWISNutrients <- readNWISqw(siteNumbers,pgroup,
+           startDate,endDate)
+  expect_is(rawNWISNutrients$startDateTime, 'POSIXct')
+  
+  groups <- c("NUT","OPE")
+  rawNWISNutOpe <- readNWISqw(siteNumbers,groups,
+           startDate,endDate) 
+  expect_is(rawNWISNutOpe$startDateTime, 'POSIXct')
+  
+})
+
+context("dv")
+
+test_that("NWIS dv tests", {
+  testthat::skip_on_cran()
+  
+  siteNumber <- '04085427'
+  startDate <- '2012-01-01'
+  endDate <- '2012-06-30'
+  pCode <- '00060'
+  
+  rawDailyQ <- readNWISdv(siteNumber,pCode, startDate, endDate)
+  expect_is(rawDailyQ$Date, 'Date')
+  
+  rawDailyQAndTempMeanMax <- readNWISdv(siteNumber,c('00010','00060'),
+        startDate, endDate, statCd=c('00001','00003'))
+  expect_that(length(grep("00060", names(rawDailyQAndTempMeanMax))) >= 2 & 
+                length(grep("00010", names(rawDailyQAndTempMeanMax))) >= 2, is_true())
+  
+
+  rawDailyMultiSites<- readNWISdv(c("01491000","01645000"),c('00010','00060'),
+        startDate, endDate, statCd=c('00001','00003'))
+  expect_that(length(unique(rawDailyMultiSites$site_no)) > 1, is_true())
+  
+  # Site with no data:
+  x <- readNWISdv("10258500","00060", "2014-09-08", "2014-09-14")
+  expect_that(sum(is.na(x$X_00060_00003)) > 0, is_true())
+  
+  site <- "05212700"
+  notActive <- readNWISdv(site, "00060", "2014-01-01","2014-01-07")
+  expect_that(nrow(notActive) == 0, is_true())
+})
+
+
 

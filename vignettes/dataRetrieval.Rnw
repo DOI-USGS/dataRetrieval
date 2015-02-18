@@ -1,7 +1,7 @@
 %\VignetteIndexEntry{Introduction to the dataRetrieval package}
 %\VignetteEngine{knitr::knitr}
 %\VignetteDepends{}
-%\VignetteSuggests{xtable}
+%\VignetteSuggests{xtable, testthat}
 %\VignetteImports{XML, RCurl, reshape2,lubridate,httr,plyr}
 %\VignettePackage{dataRetrieval}
 

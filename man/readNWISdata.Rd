@@ -8,7 +8,7 @@ readNWISdata(service = "dv", ...)
 }
 \arguments{
 \item{service}{string. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels"
-(for groundwater levels)}
+(for groundwater levels), and "site" (for site service)}
 
 \item{\dots}{see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options}
 }
@@ -53,6 +53,12 @@ dataTempUnit <- readNWISdata(sites="03086500", service="iv", parameterCd="00010"
 multiSite <- readNWISdata(sites=c("04025000","04072150"), service="iv", parameterCd="00010")
 #Not empty:
 multiSite <- readNWISdata(sites=c("04025500","040263491"), service="iv", parameterCd="00060")
+bBoxEx <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010")
+startDate <- as.Date("2013-10-01")
+endDate <- as.Date("2014-09-30")
+waterYear <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010",
+                  service="dv", startDate=startDate, endDate=endDate)
+siteInfo <- readNWISdata(stateCd="WI", parameterCd="00010",hasDataTypeCd="iv", service="site")
 }
 }
 \seealso{

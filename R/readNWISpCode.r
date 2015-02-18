@@ -3,8 +3,8 @@
 #' Imports data from NWIS about meaured parameter based on user-supplied parameter code or codes.
 #' This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes}
 #'
-#' @param parameterCd character of USGS parameter codes (or multiple parameter codes).  These are 5 digit number codes
-#' that can be found here: \url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}. To get a 
+#' @param parameterCd character of USGS parameter codes (or multiple parameter codes).  These are 5 digit number codes,
+#' more information can be found here: \url{http://help.waterdata.usgs.gov/}. To get a 
 #' complete list of all current parameter codes in the USGS, use "all" as the input.
 #' @keywords data import USGS web service
 #' @return parameterData data frame with the following information: 
