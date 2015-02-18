@@ -4,7 +4,7 @@
 #' Arguments to the function should be based on \url{http://waterservices.usgs.gov} service calls.
 #'
 #' @param service string. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
-#' (for groundwater levels)
+#' (for groundwater levels), and "site" (for site service)
 #' @param \dots see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options
 #' @keywords data import NWIS web service
 #' @return A data frame with the following columns:
@@ -45,12 +45,22 @@
 #' multiSite <- readNWISdata(sites=c("04025000","04072150"), service="iv", parameterCd="00010")
 #' #Not empty:
 #' multiSite <- readNWISdata(sites=c("04025500","040263491"), service="iv", parameterCd="00060")
+#' bBoxEx <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010")
+#' startDate <- as.Date("2013-10-01")
+#' endDate <- as.Date("2014-09-30")
+#' waterYear <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", 
+#'                   service="dv", startDate=startDate, endDate=endDate)
+#' siteInfo <- readNWISdata(stateCd="WI", parameterCd="00010",hasDataTypeCd="iv", service="site")
 #' }
 readNWISdata <- function(service="dv", ...){
   
   matchReturn <- list(...)
   
-  match.arg(service, c("dv","iv","gwlevels"))
+  match.arg(service, c("dv","iv","gwlevels","site", "uv"))
+  
+  if(service == "uv"){
+    service <- "iv"
+  }
   
   if(length(service) > 1){
     stop("Only one service call allowed.")
@@ -60,22 +70,35 @@ readNWISdata <- function(service="dv", ...){
   
   names(values)[names(values) == "startDate"] <- "startDT"
   names(values)[names(values) == "endDate"] <- "endDT"
-
+  names(values)[names(values) == "siteNumber"] <- "sites"
+  names(values)[names(values) == "siteNumbers"] <- "sites"
+  
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
   format <- "waterml,1.1"
+  baseURL <- "http://waterservices.usgs.gov/nwis/"
   
   if(service == "iv"){
     baseURL <- "http://nwis.waterservices.usgs.gov/nwis/"
-  } else {
-    baseURL <- "http://waterservices.usgs.gov/nwis/"
+  }
+  
+  if(service == "site"){
+    format <- "rdb"
   }
   
   baseURL <- paste0(baseURL,service,"/?format=",format,"&")
   urlCall <- paste0(baseURL,urlCall)
   
-  retval <- importWaterML1(urlCall, asDateTime = ("iv" == service))
-  
+  if(service == "site"){
+    retval <- importRDB1(urlCall, asDateTime = FALSE, qw = FALSE)
+  } else {
+    retval <- importWaterML1(urlCall, asDateTime = ("iv" == service))
+    if("dv" == service){
+      retval$dateTime <- as.Date(retval$dateTime)
+      retval$tz_cd <- NULL      
+      names(retval)[names(retval) == "dateTime"] <- "Date"
+    }
+  }
   
   return(retval)
 }
