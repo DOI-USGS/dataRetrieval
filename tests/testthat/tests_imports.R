@@ -122,15 +122,15 @@ context("importWQP_noCRAN")
 test_that("External WQP tests", {
   testthat::skip_on_cran()
 
-  rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
-  rawSample <- importWQP(rawSampleURL)
-  expect_is(rawSample$ActivityStartDateTime, 'POSIXct')
-  
-  url2 <- paste0(rawSampleURL,"&zip=yes")
-  rawSample2 <- suppressWarnings(importWQP(url2, TRUE))
-  expect_is(rawSample2$ActivityStartDateTime, 'POSIXct')
-  
-  STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
-  STORETdata <- importWQP(STORETex)
-  expect_is(STORETdata$ActivityStartDateTime, 'POSIXct')
+#   rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
+#   rawSample <- importWQP(rawSampleURL)
+#   expect_is(rawSample$ActivityStartDateTime, 'POSIXct')
+#   
+#   url2 <- paste0(rawSampleURL,"&zip=yes")
+#   rawSample2 <- suppressWarnings(importWQP(url2, TRUE))
+#   expect_is(rawSample2$ActivityStartDateTime, 'POSIXct')
+#   
+#   STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
+#   STORETdata <- importWQP(STORETex)
+#   expect_is(STORETdata$ActivityStartDateTime, 'POSIXct')
 })
