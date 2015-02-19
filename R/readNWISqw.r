@@ -165,7 +165,8 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   attr(data, "siteInfo") <- siteInfo
   attr(data, "variableInfo") <- varInfo
   attr(data, "statisticInfo") <- NULL
-  
+  attr(data, "url") <- url
+  attr(data, "queryTime") <- Sys.time()
   return (data)
 
 }
