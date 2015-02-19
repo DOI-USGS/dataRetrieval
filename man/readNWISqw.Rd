@@ -82,6 +82,7 @@ RAD \tab Radiochemical \cr
 SED \tab Sediment \cr
 POP \tab Population/community \cr
 }
+If more than one parameter group is requested, only sites that data for all requested groups are returned.
 }
 \examples{
 siteNumbers <- c('04024430','04024000')

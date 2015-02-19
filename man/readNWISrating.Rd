@@ -2,7 +2,7 @@
 % Please edit documentation in R/readNWISunit.r
 \name{readNWISrating}
 \alias{readNWISrating}
-\title{Reads the current rating table for an active USGS streamgage.}
+\title{Rating table for an active USGS streamgage retrieval}
 \usage{
 readNWISrating(siteNumber, type = "base")
 }

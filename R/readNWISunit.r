@@ -1,4 +1,4 @@
-#' Raw Data Import for Instantaneous USGS NWIS Data
+#' Instantaneous value data retrieval from USGS (NWIS)
 #'
 #' Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
 #' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
@@ -65,7 +65,7 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
   return (data)
 }
 
-#' Reads peak flow data from NWISweb.
+#' Peak flow data from USGS (NWIS)
 #' 
 #' Reads peak flow from NWISweb. Data is retrieved from \url{http://waterdata.usgs.gov/nwis}. 
 #' 
@@ -126,7 +126,7 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate=""){
   return (data)
 }
 
-#' Reads the current rating table for an active USGS streamgage.
+#' Rating table for an active USGS streamgage retrieval
 #' 
 #' Reads current rating table for an active USGS streamgage from NWISweb. 
 #' Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
@@ -187,7 +187,7 @@ readNWISrating <- function (siteNumber,type="base"){
   return (data)
 }
 
-#'Reads surface-water measurement data from NWISweb.
+#'Surface-water measurement data retrieval from USGS (NWIS)
 #'
 #'Reads surface-water measurement data from NWISweb. Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
 #'See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
@@ -248,7 +248,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
   return (data)
 }
 
-#' Reads groundwater level measurements from NWISweb.
+#' Groundwater level measurements retrieval from USGS (NWIS)
 #'
 #' Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service 
 #' depending on the year that the data was collected. See \url{http://waterdata.usgs.gov/usa/nwis/gw}

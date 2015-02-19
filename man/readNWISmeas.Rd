@@ -2,7 +2,7 @@
 % Please edit documentation in R/readNWISunit.r
 \name{readNWISmeas}
 \alias{readNWISmeas}
-\title{Reads surface-water measurement data from NWISweb.}
+\title{Surface-water measurement data retrieval from USGS (NWIS)}
 \usage{
 readNWISmeas(siteNumbers, startDate = "", endDate = "", tz = "")
 }
