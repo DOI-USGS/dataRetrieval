@@ -109,9 +109,9 @@ test_that("NWIS dv tests", {
         startDate, endDate, statCd=c('00001','00003'))
   expect_that(length(unique(rawDailyMultiSites$site_no)) > 1, is_true())
   
-  # Site with no data:
-  x <- readNWISdv("10258500","00060", "2014-09-08", "2014-09-14")
-  expect_that(sum(is.na(x$X_00060_00003)) > 0, is_true())
+#   # Site with no data:
+#   x <- readNWISdv("10258500","00060", "2015-02-08", "2015-02-14")
+#   expect_that(sum(is.na(x$X_00060_00003)) > 0, is_true())
   
   site <- "05212700"
   notActive <- readNWISdv(site, "00060", "2014-01-01","2014-01-07")
