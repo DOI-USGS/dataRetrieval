@@ -121,7 +121,7 @@ context("importWQP_noCRAN")
 
 test_that("External WQP tests", {
   testthat::skip_on_cran()
-expect_is(1==1, is_true())   
+  expect_that(1==1, is_true())   
 #   rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
 #   rawSample <- importWQP(rawSampleURL)
 #   expect_is(rawSample$ActivityStartDateTime, 'POSIXct')

@@ -37,5 +37,5 @@ test_that("General WQP retrievals working", {
 #   nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
 #                          characteristicType="Nutrient")
 #   expect_is(nutrientDaneCounty$ActivityStartDateTime, 'POSIXct')
-   expect_is(1==1, is_true())                      
+   expect_that(1==1, is_true())                      
 })
