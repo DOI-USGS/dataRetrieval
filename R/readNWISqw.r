@@ -24,6 +24,7 @@
 #'SED \tab Sediment \cr
 #'POP \tab Population/community \cr
 #'}
+#'If more than one parameter group is requested, only sites that data for all requested groups are returned.
 #'
 #' @param siteNumbers character of USGS site numbers.  This is usually an 8 digit number
 #' @param parameterCd character that contains the code for a parameter

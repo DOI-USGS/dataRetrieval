@@ -2,7 +2,7 @@
 % Please edit documentation in R/readNWISunit.r
 \name{readNWISuv}
 \alias{readNWISuv}
-\title{Raw Data Import for Instantaneous USGS NWIS Data}
+\title{Instantaneous value data retrieval from USGS (NWIS)}
 \usage{
 readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "",
   tz = "")

@@ -79,11 +79,6 @@ test_that("NWIS qw tests", {
            startDate,endDate)
   expect_is(rawNWISNutrients$startDateTime, 'POSIXct')
   
-  groups <- c("NUT","OPE")
-  rawNWISNutOpe <- readNWISqw(siteNumbers,groups,
-           startDate,endDate) 
-  expect_is(rawNWISNutOpe$startDateTime, 'POSIXct')
-  
 })
 
 context("dv")

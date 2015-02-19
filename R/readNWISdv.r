@@ -1,4 +1,4 @@
-#' Raw Data Import for USGS NWIS Data
+#' Daily Value USGS NWIS Data Retrieval
 #'
 #' Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
 #' Information on parameter and statistics codes can be found here: \url{http://help.waterdata.usgs.gov}

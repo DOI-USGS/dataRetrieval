@@ -2,7 +2,7 @@
 % Please edit documentation in R/readNWISdv.r
 \name{readNWISdv}
 \alias{readNWISdv}
-\title{Raw Data Import for USGS NWIS Data}
+\title{Daily Value USGS NWIS Data Retrieval}
 \usage{
 readNWISdv(siteNumber, parameterCd, startDate = "", endDate = "",
   statCd = "00003")

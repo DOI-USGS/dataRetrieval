@@ -2,7 +2,7 @@
 % Please edit documentation in R/readNWISunit.r
 \name{readNWISgwl}
 \alias{readNWISgwl}
-\title{Reads groundwater level measurements from NWISweb.}
+\title{Groundwater level measurements retrieval from USGS (NWIS)}
 \usage{
 readNWISgwl(siteNumbers, startDate = "", endDate = "")
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/readNWISunit.r
 \name{readNWISpeak}
 \alias{readNWISpeak}
-\title{Reads peak flow data from NWISweb.}
+\title{Peak flow data from USGS (NWIS)}
 \usage{
 readNWISpeak(siteNumbers, startDate = "", endDate = "")
 }
