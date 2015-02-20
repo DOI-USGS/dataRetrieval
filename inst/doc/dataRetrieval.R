@@ -73,83 +73,82 @@ print(xtable(data.df,label="tab:stat",
       )
 
 
-## ----getSite, echo=TRUE-----------------------------------
-siteNumbers <- c("01491000","01645000") 
-siteINFO <- readNWISsite(siteNumbers)
-
-## ----siteNames2, echo=TRUE--------------------------------
-siteINFO$station_nm
+## ----getSite, echo=TRUE, eval=FALSE-----------------------
+#  siteNumbers <- c("01491000","01645000")
+#  siteINFO <- readNWISsite(siteNumbers)
 
 ## ----siteNames3, echo=TRUE, eval=FALSE--------------------
 #  comment(siteINFO)
 
-## ----getSiteExtended, echo=TRUE---------------------------
-# Continuing from the previous example:
-# This pulls out just the daily, mean data:
+## ----getSiteExtended, echo=TRUE, eval=FALSE---------------
+#  # Continuing from the previous example:
+#  # This pulls out just the daily, mean data:
+#  
+#  dailyDataAvailable <- whatNWISdata(siteNumbers,
+#                      service="dv", statCd="00003")
+#  
+#  
 
-dailyDataAvailable <- whatNWISdata(siteNumbers,
-                    service="dv", statCd="00003")
+## ----tablegda, echo=FALSE,eval=FALSE----------------------
+#  tableData <- with(dailyDataAvailable,
+#        data.frame(
+#        siteNumber= site_no,
+#        srsname=srsname,
+#        startDate=as.character(begin_date),
+#        endDate=as.character(end_date),
+#        count=as.character(count_nu),
+#        units=parameter_units,
+#  #       statCd = stat_cd,
+#        stringsAsFactors=FALSE)
+#        )
+#  
+#  tableData$units[which(tableData$units == "ft3/s")] <- "ft$^3$/s"
+#  tableData$units[which(tableData$units == "uS/cm @25C")] <- "$\\mu$S/cm @25C"
+#  
+#  
+#  print(xtable(tableData,label="tab:gda",
+#      caption="Reformatted version of output from \\texttt{whatNWISdata} function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]"),
+#         caption.placement="top",
+#         size = "\\footnotesize",
+#         latex.environment=NULL,
+#         sanitize.text.function = function(x) {x},
+#         sanitize.colnames.function =  bold.colHeaders,
+#         sanitize.rownames.function = addSpace
+#        )
+#  
 
+## ----label=getPCodeInfo, echo=TRUE, eval=FALSE------------
+#  # Using defaults:
+#  parameterCd <- "00618"
+#  parameterINFO <- readNWISpCode(parameterCd)
 
+## ----label=getNWISDaily, echo=TRUE, eval=FALSE------------
+#  
+#  # Choptank River near Greensboro, MD:
+#  siteNumber <- "01491000"
+#  parameterCd <- "00060"  # Discharge
+#  startDate <- "2009-10-01"
+#  endDate <- "2012-09-30"
+#  
+#  discharge <- readNWISdv(siteNumber,
+#                      parameterCd, startDate, endDate)
 
-## ----tablegda, echo=FALSE,results='asis'------------------
-tableData <- with(dailyDataAvailable, 
-      data.frame( 
-      siteNumber= site_no,
-      srsname=srsname, 
-      startDate=as.character(begin_date), 
-      endDate=as.character(end_date), 
-      count=as.character(count_nu),
-      units=parameter_units,
-#       statCd = stat_cd,
-      stringsAsFactors=FALSE)
-      )
+## ----label=getNWIStemperature, echo=TRUE, eval=FALSE------
+#  siteNumber <- "01491000"
+#  parameterCd <- c("00010","00060")  # Temperature and discharge
+#  statCd <- c("00001","00003")  # Mean and maximum
+#  startDate <- "2012-01-01"
+#  endDate <- "2012-05-01"
+#  
+#  temperatureAndFlow <- readNWISdv(siteNumber, parameterCd,
+#          startDate, endDate, statCd=statCd)
+#  
 
-tableData$units[which(tableData$units == "ft3/s")] <- "ft$^3$/s"
-tableData$units[which(tableData$units == "uS/cm @25C")] <- "$\\mu$S/cm @25C"
-
-
-print(xtable(tableData,label="tab:gda",
-    caption="Reformatted version of output from \\texttt{whatNWISdata} function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]"),
-       caption.placement="top",
-       size = "\\footnotesize",
-       latex.environment=NULL,
-       sanitize.text.function = function(x) {x},
-       sanitize.colnames.function =  bold.colHeaders,
-       sanitize.rownames.function = addSpace
-      )
-
-
-## ----label=getPCodeInfo, echo=TRUE------------------------
-# Using defaults:
-parameterCd <- "00618" 
-parameterINFO <- readNWISpCode(parameterCd)
-colnames(parameterINFO)
-
-## ----siteNames, echo=TRUE---------------------------------
-parameterINFO$parameter_nm
-
-## ----label=getNWISDaily, echo=TRUE, eval=TRUE-------------
-
-# Choptank River near Greensboro, MD:
-siteNumber <- "01491000"
-parameterCd <- "00060"  # Discharge
-startDate <- "2009-10-01"  
-endDate <- "2012-09-30" 
-
-discharge <- readNWISdv(siteNumber, 
-                    parameterCd, startDate, endDate)
-names(discharge)
-
-## ----label=getNWIStemperature, echo=TRUE------------------
-
-parameterCd <- c("00010","00060")  # Temperature and discharge
-statCd <- c("00001","00003")  # Mean and maximum
-startDate <- "2012-01-01"
-endDate <- "2012-05-01"
-
-temperatureAndFlow <- readNWISdv(siteNumber, parameterCd, 
-        startDate, endDate, statCd=statCd)
+## ----label=getNWIStemperature2, echo=FALSE, eval=TRUE-----
+filePath <- system.file("extdata", package="dataRetrieval")
+fileName <- "temperatureAndFlow.RData"
+fullPath <- file.path(filePath, fileName)
+load(fullPath)
 
 
 ## ----label=renameColumns, echo=TRUE-----------------------
@@ -186,77 +185,61 @@ title(paste(siteInfo$station_nm,"2012"))
 legend("topleft", variableInfo$param_units, 
        col=c("black","red"),lty=c(NA,1),pch=c(1,NA))
 
-## ----label=readNWISuv, echo=TRUE--------------------------
+## ----label=readNWISuv, eval=FALSE-------------------------
+#  
+#  parameterCd <- "00060"  # Discharge
+#  startDate <- "2012-05-12"
+#  endDate <- "2012-05-13"
+#  dischargeUnit <- readNWISuv(siteNumber, parameterCd,
+#          startDate, endDate)
+#  dischargeUnit <- renameNWISColumns(dischargeUnit)
 
-parameterCd <- "00060"  # Discharge
-startDate <- "2012-05-12" 
-endDate <- "2012-05-13" 
-dischargeUnit <- readNWISuv(siteNumber, parameterCd, 
-        startDate, endDate)
-dischargeUnit <- renameNWISColumns(dischargeUnit)
-
-## ----dischargeData, echo=TRUE-----------------------------
-head(dischargeUnit)
-
-## ----label=getQW, echo=TRUE, eval=TRUE--------------------
- 
-# Dissolved Nitrate parameter codes:
-parameterCd <- c("00618","71851")
-startDate <- "1985-10-01"
-endDate <- "2012-09-30"
-
-dfLong <- readNWISqw(siteNumber, parameterCd, 
-      startDate, endDate)
-
-# Or the wide return:
-# dfWide <- readNWISqw(siteNumber, parameterCd, 
-#       startDate, endDate, reshape=TRUE)
-
+## ----label=getQW, echo=TRUE, eval=FALSE-------------------
+#  
+#  # Dissolved Nitrate parameter codes:
+#  parameterCd <- c("00618","71851")
+#  startDate <- "1985-10-01"
+#  endDate <- "2012-09-30"
+#  
+#  dfLong <- readNWISqw(siteNumber, parameterCd,
+#        startDate, endDate)
+#  
+#  # Or the wide return:
+#  # dfWide <- readNWISqw(siteNumber, parameterCd,
+#  #       startDate, endDate, reshape=TRUE)
+#  
 
 ## ----qwmeta, echo=TRUE, eval=FALSE------------------------
 #  
 #  comment(dfLong)
 #  
 
-## ----gwlexample, echo=TRUE, eval=TRUE---------------------
-siteNumber <- "434400121275801"
-groundWater <- readNWISgwl(siteNumber)
+## ----gwlexample, echo=TRUE, eval=FALSE--------------------
+#  siteNumber <- "434400121275801"
+#  groundWater <- readNWISgwl(siteNumber)
 
-names(groundWater)
+## ----peakexample, echo=TRUE, eval=FALSE-------------------
+#  siteNumber <- '01594440'
+#  peakData <- readNWISpeak(siteNumber)
+#  
 
+## ----ratingexample, echo=TRUE, eval=FALSE-----------------
+#  ratingData <- readNWISrating(siteNumber, "base")
+#  attr(ratingData, "RATING")
+#  
 
-## ----peakexample, echo=TRUE, eval=TRUE--------------------
-siteNumber <- '01594440'
-peakData <- readNWISpeak(siteNumber)
-
-
-names(peakData)
-
-
-## ----ratingexample, echo=TRUE, eval=TRUE------------------
-ratingData <- readNWISrating(siteNumber, "base")
-attr(ratingData, "RATING")
-
-names(ratingData)
-
-
-## ----surfexample, echo=TRUE, eval=TRUE--------------------
-surfaceData <- readNWISmeas(siteNumber)
-
-names(surfaceData)
-
+## ----surfexample, echo=TRUE, eval=FALSE-------------------
+#  surfaceData <- readNWISmeas(siteNumber)
+#  
 
 ## ----label=getQWData, echo=TRUE, eval=FALSE---------------
 #  specificCond <- readWQPqw('WIDNR_WQX-10032762',
 #                  'Specific conductance','2011-05-01','2011-09-30')
 
-## ----siteSearch-------------------------------------------
-sites <- whatNWISsites(bBox="-83.0,36.5,-81.0,38.5", 
-                      parameterCd="00010,00060",
-                      hasDataTypeCd="dv")
-
-names(sites)
-nrow(sites)
+## ----siteSearch, eval=FALSE-------------------------------
+#  sites <- whatNWISsites(bBox=c(-83.0,36.5,-81.0,38.5),
+#                        parameterCd=c("00010","00060"),
+#                        hasDataTypeCd="dv")
 
 ## ----dataExample------------------------------------------
 dischargeWI <- readNWISdata(service="dv",
@@ -306,15 +289,11 @@ variableInfo <- attr(dischargeWI, "variableInfo")
 
 
 
-## ----meta5, eval=TRUE, eval=FALSE-------------------------
+## ----meta5, eval=FALSE------------------------------------
 #  comment(peakData)
 #  
 #  #Which is equivalent to:
 #  # attr(peakData, "comment")
-
-## ----meta6, eval=TRUE, eval=TRUE--------------------------
-comment(peakData)[c(1:15,58:66)]
-
 
 ## ----helpFunc,eval = FALSE--------------------------------
 #  ?readNWISpCode
@@ -328,19 +307,18 @@ comment(peakData)[c(1:15,58:66)]
 ## ----openLibraryTest, eval=FALSE--------------------------
 #  library(dataRetrieval)
 
-## ----label=getSiteApp, echo=TRUE--------------------------
-availableData <- whatNWISdata(siteNumber, "dv")
-dailyData <- availableData["00003" == availableData$stat_cd,]
-
-tableData <- with(dailyData, 
-      data.frame(
-        shortName=srsname, 
-        Start=begin_date, 
-        End=end_date, 
-        Count=count_nu,
-        Units=parameter_units)
-      )
-tableData
+## ----label=getSiteApp, echo=TRUE, eval=FALSE--------------
+#  availableData <- whatNWISdata(siteNumber, "dv")
+#  dailyData <- availableData["00003" == availableData$stat_cd,]
+#  
+#  tableData <- with(dailyData,
+#        data.frame(
+#          shortName=srsname,
+#          Start=begin_date,
+#          End=end_date,
+#          Count=count_nu,
+#          Units=parameter_units)
+#        )
 
 ## ----label=saveData, echo=TRUE, eval=FALSE----------------
 #  write.table(tableData, file="tableData.tsv",sep="\t",

@@ -96,9 +96,6 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   
   pgrp <- c("INF", "PHY", "INM", "INN", "NUT", "MBI", "BIO", "IMM", "IMN", "TOX",
                            "OPE", "OPC", "OOT", "RAD", "XXX", "SED", "POP")
-  
-  
-  
 
   if(any(parameterCd == "all") | any(parameterCd == "All") ){
     
@@ -128,8 +125,6 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
                             endDate,"qw",expanded=expanded)    
   }
 
-
-  
   data <- importRDB1(url,asDateTime=TRUE, qw=TRUE, tz = tz)
   originalHeader <- comment(data)
   parameterCd <- unique(data$parm_cd)

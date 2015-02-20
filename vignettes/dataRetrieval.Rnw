@@ -354,17 +354,13 @@ Examples for using these siteNumbers, parameter codes, and stat codes will be pr
 Use the \texttt{readNWISsite} function to obtain all of the information available for a particular USGS site (or sites) such as full station name, drainage area, latitude, and longitude. \texttt{readNWISsite} can also access information about multiple sites with a vector input.
 
 
-<<getSite, echo=TRUE>>=
+<<getSite, echo=TRUE, eval=FALSE>>=
 siteNumbers <- c("01491000","01645000") 
 siteINFO <- readNWISsite(siteNumbers)
 @
 
-A specific example piece of information can be retrieved, in this case a station name, as follows:
-
-<<siteNames2, echo=TRUE>>=
-siteINFO$station_nm
-@
-Site information is obtained from \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
+Site information is obtained from:
+\url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
 
 Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
 
@@ -385,7 +381,7 @@ To discover what data is available for a particular USGS site, including measure
 In the following example, we limit the retrieved data to only daily data. The default for \texttt{"}service\texttt{"} is \enquote{all}, which returns all of the available data for that site. Likewise, there are arguments for parameter code (\texttt{parameterCd}) and statistic code (\texttt{statCd}) to filter the results. The default for both is to return all possible values (\enquote{all}). The returned \texttt{"}count\_nu\texttt{"} for \texttt{"}uv\texttt{"} data is the count of days with returned data, not the actual count of returned values.
 
 
-<<getSiteExtended, echo=TRUE>>=
+<<getSiteExtended, echo=TRUE, eval=FALSE>>=
 # Continuing from the previous example:
 # This pulls out just the daily, mean data:
 
@@ -395,7 +391,7 @@ dailyDataAvailable <- whatNWISdata(siteNumbers,
 
 @
 
-<<tablegda, echo=FALSE,results='asis'>>=
+<<tablegda, echo=FALSE,eval=FALSE>>=
 tableData <- with(dailyDataAvailable, 
       data.frame( 
       siteNumber= site_no,
@@ -424,7 +420,24 @@ print(xtable(tableData,label="tab:gda",
 
 @
 
-
+\begin{table}[ht]
+\caption{Reformatted version of output from \texttt{whatNWISdata} function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]} 
+\label{tab:gda}
+{\footnotesize
+\begin{tabular}{rllllll}
+  \hline
+ & \multicolumn{1}{c}{\textbf{\textsf{siteNumber}}} & \multicolumn{1}{c}{\textbf{\textsf{srsname}}} & \multicolumn{1}{c}{\textbf{\textsf{startDate}}} & \multicolumn{1}{c}{\textbf{\textsf{endDate}}} & \multicolumn{1}{c}{\textbf{\textsf{count}}} & \multicolumn{1}{c}{\textbf{\textsf{units}}} \\ 
+  \hline
+ & 01491000 & Temperature, water & 2010-10-01 & 2012-05-09 & 529 & deg C \\ 
+  [5pt] & 01645000 & Stream flow, mean. daily & 1930-09-26 & 2015-02-19 & 30828 & ft$^3$/s \\ 
+  [5pt] & 01491000 & Stream flow, mean. daily & 1948-01-01 & 2015-02-19 & 24522 & ft$^3$/s \\ 
+  [5pt] & 01491000 & Specific conductance & 2010-10-01 & 2012-05-09 & 527 & $\mu$S/cm @25C \\ 
+  [5pt] & 01491000 & Suspended sediment concentration (SSC) & 1980-10-01 & 1991-09-30 & 3651 & mg/l \\ 
+  [5pt] & 01491000 & Suspended sediment discharge & 1980-10-01 & 1991-09-30 & 3652 & tons/day \\ 
+   \hline
+\end{tabular}
+}
+\end{table}
 
 See Section \ref{app:createWordTable} for instructions on converting an R data frame to a table in Microsoft\textregistered\ software Excel or Word to display a data availability table similar to Table \ref{tab:gda}. Excel, Microsoft, PowerPoint, Windows, and Word are registered trademarks of Microsoft Corporation in the United States and other countries.
 
@@ -436,19 +449,13 @@ See Section \ref{app:createWordTable} for instructions on converting an R data f
 %------------------------------------------------------------
 To obtain all of the available information concerning a measured parameter (or multiple parameters), use the \texttt{readNWISpCode} function:
 
-<<label=getPCodeInfo, echo=TRUE>>=
+<<label=getPCodeInfo, echo=TRUE, eval=FALSE>>=
 # Using defaults:
 parameterCd <- "00618" 
 parameterINFO <- readNWISpCode(parameterCd)
-colnames(parameterINFO)
 @
 
-A specific example piece of information, in this case parameter name, can be obtained as follows:
-
-<<siteNames, echo=TRUE>>=
-parameterINFO$parameter_nm
-@
-Parameter information can obtained from:
+More information on parameter codes can obtained from:
 
 \url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}
 
@@ -462,7 +469,7 @@ To obtain daily records of USGS data, use the \texttt{readNWISdv} function. The 
 
 The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user must include the quotes).  Setting the start date to \texttt{"}\texttt{"} (no space) will prompt the program to ask for the earliest date, and setting the end date to \texttt{"}\texttt{"} (no space) will prompt for the latest available date.
 
-<<label=getNWISDaily, echo=TRUE, eval=TRUE>>=
+<<label=getNWISDaily, echo=TRUE, eval=FALSE>>=
 
 # Choptank River near Greensboro, MD:
 siteNumber <- "01491000"
@@ -472,7 +479,6 @@ endDate <- "2012-09-30"
 
 discharge <- readNWISdv(siteNumber, 
                     parameterCd, startDate, endDate)
-names(discharge)
 @
 
 The column \texttt{"}datetime\texttt{"} in the returned data frame is automatically imported as a variable of class \texttt{"}Date\texttt{"} in R. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS daily value qualification codes are often \texttt{"}A\texttt{"} (approved for publication) or \texttt{"}P\texttt{"} (provisional data subject to revision). A more complete list of daily value qualification codes can be found here:
@@ -481,8 +487,8 @@ The column \texttt{"}datetime\texttt{"} in the returned data frame is automatica
 
 Another example would be a request for mean and maximum daily temperature and discharge in early 2012:
 
-<<label=getNWIStemperature, echo=TRUE>>=
-
+<<label=getNWIStemperature, echo=TRUE, eval=FALSE>>=
+siteNumber <- "01491000"
 parameterCd <- c("00010","00060")  # Temperature and discharge
 statCd <- c("00001","00003")  # Mean and maximum
 startDate <- "2012-01-01"
@@ -493,6 +499,13 @@ temperatureAndFlow <- readNWISdv(siteNumber, parameterCd,
 
 @
 
+<<label=getNWIStemperature2, echo=FALSE, eval=TRUE>>=
+filePath <- system.file("extdata", package="dataRetrieval")
+fileName <- "temperatureAndFlow.RData"
+fullPath <- file.path(filePath, fileName)
+load(fullPath)
+
+@
 
 The column names can be shortened and simplified using the \texttt{renameNWISColumns} function.  This is not necessary, but may streamline subsequent data analysis and presentation. Site information, daily statistic information, and measured parameter information is attached to the data frame as attributes. This is discused further in section \ref{sec:metadata}.
 
@@ -549,7 +562,7 @@ There are occasions where NWIS values are not reported as numbers, instead there
 %------------------------------------------------------------
 Any data collected at regular time intervals (such as 15-minute or hourly) are known as \enquote{unit values.} Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function \texttt{readNWISuv}.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
 
-<<label=readNWISuv, echo=TRUE>>=
+<<label=readNWISuv, eval=FALSE>>=
 
 parameterCd <- "00060"  # Discharge
 startDate <- "2012-05-12" 
@@ -560,11 +573,6 @@ dischargeUnit <- renameNWISColumns(dischargeUnit)
 @
 
 The retrieval produces a data frame that contains 96 rows (one for every 15 minute period in the day).  They include all data collected from the startDate through the endDate (starting and ending with midnight locally-collected time). The dateTime column is converted to \enquote{UTC} (Coordinated Universal Time), so midnight EST will be 5 hours earlier in the dateTime column (the previous day, at 7pm).
-
-
-<<dischargeData, echo=TRUE>>=
-head(dischargeUnit)
-@
 
 To override the UTC timezone, specify a valid timezone in the tz argument. Default is \texttt{""}, which will keep the dateTime column in UTC. Other valid timezones are:
 
@@ -594,7 +602,7 @@ Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.htm
 %------------------------------------------------------------
 To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function \texttt{readNWISqw}, with the input arguments: siteNumber, parameterCd, startDate, and endDate. Additionally, the argument \texttt{"}expanded\texttt{"} is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (expanded=FALSE), or a more complete and verbose output (expanded=TRUE). Expanded = TRUE includes such columns as remark codes, value qualifying text, and detection level for each parameter code. There also includes an argument \texttt{"}reshape\texttt{"}, that converts the expanded dataset to a \texttt{"}wide\texttt{"} format (each requested parameter code gets individual columns). The defaults are expanded=TRUE, and reshape=FALSE. 
 
-<<label=getQW, echo=TRUE, eval=TRUE>>=
+<<label=getQW, echo=TRUE, eval=FALSE>>=
  
 # Dissolved Nitrate parameter codes:
 parameterCd <- c("00618","71851")
@@ -626,12 +634,9 @@ comment(dfLong)
 %------------------------------------------------------------
 Groundwater level measurements can be obtained with the \texttt{readNWISgwl} function. Information on the returned data can be found with the \texttt{comment} function, and attached attributes as described in section \ref{sec:metadata}.
 
-<<gwlexample, echo=TRUE, eval=TRUE>>=
+<<gwlexample, echo=TRUE, eval=FALSE>>=
 siteNumber <- "434400121275801"
 groundWater <- readNWISgwl(siteNumber)
-
-names(groundWater)
-
 @
 
 %------------------------------------------------------------
@@ -641,12 +646,9 @@ names(groundWater)
 
 Peak flow data are instantaneous discharge or stage data that record the maximum values of these variables during a flood event.  They include the annual peak flood event but can also include records of other peaks that are lower than the annual maximum. Peak discharge measurements can be obtained with the \texttt{readNWISpeak} function. Information on the returned data can be found with the \texttt{comment} function and attached attributes as described in section \ref{sec:metadata}.
 
-<<peakexample, echo=TRUE, eval=TRUE>>=
+<<peakexample, echo=TRUE, eval=FALSE>>=
 siteNumber <- '01594440'
 peakData <- readNWISpeak(siteNumber)
-
-
-names(peakData)
 
 @
 
@@ -659,11 +661,9 @@ Rating curves are the calibration curves that are used to convert measurements o
 
 Rating curves can be obtained with the \texttt{readNWISrating} function.
 
-<<ratingexample, echo=TRUE, eval=TRUE>>=
+<<ratingexample, echo=TRUE, eval=FALSE>>=
 ratingData <- readNWISrating(siteNumber, "base")
 attr(ratingData, "RATING")
-
-names(ratingData)
 
 @
 
@@ -677,10 +677,8 @@ These data are the discrete measurements of discharge that are made for the purp
 
 Surface-water measurement data can be obtained with the \texttt{readNWISmeas} function.
 
-<<surfexample, echo=TRUE, eval=TRUE>>=
+<<surfexample, echo=TRUE, eval=FALSE>>=
 surfaceData <- readNWISmeas(siteNumber)
-
-names(surfaceData)
 
 @
 
@@ -697,7 +695,9 @@ specificCond <- readWQPqw('WIDNR_WQX-10032762',
                 'Specific conductance','2011-05-01','2011-09-30')
 @
 
-A tool for finding NWIS characteristic names can be found at: \url{http://www.waterqualitydata.us/public_srsnames.jsp}. 
+A tool for finding NWIS characteristic names can be found at: 
+
+\url{http://www.waterqualitydata.us/public_srsnames.jsp}
 
 \FloatBarrier
 
@@ -721,13 +721,10 @@ to discover many options for searching for NWIS sites. For example, you may want
 
 The following dataRetrieval code can be used to get those sites:
 
-<<siteSearch>>=
-sites <- whatNWISsites(bBox="-83.0,36.5,-81.0,38.5", 
-                      parameterCd="00010,00060",
+<<siteSearch, eval=FALSE>>=
+sites <- whatNWISsites(bBox=c(-83.0,36.5,-81.0,38.5), 
+                      parameterCd=c("00010","00060"),
                       hasDataTypeCd="dv")
-
-names(sites)
-nrow(sites)
 @
 
 
@@ -850,19 +847,13 @@ variableInfo <- attr(dischargeWI, "variableInfo")
 
 Data obtained from \texttt{readNWISpeak}, \texttt{readNWISmeas}, and \texttt{readNWISrating}, the \texttt{comment} attribute is useful.
 
-<<meta5, eval=TRUE, eval=FALSE>>=
+<<meta5, eval=FALSE>>=
 comment(peakData)
 
 #Which is equivalent to:
 # attr(peakData, "comment")
 @
 
-A subset (due to space considerations) of the \texttt{comment} metatdata is shown here:
-
-<<meta6, eval=TRUE, eval=TRUE>>=
-comment(peakData)[c(1:15,58:66)]
-
-@
 
 
 %------------------------------------------------------------ 
@@ -921,7 +912,7 @@ library(dataRetrieval)
 %------------------------------------------------------------
 There are a few steps that are required in order to create a table in Microsoft\textregistered\ software (Excel, Word, PowerPoint, etc.) from an R data frame. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Excel based on the data frame tableData:
 
-<<label=getSiteApp, echo=TRUE>>=
+<<label=getSiteApp, echo=TRUE, eval=FALSE>>=
 availableData <- whatNWISdata(siteNumber, "dv")
 dailyData <- availableData["00003" == availableData$stat_cd,]
 
@@ -933,7 +924,6 @@ tableData <- with(dailyData,
         Count=count_nu,
         Units=parameter_units)
       )
-tableData
 @
 
 First, save the data frame as a tab delimited file (you don't want to use comma delimited because there are commas in some of the data elements):
