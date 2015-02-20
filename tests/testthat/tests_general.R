@@ -14,7 +14,7 @@ test_that("General NWIS retrievals working", {
   endDate <- as.Date("2014-09-30")
   waterYear <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", 
                    service="dv", startDate=startDate, endDate=endDate)
-  expect_is(waterYear$Date, 'Date')
+  expect_is(waterYear$dateTime, 'POSIXct')
   
   siteInfo <- readNWISdata(stateCd="WI", parameterCd="00010",hasDataTypeCd="iv", 
                            service="site")
