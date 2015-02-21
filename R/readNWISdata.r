@@ -46,11 +46,13 @@
 #' #Not empty:
 #' multiSite <- readNWISdata(sites=c("04025500","040263491"), service="iv", parameterCd="00060")
 #' bBoxEx <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010")
+#' 
 #' startDate <- as.Date("2013-10-01")
 #' endDate <- as.Date("2014-09-30")
 #' waterYear <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", 
 #'                   service="dv", startDate=startDate, endDate=endDate)
-#' siteInfo <- readNWISdata(stateCd="WI", parameterCd="00010",hasDataTypeCd="iv", service="site")
+#' siteInfo <- readNWISdata(stateCd="WI", parameterCd="00010",
+#'                   hasDataTypeCd="iv", service="site")
 #' }
 readNWISdata <- function(service="dv", ...){
   
@@ -94,9 +96,7 @@ readNWISdata <- function(service="dv", ...){
   } else {
     retval <- importWaterML1(urlCall, asDateTime = ("iv" == service))
     if("dv" == service){
-      retval$dateTime <- as.Date(retval$dateTime)
-      retval$tz_cd <- NULL      
-      names(retval)[names(retval) == "dateTime"] <- "Date"
+      retval$dateTime <- as.POSIXct(retval$dateTime)
     }
   }
   

@@ -33,11 +33,12 @@
 whatNWISsites <- function(...){
   
   matchReturn <- list(...)
-
-  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse="",sep=""))))
+  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
+  names(values)[names(values) == "siteNumber"] <- "sites"
+  names(values)[names(values) == "siteNumbers"] <- "sites"
   
   baseURL <- "http://waterservices.usgs.gov/nwis/site/?format=mapper&"
   urlCall <- paste(baseURL,
