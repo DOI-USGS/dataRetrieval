@@ -14,17 +14,12 @@ env:
      - BOOTSTRAP_LATEX=""
      - NOT_CRAN="true" 
 
-script: "./travis-tool.sh run_tests"
-
 r_packages:
   - XML
   - RCurl
   - plyr
   - reshape2
   - lubridate
-
-after_script:
-  - "./travis-tool.sh dump_logs"
 
 notifications:
   email:
