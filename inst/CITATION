@@ -1,0 +1,12 @@
+citHeader("To cite dataRetrieval in publications, please use:")
+
+citEntry(entry = "book",
+ author = personList(
+              as.person("Robert M. Hirsch"),
+              as.person("Laura A. De Cicco"))
+  title = "User guide to Exploration and Graphics for RivEr Trends (EGRET) and dataRetrieval: R packages for hydrologic data",
+  publisher = "U.S. Geological Survey Techniques and Methods",
+  year = "2015",
+  url = "http://pubs.usgs.gov/tm/04/a10/",
+  textVersion = "Hirsch, R.M., and De Cicco, L.A., 2015, User guide to Exploration and Graphics for RivEr Trends (EGRET) and dataRetrieval: R packages for hydrologic data (version 2.0, February 2015): U.S. Geological Survey Techniques and Methods book 4, chap. A10, 93 p., http://dx.doi.org/10.3133/tm4A10"
+)
