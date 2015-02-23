@@ -1,6 +1,6 @@
 # Sample .travis.yml for R projects from https://github.com/craigcitro/r-travis
 
-language: r
+language: c
 
 os:
   - osx
@@ -14,12 +14,16 @@ env:
      - BOOTSTRAP_LATEX=""
      - NOT_CRAN="true" 
 
-r_packages:
-  - XML
-  - RCurl
-  - plyr
-  - reshape2
-  - lubridate
+script: "./travis-tool.sh run_tests"
+
+before_script:
+  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+  - chmod 755 ./travis-tool.sh
+  - "./travis-tool.sh bootstrap"
+  - "./travis-tool.sh install_deps - ./travis-tool.sh install_r XML RCurl plyr reshape2 lubridate httr knitr xtable testthat"
+
+after_script:
+  - "./travis-tool.sh dump_logs"
 
 notifications:
   email:
