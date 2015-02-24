@@ -3,7 +3,7 @@ citHeader("To cite dataRetrieval in publications, please use:")
 citEntry(entry = "book",
  author = personList(
               as.person("Robert M. Hirsch"),
-              as.person("Laura A. De Cicco"))
+              as.person("Laura A. De Cicco")),
   title = "User guide to Exploration and Graphics for RivEr Trends (EGRET) and dataRetrieval: R packages for hydrologic data",
   publisher = "U.S. Geological Survey Techniques and Methods",
   year = "2015",
