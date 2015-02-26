@@ -10,12 +10,12 @@ env:
      - BOOTSTRAP_LATEX=""
      - NOT_CRAN="true" 
 
-script: "./travis-tool.sh run_tests"
-
-before_script:
+before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
-  - R -q -e "options(warn=2)"
+  - Rscript -e "options(warn=2)"
+
+script: "./travis-tool.sh run_tests"
 
 after_script:
   - "./travis-tool.sh dump_logs"
