@@ -25,8 +25,9 @@ dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_
 only returns remark_cd (remark code) and result_va (result value). Expanded = \code{FALSE} will not give
 sufficient information for unbiased statistical analysis.}
 
-\item{reshape}{logical, reshape the data. If \code{TRUE}, then return a wide data frame with all water-quality in a single row for each sample.
-If \code{FALSE} (default), then return a long data frame with each water-quality result in a single row.}
+\item{reshape}{logical, reshape the expanded data. If \code{TRUE}, then return a wide data frame with all water-quality in a single row for each sample.
+If \code{FALSE} (default), then return a long data frame with each water-quality result in a single row. This
+argument is only applicable to expanded data. Data requested using \code{expanded=FALSE} is always returned in the wide format.}
 
 \item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
