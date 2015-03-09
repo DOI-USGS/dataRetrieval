@@ -8,7 +8,8 @@ readNWISdata(service = "dv", ...)
 }
 \arguments{
 \item{service}{string. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels"
-(for groundwater levels), and "site" (for site service)}
+(for groundwater levels), "site" (for site service), and "qw" (water-quality). Note: "qw" calls go to:
+\url{http://nwis.waterdata.usgs.gov/usa/nwis/qwdata} for data requests, and use different call requests schemes.}
 
 \item{\dots}{see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options}
 }
@@ -61,6 +62,10 @@ waterYear <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010",
                   service="dv", startDate=startDate, endDate=endDate)
 siteInfo <- readNWISdata(stateCd="WI", parameterCd="00010",
                   hasDataTypeCd="iv", service="site")
+qwData <- readNWISdata(bBox=c(-82.5,41.52,-81,41),startDate=as.Date("2000-01-01"),
+                  drain_area_va_min=50, qw_count_nu=50,qw_attributes="expanded",
+                  qw_sample_wide="wide",list_of_search_criteria=c("lat_long_bounding_box",
+                  "drain_area_va","obs_count_nu"),service="qw")
 }
 }
 \seealso{

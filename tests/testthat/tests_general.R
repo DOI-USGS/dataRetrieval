@@ -18,6 +18,13 @@ test_that("General NWIS retrievals working", {
   
   siteInfo <- readNWISdata(stateCd="WI", parameterCd="00010",hasDataTypeCd="iv", 
                            service="site")
+  expect_is(siteInfo$station_nm, "character")
+  
+  qwData <- readNWISdata(bBox=c(-82.5,41.52,-81,41),startDate=as.Date("2000-01-01"),
+                   drain_area_va_min=50, qw_count_nu=50,qw_attributes="expanded",
+                    qw_sample_wide="wide",list_of_search_criteria=c("lat_long_bounding_box",
+                    "drain_area_va","obs_count_nu"),service="qw")
+  expect_is(qwData$startDateTime, "POSIXct")
   
 })
 
