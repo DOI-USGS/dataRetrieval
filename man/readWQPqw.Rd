@@ -13,10 +13,10 @@ readWQPqw(siteNumbers, parameterCd, startDate = "", endDate = "")
 Leaving this blank will return all of the measured values during the specified time period.}
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-retrieval for the earliest possible record.}
+retrieval for the earliest possible record. Date arguments are always specified in local time.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-retrieval for the latest possible record.}
+retrieval for the latest possible record. Date arguments are always specified in local time.}
 }
 \value{
 A data frame with at least the following columns:

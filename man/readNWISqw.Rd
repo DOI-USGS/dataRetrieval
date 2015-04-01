@@ -14,10 +14,10 @@ readNWISqw(siteNumbers, parameterCd, startDate = "", endDate = "",
 group, or a character vector of 5-digit parameter codes. See \bold{Details}.}
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-retrieval for the earliest possible record.}
+retrieval for the earliest possible record. Date arguments are always specified in local time.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-retrieval for the latest possible record.}
+retrieval for the latest possible record. Date arguments are always specified in local time.}
 
 \item{expanded}{logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional information. Expanded data includes
 remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),

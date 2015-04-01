@@ -13,10 +13,12 @@ readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "",
 \item{parameterCd}{character USGS parameter code.  This is usually an 5 digit number.}
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-retrieval for the earliest possible record.}
+retrieval for the earliest possible record. Simple date arguments are specified in local time.
+See more information here: \url{http://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-retrieval for the latest possible record.}
+retrieval for the latest possible record. Simple date arguments are specified in local time.
+See more information here: \url{http://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.}
 
 \item{tz}{character to set timezone attribute of dateTime. Default is an empty quote, which converts the
 dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
@@ -66,6 +68,14 @@ rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
 
 timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
          "2013-11-03","2013-11-03")
+
+centralTime <- readNWISuv(siteNumber,parameterCd,
+                           "2014-10-10T12:00", "2014-10-10T23:59",
+                           tz="America/Chicago")
+
+# Adding 'Z' to the time indicates to the web service to call the data with UTC time:
+GMTdata <- readNWISuv(siteNumber,parameterCd,
+                           "2014-10-10T00:00Z", "2014-10-10T23:59Z")
 }
 }
 \seealso{

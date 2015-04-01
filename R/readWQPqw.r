@@ -11,9 +11,9 @@
 #' @param parameterCd vector of USGS 5-digit parameter code or characteristicNames. 
 #' Leaving this blank will return all of the measured values during the specified time period.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-#' retrieval for the earliest possible record.
+#' retrieval for the earliest possible record. Date arguments are always specified in local time.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-#' retrieval for the latest possible record.
+#' retrieval for the latest possible record. Date arguments are always specified in local time.
 #' @keywords data import USGS web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
