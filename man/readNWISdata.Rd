@@ -19,9 +19,12 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency \tab character \tab The NWIS code for the agency reporting the data\cr
 site \tab character \tab The USGS site number \cr
-datetime \tab POSIXct \tab The date and time of the value converted to UTC (for unit value data), \cr
-\tab character \tab or raw character string \cr
-tz_cd \tab character \tab The time zone code for datetime \cr
+dateTime \tab POSIXct \tab The date and time (if applicable) of the measurement,
+          converted to UTC for unit value data. R only allows one time zone attribute per column. For unit data
+          spanning a time zone change, converting the data to UTC solves this problem. For daily data,
+          the time zone attribute is the time zone of the first returned measurement.
+           \cr
+tz_cd \tab character \tab The time zone code for dateTime column\cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
 }
@@ -44,16 +47,27 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 \description{
 Returns data from the NWIS web service.
 Arguments to the function should be based on \url{http://waterservices.usgs.gov} service calls.
+See examples below for ideas of constructing queries.
 }
 \examples{
 \dontrun{
 # Examples not run for time considerations
 dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010")
-dataTempUnit <- readNWISdata(sites="03086500", service="iv", parameterCd="00010")
+instFlow <- readNWISdata(sites="05114000", service="iv",
+                   parameterCd="00060",
+                   startDate="2014-05-01T00:00Z",endDate="2014-05-01T12:00Z")
+
+instFlowCDT <- readNWISdata(sites="05114000", service="iv",
+                   parameterCd="00060",
+                   startDate="2014-05-01T00:00",endDate="2014-05-01T12:00",
+                   tz="America/Chicago")
+
 #Empty:
-multiSite <- readNWISdata(sites=c("04025000","04072150"), service="iv", parameterCd="00010")
+multiSite <- readNWISdata(sites=c("04025000","04072150"), service="iv",
+                           parameterCd="00010")
 #Not empty:
-multiSite <- readNWISdata(sites=c("04025500","040263491"), service="iv", parameterCd="00060")
+multiSite <- readNWISdata(sites=c("04025500","040263491"),
+                           service="iv", parameterCd="00060")
 bBoxEx <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010")
 
 startDate <- as.Date("2013-10-01")
@@ -66,6 +80,8 @@ qwData <- readNWISdata(bBox=c(-82.5,41.52,-81,41),startDate=as.Date("2000-01-01"
                   drain_area_va_min=50, qw_count_nu=50,qw_attributes="expanded",
                   qw_sample_wide="wide",list_of_search_criteria=c("lat_long_bounding_box",
                   "drain_area_va","obs_count_nu"),service="qw")
+temp <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", service="site",
+                   seriesCatalogOutput=TRUE)
 }
 }
 \seealso{

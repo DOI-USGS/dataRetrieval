@@ -6,9 +6,9 @@
 #' @param siteNumber character USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a character vector.
 #' @param parameterCd character of USGS parameter code(s).  This is usually an 5 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-#' retrieval for the earliest possible record.
+#' retrieval for the earliest possible record. Date arguments are always specified in local time.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-#' retrieval for the latest possible record.
+#' retrieval for the latest possible record. Date arguments are always specified in local time.
 #' @param statCd character USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.
 #' @return A data frame with the following columns:
 #' \tabular{lll}{

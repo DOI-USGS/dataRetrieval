@@ -408,9 +408,10 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
     meltedmergedDF  <- melt(mergedDF,id.vars=sortingColumns)
     meltedmergedDF  <- meltedmergedDF[!is.na(meltedmergedDF$value),] 
-  
+    rownames(meltedmergedDF) <- NULL
+    meltedmergedDF <- meltedmergedDF[!duplicated(meltedmergedDF),]
     castFormula <- as.formula(paste(paste(sortingColumns, collapse="+"),"variable",sep="~"))
-    mergedDF2 <- dcast(meltedmergedDF, castFormula, drop=FALSE)
+    mergedDF2 <- dcast(meltedmergedDF, castFormula, drop=FALSE, value.var = "value")
     dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
     if(sum(dataColumns2) == 1){
       mergedDF <- mergedDF2[!is.na(mergedDF2[,dataColumns2]),]
