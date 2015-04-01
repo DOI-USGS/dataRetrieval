@@ -58,6 +58,8 @@
 #'                   drain_area_va_min=50, qw_count_nu=50,qw_attributes="expanded",
 #'                   qw_sample_wide="wide",list_of_search_criteria=c("lat_long_bounding_box",
 #'                   "drain_area_va","obs_count_nu"),service="qw")
+#' temp <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", service="site", 
+#'                    seriesCatalogOutput=TRUE)
 #' }
 readNWISdata <- function(service="dv", ...){
   
@@ -121,9 +123,19 @@ readNWISdata <- function(service="dv", ...){
   urlCall <- paste0(baseURL,urlCall)
   
   if(service == "site"){
-    retval <- importRDB1(urlCall, asDateTime = FALSE, qw = FALSE)
+    possibleError <- tryCatch({
+      retval <- importRDB1(urlCall, asDateTime = FALSE, qw = FALSE)
+    }, error = function(e) {
+      stop(e, "with url:", urlCall)
+    })
+    
   } else if(service != "qwdata") {
-    retval <- importWaterML1(urlCall, asDateTime = ("iv" == service))
+    possibleError <- tryCatch({
+      retval <- importWaterML1(urlCall, asDateTime = ("iv" == service))
+    }, error = function(e) {
+      stop(e, "with url:", urlCall)
+    })
+        
     if("dv" == service){
       retval$dateTime <- as.POSIXct(retval$dateTime)
     }
