@@ -78,3 +78,48 @@ NULL
 #' @examples
 #' head(pCodeToName[,1:2])
 NULL
+
+#' US State Code Lookup Table
+#'
+#' Data pulled from \url{http://www2.census.gov/geo/docs/reference/state.txt}
+#' on April 1, 2015. 
+#'
+#' @name stateCd
+#' @return stateCd data frame.
+#'
+#' \tabular{lll}{
+#' Name \tab Type \tab Description\cr
+#' STATE \tab character \tab two-digit ANSI code  \cr
+#' STUSAB \tab character \tab State abbreviation \cr
+#' STATE_NAME \tab character \tab State full name \cr
+#' STATENS \tab character \tab State id \cr
+#' }
+#' @docType data
+#' @export stateCd
+#' @keywords USGS stateCd
+#' @examples
+#' head(stateCd)
+NULL
+
+#' US County Code Lookup Table
+#'
+#' Data pulled from \url{http://www2.census.gov/geo/docs/reference/codes/files/national_county.txt}
+#' on April 1, 2015. 
+#'
+#' @name countyCd
+#' @return countyCd data frame.
+#'
+#' \tabular{lll}{
+#' Name \tab Type \tab Description\cr
+#' STUSAB \tab character \tab State abbreviation \cr
+#' STATE \tab character \tab two-digit ANSI code  \cr
+#' COUNTY \tab character \tab three-digit county code \cr
+#' COUNTY_NAME \tab character \tab County full name \cr
+#' COUNTY_ID \tab character \tab County id \cr
+#' }
+#' @docType data
+#' @export countyCd
+#' @keywords USGS countyCd
+#' @examples
+#' head(countyCd)
+NULL
