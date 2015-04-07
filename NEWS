@@ -1,3 +1,10 @@
+dataRetrieval 2.2.0
+===========
+* Changed the output of tz_cd (in all *NWIS functions) to the timezone that is reported in the data frame. Before this version, it was the time zone reported by NWIS. This was confusing however since the dateTime columns default to UTC.
+* Minor bug fixes
+* Help file updates
+* Improved query options in readNWISdata and readWQPdata functions.
+
 dataRetrieval 2.1.4
 ===========
 * Expanded readNWISdata to qw data
