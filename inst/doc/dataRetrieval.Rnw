@@ -2,7 +2,7 @@
 %\VignetteEngine{knitr::knitr}
 %\VignetteDepends{}
 %\VignetteSuggests{xtable, testthat}
-%\VignetteImports{XML, RCurl, reshape2,lubridate,httr,plyr}
+%\VignetteImports{XML, RCurl, reshape2,lubridate,plyr}
 %\VignettePackage{dataRetrieval}
 
 \documentclass[a4paper,11pt]{article}
