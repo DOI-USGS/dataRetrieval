@@ -167,7 +167,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       
       if(length(value)!=0){
       
-        value[value == noValue] <- NA
+#         value[value == noValue] <- NA
             
         attNames <- xpathSApply(subChunk, "ns1:value/@*",namespaces = chunkNS)
         attributeNames <- unique(names(attNames))
@@ -390,11 +390,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       statInformation <- merge(statInformation, statInfo, by=similarStats, all=TRUE)
     }
 
-    ######################
-    
     attList[[uniqueName]] <- list(extraSiteData, extraVariableData)
-
-    
   }
 
   if(!is.null(mergedDF)){
@@ -402,17 +398,42 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     dataColumns <- unique(dataColumns)
     qualColumns <- unique(qualColumns)
     
-    
-    
     sortingColumns <- names(mergedDF)[!(names(mergedDF) %in% c(dataColumns,qualColumns))]
   
     meltedmergedDF  <- melt(mergedDF,id.vars=sortingColumns)
     meltedmergedDF  <- meltedmergedDF[!is.na(meltedmergedDF$value),] 
-    rownames(meltedmergedDF) <- NULL
+    
     meltedmergedDF <- meltedmergedDF[!duplicated(meltedmergedDF),]
     castFormula <- as.formula(paste(paste(sortingColumns, collapse="+"),"variable",sep="~"))
-    mergedDF2 <- dcast(meltedmergedDF, castFormula, drop=FALSE, value.var = "value")
-    dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
+    
+    #Check for duplicated sorting columns (2 qualifier problem):
+    qualDups <- meltedmergedDF[duplicated(meltedmergedDF[,c(sortingColumns,"variable")]),]
+    qualDups <- qualDups[grep("cd",qualDups$variable),]
+    indexDups <- as.numeric(row.names(qualDups))
+  
+    if(length(indexDups) > 0){
+      mergedDF2 <- dcast(meltedmergedDF[-indexDups,], castFormula, drop=FALSE, value.var = "value",)
+      
+      # Need to get value....
+      dupInfo <- meltedmergedDF[indexDups, sortingColumns]
+      valDF <- meltedmergedDF[meltedmergedDF$variable != meltedmergedDF[indexDups,"variable" ],]
+      dupVals <- valDF[,sortingColumns]
+      
+      matchIndexes <- merge(dupInfo, transform(dupVals, rownum=1:nrow(dupVals)))$rownum
+
+      newRows <- rbind(meltedmergedDF[indexDups, ], valDF[matchIndexes,])
+      
+      mergedDF3 <- dcast(newRows, castFormula, drop=FALSE, value.var = "value",)
+      mergedDF2 <- rbind(mergedDF2, mergedDF3)
+      mergedDF2 <- mergedDF2[order(mergedDF2$dateTime),]
+      
+      dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
+      
+    } else {
+      mergedDF2 <- dcast(meltedmergedDF, castFormula, drop=FALSE, value.var = "value")
+      dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
+    }
+    
     if(sum(dataColumns2) == 1){
       mergedDF <- mergedDF2[!is.na(mergedDF2[,dataColumns2]),]
     } else {
@@ -421,8 +442,10 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     
     if(length(dataColumns) > 1){
       mergedDF[,dataColumns] <- lapply(mergedDF[,dataColumns], function(x) as.numeric(x))
+      mergedDF[dataColumns][!is.na(mergedDF[,dataColumns]) & mergedDF[,dataColumns] == noValue] <- NA
     } else {
       mergedDF[,dataColumns] <- as.numeric(mergedDF[,dataColumns])
+      mergedDF[!is.na(mergedDF[,dataColumns]) & mergedDF[,dataColumns] == noValue,dataColumns] <- NA
     }
     
     names(mergedDF) <- make.names(names(mergedDF))
