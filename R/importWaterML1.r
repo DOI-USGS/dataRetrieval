@@ -49,7 +49,7 @@
 #' property <- '00060'
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 #' \dontrun{
-#' data <- importWaterML1(obs_url,TRUE)
+#' data <- importWaterML1(obs_url)
 #' 
 #' groundWaterSite <- "431049071324301"
 #' startGW <- "2013-10-01"
@@ -57,6 +57,7 @@
 #' groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
 #'           startGW,endGW, service="gwlevels")
 #' groundWater <- importWaterML1(groundwaterExampleURL)
+#' groundWater2 <- importWaterML1(groundwaterExampleURL, asDateTime=TRUE)
 #' 
 #' unitDataURL <- constructNWISURL(siteNumber,property,
 #'          "2013-11-03","2013-11-03",'uv')
@@ -274,10 +275,12 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
             
             if(tz != ""){
               attr(datetime, "tzone") <- tz
+              df$tz_cd <- rep(tz, nrow(df))
             } else {
               attr(datetime, "tzone") <- "UTC"
+              df$tz_cd <- rep("UTC", nrow(df))
             }
-            
+
             
           } else {
             
@@ -461,9 +464,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   attr(mergedDF, "variableInfo") <- variableInformation
   attr(mergedDF, "disclaimer") <- notes["disclaimer"]
   attr(mergedDF, "statisticInfo") <- statInformation
-  # Do we want this?
-  #   attr(mergedDF, "attributeList") <- attList
-  #   attr(mergedDF, "queryInfo") <- queryInfo
   attr(mergedDF, "queryTime") <- Sys.time()
   return (mergedDF)
 }

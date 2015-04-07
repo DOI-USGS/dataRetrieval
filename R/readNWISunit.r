@@ -72,12 +72,6 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 
   data <- importWaterML1(url,asDateTime=TRUE,tz=tz)
   
-  if(tz == ""){
-    data$tz_cd <- rep("UTC", nrow(data))
-  } else {
-    data$tz_cd <- rep(tz, nrow(data))
-  }
-
   return (data)
 }
 
@@ -138,10 +132,12 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){
   
   if(asDateTime){
     badDates <- which(grepl("[0-9]*-[0-9]*-00",data$peak_dt))
-    data <- data[-badDates,]
     
     if(length(badDates) > 0){
-      warning(length(badDates), " rows were thrown out due to incomplete dates")
+      data <- data[-badDates,]
+      if(length(badDates) > 0){
+        warning(length(badDates), " rows were thrown out due to incomplete dates")
+      }
     }
     data$peak_dt <- as.Date(data$peak_dt)
   }
@@ -263,7 +259,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
   # Doesn't seem to be a WaterML1 format option
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"meas")
   
-  data <- importRDB1(url,asDateTime=FALSE,tz=tz)
+  data <- importRDB1(url,asDateTime=TRUE,tz=tz)
   
   if("diff_from_rating_pc" %in% names(data)){
     data$diff_from_rating_pc <- as.numeric(data$diff_from_rating_pc)

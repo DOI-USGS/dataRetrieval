@@ -44,7 +44,7 @@
 #' @examples
 #' \dontrun{
 #' # Examples not run for time considerations
-#' dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010")
+#' dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
 #' instFlow <- readNWISdata(sites="05114000", service="iv", 
 #'                    parameterCd="00060", 
 #'                    startDate="2014-05-01T00:00Z",endDate="2014-05-01T12:00Z")
@@ -158,7 +158,7 @@ readNWISdata <- function(service="dv", ...){
       stop(e, "with url:", urlCall)
     })
     
-  } else if(service != "qwdata") {
+  } else if (service != "qwdata") {
     possibleError <- tryCatch({
       retval <- importWaterML1(urlCall, asDateTime = ("iv" == service), tz= tz)
     }, error = function(e) {
@@ -172,13 +172,13 @@ readNWISdata <- function(service="dv", ...){
                                   "America/Denver","America/Denver",
                                   "America/Los_Angeles","America/Los_Angeles",
                                   "America/Anchorage","America/Anchorage",
-                                  "America/Honolulu","America/Honolulu"),
+                                  "America/Honolulu","America/Honolulu","UTC"),
                                 c("EST","EDT",
                                   "CST","CDT",
                                   "MST","MDT",
                                   "PST","PDT",
                                   "AKST","AKDT",
-                                  "HAST","HST"))
+                                  "HAST","HST","UTC"))
       #TODO: Think about dates that cross a time zone boundary.
       retval$dateTime <- as.POSIXct(retval$dateTime, tzLib[tz=retval$tz_cd[1]])
     }
