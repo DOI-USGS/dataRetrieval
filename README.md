@@ -31,11 +31,13 @@ Web service retrieval functions:
 |`whatNWISsites` | `...` | NWIS site search using user-specified queries |
 |`whatNWISdata` | `siteNumber`, `service` | NWIS data availability, including period of record and count |
 |`readWQPdata` | `...` | WQP data using user-specified queries |
-|`readWQPqw` | `Common 3` | WQP data with `Common 3` query and either parameter code or characteristic name|
+|`readWQPqw` | `Common 3`, `parameterCd`**,`tz` | WQP data with `Common 3` query and either parameter code or characteristic name|
 |`whatWQPsites` | `...` | WQP site search using user-specified queries |
 
 * `Common 3` = siteNumber, startDate, endDate
 * `...` = user-defined arguments.
+
+**`parameterCd` in WQP function can be either USGS parameter codes, or EPA characteristic names
 
 ##Reporting bugs
 
