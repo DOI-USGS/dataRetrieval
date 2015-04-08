@@ -117,15 +117,22 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, ActivityStartTime.Time),format="%Y-%m-%d %H:%M:%S", tz = "UTC"))
       retval$ActivityStartDateTime <- retval$ActivityStartDateTime + timeZoneStart*60*60
       retval$ActivityStartDateTime <- as.POSIXct(retval$ActivityStartDateTime)
-      attr(retval$ActivityStartDateTime, "tzone") <- "UTC"
-      
+      if(tz != ""){
+        attr(retval$ActivityStartDateTime, "tzone") <- tz
+      } else {
+        attr(retval$ActivityStartDateTime, "tzone") <- "UTC"
+      }      
     }
     
     if(any(!is.na(timeZoneEnd))){      
       retval$ActivityEndDateTime <- with(retval, as.POSIXct(paste(ActivityEndDate, ActivityEndTime.Time),format="%Y-%m-%d %H:%M:%S", tz = "UTC"))
       retval$ActivityEndDateTime <- retval$ActivityEndDateTime + timeZoneEnd*60*60
       retval$ActivityEndDateTime <- as.POSIXct(retval$ActivityEndDateTime)
-      attr(retval$ActivityEndDateTime, "tzone") <- "UTC"
+      if(tz != ""){
+        attr(retval$ActivityEndDateTime, "tzone") <- tz
+      } else {
+        attr(retval$ActivityEndDateTime, "tzone") <- "UTC"
+      }
     }
     
     if(all(is.na(retval$ActivityEndDateTime))){
