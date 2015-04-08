@@ -52,7 +52,7 @@ See examples below for ideas of constructing queries.
 \examples{
 \dontrun{
 # Examples not run for time considerations
-dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010")
+dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
 instFlow <- readNWISdata(sites="05114000", service="iv",
                    parameterCd="00060",
                    startDate="2014-05-01T00:00Z",endDate="2014-05-01T12:00Z")

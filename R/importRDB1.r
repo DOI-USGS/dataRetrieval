@@ -66,7 +66,7 @@
 #' start <- "2014-11-09"
 #' end <- "2014-11-28"
 #' urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
-#' ice <- importRDB1(urlIce)
+#' ice <- importRDB1(urlIce, asDateTime=TRUE)
 #' iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
 #' }
 #' # User file:
@@ -160,9 +160,11 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
         
         if(tz != ""){
           attr(data[,regexpr('d$', dataType) > 0], "tzone") <- tz
+          data$tz_cd <- rep(tz, nrow(data))
         } else {
           attr(data[,regexpr('d$', dataType) > 0], "tzone") <- "UTC"
-        }
+          data$tz_cd <- rep("UTC", nrow(data))
+        }   
        
       } else if (qw){
         
@@ -205,9 +207,11 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
         
         if(tz != ""){
           attr(data$startDateTime, "tzone") <- tz
+          data$tz_cd <- rep(tz, nrow(data))
         } else {
           attr(data$startDateTime, "tzone") <- "UTC"
-        }
+          data$tz_cd <- rep("UTC", nrow(data))
+        }        
         
         if(composite){
           data$endDateTime <- with(data, as.POSIXct(paste(sample_end_dt, sample_end_tm),format="%Y-%m-%d %H:%M", tz = "UTC"))

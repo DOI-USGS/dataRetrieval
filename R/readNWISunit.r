@@ -72,24 +72,24 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 
   data <- importWaterML1(url,asDateTime=TRUE,tz=tz)
   
-  if(tz == ""){
-    data$tz_cd <- rep("UTC", nrow(data))
-  } else {
-    data$tz_cd <- rep(tz, nrow(data))
-  }
-
   return (data)
 }
 
 #' Peak flow data from USGS (NWIS)
 #' 
-#' Reads peak flow from NWISweb. Data is retrieved from \url{http://waterdata.usgs.gov/nwis}. 
+#' Reads peak flow from NWISweb. Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
+#' In some cases, the specific date of the peak data is not know. This function will default to
+#' converting the complete dates, dropping rows with incomplete dates. If those incomplete dates are
+#' needed, set the `asDateTime` argument to FALSE. No rows will be removed, and no dates will be converted
+#' to R Date objects.
 #' 
 #' @param siteNumbers character USGS site number(or multiple sites).  This is usually an 8 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the earliest possible record.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record.
+#' @param asDateTime logical default to \code{TRUE}. When \code{TRUE}, the peak_dt column is converted
+#' to a Date object, and incomplete dates are removed. When \code{FALSE}, no columns are removed, but no dates are converted.
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -123,14 +123,24 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' \dontrun{
 #' data <- readNWISpeak(siteNumbers)
 #' }
-readNWISpeak <- function (siteNumbers,startDate="",endDate=""){  
+readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){  
   
   # Doesn't seem to be a peak xml service
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"peak")
   
   data <- importRDB1(url, asDateTime=FALSE)
   
-  data$peak_dt <- as.Date(data$peak_dt)
+  if(asDateTime){
+    badDates <- which(grepl("[0-9]*-[0-9]*-00",data$peak_dt))
+    
+    if(length(badDates) > 0){
+      data <- data[-badDates,]
+      if(length(badDates) > 0){
+        warning(length(badDates), " rows were thrown out due to incomplete dates")
+      }
+    }
+    data$peak_dt <- as.Date(data$peak_dt)
+  }
   data$gage_ht <- as.numeric(data$gage_ht)
   
   siteInfo <- readNWISsite(siteNumbers)
@@ -249,7 +259,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
   # Doesn't seem to be a WaterML1 format option
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"meas")
   
-  data <- importRDB1(url,asDateTime=FALSE,tz=tz)
+  data <- importRDB1(url,asDateTime=TRUE,tz=tz)
   
   if("diff_from_rating_pc" %in% names(data)){
     data$diff_from_rating_pc <- as.numeric(data$diff_from_rating_pc)

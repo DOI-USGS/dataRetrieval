@@ -49,7 +49,7 @@
 #' property <- '00060'
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 #' \dontrun{
-#' data <- importWaterML1(obs_url,TRUE)
+#' data <- importWaterML1(obs_url)
 #' 
 #' groundWaterSite <- "431049071324301"
 #' startGW <- "2013-10-01"
@@ -57,6 +57,7 @@
 #' groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
 #'           startGW,endGW, service="gwlevels")
 #' groundWater <- importWaterML1(groundwaterExampleURL)
+#' groundWater2 <- importWaterML1(groundwaterExampleURL, asDateTime=TRUE)
 #' 
 #' unitDataURL <- constructNWISURL(siteNumber,property,
 #'          "2013-11-03","2013-11-03",'uv')
@@ -167,7 +168,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       
       if(length(value)!=0){
       
-        value[value == noValue] <- NA
+#         value[value == noValue] <- NA
             
         attNames <- xpathSApply(subChunk, "ns1:value/@*",namespaces = chunkNS)
         attributeNames <- unique(names(attNames))
@@ -274,10 +275,12 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
             
             if(tz != ""){
               attr(datetime, "tzone") <- tz
+              df$tz_cd <- rep(tz, nrow(df))
             } else {
               attr(datetime, "tzone") <- "UTC"
+              df$tz_cd <- rep("UTC", nrow(df))
             }
-            
+
             
           } else {
             
@@ -390,11 +393,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       statInformation <- merge(statInformation, statInfo, by=similarStats, all=TRUE)
     }
 
-    ######################
-    
     attList[[uniqueName]] <- list(extraSiteData, extraVariableData)
-
-    
   }
 
   if(!is.null(mergedDF)){
@@ -402,17 +401,42 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     dataColumns <- unique(dataColumns)
     qualColumns <- unique(qualColumns)
     
-    
-    
     sortingColumns <- names(mergedDF)[!(names(mergedDF) %in% c(dataColumns,qualColumns))]
   
     meltedmergedDF  <- melt(mergedDF,id.vars=sortingColumns)
     meltedmergedDF  <- meltedmergedDF[!is.na(meltedmergedDF$value),] 
-    rownames(meltedmergedDF) <- NULL
+    
     meltedmergedDF <- meltedmergedDF[!duplicated(meltedmergedDF),]
     castFormula <- as.formula(paste(paste(sortingColumns, collapse="+"),"variable",sep="~"))
-    mergedDF2 <- dcast(meltedmergedDF, castFormula, drop=FALSE, value.var = "value")
-    dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
+    
+    #Check for duplicated sorting columns (2 qualifier problem):
+    qualDups <- meltedmergedDF[duplicated(meltedmergedDF[,c(sortingColumns,"variable")]),]
+    qualDups <- qualDups[grep("cd",qualDups$variable),]
+    indexDups <- as.numeric(row.names(qualDups))
+  
+    if(length(indexDups) > 0){
+      mergedDF2 <- dcast(meltedmergedDF[-indexDups,], castFormula, drop=FALSE, value.var = "value",)
+      
+      # Need to get value....
+      dupInfo <- meltedmergedDF[indexDups, sortingColumns]
+      valDF <- meltedmergedDF[meltedmergedDF$variable != meltedmergedDF[indexDups,"variable" ],]
+      dupVals <- valDF[,sortingColumns]
+      
+      matchIndexes <- merge(dupInfo, transform(dupVals, rownum=1:nrow(dupVals)))$rownum
+
+      newRows <- rbind(meltedmergedDF[indexDups, ], valDF[matchIndexes,])
+      
+      mergedDF3 <- dcast(newRows, castFormula, drop=FALSE, value.var = "value",)
+      mergedDF2 <- rbind(mergedDF2, mergedDF3)
+      mergedDF2 <- mergedDF2[order(mergedDF2$dateTime),]
+      
+      dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
+      
+    } else {
+      mergedDF2 <- dcast(meltedmergedDF, castFormula, drop=FALSE, value.var = "value")
+      dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
+    }
+    
     if(sum(dataColumns2) == 1){
       mergedDF <- mergedDF2[!is.na(mergedDF2[,dataColumns2]),]
     } else {
@@ -421,8 +445,10 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     
     if(length(dataColumns) > 1){
       mergedDF[,dataColumns] <- lapply(mergedDF[,dataColumns], function(x) as.numeric(x))
+      mergedDF[dataColumns][!is.na(mergedDF[,dataColumns]) & mergedDF[,dataColumns] == noValue] <- NA
     } else {
       mergedDF[,dataColumns] <- as.numeric(mergedDF[,dataColumns])
+      mergedDF[!is.na(mergedDF[,dataColumns]) & mergedDF[,dataColumns] == noValue,dataColumns] <- NA
     }
     
     names(mergedDF) <- make.names(names(mergedDF))
@@ -438,9 +464,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   attr(mergedDF, "variableInfo") <- variableInformation
   attr(mergedDF, "disclaimer") <- notes["disclaimer"]
   attr(mergedDF, "statisticInfo") <- statInformation
-  # Do we want this?
-  #   attr(mergedDF, "attributeList") <- attList
-  #   attr(mergedDF, "queryInfo") <- queryInfo
   attr(mergedDF, "queryTime") <- Sys.time()
   return (mergedDF)
 }

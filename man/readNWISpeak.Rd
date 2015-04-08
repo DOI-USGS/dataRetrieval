@@ -4,7 +4,7 @@
 \alias{readNWISpeak}
 \title{Peak flow data from USGS (NWIS)}
 \usage{
-readNWISpeak(siteNumbers, startDate = "", endDate = "")
+readNWISpeak(siteNumbers, startDate = "", endDate = "", asDateTime = TRUE)
 }
 \arguments{
 \item{siteNumbers}{character USGS site number(or multiple sites).  This is usually an 8 digit number.}
@@ -14,6 +14,9 @@ retrieval for the earliest possible record.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record.}
+
+\item{asDateTime}{logical default to \code{TRUE}. When \code{TRUE}, the peak_dt column is converted
+to a Date object, and incomplete dates are removed. When \code{FALSE}, no columns are removed, but no dates are converted.}
 }
 \value{
 A data frame with the following columns:
@@ -45,6 +48,10 @@ siteInfo \tab data.frame \tab A data frame containing information on the request
 }
 \description{
 Reads peak flow from NWISweb. Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
+In some cases, the specific date of the peak data is not know. This function will default to
+converting the complete dates, dropping rows with incomplete dates. If those incomplete dates are
+needed, set the `asDateTime` argument to FALSE. No rows will be removed, and no dates will be converted
+to R Date objects.
 }
 \examples{
 siteNumbers <- c('01594440','040851325')

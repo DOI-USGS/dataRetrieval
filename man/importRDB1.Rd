@@ -79,7 +79,7 @@ iceSite <- '04024430'
 start <- "2014-11-09"
 end <- "2014-11-28"
 urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
-ice <- importRDB1(urlIce)
+ice <- importRDB1(urlIce, asDateTime=TRUE)
 iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
 }
 # User file:
