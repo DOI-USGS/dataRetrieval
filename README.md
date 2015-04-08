@@ -1,16 +1,20 @@
 `dataRetrieval`
 =============
-Linux: [![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master)](https://travis-ci.org/USGS-R/dataRetrieval)
-
-Windows: [![Build status](https://ci.appveyor.com/api/projects/status/msanha92b500grr7?svg=true)](https://ci.appveyor.com/project/ldecicco-USGS/dataretrieval-787)
-
-
 Retrieval functions for USGS and EPA hydrologic and water quality data.
 
 A fairly large overhaul of the functions was done on November 31, 2014. Feedback from initial users was incorporated. For questions, bug reports, and suggestions please create an Issue here:
 
 [dataRetrieval Issues page](https://github.com/USGS-R/dataRetrieval/issues)
 
+Linux: [![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master)](https://travis-ci.org/USGS-R/dataRetrieval)
+
+Windows: [![Build status](https://ci.appveyor.com/api/projects/status/msanha92b500grr7?svg=true)](https://ci.appveyor.com/project/ldecicco-USGS/dataretrieval-787)
+
+##Package Installation
+To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
+```R
+  install.packages("dataRetrieval")
+```
 
 ## Function Overview
 
@@ -48,14 +52,6 @@ Please email questions, comments, and feedback to:
 egret_comments@usgs.gov
 
 Additionally, to subscribe to an email list concerning updates to these R packages, please send a request to egret_comments@usgs.gov.
-
-
-
-##Package Installation
-To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
-```R
-	install.packages("dataRetrieval")
-```
 
 ##Latest Version Updates
 ---------------
