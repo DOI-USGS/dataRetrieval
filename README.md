@@ -20,12 +20,12 @@ Web service retrieval functions:
 | -------------| ------------------------|:-------------|
 |`readNWISdata` | `...`, `service` | NWIS data using user-specified queries |
 |`readNWISdv` | `Common 3`, `parameterCd`, `statCd` | NWIS daily data with `Common` query |
-|`readNWISqw` | `Common 3`, `parameterCd`, `expanded` | NWIS water quality data with `Common` query |
-|`readNWISuv` | `Common 3`, `parameterCd` | NWIS instantaneous data with `Common` query |
+|`readNWISqw` | `Common 3`, `parameterCd`, `expanded`,`reshape`,`tz` | NWIS water quality data with `Common` query |
+|`readNWISuv` | `Common 3`, `parameterCd`,`tz` | NWIS instantaneous data with `Common` query |
 |`readNWISpCode` | `parameterCd` | NWIS parameter code information |
 |`readNWISgwl` | `Common 3` | NWIS groundwater level data with `Common` query |
-|`readNWISpeak` | `Common 3` | NWIS peak flow data with `Common` query |
-|`readNWISmeas` | `Common 3` | NWIS surface-water measurement data with `Common` query |
+|`readNWISpeak` | `Common 3`,`asDateTime` | NWIS peak flow data with `Common` query |
+|`readNWISmeas` | `Common 3`, `tz` | NWIS surface-water measurement data with `Common` query |
 |`readNWISrating` | `siteNumber`, `type` | NWIS rating table for an active USGS streamgage |
 |`readNWISsite` | `siteNumber` | NWIS site information |
 |`whatNWISsites` | `...` | NWIS site search using user-specified queries |
