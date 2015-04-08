@@ -105,6 +105,11 @@ readNWISdata <- function(service="dv", ...){
     values["stateCd"] <- stateCdLookup(values["stateCd"], "postal")
   }
   
+  if("statecode" %in% names(values)){
+    values["statecode"] <- stateCdLookup(values["statecode"], "postal")
+    names(values)[names(values) == "statecode"] <- "stateCd"
+  }
+  
   if(service == "iv"){
     baseURL <- "http://nwis.waterservices.usgs.gov/nwis/"
   } else if (service == "qwdata"){
@@ -138,8 +143,9 @@ readNWISdata <- function(service="dv", ...){
                "America/Denver","America/Los_Angeles",
                "America/Anchorage","America/Honolulu",
                "America/Jamaica","America/Managua",
-               "America/Phoenix","America/Metlakatla")
+               "America/Phoenix","America/Metlakatla","UTC")
       tz <- match.arg(tz, rTZ)
+      if("UTC" == tz) tz <- ""
     }
     values <- values[!(names(values) %in% "tz")]
   } else {
