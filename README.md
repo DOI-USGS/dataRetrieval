@@ -57,61 +57,13 @@ To install the dataRetrieval package, you must be using R 3.0 or greater and run
 	install.packages("dataRetrieval")
 ```
 
-##Version updates
+##Latest Version Updates
 ---------------
-###dataRetrieval 2.1.0
-* Improved error handling
-* Moved parameterCdFile and pcodeToName data to sysdata.rda to assure functions using that data are available in other packages.
-* Fixed WaterML2 qualifier bug.
-
-
-
-###dataRetrieval 2.0.1
-* Improved help files and vignette documentation
-* Added siteInfo and variableInfo attributes to returned data frames
-* Removed any obsolete functions
-
-
-###dataRetrieval 2.0.0
-
-* Changing naming convention. Migrated `EGRET` specific retrievals to `EGRET`:
-
-Moving `EGRET` specific functions to `EGRET` (version 2.0.0 and greater):
-
-
-|Information Source | Meta Data | Data |
-| -------------| -------------| ------------- |:-------------|
-|NWIS | `readNWISInfo` | `readNWISSample` |
-|  |  | `readNWISDaily` |
-| Water Quality Portal  | `readWQPInfo`| `readWQPSample` |
-| User-supplied files | `readUserInfo` | `readUserDaily`|
-| | | `readUserSample` |
-
-* Added back WaterML2 parsing tool
-* Added specific groundwater, rating, peak, and surfacewater measurement functions
-* Attached metadata attributes to returned dataframes
-
-
-###dataRetrieval 1.4.0
-* Changed naming convention:
-
-
-
-###dataRetrieval 1.3.3
-
-* Updated getNWISSiteInfo to retrieve multiple site file datasets at once using a vector of siteNumbers as input argument.
-* Updated error-handling for Web service calls. More information is returned when errors happen
-* Added some basic processing to Water Quality Portal raw data retrievals. Date columns are returned as Date objects, value columns are numeric, and a column is created from the date/time/timezone columns that is POSIXct.
-* Added very generalized NWIS and WQP retrieval functions (getNWISData, getNWISSites, getGeneralWQPData, and whatWQPsites) which allow the user to use any argument available on the Web service platform.
-
-
-###dataRetrieval 1.3.2
-
-* Deprecated getQWData, updated readWQPdata to take either parameter code or characteristic name.
-* Changed the name of raw data retrievals to: readNWISqw, getNWISunitData, getNWISdvData, and getWQPqwData (from: readNWISqw, retrieveUnitNWISData, retrieveNWISData, getRawQWData)
-* Added NA warning to getDVData function
-* Updated mergeReport to allow for Sample data with different measurements taken on the same day
-
+###dataRetrieval 2.2.0
+* Changed the output of tz_cd (in all *NWIS functions) to the timezone that is reported in the data frame. Before this version, it was the time zone reported by NWIS. This was confusing however since the dateTime columns default to UTC.
+* Minor bug fixes
+* Help file updates
+* Improved query options in readNWISdata and readWQPdata functions.
 
 
 ##Disclaimer
