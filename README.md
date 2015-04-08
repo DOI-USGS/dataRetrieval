@@ -35,6 +35,7 @@ Web service retrieval functions:
 |`whatWQPsites` | `...` | WQP site search using user-specified queries |
 
 * `Common 3` = siteNumber, startDate, endDate
+* `...` = user-defined arguments.
 
 ##Reporting bugs
 
