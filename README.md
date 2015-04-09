@@ -8,8 +8,14 @@ Windows: [![Build status](https://ci.appveyor.com/api/projects/status/msanha92b5
 
 ##Package Installation
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
+
 ```R
-  install.packages("dataRetrieval")
+install.packages("dataRetrieval")
+```
+
+To get inter-CRAN release updates, use the command:
+```r
+install.packages("dataRetrieval",repos="http://owi.usgs.gov/R")
 ```
 
 ## Function Overview
