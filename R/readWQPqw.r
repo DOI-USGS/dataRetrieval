@@ -14,6 +14,10 @@
 #' retrieval for the earliest possible record. Date arguments are always specified in local time.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record. Date arguments are always specified in local time.
+#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @keywords data import USGS web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -104,10 +108,10 @@
 #' rawPHsites <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')
 #' nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','2012-12-20')
 #' }
-readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate=""){
+readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz=""){
 
   url <- constructWQPURL(siteNumbers,parameterCd,startDate,endDate)
-  retval <- importWQP(url)
+  retval <- importWQP(url, tz = tz)
   
   pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
   

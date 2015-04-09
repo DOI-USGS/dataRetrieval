@@ -102,10 +102,6 @@ readWQPdata <- function(...){
 
   values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=";",sep=""))))
   
-  values <- gsub(",","%2C",values)
-  values <- gsub("%20","+",values)
-  values <- gsub(":","%3A",values)
-
   if("bBox" %in% names(values)){
     values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
   }
@@ -115,6 +111,41 @@ readWQPdata <- function(...){
   names(values)[names(values) == "siteNumber"] <- "siteid"
   names(values)[names(values) == "siteNumbers"] <- "siteid"
   
+  if("statecode" %in% names(values)){
+    stCd <- values["statecode"]
+    if(!grepl("US:",stCd)){
+      values["statecode"] <- paste0("US:",stateCdLookup(stCd, "id"))
+    }
+  }
+  
+  if("stateCd" %in% names(values)){
+    stCd <- values["stateCd"]
+    if(!grepl("US:",stCd)){
+      values["stateCd"] <- paste0("US:",stateCdLookup(stCd, "id"))
+    }
+    names(values)[names(values) == "stateCd"] <- "statecode"
+  }
+  
+  if("tz" %in% names(values)){
+    tz <- values["tz"]
+    if(tz != ""){
+      rTZ <- c("America/New_York","America/Chicago",
+               "America/Denver","America/Los_Angeles",
+               "America/Anchorage","America/Honolulu",
+               "America/Jamaica","America/Managua",
+               "America/Phoenix","America/Metlakatla","UTC")
+      tz <- match.arg(tz, rTZ)
+      if("UTC" == tz) tz <- ""
+    }
+    values <- values[!(names(values) %in% "tz")]
+  } else {
+    tz <- ""
+  }
+  
+  values <- gsub(",","%2C",values)
+  values <- gsub("%20","+",values)
+  values <- gsub(":","%3A",values)
+  
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
   
@@ -123,7 +154,7 @@ readWQPdata <- function(...){
                    urlCall,
                    "&mimeType=tsv")
   
-  retval <- importWQP(urlCall,FALSE)
+  retval <- importWQP(urlCall,FALSE, tz=tz)
   
   if(!all(is.na(retval))){
     siteInfo <- whatWQPsites(...)

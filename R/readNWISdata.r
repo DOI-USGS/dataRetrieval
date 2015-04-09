@@ -101,6 +101,15 @@ readNWISdata <- function(service="dv", ...){
   format <- "waterml,1.1"
   baseURL <- "http://waterservices.usgs.gov/nwis/"
   
+  if("stateCd" %in% names(values)){
+    values["stateCd"] <- stateCdLookup(values["stateCd"], "postal")
+  }
+  
+  if("statecode" %in% names(values)){
+    values["statecode"] <- stateCdLookup(values["statecode"], "postal")
+    names(values)[names(values) == "statecode"] <- "stateCd"
+  }
+  
   if(service == "iv"){
     baseURL <- "http://nwis.waterservices.usgs.gov/nwis/"
   } else if (service == "qwdata"){
@@ -134,8 +143,9 @@ readNWISdata <- function(service="dv", ...){
                "America/Denver","America/Los_Angeles",
                "America/Anchorage","America/Honolulu",
                "America/Jamaica","America/Managua",
-               "America/Phoenix","America/Metlakatla")
+               "America/Phoenix","America/Metlakatla","UTC")
       tz <- match.arg(tz, rTZ)
+      if("UTC" == tz) tz <- ""
     }
     values <- values[!(names(values) %in% "tz")]
   } else {
@@ -199,7 +209,42 @@ readNWISdata <- function(service="dv", ...){
     })
   }
   
-  
-  
   return(retval)
+}
+
+#' State code look up 
+#'
+#' Function to simplify finding state and state code definitions. Used in \code{readNWISdata}
+#' and \code{readWQPdata}.
+#'
+#' @param input could be character (full name, abbreviation, id), or numeric (id)
+#' @param outputType character can be "postal","fullName","tableIndex", or "id". 
+#' @export
+#' @examples
+#' fullName <- stateCdLookup("wi", "fullName")
+#' abbriev <- stateCdLookup("Wisconsin", "postal")
+#' id <- stateCdLookup("WI", "id")
+#' name <- stateCdLookup(55, "fullName")
+#' index <- stateCdLookup("WI", "tableIndex")
+#' stateCd[index,]
+stateCdLookup <- function(input, outputType="postal"){
+  
+  outputType <- match.arg(outputType, c("postal","fullName","tableIndex","id"))
+  
+  if(is.numeric(input) | !is.na(suppressWarnings(as.numeric(input)))){
+    input <- which(input == as.numeric(stateCd$STATE))
+  } else if(nchar(input) == 2){
+    input <- which(tolower(input) == tolower(stateCd$STUSAB))
+  } else {
+    input <- which(tolower(input) == tolower(stateCd$STATE_NAME))
+  }
+  
+  retVal <- switch(outputType,
+         postal = stateCd$STUSAB[input],
+         fullName = stateCd$STATE_NAME[input],
+         tableIndex = input,
+         id = stateCd$STATE[input]
+           )
+  
+  return(retVal)
 }

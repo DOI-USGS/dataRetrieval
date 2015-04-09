@@ -61,6 +61,10 @@ whatWQPsites <- function(...){
   
   values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=";",sep=""))))
   
+  if("tz" %in% names(values)){
+    values <- values[!(names(values) %in% "tz")]
+  }
+  
   values <- gsub(",","%2C",values)
   values <- gsub("%20","+",values)
   values <- gsub(":","%3A",values)
