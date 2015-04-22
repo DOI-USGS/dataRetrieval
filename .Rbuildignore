@@ -1,3 +1,4 @@
+vignettes\figure
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.Rproj\inst\dataRetrieval.log
