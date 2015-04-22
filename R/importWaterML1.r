@@ -87,6 +87,10 @@
 #' fullPath <- file.path(filePath, fileName)
 #' imporFile <- importWaterML1(fullPath,TRUE)
 #'
+#'#Timezone change with specified local timezone:
+#' tzURL <- constructNWISURL("04027000", c("00300","63680"), "2011-11-05", "2011-11-07","uv")
+#' tzIssue <- importWaterML1(tzURL, TRUE, "America/Chicago")
+#'
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(file.exists(obs_url)){
@@ -273,13 +277,13 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
               }
             }
             
-            if(tz != ""){
-              attr(datetime, "tzone") <- tz
-              df$tz_cd <- rep(tz, nrow(df))
-            } else {
-              attr(datetime, "tzone") <- "UTC"
-              df$tz_cd <- rep("UTC", nrow(df))
-            }
+#             if(tz != ""){
+#               attr(datetime, "tzone") <- tz
+#               df$tz_cd <- rep(tz, nrow(df))
+#             } else {
+#               attr(datetime, "tzone") <- "UTC"
+#               df$tz_cd <- rep("UTC", nrow(df))
+#             }
 
             
           } else {
@@ -308,9 +312,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         }
         
         columnsOrderd <- columnsOrdered[columnsOrdered %in% names(df)]
-        
-        
-        
         df <- df[,columnsOrderd]
                         
         if (is.null(mergedDF)){
@@ -454,6 +455,14 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     names(mergedDF) <- make.names(names(mergedDF))
   } else {
     mergedDF <- data.frame()
+  }
+
+  if(tz != ""){
+    attr(mergedDF$dateTime, "tzone") <- tz
+    mergedDF$tz_cd <- rep(tz, nrow(mergedDF))
+  } else {
+    attr(mergedDF$dateTime, "tzone") <- "UTC"
+    mergedDF$tz_cd <- rep("UTC", nrow(mergedDF))
   }
 
   variableInformation$noDataValue <- rep(NA, nrow(variableInformation))
