@@ -457,14 +457,15 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     mergedDF <- data.frame()
   }
 
-  if(tz != ""){
-    attr(mergedDF$dateTime, "tzone") <- tz
-    mergedDF$tz_cd <- rep(tz, nrow(mergedDF))
-  } else {
-    attr(mergedDF$dateTime, "tzone") <- "UTC"
-    mergedDF$tz_cd <- rep("UTC", nrow(mergedDF))
+  if(asDateTime){
+    if(tz != ""){
+      attr(mergedDF$dateTime, "tzone") <- tz
+      mergedDF$tz_cd <- rep(tz, nrow(mergedDF))
+    } else {
+      attr(mergedDF$dateTime, "tzone") <- "UTC"
+      mergedDF$tz_cd <- rep("UTC", nrow(mergedDF))
+    }
   }
-
   variableInformation$noDataValue <- rep(NA, nrow(variableInformation))
   
   row.names(mergedDF) <- NULL
