@@ -143,6 +143,7 @@ readWQPdata <- function(...){
   }
   
   values <- gsub(",","%2C",values)
+  values <- gsub(";","%3B",values)
   values <- gsub("%20","+",values)
   values <- gsub(":","%3A",values)
   

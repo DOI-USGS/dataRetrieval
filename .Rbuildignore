@@ -1,10 +1,10 @@
-vignettes\figure
+vignettes/figure
+appveyor.yml
+.travis.yml
+.gitignore
+dataRetrieval-concordance.tex
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.Rproj\inst\dataRetrieval.log
-^\.Rproj\inst\dataRetrieval-concordance.tex
-^\.Rproj\inst\dataRetrieval.toc
-^\.Rproj\inst\dataRetrieval.tex
 ^\.travis\.yml$
 ^\.Rproj\.gitignore
 ^\.Rproj\.RData
@@ -12,5 +12,5 @@ vignettes\figure
 ^\.Rproj\.Rhistory
 ^\.Rproj\.travis.yml
 ^\.Rproj\appveyor.yml
-appveyor.yml
+
 
