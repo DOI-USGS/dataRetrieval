@@ -65,7 +65,23 @@ whatWQPsites <- function(...){
     values <- values[!(names(values) %in% "tz")]
   }
   
+  if("statecode" %in% names(values)){
+    stCd <- values["statecode"]
+    if(!grepl("US:",stCd)){
+      values["statecode"] <- paste0("US:",stateCdLookup(stCd, "id"))
+    }
+  }
+  
+  if("stateCd" %in% names(values)){
+    stCd <- values["stateCd"]
+    if(!grepl("US:",stCd)){
+      values["stateCd"] <- paste0("US:",stateCdLookup(stCd, "id"))
+    }
+    names(values)[names(values) == "stateCd"] <- "statecode"
+  }
+  
   values <- gsub(",","%2C",values)
+  values <- gsub(";","%3B",values)
   values <- gsub("%20","+",values)
   values <- gsub(":","%3A",values)
   
