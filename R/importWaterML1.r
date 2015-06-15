@@ -404,7 +404,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     
     sortingColumns <- names(mergedDF)[!(names(mergedDF) %in% c(dataColumns,qualColumns))]
   
-    meltedmergedDF  <- melt(mergedDF,id.vars=sortingColumns)
+    meltedmergedDF  <- reshape2::melt(mergedDF,id.vars=sortingColumns)
     meltedmergedDF  <- meltedmergedDF[!is.na(meltedmergedDF$value),] 
     
     meltedmergedDF <- meltedmergedDF[!duplicated(meltedmergedDF),]
@@ -416,7 +416,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     indexDups <- as.numeric(row.names(qualDups))
   
     if(length(indexDups) > 0){
-      mergedDF2 <- dcast(meltedmergedDF[-indexDups,], castFormula, drop=FALSE, value.var = "value",)
+      mergedDF2 <- reshape2::dcast(meltedmergedDF[-indexDups,], castFormula, drop=FALSE, value.var = "value",)
       
       # Need to get value....
       dupInfo <- meltedmergedDF[indexDups, sortingColumns]
@@ -434,7 +434,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
       
     } else {
-      mergedDF2 <- dcast(meltedmergedDF, castFormula, drop=FALSE, value.var = "value")
+      mergedDF2 <- reshape2::dcast(meltedmergedDF, castFormula, drop=FALSE, value.var = "value")
       dataColumns2 <- !(names(mergedDF2) %in% sortingColumns)
     }
     

@@ -145,8 +145,8 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
       if(sum(data$parm_cd == "") > 0){
         warning("Some or all data returned without pCodes, those data will not be included in reshape")
       }
-      longDF <- melt(dataWithPcodes, columnsToMelt)
-      wideDF <- dcast(longDF, ... ~ variable + parm_cd )
+      longDF <- reshape2::melt(dataWithPcodes, columnsToMelt)
+      wideDF <- reshape2::dcast(longDF, ... ~ variable + parm_cd )
       wideDF[,grep("_va_",names(wideDF))] <- sapply(wideDF[,grep("_va_",names(wideDF))], function(x) as.numeric(x))
       pCodesReturned <- unique(dataWithPcodes$parm_cd)
       groupByPCode <- as.vector(sapply(pCodesReturned, function(x) grep(x, names(wideDF)) ))
