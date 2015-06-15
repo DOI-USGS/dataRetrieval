@@ -59,7 +59,7 @@ whatWQPsites <- function(...){
 
   matchReturn <- list(...)
   
-  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=";",sep=""))))
+  values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))
   
   if("tz" %in% names(values)){
     values <- values[!(names(values) %in% "tz")]
@@ -80,10 +80,10 @@ whatWQPsites <- function(...){
     names(values)[names(values) == "stateCd"] <- "statecode"
   }
   
-  values <- gsub(",","%2C",values)
-  values <- gsub(";","%3B",values)
+#   values <- gsub(",","%2C",values)
+#   values <- gsub(";","%3B",values)
   values <- gsub("%20","+",values)
-  values <- gsub(":","%3A",values)
+  # values <- gsub(":","%3A",values)
   
   if("bBox" %in% names(values)){
     values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
@@ -95,6 +95,7 @@ whatWQPsites <- function(...){
   
   
   baseURL <- "http://www.waterqualitydata.us/Station/search?"
+  # baseURL <- "http://wqp-test.er.usgs.gov/Station/search?sorted=no&"
   urlCall <- paste(baseURL,
                urlCall,
                "&mimeType=tsv",sep = "")

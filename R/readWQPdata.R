@@ -100,7 +100,7 @@ readWQPdata <- function(...){
   
   matchReturn <- list(...)
 
-  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=";",sep=""))))
+  values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))
   
   if("bBox" %in% names(values)){
     values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
@@ -141,16 +141,13 @@ readWQPdata <- function(...){
   } else {
     tz <- ""
   }
-  
-  values <- gsub(",","%2C",values)
-  values <- gsub(";","%3B",values)
+
   values <- gsub("%20","+",values)
-  values <- gsub(":","%3A",values)
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
-  
   baseURL <- "http://www.waterqualitydata.us/Result/search?"
+  # baseURL <- "http://wqp-test.er.usgs.gov/Result/search?&sorted=no"
   urlCall <- paste0(baseURL,
                    urlCall,
                    "&mimeType=tsv")
