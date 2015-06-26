@@ -25,5 +25,5 @@ format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&sho
 \examples{
 head(parameterCdFile[,1:2])
 }
-\keyword{datasets}
+\keyword{internal}
 

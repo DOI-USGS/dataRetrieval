@@ -6,6 +6,7 @@
 #' @param values named list with arguments to send to the Water Quality Portal
 #' @return values named list with corrected arguments to send to the Water Quality Portal
 #' @export
+#' @keywords internal
 #' @examples
 #' values <- list(startDateLo="01-01-2002", characteristicName="Phosphorous", 
 #'           endDate=as.Date("2014-01-01"))

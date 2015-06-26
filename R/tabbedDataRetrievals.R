@@ -44,7 +44,7 @@ NULL
 #'
 #'@docType data
 #'@export parameterCdFile 
-#'@keywords datasets
+#'@keywords internal
 #'@examples
 #'head(parameterCdFile[,1:2])
 NULL
@@ -74,7 +74,7 @@ NULL
 #' }
 #' @docType data
 #' @export pCodeToName 
-#' @keywords USGS parameterCd
+#' @keywords internal
 #' @examples
 #' head(pCodeToName[,1:2])
 NULL

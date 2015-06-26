@@ -71,7 +71,8 @@
 #' variableInfo \tab data frame \tab A data frame containing information on the requested parameters \cr
 #' }
 #' @export
-#' @import reshape2
+#' @importFrom reshape2 melt
+#' @importFrom reshape2 dcast
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
 #' \code{\link{readWQPqw}}, \code{\link{constructNWISURL}}
 #' @examples
@@ -139,18 +140,21 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
                          "sample_end_dt","sample_end_tm","sample_start_time_datum_cd","tm_datum_rlbty_cd",
                          "parm_cd","startDateTime","endDateTime","coll_ent_cd", "medium_cd","project_cd",
                          "aqfr_cd","tu_id","body_part_id", "hyd_cond_cd", "samp_type_cd",
-                         "hyd_event_cd","sample_lab_cm_tx")
-      columnsToMelt <- columnsToMelt[columnsToMelt %in% names(data)]
+                         "hyd_event_cd","sample_lab_cm_tx","tz_cd","startDateTime","endDateTime")
+      measureCols <- names(data)[!(names(data) %in% columnsToMelt)]
+      columnsToMelt <- names(data)[(names(data) %in% columnsToMelt)]
       dataWithPcodes <- data[data$parm_cd != "",]
       if(sum(data$parm_cd == "") > 0){
         warning("Some or all data returned without pCodes, those data will not be included in reshape")
       }
-      longDF <- melt(dataWithPcodes, columnsToMelt)
-      wideDF <- dcast(longDF, ... ~ variable + parm_cd )
+      # longDF <- reshape2::melt(dataWithPcodes, measure.vars =  columnsToMelt)
+      longDF <- reshape2::melt(dataWithPcodes, measure.vars =  measureCols,
+                     variable.name = "variable", value.name = "value", na.rm = FALSE)
+      wideDF <- reshape2::dcast(longDF, ... ~ variable + parm_cd )
       wideDF[,grep("_va_",names(wideDF))] <- sapply(wideDF[,grep("_va_",names(wideDF))], function(x) as.numeric(x))
       pCodesReturned <- unique(dataWithPcodes$parm_cd)
       groupByPCode <- as.vector(sapply(pCodesReturned, function(x) grep(x, names(wideDF)) ))
-      data <- wideDF[,c(1:length(columnsToMelt)-1,groupByPCode)]
+      data <- wideDF[,c(1:length(columnsToMelt),groupByPCode)]
       comment(data) <- originalHeader
     } else {
       warning("Reshape can only be used with expanded data. Reshape request will be ignored.")

@@ -99,12 +99,12 @@ test_that("External importWaterML1 test", {
   expect_is(unitData$dateTime, 'POSIXct')
   
   
-  # Two sites, two pcodes, one site has two data descriptors:
-  siteNumber <- c('01480015',"04085427")
+  # Two sites, two pcodes, one site has two data descriptors
+  siteNumber <- c('01480015',"04085427") #one site seems to have lost it's 2nd dd
   obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
   data <- importWaterML1(obs_url)
   expect_that(length(unique(data$site_no)) == 2, is_true())
-  expect_that(ncol(data) == 10, is_true()) # 3 data, 3 remark codes, and 4 (agency, site, dateTime, tz)
+  expect_that(ncol(data) == 8, is_true()) # 3 data, 3 remark codes, and 4 (agency, site, dateTime, tz)
 
   inactiveSite <- "05212700"
   inactiveSite <- constructNWISURL(inactiveSite, "00060", "2014-01-01", "2014-01-10",'dv')
@@ -123,15 +123,15 @@ context("importWQP_noCRAN")
 test_that("External WQP tests", {
   testthat::skip_on_cran()
   expect_that(1==1, is_true())   
-#   rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
-#   rawSample <- importWQP(rawSampleURL)
-#   expect_is(rawSample$ActivityStartDateTime, 'POSIXct')
-#   
-#   url2 <- paste0(rawSampleURL,"&zip=yes")
-#   rawSample2 <- suppressWarnings(importWQP(url2, TRUE))
-#   expect_is(rawSample2$ActivityStartDateTime, 'POSIXct')
-#   
-#   STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
-#   STORETdata <- importWQP(STORETex)
-#   expect_is(STORETdata$ActivityStartDateTime, 'POSIXct')
+  rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
+  rawSample <- importWQP(rawSampleURL)
+  expect_is(rawSample$ActivityStartDateTime, 'POSIXct')
+  
+  url2 <- paste0(rawSampleURL,"&zip=yes")
+  rawSample2 <- suppressWarnings(importWQP(url2, TRUE))
+  expect_is(rawSample2$ActivityStartDateTime, 'POSIXct')
+  
+  STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
+  STORETdata <- importWQP(STORETex)
+  expect_is(STORETdata$ActivityStartDateTime, 'POSIXct')
 })
