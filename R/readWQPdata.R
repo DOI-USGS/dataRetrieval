@@ -147,10 +147,9 @@ readWQPdata <- function(...){
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
   baseURL <- "http://www.waterqualitydata.us/Result/search?"
-  # baseURL <- "http://wqp-test.er.usgs.gov/Result/search?&sorted=no"
   urlCall <- paste0(baseURL,
                    urlCall,
-                   "&mimeType=tsv")
+                   "&sorted=no&mimeType=tsv")
   
   retval <- importWQP(urlCall,FALSE, tz=tz)
   
