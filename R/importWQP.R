@@ -138,6 +138,10 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       unlink(doc)
     }
     
+    retval <- retval[order(retval$OrganizationIdentifier, 
+                           retval$MonitoringLocationIdentifier, 
+                           retval$ActivityStartDateTime, decreasing = FALSE),]
+    
     return(retval)
   
   } else {
