@@ -36,7 +36,7 @@ test_that("General WQP retrievals working", {
   pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
   expect_is(pHData$ActivityStartDateTime, 'POSIXct')
   
-  pHDataExpanded2 <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),
+  pHDataExpanded2 <- readWQPdata(bBox=c(-90.1,42.9,-89.9,43.1),
                                  characteristicName=nameToUse)
   expect_is(pHDataExpanded2$ActivityStartDateTime, 'POSIXct')
   
