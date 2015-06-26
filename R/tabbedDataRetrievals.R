@@ -44,7 +44,7 @@ NULL
 #'
 #'@docType data
 #'@export parameterCdFile 
-#'@keywords datasets
+#'@keywords internal
 #'@examples
 #'head(parameterCdFile[,1:2])
 NULL
