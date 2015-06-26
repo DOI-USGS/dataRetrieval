@@ -72,19 +72,15 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
   
   if (!is.na(numToBeReturned) & numToBeReturned != 0){
 
-    suppressWarnings(namesData <- read.delim(if(zip) doc else textConnection(doc) , header = TRUE, quote="\"",
-                                             dec=".", sep='\t',
-                                             colClasses='character',
-                                             fill = TRUE,nrow=1))
+    suppressWarnings(namesData <- read.delim(if(zip) doc else textConnection(doc) , header = TRUE, quote="",
+                                             dec=".", sep='\t', colClasses='character',nrow=1))
           
     classColumns <- setNames(rep('character',ncol(namesData)),names(namesData))
     
     classColumns[grep("MeasureValue",names(classColumns))] <- NA
     
-    suppressWarnings(retval <- read.delim(if(zip) doc else textConnection(doc), header = TRUE, quote="\"", 
-                         dec=".", sep='\t', 
-                         colClasses=as.character(classColumns), 
-                         fill = TRUE))
+    suppressWarnings(retval <- read.delim(if(zip) doc else textConnection(doc), header = TRUE, quote="", 
+                         dec=".", sep='\t', colClasses=as.character(classColumns)))
     
     actualNumReturned <- nrow(retval)
     
