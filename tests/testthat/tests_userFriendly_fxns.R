@@ -113,5 +113,15 @@ test_that("NWIS dv tests", {
   expect_that(nrow(notActive) == 0, is_true())
 })
 
-
-
+test_that("WQP qw tests", {
+  testthat::skip_on_cran()
+  nameToUse <- 'Specific conductance'
+  pcodeToUse <- '00095'
+  
+  INFO_WQP <- readWQPqw('USGS-04024315',pcodeToUse, startDate = "", endDate = "")
+  expect_is(INFO_WQP$ActivityStartDateTime, 'POSIXct')
+  
+  INFO2 <- readWQPqw('WIDNR_WQX-10032762',nameToUse, startDate = "", endDate = "")
+  expect_is(INFO2$ActivityStartDateTime, 'POSIXct')
+  
+})
