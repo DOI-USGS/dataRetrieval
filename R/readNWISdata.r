@@ -75,6 +75,7 @@
 #'                   "drain_area_va","obs_count_nu"),service="qw")
 #' temp <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", service="site", 
 #'                    seriesCatalogOutput=TRUE)
+#' wiGWL <- readNWISdata(stateCd="WI",service="gwlevels")
 #' }
 readNWISdata <- function(service="dv", ...){
   
@@ -153,7 +154,7 @@ readNWISdata <- function(service="dv", ...){
     tz <- ""
   }
   
-  if(service == "site"){
+  if(service %in% c("site","gwlevels")){
     format <- "rdb"
   }
   
@@ -162,7 +163,7 @@ readNWISdata <- function(service="dv", ...){
   baseURL <- paste0(baseURL,service,"/?format=",format,"&")
   urlCall <- paste0(baseURL,urlCall)
   
-  if(service == "site"){
+  if(format == "rdb"){
     possibleError <- tryCatch({
       retval <- importRDB1(urlCall, asDateTime = FALSE, qw = FALSE, tz = tz)
     }, error = function(e) {
