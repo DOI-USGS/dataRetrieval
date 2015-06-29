@@ -5,7 +5,7 @@
 #' Mapper format is used
 #'
 #' @param \dots see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options
-#' @keywords data import NWIS web service
+#' @import utils
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr

@@ -87,9 +87,4 @@ temp <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", service="si
 \seealso{
 \code{\link{renameNWISColumns}},  \code{\link{importWaterML1}}, \code{\link{importRDB1}}
 }
-\keyword{NWIS}
-\keyword{data}
-\keyword{import}
-\keyword{service}
-\keyword{web}
 

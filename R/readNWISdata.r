@@ -8,7 +8,8 @@
 #' (for groundwater levels), "site" (for site service), and "qw" (water-quality). Note: "qw" calls go to: 
 #' \url{http://nwis.waterdata.usgs.gov/usa/nwis/qwdata} for data requests, and use different call requests schemes. 
 #' @param \dots see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options
-#' @keywords data import NWIS web service
+#' @import utils
+#' @import stats
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr

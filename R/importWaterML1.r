@@ -40,6 +40,8 @@
 #' @export
 #' @import XML
 #' @import RCurl
+#' @import utils
+#' @import stats
 #' @importFrom  reshape2 melt
 #' @importFrom reshape2 dcast
 #' @examples
