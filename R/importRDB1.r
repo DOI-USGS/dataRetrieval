@@ -40,6 +40,8 @@
 #' }
 #' @export
 #' @import RCurl
+#' @import utils
+#' @import stats
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"

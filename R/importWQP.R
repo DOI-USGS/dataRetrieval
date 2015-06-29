@@ -14,6 +14,8 @@
 #' @seealso \code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
 #' @import RCurl
 #' @import lubridate
+#' @import utils
+#' @import stats
 #' @examples
 #' # These examples require an internet connection to run
 #' 

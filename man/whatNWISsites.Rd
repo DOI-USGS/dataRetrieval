@@ -39,9 +39,4 @@ Mapper format is used
 siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
 }
 }
-\keyword{NWIS}
-\keyword{data}
-\keyword{import}
-\keyword{service}
-\keyword{web}
 

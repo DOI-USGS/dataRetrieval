@@ -48,6 +48,7 @@
 #' * element is only in NWIS
 #' 
 #' @export
+#' @import utils
 #' @examples
 #' \dontrun{
 #' site1 <- whatWQPsites(siteid="USGS-01594440")

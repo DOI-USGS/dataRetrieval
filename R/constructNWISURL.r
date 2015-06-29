@@ -22,6 +22,7 @@
 #' @return url string
 #' @export
 #' @import RCurl
+#' @import utils
 #' @examples
 #' siteNumber <- '01594440'
 #' startDate <- '1985-01-01'
