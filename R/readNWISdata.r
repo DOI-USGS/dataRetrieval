@@ -165,12 +165,13 @@ readNWISdata <- function(service="dv", ...){
   
   if(format == "rdb"){
     possibleError <- tryCatch({
-      retval <- importRDB1(urlCall, asDateTime = FALSE, qw = FALSE, tz = tz)
+      retval <- importRDB1(urlCall, asDateTime = (service == "qwdata"), 
+                           qw = (service == "qwdata"), tz = tz)
     }, error = function(e) {
       stop(e, "with url:", urlCall)
     })
     
-  } else if (service != "qwdata") {
+  } else {
     possibleError <- tryCatch({
       retval <- importWaterML1(urlCall, asDateTime = ("iv" == service), tz= tz)
     }, error = function(e) {
@@ -203,12 +204,6 @@ readNWISdata <- function(service="dv", ...){
       }
     }
     
-  } else {
-    possibleError <- tryCatch({
-      retval <- importRDB1(urlCall, asDateTime = TRUE, qw = TRUE)
-    }, error = function(e) {
-      stop(e, "with url:", urlCall)
-    })
   }
   
   return(retval)
