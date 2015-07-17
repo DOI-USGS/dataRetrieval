@@ -104,8 +104,8 @@ whatWQPsites <- function(...){
   
   if (!is.na(numToBeReturned) & numToBeReturned != 0){
  
-    retval <- read.delim(textConnection(doc), header = TRUE, quote="\"", 
-                         dec=".", sep='\t', 
+    retval <- read.delim(textConnection(doc), header = TRUE,  
+                         dec=".", sep='\t', quote="",
                          colClasses=c('character'), 
                          fill = TRUE)    
     actualNumReturned <- nrow(retval)
