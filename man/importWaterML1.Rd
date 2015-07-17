@@ -88,15 +88,16 @@ inactiveAndAcitive <- c("07334200","05212700")
 inactiveAndAcitive <- constructNWISURL(inactiveAndAcitive, "00060", "2014-01-01", "2014-01-10",'dv')
 inactiveAndAcitive <- importWaterML1(inactiveAndAcitive)
 
+Timezone change with specified local timezone:
+tzURL <- constructNWISURL("04027000", c("00300","63680"), "2011-11-05", "2011-11-07","uv")
+tzIssue <- importWaterML1(tzURL, TRUE, "America/Chicago")
+
+
 }
 filePath <- system.file("extdata", package="dataRetrieval")
 fileName <- "WaterML1Example.xml"
 fullPath <- file.path(filePath, fileName)
 imporFile <- importWaterML1(fullPath,TRUE)
-
-#Timezone change with specified local timezone:
-tzURL <- constructNWISURL("04027000", c("00300","63680"), "2011-11-05", "2011-11-07","uv")
-tzIssue <- importWaterML1(tzURL, TRUE, "America/Chicago")
 }
 \seealso{
 \code{\link{renameNWISColumns}}
