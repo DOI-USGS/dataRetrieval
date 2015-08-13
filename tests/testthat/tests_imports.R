@@ -36,15 +36,16 @@ test_that("External importRDB1 tests", {
   expect_is(qwData$sample_dt, 'Date')
   expect_is(qwData$startDateTime, 'POSIXct')
   
-  iceSite <- '04024430'
-  start <- "2014-11-09"
-  end <- "2014-11-28"
-  urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
-  ice <- importRDB1(urlIce)
-  expect_that(sum(is.na(ice$X01_00060)) > 0, is_true())
-  
-  iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
-  expect_that(sum(iceNoConvert$X01_00060 == "Ice") > 0, is_true())
+  #This data got deleted:
+#   iceSite <- '04024430'
+#   start <- "2014-11-09"
+#   end <- "2014-11-28"
+#   urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
+#   ice <- importRDB1(urlIce)
+#   expect_that(sum(is.na(ice$X01_00060)) > 0, is_true())
+#   
+#   iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
+#   expect_that(sum(iceNoConvert$X01_00060 == "Ice") > 0, is_true())
 })
 
 context("importRDB")
