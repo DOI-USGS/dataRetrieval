@@ -241,18 +241,15 @@ legend("topleft", variableInfo$param_units,
 #                        parameterCd=c("00010","00060"),
 #                        hasDataTypeCd="dv")
 
-## ----dataExample------------------------------------------
-dischargeWI <- readNWISdata(service="dv",
-                           stateCd="WI",
-                           parameterCd="00060",
-                           drainAreaMin="50",
-                           statCd="00003")
-names(dischargeWI)
-nrow(dischargeWI)
-
-siteInfo <- attr(dischargeWI, "siteInfo")
-head(siteInfo)
-
+## ----dataExample, eval=FALSE------------------------------
+#  dischargeWI <- readNWISdata(service="dv",
+#                             stateCd="WI",
+#                             parameterCd="00060",
+#                             drainAreaMin="50",
+#                             statCd="00003")
+#  
+#  siteInfo <- attr(dischargeWI, "siteInfo")
+#  
 
 ## ----NJChloride, eval=FALSE-------------------------------
 #  
@@ -266,28 +263,27 @@ head(siteInfo)
 #                   characteristicName="pH")
 #  
 
-## ----meta1, eval=TRUE-------------------------------------
+## ----meta1, eval=FALSE------------------------------------
+#  
+#  attr(dischargeWI, "url")
+#  
+#  attr(dischargeWI, "queryTime")
+#  
+#  siteInfo <- attr(dischargeWI, "siteInfo")
+#  
 
-attr(dischargeWI, "url")
+## ----meta2, eval=FALSE------------------------------------
+#  
+#  names(attributes(dischargeWI))
+#  
 
-attr(dischargeWI, "queryTime")
-
-siteInfo <- attr(dischargeWI, "siteInfo")
-
-
-## ----meta2, eval=TRUE-------------------------------------
-
-names(attributes(dischargeWI))
-
-
-## ----meta3, eval=TRUE-------------------------------------
-
-siteInfo <- attr(dischargeWI, "siteInfo")
-head(siteInfo)
-
-variableInfo <- attr(dischargeWI, "variableInfo")
-
-
+## ----meta3, eval=FALSE------------------------------------
+#  
+#  siteInfo <- attr(dischargeWI, "siteInfo")
+#  
+#  variableInfo <- attr(dischargeWI, "variableInfo")
+#  
+#  
 
 ## ----meta5, eval=FALSE------------------------------------
 #  comment(peakData)

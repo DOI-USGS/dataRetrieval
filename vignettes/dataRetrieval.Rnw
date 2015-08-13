@@ -757,17 +757,14 @@ For NWIS data, the function \texttt{readNWISdata} can be used. The argument list
 
 The \texttt{"..."} argument allows the user to create their own queries based on the instructions found in the web links above. The links provide instructions on how to create a URL to request data. Perhaps you want sites only in Wisconsin, with a drainage area less than 50 mi$^2$, and the most recent daily dischage data. That request would be done as follows:
 
-<<dataExample>>=
+<<dataExample, eval=FALSE>>=
 dischargeWI <- readNWISdata(service="dv",
                            stateCd="WI",
                            parameterCd="00060",
                            drainAreaMin="50",
                            statCd="00003")
-names(dischargeWI)
-nrow(dischargeWI)
 
 siteInfo <- attr(dischargeWI, "siteInfo")
-head(siteInfo)
 
 @
 
@@ -815,7 +812,7 @@ dataPH <- readWQPdata(statecode="US:55",
 %------------------------------------------------------------
 All data frames returned from the Web services have some form of associated metadata. This information is included as attributes to the data frame. All data frames will have a \texttt{url} (returning a character of the url used to obtain the data), \texttt{siteInfo} (returning a data frame with information on sites),  and \texttt{queryTime} (returning a POSIXct datetime) attributes. For example, the url and query time used to obtain the data can be found as follows:
 
-<<meta1, eval=TRUE>>=
+<<meta1, eval=FALSE>>=
 
 attr(dischargeWI, "url")
 
@@ -827,7 +824,7 @@ siteInfo <- attr(dischargeWI, "siteInfo")
 
 Depending on the format that the data was obtained (RDB, WaterML1, etc), there will be additional information embedded in the data frame as attributes. To discover the available attributes:
 
-<<meta2, eval=TRUE>>=
+<<meta2, eval=FALSE>>=
 
 names(attributes(dischargeWI))
 
@@ -835,10 +832,9 @@ names(attributes(dischargeWI))
 
 For data obtained from \texttt{readNWISuv}, \texttt{readNWISdv}, \texttt{readNWISgwl} there are two attributes that are particularly useful: \texttt{siteInfo} and \texttt{variableInfo}.
 
-<<meta3, eval=TRUE>>=
+<<meta3, eval=FALSE>>=
 
 siteInfo <- attr(dischargeWI, "siteInfo")
-head(siteInfo)
 
 variableInfo <- attr(dischargeWI, "variableInfo")
 
