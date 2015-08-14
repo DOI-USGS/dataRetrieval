@@ -77,3 +77,6 @@ This software is provided "AS IS."
  [
     ![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)
   ](http://creativecommons.org/publicdomain/zero/1.0/)
+
+CRAN statistics:
+[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](http://cran.rstudio.com/web/packages/dataRetrieval/index.html)
