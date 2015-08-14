@@ -19,8 +19,7 @@
 #' @param \dots named arguments for the base name for any other parameter code. The
 #'form of the name must be like pXXXXX, where XXXXX is the parameter code.
 #' @return A dataset like \code{data} with selected columns renamed.
-#' @note The following statistics codes are converted by \code{renameNWISColumns}. See
-#'\url{http://help.waterdata.usgs.gov} for more information about USGS codes.
+#' @note The following statistics codes are converted by \code{renameNWISColumns}. 
 #'\describe{
 #'\item{00001}{Maximum value, suffix: Max}
 #'\item{00002}{Minimum value, suffix: Min}

@@ -182,9 +182,7 @@ library(dataRetrieval)
 %------------------------------------------------------------
 \section{Introduction to dataRetrieval}
 %------------------------------------------------------------ 
-The dataRetrieval package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). A lot of useful information about NWIS can be obtained here:
-
-\url{http://help.waterdata.usgs.gov/}
+The dataRetrieval package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). 
 
 For information on getting started in R and installing the package, see (\ref{sec:appendix1}): Getting Started. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
@@ -281,12 +279,7 @@ The USGS organizes hydrologic data in a standard structure.  Streamgages are loc
 
 Once the siteNumber is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. 
 
-A useful place to discover USGS codes information, along with other NWIS information is:
-
-\url{http://help.waterdata.usgs.gov/codes-and-parameters}
-
 Not every station will measure all parameters. A short list of commonly measured parameters is shown in Table \ref{tab:params}.
-
 
 <<tableParameterCodes, echo=FALSE,results='asis'>>=
 pCode <- c('00060', '00065', '00010','00045','00400')
@@ -315,9 +308,7 @@ Casrn stands for \enquote{Chemical Abstracts Service (CAS) Registry Number}. Mor
 
 \url{http://www.cas.org/content/chemical-substances/faqs}
 
-For unit values data (sensor data measured at regular time intervals such as 15 minutes or hourly), knowing the parameter code and siteNumber is enough to make a request for data.  For most variables that are measured on a continuous basis, the USGS also stores the historical data as daily values.  These daily values are statistical summaries of the continuous data, e.g. maximum, minimum, mean, or median. The different statistics are specified by a 5-digit statistics code.  A complete list of statistic codes can be found here:
-
-\url{http://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=%25&fmt=html&inline=true}
+For unit values data (sensor data measured at regular time intervals such as 15 minutes or hourly), knowing the parameter code and siteNumber is enough to make a request for data.  For most variables that are measured on a continuous basis, the USGS also stores the historical data as daily values.  These daily values are statistical summaries of the continuous data, e.g. maximum, minimum, mean, or median. The different statistics are specified by a 5-digit statistics code.  
 
 Some common codes are shown in Table \ref{tab:stat}.
 
@@ -455,9 +446,6 @@ parameterCd <- "00618"
 parameterINFO <- readNWISpCode(parameterCd)
 @
 
-More information on parameter codes can obtained from:
-
-\url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}
 
 \FloatBarrier
 
@@ -481,9 +469,7 @@ discharge <- readNWISdv(siteNumber,
                     parameterCd, startDate, endDate)
 @
 
-The column \texttt{"}datetime\texttt{"} in the returned data frame is automatically imported as a variable of class \texttt{"}Date\texttt{"} in R. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS daily value qualification codes are often \texttt{"}A\texttt{"} (approved for publication) or \texttt{"}P\texttt{"} (provisional data subject to revision). A more complete list of daily value qualification codes can be found here:
-
-\url{http://help.waterdata.usgs.gov/codes-and-parameters/daily-value-qualification-code-dv_rmk_cd}
+The column \texttt{"}datetime\texttt{"} in the returned data frame is automatically imported as a variable of class \texttt{"}Date\texttt{"} in R. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS daily value qualification codes are often \texttt{"}A\texttt{"} (approved for publication) or \texttt{"}P\texttt{"} (provisional data subject to revision). 
 
 Another example would be a request for mean and maximum daily temperature and discharge in early 2012:
 
