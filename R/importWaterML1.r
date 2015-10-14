@@ -3,7 +3,7 @@
 #' This function accepts a url parameter that already contains the desired
 #' NWIS site, parameter code, statistic, startdate and enddate. 
 #'
-#' @param obs_url character containing the url for the retrieval
+#' @param obs_url character containing the url for the retrieval or a file path to the data file.
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).

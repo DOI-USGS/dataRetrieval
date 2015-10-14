@@ -5,7 +5,7 @@
 #' NWIS site, parameter code, statistic, startdate and enddate. It is not
 #' recommended to use the RDB format for importing multi-site data. 
 #'
-#' @param obs_url character containing the url for the retrieval
+#' @param obs_url character containing the url for the retrieval or a file path to the data file.
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
 #' @param qw logical, if \code{TRUE} parses as water quality data (where dates/times are in start and end times)
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
