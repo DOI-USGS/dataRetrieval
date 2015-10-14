@@ -1,3 +1,9 @@
+.onAttach <- function(libname, pkgname) {
+  if("package:reshape" %in% search()){
+    packageStartupMessage("Caution: The reshape package interferes with some functions in the dataRetrieval package.")
+  }
+}
+
 #' Retrieval functions for USGS and EPA data
 #'
 #' \tabular{ll}{
