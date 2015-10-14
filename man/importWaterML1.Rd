@@ -7,7 +7,7 @@
 importWaterML1(obs_url, asDateTime = FALSE, tz = "")
 }
 \arguments{
-\item{obs_url}{character containing the url for the retrieval}
+\item{obs_url}{character containing the url for the retrieval or a file path to the data file.}
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
 
