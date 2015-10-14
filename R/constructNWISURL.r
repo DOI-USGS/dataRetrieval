@@ -40,6 +40,7 @@
 #' url_rating <- constructNWISURL(siteNumber,service="rating",ratingType="base")
 #' url_peak <- constructNWISURL(siteNumber, service="peak")
 #' url_meas <- constructNWISURL(siteNumber, service="meas")
+#' urlQW <- constructNWISURL("450456092225801","70300",startDate="",endDate="","qw",expanded=TRUE)
 constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate="",
                              service,statCd="00003", format="xml",expanded=TRUE,
                              ratingType="base"){
@@ -99,6 +100,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
                           "rdb_compression=value", sep = "&")
              if(expanded){
                url <- paste0(url,"&qw_sample_wide=0")
+               url <- gsub("rdb_qw_attributes=0","rdb_qw_attributes=expanded",url)
              } else {
                url <- paste0(url,"&qw_sample_wide=separated_wide")
              }

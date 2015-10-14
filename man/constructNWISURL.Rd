@@ -57,6 +57,7 @@ url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',
 url_rating <- constructNWISURL(siteNumber,service="rating",ratingType="base")
 url_peak <- constructNWISURL(siteNumber, service="peak")
 url_meas <- constructNWISURL(siteNumber, service="meas")
+urlQW <- constructNWISURL("450456092225801","70300",startDate="",endDate="","qw",expanded=TRUE)
 }
 \keyword{USGS}
 \keyword{data}
