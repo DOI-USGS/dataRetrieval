@@ -130,26 +130,28 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){
   
   data <- importRDB1(url, asDateTime=FALSE)
   
-  if(asDateTime){
-    badDates <- which(grepl("[0-9]*-[0-9]*-00",data$peak_dt))
-    
-    if(length(badDates) > 0){
-      data <- data[-badDates,]
+  if(nrow(data) > 0){
+    if(asDateTime){
+      badDates <- which(grepl("[0-9]*-[0-9]*-00",data$peak_dt))
+      
       if(length(badDates) > 0){
-        warning(length(badDates), " rows were thrown out due to incomplete dates")
+        data <- data[-badDates,]
+        if(length(badDates) > 0){
+          warning(length(badDates), " rows were thrown out due to incomplete dates")
+        }
       }
+      data$peak_dt <- as.Date(data$peak_dt)
     }
-    data$peak_dt <- as.Date(data$peak_dt)
-  }
-  data$gage_ht <- as.numeric(data$gage_ht)
-  
-  siteInfo <- readNWISsite(siteNumbers)
-  
-  attr(data, "siteInfo") <- siteInfo
-  attr(data, "variableInfo") <- NULL
-  attr(data, "statisticInfo") <- NULL
+    data$gage_ht <- as.numeric(data$gage_ht)
     
-  return (data)
+    siteInfo <- readNWISsite(siteNumbers)
+    
+    attr(data, "siteInfo") <- siteInfo
+    attr(data, "variableInfo") <- NULL
+    attr(data, "statisticInfo") <- NULL
+  }    
+    return (data)
+  
 }
 
 #' Rating table for an active USGS streamgage retrieval
@@ -197,18 +199,20 @@ readNWISrating <- function (siteNumber,type="base"){
     
   data <- importRDB1(url, asDateTime=FALSE)
   
-  if(type == "base") {
-    Rat <- grep("//RATING ", comment(data), value=TRUE, fixed=TRUE)
-    Rat <- sub("# //RATING ", "", Rat)
-    Rat <- scan(text=Rat, sep=" ", what="")
-    attr(data, "RATING") <- Rat
+  if(nrow(data) > 0){
+    if(type == "base") {
+      Rat <- grep("//RATING ", comment(data), value=TRUE, fixed=TRUE)
+      Rat <- sub("# //RATING ", "", Rat)
+      Rat <- scan(text=Rat, sep=" ", what="")
+      attr(data, "RATING") <- Rat
+    }
+    
+    siteInfo <- readNWISsite(siteNumber)
+    
+    attr(data, "siteInfo") <- siteInfo
+    attr(data, "variableInfo") <- NULL
+    attr(data, "statisticInfo") <- NULL
   }
-  
-  siteInfo <- readNWISsite(siteNumber)
-  
-  attr(data, "siteInfo") <- siteInfo
-  attr(data, "variableInfo") <- NULL
-  attr(data, "statisticInfo") <- NULL
   
   return (data)
 }
@@ -261,15 +265,17 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
   
   data <- importRDB1(url,asDateTime=TRUE,tz=tz)
   
-  if("diff_from_rating_pc" %in% names(data)){
-    data$diff_from_rating_pc <- as.numeric(data$diff_from_rating_pc)
+  if(nrow(data) > 0){
+    if("diff_from_rating_pc" %in% names(data)){
+      data$diff_from_rating_pc <- as.numeric(data$diff_from_rating_pc)
+    }
+    
+    siteInfo <- readNWISsite(siteNumbers)
+    
+    attr(data, "siteInfo") <- siteInfo
+    attr(data, "variableInfo") <- NULL
+    attr(data, "statisticInfo") <- NULL    
   }
-  
-  siteInfo <- readNWISsite(siteNumbers)
-  
-  attr(data, "siteInfo") <- siteInfo
-  attr(data, "variableInfo") <- NULL
-  attr(data, "statisticInfo") <- NULL
   
   return (data)
 }
@@ -323,16 +329,17 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
 #' }
 readNWISgwl <- function (siteNumbers,startDate="",endDate=""){  
   
-#   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="wml1")
-#   data <- importWaterML1(url,asDateTime=FALSE)
-#   data$tz_cd <- NULL
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="tsv")
   data <- importRDB1(url,asDateTime=FALSE)
-  data$lev_dt <- as.Date(data$lev_dt)
+
+  if(nrow(data) > 0){
+    data$lev_dt <- as.Date(data$lev_dt)
   
-  siteInfo <- readNWISsite(siteNumbers)
-  
-  attr(data, "siteInfo") <- siteInfo
+    siteInfo <- readNWISsite(siteNumbers)
+    
+    attr(data, "siteInfo") <- siteInfo
+  }
+    
   return (data)
 }
 

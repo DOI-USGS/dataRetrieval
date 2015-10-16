@@ -32,6 +32,10 @@ getWebServiceData <- function(obs_url){
   if(headerInfo['status'] != "200"){  
     stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", obs_url)
   } else {
+    if(grepl("No sites/data found using the selection criteria specified", returnedDoc)){
+      message(returnedDoc)
+      headerInfo['warn'] <- returnedDoc
+    }
     attr(returnedDoc, "headerInfo") <- headerInfo
     return(returnedDoc)
   }
