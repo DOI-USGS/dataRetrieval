@@ -93,9 +93,15 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
   } else {
     rawData <- getWebServiceData(obs_url)
     doc <- textConnection(rawData)
+    if("warn" %in% names(attr(rawData,"header"))){
+      data <- data.frame()
+      attr(data, "header") <- attr(rawData,"header")
+      attr(data, "url") <- obs_url
+      attr(data, "queryTime") <- Sys.time()
+      
+      return(data)
+    }
   }
-  
-
   
   tmp <- read.delim(  
     doc, 
@@ -244,6 +250,10 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
   comment(data) <- hdr
   attr(data, "url") <- obs_url
   attr(data, "queryTime") <- Sys.time()
+  if(!file.exists(obs_url)){
+    attr(data, "header") <- attr(rawData, "header")
+  }
+  
 
   return(data)
   
