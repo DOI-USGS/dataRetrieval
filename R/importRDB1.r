@@ -42,6 +42,7 @@
 #' @import RCurl
 #' @import utils
 #' @import stats
+#' @importFrom dplyr left_join
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -135,9 +136,12 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
       data <- data[findRowsWithHeaderInfo,]
     }
     
-    offsetLibrary <- setNames(c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
-                                c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
-    
+    offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
+                                tz_cd=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"),
+                                stringsAsFactors = FALSE)
+#     offsetLibrary <- setNames(c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
+#                                c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
+#     
     # The suppressed warning occurs when there is text (such as ice) in the numeric column:
     data[,grep('n$', dataType)] <- suppressWarnings(sapply(data[,grep('n$', dataType)], function(x) as.numeric(x)))
     
@@ -156,7 +160,8 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
       if (asDateTime & !qw){
         
         if("tz_cd" %in% names(data)){
-          offset <- offsetLibrary[data$tz_cd]
+          offset <- left_join(data[,"tz_cd",drop=FALSE],offsetLibrary, by="tz_cd")
+          offset <- offset$offset
         } else {
           offset <- 0
         }
@@ -177,14 +182,20 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
       } else if (qw){
         
         if("sample_start_time_datum_cd" %in% names(data)){
-          timeZoneStartOffset <- offsetLibrary[data$sample_start_time_datum_cd]
+          timeZoneStartOffset <- left_join(data[,"sample_start_time_datum_cd",drop=FALSE],offsetLibrary, 
+                                           by=c("sample_start_time_datum_cd"="tz_cd"))
+          timeZoneStartOffset <- timeZoneStartOffset$offset
+          # timeZoneStartOffset <- offsetLibrary[data$sample_start_time_datum_cd]
           timeZoneStartOffset[is.na(timeZoneStartOffset)] <- 0
         } else {
           timeZoneStartOffset <- 0
         }
         
         if("sample_end_time_datum_cd" %in% names(data)){
-          timeZoneEndOffset <- offsetLibrary[data$sample_end_time_datum_cd]
+          timeZoneEndOffset <- left_join(data[,"sample_end_time_datum_cd",drop=FALSE],offsetLibrary, 
+                                           by=c("sample_end_time_datum_cd"="tz_cd"))
+          timeZoneEndOffset <- timeZoneEndOffset$offset
+          # timeZoneEndOffset <- offsetLibrary[data$sample_end_time_datum_cd]
           timeZoneEndOffset[is.na(timeZoneEndOffset)] <- 0
           composite <- TRUE
         } else {
