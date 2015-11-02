@@ -55,6 +55,7 @@
 #' 
 #' type <- "Stream"
 #' sites <- whatWQPsites(countycode="US:55:025",siteType=type)
+#' data <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 #' }
 whatWQPsites <- function(...){
 
@@ -80,14 +81,14 @@ whatWQPsites <- function(...){
     }
     names(values)[names(values) == "stateCd"] <- "statecode"
   }
-
-  values <- gsub("%20","+",values)
   
   if("bBox" %in% names(values)){
     values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
   }
   
   values <- checkWQPdates(values)
+  
+  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
     
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   

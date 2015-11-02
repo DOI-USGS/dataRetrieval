@@ -4,6 +4,8 @@
 #' because it allows for other agencies rather than the USGS.  
 #'
 #' @param \dots see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options
+#' @param zip logical to request data via downloading zip file. Default set to FALSE. The overhead associated with 
+#' downloading and un-zipping only improves performance for large data returns.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -93,10 +95,10 @@
 #' startDate <- as.Date("2013-01-01")
 #' nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
 #'                         characteristicType="Nutrient")
-#' nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate="",
-#'                         characteristicType="Nutrient")
+#' 
+#'                         
 #' }
-readWQPdata <- function(...){
+readWQPdata <- function(..., zip=FALSE){
   
   matchReturn <- list(...)
 
@@ -142,8 +144,8 @@ readWQPdata <- function(...){
     tz <- ""
   }
 
-  values <- gsub("%20","+",values)
-  
+  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
   baseURL <- "http://www.waterqualitydata.us/Result/search?"
@@ -151,7 +153,9 @@ readWQPdata <- function(...){
                    urlCall,
                    "&sorted=no&mimeType=tsv")
   
-  retval <- importWQP(urlCall,FALSE, tz=tz)
+  if(zip) urlCall <- paste0(urlCall,"&zip=yes")
+  
+  retval <- importWQP(urlCall,zip=zip, tz=tz)
   
   if(!all(is.na(retval))){
     siteInfo <- whatWQPsites(...)

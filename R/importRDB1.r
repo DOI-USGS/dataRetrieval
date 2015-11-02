@@ -42,6 +42,7 @@
 #' @import RCurl
 #' @import utils
 #' @import stats
+#' @importFrom dplyr left_join
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -64,7 +65,7 @@
 #'           c('34247','30234','32104','34220'),
 #'          "2010-11-03","","qw",format="rdb") 
 #' qwData <- importRDB1(qwURL, qw=TRUE, tz="America/Chicago")
-#' iceSite <- '04024430'
+#' iceSite <- '04024000'
 #' start <- "2014-11-09"
 #' end <- "2014-11-28"
 #' urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
@@ -135,9 +136,10 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
       data <- data[findRowsWithHeaderInfo,]
     }
     
-    offsetLibrary <- setNames(c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
-                                c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
-    
+    offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
+                                tz_cd=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"),
+                                stringsAsFactors = FALSE)
+
     # The suppressed warning occurs when there is text (such as ice) in the numeric column:
     data[,grep('n$', dataType)] <- suppressWarnings(sapply(data[,grep('n$', dataType)], function(x) as.numeric(x)))
     
@@ -156,16 +158,27 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
       if (asDateTime & !qw){
         
         if("tz_cd" %in% names(data)){
-          offset <- offsetLibrary[data$tz_cd]
+          offset <- left_join(data[,"tz_cd",drop=FALSE],offsetLibrary, by="tz_cd")
+          offset <- offset$offset
+          offset[is.na(offset)] <- median(offset, na.rm=TRUE)
         } else {
           offset <- 0
         }
-        offset[is.na(offset)] <- 0
-        
+        # offset[is.na(offset)] <- 0
+        rawDateTimes <- data[,regexpr('d$', dataType) > 0]
         data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0], "%Y-%m-%d %H:%M", tz = "UTC")
+
+        
+        if(any(is.na(data[,regexpr('d$', dataType) > 0]))){
+          data[,paste(names(data)[regexpr('d$', dataType) > 0],"dateFlag",sep = "_")] <- is.na(data[,regexpr('d$', dataType) > 0])
+          data[is.na(data[,regexpr('d$', dataType) > 0]),regexpr('d$', dataType) > 0] <- as.POSIXct(paste(rawDateTimes[is.na(data[,regexpr('d$', dataType) > 0])],"12:00"),
+                                                                                                    "%Y-%m-%d %H:%M",tz="UTC")
+
+        }
+
         data[,regexpr('d$', dataType) > 0] <- data[,regexpr('d$', dataType) > 0] + offset*60*60
         data[,regexpr('d$', dataType) > 0] <- as.POSIXct(data[,regexpr('d$', dataType) > 0])
-        
+                
         if(tz != ""){
           attr(data[,regexpr('d$', dataType) > 0], "tzone") <- tz
           data$tz_cd <- rep(tz, nrow(data))
@@ -177,14 +190,18 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
       } else if (qw){
         
         if("sample_start_time_datum_cd" %in% names(data)){
-          timeZoneStartOffset <- offsetLibrary[data$sample_start_time_datum_cd]
+          timeZoneStartOffset <- left_join(data[,"sample_start_time_datum_cd",drop=FALSE],offsetLibrary, 
+                                           by=c("sample_start_time_datum_cd"="tz_cd"))
+          timeZoneStartOffset <- timeZoneStartOffset$offset
           timeZoneStartOffset[is.na(timeZoneStartOffset)] <- 0
         } else {
           timeZoneStartOffset <- 0
         }
         
         if("sample_end_time_datum_cd" %in% names(data)){
-          timeZoneEndOffset <- offsetLibrary[data$sample_end_time_datum_cd]
+          timeZoneEndOffset <- left_join(data[,"sample_end_time_datum_cd",drop=FALSE],offsetLibrary, 
+                                           by=c("sample_end_time_datum_cd"="tz_cd"))
+          timeZoneEndOffset <- timeZoneEndOffset$offset
           timeZoneEndOffset[is.na(timeZoneEndOffset)] <- 0
           composite <- TRUE
         } else {
@@ -210,6 +227,12 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
         }
         
         data$startDateTime <- with(data, as.POSIXct(paste(sample_dt, sample_tm),format="%Y-%m-%d %H:%M", tz = "UTC"))
+        
+        if(any(is.na(data$startDateTime))){
+          data$startDateTime_dateFlag <- is.na(data$startDateTime)
+          data$startDateTime[is.na(data$startDateTime)] <- as.POSIXct(paste(data$sample_dt,"12:00"),"%Y-%m-%d %H:%M",tz="UTC")
+        }
+        
         data$startDateTime <- data$startDateTime + timeZoneStartOffset*60*60
         data$startDateTime <- as.POSIXct(data$startDateTime)
         
@@ -223,6 +246,12 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
         
         if(composite){
           data$endDateTime <- with(data, as.POSIXct(paste(sample_end_dt, sample_end_tm),format="%Y-%m-%d %H:%M", tz = "UTC"))
+          
+          if(any(is.na(data$endDateTime))){
+            data$endDateTime_dateFlag <- is.na(data$endDateTime)
+            data$endDateTime[is.na(data$endDateTime)] <- as.POSIXct(paste(data$sample_end_dt,"12:00"),"%Y-%m-%d %H:%M",tz="UTC")
+          }
+          
           data$endDateTime <- data$endDateTime + timeZoneEndOffset*60*60
           data$endDateTime <- as.POSIXct(data$endDateTime)
           
@@ -254,7 +283,6 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     attr(data, "header") <- attr(rawData, "header")
   }
   
-
   return(data)
   
 

@@ -4,9 +4,12 @@
 \alias{readWQPdata}
 \title{General Data Import from Water Quality Portal}
 \usage{
-readWQPdata(...)
+readWQPdata(..., zip = FALSE)
 }
 \arguments{
+\item{zip}{logical to request data via downloading zip file. Default set to FALSE. The overhead associated with
+downloading and un-zipping only improves performance for large data returns.}
+
 \item{\dots}{see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options}
 }
 \value{
@@ -102,8 +105,8 @@ pHDataExpanded2 <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),characteristicN
 startDate <- as.Date("2013-01-01")
 nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
                         characteristicType="Nutrient")
-nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate="",
-                        characteristicType="Nutrient")
+
+
 }
 }
 \keyword{WQP}
