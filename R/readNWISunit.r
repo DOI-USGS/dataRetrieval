@@ -118,6 +118,7 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' }
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
+#' @importFrom dplyr left_join
 #' @examples
 #' siteNumbers <- c('01594440','040851325')
 #' \dontrun{
@@ -145,6 +146,7 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){
     data$gage_ht <- as.numeric(data$gage_ht)
     
     siteInfo <- readNWISsite(siteNumbers)
+    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
     
     attr(data, "siteInfo") <- siteInfo
     attr(data, "variableInfo") <- NULL
@@ -186,6 +188,7 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){
 #'relate flow to stage.
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
+#' @importFrom dplyr left_join
 #' @examples
 #' siteNumber <- '01594440'
 #' \dontrun{
@@ -208,6 +211,7 @@ readNWISrating <- function (siteNumber,type="base"){
     }
     
     siteInfo <- readNWISsite(siteNumber)
+    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
     
     attr(data, "siteInfo") <- siteInfo
     attr(data, "variableInfo") <- NULL
@@ -253,6 +257,7 @@ readNWISrating <- function (siteNumber,type="base"){
 #' }
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
+#' @importFrom dplyr left_join
 #' @examples
 #' siteNumbers <- c('01594440','040851325')
 #' \dontrun{
@@ -271,6 +276,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
     }
     
     siteInfo <- readNWISsite(siteNumbers)
+    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
     
     attr(data, "siteInfo") <- siteInfo
     attr(data, "variableInfo") <- NULL
@@ -319,6 +325,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
 #' 
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
+#' @importFrom dplyr left_join
 #' @examples
 #' siteNumber <- "434400121275801"
 #' \dontrun{
@@ -336,6 +343,7 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate=""){
     data$lev_dt <- as.Date(data$lev_dt)
   
     siteInfo <- readNWISsite(siteNumbers)
+    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
     
     attr(data, "siteInfo") <- siteInfo
   }

@@ -73,6 +73,7 @@
 #' @export
 #' @importFrom reshape2 melt
 #' @importFrom reshape2 dcast
+#' @importFrom dplyr left_join
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
 #' \code{\link{readWQPqw}}, \code{\link{constructNWISURL}}
 #' @examples
@@ -163,6 +164,8 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   parameterCd <- parameterCd[parameterCd != ""]
   
   siteInfo <- readNWISsite(siteNumbers)
+  
+  siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
   
   varInfo <- readNWISpCode(parameterCd)
   
