@@ -139,9 +139,7 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
                                 tz_cd=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"),
                                 stringsAsFactors = FALSE)
-#     offsetLibrary <- setNames(c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
-#                                c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"))
-#     
+
     # The suppressed warning occurs when there is text (such as ice) in the numeric column:
     data[,grep('n$', dataType)] <- suppressWarnings(sapply(data[,grep('n$', dataType)], function(x) as.numeric(x)))
     
@@ -185,7 +183,6 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
           timeZoneStartOffset <- left_join(data[,"sample_start_time_datum_cd",drop=FALSE],offsetLibrary, 
                                            by=c("sample_start_time_datum_cd"="tz_cd"))
           timeZoneStartOffset <- timeZoneStartOffset$offset
-          # timeZoneStartOffset <- offsetLibrary[data$sample_start_time_datum_cd]
           timeZoneStartOffset[is.na(timeZoneStartOffset)] <- 0
         } else {
           timeZoneStartOffset <- 0
@@ -195,7 +192,6 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
           timeZoneEndOffset <- left_join(data[,"sample_end_time_datum_cd",drop=FALSE],offsetLibrary, 
                                            by=c("sample_end_time_datum_cd"="tz_cd"))
           timeZoneEndOffset <- timeZoneEndOffset$offset
-          # timeZoneEndOffset <- offsetLibrary[data$sample_end_time_datum_cd]
           timeZoneEndOffset[is.na(timeZoneEndOffset)] <- 0
           composite <- TRUE
         } else {
@@ -265,7 +261,6 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     attr(data, "header") <- attr(rawData, "header")
   }
   
-
   return(data)
   
 

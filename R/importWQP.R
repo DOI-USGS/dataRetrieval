@@ -26,7 +26,7 @@
 #' 
 #' rawSample <- importWQP(rawSampleURL)
 #' url2 <- paste0(rawSampleURL,"&zip=yes")
-#' rawSample2 <- importWQP(url2, TRUE)
+#' rawSample2 <- importWQP(url2, zip=TRUE)
 #' 
 #' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' STORETdata <- importWQP(STORETex)
@@ -44,8 +44,6 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
   if(file.exists(obs_url)){
     if(zip){
       obs_url <- unzip(obs_url)
-#       retval <- read.csv(doc, header = TRUE, quote="", dec=".", colClasses="character",stringsAsFactors = FALSE)
-#       unlink(doc)
     } 
     suppressWarnings(namesData <- read.delim(obs_url , header = TRUE, quote="",
                                              dec=".", sep='\t', colClasses='character',nrow=1))
@@ -86,15 +84,10 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
   
         stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", obs_url)
       }
-      
-#       retval <- read.csv(doc, header = TRUE, quote="", dec=".", colClasses="character",stringsAsFactors = FALSE)
-#       unlink(doc)
-      
+
     } else {
       doc <- getWebServiceData(obs_url)
       headerInfo <- attr(doc, "headerInfo")
-#       retval <- read.csv(textConnection(doc), header = TRUE, quote="", dec=".", colClasses="character",stringsAsFactors = FALSE)
-#       unlink(doc)
     }
     
     suppressWarnings(namesData <- read.delim(if(zip) doc else textConnection(doc) , header = TRUE, quote="",
