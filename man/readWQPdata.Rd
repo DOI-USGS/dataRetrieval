@@ -102,8 +102,8 @@ pHDataExpanded2 <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),characteristicN
 startDate <- as.Date("2013-01-01")
 nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
                         characteristicType="Nutrient")
-nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate="",
-                        characteristicType="Nutrient")
+
+
 }
 }
 \keyword{WQP}

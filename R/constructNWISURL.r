@@ -244,8 +244,8 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate){
     suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
   } else {
     pCodeLogic <- FALSE
-    parameterCd <- gsub(",","%2C",parameterCd)
-    parameterCd <- URLencode(parameterCd)
+    # parameterCd <- gsub(",","%2C",parameterCd)
+    parameterCd <- URLencode(parameterCd, reserved = TRUE)
   }
   
   if(multiplePcodes){

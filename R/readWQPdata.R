@@ -93,8 +93,8 @@
 #' startDate <- as.Date("2013-01-01")
 #' nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
 #'                         characteristicType="Nutrient")
-#' nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate="",
-#'                         characteristicType="Nutrient")
+#' 
+#'                         
 #' }
 readWQPdata <- function(...){
   
@@ -142,8 +142,8 @@ readWQPdata <- function(...){
     tz <- ""
   }
 
-  values <- gsub("%20","+",values)
-  
+  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
   baseURL <- "http://www.waterqualitydata.us/Result/search?"

@@ -106,7 +106,7 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     
     suppressWarnings(retval <- read.delim(if(zip) doc else textConnection(doc), header = TRUE, quote="", 
                                           dec=".", sep='\t', colClasses=as.character(classColumns)))
-    unlink(doc)
+    if(zip) unlink(doc)
       
     numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
   

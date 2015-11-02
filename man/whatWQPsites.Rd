@@ -62,6 +62,7 @@ site1 <- whatWQPsites(siteid="USGS-01594440")
 
 type <- "Stream"
 sites <- whatWQPsites(countycode="US:55:025",siteType=type)
+data <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 }
 }
 \keyword{WQP}
