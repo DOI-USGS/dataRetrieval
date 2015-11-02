@@ -188,7 +188,6 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){
 #'relate flow to stage.
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
-#' @importFrom dplyr left_join
 #' @examples
 #' siteNumber <- '01594440'
 #' \dontrun{
@@ -211,8 +210,7 @@ readNWISrating <- function (siteNumber,type="base"){
     }
     
     siteInfo <- readNWISsite(siteNumber)
-    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
-    
+
     attr(data, "siteInfo") <- siteInfo
     attr(data, "variableInfo") <- NULL
     attr(data, "statisticInfo") <- NULL
