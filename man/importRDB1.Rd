@@ -75,7 +75,7 @@ qwURL <- constructNWISURL(c('04024430','04024000'),
           c('34247','30234','32104','34220'),
          "2010-11-03","","qw",format="rdb")
 qwData <- importRDB1(qwURL, qw=TRUE, tz="America/Chicago")
-iceSite <- '04024430'
+iceSite <- '04024000'
 start <- "2014-11-09"
 end <- "2014-11-28"
 urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
