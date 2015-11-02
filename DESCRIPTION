@@ -29,7 +29,8 @@ Imports:
     lubridate,
     plyr,
     stats,
-    utils
+    utils,
+    dplyr
 Suggests:
     xtable,
     knitr,
