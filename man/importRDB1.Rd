@@ -39,6 +39,8 @@ XD_P_S, where X is literal,
 D is an option description of the parameter,
 P is the parameter code,
 and S is the statistic code (if applicable).
+If a date/time (dt) column contained incomplete date and times, a new column of dates was inserted. This could happen
+when older data was reported as dates, and newer data was reported as a date/time.
 
 There are also several useful attributes attached to the data frame:
 \tabular{lll}{
