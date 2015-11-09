@@ -255,6 +255,7 @@ readNWISrating <- function (siteNumber,type="base"){
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+#' tz_cd_reported \tab The originally reported time zone \cr
 #' }
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
