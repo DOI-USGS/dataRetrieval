@@ -30,10 +30,10 @@ peak_va \tab numeric \tab Annual peak streamflow value in cfs \cr
 peak_cd \tab character \tab Peak Discharge-Qualification codes (see \code{comment} for more information) \cr
 gage_ht \tab numeric \tab Gage height for the associated peak streamflow in feet \cr
 gage_ht_cd \tab character \tab Gage height qualification codes \cr
-year_last_pk \tab character \tab Peak streamflow reported is the highest since this year \cr
-ag_dt \tab character \tab Date of maximum gage-height for water year (if not concurrent with peak) \cr
+year_last_pk \tab numeric \tab Peak streamflow reported is the highest since this year \cr
+ag_dt \tab Date \tab Date of maximum gage-height for water year (if not concurrent with peak) \cr
 ag_tm \tab character \tab Time of maximum gage-height for water year (if not concurrent with peak) \cr
-ag_gage_ht \tab character \tab maximum Gage height for water year in feet (if not concurrent with peak) \cr
+ag_gage_ht \tab numeric \tab maximum Gage height for water year in feet (if not concurrent with peak) \cr
 ag_gage_ht_cd \tab character \tab maximum Gage height code \cr
 }
 
