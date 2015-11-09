@@ -141,8 +141,8 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){
           warning(length(badDates), " rows were thrown out due to incomplete dates")
         }
       }
-      data$peak_dt <- as.Date(data$peak_dt)
-      data$ag_dt <- as.Date(data$ag_dt)
+      if("peak_dt" %in% names(data))  data$peak_dt <- as.Date(data$peak_dt, format="%Y-%m-%d")
+      if("ag_dt" %in% names(data))  data$ag_dt <- as.Date(data$ag_dt, format="%Y-%m-%d")
     }
     data$gage_ht <- as.numeric(data$gage_ht)
     data$ag_gage_ht <- as.numeric(data$ag_gage_ht)
