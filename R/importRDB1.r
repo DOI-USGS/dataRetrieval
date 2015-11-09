@@ -173,8 +173,10 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
 
         
         if(any(is.na(data[,regexpr('d$', dataType) > 0]))){
-          data[,paste(names(data)[regexpr('d$', dataType) > 0],"date",sep = "_")] <- as.Date(substr(rawDateTimes,1,10))
-          data[,paste(names(data)[regexpr('d$', dataType) > 0],"tm",sep = "_")] <- substr(rawDateTimes,12,nchar(rawDateTimes))
+          base.name <- names(data)[regexpr('d$', dataType) > 0]
+          base.name <- gsub("_dt","",base.name)
+          data[,paste(base.name,"date","reported",sep = "_")] <- as.Date(substr(rawDateTimes,1,10))
+          data[,paste(base.name,"tm","reported",sep = "_")] <- substr(rawDateTimes,12,nchar(rawDateTimes))
         }
 
         data[,regexpr('d$', dataType) > 0] <- data[,regexpr('d$', dataType) > 0] + offset*60*60
