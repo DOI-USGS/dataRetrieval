@@ -239,8 +239,8 @@ readNWISrating <- function (siteNumber,type="base"){
 #' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 #' site_no \tab character \tab The USGS site number \cr
 #' measurement_dt \tab POSIXct \tab The date and time (in POSIXct) of the measurement. Unless specified
-#' with the tz parameter, this is converted to UTC. If the measurement_dt column is an incomplete, a measurement_dt_date column is added to the 
-#' returned data frame.   \cr
+#' with the tz parameter, this is converted to UTC. If the measurement_dt column is an incomplete, a measurement_dt_date and
+#' measurement_dt_time column are added to the returned data frame.   \cr
 #' tz_cd \tab character \tab The time zone code for the measurement_dt column \cr
 #' }
 #'  
