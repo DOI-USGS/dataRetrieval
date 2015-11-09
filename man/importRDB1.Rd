@@ -33,6 +33,7 @@ datetime \tab POSIXct \tab The date and time of the value converted to UTC (if a
 tz_cd \tab character \tab The time zone code for datetime \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
+tz_cd_reported \tab The originally reported time zone \cr
 }
 Note that code and value are repeated for the parameters requested. The names are of the form
 XD_P_S, where X is literal,
