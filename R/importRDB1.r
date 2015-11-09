@@ -31,7 +31,7 @@
 #' D is an option description of the parameter, 
 #' P is the parameter code, 
 #' and S is the statistic code (if applicable).
-#' If a date/time (dt) column contained incomplete date and times, a new column of dates was inserted. This could happen
+#' If a date/time (dt) column contained incomplete date and times, a new column of dates and time was inserted. This could happen
 #' when older data was reported as dates, and newer data was reported as a date/time.
 #' 
 #' There are also several useful attributes attached to the data frame:
@@ -174,6 +174,7 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
         
         if(any(is.na(data[,regexpr('d$', dataType) > 0]))){
           data[,paste(names(data)[regexpr('d$', dataType) > 0],"date",sep = "_")] <- as.Date(substr(rawDateTimes,1,10))
+          data[,paste(names(data)[regexpr('d$', dataType) > 0],"tm",sep = "_")] <- substr(rawDateTimes,12,nchar(rawDateTimes))
         }
 
         data[,regexpr('d$', dataType) > 0] <- data[,regexpr('d$', dataType) > 0] + offset*60*60
