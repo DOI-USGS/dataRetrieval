@@ -101,10 +101,10 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' peak_cd \tab character \tab Peak Discharge-Qualification codes (see \code{comment} for more information) \cr
 #' gage_ht \tab numeric \tab Gage height for the associated peak streamflow in feet \cr
 #' gage_ht_cd \tab character \tab Gage height qualification codes \cr
-#' year_last_pk \tab character \tab Peak streamflow reported is the highest since this year \cr
-#' ag_dt \tab character \tab Date of maximum gage-height for water year (if not concurrent with peak) \cr
+#' year_last_pk \tab numeric \tab Peak streamflow reported is the highest since this year \cr
+#' ag_dt \tab Date \tab Date of maximum gage-height for water year (if not concurrent with peak) \cr
 #' ag_tm \tab character \tab Time of maximum gage-height for water year (if not concurrent with peak) \cr
-#' ag_gage_ht \tab character \tab maximum Gage height for water year in feet (if not concurrent with peak) \cr
+#' ag_gage_ht \tab numeric \tab maximum Gage height for water year in feet (if not concurrent with peak) \cr
 #' ag_gage_ht_cd \tab character \tab maximum Gage height code \cr
 #' }
 #' 
@@ -141,9 +141,12 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){
           warning(length(badDates), " rows were thrown out due to incomplete dates")
         }
       }
-      data$peak_dt <- as.Date(data$peak_dt)
+      if("peak_dt" %in% names(data))  data$peak_dt <- as.Date(data$peak_dt, format="%Y-%m-%d")
+      if("ag_dt" %in% names(data))  data$ag_dt <- as.Date(data$ag_dt, format="%Y-%m-%d")
     }
     data$gage_ht <- as.numeric(data$gage_ht)
+    data$ag_gage_ht <- as.numeric(data$ag_gage_ht)
+    data$year_last_pk <- as.numeric(data$year_last_pk)
     
     siteInfo <- readNWISsite(siteNumbers)
     siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
