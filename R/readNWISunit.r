@@ -238,9 +238,12 @@ readNWISrating <- function (siteNumber,type="base"){
 #' Name \tab Type \tab Description \cr
 #' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 #' site_no \tab character \tab The USGS site number \cr
-#' tz_cd \tab character \tab The time zone code for dateTime \cr
+#' measurement_dt \tab POSIXct \tab The date and time (in POSIXct) of the measurement. Unless specified
+#' with the tz parameter, this is converted to UTC. If the measurement_dt column is an incomplete, a measurement_dt_date column is added to the 
+#' returned data frame.   \cr
+#' tz_cd \tab character \tab The time zone code for the measurement_dt column \cr
 #' }
-#' 
+#'  
 #' See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water, and 
 #' \url{http://waterdata.usgs.gov/nwis/help?output_formats_help#streamflow_measurement_data}
 #' for help on the columns and codes.

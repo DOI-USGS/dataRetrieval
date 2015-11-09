@@ -30,6 +30,8 @@
 #' D is an option description of the parameter, 
 #' P is the parameter code, 
 #' and S is the statistic code (if applicable).
+#' If a date/time (dt) column contained incomplete date and times, a new column of dates was inserted. This could happen
+#' when older data was reported as dates, and newer data was reported as a date/time.
 #' 
 #' There are also several useful attributes attached to the data frame:
 #' \tabular{lll}{
@@ -170,10 +172,7 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
 
         
         if(any(is.na(data[,regexpr('d$', dataType) > 0]))){
-          data[,paste(names(data)[regexpr('d$', dataType) > 0],"dateFlag",sep = "_")] <- is.na(data[,regexpr('d$', dataType) > 0])
-          data[is.na(data[,regexpr('d$', dataType) > 0]),regexpr('d$', dataType) > 0] <- as.POSIXct(paste(rawDateTimes[is.na(data[,regexpr('d$', dataType) > 0])],"12:00"),
-                                                                                                    "%Y-%m-%d %H:%M",tz="UTC")
-
+          data[,paste(names(data)[regexpr('d$', dataType) > 0],"date",sep = "_")] <- as.Date(substr(rawDateTimes,1,10))
         }
 
         data[,regexpr('d$', dataType) > 0] <- data[,regexpr('d$', dataType) > 0] + offset*60*60
@@ -184,7 +183,7 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
           data$tz_cd <- rep(tz, nrow(data))
         } else {
           attr(data[,regexpr('d$', dataType) > 0], "tzone") <- "UTC"
-          data$tz_cd <- rep("UTC", nrow(data))
+          data$tz_cd[!is.na(data[,regexpr('d$', dataType) > 0])] <- "UTC"
         }   
        
       } else if (qw){
@@ -198,14 +197,13 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
           timeZoneStartOffset <- 0
         }
         
-        if("sample_end_time_datum_cd" %in% names(data)){
+        composite <- "sample_end_time_datum_cd" %in% names(data)
+        if(composite){
           timeZoneEndOffset <- left_join(data[,"sample_end_time_datum_cd",drop=FALSE],offsetLibrary, 
                                            by=c("sample_end_time_datum_cd"="tz_cd"))
           timeZoneEndOffset <- timeZoneEndOffset$offset
           timeZoneEndOffset[is.na(timeZoneEndOffset)] <- 0
-          composite <- TRUE
         } else {
-          composite <- FALSE
           if(any(data$sample_end_dt != "") & any(data$sample_end_dm != "")){
             if(which(data$sample_end_dt != "") == which(data$sample_end_dm != "")){
               composite <- TRUE
@@ -227,12 +225,6 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
         }
         
         data$startDateTime <- with(data, as.POSIXct(paste(sample_dt, sample_tm),format="%Y-%m-%d %H:%M", tz = "UTC"))
-        
-        if(any(is.na(data$startDateTime))){
-          data$startDateTime_dateFlag <- is.na(data$startDateTime)
-          data$startDateTime[is.na(data$startDateTime)] <- as.POSIXct(paste(data$sample_dt,"12:00"),"%Y-%m-%d %H:%M",tz="UTC")
-        }
-        
         data$startDateTime <- data$startDateTime + timeZoneStartOffset*60*60
         data$startDateTime <- as.POSIXct(data$startDateTime)
         
@@ -241,17 +233,11 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
           data$tz_cd <- rep(tz, nrow(data))
         } else {
           attr(data$startDateTime, "tzone") <- "UTC"
-          data$tz_cd <- rep("UTC", nrow(data))
+          data$tz_cd[!is.na(data$startDateTime)] <- "UTC"
         }        
         
         if(composite){
           data$endDateTime <- with(data, as.POSIXct(paste(sample_end_dt, sample_end_tm),format="%Y-%m-%d %H:%M", tz = "UTC"))
-          
-          if(any(is.na(data$endDateTime))){
-            data$endDateTime_dateFlag <- is.na(data$endDateTime)
-            data$endDateTime[is.na(data$endDateTime)] <- as.POSIXct(paste(data$sample_end_dt,"12:00"),"%Y-%m-%d %H:%M",tz="UTC")
-          }
-          
           data$endDateTime <- data$endDateTime + timeZoneEndOffset*60*60
           data$endDateTime <- as.POSIXct(data$endDateTime)
           
