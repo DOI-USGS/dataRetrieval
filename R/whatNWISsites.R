@@ -40,7 +40,7 @@ whatNWISsites <- function(...){
   names(values)[names(values) == "siteNumber"] <- "sites"
   names(values)[names(values) == "siteNumbers"] <- "sites"
   
-  baseURL <- "http://waterservices.usgs.gov/nwis/site/?format=mapper&"
+  baseURL <- drURL('waterservices',"&format=mapper&")
   urlCall <- paste(baseURL,
                    urlCall,sep = "")
 
