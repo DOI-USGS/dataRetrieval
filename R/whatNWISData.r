@@ -87,8 +87,7 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
     }
   }
   
-  
-  urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=",siteNumber,sep = "")
+  urlSitefile <- paste(drURL('waterservices', '&format=rdb&seriesCatalogOutput=true&sites='),siteNumber,sep = "")
  
   SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE)
   
