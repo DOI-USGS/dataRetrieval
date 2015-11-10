@@ -31,6 +31,7 @@ setAccess = function(access="public"){
   pkg.env$waterservices = paste0("http://waterservices.usgs.gov/nwis/site/", access.param)
   pkg.env$iv =  paste0("http://nwis.waterservices.usgs.gov/nwis/iv/", access.param)
   pkg.env$dv =  paste0("http://waterservices.usgs.gov/nwis/dv/", access.param)
+  pkg.env$gwlevels = paste0("http://waterservices.usgs.gov/nwis/gwlevels/", access.param)
   
 }
 
