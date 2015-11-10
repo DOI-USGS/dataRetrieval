@@ -149,9 +149,6 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           
           if ("uv"==service) {
             service <- "iv"
-            baseURL <- paste0("http://nwis.waterservices.usgs.gov/nwis/",service)  
-          } else {
-            baseURL <- paste0("http://waterservices.usgs.gov/nwis/",service)  
           }
           
           format <- match.arg(format, c("xml","tsv","wml1","wml2","rdb"))
@@ -174,8 +171,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
             }
           )
 
-          
-          url <- paste0(baseURL,"/?site=",siteNumber, "&format=", formatURL)
+          url <- drURL(service, paste0("&site=",siteNumber, "&format=", formatURL))
           
           if("gwlevels"!= service){
             url <- paste0(url, "&ParameterCd=",parameterCd)
