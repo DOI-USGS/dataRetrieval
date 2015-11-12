@@ -90,15 +90,20 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       headerInfo <- attr(doc, "headerInfo")
     }
     
-    suppressWarnings(namesData <- read.delim(if(zip) doc else textConnection(doc) , header = TRUE, quote="",
-                                             dec=".", sep='\t', colClasses='character',nrow=1))
+    library(readr)
+    retval <- read_tsv(doc, col_types = cols(`ActivityStartTime/Time` = col_character(),
+                                             `ActivityEndTime/Time` = col_character(),
+                                             USGSPCode = col_character()))
     
-    classColumns <- setNames(rep('character',ncol(namesData)),names(namesData))
-    
-    classColumns[grep("MeasureValue",names(classColumns))] <- NA
-    
-    suppressWarnings(retval <- read.delim(if(zip) doc else textConnection(doc), header = TRUE, quote="", 
-                                          dec=".", sep='\t', colClasses=as.character(classColumns)))
+#     suppressWarnings(namesData <- read.delim(if(zip) doc else textConnection(doc) , header = TRUE, quote="",
+#                                              dec=".", sep='\t', colClasses='character',nrow=1))
+#     
+#     classColumns <- setNames(rep('character',ncol(namesData)),names(namesData))
+#     
+#     classColumns[grep("MeasureValue",names(classColumns))] <- NA
+#     
+#     suppressWarnings(retval <- read.delim(if(zip) doc else textConnection(doc), header = TRUE, quote="", 
+#                                           dec=".", sep='\t', colClasses=as.character(classColumns)))
     if(zip) unlink(doc)
       
     numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
@@ -127,28 +132,28 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
                             code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"),
                             stringsAsFactors = FALSE)
   
-  retval <- left_join(retval, offsetLibrary, by=c("ActivityStartTime.TimeZoneCode"="code"))
+  retval <- left_join(retval, offsetLibrary, by=c("ActivityStartTime/TimeZoneCode"="code"))
   names(retval)[names(retval) == "offset"] <- "timeZoneStart"
-  retval <- left_join(retval, offsetLibrary, by=c("ActivityEndTime.TimeZoneCode"="code"))
+  retval <- left_join(retval, offsetLibrary, by=c("ActivityEndTime/TimeZoneCode"="code"))
   names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
 
   retval$timeZoneStart[is.na(retval$timeZoneStart)] <- 0
   retval$timeZoneEnd[is.na(retval$timeZoneEnd)] <- 0
   
-  if("ActivityStartDate" %in% names(retval)){
-    if(any(retval$ActivityStartDate != "")){
-      suppressWarnings(retval$ActivityStartDate <- as.Date(parse_date_time(retval$ActivityStartDate, c("Ymd", "mdY"))))
-    }
-  }
-
-  if("ActivityEndDate" %in% names(retval)){
-    if(any(retval$ActivityEndDate != "")){
-      suppressWarnings(retval$ActivityEndDate <- as.Date(parse_date_time(retval$ActivityEndDate, c("Ymd", "mdY"))))
-    }        
-  }
+#   if("ActivityStartDate" %in% names(retval)){
+#     if(any(retval$ActivityStartDate != "")){
+#       suppressWarnings(retval$ActivityStartDate <- as.Date(parse_date_time(retval$ActivityStartDate, c("Ymd", "mdY"))))
+#     }
+#   }
+# 
+#   if("ActivityEndDate" %in% names(retval)){
+#     if(any(retval$ActivityEndDate != "")){
+#       suppressWarnings(retval$ActivityEndDate <- as.Date(parse_date_time(retval$ActivityEndDate, c("Ymd", "mdY"))))
+#     }        
+#   }
 
   if(any(!is.na(retval$timeZoneStart))){
-    retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, ActivityStartTime.Time),format="%Y-%m-%d %H:%M:%S", tz = "UTC"))
+    retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, `ActivityStartTime/Time`),format="%Y-%m-%d %H:%M:%S", tz = "UTC"))
     retval$ActivityStartDateTime <- retval$ActivityStartDateTime + retval$timeZoneStart*60*60
     retval$ActivityStartDateTime <- as.POSIXct(retval$ActivityStartDateTime)
     if(tz != ""){
@@ -159,7 +164,7 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
   }
   
   if(any(!is.na(retval$timeZoneEnd))){      
-    retval$ActivityEndDateTime <- with(retval, as.POSIXct(paste(ActivityEndDate, ActivityEndTime.Time),format="%Y-%m-%d %H:%M:%S", tz = "UTC"))
+    retval$ActivityEndDateTime <- with(retval, as.POSIXct(paste(ActivityEndDate, `ActivityEndTime/Time`),format="%Y-%m-%d %H:%M:%S", tz = "UTC"))
     retval$ActivityEndDateTime <- retval$ActivityEndDateTime + retval$timeZoneEnd*60*60
     retval$ActivityEndDateTime <- as.POSIXct(retval$ActivityEndDateTime)
     if(tz != ""){
