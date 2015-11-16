@@ -25,7 +25,7 @@ setAccess = function(access="public"){
     access.param = '?Access=3'
     message('setting access to internal')
   }else {
-    access.param = '?Access=1'
+    access.param = '?Access=0'
   }
   
   pkg.env$waterservices = paste0("http://waterservices.usgs.gov/nwis/site/", access.param)
