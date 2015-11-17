@@ -22,19 +22,38 @@ setAccess = function(access="public"){
   access = match.arg(access, c('public','internal'))
   
   if(access=="internal"){
-    access.param = '?Access=3'
+    pkg.env$access = '3'
     message('setting access to internal')
   }else {
-    access.param = '?Access=0'
+    pkg.env$access = '0'
+    message('setting access to public')
   }
   
-  pkg.env$waterservices = paste0("http://waterservices.usgs.gov/nwis/site/", access.param)
-  pkg.env$iv =  paste0("http://nwis.waterservices.usgs.gov/nwis/iv/", access.param)
-  pkg.env$dv =  paste0("http://waterservices.usgs.gov/nwis/dv/", access.param)
-  pkg.env$gwlevels = paste0("http://waterservices.usgs.gov/nwis/gwlevels/", access.param)
+  pkg.env$waterservices = "http://waterservices.usgs.gov/nwis/site/"
+  pkg.env$iv = "http://nwis.waterservices.usgs.gov/nwis/iv/"
+  pkg.env$dv =  "http://waterservices.usgs.gov/nwis/dv/"
+  pkg.env$gwlevels = "http://waterservices.usgs.gov/nwis/gwlevels/"
   
 }
 
-drURL = function(base.name, params){
-  return(paste0(pkg.env[[base.name]], params))
+drURL <- function(base.name, ..., arg.list=NULL){
+  
+  
+  queryString <- drQueryArgs(..., arg.list=arg.list)
+  #to do: add something to check for redundant params
+  
+  return(paste0(pkg.env[[base.name]], '?', queryString))
+}
+
+drQueryArgs <- function(..., arg.list){
+  args <- append(expand.grid(..., stringsAsFactors = FALSE), arg.list)
+  # get the args into name=value strings
+  keyValues <- paste0(names(args),unname(lapply(args, function(x) paste0('=',x[[1]]))))
+  return(paste(keyValues, collapse='&'))
+}
+
+appendDrURL <- function(url, ..., arg.list=NULL){
+  
+  queryString <- drQueryArgs(..., arg.list=arg.list)
+  return(paste0(url, "&", queryString))
 }

@@ -35,14 +35,11 @@ whatNWISsites <- function(...){
   matchReturn <- list(...)
   values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
   
-  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
-  
   names(values)[names(values) == "siteNumber"] <- "sites"
   names(values)[names(values) == "siteNumbers"] <- "sites"
   
-  baseURL <- drURL('waterservices',"&format=mapper&")
-  urlCall <- paste(baseURL,
-                   urlCall,sep = "")
+  urlCall <- drURL('waterservices',Access=pkg.env$access, format="mapper", arg.list = values)
+
 
   rawData <- getWebServiceData(urlCall)
 

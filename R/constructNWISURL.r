@@ -171,29 +171,29 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
             }
           )
 
-          url <- drURL(service, paste0("&site=",siteNumber, "&format=", formatURL))
+          url <- drURL(service, Access=pkg.env$access, site=siteNumber, format=formatURL)
           
           if("gwlevels"!= service){
-            url <- paste0(url, "&ParameterCd=",parameterCd)
+            url <- appendDrURL(url, ParameterCd=parameterCd)
           }
           
           if("dv"==service) {
             if(length(statCd) > 1){
               statCd <- paste(statCd, collapse=",")
             }            
-            url <- paste0(url, "&StatCd=", statCd)
+            url <- appendDrURL(url, StatCd=statCd)
           }
           
           if (nzchar(startDate)) {
-            url <- paste0(url,"&startDT=",startDate)
+            url <- appendDrURL(url, startDT=startDate)
           } else {
             startorgin <- "1851-01-01"
             if ("iv" == service) startorgin <- "1900-01-01"            
-            url <- paste0(url,"&startDT=",startorgin)
+            url <- appendDrURL(url, startDT=startorgin)
           }
           
           if (nzchar(endDate)) {
-            url <- paste0(url,"&endDT=",endDate)
+            url <- appendDrURL(url, endDT=endDate)
           }
         }
          
