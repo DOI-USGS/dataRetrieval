@@ -13,10 +13,11 @@
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
 #' @import RCurl
-#' @import lubridate
 #' @import utils
 #' @import stats
-#' @importFrom dplyr left_join
+#' @import data.table 
+#' @importFrom lubridate parse_date_time
+#' @importFrom lubridate fast_strptime
 #' @examples
 #' # These examples require an internet connection to run
 #' 
@@ -41,73 +42,12 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
                           "America/Phoenix","America/Metlakatla"))
   }
   
-  if(file.exists(obs_url)){
-    if(zip){
-      obs_url <- unzip(obs_url)
-    } 
-    suppressWarnings(namesData <- read.delim(obs_url , header = TRUE, quote="",
-                                             dec=".", sep='\t', colClasses='character',nrow=1))
+  if(!file.exists(obs_url)){
+    h <- basicHeaderGatherer()
+    httpHEAD(obs_url, headerfunction = h$update)
     
-    classColumns <- setNames(rep('character',ncol(namesData)),names(namesData))
-    
-    classColumns[grep("MeasureValue",names(classColumns))] <- NA
-    
-    suppressWarnings(retval <- read.delim(obs_url, header = TRUE, quote="", 
-                                          dec=".", sep='\t', colClasses=as.character(classColumns)))
-    if(zip){
-      unlink(obs_url)
-    }
-    
-  } else {
-  
-    if(zip){
-      h <- basicHeaderGatherer()
-      httpHEAD(obs_url, headerfunction = h$update)
-      
-      headerInfo <- h$value()
-      
-      temp <- tempfile()
-      options(timeout = 120)
-      
-      possibleError <- tryCatch({
-        download.file(obs_url,temp, quiet=TRUE, mode='wb')
-        },
-        error = function(e)  {
-          stop(e, "with url:", obs_url)
-        }
-      )
-      
-      if(headerInfo['status'] == "200"){
-        doc <- unzip(temp)
-      } else {
-        unlink(temp)
-  
-        stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", obs_url)
-      }
-
-    } else {
-      doc <- getWebServiceData(obs_url)
-      headerInfo <- attr(doc, "headerInfo")
-    }
-    
-    library(readr)
-    retval <- read_tsv(doc, col_types = cols(`ActivityStartTime/Time` = col_character(),
-                                             `ActivityEndTime/Time` = col_character(),
-                                             USGSPCode = col_character()))
-    
-#     suppressWarnings(namesData <- read.delim(if(zip) doc else textConnection(doc) , header = TRUE, quote="",
-#                                              dec=".", sep='\t', colClasses='character',nrow=1))
-#     
-#     classColumns <- setNames(rep('character',ncol(namesData)),names(namesData))
-#     
-#     classColumns[grep("MeasureValue",names(classColumns))] <- NA
-#     
-#     suppressWarnings(retval <- read.delim(if(zip) doc else textConnection(doc), header = TRUE, quote="", 
-#                                           dec=".", sep='\t', colClasses=as.character(classColumns)))
-    if(zip) unlink(doc)
-      
+    headerInfo <- h$value()
     numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
-  
     
     if(headerInfo['Total-Result-Count'] == "0"){
       warning("No data returned")
@@ -121,67 +61,82 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       return(data.frame())
     }
     
+    if(headerInfo['status'] == "200"){
+
+      if(zip){
+        temp <- tempfile()
+        options(timeout = 120)
+        
+        possibleError <- tryCatch({
+            suppressWarnings(download.file(obs_url,temp, quiet=TRUE, mode='wb'))
+          },
+          error = function(e)  {
+            stop(e, "with url:", obs_url)
+          }
+        )
+        
+        if(headerInfo['status'] == "200"){
+          doc <- unzip(temp)
+          retval <- fread(doc,colClasses = "character",verbose = FALSE,showProgress = FALSE)
+        } else {
+          stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", obs_url)
+        }
+        unlink(doc)
+      } else {
+        retval <- suppressWarnings(fread(obs_url,colClasses = "character",verbose = FALSE,showProgress = FALSE))
+      }
+    } else {
+      stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", obs_url)
+    }
+    
     actualNumReturned <- nrow(retval)
     if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", actualNumReturned, " were returned")
     
-  }
-  
-  retval[,names(which(sapply(retval[,grep("MeasureValue",names(retval))], function(x)all(is.na(x)))))] <- ""
-  
-  offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
-                            code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"),
-                            stringsAsFactors = FALSE)
-  
-  retval <- left_join(retval, offsetLibrary, by=c("ActivityStartTime/TimeZoneCode"="code"))
-  names(retval)[names(retval) == "offset"] <- "timeZoneStart"
-  retval <- left_join(retval, offsetLibrary, by=c("ActivityEndTime/TimeZoneCode"="code"))
-  names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
-
-  retval$timeZoneStart[is.na(retval$timeZoneStart)] <- 0
-  retval$timeZoneEnd[is.na(retval$timeZoneEnd)] <- 0
-  
-#   if("ActivityStartDate" %in% names(retval)){
-#     if(any(retval$ActivityStartDate != "")){
-#       suppressWarnings(retval$ActivityStartDate <- as.Date(parse_date_time(retval$ActivityStartDate, c("Ymd", "mdY"))))
-#     }
-#   }
-# 
-#   if("ActivityEndDate" %in% names(retval)){
-#     if(any(retval$ActivityEndDate != "")){
-#       suppressWarnings(retval$ActivityEndDate <- as.Date(parse_date_time(retval$ActivityEndDate, c("Ymd", "mdY"))))
-#     }        
-#   }
-
-  if(any(!is.na(retval$timeZoneStart))){
-    retval$ActivityStartDateTime <- with(retval, as.POSIXct(paste(ActivityStartDate, `ActivityStartTime/Time`),format="%Y-%m-%d %H:%M:%S", tz = "UTC"))
-    retval$ActivityStartDateTime <- retval$ActivityStartDateTime + retval$timeZoneStart*60*60
-    retval$ActivityStartDateTime <- as.POSIXct(retval$ActivityStartDateTime)
-    if(tz != ""){
-      attr(retval$ActivityStartDateTime, "tzone") <- tz
-    } else {
-      attr(retval$ActivityStartDateTime, "tzone") <- "UTC"
-    }      
-  }
-  
-  if(any(!is.na(retval$timeZoneEnd))){      
-    retval$ActivityEndDateTime <- with(retval, as.POSIXct(paste(ActivityEndDate, `ActivityEndTime/Time`),format="%Y-%m-%d %H:%M:%S", tz = "UTC"))
-    retval$ActivityEndDateTime <- retval$ActivityEndDateTime + retval$timeZoneEnd*60*60
-    retval$ActivityEndDateTime <- as.POSIXct(retval$ActivityEndDateTime)
-    if(tz != ""){
-      attr(retval$ActivityEndDateTime, "tzone") <- tz
-    } else {
-      attr(retval$ActivityEndDateTime, "tzone") <- "UTC"
+  } else {
+    
+    if(zip){
+      doc <- unzip(obs_url)
+      retval <- fread(doc,colClasses = "character",verbose = FALSE,showProgress = FALSE)
+      unlink(doc)
+    }  else {
+      retval <- fread(obs_url,colClasses = "character",verbose = FALSE,showProgress = FALSE)
     }
-  }
-  
-  if(all(is.na(retval$ActivityEndDateTime))){
-    retval$ActivityEndDateTime <- NULL
+
   }
 
-  retval <- retval[order(retval$OrganizationIdentifier, 
-                         retval$MonitoringLocationIdentifier, 
-                         retval$ActivityStartDateTime, decreasing = FALSE),]
+  dateCols <- c("ActivityStartDate","ActivityEndDate","AnalysisStartDate","PreparationStartDate")
+  retval <- suppressWarnings(retval[, (dateCols) := lapply(.SD, function(x) as.Date(parse_date_time(x, c("Ymd", "mdY")))),
+                                      .SDcols = dateCols])
   
+  numTmp <- names(retval)[grep("Value",names(retval))]
+  retval <- suppressWarnings(retval[, (numTmp) := lapply(.SD, as.numeric), .SDcols = numTmp])
+  
+  offsetLibrary <- data.table(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10),
+                              code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST"),
+                              key = "code")
+  retval <- setkey(retval, ActivityStartTime/TimeZoneCode)
+  retval <- retval[,timeZoneStart:=offsetLibrary[SJ(retval$`ActivityStartTime/TimeZoneCode`)]$offset]
+  retval <- setkey(retval, ActivityEndTime/TimeZoneCode)
+  retval <- retval[,timeZoneEnd:=offsetLibrary[SJ(retval$`ActivityEndTime/TimeZoneCode`)]$offset]
+  
+  retval <- retval[,ActivityStartDateTime:=paste(ActivityStartDate, `ActivityStartTime/Time`)]
+  retval <- retval[,ActivityStartDateTime:=fast_strptime(ActivityStartDateTime, '%Y-%m-%d %H:%M:%S')+60*60*timeZoneStart]
+  
+  retval <- retval[,ActivityEndDateTime:=paste(ActivityEndDate, `ActivityEndTime/Time`)]
+  retval <- retval[,ActivityEndDateTime:=fast_strptime(ActivityEndDateTime, '%Y-%m-%d %H:%M:%S')+60*60*timeZoneEnd]
+  
+
+
+#   if(all(is.na(retval$ActivityEndDateTime))){
+#     retval$ActivityEndDateTime <- NULL
+#   }
+
+  retval <- retval[order(OrganizationIdentifier, 
+                         MonitoringLocationIdentifier, 
+                         ActivityStartDateTime)]
+  
+  retval <- setDF(retval)
+  names(retval) <- gsub("/",".",names(retval))
   return(retval)
   
   
