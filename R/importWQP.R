@@ -83,20 +83,20 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
           }
         )
         doc <- unzip(temp)
-        retval <- read_delim(doc, 
+        retval <- suppressWarnings(read_delim(doc, 
                              col_types = cols(`ActivityStartTime/Time` = col_character(),
                                               `ActivityEndTime/Time` = col_character(),
                                               USGSPCode = col_character(),
                                               ResultCommentText=col_character()),
-                             quote = "", delim = "\t")
+                             quote = "", delim = "\t"))
         unlink(doc)
       } else {
-        retval <- read_delim(obs_url, 
+        retval <- suppressWarnings(read_delim(obs_url, 
                              col_types = cols(`ActivityStartTime/Time` = col_character(),
                                               `ActivityEndTime/Time` = col_character(),
                                               USGSPCode = col_character(),
                                               ResultCommentText=col_character()),
-                             quote = "", delim = "\t")
+                             quote = "", delim = "\t"))
       }
     } else {
       stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", obs_url)
@@ -109,20 +109,20 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     
     if(zip){
       doc <- unzip(obs_url)
-      retval <- read_delim(obs_url, 
+      retval <- suppressWarnings(read_delim(obs_url, 
                            col_types = cols(`ActivityStartTime/Time` = col_character(),
                                             `ActivityEndTime/Time` = col_character(),
                                             USGSPCode = col_character(),
                                             ResultCommentText=col_character()),
-                           quote = "", delim = "\t")
+                           quote = "", delim = "\t"))
       unlink(doc)
     }  else {
-      retval <- read_delim(obs_url, 
+      retval <- suppressWarnings(read_delim(obs_url, 
                            col_types = cols(`ActivityStartTime/Time` = col_character(),
                                             `ActivityEndTime/Time` = col_character(),
                                             USGSPCode = col_character(),
                                             ResultCommentText=col_character()),
-                           quote = "", delim = "\t")
+                           quote = "", delim = "\t"))
     }
     
   }
