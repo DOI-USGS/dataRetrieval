@@ -26,12 +26,12 @@ Imports:
     XML,
     RCurl,
     reshape2,
-    data.table,
     lubridate,
     plyr,
     stats,
     utils,
-    dplyr
+    dplyr,
+    readr
 Suggests:
     xtable,
     knitr,

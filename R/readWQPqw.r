@@ -151,7 +151,7 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz=""){
                              stringsAsFactors=FALSE)
   variableInfo <- unique(variableInfo)
   
-  if(any(variableInfo$parameterCd != "")){
+  if(any(!is.na(variableInfo$parameterCd))){
     pcodes <- unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)])
     pcodes <- pcodes["" != pcodes]
     paramINFO <- readNWISpCode(pcodes)

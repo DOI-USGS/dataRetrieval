@@ -54,7 +54,7 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @import lubridate
+#' @importFrom lubridate parse_date_time
 #' @examples
 #' \dontrun{
 #' availableData <- whatNWISdata('05114000')
