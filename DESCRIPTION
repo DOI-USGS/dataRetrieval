@@ -30,7 +30,8 @@ Imports:
     plyr,
     stats,
     utils,
-    dplyr
+    dplyr,
+    readr
 Suggests:
     xtable,
     knitr,
@@ -39,4 +40,4 @@ VignetteBuilder: knitr
 BuildVignettes: true
 BugReports: https://github.com/USGS-R/dataRetrieval/issues
 URL: https://github.com/USGS-R/dataRetrieval, http://pubs.usgs.gov/tm/04/a10/
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1
