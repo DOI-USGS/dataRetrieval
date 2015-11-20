@@ -55,21 +55,23 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     httpHEAD(obs_url, headerfunction = h$update)
     
     headerInfo <- h$value()
-    numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
     
-    if(headerInfo['Total-Result-Count'] == "0"){
-      warning("No data returned")
-      return(data.frame())
-    }
-    
-    if(is.na(numToBeReturned) | numToBeReturned == 0){
-      for(i in grep("Warning",names(headerInfo))){
-        warning(headerInfo[i])
-      }
-      return(data.frame())
-    }
     
     if(headerInfo['status'] == "200"){
+      
+      numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
+      
+      if(headerInfo['Total-Result-Count'] == "0"){
+        warning("No data returned")
+        return(data.frame())
+      }
+      
+      if(is.na(numToBeReturned) | numToBeReturned == 0){
+        for(i in grep("Warning",names(headerInfo))){
+          warning(headerInfo[i])
+        }
+        return(data.frame())
+      }
       
       if(zip){
         temp <- tempfile()
