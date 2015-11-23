@@ -204,6 +204,11 @@ readNWISrating <- function (siteNumber,type="base"){
     
   data <- importRDB1(url, asDateTime=FALSE)
   
+  if("current_rating_nu" %in% names(data)){
+    intColumns <- intColumns[!("current_rating_nu" %in% names(data)[intColumns])]
+    data$current_rating_nu <- gsub(" ", "", data$current_rating_nu)
+  }
+  
   if(nrow(data) > 0){
     if(type == "base") {
       Rat <- grep("//RATING ", comment(data), value=TRUE, fixed=TRUE)

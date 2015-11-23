@@ -151,10 +151,6 @@ importRDB1 <- function(obs_url, asDateTime=FALSE, qw=FALSE, convertType = TRUE, 
     
     intColumns <- grep("_nu",names(data))
     
-    if("current_rating_nu" %in% names(data)){
-      intColumns <- intColumns[!("current_rating_nu" %in% names(data)[intColumns])]
-      data$current_rating_nu <- gsub(" ", "", data$current_rating_nu)
-    }
     data[,intColumns] <- sapply(data[,intColumns],as.integer)
     
     if(length(grep('d$', dataType)) > 0){
