@@ -295,6 +295,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
     data$measurement_dateTime <- data$measurement_dt
     data$measurement_dt <- as.Date(data$measurement_dateTime)
     data$measurement_tm <- strftime(data$measurement_dateTime, "%H:%M")
+    data$measurement_tm[is.na(data$tz_cd_reported)] <- ""
     indexDT <- which("measurement_dt" == names(data))
     indexTZ <- which("tz_cd" == names(data))
     indexTM <- which("measurement_tm" == names(data))
