@@ -1,3 +1,11 @@
+dataRetrieval 2.4.0
+==========
+* Package readr now used for tab delimited parsing
+* readr functions used to determine column types. Mostly, this produces the same results. 
+* In the case where there is text in a numeric column (specified by the RDB header), these now remain characters (previously was converted to numeric)
+* Columns that come back from web services as integers remain integers (previously was converted to numeric)
+* Added reported time zone code information. dateTime columns by default get converted to UTC, but the original time zone code (tz_cd for instance) is appended to the data frame.
+
 dataRetrieval 2.3.0
 ===========
 * Converted all Water Quality Portal queries to sorted=no to greatly improve retrieval times

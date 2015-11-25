@@ -165,8 +165,7 @@ readNWISdata <- function(service="dv", ...){
   
   if(format == "rdb"){
     possibleError <- tryCatch({
-      retval <- importRDB1(urlCall, asDateTime = (service == "qwdata"), 
-                           qw = (service == "qwdata"), tz = tz)
+      retval <- importRDB1(urlCall, asDateTime = (service == "qwdata"), tz = tz)
     }, error = function(e) {
       stop(e, "with url:", urlCall)
     })
@@ -203,7 +202,6 @@ readNWISdata <- function(service="dv", ...){
         retval$tz_cd <- rep(tz, nrow(retval))
       }
     }
-    
   }
   
   return(retval)

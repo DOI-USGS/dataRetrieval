@@ -45,6 +45,10 @@
 #' url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
 #' twoResults <- importWaterML1(url2,TRUE)
 #' twoResults <- renameNWISColumns(twoResults)
+#' url2RDB <- constructNWISURL(siteWithTwo,"00060",
+#'          startDate,endDate,"dv",format="tsv")
+#' rdbResults <- importRDB1(url2RDB)
+#' rdbResults <- renameNWISColumns(rdbResults) 
 #' }
 renameNWISColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
                           p00060="Flow", p00065="GH", p00095="SpecCond", p00300="DO",
@@ -78,7 +82,7 @@ renameNWISColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
   Conv$s00023<- "HiLoTide"
   Conv$s00024<- "LoLoTide"
 
-  dataColumns <- grep("X_", Cnames)
+  dataColumns <- c(grep("X_", Cnames),grep("X\\d{2}", Cnames))
   
   for (i in dataColumns){
     chunks <- strsplit(Cnames[i], "_")[[1]]

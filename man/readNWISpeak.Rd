@@ -57,6 +57,7 @@ to R Date objects.
 siteNumbers <- c('01594440','040851325')
 \dontrun{
 data <- readNWISpeak(siteNumbers)
+data2 <- readNWISpeak(siteNumbers, asDateTime=FALSE)
 }
 }
 \seealso{

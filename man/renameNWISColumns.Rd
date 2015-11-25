@@ -68,6 +68,10 @@ endDate <- "2012-10-01"
 url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
 twoResults <- importWaterML1(url2,TRUE)
 twoResults <- renameNWISColumns(twoResults)
+url2RDB <- constructNWISURL(siteWithTwo,"00060",
+         startDate,endDate,"dv",format="tsv")
+rdbResults <- importRDB1(url2RDB)
+rdbResults <- renameNWISColumns(rdbResults) 
 }
 }
 \seealso{

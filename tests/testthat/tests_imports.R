@@ -12,7 +12,7 @@ test_that("External importRDB1 tests", {
   obs_url <- constructNWISURL(siteNumber,property,
             startDate,endDate,"dv",format="tsv")
   data <- importRDB1(obs_url)
-  expect_is(data$datetime, 'character') 
+  expect_is(data$datetime, 'Date') 
   
   urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),
           startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
@@ -32,7 +32,7 @@ test_that("External importRDB1 tests", {
   qwURL <- constructNWISURL(c('04024430','04024000'),
            c('34247','30234','32104','34220'),
           "2010-11-03","","qw",format="rdb") 
-  qwData <- importRDB1(qwURL, qw=TRUE, tz="America/Chicago")
+  qwData <- importRDB1(qwURL, tz="America/Chicago")
   expect_is(qwData$sample_dt, 'Date')
   expect_is(qwData$startDateTime, 'POSIXct')
   
@@ -56,7 +56,7 @@ test_that("CRAN-friendly importRDB test", {
   importUserRDB <- importRDB1(fullPath)
   
   # default is to turn dates to characters
-  expect_is(importUserRDB$datetime, 'character')
+  expect_is(importUserRDB$datetime, 'Date')
   
 })
 
