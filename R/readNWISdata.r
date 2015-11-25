@@ -202,11 +202,6 @@ readNWISdata <- function(service="dv", ...){
         retval$tz_cd <- rep(tz, nrow(retval))
       }
     }
-    
-    if("qwdata" == service){
-      retval <- convertQWdates(retval)
-    }
-    
   }
   
   return(retval)

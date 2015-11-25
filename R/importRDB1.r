@@ -45,6 +45,8 @@
 #' @import utils
 #' @import stats
 #' @importFrom dplyr left_join
+#' @importFrom readr read_lines
+#' @importFrom readr read_delim
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
