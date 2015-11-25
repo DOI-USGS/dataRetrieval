@@ -4,15 +4,12 @@
 \alias{importRDB1}
 \title{Function to return data from the NWIS RDB 1.0 format}
 \usage{
-importRDB1(obs_url, asDateTime = FALSE, qw = FALSE, convertType = TRUE,
-  tz = "")
+importRDB1(obs_url, asDateTime = TRUE, convertType = TRUE, tz = "")
 }
 \arguments{
 \item{obs_url}{character containing the url for the retrieval or a file path to the data file.}
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
-
-\item{qw}{logical, if \code{TRUE} parses as water quality data (where dates/times are in start and end times)}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
@@ -77,10 +74,10 @@ unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
 qwURL <- constructNWISURL(c('04024430','04024000'),
           c('34247','30234','32104','34220'),
          "2010-11-03","","qw",format="rdb") 
-qwData <- importRDB1(qwURL, qw=TRUE, tz="America/Chicago")
+qwData <- importRDB1(qwURL, asDateTime=TRUE, tz="America/Chicago")
 iceSite <- '04024000'
-start <- "2014-11-09"
-end <- "2014-11-28"
+start <- "2015-11-09"
+end <- "2015-11-24"
 urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
 ice <- importRDB1(urlIce, asDateTime=TRUE)
 iceNoConvert <- importRDB1(urlIce, convertType=FALSE)

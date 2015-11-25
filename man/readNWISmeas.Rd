@@ -54,6 +54,7 @@ See \url{http://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
 siteNumbers <- c('01594440','040851325')
 \dontrun{
 data <- readNWISmeas(siteNumbers)
+Meas05316840 <- readNWISmeas("05316840")
 }
 }
 \seealso{

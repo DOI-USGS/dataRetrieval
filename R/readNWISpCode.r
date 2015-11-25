@@ -26,7 +26,7 @@ readNWISpCode <- function(parameterCd){
  
   if(any(parameterCd == "all")){
     fullURL <- "http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units"
-    fullPcodeDownload <- importRDB1(fullURL)
+    fullPcodeDownload <- importRDB1(fullURL, asDateTime = FALSE)
     return(fullPcodeDownload)
     
   } else {

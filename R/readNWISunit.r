@@ -123,13 +123,14 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' siteNumbers <- c('01594440','040851325')
 #' \dontrun{
 #' data <- readNWISpeak(siteNumbers)
+#' data2 <- readNWISpeak(siteNumbers, asDateTime=FALSE)
 #' }
 readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){  
   
   # Doesn't seem to be a peak xml service
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"peak")
   
-  data <- importRDB1(url, asDateTime=FALSE)
+  data <- importRDB1(url, asDateTime=asDateTime)
   
   if(nrow(data) > 0){
     if(asDateTime){
@@ -272,6 +273,7 @@ readNWISrating <- function (siteNumber,type="base"){
 #' siteNumbers <- c('01594440','040851325')
 #' \dontrun{
 #' data <- readNWISmeas(siteNumbers)
+#' Meas05316840 <- readNWISmeas("05316840")
 #' }
 readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){  
   
@@ -285,8 +287,29 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
       data$diff_from_rating_pc <- as.numeric(data$diff_from_rating_pc)
     }
     
+    url <- attr(data, "url")
+    comment <- attr(data, "comment")
+    queryTime <- attr(data, "queryTime")
+    header <- attr(data, "header")
+    
+    data$measurement_dateTime <- data$measurement_dt
+    data$measurement_dt <- as.Date(data$measurement_dateTime)
+    data$measurement_tm <- strftime(data$measurement_dateTime, "%H:%M")
+    indexDT <- which("measurement_dt" == names(data))
+    indexTZ <- which("tz_cd" == names(data))
+    indexTM <- which("measurement_tm" == names(data))
+    indexTZrep <- which("tz_cd_reported" == names(data))
+    newOrder <- c(1:indexDT,indexTM,indexTZrep,c((indexDT+1):ncol(data))[!(c((indexDT+1):ncol(data)) %in% c(indexTZrep,indexTM))])
+
+    data <- data[,newOrder]
+
     siteInfo <- readNWISsite(siteNumbers)
     siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+    
+    attr(data, "url") <- url
+    attr(data, "comment") <- comment
+    attr(data, "queryTime") <- queryTime
+    attr(data, "header") <- header
     
     attr(data, "siteInfo") <- siteInfo
     attr(data, "variableInfo") <- NULL
@@ -347,7 +370,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
 readNWISgwl <- function (siteNumbers,startDate="",endDate=""){  
   
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="tsv")
-  data <- importRDB1(url,asDateTime=FALSE)
+  data <- importRDB1(url,asDateTime=TRUE)
 
   if(nrow(data) > 0){
     data$lev_dt <- as.Date(data$lev_dt)
