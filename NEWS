@@ -1,3 +1,10 @@
+dataRetrieval 2.4.0
+==========
+* Package readr now used for tab delimited parsing
+* readr functions used to determine column types. Mostly, this produces the same results. 
+* In the case where there is text in a numeric column (specified by the RDB header), these now remain characters (previously was converted to numeric)
+* 
+
 dataRetrieval 2.3.0
 ===========
 * Converted all Water Quality Portal queries to sorted=no to greatly improve retrieval times
