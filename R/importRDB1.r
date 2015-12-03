@@ -115,8 +115,15 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
 
   if(convertType){
     readr.data <- suppressWarnings(read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE))
+    badCols <- problems(readr.data)$col
+    if(length(badCols) > 0){
+      unique.bad.cols <- unique(badCols)
+      readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
+                                    col_types = cols(.default = "c"))
+      readr.data[,unique.bad.cols] <- lapply(readr.data.char[,unique.bad.cols], parse_number)
+    }
   } else {
-    readr.data <- suppressWarnings(read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c")))
+    readr.data <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c"))
   }
   
   names(readr.data) <- header.names
@@ -152,7 +159,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
     
     if("tz_cd" %in% header.names){
       date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
-      readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz)
+      readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
     }
     
     if("sample_start_time_datum_cd" %in% header.names){
@@ -190,7 +197,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   
 }
 
-convertTZ <- function(df, tz.name, date.time.cols, tz){
+convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
   
   offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0),
                               code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA),
@@ -211,14 +218,15 @@ convertTZ <- function(df, tz.name, date.time.cols, tz){
     df[!is.na(df[,date.time.cols]),tz.name] <- "UTC"
   }
   
-  reported.col <- which(names(df) %in% paste0(tz.name,"_reported"))
-  orig.col <- which(names(df) %in% tz.name)
-  
-  new.order <- 1:ncol(df)
-  new.order[orig.col] <- reported.col
-  new.order[reported.col] <- orig.col
-  
-  df <- df[,new.order]
-  
+  if(flip.cols){
+    reported.col <- which(names(df) %in% paste0(tz.name,"_reported"))
+    orig.col <- which(names(df) %in% tz.name)
+    
+    new.order <- 1:ncol(df)
+    new.order[orig.col] <- reported.col
+    new.order[reported.col] <- orig.col
+    
+    df <- df[,new.order]
+  }
   return(df)
 }
