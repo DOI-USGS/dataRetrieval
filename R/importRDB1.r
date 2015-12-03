@@ -47,6 +47,8 @@
 #' @importFrom dplyr left_join
 #' @importFrom readr read_lines
 #' @importFrom readr read_delim
+#' @importFrom readr problems
+#' @importFrom readr parse_number
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
