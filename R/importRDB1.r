@@ -123,12 +123,25 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
       readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
                                     col_types = cols(.default = "c"))
       readr.data[,unique.bad.cols] <- lapply(readr.data.char[,unique.bad.cols], parse_number)
+      
     }
+    
   } else {
     readr.data <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c"))
   }
   
   names(readr.data) <- header.names
+  
+  if("site_no" %in% names(readr.data)){
+    if(!is.integer(readr.data$site_no)){
+      if(is.null(readr.data.char)){
+        readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
+                                      col_types = cols(.default = "c"))
+      }
+      names(readr.data.char) <- header.names
+      readr.data$site_no <- readr.data.char$site_no
+    }
+  }
   comment(readr.data) <- readr.meta
   readr.data <- as.data.frame(readr.data)
   
