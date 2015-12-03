@@ -117,15 +117,6 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
 
   if(convertType){
     readr.data <- suppressWarnings(read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE))
-    badCols <- problems(readr.data)$col
-    if(length(badCols) > 0){
-      unique.bad.cols <- unique(badCols)
-      readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
-                                    col_types = cols(.default = "c"))
-      readr.data[,unique.bad.cols] <- lapply(readr.data.char[,unique.bad.cols], parse_number)
-      
-    }
-    
   } else {
     readr.data <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c"))
   }
@@ -133,15 +124,32 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   names(readr.data) <- header.names
   
   if("site_no" %in% names(readr.data)){
-    if(!is.integer(readr.data$site_no)){
-      if(is.null(readr.data.char)){
-        readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
-                                      col_types = cols(.default = "c"))
-      }
+    if(is.integer(readr.data$site_no)){
+      readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
+                                    col_types = cols(.default = "c"))
       names(readr.data.char) <- header.names
       readr.data$site_no <- readr.data.char$site_no
     }
   }
+  
+  badCols <- problems(readr.data)$col
+  if(length(badCols) > 0){
+    unique.bad.cols <- unique(badCols)
+    
+    index.col <- as.integer(gsub("X","",unique.bad.cols))
+    
+    if(!(all(header.names[index.col] %in% "site_no"))){
+      unique.bad.cols <- unique.bad.cols[!(header.names[index.col] %in% "site_no")]
+      index.col <- as.integer(gsub("X","",unique.bad.cols))
+      unique.bad.cols.names <- header.names[index.col]
+      if(!exists("readr.data.char")){
+        readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
+                                      col_types = cols(.default = "c"))
+      }
+      readr.data[,unique.bad.cols.names] <- lapply(readr.data.char[,unique.bad.cols], parse_number)
+    }
+  }
+  
   comment(readr.data) <- readr.meta
   readr.data <- as.data.frame(readr.data)
   

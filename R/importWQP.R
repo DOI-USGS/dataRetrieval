@@ -19,6 +19,7 @@
 #' @import stats
 #' @importFrom readr read_delim
 #' @importFrom readr col_character
+#' @importFrom readr col_number
 #' @importFrom readr cols
 #' @importFrom dplyr mutate_
 #' @importFrom dplyr mutate_each_
@@ -89,7 +90,10 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
                              col_types = cols(`ActivityStartTime/Time` = col_character(),
                                               `ActivityEndTime/Time` = col_character(),
                                               USGSPCode = col_character(),
-                                              ResultCommentText=col_character()),
+                                              ResultCommentText=col_character(),
+                                              `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
+                                              `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
+                                              ResultMeasureValue = col_number()),
                              quote = "", delim = "\t")
         unlink(doc)
       } else {
@@ -97,7 +101,10 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
                              col_types = cols(`ActivityStartTime/Time` = col_character(),
                                               `ActivityEndTime/Time` = col_character(),
                                               USGSPCode = col_character(),
-                                              ResultCommentText=col_character()),
+                                              ResultCommentText=col_character(),
+                                              `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
+                                              `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
+                                              ResultMeasureValue = col_number()),
                              quote = "", delim = "\t")
       }
     } else {
