@@ -100,7 +100,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   if(file.exists(obs_url)){
     rawData <- obs_url
   } else {
-    rawData <- getWebServiceData(obs_url)
+    rawData <- getWebServiceData(obs_url, encoding='gzip')
   }
   
   returnedDoc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)

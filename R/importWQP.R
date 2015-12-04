@@ -53,20 +53,6 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
 
   
   if(!file.exists(obs_url)){
-    doc <- getWebServiceData(obs_url)
-    headerInfo <- attr(doc, "headerInfo")
-
-    numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
-    sitesToBeReturned <- as.numeric(headerInfo["Total-Site-Count"])
-    
-    totalReturned <- sum(numToBeReturned, sitesToBeReturned,na.rm = TRUE)
-    
-    if(is.na(totalReturned) | totalReturned == 0){
-      for(i in grep("Warning",names(headerInfo))){
-        warning(headerInfo[i])
-      }
-      return(data.frame())
-    }
     
     if(zip){
       temp <- tempfile()
@@ -79,7 +65,23 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
           stop(e, "with url:", obs_url)
         }
       )
-        obs_url <- temp
+      doc <- temp
+      
+    } else {
+      doc <- getWebServiceData(obs_url)
+      headerInfo <- attr(doc, "headerInfo")
+      
+      numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
+      sitesToBeReturned <- as.numeric(headerInfo["Total-Site-Count"])
+      
+      totalReturned <- sum(numToBeReturned, sitesToBeReturned,na.rm = TRUE)
+      
+      if(is.na(totalReturned) | totalReturned == 0){
+        for(i in grep("Warning",names(headerInfo))){
+          warning(headerInfo[i])
+        }
+        return(data.frame())
+      }      
     }
 
   } else {
@@ -116,7 +118,7 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
                          quote = "", delim = "\t"))
   }
     
-  if(!file.exists(obs_url)){
+  if(!file.exists(obs_url) & !zip){
     actualNumReturned <- nrow(retval)
     
     if(actualNumReturned != numToBeReturned & actualNumReturned != sitesToBeReturned){
