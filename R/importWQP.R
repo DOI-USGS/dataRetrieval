@@ -50,107 +50,104 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
                           "America/Jamaica","America/Managua",
                           "America/Phoenix","America/Metlakatla"))
   }
+
   
   if(!file.exists(obs_url)){
-    h <- basicHeaderGatherer()
-    httpHEAD(obs_url, headerfunction = h$update)
+    doc <- getWebServiceData(obs_url)
+    headerInfo <- attr(doc, "headerInfo")
+
+    numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
+    sitesToBeReturned <- as.numeric(headerInfo["Total-Site-Count"])
     
-    headerInfo <- h$value()
+    totalReturned <- sum(numToBeReturned, sitesToBeReturned,na.rm = TRUE)
     
-    
-    if(headerInfo['status'] == "200"){
-      
-      numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
-      
-      if(is.na(numToBeReturned) | numToBeReturned == 0){
-        for(i in grep("Warning",names(headerInfo))){
-          warning(headerInfo[i])
-        }
-        return(data.frame())
+    if(is.na(totalReturned) | totalReturned == 0){
+      for(i in grep("Warning",names(headerInfo))){
+        warning(headerInfo[i])
       }
-      
-      if(zip){
-        temp <- tempfile()
-        options(timeout = 120)
-        
-        possibleError <- tryCatch({
-            suppressWarnings(download.file(obs_url,temp, quiet=TRUE, mode='wb'))
-          },
-          error = function(e)  {
-            stop(e, "with url:", obs_url)
-          }
-        )
-        doc <- unzip(temp)
-        retval <- read_delim(doc, 
-                             col_types = cols(`ActivityStartTime/Time` = col_character(),
-                                              `ActivityEndTime/Time` = col_character(),
-                                              USGSPCode = col_character(),
-                                              ResultCommentText=col_character(),
-                                              `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
-                                              `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
-                                              ResultMeasureValue = col_number()),
-                             quote = "", delim = "\t")
-        unlink(doc)
-      } else {
-        retval <- read_delim(obs_url, 
-                             col_types = cols(`ActivityStartTime/Time` = col_character(),
-                                              `ActivityEndTime/Time` = col_character(),
-                                              USGSPCode = col_character(),
-                                              ResultCommentText=col_character(),
-                                              `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
-                                              `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
-                                              ResultMeasureValue = col_number()),
-                             quote = "", delim = "\t")
-      }
-    } else {
-      stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", obs_url)
+      return(data.frame())
     }
-    
-    actualNumReturned <- nrow(retval)
-    if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sample results were expected, ", actualNumReturned, " were returned")
-    
-  } else {
     
     if(zip){
-      doc <- unzip(obs_url)
-      retval <- read_delim(obs_url, 
-                           col_types = cols(`ActivityStartTime/Time` = col_character(),
-                                            `ActivityEndTime/Time` = col_character(),
-                                            USGSPCode = col_character(),
-                                            ResultCommentText=col_character()),
-                           quote = "", delim = "\t")
-      unlink(doc)
-    }  else {
-      retval <- read_delim(obs_url, 
-                           col_types = cols(`ActivityStartTime/Time` = col_character(),
-                                            `ActivityEndTime/Time` = col_character(),
-                                            USGSPCode = col_character(),
-                                            ResultCommentText=col_character()),
-                           quote = "", delim = "\t")
+      temp <- tempfile()
+      options(timeout = 120)
+      
+      possibleError <- tryCatch({
+          suppressWarnings(download.file(obs_url,temp, quiet=TRUE, mode='wb'))
+        },
+        error = function(e)  {
+          stop(e, "with url:", obs_url)
+        }
+      )
+        obs_url <- temp
     }
+
+  } else {
+    doc <- obs_url
+  }
     
+  if(zip){
+    doc <- unzip(doc)
+    retval <- suppressWarnings(read_delim(doc, 
+                         col_types = cols(`ActivityStartTime/Time` = col_character(),
+                                          `ActivityEndTime/Time` = col_character(),
+                                          USGSPCode = col_character(),
+                                          ResultCommentText=col_character(),
+                                          `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
+                                          `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
+                                          ResultMeasureValue = col_number(),
+                                          `WellDepthMeasure/MeasureValue` = col_number(),
+                                          `WellHoleDepthMeasure/MeasureValue` = col_number(),
+                                          `HUCEightDigitCode` = col_character()),
+                         quote = "", delim = "\t"))
+    unlink(doc)
+  }  else {
+    retval <- suppressWarnings(read_delim(doc, 
+                         col_types = cols(`ActivityStartTime/Time` = col_character(),
+                                          `ActivityEndTime/Time` = col_character(),
+                                          USGSPCode = col_character(),
+                                          ResultCommentText=col_character(),
+                                          `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
+                                          `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
+                                          ResultMeasureValue = col_number(),
+                                          `WellDepthMeasure/MeasureValue` = col_number(),
+                                          `WellHoleDepthMeasure/MeasureValue` = col_number(),
+                                          `HUCEightDigitCode` = col_character()),
+                         quote = "", delim = "\t"))
+  }
+    
+  if(!file.exists(obs_url)){
+    actualNumReturned <- nrow(retval)
+    
+    if(actualNumReturned != numToBeReturned & actualNumReturned != sitesToBeReturned){
+      warning(totalReturned, " sample results were expected, ", actualNumReturned, " were returned")
+    } 
   }
   
-  offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0),
-                              code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA),
-                              stringsAsFactors = FALSE)
-  
-  retval <- left_join(retval, offsetLibrary, by=c("ActivityStartTime/TimeZoneCode"="code"))
-  names(retval)[names(retval) == "offset"] <- "timeZoneStart"
-  retval <- left_join(retval, offsetLibrary, by=c("ActivityEndTime/TimeZoneCode"="code"))
-  names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
-  
-  dateCols <- c("ActivityStartDate","ActivityEndDate","AnalysisStartDate","PreparationStartDate")
-  
-  retval <- suppressWarnings(mutate_each_(retval, ~as.Date(parse_date_time(., c("Ymd", "mdY"))), dateCols))
-  
-  retval <- mutate_(retval, ActivityStartDateTime=~paste(ActivityStartDate, `ActivityStartTime/Time`))
-  retval <- mutate_(retval, ActivityEndDateTime=~paste(ActivityEndDate, `ActivityEndTime/Time`))
-  
-  retval <- mutate_(retval, ActivityStartDateTime=~fast_strptime(ActivityStartDateTime, '%Y-%m-%d %H:%M:%S')+60*60*timeZoneStart)
-  retval <- mutate_(retval, ActivityEndDateTime=~fast_strptime(ActivityEndDateTime, '%Y-%m-%d %H:%M:%S')+60*60*timeZoneStart)
-  
-  retval <- select_(retval, ~-timeZoneEnd, ~-timeZoneStart)
+  if(length(grep("ActivityStartTime",names(retval))) > 0){
+    
+
+    offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0),
+                                code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA),
+                                stringsAsFactors = FALSE)
+    
+    retval <- left_join(retval, offsetLibrary, by=c("ActivityStartTime/TimeZoneCode"="code"))
+    names(retval)[names(retval) == "offset"] <- "timeZoneStart"
+    retval <- left_join(retval, offsetLibrary, by=c("ActivityEndTime/TimeZoneCode"="code"))
+    names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
+    
+    dateCols <- c("ActivityStartDate","ActivityEndDate","AnalysisStartDate","PreparationStartDate")
+    
+    retval <- suppressWarnings(mutate_each_(retval, ~as.Date(parse_date_time(., c("Ymd", "mdY"))), dateCols))
+    
+    retval <- mutate_(retval, ActivityStartDateTime=~paste(ActivityStartDate, `ActivityStartTime/Time`))
+    retval <- mutate_(retval, ActivityEndDateTime=~paste(ActivityEndDate, `ActivityEndTime/Time`))
+    
+    retval <- mutate_(retval, ActivityStartDateTime=~fast_strptime(ActivityStartDateTime, '%Y-%m-%d %H:%M:%S')+60*60*timeZoneStart)
+    retval <- mutate_(retval, ActivityEndDateTime=~fast_strptime(ActivityEndDateTime, '%Y-%m-%d %H:%M:%S')+60*60*timeZoneStart)
+    
+    retval <- select_(retval, ~-timeZoneEnd, ~-timeZoneStart)
+  }
   names(retval)[grep("/",names(retval))] <- gsub("/",".",names(retval)[grep("/",names(retval))])
   
   return(retval)

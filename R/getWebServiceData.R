@@ -4,6 +4,7 @@
 #' \code{\link[RCurl]{getURI}} with more informative error messages.
 #'
 #' @param obs_url character containing the url for the retrieval
+#' @param \dots information to pass to header request
 #' @import RCurl
 #' @export
 #' @return raw data from web services
@@ -17,10 +18,10 @@
 #' \dontrun{
 #' rawData <- getWebServiceData(obs_url)
 #' }
-getWebServiceData <- function(obs_url){
+getWebServiceData <- function(obs_url, ...){
   possibleError <- tryCatch({
     h <- basicHeaderGatherer()
-    returnedDoc <- getURI(obs_url, headerfunction = h$update, encoding='gzip')      
+    returnedDoc <- getURI(obs_url, headerfunction = h$update, ...)      
   }, warning = function(w) {
     warning(w, "with url:", obs_url)
   }, error = function(e) {

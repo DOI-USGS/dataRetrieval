@@ -98,41 +98,10 @@ whatWQPsites <- function(...){
                urlCall,
                "&mimeType=tsv&sorted=no",sep = "")
   
-  doc <- getWebServiceData(urlCall)
-  headerInfo <- attr(doc, "headerInfo")
-    
-  numToBeReturned <- as.numeric(headerInfo["Total-Site-Count"])
+  retval <- importWQP(urlCall)
+  retval$queryTime <- Sys.time()
   
-  if (!is.na(numToBeReturned) & numToBeReturned != 0){
- 
-    retval <- read.delim(textConnection(doc), header = TRUE,  
-                         dec=".", sep='\t', quote="",
-                         colClasses=c('character'), 
-                         fill = TRUE)    
-    actualNumReturned <- nrow(retval)
-    
-    if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sites were expected, ", actualNumReturned, " were returned")
-    
-    if("LatitudeMeasure" %in% names(retval)){
-      retval$LatitudeMeasure <- as.numeric(retval$LatitudeMeasure)
-    }
-    
-    if("LongitudeMeasure" %in% names(retval)){
-      retval$LongitudeMeasure <- as.numeric(retval$LongitudeMeasure)
-    }
-    
-    retval$queryTime <- Sys.time()
-    
-    return(retval)
-    
-  } else {
-    if(headerInfo['Total-Site-Count'] == "0"){
-      warning("No data returned")
-    }
-    
-    for(i in grep("Warning",names(headerInfo))){
-      warning(headerInfo[i])
-    }
-  }
+  return(retval)
+  
 
 }

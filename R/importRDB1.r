@@ -98,7 +98,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   if(file.exists(obs_url)){
     doc <- obs_url
   } else {
-    doc <- getWebServiceData(obs_url)
+    doc <- getWebServiceData(obs_url, encoding='gzip')
     if("warn" %in% names(attr(doc,"header"))){
       data <- data.frame()
       attr(data, "header") <- attr(doc,"header")
