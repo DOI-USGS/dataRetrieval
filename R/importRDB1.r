@@ -47,6 +47,8 @@
 #' @importFrom dplyr left_join
 #' @importFrom readr read_lines
 #' @importFrom readr read_delim
+#' @importFrom readr problems
+#' @importFrom readr parse_number
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -116,10 +118,38 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   if(convertType){
     readr.data <- suppressWarnings(read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE))
   } else {
-    readr.data <- suppressWarnings(read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c")))
+    readr.data <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c"))
   }
   
   names(readr.data) <- header.names
+  
+  if("site_no" %in% names(readr.data)){
+    if(is.integer(readr.data$site_no)){
+      readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
+                                    col_types = cols(.default = "c"))
+      names(readr.data.char) <- header.names
+      readr.data$site_no <- readr.data.char$site_no
+    }
+  }
+  
+  badCols <- problems(readr.data)$col
+  if(length(badCols) > 0){
+    unique.bad.cols <- unique(badCols)
+    
+    index.col <- as.integer(gsub("X","",unique.bad.cols))
+    
+    if(!(all(header.names[index.col] %in% "site_no"))){
+      unique.bad.cols <- unique.bad.cols[!(header.names[index.col] %in% "site_no")]
+      index.col <- as.integer(gsub("X","",unique.bad.cols))
+      unique.bad.cols.names <- header.names[index.col]
+      if(!exists("readr.data.char")){
+        readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
+                                      col_types = cols(.default = "c"))
+      }
+      readr.data[,unique.bad.cols.names] <- lapply(readr.data.char[,unique.bad.cols], parse_number)
+    }
+  }
+  
   comment(readr.data) <- readr.meta
   readr.data <- as.data.frame(readr.data)
   
@@ -152,7 +182,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
     
     if("tz_cd" %in% header.names){
       date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
-      readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz)
+      readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
     }
     
     if("sample_start_time_datum_cd" %in% header.names){
@@ -190,7 +220,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   
 }
 
-convertTZ <- function(df, tz.name, date.time.cols, tz){
+convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
   
   offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0),
                               code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA),
@@ -211,14 +241,15 @@ convertTZ <- function(df, tz.name, date.time.cols, tz){
     df[!is.na(df[,date.time.cols]),tz.name] <- "UTC"
   }
   
-  reported.col <- which(names(df) %in% paste0(tz.name,"_reported"))
-  orig.col <- which(names(df) %in% tz.name)
-  
-  new.order <- 1:ncol(df)
-  new.order[orig.col] <- reported.col
-  new.order[reported.col] <- orig.col
-  
-  df <- df[,new.order]
-  
+  if(flip.cols){
+    reported.col <- which(names(df) %in% paste0(tz.name,"_reported"))
+    orig.col <- which(names(df) %in% tz.name)
+    
+    new.order <- 1:ncol(df)
+    new.order[orig.col] <- reported.col
+    new.order[reported.col] <- orig.col
+    
+    df <- df[,new.order]
+  }
   return(df)
 }

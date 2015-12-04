@@ -19,6 +19,7 @@
 #' @import stats
 #' @importFrom readr read_delim
 #' @importFrom readr col_character
+#' @importFrom readr col_number
 #' @importFrom readr cols
 #' @importFrom dplyr mutate_
 #' @importFrom dplyr mutate_each_
@@ -85,20 +86,26 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
           }
         )
         doc <- unzip(temp)
-        retval <- suppressWarnings(read_delim(doc, 
+        retval <- read_delim(doc, 
                              col_types = cols(`ActivityStartTime/Time` = col_character(),
                                               `ActivityEndTime/Time` = col_character(),
                                               USGSPCode = col_character(),
-                                              ResultCommentText=col_character()),
-                             quote = "", delim = "\t"))
+                                              ResultCommentText=col_character(),
+                                              `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
+                                              `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
+                                              ResultMeasureValue = col_number()),
+                             quote = "", delim = "\t")
         unlink(doc)
       } else {
-        retval <- suppressWarnings(read_delim(obs_url, 
+        retval <- read_delim(obs_url, 
                              col_types = cols(`ActivityStartTime/Time` = col_character(),
                                               `ActivityEndTime/Time` = col_character(),
                                               USGSPCode = col_character(),
-                                              ResultCommentText=col_character()),
-                             quote = "", delim = "\t"))
+                                              ResultCommentText=col_character(),
+                                              `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
+                                              `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
+                                              ResultMeasureValue = col_number()),
+                             quote = "", delim = "\t")
       }
     } else {
       stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", obs_url)
@@ -111,20 +118,20 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     
     if(zip){
       doc <- unzip(obs_url)
-      retval <- suppressWarnings(read_delim(obs_url, 
+      retval <- read_delim(obs_url, 
                            col_types = cols(`ActivityStartTime/Time` = col_character(),
                                             `ActivityEndTime/Time` = col_character(),
                                             USGSPCode = col_character(),
                                             ResultCommentText=col_character()),
-                           quote = "", delim = "\t"))
+                           quote = "", delim = "\t")
       unlink(doc)
     }  else {
-      retval <- suppressWarnings(read_delim(obs_url, 
+      retval <- read_delim(obs_url, 
                            col_types = cols(`ActivityStartTime/Time` = col_character(),
                                             `ActivityEndTime/Time` = col_character(),
                                             USGSPCode = col_character(),
                                             ResultCommentText=col_character()),
-                           quote = "", delim = "\t"))
+                           quote = "", delim = "\t")
     }
     
   }

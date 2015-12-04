@@ -26,6 +26,9 @@ test_that("General NWIS retrievals working", {
                     "drain_area_va","obs_count_nu"),service="qw")
   expect_is(qwData$startDateTime, "POSIXct")
   
+  url <- "http://waterservices.usgs.gov/nwis/dv/?Access=0&site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06"
+  dv <- importRDB1(url, asDateTime = FALSE)
+  
 })
 
 
