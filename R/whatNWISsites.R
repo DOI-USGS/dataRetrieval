@@ -41,7 +41,7 @@ whatNWISsites <- function(...){
   urlCall <- drURL('waterservices',Access=pkg.env$access, format="mapper", arg.list = values)
 
 
-  rawData <- getWebServiceData(urlCall)
+  rawData <- getWebServiceData(urlCall, encoding='gzip')
 
 
   doc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)

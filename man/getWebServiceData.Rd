@@ -4,10 +4,12 @@
 \alias{getWebServiceData}
 \title{Function to return data from web services}
 \usage{
-getWebServiceData(obs_url)
+getWebServiceData(obs_url, ...)
 }
 \arguments{
 \item{obs_url}{character containing the url for the retrieval}
+
+\item{\dots}{information to pass to header request}
 }
 \value{
 raw data from web services
