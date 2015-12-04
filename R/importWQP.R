@@ -62,11 +62,6 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       
       numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
       
-      if(headerInfo['Total-Result-Count'] == "0"){
-        warning("No data returned")
-        return(data.frame())
-      }
-      
       if(is.na(numToBeReturned) | numToBeReturned == 0){
         for(i in grep("Warning",names(headerInfo))){
           warning(headerInfo[i])
