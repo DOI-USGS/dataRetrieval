@@ -7,9 +7,10 @@
 readNWISdata(service = "dv", ...)
 }
 \arguments{
-\item{service}{string. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
-(for groundwater levels), "site" (for site service), and "qw" (water-quality). Note: "qw" calls go to: 
-\url{http://nwis.waterdata.usgs.gov/usa/nwis/qwdata} for data requests, and use different call requests schemes.}
+\item{service}{character. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
+(for groundwater levels), "site" (for site service), "qw" (water-quality), and "measurement". 
+Note: "qw" and "measurement" calls go to: 
+\url{http://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.}
 
 \item{\dots}{see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options}
 }
@@ -56,7 +57,7 @@ dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
 instFlow <- readNWISdata(sites="05114000", service="iv", 
                    parameterCd="00060", 
                    startDate="2014-05-01T00:00Z",endDate="2014-05-01T12:00Z")
-                   
+                                                   
 instFlowCDT <- readNWISdata(sites="05114000", service="iv", 
                    parameterCd="00060", 
                    startDate="2014-05-01T00:00",endDate="2014-05-01T12:00",
@@ -83,6 +84,7 @@ qwData <- readNWISdata(bBox=c(-82.5,41.52,-81,41),startDate=as.Date("2000-01-01"
 temp <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", service="site", 
                    seriesCatalogOutput=TRUE)
 wiGWL <- readNWISdata(stateCd="WI",service="gwlevels")
+meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
 }
 }
 \seealso{

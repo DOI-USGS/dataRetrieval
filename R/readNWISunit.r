@@ -242,6 +242,7 @@ readNWISrating <- function (siteNumber,type="base"){
 #' dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+#' @param expanded logical. Whether or not (TRUE or FALSE) to call the expanded data.
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -274,11 +275,12 @@ readNWISrating <- function (siteNumber,type="base"){
 #' \dontrun{
 #' data <- readNWISmeas(siteNumbers)
 #' Meas05316840 <- readNWISmeas("05316840")
+#' Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)
 #' }
-readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){  
+readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=FALSE){  
   
   # Doesn't seem to be a WaterML1 format option
-  url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"meas")
+  url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"meas", expanded = expanded)
   
   data <- importRDB1(url,asDateTime=TRUE,tz=tz)
   
@@ -300,7 +302,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz=""){
     indexTZ <- which("tz_cd" == names(data))
     indexTM <- which("measurement_tm" == names(data))
     indexTZrep <- which("tz_cd_reported" == names(data))
-    newOrder <- c(1:indexDT,indexTM,indexTZrep,c((indexDT+1):ncol(data))[!(c((indexDT+1):ncol(data)) %in% c(indexTZrep,indexTM))])
+    newOrder <- c(1:indexDT,indexTM,indexTZrep,c((indexDT+1):ncol(data))[!(c((indexDT+1):ncol(data)) %in% c(indexTZrep,indexTM,indexTZ))],indexTZ)
 
     data <- data[,newOrder]
 

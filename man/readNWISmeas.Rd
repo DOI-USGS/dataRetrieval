@@ -4,7 +4,8 @@
 \alias{readNWISmeas}
 \title{Surface-water measurement data retrieval from USGS (NWIS)}
 \usage{
-readNWISmeas(siteNumbers, startDate = "", endDate = "", tz = "")
+readNWISmeas(siteNumbers, startDate = "", endDate = "", tz = "",
+  expanded = FALSE)
 }
 \arguments{
 \item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
@@ -19,6 +20,8 @@ retrieval for the latest possible record.}
 dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
+
+\item{expanded}{logical. Whether or not (TRUE or FALSE) to call the expanded data.}
 }
 \value{
 A data frame with at least the following columns:
@@ -55,6 +58,7 @@ siteNumbers <- c('01594440','040851325')
 \dontrun{
 data <- readNWISmeas(siteNumbers)
 Meas05316840 <- readNWISmeas("05316840")
+Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)
 }
 }
 \seealso{

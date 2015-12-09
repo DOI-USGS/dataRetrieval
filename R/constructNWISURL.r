@@ -130,12 +130,17 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
         },
         meas = {
           url <- paste0("http://waterdata.usgs.gov/nwis/measurements?site_no=", siteNumber,
-                "&range_selection=date_range&format=rdb")
+                "&range_selection=date_range")
           if (nzchar(startDate)) {
             url <- paste0(url,"&begin_date=",startDate)
           }
           if(nzchar(endDate)){
             url <- paste0(url, "&end_date=", endDate)
+          }
+          if(expanded){
+            url <- paste0(url,"&format=rdb_expanded")
+          } else {
+            url <- paste0(url,"&format=rdb")
           }
 
         },

@@ -4,9 +4,10 @@
 #' Arguments to the function should be based on \url{http://waterservices.usgs.gov} service calls.
 #' See examples below for ideas of constructing queries.
 #'
-#' @param service string. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
-#' (for groundwater levels), "site" (for site service), and "qw" (water-quality). Note: "qw" calls go to: 
-#' \url{http://nwis.waterdata.usgs.gov/usa/nwis/qwdata} for data requests, and use different call requests schemes. 
+#' @param service character. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
+#' (for groundwater levels), "site" (for site service), "qw" (water-quality), and "measurement". 
+#' Note: "qw" and "measurement" calls go to: 
+#' \url{http://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes. 
 #' @param \dots see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options
 #' @import utils
 #' @import stats
@@ -49,7 +50,7 @@
 #' instFlow <- readNWISdata(sites="05114000", service="iv", 
 #'                    parameterCd="00060", 
 #'                    startDate="2014-05-01T00:00Z",endDate="2014-05-01T12:00Z")
-#'                    
+#'                                                    
 #' instFlowCDT <- readNWISdata(sites="05114000", service="iv", 
 #'                    parameterCd="00060", 
 #'                    startDate="2014-05-01T00:00",endDate="2014-05-01T12:00",
@@ -76,12 +77,13 @@
 #' temp <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", service="site", 
 #'                    seriesCatalogOutput=TRUE)
 #' wiGWL <- readNWISdata(stateCd="WI",service="gwlevels")
+#' meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
 #' }
 readNWISdata <- function(service="dv", ...){
   
   matchReturn <- list(...)
   
-  match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","qwdata"))
+  match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata"))
   
   if(service == "uv"){
     service <- "iv"
@@ -100,7 +102,7 @@ readNWISdata <- function(service="dv", ...){
   names(values)[names(values) == "siteNumber"] <- "sites"
   names(values)[names(values) == "siteNumbers"] <- "sites"
   
-  format <- "waterml,1.1"
+  format.default <- "waterml,1.1"
   baseURL <- "http://waterservices.usgs.gov/nwis/"
   
   if("stateCd" %in% names(values)){
@@ -114,18 +116,13 @@ readNWISdata <- function(service="dv", ...){
   
   if(service == "iv"){
     baseURL <- "http://nwis.waterservices.usgs.gov/nwis/"
-  } else if (service == "qwdata"){
+  } else if (service %in% c("qwdata","measurements")){
     baseURL <- "http://nwis.waterdata.usgs.gov/nwis/"
 
-    format <- "rdb"
+    format.default <- "rdb"
     
     names(values)[names(values) == "startDT"] <- "begin_date"
     names(values)[names(values) == "endDT"] <- "end_date"
-    
-    values["rdb_inventory_output"] <- "file"
-    values["TZoutput"] <- "0"
-    values["date_format"] <- "YYYY-MM-DD"
-    values["qw_sample_wide"] <- "wide"
     
     if("bBox" %in% names(values)){
       values["nw_longitude_va"] <- as.character(matchReturn$bBox[1])
@@ -136,7 +133,19 @@ readNWISdata <- function(service="dv", ...){
       values <- values[-which("bBox" %in% names(values))] 
     }
     
-  }
+    values["date_format"] <- "YYYY-MM-DD"
+    values["rdb_inventory_output"] <- "file"
+    values["TZoutput"] <- "0"
+    
+    if(all(c("begin_date","end_date") %in% names(values))){
+      values["range_selection"] <- "date_range"
+    }
+    
+    if(service == "qwdata"){
+      values["qw_sample_wide"] <- "wide"
+    }
+    
+  } 
   
   if("tz" %in% names(values)){
     tz <- values["tz"]
@@ -155,52 +164,48 @@ readNWISdata <- function(service="dv", ...){
   }
   
   if(service %in% c("site","gwlevels")){
-    format <- "rdb"
+    format.default <- "rdb"
+  }
+  
+  if(!("format" %in% names(values))){
+    values["format"] <- format.default
   }
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
-  baseURL <- paste0(baseURL,service,"/?format=",format,"&")
-  urlCall <- paste0(baseURL,urlCall)
+  baseURL <- paste0(baseURL,service)
+  urlCall <- paste(baseURL,urlCall,sep="/?")
   
-  if(format == "rdb"){
-    possibleError <- tryCatch({
-      retval <- importRDB1(urlCall, asDateTime = (service == "qwdata"), tz = tz)
-    }, error = function(e) {
-      stop(e, "with url:", urlCall)
-    })
-    
+  if(length(grep("rdb",values["format"])) >0){
+    retval <- importRDB1(urlCall, asDateTime = TRUE, tz = tz)
+    # retval <- importRDB1(urlCall, asDateTime = (service == "qwdata"), tz = tz)
   } else {
-    possibleError <- tryCatch({
-      retval <- importWaterML1(urlCall, asDateTime = ("iv" == service), tz= tz)
-    }, error = function(e) {
-      stop(e, "with url:", urlCall)
-    })
-        
-    if("dv" == service){
-      
-      tzLib <- setNames(c("America/New_York","America/New_York",
-                                  "America/Chicago","America/Chicago",
-                                  "America/Denver","America/Denver",
-                                  "America/Los_Angeles","America/Los_Angeles",
-                                  "America/Anchorage","America/Anchorage",
-                                  "America/Honolulu","America/Honolulu","UTC"),
-                                c("EST","EDT",
-                                  "CST","CDT",
-                                  "MST","MDT",
-                                  "PST","PDT",
-                                  "AKST","AKDT",
-                                  "HAST","HST","UTC"))
-      #TODO: Think about dates that cross a time zone boundary.
-      retval$dateTime <- as.POSIXct(retval$dateTime, tzLib[tz=retval$tz_cd[1]])
-    }
+    retval <- importWaterML1(urlCall, asDateTime = ("iv" == service), tz= tz)
+  }
+  
+  if("dv" == service){
     
-    if("iv" == service){
-      if(tz == ""){
-        retval$tz_cd <- rep("UTC", nrow(retval))
-      } else {
-        retval$tz_cd <- rep(tz, nrow(retval))
-      }
+    tzLib <- setNames(c("America/New_York","America/New_York",
+                                "America/Chicago","America/Chicago",
+                                "America/Denver","America/Denver",
+                                "America/Los_Angeles","America/Los_Angeles",
+                                "America/Anchorage","America/Anchorage",
+                                "America/Honolulu","America/Honolulu","UTC"),
+                              c("EST","EDT",
+                                "CST","CDT",
+                                "MST","MDT",
+                                "PST","PDT",
+                                "AKST","AKDT",
+                                "HAST","HST","UTC"))
+    #TODO: Think about dates that cross a time zone boundary.
+    retval$dateTime <- as.POSIXct(retval$dateTime, tzLib[tz=retval$tz_cd[1]])
+  }
+    
+  if("iv" == service){
+    if(tz == ""){
+      retval$tz_cd <- rep("UTC", nrow(retval))
+    } else {
+      retval$tz_cd <- rep(tz, nrow(retval))
     }
   }
   
