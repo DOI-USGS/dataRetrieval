@@ -123,36 +123,45 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   
   names(readr.data) <- header.names
   
-  if("site_no" %in% names(readr.data)){
-    if(is.integer(readr.data$site_no)){
-      readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
-                                    col_types = cols(.default = "c"))
-      names(readr.data.char) <- header.names
-      readr.data$site_no <- readr.data.char$site_no
-    }
+  for(j in c("site_no",header.names[grep("_cd",header.names)])){
+    if(j %in% names(readr.data)){
+      if(is.integer(readr.data[[j]])){
+        if(!exists("readr.data.char")){
+          readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
+                                        col_types = cols(.default = "c"))
+          names(readr.data.char) <- header.names
+        }
+
+        readr.data[,j] <- readr.data.char[[j]]
+      }
+    }    
   }
-  
-  badCols <- problems(readr.data)$col
-  if(length(badCols) > 0){
-    unique.bad.cols <- unique(badCols)
-    
-    index.col <- as.integer(gsub("X","",unique.bad.cols))
-    
-    if(!(all(header.names[index.col] %in% "site_no"))){
-      unique.bad.cols <- unique.bad.cols[!(header.names[index.col] %in% "site_no")]
+
+  problems.orig <- problems(readr.data)
+  badCols <- problems.orig$col
+  if(length(badCols) > 0){ 
+    int.message <- grep("no trailing characters",problems.orig$expected)
+    if(length(int.message) > 0){
+      unique.bad.cols <- unique(badCols[int.message])
       index.col <- as.integer(gsub("X","",unique.bad.cols))
-      unique.bad.cols.names <- header.names[index.col]
       if(!exists("readr.data.char")){
         readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
                                       col_types = cols(.default = "c"))
+        
       }
-      readr.data[,unique.bad.cols.names] <- lapply(readr.data.char[,unique.bad.cols], parse_number)
+      for(i in index.col){
+        if(is.integer(readr.data[[i]])){
+          if(header.names[i] != "site_no"){
+            readr.data[,i] <- parse_number(readr.data.char[[i]])
+            problems.orig <- problems.orig[problems.orig$col != paste0("X",i),]
+          }
+        }
+      }
     }
   }
   
   comment(readr.data) <- readr.meta
   readr.data <- as.data.frame(readr.data)
-  
   if (asDateTime & convertType){
 
     header.suffix <- sapply(strsplit(header.names,"_"), function(x)x[length(x)])
@@ -194,26 +203,21 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
         readr.data$sample_start_time_datum_cd_reported_reported <- NULL 
       }
     }
-    
+    names(readr.data)[names(readr.data) == "sample_dateTime"] <- "startDateTime"
+    names(readr.data)[names(readr.data) == "sample_end_dateTime"] <- "endDateTime"
   }
-  
-  names(readr.data)[names(readr.data) == "sample_dateTime"] <- "startDateTime"
-  names(readr.data)[names(readr.data) == "sample_end_dateTime"] <- "endDateTime"
-  
-  if("site_no" %in% header.names){
-    if(class(readr.data$site_no) != "character"){
-      readr.data$site_no <- as.character(readr.data$site_no)
-    }
-  }
-  
+
   row.names(readr.data) <- NULL
 
   names(readr.data) <- make.names(names(readr.data))
   
-  attr(readr.data, "url") <- obs_url
   attr(readr.data, "queryTime") <- Sys.time()
   if(!file.exists(obs_url)){
+    attr(readr.data, "url") <- obs_url
     attr(readr.data, "header") <- attr(doc, "header")
+  }
+  if(nrow(problems.orig) > 0){
+    attr(readr.data, "problems") <- problems.orig
   }
   
   return(readr.data)
