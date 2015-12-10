@@ -59,6 +59,7 @@ siteNumbers <- c('01594440','040851325')
 data <- readNWISmeas(siteNumbers)
 Meas05316840 <- readNWISmeas("05316840")
 Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)
+Meas07227500.ex <- readNWISmeas("07227500",expanded=TRUE)
 }
 }
 \seealso{
