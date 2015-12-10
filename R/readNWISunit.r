@@ -276,6 +276,7 @@ readNWISrating <- function (siteNumber,type="base"){
 #' data <- readNWISmeas(siteNumbers)
 #' Meas05316840 <- readNWISmeas("05316840")
 #' Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)
+#' Meas07227500.ex <- readNWISmeas("07227500",expanded=TRUE)
 #' }
 readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=FALSE){  
   
