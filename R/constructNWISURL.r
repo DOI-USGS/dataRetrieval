@@ -21,7 +21,6 @@
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
-#' @import RCurl
 #' @import utils
 #' @examples
 #' siteNumber <- '01594440'
@@ -226,7 +225,6 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 #' @keywords data import WQP web service
 #' @return url string
 #' @export
-#' @import RCurl
 #' @examples
 #' siteNumber <- '01594440'
 #' startDate <- '1985-01-01'

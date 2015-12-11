@@ -41,7 +41,6 @@
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' }
 #' @export
-#' @import RCurl
 #' @import utils
 #' @import stats
 #' @importFrom dplyr left_join

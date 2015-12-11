@@ -5,7 +5,8 @@
 #'
 #' @param obs_url character containing the url for the retrieval
 #' @param \dots information to pass to header request
-#' @import RCurl
+#' @importFrom RCurl basicHeaderGatherer
+#' @importFrom RCurl getURI
 #' @export
 #' @return raw data from web services
 #' @examples
