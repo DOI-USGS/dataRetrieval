@@ -122,9 +122,10 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   }
   
   names(readr.data) <- header.names
-  # problems.orig <- problems(readr.data)
   
-  char.names <- c(header.names[grep("_cd",header.names)],header.names[header.names == "site_no"])
+  char.names <- c(header.names[grep("_cd",header.names)],
+                  header.names[grep("_id",header.names)],
+                  header.names[header.names == "site_no"])
   
   if(length(char.names) > 0){
     char.names <- char.names[sapply(readr.data[,char.names], is.integer)]
@@ -147,7 +148,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   
   if(length(badCols) > 0){
     readr.data <- fixErrors(readr.data, readr.data.char, "no trailing characters", parse_number)
-    readr.data <- fixErrors(readr.data, readr.data.char, "date like", parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d"))
+    readr.data <- fixErrors(readr.data, readr.data.char, "date like", parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d","%Y"))
   }
 
   comment(readr.data) <- readr.meta
