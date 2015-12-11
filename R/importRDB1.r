@@ -122,7 +122,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   }
   
   names(readr.data) <- header.names
-  problems.orig <- problems(readr.data)
+  # problems.orig <- problems(readr.data)
   
   char.names <- c(header.names[grep("_cd",header.names)],header.names[header.names == "site_no"])
   
@@ -132,7 +132,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
     char.names <- NULL
   } 
   
-  if(nrow(problems.orig) > 0 | length(char.names) > 0){
+  if(nrow(problems(readr.data)) > 0 | length(char.names) > 0){
     readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
                                   col_types = cols(.default = "c"))
     names(readr.data.char) <- header.names    
@@ -140,41 +140,20 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   
   for(j in char.names){
     readr.data[,j] <- readr.data.char[[j]]
-    problems.orig <- problems.orig[problems.orig$col != paste0("X",j),]
+    attr(readr.data, "problems")  <- attr(readr.data, "problems")[attr(readr.data, "problems")[["col"]] != paste0("X",j),]
   }
+
+  badCols <- attr(readr.data, "problems")[["col"]]  
   
-  badCols <- problems.orig$col
-  if(length(badCols) > 0){ 
-    # Started as integers, should be numeric:
-    int.message <- grep("no trailing characters",problems.orig$expected)
-    if(length(int.message) > 0){
-      unique.bad.cols <- unique(badCols[int.message])
-      index.col <- as.integer(gsub("X","",unique.bad.cols))
-
-      for(i in index.col){
-        if(is.integer(readr.data[[i]])){
-          if(header.names[i] != "site_no"){
-            readr.data[,i] <- parse_number(readr.data.char[[i]])
-            problems.orig <- problems.orig[problems.orig$col != paste0("X",i),]
-          }
-        }
-      }
-    }
-    # Started as Date, should be date/time
-    dat.message <- grep("date like",problems.orig$expected)
-    if(length(dat.message) > 0){
-      unique.bad.cols <- unique(badCols[dat.message])
-      index.col <- as.integer(gsub("X","",unique.bad.cols))
-
-      for(i in index.col){
-        readr.data[,i] <- parse_date_time(readr.data.char[[i]], c("%Y-%m-%d %H:%M:%S","%Y-%m-%d"))
-        problems.orig <- problems.orig[problems.orig$col != paste0("X",i),]
-      }
-    }
+  if(length(badCols) > 0){
+    readr.data <- fixErrors(readr.data, readr.data.char, "no trailing characters", parse_number)
+    readr.data <- fixErrors(readr.data, readr.data.char, "date like", parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d"))
   }
-  
+
   comment(readr.data) <- readr.meta
+  problems.orig <- problems(readr.data)
   readr.data <- as.data.frame(readr.data)
+  
   if (asDateTime & convertType){
 
     header.suffix <- sapply(strsplit(header.names,"_"), function(x)x[length(x)])
@@ -270,3 +249,20 @@ convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
   }
   return(df)
 }
+
+fixErrors <- function(readr.data, readr.data.char, message.text, FUN, ...){
+  FUN <- match.fun(FUN)
+  badCols <- attr(readr.data, "problems")[["col"]] 
+  int.message <- grep(message.text, attr(readr.data, "problems")[["expected"]])
+  if(length(int.message) > 0){
+    unique.bad.cols <- unique(badCols[int.message])
+    index.col <- as.integer(gsub("X","",unique.bad.cols))
+    
+    for(i in index.col){
+      readr.data[,i] <- FUN(readr.data.char[[i]], ...)
+      attr(readr.data, "problems") <- attr(readr.data, "problems")[attr(readr.data, "problems")[["col"]] != paste0("X",i),]
+    }
+  }
+  return(readr.data)
+}
+
