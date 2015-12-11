@@ -11,8 +11,14 @@
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return mergedDF a data frame time, value, description, qualifier, and identifier
 #' @export
-#' @import XML
-#' @import RCurl
+#' @importFrom XML xmlRoot
+#' @importFrom XML xmlDoc
+#' @importFrom XML xpathApply
+#' @importFrom XML xpathSApply
+#' @importFrom XML xmlNamespaceDefinitions
+#' @importFrom XML xmlValue
+#' @importFrom XML xmlAttrs
+#' @importFrom XML xmlName
 #' @importFrom plyr rbind.fill.matrix
 #' @examples
 #' baseURL <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"

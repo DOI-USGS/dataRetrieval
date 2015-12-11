@@ -14,7 +14,6 @@
 #' start and end times, and converted to UTC. See \url{http://www.waterqualitydata.us/portal_userguide.jsp} for more information.
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
-#' @import RCurl
 #' @import utils
 #' @import stats
 #' @importFrom readr read_delim

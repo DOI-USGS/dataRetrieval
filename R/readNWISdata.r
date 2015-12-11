@@ -198,7 +198,10 @@ readNWISdata <- function(service="dv", ...){
                                 "AKST","AKDT",
                                 "HAST","HST","UTC"))
     #TODO: Think about dates that cross a time zone boundary.
-    retval$dateTime <- as.POSIXct(retval$dateTime, tzLib[tz=retval$tz_cd[1]])
+    if(values["format"] == "waterml,1.1"){
+      retval$dateTime <- as.POSIXct(retval$dateTime, tzLib[tz=retval$tz_cd[1]])
+    }
+    
   }
     
   if("iv" == service){

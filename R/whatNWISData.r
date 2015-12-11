@@ -109,9 +109,10 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
     SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd,]
   }
   
-  
-  SiteFile$begin_date <- as.Date(parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
-  SiteFile$end_date <- as.Date(parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
+  if(nrow(SiteFile) > 0){
+    SiteFile$begin_date <- as.Date(parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
+    SiteFile$end_date <- as.Date(parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
+  }
   
   comment(SiteFile) <- headerInfo
   attr(SiteFile, "url") <- urlSitefile

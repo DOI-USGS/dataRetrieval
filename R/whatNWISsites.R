@@ -25,7 +25,10 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @import XML
+#' @importFrom XML xmlTreeParse
+#' @importFrom XML xmlRoot
+#' @importFrom XML xpathApply
+#' @importFrom XML xmlSize
 #' @examples
 #' \dontrun{
 #' siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")

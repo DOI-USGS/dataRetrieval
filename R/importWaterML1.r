@@ -38,8 +38,15 @@
 #' 
 #' @seealso \code{\link{renameNWISColumns}}
 #' @export
-#' @import XML
-#' @import RCurl
+#' @importFrom XML xmlTreeParse
+#' @importFrom XML xmlRoot
+#' @importFrom XML xmlToList
+#' @importFrom XML xmlDoc
+#' @importFrom XML xpathApply
+#' @importFrom XML xpathSApply
+#' @importFrom XML xmlNamespaceDefinitions
+#' @importFrom XML xmlValue
+#' @importFrom XML xmlAttrs
 #' @import utils
 #' @import stats
 #' @importFrom  reshape2 melt
