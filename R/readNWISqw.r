@@ -171,7 +171,9 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   
   siteInfo <- readNWISsite(siteNumbers)
   
-  siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+  if(nrow(data) > 0){
+    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+  }
   
   varInfo <- readNWISpCode(parameterCd)
   

@@ -89,6 +89,9 @@ test_that("NWIS qw tests", {
            startDate,endDate)
   expect_is(rawNWISNutrients$startDateTime, 'POSIXct')
   
+  qwret <- readNWISqw("413437087150601", parameterCd = c("NUT","INN"),startDate = "",endDate = "")
+  expect_that(nrow(qwret) == 0, is_true())
+  
 })
 
 context("dv")

@@ -120,86 +120,95 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
     readr.data <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c"))
   }
   
-  names(readr.data) <- header.names
+  if(nrow(readr.data) > 0){
+    names(readr.data) <- header.names
+    
+    char.names <- c(header.names[grep("_cd",header.names)],
+                    header.names[grep("_id",header.names)],
+                    header.names[header.names == "site_no"])
+    
+    if(length(char.names) > 0){
+      char.names <- char.names[sapply(readr.data[,char.names], is.integer)]
+    } else {
+      char.names <- NULL
+    } 
+    
+    if(nrow(problems(readr.data)) > 0 | length(char.names) > 0){
+      readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
+                                    col_types = cols(.default = "c"))
+      names(readr.data.char) <- header.names    
+    }
+    
+    for(j in char.names){
+      readr.data[,j] <- readr.data.char[[j]]
+      attr(readr.data, "problems")  <- attr(readr.data, "problems")[attr(readr.data, "problems")[["col"]] != paste0("X",j),]
+    }
   
-  char.names <- c(header.names[grep("_cd",header.names)],
-                  header.names[grep("_id",header.names)],
-                  header.names[header.names == "site_no"])
+    badCols <- attr(readr.data, "problems")[["col"]]  
+    
+    if(length(badCols) > 0){
+      readr.data <- fixErrors(readr.data, readr.data.char, "no trailing characters", parse_number)
+      readr.data <- fixErrors(readr.data, readr.data.char, "date like", parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d","%Y"))
+    }
   
-  if(length(char.names) > 0){
-    char.names <- char.names[sapply(readr.data[,char.names], is.integer)]
+    comment(readr.data) <- readr.meta
+    problems.orig <- problems(readr.data)
+    readr.data <- as.data.frame(readr.data)
+    
+    if (asDateTime & convertType){
+  
+      header.suffix <- sapply(strsplit(header.names,"_"), function(x)x[length(x)])
+      header.base <- substr(header.names,1,nchar(header.names)-3)
+      
+      for(i in unique(header.base[header.suffix %in% c("dt","tm")])){
+        
+        if(all(c(paste0(i,"_dt"),paste0(i,"_tm")) %in% header.names)){
+          varname <- paste0(i,"_dateTime")
+          
+          varval <- as.POSIXct(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), "%Y-%m-%d %H:%M", tz = "UTC")
+          readr.data[,varname] <- varval
+          
+          tz.name <- paste0(i,"_time_datum_cd")
+          
+          if(tz.name %in% header.names){
+            readr.data <- convertTZ(readr.data,tz.name,varname,tz)
+          }
+          
+          tz.name <- paste0(i,"_tz_cd")
+          
+          if(tz.name %in% header.names){
+            readr.data <- convertTZ(readr.data,tz.name,varname,tz)
+          }
+        }
+      }
+      
+      if("tz_cd" %in% header.names){
+        date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
+        readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
+      }
+      
+      if("sample_start_time_datum_cd" %in% header.names){
+        readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd","sample_dateTime",tz)
+        
+        if(!("sample_end_time_datum_cd" %in% header.names) & "sample_end_dateTime" %in% names(readr.data)){
+          readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd_reported","sample_end_dateTime",tz)
+          readr.data$sample_start_time_datum_cd_reported<- readr.data$sample_start_time_datum_cd_reported_reported 
+          readr.data$sample_start_time_datum_cd_reported_reported <- NULL 
+        }
+      }
+      names(readr.data)[names(readr.data) == "sample_dateTime"] <- "startDateTime"
+      names(readr.data)[names(readr.data) == "sample_end_dateTime"] <- "endDateTime"
+    }
+    row.names(readr.data) <- NULL
+    
+    if(nrow(problems.orig) > 0){
+      attr(readr.data, "problems") <- problems.orig
+    }
   } else {
-    char.names <- NULL
-  } 
-  
-  if(nrow(problems(readr.data)) > 0 | length(char.names) > 0){
-    readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
-                                  col_types = cols(.default = "c"))
-    names(readr.data.char) <- header.names    
+    readr.data <- data.frame(matrix(vector(), 0, length(header.names),
+                                    dimnames=list(c(), header.names)),
+                             stringsAsFactors=FALSE)
   }
-  
-  for(j in char.names){
-    readr.data[,j] <- readr.data.char[[j]]
-    attr(readr.data, "problems")  <- attr(readr.data, "problems")[attr(readr.data, "problems")[["col"]] != paste0("X",j),]
-  }
-
-  badCols <- attr(readr.data, "problems")[["col"]]  
-  
-  if(length(badCols) > 0){
-    readr.data <- fixErrors(readr.data, readr.data.char, "no trailing characters", parse_number)
-    readr.data <- fixErrors(readr.data, readr.data.char, "date like", parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d","%Y"))
-  }
-
-  comment(readr.data) <- readr.meta
-  problems.orig <- problems(readr.data)
-  readr.data <- as.data.frame(readr.data)
-  
-  if (asDateTime & convertType){
-
-    header.suffix <- sapply(strsplit(header.names,"_"), function(x)x[length(x)])
-    header.base <- substr(header.names,1,nchar(header.names)-3)
-    
-    for(i in unique(header.base[header.suffix %in% c("dt","tm")])){
-      
-      if(all(c(paste0(i,"_dt"),paste0(i,"_tm")) %in% header.names)){
-        varname <- paste0(i,"_dateTime")
-        
-        varval <- as.POSIXct(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), "%Y-%m-%d %H:%M", tz = "UTC")
-        readr.data[,varname] <- varval
-        
-        tz.name <- paste0(i,"_time_datum_cd")
-        
-        if(tz.name %in% header.names){
-          readr.data <- convertTZ(readr.data,tz.name,varname,tz)
-        }
-        
-        tz.name <- paste0(i,"_tz_cd")
-        
-        if(tz.name %in% header.names){
-          readr.data <- convertTZ(readr.data,tz.name,varname,tz)
-        }
-      }
-    }
-    
-    if("tz_cd" %in% header.names){
-      date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
-      readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
-    }
-    
-    if("sample_start_time_datum_cd" %in% header.names){
-      readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd","sample_dateTime",tz)
-      
-      if(!("sample_end_time_datum_cd" %in% header.names) & "sample_end_dateTime" %in% names(readr.data)){
-        readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd_reported","sample_end_dateTime",tz)
-        readr.data$sample_start_time_datum_cd_reported<- readr.data$sample_start_time_datum_cd_reported_reported 
-        readr.data$sample_start_time_datum_cd_reported_reported <- NULL 
-      }
-    }
-    names(readr.data)[names(readr.data) == "sample_dateTime"] <- "startDateTime"
-    names(readr.data)[names(readr.data) == "sample_end_dateTime"] <- "endDateTime"
-  }
-
-  row.names(readr.data) <- NULL
 
   names(readr.data) <- make.names(names(readr.data))
   
@@ -208,9 +217,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
     attr(readr.data, "url") <- obs_url
     attr(readr.data, "header") <- attr(doc, "header")
   }
-  if(nrow(problems.orig) > 0){
-    attr(readr.data, "problems") <- problems.orig
-  }
+
   
   return(readr.data)
   
