@@ -125,7 +125,12 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   problems.orig <- problems(readr.data)
   
   char.names <- c(header.names[grep("_cd",header.names)],header.names[header.names == "site_no"])
-  char.names <- char.names[sapply(readr.data[,char.names], is.integer)]
+  
+  if(length(char.names) > 0){
+    char.names <- char.names[sapply(readr.data[,char.names], is.integer)]
+  } else {
+    char.names <- NULL
+  } 
   
   if(nrow(problems.orig) > 0 | length(char.names) > 0){
     readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
