@@ -124,15 +124,15 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   names(readr.data) <- header.names
   problems.orig <- problems(readr.data)
   
-  if(nrow(problems.orig) > 0){
+  char.names <- c(header.names[grep("_cd",header.names)],header.names[header.names == "site_no"])
+  char.names <- char.names[sapply(readr.data[,char.names], is.integer)]
+  
+  if(nrow(problems.orig) > 0 | length(char.names) > 0){
     readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
                                   col_types = cols(.default = "c"))
     names(readr.data.char) <- header.names    
   }
   
-  char.names <- c(header.names[grep("_cd",header.names)],header.names[header.names == "site_no"])
-  char.names <- char.names[sapply(readr.data[,char.names], is.integer)]
-
   for(j in char.names){
     readr.data[,j] <- readr.data.char[[j]]
     problems.orig <- problems.orig[problems.orig$col != paste0("X",j),]
