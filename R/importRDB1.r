@@ -124,7 +124,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   names(readr.data) <- header.names
   problems.orig <- problems(readr.data)
   
-  if(length(problems.orig) > 0){
+  if(nrow(problems.orig) > 0){
     readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
                                   col_types = cols(.default = "c"))
     names(readr.data.char) <- header.names    
@@ -135,7 +135,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
 
   for(j in char.names){
     readr.data[,j] <- readr.data.char[[j]]
-    problems.orig <- problems.orig[problems.orig$col != paste0("X",i),]
+    problems.orig <- problems.orig[problems.orig$col != paste0("X",j),]
   }
   
   badCols <- problems.orig$col
