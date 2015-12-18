@@ -187,6 +187,17 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
         readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
       }
       
+      if("DATE" %in% header.names){
+        readr.data[,"DATE"] <- parse_date_time(readr.data[,"DATE"], "Ymd")
+      }
+      
+      if(all(c("DATE","TIME","TZCD") %in% header.names)){
+        varname <- "DATETIME"
+        varval <- as.POSIXct(paste(readr.data[,"DATE"],readr.data[,"TIME"]), "%Y-%m-%d %H%M%S", tz = "UTC")
+        readr.data[,varname] <- varval
+        readr.data <- convertTZ(readr.data,"TZCD",varname,tz, flip.cols=TRUE)
+      }
+      
       if("sample_start_time_datum_cd" %in% header.names){
         readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd","sample_dateTime",tz)
         
