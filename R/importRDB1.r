@@ -148,7 +148,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
     
     if(length(badCols) > 0){
       readr.data <- fixErrors(readr.data, readr.data.char, "no trailing characters", parse_number)
-      readr.data <- fixErrors(readr.data, readr.data.char, "date like", parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d","%Y"))
+      readr.data <- fixErrors(readr.data, readr.data.char, "date like", parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d","%Y", "%Y%M%D"))
     }
   
     comment(readr.data) <- readr.meta
@@ -185,6 +185,17 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
       if("tz_cd" %in% header.names){
         date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
         readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
+      }
+      
+      if("DATE" %in% header.names){
+        readr.data[,"DATE"] <- parse_date_time(readr.data[,"DATE"], "Ymd")
+      }
+      
+      if(all(c("DATE","TIME","TZCD") %in% header.names)){
+        varname <- "DATETIME"
+        varval <- as.POSIXct(paste(readr.data[,"DATE"],readr.data[,"TIME"]), "%Y-%m-%d %H%M%S", tz = "UTC")
+        readr.data[,varname] <- varval
+        readr.data <- convertTZ(readr.data,"TZCD",varname,tz, flip.cols=TRUE)
       }
       
       if("sample_start_time_datum_cd" %in% header.names){
