@@ -128,7 +128,8 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
                     header.names[header.names == "site_no"])
     
     if(length(char.names) > 0){
-      char.names <- char.names[sapply(readr.data[,char.names], is.integer)]
+      char.names.true <- char.names[sapply(readr.data[,char.names], is.character)]
+      char.names <- char.names[!(char.names %in% char.names.true)]
     } else {
       char.names <- NULL
     } 
