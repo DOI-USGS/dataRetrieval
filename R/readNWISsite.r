@@ -70,7 +70,9 @@ readNWISsite <- function(siteNumbers){
   urlSitefile <- paste0("http://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=Expanded&sites=",siteNumber)
   
   data <- importRDB1(urlSitefile,asDateTime=FALSE)
-  
+  #readr needs multiple lines to convert to anything but characters:  
+  data[,grep("_va",names(data))] <- sapply(data[,grep("_va",names(data))], as.numeric)
+
   return(data)
  
 }
