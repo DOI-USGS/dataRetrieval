@@ -76,6 +76,12 @@
 #' urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
 #' ice <- importRDB1(urlIce, asDateTime=TRUE)
 #' iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
+#' 
+#' inactiveSite <- "05212700"
+#' inactiveSite <- constructNWISURL(inactiveSite, "00060", 
+#'          "2014-01-01", "2014-01-10","dv",format="tsv")
+#' inactiveSite <- importRDB1(inactiveSite) #This returns 404 (but 200 in WaterML1)
+#' 
 #' }
 #' # User file:
 #' filePath <- system.file("extdata", package="dataRetrieval")
@@ -93,10 +99,10 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
                           "America/Phoenix","America/Metlakatla","UTC"))
   }
   
-
   if(file.exists(obs_url)){
     doc <- obs_url
   } else {
+    # doc <- getWebServiceData(obs_url, add_headers(Accept-Encoding = "gzip"))
     doc <- getWebServiceData(obs_url, encoding='gzip')
     if("warn" %in% names(attr(doc,"header"))){
       data <- data.frame()
