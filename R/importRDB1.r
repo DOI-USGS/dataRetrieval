@@ -185,7 +185,9 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
       
       if("tz_cd" %in% header.names){
         date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
-        readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
+        if(length(date.time.cols) > 0){
+          readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
+        }
       }
       
       if("DATE" %in% header.names){
