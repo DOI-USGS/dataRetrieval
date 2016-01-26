@@ -5,7 +5,7 @@
 #' Imports data from the Water Quality Portal based on a specified url.
 #' 
 #' @param obs_url character URL to Water Quality Portal#' @keywords data import USGS web service
-#' @param zip logical used to request the data in a zip format (TRUE)
+#' @param zip logical to request data via downloading zip file. Default set to TRUE.
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
@@ -34,13 +34,14 @@
 #' rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
 #' 
 #' rawSample <- importWQP(rawSampleURL)
-#' url2 <- paste0(rawSampleURL,"&zip=yes")
-#' rawSample2 <- importWQP(url2, zip=TRUE)
+#' 
+#' rawSampleURL_noZip <- constructWQPURL('USGS-01594440','01075', '', '', FALSE)
+#' rawSample2 <- importWQP(rawSampleURL_noZip, zip=FALSE)
 #' 
 #' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' STORETdata <- importWQP(STORETex)
 #' }
-importWQP <- function(obs_url, zip=FALSE, tz=""){
+importWQP <- function(obs_url, zip=TRUE, tz=""){
   
   if(tz != ""){
     tz <- match.arg(tz, c("America/New_York","America/Chicago",

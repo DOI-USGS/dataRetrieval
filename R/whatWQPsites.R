@@ -4,6 +4,7 @@
 #' Arguments to the function should be based on \url{www.waterqualitydata.us/webservices_documentation.jsp}
 #'
 #' @param \dots see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options
+#' @param zip logical to request data via downloading zip file. Default set to TRUE.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -55,9 +56,9 @@
 #' 
 #' type <- "Stream"
 #' sites <- whatWQPsites(countycode="US:55:025",siteType=type)
-#' data <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+#' lakeSites <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 #' }
-whatWQPsites <- function(...){
+whatWQPsites <- function(...,zip=TRUE){
 
   matchReturn <- list(...)
   
@@ -94,12 +95,17 @@ whatWQPsites <- function(...){
   
   
   baseURL <- "http://www.waterqualitydata.us/Station/search?"
-  urlCall <- paste(baseURL,
+  urlCall <- paste0(baseURL,
                urlCall,
-               "&mimeType=tsv&sorted=no",sep = "")
+               "&mimeType=tsv&sorted=no")
+  if(zip){
+    urlCall <- paste0(urlCall,"&zip=yes")
+  }
   
-  retval <- importWQP(urlCall)
-  retval$queryTime <- Sys.time()
+  retval <- importWQP(urlCall, zip=zip)
+  
+  attr(retval, "queryTime") <- Sys.time()
+  attr(retval, "url") <- urlCall
   
   return(retval)
   
