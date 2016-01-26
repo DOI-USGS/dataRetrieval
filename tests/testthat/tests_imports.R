@@ -128,8 +128,8 @@ test_that("External WQP tests", {
   rawSample <- importWQP(rawSampleURL)
   expect_is(rawSample$ActivityStartDateTime, 'POSIXct')
   
-  url2 <- paste0(rawSampleURL,"&zip=yes")
-  rawSample2 <- suppressWarnings(importWQP(url2, TRUE))
+  url2 <- constructWQPURL('USGS-01594440','01075', '', '', zip = FALSE)
+  rawSample2 <- suppressWarnings(importWQP(url2, FALSE))
   expect_is(rawSample2$ActivityStartDateTime, 'POSIXct')
   
   STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')

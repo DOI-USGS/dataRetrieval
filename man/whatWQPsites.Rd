@@ -4,9 +4,11 @@
 \alias{whatWQPsites}
 \title{Site Data Import from Water Quality Portal}
 \usage{
-whatWQPsites(...)
+whatWQPsites(..., zip = TRUE)
 }
 \arguments{
+\item{zip}{logical to request data via downloading zip file. Default set to TRUE.}
+
 \item{\dots}{see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options}
 }
 \value{
@@ -62,7 +64,7 @@ site1 <- whatWQPsites(siteid="USGS-01594440")
 
 type <- "Stream"
 sites <- whatWQPsites(countycode="US:55:025",siteType=type)
-data <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+lakeSites <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 }
 }
 \keyword{WQP}

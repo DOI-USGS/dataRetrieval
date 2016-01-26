@@ -20,9 +20,12 @@
 #' rawData <- getWebServiceData(obs_url)
 #' }
 getWebServiceData <- function(obs_url, ...){
+  
   possibleError <- tryCatch({
     h <- basicHeaderGatherer()
-    returnedDoc <- getURI(obs_url, headerfunction = h$update, ...)      
+    
+    returnedDoc <- getURI(obs_url, headerfunction = h$update, 
+                          useragent = paste("dataRetrieval",packageVersion("dataRetrieval"),sep="/"), ...)      
   }, warning = function(w) {
     warning(w, "with url:", obs_url)
   }, error = function(e) {

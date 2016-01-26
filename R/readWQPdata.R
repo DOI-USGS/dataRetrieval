@@ -4,8 +4,7 @@
 #' because it allows for other agencies rather than the USGS.  
 #'
 #' @param \dots see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options
-#' @param zip logical to request data via downloading zip file. Default set to FALSE. The overhead associated with 
-#' downloading and un-zipping only improves performance for large data returns.
+#' @param zip logical to request data via downloading zip file. Default set to TRUE.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -98,7 +97,7 @@
 #' 
 #'                         
 #' }
-readWQPdata <- function(..., zip=FALSE){
+readWQPdata <- function(..., zip=TRUE){
   
   matchReturn <- list(...)
 
@@ -158,7 +157,7 @@ readWQPdata <- function(..., zip=FALSE){
   retval <- importWQP(urlCall,zip=zip, tz=tz)
   
   if(!all(is.na(retval))){
-    siteInfo <- whatWQPsites(...)
+    siteInfo <- whatWQPsites(...,zip=zip)
     
     siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
                                  agency_cd=siteInfo$OrganizationIdentifier,
