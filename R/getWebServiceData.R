@@ -41,27 +41,4 @@ getWebServiceData <- function(obs_url, ...){
     return(returnedDoc)
   }
   
-#   possibleError <- tryCatch({
-#     h <- basicHeaderGatherer()
-#     
-#     returnedDoc <- getURI(obs_url, headerfunction = h$update, 
-#                           useragent = paste("dataRetrieval",packageVersion("dataRetrieval"),sep="/"), ...)      
-#   }, warning = function(w) {
-#     warning(w, "with url:", obs_url)
-#   }, error = function(e) {
-#     stop(e, "with url:", obs_url)
-#   }) 
-#   
-#   headerInfo <- h$value()
-#   
-#   if(headerInfo['status'] != "200"){  
-#     stop("Status:", headerInfo['status'], ": ", headerInfo['statusMessage'], "\nFor: ", obs_url)
-#   } else {
-#     if(grepl("No sites/data found using the selection criteria specified", returnedDoc)){
-#       message(returnedDoc)
-#       headerInfo['warn'] <- returnedDoc
-#     }
-#     attr(returnedDoc, "headerInfo") <- headerInfo
-#     return(returnedDoc)
-#   }
 }
