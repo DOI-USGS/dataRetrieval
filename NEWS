@@ -1,3 +1,9 @@
+dataRetrieval 2.4.6
+==========
+* Default for Water Quality Portal queries changed to zip.
+* Basic switch from RCurl to httr.
+* Minor bug fixes 
+
 dataRetrieval 2.4.0
 ==========
 * Package readr now used for tab delimited parsing
