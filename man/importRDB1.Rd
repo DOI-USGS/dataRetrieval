@@ -81,6 +81,12 @@ end <- "2015-11-24"
 urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
 ice <- importRDB1(urlIce, asDateTime=TRUE)
 iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
+
+inactiveSite <- "05212700"
+inactiveSite <- constructNWISURL(inactiveSite, "00060", 
+         "2014-01-01", "2014-01-10","dv",format="tsv")
+inactiveSite <- importRDB1(inactiveSite) #This returns 404 (but 200 in WaterML1)
+
 }
 # User file:
 filePath <- system.file("extdata", package="dataRetrieval")

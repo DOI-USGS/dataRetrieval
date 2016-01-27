@@ -24,7 +24,7 @@ Depends:
     R (>= 3.0)
 Imports:
     XML,
-    RCurl,
+    httr,
     reshape2,
     lubridate,
     plyr,
