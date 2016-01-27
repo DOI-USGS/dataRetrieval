@@ -26,6 +26,8 @@
 #' @importFrom dplyr left_join
 #' @importFrom lubridate parse_date_time
 #' @importFrom lubridate fast_strptime
+#' @importFrom RCurl basicHeaderGatherer
+#' @importFrom RCurl getURI
 #' @examples
 #' # These examples require an internet connection to run
 #' 
@@ -50,45 +52,48 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
                           "America/Jamaica","America/Managua",
                           "America/Phoenix","America/Metlakatla"))
   }
-
   
   if(!file.exists(obs_url)){
     
     if(zip){
       temp <- tempfile()
       options(timeout = 120)
-      
-      possibleError <- tryCatch({
-          suppressWarnings(download.file(obs_url,temp, quiet=TRUE, mode='wb'))
-        },
-        error = function(e)  {
-          stop(e, "with url:", obs_url)
-        }
-      )
-      doc <- temp
+      h <- basicHeaderGatherer()
+      x <- httpHEAD(obs_url, headerfunction = h$update, 
+                  useragent = paste("dataRetrieval",packageVersion("dataRetrieval"),sep="/"))
+      headerInfo <- h$value()
       
     } else {
       doc <- getWebServiceData(obs_url)
       headerInfo <- attr(doc, "headerInfo")
-      
-      numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
-      sitesToBeReturned <- as.numeric(headerInfo["Total-Site-Count"])
-      
-      totalReturned <- sum(numToBeReturned, sitesToBeReturned,na.rm = TRUE)
-      
-      if(is.na(totalReturned) | totalReturned == 0){
-        for(i in grep("Warning",names(headerInfo))){
-          warning(headerInfo[i])
-        }
-        return(data.frame())
-      }      
     }
-
+    
+    numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
+    sitesToBeReturned <- as.numeric(headerInfo["Total-Site-Count"])
+    
+    totalReturned <- sum(numToBeReturned, sitesToBeReturned,na.rm = TRUE)
+    
+    if(is.na(totalReturned) | totalReturned == 0){
+      for(i in grep("Warning",names(headerInfo))){
+        warning(headerInfo[i])
+      }
+      return(data.frame())
+    }  
+    
   } else {
     doc <- obs_url
   }
     
   if(zip){
+    
+    possibleError <- tryCatch({
+      suppressWarnings(download.file(obs_url,temp, quiet=TRUE, mode='wb'))
+    },
+    error = function(e)  {
+      stop(e, "with url:", obs_url)
+    })
+    
+    doc <- temp
     doc <- unzip(doc)
     retval <- suppressWarnings(read_delim(doc, 
                          col_types = cols(`ActivityStartTime/Time` = col_character(),
