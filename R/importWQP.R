@@ -27,7 +27,7 @@
 #' @importFrom lubridate parse_date_time
 #' @importFrom lubridate fast_strptime
 #' @importFrom RCurl basicHeaderGatherer
-#' @importFrom RCurl getURI
+#' @importFrom RCurl getBinaryURL
 #' @examples
 #' # These examples require an internet connection to run
 #' 
@@ -59,8 +59,11 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
       temp <- tempfile()
       options(timeout = 120)
       h <- basicHeaderGatherer()
-      x <- httpHEAD(obs_url, headerfunction = h$update, 
-                  useragent = paste("dataRetrieval",packageVersion("dataRetrieval"),sep="/"))
+      myOpts = curlOptions(verbose = FALSE, 
+                           header = FALSE, 
+                           useragent = paste("dataRetrieval",packageVersion("dataRetrieval"),sep="/"))
+
+      doc <- getBinaryURL(obs_url, .opts=myOpts, headerfunction = h$update)
       headerInfo <- h$value()
       
     } else {
@@ -77,7 +80,9 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
       for(i in grep("Warning",names(headerInfo))){
         warning(headerInfo[i])
       }
-      return(data.frame())
+      emptyReturn <- data.frame(NA)
+      attr(emptyReturn, "headerInfo") <- headerInfo
+      return(emptyReturn)
     }  
     
   } else {
@@ -85,16 +90,12 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
   }
     
   if(zip){
-    
-    possibleError <- tryCatch({
-      suppressWarnings(download.file(obs_url,temp, quiet=TRUE, mode='wb'))
-    },
-    error = function(e)  {
-      stop(e, "with url:", obs_url)
-    })
-    
-    doc <- temp
-    doc <- unzip(doc)
+    temp <- paste0(temp,".zip")
+    con <- file(temp, open = "wb")
+    writeBin(doc, con)
+    close(con)
+
+    doc <- unzip(temp)
     retval <- suppressWarnings(read_delim(doc, 
                          col_types = cols(`ActivityStartTime/Time` = col_character(),
                                           `ActivityEndTime/Time` = col_character(),
@@ -107,7 +108,7 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
                                           `WellHoleDepthMeasure/MeasureValue` = col_number(),
                                           `HUCEightDigitCode` = col_character()),
                          quote = "", delim = "\t"))
-    unlink(doc)
+    unlink(temp)
   }  else {
     retval <- suppressWarnings(read_delim(doc, 
                          col_types = cols(`ActivityStartTime/Time` = col_character(),

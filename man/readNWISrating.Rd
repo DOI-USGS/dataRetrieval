@@ -4,12 +4,15 @@
 \alias{readNWISrating}
 \title{Rating table for an active USGS streamgage retrieval}
 \usage{
-readNWISrating(siteNumber, type = "base")
+readNWISrating(siteNumber, type = "base", convertType = TRUE)
 }
 \arguments{
 \item{siteNumber}{character USGS site number.  This is usually an 8 digit number}
 
 \item{type}{character can be "base", "corr", or "exsa"}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character}
 }
 \value{
 A data frame. If \code{type} is "base," then the columns are

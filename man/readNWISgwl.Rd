@@ -4,7 +4,7 @@
 \alias{readNWISgwl}
 \title{Groundwater level measurements retrieval from USGS (NWIS)}
 \usage{
-readNWISgwl(siteNumbers, startDate = "", endDate = "")
+readNWISgwl(siteNumbers, startDate = "", endDate = "", convertType = TRUE)
 }
 \arguments{
 \item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
@@ -14,6 +14,9 @@ retrieval for the earliest possible record.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record.}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character}
 }
 \value{
 A data frame with the following columns:

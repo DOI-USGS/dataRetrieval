@@ -90,6 +90,8 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' retrieval for the latest possible record.
 #' @param asDateTime logical default to \code{TRUE}. When \code{TRUE}, the peak_dt column is converted
 #' to a Date object, and incomplete dates are removed. When \code{FALSE}, no columns are removed, but no dates are converted.
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -124,16 +126,18 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' \dontrun{
 #' data <- readNWISpeak(siteNumbers)
 #' data2 <- readNWISpeak(siteNumbers, asDateTime=FALSE)
+#' stations<-c("06011000")
+#' peakdata<-readNWISpeak(stations,convertType=FALSE)
 #' }
-readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){  
+readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, convertType = TRUE){  
   
   # Doesn't seem to be a peak xml service
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"peak")
   
-  data <- importRDB1(url, asDateTime=asDateTime)
+  data <- importRDB1(url, asDateTime=asDateTime, convertType = convertType)
   
   if(nrow(data) > 0){
-    if(asDateTime){
+    if(asDateTime & convertType){
       badDates <- which(grepl("[0-9]*-[0-9]*-00",data$peak_dt))
       
       if(length(badDates) > 0){
@@ -145,9 +149,12 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){
       if("peak_dt" %in% names(data))  data$peak_dt <- as.Date(data$peak_dt, format="%Y-%m-%d")
       if("ag_dt" %in% names(data))  data$ag_dt <- as.Date(data$ag_dt, format="%Y-%m-%d")
     }
-    data$gage_ht <- as.numeric(data$gage_ht)
-    data$ag_gage_ht <- as.numeric(data$ag_gage_ht)
-    data$year_last_pk <- as.numeric(data$year_last_pk)
+    
+#     if(convertType){
+#     data$gage_ht <- as.numeric(data$gage_ht)
+#     data$ag_gage_ht <- as.numeric(data$ag_gage_ht)
+#     data$year_last_pk <- as.numeric(data$year_last_pk)
+#     }
     
     siteInfo <- readNWISsite(siteNumbers)
     siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
@@ -167,6 +174,8 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){
 #' 
 #' @param siteNumber character USGS site number.  This is usually an 8 digit number
 #' @param type character can be "base", "corr", or "exsa"
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @return A data frame. If \code{type} is "base," then the columns are
 #'INDEP, typically the gage height, in feet; DEP, typically the streamflow,
 #'in cubic feet per second; and STOR, where "*" indicates that the pair are
@@ -198,12 +207,12 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE){
 #' data <- readNWISrating(siteNumber, "base")
 #' attr(data, "RATING")
 #' }
-readNWISrating <- function (siteNumber,type="base"){  
+readNWISrating <- function (siteNumber,type="base",convertType = TRUE){  
   
   # No rating xml service 
   url <- constructNWISURL(siteNumber,service="rating",ratingType = type)
     
-  data <- importRDB1(url, asDateTime=FALSE)
+  data <- importRDB1(url, asDateTime=FALSE, convertType = convertType)
   
   if("current_rating_nu" %in% names(data)){
     intColumns <- intColumns[!("current_rating_nu" %in% names(data)[intColumns])]
@@ -243,6 +252,8 @@ readNWISrating <- function (siteNumber,type="base"){
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @param expanded logical. Whether or not (TRUE or FALSE) to call the expanded data.
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -277,13 +288,14 @@ readNWISrating <- function (siteNumber,type="base"){
 #' Meas05316840 <- readNWISmeas("05316840")
 #' Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)
 #' Meas07227500.ex <- readNWISmeas("07227500",expanded=TRUE)
+#' Meas07227500.exRaw <- readNWISmeas("07227500",expanded=TRUE, convertType = FALSE)
 #' }
-readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=FALSE){  
+readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=FALSE, convertType = TRUE){  
   
   # Doesn't seem to be a WaterML1 format option
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"meas", expanded = expanded)
   
-  data <- importRDB1(url,asDateTime=TRUE,tz=tz)
+  data <- importRDB1(url,asDateTime=TRUE,tz=tz, convertType = convertType)
   
   if(nrow(data) > 0){
     if("diff_from_rating_pc" %in% names(data)){
@@ -295,17 +307,20 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
     queryTime <- attr(data, "queryTime")
     header <- attr(data, "header")
     
-    data$measurement_dateTime <- data$measurement_dt
-    data$measurement_dt <- as.Date(data$measurement_dateTime)
-    data$measurement_tm <- strftime(data$measurement_dateTime, "%H:%M")
-    data$measurement_tm[is.na(data$tz_cd_reported)] <- ""
-    indexDT <- which("measurement_dt" == names(data))
-    indexTZ <- which("tz_cd" == names(data))
-    indexTM <- which("measurement_tm" == names(data))
-    indexTZrep <- which("tz_cd_reported" == names(data))
-    newOrder <- c(1:indexDT,indexTM,indexTZrep,c((indexDT+1):ncol(data))[!(c((indexDT+1):ncol(data)) %in% c(indexTZrep,indexTM,indexTZ))],indexTZ)
+    if(convertType){
+      data$measurement_dateTime <- data$measurement_dt
+      data$measurement_dt <- as.Date(data$measurement_dateTime)
+      data$measurement_tm <- strftime(data$measurement_dateTime, "%H:%M")
+      data$measurement_tm[is.na(data$tz_cd_reported)] <- ""
+      indexDT <- which("measurement_dt" == names(data))
+      indexTZ <- which("tz_cd" == names(data))
+      indexTM <- which("measurement_tm" == names(data))
+      indexTZrep <- which("tz_cd_reported" == names(data))
+      newOrder <- c(1:indexDT,indexTM,indexTZrep,c((indexDT+1):ncol(data))[!(c((indexDT+1):ncol(data)) %in% c(indexTZrep,indexTM,indexTZ))],indexTZ)
+  
+      data <- data[,newOrder]      
+    }
 
-    data <- data[,newOrder]
 
     siteInfo <- readNWISsite(siteNumbers)
     siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
@@ -336,6 +351,8 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #' retrieval for the earliest possible record.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record.
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -371,10 +388,10 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #' data2 <- readNWISgwl(sites, '','')
 #' data3 <- readNWISgwl("420125073193001", '','')
 #' }
-readNWISgwl <- function (siteNumbers,startDate="",endDate=""){  
+readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE){  
   
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="tsv")
-  data <- importRDB1(url,asDateTime=TRUE)
+  data <- importRDB1(url,asDateTime=TRUE, convertType = convertType)
 
   if(nrow(data) > 0){
     data$lev_dt <- as.Date(data$lev_dt)

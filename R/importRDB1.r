@@ -167,18 +167,20 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
           varname <- paste0(i,"_dateTime")
           
           varval <- as.POSIXct(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), "%Y-%m-%d %H:%M", tz = "UTC")
-          readr.data[,varname] <- varval
           
-          tz.name <- paste0(i,"_time_datum_cd")
-          
-          if(tz.name %in% header.names){
-            readr.data <- convertTZ(readr.data,tz.name,varname,tz)
-          }
-          
-          tz.name <- paste0(i,"_tz_cd")
-          
-          if(tz.name %in% header.names){
-            readr.data <- convertTZ(readr.data,tz.name,varname,tz)
+          if(!all(is.na(varval))){
+            readr.data[,varname] <- varval
+            tz.name <- paste0(i,"_time_datum_cd")
+            
+            if(tz.name %in% header.names){
+              readr.data <- convertTZ(readr.data,tz.name,varname,tz)
+            }
+            
+            tz.name <- paste0(i,"_tz_cd")
+            
+            if(tz.name %in% header.names){
+              readr.data <- convertTZ(readr.data,tz.name,varname,tz)
+            } 
           }
         }
       }
@@ -268,6 +270,11 @@ convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
     
     df <- df[,new.order]
   }
+  
+  if(all(is.na(df[,date.time.cols]))){
+    df[,date.time.cols] <- NULL
+  }
+  
   return(df)
 }
 

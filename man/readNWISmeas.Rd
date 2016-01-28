@@ -5,7 +5,7 @@
 \title{Surface-water measurement data retrieval from USGS (NWIS)}
 \usage{
 readNWISmeas(siteNumbers, startDate = "", endDate = "", tz = "",
-  expanded = FALSE)
+  expanded = FALSE, convertType = TRUE)
 }
 \arguments{
 \item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
@@ -22,6 +22,9 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 
 \item{expanded}{logical. Whether or not (TRUE or FALSE) to call the expanded data.}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character}
 }
 \value{
 A data frame with at least the following columns:
@@ -60,6 +63,7 @@ data <- readNWISmeas(siteNumbers)
 Meas05316840 <- readNWISmeas("05316840")
 Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)
 Meas07227500.ex <- readNWISmeas("07227500",expanded=TRUE)
+Meas07227500.exRaw <- readNWISmeas("07227500",expanded=TRUE, convertType = FALSE)
 }
 }
 \seealso{
