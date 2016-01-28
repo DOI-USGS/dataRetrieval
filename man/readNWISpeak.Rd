@@ -4,7 +4,8 @@
 \alias{readNWISpeak}
 \title{Peak flow data from USGS (NWIS)}
 \usage{
-readNWISpeak(siteNumbers, startDate = "", endDate = "", asDateTime = TRUE)
+readNWISpeak(siteNumbers, startDate = "", endDate = "", asDateTime = TRUE,
+  convertType = TRUE)
 }
 \arguments{
 \item{siteNumbers}{character USGS site number(or multiple sites).  This is usually an 8 digit number.}
@@ -17,6 +18,9 @@ retrieval for the latest possible record.}
 
 \item{asDateTime}{logical default to \code{TRUE}. When \code{TRUE}, the peak_dt column is converted
 to a Date object, and incomplete dates are removed. When \code{FALSE}, no columns are removed, but no dates are converted.}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character}
 }
 \value{
 A data frame with the following columns:
@@ -58,6 +62,8 @@ siteNumbers <- c('01594440','040851325')
 \dontrun{
 data <- readNWISpeak(siteNumbers)
 data2 <- readNWISpeak(siteNumbers, asDateTime=FALSE)
+stations<-c("06011000")
+peakdata<-readNWISpeak(stations,convertType=FALSE)
 }
 }
 \seealso{

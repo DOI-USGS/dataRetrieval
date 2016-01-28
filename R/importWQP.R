@@ -26,6 +26,9 @@
 #' @importFrom dplyr left_join
 #' @importFrom lubridate parse_date_time
 #' @importFrom lubridate fast_strptime
+#' @importFrom RCurl basicHeaderGatherer
+#' @importFrom RCurl getBinaryURL
+#' @importFrom RCurl curlOptions
 #' @examples
 #' # These examples require an internet connection to run
 #' 
@@ -50,46 +53,50 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
                           "America/Jamaica","America/Managua",
                           "America/Phoenix","America/Metlakatla"))
   }
-
   
   if(!file.exists(obs_url)){
     
     if(zip){
       temp <- tempfile()
       options(timeout = 120)
-      
-      possibleError <- tryCatch({
-          suppressWarnings(download.file(obs_url,temp, quiet=TRUE, mode='wb'))
-        },
-        error = function(e)  {
-          stop(e, "with url:", obs_url)
-        }
-      )
-      doc <- temp
+      h <- basicHeaderGatherer()
+      myOpts = curlOptions(verbose = FALSE, 
+                           header = FALSE, 
+                           useragent = paste("dataRetrieval",packageVersion("dataRetrieval"),sep="/"))
+
+      doc <- getBinaryURL(obs_url, .opts=myOpts, headerfunction = h$update)
+      headerInfo <- h$value()
       
     } else {
       doc <- getWebServiceData(obs_url)
       headerInfo <- attr(doc, "headerInfo")
-      
-      numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
-      sitesToBeReturned <- as.numeric(headerInfo["Total-Site-Count"])
-      
-      totalReturned <- sum(numToBeReturned, sitesToBeReturned,na.rm = TRUE)
-      
-      if(is.na(totalReturned) | totalReturned == 0){
-        for(i in grep("Warning",names(headerInfo))){
-          warning(headerInfo[i])
-        }
-        return(data.frame())
-      }      
     }
-
+    
+    numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
+    sitesToBeReturned <- as.numeric(headerInfo["Total-Site-Count"])
+    
+    totalReturned <- sum(numToBeReturned, sitesToBeReturned,na.rm = TRUE)
+    
+    if(is.na(totalReturned) | totalReturned == 0){
+      for(i in grep("Warning",names(headerInfo))){
+        warning(headerInfo[i])
+      }
+      emptyReturn <- data.frame(NA)
+      attr(emptyReturn, "headerInfo") <- headerInfo
+      return(emptyReturn)
+    }  
+    
   } else {
     doc <- obs_url
   }
     
   if(zip){
-    doc <- unzip(doc)
+    temp <- paste0(temp,".zip")
+    con <- file(temp, open = "wb")
+    writeBin(doc, con)
+    close(con)
+
+    doc <- unzip(temp)
     retval <- suppressWarnings(read_delim(doc, 
                          col_types = cols(`ActivityStartTime/Time` = col_character(),
                                           `ActivityEndTime/Time` = col_character(),
@@ -102,7 +109,7 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
                                           `WellHoleDepthMeasure/MeasureValue` = col_number(),
                                           `HUCEightDigitCode` = col_character()),
                          quote = "", delim = "\t"))
-    unlink(doc)
+    unlink(temp)
   }  else {
     retval <- suppressWarnings(read_delim(doc, 
                          col_types = cols(`ActivityStartTime/Time` = col_character(),
