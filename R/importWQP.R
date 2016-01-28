@@ -28,6 +28,7 @@
 #' @importFrom lubridate fast_strptime
 #' @importFrom RCurl basicHeaderGatherer
 #' @importFrom RCurl getBinaryURL
+#' @importFrom RCurl curlOptions
 #' @examples
 #' # These examples require an internet connection to run
 #' 
