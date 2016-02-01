@@ -26,7 +26,7 @@ getWebServiceData <- function(obs_url, ...){
     h <- basicHeaderGatherer()
     
     returnedDoc <- getURI(obs_url, headerfunction = h$update, 
-                          useragent = , ...)      
+                          useragent = default_ua(), ...)      
   }, warning = function(w) {
     warning(w, "with url:", obs_url)
   }, error = function(e) {
@@ -50,8 +50,8 @@ getWebServiceData <- function(obs_url, ...){
 default_ua <- function() {
   versions <- c(
     libcurl = RCurl::curlVersion()$version,
-    RCurl = packageVersion("RCurl"),
-    dataRetrieval = packageVersion("dataRetrieval")
+    RCurl = as.character(packageVersion("RCurl")),
+    dataRetrieval = as.character(packageVersion("dataRetrieval"))
   )
   paste0(names(versions), "/", versions, collapse = " ")
 }
