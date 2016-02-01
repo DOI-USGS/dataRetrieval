@@ -7,6 +7,7 @@
 #' @param \dots information to pass to header request
 #' @importFrom RCurl basicHeaderGatherer
 #' @importFrom RCurl getURI
+#' @importFrom RCurl curlVersion
 #' @export
 #' @return raw data from web services
 #' @examples
@@ -25,7 +26,7 @@ getWebServiceData <- function(obs_url, ...){
     h <- basicHeaderGatherer()
     
     returnedDoc <- getURI(obs_url, headerfunction = h$update, 
-                          useragent = paste("dataRetrieval",packageVersion("dataRetrieval"),sep="/"), ...)      
+                          useragent = , ...)      
   }, warning = function(w) {
     warning(w, "with url:", obs_url)
   }, error = function(e) {
@@ -44,4 +45,13 @@ getWebServiceData <- function(obs_url, ...){
     attr(returnedDoc, "headerInfo") <- headerInfo
     return(returnedDoc)
   }
+}
+
+default_ua <- function() {
+  versions <- c(
+    libcurl = RCurl::curlVersion()$version,
+    RCurl = packageVersion("RCurl"),
+    dataRetrieval = packageVersion("dataRetrieval")
+  )
+  paste0(names(versions), "/", versions, collapse = " ")
 }
