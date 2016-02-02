@@ -58,11 +58,11 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
     
     if(zip){
       temp <- tempfile()
-      options(timeout = 120)
+      # options(timeout = 120)
       h <- basicHeaderGatherer()
       myOpts = curlOptions(verbose = FALSE, 
                            header = FALSE, 
-                           useragent = paste("dataRetrieval",packageVersion("dataRetrieval"),sep="/"))
+                           useragent = default_ua())
 
       doc <- getBinaryURL(obs_url, .opts=myOpts, headerfunction = h$update)
       headerInfo <- h$value()
@@ -88,10 +88,7 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
     
     if(zip){
       temp <- paste0(temp,".zip")
-      con <- file(temp, open = "wb")
-      writeBin(doc, con)
-      close(con)
-      
+      writeBin(doc, temp)
       doc <- unzip(temp)
     }
     
