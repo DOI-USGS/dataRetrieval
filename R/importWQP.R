@@ -58,11 +58,11 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
     
     if(zip){
       temp <- tempfile()
-      options(timeout = 120)
+      # options(timeout = 120)
       h <- basicHeaderGatherer()
       myOpts = curlOptions(verbose = FALSE, 
                            header = FALSE, 
-                           useragent = paste("dataRetrieval",packageVersion("dataRetrieval"),sep="/"))
+                           useragent = default_ua())
 
       doc <- getBinaryURL(obs_url, .opts=myOpts, headerfunction = h$update)
       headerInfo <- h$value()
@@ -86,46 +86,37 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
       return(emptyReturn)
     }  
     
+    if(zip){
+      temp <- paste0(temp,".zip")
+      writeBin(doc, temp)
+      doc <- unzip(temp)
+    }
+    
   } else {
-    doc <- obs_url
-  }
+    if(zip){
+      doc <- unzip(obs_url)
+    } else {
+      doc <- obs_url
+    }
     
-  if(zip){
-    temp <- paste0(temp,".zip")
-    con <- file(temp, open = "wb")
-    writeBin(doc, con)
-    close(con)
+  }
 
-    doc <- unzip(temp)
-    retval <- suppressWarnings(read_delim(doc, 
-                         col_types = cols(`ActivityStartTime/Time` = col_character(),
-                                          `ActivityEndTime/Time` = col_character(),
-                                          USGSPCode = col_character(),
-                                          ResultCommentText=col_character(),
-                                          `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
-                                          `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
-                                          ResultMeasureValue = col_number(),
-                                          `WellDepthMeasure/MeasureValue` = col_number(),
-                                          `WellHoleDepthMeasure/MeasureValue` = col_number(),
-                                          `HUCEightDigitCode` = col_character()),
-                         quote = "", delim = "\t"))
-    unlink(temp)
-  }  else {
-    retval <- suppressWarnings(read_delim(doc, 
-                         col_types = cols(`ActivityStartTime/Time` = col_character(),
-                                          `ActivityEndTime/Time` = col_character(),
-                                          USGSPCode = col_character(),
-                                          ResultCommentText=col_character(),
-                                          `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
-                                          `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
-                                          ResultMeasureValue = col_number(),
-                                          `WellDepthMeasure/MeasureValue` = col_number(),
-                                          `WellHoleDepthMeasure/MeasureValue` = col_number(),
-                                          `HUCEightDigitCode` = col_character()),
-                         quote = "", delim = "\t"))
-  }
+  retval <- suppressWarnings(read_delim(doc, 
+                       col_types = cols(`ActivityStartTime/Time` = col_character(),
+                                        `ActivityEndTime/Time` = col_character(),
+                                        USGSPCode = col_character(),
+                                        ResultCommentText=col_character(),
+                                        `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
+                                        `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
+                                        ResultMeasureValue = col_number(),
+                                        `WellDepthMeasure/MeasureValue` = col_number(),
+                                        `WellHoleDepthMeasure/MeasureValue` = col_number(),
+                                        `HUCEightDigitCode` = col_character()),
+                       quote = "", delim = "\t"))
     
-  if(!file.exists(obs_url) & !zip){
+  if(zip) unlink(doc)
+    
+  if(!file.exists(obs_url)){
     actualNumReturned <- nrow(retval)
     
     if(actualNumReturned != numToBeReturned & actualNumReturned != sitesToBeReturned){
