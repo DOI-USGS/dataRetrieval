@@ -58,7 +58,7 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
     
     if(zip){
       temp <- tempfile()
-      # options(timeout = 120)
+      options(timeout = 120)
       h <- basicHeaderGatherer()
       myOpts = curlOptions(verbose = FALSE, 
                            header = FALSE, 
@@ -88,7 +88,10 @@ importWQP <- function(obs_url, zip=TRUE, tz=""){
     
     if(zip){
       temp <- paste0(temp,".zip")
-      writeBin(doc, temp)
+      f <- file(temp, "wb")
+      writeBin(doc, con = f)
+      close(f)
+      
       doc <- unzip(temp)
     }
     
