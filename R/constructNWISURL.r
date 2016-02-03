@@ -222,7 +222,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 #' retrieval for the earliest possible record.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record.
-#' @param zip logical to request data via downloading zip file. Default set to TRUE.
+#' @param zip logical to request data via downloading zip file. Default set to FALSE.
 #' @keywords data import WQP web service
 #' @return url string
 #' @export
@@ -234,7 +234,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 #' url_wqp <- constructWQPURL(paste("USGS",siteNumber,sep="-"),
 #'            c('01075','00029','00453'),
 #'            startDate,endDate)
-constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=TRUE){
+constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
   
   multipleSites <- length(siteNumber) > 1
   multiplePcodes <- length(parameterCd)>1

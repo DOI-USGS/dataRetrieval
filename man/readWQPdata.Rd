@@ -4,10 +4,10 @@
 \alias{readWQPdata}
 \title{General Data Import from Water Quality Portal}
 \usage{
-readWQPdata(..., zip = TRUE)
+readWQPdata(..., zip = FALSE)
 }
 \arguments{
-\item{zip}{logical to request data via downloading zip file. Default set to TRUE.}
+\item{zip}{logical to request data via downloading zip file. Default set to FALSE.}
 
 \item{\dots}{see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options}
 }
