@@ -4,7 +4,7 @@
 #' Arguments to the function should be based on \url{www.waterqualitydata.us/webservices_documentation.jsp}
 #'
 #' @param \dots see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options
-#' @param zip logical to request data via downloading zip file. Default set to TRUE.
+#' @param zip logical to request data via downloading zip file. Default set to FALSE.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -58,7 +58,7 @@
 #' sites <- whatWQPsites(countycode="US:55:025",siteType=type)
 #' lakeSites <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 #' }
-whatWQPsites <- function(...,zip=TRUE){
+whatWQPsites <- function(...,zip=FALSE){
 
   matchReturn <- list(...)
   
