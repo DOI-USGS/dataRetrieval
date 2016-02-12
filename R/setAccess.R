@@ -57,7 +57,7 @@ drURL <- function(base.name, ..., arg.list=NULL){
 
 drQueryArgs <- function(..., arg.list){
   dots <- list(...)
-  dots <- dots[!sapply(dots,is.null)]
+  dots <- dots[!vapply(X=dots,FUN=is.null,FUN.VALUE = TRUE)]
   
   args <- append(expand.grid(dots, stringsAsFactors = FALSE), arg.list)
   # get the args into name=value strings
