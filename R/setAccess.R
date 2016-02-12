@@ -3,11 +3,13 @@
 #'access Indicate which dataRetrieval access code
 #' you want to use options: \code{c('public','internal')}
 #'
-#' @param access code for data access. Options are: "public","internal","cooperator", or "USGS". 
-#' Access=3 is internal...for a single water science center
-#' Access=2 is internal...for all water science centers
-#' Access=1 is cooperator
-#' Access=0 is public
+#' @param access code for data access. Options are: "public","internal","cooperator", or "USGS".
+#' \itemize{ 
+#' \item{"internal" represents Access=3 ...for a single water science center}
+#' \item{"USGS" represents Access=2 ...for all water science centers}
+#' \item{"cooperator" represents Access=1}
+#' \item{"public" represents Access=0, public access}
+#' }
 #'
 #'@author Luke Winslow, Jordan S Read
 #'
