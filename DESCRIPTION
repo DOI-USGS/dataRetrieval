@@ -1,14 +1,16 @@
 Package: dataRetrieval
 Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
-Version: 2.4.8
-Date: 2016-02-01
+Version: 2.4.9
+Date: 2016-02-12
 Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
     email = "rhirsch@usgs.gov"),
     person("Laura", "DeCicco", role = c("aut","cre"),
     email = "ldecicco@usgs.gov"),
     person("David","Lorenz", role=c("aut"),
-    email = "lorenz@usgs.gov"))
+    email = "lorenz@usgs.gov"),
+    person("Jordan", "Read", role = c("ctb"),
+    email = "jread@usgs.gov"))
 Description: Collection of functions to help retrieve U.S. Geological Survey
     (USGS) and U.S. Environmental Protection Agency (EPA) water quality and
     hydrology data from web services. USGS web services are discovered from the
