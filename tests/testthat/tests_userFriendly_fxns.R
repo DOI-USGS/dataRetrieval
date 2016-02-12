@@ -19,7 +19,7 @@ test_that("Unit value data returns correct types", {
   expect_is(rawData$dateTime, 'POSIXct')
   expect_is(rawData$Flow_Inst, 'numeric')
   expect_that(attr(rawData, "url"), equals(
-      "http://nwis.waterservices.usgs.gov/nwis/iv/?Access=0&site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
+      "http://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
   )
 #   #First switchover to standard time:
 #   expect_that(as.numeric(timeZoneChange[which(timeZoneChange$tz_cd == "America/Chicago")[1],"dateTime"]),
@@ -58,7 +58,7 @@ test_that("peak, rating curves, surface-water measurements", {
   emptyDF <- whatNWISdata("10312000",parameterCd = "50286")
   expect_that(nrow(emptyDF) == 0, is_true())
   
-  url <- "http://waterservices.usgs.gov/nwis/site/?Access=0&format=rdb&seriesCatalogOutput=true&sites=05114000"
+  url <- "http://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000"
   x <- importRDB1(url)
 
 })
