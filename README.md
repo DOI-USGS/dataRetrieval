@@ -80,3 +80,5 @@ This software is provided "AS IS."
 
 CRAN statistics:
 [![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](http://cran.rstudio.com/web/packages/dataRetrieval/index.html)
+
+[![Research software impact](http://depsy.org/api/package/cran/dataRetrieval/badge.svg)](http://depsy.org/package/r/dataRetrieval)
