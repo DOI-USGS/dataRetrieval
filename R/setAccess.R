@@ -43,7 +43,7 @@ setAccess = function(access="public"){
   pkg.env$iv = "http://nwis.waterservices.usgs.gov/nwis/iv/"
   pkg.env$dv =  "http://waterservices.usgs.gov/nwis/dv/"
   pkg.env$gwlevels = "http://waterservices.usgs.gov/nwis/gwlevels/"
-  
+  options(Access.dataRetrieval = access)
 }
 
 drURL <- function(base.name, ..., arg.list=NULL){
