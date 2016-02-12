@@ -133,7 +133,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   timeSeries <- xpathApply(doc, "//ns1:timeSeries", namespaces = ns)
   
-  
   if(0 == length(timeSeries)){
     df <- data.frame()
     attr(df, "queryInfo") <- queryInfo
@@ -287,16 +286,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
                 datetime <- datetime - tzHours*60*60
               }
             }
-            
-#             if(tz != ""){
-#               attr(datetime, "tzone") <- tz
-#               df$tz_cd <- rep(tz, nrow(df))
-#             } else {
-#               attr(datetime, "tzone") <- "UTC"
-#               df$tz_cd <- rep("UTC", nrow(df))
-#             }
 
-            
           } else {
             
             datetime <- as.character(datetime)

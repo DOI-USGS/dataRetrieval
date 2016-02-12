@@ -19,7 +19,7 @@
 #' @importFrom XML xmlValue
 #' @importFrom XML xmlAttrs
 #' @importFrom XML xmlName
-#' @importFrom plyr rbind.fill.matrix
+#' @importFrom dplyr rbind_all
 #' @examples
 #' baseURL <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
 #' URL <- paste(baseURL, "sites=01646500",
@@ -83,16 +83,7 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
     chunk <- xmlDoc(timeSeries[[i]])
     chunk <- xmlRoot(chunk)
     chunkNS <- xmlNamespaceDefinitions(chunk, simplify = TRUE)
-    
-#     xp <- xpathApply(chunk, "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP", 
-#                      xpathSApply, ".//*[not(*)]", 
-#                      function(x) setNames(ifelse(nzchar(xmlValue(x)), 
-#                                        xmlValue(x), 
-#                                           ifelse("qualifier" == xmlName(x),
-#                                                 xpathSApply(x,"./@xlink:title",namespaces = ns),"")), #originally I had the "" as xmlAttr(x) 
-#                                                     xmlName(x)), 
-#                      namespaces = chunkNS)
-    
+
     xp <- xpathApply(chunk, "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP", 
                      xpathSApply, ".//*[not(*)]", 
                      function(x) setNames(ifelse(nzchar(xmlValue(x)), 
@@ -108,9 +99,9 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
       xp <- xp[-1]
     }
 
-    
-    DF2 <- do.call(rbind.fill.matrix, lapply(xp, t))
-    DF2 <- as.data.frame(DF2,stringsAsFactors=FALSE)
+    y <- lapply(xp,t)
+    z <- lapply(y, as.data.frame)
+    DF2 <- suppressWarnings(rbind_all(z))
 
     names(DF2)[grep("wml2",names(DF2))] <- sub("wml2:","",names(DF2)[grep("wml2",names(DF2))])
     
@@ -150,11 +141,7 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
     } else {
       DF2$qualifier <- rep(defaultQualifier,nrow(DF2))
     }
-    
-    
-#     DF2$qualifier <- ifelse("Provisional data subject to revision." == DF2$qualifier, "P",
-#                                ifelse("Approved for publication. Processing and review completed." == DF2$qualifier, "A", DF2$qualifier))
-    
+   
 #########################################
 
     id <- as.character(xpathApply(chunk, "//gml:identifier", xmlValue, namespaces = chunkNS))
