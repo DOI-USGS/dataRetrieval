@@ -29,7 +29,6 @@ Imports:
     RCurl,
     reshape2,
     lubridate,
-    plyr,
     stats,
     utils,
     dplyr,
