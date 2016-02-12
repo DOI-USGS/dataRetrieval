@@ -7,7 +7,11 @@
 setAccess(access = "public")
 }
 \arguments{
-\item{access}{code for data access. Either "public" or "internal"}
+\item{access}{code for data access. Options are: "public","internal","cooperator", or "USGS". 
+Access=3 is internal...for a single water science center
+Access=2 is internal...for all water science centers
+Access=1 is cooperator
+Access=0 is public}
 }
 \description{
 access Indicate which dataRetrieval access code

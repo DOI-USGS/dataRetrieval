@@ -3,7 +3,11 @@
 #'access Indicate which dataRetrieval access code
 #' you want to use options: \code{c('public','internal')}
 #'
-#' @param access code for data access. Either "public" or "internal"
+#' @param access code for data access. Options are: "public","internal","cooperator", or "USGS". 
+#' Access=3 is internal...for a single water science center
+#' Access=2 is internal...for all water science centers
+#' Access=1 is cooperator
+#' Access=0 is public
 #'
 #'@author Luke Winslow, Jordan S Read
 #'
@@ -19,13 +23,19 @@
 #' @export
 setAccess = function(access="public"){
   
-  access = match.arg(access, c('public','internal'))
+  access = match.arg(access, c('public','internal','cooperator','USGS'))
   
   if(access=="internal"){
     pkg.env$access = '3'
     message('setting access to internal')
-  }else {
-    pkg.env$access = '0'
+  } else if(access=="cooperator"){
+    pkg.env$access = '1'
+    message('setting access to cooperator')
+  } else if(access=="USGS"){
+    pkg.env$access = '2'
+    message('setting access to all USGS Water Science Centers')    
+  } else {
+    pkg.env$access = NULL
     message('setting access to public')
   }
   
@@ -46,7 +56,10 @@ drURL <- function(base.name, ..., arg.list=NULL){
 }
 
 drQueryArgs <- function(..., arg.list){
-  args <- append(expand.grid(..., stringsAsFactors = FALSE), arg.list)
+  dots <- list(...)
+  dots <- dots[!sapply(dots,is.null)]
+  
+  args <- append(expand.grid(dots, stringsAsFactors = FALSE), arg.list)
   # get the args into name=value strings
   keyValues <- paste0(names(args),unname(lapply(args, function(x) paste0('=',x[[1]]))))
   return(paste(keyValues, collapse='&'))
