@@ -4,7 +4,7 @@
 \alias{getWebServiceData}
 \title{Function to return data from web services}
 \usage{
-getWebServiceData(obs_url, ..., progress = TRUE, verbose = TRUE)
+getWebServiceData(obs_url, ..., progress = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{obs_url}{character containing the url for the retrieval}
