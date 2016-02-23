@@ -28,7 +28,7 @@
 #' \dontrun{
 #' rawData <- getWebServiceData(obs_url)
 #' }
-getWebServiceData <- function(obs_url, ..., progress=TRUE, verbose=TRUE){
+getWebServiceData <- function(obs_url, ..., progress=FALSE, verbose=FALSE){
   
   returnedList <- GET(obs_url, ..., user_agent(default_ua()), 
                       if(progress) progress(), 
