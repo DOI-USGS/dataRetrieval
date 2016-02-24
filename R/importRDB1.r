@@ -48,6 +48,7 @@
 #' @importFrom readr read_delim
 #' @importFrom readr problems
 #' @importFrom readr parse_number
+#' @importFrom lubridate fast_strptime
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -166,7 +167,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
         if(all(c(paste0(i,"_dt"),paste0(i,"_tm")) %in% header.names)){
           varname <- paste0(i,"_dateTime")
           
-          varval <- as.POSIXct(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), "%Y-%m-%d %H:%M", tz = "UTC")
+          varval <- fast_strptime(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), "%Y-%m-%d %H:%M", tz = "UTC")
           
           if(!all(is.na(varval))){
             readr.data[,varname] <- varval
@@ -198,7 +199,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
       
       if(all(c("DATE","TIME","TZCD") %in% header.names)){
         varname <- "DATETIME"
-        varval <- as.POSIXct(paste(readr.data[,"DATE"],readr.data[,"TIME"]), "%Y-%m-%d %H%M%S", tz = "UTC")
+        varval <- fast_strptime(paste(readr.data[,"DATE"],readr.data[,"TIME"]), "%Y-%m-%d %H%M%S", tz = "UTC")
         readr.data[,varname] <- varval
         readr.data <- convertTZ(readr.data,"TZCD",varname,tz, flip.cols=TRUE)
       }
