@@ -30,8 +30,6 @@
 #' @importFrom httr content
 #' @importFrom httr user_agent
 #' @importFrom httr write_disk
-#' @importFrom httr verbose
-#' @importFrom httr progress
 #' @examples
 #' # These examples require an internet connection to run
 #' 
@@ -64,8 +62,7 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       temp <- tempfile()
       temp <- paste0(temp,".zip")
       doc <- GET(obs_url, user_agent(default_ua()), 
-                          progress(), 
-                          verbose(), write_disk(temp))
+                          write_disk(temp))
 
       headerInfo <- headers(doc)
       

@@ -4,8 +4,6 @@
 #' \code{\link[RCurl]{getURI}} with more informative error messages.
 #'
 #' @param obs_url character containing the url for the retrieval
-#' @param progress logical
-#' @param verbose logical
 #' @param \dots information to pass to header request
 #' @importFrom httr GET
 #' @importFrom httr content
@@ -13,8 +11,6 @@
 #' @importFrom httr stop_for_status
 #' @importFrom httr status_code
 #' @importFrom httr headers
-#' @importFrom httr verbose
-#' @importFrom httr progress
 #' @importFrom curl curl_version
 #' @export
 #' @return raw data from web services
@@ -28,11 +24,9 @@
 #' \dontrun{
 #' rawData <- getWebServiceData(obs_url)
 #' }
-getWebServiceData <- function(obs_url, ..., progress=FALSE, verbose=FALSE){
+getWebServiceData <- function(obs_url, ...){
   
-  returnedList <- GET(obs_url, ..., user_agent(default_ua()), 
-                      if(progress) progress(), 
-                      if(verbose) verbose())
+  returnedList <- GET(obs_url, ..., user_agent(default_ua()))
   
     if(status_code(returnedList) != 200){
       message("For: ", obs_url,"\n")
