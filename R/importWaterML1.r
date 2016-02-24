@@ -106,12 +106,11 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(file.exists(obs_url)){
     rawData <- obs_url
+    returnedDoc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
   } else {
-    rawData <- getWebServiceData(obs_url, encoding='gzip')
+    returnedDoc <- getWebServiceData(obs_url, encoding='gzip')
   }
-  
-  returnedDoc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
-  
+
   if(tz != ""){
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
                           "America/Denver","America/Los_Angeles",
@@ -181,9 +180,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       value <- as.numeric(xpathSApply(subChunk, "ns1:value",namespaces = chunkNS, xmlValue))  
       
       if(length(value)!=0){
-      
-#         value[value == noValue] <- NA
-            
+
         attNames <- xpathSApply(subChunk, "ns1:value/@*",namespaces = chunkNS)
         attributeNames <- unique(names(attNames))
   
@@ -197,7 +194,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         if(length(methodDescription) > 0 && methodDescription != ""){
           valueName <- paste("X",methodDescription,pCode,statCd,sep="_") 
         }
-        
          
         assign(valueName,value)
         

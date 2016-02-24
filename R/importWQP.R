@@ -27,7 +27,6 @@
 #' @importFrom lubridate parse_date_time
 #' @importFrom lubridate fast_strptime
 #' @importFrom httr GET
-#' @importFrom httr content
 #' @importFrom httr user_agent
 #' @importFrom httr write_disk
 #' @examples
