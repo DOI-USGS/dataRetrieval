@@ -56,7 +56,7 @@ offering <- '00003'
 property <- '00060'
 obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 \dontrun{
-data <- importWaterML1(obs_url)
+data <- importWaterML1(obs_url, asDateTime=TRUE)
 
 groundWaterSite <- "431049071324301"
 startGW <- "2013-10-01"

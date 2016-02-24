@@ -51,12 +51,11 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
   
   if(file.exists(obs_url)){
     rawData <- obs_url
+    doc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
   } else {
-    rawData <- getWebServiceData(obs_url)
+    doc <- getWebServiceData(obs_url)
   }
-  
-  doc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
-  
+
   if(tz != ""){
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
                           "America/Denver","America/Los_Angeles",

@@ -26,9 +26,9 @@
 #' @importFrom dplyr left_join
 #' @importFrom lubridate parse_date_time
 #' @importFrom lubridate fast_strptime
-#' @importFrom RCurl basicHeaderGatherer
-#' @importFrom RCurl getBinaryURL
-#' @importFrom RCurl curlOptions
+#' @importFrom httr GET
+#' @importFrom httr user_agent
+#' @importFrom httr write_disk
 #' @examples
 #' # These examples require an internet connection to run
 #' 
@@ -38,8 +38,8 @@
 #' 
 #' rawSample <- importWQP(rawSampleURL)
 #' 
-#' rawSampleURL_noZip <- constructWQPURL('USGS-01594440','01075', '', '', FALSE)
-#' rawSample2 <- importWQP(rawSampleURL_noZip, zip=FALSE)
+#' rawSampleURL_Zip <- constructWQPURL('USGS-01594440','01075', '', '', TRUE)
+#' rawSample2 <- importWQP(rawSampleURL_Zip, zip=TRUE)
 #' 
 #' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' STORETdata <- importWQP(STORETex)
@@ -59,22 +59,28 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     if(zip){
       message("zip encoding access still in development")
       temp <- tempfile()
-      options(timeout = 120)
-      h <- basicHeaderGatherer()
-      myOpts = curlOptions(verbose = FALSE, 
-                           header = FALSE, 
-                           useragent = default_ua())
+      temp <- paste0(temp,".zip")
+      doc <- GET(obs_url, user_agent(default_ua()), 
+                          write_disk(temp))
 
-      doc <- getBinaryURL(obs_url, .opts=myOpts, headerfunction = h$update)
-      headerInfo <- h$value()
+      headerInfo <- headers(doc)
       
     } else {
       doc <- getWebServiceData(obs_url)
       headerInfo <- attr(doc, "headerInfo")
     }
     
-    numToBeReturned <- as.numeric(headerInfo["Total-Result-Count"])
-    sitesToBeReturned <- as.numeric(headerInfo["Total-Site-Count"])
+    numToBeReturned <- 0
+    sitesToBeReturned <- 0
+    
+    if("total-result-count" %in% names(headerInfo)){
+      numToBeReturned <- as.numeric(headerInfo["total-result-count"])
+    } 
+    
+    if("total-site-count" %in% names(headerInfo)){
+      sitesToBeReturned <- as.numeric(headerInfo["total-site-count"])
+    }
+    
     
     totalReturned <- sum(numToBeReturned, sitesToBeReturned,na.rm = TRUE)
     
@@ -88,11 +94,6 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     }  
     
     if(zip){
-      temp <- paste0(temp,".zip")
-      f <- file(temp, "wb")
-      writeBin(doc, con = f)
-      close(f)
-      
       doc <- unzip(temp)
     }
     

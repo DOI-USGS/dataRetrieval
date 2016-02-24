@@ -178,7 +178,6 @@ readNWISdata <- function(service="dv", ...){
   
   if(length(grep("rdb",values["format"])) >0){
     retval <- importRDB1(urlCall, asDateTime = TRUE, tz = tz)
-    # retval <- importRDB1(urlCall, asDateTime = (service == "qwdata"), tz = tz)
   } else {
     retval <- importWaterML1(urlCall, asDateTime = ("iv" == service), tz= tz)
   }
