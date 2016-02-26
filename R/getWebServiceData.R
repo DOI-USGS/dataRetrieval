@@ -34,19 +34,17 @@ getWebServiceData <- function(obs_url, ...){
     } else {
       
       headerInfo <- headers(returnedList)
-      
+
       if(headerInfo$`content-type` == "text/tab-separated-values;charset=UTF-8"){
         returnedDoc <- content(returnedList, type="text",encoding = "UTF-8")
       } else if (headerInfo$`content-type` == "text/xml;charset=UTF-8"){
         returnedDoc <- xmlcontent(returnedList)
       } else {
-        returnedDoc <- content(returnedList)
-        
+        returnedDoc <- content(returnedList,encoding = "UTF-8")
         if(grepl("No sites/data found using the selection criteria specified", returnedDoc)){
           message(returnedDoc)
         }
       }
-
 
       attr(returnedDoc, "headerInfo") <- headerInfo
 
