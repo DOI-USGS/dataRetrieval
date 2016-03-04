@@ -1,3 +1,7 @@
+dataRetrieval 2.5.0
+==========
+* Package httr is now used for web service retrievals
+
 dataRetrieval 2.4.0
 ==========
 * Package readr now used for tab delimited parsing
