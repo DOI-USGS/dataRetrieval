@@ -1,0 +1,92 @@
+
+#bigTable td{
+  font-size: 0.8em;
+  width: 1500px;
+}
+
+.title-slide hgroup h1 {
+    color: #515151;
+    font-size: 40px;
+    letter-spacing: -3px;
+    line-height: 1.4;
+}
+
+h2 {
+    color: #515151;
+    font-size: 35px;
+    letter-spacing: -2px;
+    line-height: 1.2em;
+}
+
+slides > slide > hgroup + article{
+  margin-top:10px;
+}
+
+#study-sites-tributaries {
+    margin-top: 10px;
+}
+
+#testingStuff{
+  width:100%
+}
+
+#leftSideDiv{
+  width:75%;
+  float:left;
+}
+
+#leftSideThird{
+  width:33%;
+  float:left;
+}
+
+#rightSideThird{
+  width:33%;
+  float:right;
+}
+
+#middleThird{
+  width:33%;
+  float:left;
+}
+
+
+.diffH2 h2{
+  line-height:0px;
+}
+
+#rightSideDiv{
+  width:33%;
+  float:right;
+}
+
+table.rmdtable td, table th {
+    font-size: 18px;
+    padding: 0.5em 0.5em;
+    
+}
+
+table.rmdtable tr > td:first-child, table th {
+    font-weight: normal;
+    color: #515151;
+}
+
+article.smaller table td {
+    font-size: 14px;
+    font-weight: normal;
+    color: #515151;
+}
+
+
+article.rmdtable table th {
+    font-size: 16px;
+    font-weight: normal;
+    color: #FFF;
+}
+
+.testingStuff b, strong {
+  font-weight: bold;
+  color: #FF0000;
+}
+
+
