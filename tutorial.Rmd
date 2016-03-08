@@ -6,7 +6,7 @@ output:
   ioslides_presentation:
     smaller: yes
     css: styles.css 
-    logo: simple-shadow.png
+    logo: images/simple-shadow.png
 ---
 
 ```{r setup, include=FALSE}
@@ -40,7 +40,7 @@ How to discover data?
 
 
 ## Overview
-<img src="2015-12-15_13-52-29.png" alt="Overview" style="width: 800px;"/>
+<img src="images/2015-12-15_13-52-29.png" alt="Overview" style="width: 800px;"/>
 
 ## Installation
 
