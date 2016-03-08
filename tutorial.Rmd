@@ -61,26 +61,62 @@ How to discover data?
 * Meta Data
     + Site information
     + Parameter information
+    
+## USGS Basic Web Retrievals
 
-## NWIS Links
-More information:
+The USGS uses various codes for basic retrievals
+
+* Site ID (often 8 or 15-digits)
+* Parameter Code (5 digits)
+* Statistic Code (for daily values)
+
+<div class="columns-2">
+
+```{r echo=FALSE, eval=TRUE}
+library(knitr)
+library(pander)
+
+df <- data.frame(pCode = c("00060","00065","00010","00045","00400"),
+                 shName = c("Discharge","Gage Height","Temperature","Precipitation","pH"))
+
+names(df) <- c("Parameter Codes", "Short Name")
+
+pander(df)
+
+```
+
+```{r echo=FALSE, eval=TRUE}
+library(knitr)
+library(pander)
+
+df <- data.frame(pCode = c("00001","00002","00003","00008"),
+                 shName = c("Maximum","Minimum","Mean","Median"))
+
+names(df) <- c("Statistic Codes", "Short Name")
+
+pander(df)
+
+```
+
+
+</div>
+    
+## Water Quality Portal
+
+[Water Quality Portal](http://www.waterqualitydata.us/)
+
+
+
+## More information:
+
+NWIS
 
 [Water Services](http://waterservices.usgs.gov/)
 
 [Help](http://help.waterdata.usgs.gov/)
 
-## Water Quality Portal
+Water Quality Portal
+
 [Water Quality Portal](http://www.waterqualitydata.us/)
 
-## Slide with R Output
-
-```{r cars, echo = TRUE}
-summary(cars)
-```
-
-## Slide with Plot
-
-```{r pressure}
-plot(pressure)
-```
 
