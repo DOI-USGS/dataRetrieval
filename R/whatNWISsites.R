@@ -46,9 +46,7 @@ whatNWISsites <- function(...){
 
   rawData <- getWebServiceData(urlCall, encoding='gzip')
 
-
-  doc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
-  doc <- xmlRoot(doc)
+  doc <- xmlRoot(rawData)
   numChunks <- xmlSize(doc)
   for(i in 1:numChunks){
     chunk <- doc[[1]]
