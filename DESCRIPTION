@@ -1,7 +1,7 @@
 Package: dataRetrieval
 Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
-Version: 2.5.2
+Version: 2.5.3
 Date: 2016-03-04
 Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
     email = "rhirsch@usgs.gov"),
@@ -28,10 +28,10 @@ Depends:
     R (>= 3.0)
 Imports:
     XML,
-    httr,
+    httr (>= 1.0.0),
     curl,
     reshape2,
-    lubridate,
+    lubridate (>= 1.5.0),
     stats,
     utils,
     dplyr,
