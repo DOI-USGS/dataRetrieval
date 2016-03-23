@@ -41,15 +41,14 @@ setAccess = function(access="public"){
     message('setting access to public')
   }
   
-  pkg.env$waterservices = "http://waterservices.usgs.gov/nwis/site/"
-  pkg.env$iv = "http://nwis.waterservices.usgs.gov/nwis/iv/"
-  pkg.env$dv =  "http://waterservices.usgs.gov/nwis/dv/"
-  pkg.env$gwlevels = "http://waterservices.usgs.gov/nwis/gwlevels/"
   options(Access.dataRetrieval = access)
 }
 
 drURL <- function(base.name, ..., arg.list=NULL){
-  
+  pkg.env$waterservices = "http://waterservices.usgs.gov/nwis/site/"
+  pkg.env$iv = "http://nwis.waterservices.usgs.gov/nwis/iv/"
+  pkg.env$dv =  "http://waterservices.usgs.gov/nwis/dv/"
+  pkg.env$gwlevels = "http://waterservices.usgs.gov/nwis/gwlevels/"
   
   queryString <- drQueryArgs(..., arg.list=arg.list)
   #to do: add something to check for redundant params
