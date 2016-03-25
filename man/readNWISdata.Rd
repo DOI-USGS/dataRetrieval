@@ -4,13 +4,18 @@
 \alias{readNWISdata}
 \title{General Data Import from NWIS}
 \usage{
-readNWISdata(service = "dv", ...)
+readNWISdata(service = "dv", ..., asDateTime = TRUE, convertType = TRUE)
 }
 \arguments{
 \item{service}{character. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
 (for groundwater levels), "site" (for site service), "qw" (water-quality), and "measurement". 
 Note: "qw" and "measurement" calls go to: 
 \url{http://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.}
+
+\item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character}
 
 \item{\dots}{see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options}
 }

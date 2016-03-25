@@ -330,7 +330,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     
     names(propertyValues) <- properties
     propertyValues <- propertyValues[propertyValues != "NA"]
-    siteInfo <- cbind(siteInfo, t(propertyValues))            
+    siteInfo <- cbind(siteInfo, t(propertyValues))
+    siteInfo[names(propertyValues)] <- as.character(siteInfo[names(propertyValues)])
     
     names(extraVariableData) <- make.unique(names(extraVariableData))
     
