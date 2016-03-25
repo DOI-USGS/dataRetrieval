@@ -8,6 +8,9 @@
 #' (for groundwater levels), "site" (for site service), "qw" (water-quality), and "measurement". 
 #' Note: "qw" and "measurement" calls go to: 
 #' \url{http://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes. 
+#' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @param \dots see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options
 #' @import utils
 #' @import stats
@@ -79,7 +82,7 @@
 #' wiGWL <- readNWISdata(stateCd="WI",service="gwlevels")
 #' meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
 #' }
-readNWISdata <- function(service="dv", ...){
+readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   
   matchReturn <- list(...)
   
@@ -177,9 +180,9 @@ readNWISdata <- function(service="dv", ...){
   urlCall <- paste(baseURL,urlCall,sep="/?")
   
   if(length(grep("rdb",values["format"])) >0){
-    retval <- importRDB1(urlCall, asDateTime = TRUE, tz = tz)
+    retval <- importRDB1(urlCall, tz = tz, asDateTime=asDateTime, convertType=convertType)
   } else {
-    retval <- importWaterML1(urlCall, asDateTime = ("iv" == service), tz= tz)
+    retval <- importWaterML1(urlCall, tz= tz, asDateTime=asDateTime)
   }
   
   if("dv" == service){
@@ -197,7 +200,7 @@ readNWISdata <- function(service="dv", ...){
                                 "AKST","AKDT",
                                 "HAST","HST","UTC"))
     #TODO: Think about dates that cross a time zone boundary.
-    if(values["format"] == "waterml,1.1"){
+    if(values["format"] == "waterml,1.1" & nrow(retval) > 0){
       retval$dateTime <- as.POSIXct(retval$dateTime, tzLib[tz=retval$tz_cd[1]])
     }
     
