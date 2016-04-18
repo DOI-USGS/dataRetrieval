@@ -199,7 +199,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
       
       if(all(c("DATE","TIME","TZCD") %in% header.names)){
         varname <- "DATETIME"
-        varval <- fast_strptime(paste(readr.data[,"DATE"],readr.data[,"TIME"]), "%Y-%m-%d %H%M%S", tz = "UTC")
+        varval <- fast_strptime(paste(readr.data[,"DATE"],readr.data[,"TIME"]), "%Y-%m-%d %H%M%S", tz = "UTC", lt=FALSE)
         readr.data[,varname] <- varval
         readr.data <- convertTZ(readr.data,"TZCD",varname,tz, flip.cols=TRUE)
       }
