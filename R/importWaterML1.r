@@ -430,7 +430,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     mergedDF <- data.frame()
   }
 
-  if(asDateTime){
+  if(asDateTime & nrow(mergedDF) > 0){
     if(tz != ""){
       attr(mergedDF$dateTime, "tzone") <- tz
       mergedDF$tz_cd <- rep(tz, nrow(mergedDF))
