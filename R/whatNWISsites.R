@@ -41,7 +41,7 @@ whatNWISsites <- function(...){
   names(values)[names(values) == "siteNumber"] <- "sites"
   names(values)[names(values) == "siteNumbers"] <- "sites"
   
-  urlCall <- drURL('waterservices',Access=pkg.env$access, format="mapper", arg.list = values)
+  urlCall <- drURL('site',Access=pkg.env$access, format="mapper", arg.list = values)
 
 
   rawData <- getWebServiceData(urlCall, encoding='gzip')

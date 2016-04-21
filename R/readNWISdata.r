@@ -117,10 +117,8 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     names(values)[names(values) == "statecode"] <- "stateCd"
   }
   
-  if(service == "iv"){
-    baseURL <- "http://nwis.waterservices.usgs.gov/nwis/"
-  } else if (service %in% c("qwdata","measurements")){
-    baseURL <- "http://nwis.waterdata.usgs.gov/nwis/"
+
+  if (service %in% c("qwdata","measurements")){
 
     format.default <- "rdb"
     
