@@ -58,15 +58,6 @@ egret_comments@usgs.gov
 
 Additionally, to subscribe to an email list concerning updates to these R packages, please send a request to egret_comments@usgs.gov.
 
-##Latest Version Updates
----------------
-###dataRetrieval 2.2.0
-* Changed the output of tz_cd (in all *NWIS functions) to the timezone that is reported in the data frame. Before this version, it was the time zone reported by NWIS. This was confusing however since the dateTime columns default to UTC.
-* Minor bug fixes
-* Help file updates
-* Improved query options in readNWISdata and readWQPdata functions.
-
-
 ##Disclaimer
 This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the [official USGS copyright policy](http://www.usgs.gov/visual-id/credit_usgs.html#copyright/ "official USGS copyright policy")
 

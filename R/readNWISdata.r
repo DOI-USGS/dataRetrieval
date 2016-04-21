@@ -117,10 +117,8 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     names(values)[names(values) == "statecode"] <- "stateCd"
   }
   
-  if(service == "iv"){
-    baseURL <- "http://nwis.waterservices.usgs.gov/nwis/"
-  } else if (service %in% c("qwdata","measurements")){
-    baseURL <- "http://nwis.waterdata.usgs.gov/nwis/"
+
+  if (service %in% c("qwdata","measurements")){
 
     format.default <- "rdb"
     
@@ -174,15 +172,16 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     values["format"] <- format.default
   }
   
-  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
+  baseURL <- drURL(service, arg.list=values)
   
-  baseURL <- paste0(baseURL,service)
-  urlCall <- paste(baseURL,urlCall,sep="/?")
-  
+  if(service %in% c("site","dv","iv","gwlevels")) {
+    baseURL <- appendDrURL(baseURL, Access=pkg.env$access)
+  }
+
   if(length(grep("rdb",values["format"])) >0){
-    retval <- importRDB1(urlCall, tz = tz, asDateTime=asDateTime, convertType=convertType)
+    retval <- importRDB1(baseURL, tz = tz, asDateTime=asDateTime, convertType=convertType)
   } else {
-    retval <- importWaterML1(urlCall, tz= tz, asDateTime=asDateTime)
+    retval <- importWaterML1(baseURL, tz= tz, asDateTime=asDateTime)
   }
   
   if("dv" == service){

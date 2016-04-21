@@ -87,7 +87,7 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
     }
   }
   
-  urlSitefile <- drURL('waterservices', Access=pkg.env$access, format='rdb', seriesCatalogOutput='true',sites=paste(siteNumber))
+  urlSitefile <- drURL('site', Access=pkg.env$access, format='rdb', seriesCatalogOutput='true',sites=siteNumber)
  
   SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE)
   
