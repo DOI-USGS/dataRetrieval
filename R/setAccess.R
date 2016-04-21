@@ -41,10 +41,15 @@ setAccess = function(access="public"){
     message('setting access to public')
   }
   
-  pkg.env$waterservices = "http://waterservices.usgs.gov/nwis/site/"
+  pkg.env$site = "http://waterservices.usgs.gov/nwis/site/"
   pkg.env$iv = "http://nwis.waterservices.usgs.gov/nwis/iv/"
   pkg.env$dv =  "http://waterservices.usgs.gov/nwis/dv/"
   pkg.env$gwlevels = "http://waterservices.usgs.gov/nwis/gwlevels/"
+  pkg.env$measurements = "http://waterdata.usgs.gov/nwis/measurements/"
+  pkg.env$peak = "http://nwis.waterdata.usgs.gov/usa/nwis/peak/"
+  pkg.env$rating = "http://waterdata.usgs.gov/nwisweb/get_ratings/"
+  pkg.env$qwdata = "http://nwis.waterdata.usgs.gov/nwis/qwdata"
+  
   options(Access.dataRetrieval = access)
 }
 
