@@ -2,6 +2,8 @@
 title: "dataRetrieval Tutorial"
 author: "<b>USGS</b>: Laura DeCicco"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
+subtitle: "Advance slides using right and left arrow keys"
+
 knit: (function(inputFile, encoding) { 
       out_dir <- 'test';
       rmarkdown::render(inputFile,
@@ -64,7 +66,7 @@ install.packages("dataRetrieval",
                          getOption("repos")))
 ```
 
-More information can be found [here](http://owi.usgs.gov/R/gran.html).
+More information can be found at [http://owi.usgs.gov/R/gran.html](http://owi.usgs.gov/R/gran.html).
 
 Finally, the absolute cutting-edge version of `dataRetrieval` can be installed using the `devtools` package which pulls from GitHub:
 
@@ -99,23 +101,24 @@ Finally, if there are still questions that the vignette and help files don't ans
 
 <center>[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)</center>
 
-## US Geological Survey Water Data Overview
-
-National Water Information System (NWIS)
+## US Geological Survey Water National Water Information System (NWIS) Overview
 
 * Unit Data
-    + "Real-time" data
-    + Available data from 2007 (big improvement from 120 days!)
+    + Data reported at the frequency it is collected – e.g. 15 minute
+    + Generally available back to 2007 (big improvement from 120 days!)
+    + Includes current real-time data.
   
 * Daily Data
-    + Data aggregated from the unit data to a daily statistic
-    + This data can go back many decades
+    + Data aggregated to a daily statistic such as mean, min, or max
+    + Includes, streamflow, groundwater levels, and water quality sensors
+    + These data can can go back many decades
     
 * Discrete Data
     + Water quality data
     + Groundwater level
     + Rating curves
     + Surfacewater measurements
+    + Peak flow
     
 * Meta Data
     + Site information
@@ -127,9 +130,11 @@ The USGS uses various codes for basic retrievals
 
 * Site ID (often 8 or 15-digits)
 * Parameter Code (5 digits)
-    + [More information](http://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&inline=true&group_cd=%)
+    + Full list:
+    + [http://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&inline=true&group_cd=%](http://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&inline=true&group_cd=%)
 * Statistic Code (for daily values)
-    + [More information](http://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=%25&fmt=html)
+    + Full list:
+    + [http://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=%25&fmt=html](http://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=%25&fmt=html)
 
 
 Here are some examples of common codes:
@@ -161,16 +166,18 @@ pander(df)
 
 ## USGS Basic Web Retrievals: Parameter Code
 
-`dataRetrieval` includes a data set `parameterCdFile` that allows you to explore the USGS parmeter codes. For example, to find all the parameter codes with the word "phosphorus" in the name:
+`dataRetrieval` includes a data set `parameterCdFile` that allows you to explore the USGS parameter codes. For example, to find all the parameter codes with the word "phosphorus" in the name:
 
 ```{r echo=TRUE, eval=TRUE}
 parameterCdFile <- parameterCdFile
+names(parameterCdFile)
 
 phosCds <- parameterCdFile[grep("phosphorus",
                                 parameterCdFile$parameter_nm,
                                 ignore.case=TRUE),]
 
 nrow(phosCds)
+unique(phosCds$parameter_units)
 
 ```
 
@@ -178,7 +185,7 @@ nrow(phosCds)
 
 ```{r echo=FALSE, eval=TRUE}
 library(DT)
-datatable(phosCds, rownames = FALSE,options = list(pageLength = 5))
+datatable(phosCds, rownames = FALSE,options = list(pageLength = 8))
 ```
 
 ## USGS Basic Web Retrievals: readNWISuv
@@ -218,19 +225,9 @@ names(yahara)
 
 ```{r echo=TRUE, eval=TRUE}
 head(yahara)
+summary(yahara)
 ```
 
-The data is returned as a data frame with 5 columns:
-```{r echo=FALSE, eval=TRUE}
-df <- data.frame(pCode = names(yahara),
-                 shName = c("chr","chr","POSIXct","num","chr","chr"))
-
-names(df) <- c("Column Name", "Type")
-
-pander(df)
-
-```
-  
 ## Explore Data (cont.)
 
 The returned data also has several attributes attached to the data frame. To see what the attributes are:
@@ -246,6 +243,7 @@ To access the attributes:
 
 ```{r echo=TRUE, eval=TRUE}
 url <- attr(yahara, "url")
+url
 ```
 
 [Raw Data](`r url`)
@@ -254,14 +252,13 @@ url <- attr(yahara, "url")
 
 ```{r echo=TRUE, eval=TRUE, fig.height=3.5}
 library(ggplot2)
-ts <- ggplot(yahara,
+ts <- ggplot(data = yahara,
              aes(dateTime, Flow_Inst)) +
       geom_line()
 ts
 ```
     
 ##  Use attributes for metadata:
-
 
 ```{r echo=TRUE, eval=TRUE, fig.height=3.5}
 parameterInfo <- attr(yahara, "variableInfo")
@@ -278,10 +275,10 @@ ts
 
 The unit value discharge data is 15 minute data availabe back to 2007. 
 
-Daily mean data is available for that site back to 1976.
+Daily mean data is available for far longer.
 
 ```{r echo=TRUE, eval=TRUE, fig.height=3.5}
-daily <- readNWISdv(siteNo, pCode)
+daily <- readNWISdv(siteNo, pCode, "1990-01-01","2014-12-31")
 daily <- renameNWISColumns(daily)
 dd <- ggplot(daily, aes(Date,Flow)) +
   xlab("") +
@@ -308,160 +305,20 @@ siteInfo <- attr(multi, "siteInfo")
 
 ```
 
-## Multiple site and parameters (cont.)
-
-Base R plots:
-
-```{r echo=TRUE, eval=FALSE}
-par(mfcol=c(2,1),oma=c(2,1,1,1), mar=c(1,4,0.1,0.1))
-
-site1 <- multi[multi$site_no == sites[1],]
-site2 <- multi[multi$site_no == sites[2],]
-plot(site1$dateTime, site1$Flow_Inst, type="l",col="red",
-     xlab = "",xaxt="n",
-     ylab=variableInfo$param_units[variableInfo$parameterCd == "00060"])
-
-lines(site2$dateTime, site2$Flow_Inst)
-plot(site1$dateTime, site1$Wtemp_Inst, type="l",col="red",
-     xlab = "", 
-     ylab=variableInfo$param_units[variableInfo$parameterCd == "00010"])
-lines(site2$dateTime, site2$Wtemp_Inst)
-legend("topleft", legend = siteInfo$site_no, 
-       cex=0.75, col = c("red","black"),lwd = 1)
-box()
-
-
-```
-
-## Multiple site and parameters (cont.)
-
-Base R plots:
-
-```{r echo=FALSE, eval=TRUE}
-par(mfcol=c(2,1),oma=c(2,1,1,1), mar=c(1,4,0.1,0.1))
-
-site1 <- multi[multi$site_no == sites[1],]
-site2 <- multi[multi$site_no == sites[2],]
-plot(site1$dateTime, site1$Flow_Inst, type="l",col="red",
-     xlab = "",xaxt="n",
-     ylab=variableInfo$param_units[variableInfo$parameterCd == "00060"])
-
-lines(site2$dateTime, site2$Flow_Inst)
-plot(site1$dateTime, site1$Wtemp_Inst, type="l",col="red",
-     xlab = "", 
-     ylab=variableInfo$param_units[variableInfo$parameterCd == "00010"])
-lines(site2$dateTime, site2$Wtemp_Inst)
-legend("topleft", legend = siteInfo$site_no, 
-       cex=0.75, col = c("red","black"),lwd = 1)
-box()
-
-```
-
-
-## Multiple site and parameters (cont.)
-
-ggplot2: Reshape data from "wide" to "long" first using `tidyr` package.
-
-```{r echo=TRUE, eval=TRUE, message=FALSE}
-library(tidyr)
-library(dplyr)
-multi.data <- select(multi, site_no, dateTime, Wtemp_Inst, Flow_Inst)
-head(multi.data)
-
-longMulti <- gather(multi.data, variable, value, -site_no, -dateTime)
-head(longMulti)
-```
-
-
-## Multiple site and parameters (cont.)
-
-ggplot2: Reshape data from "wide" to "long" first using `tidyr` package.
-
-```{r echo=TRUE, eval=TRUE, fig.height=4}
-
-gp <- ggplot(longMulti, 
-             aes(dateTime, value, color=site_no)) +
-  geom_line() +
-  facet_grid(variable ~ .,scales= "free")
-gp
-
-```
-
-## Multiple site and parameters (cont.)
-
-To demonstrate the power of `tidyr` + `dplyr` + `ggplot2` + `dataRetrieval`:
-
-```{r echo=TRUE, eval=FALSE}
-sites <- c("05427850","05427718","05428000","05427880") 
-pCodes <- c("00060","00010","00055","00065") 
-
-wideMulti <- readNWISuv(sites,pCodes, "2016-03-01","2016-03-08") %>%
-         select(-ends_with("_cd"))
-
-siteInfo <- attr(wideMulti, "siteInfo")
-paramInfo <- attr(wideMulti, "variableInfo")
-
-longMulti <- gather(wideMulti, variable, value, -site_no, -dateTime) %>%
-         mutate(variable = as.factor(variable)) %>%
-         mutate(site_no = as.factor(site_no))
-
-levels(longMulti$variable) <- paramInfo$param_units
-levels(longMulti$site_no) <- siteInfo$station_nm
-
-gp <- ggplot(longMulti, 
-             aes(dateTime, value, color=site_no)) +
-  geom_line(size=1.5) + xlab("") + ylab("") +
-  facet_grid(variable ~ .,scales= "free") + 
-  theme(legend.title=element_blank(),
-        legend.position='bottom',legend.direction = "vertical")
-gp
-
-```
-
-## Multiple site and parameters (cont.)
-
-To demonstrate the power of `tidyr` + `dplyr` + `ggplot2` + `dataRetrieval`:
-
-```{r echo=FALSE, eval=TRUE, warning=FALSE, fig.height=6}
-sites <- c("05427850","05427718","05428000","05427880") 
-pCodes <- c("00060","00010","00055","00065") 
-
-wideMulti <- readNWISuv(sites,pCodes, "2016-03-01","2016-03-08") %>%
-         select(-ends_with("_cd"))
-
-siteInfo <- attr(wideMulti, "siteInfo")
-paramInfo <- attr(wideMulti, "variableInfo")
-
-longMulti <- gather(wideMulti, variable, value, -site_no, -dateTime) %>%
-         mutate(variable = as.factor(variable)) %>%
-         mutate(site_no = as.factor(site_no))
-
-levels(longMulti$variable) <- paramInfo$param_units
-levels(longMulti$site_no) <- siteInfo$station_nm
-
-gp <- ggplot(longMulti, 
-             aes(dateTime, value, color=site_no)) +
-  geom_line() + xlab("") + ylab("") +
-  facet_grid(variable ~ .,scales= "free") + 
-  theme(legend.title=element_blank(),
-        legend.position='bottom',legend.direction = "vertical")
-gp
-
-```
-
-
 ##  USGS Advanced Retrievals: Discover Data
 
 This is all great when you know your site numbers.
 
 What do you do when you don't?
 
-If you are looking in a specific area, you can browse the 
-Environmental Data Discovery and Transformation tool: [EnDDaT](http://cida.usgs.gov/enddat/dataDiscovery.jsp)
+NWIS Mapper:
+[http://maps.waterdata.usgs.gov/mapper/index.html](http://maps.waterdata.usgs.gov/mapper/index.html)
+
+Environmental Data Discovery and Transformation tool: [http://cida.usgs.gov/enddat/dataDiscovery.jsp](http://cida.usgs.gov/enddat/dataDiscovery.jsp)
 
 If you don't....
 
-Become familiar with the possibilities of the web services [HERE](http://waterservices.usgs.gov/)
+Become familiar with the possibilities of the web services [http://waterservices.usgs.gov/](http://waterservices.usgs.gov/)
 
 <img src="../images/waterservices.png" alt="Overview" style="width: 450px;"/>
 
@@ -476,6 +333,7 @@ pCode <- c("00662","00665")
 phWI <- readNWISdata(stateCd="WI", service="site",
                      seriesCatalogOutput=TRUE)
 
+library(dplyr)
 phWI.1 <- filter(phWI, parm_cd %in% pCode) %>%
             filter(count_nu > 300) %>%
             mutate(period = as.Date(end_date) - as.Date(begin_date)) %>%
@@ -486,7 +344,7 @@ phWI.1 <- filter(phWI, parm_cd %in% pCode) %>%
 ##  readNWISdata
 
 ```{r echo=FALSE, eval=TRUE, message=FALSE}
-
+library(dplyr)
 pCode <- c("00662","00665")
 phWI <- readNWISdata(stateCd="WI", service="site",
                      seriesCatalogOutput=TRUE)
@@ -786,14 +644,181 @@ Downloading: 53 kB
 
 ## More information:
 
+dataRetrieval
+
+* These slides:
+  + [http://usgs-r.github.io/dataRetrieval](http://usgs-r.github.io/dataRetrieval)
+
+* Report issues and ask questions:
+  + [https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
+
 NWIS
 
-* [Water Services](http://waterservices.usgs.gov/)
+* Water Services:
+  + [http://waterservices.usgs.gov/](http://waterservices.usgs.gov/)
 
-* [Help](http://help.waterdata.usgs.gov/)
+* Help:
+  + [http://help.waterdata.usgs.gov/](http://help.waterdata.usgs.gov/)
 
 Water Quality Portal
 
-* [Water Quality Portal](http://www.waterqualitydata.us/)
+  + [http://www.waterqualitydata.us/](http://www.waterqualitydata.us/)
 
+## Supplemental Slides: Multiple site and parameters
+
+```{r echo=TRUE, eval=TRUE}
+sites <- c("05427850","05427718") # 2 stations on Yahara
+pCodes <- c("00060","00010") #Temperature and discharge
+
+multi <- readNWISuv(sites,pCodes, "2016-03-01","2016-03-08")
+multi <- renameNWISColumns(multi)
+
+names(multi)
+
+variableInfo <- attr(multi, "variableInfo")
+siteInfo <- attr(multi, "siteInfo")
+
+```
+
+
+## Supplemental Slides: Multiple site and parameters (cont.)
+
+Base R plots:
+
+```{r echo=TRUE, eval=FALSE}
+par(mfcol=c(2,1),oma=c(2,1,1,1), mar=c(1,4,0.1,0.1))
+
+site1 <- multi[multi$site_no == sites[1],]
+site2 <- multi[multi$site_no == sites[2],]
+plot(site1$dateTime, site1$Flow_Inst, type="l",col="red",
+     xlab = "",xaxt="n",
+     ylab=variableInfo$param_units[variableInfo$parameterCd == "00060"])
+
+lines(site2$dateTime, site2$Flow_Inst)
+plot(site1$dateTime, site1$Wtemp_Inst, type="l",col="red",
+     xlab = "", 
+     ylab=variableInfo$param_units[variableInfo$parameterCd == "00010"])
+lines(site2$dateTime, site2$Wtemp_Inst)
+legend("topleft", legend = siteInfo$site_no, 
+       cex=0.75, col = c("red","black"),lwd = 1)
+box()
+
+
+```
+
+## Supplemental Slides: Multiple site and parameters (cont.)
+
+Base R plots:
+
+```{r echo=FALSE, eval=TRUE}
+par(mfcol=c(2,1),oma=c(2,1,1,1), mar=c(1,4,0.1,0.1))
+
+site1 <- multi[multi$site_no == sites[1],]
+site2 <- multi[multi$site_no == sites[2],]
+plot(site1$dateTime, site1$Flow_Inst, type="l",col="red",
+     xlab = "",xaxt="n",
+     ylab=variableInfo$param_units[variableInfo$parameterCd == "00060"])
+
+lines(site2$dateTime, site2$Flow_Inst)
+plot(site1$dateTime, site1$Wtemp_Inst, type="l",col="red",
+     xlab = "", 
+     ylab=variableInfo$param_units[variableInfo$parameterCd == "00010"])
+lines(site2$dateTime, site2$Wtemp_Inst)
+legend("topleft", legend = siteInfo$site_no, 
+       cex=0.75, col = c("red","black"),lwd = 1)
+box()
+
+```
+
+
+## Supplemental Slides: Multiple site and parameters (cont.)
+
+ggplot2: Reshape data from "wide" to "long" first using `tidyr` package.
+
+```{r echo=TRUE, eval=TRUE, message=FALSE}
+library(tidyr)
+library(dplyr)
+multi.data <- select(multi, site_no, dateTime, Wtemp_Inst, Flow_Inst)
+head(multi.data)
+
+longMulti <- gather(multi.data, variable, value, -site_no, -dateTime)
+head(longMulti)
+```
+
+
+## Supplemental Slides: Multiple site and parameters (cont.)
+
+ggplot2: Reshape data from "wide" to "long" first using `tidyr` package.
+
+```{r echo=TRUE, eval=TRUE, fig.height=4}
+
+gp <- ggplot(longMulti, 
+             aes(dateTime, value, color=site_no)) +
+  geom_line() +
+  facet_grid(variable ~ .,scales= "free")
+gp
+
+```
+
+## Supplemental Slides: Multiple site and parameters (cont.)
+
+To demonstrate the power of `tidyr` + `dplyr` + `ggplot2` + `dataRetrieval`:
+
+```{r echo=TRUE, eval=FALSE}
+sites <- c("05427850","05427718","05428000","05427880") 
+pCodes <- c("00060","00010","00055","00065") 
+
+wideMulti <- readNWISuv(sites,pCodes, "2016-03-01","2016-03-08") %>%
+         select(-ends_with("_cd"))
+
+siteInfo <- attr(wideMulti, "siteInfo")
+paramInfo <- attr(wideMulti, "variableInfo")
+
+longMulti <- gather(wideMulti, variable, value, -site_no, -dateTime) %>%
+         mutate(variable = as.factor(variable)) %>%
+         mutate(site_no = as.factor(site_no))
+
+levels(longMulti$variable) <- paramInfo$param_units
+levels(longMulti$site_no) <- siteInfo$station_nm
+
+gp <- ggplot(longMulti, 
+             aes(dateTime, value, color=site_no)) +
+  geom_line(size=1.5) + xlab("") + ylab("") +
+  facet_grid(variable ~ .,scales= "free") + 
+  theme(legend.title=element_blank(),
+        legend.position='bottom',legend.direction = "vertical")
+gp
+
+```
+
+## Supplemental Slides: Multiple site and parameters (cont.)
+
+To demonstrate the power of `tidyr` + `dplyr` + `ggplot2` + `dataRetrieval`:
+
+```{r echo=FALSE, eval=TRUE, warning=FALSE, fig.height=6}
+sites <- c("05427850","05427718","05428000","05427880") 
+pCodes <- c("00060","00010","00055","00065") 
+
+wideMulti <- readNWISuv(sites,pCodes, "2016-03-01","2016-03-08") %>%
+         select(-ends_with("_cd"))
+
+siteInfo <- attr(wideMulti, "siteInfo")
+paramInfo <- attr(wideMulti, "variableInfo")
+
+longMulti <- gather(wideMulti, variable, value, -site_no, -dateTime) %>%
+         mutate(variable = as.factor(variable)) %>%
+         mutate(site_no = as.factor(site_no))
+
+levels(longMulti$variable) <- paramInfo$param_units
+levels(longMulti$site_no) <- siteInfo$station_nm
+
+gp <- ggplot(longMulti, 
+             aes(dateTime, value, color=site_no)) +
+  geom_line() + xlab("") + ylab("") +
+  facet_grid(variable ~ .,scales= "free") + 
+  theme(legend.title=element_blank(),
+        legend.position='bottom',legend.direction = "vertical")
+gp
+
+```
 
