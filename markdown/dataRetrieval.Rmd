@@ -316,8 +316,7 @@ NWIS Mapper:
 
 Environmental Data Discovery and Transformation tool: [http://cida.usgs.gov/enddat/dataDiscovery.jsp](http://cida.usgs.gov/enddat/dataDiscovery.jsp)
 
-If you don't....
-
+For dataRetrieval:
 Become familiar with the possibilities of the web services [http://waterservices.usgs.gov/](http://waterservices.usgs.gov/)
 
 <img src="../images/waterservices.png" alt="Overview" style="width: 450px;"/>
@@ -448,7 +447,7 @@ Censored data is particularly important for water quality data. Two examples of 
 NWIS data makes identifing this data easy using the column result_cd. 
 
 ```{r eval=TRUE, echo=FALSE}
-subNWIS <- select(nwisQW, startDateTime, remark_cd, result_va)
+subNWIS <- select(nwisQW, startDateTime, result_va,remark_cd)
 datatable(subNWIS,rownames = FALSE, 
             options = list(pageLength = 5))
 
@@ -459,7 +458,7 @@ datatable(subNWIS,rownames = FALSE,
 There's a little more work for WQP data. The following table has renamed the columns for space considerations.
 
 ```{r eval=TRUE, echo=FALSE}
-subWQP <- select(wqpQW, ActivityStartDateTime, DetectionQuantitationLimitMeasure.MeasureValue,ResultDetectionConditionText,ResultMeasureValue) %>%
+subWQP <- select(wqpQW, ActivityStartDateTime, DetectionQuantitationLimitMeasure.MeasureValue,ResultMeasureValue,ResultDetectionConditionText) %>%
   rename(value=ResultMeasureValue) %>%
   rename(dateTime = ActivityStartDateTime) %>%
   rename(detectionText = ResultDetectionConditionText) %>%
