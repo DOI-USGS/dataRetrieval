@@ -271,39 +271,50 @@ ts <- ts +
 ts
 ```
 
-##  USGS Basic Web Retrievals: readNWISdv
 
-The unit value discharge data is 15 minute data availabe back to 2007. 
+## USGS Basic Web Retrievals (additional functions)
 
-Daily mean data is available for far longer.
+Aside from `readNWISuv`, there are other functions in `dataRetrieval` that take essentially the same 4 inputs (sites, parameter codes, start date, end date), but deliver data from different NWIS services:
 
-```{r echo=TRUE, eval=TRUE, fig.height=3.5}
-daily <- readNWISdv(siteNo, pCode, "1990-01-01","2014-12-31")
-daily <- renameNWISColumns(daily)
-dd <- ggplot(daily, aes(Date,Flow)) +
-  xlab("") +
-  ylab(attr(daily,"variableInfo")$parameter_nm) +
-  geom_line()
-dd
-```
-    
-## Multiple site and parameters
+```{r echo=FALSE, eval=TRUE}
 
-The NWIS functions can be used to get multiple sites and multiple parameters in one call.
+df <- data.frame(functionName = c("readNWISuv", "readNWISdv",                              "readNWISgwl", "readNWISmeas","readNWISpeak", 
+                    "readNWISqw","readNWISrating","readNWISpCode",
+                    "readNWISsite"),
+                 service = c("Unit", "Daily", "Groundwater Level",
+                             "Surface-water", "Peak Flow", 
+                             "Water Quality", "Rating Curves",
+                             "Parameter Code", "Site"),
+                 stringsAsFactors = FALSE)
 
-```{r echo=TRUE, eval=TRUE}
-sites <- c("05427850","05427718") # 2 stations on Yahara
-pCodes <- c("00060","00010") #Temperature and discharge
+names(df) <- c("Function Name", "Data")
 
-multi <- readNWISuv(sites,pCodes, "2016-03-01","2016-03-08")
-multi <- renameNWISColumns(multi)
-
-names(multi)
-
-variableInfo <- attr(multi, "variableInfo")
-siteInfo <- attr(multi, "siteInfo")
+pander(df)
 
 ```
+
+##  USGS Advanced Retrievals: readNWISdata
+
+* A single function exists: `readNWISdata` 
+* Allow users to specify the service type in the function call
+* Available services:
+    + Unit (service = "iv")
+    + Daily (service = "dv")
+    + Groundwater levels (service = "gwlevels")
+    + Surface-water measurements (service = "measurement")
+    + Water Quality (service = "qw")
+    + Site (service = "site")
+
+```{r eval=FALSE, echo=TRUE}
+siteNo <- "05427718"
+pCode <- "00060"
+start.date <- "2014-10-01"
+end.date <- "2015-09-30"
+
+yahara2 <- readNWISdata(siteNumbers = siteNo, parameterCd = pCode,
+                     startDate = start.date, endDate = end.date,
+                     service = "uv")
+```                
 
 ##  USGS Advanced Retrievals: Discover Data
 
@@ -571,12 +582,12 @@ leaflet(data=wiSummary) %>%
 ```
 
 
-## Water Quality Portal Advise
+<!-- ## Water Quality Portal Advise -->
 
-More filters are often *slower*. 
-Bounding box queries are slow.
+<!-- More filters are often *slower*.  -->
+<!-- Bounding box queries are slow. -->
 
-Check the website for new features!
+<!-- Check the website for new features! -->
 
 
 ##  Time/Time zone discussion
@@ -663,7 +674,60 @@ Water Quality Portal
 
   + [http://www.waterqualitydata.us/](http://www.waterqualitydata.us/)
 
+##  Supplemental Slides: USGS Basic Web Retrievals: readNWISdv
+
+The unit value discharge data is 15 minute data availabe back to 2007. 
+
+Daily mean data is available for far longer.
+
+```{r echo=TRUE, eval=TRUE, fig.height=3.5}
+siteNo <- "05427718"
+pCode <- "00060"
+
+daily <- readNWISdv(siteNo, pCode, "1990-01-01","2014-12-31")
+daily <- renameNWISColumns(daily)
+dd <- ggplot(daily, aes(Date,Flow)) +
+  xlab("") +
+  ylab(attr(daily,"variableInfo")$parameter_nm) +
+  geom_line()
+dd
+```
+    
+    
+## Supplemental Slides: Multiple parameter example
+
+```{r}
+pCode <- c("00665","80154") #Phos and Sed
+sitesDC <- readNWISdata(stateCd="DC", service="site",
+                     seriesCatalogOutput=TRUE)
+sitesDC.1 <- filter(sitesDC, parm_cd %in% pCode) %>%
+            filter(count_nu > 300)
+
+comboData <- readNWISqw(sitesDC.1$site_no, pCode, reshape = TRUE)
+comboData <- renameNWISColumns(comboData)
+```
+ 
+## Supplemental Slides: Multiple parameter example (cont.)
+
+Get samples that have both parameters:
+
+```{r}
+comboData <- comboData %>%
+  filter(!is.na(result_va_00665) & !is.na(result_va_80154))
+
+plot(comboData$result_va_80154,comboData$result_va_00665,log="xy")
+mod <- lm(log(result_va_00665)~log(result_va_80154),data=comboData)
+print(summary(mod))
+plot(comboData$sample_dt,mod$residuals)
+abline(h=0)
+
+
+```
+
+    
 ## Supplemental Slides: Multiple site and parameters
+
+The NWIS functions can be used to get multiple sites and multiple parameters in one call.
 
 ```{r echo=TRUE, eval=TRUE}
 sites <- c("05427850","05427718") # 2 stations on Yahara
@@ -678,7 +742,6 @@ variableInfo <- attr(multi, "variableInfo")
 siteInfo <- attr(multi, "siteInfo")
 
 ```
-
 
 ## Supplemental Slides: Multiple site and parameters (cont.)
 
