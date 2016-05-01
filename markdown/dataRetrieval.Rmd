@@ -487,7 +487,9 @@ The true value of the Water Quality Portal is to explore water quality data from
 
 Become familiar with the possibilities of the web services [HERE](http://www.waterqualitydata.us/)
 
-There's not a function in WQP that returns period of record information like we did above via NWIS data. The following function returns a list of sites that have collected phosphorus data in Wisconsin, but there's no way to know if that site has collected one sample, or thousands.
+There's not a function in WQP that returns period of record information like we did above via NWIS data...(that feature may be implemented in the future)
+
+The following function returns sites that have collected phosphorus data in Wisconsin. There's no way to know if that site has collected one sample, or thousands.
 
 ```{r echo=TRUE, eval=FALSE}
 
@@ -580,14 +582,6 @@ leaflet(data=wiSummary) %>%
             title = 'Max Value')
 
 ```
-
-
-<!-- ## Water Quality Portal Advise -->
-
-<!-- More filters are often *slower*.  -->
-<!-- Bounding box queries are slow. -->
-
-<!-- Check the website for new features! -->
 
 
 ##  Time/Time zone discussion
@@ -694,7 +688,9 @@ dd
 ```
     
     
-## Supplemental Slides: Multiple parameter example
+## Supplemental Slides: Data Exploration
+
+Let's work through a problem. Phosphorus ("00665") and Sediment ("80154")
 
 ```{r}
 pCode <- c("00665","80154") #Phos and Sed
