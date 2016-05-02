@@ -485,9 +485,11 @@ Non-NWIS data might have different ways to indicate censoring.
 
 The true value of the Water Quality Portal is to explore water quality data from different sources. 
 
-Become familiar with the possibilities of the web services [HERE](http://www.waterqualitydata.us/)
+Become familiar with the possibilities of the web services [http://www.waterqualitydata.us/](http://www.waterqualitydata.us/)
 
-There's not a function in WQP that returns period of record information like we did above via NWIS data. The following function returns a list of sites that have collected phosphorus data in Wisconsin, but there's no way to know if that site has collected one sample, or thousands.
+There's not a function in WQP that returns period of record information like we did above via NWIS data...(that feature may be implemented in the future)
+
+The following function returns sites that have collected phosphorus data in Wisconsin. There's no way to know if that site has collected one sample, or thousands.
 
 ```{r echo=TRUE, eval=FALSE}
 
@@ -500,9 +502,7 @@ phosSites <- whatWQPsites(statecode="WI",characteristicName="Phosphorus")
 So, to get that information, you need to actually get that data.
 
 ```{r echo=TRUE, eval=FALSE}
-
 phosData <- readWQPdata(statecode="WI",characteristicName="Phosphorus")
-saveRDS(phosData, "phosData.rds")
 unique(phosData$ResultMeasure.MeasureUnitCode)
   
 ```
@@ -526,7 +526,35 @@ wiSummary <- phosData %>%
             max = max(ResultMeasureValue, na.rm = TRUE)) %>%
   filter(count > 300) %>%
   arrange(-count) %>%
-  left_join(siteInfo)
+  left_join(siteInfo, by = "MonitoringLocationIdentifier")
+
+```
+
+
+## Water Quality Portal Retrieval: readWQPdata (cont.)
+
+Code for map on next slide:
+
+```{r echo=FALSE, eval=TRUE}
+col_types <- c("darkblue","dodgerblue","green4","gold1","orange","brown","red")
+leg_vals <- unique(as.numeric(quantile(wiSummary$max, probs=c(0,0.01,0.1,0.25,0.5,0.75,0.9,.99,1), na.rm=TRUE)))
+pal = colorBin(col_types, wiSummary$max, bins = leg_vals)
+rad <-3*seq(1,4,length.out = 16)
+wiSummary$sizes <- rad[as.numeric(cut(wiSummary$count, breaks=16))]
+          
+leaflet(data=wiSummary) %>% 
+  addProviderTiles("CartoDB.Positron") %>%
+  addCircleMarkers(~dec_lon_va,~dec_lat_va,
+                   fillColor = ~pal(max),
+                   radius = ~sizes,
+                   fillOpacity = 0.8, opacity = 0.8,stroke=FALSE,
+                   popup=~station_nm) %>%
+  addLegend(position = 'bottomleft',
+            pal=pal,
+            values=~max,
+            opacity = 0.8,
+            labFormat = labelFormat(digits = 1), #transform = function(x) as.integer(x)),
+            title = 'Max Value')
 
 ```
 
@@ -555,39 +583,6 @@ leaflet(data=wiSummary) %>%
             title = 'Max Value')
 
 ```
-
-## Water Quality Portal Retrieval: readWQPdata (cont.)
-
-```{r echo=FALSE, eval=TRUE}
-col_types <- c("darkblue","dodgerblue","green4","gold1","orange","brown","red")
-leg_vals <- unique(as.numeric(quantile(wiSummary$max, probs=c(0,0.01,0.1,0.25,0.5,0.75,0.9,.99,1), na.rm=TRUE)))
-pal = colorBin(col_types, wiSummary$max, bins = leg_vals)
-rad <-3*seq(1,4,length.out = 16)
-wiSummary$sizes <- rad[as.numeric(cut(wiSummary$count, breaks=16))]
-          
-leaflet(data=wiSummary) %>% 
-  addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(~dec_lon_va,~dec_lat_va,
-                   fillColor = ~pal(max),
-                   radius = ~sizes,
-                   fillOpacity = 0.8, opacity = 0.8,stroke=FALSE,
-                   popup=~station_nm) %>%
-  addLegend(position = 'bottomleft',
-            pal=pal,
-            values=~max,
-            opacity = 0.8,
-            labFormat = labelFormat(digits = 1), #transform = function(x) as.integer(x)),
-            title = 'Max Value')
-
-```
-
-
-<!-- ## Water Quality Portal Advise -->
-
-<!-- More filters are often *slower*.  -->
-<!-- Bounding box queries are slow. -->
-
-<!-- Check the website for new features! -->
 
 
 ##  Time/Time zone discussion
@@ -674,13 +669,139 @@ Water Quality Portal
 
   + [http://www.waterqualitydata.us/](http://www.waterqualitydata.us/)
 
+
+## Supplemental Slides: Example Data Exploration
+
+Let's work through a problem. Phosphorus ("00665") and Sediment ("80154")
+
+```{r echo=TRUE, eval=TRUE}
+pCode <- c("00665","80154") #Phos and Sed
+sitesVA <- readNWISdata(stateCd="VA", service="site",
+                     seriesCatalogOutput=TRUE)
+sitesVA.1 <- filter(sitesVA, parm_cd %in% pCode) %>%
+             filter(data_type_cd == "qw") %>%
+             filter(count_nu > 500) %>%
+             filter(duplicated(site_no))
+
+```
+ 
+```{r echo=FALSE}
+
+pander(sitesVA.1[,c("site_no","station_nm","begin_date","end_date")])
+```
+ 
+ 
+## Supplemental Slides: Example Data Exploration (cont.)
+
+Get samples that have both parameters:
+
+```{r echo=TRUE, eval = FALSE}
+comboData <- readNWISqw(sitesVA.1$site_no[1], pCode, reshape = TRUE) %>% 
+                  filter(!is.na(result_va_00665) & !is.na(result_va_80154))
+
+variableInfo <- attr(comboData, "variableInfo")
+
+plotCombo <- ggplot(data=comboData) +
+        geom_point(aes(x=result_va_80154, y=result_va_00665)) +
+        scale_y_log10() +
+        scale_x_log10() +
+        xlab(variableInfo$srsname[variableInfo$parameter_cd == "80154"]) +
+        ylab(variableInfo$srsname[variableInfo$parameter_cd == "00665"])
+plotCombo
+
+```
+
+## Supplemental Slides: Example Data Exploration (cont.)
+
+Get samples that have both parameters:
+
+```{r echo=FALSE, eval = TRUE}
+comboData <- readNWISqw(sitesVA.1$site_no[1], pCode, reshape = TRUE) %>% 
+                  renameNWISColumns() %>%
+                  filter(!is.na(result_va_00665)) %>%
+                  filter(!is.na(result_va_80154)) %>%
+                  filter(result_va_00665 > 0) %>%
+                  filter(result_va_80154 > 0)
+
+variableInfo <- attr(comboData, "variableInfo")
+
+plotCombo <- ggplot(data=comboData) +
+        geom_point(aes(x=result_va_80154, y=result_va_00665)) +
+        scale_y_log10() +
+        scale_x_log10() +
+        xlab(variableInfo$srsname[variableInfo$parameter_cd == "80154"]) +
+        ylab(variableInfo$srsname[variableInfo$parameter_cd == "00665"])
+plotCombo
+
+```
+
+
+## Supplemental Slides: Example Data Exploration (cont.)
+
+Run a simple linear regression
+
+```{r echo = TRUE, eval = TRUE}
+mod <- lm(log(result_va_00665)~log(result_va_80154),data=comboData)
+print(summary(mod))
+```
+
+## Supplemental Slides: Example Data Exploration (cont.)
+
+Plot residuals:
+
+```{r echo=TRUE, eval=FALSE}
+
+plotResid <- ggplot() +
+        geom_point(aes(x=comboData$sample_dt,
+                       y=mod$residuals)) +
+        geom_hline(yintercept = 0) +
+        xlab("") + ylab("Residuals")
+plotResid
+
+```
+
+## Supplemental Slides: Example Data Exploration (cont.)
+
+Plot residuals:
+
+```{r echo=FALSE, eval=TRUE}
+
+plotResid <- ggplot() +
+        geom_point(aes(x=comboData$sample_dt,
+                       y=mod$residuals)) +
+        geom_hline(yintercept = 0) +
+        xlab("") + ylab("Residuals")
+plotResid
+
+```
+
+
 ##  Supplemental Slides: USGS Basic Web Retrievals: readNWISdv
 
-The unit value discharge data is 15 minute data availabe back to 2007. 
+Unit value discharge data is 15 minute data availabe back to 2007. 
 
 Daily mean data is available for far longer.
 
-```{r echo=TRUE, eval=TRUE, fig.height=3.5}
+```{r echo=TRUE, eval=FALSE}
+siteNo <- "05427718"
+pCode <- "00060"
+
+daily <- readNWISdv(siteNo, pCode, "1990-01-01","2014-12-31")
+daily <- renameNWISColumns(daily)
+dd <- ggplot(daily, aes(Date,Flow)) +
+  xlab("") +
+  ylab(attr(daily,"variableInfo")$parameter_nm) +
+  geom_line()
+dd
+```
+   
+##  Supplemental Slides: USGS Basic Web Retrievals: readNWISdv
+
+Unit value discharge data is 15 minute data availabe back to 2007. 
+
+Daily mean data is available for far longer.
+
+```{r echo=FALSE, eval=TRUE}
 siteNo <- "05427718"
 pCode <- "00060"
 
@@ -693,37 +814,8 @@ dd <- ggplot(daily, aes(Date,Flow)) +
 dd
 ```
     
-    
-## Supplemental Slides: Multiple parameter example
-
-```{r}
-pCode <- c("00665","80154") #Phos and Sed
-sitesDC <- readNWISdata(stateCd="DC", service="site",
-                     seriesCatalogOutput=TRUE)
-sitesDC.1 <- filter(sitesDC, parm_cd %in% pCode) %>%
-            filter(count_nu > 300)
-
-comboData <- readNWISqw(sitesDC.1$site_no, pCode, reshape = TRUE)
-comboData <- renameNWISColumns(comboData)
-```
  
-## Supplemental Slides: Multiple parameter example (cont.)
-
-Get samples that have both parameters:
-
-```{r}
-comboData <- comboData %>%
-  filter(!is.na(result_va_00665) & !is.na(result_va_80154))
-
-plot(comboData$result_va_80154,comboData$result_va_00665,log="xy")
-mod <- lm(log(result_va_00665)~log(result_va_80154),data=comboData)
-print(summary(mod))
-plot(comboData$sample_dt,mod$residuals)
-abline(h=0)
-
-
-```
-
+    
     
 ## Supplemental Slides: Multiple site and parameters
 
