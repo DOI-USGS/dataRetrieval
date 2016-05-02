@@ -668,6 +668,60 @@ Water Quality Portal
 
   + [http://www.waterqualitydata.us/](http://www.waterqualitydata.us/)
 
+
+## Supplemental Slides: Example Data Exploration
+
+Let's work through a problem. Phosphorus ("00665") and Sediment ("80154")
+
+```{r}
+pCode <- c("00665","80154") #Phos and Sed
+sitesVA <- readNWISdata(stateCd="VA", service="site",
+                     seriesCatalogOutput=TRUE)
+sitesVA.1 <- filter(sitesVA, parm_cd %in% pCode) %>%
+             filter(data_type_cd == "qw") %>%
+             filter(count_nu > 500) %>%
+             filter(duplicated(site_no))
+
+```
+ 
+```{r echo=FALSE}
+
+pander(sitesVA.1[,c("site_no","station_nm","begin_date","end_date")])
+```
+ 
+ 
+## Supplemental Slides: Example Data Exploration (cont.)
+
+Get samples that have both parameters:
+
+```{r}
+comboData <- readNWISqw(sitesVA.1$site_no[1], pCode, reshape = TRUE) %>% 
+                  renameNWISColumns() %>%
+                  filter(!is.na(result_va_00665) & !is.na(result_va_80154))
+
+variableInfo <- attr(comboData, "variableInfo")
+
+plotCombo <- ggplot(data=comboData) +
+        geom_point(aes(x=result_va_80154, y=result_va_00665)) +
+        scale_y_log10() +
+        scale_x_log10() +
+        xlab(variableInfo$srsname[variableInfo$parameter_cd == "80154"]) +
+        ylab(variableInfo$srsname[variableInfo$parameter_cd == "00665"])
+plotCombo
+
+```
+
+## Supplemental Slides: Example Data Exploration (cont.)
+
+```{r}
+
+# plot(comboData$result_va_80154,comboData$result_va_00665,log="xy")
+# mod <- lm(log(result_va_00665)~log(result_va_80154),data=comboData)
+# print(summary(mod))
+# plot(comboData$sample_dt,mod$residuals)
+# abline(h=0)
+```
+
 ##  Supplemental Slides: USGS Basic Web Retrievals: readNWISdv
 
 The unit value discharge data is 15 minute data availabe back to 2007. 
@@ -688,38 +742,6 @@ dd
 ```
     
     
-## Supplemental Slides: Data Exploration
-
-Let's work through a problem. Phosphorus ("00665") and Sediment ("80154")
-
-```{r}
-pCode <- c("00665","80154") #Phos and Sed
-sitesDC <- readNWISdata(stateCd="DC", service="site",
-                     seriesCatalogOutput=TRUE)
-sitesDC.1 <- filter(sitesDC, parm_cd %in% pCode) %>%
-            filter(count_nu > 300)
-
-comboData <- readNWISqw(sitesDC.1$site_no, pCode, reshape = TRUE)
-comboData <- renameNWISColumns(comboData)
-```
- 
-## Supplemental Slides: Multiple parameter example (cont.)
-
-Get samples that have both parameters:
-
-```{r}
-comboData <- comboData %>%
-  filter(!is.na(result_va_00665) & !is.na(result_va_80154))
-
-plot(comboData$result_va_80154,comboData$result_va_00665,log="xy")
-mod <- lm(log(result_va_00665)~log(result_va_80154),data=comboData)
-print(summary(mod))
-plot(comboData$sample_dt,mod$residuals)
-abline(h=0)
-
-
-```
-
     
 ## Supplemental Slides: Multiple site and parameters
 
