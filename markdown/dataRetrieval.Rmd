@@ -681,7 +681,8 @@ sitesVA <- readNWISdata(stateCd="VA", service="site",
 sitesVA.1 <- filter(sitesVA, parm_cd %in% pCode) %>%
              filter(data_type_cd == "qw") %>%
              filter(count_nu > 500) %>%
-             filter(duplicated(site_no))
+             filter(duplicated(site_no)) %>%
+             arrange(desc(count_nu))
 
 ```
  
