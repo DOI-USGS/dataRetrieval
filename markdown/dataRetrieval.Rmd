@@ -340,8 +340,8 @@ Let's look for long-term USGS phosphorous data in Wisconsin:
 ?readNWISdata
 
 pCode <- c("00662","00665")
-phWI <- readNWISdata(stateCd="WI", service="site",
-                     seriesCatalogOutput=TRUE)
+phWI <- readNWISdata(stateCd="WI", parameterCd=pCode,
+                     service="site", seriesCatalogOutput=TRUE)
 
 library(dplyr)
 phWI.1 <- filter(phWI, parm_cd %in% pCode) %>%
@@ -356,7 +356,8 @@ phWI.1 <- filter(phWI, parm_cd %in% pCode) %>%
 ```{r echo=FALSE, eval=TRUE, message=FALSE}
 library(dplyr)
 pCode <- c("00662","00665")
-phWI <- readNWISdata(stateCd="WI", service="site",
+phWI <- readNWISdata(stateCd="WI", parameterCd=pCode,
+                     service="site",
                      seriesCatalogOutput=TRUE)
 
 phWI.1 <- filter(phWI, parm_cd %in% pCode) %>%
@@ -676,8 +677,8 @@ Let's work through a problem. Phosphorus ("00665") and Sediment ("80154")
 
 ```{r echo=TRUE, eval=TRUE}
 pCode <- c("00665","80154") #Phos and Sed
-sitesVA <- readNWISdata(stateCd="VA", service="site",
-                     seriesCatalogOutput=TRUE)
+sitesVA <- readNWISdata(stateCd="VA", parameterCd=pCode,
+                        service="site", seriesCatalogOutput=TRUE)
 sitesVA.1 <- filter(sitesVA, parm_cd %in% pCode) %>%
              filter(data_type_cd == "qw") %>%
              filter(count_nu > 500) %>%
