@@ -30,7 +30,8 @@ Imports:
     plyr,
     stats,
     utils,
-    dplyr
+    dplyr,
+    httr
 Suggests:
     xtable,
     knitr,

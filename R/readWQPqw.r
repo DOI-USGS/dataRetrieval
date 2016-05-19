@@ -108,68 +108,74 @@
 #' rawPHsites <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')
 #' nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','2012-12-20')
 #' }
-readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz=""){
+readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="", querySummary=FALSE){
 
   url <- constructWQPURL(siteNumbers,parameterCd,startDate,endDate)
-  retval <- importWQP(url, tz = tz)
   
-  pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
-  
-  if (nzchar(startDate)){
-    startDate <- format(as.Date(startDate), format="%m-%d-%Y")
-  }
-  
-  if (nzchar(endDate)){
-    endDate <- format(as.Date(endDate), format="%m-%d-%Y")
-  }
-  
-  if(pcodeCheck){
-    siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse=";"),
-                             pCode=paste0(parameterCd,collapse=";"), 
-                             startDateLo=startDate, startDateHi=endDate)
+  if(querySummary){
+    queryHEAD <- HEAD(url)
+    retquery <- headers(queryHEAD)
+    return(retquery)
   } else {
-    siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse=";"), 
-                             characteristicName=URLencode(paste0(parameterCd,collapse=";")), 
-                             startDateLo=startDate, startDateHi=endDate)
-  }
+    retval <- importWQP(url, tz = tz)
     
-  siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
-                               agency_cd=siteInfo$OrganizationIdentifier,
-                               site_no=siteInfo$MonitoringLocationIdentifier,
-                               dec_lat_va=siteInfo$LatitudeMeasure,
-                               dec_lon_va=siteInfo$LongitudeMeasure,
-                               hucCd=siteInfo$HUCEightDigitCode,
+    pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
+    
+    if (nzchar(startDate)){
+      startDate <- format(as.Date(startDate), format="%m-%d-%Y")
+    }
+    
+    if (nzchar(endDate)){
+      endDate <- format(as.Date(endDate), format="%m-%d-%Y")
+    }
+    
+    if(pcodeCheck){
+      siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse=";"),
+                               pCode=paste0(parameterCd,collapse=";"), 
+                               startDateLo=startDate, startDateHi=endDate)
+    } else {
+      siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse=";"), 
+                               characteristicName=URLencode(paste0(parameterCd,collapse=";")), 
+                               startDateLo=startDate, startDateHi=endDate)
+    }
+      
+    siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
+                                 agency_cd=siteInfo$OrganizationIdentifier,
+                                 site_no=siteInfo$MonitoringLocationIdentifier,
+                                 dec_lat_va=siteInfo$LatitudeMeasure,
+                                 dec_lon_va=siteInfo$LongitudeMeasure,
+                                 hucCd=siteInfo$HUCEightDigitCode,
+                                 stringsAsFactors=FALSE)
+    
+    siteInfo <- cbind(siteInfoCommon, siteInfo)
+    
+    
+    variableInfo <- data.frame(characteristicName=retval$CharacteristicName,
+                               parameterCd=retval$USGSPCode,
+                               param_units=retval$ResultMeasure.MeasureUnitCode,
+                               valueType=retval$ResultSampleFractionText,
                                stringsAsFactors=FALSE)
-  
-  siteInfo <- cbind(siteInfoCommon, siteInfo)
-  
-  
-  variableInfo <- data.frame(characteristicName=retval$CharacteristicName,
-                             parameterCd=retval$USGSPCode,
-                             param_units=retval$ResultMeasure.MeasureUnitCode,
-                             valueType=retval$ResultSampleFractionText,
-                             stringsAsFactors=FALSE)
-  variableInfo <- unique(variableInfo)
-  
-  if(any(variableInfo$parameterCd != "")){
-    pcodes <- unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)])
-    pcodes <- pcodes["" != pcodes]
-    paramINFO <- readNWISpCode(pcodes)
-    names(paramINFO)["parameter_cd" == names(paramINFO)] <- "parameterCd"
-    
-    pCodeToName <- pCodeToName
-    varExtras <- pCodeToName[pCodeToName$parm_cd %in% unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
-    names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
-    variableInfo <- merge(variableInfo, varExtras, by="parameterCd", all = TRUE)
-    variableInfo <- merge(variableInfo, paramINFO, by="parameterCd", all = TRUE)
     variableInfo <- unique(variableInfo)
+    
+    if(any(variableInfo$parameterCd != "")){
+      pcodes <- unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)])
+      pcodes <- pcodes["" != pcodes]
+      paramINFO <- readNWISpCode(pcodes)
+      names(paramINFO)["parameter_cd" == names(paramINFO)] <- "parameterCd"
+      
+      pCodeToName <- pCodeToName
+      varExtras <- pCodeToName[pCodeToName$parm_cd %in% unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
+      names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
+      variableInfo <- merge(variableInfo, varExtras, by="parameterCd", all = TRUE)
+      variableInfo <- merge(variableInfo, paramINFO, by="parameterCd", all = TRUE)
+      variableInfo <- unique(variableInfo)
+    }
+    
+    attr(retval, "siteInfo") <- siteInfo
+    attr(retval, "variableInfo") <- variableInfo
+    attr(retval, "url") <- url
+    attr(retval, "queryTime") <- Sys.time()
+    
+    return(retval)
   }
-  
-  attr(retval, "siteInfo") <- siteInfo
-  attr(retval, "variableInfo") <- variableInfo
-  attr(retval, "url") <- url
-  attr(retval, "queryTime") <- Sys.time()
-  
-  return(retval)
-  
 }
