@@ -4,6 +4,7 @@
 #' Arguments to the function should be based on \url{www.waterqualitydata.us/webservices_documentation.jsp}
 #'
 #' @param \dots see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options
+#' @param zip logical to request data via downloading zip file. Default set to FALSE.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -55,9 +56,9 @@
 #' 
 #' type <- "Stream"
 #' sites <- whatWQPsites(countycode="US:55:025",siteType=type)
-#' data <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+#' lakeSites <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 #' }
-whatWQPsites <- function(...){
+whatWQPsites <- function(...,zip=FALSE){
 
   matchReturn <- list(...)
   
@@ -94,45 +95,19 @@ whatWQPsites <- function(...){
   
   
   baseURL <- "http://www.waterqualitydata.us/Station/search?"
-  urlCall <- paste(baseURL,
+  urlCall <- paste0(baseURL,
                urlCall,
-               "&mimeType=tsv&sorted=no",sep = "")
-  
-  doc <- getWebServiceData(urlCall)
-  headerInfo <- attr(doc, "headerInfo")
-    
-  numToBeReturned <- as.numeric(headerInfo["Total-Site-Count"])
-  
-  if (!is.na(numToBeReturned) & numToBeReturned != 0){
- 
-    retval <- read.delim(textConnection(doc), header = TRUE,  
-                         dec=".", sep='\t', quote="",
-                         colClasses=c('character'), 
-                         fill = TRUE)    
-    actualNumReturned <- nrow(retval)
-    
-    if(actualNumReturned != numToBeReturned) warning(numToBeReturned, " sites were expected, ", actualNumReturned, " were returned")
-    
-    if("LatitudeMeasure" %in% names(retval)){
-      retval$LatitudeMeasure <- as.numeric(retval$LatitudeMeasure)
-    }
-    
-    if("LongitudeMeasure" %in% names(retval)){
-      retval$LongitudeMeasure <- as.numeric(retval$LongitudeMeasure)
-    }
-    
-    retval$queryTime <- Sys.time()
-    
-    return(retval)
-    
-  } else {
-    if(headerInfo['Total-Site-Count'] == "0"){
-      warning("No data returned")
-    }
-    
-    for(i in grep("Warning",names(headerInfo))){
-      warning(headerInfo[i])
-    }
+               "&mimeType=tsv&sorted=no")
+  if(zip){
+    urlCall <- paste0(urlCall,"&zip=yes")
   }
+  
+  retval <- importWQP(urlCall, zip=zip)
+  
+  attr(retval, "queryTime") <- Sys.time()
+  attr(retval, "url") <- urlCall
+  
+  return(retval)
+  
 
 }

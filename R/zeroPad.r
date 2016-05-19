@@ -16,7 +16,11 @@ zeroPad <- function(x,padTo){
   if(padTo <= 1) return(x)
   numDigits <- nchar(x)
   padding <- padTo-numDigits
-  padingZeros <- sapply(padding[padding > 0], function(y) paste(rep("0",y),collapse="",sep=""))
+  padingZeros <- vapply(
+      X = padding[padding > 0], 
+      FUN = function(y) paste(rep("0",y),collapse="",sep=""),
+      FUN.VALUE = ""
+  )
   x[padding > 0] <- paste(padingZeros,x[padding > 0],sep="")
   return(x)
 }

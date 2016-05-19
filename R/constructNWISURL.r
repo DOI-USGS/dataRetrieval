@@ -21,7 +21,6 @@
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
-#' @import RCurl
 #' @import utils
 #' @examples
 #' siteNumber <- '01594440'
@@ -130,12 +129,17 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
         },
         meas = {
           url <- paste0("http://waterdata.usgs.gov/nwis/measurements?site_no=", siteNumber,
-                "&range_selection=date_range&format=rdb")
+                "&range_selection=date_range")
           if (nzchar(startDate)) {
             url <- paste0(url,"&begin_date=",startDate)
           }
           if(nzchar(endDate)){
             url <- paste0(url, "&end_date=", endDate)
+          }
+          if(expanded){
+            url <- paste0(url,"&format=rdb_expanded")
+          } else {
+            url <- paste0(url,"&format=rdb")
           }
 
         },
@@ -149,9 +153,6 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           
           if ("uv"==service) {
             service <- "iv"
-            baseURL <- paste0("http://nwis.waterservices.usgs.gov/nwis/",service)  
-          } else {
-            baseURL <- paste0("http://waterservices.usgs.gov/nwis/",service)  
           }
           
           format <- match.arg(format, c("xml","tsv","wml1","wml2","rdb"))
@@ -174,30 +175,29 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
             }
           )
 
-          
-          url <- paste0(baseURL,"/?site=",siteNumber, "&format=", formatURL)
+          url <- drURL(service, Access=pkg.env$access, site=siteNumber, format=formatURL)
           
           if("gwlevels"!= service){
-            url <- paste0(url, "&ParameterCd=",parameterCd)
+            url <- appendDrURL(url, ParameterCd=parameterCd)
           }
           
           if("dv"==service) {
             if(length(statCd) > 1){
               statCd <- paste(statCd, collapse=",")
             }            
-            url <- paste0(url, "&StatCd=", statCd)
+            url <- appendDrURL(url, StatCd=statCd)
           }
           
           if (nzchar(startDate)) {
-            url <- paste0(url,"&startDT=",startDate)
+            url <- appendDrURL(url, startDT=startDate)
           } else {
             startorgin <- "1851-01-01"
             if ("iv" == service) startorgin <- "1900-01-01"            
-            url <- paste0(url,"&startDT=",startorgin)
+            url <- appendDrURL(url, startDT=startorgin)
           }
           
           if (nzchar(endDate)) {
-            url <- paste0(url,"&endDT=",endDate)
+            url <- appendDrURL(url, endDT=endDate)
           }
         }
          
@@ -222,10 +222,10 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 #' retrieval for the earliest possible record.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record.
+#' @param zip logical to request data via downloading zip file. Default set to FALSE.
 #' @keywords data import WQP web service
 #' @return url string
 #' @export
-#' @import RCurl
 #' @examples
 #' siteNumber <- '01594440'
 #' startDate <- '1985-01-01'
@@ -234,7 +234,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 #' url_wqp <- constructWQPURL(paste("USGS",siteNumber,sep="-"),
 #'            c('01075','00029','00453'),
 #'            startDate,endDate)
-constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate){
+constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
   
   multipleSites <- length(siteNumber) > 1
   multiplePcodes <- length(parameterCd)>1
@@ -268,6 +268,11 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate){
   }
   
   url <- paste0(url,"&sorted=no&mimeType=tsv")
+  
+  if(zip){
+    url <- paste0(url,"&zip=yes")
+  }
+  
   return(url)
 
 }

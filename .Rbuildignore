@@ -1,7 +1,9 @@
+.Rhistory
 vignettes/figure
 appveyor.yml
 .travis.yml
 .gitignore
+examplePhosQuery.R
 dataRetrieval-concordance.tex
 ^.*\.Rproj$
 ^\.Rproj\.user$

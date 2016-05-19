@@ -25,7 +25,10 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @import XML
+#' @importFrom XML xmlTreeParse
+#' @importFrom XML xmlRoot
+#' @importFrom XML xpathApply
+#' @importFrom XML xmlSize
 #' @examples
 #' \dontrun{
 #' siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
@@ -35,20 +38,15 @@ whatNWISsites <- function(...){
   matchReturn <- list(...)
   values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
   
-  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
-  
   names(values)[names(values) == "siteNumber"] <- "sites"
   names(values)[names(values) == "siteNumbers"] <- "sites"
   
-  baseURL <- "http://waterservices.usgs.gov/nwis/site/?format=mapper&"
-  urlCall <- paste(baseURL,
-                   urlCall,sep = "")
-
-  rawData <- getWebServiceData(urlCall)
+  urlCall <- drURL('site',Access=pkg.env$access, format="mapper", arg.list = values)
 
 
-  doc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
-  doc <- xmlRoot(doc)
+  rawData <- getWebServiceData(urlCall, encoding='gzip')
+
+  doc <- xmlRoot(rawData)
   numChunks <- xmlSize(doc)
   for(i in 1:numChunks){
     chunk <- doc[[1]]

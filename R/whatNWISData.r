@@ -54,7 +54,7 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @import lubridate
+#' @importFrom lubridate parse_date_time
 #' @examples
 #' \dontrun{
 #' availableData <- whatNWISdata('05114000')
@@ -87,8 +87,7 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
     }
   }
   
-  
-  urlSitefile <- paste("http://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=",siteNumber,sep = "")
+  urlSitefile <- drURL('site', Access=pkg.env$access, format='rdb', seriesCatalogOutput='true',sites=siteNumber)
  
   SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE)
   
@@ -110,9 +109,10 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
     SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd,]
   }
   
-  
-  SiteFile$begin_date <- as.Date(parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
-  SiteFile$end_date <- as.Date(parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
+  if(nrow(SiteFile) > 0){
+    SiteFile$begin_date <- as.Date(parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
+    SiteFile$end_date <- as.Date(parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
+  }
   
   comment(SiteFile) <- headerInfo
   attr(SiteFile, "url") <- urlSitefile

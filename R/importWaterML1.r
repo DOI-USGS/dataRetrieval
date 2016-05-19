@@ -38,12 +38,21 @@
 #' 
 #' @seealso \code{\link{renameNWISColumns}}
 #' @export
-#' @import XML
-#' @import RCurl
+#' @importFrom XML xmlTreeParse
+#' @importFrom XML xmlRoot
+#' @importFrom XML xmlToList
+#' @importFrom XML xmlDoc
+#' @importFrom XML xpathApply
+#' @importFrom XML xpathSApply
+#' @importFrom XML xmlNamespaceDefinitions
+#' @importFrom XML xmlValue
+#' @importFrom XML xmlAttrs
 #' @import utils
 #' @import stats
 #' @importFrom  reshape2 melt
 #' @importFrom reshape2 dcast
+#' @importFrom lubridate parse_date_time
+#' @importFrom dplyr full_join
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -52,7 +61,7 @@
 #' property <- '00060'
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 #' \dontrun{
-#' data <- importWaterML1(obs_url)
+#' data <- importWaterML1(obs_url, asDateTime=TRUE)
 #' 
 #' groundWaterSite <- "431049071324301"
 #' startGW <- "2013-10-01"
@@ -99,12 +108,11 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(file.exists(obs_url)){
     rawData <- obs_url
+    returnedDoc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
   } else {
-    rawData <- getWebServiceData(obs_url)
+    returnedDoc <- getWebServiceData(obs_url, encoding='gzip')
   }
-  
-  returnedDoc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
-  
+
   if(tz != ""){
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
                           "America/Denver","America/Los_Angeles",
@@ -125,7 +133,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   names(notes) <- noteTitles
   
   timeSeries <- xpathApply(doc, "//ns1:timeSeries", namespaces = ns)
-  
   
   if(0 == length(timeSeries)){
     df <- data.frame()
@@ -175,9 +182,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       value <- as.numeric(xpathSApply(subChunk, "ns1:value",namespaces = chunkNS, xmlValue))  
       
       if(length(value)!=0){
-      
-#         value[value == noValue] <- NA
-            
+
         attNames <- xpathSApply(subChunk, "ns1:value/@*",namespaces = chunkNS)
         attributeNames <- unique(names(attNames))
   
@@ -191,7 +196,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         if(length(methodDescription) > 0 && methodDescription != ""){
           valueName <- paste("X",methodDescription,pCode,statCd,sep="_") 
         }
-        
          
         assign(valueName,value)
         
@@ -229,73 +233,32 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         if("dateTime" %in% attributeNames){
           
           datetime <- xpathSApply(subChunk, "ns1:value/@dateTime",namespaces = chunkNS)
-          
-          numChar <- nchar(datetime)
-          
+
           if(asDateTime){
             
-            # Common options:
-            # YYYY numChar=4
-            # YYYY-MM-DD numChar=10
-            # YYYY-MM-DDTHH:MM numChar=16
-            # YYYY-MM-DDTHH:MM:SS numChar=19
-            # YYYY-MM-DDTHH:MM:SSZ numChar=20
-            # YYYY-MM-DDTHH:MM:SS.000 numChar=23
-            # YYYY-MM-DDTHH:MM:SS.000-XX:00 numChar=29
-                        
-            if(abs(max(numChar) - min(numChar)) != 0){
-              warning("Mixed date types, not converted to POSIXct")
-            } else {
-              numChar <- numChar[1]
-              if(numChar == 4){
-                datetime <- as.POSIXct(datetime, "%Y", tz = "UTC")
-              } else if(numChar == 10){
-                datetime <- as.POSIXct(datetime, "%Y-%m-%d", tz = "UTC")
-              } else if(numChar == 16){
-                datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M", tz = "UTC")
-              } else if(numChar == 19){
-                datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%S", tz = "UTC")
-              } else if(numChar == 20){
-                datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%S", tz = "UTC")
-              }  else if(numChar == 23){
-                datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
-              } else if(numChar == 24){
-                datetime <- substr(datetime,1,23)
-                datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
-                df$tz_cd <- rep(zoneAbbrievs[1], nrow(df))
-              } else if(numChar == 29){
-                tzOffset <- as.character(substr(datetime,24,numChar))
-                
-                tzHours <- as.numeric(substr(tzOffset,1,3))
-  
-                datetime <- substr(datetime,1,23)
-                datetime <- as.POSIXct(datetime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
-                datetime <- datetime - tzHours*60*60
-                df$tz_cd <- as.character(zoneAbbrievs[tzOffset]) 
-              }
+            numChar <- nchar(datetime)
+            
+            datetime <- parse_date_time(datetime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
+                                                    "%Y-%m-%dT%H:%M:%S","%Y-%m-%dT%H:%M:%OS",
+                                                    "%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
+            
+            if(any(numChar < 20) & any(numChar > 16)){
               
-              if(!("tz_cd" %in% names(df))){
-                df$tz_cd <- zoneAbbrievs[1]
-                tzHours <- as.numeric(substr(names(zoneAbbrievs[1]),1,3))
-                datetime <- datetime - tzHours*60*60
-              }
+              offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0),
+                                          code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST",""),
+                                          stringsAsFactors = FALSE)
+              
+              datetime[numChar < 20 & numChar > 16] <- datetime[numChar < 20 & numChar > 16] + offsetLibrary[offsetLibrary$code == zoneAbbrievs[1],"offset"]*60*60
             }
             
-#             if(tz != ""){
-#               attr(datetime, "tzone") <- tz
-#               df$tz_cd <- rep(tz, nrow(df))
-#             } else {
-#               attr(datetime, "tzone") <- "UTC"
-#               df$tz_cd <- rep("UTC", nrow(df))
-#             }
-
             
           } else {
             
             datetime <- as.character(datetime)
+            numChar <- nchar(datetime) 
             if(any(numChar) == 29){
               tzOffset <- as.character(substr(datetime,24,numChar))
-              df$tz_cd <- as.character(zoneAbbrievs[tzOffset]) 
+              df$tz_cd <- as.character(zoneAbbrievs[tzOffset])
               df$tz_cd[is.na(df$tz_cd)] <- zoneAbbrievs[1]
             } else {
               df$tz_cd <- zoneAbbrievs[1]
@@ -322,7 +285,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
           mergedDF <- df          
         } else {
           similarNames <- intersect(names(mergedDF), names(df))
-          mergedDF <- merge(mergedDF, df,by=similarNames,all=TRUE)
+          # mergedDF <- merge(mergedDF, df,by=similarNames,all=TRUE)
+          mergedDF <- full_join(mergedDF, df, by=similarNames)
         }
         
       } else {
@@ -366,7 +330,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     
     names(propertyValues) <- properties
     propertyValues <- propertyValues[propertyValues != "NA"]
-    siteInfo <- cbind(siteInfo, t(propertyValues))            
+    siteInfo <- cbind(siteInfo, t(propertyValues))
+    siteInfo[names(propertyValues)] <- as.character(siteInfo[names(propertyValues)])
     
     names(extraVariableData) <- make.unique(names(extraVariableData))
     
@@ -389,7 +354,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       
     } else {
       similarSites <- intersect(names(siteInformation), names(siteInfo))
-      siteInformation <- merge(siteInformation, siteInfo, by=similarSites, all=TRUE)
+      # siteInformation <- merge(siteInformation, siteInfo, by=similarSites, all=TRUE)
+      siteInformation <- full_join(siteInformation, siteInfo, by=similarSites)
       
       similarVariables <- intersect(names(variableInformation),names(variableInfo))
       variableInformation <- merge(variableInformation, variableInfo, by=similarVariables, all=TRUE)
@@ -434,7 +400,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
 
       newRows <- rbind(meltedmergedDF[indexDups, ], valDF[matchIndexes,])
       
-      mergedDF3 <- dcast(newRows, castFormula, drop=FALSE, value.var = "value",)
+      mergedDF3 <- dcast(newRows, castFormula, drop=FALSE, value.var = "value")
       mergedDF2 <- rbind(mergedDF2, mergedDF3)
       mergedDF2 <- mergedDF2[order(mergedDF2$dateTime),]
       
@@ -464,7 +430,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     mergedDF <- data.frame()
   }
 
-  if(asDateTime){
+  if(asDateTime & nrow(mergedDF) > 0){
     if(tz != ""){
       attr(mergedDF$dateTime, "tzone") <- tz
       mergedDF$tz_cd <- rep(tz, nrow(mergedDF))

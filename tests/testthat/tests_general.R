@@ -26,6 +26,12 @@ test_that("General NWIS retrievals working", {
                     "drain_area_va","obs_count_nu"),service="qw")
   expect_is(qwData$startDateTime, "POSIXct")
   
+  url <- "http://waterservices.usgs.gov/nwis/dv/?site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06"
+  dv <- importRDB1(url, asDateTime = FALSE)
+  
+  urlEmpty <- "http://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=413437087150601&sort_key=site_no&group_key=NONE&inventory_output=0&begin_date=&end_date=&TZoutput=0&param_group=NUT,INN&qw_attributes=0&format=rdb&qw_sample_wide=0&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&list_of_search_criteria=multiple_site_no"
+  dv <- importRDB1(urlEmpty, asDateTime = FALSE)
+  expect_that(nrow(dv) == 0, is_true())
 })
 
 
@@ -37,9 +43,10 @@ test_that("General WQP retrievals working", {
   pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
   expect_is(pHData$ActivityStartDateTime, 'POSIXct')
   
-  pHDataExpanded2 <- readWQPdata(bBox=c(-90.1,42.9,-89.9,43.1),
-                                 characteristicName=nameToUse)
-  expect_is(pHDataExpanded2$ActivityStartDateTime, 'POSIXct')
+  # Known slow query for WQP:
+#   pHDataExpanded2 <- readWQPdata(bBox=c(-90.1,42.9,-89.9,43.1),
+#                                  characteristicName=nameToUse)
+#   expect_is(pHDataExpanded2$ActivityStartDateTime, 'POSIXct')
   
   startDate <- as.Date("2013-01-01")
   nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
