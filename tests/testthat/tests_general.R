@@ -53,3 +53,18 @@ test_that("General WQP retrievals working", {
                          characteristicType="Nutrient")
   expect_is(nutrientDaneCounty$ActivityStartDateTime, 'POSIXct')
 })
+
+test_that("WQP head query retrieval working", {
+  testthat::skip_on_cran()
+  # testthat::skip_on_cran()
+  # Bring back when WQP is back
+  nameToUse <- "pH"
+  pHDataQueryResults <- readWQPdata(siteid="USGS-04024315",
+                                    characteristicName=nameToUse, 
+                                    querySummary=TRUE)
+  expect_false(is.null(pHDataQueryResults$`total-site-count`))
+  expect_is(pHDataQueryResults$`total-site-count`, 'character')
+  expect_false(is.null(pHDataQueryResults$`total-result-count`))
+  expect_is(pHDataQueryResults$`total-result-count`, 'character')
+  
+})
