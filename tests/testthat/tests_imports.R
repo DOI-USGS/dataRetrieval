@@ -72,52 +72,52 @@ test_that("CRAN-friendly importWaterML1 test", {
   
 })
 
-test_that("External importWaterML1 test", {
-  testthat::skip_on_cran()
-  
-  siteNumber <- "02177000"
-  startDate <- "2012-09-01"
-  endDate <- "2012-10-01"
-  offering <- '00003'
-  property <- '00060'
-  obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
-  
-  data <- importWaterML1(obs_url,TRUE)
-  expect_is(data$dateTime, 'POSIXct')
-  
-  groundWaterSite <- "431049071324301"
-  startGW <- "2013-10-01"
-  endGW <- "2014-06-30"
-  groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
-           startGW,endGW, service="gwlevels")
-  groundWater <- importWaterML1(groundwaterExampleURL)
-  
-  expect_is(groundWater$dateTime, 'character')
-  
-  unitDataURL <- constructNWISURL(siteNumber,property,
-          "2013-11-03","2013-11-03",'uv')
-  unitData <- importWaterML1(unitDataURL,TRUE)
-  expect_is(unitData$dateTime, 'POSIXct')
-  
-  
-  # Two sites, two pcodes, one site has two data descriptors
-  siteNumber <- c('01480015',"04085427") #one site seems to have lost it's 2nd dd
-  obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
-  data <- importWaterML1(obs_url)
-  expect_that(length(unique(data$site_no)) == 2, is_true())
-  expect_that(ncol(data) == 8, is_true()) # 3 data, 3 remark codes, and 4 (agency, site, dateTime, tz)
-
-  inactiveSite <- "05212700"
-  inactiveSite <- constructNWISURL(inactiveSite, "00060", "2014-01-01", "2014-01-10",'dv')
-  inactiveSite <- importWaterML1(inactiveSite)
-  expect_that(nrow(inactiveSite) == 0, is_true())
-  
-  inactiveAndActive <- c("07334200","05212700")
-  inactiveAndActive <- constructNWISURL(inactiveAndActive, "00060", "2014-01-01", "2014-01-10",'dv')
-  inactiveAndActive <- importWaterML1(inactiveAndActive)
-  expect_that(length(unique(inactiveAndActive$site_no)) == 1, is_true())
-  
-})
+# test_that("External importWaterML1 test", {
+#   testthat::skip_on_cran()
+#   
+#   siteNumber <- "02177000"
+#   startDate <- "2012-09-01"
+#   endDate <- "2012-10-01"
+#   offering <- '00003'
+#   property <- '00060'
+#   obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
+#   
+#   data <- importWaterML1(obs_url,TRUE)
+#   expect_is(data$dateTime, 'POSIXct')
+#   
+#   groundWaterSite <- "431049071324301"
+#   startGW <- "2013-10-01"
+#   endGW <- "2014-06-30"
+#   groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
+#            startGW,endGW, service="gwlevels")
+#   groundWater <- importWaterML1(groundwaterExampleURL)
+#   
+#   expect_is(groundWater$dateTime, 'character')
+#   
+#   unitDataURL <- constructNWISURL(siteNumber,property,
+#           "2013-11-03","2013-11-03",'uv')
+#   unitData <- importWaterML1(unitDataURL,TRUE)
+#   expect_is(unitData$dateTime, 'POSIXct')
+#   
+#   
+#   # Two sites, two pcodes, one site has two data descriptors
+#   siteNumber <- c('01480015',"04085427") #one site seems to have lost it's 2nd dd
+#   obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
+#   data <- importWaterML1(obs_url)
+#   expect_that(length(unique(data$site_no)) == 2, is_true())
+#   expect_that(ncol(data) == 8, is_true()) # 3 data, 3 remark codes, and 4 (agency, site, dateTime, tz)
+# 
+#   inactiveSite <- "05212700"
+#   inactiveSite <- constructNWISURL(inactiveSite, "00060", "2014-01-01", "2014-01-10",'dv')
+#   inactiveSite <- importWaterML1(inactiveSite)
+#   expect_that(nrow(inactiveSite) == 0, is_true())
+#   
+#   inactiveAndActive <- c("07334200","05212700")
+#   inactiveAndActive <- constructNWISURL(inactiveAndActive, "00060", "2014-01-01", "2014-01-10",'dv')
+#   inactiveAndActive <- importWaterML1(inactiveAndActive)
+#   expect_that(length(unique(inactiveAndActive$site_no)) == 1, is_true())
+#   
+# })
 
 context("importWQP_noCRAN")
 
