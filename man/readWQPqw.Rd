@@ -4,7 +4,8 @@
 \alias{readWQPqw}
 \title{Raw Data Import for Water Quality Portal}
 \usage{
-readWQPqw(siteNumbers, parameterCd, startDate = "", endDate = "", tz = "")
+readWQPqw(siteNumbers, parameterCd, startDate = "", endDate = "", tz = "",
+  querySummary = FALSE)
 }
 \arguments{
 \item{siteNumbers}{character site number. This needs to include the full agency code prefix.}
@@ -21,7 +22,8 @@ retrieval for the latest possible record. Date arguments are always specified in
 \item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+querySummary logical to look at number of records and unique sites that will be returned from this query.}
 }
 \value{
 A data frame with at least the following columns:
