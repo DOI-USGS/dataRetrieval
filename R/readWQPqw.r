@@ -19,6 +19,7 @@
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' querySummary logical to look at number of records and unique sites that will be returned from this query.
+#' @param querySummary logical to look at number of records and unique sites that will be returned from this query.
 #' @keywords data import USGS web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -116,7 +117,7 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="", que
   url <- constructWQPURL(siteNumbers,parameterCd,startDate,endDate)
   
   if(querySummary){
-    queryHEAD <- HEAD(urlCall)
+    queryHEAD <- HEAD(url)
     retquery <- headers(queryHEAD)
     return(retquery)
   } else {
