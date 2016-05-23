@@ -99,6 +99,8 @@
 #' variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
+#' @importFrom httr HEAD
+#' @importFrom httr headers
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
 #' \code{\link{readNWISqw}}, and \code{\link{importWQP}}
