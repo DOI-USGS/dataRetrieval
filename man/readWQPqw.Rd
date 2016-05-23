@@ -24,6 +24,8 @@ datetimes to UTC (properly accounting for daylight savings times based on the da
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 querySummary logical to look at number of records and unique sites that will be returned from this query.}
+
+\item{querySummary}{logical to look at number of records and unique sites that will be returned from this query.}
 }
 \value{
 A data frame with at least the following columns:
