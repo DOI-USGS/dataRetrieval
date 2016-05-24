@@ -89,4 +89,11 @@ article.rmdtable table th {
   color: #FF0000;
 }
 
+slides > slide {
+  background-image: url(images/usgs.png), url(images/simple-shadow.png), url(images/paper_fibers.png);
+  background-size: 150px, 35px, cover;
+  background-repeat: no-repeat;
+  background-position: 3% 98%, 98% 98%;
+}
+
 

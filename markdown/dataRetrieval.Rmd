@@ -14,7 +14,7 @@ output:
     css: ../styles.css
     logo: ../images/simple-shadow.png
     smaller: yes
-    widescreen: no
+    widescreen: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -101,7 +101,7 @@ Finally, if there are still questions that the vignette and help files don't ans
 
 <center>[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)</center>
 
-## US Geological Survey Water National Water Information System (NWIS) Overview
+## US Geological Survey Water National Water Information System (NWIS) Overview {.smaller .columns-2}
 
 * Unit Data
     + Data reported at the frequency it is collected – e.g. 15 minute
@@ -123,7 +123,7 @@ Finally, if there are still questions that the vignette and help files don't ans
 * Meta Data
     + Site information
     + Parameter information
-    
+
 ## USGS Basic Web Retrievals
 
 The USGS uses various codes for basic retrievals
@@ -425,9 +425,6 @@ meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
 * Much more verbose output than NWIS
 
 * To get non-NWIS data, need to use CharacteristicName instead of parameter code.
-    + Need to be careful of units
-    + Need to be careful of censored values
-    + Dissolved vs filtered vs ....etc....
 
 <img src="../images/WQP.png" alt="Overview" style="width: 300px;"/>
 
