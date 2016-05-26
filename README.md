@@ -14,6 +14,8 @@ Research software impact:
 
 [![Coverage Status](https://coveralls.io/repos/USGS-R/dataRetrieval/badge.svg?branch=master&service=github)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=master)
 
+[![codecov](https://codecov.io/gh/USGS-R/dataRetrieval/branch/master/graph/badge.svg)](https://codecov.io/gh/USGS-R/dataRetrieval)
+
 ##Package Installation
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
 
