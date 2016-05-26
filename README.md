@@ -6,6 +6,14 @@ Linux: [![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master)]
 
 Windows: [![Build status](https://ci.appveyor.com/api/projects/status/msanha92b500grr7?svg=true)](https://ci.appveyor.com/project/ldecicco-USGS/dataretrieval-787)
 
+CRAN statistics:
+[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
+
+Research software impact:
+[![Research software impact](http://depsy.org/api/package/cran/dataRetrieval/badge.svg)](http://depsy.org/package/r/dataRetrieval)
+
+[![Coverage Status](https://coveralls.io/repos/USGS-R/dataRetrieval/badge.svg?branch=master&service=github)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=master)
+
 ##Package Installation
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
 
@@ -69,8 +77,3 @@ This software is provided "AS IS."
     ![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)
   ](http://creativecommons.org/publicdomain/zero/1.0/)
 
-CRAN statistics:
-[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
-
-Research software impact:
-[![Research software impact](http://depsy.org/api/package/cran/dataRetrieval/badge.svg)](http://depsy.org/package/r/dataRetrieval)
