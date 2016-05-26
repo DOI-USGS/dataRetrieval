@@ -101,28 +101,32 @@ Finally, if there are still questions that the vignette and help files don't ans
 
 <center>[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)</center>
 
-## US Geological Survey Water National Water Information System (NWIS) Overview {.smaller .columns-2}
+## US Geological Survey Water National Water Information System (NWIS) Overview 
 
-* Unit Data
-    + Data reported at the frequency it is collected – e.g. 15 minute
-    + Generally available back to 2007 (big improvement from 120 days!)
-    + Includes current real-time data.
-  
-* Daily Data
-    + Data aggregated to a daily statistic such as mean, min, or max
-    + Includes, streamflow, groundwater levels, and water quality sensors
-    + These data can can go back many decades
-    
-* Discrete Data
-    + Water quality data
-    + Groundwater level
-    + Rating curves
-    + Surfacewater measurements
-    + Peak flow
-    
-* Meta Data
-    + Site information
-    + Parameter information
+|Unit Data|
+|---------|
+|Data reported at the frequency it is collected – e.g. 15 minute|
+|Generally available back to 2007 (big improvement from 120 days!)|
+|Includes current real-time data|
+
+
+
+|Daily Data|
+|----------|
+|Data aggregated to a daily statistic such as mean, min, or max|
+|Includes, streamflow, groundwater levels, and water quality sensors|
+|These data can can go back many decades|
+
+
+
+|Discrete Data|Meta Data|
+|-------------|---------|
+|Water quality data|Site information|
+|Groundwater level|Parameter information|
+|Rating curves| |
+|Surfacewater measurements| |
+|Peak flow| |
+
 
 ## USGS Basic Web Retrievals
 
