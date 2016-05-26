@@ -4,8 +4,6 @@ Retrieval functions for USGS and EPA hydrologic and water quality data. For tuto
 
 [usgs-r.github.io/dataRetrieval](usgs-r.github.io/dataRetrieval)
 
-
-
 ##Package Installation
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
 
@@ -25,6 +23,15 @@ library(devtools)
 install_github("USGS-R/dataRetrieval")
 ```
 
+##Reporting bugs
+
+Please consider reporting bugs and asking questions on the Issues page:
+
+[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
+
+Follow `@USGS-R` on Twitter for updates on all USGS R packages:
+[https://twitter.com/USGS_R](https://twitter.com/USGS_R)
+
 ### Current build tests:
 
 |Linux|Windows|Test Coverage|
@@ -40,19 +47,6 @@ install_github("USGS-R/dataRetrieval")
 ### Research software impact:
 [![Research software impact](http://depsy.org/api/package/cran/dataRetrieval/badge.svg)](http://depsy.org/package/r/dataRetrieval)
 
-
-##Reporting bugs
-
-Please consider reporting bugs and asking questions on the Issues page:
-
-[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
-
-
-##Subscribe
-Please email questions, comments, and feedback to: 
-egret_comments@usgs.gov
-
-Additionally, to subscribe to an email list concerning updates to these R packages, please send a request to egret_comments@usgs.gov.
 
 ##Disclaimer
 This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the [official USGS copyright policy](http://www.usgs.gov/visual-id/credit_usgs.html#copyright/ "official USGS copyright policy")
