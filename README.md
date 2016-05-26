@@ -12,7 +12,7 @@ CRAN statistics:
 Research software impact:
 [![Research software impact](http://depsy.org/api/package/cran/dataRetrieval/badge.svg)](http://depsy.org/package/r/dataRetrieval)
 
-[![Coverage Status](https://coveralls.io/repos/USGS-R/dataRetrieval/badge.svg?branch=master&service=github)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=master)
 
 [![codecov](https://codecov.io/gh/USGS-R/dataRetrieval/branch/master/graph/badge.svg)](https://codecov.io/gh/USGS-R/dataRetrieval)
 
