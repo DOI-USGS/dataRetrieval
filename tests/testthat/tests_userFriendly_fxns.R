@@ -92,6 +92,18 @@ test_that("NWIS qw tests", {
   qwret <- readNWISqw("413437087150601", parameterCd = c("NUT","INN"),startDate = "",endDate = "")
   expect_that(nrow(qwret) == 0, is_true())
   
+  siteNumber <- '455638089034501'
+  wy_start <- paste0(2014, "-10-01")
+  wy_end <- paste0(2015, "-09-30")
+  
+  #No data test:
+  no.data <- readNWISqw(siteNumbers = siteNumber, 
+                  parameterCd = '00060', 
+                  startDate = wy_start, 
+                  endDat = wy_end)
+  
+  expect_that(nrow(no.data) == 0, is_true())
+  
 })
 
 context("dv")
