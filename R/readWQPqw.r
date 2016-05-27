@@ -100,8 +100,6 @@
 #' variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
-#' @importFrom httr HEAD
-#' @importFrom httr headers
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
 #' \code{\link{readNWISqw}}, and \code{\link{importWQP}}
@@ -119,8 +117,7 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="", que
   url <- constructWQPURL(siteNumbers,parameterCd,startDate,endDate)
   
   if(querySummary){
-    queryHEAD <- HEAD(url)
-    retquery <- headers(queryHEAD)
+    retquery <- getQuerySummary(url)
     return(retquery)
   } else {
     

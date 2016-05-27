@@ -86,8 +86,6 @@
 #' variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
-#' @importFrom httr HEAD
-#' @importFrom httr headers
 #' @export
 #' @examples
 #' \dontrun{
@@ -159,8 +157,7 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
   if(zip) urlCall <- paste0(urlCall,"&zip=yes")
   
   if(querySummary){
-    queryHEAD <- HEAD(urlCall)
-    retquery <- headers(queryHEAD)
+    retquery <- getQuerySummary(urlCall)
     return(retquery)
   } else {
   

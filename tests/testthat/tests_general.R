@@ -52,15 +52,27 @@ test_that("General WQP retrievals working", {
   expect_is(nutrientDaneCounty$ActivityStartDateTime, 'POSIXct')
 })
 
-test_that("WQP head query retrieval working", {
+test_that("WQP head query retrievals working", {
   testthat::skip_on_cran()
   nameToUse <- "pH"
   pHDataQueryResults <- readWQPdata(siteid="USGS-04024315",
                                     characteristicName=nameToUse, 
                                     querySummary=TRUE)
+  expect_false(is.null(pHDataQueryResults$date))
+  expect_is(pHDataQueryResults$date, 'Date')
   expect_false(is.null(pHDataQueryResults$`total-site-count`))
-  expect_is(pHDataQueryResults$`total-site-count`, 'character')
+  expect_is(pHDataQueryResults$`total-site-count`, 'numeric')
   expect_false(is.null(pHDataQueryResults$`total-result-count`))
-  expect_is(pHDataQueryResults$`total-result-count`, 'character')
+  expect_is(pHDataQueryResults$`total-result-count`, 'numeric')
+  
+  pHDataQueryResults <- readWQPqw(siteNumbers="USGS-04024315",
+                                  parameterCd=nameToUse, 
+                                  querySummary=TRUE)
+  expect_false(is.null(pHDataQueryResults$date))
+  expect_is(pHDataQueryResults$date, 'Date')
+  expect_false(is.null(pHDataQueryResults$`total-site-count`))
+  expect_is(pHDataQueryResults$`total-site-count`, 'numeric')
+  expect_false(is.null(pHDataQueryResults$`total-result-count`))
+  expect_is(pHDataQueryResults$`total-result-count`, 'numeric')
   
 })
