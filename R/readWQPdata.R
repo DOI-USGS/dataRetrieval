@@ -160,6 +160,13 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
   if(querySummary){
     queryHEAD <- HEAD(urlCall)
     retquery <- headers(queryHEAD)
+    countNames <- c('total-site-count', 'nwis-site-count', 'total-result-count', 'nwis-result-count')
+    retquery[which(names(retquery) %in% countNames)] <- unlist(lapply(countNames, retquery = retquery,
+                                                                      FUN = function(c, retquery){
+                                                                        retquery[[c]] <- as.numeric(retquery[[c]])
+                                                                        return(retquery[c])
+                                                                      }))
+    retquery$date <- as.Date(retquery$date, format = "%a, %d %b %Y %H:%M:%S")
     return(retquery)
   } else {
   
