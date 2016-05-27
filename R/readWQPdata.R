@@ -86,8 +86,6 @@
 #' variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
-#' @importFrom httr HEAD
-#' @importFrom httr headers
 #' @export
 #' @examples
 #' \dontrun{
@@ -159,15 +157,7 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
   if(zip) urlCall <- paste0(urlCall,"&zip=yes")
   
   if(querySummary){
-    queryHEAD <- HEAD(urlCall)
-    retquery <- headers(queryHEAD)
-    countNames <- c('total-site-count', 'nwis-site-count', 'total-result-count', 'nwis-result-count')
-    retquery[which(names(retquery) %in% countNames)] <- unlist(lapply(countNames, retquery = retquery,
-                                                                      FUN = function(c, retquery){
-                                                                        retquery[[c]] <- as.numeric(retquery[[c]])
-                                                                        return(retquery[c])
-                                                                      }))
-    retquery$date <- as.Date(retquery$date, format = "%a, %d %b %Y %H:%M:%S")
+    retquery <- getQuerySummary(urlCall)
     return(retquery)
   } else {
   
