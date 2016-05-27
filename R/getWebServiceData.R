@@ -39,6 +39,11 @@ getWebServiceData <- function(obs_url, ...){
         returnedDoc <- content(returnedList, type="text",encoding = "UTF-8")
       } else if (headerInfo$`content-type` == "text/xml;charset=UTF-8"){
         returnedDoc <- xmlcontent(returnedList)
+      } else if (headerInfo$`content-type` == "text/html"){
+        txt <- readBin(returnedList$content, character())
+        message(txt)
+        return(txt)
+        
       } else {
         returnedDoc <- content(returnedList,encoding = "UTF-8")
         if(grepl("No sites/data found using the selection criteria specified", returnedDoc)){
@@ -72,3 +77,4 @@ xmlcontent <- function(response){
   XML::xmlTreeParse(iconv(readBin(response$content, character()), from = "UTF-8", to = "UTF-8"),
                     useInternalNodes=TRUE,getDTD = FALSE)
 }
+

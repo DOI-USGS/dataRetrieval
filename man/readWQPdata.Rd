@@ -9,7 +9,7 @@ readWQPdata(..., zip = FALSE, querySummary = FALSE)
 \arguments{
 \item{zip}{logical to request data via downloading zip file. Default set to FALSE.}
 
-\item{querySummary}{logical to look at number of records and unique sites that will be returned from this query.}
+\item{querySummary}{logical to ONLY return the number of records and unique sites that will be returned from this query.}
 
 \item{\dots}{see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options}
 }
@@ -102,7 +102,8 @@ because it allows for other agencies rather than the USGS.
 \dontrun{
 nameToUse <- "pH"
 pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
-pHDataExpanded2 <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),characteristicName=nameToUse)
+pHData_summary <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),
+     characteristicName=nameToUse, querySummary=TRUE)
 startDate <- as.Date("2013-01-01")
 nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
                         characteristicType="Nutrient")

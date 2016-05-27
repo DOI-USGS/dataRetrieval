@@ -19,6 +19,7 @@
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' querySummary logical to look at number of records and unique sites that will be returned from this query.
+#' @param querySummary logical to look at number of records and unique sites that will be returned from this query.
 #' @keywords data import USGS web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -110,6 +111,8 @@
 #' rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' rawPHsites <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')
 #' nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','2012-12-20')
+#' nwisEx.summary <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),
+#'     '','2012-12-20', querySummary=TRUE)
 #' }
 readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="", querySummary=FALSE){
 

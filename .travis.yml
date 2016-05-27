@@ -1,31 +1,39 @@
-# Sample .travis.yml for R projects from https://github.com/craigcitro/r-travis
+# Sample .travis.yml for R projects.
+#
+# See README.md for instructions, or for more configuration options,
+# see the wiki:
+#   https://github.com/craigcitro/r-travis/wiki
 
-language: c
-
-os:
-  - osx
-  - linux
+language: objective-c
+sudo: required
 
 env:
    global:
-     - CRAN: http://cran.rstudio.com
+     - R_LIBS="http://cran.rstudio.com"
      - R_BUILD_ARGS="--no-build-vignettes --no-manual"
      - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
      - BOOTSTRAP_LATEX=""
-     - NOT_CRAN="true" 
+     - NOT_CRAN="true"
 
-script: "./travis-tool.sh run_tests"
-
-before_script:
+before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
-  - "./travis-tool.sh bootstrap"
-  - "./travis-tool.sh install_deps - ./travis-tool.sh install_r XML RCurl plyr reshape2 lubridate httr knitr xtable testthat"
+  - ./travis-tool.sh bootstrap
 
-after_script:
-  - "./travis-tool.sh dump_logs"
+install:
+  - ./travis-tool.sh install_deps
+  - ./travis-tool.sh install_r covr
+
+script: ./travis-tool.sh run_tests
+
+after_success:
+  - Rscript -e 'covr::coveralls()'
+
+after_failure:
+  - ./travis-tool.sh dump_logs
 
 notifications:
   email:
     on_success: change
     on_failure: change
+

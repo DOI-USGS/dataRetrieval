@@ -1,3 +1,7 @@
+dataRetrieval 2.5.7
+==========
+* HEAD requests can be returned in readWQP* functions. This can give some indication on amount of data available.
+
 dataRetrieval 2.5.0
 ==========
 * Package httr is now used for web service retrievals

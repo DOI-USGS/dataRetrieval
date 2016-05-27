@@ -24,6 +24,8 @@ datetimes to UTC (properly accounting for daylight savings times based on the da
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 querySummary logical to look at number of records and unique sites that will be returned from this query.}
+
+\item{querySummary}{logical to look at number of records and unique sites that will be returned from this query.}
 }
 \value{
 A data frame with at least the following columns:
@@ -120,6 +122,8 @@ rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
 rawPHsites <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')
 nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','2012-12-20')
+nwisEx.summary <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),
+    '','2012-12-20', querySummary=TRUE)
 }
 }
 \seealso{

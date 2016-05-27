@@ -1,10 +1,8 @@
 `dataRetrieval`
 =============
-Retrieval functions for USGS and EPA hydrologic and water quality data.
+Retrieval functions for USGS and EPA hydrologic and water quality data. For tutorial information, see:
 
-Linux: [![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master)](https://travis-ci.org/USGS-R/dataRetrieval)
-
-Windows: [![Build status](https://ci.appveyor.com/api/projects/status/msanha92b500grr7?svg=true)](https://ci.appveyor.com/project/ldecicco-USGS/dataretrieval-787)
+[usgs-r.github.io/dataRetrieval](usgs-r.github.io/dataRetrieval)
 
 ##Package Installation
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
@@ -18,32 +16,12 @@ To get inter-CRAN release updates, use the command:
 install.packages("dataRetrieval",repos="http://owi.usgs.gov/R")
 ```
 
-## Function Overview
+To get cutting-edge changes, install from GitHub using the `devtools` packages:
 
-Web service retrieval functions:
-
-|Function | Inputs | Description | 
-| -------------| ------------------------|:-------------|
-|`readNWISdata` | `...`, `service` | NWIS data using user-specified queries |
-|`readNWISdv` | `Common 3`, `parameterCd`, `statCd` | NWIS daily data with `Common` query |
-|`readNWISqw` | `Common 3`, `parameterCd`, `expanded`,`reshape`,`tz` | NWIS water quality data with `Common` query |
-|`readNWISuv` | `Common 3`, `parameterCd`,`tz` | NWIS instantaneous data with `Common` query |
-|`readNWISpCode` | `parameterCd` | NWIS parameter code information |
-|`readNWISgwl` | `Common 3` | NWIS groundwater level data with `Common` query |
-|`readNWISpeak` | `Common 3`,`asDateTime` | NWIS peak flow data with `Common` query |
-|`readNWISmeas` | `Common 3`, `tz` | NWIS surface-water measurement data with `Common` query |
-|`readNWISrating` | `siteNumber`, `type` | NWIS rating table for an active USGS streamgage |
-|`readNWISsite` | `siteNumber` | NWIS site information |
-|`whatNWISsites` | `...` | NWIS site search using user-specified queries |
-|`whatNWISdata` | `siteNumber`, `service` | NWIS data availability, including period of record and count |
-|`readWQPdata` | `...` | WQP data using user-specified queries |
-|`readWQPqw` | `Common 3`, `parameterCd`**,`tz` | WQP data with `Common 3` query and either parameter code or characteristic name|
-|`whatWQPsites` | `...` | WQP site search using user-specified queries |
-
-* `Common 3` = siteNumber, startDate, endDate
-* `...` = user-defined arguments.
-
-**`parameterCd` in WQP function can be either USGS parameter codes, or EPA characteristic names
+```r
+library(devtools)
+install_github("USGS-R/dataRetrieval")
+```
 
 ##Reporting bugs
 
@@ -51,12 +29,24 @@ Please consider reporting bugs and asking questions on the Issues page:
 
 [https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
 
+Follow `@USGS-R` on Twitter for updates on all USGS R packages:
+[https://twitter.com/USGS_R](https://twitter.com/USGS_R)
 
-##Subscribe
-Please email questions, comments, and feedback to: 
-egret_comments@usgs.gov
+### Current build tests:
 
-Additionally, to subscribe to an email list concerning updates to these R packages, please send a request to egret_comments@usgs.gov.
+|Linux|Windows|Test Coverage|
+|----------|------------|------------|
+| [![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master)](https://travis-ci.org/USGS-R/dataRetrieval)|[![Build status](https://ci.appveyor.com/api/projects/status/msanha92b500grr7?svg=true)](https://ci.appveyor.com/project/ldecicco-USGS/dataretrieval-787)|[![Coverage Status](https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=master)|
+
+### Current CRAN information:
+
+|Version|Monthly Downloads|Total Downloads|
+|----------|------------|------------|
+|[![CRAN version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)|[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)|[![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)|
+
+### Research software impact:
+[![Research software impact](http://depsy.org/api/package/cran/dataRetrieval/badge.svg)](http://depsy.org/package/r/dataRetrieval)
+
 
 ##Disclaimer
 This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the [official USGS copyright policy](http://www.usgs.gov/visual-id/credit_usgs.html#copyright/ "official USGS copyright policy")
@@ -69,8 +59,3 @@ This software is provided "AS IS."
     ![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)
   ](http://creativecommons.org/publicdomain/zero/1.0/)
 
-CRAN statistics:
-[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
-
-Research software impact:
-[![Research software impact](http://depsy.org/api/package/cran/dataRetrieval/badge.svg)](http://depsy.org/package/r/dataRetrieval)
