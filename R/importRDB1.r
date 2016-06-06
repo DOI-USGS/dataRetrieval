@@ -149,7 +149,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
     badCols <- attr(readr.data, "problems")[["col"]]  
     
     if(length(badCols) > 0){
-      readr.data <- fixErrors(readr.data, readr.data.char, "no trailing characters", parse_number)
+      readr.data <- fixErrors(readr.data, readr.data.char, "no trailing characters", as.numeric)
       readr.data <- fixErrors(readr.data, readr.data.char, "date like", parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d","%Y"))
     }
   
