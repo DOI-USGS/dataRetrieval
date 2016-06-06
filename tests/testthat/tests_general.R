@@ -42,9 +42,9 @@ test_that("General WQP retrievals working", {
   expect_is(pHData$ActivityStartDateTime, 'POSIXct')
   
   # Known slow query for WQP:
-  pHDataExpanded2 <- readWQPdata(bBox=c(-90.1,42.9,-89.9,43.1),
-                                 characteristicName=nameToUse, querySummary = TRUE)
-  expect_is(pHDataExpanded2, 'list')
+  # pHDataExpanded2 <- readWQPdata(bBox=c(-90.1,42.9,-89.9,43.1),
+  #                                characteristicName=nameToUse, querySummary = TRUE)
+  # expect_is(pHDataExpanded2, 'list')
   
   startDate <- as.Date("2013-01-01")
   nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
