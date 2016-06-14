@@ -74,5 +74,10 @@ test_that("WQP head query retrievals working", {
   expect_is(pHDataQueryResults$`total-site-count`, 'numeric')
   expect_false(is.null(pHDataQueryResults$`total-result-count`))
   expect_is(pHDataQueryResults$`total-result-count`, 'numeric')
-  
+})
+
+test_that("zeroPad handles NAs", {
+  toPad <- c(1,5,55,NA)
+  padded <- zeroPad(toPad,3)
+  expect_true(identical(c("001","005","055",NA),padded))
 })
