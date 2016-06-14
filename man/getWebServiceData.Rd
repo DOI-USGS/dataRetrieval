@@ -16,7 +16,7 @@ raw data from web services
 }
 \description{
 This function accepts a url parameter, and returns the raw data. The function enhances
-\code{\link[RCurl]{getURI}} with more informative error messages.
+\code{\link[httr]{GET}} with more informative error messages.
 }
 \examples{
 siteNumber <- "02177000"
