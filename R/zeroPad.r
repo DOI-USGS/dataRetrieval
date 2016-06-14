@@ -16,19 +16,20 @@
 #' padPCodeNA <- zeroPad(pCodeNA,4)
 zeroPad <- function(x,padTo){
   if(padTo <= 1) return(x)
-  #if(is.na(x) == TRUE) return(x)
+  
   numDigits <- nchar(x)
   padding <- padTo-numDigits
-  padNA <- which(is.na(padding) == TRUE)
-  if(length(padNA > 1)){
-    padding[padNA] <- 0
-    message("There were NAs send to zeroPad")
+  
+  if(any(is.na(padding))){
+    padding[is.na(padding)] <- 0
   }
+  
   paddingZeros <- vapply(
       X = padding[padding > 0], 
-      FUN = function(y) paste(rep("0",y),collapse="",sep=""),
+      FUN = function(y) paste0(rep("0",y),collapse=""),
       FUN.VALUE = ""
   )
-  x[padding > 0] <- paste(paddingZeros,x[padding > 0],sep="")
+  
+  x[padding > 0] <- paste0(paddingZeros,x[padding > 0])
   return(x)
 }
