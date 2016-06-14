@@ -374,7 +374,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #' url \tab character \tab The url used to generate the data \cr
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' comment \tab character \tab Header comments from the RDB file \cr
-#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
+#' siteInfo \tab xdata.frame \tab A data frame containing information on the requested sites \cr
 #' }
 #' 
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
@@ -394,6 +394,11 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
   data <- importRDB1(url,asDateTime=TRUE, convertType = convertType)
 
   if(nrow(data) > 0){
+    #check that the date includes a day, based on date string length
+    if(any(nchar(as.character(data$lev_dt)) <= 7)){
+      data$lev_dt <- parse_date_time(data$lev_dt,c("Y-m","Y-m-d"))
+      warning("Some dates probably didn't include days; they are converted to the last day of the preceding month")
+    }
     data$lev_dt <- as.Date(data$lev_dt)
   
     siteInfo <- readNWISsite(siteNumbers)
