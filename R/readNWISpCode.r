@@ -50,7 +50,7 @@ readNWISpCode <- function(parameterCd){
       }
       
       if(nrow(parameterData) != length(parameterCd)){
-        badPcode <- parameterCd[!(parameterCd %in% newData$parameter_cd)]
+        badPcode <- parameterCd[!(parameterCd %in% parameterData$parameter_cd)]
         warning("The following pCodes seem mistyped, and no information was returned: ",paste(badPcode,collapse=","))
       }
     } 

@@ -29,6 +29,7 @@ This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/
 }
 \examples{
 paramINFO <- readNWISpCode(c('01075','00060','00931'))
+paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
 }
 \seealso{
 \code{\link{importRDB1}}
