@@ -22,45 +22,47 @@
 #' @seealso \code{\link{importRDB1}}
 #' @examples
 #' paramINFO <- readNWISpCode(c('01075','00060','00931'))
+#' paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
 readNWISpCode <- function(parameterCd){
  
+  parameterCd.orig <- parameterCd
+  parameterCd <- parameterCd[!is.na(parameterCd)]
+  
   if(any(parameterCd == "all")){
     fullURL <- "http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units"
-    fullPcodeDownload <- importRDB1(fullURL, asDateTime = FALSE)
-    return(fullPcodeDownload)
-    
+    parameterData <- importRDB1(fullURL, asDateTime = FALSE)
   } else {
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
-    
     parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd,]
   
     if(nrow(parameterData) != length(parameterCd)){
-      
       if(length(parameterCd) == 1){
         url <- paste0("http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=pm_search",
                      "&pm_search=", parameterCd,
                      "&format=rdb", "&show=parameter_group_nm",
                      "&show=parameter_nm", "&show=casrn",
                      "&show=srsname", "&show=parameter_units")
-        newData <- importRDB1(url,asDateTime = FALSE)
+        parameterData <- importRDB1(url,asDateTime = FALSE)
       } else {
-        
         fullURL <- "http://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units"
         fullPcodeDownload <- importRDB1(fullURL)
-        newData <- fullPcodeDownload[fullPcodeDownload$parameter_cd %in% parameterCd,]
-        
+        parameterData <- fullPcodeDownload[fullPcodeDownload$parameter_cd %in% parameterCd,]
       }
       
-      if(nrow(newData) != length(parameterCd)){
-        badPcode <- parameterCd[!(parameterCd %in% newData$parameter_cd)]
+      if(nrow(parameterData) != length(parameterCd)){
+        badPcode <- parameterCd[!(parameterCd %in% parameterData$parameter_cd)]
         warning("The following pCodes seem mistyped, and no information was returned: ",paste(badPcode,collapse=","))
       }
-      
-      return(newData)
-      
-    } else {
-      return(parameterData)
-    }
+    } 
   }
+  
+  if(nrow(parameterData) != sum(is.na(parameterCd.orig))){
+    na.params <- data.frame(matrix(ncol = ncol(parameterData), nrow = sum(is.na(parameterCd.orig))))
+    names(na.params) <- names(parameterData)
+    parameterData <- rbind(parameterData, na.params)
+  }
+  
+  
+  return(parameterData)
   
 }
