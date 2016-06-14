@@ -81,3 +81,9 @@ test_that("zeroPad handles NAs", {
   padded <- zeroPad(toPad,3)
   expect_true(identical(c("001","005","055",NA),padded))
 })
+
+test_that("Dates with no days can be handled", {
+  testthat::skip_on_cran()
+  data <- readNWISgwl("425957088141001", startDate = "1980-01-01")
+  expect_error(charToDate(x), NA)
+})
