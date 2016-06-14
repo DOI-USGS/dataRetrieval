@@ -12,15 +12,23 @@
 #' correctPCode <- zeroPad(pCode,5)
 #' pCodes <- c('100','1000','0','12345','1565465465465465')
 #' correctPCodes <- zeroPad(pCodes,5)
+#' pCodeNA <- c(1,2,NA)
+#' padPCodeNA <- zeroPad(pCodeNA,4)
 zeroPad <- function(x,padTo){
   if(padTo <= 1) return(x)
+  #if(is.na(x) == TRUE) return(x)
   numDigits <- nchar(x)
   padding <- padTo-numDigits
-  padingZeros <- vapply(
+  padNA <- which(is.na(padding) == TRUE)
+  if(length(padNA > 1)){
+    padding[padNA] <- 0
+    message("There were NAs send to zeroPad")
+  }
+  paddingZeros <- vapply(
       X = padding[padding > 0], 
       FUN = function(y) paste(rep("0",y),collapse="",sep=""),
       FUN.VALUE = ""
   )
-  x[padding > 0] <- paste(padingZeros,x[padding > 0],sep="")
+  x[padding > 0] <- paste(paddingZeros,x[padding > 0],sep="")
   return(x)
 }
