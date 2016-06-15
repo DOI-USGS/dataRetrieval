@@ -149,14 +149,16 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
             stop("Monthly and yearly report types can only provide means")
           }
           parameterCd <- paste(parameterCd,collapse=",")
-          url <- paste0("http://waterservices.usgs.gov/nwis/stat/?format=rdb&sites=",siteNumber,"&missingData=off",
-                        "&statType=",statType,"&statReportType=",statReportType,"&parameterCd",parameterCd)
+          url <- paste0("http://waterservices.usgs.gov/nwis/stat/?format=rdb&sites=",siteNumber,
+                        "&statType=",statType,"&statReportType=",statReportType,"&parameterCd=",parameterCd)
           if (nzchar(startDate)) {
-            url <- paste(url,"&begin_date=",startDate,sep="")
+            url <- paste0(url,"&begin_date=",startDate)
           }
-          
           if (nzchar(endDate)) {
-            url <- paste(url,"&end_date=",endDate,sep="")
+            url <- paste0(url,"&end_date=",endDate)
+          }
+          if (!grepl("(?i)daily",statReportType)){
+            url <- paste0(url,"&missingData=off")
           }
           
         },
