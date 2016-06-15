@@ -44,7 +44,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
                              service,statCd="00003", format="xml",expanded=TRUE,
                              ratingType="base",statReportType="daily",statType="mean"){
 
-  service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas","stats"))
+  service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas","stat"))
   
   if(any(!is.na(parameterCd) & parameterCd != "all")){
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
@@ -148,6 +148,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           if(!grepl("(?i)daily",statReportType) && !all(grepl("(?i)mean",statType)) && !all(grepl("(?i)all",statType))){
             stop("Monthly and yearly report types can only provide means")
           }
+          statType <- paste(statType,collapse=",")
           parameterCd <- paste(parameterCd,collapse=",")
           url <- paste0("http://waterservices.usgs.gov/nwis/stat/?format=rdb&sites=",siteNumber,
                         "&statType=",statType,"&statReportType=",statReportType,"&parameterCd=",parameterCd)

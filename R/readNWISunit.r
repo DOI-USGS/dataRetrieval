@@ -418,7 +418,7 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' See \url{http://waterservices.usgs.gov/rest/Statistics-Service.html} for more information.
 #' 
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
-#' @param parameterCd character USGS parameter code.  This is usually a 5 digit number.
+#' @param parameterCd character USGS parameter code.  This is usually a 5 digit number.  
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the earliest possible record.  For daily data, this indicates the start of the period the statistics 
 #' be computed over.
@@ -429,7 +429,7 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #'  numerics based on a standard algorithm. If false, everything is returned as a character
 #' @param statReportType character time division for statistics: daily, monthly, or yearly.  Default is daily.
 #' Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 365
-#' data points will be returned for each site/parameter.
+#' data points will be returned for each site/parameter.  Use readNWISdata or *** the simpler version *** for daily averages. 
 #' #TODO: phrase above more clearly?
 #'   Monthly and yearly provide statistics for each month and year within the range indivually.
 #' @param statTypes character type of statistics to output for daily values.  Default is mean, which is the only
@@ -439,8 +439,9 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
 #' 
-readNWISstats <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE, 
+readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE, 
                           statReportType = "daily", statTypes = "mean"){
-  url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="tsv")
+  url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,service = "stat",format = "rdb", 
+                          statTypes = statTypes, statReportType = statReportType)
   data <- importRDB1(url,asDateTime=TRUE, convertType = convertType)
 }
