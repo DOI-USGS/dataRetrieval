@@ -42,9 +42,9 @@
 #' urlQW <- constructNWISURL("450456092225801","70300",startDate="",endDate="","qw",expanded=TRUE)
 constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate="",
                              service,statCd="00003", format="xml",expanded=TRUE,
-                             ratingType="base"){
+                             ratingType="base",statReportType="daily",statType="mean"){
 
-  service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas"))
+  service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas","stats"))
   
   if(any(!is.na(parameterCd) & parameterCd != "all")){
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
@@ -142,6 +142,23 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
             url <- paste0(url,"&format=rdb")
           }
 
+        },
+        stats = { #for statistics service
+          #make sure only allowed statTypes are being requested
+          if(!grepl("(?i)daily",statReportType) && !all(grepl("(?i)mean",statType)) && !all(grepl("(?i)all",statType))){
+            stop("Monthly and yearly report types can only provide means")
+          }
+          parameterCd <- paste(parameterCd,collapse=",")
+          url <- paste0("http://waterservices.usgs.gov/nwis/stat/?format=rdb&sites=",siteNumber,"&missingData=off",
+                        "&statType=",statType,"&statReportType=",statReportType,"&parameterCd",parameterCd)
+          if (nzchar(startDate)) {
+            url <- paste(url,"&begin_date=",startDate,sep="")
+          }
+          
+          if (nzchar(endDate)) {
+            url <- paste(url,"&end_date=",endDate,sep="")
+          }
+          
         },
         
         { # this will be either dv or uv
