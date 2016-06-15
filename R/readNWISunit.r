@@ -412,3 +412,35 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
   return (data)
 }
 
+#' Site statistics retrieval from USGS (NWIS) 
+#' 
+#' Retrieves site statistics from the USGS Statistics Web Service beta.  
+#' See \url{http://waterservices.usgs.gov/rest/Statistics-Service.html} for more information.
+#' 
+#' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
+#' @param parameterCd character USGS parameter code.  This is usually a 5 digit number.
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the earliest possible record.  For daily data, this indicates the start of the period the statistics 
+#' be computed over.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the latest possible record.  For daily data, this indicates the end of the period the statistics 
+#' be computed over.
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates,
+#'  numerics based on a standard algorithm. If false, everything is returned as a character
+#' @param statReportType character time division for statistics: daily, monthly, or yearly.  Default is daily.
+#' Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 365
+#' data points will be returned for each site/parameter.
+#' #TODO: phrase above more clearly?
+#'   Monthly and yearly provide statistics for each month and year within the range indivually.
+#' @param statTypes character type of statistics to output for daily values.  Default is mean, which is the only
+#' option for monthly and yearly report types. See the statistics service documentation 
+#' \url {http://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.  
+#' @return A data frame with the following columns:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' 
+readNWISstats <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE, 
+                          statReportType = "daily", statTypes = "mean"){
+  url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="tsv")
+  data <- importRDB1(url,asDateTime=TRUE, convertType = convertType)
+}
