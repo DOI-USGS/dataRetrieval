@@ -342,8 +342,8 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #'
 #' Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service 
 #' depending on the year that the data was collected. See \url{http://waterdata.usgs.gov/usa/nwis/gw}
-#' for details about groundwater. Groundwater dates and times are returned in many different formats, therefore the 
-#' date/time information is returned as a character string. Users will need to convert to a date object.
+#' for details about groundwater. By default the returned dates are converted to date objects, unless convertType
+#' is specified as FALSE. Sites with non-standard date formats (i.e. lacking a day) can be affected (see examples).
 #' See \url{http://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more information.
 #' 
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
