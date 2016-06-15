@@ -374,7 +374,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #' url \tab character \tab The url used to generate the data \cr
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' comment \tab character \tab Header comments from the RDB file \cr
-#' siteInfo \tab xdata.frame \tab A data frame containing information on the requested sites \cr
+#' siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
 #' }
 #' 
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
