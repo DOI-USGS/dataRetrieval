@@ -395,13 +395,14 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
   data <- importRDB1(url,asDateTime=TRUE, convertType = convertType)
 
   if(nrow(data) > 0){
-    #check that the date includes a day, based on date string length
-    if(any(nchar(as.character(data$lev_dt)) <= 7)){
-      data$lev_dt <- parse_date_time(data$lev_dt,c("Y-m","Y-m-d"))
-      warning("Some dates probably didn't include days; they are converted to the last day of the preceding month")
+    if(convertType){
+      #check that the date includes a day, based on date string length
+      if(any(nchar(as.character(data$lev_dt)) <= 7)){
+        data$lev_dt <- parse_date_time(data$lev_dt,c("Y-m","Y-m-d"))
+        warning("Some dates probably didn't include days; they are converted to the last day of the preceding month")
+      }
+      data$lev_dt <- as.Date(data$lev_dt)
     }
-    data$lev_dt <- as.Date(data$lev_dt)
-  
     siteInfo <- readNWISsite(siteNumbers)
     siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
     
