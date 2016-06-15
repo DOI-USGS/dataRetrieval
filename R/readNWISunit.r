@@ -387,6 +387,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #' sites <- c("434400121275801", "375907091432201")
 #' data2 <- readNWISgwl(sites, '','')
 #' data3 <- readNWISgwl("420125073193001", '','')
+#' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01") #handling of data where date has no day
 #' }
 readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE){  
   
@@ -394,8 +395,14 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
   data <- importRDB1(url,asDateTime=TRUE, convertType = convertType)
 
   if(nrow(data) > 0){
-    data$lev_dt <- as.Date(data$lev_dt)
-  
+    if(convertType){
+      #check that the date includes a day, based on date string length
+      if(any(nchar(as.character(data$lev_dt)) <= 7)){
+        data$lev_dt <- parse_date_time(data$lev_dt,c("Y-m","Y-m-d"))
+        warning("Some dates probably didn't include days; they are converted to the last day of the preceding month")
+      }
+      data$lev_dt <- as.Date(data$lev_dt)
+    }
     siteInfo <- readNWISsite(siteNumbers)
     siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
     
