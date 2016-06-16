@@ -143,20 +143,29 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           }
 
         },
-        stats = { #for statistics service
+        stat = { #for statistics service
           #make sure only allowed statTypes are being requested
           if(!grepl("(?i)daily",statReportType) && !all(grepl("(?i)mean",statType)) && !all(grepl("(?i)all",statType))){
-            stop("Monthly and yearly report types can only provide means")
+            stop("Monthly and annual report types can only provide means")
+          }
+          
+          #make sure dates aren't too specific for statReportType
+          if(grepl("(?i)monthly",statReportType) && (length(unlist(gregexpr("-",startDate))) > 1 
+             || length(unlist(gregexpr("-",endDate))) > 1)){
+            stop("Start and end dates for monthly statReportTypes can only include months and years")
+          }
+          if(grepl("(?i)annual",statReportType) && (grepl("-",startDate) || grepl("-",endDate))){
+            stop("Start and end dates for annual statReportTypes can only include years")
           }
           statType <- paste(statType,collapse=",")
           parameterCd <- paste(parameterCd,collapse=",")
           url <- paste0("http://waterservices.usgs.gov/nwis/stat/?format=rdb&sites=",siteNumber,
                         "&statType=",statType,"&statReportType=",statReportType,"&parameterCd=",parameterCd)
           if (nzchar(startDate)) {
-            url <- paste0(url,"&begin_date=",startDate)
+            url <- paste0(url,"&startDT=",startDate)
           }
           if (nzchar(endDate)) {
-            url <- paste0(url,"&end_date=",endDate)
+            url <- paste0(url,"&endDT=",endDate)
           }
           if (!grepl("(?i)daily",statReportType)){
             url <- paste0(url,"&missingData=off")

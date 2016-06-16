@@ -425,10 +425,11 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record.  For daily data, this indicates the end of the period the statistics 
 #' be computed over.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates,
-#'  numerics based on a standard algorithm. If false, everything is returned as a character
-#' @param statReportType character time division for statistics: daily, monthly, or yearly.  Default is daily.
-#' Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 365
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
+#' numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
+#' in separate columns.  If convertType is false, everything is returned as a character.
+#' @param statReportType character time division for statistics: daily, monthly, or annual.  Default is daily.
+#' Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 366
 #' data points will be returned for each site/parameter.  Use readNWISdata or *** the simpler version *** for daily averages. 
 #' #TODO: phrase above more clearly?
 #'   Monthly and yearly provide statistics for each month and year within the range indivually.
@@ -440,8 +441,10 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' Name \tab Type \tab Description \cr
 #' 
 readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE, 
-                          statReportType = "daily", statTypes = "mean"){
+                          statReportType = "daily", statType = "mean"){
   url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,service = "stat",format = "rdb", 
-                          statTypes = statTypes, statReportType = statReportType)
+                          statType = statType, statReportType = statReportType)
   data <- importRDB1(url,asDateTime=TRUE, convertType = convertType)
+  
+  return (data)
 }
