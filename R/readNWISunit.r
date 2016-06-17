@@ -451,6 +451,15 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' @export
 #' @importFrom dplyr left_join
 #' @examples
+#' \dontrun{
+#' #all the annual mean discharge data for two sites
+#' x <- readNWISstat(siteNumbers=c("02319394","02171500"),parameterCd=c("00010","00060"),statReportType="annual")
+#' 
+#' #Request p25, p75, and mean values for temperature and discharge for the 2000s
+#' #Note that p25 and p75 were not available for temperature, and return NAs
+#' x <- readNWISstat(siteNumbers=c("02171500"),parameterCd=c("00010","00060"),statReportType="daily",
+#' statType=c("mean","median"),startDate="2000",endDate="2010")
+#' }
 readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE, 
                           statReportType = "daily", statType = "mean"){
   url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,service = "stat",format = "rdb", 
