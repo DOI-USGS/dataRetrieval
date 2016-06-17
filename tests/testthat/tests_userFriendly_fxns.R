@@ -155,7 +155,6 @@ test_that("readNWISstat tests", {
   testthat::skip_on_cran()
   data <- readNWISstat(siteNumbers=c("02171500"),parameterCd=c("00010","00060"),
                     statReportType="daily",statType=c("mean","p75","p25"),startDate="2000",endDate="2010")
-  expect_is(data$p25_va, 'numeric')
-  expect_is(data$begin_yr, 'numeric')
+  expect_is(data$begin_yr, 'integer')
   expect_that(length(data) > 3, is_true())
 })
