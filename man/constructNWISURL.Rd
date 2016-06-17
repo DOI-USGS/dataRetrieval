@@ -6,7 +6,8 @@
 \usage{
 constructNWISURL(siteNumber, parameterCd = "00060", startDate = "",
   endDate = "", service, statCd = "00003", format = "xml",
-  expanded = TRUE, ratingType = "base")
+  expanded = TRUE, ratingType = "base", statReportType = "daily",
+  statType = "mean")
 }
 \arguments{
 \item{siteNumber}{string or vector of strings USGS site number.  This is usually an 8 digit number}

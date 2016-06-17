@@ -144,7 +144,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 
         },
         stat = { #for statistics service
-          #make sure only allowed statTypes are being requested
+          #make sure only statTypes allowed for the statReportType are being requested
           if(!grepl("(?i)daily",statReportType) && !all(grepl("(?i)mean",statType)) && !all(grepl("(?i)all",statType))){
             stop("Monthly and annual report types can only provide means")
           }
@@ -152,10 +152,10 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           #make sure dates aren't too specific for statReportType
           if(grepl("(?i)monthly",statReportType) && (length(unlist(gregexpr("-",startDate))) > 1 
              || length(unlist(gregexpr("-",endDate))) > 1)){
-            stop("Start and end dates for monthly statReportTypes can only include months and years")
+            stop("Start and end dates for monthly statReportType can only include months and years")
           }
           if(grepl("(?i)annual",statReportType) && (grepl("-",startDate) || grepl("-",endDate))){
-            stop("Start and end dates for annual statReportTypes can only include years")
+            stop("Start and end dates for annual statReportType can only include years")
           }
           statType <- paste(statType,collapse=",")
           parameterCd <- paste(parameterCd,collapse=",")
