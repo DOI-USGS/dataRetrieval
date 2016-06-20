@@ -86,7 +86,7 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   
   matchReturn <- list(...)
   
-  match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata"))
+  match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata","stat"))
   
   if(service == "uv"){
     service <- "iv"
@@ -164,7 +164,7 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     tz <- ""
   }
   
-  if(service %in% c("site","gwlevels")){
+  if(service %in% c("site","gwlevels","stat")){
     format.default <- "rdb"
   }
   
@@ -177,7 +177,7 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   if(service %in% c("site","dv","iv","gwlevels")) {
     baseURL <- appendDrURL(baseURL, Access=pkg.env$access)
   }
-
+  #actually get the data
   if(length(grep("rdb",values["format"])) >0){
     retval <- importRDB1(baseURL, tz = tz, asDateTime=asDateTime, convertType=convertType)
   } else {
