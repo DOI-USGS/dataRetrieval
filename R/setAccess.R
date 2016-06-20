@@ -49,6 +49,7 @@ setAccess = function(access="public"){
   pkg.env$peak = "http://nwis.waterdata.usgs.gov/usa/nwis/peak/"
   pkg.env$rating = "http://waterdata.usgs.gov/nwisweb/get_ratings/"
   pkg.env$qwdata = "http://nwis.waterdata.usgs.gov/nwis/qwdata"
+  pkg.env$stat = "http://waterservices.usgs.gov/nwis/stat/"
   
   options(Access.dataRetrieval = access)
 }

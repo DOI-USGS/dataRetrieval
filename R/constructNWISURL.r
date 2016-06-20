@@ -42,9 +42,9 @@
 #' urlQW <- constructNWISURL("450456092225801","70300",startDate="",endDate="","qw",expanded=TRUE)
 constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate="",
                              service,statCd="00003", format="xml",expanded=TRUE,
-                             ratingType="base"){
+                             ratingType="base",statReportType="daily",statType="mean"){
 
-  service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas"))
+  service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas","stat"))
   
   if(any(!is.na(parameterCd) & parameterCd != "all")){
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
@@ -142,6 +142,35 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
             url <- paste0(url,"&format=rdb")
           }
 
+        },
+        stat = { #for statistics service
+          #make sure only statTypes allowed for the statReportType are being requested
+          if(!grepl("(?i)daily",statReportType) && !all(grepl("(?i)mean",statType)) && !all(grepl("(?i)all",statType))){
+            stop("Monthly and annual report types can only provide means")
+          }
+          
+          #make sure dates aren't too specific for statReportType
+          if(grepl("(?i)monthly",statReportType) && (length(unlist(gregexpr("-",startDate))) > 1 
+             || length(unlist(gregexpr("-",endDate))) > 1)){
+            stop("Start and end dates for monthly statReportType can only include months and years")
+          }
+          if(grepl("(?i)annual",statReportType) && (grepl("-",startDate) || grepl("-",endDate))){
+            stop("Start and end dates for annual statReportType can only include years")
+          }
+          statType <- paste(statType,collapse=",")
+          parameterCd <- paste(parameterCd,collapse=",")
+          url <- paste0("http://waterservices.usgs.gov/nwis/stat/?format=rdb&sites=",siteNumber,
+                        "&statType=",statType,"&statReportType=",statReportType,"&parameterCd=",parameterCd)
+          if (nzchar(startDate)) {
+            url <- paste0(url,"&startDT=",startDate)
+          }
+          if (nzchar(endDate)) {
+            url <- paste0(url,"&endDT=",endDate)
+          }
+          if (!grepl("(?i)daily",statReportType)){
+            url <- paste0(url,"&missingData=off")
+          }
+          
         },
         
         { # this will be either dv or uv
