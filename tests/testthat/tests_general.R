@@ -35,7 +35,7 @@ test_that("General NWIS retrievals working", {
   
   dailyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="daily",
                            statType=c("p25","p50","p75","min","max"),parameterCd="00065",convertType=FALSE)
-  expect_that(length(dailyStat$min_va) > 1)
+  expect_that(length(dailyStat$min_va) > 1, is_true())
   expect_is(dailyStat$p25_va,"character")
   
   waterYearStat <- readNWISdata(site=c("03112500"),service="stat",statReportType="annual",
