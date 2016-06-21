@@ -5,9 +5,10 @@
 #' See examples below for ideas of constructing queries.
 #'
 #' @param service character. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
-#' (for groundwater levels), "site" (for site service), "qw" (water-quality), and "measurement". 
-#' Note: "qw" and "measurement" calls go to: 
-#' \url{http://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes. 
+#' (for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
+#' statistics service). Note: "qw" and "measurement" calls go to: 
+#' \url{http://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
+#' The statistics service has a limited selection of arguments (see \url{http://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}). 
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
@@ -81,12 +82,19 @@
 #'                    seriesCatalogOutput=TRUE)
 #' wiGWL <- readNWISdata(stateCd="WI",service="gwlevels")
 #' meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
+#' 
+#' waterYearStat <- readNWISdata(site=c("03112500"),service="stat",statReportType="annual",
+#'                  statYearType="water", missingData="on")
+#' monthlyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="monthly")                                   
+#' dailyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="daily",
+#'                          statType=c("p25","p50","p75","min","max"),parameterCd="00065")
+#' allDailyStats <- readNWISdata(site=c("03111548"),service="stat",statReportType="daily")
 #' }
 readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   
   matchReturn <- list(...)
   
-  match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata"))
+  match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata","stat"))
   
   if(service == "uv"){
     service <- "iv"
@@ -164,7 +172,7 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     tz <- ""
   }
   
-  if(service %in% c("site","gwlevels")){
+  if(service %in% c("site","gwlevels","stat")){
     format.default <- "rdb"
   }
   
@@ -177,7 +185,7 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   if(service %in% c("site","dv","iv","gwlevels")) {
     baseURL <- appendDrURL(baseURL, Access=pkg.env$access)
   }
-
+  #actually get the data
   if(length(grep("rdb",values["format"])) >0){
     retval <- importRDB1(baseURL, tz = tz, asDateTime=asDateTime, convertType=convertType)
   } else {

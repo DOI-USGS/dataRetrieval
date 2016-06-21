@@ -24,8 +24,7 @@
 #'
 #' @export
 setAccess = function(access="public"){
-  
-  access = match.arg(access, c('public','internal','cooperator','USGS'))
+access = match.arg(access, c('public','internal','cooperator','USGS'))
   
   if(access=="internal"){
     pkg.env$access = '3'
@@ -55,8 +54,6 @@ setAccess = function(access="public"){
 }
 
 drURL <- function(base.name, ..., arg.list=NULL){
-  
-  
   queryString <- drQueryArgs(..., arg.list=arg.list)
   #to do: add something to check for redundant params
   
