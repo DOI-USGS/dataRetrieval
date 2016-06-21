@@ -32,6 +32,16 @@ test_that("General NWIS retrievals working", {
   urlEmpty <- "http://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=413437087150601&sort_key=site_no&group_key=NONE&inventory_output=0&begin_date=&end_date=&TZoutput=0&param_group=NUT,INN&qw_attributes=0&format=rdb&qw_sample_wide=0&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&list_of_search_criteria=multiple_site_no"
   dv <- importRDB1(urlEmpty, asDateTime = FALSE)
   expect_that(nrow(dv) == 0, is_true())
+  
+  dailyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="daily",
+                           statType=c("p25","p50","p75","min","max"),parameterCd="00065",convertType=FALSE)
+  expect_that(length(dailyStat$min_va) > 1, is_true())
+  expect_is(dailyStat$p25_va,"character")
+  
+  waterYearStat <- readNWISdata(site=c("03112500"),service="stat",statReportType="annual",
+                                statYearType="water", missingData="on")
+  expect_is(waterYearStat$mean_va,"numeric")
+  expect_is(waterYearStat$parameter_cd,"character")
 })
 
 
@@ -80,4 +90,10 @@ test_that("zeroPad handles NAs", {
   toPad <- c(1,5,55,NA)
   padded <- zeroPad(toPad,3)
   expect_true(identical(c("001","005","055",NA),padded))
+})
+
+test_that("Dates with no days can be handled", {
+  testthat::skip_on_cran()
+  data <- readNWISgwl("425957088141001", startDate = "1980-01-01")
+  expect_true(class(data$lev_dt)=="Date")
 })

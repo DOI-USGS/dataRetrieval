@@ -8,9 +8,10 @@ readNWISdata(service = "dv", ..., asDateTime = TRUE, convertType = TRUE)
 }
 \arguments{
 \item{service}{character. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
-(for groundwater levels), "site" (for site service), "qw" (water-quality), and "measurement". 
-Note: "qw" and "measurement" calls go to: 
-\url{http://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.}
+(for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
+statistics service). Note: "qw" and "measurement" calls go to: 
+\url{http://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
+The statistics service has a limited selection of arguments (see \url{http://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}).}
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
 
@@ -90,6 +91,13 @@ temp <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", service="si
                    seriesCatalogOutput=TRUE)
 wiGWL <- readNWISdata(stateCd="WI",service="gwlevels")
 meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
+
+waterYearStat <- readNWISdata(site=c("03112500"),service="stat",statReportType="annual",
+                 statYearType="water", missingData="on")
+monthlyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="monthly")                                   
+dailyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="daily",
+                         statType=c("p25","p50","p75","min","max"),parameterCd="00065")
+allDailyStats <- readNWISdata(site=c("03111548"),service="stat",statReportType="daily")
 }
 }
 \seealso{

@@ -24,8 +24,7 @@
 #'
 #' @export
 setAccess = function(access="public"){
-  
-  access = match.arg(access, c('public','internal','cooperator','USGS'))
+access = match.arg(access, c('public','internal','cooperator','USGS'))
   
   if(access=="internal"){
     pkg.env$access = '3'
@@ -49,13 +48,12 @@ setAccess = function(access="public"){
   pkg.env$peak = "http://nwis.waterdata.usgs.gov/usa/nwis/peak/"
   pkg.env$rating = "http://waterdata.usgs.gov/nwisweb/get_ratings/"
   pkg.env$qwdata = "http://nwis.waterdata.usgs.gov/nwis/qwdata"
+  pkg.env$stat = "http://waterservices.usgs.gov/nwis/stat/"
   
   options(Access.dataRetrieval = access)
 }
 
 drURL <- function(base.name, ..., arg.list=NULL){
-  
-  
   queryString <- drQueryArgs(..., arg.list=arg.list)
   #to do: add something to check for redundant params
   

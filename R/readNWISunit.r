@@ -342,8 +342,8 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #'
 #' Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service 
 #' depending on the year that the data was collected. See \url{http://waterdata.usgs.gov/usa/nwis/gw}
-#' for details about groundwater. Groundwater dates and times are returned in many different formats, therefore the 
-#' date/time information is returned as a character string. Users will need to convert to a date object.
+#' for details about groundwater. By default the returned dates are converted to date objects, unless convertType
+#' is specified as FALSE. Sites with non-standard date formats (i.e. lacking a day) can be affected (see examples).
 #' See \url{http://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more information.
 #' 
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
@@ -387,6 +387,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #' sites <- c("434400121275801", "375907091432201")
 #' data2 <- readNWISgwl(sites, '','')
 #' data3 <- readNWISgwl("420125073193001", '','')
+#' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01") #handling of data where date has no day
 #' }
 readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE){  
   
@@ -394,8 +395,14 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
   data <- importRDB1(url,asDateTime=TRUE, convertType = convertType)
 
   if(nrow(data) > 0){
-    data$lev_dt <- as.Date(data$lev_dt)
-  
+    if(convertType){
+      #check that the date includes a day, based on date string length
+      if(any(nchar(as.character(data$lev_dt)) <= 7)){
+        data$lev_dt <- parse_date_time(data$lev_dt,c("Y-m","Y-m-d"))
+        warning("Some dates probably didn't include days; they are converted to the last day of the preceding month")
+      }
+      data$lev_dt <- as.Date(data$lev_dt)
+    }
     siteInfo <- readNWISsite(siteNumbers)
     siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
     
@@ -405,3 +412,64 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
   return (data)
 }
 
+#' Site statistics retrieval from USGS (NWIS) 
+#' 
+#' Retrieves site statistics from the USGS Statistics Web Service beta.  
+#' See \url{http://waterservices.usgs.gov/rest/Statistics-Service.html} for more information.
+#' 
+#' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number.
+#' @param parameterCd character USGS parameter code.  This is usually a 5 digit number.  
+#' @param startDate character starting date for data retrieval in the form YYYY, YYYY-MM, or YYYY-MM-DD. Dates cannot 
+#' be more specific than the statReportType, i.e. startDate for monthly statReportTypes cannot include days, and annual
+#' statReportTypes cannot include days or months.  Months and days are optional for the daily statReportType. 
+#' Default is "" which indicates retrieval for the earliest possible record.  For daily data, this indicates the 
+#' start of the period the statistics will be computed over.
+#' @param endDate character ending date for data retrieval in the form YYYY, YYYY-MM, or YYYY-MM-DD. Default is "" 
+#' which indicates retrieval for the latest possible record.  For daily data, this indicates the end of the period 
+#' the statistics will be computed over.  The same restrictions as startDate apply.  
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
+#' numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
+#' in separate columns.  If convertType is false, everything is returned as a character.
+#' @param statReportType character time division for statistics: daily, monthly, or annual.  Default is daily.
+#' Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 366
+#' data points will be returned for each site/parameter.  Use readNWISdata or readNWISdv for daily averages. 
+#' Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years.
+#' #TODO: phrase above more clearly?
+#'   Monthly and yearly provide statistics for each month and year within the range indivually.
+#' @param statType character type(s) of statistics to output for daily values.  Default is mean, which is the only
+#' option for monthly and yearly report types. See the statistics service documentation 
+#' at \url{http://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.  
+#' @return A data frame with the following columns:
+#' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
+#' site_no \tab character \tab The USGS site number \cr
+#' parameter_cd \tab character \tab The USGS parameter code \cr
+#' 
+#' Other columns will be present depending on statReportType and statType
+#' }
+#' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
+#' @export
+#' @importFrom dplyr left_join
+#' @examples
+#' \dontrun{
+#' #all the annual mean discharge data for two sites
+#' x <- readNWISstat(siteNumbers=c("02319394","02171500"),parameterCd=c("00010","00060"),statReportType="annual")
+#' 
+#' #Request p25, p75, and mean values for temperature and discharge for the 2000s
+#' #Note that p25 and p75 were not available for temperature, and return NAs
+#' x <- readNWISstat(siteNumbers=c("02171500"),parameterCd=c("00010","00060"),statReportType="daily",
+#' statType=c("mean","median"),startDate="2000",endDate="2010")
+#' }
+readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE, 
+                          statReportType = "daily", statType = "mean"){
+  url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,service = "stat",format = "rdb", 
+                          statType = statType, statReportType = statReportType)
+  data <- importRDB1(url,asDateTime=TRUE, convertType = convertType)
+  
+  siteInfo <- readNWISsite(siteNumbers)
+  siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+  attr(data, "siteInfo") <- siteInfo
+  
+  return (data)
+}
