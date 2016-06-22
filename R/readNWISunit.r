@@ -463,6 +463,14 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' }
 readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE, 
                           statReportType = "daily", statType = "mean"){
+  #check for NAs in site numbers
+  if(any(is.na(siteNumbers))){
+    siteNumbers <- siteNumbers[!is.na(siteNumbers)]
+    if(length(siteNumbers)==0){
+      stop("siteNumbers was all NAs")
+    }
+    warning("NAs were passed in siteNumbers; they were ignored")
+  }
   url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,service = "stat",format = "rdb", 
                           statType = statType, statReportType = statReportType)
   data <- importRDB1(url,asDateTime=TRUE, convertType = convertType)
