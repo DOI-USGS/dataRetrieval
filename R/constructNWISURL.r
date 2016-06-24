@@ -305,3 +305,16 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
   return(url)
 
 }
+
+#' Construct URL for NWIS water use data service
+#' 
+#' 
+
+constructUseURL <- function(years="ALL",category="ALL"){ 
+    baseURL <- "http://waterdata.usgs.gov/nwis/water_use?format=rdb&rdb_compression=value&"
+    category <- paste(category,collapse="%2C")  
+    years <- paste(years, collapse="%2C")
+    retURL <- paste0(baseURL,"wu_year=",years,"&wu_category=",category)
+    
+    return(retURL)
+}

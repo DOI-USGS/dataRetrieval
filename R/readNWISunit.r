@@ -481,3 +481,12 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
   
   return (data)
 }
+
+#' Water use data retrieval from USGS (NWIS)
+#' 
+#' 
+ 
+readNWISuse <- function(years="ALL",category="ALL"){
+  url <- constructUseURL(years,category)
+  data <- importRDB1(url,convertType = TRUE)
+}
