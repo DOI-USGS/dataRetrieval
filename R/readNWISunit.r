@@ -490,9 +490,17 @@ readNWISuse <- function(years="ALL",stateAB="",county=NULL,convertType=TRUE){
   if(!is.null(county) && is.null(stateAB)){
     stop("Please enter a state code")
   }
-  if(!is.null(county) && !grepl("(?i)all",county)){
+ 
+  if(!is.null(county) && toupper(county) != "ALL"){
+    #check if "County" was included on string - need it to match countyCd data frame
+    if(!grepl('\\County$',county)){
+      county <- paste(county,"County")
+    }
     #county turns into number for the particular state if isn't empty or ALL
     county <- countyCd$COUNTY[countyCd$STUSAB==stateAB & countyCd$COUNTY_NAME==county]
+    if(length(county)==0){
+      stop("There was a problem with county; check that you entry matches the countyCd data frame")
+      }
   }
   url <- constructUseURL(years,stateAB,county)
   data <- importRDB1(url,convertType=convertType)  #data arrives in named rows?
