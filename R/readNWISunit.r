@@ -486,7 +486,13 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' 
 #' 
  
-readNWISuse <- function(years="ALL",category="ALL"){
-  url <- constructUseURL(years,category)
-  data <- importRDB1(url,convertType = TRUE)
+readNWISuse <- function(years="ALL",stateCd="",county="",convertType=TRUE){
+  if(county=="" && stateCd==""){
+    stop("Please enter a state code")
+  }
+  countyNum <- countyCd$COUNTY[countyCd$STUSAB==stateCd & countyCd$COUNTY_NAME==county]
+  url <- constructUseURL(years,stateCd,countyNum)
+  data <- importRDB1(url)  #data arrives in named rows 
+  
+  
 }
