@@ -4,7 +4,7 @@
 \alias{readNWISuse}
 \title{Water use data retrieval from USGS (NWIS)}
 \usage{
-readNWISuse(years = "ALL", stateCd = "", county = "",
+readNWISuse(years = "ALL", stateAB = "", county = NULL,
   convertType = TRUE)
 }
 \description{

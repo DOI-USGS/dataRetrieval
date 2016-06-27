@@ -486,13 +486,15 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' 
 #' 
  
-readNWISuse <- function(years="ALL",stateCd="",county="",convertType=TRUE){
-  if(county=="" && stateCd==""){
+readNWISuse <- function(years="ALL",stateAB="",county=NULL,convertType=TRUE){
+  if(!is.null(county) && is.null(stateAB)){
     stop("Please enter a state code")
   }
-  countyNum <- countyCd$COUNTY[countyCd$STUSAB==stateCd & countyCd$COUNTY_NAME==county]
-  url <- constructUseURL(years,stateCd,countyNum)
-  data <- importRDB1(url)  #data arrives in named rows 
-  
-  
+  if(!is.null(county) && !grepl("(?i)all",county)){
+    #county turns into number for the particular state if isn't empty or ALL
+    county <- countyCd$COUNTY[countyCd$STUSAB==stateAB & countyCd$COUNTY_NAME==county]
+  }
+  url <- constructUseURL(years,stateAB,county)
+  data <- importRDB1(url,convertType=convertType)  #data arrives in named rows?
+  #TODO - distinguish if total country data with crappy formatting
 }

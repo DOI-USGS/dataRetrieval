@@ -4,7 +4,7 @@
 \alias{constructUseURL}
 \title{Construct URL for NWIS water use data service}
 \usage{
-constructUseURL(years, stateCd, countyNum)
+constructUseURL(years, stateAB, county)
 }
 \description{
 Construct URL for NWIS water use data service

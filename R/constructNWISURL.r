@@ -310,20 +310,22 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
 #' 
 #' 
 
-constructUseURL <- function(years,stateCd,countyNum){ 
+constructUseURL <- function(years,stateAB,county){ 
     baseURL <- "http://waterdata.usgs.gov/"
-    base2 <- "nwis/water_use?format=rdb&rdb_compression=value&"
-    if(stateCd==""){
+    base2 <- "nwis/water_use?format=rdb&rdb_compression=value"
+    if(is.null(stateAB)){
       baseURL <- paste0(baseURL,base2)
     } else{
-      baseURL <- paste0(baseURL,paste0(stateCd,"/"),base2)
-      if(length(countyNum) != 0){
-        if(length(countyNum) > 1) {countyCollapse <- paste(countyNum,collapse="%2C")}
-        baseURL <- paste0(baseURL,"&area=county&wu_county=",countyCollapse,"&")
+      baseURL <- paste0(baseURL,paste0(stateAB,"/"),base2)
+      if(!is.null(county)){
+        if(length(county) > 1) {county <- paste(county,collapse="%2C")}
+          baseURL <- paste0(baseURL,"&wu_area=county&wu_county=",county)
+      } else{
+          baseURL <- paste0(baseURL,"&wu_area=State%20Total")
+        }
       }
-    }
     years <- paste(years, collapse="%2C")
-    retURL <- paste0(baseURL,"wu_year=",years,"&wu_category=ALL")
+    retURL <- paste0(baseURL,"&wu_year=",years,"&wu_category=ALL")
     
     return(retURL)
 }
