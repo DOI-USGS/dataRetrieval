@@ -484,25 +484,37 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 
 #' Water use data retrieval from USGS (NWIS)
 #' 
-#' 
+#' @importFrom stringr str_sub
  
-readNWISuse <- function(years="ALL",stateAB="",county=NULL,convertType=TRUE){
+readNWISuse <- function(years="ALL",stateAB=NULL,county=NULL,convertType=TRUE){
   if(!is.null(county) && is.null(stateAB)){
     stop("Please enter a state code")
   }
  
   if(!is.null(county) && toupper(county) != "ALL"){
     #check if "County" was included on string - need it to match countyCd data frame
-    if(!grepl('\\County$',county)){
-      county <- paste(county,"County")
-    }
+    county <- ifelse(!grepl('\\County$',county),paste(county,"County"),county)
+    
     #county turns into number for the particular state if isn't empty or ALL
-    county <- countyCd$COUNTY[countyCd$STUSAB==stateAB & countyCd$COUNTY_NAME==county]
+    stateCounties <- countyCd[countyCd$STUSAB==stateAB,]
+    county <- paste(stateCounties[match(county,stateCounties$COUNTY_NAME),]$COUNTY,collapse="%2C")
     if(length(county)==0){
       stop("There was a problem with county; check that you entry matches the countyCd data frame")
-      }
+    }
   }
+  if(!is.null(county) && toupper(county) == "ALL"){county <- toupper(county)} #case sensitive in URL
+  if(any(grepl("(?i)all",years))){years <- toupper(years)}
   url <- constructUseURL(years,stateAB,county)
   data <- importRDB1(url,convertType=convertType)  #data arrives in named rows?
   #TODO - distinguish if total country data with crappy formatting
+  if(is.null(county) && is.null(stateAB)){
+    cmmnt <- comment(data)
+    data <- t(data)
+    colnames(data) <- data[1,]
+    data <- as.data.frame(data[-1,])
+    data <- cbind(Year=as.integer(str_sub(rownames(data),2)),data)
+    rownames(data) <- NULL
+    comment(data) <- cmmnt
+  }
+  return(data)
 }
