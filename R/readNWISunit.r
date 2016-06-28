@@ -484,7 +484,21 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 
 #' Water use data retrieval from USGS (NWIS)
 #' 
+#' Retrieves water use data from USGS Water Use Data for the Nation.  See \url{http://waterdata.usgs.gov/nwis/wu} for 
+#' more information.  All available use categories for the supplied arguments are retrieved. 
+#' 
+#' @param years integer Years for data retrieval — must be years ending in 0 or 5. Default is all available years.
+#' @param  stateAB character Two-letter USPS state abbreviation.  Only one is accepted per query.  Codes can be located
+#' with the stateCdLookup function.  Default is \code{NULL}, which will return national data.
+#' @param county character Name(s) of counties.  Default is \code{NULL}, which will return state or national data 
+#' depending on the stateAB argument.  \code{ALL} may also be supplied, which will return data for every county in a 
+#' state. County names be supplied ending in "County" or not — e.g., "Belmont" and "Belmont County" are both acceptable.  
+#' @param convertType logical
+#' @export
 #' @importFrom stringr str_sub
+#' @examples 
+#' \dontrun{
+#' }
  
 readNWISuse <- function(years="ALL",stateAB=NULL,county=NULL,convertType=TRUE){
   if(!is.null(county) && is.null(stateAB)){
@@ -505,13 +519,14 @@ readNWISuse <- function(years="ALL",stateAB=NULL,county=NULL,convertType=TRUE){
   if(!is.null(county) && toupper(county) == "ALL"){county <- toupper(county)} #case sensitive in URL
   if(any(grepl("(?i)all",years))){years <- toupper(years)}
   url <- constructUseURL(years,stateAB,county)
-  data <- importRDB1(url,convertType=convertType)  #data arrives in named rows?
-  #TODO - distinguish if total country data with crappy formatting
+  data <- importRDB1(url,convertType=convertType)  
+  
+  #distinguish if total country data arriving in named rows
   if(is.null(county) && is.null(stateAB)){
     cmmnt <- comment(data)
     data <- t(data)
     colnames(data) <- data[1,]
-    data <- as.data.frame(data[-1,])
+    data <- as.data.frame(data[-1,],stringsAsFactors=FALSE)
     data <- cbind(Year=as.integer(str_sub(rownames(data),2)),data)
     rownames(data) <- NULL
     comment(data) <- cmmnt
