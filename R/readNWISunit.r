@@ -493,7 +493,12 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' @param county character Name(s) of counties.  Default is \code{NULL}, which will return state or national data 
 #' depending on the stateAB argument.  \code{ALL} may also be supplied, which will return data for every county in a 
 #' state. County names be supplied ending in "County" or not — e.g., "Belmont" and "Belmont County" are both acceptable.  
-#' @param convertType logical
+#' @param convertType logical defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
+#' numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
+#' in separate columns.  If convertType is false, everything is returned as a character.
+#' @return A data frame with at least the year of record, and all available statistics for the given geographic parameters.
+#' County and state fields will be included as appropriate.
+#' 
 #' @export
 #' @importFrom stringr str_sub
 #' @examples 
@@ -513,7 +518,7 @@ readNWISuse <- function(years="ALL",stateAB=NULL,county=NULL,convertType=TRUE){
     stateCounties <- countyCd[countyCd$STUSAB==stateAB,]
     county <- paste(stateCounties[match(county,stateCounties$COUNTY_NAME),]$COUNTY,collapse="%2C")
     if(length(county)==0){
-      stop("There was a problem with county; check that you entry matches the countyCd data frame")
+      stop("There was a problem with county; check that your entry matches the countyCd data frame")
     }
   }
   if(!is.null(county) && toupper(county) == "ALL"){county <- toupper(county)} #case sensitive in URL

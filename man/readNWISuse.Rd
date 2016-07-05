@@ -7,7 +7,26 @@
 readNWISuse(years = "ALL", stateAB = NULL, county = NULL,
   convertType = TRUE)
 }
+\arguments{
+\item{years}{integer Years for data retrieval — must be years ending in 0 or 5. Default is all available years.}
+
+\item{stateAB}{character Two-letter USPS state abbreviation.  Only one is accepted per query.  Codes can be located
+with the stateCdLookup function.  Default is \code{NULL}, which will return national data.}
+
+\item{county}{character Name(s) of counties.  Default is \code{NULL}, which will return state or national data 
+depending on the stateAB argument.  \code{ALL} may also be supplied, which will return data for every county in a 
+state. County names be supplied ending in "County" or not — e.g., "Belmont" and "Belmont County" are both acceptable.}
+
+\item{convertType}{logical defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
+numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
+in separate columns.  If convertType is false, everything is returned as a character.}
+}
 \description{
-Water use data retrieval from USGS (NWIS)
+Retrieves water use data from USGS Water Use Data for the Nation.  See \url{http://waterdata.usgs.gov/nwis/wu} for 
+more information.  All available use categories for the supplied arguments are retrieved.
+}
+\examples{
+\dontrun{
+}
 }
 
