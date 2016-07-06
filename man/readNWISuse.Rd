@@ -11,7 +11,8 @@ readNWISuse(years = "ALL", stateAB = NULL, county = NULL,
 \item{years}{integer Years for data retrieval — must be years ending in 0 or 5. Default is all available years.}
 
 \item{stateAB}{character Two-letter USPS state abbreviation.  Only one is accepted per query.  Codes can be located
-with the stateCdLookup function.  Default is \code{NULL}, which will return national data.}
+with the stateCdLookup function for US states. Data for the Virgin Islands (VI), Puerto Rico (PR) and the District
+of Columbia is also available.  Default is \code{NULL}, which will return national data.}
 
 \item{county}{character Name(s) of counties.  Default is \code{NULL}, which will return state or national data 
 depending on the stateAB argument.  \code{ALL} may also be supplied, which will return data for every county in a 
@@ -21,12 +22,31 @@ state. County names be supplied ending in "County" or not — e.g., "Belmont" an
 numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
 in separate columns.  If convertType is false, everything is returned as a character.}
 }
+\value{
+A data frame with at least the year of record, and all available statistics for the given geographic parameters.
+County and state fields will be included as appropriate.
+}
 \description{
 Retrieves water use data from USGS Water Use Data for the Nation.  See \url{http://waterdata.usgs.gov/nwis/wu} for 
 more information.  All available use categories for the supplied arguments are retrieved.
 }
 \examples{
 \dontrun{
+#All data for a county
+allegheny <- readNWISuse(years="ALL",stateAB = "PA",county = "Allegheny")
+
+#Data for an entire state for certain years
+ohio <- readNWISuse(years=c(2000,2005,2010),stateAB = "OH")
+
+#Data for an entire state, county by county
+pr <- readNWISuse(years=c(2000,2005,2010),stateAB = "PR",county="ALL")
+
+#All national-scale data
+national <- readNWISuse()
+
+#Washington, DC data
+dc <- readNWISuse(stateAB = "DC")
+
 }
 }
 
