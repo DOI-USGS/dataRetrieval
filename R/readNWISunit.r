@@ -501,7 +501,6 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' County and state fields will be included as appropriate.
 #' 
 #' @export
-#' @importFrom stringr str_sub
 #' @examples 
 #' \dontrun{
 #' #All data for a county
@@ -548,7 +547,7 @@ readNWISuse <- function(years="ALL",stateAB=NULL,county=NULL,convertType=TRUE){
     data <- t(data)
     colnames(data) <- data[1,]
     data <- as.data.frame(data[-1,],stringsAsFactors=FALSE)
-    data <- cbind(Year=as.integer(str_sub(rownames(data),2)),data)
+    data <- cbind(Year=as.integer(substr(rownames(data),2,5)),data)
     rownames(data) <- NULL
     comment(data) <- cmmnt
   }
