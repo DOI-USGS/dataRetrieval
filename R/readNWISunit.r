@@ -433,9 +433,8 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' @param statReportType character time division for statistics: daily, monthly, or annual.  Default is daily.
 #' Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 366
 #' data points will be returned for each site/parameter.  Use readNWISdata or readNWISdv for daily averages. 
-#' Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years.
-#' #TODO: phrase above more clearly?
-#'   Monthly and yearly provide statistics for each month and year within the range indivually.
+#' Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years. Monthly and yearly 
+#' provide statistics for each month and year within the range indivually.
 #' @param statType character type(s) of statistics to output for daily values.  Default is mean, which is the only
 #' option for monthly and yearly report types. See the statistics service documentation 
 #' at \url{http://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.  
@@ -487,16 +486,17 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' Retrieves water use data from USGS Water Use Data for the Nation.  See \url{http://waterdata.usgs.gov/nwis/wu} for 
 #' more information.  All available use categories for the supplied arguments are retrieved. 
 #' 
-#' @param years integer Years for data retrieval — must be years ending in 0 or 5. Default is all available years.
-#' @param  stateAB character Two-letter USPS state abbreviation.  Only one is accepted per query.  Codes can be located
-#' with the stateCdLookup function for US states. Data for the Virgin Islands (VI), Puerto Rico (PR) and the District
-#' of Columbia is also available.  Default is \code{NULL}, which will return national data.
-#' @param county character Name(s) of counties.  Default is \code{NULL}, which will return state or national data 
-#' depending on the stateAB argument.  \code{ALL} may also be supplied, which will return data for every county in a 
-#' state. County names be supplied ending in "County" or not — e.g., "Belmont" and "Belmont County" are both acceptable.  
+#' @param  stateCd could be character (full name, abbreviation, id), or numeric (id). Only one is accepted per query.  
+#' @param countyCd could be character (name, with or without "County", or "ALL"), numeric (id), or code{NULL}, which will 
+#' return state or national data depending on the stateCd argument.  \code{ALL} may also be supplied, which will return data 
+#' for every county in a state. Can be a vector of counties in the same state.  
+#' @param years integer Years for data retrieval. Must be years ending in 0 or 5. Default is all available years.
 #' @param convertType logical defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
 #' numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
 #' in separate columns.  If convertType is false, everything is returned as a character.
+#' @param transform logical only intended for use with national data.  Defaults to \code{FALSE}, with data being returned as 
+#' presented by the web service.  If \code{TRUE}, data will be transformed and returned with column names, which will reformat
+#' national data to be similar to state data.  
 #' @return A data frame with at least the year of record, and all available statistics for the given geographic parameters.
 #' County and state fields will be included as appropriate.
 #' 
@@ -504,45 +504,42 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' @examples 
 #' \dontrun{
 #' #All data for a county
-#' allegheny <- readNWISuse(years="ALL",stateAB = "PA",county = "Allegheny")
+#' allegheny <- readNWISuse(stateCd = "Pennsylvania",countyCd = "Allegheny")
 #' 
 #' #Data for an entire state for certain years
-#' ohio <- readNWISuse(years=c(2000,2005,2010),stateAB = "OH")
+#' ohio <- readNWISuse(years=c(2000,2005,2010),stateCd = "OH", countyCd = NULL)
 #' 
 #' #Data for an entire state, county by county
-#' pr <- readNWISuse(years=c(2000,2005,2010),stateAB = "PR",county="ALL")
+#' pr <- readNWISuse(years=c(2000,2005,2010),stateCd = "PR",countyCd="ALL")
 #' 
-#' #All national-scale data
-#' national <- readNWISuse()
+#' #All national-scale data, transforming data frame to named columns from named rows
+#' national <- readNWISuse(stateCd = NULL, countyCd = NULL, transform = TRUE)
 #' 
 #' #Washington, DC data
-#' dc <- readNWISuse(stateAB = "DC")
+#' dc <- readNWISuse(stateCd = "DC",countyCd = NULL)
+#' 
+#' #data for multiple counties, with different input formatting
+#' paData <- readNWISuse(stateCd = "42",countyCd = c("Allegheny County", "BUTLER", 1, "031"))
 #' 
 #' }
  
-readNWISuse <- function(years="ALL",stateAB=NULL,county=NULL,convertType=TRUE){
-  if(!is.null(county) && is.null(stateAB)){
-    stop("Please enter a state code")
-  }
+readNWISuse <- function(stateCd, countyCd, years = "ALL", convertType = TRUE, transform = FALSE){
  
-  if(!is.null(county) && toupper(county) != "ALL"){
-    #check if "County" was included on string - need it to match countyCd data frame
-    county <- ifelse(!grepl('\\County$',county),paste(county,"County"),county)
-    
-    #county turns into number for the particular state if isn't empty or ALL
-    stateCounties <- countyCd[countyCd$STUSAB==stateAB,]
-    county <- paste(stateCounties[match(county,stateCounties$COUNTY_NAME),]$COUNTY,collapse="%2C")
-    if(length(county)==0){
-      stop("There was a problem with county; check that your entry matches the countyCd data frame")
+  countyID <- NULL
+  if(!is.null(countyCd) && toupper(countyCd) != "ALL" && countyCd != ""){
+    for(c in countyCd){
+      code <- countyCdLookup(state = stateCd, county = c, outputType = "id")
+      countyID <- c(countyID,code)
     }
   }
-  if(!is.null(county) && toupper(county) == "ALL"){county <- toupper(county)} #case sensitive in URL
+  
+  if(!is.null(countyCd) && toupper(countyCd) == "ALL"){countyID <- toupper(countyID)} #case sensitive in URL
   if(any(grepl("(?i)all",years))){years <- toupper(years)}
-  url <- constructUseURL(years,stateAB,county)
+  url <- constructUseURL(years,stateCd,countyID)
   data <- importRDB1(url,convertType=convertType)  
   
-  #distinguish if total country data arriving in named rows
-  if(is.null(county) && is.null(stateAB)){
+  #for total country data arriving in named rows
+  if(transform == TRUE){
     cmmnt <- comment(data)
     data <- t(data)
     colnames(data) <- data[1,]
@@ -550,6 +547,7 @@ readNWISuse <- function(years="ALL",stateAB=NULL,county=NULL,convertType=TRUE){
     data <- cbind(Year=as.integer(substr(rownames(data),2,5)),data)
     rownames(data) <- NULL
     comment(data) <- cmmnt
+    if(nchar(stateCd) != 0 && !is.null(stateCd)){warning("transform = TRUE is only intended for national data")}
   }
   return(data)
 }

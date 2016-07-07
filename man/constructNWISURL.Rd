@@ -32,6 +32,16 @@ but the user must carefully check the results to see if the data returns matches
 \item{expanded}{logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional information, only applicable for qw data.}
 
 \item{ratingType}{can be "base", "corr", or "exsa". Only applies to rating curve data.}
+
+\item{statReportType}{character Only used for statistics service requests.  Time division for statistics: daily, monthly, or annual.  Default is daily.
+Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 366
+data points will be returned for each site/parameter.  Use readNWISdata or readNWISdv for daily averages. 
+Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years. Monthly and yearly 
+provide statistics for each month and year within the range indivually.}
+
+\item{statType}{character Only used for statistics service requests. Type(s) of statistics to output for daily values.  Default is mean, which is the only
+option for monthly and yearly report types. See the statistics service documentation 
+at \url{http://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.}
 }
 \value{
 url string

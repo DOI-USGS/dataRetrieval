@@ -244,7 +244,7 @@ stateCdLookup <- function(input, outputType="postal"){
   outputType <- match.arg(outputType, c("postal","fullName","tableIndex","id"))
   
   if(is.numeric(input) | !is.na(suppressWarnings(as.numeric(input)))){
-    input <- which(input == as.numeric(stateCd$STATE))
+    input <- which(as.numeric(input) == as.numeric(stateCd$STATE))
   } else if(nchar(input) == 2){
     input <- which(tolower(input) == tolower(stateCd$STUSAB))
   } else {
@@ -283,7 +283,7 @@ countyCdLookup <- function(state, county, outputType = "id"){
   stateCd <- stateCdLookup(state,outputType = "postal")
   
   if(is.numeric(county) | !is.na(suppressWarnings(as.numeric(county)))){
-    county <- which(county == as.numeric(countyCd$COUNTY) & stateCd == countyCd$STUSAB)
+    county <- which(as.numeric(county) == as.numeric(countyCd$COUNTY) & stateCd == countyCd$STUSAB)
   } else {
     #check if "County" was included on string - need it to match countyCd data frame
     county <- ifelse(!grepl('(?i)\\County$',county),paste(county,"County"),county)

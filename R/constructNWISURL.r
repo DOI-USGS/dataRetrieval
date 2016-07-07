@@ -18,6 +18,14 @@
 #' but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml". 
 #' @param expanded logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional information, only applicable for qw data.
 #' @param ratingType can be "base", "corr", or "exsa". Only applies to rating curve data.
+#' @param statReportType character Only used for statistics service requests.  Time division for statistics: daily, monthly, or annual.  Default is daily.
+#' Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 366
+#' data points will be returned for each site/parameter.  Use readNWISdata or readNWISdv for daily averages. 
+#' Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years. Monthly and yearly 
+#' provide statistics for each month and year within the range indivually.
+#' @param statType character Only used for statistics service requests. Type(s) of statistics to output for daily values.  Default is mean, which is the only
+#' option for monthly and yearly report types. See the statistics service documentation 
+#' at \url{http://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
@@ -308,18 +316,28 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
 
 #' Construct URL for NWIS water use data service
 #' 
+#' Reconstructs URLs to retrieve data from here: \url{http://waterdata.usgs.gov/nwis/wu}
 #' 
-
-constructUseURL <- function(years,stateAB,county){ 
+#' @param years integer Years for data retrieval. Must be years ending in 0 or 5, or "ALL", which retrieves all available years.
+#' @param stateCd could be character (full name, abbreviation, id), or numeric (id)
+#' @param countyCd could be numeric (County IDs from countyCdLookup) or character ("ALL") 
+#' @return url string
+#' @export
+#' @examples
+#' url <- constructUseURL(years=c(1990,1995),stateCd="Ohio",countyCd = c(1,3))
+#' 
+constructUseURL <- function(years,stateCd,countyCd){ 
     baseURL <- "http://waterdata.usgs.gov/"
     base2 <- "nwis/water_use?format=rdb&rdb_compression=value"
-    if(is.null(stateAB)){
+    if(is.null(stateCd)){
       baseURL <- paste0(baseURL,base2)
     } else{
-      baseURL <- paste0(baseURL,paste0(stateAB,"/"),base2)
-      if(!is.null(county)){
-        if(length(county) > 1) {county <- paste(county,collapse="%2C")}
-          baseURL <- paste0(baseURL,"&wu_area=county&wu_county=",county)
+      stateCd <- stateCdLookup(input = stateCd, outputType = "postal")
+      baseURL <- paste0(baseURL,paste0(stateCd,"/"),base2)
+      if(!is.null(countyCd)){
+        
+        if(length(countyCd) > 1) {countyCd <- paste(countyCd,collapse="%2C")}
+          baseURL <- paste0(baseURL,"&wu_area=county&wu_county=",countyCd)
       } else{
           baseURL <- paste0(baseURL,"&wu_area=State%20Total")
         }

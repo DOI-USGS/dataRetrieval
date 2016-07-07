@@ -4,23 +4,25 @@
 \alias{readNWISuse}
 \title{Water use data retrieval from USGS (NWIS)}
 \usage{
-readNWISuse(years = "ALL", stateAB = NULL, county = NULL,
-  convertType = TRUE)
+readNWISuse(stateCd, countyCd, years = "ALL", convertType = TRUE,
+  transform = FALSE)
 }
 \arguments{
+\item{stateCd}{could be character (full name, abbreviation, id), or numeric (id). Only one is accepted per query.}
+
+\item{countyCd}{could be character (name, with or without "County", or "ALL"), numeric (id), or code{NULL}, which will 
+return state or national data depending on the stateCd argument.  \code{ALL} may also be supplied, which will return data 
+for every county in a state. Can be a vector of counties in the same state.}
+
 \item{years}{integer Years for data retrieval — must be years ending in 0 or 5. Default is all available years.}
-
-\item{stateAB}{character Two-letter USPS state abbreviation.  Only one is accepted per query.  Codes can be located
-with the stateCdLookup function for US states. Data for the Virgin Islands (VI), Puerto Rico (PR) and the District
-of Columbia is also available.  Default is \code{NULL}, which will return national data.}
-
-\item{county}{character Name(s) of counties.  Default is \code{NULL}, which will return state or national data 
-depending on the stateAB argument.  \code{ALL} may also be supplied, which will return data for every county in a 
-state. County names be supplied ending in "County" or not — e.g., "Belmont" and "Belmont County" are both acceptable.}
 
 \item{convertType}{logical defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
 numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
 in separate columns.  If convertType is false, everything is returned as a character.}
+
+\item{transform}{logical only intended for use with national data.  Defaults to \code{FALSE}, with data being returned as 
+presented by the web service.  If \code{TRUE}, data will be transformed and returned with column names, which will reformat
+national data to be similar to state data.}
 }
 \value{
 A data frame with at least the year of record, and all available statistics for the given geographic parameters.
@@ -33,19 +35,22 @@ more information.  All available use categories for the supplied arguments are r
 \examples{
 \dontrun{
 #All data for a county
-allegheny <- readNWISuse(years="ALL",stateAB = "PA",county = "Allegheny")
+allegheny <- readNWISuse(stateCd = "Pennsylvania",countyCd = "Allegheny")
 
 #Data for an entire state for certain years
-ohio <- readNWISuse(years=c(2000,2005,2010),stateAB = "OH")
+ohio <- readNWISuse(years=c(2000,2005,2010),stateCd = "OH", countyCd = NULL)
 
 #Data for an entire state, county by county
-pr <- readNWISuse(years=c(2000,2005,2010),stateAB = "PR",county="ALL")
+pr <- readNWISuse(years=c(2000,2005,2010),stateCd = "PR",countyCd="ALL")
 
-#All national-scale data
-national <- readNWISuse()
+#All national-scale data, transforming data frame to named columns from named rows
+national <- readNWISuse(stateCd = NULL, countyCd = NULL, transform = TRUE)
 
 #Washington, DC data
-dc <- readNWISuse(stateAB = "DC")
+dc <- readNWISuse(stateCd = "DC",countyCd = NULL)
+
+#data for multiple counties, with different input formatting
+paData <- readNWISuse(stateCd = "42",countyCd = c("Allegheny County", "BUTLER", 1, "031"))
 
 }
 }

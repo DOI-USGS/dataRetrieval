@@ -4,9 +4,23 @@
 \alias{constructUseURL}
 \title{Construct URL for NWIS water use data service}
 \usage{
-constructUseURL(years, stateAB, county)
+constructUseURL(years, stateCd, countyCd)
+}
+\arguments{
+\item{years}{integer Years for data retrieval. Must be years ending in 0 or 5, or "ALL", which retrieves all available years.}
+
+\item{stateCd}{could be character (full name, abbreviation, id), or numeric (id)}
+
+\item{countyCd}{could be numeric (County IDs from countyCdLookup) or character ("ALL")}
+}
+\value{
+url string
 }
 \description{
-Construct URL for NWIS water use data service
+Reconstructs URLs to retrieve data from here: \url{http://waterdata.usgs.gov/nwis/wu}
+}
+\examples{
+url <- constructUseURL(years=c(1990,1995),stateCd="Ohio",countyCd = c(1,3))
+
 }
 
