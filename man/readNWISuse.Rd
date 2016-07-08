@@ -14,7 +14,7 @@ readNWISuse(stateCd, countyCd, years = "ALL", convertType = TRUE,
 return state or national data depending on the stateCd argument.  \code{ALL} may also be supplied, which will return data 
 for every county in a state. Can be a vector of counties in the same state.}
 
-\item{years}{integer Years for data retrieval — must be years ending in 0 or 5. Default is all available years.}
+\item{years}{integer Years for data retrieval. Must be years ending in 0 or 5. Default is all available years.}
 
 \item{convertType}{logical defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
 numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
