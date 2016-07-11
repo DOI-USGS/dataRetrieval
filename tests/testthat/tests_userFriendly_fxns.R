@@ -158,6 +158,14 @@ test_that("readNWISstat tests", {
                     statReportType="daily",statType=c("mean","p75","p25"),startDate="2000",endDate="2010")
   expect_is(data$begin_yr, 'integer')
   expect_that(length(data) > 3, is_true())
+  
+  monthData <- readNWISstat(siteNumbers=c("02171500"),parameterCd=c("00010","00060"),
+                                                  statReportType="monthly",startDate="2000",endDate="2010")
+  expect_is(monthData$mean_va, 'numeric')
+  
+  annualData <- readNWISstat(siteNumbers=c("02171500"),parameterCd=c("00010","00060"),statReportType="annual",
+                             startDate="2000",endDate="2010")
+  expect_gt(nrow(annualData),2)
 })
 
 context("readNWISuse tests")
