@@ -105,6 +105,9 @@ dailyStat <- readNWISdata(site=c("03112500","03111520"),
 allDailyStats <- readNWISdata(site=c("03111548"),
                               service="stat",
                               statReportType="daily")
+                              service="stat",statReportType="daily",
+                              statType=c("p25","p50","p75","min","max"),
+                              parameterCd="00065")
 }
 }
 \seealso{
