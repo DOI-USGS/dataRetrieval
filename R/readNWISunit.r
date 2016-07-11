@@ -141,7 +141,7 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, 
       
       if("peak_dt" %in% names(data)){
         if(any(nchar(as.character(data$peak_dt)) <= 7) | any(grepl("[0-9]*-[0-9]*-00",data$peak_dt))){
-          error("Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text")
+          stop("Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text")
         } else {
           data$peak_dt <- as.Date(data$peak_dt, format="%Y-%m-%d")
         }
@@ -396,7 +396,7 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
     if(convertType){
       #check that the date includes a day, based on date string length
       if(any(nchar(as.character(data$lev_dt)) <= 7) | any(grepl("[0-9]*-[0-9]*-00",data$lev_dt))){
-        error("Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text")
+        stop("Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text")
       } else {
         data$lev_dt <- as.Date(data$lev_dt)
       }
