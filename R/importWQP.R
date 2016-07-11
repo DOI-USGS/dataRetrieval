@@ -143,7 +143,9 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     
     dateCols <- c("ActivityStartDate","ActivityEndDate","AnalysisStartDate","PreparationStartDate")
     
-    retval <- suppressWarnings(mutate_each_(retval, ~as.Date(parse_date_time(., c("Ymd", "mdY"))), dateCols))
+    for(i in dateCols){
+      retval[,i] <- suppressWarnings(as.Date(parse_date_time(retval[[i]], c("Ymd", "mdY"))))
+    }
     
     retval <- mutate_(retval, ActivityStartDateTime=~paste(ActivityStartDate, `ActivityStartTime/Time`))
     retval <- mutate_(retval, ActivityEndDateTime=~paste(ActivityEndDate, `ActivityEndTime/Time`))

@@ -29,9 +29,8 @@ in separate columns.  If convertType is false, everything is returned as a chara
 \item{statReportType}{character time division for statistics: daily, monthly, or annual.  Default is daily.
 Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 366
 data points will be returned for each site/parameter.  Use readNWISdata or readNWISdv for daily averages. 
-Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years.
-#TODO: phrase above more clearly?
-  Monthly and yearly provide statistics for each month and year within the range indivually.}
+Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years. Monthly and yearly 
+provide statistics for each month and year within the range indivually.}
 
 \item{statType}{character type(s) of statistics to output for daily values.  Default is mean, which is the only
 option for monthly and yearly report types. See the statistics service documentation 
