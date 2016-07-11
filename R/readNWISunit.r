@@ -387,7 +387,8 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #' sites <- c("434400121275801", "375907091432201")
 #' data2 <- readNWISgwl(sites, '','')
 #' data3 <- readNWISgwl("420125073193001", '','')
-#' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01") #handling of data where date has no day
+#' #handling of data where date has no day
+#' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01") 
 #' }
 readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE){  
   
@@ -453,12 +454,17 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' @examples
 #' \dontrun{
 #' #all the annual mean discharge data for two sites
-#' x <- readNWISstat(siteNumbers=c("02319394","02171500"),parameterCd=c("00010","00060"),statReportType="annual")
+#' x <- readNWISstat(siteNumbers=c("02319394","02171500"),
+#'                   parameterCd=c("00010","00060"),
+#'                   statReportType="annual")
 #' 
 #' #Request p25, p75, and mean values for temperature and discharge for the 2000s
 #' #Note that p25 and p75 were not available for temperature, and return NAs
-#' x <- readNWISstat(siteNumbers=c("02171500"),parameterCd=c("00010","00060"),statReportType="daily",
-#' statType=c("mean","median"),startDate="2000",endDate="2010")
+#' x <- readNWISstat(siteNumbers=c("02171500"),
+#'                   parameterCd=c("00010","00060"),
+#'                   statReportType="daily",
+#'                   statType=c("mean","median"),
+#'                   startDate="2000",endDate="2010")
 #' }
 readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE, 
                           statReportType = "daily", statType = "mean"){
