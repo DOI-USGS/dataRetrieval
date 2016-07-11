@@ -138,23 +138,20 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, 
   
   if(nrow(data) > 0){
     if(asDateTime & convertType){
-      badDates <- which(grepl("[0-9]*-[0-9]*-00",data$peak_dt))
       
-      if(length(badDates) > 0){
-        data <- data[-badDates,]
-        if(length(badDates) > 0){
-          warning(length(badDates), " rows were thrown out due to incomplete dates")
+      if("peak_dt" %in% names(data)){
+        if(any(nchar(as.character(data$peak_dt)) <= 7) | any(grepl("[0-9]*-[0-9]*-00",data$peak_dt))){
+          error("Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text")
+        } else {
+          data$peak_dt <- as.Date(data$peak_dt, format="%Y-%m-%d")
         }
       }
-      if("peak_dt" %in% names(data))  data$peak_dt <- as.Date(data$peak_dt, format="%Y-%m-%d")
+      
+      badDates <- which(grepl("[0-9]*-[0-9]*-00",data$peak_dt))
+ 
       if("ag_dt" %in% names(data))  data$ag_dt <- as.Date(data$ag_dt, format="%Y-%m-%d")
     }
-    
-#     if(convertType){
-#     data$gage_ht <- as.numeric(data$gage_ht)
-#     data$ag_gage_ht <- as.numeric(data$ag_gage_ht)
-#     data$year_last_pk <- as.numeric(data$year_last_pk)
-#     }
+
     
     siteInfo <- readNWISsite(siteNumbers)
     siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
@@ -387,7 +384,8 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #' sites <- c("434400121275801", "375907091432201")
 #' data2 <- readNWISgwl(sites, '','')
 #' data3 <- readNWISgwl("420125073193001", '','')
-#' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01") #handling of data where date has no day
+#' #handling of data where date has no day
+#' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01") 
 #' }
 readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE){  
   
@@ -397,11 +395,11 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
   if(nrow(data) > 0){
     if(convertType){
       #check that the date includes a day, based on date string length
-      if(any(nchar(as.character(data$lev_dt)) <= 7)){
-        data$lev_dt <- parse_date_time(data$lev_dt,c("Y-m","Y-m-d"))
-        warning("Some dates probably didn't include days; they are converted to the last day of the preceding month")
+      if(any(nchar(as.character(data$lev_dt)) <= 7) | any(grepl("[0-9]*-[0-9]*-00",data$lev_dt))){
+        error("Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text")
+      } else {
+        data$lev_dt <- as.Date(data$lev_dt)
       }
-      data$lev_dt <- as.Date(data$lev_dt)
     }
     siteInfo <- readNWISsite(siteNumbers)
     siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
@@ -453,12 +451,17 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' @examples
 #' \dontrun{
 #' #all the annual mean discharge data for two sites
-#' x <- readNWISstat(siteNumbers=c("02319394","02171500"),parameterCd=c("00010","00060"),statReportType="annual")
+#' x <- readNWISstat(siteNumbers=c("02319394","02171500"),
+#'                   parameterCd=c("00010","00060"),
+#'                   statReportType="annual")
 #' 
 #' #Request p25, p75, and mean values for temperature and discharge for the 2000s
 #' #Note that p25 and p75 were not available for temperature, and return NAs
-#' x <- readNWISstat(siteNumbers=c("02171500"),parameterCd=c("00010","00060"),statReportType="daily",
-#' statType=c("mean","median"),startDate="2000",endDate="2010")
+#' x <- readNWISstat(siteNumbers=c("02171500"),
+#'                   parameterCd=c("00010","00060"),
+#'                   statReportType="daily",
+#'                   statType=c("mean","median"),
+#'                   startDate="2000",endDate="2010")
 #' }
 readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE, 
                           statReportType = "daily", statType = "mean"){
@@ -522,7 +525,6 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' paData <- readNWISuse(stateCd = "42",countyCd = c("Allegheny County", "BUTLER", 1, "031"))
 #' 
 #' }
- 
 readNWISuse <- function(stateCd, countyCd, years = "ALL", convertType = TRUE, transform = FALSE){
  
   countyID <- NULL
@@ -533,13 +535,18 @@ readNWISuse <- function(stateCd, countyCd, years = "ALL", convertType = TRUE, tr
     }
   }
   
-  if(!is.null(countyCd) && toupper(countyCd) == "ALL"){countyID <- toupper(countyID)} #case sensitive in URL
-  if(any(grepl("(?i)all",years))){years <- toupper(years)}
+  if(!is.null(countyCd) && toupper(countyCd) == "ALL"){
+    countyID <- toupper(countyID)
+  } #case sensitive in URL
+  
+  if(any(grepl("(?i)all",years))){
+    years <- toupper(years)
+  }
   url <- constructUseURL(years,stateCd,countyID)
   data <- importRDB1(url,convertType=convertType)  
   
   #for total country data arriving in named rows
-  if(transform == TRUE){
+  if(transform){
     cmmnt <- comment(data)
     data <- t(data)
     colnames(data) <- data[1,]
