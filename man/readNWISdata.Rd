@@ -94,9 +94,13 @@ meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
 
 waterYearStat <- readNWISdata(site=c("03112500"),service="stat",statReportType="annual",
                  statYearType="water", missingData="on")
-monthlyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="monthly")                                   
-dailyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="daily",
-                         statType=c("p25","p50","p75","min","max"),parameterCd="00065")
+monthlyStat <- readNWISdata(site=c("03112500","03111520"),
+                            service="stat",
+                            statReportType="monthly")                                   
+dailyStat <- readNWISdata(site=c("03112500","03111520"),
+                          service="stat",statReportType="daily",
+                          statType=c("p25","p50","p75","min","max"),
+                          parameterCd="00065")
 allDailyStats <- readNWISdata(site=c("03111548"),service="stat",statReportType="daily")
 }
 }

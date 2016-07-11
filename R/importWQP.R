@@ -142,9 +142,15 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
     
     dateCols <- c("ActivityStartDate","ActivityEndDate","AnalysisStartDate","PreparationStartDate")
+
+    for(i in dateCols){
+      retval[,i] <- suppressWarnings(as.Date(parse_date_time(retval[[i]], c("Ymd", "mdY"))))
+    }
+    # retval <- suppressWarnings(mutate_each_(retval, ~as.Date(parse_date_time(., c("Ymd", "mdY"))), dateCols))
     
-    retval <- suppressWarnings(mutate_each_(retval, ~as.Date(parse_date_time(., c("Ymd", "mdY"))), dateCols))
-    
+    # retval[,dateCols] <- suppressWarnings(sapply(dateCols, function(x) parse_date_time(retval[[x]], c("Ymd", "mdY"))))
+    # retval[,dateCols] <- sapply(retval[,dateCols], function(x) as.Date(x, origin = "1970-01-01"))
+    # 
     retval <- mutate_(retval, ActivityStartDateTime=~paste(ActivityStartDate, `ActivityStartTime/Time`))
     retval <- mutate_(retval, ActivityEndDateTime=~paste(ActivityEndDate, `ActivityEndTime/Time`))
     
