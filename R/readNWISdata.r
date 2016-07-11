@@ -248,7 +248,7 @@ stateCdLookup <- function(input, outputType="postal"){
   outputType <- match.arg(outputType, c("postal","fullName","tableIndex","id"))
   
   if(is.numeric(input) | !is.na(suppressWarnings(as.numeric(input)))){
-    input <- which(input == as.numeric(stateCd$STATE))
+    input <- which(as.numeric(input) == as.numeric(stateCd$STATE))
   } else if(nchar(input) == 2){
     input <- which(tolower(input) == tolower(stateCd$STUSAB))
   } else {
@@ -261,6 +261,45 @@ stateCdLookup <- function(input, outputType="postal"){
          tableIndex = input,
          id = stateCd$STATE[input]
            )
+  
+  return(retVal)
+}
+
+#' County code look up 
+#'
+#' Function to simplify finding county and county code definitions. Used in \code{readNWISdata}
+#' and \code{readNWISuse}.
+#'
+#' @param state could be character (full name, abbreviation, id), or numeric (id)
+#' @param county could be character (name, with or without "County") or numeric (id)
+#' @param outputType character can be "fullName","tableIndex", "id", or "fullEntry". 
+#' @export
+#' @examples
+#' id <- countyCdLookup(state = "WI", county = "Dane")
+#' name <- countyCdLookup(state = "OH", county = 13, output = "fullName")
+#' index <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "tableIndex")
+#' fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
+
+countyCdLookup <- function(state, county, outputType = "id"){
+  outputType <- match.arg(outputType, c("fullName","tableIndex","id","fullEntry"))
+  
+  #first turn state into stateCd postal name
+  stateCd <- stateCdLookup(state,outputType = "postal")
+  
+  if(is.numeric(county) | !is.na(suppressWarnings(as.numeric(county)))){
+    county <- which(as.numeric(county) == as.numeric(countyCd$COUNTY) & stateCd == countyCd$STUSAB)
+  } else {
+    #check if "County" was included on string - need it to match countyCd data frame
+    county <- ifelse(!grepl('(?i)\\County$',county),paste(county,"County"),county)
+    county <- which(tolower(county) == tolower(countyCd$COUNTY_NAME) & stateCd == countyCd$STUSAB)
+  }
+  
+  retVal <- switch(outputType,
+                   fullName = countyCd$COUNTY_NAME[county],
+                   tableIndex = county,
+                   id = countyCd$COUNTY[county],
+                   fullEntry = countyCd[county,]
+  )
   
   return(retVal)
 }
