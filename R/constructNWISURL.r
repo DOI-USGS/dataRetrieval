@@ -16,15 +16,16 @@
 #' @param format string, can be "tsv" or "xml", and is only applicable for daily and unit value requests.  "tsv" returns results faster, but there is a possiblitiy that an incomplete file is returned without warning. XML is slower, 
 #' but will offer a warning if the file was incomplete (for example, if there was a momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
 #' but the user must carefully check the results to see if the data returns matches what is expected. The default is therefore "xml". 
-#' @param statReportType character time division for statistics: daily, monthly, or annual.  Default is daily.
-#' Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 366
-#' data points will be returned for each site/parameter.  Use readNWISdata or readNWISdv for daily averages. 
-#' Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years.
-#' #TODO: phrase above more clearly?
-#' @param statType character type(s) of statistics to output for daily values.  Default is mean, which is the only
-#' option for monthly and yearly report types. See the statistics service documentation 
 #' @param expanded logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional information, only applicable for qw data.
 #' @param ratingType can be "base", "corr", or "exsa". Only applies to rating curve data.
+#' @param statReportType character Only used for statistics service requests.  Time division for statistics: daily, monthly, or annual.  Default is daily.
+#' Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 366
+#' data points will be returned for each site/parameter.  Use readNWISdata or readNWISdv for daily averages. 
+#' Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years. Monthly and yearly 
+#' provide statistics for each month and year within the range indivually.
+#' @param statType character Only used for statistics service requests. Type(s) of statistics to output for daily values.  Default is mean, which is the only
+#' option for monthly and yearly report types. See the statistics service documentation 
+#' at \url{http://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
