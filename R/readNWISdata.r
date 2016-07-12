@@ -85,10 +85,21 @@
 #' 
 #' waterYearStat <- readNWISdata(site=c("03112500"),service="stat",statReportType="annual",
 #'                  statYearType="water", missingData="on")
-#' monthlyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="monthly")                                   
-#' dailyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="daily",
-#'                          statType=c("p25","p50","p75","min","max"),parameterCd="00065")
-#' allDailyStats <- readNWISdata(site=c("03111548"),service="stat",statReportType="daily")
+#' monthlyStat <- readNWISdata(site=c("03112500","03111520"),
+#'                             service="stat",
+#'                             statReportType="monthly")                                   
+#' dailyStat <- readNWISdata(site=c("03112500","03111520"),
+#'                           service="stat",
+#'                           statReportType="daily",
+#'                           statType=c("p25","p50","p75","min","max"),
+#'                           parameterCd="00065")
+#' allDailyStats <- readNWISdata(site=c("03111548"),
+#'                               service="stat",
+#'                               statReportType="daily")
+#'                               service="stat",statReportType="daily",
+#'                               statType=c("p25","p50","p75","min","max"),
+#'                               parameterCd="00065")
+
 #' }
 readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   
@@ -275,7 +286,6 @@ stateCdLookup <- function(input, outputType="postal"){
 #' name <- countyCdLookup(state = "OH", county = 13, output = "fullName")
 #' index <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "tableIndex")
 #' fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
-
 countyCdLookup <- function(state, county, outputType = "id"){
   outputType <- match.arg(outputType, c("fullName","tableIndex","id","fullEntry"))
   
