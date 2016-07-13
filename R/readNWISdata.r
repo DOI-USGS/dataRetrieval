@@ -117,7 +117,7 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     stop("Only one service call allowed.")
   }
   
-  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
+  values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=",",sep="")))
   
   names(values)[names(values) == "startDate"] <- "startDT"
   names(values)[names(values) == "endDate"] <- "endDT"
@@ -191,6 +191,8 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     values["format"] <- format.default
   }
   
+  values <- sapply(values, function(x) URLencode(x))
+  
   baseURL <- drURL(service, arg.list=values)
   
   if(service %in% c("site","dv","iv","gwlevels")) {
@@ -250,6 +252,7 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
 #' name <- stateCdLookup(55, "fullName")
 #' index <- stateCdLookup("WI", "tableIndex")
 #' stateCd[index,]
+#' stateCdLookup("West Virginia")
 stateCdLookup <- function(input, outputType="postal"){
   
   outputType <- match.arg(outputType, c("postal","fullName","tableIndex","id"))
