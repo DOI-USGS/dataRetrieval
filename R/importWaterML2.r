@@ -53,7 +53,7 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
     rawData <- obs_url
     doc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
   } else {
-    doc <- xmlTreeParse(getWebServiceData(obs_url), getDTD = FALSE, useInternalNodes = TRUE)
+    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
   }
 
   if(tz != ""){
@@ -137,6 +137,11 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
                                         namespaces = chunkNS))
       DF2$qualifier <- ifelse(defaultQualifier != isQual,isQual,defaultQualifier)
       DF2$`swe:value` <- NULL
+    } else if (length(defaultQualifier > 1)){
+      for (j in 1:length(defaultQualifier)){
+        qualName <- paste0("qualifier",j)
+        DF2[,eval(qualName)] <- defaultQualifier[j]
+      }
     } else {
       DF2$qualifier <- rep(defaultQualifier,nrow(DF2))
     }

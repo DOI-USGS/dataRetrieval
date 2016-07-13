@@ -119,6 +119,25 @@ test_that("External importWaterML1 test", {
 
 })
 
+context("importWaterML2")
+test_that("importWaterML2 internal test", {
+  filePath <- system.file("extdata", package="dataRetrieval")
+  fileName <- "WaterML2Example.xml"
+  fullPath <- file.path(filePath, fileName)
+  UserData <- importWaterML2(fullPath)
+  expect_is(UserData$value, 'numeric')
+  expect_is(UserData$qualifier, 'character')
+  
+test_that("importWaterML2 external test", {
+  testthat::skip_on_cran()
+  url <- "http://waterservices.usgs.gov/nwis/iv/?format=waterml,2.0&sites=01646500&parameterCd=00060,00065"
+  data <- importWaterML2(url)
+  expect_is(data$value, 'numeric')
+  expect_gt(nrow(data),0)
+})
+  
+})
+
 context("importWQP_noCRAN")
 
 test_that("External WQP tests", {
