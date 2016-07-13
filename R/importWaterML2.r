@@ -53,7 +53,7 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
     rawData <- obs_url
     doc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
   } else {
-    doc <- getWebServiceData(obs_url)
+    doc <- xmlTreeParse(getWebServiceData(obs_url), getDTD = FALSE, useInternalNodes = TRUE)
   }
 
   if(tz != ""){
@@ -144,7 +144,17 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
 #########################################
 
     id <- as.character(xpathApply(chunk, "//gml:identifier", xmlValue, namespaces = chunkNS))
-    DF2$identifier <- rep(id, nrow(DF2))
+    if(length(id) > 1){
+      for (j in 1:length(id)){
+        idName <- paste0("identifier",j)
+        DF2[,eval(idName)] <- id[j]
+      }
+      message("There were multiple identifier elements")
+    } else if (length(id) == 0){
+      DF2$identifier <- NA
+    } else{
+      DF2$identifier <- rep(id, nrow(DF2))
+    }
     
     if (1 == i ){
       mergedDF <- DF2

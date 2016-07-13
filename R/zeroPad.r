@@ -17,7 +17,7 @@
 zeroPad <- function(x,padTo){
   if(padTo <= 1) return(x)
   
-  numDigits <- nchar(x)
+  numDigits <- nchar(x, keepNA = TRUE)
   padding <- padTo-numDigits
   
   if(any(is.na(padding))){
