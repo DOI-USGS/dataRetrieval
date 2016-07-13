@@ -99,7 +99,8 @@
 #'                               service="stat",statReportType="daily",
 #'                               statType=c("p25","p50","p75","min","max"),
 #'                               parameterCd="00065")
-
+#'
+#'dailyWV <- readNWISdata(stateCd = "West Virginia", parameterCd = "00060")
 #' }
 readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   
@@ -252,27 +253,33 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
 #' name <- stateCdLookup(55, "fullName")
 #' index <- stateCdLookup("WI", "tableIndex")
 #' stateCd[index,]
-#' stateCdLookup("West Virginia")
+#' stateCdLookup(c("West Virginia", "Wisconsin", 55, "MN"))
 stateCdLookup <- function(input, outputType="postal"){
   
   outputType <- match.arg(outputType, c("postal","fullName","tableIndex","id"))
   
-  if(is.numeric(input) | !is.na(suppressWarnings(as.numeric(input)))){
-    input <- which(as.numeric(input) == as.numeric(stateCd$STATE))
-  } else if(nchar(input) == 2){
-    input <- which(tolower(input) == tolower(stateCd$STUSAB))
-  } else {
-    input <- which(tolower(input) == tolower(stateCd$STATE_NAME))
+  retVal <- NA
+  
+  for(i in input){
+    if(is.numeric(i) | !is.na(suppressWarnings(as.numeric(i)))){
+      i <- which(as.numeric(i) == as.numeric(stateCd$STATE))
+    } else if(nchar(i) == 2){
+      i <- which(tolower(i) == tolower(stateCd$STUSAB))
+    } else {
+      i <- which(tolower(i) == tolower(stateCd$STATE_NAME))
+    }
+    
+    output <- switch(outputType,
+                     postal = stateCd$STUSAB[i],
+                     fullName = stateCd$STATE_NAME[i],
+                     tableIndex = i,
+                     id = as.integer(stateCd$STATE[i])
+    )
+    
+    retVal <- c(retVal,output)
   }
   
-  retVal <- switch(outputType,
-         postal = stateCd$STUSAB[input],
-         fullName = stateCd$STATE_NAME[input],
-         tableIndex = input,
-         id = stateCd$STATE[input]
-           )
-  
-  return(retVal)
+  return(retVal[-1])
 }
 
 #' County code look up 
