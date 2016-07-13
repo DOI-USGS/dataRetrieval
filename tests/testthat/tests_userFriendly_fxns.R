@@ -181,3 +181,27 @@ test_that("readNWISuse tests", {
   twoCounties <- readNWISuse(years=2010,stateCd="PA",countyCd=c("Cambria","Indiana"))
   expect_that(nrow(twoCounties)==2, is_true())
 })
+
+context("state tests")
+test_that("state county tests",{
+  fullName <- stateCdLookup("wi", "fullName")
+  expect_equal(fullName, "Wisconsin")
+  
+  abbriev <- stateCdLookup("Wisconsin", "postal")
+  expect_equal(abbriev, "WI")
+  id <- stateCdLookup("WI", "id")
+  expect_equal(id, 55)
+  name <- stateCdLookup(55, "fullName")
+  expect_equal(name, "Wisconsin")
+  multipleStates <- stateCdLookup(c("West Virginia", "Wisconsin", 55, "MN"))
+  expect_equal(multipleStates, c("WV","WI","WI","MN"))
+  
+  id <- countyCdLookup(state = "WI", county = "Dane")
+  expect_equal(id, "025")
+  name <- countyCdLookup(state = "OH", county = 13, output = "fullName")
+  expect_equal(name, "Belmont County")
+  index <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "tableIndex")
+  expect_equal(index, 2246)
+  fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
+  expect_equal(fromIDs, "Bacon County")
+})
