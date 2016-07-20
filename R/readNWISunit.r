@@ -494,6 +494,8 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' return state or national data depending on the stateCd argument.  \code{ALL} may also be supplied, which will return data 
 #' for every county in a state. Can be a vector of counties in the same state.  
 #' @param years integer Years for data retrieval. Must be years ending in 0 or 5. Default is all available years.
+#' @param categories character categories of water use.  Defaults to \code{ALL}.  Specific categories must be supplied as two-
+#' letter abbreviations as seen in the URL when using the NWIS water use web interface.
 #' @param convertType logical defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
 #' numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
 #' in separate columns.  If convertType is false, everything is returned as a character.
@@ -524,8 +526,10 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' #data for multiple counties, with different input formatting
 #' paData <- readNWISuse(stateCd = "42",countyCd = c("Allegheny County", "BUTLER", 1, "031"))
 #' 
+#' #retrieving two specific categories for an entire state
+#' ks <- readNWISuse(stateCd = "KS", countyCd = NULL, categories = c("IT","LI"))
 #' }
-readNWISuse <- function(stateCd, countyCd, years = "ALL", convertType = TRUE, transform = FALSE){
+readNWISuse <- function(stateCd, countyCd, years = "ALL", categories = "ALL", convertType = TRUE, transform = FALSE){
  
   countyID <- NULL
   if(!is.null(countyCd) && toupper(countyCd) != "ALL" && countyCd != ""){
@@ -539,10 +543,10 @@ readNWISuse <- function(stateCd, countyCd, years = "ALL", convertType = TRUE, tr
     countyID <- toupper(countyID)
   } #case sensitive in URL
   
-  if(any(grepl("(?i)all",years))){
-    years <- toupper(years)
-  }
-  url <- constructUseURL(years,stateCd,countyID)
+  years <- .capitalALL(years)
+  categories <- .capitalALL(categories)
+  
+  url <- constructUseURL(years,stateCd,countyID,categories)
   data <- importRDB1(url,convertType=convertType)  
   
   #for total country data arriving in named rows
@@ -557,4 +561,11 @@ readNWISuse <- function(stateCd, countyCd, years = "ALL", convertType = TRUE, tr
     if(nchar(stateCd) != 0 && !is.null(stateCd)){warning("transform = TRUE is only intended for national data")}
   }
   return(data)
+}
+
+.capitalALL <- function(input){
+  if(any(grepl("(?i)all",input))){
+    input <- toupper(input)
+  }
+  return(input)
 }

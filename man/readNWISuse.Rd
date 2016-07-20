@@ -4,8 +4,8 @@
 \alias{readNWISuse}
 \title{Water use data retrieval from USGS (NWIS)}
 \usage{
-readNWISuse(stateCd, countyCd, years = "ALL", convertType = TRUE,
-  transform = FALSE)
+readNWISuse(stateCd, countyCd, years = "ALL", categories = "ALL",
+  convertType = TRUE, transform = FALSE)
 }
 \arguments{
 \item{stateCd}{could be character (full name, abbreviation, id), or numeric (id). Only one is accepted per query.}
@@ -15,6 +15,9 @@ return state or national data depending on the stateCd argument.  \code{ALL} may
 for every county in a state. Can be a vector of counties in the same state.}
 
 \item{years}{integer Years for data retrieval. Must be years ending in 0 or 5. Default is all available years.}
+
+\item{categories}{character categories of water use.  Defaults to \code{ALL}.  Specific categories must be supplied as two-
+letter abbreviations as seen in the URL when using the NWIS water use web interface.}
 
 \item{convertType}{logical defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
 numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
@@ -52,6 +55,8 @@ dc <- readNWISuse(stateCd = "DC",countyCd = NULL)
 #data for multiple counties, with different input formatting
 paData <- readNWISuse(stateCd = "42",countyCd = c("Allegheny County", "BUTLER", 1, "031"))
 
+#retrieving two specific categories for an entire state
+ks <- readNWISuse(stateCd = "KS", countyCd = NULL, categories = c("IT","LI"))
 }
 }
 
