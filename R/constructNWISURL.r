@@ -321,12 +321,13 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
 #' @param years integer Years for data retrieval. Must be years ending in 0 or 5, or "ALL", which retrieves all available years.
 #' @param stateCd could be character (full name, abbreviation, id), or numeric (id)
 #' @param countyCd could be numeric (County IDs from countyCdLookup) or character ("ALL") 
+#' @param categories character Two-letter cateogory abbreviation(s)
 #' @return url string
 #' @export
 #' @examples
-#' url <- constructUseURL(years=c(1990,1995),stateCd="Ohio",countyCd = c(1,3))
+#' url <- constructUseURL(years=c(1990,1995),stateCd="Ohio",countyCd = c(1,3), categories = "ALL")
 #' 
-constructUseURL <- function(years,stateCd,countyCd){ 
+constructUseURL <- function(years,stateCd,countyCd,categories){ 
     baseURL <- "http://waterdata.usgs.gov/"
     base2 <- "nwis/water_use?format=rdb&rdb_compression=value"
     if(is.null(stateCd)){
@@ -343,7 +344,8 @@ constructUseURL <- function(years,stateCd,countyCd){
         }
       }
     years <- paste(years, collapse="%2C")
-    retURL <- paste0(baseURL,"&wu_year=",years,"&wu_category=ALL")
+    categories <- paste(categories, collapse = "%2C")
+    retURL <- paste0(baseURL,"&wu_year=",years,"&wu_category=",categories)
     
     return(retURL)
 }
