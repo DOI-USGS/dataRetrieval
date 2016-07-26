@@ -43,17 +43,11 @@
 #' @export
 #' @import utils
 #' @import stats
+#' @import lubridate
 #' @importFrom dplyr left_join
 #' @importFrom readr read_lines
 #' @importFrom readr read_delim
 #' @importFrom readr problems
-#' @importFrom lubridate fast_strptime
-#' @importFrom lubridate parse_date_time
-#' @importFrom lubridate seconds_to_period
-#' @importFrom lubridate second
-#' @importFrom lubridate minute
-#' @importFrom lubridate hour
-#' @import lubridate
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -176,9 +170,8 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
         
         if(all(c(paste0(i,"_dt"),paste0(i,"_tm")) %in% header.names)){
           varname <- paste0(i,"_dateTime")
-
-          varval <- as.POSIXct(fast_strptime(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), "%Y-%m-%d %H:%M:%S", tz = "UTC"))
-          
+          varval <- parse_date_time(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), c("%Y-%m-%d %H:%M:%S","%Y-%m-%d %H:%M"), tz = "UTC")
+        
           if(!all(is.na(varval))){
             readr.data[,varname] <- varval
             tz.name <- paste0(i,"_time_datum_cd")
