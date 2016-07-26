@@ -108,6 +108,8 @@ allDailyStats <- readNWISdata(site=c("03111548"),
                               service="stat",statReportType="daily",
                               statType=c("p25","p50","p75","min","max"),
                               parameterCd="00065")
+
+dailyWV <- readNWISdata(stateCd = "West Virginia", parameterCd = "00060")
 }
 }
 \seealso{
