@@ -113,10 +113,11 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
   #TODO: get queryInfo, turn into list 
   #attributes
   queryNodes <- xml_children(xml_find_all(returnedDoc,".//ns1:queryInfo"))
-  attrib <- xml_attrs(queryNodes)
-  queryText <- xml_text(queryNodes)
-  
-  
+  notes <- queryNodes[xml_name(queryNodes)=="note"]
+  noteTitles <- xml_attrs(notes)
+  noteText <- xml_text(notes)
+  noteList <- as.list(noteText)
+  names(noteList) <- noteTitles
   
   if(0 == length(timeSeries)){
     df <- data.frame()
@@ -126,8 +127,6 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
   }
   
   attList <- list()
-  dataColumns <- c()
-  qualColumns <- c()
   mergedDF <- NULL
   
   for(t in timeSeries){
@@ -137,15 +136,51 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
     vals <- xml_text(obs) #actual observations
     sourceInfo <- xml_children(xml_find_all(t, ".//ns1:sourceInfo"))
     variable <- xml_children(xml_find_all(t, ".//ns1:variable"))
+    
+    #statistic info
+    options <- xml_find_all(variable,"ns1:option")
+    stat <- options[xml_attr(options,"name")=="Statistic"]
+    stat_nm <- xml_text(options[xml_attr(stat,"name")=="Statistic"])
+    statCd <- xml_attr(stat, "optionCode")
+    statDf <- as.data.frame(cbind(statCd,stat_nm), stringsAsFactors = FALSE)
+    
+    #variable info
+    varText <- as.data.frame(t(xml_text(variable)),stringsAsFactors = FALSE)
+    varNames <- xml_name(variable) #modify names?
+    names(varText) <- varNames
+    
+    #site info
+    locNodes <- xml_children(xml_find_all(sourceInfo,".//ns1:geogLocation"))
+    locNames <- xml_name(locNodes)
+    locText <- xml_text(locNodes)  
+    names(locText) <- sub("longitude","dec_lon_va",sub("latitude","dec_lat_va",locNames))
+    sitePropNodes <- sourceInfo[xml_name(sourceInfo)=="siteProperty"]
+    siteProp <- xml_text(sitePropNodes)
+    names(siteProp) <- xml_attr(sitePropNodes, "name")
+    tzInfo <- unlist(xml_attrs(xml_find_all(sourceInfo,"ns1:defaultTimeZone")))
+    siteName <- xml_text(sourceInfo[xml_name(sourceInfo)=="siteName"])
+    siteCodeNode <- sourceInfo[xml_name(sourceInfo)=="siteCode"]
+    site_no <- xml_text(siteCodeNode)
+    siteCodeAtt <- unlist(xml_attrs(siteCodeNode))
+    siteDF <- cbind(t(locText),t(siteProp),t(tzInfo),siteName,t(siteCodeAtt))
+    #siteDF <- cbind(locText, siteProp, tzInfo, siteName, )
+    
     if(asDateTime){
-      dateTime <- as.POSIXct(strptime(xml_attr(obs,"dateTime"),"%Y-%m-%dT%H:%M:%S",tz=tz))
-      tzCol <- rep(attr(dateTime,'tzone'),nObs)
+      dateTime <- parse_date_time(xml_attr(obs,"dateTime"), c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
+                                                             "%Y-%m-%dT%H:%M:%S","%Y-%m-%dT%H:%M:%OS",
+                                                             "%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
+      #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
+      attr(dateTime, 'tzone') <- tz 
+      tzCol <- rep(tz,nObs)
     }else{
       dateTime <- xml_attr(obs,"dateTime")
       tzCol <- rep(xml_attr(xml_find_all(sourceInfo,".//ns1:defaultTimeZone"),"zoneAbbreviation"),
                    nObs)
     }
+    noQual <- FALSE
     qual <- xml_attr(obs,"qualifiers")
+    if(all(is.na(qual))){noQual <- TRUE}
+    
     agency_cd <- xml_attr(sourceInfo[xml_name(sourceInfo)=="siteCode"],"agencyCode")
     site_no <- xml_text(sourceInfo[xml_name(sourceInfo)=="siteCode"])
     pCode <- xml_text(variable[xml_name(variable)=="variableCode"])
@@ -156,7 +191,9 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
     obsColName <- paste("X",pCode,statCode,sep = "_")
     qualColName <- paste0(obsColName,"_cd")
     colnames(df) <- c("agency_cd","site_no","dateTime",obsColName,qualColName,"tz_code")
-    
+    if(noQual){
+      df <- df[-5]
+    }
     #join by site no (dplyr?)
     if (is.null(mergedDF)){
       mergedDF <- df          
@@ -167,6 +204,12 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
   }
   
   #TODO: attach other site info etc as attributes of mergedDF
+  
+  attr(mergedDF, "disclaimer") <- noteText[noteTitles=="disclaimer"]
+  attr(mergedDF, "statisticInfo") <- statDf
+  attr(mergedDF, "variableInfo") <- varText
+  attr(mergedDF, "siteInfo") <- siteDF
   attr(mergedDF, "queryTime") <- Sys.time()
+  
   return (mergedDF)
 }
