@@ -21,7 +21,8 @@ retrieval for the earliest possible record.}
 retrieval for the latest possible record.}
 
 \item{service}{string USGS service to call. Possible values are "dv" (daily values), "uv" (unit/instantaneous values), 
-"qw" (water quality data), "gwlevels" (groundwater),and "rating" (rating curve), "peak", "meas" (discrete streamflow measurements).}
+"qw" (water quality data), "gwlevels" (groundwater),and "rating" (rating curve), "peak", "meas" (discrete streamflow measurements),
+"stat" (statistics web service BETA).}
 
 \item{statCd}{string or vector USGS statistic code only used for daily value service. This is usually 5 digits.  Daily mean (00003) is the default.}
 
@@ -37,7 +38,7 @@ but the user must carefully check the results to see if the data returns matches
 Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 366
 data points will be returned for each site/parameter.  Use readNWISdata or readNWISdv for daily averages. 
 Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years. Monthly and yearly 
-provide statistics for each month and year within the range indivually.}
+provide statistics for each month and year within the range individually.}
 
 \item{statType}{character Only used for statistics service requests. Type(s) of statistics to output for daily values.  Default is mean, which is the only
 option for monthly and yearly report types. See the statistics service documentation 

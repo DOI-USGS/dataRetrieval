@@ -188,6 +188,12 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     format.default <- "rdb"
   }
   
+  if(service == "stat"){
+    message("Please be aware the NWIS data service feeding this function is in BETA.\n
+          Data formatting could be changed at any time, and is not guaranteed")
+    
+  }
+  
   if(!("format" %in% names(values))){
     values["format"] <- format.default
   }

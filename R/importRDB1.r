@@ -125,6 +125,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
                                                 col_names = FALSE, 
                                                 col_types = colList))
     }
+
   } else {
     readr.data <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c"))
   }
@@ -155,15 +156,28 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
     }
   
     badCols <- attr(readr.data, "problems")[["col"]]  
+    readr.data <- as.data.frame(readr.data)
     
     if(length(badCols) > 0){
       readr.data <- fixErrors(readr.data, readr.data.char, "no trailing characters", as.numeric)
       readr.data <- fixErrors(readr.data, readr.data.char, "date like", parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d","%Y"))
     }
+    
+    if(length(grep("_va", names(readr.data))) > 0  && 
+       any(lapply(readr.data[,grep("_va", names(readr.data))], class) %in% "integer")){ 
+      #note... if we simply convert any _va to numeric...we lose some QW censoring information from some formats
+      vaCols <- grep("_va", names(readr.data))
+      
+      if(length(vaCols) > 1){
+        vaCols <- vaCols[lapply(readr.data[,vaCols], class) %in% "integer"]
+      } 
+      
+      readr.data[,vaCols] <- sapply(readr.data[,vaCols], as.numeric)
+    }
   
     comment(readr.data) <- readr.meta
     problems.orig <- problems(readr.data)
-    readr.data <- as.data.frame(readr.data)
+    
     
     if (asDateTime & convertType){
   
@@ -295,7 +309,11 @@ fixErrors <- function(readr.data, readr.data.char, message.text, FUN, ...){
     index.col <- as.integer(gsub("X","",unique.bad.cols))
     
     for(i in index.col){
-      readr.data[,i] <- FUN(readr.data.char[[i]], ...)
+      readr.data[,i] <- tryCatch({
+        FUN(readr.data.char[[i]], ...)
+      }, warning=function(cond){
+        readr.data.char[[i]]
+      })
       attr(readr.data, "problems") <- attr(readr.data, "problems")[attr(readr.data, "problems")[["col"]] != paste0("X",i),]
     }
   }
