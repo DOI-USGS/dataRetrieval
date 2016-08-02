@@ -26,7 +26,7 @@
 #' }
 getWebServiceData <- function(obs_url, ...){
   
-  returnedList <- GET(obs_url, ..., user_agent(default_ua()))
+  returnedList <- RETRY("GET",obs_url, ..., user_agent(default_ua()))
   
     if(status_code(returnedList) != 200){
       message("For: ", obs_url,"\n")
