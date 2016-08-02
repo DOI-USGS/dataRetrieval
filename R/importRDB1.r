@@ -119,8 +119,10 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   #defaults to time in seconds in readr 0.2.2.9??  
     if(length(grep("hms",lapply(readr.data, class))) > 0){
       colHMS <- grep("hms",lapply(readr.data, class))
-      colList <- list(rep("c", length(colHMS)))
+      
+      colList <- as.list(rep("c",length(colHMS)))
       names(colList) <- paste0("X",colHMS)
+
       readr.data <- suppressWarnings(read_delim(doc, skip = (meta.rows+2),delim="\t",
                                                 col_names = FALSE, 
                                                 col_types = colList))
