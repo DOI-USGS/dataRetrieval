@@ -306,7 +306,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
     
     if(convertType){
       data$measurement_dateTime <- data$measurement_dt
-      data$measurement_dt <- as.Date(data$measurement_dateTime)
+      data$measurement_dt <- suppressWarnings(as.Date(data$measurement_dateTime))
       data$measurement_tm <- strftime(data$measurement_dateTime, "%H:%M")
       data$measurement_tm[is.na(data$tz_cd_reported)] <- ""
       indexDT <- which("measurement_dt" == names(data))
@@ -465,6 +465,7 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' }
 readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE, 
                           statReportType = "daily", statType = "mean"){
+
   #check for NAs in site numbers
   if(any(is.na(siteNumbers))){
     siteNumbers <- siteNumbers[!is.na(siteNumbers)]
