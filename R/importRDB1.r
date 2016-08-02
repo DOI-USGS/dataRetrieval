@@ -117,9 +117,13 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   if(convertType){
     readr.data <- suppressWarnings(read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE))
   #defaults to time in seconds in readr 0.2.2.9??  
-    if(data.class(readr.data$X4)=="hms"){
-    td <- seconds_to_period(readr.data$X4[!is.na(readr.data$X4)])
-    readr.data$X4[!is.na(readr.data$X4)] <- sprintf('%02d:%02d:%02d', hour(td), minute(td), second(td))
+    if(length(grep("hms",lapply(readr.data, class))) > 0){
+      colHMS <- grep("hms",lapply(readr.data, class))
+      colList <- list(rep("c", length(colHMS)))
+      names(colList) <- paste0("X",colHMS)
+      readr.data <- suppressWarnings(read_delim(doc, skip = (meta.rows+2),delim="\t",
+                                                col_names = FALSE, 
+                                                col_types = colList))
     }
   } else {
     readr.data <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c"))
@@ -170,7 +174,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
         
         if(all(c(paste0(i,"_dt"),paste0(i,"_tm")) %in% header.names)){
           varname <- paste0(i,"_dateTime")
-          varval <- parse_date_time(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), c("%Y-%m-%d %H:%M:%S","%Y-%m-%d %H:%M"), tz = "UTC")
+          varval <- suppressWarnings(parse_date_time(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), c("%Y-%m-%d %H:%M:%S","%Y-%m-%d %H:%M"), tz = "UTC"))
         
           if(!all(is.na(varval))){
             readr.data[,varname] <- varval
