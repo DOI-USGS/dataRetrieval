@@ -150,7 +150,9 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
     names(varText) <- varNames
     
     #site info
-    locNodes <- xml_children(xml_find_all(sourceInfo,".//ns1:geogLocation"))
+    srsNode <- xml_find_all(sourceInfo,".//ns1:geogLocation")
+    srs <- xml_attr(srsNode, 'srs')
+    locNodes <- xml_children(srsNode)
     locNames <- xml_name(locNodes)
     locText <- xml_text(locNodes)  
     names(locText) <- sub("longitude","dec_lon_va",sub("latitude","dec_lat_va",locNames))
@@ -162,8 +164,8 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
     siteCodeNode <- sourceInfo[xml_name(sourceInfo)=="siteCode"]
     site_no <- xml_text(siteCodeNode)
     siteCodeAtt <- unlist(xml_attrs(siteCodeNode))
-    siteDF <- cbind(t(locText),t(siteProp),t(tzInfo),siteName,t(siteCodeAtt))
-    #siteDF <- cbind(locText, siteProp, tzInfo, siteName, )
+    siteDF <- as.data.frame(cbind(t(locText),t(tzInfo),siteName,t(siteCodeAtt),srs,t(siteProp)))
+    
     
     if(asDateTime){
       dateTime <- parse_date_time(xml_attr(obs,"dateTime"), c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
@@ -205,10 +207,11 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   #TODO: attach other site info etc as attributes of mergedDF
   
+  attr(mergedDF, "url") <- obs_url
+  attr(mergedDF, "siteInfo") <- siteDF
+  attr(mergedDF, "variableInfo") <- varText
   attr(mergedDF, "disclaimer") <- noteText[noteTitles=="disclaimer"]
   attr(mergedDF, "statisticInfo") <- statDf
-  attr(mergedDF, "variableInfo") <- varText
-  attr(mergedDF, "siteInfo") <- siteDF
   attr(mergedDF, "queryTime") <- Sys.time()
   
   return (mergedDF)
