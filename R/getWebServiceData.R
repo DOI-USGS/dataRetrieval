@@ -6,6 +6,7 @@
 #' @param obs_url character containing the url for the retrieval
 #' @param \dots information to pass to header request
 #' @importFrom httr GET
+#' @importFrom httr RETRY
 #' @importFrom httr user_agent
 #' @importFrom httr stop_for_status
 #' @importFrom httr status_code
@@ -26,7 +27,7 @@
 #' }
 getWebServiceData <- function(obs_url, ...){
   
-  returnedList <- GET(obs_url, ..., user_agent(default_ua()))
+  returnedList <- RETRY("GET",obs_url, ..., user_agent(default_ua()))
   
     if(status_code(returnedList) != 200){
       message("For: ", obs_url,"\n")
