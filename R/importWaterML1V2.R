@@ -110,8 +110,7 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   timeSeries <- xml_find_all(returnedDoc, ".//ns1:timeSeries") #each parameter/site combo
   
-  #TODO: get queryInfo, turn into list 
-  #attributes
+  #some intial attributes
   queryNodes <- xml_children(xml_find_all(returnedDoc,".//ns1:queryInfo"))
   notes <- queryNodes[xml_name(queryNodes)=="note"]
   noteTitles <- xml_attrs(notes)
@@ -131,9 +130,8 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   for(t in timeSeries){
     obs <- xml_find_all(t, ".//ns1:value")
-    values <- xml_text(obs)
+    values <- xml_text(obs)  #actual observations
     nObs <- length(obs)
-    vals <- xml_text(obs) #actual observations
     sourceInfo <- xml_children(xml_find_all(t, ".//ns1:sourceInfo"))
     variable <- xml_children(xml_find_all(t, ".//ns1:variable"))
     
@@ -142,11 +140,12 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
     stat <- options[xml_attr(options,"name")=="Statistic"]
     stat_nm <- xml_text(options[xml_attr(stat,"name")=="Statistic"])
     statCd <- xml_attr(stat, "optionCode")
-    statDf <- as.data.frame(cbind(statCd,stat_nm), stringsAsFactors = FALSE)
+    statDF <- cbind.data.frame(statCd,stat_nm, stringsAsFactors = FALSE)
     
     #variable info
     varText <- as.data.frame(t(xml_text(variable)),stringsAsFactors = FALSE)
-    varNames <- xml_name(variable) #modify names?
+    varNames <- xml_name(variable) 
+    varName <- sub("unit", "param_unit",varNames) #rename to stay consistent with orig importWaterMl1
     names(varText) <- varNames
     
     #site info
@@ -164,7 +163,8 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
     siteCodeNode <- sourceInfo[xml_name(sourceInfo)=="siteCode"]
     site_no <- xml_text(siteCodeNode)
     siteCodeAtt <- unlist(xml_attrs(siteCodeNode))
-    siteDF <- as.data.frame(cbind(t(locText),t(tzInfo),siteName,t(siteCodeAtt),srs,t(siteProp)))
+    siteDF <- cbind.data.frame(t(locText),t(tzInfo),siteName,t(siteCodeAtt),srs,t(siteProp),
+                               stringsAsFactors = FALSE)
     
     
     if(asDateTime){
@@ -184,34 +184,62 @@ importWaterML1_V2 <- function(obs_url,asDateTime=FALSE, tz=""){
     if(all(is.na(qual))){noQual <- TRUE}
     
     agency_cd <- xml_attr(sourceInfo[xml_name(sourceInfo)=="siteCode"],"agencyCode")
-    site_no <- xml_text(sourceInfo[xml_name(sourceInfo)=="siteCode"])
     pCode <- xml_text(variable[xml_name(variable)=="variableCode"])
     statCode <- xml_attr(xml_find_all(variable,".//ns1:option"),"optionCode")
-    # 
-    #TODO: get TZ code, rep site no & agency, combine into DF
-    df <- cbind.data.frame(rep(agency_cd,nObs),rep(site_no,nObs),dateTime,values,qual,tzCol)
+  
+    #get TZ code, rep site no & agency, combine into DF
+    df <- cbind.data.frame(rep(agency_cd,nObs),rep(site_no,nObs),dateTime,values,qual,tzCol,
+                           stringsAsFactors = FALSE)
     obsColName <- paste("X",pCode,statCode,sep = "_")
     qualColName <- paste0(obsColName,"_cd")
     colnames(df) <- c("agency_cd","site_no","dateTime",obsColName,qualColName,"tz_code")
     if(noQual){
       df <- df[-5]
     }
-    #join by site no (dplyr?)
+    #join by site no 
+    #TODO: append attribute dfs as well 
+    #append siteInfo, stat, and variable if they don't match a previous one
+    if(nrow(df)==0){ # no data 
+      df <- data.frame()
+    }
     if (is.null(mergedDF)){
-      mergedDF <- df          
+      mergedDF <- df
+      mergedSite <- siteDF
+      mergedVar <- varText
+      mergedStat <- statDF
     } else {
-      similarNames <- intersect(colnames(mergedDF), colnames(df))
-      mergedDF <- full_join(mergedDF, df, by=similarNames)
+      #TODO: why isn't the join working with multiple sites?
+      
+      #
+      #print(similarNames)
+      #mergedDF <- merge(mergedDF, df, by = "site_no", all = TRUE)
+      #merge separately with any same site nos, then recombine
+      sameSite <- mergedDF[mergedDF$site_no == site_no,]
+      if(nrow(sameSite) > 0){
+        diffSite <- mergedDF[mergedDF$site_no != site_no,]
+        #first need to delete the obs and qual columns if they have already been filled with NA
+        deleteCols <- grepl(paste0(obsColName,"*"),colnames(sameSite))
+        sameSite <- sameSite[,!deleteCols]
+        sameSite_simNames <- intersect(colnames(sameSite), colnames(df))
+        sameSite <- full_join(sameSite, df, by = sameSite_simNames)
+        mergedDF <- bind_rows(sameSite, diffSite)
+      }else{
+        similarNames <- intersect(colnames(mergedDF), colnames(df))
+        mergedDF <- full_join(mergedDF, df, by=similarNames)
+      }
+      
+      mergedSite <- full_join(mergedSite, siteDF)
+      mergedVar <- full_join(mergedVar, varText)
+      mergedStat <- full_join(mergedStat, statDF)
     }
   }
   
-  #TODO: attach other site info etc as attributes of mergedDF
-  
+  #attach other site info etc as attributes of mergedDF
   attr(mergedDF, "url") <- obs_url
-  attr(mergedDF, "siteInfo") <- siteDF
-  attr(mergedDF, "variableInfo") <- varText
+  attr(mergedDF, "siteInfo") <- mergedSite
+  attr(mergedDF, "variableInfo") <- mergedVar
   attr(mergedDF, "disclaimer") <- noteText[noteTitles=="disclaimer"]
-  attr(mergedDF, "statisticInfo") <- statDf
+  attr(mergedDF, "statisticInfo") <- mergedStat
   attr(mergedDF, "queryTime") <- Sys.time()
   
   return (mergedDF)
