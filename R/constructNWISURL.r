@@ -97,9 +97,10 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
              
              searchCriteria <- paste(searchCriteria, "multiple_parameter_cds", sep=",")
              searchCriteria <- paste("list_of_search_criteria",searchCriteria,sep="=")
-             baseURL <- "http://nwis.waterdata.usgs.gov/nwis/qwdata"
+
+             baseURL <- drURL("qwdata")
              
-             url <- paste(baseURL,siteNumber,sep="?")
+             url <- paste0(baseURL,siteNumber)
              url <- paste(url, pCodes,searchCriteria,
                           "group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd",
                           "column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file",
@@ -107,48 +108,48 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
                           "format=rdb&rdb_qw_attributes=0&date_format=YYYY-MM-DD",
                           "rdb_compression=value", sep = "&")
              if(expanded){
-               url <- paste0(url,"&qw_sample_wide=0")
+               url <- appendDrURL(url,qw_sample_wide="0")
                url <- gsub("rdb_qw_attributes=0","rdb_qw_attributes=expanded",url)
              } else {
-               url <- paste0(url,"&qw_sample_wide=separated_wide")
+               url <- appendDrURL(url,qw_sample_wide="separated_wide")
              }
              
              if (nzchar(startDate)) {
-               url <- paste(url,"&begin_date=",startDate,sep="")
+               url <- appendDrURL(url,begin_date=startDate)
              }
              
              if (nzchar(endDate)) {
-               url <- paste(url,"&end_date=",endDate,sep="")
+               url <- appendDrURL(url,end_date=endDate)
              }
            },
         rating = {
           ratingType <- match.arg(ratingType, c("base", "corr", "exsa"))
-          url <- paste0("http://waterdata.usgs.gov/nwisweb/get_ratings?site_no=",
-                siteNumber, "&file_type=", ratingType)
+          url <- drURL("rating", site_no=siteNumber,file_type=ratingType)
         },
         peak = {
-          url <- paste0("http://nwis.waterdata.usgs.gov/usa/nwis/peak/?site_no=", siteNumber,
-                "&range_selection=date_range&format=rdb")
+          url <- drURL("peak", site_no=siteNumber,
+                       range_selection="date_range",
+                       format="rdb")
           if (nzchar(startDate)) {
-            url <- paste0(url,"&begin_date=",startDate)
-          }
+            url <- appendDrURL(url,begin_date=startDate)
+          } 
           if(nzchar(endDate)){
-            url <- paste0(url, "&end_date=", endDate)
+            url <- appendDrURL(url, end_date=endDate)
           }
         },
         meas = {
-          url <- paste0("http://waterdata.usgs.gov/nwis/measurements?site_no=", siteNumber,
-                "&range_selection=date_range")
+          url <- drURL("peak", site_no=siteNumber,
+                       range_selection="date_range")
           if (nzchar(startDate)) {
-            url <- paste0(url,"&begin_date=",startDate)
+            url <- appendDrURL(url,begin_date=startDate)
           }
           if(nzchar(endDate)){
-            url <- paste0(url, "&end_date=", endDate)
+            url <- appendDrURL(url, end_date=endDate)
           }
           if(expanded){
-            url <- paste0(url,"&format=rdb_expanded")
+            url <- appendDrURL(url,format="rdb_expanded")
           } else {
-            url <- paste0(url,"&format=rdb")
+            url <- appendDrURL(url,format="rdb")
           }
 
         },
@@ -172,16 +173,18 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           }
           statType <- paste(statType,collapse=",")
           parameterCd <- paste(parameterCd,collapse=",")
-          url <- paste0("http://waterservices.usgs.gov/nwis/stat/?format=rdb&sites=",siteNumber,
-                        "&statType=",statType,"&statReportType=",statReportType,"&parameterCd=",parameterCd)
+          url <- drURL("stat", sites=siteNumber,
+                       statType=statType,
+                       statReportType=statReportType,
+                       parameterCd=parameterCd)
           if (nzchar(startDate)) {
-            url <- paste0(url,"&startDT=",startDate)
+            url <- appendDrURL(url,startDT=startDate)
           }
           if (nzchar(endDate)) {
-            url <- paste0(url,"&endDT=",endDate)
+            url <- appendDrURL(url,endDT=endDate)
           }
           if (!grepl("(?i)daily",statReportType)){
-            url <- paste0(url,"&missingData=off")
+            url <- appendDrURL(url,missingData="off")
           }
           
         },
