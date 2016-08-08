@@ -2,7 +2,7 @@
 =============
 Retrieval functions for USGS and EPA hydrologic and water quality data. For tutorial information, see:
 
-[usgs-r.github.io/dataRetrieval](usgs-r.github.io/dataRetrieval)
+[http://owi.usgs.gov/R/dataRetrieval.html](http://owi.usgs.gov/R/dataRetrieval.html)
 
 ##Package Installation
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:

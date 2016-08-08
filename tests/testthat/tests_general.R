@@ -56,10 +56,11 @@ test_that("General WQP retrievals working", {
   #                                characteristicName=nameToUse, querySummary = TRUE)
   # expect_is(pHDataExpanded2, 'list')
   
-  startDate <- as.Date("2013-01-01")
-  nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
-                         characteristicType="Nutrient")
-  expect_is(nutrientDaneCounty$ActivityStartDateTime, 'POSIXct')
+  # Super slow:
+  # startDate <- as.Date("2013-01-01")
+  # nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
+  #                        characteristicType="Nutrient")
+  # expect_is(nutrientDaneCounty$ActivityStartDateTime, 'POSIXct')
 })
 
 test_that("WQP head query retrievals working", {
