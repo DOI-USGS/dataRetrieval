@@ -258,6 +258,9 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
     attr(readr.data, "header") <- attr(doc, "header")
   }
 
+  if("spec" %in% names(attributes(readr.data))){
+    attr(readr.data, "spec") <- NULL
+  }
   
   return(readr.data)
   
