@@ -40,6 +40,16 @@ access = match.arg(access, c('public','internal','cooperator','USGS'))
     message('setting access to public')
   }
   
+  # pkg.env$site = "http://waterservices.usgs.gov/nwis/site/"
+  # pkg.env$iv = "http://waterservices.usgs.gov/nwis/iv/"
+  # pkg.env$dv =  "http://waterservices.usgs.gov/nwis/dv/"
+  # pkg.env$gwlevels = "http://waterservices.usgs.gov/nwis/gwlevels/"
+  # pkg.env$measurements = "http://waterdata.usgs.gov/nwis/measurements/"
+  # pkg.env$peak = "http://waterdata.usgs.gov/usa/nwis/peak/"
+  # pkg.env$rating = "http://waterdata.usgs.gov/nwisweb/get_ratings/"
+  # pkg.env$qwdata = "http://waterdata.usgs.gov/nwis/qwdata"
+  # pkg.env$stat = "http://waterservices.usgs.gov/nwis/stat/"
+  
   pkg.env$site = "http://staging.waterservices.usgs.gov/nwis/site/"
   pkg.env$iv = "http://staging.waterservices.usgs.gov/nwis/iv/"
   pkg.env$dv =  "http://staging.waterservices.usgs.gov/nwis/dv/"
@@ -49,6 +59,7 @@ access = match.arg(access, c('public','internal','cooperator','USGS'))
   pkg.env$rating = "http://staging.waterdata.usgs.gov/nwisweb/get_ratings/"
   pkg.env$qwdata = "http://staging.waterdata.usgs.gov/nwis/qwdata"
   pkg.env$stat = "http://staging.waterservices.usgs.gov/nwis/stat/"
+
   
   options(Access.dataRetrieval = access)
 }
