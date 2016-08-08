@@ -18,12 +18,22 @@ test_that("Unit value data returns correct types", {
   timeZoneChange <- renameNWISColumns(timeZoneChange)
   expect_is(rawData$dateTime, 'POSIXct')
   expect_is(rawData$Flow_Inst, 'numeric')
-  expect_that(attr(rawData, "url"), equals(
-      "http://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
-  )
+  # expect_that(attr(rawData, "url"), equals(
+  #     "http://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
+  # )
 #   #First switchover to standard time:
 #   expect_that(as.numeric(timeZoneChange[which(timeZoneChange$tz_cd == "America/Chicago")[1],"dateTime"]),
 #               equals(as.numeric(as.POSIXct("2013-11-03 01:00:00", tz="UTC")+60*60*6)))
+  
+  site <- "04087170"
+  pCode <- "63680"
+  startDate <- "2012-07-10"
+  endDate <- "2012-07-17"
+  dd_2 <- readNWISuv(site, pCode, startDate, endDate)
+  expect_true(all(names(dd_2) %in% c("agency_cd","site_no",                   
+                                 "dateTime","X_.YSI.6136.UP._63680_00011",   
+                                 "X_YSI.6136.DOWN_63680_00011","X_.YSI.6136.UP._63680_00011_cd",
+                                 "X_YSI.6136.DOWN_63680_00011_cd","tz_cd")))
   
 })
 
