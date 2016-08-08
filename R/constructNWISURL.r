@@ -138,7 +138,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           }
         },
         meas = {
-          url <- drURL("peak", site_no=siteNumber,
+          url <- drURL("measurements", site_no=siteNumber,
                        range_selection="date_range")
           if (nzchar(startDate)) {
             url <- appendDrURL(url,begin_date=startDate)
