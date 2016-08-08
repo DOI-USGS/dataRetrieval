@@ -53,8 +53,12 @@ See \url{http://waterservices.usgs.gov/rest/Statistics-Service.html} for more in
 }
 \examples{
 \dontrun{
+x1 <- readNWISstat(siteNumbers=c("02319394"),
+                  parameterCd=c("00060"),
+                  statReportType="annual") 
+
 #all the annual mean discharge data for two sites
-x <- readNWISstat(siteNumbers=c("02319394","02171500"),
+x2 <- readNWISstat(siteNumbers=c("02319394","02171500"),
                   parameterCd=c("00010","00060"),
                   statReportType="annual")
 
