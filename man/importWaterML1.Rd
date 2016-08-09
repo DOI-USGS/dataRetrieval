@@ -97,7 +97,7 @@ tzIssue <- importWaterML1(tzURL, TRUE, "America/Chicago")
 filePath <- system.file("extdata", package="dataRetrieval")
 fileName <- "WaterML1Example.xml"
 fullPath <- file.path(filePath, fileName)
-imporFile <- importWaterML1(fullPath,TRUE)
+importFile <- importWaterML1(fullPath,TRUE)
 
 }
 \seealso{
