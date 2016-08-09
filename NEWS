@@ -1,3 +1,12 @@
+dataRetrieval 2.5.12
+==========
+* Response to readr 1.0.0 updates
+* Added NWIS Water Use data
+* Added NWIS Statistical Service data
+* Added message on updates to NWIS data on startup message
+* Automatically retries web service calls when status code is greater than 400
+* More integrated use of pkg.env to set base URLs
+
 dataRetrieval 2.5.7
 ==========
 * HEAD requests can be returned in readWQP* functions. This can give some indication on amount of data available.

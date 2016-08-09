@@ -450,8 +450,12 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' @importFrom dplyr left_join
 #' @examples
 #' \dontrun{
+#' x1 <- readNWISstat(siteNumbers=c("02319394"),
+#'                   parameterCd=c("00060"),
+#'                   statReportType="annual") 
+#' 
 #' #all the annual mean discharge data for two sites
-#' x <- readNWISstat(siteNumbers=c("02319394","02171500"),
+#' x2 <- readNWISstat(siteNumbers=c("02319394","02171500"),
 #'                   parameterCd=c("00010","00060"),
 #'                   statReportType="annual")
 #' 
