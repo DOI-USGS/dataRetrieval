@@ -43,7 +43,13 @@
 #' @importFrom lubridate parse_date_time
 #' @importFrom dplyr full_join
 #' @importFrom dplyr bind_rows
-#' @import xml2
+#' @importFrom xml2 read_xml
+#' @importFrom xml2 xml_find_all
+#' @importFrom xml2 xml_children
+#' @importFrom xml2 xml_name
+#' @importFrom xml2 xml_text
+#' @importFrom xml2 xml_attrs
+#' @importFrom xml2 xml_attr
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -119,21 +125,16 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
   if(0 == length(timeSeries)){
     df <- data.frame()
-    attr(df, "queryInfo") <- queryInfo
+    attr(df, "queryInfo") <- noteList
     attr(df, "url") <- obs_url
     return(df)
   }
   
-  attList <- list()
   mergedDF <- NULL
   
   for(t in timeSeries){
     obs <- xml_find_all(t, ".//ns1:value")
     values <- as.numeric(xml_text(obs))  #actual observations
-    if(length(values) == 0){
-      noValues <- TRUE
-    }else{ noValues <- FALSE}
-    
     nObs <- length(obs)
     sourceInfo <- xml_children(xml_find_all(t, ".//ns1:sourceInfo"))
     variable <- xml_children(xml_find_all(t, ".//ns1:variable"))
@@ -201,9 +202,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     }
     #join by site no 
     #append siteInfo, stat, and variable if they don't match a previous one
-    # if(nrow(df)==0){ # no data 
-    #   df <- data.frame()
-    # }
     if (is.null(mergedDF)){
       mergedDF <- df
       mergedSite <- siteDF
