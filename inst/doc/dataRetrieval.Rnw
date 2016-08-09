@@ -683,7 +683,7 @@ specificCond <- readWQPqw('WIDNR_WQX-10032762',
 
 A tool for finding NWIS characteristic names can be found at: 
 
-\url{http://www.waterqualitydata.us/public_srsnames.jsp}
+\url{http://www.waterqualitydata.us/public_srsnames/}
 
 \FloatBarrier
 
