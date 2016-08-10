@@ -103,7 +103,7 @@
 #'
 
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
-
+  
   returnedDoc <- read_xml(obs_url)
   if(tz != ""){  #check tz is valid if supplied
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
@@ -133,11 +133,64 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   mergedDF <- NULL
   
   for(t in timeSeries){
-    obs <- xml_find_all(t, ".//ns1:value")
-    values <- as.numeric(xml_text(obs))  #actual observations
-    nObs <- length(obs)
+    #check if there are multiple time series (ie with different descriptors)
+    valParents <- xml_find_all(t,".//ns1:values")
+    obsDF <- NULL
+    useMethodDesc <- FALSE
+    if(length(valParents) > 1){ useMethodDesc <- TRUE} #append the method description to colnames later
+   
     sourceInfo <- xml_children(xml_find_all(t, ".//ns1:sourceInfo"))
     variable <- xml_children(xml_find_all(t, ".//ns1:variable"))
+    agency_cd <- xml_attr(sourceInfo[xml_name(sourceInfo)=="siteCode"],"agencyCode")
+    pCode <- xml_text(variable[xml_name(variable)=="variableCode"])
+    statCode <- xml_attr(xml_find_all(variable,".//ns1:option"),"optionCode")
+    
+    for(v in valParents){
+      obsColName <- paste(pCode,statCode,sep = "_")
+      obs <- xml_find_all(v, ".//ns1:value")
+      values <- as.numeric(xml_text(obs))  #actual observations
+      nObs <- length(values)
+      qual <- xml_attr(obs,"qualifiers")
+      if(all(is.na(qual))){
+        noQual <- TRUE
+      }else{noQual <- FALSE}
+      
+      if(asDateTime){
+        dateTime <- parse_date_time(xml_attr(obs,"dateTime"), c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
+                                                                "%Y-%m-%dT%H:%M:%S","%Y-%m-%dT%H:%M:%OS",
+                                                                "%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
+        #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
+        attr(dateTime, 'tzone') <- tz 
+        tzCol <- rep(tz,nObs)
+      }else{
+        dateTime <- xml_attr(obs,"dateTime")
+        tzCol <- rep(xml_attr(xml_find_all(sourceInfo,".//ns1:defaultTimeZone"),"zoneAbbreviation"),
+                     nObs)
+      }
+      #create column names, addressing if methodDesc is needed
+      if(useMethodDesc){
+        methodDesc <- make.names(gsub("\\[|\\]","",xml_text(xml_find_all(v, ".//ns1:methodDescription"))))
+        obsColName <- paste("X",methodDesc,obsColName, sep = "_")
+      } else{
+        obsColName <- paste("X",obsColName, sep = "_")
+      }
+      qualColName <- paste(obsColName,"cd",sep = "_")
+      
+      valParentDF <- cbind.data.frame(dateTime, values, qual, tzCol, stringsAsFactors = FALSE)
+      names(valParentDF) <- c("dateTime",obsColName, qualColName, "tz_cd")
+      #delete qual column if all NA
+      if(all(is.na(valParentDF[,eval(qualColName)]))){
+        valParentDF <- subset(valParentDF, select = c("dateTime", eval(obsColName), "tz_cd"))
+      }
+      if(is.null(obsDF)){
+        obsDF <- valParentDF
+      }else{
+        obsDF <- full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
+      }
+      
+    }
+   
+    nObs <- nrow(obsDF)
     
     #statistic info
     options <- xml_find_all(variable,"ns1:option")
@@ -170,36 +223,11 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     siteDF <- cbind.data.frame(t(locText),t(tzInfo),siteName,t(siteCodeAtt),srs,t(siteProp),
                                stringsAsFactors = FALSE)
     
-    
-    if(asDateTime){
-      dateTime <- parse_date_time(xml_attr(obs,"dateTime"), c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
-                                                             "%Y-%m-%dT%H:%M:%S","%Y-%m-%dT%H:%M:%OS",
-                                                             "%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
-      #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
-      attr(dateTime, 'tzone') <- tz 
-      tzCol <- rep(tz,nObs)
-    }else{
-      dateTime <- xml_attr(obs,"dateTime")
-      tzCol <- rep(xml_attr(xml_find_all(sourceInfo,".//ns1:defaultTimeZone"),"zoneAbbreviation"),
-                   nObs)
-    }
-    noQual <- FALSE
-    qual <- xml_attr(obs,"qualifiers")
-    if(all(is.na(qual))){noQual <- TRUE}
-    
-    agency_cd <- xml_attr(sourceInfo[xml_name(sourceInfo)=="siteCode"],"agencyCode")
-    pCode <- xml_text(variable[xml_name(variable)=="variableCode"])
-    statCode <- xml_attr(xml_find_all(variable,".//ns1:option"),"optionCode")
-  
     #get TZ code, rep site no & agency, combine into DF
-    df <- cbind.data.frame(rep(agency_cd,nObs),rep(site_no,nObs),dateTime,values,qual,tzCol,
-                           stringsAsFactors = FALSE)
-    obsColName <- paste("X",pCode,statCode,sep = "_")
-    qualColName <- paste0(obsColName,"_cd")
-    colnames(df) <- c("agency_cd","site_no","dateTime",obsColName,qualColName,"tz_cd")
-    if(noQual){
-      df <- df[-5]
-    }
+    obsDFrows <- nrow(obsDF)
+    df <- cbind.data.frame(agency_cd = rep(agency_cd,obsDFrows), site_no = rep(site_no,obsDFrows), 
+                           obsDF, stringsAsFactors = FALSE)
+   
     #join by site no 
     #append siteInfo, stat, and variable if they don't match a previous one
     if (is.null(mergedDF)){
