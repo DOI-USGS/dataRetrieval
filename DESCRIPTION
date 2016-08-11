@@ -37,6 +37,7 @@ Imports:
     stats,
     utils,
     dplyr,
+    xml2,
     readr (>= 1.0.0)
 Suggests:
     xtable,
