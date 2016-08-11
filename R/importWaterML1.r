@@ -50,6 +50,7 @@
 #' @importFrom xml2 xml_text
 #' @importFrom xml2 xml_attrs
 #' @importFrom xml2 xml_attr
+#' @importFrom xml2 xml_root
 #' @examples
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -104,7 +105,12 @@
 
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   
-  returnedDoc <- read_xml(obs_url)
+  if(file.exists(obs_url)){
+    returnedDoc <- read_xml(obs_url)
+  } else {
+    returnedDoc <- xml_root(getWebServiceData(obs_url, encoding='gzip'))
+  }
+  
   if(tz != ""){  #check tz is valid if supplied
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
                           "America/Denver","America/Los_Angeles",
