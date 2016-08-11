@@ -3,7 +3,7 @@
 #' This function accepts a url parameter that already contains the desired
 #' NWIS site, parameter code, statistic, startdate and enddate. 
 #'
-#' @param obs_url character containing the url for the retrieval or a file path to the data file.
+#' @param input character or raw, containing the url for the retrieval or a file path to the data file, or raw XML.
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
@@ -57,9 +57,9 @@
 #' endDate <- "2012-10-01"
 #' offering <- '00003'
 #' property <- '00060'
-#' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
+#' input <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 #' \dontrun{
-#' data <- importWaterML1(obs_url, asDateTime=TRUE)
+#' data <- importWaterML1(input, asDateTime=TRUE)
 #' 
 #' groundWaterSite <- "431049071324301"
 #' startGW <- "2013-10-01"
@@ -75,8 +75,8 @@
 #' 
 #' # Two sites, two pcodes, one site has two data descriptors:
 #' siteNumber <- c('01480015',"04085427")
-#' obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
-#' data <- importWaterML1(obs_url)
+#' input <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
+#' data <- importWaterML1(input)
 #' data$dateTime <- as.Date(data$dateTime)
 #' data <- renameNWISColumns(data)
 #' names(attributes(data))
@@ -95,7 +95,11 @@
 #' tzURL <- constructNWISURL("04027000", c("00300","63680"), "2011-11-05", "2011-11-07","uv")
 #' tzIssue <- importWaterML1(tzURL, TRUE, "America/Chicago")
 #'
-#' 
+#' #raw XML
+#' url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
+#'                          startDate = "2014-01-01", endDate = "2014-01-01")
+#' raw <- content(GET(url), as = 'raw')
+#' rawParsed <- importWaterML1(raw)
 #' }
 #' filePath <- system.file("extdata", package="dataRetrieval")
 #' fileName <- "WaterML1Example.xml"
@@ -103,12 +107,15 @@
 #' importFile <- importWaterML1(fullPath,TRUE)
 #'
 
-importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
-  
-  if(file.exists(obs_url)){
-    returnedDoc <- read_xml(obs_url)
+importWaterML1 <- function(input,asDateTime=FALSE, tz=""){
+  raw <- FALSE
+  if(class(input) == "character" && file.exists(input)){
+    returnedDoc <- read_xml(input)
+  }else if(class(input) == 'raw'){
+    returnedDoc <- read_xml(input)
+    raw <- TRUE
   } else {
-    returnedDoc <- xml_root(getWebServiceData(obs_url, encoding='gzip'))
+    returnedDoc <- xml_root(getWebServiceData(input, encoding='gzip'))
   }
   
   if(tz != ""){  #check tz is valid if supplied
@@ -132,7 +139,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   if(0 == length(timeSeries)){
     df <- data.frame()
     attr(df, "queryInfo") <- noteList
-    attr(df, "url") <- obs_url
+    if(!raw){
+      attr(df, "url") <- input
+    }
     return(df)
   }
   
@@ -266,7 +275,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   }
   
   #attach other site info etc as attributes of mergedDF
-  attr(mergedDF, "url") <- obs_url
+  if(!raw){
+    attr(mergedDF, "url") <- input
+  }
   attr(mergedDF, "siteInfo") <- mergedSite
   attr(mergedDF, "variableInfo") <- mergedVar
   attr(mergedDF, "disclaimer") <- noteText[noteTitles=="disclaimer"]

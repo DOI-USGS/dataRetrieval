@@ -4,10 +4,10 @@
 \alias{importWaterML1}
 \title{Function to return data from the NWISWeb WaterML1.1 service}
 \usage{
-importWaterML1(obs_url, asDateTime = FALSE, tz = "")
+importWaterML1(input, asDateTime = FALSE, tz = "")
 }
 \arguments{
-\item{obs_url}{character containing the url for the retrieval or a file path to the data file.}
+\item{input}{character or raw, containing the url for the retrieval or a file path to the data file, or raw XML.}
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
 
@@ -54,9 +54,9 @@ startDate <- "2012-09-01"
 endDate <- "2012-10-01"
 offering <- '00003'
 property <- '00060'
-obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
+input <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 \dontrun{
-data <- importWaterML1(obs_url, asDateTime=TRUE)
+data <- importWaterML1(input, asDateTime=TRUE)
 
 groundWaterSite <- "431049071324301"
 startGW <- "2013-10-01"
@@ -72,8 +72,8 @@ unitData <- importWaterML1(unitDataURL,TRUE)
 
 # Two sites, two pcodes, one site has two data descriptors:
 siteNumber <- c('01480015',"04085427")
-obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
-data <- importWaterML1(obs_url)
+input <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
+data <- importWaterML1(input)
 data$dateTime <- as.Date(data$dateTime)
 data <- renameNWISColumns(data)
 names(attributes(data))
@@ -92,7 +92,11 @@ Timezone change with specified local timezone:
 tzURL <- constructNWISURL("04027000", c("00300","63680"), "2011-11-05", "2011-11-07","uv")
 tzIssue <- importWaterML1(tzURL, TRUE, "America/Chicago")
 
-
+#raw XML
+url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
+                         startDate = "2014-01-01", endDate = "2014-01-01")
+raw <- content(GET(url), as = 'raw')
+rawParsed <- importWaterML1(raw)
 }
 filePath <- system.file("extdata", package="dataRetrieval")
 fileName <- "WaterML1Example.xml"
