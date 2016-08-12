@@ -3,23 +3,20 @@
 #' This function accepts a url parameter for a WaterML2 getObservation. This function is still under development,
 #' but the general functionality is correct.
 #'
-#' @param obs_url character containing the url for the retrieval or a file path to the data file.
-#' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
+#' @param input character or raw, containing the url for the retrieval or a path to the data file, or raw XML.
+#' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return mergedDF a data frame time, value, description, qualifier, and identifier
 #' @export
-#' @importFrom XML xmlRoot
-#' @importFrom XML xmlDoc
-#' @importFrom XML xpathApply
-#' @importFrom XML xpathSApply
-#' @importFrom XML xmlNamespaceDefinitions
-#' @importFrom XML xmlValue
-#' @importFrom XML xmlAttrs
-#' @importFrom XML xmlName
+#' @importFrom xml2 read_xml
+#' @importFrom xml2 xml_find_all
+#' @importFrom xml2 xml_text
+#' @importFrom xml2 xml_attr
 #' @importFrom dplyr rbind_all
+#' @importFrom lubridate parse_date_time
 #' @examples
 #' baseURL <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
 #' URL <- paste(baseURL, "sites=01646500",
@@ -47,127 +44,77 @@
 #' fullPath <- file.path(filePath, fileName)
 #' UserData <- importWaterML2(fullPath)
 #' 
-importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
+importWaterML2 <- function(input, asDateTime=FALSE, tz=""){
   
-  if(file.exists(obs_url)){
-    rawData <- obs_url
-    doc <- xmlTreeParse(rawData, getDTD = FALSE, useInternalNodes = TRUE)
-  } else {
-    doc <- xmlTreeParse(obs_url, getDTD = FALSE, useInternalNodes = TRUE)
-  }
-
   if(tz != ""){
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
                           "America/Denver","America/Los_Angeles",
                           "America/Anchorage","America/Honolulu",
                           "America/Jamaica","America/Managua",
                           "America/Phoenix","America/Metlakatla"))
+  }else{tz = "UTC"}
+  
+  raw <- FALSE
+  if(class(input) == "character" && file.exists(input)){
+    returnedDoc <- read_xml(input)
+  }else if(class(input) == 'raw'){
+    returnedDoc <- read_xml(input)
+    raw <- TRUE
+  } else {
+    returnedDoc <- xml_root(getWebServiceData(input, encoding='gzip'))
   }
   
-  doc <- xmlRoot(doc)
+  timeSeries <- xml_find_all(returnedDoc, "//wml2:Collection") #each parameter/site combo
   
-  ns <- xmlNamespaceDefinitions(doc, simplify = TRUE)  
-  
-  
-  timeSeries <- xpathApply(doc, "//wml2:Collection", namespaces = ns)
-
   if(0 == length(timeSeries)){
     df <- data.frame()
-    attr(df, "url") <- obs_url
+    if(!raw){
+      attr(df, "url") <- input
+    }
     return(df)
   }
   
-  for (i in 1:length(timeSeries)){
+  mergedDF <- NULL
   
-    chunk <- xmlDoc(timeSeries[[i]])
-    chunk <- xmlRoot(chunk)
-    chunkNS <- xmlNamespaceDefinitions(chunk, simplify = TRUE)
-
-    xp <- xpathApply(chunk, "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP", 
-                     xpathSApply, ".//*[not(*)]", 
-                     function(x) setNames(ifelse(nzchar(xmlValue(x)), 
-                                                 xmlValue(x), 
-                                                 ifelse("qualifier" == xmlName(x),
-                                                        xpathSApply(x,"./@xlink:title",namespaces = ns),"")), #originally I had the "" as xmlAttr(x) 
-                                          xmlName(x,full=TRUE)), 
-                     namespaces = chunkNS)
-  
-    if(length(xpathApply(doc, 
-                  "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP/wml2:metadata/wml2:TVPMeasurementMetadata", 
-                  xmlValue, namespaces = ns)) != 0){
-      xp <- xp[-1]
-    }
-
-    y <- lapply(xp,t)
-    z <- lapply(y, as.data.frame)
-    DF2 <- suppressWarnings(rbind_all(z))
-
-    names(DF2)[grep("wml2",names(DF2))] <- sub("wml2:","",names(DF2)[grep("wml2",names(DF2))])
-    
+  for(t in timeSeries){
+    TVP <- xml_find_all(t, ".//wml2:MeasurementTVP")#time-value pairs
+    time <- xml_text(xml_find_all(TVP,".//wml2:time"))
+    #TODO: if asDateTime....
     if(asDateTime){
+      time <- parse_date_time(time, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M","%Y-%m-%dT%H:%M:%S",
+                                      "%Y-%m-%dT%H:%M:%OS","%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
+      #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
+      attr(time, 'tzone') <- tz 
+    }
+    values <- as.numeric(xml_text(xml_find_all(TVP,".//wml2:value")))
+    #TODO: deal with multiple identifiers (assigning column names)
+    idents <- xml_text(xml_find_all(t, ".//gml:identifier"))
+    useIdents <- rep(idents, length(values))
+    #TODO: check qualifiers in points against default, if both exist, same, etc
+    tvpQuals <- xml_text(xml_find_all(TVP, ".//swe:description"))
+    defaultPointMeta <- xml_find_all(t, ".//wml2:DefaultTVPMeasurementMetadata")
+    defaultQuals <- xml_text(xml_find_all(defaultPointMeta, ".//swe:description"))
     
-      DF2$time <- gsub(":","",DF2$time)
-      DF2$time <- ifelse(nchar(DF2$time) > 18,
-                                   as.POSIXct(DF2$time, format="%Y-%m-%dT%H%M%S%z",tz="UTC"),
-                                         as.POSIXct(DF2$time, format="%Y-%m-%dT%H%M%S",tz="UTC"))
-      
-      DF2$time <- as.POSIXct(DF2$time, origin = "1970-01-01", tz="UTC")
-      
-      if(tz != ""){
-        attr(DF2$time, "tzone") <- tz
-      }
-      
+    if(length(tvpQuals) == 0){
+      useQuals <- rep(defaultQuals, length(values))
+    }else{
+      useQuals <- tvpQuals
+    }
+    if(length(useQuals) == 0){
+      df <- cbind.data.frame(time, value=values, identifier=useIdents,
+                             stringsAsFactors=FALSE)
+    }else{
+    df <- cbind.data.frame(time, value=values, qualifier=useQuals, identifier=useIdents,
+                           stringsAsFactors=FALSE)
+    }
+    if (is.null(mergedDF)){
+      mergedDF <- df
     } else {
-      DF2$time <- as.Date(DF2$time)
-    }
-  
-    DF2$value <- as.numeric(DF2$value)
-    
-#########################################
-    # Very specific to USGS:
-    defaultQualifier <- as.character(xpathApply(chunk, "//wml2:defaultPointMetadata/wml2:DefaultTVPMeasurementMetadata/wml2:qualifier/@xlink:title",namespaces = chunkNS))
-    
-    if (length(defaultQualifier) == 0 && (typeof(defaultQualifier) == "character")) {
-      defaultQualifier <- "NA"
-    }
-    
-    if("swe:value" %in% names(DF2)){
-      isQual <- as.character(xpathApply(chunk, 
-                                        "//wml2:MeasurementTimeseries/wml2:point/wml2:MeasurementTVP/wml2:metadata/wml2:TVPMeasurementMetadata/wml2:qualifier/@xlink:title",
-                                        namespaces = chunkNS))
-      DF2$qualifier <- ifelse(defaultQualifier != isQual,isQual,defaultQualifier)
-      DF2$`swe:value` <- NULL
-    } else if (length(defaultQualifier > 1)){
-      for (j in 1:length(defaultQualifier)){
-        qualName <- paste0("qualifier",j)
-        DF2[,eval(qualName)] <- defaultQualifier[j]
-      }
-    } else {
-      DF2$qualifier <- rep(defaultQualifier,nrow(DF2))
-    }
-   
-#########################################
-
-    id <- as.character(xpathApply(chunk, "//gml:identifier", xmlValue, namespaces = chunkNS))
-    if(length(id) > 1){
-      for (j in 1:length(id)){
-        idName <- paste0("identifier",j)
-        DF2[,eval(idName)] <- id[j]
-      }
-      message("There were multiple identifier elements")
-    } else if (length(id) == 0){
-      DF2$identifier <- NA
-    } else{
-      DF2$identifier <- rep(id, nrow(DF2))
-    }
-    
-    if (1 == i ){
-      mergedDF <- DF2
-    } else {
-      similarNames <- intersect(names(mergedDF), names(DF2))
-      mergedDF <- merge(mergedDF, DF2,by=similarNames,all=TRUE)
+      similarNames <- intersect(colnames(mergedDF), colnames(df))
+      mergedDF <- full_join(mergedDF, df, by=similarNames)
     }
   }
-
-  return (mergedDF)
+  return(mergedDF)
 }
+
+
