@@ -51,7 +51,7 @@ importWaterML2_V2 <- function(input, asDateTime=FALSE, tz=""){
                           "America/Anchorage","America/Honolulu",
                           "America/Jamaica","America/Managua",
                           "America/Phoenix","America/Metlakatla"))
-  }
+  }else{tz = "UTC"}
   
   raw <- FALSE
   if(class(input) == "character" && file.exists(input)){
@@ -62,11 +62,8 @@ importWaterML2_V2 <- function(input, asDateTime=FALSE, tz=""){
   } else {
     returnedDoc <- xml_root(getWebServiceData(input, encoding='gzip'))
   }
-  #if(xml_name(xml_root(returnedDoc)) == "FeatureCollection"){
-    timeSeries <- xml_find_all(returnedDoc, "//wml2:Collection") #each parameter/site combo
-  #}else{
-   # timeSeries <- returnedDoc #sometimes there isn't the gml:FeatureCollection root
-  #}
+  
+  timeSeries <- xml_find_all(returnedDoc, "//wml2:Collection") #each parameter/site combo
   
   if(0 == length(timeSeries)){
     df <- data.frame()
@@ -76,37 +73,49 @@ importWaterML2_V2 <- function(input, asDateTime=FALSE, tz=""){
     return(df)
   }
   
-    for(t in timeSeries){
-      TVP <- xml_find_all(t, ".//wml2:MeasurementTVP")#time-value pairs
-      time <- xml_text(xml_find_all(TVP,".//wml2:time"))
-      #TODO: if asDateTime....
-      if(asDateTime){
-        
-        time <- gsub(":","",DF2$time)
-        time <- ifelse(nchar(DF2$time) > 18,
-                       as.POSIXct(DF2$time, format="%Y-%m-%dT%H%M%S%z",tz="UTC"),
-                       as.POSIXct(DF2$time, format="%Y-%m-%dT%H%M%S",tz="UTC"))
-        
-        time <- as.POSIXct(DF2$time, origin = "1970-01-01", tz="UTC")
-        
-        if(tz != ""){
-          attr(time, "tzone") <- tz
-        }
-      } else {
-        time <- as.Date(time)
-      }
-    }
+  mergedDF <- NULL
+  
+  for(t in timeSeries){
+    TVP <- xml_find_all(t, ".//wml2:MeasurementTVP")#time-value pairs
+    time <- xml_text(xml_find_all(TVP,".//wml2:time"))
+    #TODO: if asDateTime....
+    if(asDateTime){
+      
+      time <- gsub(":","",DF2$time)
+      time <- ifelse(nchar(DF2$time) > 18,
+                     as.POSIXct(DF2$time, format="%Y-%m-%dT%H%M%S%z",tz="UTC"),
+                     as.POSIXct(DF2$time, format="%Y-%m-%dT%H%M%S",tz="UTC"))
+      
+      time <- as.POSIXct(DF2$time, origin = "1970-01-01", tz="UTC")
+      
+      attr(time, "tzone") <- tz
+    }   
     
     values <- xml_text(xml_find_all(TVP,".//wml2:value"))
     #TODO: deal with multiple identifiers (assigning column names)
     idents <- xml_text(xml_find_all(t, ".//gml:identifier"))
-    
+    useIdents <- rep(idents, length(values))
     #TODO: check qualifiers in points against default, if both exist, same, etc
     tvpQuals <- xml_attr(xml_find_all(TVP, ".//wml2:qualifier"), "xlink:title")
+    defaultPointMeta <- xml_find_all(t, ".//wml2:DefaultTVPMeasurementMetadata")
     defaultQuals <- xml_attr(xml_find_all(defaultPointMeta, ".//wml2:qualifier"),"title")
     
-    if()
+    if(length(tvpQuals) == 0){
+      useQuals <- rep(defaultQuals, length(values))
+    }else{
+      useQuals <- tvpQuals
+    }
+    
+    df <- cbind.data.frame(time, value=values, qualifier=useQuals, identifier=useIdents,
+                           stringsAsFactors=FALSE)
+    if (is.null(mergedDF)){
+      mergedDF <- df
+    } else {
+      similarNames <- intersect(colnames(mergedDF), colnames(df))
+      mergedDF <- full_join(mergedDF, df, by=similarNames)
+    }
   }
-  
-  
+  return(mergedDF)
 }
+
+
