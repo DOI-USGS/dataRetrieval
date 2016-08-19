@@ -8,11 +8,11 @@ knit: (function(inputFile, encoding) {
       out_dir <- 'test';
       rmarkdown::render(inputFile,
                         encoding=encoding, 
-                        output_file='../dataRetrieval.html') })
+                        output_file='dataRetrieval.html') })
 output:
   ioslides_presentation:
-    css: ../styles.css
-    logo: ../images/simple-shadow.png
+    css: css/stylesSlides.css
+    logo: img/simple-shadow.png
     smaller: yes
     widescreen: yes
 ---
@@ -48,7 +48,7 @@ How to discover data?
 
 
 ## Overview
-<img src="../images/2015-12-15_13-52-29.png" alt="Overview" style="width: 800px;"/>
+<img src="img/2015-12-15_13-52-29.png" alt="Overview" style="width: 800px;"/>
 
 ## Installation
 
@@ -334,7 +334,7 @@ Environmental Data Discovery and Transformation tool: [http://cida.usgs.gov/endd
 For dataRetrieval:
 Become familiar with the possibilities of the web services [http://waterservices.usgs.gov/](http://waterservices.usgs.gov/)
 
-<img src="../images/waterservices.png" alt="Overview" style="width: 450px;"/>
+<img src="img/waterservices.png" alt="Overview" title="dataRetrieval Overview" style="width: 450px;"/>
 
 ##  USGS Advanced Retrievals: readNWISdata
 
@@ -418,8 +418,6 @@ meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
 
 [Water Quality Portal](http://www.waterqualitydata.us/)
 
-<div class="columns-2">
-
 * Multiple agencies
     + USGS data comes from the NWIS database
     + EPA data comes from the STORET database (this includes many state, tribal, NGO, and academic groups)
@@ -430,9 +428,6 @@ meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
 
 * To get non-NWIS data, need to use CharacteristicName instead of parameter code.
 
-<img src="../images/WQP.png" alt="Overview" style="width: 300px;"/>
-
-</div>
 
 ## Water Quality Portal Basic Retrieval: readWQPqw
 
@@ -510,7 +505,7 @@ unique(phosData$ResultMeasure.MeasureUnitCode)
 ```
 
 ```{r echo=FALSE, eval=TRUE}
-phosData <- readRDS("phosData.rds")
+phosData <- readRDS("img/phosData.rds")
 unique(phosData$ResultMeasure.MeasureUnitCode)
 ```
 
@@ -699,7 +694,8 @@ pander(sitesVA.1[,c("site_no","station_nm","begin_date","end_date")])
 Get samples that have both parameters:
 
 ```{r echo=TRUE, eval = FALSE}
-comboData <- readNWISqw(sitesVA.1$site_no[1], pCode, reshape = TRUE) %>% 
+comboData <- readNWISqw(sitesVA.1$site_no[1], 
+                        pCode, reshape = TRUE) %>% 
                   filter(!is.na(result_va_00665) & !is.na(result_va_80154))
 
 variableInfo <- attr(comboData, "variableInfo")
