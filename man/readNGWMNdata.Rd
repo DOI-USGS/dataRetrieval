@@ -2,14 +2,20 @@
 % Please edit documentation in R/readNGWMNdata.R
 \name{readNGWMNdata}
 \alias{readNGWMNdata}
-\title{import data from the National Groundwater Monitoring Network \link{http://cida.usgs.gov/ngwmn/}}
+\title{import data from the National Groundwater Monitoring Network \link{http://cida.usgs.gov/ngwmn/}
+Only water level data and site metadata is currently available through the web service.}
 \usage{
-readNGWMNdata(sites, request = "observation", asDateTime = TRUE)
+readNGWMNdata(featureID, request = "observation", asDateTime = TRUE)
 }
 \arguments{
-\item{request}{}
+\item{featureID}{character}
+
+\item{request}{character}
+
+\item{asDateTime}{logical}
 }
 \description{
 import data from the National Groundwater Monitoring Network \link{http://cida.usgs.gov/ngwmn/}
+Only water level data and site metadata is currently available through the web service.
 }
 

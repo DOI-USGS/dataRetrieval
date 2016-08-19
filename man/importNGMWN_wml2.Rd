@@ -2,7 +2,7 @@
 % Please edit documentation in R/importNGWMN_wml2.R
 \name{importNGMWN_wml2}
 \alias{importNGMWN_wml2}
-\title{Function to return data from the WaterML2 data}
+\title{Function to return data from the National Ground Water Monitoring Network waterML2 format}
 \usage{
 importNGMWN_wml2(input, asDateTime = FALSE, tz = "")
 }
@@ -17,13 +17,16 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \value{
-mergedDF a data frame time, value, description, qualifier, and identifier
+mergedDF a data frame source, time, value, uom, uomTitle, comment, gmlID
 }
 \description{
 This function accepts a url parameter for a WaterML2 getObservation. This function is still under development,
 but the general functionality is correct.
 }
 \examples{
-
+\dontrun{
+url <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401"
+data <- importNGWMN_wml2(url)
+}
 }
 
