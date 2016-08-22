@@ -3,7 +3,7 @@
 #' This function accepts a url parameter for a WaterML2 getObservation. This function is still under development,
 #' but the general functionality is correct.
 #'
-#' @param input character or raw, containing the url for the retrieval or a path to the data file, or raw XML.
+#' @param obs_url character or raw, containing the url for the retrieval or a path to the data file, or raw XML.
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
@@ -44,7 +44,7 @@
 #' fullPath <- file.path(filePath, fileName)
 #' UserData <- importWaterML2(fullPath)
 #' 
-importWaterML2 <- function(input, asDateTime=FALSE, tz=""){
+importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
   
   if(tz != ""){
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
@@ -55,13 +55,13 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz=""){
   }else{tz = "UTC"}
   
   raw <- FALSE
-  if(class(input) == "character" && file.exists(input)){
-    returnedDoc <- read_xml(input)
-  }else if(class(input) == 'raw'){
-    returnedDoc <- read_xml(input)
+  if(class(obs_url) == "character" && file.exists(obs_url)){
+    returnedDoc <- read_xml(obs_url)
+  }else if(class(obs_url) == 'raw'){
+    returnedDoc <- read_xml(obs_url)
     raw <- TRUE
   } else {
-    returnedDoc <- xml_root(getWebServiceData(input, encoding='gzip'))
+    returnedDoc <- xml_root(getWebServiceData(obs_url, encoding='gzip'))
   }
   
   timeSeries <- xml_find_all(returnedDoc, "//wml2:Collection") #each parameter/site combo
@@ -69,7 +69,7 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz=""){
   if(0 == length(timeSeries)){
     df <- data.frame()
     if(!raw){
-      attr(df, "url") <- input
+      attr(df, "url") <- obs_url
     }
     return(df)
   }

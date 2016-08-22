@@ -4,10 +4,10 @@
 \alias{importWaterML2}
 \title{Function to return data from the WaterML2 data}
 \usage{
-importWaterML2(input, asDateTime = FALSE, tz = "")
+importWaterML2(obs_url, asDateTime = FALSE, tz = "")
 }
 \arguments{
-\item{input}{character or raw, containing the url for the retrieval or a path to the data file, or raw XML.}
+\item{obs_url}{character or raw, containing the url for the retrieval or a path to the data file, or raw XML.}
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character}
 
