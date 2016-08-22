@@ -824,7 +824,10 @@ The NWIS functions can be used to get multiple sites and multiple parameters in 
 sites <- c("05427850","05427718") # 2 stations on Yahara
 pCodes <- c("00060","00010") #Temperature and discharge
 
-multi <- readNWISuv(sites,pCodes, "2016-03-01","2016-03-08")
+today <- Sys.Date()
+last.week <- Sys.Date()-7
+
+multi <- readNWISuv(sites,pCodes, last.week, today)
 multi <- renameNWISColumns(multi)
 
 names(multi)
