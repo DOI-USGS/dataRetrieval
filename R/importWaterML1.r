@@ -3,10 +3,10 @@
 #' This function accepts a url parameter that already contains the desired
 #' NWIS site, parameter code, statistic, startdate and enddate. 
 #'
-#' @param input character or raw, containing the url for the retrieval or a file path to the data file, or raw XML.
+#' @param obs_url character or raw, containing the url for the retrieval or a file path to the data file, or raw XML.
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
-#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
-#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' @param tz character to set timezone attribute of . Default is an empty quote, which converts the 
+#' s to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return A data frame with the following columns:
@@ -14,9 +14,9 @@
 #' Name \tab Type \tab Description \cr
 #' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 #' site_no \tab character \tab The USGS site number \cr
-#' datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
+#'  \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
 #' \tab character \tab or raw character string (if asDateTime = FALSE) \cr
-#' tz_cd \tab character \tab The time zone code for datetime \cr
+#' tz_cd \tab character \tab The time zone code for  \cr
 #' code \tab character \tab Any codes that qualify the corresponding value\cr
 #' value \tab numeric \tab The numeric value for the parameter \cr
 #' }
@@ -57,9 +57,9 @@
 #' endDate <- "2012-10-01"
 #' offering <- '00003'
 #' property <- '00060'
-#' input <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
+#' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 #' \dontrun{
-#' data <- importWaterML1(input, asDateTime=TRUE)
+#' data <- importWaterML1(obs_url, asDateTime=TRUE)
 #' 
 #' groundWaterSite <- "431049071324301"
 #' startGW <- "2013-10-01"
@@ -75,8 +75,8 @@
 #' 
 #' # Two sites, two pcodes, one site has two data descriptors:
 #' siteNumber <- c('01480015',"04085427")
-#' input <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
-#' data <- importWaterML1(input)
+#' obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
+#' data <- importWaterML1(obs_url)
 #' data$dateTime <- as.Date(data$dateTime)
 #' data <- renameNWISColumns(data)
 #' names(attributes(data))
@@ -107,15 +107,16 @@
 #' importFile <- importWaterML1(fullPath,TRUE)
 #'
 
-importWaterML1 <- function(input,asDateTime=FALSE, tz=""){
+importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
+  #note: obs_url is a dated name, does not have to be a url/path
   raw <- FALSE
-  if(class(input) == "character" && file.exists(input)){
-    returnedDoc <- read_xml(input)
-  }else if(class(input) == 'raw'){
-    returnedDoc <- read_xml(input)
+  if(class(obs_url) == "character" && file.exists(obs_url)){
+    returnedDoc <- read_xml(obs_url)
+  }else if(class(obs_url) == 'raw'){
+    returnedDoc <- read_xml(obs_url)
     raw <- TRUE
   } else {
-    returnedDoc <- xml_root(getWebServiceData(input, encoding='gzip'))
+    returnedDoc <- xml_root(getWebServiceData(obs_url, encoding='gzip'))
   }
   
   if(tz != ""){  #check tz is valid if supplied
@@ -140,7 +141,7 @@ importWaterML1 <- function(input,asDateTime=FALSE, tz=""){
     df <- data.frame()
     attr(df, "queryInfo") <- noteList
     if(!raw){
-      attr(df, "url") <- input
+      attr(df, "url") <- obs_url
     }
     return(df)
   }
@@ -149,6 +150,7 @@ importWaterML1 <- function(input,asDateTime=FALSE, tz=""){
   
   for(t in timeSeries){
     #check if there are multiple time series (ie with different descriptors)
+    #descriptor will be appended to col name if so
     valParents <- xml_find_all(t,".//ns1:values")
     obsDF <- NULL
     useMethodDesc <- FALSE
@@ -160,6 +162,25 @@ importWaterML1 <- function(input,asDateTime=FALSE, tz=""){
     pCode <- xml_text(variable[xml_name(variable)=="variableCode"])
     statCode <- xml_attr(xml_find_all(variable,".//ns1:option"),"optionCode")
     
+    #site info
+    srsNode <- xml_find_all(sourceInfo,".//ns1:geogLocation")
+    srs <- xml_attr(srsNode, 'srs')
+    locNodes <- xml_children(srsNode)
+    locNames <- xml_name(locNodes)
+    locText <- xml_text(locNodes)  
+    names(locText) <- sub("longitude","dec_lon_va",sub("latitude","dec_lat_va",locNames))
+    sitePropNodes <- sourceInfo[xml_name(sourceInfo)=="siteProperty"]
+    siteProp <- xml_text(sitePropNodes)
+    names(siteProp) <- xml_attr(sitePropNodes, "name")
+    tzInfo <- unlist(xml_attrs(xml_find_all(sourceInfo,"ns1:defaultTimeZone")))
+    siteName <- xml_text(sourceInfo[xml_name(sourceInfo)=="siteName"])
+    siteCodeNode <- sourceInfo[xml_name(sourceInfo)=="siteCode"]
+    site_no <- xml_text(siteCodeNode)
+    siteCodeAtt <- unlist(xml_attrs(siteCodeNode))
+    siteDF <- cbind.data.frame(t(locText),t(tzInfo),siteName,t(siteCodeAtt),srs,t(siteProp),
+                               stringsAsFactors = FALSE)
+    defaultTZ <- xml_attr(xml_find_all(sourceInfo,".//ns1:defaultTimeZone"),"zoneAbbreviation")
+    
     for(v in valParents){
       obsColName <- paste(pCode,statCode,sep = "_")
       obs <- xml_find_all(v, ".//ns1:value")
@@ -170,21 +191,33 @@ importWaterML1 <- function(input,asDateTime=FALSE, tz=""){
         noQual <- TRUE
       }else{noQual <- FALSE}
       
+      dateTime <- xml_attr(obs,"dateTime")
       if(asDateTime){
-        dateTime <- parse_date_time(xml_attr(obs,"dateTime"), c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
+        numChar <- nchar(dateTime)
+        dateTime <- parse_date_time(dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
                                                                 "%Y-%m-%dT%H:%M:%S","%Y-%m-%dT%H:%M:%OS",
                                                                 "%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
+        if(any(numChar < 20) & any(numChar > 16)){
+          offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0),
+                                      code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST",""),
+                                      stringsAsFactors = FALSE)
+          
+          #not sure there is still a case for this (no offset on times)?
+          dateTime[numChar < 20 & numChar > 16] <- dateTime[numChar < 20 & numChar > 16] + offsetLibrary[offsetLibrary$code == defaultTZ,"offset"]*60*60
+          warning(paste("site",site_no[1], "had data without time zone offsets, so DST could not be accounted for"))
+        }                                        
+        
         #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
         attr(dateTime, 'tzone') <- tz 
         tzCol <- rep(tz,nObs)
       }else{
-        dateTime <- xml_attr(obs,"dateTime")
-        tzCol <- rep(xml_attr(xml_find_all(sourceInfo,".//ns1:defaultTimeZone"),"zoneAbbreviation"),
-                     nObs)
+        tzCol <- rep(defaultTZ, nObs)
       }
       #create column names, addressing if methodDesc is needed
       if(useMethodDesc){
-        methodDesc <- make.names(gsub("\\[|\\]","",xml_text(xml_find_all(v, ".//ns1:methodDescription"))))
+        methodDesc <- xml_text(xml_find_all(v, ".//ns1:methodDescription"))
+        #this keeps column names consistent with old version
+        methodDesc <- gsub("\\[|\\]| ",".",methodDesc)
         obsColName <- paste("X",methodDesc,obsColName, sep = "_")
       } else{
         obsColName <- paste("X",obsColName, sep = "_")
@@ -220,25 +253,9 @@ importWaterML1 <- function(input,asDateTime=FALSE, tz=""){
     varName <- sub("unit", "param_unit",varNames) #rename to stay consistent with orig importWaterMl1
     names(varText) <- varNames
     
-    #site info
-    srsNode <- xml_find_all(sourceInfo,".//ns1:geogLocation")
-    srs <- xml_attr(srsNode, 'srs')
-    locNodes <- xml_children(srsNode)
-    locNames <- xml_name(locNodes)
-    locText <- xml_text(locNodes)  
-    names(locText) <- sub("longitude","dec_lon_va",sub("latitude","dec_lat_va",locNames))
-    sitePropNodes <- sourceInfo[xml_name(sourceInfo)=="siteProperty"]
-    siteProp <- xml_text(sitePropNodes)
-    names(siteProp) <- xml_attr(sitePropNodes, "name")
-    tzInfo <- unlist(xml_attrs(xml_find_all(sourceInfo,"ns1:defaultTimeZone")))
-    siteName <- xml_text(sourceInfo[xml_name(sourceInfo)=="siteName"])
-    siteCodeNode <- sourceInfo[xml_name(sourceInfo)=="siteCode"]
-    site_no <- xml_text(siteCodeNode)
-    siteCodeAtt <- unlist(xml_attrs(siteCodeNode))
-    siteDF <- cbind.data.frame(t(locText),t(tzInfo),siteName,t(siteCodeAtt),srs,t(siteProp),
-                               stringsAsFactors = FALSE)
     
-    #get TZ code, rep site no & agency, combine into DF
+    
+    #rep site no & agency, combine into DF
     obsDFrows <- nrow(obsDF)
     df <- cbind.data.frame(agency_cd = rep(agency_cd,obsDFrows), site_no = rep(site_no,obsDFrows), 
                            obsDF, stringsAsFactors = FALSE)
@@ -276,7 +293,7 @@ importWaterML1 <- function(input,asDateTime=FALSE, tz=""){
   
   #attach other site info etc as attributes of mergedDF
   if(!raw){
-    attr(mergedDF, "url") <- input
+    attr(mergedDF, "url") <- obs_url
   }
   attr(mergedDF, "siteInfo") <- mergedSite
   attr(mergedDF, "variableInfo") <- mergedVar

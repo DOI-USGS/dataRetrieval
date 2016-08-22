@@ -4,15 +4,15 @@
 \alias{importWaterML1}
 \title{Function to return data from the NWISWeb WaterML1.1 service}
 \usage{
-importWaterML1(input, asDateTime = FALSE, tz = "")
+importWaterML1(obs_url, asDateTime = FALSE, tz = "")
 }
 \arguments{
-\item{input}{character or raw, containing the url for the retrieval or a file path to the data file, or raw XML.}
+\item{obs_url}{character or raw, containing the url for the retrieval or a file path to the data file, or raw XML.}
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
 
-\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the 
-datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+\item{tz}{character to set timezone attribute of . Default is an empty quote, which converts the 
+s to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
@@ -22,9 +22,9 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
-datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
+ \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
 \tab character \tab or raw character string (if asDateTime = FALSE) \cr
-tz_cd \tab character \tab The time zone code for datetime \cr
+tz_cd \tab character \tab The time zone code for  \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
 }
@@ -54,9 +54,9 @@ startDate <- "2012-09-01"
 endDate <- "2012-10-01"
 offering <- '00003'
 property <- '00060'
-input <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
+obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 \dontrun{
-data <- importWaterML1(input, asDateTime=TRUE)
+data <- importWaterML1(obs_url, asDateTime=TRUE)
 
 groundWaterSite <- "431049071324301"
 startGW <- "2013-10-01"
@@ -72,8 +72,8 @@ unitData <- importWaterML1(unitDataURL,TRUE)
 
 # Two sites, two pcodes, one site has two data descriptors:
 siteNumber <- c('01480015',"04085427")
-input <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
-data <- importWaterML1(input)
+obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
+data <- importWaterML1(obs_url)
 data$dateTime <- as.Date(data$dateTime)
 data <- renameNWISColumns(data)
 names(attributes(data))

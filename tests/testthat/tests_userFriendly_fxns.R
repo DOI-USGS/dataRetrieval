@@ -31,8 +31,8 @@ test_that("Unit value data returns correct types", {
   endDate <- "2012-07-17"
   dd_2 <- readNWISuv(site, pCode, startDate, endDate)
   expect_true(all(names(dd_2) %in% c("agency_cd","site_no",                   
-                                 "dateTime","X_YSI.6136.UP_63680_00011",   
-                                 "X_YSI.6136.DOWN_63680_00011","X_YSI.6136.UP_63680_00011_cd",
+                                 "dateTime","X_.YSI.6136.UP._63680_00011",   
+                                 "X_YSI.6136.DOWN_63680_00011","X_.YSI.6136.UP._63680_00011_cd",
                                  "X_YSI.6136.DOWN_63680_00011_cd","tz_cd")))
   
 })
