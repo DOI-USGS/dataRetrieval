@@ -91,7 +91,23 @@ importNGMWN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     }
     attr(mergedDF, "gml:identifier") <- xml_text(xml_find_all(returnedDoc, ".//gml:identifier")) 
     attr(mergedDF, "generationDate") <- xml_text(xml_find_all(returnedDoc, ".//wml2:generationDate")) 
-  }else if(response == "ExceptionReport"){
+    
+  }else if(response == "GetFeatureOfInterestResponse"){
+    site <- xml_text(xml_find_all(returnedDoc,".//gml:identifier"))
+    site <- substring(site, 8)
+    
+    #bandaid to work with only single site calls
+    #TODO: need better solution when bbox is added
+    siteDesc <- xml_text(xml_find_all(returnedDoc, ".//gml:description"))
+    if(length(siteDesc) == 0){
+      siteDesc <- NA
+    }
+    
+    siteLocs <- strsplit(xml_text(xml_find_all(returnedDoc, ".//gml:pos")), " ")
+    siteLocs <- data.frame(lat=siteLocs[[1]][1], lon=siteLocs[[1]][2], stringsAsFactors = FALSE)
+    mergedDF <- cbind.data.frame(site, description = siteDesc, siteLocs, stringsAsFactors = FALSE) 
+  }
+  else if(response == "ExceptionReport"){
     #TODO: what happens if exception?
   }
   return(mergedDF)
