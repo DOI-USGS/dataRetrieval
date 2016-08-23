@@ -15,33 +15,65 @@ readNGWMNdata <- function(featureID, request = "observation", asDateTime = TRUE)
   
   if(request == "observation"){
     allObs <- NULL
+    allAttrs <- NULL
+    #these attributes are pulled out and saved when doing binds to be reattached
+    attrs <- c("url","gml:identifier","generationDate")
     for(f in featureID){
-      obsFID <- retrieveObservation(f, asDateTime)
+      obsFID <- retrieveObservation(f, asDateTime, attrs)
       if(is.null(allObs)){
         allObs <- obsFID
       }else{
-        allObs <- bind_rows(allObs, obsFID) 
+        obsFIDatt <- saveAttrs(attrs, obsFID)
+        allAttrs <- saveAttrs(attrs, allObs)
+        allObs <- removeAttrs(attrs, allObs)
+        obsFID <- removeAttrs(attrs, obsFID)
+        allAttrs <- bind_rows(allAttrs, obsFIDatt)
+        allObs <- bind_rows(allObs, obsFID)
+        attributes(allObs) <- c(attributes(allObs),as.list(allAttrs))
       }
+      returnData <- allObs
     }
-    returnData <- allObs
-    
   } 
   
   return(returnData)
 }
 
-retrieveObservation <- function(featureID, asDateTime){
+retrieveObservation <- function(featureID, asDateTime, attrs){
   #allow for multiple site calls, and aggregate here?
   #will need to contruct this more piece by piece if other versions, properties are added
   baseURL <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
   url <- paste0(baseURL, featureID)
   
   returnData <- importNGMWN_wml2(url, asDateTime)
-  #tack on site number
+  if(nrow(returnData) == 0){
+    #need to add NA attributes, so they aren't messed up when stored as DFs
+    attr(returnData, "gml:identifier") <- NA
+    attr(returnData, "generationDate") <- NA
+  }
+  
+  
+  #mutate removes the attributes, need to save and append
+  attribs <- saveAttrs(attrs, returnData)
   if(nrow(returnData) > 0){
+    #tack on site number
     siteNum <- rep(sub('.*\\.', '', featureID), nrow(returnData))
     returnData <- mutate(returnData, site = siteNum)
     returnData <- returnData[,c(7,1:6)] #move siteNum to the left
   }
+  attributes(returnData) <- c(attributes(returnData), as.list(attribs))
   return(returnData)
+}
+
+#save specified attributes from a data frame
+saveAttrs <- function(attrs, df){
+  attribs <- sapply(attrs, function(x) attr(df, x))
+  return(as.data.frame(t(attribs), stringsAsFactors = FALSE))
+}
+
+#strip specified attributes from a data frame
+removeAttrs <- function(attrs, df){
+  for(a in attrs){
+    attr(df, a) <- NULL
+  }
+  return(df)
 }
