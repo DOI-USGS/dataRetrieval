@@ -245,15 +245,13 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     stat <- options[xml_attr(options,"name")=="Statistic"]
     stat_nm <- xml_text(options[xml_attr(stat,"name")=="Statistic"])
     statCd <- xml_attr(stat, "optionCode")
-    statDF <- cbind.data.frame(statCd,stat_nm, stringsAsFactors = FALSE)
+    statDF <- cbind.data.frame(statisticCd=statCd,statisticName=stat_nm, stringsAsFactors = FALSE)
     
     #variable info
     varText <- as.data.frame(t(xml_text(variable)),stringsAsFactors = FALSE)
     varNames <- xml_name(variable) 
     varName <- sub("unit", "param_unit",varNames) #rename to stay consistent with orig importWaterMl1
     names(varText) <- varNames
-    
-    
     
     #rep site no & agency, combine into DF
     obsDFrows <- nrow(obsDF)
@@ -290,6 +288,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       mergedStat <- full_join(mergedStat, statDF, by = colnames(mergedStat))
     }
   }
+  #TODO: reorder columns to be consistent with old version
+  #mergedDF <- mergedDF[,order(names(mergedDF))]
   
   #attach other site info etc as attributes of mergedDF
   if(!raw){
