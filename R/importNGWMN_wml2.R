@@ -74,9 +74,9 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
       nVals <- length(values)
       gmlID <- rep(gmlID, nVals)
       
-      uom <- removeBlanks(xml_attr(valueNodes, "uom", default = NA))
+      uom <- xml_attr(valueNodes, "uom", default = NA)
       source <- xml_attr(xml_find_all(TVP, ".//wml2:source"), "title")
-      comment <- removeBlanks(xml_text(xml_find_all(TVP, ".//wml2:comment")))
+      comment <- xml_text(xml_find_all(TVP, ".//wml2:comment"))
       
       df <- cbind.data.frame(source, time, value=values, uom, comment, gmlID,
                              stringsAsFactors=FALSE)
@@ -92,6 +92,7 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
       url <- input
       attr(mergedDF, "url") <- url
     }
+    mergedDF[mergedDF == ""] <- NA
     attr(mergedDF, "gml:identifier") <- xml_text(xml_find_all(returnedDoc, ".//gml:identifier")) 
     attr(mergedDF, "generationDate") <- xml_text(xml_find_all(returnedDoc, ".//wml2:generationDate")) 
     mergedDF$value[mergedDF$value == -999999.0] <- NA
@@ -115,11 +116,4 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     stop("Unrecognized response from the web service")
   }
   return(mergedDF)
-  
-}
-
-#replace blank cells with NAs
-removeBlanks <- function(input){
-  input <- sapply(input, function(f){is.na(f)<-which(f == '');f})
-  return(input)
 }
