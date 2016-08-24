@@ -6,7 +6,7 @@
 #' @param input character or raw, containing the url for the retrieval or a path to the data file, or raw XML.
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
-#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return mergedDF a data frame source, time, value, uom, uomTitle, comment, gmlID
@@ -20,9 +20,12 @@
 #' \dontrun{
 #' url <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401"
 #' data <- importNGWMN_wml2(url)
+#' 
+#' url <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER.USGS.474011117072901"
+#' data <- importNGWMN_wml2(url)
 #' }
-importNGMWN_wml2 <- function(input, asDateTime=FALSE, tz=""){
-  #TODO: update documentation
+#' 
+importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
   if(tz != ""){
     tz <- match.arg(tz, c("America/New_York","America/Chicago",
                           "America/Denver","America/Los_Angeles",
@@ -91,6 +94,7 @@ importNGMWN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     }
     attr(mergedDF, "gml:identifier") <- xml_text(xml_find_all(returnedDoc, ".//gml:identifier")) 
     attr(mergedDF, "generationDate") <- xml_text(xml_find_all(returnedDoc, ".//wml2:generationDate")) 
+    mergedDF$value[mergedDF$value == -999999.0] <- NA
     
   }else if(response == "GetFeatureOfInterestResponse"){
     site <- xml_text(xml_find_all(returnedDoc,".//gml:identifier"))
@@ -107,18 +111,15 @@ importNGMWN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     siteLocs <- data.frame(lat=siteLocs[[1]][1], lon=siteLocs[[1]][2], stringsAsFactors = FALSE)
     mergedDF <- cbind.data.frame(site, description = siteDesc, siteLocs, stringsAsFactors = FALSE) 
   }
-  else if(response == "ExceptionReport"){
-    #TODO: what happens if exception?
+  else{
+    stop("Unrecognized response from the web service")
   }
   return(mergedDF)
   
 }
-
 
 #replace blank cells with NAs
 removeBlanks <- function(input){
   input <- sapply(input, function(f){is.na(f)<-which(f == '');f})
   return(input)
 }
-
-

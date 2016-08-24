@@ -215,3 +215,18 @@ test_that("state county tests",{
   fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
   expect_equal(fromIDs, "Bacon County")
 })
+
+test_that("NGWMN functions working", {
+  noDataSite <- "UTGS.401544112060301"
+  noDataSite <- readNGWMNdata(featureID = noDataSite, request = "observation")
+  expect_true(is.data.frame(noDataSite))
+  
+  #one site
+  site <- "USGS.430427089284901"
+  oneSite <- readNGWMNdata(featureID = site)
+  expect_true(is.numeric(oneSite$value))
+  expect_true(is.character(oneSite$site))
+  expect_true(nrow(oneSite) > 0)
+  
+  
+})

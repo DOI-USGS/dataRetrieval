@@ -2,20 +2,41 @@
 % Please edit documentation in R/readNGWMNdata.R
 \name{readNGWMNdata}
 \alias{readNGWMNdata}
-\title{import data from the National Groundwater Monitoring Network \link{http://cida.usgs.gov/ngwmn/}
-Only water level data and site metadata is currently available through the web service.}
+\title{import data from the National Groundwater Monitoring Network \link{http://cida.usgs.gov/ngwmn/}.}
 \usage{
-readNGWMNdata(featureID, request = "observation", asDateTime = TRUE)
+readNGWMNdata(featureID, request = "observation", asDateTime = FALSE)
 }
 \arguments{
-\item{featureID}{character}
+\item{featureID}{character Vector of feature IDs in the formatted with agency code and site number 
+separated by a period, e.g. \code{USGS.404159100494601}.}
 
-\item{request}{character}
+\item{request}{character Identifies which web service to access.  Only \code{observation} is currently 
+supported, which retrieves all water level for each site.}
 
-\item{asDateTime}{logical}
+\item{asDateTime}{logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
+\code{FALSE} since time zone information is not included.}
 }
 \description{
-import data from the National Groundwater Monitoring Network \link{http://cida.usgs.gov/ngwmn/}
-Only water level data and site metadata is currently available through the web service.
+Only water level data is currently available through the web service.
+}
+\examples{
+\dontrun{
+#one site
+site <- "USGS.430427089284901"
+oneSite <- readNGWMNdata(featureID = site)
+
+#multiple sites
+sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
+multiSiteData <- readNGWMNdata(sites)
+
+#non-USGS site
+site <- "MBMG.892195"
+data <- readNGWMNdata(featureID = site)
+
+#site with no data returns empty data frame
+noDataSite <- "UTGS.401544112060301"
+noDataSite <- readNGWMNdata(featureID = noDataSite, request = "observation")
+}
+
 }
 
