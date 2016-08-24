@@ -43,6 +43,7 @@
 #' @importFrom lubridate parse_date_time
 #' @importFrom dplyr full_join
 #' @importFrom dplyr bind_rows
+#' @importFrom dplyr arrange
 #' @importFrom xml2 read_xml
 #' @importFrom xml2 xml_find_all
 #' @importFrom xml2 xml_children
@@ -167,7 +168,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     srs <- xml_attr(srsNode, 'srs')
     locNodes <- xml_children(srsNode)
     locNames <- xml_name(locNodes)
-    locText <- xml_text(locNodes)  
+    locText <- as.numeric(xml_text(locNodes))  
     names(locText) <- sub("longitude","dec_lon_va",sub("latitude","dec_lat_va",locNames))
     sitePropNodes <- sourceInfo[xml_name(sourceInfo)=="siteProperty"]
     siteProp <- xml_text(sitePropNodes)
@@ -253,6 +254,13 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     varName <- sub("unit", "param_unit",varNames) #rename to stay consistent with orig importWaterMl1
     names(varText) <- varNames
     
+    #TODO: replace no data vals with NA, change attribute df
+    noDataVal <- varText$noDataValue
+    if(nrow(obsDF) > 0){
+      obsDF[obsDF$values == noDataVal] <- NA
+    }
+    varText$noDataValue <- NA
+    
     #rep site no & agency, combine into DF
     obsDFrows <- nrow(obsDF)
     df <- cbind.data.frame(agency_cd = rep(agency_cd,obsDFrows), site_no = rep(site_no,obsDFrows), 
@@ -288,8 +296,11 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       mergedStat <- full_join(mergedStat, statDF, by = colnames(mergedStat))
     }
   }
-  #TODO: reorder columns to be consistent with old version
-  #mergedDF <- mergedDF[,order(names(mergedDF))]
+  #move tz column to far right and sort by increasing site number to be consistent with old version
+  mergedNames <- names(mergedDF)
+  tzLoc <- grep("tz_cd", names(mergedDF))
+  mergedDF <- mergedDF[c(mergedNames[-tzLoc],mergedNames[tzLoc])]
+  mergedDF <- arrange(mergedDF,site_no)
   
   #attach other site info etc as attributes of mergedDF
   if(!raw){
