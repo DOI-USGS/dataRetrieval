@@ -83,7 +83,7 @@ test_that("External importWaterML1 test", {
   obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 
   data <- importWaterML1(obs_url,TRUE)
-  saveRDS(data, "rds/dvWML1.rds")
+  # saveRDS(data, "rds/dvWML1.rds")
   expect_is(data$dateTime, 'POSIXct')
 
   groundWaterSite <- "431049071324301"
