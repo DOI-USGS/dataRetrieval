@@ -105,3 +105,4 @@ test_that("Dates with no days can be handled", {
   testthat::skip_on_cran()
   expect_error(readNWISgwl("425957088141001", startDate = "1980-01-01"))
  })
+

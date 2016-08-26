@@ -7,12 +7,12 @@
 importWaterML1(obs_url, asDateTime = FALSE, tz = "")
 }
 \arguments{
-\item{obs_url}{character containing the url for the retrieval or a file path to the data file.}
+\item{obs_url}{character or raw, containing the url for the retrieval or a file path to the data file, or raw XML.}
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
 
-\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the 
-datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+\item{tz}{character to set timezone attribute of . Default is an empty quote, which converts the 
+s to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
@@ -22,9 +22,9 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
-datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
+ \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
 \tab character \tab or raw character string (if asDateTime = FALSE) \cr
-tz_cd \tab character \tab The time zone code for datetime \cr
+tz_cd \tab character \tab The time zone code for  \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
 }
@@ -92,12 +92,16 @@ Timezone change with specified local timezone:
 tzURL <- constructNWISURL("04027000", c("00300","63680"), "2011-11-05", "2011-11-07","uv")
 tzIssue <- importWaterML1(tzURL, TRUE, "America/Chicago")
 
-
+#raw XML
+url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
+                         startDate = "2014-01-01", endDate = "2014-01-01")
+raw <- content(GET(url), as = 'raw')
+rawParsed <- importWaterML1(raw)
 }
 filePath <- system.file("extdata", package="dataRetrieval")
 fileName <- "WaterML1Example.xml"
 fullPath <- file.path(filePath, fileName)
-imporFile <- importWaterML1(fullPath,TRUE)
+importFile <- importWaterML1(fullPath,TRUE)
 
 }
 \seealso{

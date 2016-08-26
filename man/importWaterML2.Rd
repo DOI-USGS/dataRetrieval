@@ -7,9 +7,9 @@
 importWaterML2(obs_url, asDateTime = FALSE, tz = "")
 }
 \arguments{
-\item{obs_url}{character containing the url for the retrieval or a file path to the data file.}
+\item{obs_url}{character or raw, containing the url for the retrieval or a path to the data file, or raw XML.}
 
-\item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
+\item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character}
 
 \item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
