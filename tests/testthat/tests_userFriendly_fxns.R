@@ -218,14 +218,17 @@ test_that("state county tests",{
 
 test_that("NGWMN functions working", {
   noDataSite <- "UTGS.401544112060301"
-  noDataSite <- readNGWMNdata(featureID = noDataSite, request = "observation")
+  noDataSite <- readNGWMNlevels(featureID = noDataSite)
   expect_true(is.data.frame(noDataSite))
   
   #one site
   site <- "USGS.430427089284901"
-  oneSite <- readNGWMNdata(featureID = site)
+  oneSite <- readNGWMNlevels(featureID = site)
+  siteInfo <- readNGWMNsites(site)
   expect_true(is.numeric(oneSite$value))
   expect_true(is.character(oneSite$site))
+  expect_true(is.data.frame(siteInfo))
+  expect_true(nrow(siteInfo) > 0)
   expect_true(nrow(oneSite) > 0)
   
   

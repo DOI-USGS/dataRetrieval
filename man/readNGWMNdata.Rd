@@ -4,17 +4,23 @@
 \alias{readNGWMNdata}
 \title{import data from the National Groundwater Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
 \usage{
-readNGWMNdata(featureID, request = "observation", asDateTime = TRUE)
+readNGWMNdata(featureID, service = "observation", asDateTime = TRUE,
+  tz = "")
 }
 \arguments{
 \item{featureID}{character Vector of feature IDs in the formatted with agency code and site number 
 separated by a period, e.g. \code{USGS.404159100494601}.}
 
-\item{request}{character Identifies which web service to access.  Only \code{observation} is currently 
+\item{service}{character Identifies which web service to access.  Only \code{observation} is currently 
 supported, which retrieves all water level for each site.}
 
 \item{asDateTime}{logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
 \code{FALSE} since time zone information is not included.}
+
+\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the 
+datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
+Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \description{
 Only water level data is currently available through the web service.
@@ -35,7 +41,7 @@ data <- readNGWMNdata(featureID = site)
 
 #site with no data returns empty data frame
 noDataSite <- "UTGS.401544112060301"
-noDataSite <- readNGWMNdata(featureID = noDataSite, request = "observation")
+noDataSite <- readNGWMNdata(featureID = noDataSite, service = "observation")
 }
 
 }

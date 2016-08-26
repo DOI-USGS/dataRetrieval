@@ -5,12 +5,15 @@
 #' \code{FALSE} since time zone information is not included.  
 #' @param featureID character Vector of feature IDs in the formatted with agency code and site number 
 #' separated by a period, e.g. \code{USGS.404159100494601}.
-#' @param request character Identifies which web service to access.  Only \code{observation} is currently 
+#' @param service character Identifies which web service to access.  Only \code{observation} is currently 
 #' supported, which retrieves all water level for each site.   
+#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
+#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @import utils
 #' @importFrom dplyr mutate
 #' @importFrom dplyr bind_rows
-#' @export
 #' 
 #' @examples 
 #' \dontrun{
@@ -28,19 +31,19 @@
 #' 
 #' #site with no data returns empty data frame
 #' noDataSite <- "UTGS.401544112060301"
-#' noDataSite <- readNGWMNdata(featureID = noDataSite, request = "observation")
+#' noDataSite <- readNGWMNdata(featureID = noDataSite, service = "observation")
 #' }
 #' 
 
-readNGWMNdata <- function(featureID, request = "observation", asDateTime = TRUE){
+readNGWMNdata <- function(featureID, service = "observation", asDateTime = TRUE, tz = ""){
   message("          ********************************************************
           DISCLAIMER: NGWMN retrieval functions are still in flux, 
               and no future behavior or output is guaranteed
           *********************************************************")
-  match.arg(request, c("observation", "featureOfInterest"))
+  match.arg(service, c("observation", "featureOfInterest"))
   
   
-  if(request == "observation"){
+  if(service == "observation"){
     allObs <- NULL
     allAttrs <- NULL
     allSites <- NULL
@@ -64,10 +67,90 @@ readNGWMNdata <- function(featureID, request = "observation", asDateTime = TRUE)
       attr(allObs, "siteInfo") <- allSites
       returnData <- allObs
     }
-  } #TODO: add direct feature of interest request
+  }else if(service == "featureOfInterest"){
+    allSites <- NULL
+    for(f in featureID){
+      siteFID <- retrieveFeatureOfInterest(f, asDateTime)
+      if(is.null(allSites)){
+        allSites <- siteFID
+        }else{
+        allSites <- bind_rows(allSites, siteFID)
+      }
+    }
+    returnData <- allSites
+  }else{
+    stop("unrecognized service request")
+  }
   
   return(returnData)
 }
+
+#' Retrieve groundwater levels from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.
+#'
+#' @param featureID character Vector of feature IDs in the formatted with agency code and site number 
+#' separated by a period, e.g. \code{USGS.404159100494601}.
+#' 
+#' @export
+#' 
+#' @examples 
+#' \dontrun{
+#' #one site
+#' site <- "USGS.430427089284901"
+#' oneSite <- readNGWMNlevels(featureID = site)
+#' 
+#' #multiple sites
+#' sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
+#' multiSiteData <- readNGWMNlevels(sites)
+#' 
+#' #non-USGS site
+#' site <- "MBMG.892195"
+#' data <- readNGWMNlevels(featureID = site)
+#' 
+#' #site with no data returns empty data frame
+#' noDataSite <- "UTGS.401544112060301"
+#' noDataSite <- readNGWMNlevels(featureID = noDataSite)
+#' }
+
+readNGWMNlevels <- function(featureID){
+  data <- readNGWMNdata(featureID, service = "observation")
+  return(data)
+}
+
+#' Retrieve site data from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.
+#'
+#' @param featureID character Vector of feature IDs in the formatted with agency code and site number 
+#' separated by a period, e.g. \code{USGS.404159100494601}.
+#' 
+#' @export
+#' @return A data frame the following columns: 
+#' #' \tabular{lll}{
+#' Name \tab Type \tab Description \cr
+#' site \tab char \tab Site FID \cr
+#' description \tab char \tab Site description \cr
+#' dec_lat_va, dec_lon_va \tab numeric \tab Site latitude and longitude \cr
+#' }
+#' @examples 
+#' \dontrun{
+#' #one site
+#' site <- "USGS.430427089284901"
+#' oneSite <- readNGWMNsites(featureID = site)
+#' 
+#' #multiple sites
+#' sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
+#' multiSiteInfo <- readNGWMNsites(sites)
+#' 
+#' #non-USGS site
+#' site <- "MBMG.892195"
+#' siteInfo <- readNGWMNsites(featureID = site)
+#' 
+#' }
+
+readNGWMNsites <- function(featureID){
+  sites <- readNGWMNdata(featureID, service = "featureOfInterest")
+  return(sites)
+}
+
+
 
 retrieveObservation <- function(featureID, asDateTime, attrs){
   #will need to contruct this more piece by piece if other versions, properties are added
