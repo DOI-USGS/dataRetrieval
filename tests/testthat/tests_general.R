@@ -36,7 +36,7 @@ test_that("General NWIS retrievals working", {
   
   urlEmpty <- "http://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=413437087150601&sort_key=site_no&group_key=NONE&inventory_output=0&begin_date=&end_date=&TZoutput=0&param_group=NUT,INN&qw_attributes=0&format=rdb&qw_sample_wide=0&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&list_of_search_criteria=multiple_site_no"
   dv <- importRDB1(urlEmpty, asDateTime = FALSE)
-  saveRDS(dv, "rds/emptyDV.rds")
+  # saveRDS(dv, "rds/emptyDV.rds")
   expect_that(nrow(dv) == 0, is_true())
   
   dailyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="daily",
