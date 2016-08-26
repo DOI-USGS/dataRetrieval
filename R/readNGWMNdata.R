@@ -1,4 +1,4 @@
-#' import data from the National Groundwater Monitoring Network \link{http://cida.usgs.gov/ngwmn/}.
+#' import data from the National Groundwater Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.
 #' 
 #' Only water level data is currently available through the web service.  
 #' @param asDateTime logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
@@ -32,12 +32,13 @@
 #' }
 #' 
 
-readNGWMNdata <- function(featureID, request = "observation", asDateTime = FALSE){
-  
+readNGWMNdata <- function(featureID, request = "observation", asDateTime = TRUE){
+  message("          ********************************************************
+          DISCLAIMER: NGWMN retrieval functions are still in flux, 
+              and no future behavior or output is guaranteed
+          *********************************************************")
   match.arg(request, c("observation", "featureOfInterest"))
-  if(asDateTime){
-    warning("Times zones will be incorrect.  This will be fixed in the future")
-  }
+  
   
   if(request == "observation"){
     allObs <- NULL
@@ -47,7 +48,7 @@ readNGWMNdata <- function(featureID, request = "observation", asDateTime = FALSE
     attrs <- c("url","gml:identifier","generationDate")
     for(f in featureID){
       obsFID <- retrieveObservation(f, asDateTime, attrs)
-      siteFID <- retrieveFeatureOfInterest(f)
+      siteFID <- retrieveFeatureOfInterest(f, asDateTime)
       if(is.null(allObs)){
         allObs <- obsFID
         allSites <- siteFID
@@ -86,7 +87,8 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
     #tack on site number
     siteNum <- rep(sub('.*\\.', '', featureID), nrow(returnData))
     returnData <- mutate(returnData, site = siteNum)
-    returnData <- returnData[,c(7,1:6)] #move siteNum to the left
+    numCol <- ncol(returnData)
+    returnData <- returnData[,c(numCol,1:(numCol - 1))] #move siteNum to the left
   }
   attributes(returnData) <- c(attributes(returnData), as.list(attribs))
   
@@ -96,7 +98,7 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
 #retrieve feature of interest
 #don't expose until can support bbox
 #note: import function can only do single sites right now
-retrieveFeatureOfInterest <- function(featureID){
+retrieveFeatureOfInterest <- function(featureID, asDateTime){
   baseURL <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
   url <- paste0(baseURL, featureID)
   siteDF <- importNGWMN_wml2(url, asDateTime)

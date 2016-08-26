@@ -2,9 +2,9 @@
 % Please edit documentation in R/readNGWMNdata.R
 \name{readNGWMNdata}
 \alias{readNGWMNdata}
-\title{import data from the National Groundwater Monitoring Network \link{http://cida.usgs.gov/ngwmn/}.}
+\title{import data from the National Groundwater Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
 \usage{
-readNGWMNdata(featureID, request = "observation", asDateTime = FALSE)
+readNGWMNdata(featureID, request = "observation", asDateTime = TRUE)
 }
 \arguments{
 \item{featureID}{character Vector of feature IDs in the formatted with agency code and site number 
