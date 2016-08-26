@@ -38,9 +38,6 @@ getWebServiceData <- function(obs_url, ...){
 
       if(headerInfo$`content-type` == "text/tab-separated-values;charset=UTF-8"){
         returnedDoc <- content(returnedList, type="text",encoding = "UTF-8")
-      } else if (headerInfo$`content-type` %in% c("text/xml;charset=UTF-8",
-                                                  "text/xml")){
-        returnedDoc <- xmlcontent(returnedList)
       } else if (headerInfo$`content-type` == "text/html"){
         txt <- readBin(returnedList$content, character())
         message(txt)
@@ -66,18 +63,6 @@ default_ua <- function() {
     dataRetrieval = as.character(packageVersion("dataRetrieval"))
   )
   paste0(names(versions), "/", versions, collapse = " ")
-}
-
-#' drop in replacement for httr switching to xml2 from XML
-#' 
-#' reverts to old parsing pre v1.1.0 for httr
-#' 
-#' @param response the result of httr::GET(url)
-#' @keywords internal
-#' @importFrom XML xmlParse
-xmlcontent <- function(response){
-  XML::xmlTreeParse(iconv(readBin(response$content, character()), from = "UTF-8", to = "UTF-8"),
-                    useInternalNodes=TRUE,getDTD = FALSE)
 }
 
 #' getting header information from a WQP query

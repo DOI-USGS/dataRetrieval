@@ -99,7 +99,6 @@ test_that("External importWaterML1 test", {
   unitData <- importWaterML1(unitDataURL,TRUE)
   expect_is(unitData$dateTime, 'POSIXct')
 
-
   # Two sites, two pcodes, one site has two data descriptors
   siteNumber <- c('01480015',"04085427") #one site seems to have lost it's 2nd dd
   obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
@@ -116,7 +115,26 @@ test_that("External importWaterML1 test", {
   inactiveAndActive <- constructNWISURL(inactiveAndActive, "00060", "2014-01-01", "2014-01-10",'dv')
   inactiveAndActive <- importWaterML1(inactiveAndActive)
   expect_that(length(unique(inactiveAndActive$site_no)) == 1, is_true())
-
+  
+  #raw XML
+  url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
+                          startDate = "2014-01-01", endDate = "2014-01-01")
+  raw <- content(GET(url), as = 'raw')
+  rawParsed <- importWaterML1(raw)
+  expect_true(nrow(rawParsed) > 0)
+  expect_true(data.class(rawParsed$X_00060_00003) == "numeric")
+ 
+  #no data
+  url <- constructNWISURL("05212700", "00060", "2014-01-01", "2014-01-10",'dv', statCd = "00001")
+  noData <- importWaterML1(url) 
+  expect_true(class(attr(noData,"url"))=="character")
+  expect_true(all(dim(noData)==0))
+  
+  url <- constructNWISURL(service = 'iv', site = c('02319300','02171500'), 
+                          startDate = "2015-04-04", endDate = "2015-04-05")
+  data <- importWaterML1(url, tz = "America/New_York", asDateTime = TRUE)
+  expect_true(data.class(data$dateTime) == "POSIXct")
+  expect_true(nrow(data) > 0)
 })
 
 context("importWaterML2")
