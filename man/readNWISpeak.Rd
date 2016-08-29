@@ -5,7 +5,7 @@
 \title{Peak flow data from USGS (NWIS)}
 \usage{
 readNWISpeak(siteNumbers, startDate = "", endDate = "", asDateTime = TRUE,
-  convertType = TRUE)
+  convertType = TRUE, tz = "")
 }
 \arguments{
 \item{siteNumbers}{character USGS site number(or multiple sites).  This is usually an 8 digit number.}
@@ -21,6 +21,11 @@ to a Date object, and incomplete dates are removed. When \code{FALSE}, no column
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
+
+\item{tz}{character to set timezone attribute of dateTime. Default is an empty quote, which converts the 
+dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \value{
 A data frame with the following columns:
