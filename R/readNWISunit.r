@@ -92,10 +92,6 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' to a Date object, and incomplete dates are removed. When \code{FALSE}, no columns are removed, but no dates are converted.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
-#' @param tz character to set timezone attribute of dateTime. Default is an empty quote, which converts the 
-#' dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
-#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -133,12 +129,12 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' stations<-c("06011000")
 #' peakdata<-readNWISpeak(stations,convertType=FALSE)
 #' }
-readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, convertType = TRUE, tz=""){  
+readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, convertType = TRUE){  
   
   # Doesn't seem to be a peak xml service
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"peak")
   
-  data <- importRDB1(url, asDateTime=asDateTime, convertType = convertType, tz=tz)
+  data <- importRDB1(url, asDateTime=asDateTime, convertType = convertType)
   
   if(nrow(data) > 0){
     if(asDateTime & convertType){
