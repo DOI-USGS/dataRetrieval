@@ -26,9 +26,11 @@
 #' }
 #' @export
 #' @importFrom XML xmlTreeParse
-#' @importFrom XML xmlRoot
 #' @importFrom XML xpathApply
 #' @importFrom XML xmlSize
+#' @importFrom xml2 xml_root
+#' @importFrom xml2 xml_find_all
+#' 
 #' @examples
 #' \dontrun{
 #' siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
@@ -46,7 +48,7 @@ whatNWISsites <- function(...){
 
   rawData <- getWebServiceData(urlCall, encoding='gzip')
 
-  doc <- xmlRoot(rawData)
+  doc <- xml_root(rawData)
   numChunks <- xmlSize(doc)
   for(i in 1:numChunks){
     chunk <- doc[[1]]
