@@ -49,7 +49,31 @@ whatNWISsites <- function(...){
   rawData <- getWebServiceData(urlCall, encoding='gzip')
 
   doc <- xml_root(rawData)
-  numChunks <- xmlSize(doc)
+  siteCategories <- xml_children(doc)
+  for(sc in siteCategories){
+    sites <- xml_children(sc)
+    #attrs <- c("sno","sna","cat","lat","lng","agc")
+    site_no <- xml_attr(sites, "sno")
+    site_name <- xml_attr(sites, "sna")
+    site_cat <- xml_attr(sites, "cat")
+    dec_lat_va <- xml_attr(sites, "lat")
+    dec_lon_va <- xml_attr(sites, "lng")
+    agencyCd <- xml_attr(sites, "agc")
+    
+    if(xml_name(sc)=="colocated_sites"){
+      colocated <- TRUE
+    }else{
+      colocated <- FALSE
+    }
+    
+    
+  }
+  
+  
+  
+  
+  
+  
   for(i in 1:numChunks){
     chunk <- doc[[1]]
     site_no <- as.character(xpathApply(chunk, "site/@sno"))
