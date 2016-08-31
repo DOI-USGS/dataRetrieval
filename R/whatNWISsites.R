@@ -25,11 +25,10 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @importFrom XML xmlTreeParse
-#' @importFrom XML xpathApply
-#' @importFrom XML xmlSize
 #' @importFrom xml2 xml_root
-#' @importFrom xml2 xml_find_all
+#' @importFrom xml2 xml_children
+#' @importFrom xml2 xml_attr
+#' @importFrom dplyr bind_rows
 #' 
 #' @examples
 #' \dontrun{
@@ -45,20 +44,20 @@ whatNWISsites <- function(...){
   
   urlCall <- drURL('site',Access=pkg.env$access, format="mapper", arg.list = values)
 
-
   rawData <- getWebServiceData(urlCall, encoding='gzip')
 
   doc <- xml_root(rawData)
   siteCategories <- xml_children(doc)
+  retVal <- NULL
   for(sc in siteCategories){
     sites <- xml_children(sc)
     #attrs <- c("sno","sna","cat","lat","lng","agc")
     site_no <- xml_attr(sites, "sno")
-    site_name <- xml_attr(sites, "sna")
-    site_cat <- xml_attr(sites, "cat")
-    dec_lat_va <- xml_attr(sites, "lat")
-    dec_lon_va <- xml_attr(sites, "lng")
-    agencyCd <- xml_attr(sites, "agc")
+    station_nm <- xml_attr(sites, "sna")
+    site_tp_cd <- xml_attr(sites, "cat")
+    dec_lat_va <- as.numeric(xml_attr(sites, "lat"))
+    dec_long_va <- as.numeric(xml_attr(sites, "lng"))
+    agency_cd <- xml_attr(sites, "agc")
     
     if(xml_name(sc)=="colocated_sites"){
       colocated <- TRUE
@@ -66,39 +65,20 @@ whatNWISsites <- function(...){
       colocated <- FALSE
     }
     
-    
-  }
-  
-  
-  
-  
-  
-  
-  for(i in 1:numChunks){
-    chunk <- doc[[1]]
-    site_no <- as.character(xpathApply(chunk, "site/@sno"))
-    station_nm <- as.character(xpathApply(chunk, "site/@sna"))
-    site_tp_cd <- as.character(xpathApply(chunk, "site/@cat"))
-    dec_lat_va <- as.numeric(xpathApply(chunk, "site/@lat"))
-    dec_long_va <- as.numeric(xpathApply(chunk, "site/@lng"))
-    agency_cd <- as.character(xpathApply(chunk, "site/@agc"))
-    
     df <- data.frame(agency_cd, site_no, station_nm, site_tp_cd, 
-                     dec_lat_va, dec_long_va, stringsAsFactors=FALSE) 
+                     dec_lat_va, dec_long_va, colocated, stringsAsFactors=FALSE) 
     
-    if(1==i){
-      retval <- df
-    } else {
-      retval <- rbind(retval, df)
+    if(is.null(retVal)){
+      retVal <- df
+    }else{
+      retVal <- bind_rows(retVal, df)
     }
   }
-    
-  retval <- retval[!duplicated(retval),]
   
-  retval$queryTime <- Sys.time()
-  attr(retval, "url") <- urlCall
-  attr(retval, "queryTime") <- Sys.time()
+  retVal <- retVal[!duplicated(retVal),]
+  retVal$queryTime <- Sys.time()
+  attr(retVal, "url") <- urlCall
+  attr(retVal, "queryTime") <- Sys.time()
   
-  return(retval)
-  
+  return(retVal)
 }
