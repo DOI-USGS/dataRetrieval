@@ -217,6 +217,7 @@ test_that("state county tests",{
 })
 
 test_that("NGWMN functions working", {
+  testthat::skip_on_cran()
   noDataSite <- "UTGS.401544112060301"
   noDataSite <- readNGWMNlevels(featureID = noDataSite)
   expect_true(is.data.frame(noDataSite))
@@ -233,3 +234,6 @@ test_that("NGWMN functions working", {
   
   
 })
+
+
+
