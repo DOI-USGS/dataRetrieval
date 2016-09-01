@@ -218,7 +218,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       if(useMethodDesc){
         methodDesc <- xml_text(xml_find_all(v, ".//ns1:methodDescription"))
         #this keeps column names consistent with old version
-        methodDesc <- gsub("\\[|\\]| ",".",methodDesc)
+        methodDesc <- gsub("\\[|\\]| |\\(|\\)",".",methodDesc)
         
         #sometimes methodDesc is empty
         if(nchar(methodDesc) > 0){
@@ -243,9 +243,14 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         }else{
           obsDF <- full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
         }
+      }else{
+        obsDF <- NULL
       }
     }
    
+    if(is.null(obsDF)){
+      next
+    }
     nObs <- nrow(obsDF)
     
     #statistic info
@@ -263,7 +268,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     
     #replace no data vals with NA, change attribute df
     noDataVal <- as.numeric(varText$noDataValue)
-    if(nrow(obsDF) > 0){
+    if(nObs > 0){
       obsDF[obsDF$values == noDataVal] <- NA
     }
     varText$noDataValue <- NA
