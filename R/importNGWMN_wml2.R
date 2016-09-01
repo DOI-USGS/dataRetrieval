@@ -122,6 +122,8 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     
     #bandaid to work with only single site calls
     #TODO: need better solution when bbox is added
+    #use number of children of right parent node?  ie like xmlSize in XML
+    
     siteDesc <- xml_text(xml_find_all(returnedDoc, ".//gml:description"))
     if(length(siteDesc) == 0){
       siteDesc <- NA
