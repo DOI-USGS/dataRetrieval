@@ -219,7 +219,13 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         methodDesc <- xml_text(xml_find_all(v, ".//ns1:methodDescription"))
         #this keeps column names consistent with old version
         methodDesc <- gsub("\\[|\\]| ",".",methodDesc)
-        obsColName <- paste("X",methodDesc,obsColName, sep = "_")
+        
+        #sometimes methodDesc is empty
+        if(nchar(methodDesc) > 0){
+          obsColName <- paste("X",methodDesc,obsColName, sep = "_")
+        }else{
+          obsColName <- paste("X",obsColName, sep = "_")
+        }
       } else{
         obsColName <- paste("X",obsColName, sep = "_")
       }
@@ -231,12 +237,13 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       if(all(is.na(valParentDF[,eval(qualColName)]))){
         valParentDF <- subset(valParentDF, select = c("dateTime", eval(obsColName), "tz_cd"))
       }
-      if(is.null(obsDF)){
-        obsDF <- valParentDF
-      }else{
-        obsDF <- full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
+      if(nrow(valParentDF) > 0){
+        if(is.null(obsDF)){
+          obsDF <- valParentDF
+        }else{
+          obsDF <- full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
+        }
       }
-      
     }
    
     nObs <- nrow(obsDF)
@@ -254,8 +261,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     varName <- sub("unit", "param_unit",varNames) #rename to stay consistent with orig importWaterMl1
     names(varText) <- varNames
     
-    #TODO: replace no data vals with NA, change attribute df
-    noDataVal <- varText$noDataValue
+    #replace no data vals with NA, change attribute df
+    noDataVal <- as.numeric(varText$noDataValue)
     if(nrow(obsDF) > 0){
       obsDF[obsDF$values == noDataVal] <- NA
     }
@@ -265,7 +272,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     obsDFrows <- nrow(obsDF)
     df <- cbind.data.frame(agency_cd = rep(agency_cd,obsDFrows), site_no = rep(site_no,obsDFrows), 
                            obsDF, stringsAsFactors = FALSE)
-   
+    
     #join by site no 
     #append siteInfo, stat, and variable if they don't match a previous one
     if (is.null(mergedDF)){
@@ -300,7 +307,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   mergedNames <- names(mergedDF)
   tzLoc <- grep("tz_cd", names(mergedDF))
   mergedDF <- mergedDF[c(mergedNames[-tzLoc],mergedNames[tzLoc])]
-  mergedDF <- arrange(mergedDF,site_no)
+  mergedDF <- arrange(mergedDF,site_no, dateTime)
   
   #attach other site info etc as attributes of mergedDF
   if(!raw){
