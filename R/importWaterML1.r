@@ -244,11 +244,12 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
           obsDF <- full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
         }
       }else{
-        obsDF <- NULL
+        obsDF <- data.frame()
       }
     }
    
     if(is.null(obsDF)){
+      mergedSite <- data.frame()
       next
     }
     nObs <- nrow(obsDF)
@@ -308,13 +309,16 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       mergedStat <- full_join(mergedStat, statDF, by = colnames(mergedStat))
     }
   }
-  #keep attribute df names the same as old version
-  names(mergedSite) <- c("dec_lat_va", "dec_lon_va", "timeZoneOffset", "timeZoneAbbreviation",
-                         "station_nm","network","agency_cd","srs","siteTypeCd",
-                         "hucCd", "stateCd", "countyCd", "site_no")
-  mergedSite <- mergedSite[c("station_nm", "site_no", "agency_cd", "timeZoneOffset", 
-                             "timeZoneAbbreviation", "dec_lat_va","dec_lon_va","srs","siteTypeCd",
-                             "hucCd","stateCd","countyCd","network")]
+  
+  if(!is.null(mergedSite)){
+    #keep attribute df names the same as old version
+    names(mergedSite) <- c("dec_lat_va", "dec_lon_va", "timeZoneOffset", "timeZoneAbbreviation",
+                           "station_nm","network","agency_cd","srs","siteTypeCd",
+                           "hucCd", "stateCd", "countyCd", "site_no")
+    mergedSite <- mergedSite[c("station_nm", "site_no", "agency_cd", "timeZoneOffset", 
+                               "timeZoneAbbreviation", "dec_lat_va","dec_lon_va","srs","siteTypeCd",
+                               "hucCd","stateCd","countyCd","network")]
+  }
   
   #move tz column to far right and sort by increasing site number to be consistent with old version
   mergedNames <- names(mergedDF)
