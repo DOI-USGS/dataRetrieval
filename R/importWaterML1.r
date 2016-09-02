@@ -178,8 +178,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     siteCodeNode <- sourceInfo[xml_name(sourceInfo)=="siteCode"]
     site_no <- xml_text(siteCodeNode)
     siteCodeAtt <- unlist(xml_attrs(siteCodeNode))
-    siteDF <- cbind.data.frame(t(locText),t(tzInfo),siteName,t(siteCodeAtt),srs,t(siteProp),
-                               stringsAsFactors = FALSE)
+    siteDF <- cbind.data.frame(t(locText),t(tzInfo),station_nm=siteName,t(siteCodeAtt),srs,t(siteProp),
+                               site_no,stringsAsFactors = FALSE)
     defaultTZ <- xml_attr(xml_find_all(sourceInfo,".//ns1:defaultTimeZone"),"zoneAbbreviation")
     
     for(v in valParents){
@@ -218,8 +218,14 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       if(useMethodDesc){
         methodDesc <- xml_text(xml_find_all(v, ".//ns1:methodDescription"))
         #this keeps column names consistent with old version
-        methodDesc <- gsub("\\[|\\]| ",".",methodDesc)
-        obsColName <- paste("X",methodDesc,obsColName, sep = "_")
+        methodDesc <- gsub("\\[|\\]| |\\(|\\)",".",methodDesc)
+        
+        #sometimes methodDesc is empty
+        if(nchar(methodDesc) > 0){
+          obsColName <- paste("X",methodDesc,obsColName, sep = "_")
+        }else{
+          obsColName <- paste("X",obsColName, sep = "_")
+        }
       } else{
         obsColName <- paste("X",obsColName, sep = "_")
       }
@@ -231,14 +237,21 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       if(all(is.na(valParentDF[,eval(qualColName)]))){
         valParentDF <- subset(valParentDF, select = c("dateTime", eval(obsColName), "tz_cd"))
       }
-      if(is.null(obsDF)){
-        obsDF <- valParentDF
+      if(nrow(valParentDF) > 0){
+        if(is.null(obsDF)){
+          obsDF <- valParentDF
+        }else{
+          obsDF <- full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
+        }
       }else{
-        obsDF <- full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
+        obsDF <- data.frame()
       }
-      
     }
    
+    if(is.null(obsDF)){
+      mergedSite <- data.frame()
+      next
+    }
     nObs <- nrow(obsDF)
     
     #statistic info
@@ -254,9 +267,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     varName <- sub("unit", "param_unit",varNames) #rename to stay consistent with orig importWaterMl1
     names(varText) <- varNames
     
-    #TODO: replace no data vals with NA, change attribute df
-    noDataVal <- varText$noDataValue
-    if(nrow(obsDF) > 0){
+    #replace no data vals with NA, change attribute df
+    noDataVal <- as.numeric(varText$noDataValue)
+    if(nObs > 0){
       obsDF[obsDF$values == noDataVal] <- NA
     }
     varText$noDataValue <- NA
@@ -265,7 +278,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     obsDFrows <- nrow(obsDF)
     df <- cbind.data.frame(agency_cd = rep(agency_cd,obsDFrows), site_no = rep(site_no,obsDFrows), 
                            obsDF, stringsAsFactors = FALSE)
-   
+    
     #join by site no 
     #append siteInfo, stat, and variable if they don't match a previous one
     if (is.null(mergedDF)){
@@ -296,11 +309,22 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       mergedStat <- full_join(mergedStat, statDF, by = colnames(mergedStat))
     }
   }
+  
+  if(!is.null(mergedSite)){
+    #keep attribute df names the same as old version
+    names(mergedSite) <- c("dec_lat_va", "dec_lon_va", "timeZoneOffset", "timeZoneAbbreviation",
+                           "station_nm","network","agency_cd","srs","siteTypeCd",
+                           "hucCd", "stateCd", "countyCd", "site_no")
+    mergedSite <- mergedSite[c("station_nm", "site_no", "agency_cd", "timeZoneOffset", 
+                               "timeZoneAbbreviation", "dec_lat_va","dec_lon_va","srs","siteTypeCd",
+                               "hucCd","stateCd","countyCd","network")]
+  }
+  
   #move tz column to far right and sort by increasing site number to be consistent with old version
   mergedNames <- names(mergedDF)
   tzLoc <- grep("tz_cd", names(mergedDF))
   mergedDF <- mergedDF[c(mergedNames[-tzLoc],mergedNames[tzLoc])]
-  mergedDF <- arrange(mergedDF,site_no)
+  mergedDF <- arrange(mergedDF,site_no, dateTime)
   
   #attach other site info etc as attributes of mergedDF
   if(!raw){
