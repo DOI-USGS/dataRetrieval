@@ -248,6 +248,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         obsDF <- data.frame(dateTime=character(0), tz_cd=character(0), stringsAsFactors = FALSE)
         if(asDateTime){
           obsDF$dateTime <- as.POSIXct(obsDF$dateTime)
+          attr(obsDF$dateTime, "tzone") <- tz
         }
         
       }
