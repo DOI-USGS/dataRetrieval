@@ -244,7 +244,12 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
           obsDF <- full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
         }
       }else{
-        obsDF <- data.frame()
+        #need column names for joining later
+        obsDF <- data.frame(dateTime=character(0), tz_cd=character(0), stringsAsFactors = FALSE)
+        if(asDateTime){
+          obsDF$dateTime <- as.POSIXct(obsDF$dateTime)
+        }
+        
       }
     }
    
