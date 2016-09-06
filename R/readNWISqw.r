@@ -138,7 +138,7 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   queryTime <- attr(data, "queryTime")
   header <- attr(data, "header")
 
-  parameterCd <- unique(data$parm_cd)
+  
   
   if(reshape){
     if(expanded){
@@ -167,18 +167,23 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
       warning("Reshape can only be used with expanded data. Reshape request will be ignored.")
     }
   }
-  parameterCd <- parameterCd[parameterCd != ""]
   
-  siteInfo <- readNWISsite(siteNumbers)
+  if( !(is.null(siteNumbers)) && !(is.na(siteNumbers)) & length(siteNumbers) > 0){
+    siteInfo <- readNWISsite(siteNumbers)
+    if(nrow(data) > 0){
+      siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+    }
+    attr(data, "siteInfo") <- siteInfo    
+  }
+
+  parameterCd <- unique(data$parm_cd)
   
-  if(nrow(data) > 0){
-    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+  if(!(is.null(parameterCd)) && !is.na(parameterCd) & length(parameterCd) > 0){
+    parameterCd <- parameterCd[parameterCd != ""]
+    varInfo <- readNWISpCode(parameterCd)
+    attr(data, "variableInfo") <- varInfo
   }
   
-  varInfo <- readNWISpCode(parameterCd)
-  
-  attr(data, "siteInfo") <- siteInfo
-  attr(data, "variableInfo") <- varInfo
   attr(data, "statisticInfo") <- NULL
   
   attr(data, "url") <- url
