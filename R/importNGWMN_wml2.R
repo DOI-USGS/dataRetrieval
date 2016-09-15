@@ -77,7 +77,13 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
       oneCol <- rep(NA, nVals) 
       timeDF <- data.frame(date=oneCol, time=oneCol, dateTime=oneCol)
       splitTime <- data.frame(matrix(unlist(strsplit(rawTime, "T")), nrow=nVals, byrow = TRUE), stringsAsFactors=FALSE)
-      names(splitTime) <- c("date", "time")
+      if(ncol(splitTime) > 1){ #some sites only have a date
+        names(splitTime) <- c("date", "time")
+      }else{
+        names(splitTime) <- "date"
+        splitTime <- mutate(splitTime, time = NA)
+      }
+      
       timeDF <- mutate(splitTime, dateTime = NA)
       logicVec <- nchar(rawTime) > 19
       timeDF$dateTime[logicVec] <- rawTime[logicVec]
@@ -123,7 +129,7 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     #bandaid to work with only single site calls
     #TODO: need better solution when bbox is added
     #use number of children of right parent node?  ie like xmlSize in XML
-    
+    #and loop?
     siteDesc <- xml_text(xml_find_all(returnedDoc, ".//gml:description"))
     if(length(siteDesc) == 0){
       siteDesc <- NA
