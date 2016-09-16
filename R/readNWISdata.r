@@ -118,7 +118,7 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     stop("Only one service call allowed.")
   }
   
-  values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=",",sep="")))
+  values <- convertDots(matchReturn) 
   
   names(values)[names(values) == "startDate"] <- "startDT"
   names(values)[names(values) == "endDate"] <- "endDT"
@@ -323,5 +323,11 @@ countyCdLookup <- function(state, county, outputType = "id"){
                    fullEntry = countyCd[county,]
   )
   
+  return(retVal)
+}
+
+# convert variables in dots to usable format
+convertDots <- function(matchReturn){
+  retVal <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=",",sep="")))
   return(retVal)
 }

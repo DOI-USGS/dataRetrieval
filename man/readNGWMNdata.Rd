@@ -4,13 +4,9 @@
 \alias{readNGWMNdata}
 \title{import data from the National Groundwater Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
 \usage{
-readNGWMNdata(featureID, service = "observation", asDateTime = TRUE,
-  tz = "")
+readNGWMNdata(..., service = "observation", asDateTime = TRUE, tz = "")
 }
 \arguments{
-\item{featureID}{character Vector of feature IDs in the formatted with agency code and site number 
-separated by a period, e.g. \code{USGS.404159100494601}.}
-
 \item{service}{character Identifies which web service to access.  Only \code{observation} is currently 
 supported, which retrieves all water level for each site.}
 
@@ -21,6 +17,9 @@ supported, which retrieves all water level for each site.}
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
+
+\item{featureID}{character Vector of feature IDs in the formatted with agency code and site number 
+separated by a period, e.g. \code{USGS.404159100494601}.}
 }
 \description{
 Only water level data is currently available through the web service.

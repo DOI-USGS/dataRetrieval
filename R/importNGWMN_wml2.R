@@ -15,6 +15,7 @@
 #' @importFrom xml2 xml_find_all
 #' @importFrom xml2 xml_text
 #' @importFrom xml2 xml_attr
+#' @importFrom xml2 xml_find_first
 #' @importFrom lubridate parse_date_time
 #' @examples
 #' \dontrun{
@@ -120,23 +121,30 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     mergedDF[nonDateCols][mergedDF[nonDateCols] == "" | mergedDF[nonDateCols]== -999999.0] <- NA
     attr(mergedDF, "gml:identifier") <- xml_text(xml_find_all(returnedDoc, ".//gml:identifier")) 
     attr(mergedDF, "generationDate") <- xml_text(xml_find_all(returnedDoc, ".//wml2:generationDate")) 
-   
+    meta <- xml_find_all(returnedDoc, ".//gmd:contact")
+    attr(mergedDF, "contact") <- xml_attr(meta, "href")
+    attr(mergedDF, "responsibleParty") <- xml_text(xml_find_all(meta, ".//gco:CharacterString"))
+    
     
   }else if(response == "GetFeatureOfInterestResponse"){
-    site <- xml_text(xml_find_all(returnedDoc,".//gml:identifier"))
+    featureMembers <- xml_find_all(returnedDoc, ".//sos:featureMember")
+    site <- xml_text(xml_find_all(featureMembers,".//gml:identifier"))
     site <- substring(site, 8)
     
-    #bandaid to work with only single site calls
     #TODO: need better solution when bbox is added
-    #use number of children of right parent node?  ie like xmlSize in XML
-    #and loop?
-    siteDesc <- xml_text(xml_find_all(returnedDoc, ".//gml:description"))
-    if(length(siteDesc) == 0){
-      siteDesc <- NA
-    }
+    #some sites don't have a description
+    siteDesc <- xml_text(xml_find_first(featureMembers, ".//gml:description"))
+    #siteDesc <- xml_text(xml_find_all(returnedDoc, ".//gml:description"))
+    # if(length(siteDesc) == 0){
+    #   siteDesc <- NA
+    # }
     
-    siteLocs <- strsplit(xml_text(xml_find_all(returnedDoc, ".//gml:pos")), " ")
-    siteLocs <- data.frame(dec_lat_va=as.numeric(siteLocs[[1]][1]), dec_lon_va=as.numeric(siteLocs[[1]][2]), stringsAsFactors = FALSE)
+    siteLocs <- strsplit(xml_text(xml_find_all(featureMembers, ".//gml:pos")), " ")
+    #TODO: deal with multiple sites
+    siteLocs <- data.frame(matrix(unlist(siteLocs), nrow=length(siteLocs), byrow=TRUE), stringsAsFactors = FALSE)
+    names(siteLocs) <- c("dec_lat_va", "dec_lon_va")
+    siteLocs <- mutate(siteLocs, dec_lat_va=as.numeric(dec_lat_va), dec_lon_va=as.numeric(dec_lon_va))
+    #siteLocs <- data.frame(dec_lat_va=as.numeric(siteLocs[[1]][1]), dec_lon_va=as.numeric(siteLocs[[1]][2]), stringsAsFactors = FALSE)
     mergedDF <- cbind.data.frame(site, description = siteDesc, siteLocs, stringsAsFactors = FALSE) 
   }
   else{

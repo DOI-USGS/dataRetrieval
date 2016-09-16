@@ -14,7 +14,8 @@
 #' @import utils
 #' @importFrom dplyr mutate
 #' @importFrom dplyr bind_rows
-#' 
+#' @importFrom dplyr bind_cols
+#' @export
 #' @examples 
 #' \dontrun{
 #' #one site
@@ -35,48 +36,56 @@
 #' }
 #' 
 
-readNGWMNdata <- function(featureID, service = "observation", asDateTime = TRUE, tz = ""){
+readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = ""){
   message("          ********************************************************
           DISCLAIMER: NGWMN retrieval functions are still in flux, 
               and no future behavior or output is guaranteed
           *********************************************************")
+  #TODO: add getCapabilities
   match.arg(service, c("observation", "featureOfInterest"))
-  
+  dots <- list(...)
   
   if(service == "observation"){
     allObs <- NULL
     allAttrs <- NULL
     allSites <- NULL
     #these attributes are pulled out and saved when doing binds to be reattached
-    attrs <- c("url","gml:identifier","generationDate")
+    attrs <- c("url","gml:identifier","generationDate","responsibleParty", "contact")
     for(f in featureID){
       obsFID <- retrieveObservation(f, asDateTime, attrs)
       siteFID <- retrieveFeatureOfInterest(f, asDateTime)
       if(is.null(allObs)){
         allObs <- obsFID
-        allSites <- siteFID
         allAttrs <- saveAttrs(attrs, allObs)
+        allSites <- bind_cols(siteFID,allAttrs)
       }else{
         obsFIDatt <- saveAttrs(attrs, obsFID)
         obsFID <- removeAttrs(attrs, obsFID)
-        allAttrs <- bind_rows(allAttrs, obsFIDatt)
         allObs <- bind_rows(allObs, obsFID)
-        allSites <- bind_rows(allSites, siteFID)
+        obsSites <- bind_cols(siteFID, obsFIDatt)
+        allSites <- bind_rows(allSites, obsSites)
       }
-      attributes(allObs) <- c(attributes(allObs),as.list(allAttrs))
+      
       attr(allObs, "siteInfo") <- allSites
       returnData <- allObs
     }
   }else if(service == "featureOfInterest"){
     allSites <- NULL
-    for(f in featureID){
-      siteFID <- retrieveFeatureOfInterest(f, asDateTime)
-      if(is.null(allSites)){
-        allSites <- siteFID
+    if(exists("featureID")){
+      #TODO: can do multi site calls with encoded comma
+      for(f in featureID){
+        siteFID <- retrieveFeatureOfInterest(f, asDateTime)
+        if(is.null(allSites)){
+          allSites <- siteFID
         }else{
-        allSites <- bind_rows(allSites, siteFID)
+          allSites <- bind_rows(allSites, siteFID)
+        }
       }
     }
+    if(exists("bbox")){
+      
+    }
+    
     returnData <- allSites
   }else{
     stop("unrecognized service request")
@@ -178,12 +187,27 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
   return(returnData)
 }
 
-#retrieve feature of interest
-#don't expose until can support bbox
-#note: import function can only do single sites right now
-retrieveFeatureOfInterest <- function(featureID, asDateTime){
-  baseURL <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
-  url <- paste0(baseURL, featureID)
+#' retrieve feature of interest
+#' 
+#' @export
+#TODO: accomodate bbox
+#TODO: can do multisite calls
+retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:EPSG::4269"){
+  baseURL <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0"
+  dots <- list(...)
+  values <- convertDots(dots)
+  if("featureID" %in% names(values)){
+    foiURL <- "&featureOfInterest="
+    #paste on VW_GWDP.. to all foi
+    
+    
+    url <- paste0(baseURL, featureID)
+  }else if("bbox" %in% names(values)){
+    bbox <- paste(values[['bbox']], collapse=",")
+    url <- paste0(baseURL, "&bbox=", bbox, "&srsName=",srsName)
+  }else{
+    stop()
+  }
   siteDF <- importNGWMN_wml2(url, asDateTime)
   return(siteDF)
 }
