@@ -29,7 +29,6 @@ Copyright: This software is in the public domain because it contains materials
 Depends:
     R (>= 3.0)
 Imports:
-    XML,
     httr (>= 1.0.0),
     curl,
     reshape2,
