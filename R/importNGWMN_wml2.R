@@ -131,16 +131,10 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     site <- xml_text(xml_find_all(featureMembers,".//gml:identifier"))
     site <- substring(site, 8)
     
-    #TODO: need better solution when bbox is added
     #some sites don't have a description
     siteDesc <- xml_text(xml_find_first(featureMembers, ".//gml:description"))
-    #siteDesc <- xml_text(xml_find_all(returnedDoc, ".//gml:description"))
-    # if(length(siteDesc) == 0){
-    #   siteDesc <- NA
-    # }
     
     siteLocs <- strsplit(xml_text(xml_find_all(featureMembers, ".//gml:pos")), " ")
-    #TODO: deal with multiple sites
     siteLocs <- data.frame(matrix(unlist(siteLocs), nrow=length(siteLocs), byrow=TRUE), stringsAsFactors = FALSE)
     names(siteLocs) <- c("dec_lat_va", "dec_lon_va")
     siteLocs <- mutate(siteLocs, dec_lat_va=as.numeric(dec_lat_va), dec_lon_va=as.numeric(dec_lon_va))

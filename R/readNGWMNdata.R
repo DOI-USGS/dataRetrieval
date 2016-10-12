@@ -26,6 +26,7 @@
 #' sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
 #' multiSiteData <- readNGWMNdata(sites)
 #' 
+#' 
 #' #non-USGS site
 #' site <- "MBMG.892195"
 #' data <- readNGWMNdata(featureID = site)
@@ -41,8 +42,8 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
           DISCLAIMER: NGWMN retrieval functions are still in flux, 
               and no future behavior or output is guaranteed
           *********************************************************")
-  #TODO: add getCapabilities
-  match.arg(service, c("observation", "featureOfInterest"))
+  
+  match.arg(service, c("observation", "featureOfInterest", "getCapabilities"))
   dots <- list(...)
   
   if(service == "observation"){
@@ -70,27 +71,18 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
       returnData <- allObs
     }
   }else if(service == "featureOfInterest"){
-    allSites <- NULL
-    if(exists("featureID")){
+    if("featureID" %in% names(dots)){
       #TODO: can do multi site calls with encoded comma
-      for(f in featureID){
-        siteFID <- retrieveFeatureOfInterest(f, asDateTime)
-        if(is.null(allSites)){
-          allSites <- siteFID
-        }else{
-          allSites <- bind_rows(allSites, siteFID)
-        }
-      }
+      allSites <- retrieveFeatureOfInterest(featureID = dots[['featureID']], asDateTime=asDateTime)
     }
-    if(exists("bbox")){
-      
+    if("bbox" %in% names(dots)){
+      allSites <- retrieveFeatureOfInterest(bbox=dots[['bbox']])
     }
-    
     returnData <- allSites
   }else{
-    stop("unrecognized service request")
+    stop("getCapabilities is not yet implemented")
+    #TODO: fill in getCapabilites
   }
-  
   return(returnData)
 }
 
@@ -190,18 +182,18 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
 #' retrieve feature of interest
 #' 
 #' @export
-#TODO: accomodate bbox
 #TODO: can do multisite calls
+#TODO: allow pass through srsName
 retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:EPSG::4269"){
   baseURL <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0"
   dots <- list(...)
   values <- convertDots(dots)
+  
   if("featureID" %in% names(values)){
     foiURL <- "&featureOfInterest="
-    #paste on VW_GWDP.. to all foi
+    fidURL <- paste("VW_GWDP_GEOSERVER", values[['featureID']], sep=".", collapse = "%2C")
+    url <- paste0(baseURL, foiURL, fidURL)
     
-    
-    url <- paste0(baseURL, featureID)
   }else if("bbox" %in% names(values)){
     bbox <- paste(values[['bbox']], collapse=",")
     url <- paste0(baseURL, "&bbox=", bbox, "&srsName=",srsName)
