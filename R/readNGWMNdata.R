@@ -52,9 +52,11 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
     allSites <- NULL
     #these attributes are pulled out and saved when doing binds to be reattached
     attrs <- c("url","gml:identifier","generationDate","responsibleParty", "contact")
+    featureID <- as.vector(dots[['featureID']])
+    #TODO: call featureOfInterest outside loop
     for(f in featureID){
-      obsFID <- retrieveObservation(f, asDateTime, attrs)
-      siteFID <- retrieveFeatureOfInterest(f, asDateTime)
+      obsFID <- retrieveObservation(featureID = f, asDateTime, attrs)
+      siteFID <- retrieveFeatureOfInterest(featureID = f, asDateTime)
       if(is.null(allObs)){
         allObs <- obsFID
         allAttrs <- saveAttrs(attrs, allObs)
@@ -113,7 +115,7 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
 #' }
 
 readNGWMNlevels <- function(featureID){
-  data <- readNGWMNdata(featureID, service = "observation")
+  data <- readNGWMNdata(featureID = featureID, service = "observation")
   return(data)
 }
 
@@ -147,7 +149,7 @@ readNGWMNlevels <- function(featureID){
 #' }
 
 readNGWMNsites <- function(featureID){
-  sites <- readNGWMNdata(featureID, service = "featureOfInterest")
+  sites <- readNGWMNdata(featureID = featureID, service = "featureOfInterest")
   return(sites)
 }
 
@@ -183,7 +185,7 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
 #' 
 #' @export
 #TODO: can do multisite calls
-#TODO: allow pass through srsName
+#TODO: allow pass through srsName  needs to be worked in higher-up in dots
 retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:EPSG::4269"){
   baseURL <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0"
   dots <- list(...)
