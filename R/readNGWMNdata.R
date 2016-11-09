@@ -15,6 +15,7 @@
 #' @importFrom dplyr mutate
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr bind_cols
+#' @importFrom stats na.omit
 #' @export
 #' @examples 
 #' \dontrun{
@@ -36,7 +37,8 @@
 #' noDataSite <- readNGWMNdata(featureID = noDataSite, service = "observation")
 #' }
 #' 
-
+#TODO: accept colon or period! change examples
+#TODO: deal with NA fIDs
 readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = ""){
   message("          ********************************************************
           DISCLAIMER: NGWMN retrieval functions are still in flux, 
@@ -52,7 +54,11 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
     allSites <- NULL
     #these attributes are pulled out and saved when doing binds to be reattached
     attrs <- c("url","gml:identifier","generationDate","responsibleParty", "contact")
-    featureID <- as.vector(dots[['featureID']])
+    featureID <- na.omit(gsub(":",".",dots[['featureID']]))
+    
+    #featureID <- na.omit(featureID)
+    #featureID <- featureID[!is.na(featureID)]
+    #featureID <- gsub(":",".",featureID) #getFeatureOfInterest returns with colons
     #TODO: call featureOfInterest outside loop
     for(f in featureID){
       obsFID <- retrieveObservation(featureID = f, asDateTime, attrs)
