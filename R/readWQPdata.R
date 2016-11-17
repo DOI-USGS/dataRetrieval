@@ -1,6 +1,6 @@
 #' General Data Import from Water Quality Portal
 #'
-#' Imports data from Water Quality Portal web service. This function gets the data from here: \url{http://www.waterqualitydata.us}.
+#' Imports data from Water Quality Portal web service. This function gets the data from here: \url{https://www.waterqualitydata.us}.
 #' because it allows for other agencies rather than the USGS.  
 #'
 #' @param \dots see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options
@@ -149,7 +149,7 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
 
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
-  baseURL <- "http://www.waterqualitydata.us/Result/search?"
+  baseURL <- "https://www.waterqualitydata.us/Result/search?"
   urlCall <- paste0(baseURL,
                    urlCall,
                    "&sorted=no&mimeType=tsv")
