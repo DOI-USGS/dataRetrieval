@@ -21,13 +21,13 @@
 #' @return A dataset like \code{data} with selected columns renamed.
 #' @note The following statistics codes are converted by \code{renameNWISColumns}. 
 #'\describe{
+#'\item{00000}{Instantaneous Value, suffix: Inst}
 #'\item{00001}{Maximum value, suffix: Max}
 #'\item{00002}{Minimum value, suffix: Min}
 #'\item{00003}{Mean value, no suffix}
 #'\item{00006}{Sum of values, suffix: Sum}
 #'\item{00007}{Modal value, suffix: Mode}
 #'\item{00008}{Median value, suffix: Median}
-#'\item{00011}{Instantaneous Value, suffix: Inst}
 #'\item{00012}{Equivalent mean value, suffix: EqMean}
 #'\item{00021}{Tidal high-high value, suffix: HiHiTide}
 #'\item{00022}{Tidal low-high value, suffix: LoHiTide}
@@ -69,13 +69,13 @@ renameNWISColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
   Conv$p63680 <- p63680
   Conv$p72019 <- p72019
   
+  Conv$s00000<- "Inst" # Why is this in dv?
   Conv$s00001 <- "Max"
   Conv$s00002 <- "Min"
   Conv$s00003 <- ""
   Conv$s00006 <- "Sum"
   Conv$s00007 <- "Mode"
   Conv$s00008 <- "Median"
-  Conv$s00011<- "Inst" # Why is this in dv?
   Conv$s00012<- "EqMean"
   Conv$s00021<- "HiHiTide"
   Conv$s00022<- "LoHiTide"
