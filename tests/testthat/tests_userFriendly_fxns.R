@@ -233,7 +233,7 @@ test_that("NGWMN functions working", {
   expect_true(nrow(oneSite) > 0)
   
   #non-USGS site
-  data <- readNGWMNlevels(featureID = "MBMG.892195")
+  data <- readNGWMNlevels(featureID = "MBMG.1388")
   expect_true(nrow(data) > 1)
   expect_true(is.numeric(oneSite$value))
   
