@@ -46,13 +46,13 @@ to rename those columns.
 \note{
 The following statistics codes are converted by \code{renameNWISColumns}. 
 \describe{
+\item{00000}{Instantaneous Value, suffix: Inst}
 \item{00001}{Maximum value, suffix: Max}
 \item{00002}{Minimum value, suffix: Min}
 \item{00003}{Mean value, no suffix}
 \item{00006}{Sum of values, suffix: Sum}
 \item{00007}{Modal value, suffix: Mode}
 \item{00008}{Median value, suffix: Median}
-\item{00011}{Instantaneous Value, suffix: Inst}
 \item{00012}{Equivalent mean value, suffix: EqMean}
 \item{00021}{Tidal high-high value, suffix: HiHiTide}
 \item{00022}{Tidal low-high value, suffix: LoHiTide}
