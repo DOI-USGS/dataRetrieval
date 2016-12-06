@@ -27,33 +27,47 @@
 #' }
 getWebServiceData <- function(obs_url, ...){
   
-  returnedList <- RETRY("GET",obs_url, ..., user_agent(default_ua()))
+  returnedList <- tryCatch({
+    RETRY("GET",obs_url, ..., user_agent(default_ua()))
+  }, error = function(e){
+    NULL
+  })
+    
+  if(is.null(returnedList)){
+    message("Switching from https to http")
+    obs_url <- gsub("https", "http", obs_url)
+    returnedList <- tryCatch({
+      RETRY("GET",obs_url, ..., user_agent(default_ua()))
+    }, error = function(e){
+      NULL
+    })
+  } 
   
-    if(status_code(returnedList) != 200){
-      message("For: ", obs_url,"\n")
-      stop_for_status(returnedList)
-    } else {
+  if(status_code(returnedList) != 200){
+    message("For: ", obs_url,"\n")
+    stop_for_status(returnedList)
+  } else {
+    
+    headerInfo <- headers(returnedList)
+
+    if(headerInfo$`content-type` == "text/tab-separated-values;charset=UTF-8"){
+      returnedDoc <- content(returnedList, type="text",encoding = "UTF-8")
+    } else if (headerInfo$`content-type` == "text/html"){
+      txt <- readBin(returnedList$content, character())
+      message(txt)
+      return(txt)
       
-      headerInfo <- headers(returnedList)
-
-      if(headerInfo$`content-type` == "text/tab-separated-values;charset=UTF-8"){
-        returnedDoc <- content(returnedList, type="text",encoding = "UTF-8")
-      } else if (headerInfo$`content-type` == "text/html"){
-        txt <- readBin(returnedList$content, character())
-        message(txt)
-        return(txt)
-        
-      } else {
-        returnedDoc <- content(returnedList,encoding = "UTF-8")
-        if(grepl("No sites/data found using the selection criteria specified", returnedDoc)){
-          message(returnedDoc)
-        }
+    } else {
+      returnedDoc <- content(returnedList,encoding = "UTF-8")
+      if(grepl("No sites/data found using the selection criteria specified", returnedDoc)){
+        message(returnedDoc)
       }
-
-      attr(returnedDoc, "headerInfo") <- headerInfo
-
-      return(returnedDoc)
     }
+
+    attr(returnedDoc, "headerInfo") <- headerInfo
+
+    return(returnedDoc)
+  }
 }
 
 default_ua <- function() {
