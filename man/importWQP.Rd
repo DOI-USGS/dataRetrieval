@@ -18,7 +18,7 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 }
 \value{
 retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
-start and end times, and converted to UTC. See \url{https://www.waterqualitydata.us/portal_userguide.jsp} for more information.
+start and end times, and converted to UTC. See \url{https://www.waterqualitydata.us/portal_userguide} for more information.
 }
 \description{
 Imports data from the Water Quality Portal based on a specified url.
