@@ -1,8 +1,8 @@
 Package: dataRetrieval
 Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
-Version: 2.6.1
-Date: 2016-08-26
+Version: 2.6.3
+Date: 2016-12-06
 Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
     email = "rhirsch@usgs.gov"),
     person("Laura", "DeCicco", role = c("aut","cre"),
@@ -25,11 +25,10 @@ Copyright: This software is in the public domain because it contains materials
     that originally came from the United States Geological Survey, an agency of
     the United States Department of Interior. For more information, see the
     official USGS copyright policy at
-    http://www.usgs.gov/visual-id/credit_usgs.html#copyright
+    https://www2.usgs.gov/visual-id/credit_usgs.html#copyright
 Depends:
     R (>= 3.0)
 Imports:
-    XML,
     httr (>= 1.0.0),
     curl,
     reshape2,

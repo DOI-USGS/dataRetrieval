@@ -40,15 +40,15 @@ access = match.arg(access, c('public','internal','cooperator','USGS'))
     message('setting access to public')
   }
   
-  pkg.env$site = "http://waterservices.usgs.gov/nwis/site/"
-  pkg.env$iv = "http://waterservices.usgs.gov/nwis/iv/"
-  pkg.env$dv =  "http://waterservices.usgs.gov/nwis/dv/"
-  pkg.env$gwlevels = "http://waterservices.usgs.gov/nwis/gwlevels/"
-  pkg.env$measurements = "http://waterdata.usgs.gov/nwis/measurements/"
-  pkg.env$peak = "http://nwis.waterdata.usgs.gov/usa/nwis/peak/"
-  pkg.env$rating = "http://waterdata.usgs.gov/nwisweb/get_ratings/"
-  pkg.env$qwdata = "http://nwis.waterdata.usgs.gov/nwis/qwdata"
-  pkg.env$stat = "http://waterservices.usgs.gov/nwis/stat/"
+  pkg.env$site = "https://waterservices.usgs.gov/nwis/site/"
+  pkg.env$iv = "https://waterservices.usgs.gov/nwis/iv/"
+  pkg.env$dv =  "https://waterservices.usgs.gov/nwis/dv/"
+  pkg.env$gwlevels = "https://waterservices.usgs.gov/nwis/gwlevels/"
+  pkg.env$measurements = "https://waterdata.usgs.gov/nwis/measurements/"
+  pkg.env$peak = "https://nwis.waterdata.usgs.gov/usa/nwis/peak/"
+  pkg.env$rating = "https://waterdata.usgs.gov/nwisweb/get_ratings/"
+  pkg.env$qwdata = "https://nwis.waterdata.usgs.gov/nwis/qwdata"
+  pkg.env$stat = "https://waterservices.usgs.gov/nwis/stat/"
 
   options(Access.dataRetrieval = access)
 }
