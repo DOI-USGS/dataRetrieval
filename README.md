@@ -42,7 +42,7 @@ Follow `@USGS-R` on Twitter for updates on all USGS R packages:
 
 |Version|Monthly Downloads|Total Downloads|
 |----------|------------|------------|
-|[![CRAN version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)|[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)|[![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)|
+|[![CRAN version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://CRAN.R-project.org/package=dataRetrieval)|[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://CRAN.R-project.org/package=dataRetrieval)|[![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://CRAN.R-project.org/package=dataRetrieval)|
 
 ### Research software impact:
 [![Research software impact](http://depsy.org/api/package/cran/dataRetrieval/badge.svg)](http://depsy.org/package/r/dataRetrieval)

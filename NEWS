@@ -1,3 +1,7 @@
+dataRetrieval 2.6.3
+==========
+* All USGS web services are being flipped from http to https. This version of dataRetrieval will attempt to access https, if that fails, will attempt http.
+
 dataRetrieval 2.5.12
 ==========
 * Response to readr 1.0.0 updates
