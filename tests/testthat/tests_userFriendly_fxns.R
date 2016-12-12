@@ -10,6 +10,13 @@ test_that("Unit value data returns correct types", {
 
   rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
   rawData <- renameNWISColumns(rawData)
+  
+  spreadOver120 <- readNWISuv(siteNumber,parameterCd,
+                              as.Date(Sys.Date()-200),
+                              Sys.Date())
+  
+  expect_true(min(spreadOver120$dateTime) < as.POSIXct(Sys.Date(), tz="UTC"))
+  
   timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
                                "2013-11-03","2013-11-03", 
                                tz="America/Chicago")
