@@ -257,9 +257,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 
 #' Construct WQP url for data retrieval
 #'
-#' Imports data from WQP web service. This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/qwdata}
-#' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-#' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+#' Construct WQP url for data retrieval. This function gets the data from here: \url{https://www.waterqualitydata.us}
 #'
 #' @param siteNumber string or vector of strings USGS site number.  This is usually an 8 digit number
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
@@ -296,9 +294,8 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
     parameterCd <- paste(parameterCd, collapse=";")
   }
   
-  baseURL <- "http://www.waterqualitydata.us/Result/search?siteid="
+  baseURL <- drURL("wqpData", siteid = siteNumber) 
   url <- paste0(baseURL,
-                siteNumber,
                 ifelse(pCodeLogic,"&pCode=","&characteristicName="),
                 parameterCd)
   
@@ -336,21 +333,23 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
 #' url <- constructUseURL(years=c(1990,1995),stateCd="Ohio",countyCd = c(1,3), categories = "ALL")
 #' 
 constructUseURL <- function(years,stateCd,countyCd,categories){ 
-    baseURL <- "http://waterdata.usgs.gov/"
-    base2 <- "nwis/water_use?format=rdb&rdb_compression=value"
+
     if(is.null(stateCd)){
-      baseURL <- paste0(baseURL,base2)
-    } else{
+      baseURL <- drURL("useNat", format="rdb", rdb_compression="value")
+    } else {
       stateCd <- stateCdLookup(input = stateCd, outputType = "postal")
+      baseURL <- "https://waterdata.usgs.gov/"
+      base2 <- "nwis/water_use?format=rdb&rdb_compression=value"
       baseURL <- paste0(baseURL,paste0(stateCd,"/"),base2)
+      
       if(!is.null(countyCd)){
         
         if(length(countyCd) > 1) {countyCd <- paste(countyCd,collapse="%2C")}
           baseURL <- paste0(baseURL,"&wu_area=county&wu_county=",countyCd)
-      } else{
-          baseURL <- paste0(baseURL,"&wu_area=State%20Total")
-        }
+      } else {
+        baseURL <- paste0(baseURL,"&wu_area=State%20Total")
       }
+    }
     years <- paste(years, collapse="%2C")
     categories <- paste(categories, collapse = "%2C")
     retURL <- paste0(baseURL,"&wu_year=",years,"&wu_category=",categories)

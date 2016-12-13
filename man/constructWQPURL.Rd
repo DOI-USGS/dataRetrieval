@@ -23,9 +23,7 @@ retrieval for the latest possible record.}
 url string
 }
 \description{
-Imports data from WQP web service. This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/qwdata}
-A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+Construct WQP url for data retrieval. This function gets the data from here: \url{https://www.waterqualitydata.us}
 }
 \examples{
 siteNumber <- '01594440'

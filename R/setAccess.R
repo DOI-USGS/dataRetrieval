@@ -49,7 +49,12 @@ access = match.arg(access, c('public','internal','cooperator','USGS'))
   pkg.env$rating = "https://waterdata.usgs.gov/nwisweb/get_ratings/"
   pkg.env$qwdata = "https://nwis.waterdata.usgs.gov/nwis/qwdata"
   pkg.env$stat = "https://waterservices.usgs.gov/nwis/stat/"
+  pkg.env$useNat = "https://waterdata.usgs.gov/nwis/water_use"
+  # NOTE: state water use are still in: constructUseURL
 
+  pkg.env$wqpData = "https://www.waterqualitydata.us/Result/search"
+  pkg.env$wqpStation = "https://www.waterqualitydata.us/Station/search"
+  
   options(Access.dataRetrieval = access)
 }
 
