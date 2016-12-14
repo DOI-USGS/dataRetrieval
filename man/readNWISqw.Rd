@@ -61,9 +61,9 @@ variableInfo \tab data frame \tab A data frame containing information on the req
 }
 }
 \description{
-Imports data from NWIS web service. This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/qwdata}
-A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+Imports data from NWIS web service. This function gets the data from here: \url{https://nwis.waterdata.usgs.gov/nwis/qwdata}
+A list of parameter codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+A list of statistic codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 }
 \details{
 Valid parameter code groups are "All," or group codes:

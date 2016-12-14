@@ -1,6 +1,6 @@
 #' USGS Site File Data Retrieval
 #'
-#' Imports data from USGS site file site. This function gets data from here: \url{http://waterservices.usgs.gov/}
+#' Imports data from USGS site file site. This function gets data from here: \url{https://waterservices.usgs.gov/}
 #'
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @keywords data import USGS web service
