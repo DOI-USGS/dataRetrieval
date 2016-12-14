@@ -1,6 +1,6 @@
 #' Daily Value USGS NWIS Data Retrieval
 #'
-#' Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
+#' Imports data from NWIS web service. This function gets the data from here: \url{https://waterservices.usgs.gov/}
 #'
 #' @param siteNumber character USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a character vector.
 #' @param parameterCd character of USGS parameter code(s).  This is usually an 5 digit number.

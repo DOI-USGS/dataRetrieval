@@ -31,10 +31,10 @@ test_that("General NWIS retrievals working", {
   # saveRDS(qwData, "rds/qwData.rds")
   expect_is(qwData$startDateTime, "POSIXct")
   
-  url <- "http://waterservices.usgs.gov/nwis/dv/?site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06"
+  url <- "https://waterservices.usgs.gov/nwis/dv/?site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06"
   dv <- importRDB1(url, asDateTime = FALSE)
   
-  urlEmpty <- "http://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=413437087150601&sort_key=site_no&group_key=NONE&inventory_output=0&begin_date=&end_date=&TZoutput=0&param_group=NUT,INN&qw_attributes=0&format=rdb&qw_sample_wide=0&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&list_of_search_criteria=multiple_site_no"
+  urlEmpty <- "https://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=413437087150601&sort_key=site_no&group_key=NONE&inventory_output=0&begin_date=&end_date=&TZoutput=0&param_group=NUT,INN&qw_attributes=0&format=rdb&qw_sample_wide=0&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&list_of_search_criteria=multiple_site_no"
   dv <- importRDB1(urlEmpty, asDateTime = FALSE)
   # saveRDS(dv, "rds/emptyDV.rds")
   expect_that(nrow(dv) == 0, is_true())
@@ -50,6 +50,12 @@ test_that("General NWIS retrievals working", {
   # saveRDS(waterYearStat, "rds/waterYearStat.rds")
   expect_is(waterYearStat$mean_va,"numeric")
   expect_is(waterYearStat$parameter_cd,"character")
+  
+  #2 data descriptors, but some random empty "values" tag:
+  urlTest <- "https://nwis.waterservices.usgs.gov/nwis/iv/?site=11447650&format=waterml,1.1&ParameterCd=63680&startDT=2016-12-13&endDT=2016-12-13"
+  x <- importWaterML1(urlTest)
+  expect_equal(ncol(x), 8)
+  
 })
 
 

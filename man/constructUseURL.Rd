@@ -19,7 +19,7 @@ constructUseURL(years, stateCd, countyCd, categories)
 url string
 }
 \description{
-Reconstructs URLs to retrieve data from here: \url{http://waterdata.usgs.gov/nwis/wu}
+Reconstructs URLs to retrieve data from here: \url{https://waterdata.usgs.gov/nwis/wu}
 }
 \examples{
 url <- constructUseURL(years=c(1990,1995),stateCd="Ohio",countyCd = c(1,3), categories = "ALL")

@@ -154,9 +154,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     #descriptor will be appended to col name if so
     valParents <- xml_find_all(t,".//ns1:values")
     obsDF <- NULL
-    useMethodDesc <- FALSE
-    if(length(valParents) > 1){ useMethodDesc <- TRUE} #append the method description to colnames later
-   
+    
+    useMethodDesc <- length(valParents) > 1 #append the method description to colnames later
+
     sourceInfo <- xml_children(xml_find_all(t, ".//ns1:sourceInfo"))
     variable <- xml_children(xml_find_all(t, ".//ns1:variable"))
     agency_cd <- xml_attr(sourceInfo[xml_name(sourceInfo)=="siteCode"],"agencyCode")
@@ -185,72 +185,76 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     for(v in valParents){
       obsColName <- paste(pCode,statCode,sep = "_")
       obs <- xml_find_all(v, ".//ns1:value")
-      values <- as.numeric(xml_text(obs))  #actual observations
-      nObs <- length(values)
-      qual <- xml_attr(obs,"qualifiers")
-      if(all(is.na(qual))){
-        noQual <- TRUE
-      }else{noQual <- FALSE}
-      
-      dateTime <- xml_attr(obs,"dateTime")
-      if(asDateTime){
-        numChar <- nchar(dateTime)
-        dateTime <- parse_date_time(dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
-                                                                "%Y-%m-%dT%H:%M:%S","%Y-%m-%dT%H:%M:%OS",
-                                                                "%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
-        if(any(numChar < 20) & any(numChar > 16)){
-          offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0),
-                                      code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST",""),
-                                      stringsAsFactors = FALSE)
+      if(length(obs) > 0){
+        values <- as.numeric(xml_text(obs))  #actual observations
+        nObs <- length(values)
+        qual <- xml_attr(obs,"qualifiers")
+        
+        noQual <- all(is.na(qual))
+  
+        dateTime <- xml_attr(obs,"dateTime")
+        
+        if(asDateTime){
+          numChar <- nchar(dateTime)
+          dateTime <- parse_date_time(dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
+                                                                  "%Y-%m-%dT%H:%M:%S","%Y-%m-%dT%H:%M:%OS",
+                                                                  "%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
+          if(any(numChar < 20) & any(numChar > 16)){
+            offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0),
+                                        code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST",""),
+                                        stringsAsFactors = FALSE)
+            
+            #not sure there is still a case for this (no offset on times)?
+            dateTime[numChar < 20 & numChar > 16] <- dateTime[numChar < 20 & numChar > 16] + offsetLibrary[offsetLibrary$code == defaultTZ,"offset"]*60*60
+            warning(paste("site",site_no[1], "had data without time zone offsets, so DST could not be accounted for"))
+          }                                        
           
-          #not sure there is still a case for this (no offset on times)?
-          dateTime[numChar < 20 & numChar > 16] <- dateTime[numChar < 20 & numChar > 16] + offsetLibrary[offsetLibrary$code == defaultTZ,"offset"]*60*60
-          warning(paste("site",site_no[1], "had data without time zone offsets, so DST could not be accounted for"))
-        }                                        
-        
-        #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
-        attr(dateTime, 'tzone') <- tz 
-        tzCol <- rep(tz,nObs)
-      }else{
-        tzCol <- rep(defaultTZ, nObs)
-      }
-      #create column names, addressing if methodDesc is needed
-      if(useMethodDesc){
-        methodDesc <- xml_text(xml_find_all(v, ".//ns1:methodDescription"))
-        #this keeps column names consistent with old version
-        methodDesc <- gsub("\\[|\\]| |\\(|\\)",".",methodDesc)
-        
-        #sometimes methodDesc is empty
-        if(nchar(methodDesc) > 0){
-          obsColName <- paste("X",methodDesc,obsColName, sep = "_")
+          #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
+          attr(dateTime, 'tzone') <- tz 
+          tzCol <- rep(tz,nObs)
         }else{
+          tzCol <- rep(defaultTZ, nObs)
+        }
+        #create column names, addressing if methodDesc is needed
+        if(useMethodDesc){
+          methodDesc <- xml_text(xml_find_all(v, ".//ns1:methodDescription"))
+          #this keeps column names consistent with old version
+          methodDesc <- gsub("\\[|\\]| |\\(|\\)",".",methodDesc)
+          
+          #sometimes methodDesc is empty
+          if(nchar(methodDesc) > 0){
+            obsColName <- paste("X",methodDesc,obsColName, sep = "_")
+          }else{
+            obsColName <- paste("X",obsColName, sep = "_")
+          }
+        } else{
           obsColName <- paste("X",obsColName, sep = "_")
         }
-      } else{
-        obsColName <- paste("X",obsColName, sep = "_")
-      }
-      qualColName <- paste(obsColName,"cd",sep = "_")
-      
-      valParentDF <- cbind.data.frame(dateTime, values, qual, tzCol, stringsAsFactors = FALSE)
-      names(valParentDF) <- c("dateTime",obsColName, qualColName, "tz_cd")
-      #delete qual column if all NA
-      if(all(is.na(valParentDF[,eval(qualColName)]))){
-        valParentDF <- subset(valParentDF, select = c("dateTime", eval(obsColName), "tz_cd"))
-      }
-      if(nrow(valParentDF) > 0){
-        if(is.null(obsDF)){
-          obsDF <- valParentDF
-        }else{
-          obsDF <- full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
-        }
-      }else{
-        #need column names for joining later
-        obsDF <- data.frame(dateTime=character(0), tz_cd=character(0), stringsAsFactors = FALSE)
-        if(asDateTime){
-          obsDF$dateTime <- as.POSIXct(obsDF$dateTime)
-          attr(obsDF$dateTime, "tzone") <- tz
-        }
+        qualColName <- paste(obsColName,"cd",sep = "_")
         
+        
+        valParentDF <- cbind.data.frame(dateTime, values, qual, tzCol, stringsAsFactors = FALSE)
+        names(valParentDF) <- c("dateTime",obsColName, qualColName, "tz_cd")
+        #delete qual column if all NA
+        if(all(is.na(valParentDF[,eval(qualColName)]))){
+          valParentDF <- subset(valParentDF, select = c("dateTime", eval(obsColName), "tz_cd"))
+        }
+        if(nrow(valParentDF) > 0){
+          if(is.null(obsDF)){
+            obsDF <- valParentDF
+          } else {
+            obsDF <- full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
+          }
+        } else {
+          #need column names for joining later
+          obsDF <- data.frame(dateTime=character(0), tz_cd=character(0), stringsAsFactors = FALSE)
+          if(asDateTime){
+            obsDF$dateTime <- as.POSIXct(obsDF$dateTime)
+            attr(obsDF$dateTime, "tzone") <- tz
+          }
+          
+          
+        }
       }
     }
    
