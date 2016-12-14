@@ -18,19 +18,14 @@
 #' @importFrom dplyr rbind_all
 #' @importFrom lubridate parse_date_time
 #' @examples
-#' baseURL <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
+#' baseURL <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
 #' URL <- paste(baseURL, "sites=01646500",
 #'      "startDT=2014-09-01",
 #'      "endDT=2014-09-08",
 #'      "statCd=00003",
 #'      "parameterCd=00060",sep="&")
-#' URL2 <- paste("http://cida.usgs.gov/noreast-sos/simple?request=GetObservation",
-#'      "featureID=MD-BC-BC-05",
-#'      "offering=RAW",
-#'      "observedProperty=WATER",sep="&")
 #' \dontrun{
 #' dataReturned1 <- importWaterML2(URL)
-#' dataReturn2 <- importWaterML2(URL2, TRUE)
 #' URLmulti <-  paste(baseURL,
 #'   "sites=04024430,04024000",
 #'   "startDT=2014-09-01",

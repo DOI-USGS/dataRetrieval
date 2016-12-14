@@ -156,7 +156,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     obsDF <- NULL
     useMethodDesc <- FALSE
     if(length(valParents) > 1){ useMethodDesc <- TRUE} #append the method description to colnames later
-   
+    
     sourceInfo <- xml_children(xml_find_all(t, ".//ns1:sourceInfo"))
     variable <- xml_children(xml_find_all(t, ".//ns1:variable"))
     agency_cd <- xml_attr(sourceInfo[xml_name(sourceInfo)=="siteCode"],"agencyCode")
@@ -186,6 +186,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       obsColName <- paste(pCode,statCode,sep = "_")
       obs <- xml_find_all(v, ".//ns1:value")
       values <- as.numeric(xml_text(obs))  #actual observations
+
       nObs <- length(values)
       qual <- xml_attr(obs,"qualifiers")
       if(all(is.na(qual))){
@@ -196,8 +197,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
       if(asDateTime){
         numChar <- nchar(dateTime)
         dateTime <- parse_date_time(dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
-                                                                "%Y-%m-%dT%H:%M:%S","%Y-%m-%dT%H:%M:%OS",
-                                                                "%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
+                                                "%Y-%m-%dT%H:%M:%S","%Y-%m-%dT%H:%M:%OS",
+                                                "%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
         if(any(numChar < 20) & any(numChar > 16)){
           offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0),
                                       code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST",""),
@@ -245,15 +246,17 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
         }
       }else{
         #need column names for joining later
-        obsDF <- data.frame(dateTime=character(0), tz_cd=character(0), stringsAsFactors = FALSE)
-        if(asDateTime){
-          obsDF$dateTime <- as.POSIXct(obsDF$dateTime)
-          attr(obsDF$dateTime, "tzone") <- tz
+        # but don't overwrite:
+        if(is.null(obsDF)){
+          obsDF <- data.frame(dateTime=character(0), tz_cd=character(0), stringsAsFactors = FALSE)
+          if(asDateTime){
+            obsDF$dateTime <- as.POSIXct(obsDF$dateTime)
+            attr(obsDF$dateTime, "tzone") <- tz
+          }
         }
-        
       }
     }
-   
+    
     if(is.null(obsDF)){
       mergedSite <- data.frame()
       next

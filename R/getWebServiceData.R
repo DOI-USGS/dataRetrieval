@@ -52,7 +52,7 @@ getWebServiceData <- function(obs_url, ...){
 
     if(headerInfo$`content-type` == "text/tab-separated-values;charset=UTF-8"){
       returnedDoc <- content(returnedList, type="text",encoding = "UTF-8")
-    } else if (headerInfo$`content-type` == "text/html"){
+    } else if (headerInfo$`content-type` %in% c("text/html","text/html; charset=UTF-8") ){
       txt <- readBin(returnedList$content, character())
       message(txt)
       return(txt)
