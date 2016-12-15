@@ -279,7 +279,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     #replace no data vals with NA, change attribute df
     noDataVal <- as.numeric(varText$noDataValue)
     if(nObs > 0){
-      obsDF[obsDF$values == noDataVal] <- NA
+      obsDF[[obsColName]][obsDF[[obsColName]] == noDataVal] <- NA
     }
     varText$noDataValue <- NA
     
