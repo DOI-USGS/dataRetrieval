@@ -17,7 +17,7 @@ COUNTY_ID \tab character \tab County id \cr
 }
 }
 \description{
-Data pulled from \url{https://www2.census.gov/geo/docs/reference/codes/files/national_county.txt}
+Data pulled from \url{http://www2.census.gov/geo/docs/reference/codes/files/national_county.txt}
 on April 1, 2015.
 }
 \examples{
