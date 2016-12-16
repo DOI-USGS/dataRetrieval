@@ -20,7 +20,7 @@ LazyLoad: \tab yes\cr
 \details{
 Retrieval functions for USGS and EPA hydrologic and water quality data.
 
-Please see \url{https://pubs.usgs.gov/tm/04/a10/} for more information.
+Please see \url{https://pubs.er.usgs.gov/publication/tm4A10} for more information.
 }
 \author{
 Laura De Cicco \email{ldecicco@usgs.gov}

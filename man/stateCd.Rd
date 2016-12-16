@@ -16,7 +16,7 @@ STATENS \tab character \tab  Geographic Names Information System Identifier (GNI
 }
 }
 \description{
-Data pulled from \url{https://www2.census.gov/geo/docs/reference/state.txt}
+Data pulled from \url{http://www2.census.gov/geo/docs/reference/state.txt}
 on April 1, 2015.
 }
 \examples{
