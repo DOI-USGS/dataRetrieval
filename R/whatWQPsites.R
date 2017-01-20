@@ -60,7 +60,11 @@
 #' }
 whatWQPsites <- function(...,zip=FALSE){
 
-  matchReturn <- list(...)
+  if(all(sapply(list(...), class) != "list")){
+    matchReturn <- list(...)
+  } else {
+    matchReturn <- (...)
+  }
   
   values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))
   

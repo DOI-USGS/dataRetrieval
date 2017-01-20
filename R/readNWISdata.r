@@ -95,16 +95,26 @@
 #'                           parameterCd="00065")
 #' allDailyStats <- readNWISdata(site=c("03111548"),
 #'                               service="stat",
-#'                               statReportType="daily")
-#'                               service="stat",statReportType="daily",
+#'                               statReportType="daily",
 #'                               statType=c("p25","p50","p75","min","max"),
-#'                               parameterCd="00065")
+#'                               parameterCd="00060")
 #'
 #'dailyWV <- readNWISdata(stateCd = "West Virginia", parameterCd = "00060")
+#'
+#'arg.list <- list(site="03111548",
+#'                 statReportType="daily",
+#'                 statType=c("p25","p50","p75","min","max"),
+#'                 parameterCd="00060")
+#'allDailyStats_2 <- readNWISdata(arg.list, service="stat")
 #' }
 readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   
-  matchReturn <- list(...)
+  if(all(sapply(list(...), class) != "list")){
+    matchReturn <- list(...)
+  } else {
+    matchReturn <- (...)
+    #TODO: extract service/asDateTime,convertType?
+  }
   
   match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata","stat"))
   
@@ -163,23 +173,16 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     if(service == "qwdata"){
       values["qw_sample_wide"] <- "wide"
     }
-    
   } 
   
   if("tz" %in% names(values)){
     tz <- values["tz"]
     if(tz != ""){
-      rTZ <- c("America/New_York","America/Chicago",
-               "America/Denver","America/Los_Angeles",
-               "America/Anchorage","America/Honolulu",
-               "America/Jamaica","America/Managua",
-               "America/Phoenix","America/Metlakatla","UTC")
-      tz <- match.arg(tz, rTZ)
-      if("UTC" == tz) tz <- ""
+      tz <- match.arg(tz, OlsonNames())
     }
     values <- values[!(names(values) %in% "tz")]
   } else {
-    tz <- ""
+    tz <- "UTC"
   }
   
   if(service %in% c("site","gwlevels","stat")){

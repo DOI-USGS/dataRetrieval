@@ -96,12 +96,25 @@
 #' startDate <- as.Date("2013-01-01")
 #' nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
 #'                         characteristicType="Nutrient")
+#' secchi.names = c("Depth, Secchi disk depth", 
+#'                  "Depth, Secchi disk depth (choice list)", 
+#'                  "Secchi Reading Condition (choice list)", 
+#'                  "Secchi depth", 
+#'                  "Water transparency, Secchi disc")
+#' args <- list('startDateLo' = startDate, 
+#'              'startDateHi' = "2013-12-31", 
+#'               statecode="WI", 
+#'               characteristicName=secchi.names)
 #' 
-#'                         
+#' wqp.data <- readWQPdata(args)                  
 #' }
 readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
   
-  matchReturn <- list(...)
+  if(all(sapply(list(...), class) != "list")){
+    matchReturn <- list(...)
+  } else {
+    matchReturn <- (...)
+  }
 
   values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))
   
@@ -132,17 +145,11 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
   if("tz" %in% names(values)){
     tz <- values["tz"]
     if(tz != ""){
-      rTZ <- c("America/New_York","America/Chicago",
-               "America/Denver","America/Los_Angeles",
-               "America/Anchorage","America/Honolulu",
-               "America/Jamaica","America/Managua",
-               "America/Phoenix","America/Metlakatla","UTC")
-      tz <- match.arg(tz, rTZ)
-      if("UTC" == tz) tz <- ""
+      tz <- match.arg(tz, OlsonNames())
     }
     values <- values[!(names(values) %in% "tz")]
   } else {
-    tz <- ""
+    tz <- "UTC"
   }
 
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))

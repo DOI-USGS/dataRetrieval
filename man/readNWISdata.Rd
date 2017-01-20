@@ -104,12 +104,17 @@ dailyStat <- readNWISdata(site=c("03112500","03111520"),
                           parameterCd="00065")
 allDailyStats <- readNWISdata(site=c("03111548"),
                               service="stat",
-                              statReportType="daily")
-                              service="stat",statReportType="daily",
+                              statReportType="daily",
                               statType=c("p25","p50","p75","min","max"),
-                              parameterCd="00065")
+                              parameterCd="00060")
 
 dailyWV <- readNWISdata(stateCd = "West Virginia", parameterCd = "00060")
+
+arg.list <- list(site="03111548",
+                statReportType="daily",
+                statType=c("p25","p50","p75","min","max"),
+                parameterCd="00060")
+allDailyStats_2 <- readNWISdata(arg.list, service="stat")
 }
 }
 \seealso{

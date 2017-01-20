@@ -148,6 +148,18 @@ test_that("External importWaterML1 test", {
                               endDate="2014-05-01T12:00",
                               tz="blah"))
 
+  arg.list <- list(sites="05114000", 
+                   parameterCd="00060",
+                   startDate="2014-05-01T00:00",
+                   endDate="2014-05-01T12:00",
+                   tz="America/Chicago")
+  
+  chi_iv <- readNWISdata(arg.list, 
+                         service="iv")
+  
+  expect_true(all(chi_iv$tz_cd == "America/Chicago"))
+  expect_equal(chi_iv$dateTime[1], as.POSIXct("2014-05-01T00:00", format = "%Y-%m-%dT%H:%M", tz="America/Chicago"))
+  expect_equal(chi_iv$dateTime[nrow(chi_iv)], as.POSIXct("2014-05-01T12:00", format = "%Y-%m-%dT%H:%M", tz="America/Chicago"))
   
 })
 

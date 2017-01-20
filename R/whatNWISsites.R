@@ -36,7 +36,12 @@
 #' }
 whatNWISsites <- function(...){
   
-  matchReturn <- list(...)
+  if(all(sapply(list(...), class) != "list")){
+    matchReturn <- list(...)
+  } else {
+    matchReturn <- (...)
+  }
+  
   values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
   
   names(values)[names(values) == "siteNumber"] <- "sites"
