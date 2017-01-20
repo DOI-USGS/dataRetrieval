@@ -87,7 +87,7 @@ NULL
 
 #' US State Code Lookup Table
 #'
-#' Data pulled from \url{http://www2.census.gov/geo/docs/reference/state.txt}
+#' Data pulled from \url{https://www2.census.gov/geo/docs/reference/state.txt}
 #' on April 1, 2015. 
 #'
 #' @name stateCd

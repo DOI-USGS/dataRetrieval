@@ -4,17 +4,18 @@
 \alias{importWaterML1}
 \title{Function to return data from the NWISWeb WaterML1.1 service}
 \usage{
-importWaterML1(obs_url, asDateTime = FALSE, tz = "")
+importWaterML1(obs_url, asDateTime = FALSE, tz = "UTC")
 }
 \arguments{
 \item{obs_url}{character or raw, containing the url for the retrieval or a file path to the data file, or raw XML.}
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
 
-\item{tz}{character to set timezone attribute of . Default is an empty quote, which converts the 
-s to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
-Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
+\item{tz}{character to set timezone attribute of datetime. Default converts the datetimes to UTC 
+(properly accounting for daylight savings times based on the data's provided tz_cd column).
+Recommended US values include "UTC","America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla".
+For a complete list, see \url{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}}
 }
 \value{
 A data frame with the following columns:

@@ -5,10 +5,11 @@
 #'
 #' @param obs_url character or raw, containing the url for the retrieval or a file path to the data file, or raw XML.
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
-#' @param tz character to set timezone attribute of . Default is an empty quote, which converts the 
-#' s to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
-#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+#' @param tz character to set timezone attribute of datetime. Default converts the datetimes to UTC 
+#' (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' Recommended US values include "UTC","America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla".
+#' For a complete list, see \url{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -108,7 +109,7 @@
 #' importFile <- importWaterML1(fullPath,TRUE)
 #'
 
-importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
+importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   #note: obs_url is a dated name, does not have to be a url/path
   raw <- FALSE
   if(class(obs_url) == "character" && file.exists(obs_url)){
@@ -120,13 +121,10 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
     returnedDoc <- xml_root(getWebServiceData(obs_url, encoding='gzip'))
   }
   
-  if(tz != ""){  #check tz is valid if supplied
-    tz <- match.arg(tz, c("America/New_York","America/Chicago",
-                          "America/Denver","America/Los_Angeles",
-                          "America/Anchorage","America/Honolulu",
-                          "America/Jamaica","America/Managua",
-                          "America/Phoenix","America/Metlakatla"))
-  }else{tz <- "UTC"}
+  if(tz == ""){  #check tz is valid if supplied
+    tz <- "UTC"
+  }
+  tz <- match.arg(tz, OlsonNames())
   
   timeSeries <- xml_find_all(returnedDoc, ".//ns1:timeSeries") #each parameter/site combo
   
@@ -189,9 +187,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
 
       nObs <- length(values)
       qual <- xml_attr(obs,"qualifiers")
-      if(all(is.na(qual))){
-        noQual <- TRUE
-      }else{noQual <- FALSE}
+      
+      noQual <- all(is.na(qual))
       
       dateTime <- xml_attr(obs,"dateTime")
       if(asDateTime){
@@ -334,6 +331,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   tzLoc <- grep("tz_cd", names(mergedDF))
   mergedDF <- mergedDF[c(mergedNames[-tzLoc],mergedNames[tzLoc])]
   mergedDF <- arrange(mergedDF,site_no, dateTime)
+  
+  names(mergedDF) <- make.names(names(mergedDF))
   
   #attach other site info etc as attributes of mergedDF
   if(!raw){
