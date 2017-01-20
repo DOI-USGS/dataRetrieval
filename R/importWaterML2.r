@@ -42,12 +42,10 @@
 importWaterML2 <- function(obs_url, asDateTime=FALSE, tz=""){
   
   if(tz != ""){
-    tz <- match.arg(tz, c("America/New_York","America/Chicago",
-                          "America/Denver","America/Los_Angeles",
-                          "America/Anchorage","America/Honolulu",
-                          "America/Jamaica","America/Managua",
-                          "America/Phoenix","America/Metlakatla"))
-  }else{tz = "UTC"}
+    tz <- match.arg(tz, OlsonNames())
+  } else {
+    tz = "UTC"
+  }
   
   raw <- FALSE
   if(class(obs_url) == "character" && file.exists(obs_url)){

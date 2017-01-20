@@ -86,11 +86,9 @@
 importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz=""){
   
   if(tz != ""){
-    tz <- match.arg(tz, c("America/New_York","America/Chicago",
-                          "America/Denver","America/Los_Angeles",
-                          "America/Anchorage","America/Honolulu",
-                          "America/Jamaica","America/Managua",
-                          "America/Phoenix","America/Metlakatla","UTC"))
+    tz <- match.arg(tz, OlsonNames())
+  } else {
+    tz <- "UTC"
   }
   
 
