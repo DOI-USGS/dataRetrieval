@@ -4,7 +4,7 @@
 \alias{importRDB1}
 \title{Function to return data from the NWIS RDB 1.0 format}
 \usage{
-importRDB1(obs_url, asDateTime = TRUE, convertType = TRUE, tz = "")
+importRDB1(obs_url, asDateTime = TRUE, convertType = TRUE, tz = "UTC")
 }
 \arguments{
 \item{obs_url}{character containing the url for the retrieval or a file path to the data file.}
@@ -14,10 +14,11 @@ importRDB1(obs_url, asDateTime = TRUE, convertType = TRUE, tz = "")
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
 
-\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the 
-datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
-Possible values to provide include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
+\item{tz}{character to set timezone attribute of datetime. Default converts the datetimes to UTC 
+(properly accounting for daylight savings times based on the data's provided tz_cd column).
+Recommended US values include "UTC","America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla".
+For a complete list, see \url{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}}
 }
 \value{
 A data frame with the following columns:
