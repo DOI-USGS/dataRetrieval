@@ -7,7 +7,7 @@
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
-#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' Possible values to provide include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return mergedDF a data frame time, value, description, qualifier, and identifier
 #' @export
