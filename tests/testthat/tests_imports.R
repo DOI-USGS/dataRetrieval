@@ -140,6 +140,15 @@ test_that("External importWaterML1 test", {
   data <- importWaterML1(url, tz = "America/New_York", asDateTime = TRUE)
   expect_true(data.class(data$dateTime) == "POSIXct")
   expect_true(nrow(data) > 0)
+  
+  expect_error(readNWISdata(sites="05114000", 
+                              service="iv",
+                              parameterCd="00060",
+                              startDate="2014-05-01T00:00",
+                              endDate="2014-05-01T12:00",
+                              tz="blah"))
+
+  
 })
 
 context("importWaterML2")
