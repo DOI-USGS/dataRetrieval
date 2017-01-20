@@ -126,7 +126,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
                           "America/Anchorage","America/Honolulu",
                           "America/Jamaica","America/Managua",
                           "America/Phoenix","America/Metlakatla"))
-  }else{tz <- "UTC"}
+  } else {
+    tz <- "UTC"
+  }
   
   timeSeries <- xml_find_all(returnedDoc, ".//ns1:timeSeries") #each parameter/site combo
   
@@ -189,9 +191,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
 
       nObs <- length(values)
       qual <- xml_attr(obs,"qualifiers")
-      if(all(is.na(qual))){
-        noQual <- TRUE
-      }else{noQual <- FALSE}
+      
+      noQual <- all(is.na(qual))
       
       dateTime <- xml_attr(obs,"dateTime")
       if(asDateTime){
@@ -334,6 +335,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz=""){
   tzLoc <- grep("tz_cd", names(mergedDF))
   mergedDF <- mergedDF[c(mergedNames[-tzLoc],mergedNames[tzLoc])]
   mergedDF <- arrange(mergedDF,site_no, dateTime)
+  
+  names(mergedDF) <- make.names(names(mergedDF))
   
   #attach other site info etc as attributes of mergedDF
   if(!raw){
