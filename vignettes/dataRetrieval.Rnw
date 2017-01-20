@@ -275,7 +275,7 @@ Table \ref{tab:func} describes the functions available in the dataRetrieval pack
 %------------------------------------------------------------ 
 In this section, examples of Web retrievals document how to get raw data. This data includes site information (\ref{sec:usgsSite}), measured parameter information (\ref{sec:usgsParams}), historical daily values(\ref{sec:usgsDaily}), unit values (which include real-time data but can also include other sensor data stored at regular time intervals) (\ref{sec:usgsRT}), water quality data (\ref{sec:usgsWQP}), groundwater level data (\ref{sec:gwl}), peak flow data (\ref{sec:peak}), rating curve data (\ref{sec:rating}, and surface-water measurement data (\ref{sec:meas}). Section \ref{sec:metadata} shows instructions for getting metadata that is attached to each returned data frame.
 
-The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrieval package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits for surface-water sites and 15 digits for groundwater sites.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{http://maps.waterdata.usgs.gov/mapper/index.html}.
+The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the dataRetrieval package as \enquote{siteNumber}).  Often (but not always), these ID's are 8 digits for surface-water sites and 15 digits for groundwater sites.  The first step to finding data is discovering this siteNumber. There are many ways to do this, one is the National Water Information System: Mapper \url{https://maps.waterdata.usgs.gov/mapper/index.html}.
 
 Once the siteNumber is known, the next required input for USGS data retrievals is the \enquote{parameter code}.  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents \enquote{Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen}, with units of \enquote{mg/l as N}. 
 
@@ -351,7 +351,7 @@ siteINFO <- readNWISsite(siteNumbers)
 @
 
 Site information is obtained from:
-\url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
+\url{https://waterservices.usgs.gov/rest/Site-Test-Tool.html}
 
 Information on the returned data can be found with the \texttt{comment} function as described in section \ref{sec:metadata}.
 
@@ -453,7 +453,7 @@ parameterINFO <- readNWISpCode(parameterCd)
 \subsection{Daily Data}
 \label{sec:usgsDaily}
 %------------------------------------------------------------
-To obtain daily records of USGS data, use the \texttt{readNWISdv} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, and statCd (defaults to \texttt{"}00003\texttt{"}).  If you want to use the default values, you do not need to list them in the function call. Daily data is pulled from \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}.
+To obtain daily records of USGS data, use the \texttt{readNWISdv} function. The arguments for this function are siteNumber, parameterCd, startDate, endDate, and statCd (defaults to \texttt{"}00003\texttt{"}).  If you want to use the default values, you do not need to list them in the function call. Daily data is pulled from \url{https://waterservices.usgs.gov/rest/DV-Test-Tool.html}.
 
 The dates (start and end) must be in the format \texttt{"}YYYY-MM-DD\texttt{"} (note: the user must include the quotes).  Setting the start date to \texttt{"}\texttt{"} (no space) will prompt the program to ask for the earliest date, and setting the end date to \texttt{"}\texttt{"} (no space) will prompt for the latest available date.
 
@@ -575,7 +575,7 @@ America/Phoenix
 America/Metlakatla
 \end{verbatim}
 
-Data are retrieved from \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package. Site information and measured parameter information is attached to the data frame as attributes. This is discused further in section \ref{sec:metadata}.
+Data are retrieved from \url{https://waterservices.usgs.gov/rest/IV-Test-Tool.html}. There are occasions where NWIS values are not reported as numbers, instead a common example is \enquote{Ice.}  Any value that cannot be converted to a number will be reported as NA in this package. Site information and measured parameter information is attached to the data frame as attributes. This is discused further in section \ref{sec:metadata}.
 
 \newpage
 
@@ -673,7 +673,7 @@ surfaceData <- readNWISmeas(siteNumber)
 \section{Water Quality Portal Web Retrievals}
 \label{sec:usgsSTORET}
 %------------------------------------------------------------
-There are additional water quality data sets available from the Water Quality Data Portal (\url{http://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET database (data from EPA), NWIS database (data from USGS), STEWARDS database (data from USDA), and additional databases are slated to be included in the future.  Because only USGS uses parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{readWQPqw} function can take either a USGS parameter code, or a more general characteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
+There are additional water quality data sets available from the Water Quality Data Portal (\url{https://www.waterqualitydata.us/}).  These data sets can be housed in either the STORET database (data from EPA), NWIS database (data from USGS), STEWARDS database (data from USDA), and additional databases are slated to be included in the future.  Because only USGS uses parameter codes, a \texttt{"}characteristic name\texttt{"} must be supplied.  The \texttt{readWQPqw} function can take either a USGS parameter code, or a more general characteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
 
 
 <<label=getQWData, echo=TRUE, eval=FALSE>>=
@@ -683,7 +683,7 @@ specificCond <- readWQPqw('WIDNR_WQX-10032762',
 
 A tool for finding NWIS characteristic names can be found at: 
 
-\url{http://www.waterqualitydata.us/public_srsnames/}
+\url{https://www.waterqualitydata.us/public_srsnames/}
 
 \FloatBarrier
 
@@ -699,11 +699,11 @@ The previous examples all took specific input arguments: siteNumber, parameterCd
 %------------------------------------------------------------
 The function \texttt{whatNWISsites} can be used to discover NWIS sites based on any query that the NWIS Site Service offers. This is done by using the \texttt{"..."} argument, which allows the user to use any arbitrary input argument. We can then use the service here:
 
-\url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}
+\url{https://waterservices.usgs.gov/rest/Site-Test-Tool.html}
 
 to discover many options for searching for NWIS sites. For example, you may want to search for sites in a lat/lon bounding box, or only sites tidal streams, or sites with water quality samples, sites above a certain altitude, etc. The results of this site query generate a URL. For example, the tool provided a search within a specified bounding box, for sites that have daily discharge (parameter code = 00060) and temperature (parameter code = 00010). The generated URL is:
 
-\url{http://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv}
+\url{https://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv}
 
 The following dataRetrieval code can be used to get those sites:
 
@@ -731,10 +731,10 @@ For NWIS data, the function \texttt{readNWISdata} can be used. The argument list
 \multicolumn{1}{c}{\textbf{\textsf{Description}}}  &
 \multicolumn{1}{c}{\textbf{\textsf{Reference URL}}} \\  [0pt]
   \hline
-  daily values &  dv & \url{http://waterservices.usgs.gov/rest/DV-Test-Tool.html}\\
-  [5pt]instantaneous & iv & \url{http://waterservices.usgs.gov/rest/IV-Test-Tool.html}\\
-  [5pt]groundwater levels & gwlevels & \url{http://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html}\\
-  [5pt]water quality & qwdata & \url{http://nwis.waterdata.usgs.gov/nwis/qwdata}\\
+  daily values &  dv & \url{https://waterservices.usgs.gov/rest/DV-Test-Tool.html}\\
+  [5pt]instantaneous & iv & \url{https://waterservices.usgs.gov/rest/IV-Test-Tool.html}\\
+  [5pt]groundwater levels & gwlevels & \url{https://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html}\\
+  [5pt]water quality & qwdata & \url{https://nwis.waterdata.usgs.gov/nwis/qwdata}\\
    \hline
 \end{tabular}
 }
@@ -761,7 +761,7 @@ siteInfo <- attr(dischargeWI, "siteInfo")
 
 Just as with NWIS, the Water Quality Portal (WQP) offers a variety of ways to search for sites and request data. The possible Web service arguments for WQP site searches is found here:
 
-\url{http://www.waterqualitydata.us/webservices_documentation.jsp}
+\url{https://www.waterqualitydata.us/webservices_documentation}
 
 To discover available sites in the WQP in New Jersey that have measured Chloride, use the function \texttt{whatWQPsites}.
 
