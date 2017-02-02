@@ -10,6 +10,13 @@ test_that("Unit value data returns correct types", {
 
   rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
   rawData <- renameNWISColumns(rawData)
+  
+  spreadOver120 <- readNWISuv(siteNumber,parameterCd,
+                              as.Date(Sys.Date()-200),
+                              Sys.Date())
+  
+  expect_true(min(spreadOver120$dateTime) < as.POSIXct(Sys.Date(), tz="UTC"))
+  
   timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
                                "2013-11-03","2013-11-03", 
                                tz="America/Chicago")
@@ -18,9 +25,7 @@ test_that("Unit value data returns correct types", {
   timeZoneChange <- renameNWISColumns(timeZoneChange)
   expect_is(rawData$dateTime, 'POSIXct')
   expect_is(rawData$Flow_Inst, 'numeric')
-  # expect_that(attr(rawData, "url"), equals(
-  #     "http://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
-  # )
+  expect_equal(attr(rawData, "url"), "https://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
 #   #First switchover to standard time:
 #   expect_that(as.numeric(timeZoneChange[which(timeZoneChange$tz_cd == "America/Chicago")[1],"dateTime"]),
 #               equals(as.numeric(as.POSIXct("2013-11-03 01:00:00", tz="UTC")+60*60*6)))
@@ -34,6 +39,9 @@ test_that("Unit value data returns correct types", {
                                  "dateTime","X_.YSI.6136.UP._63680_00000",   
                                  "X_YSI.6136.DOWN_63680_00000","X_.YSI.6136.UP._63680_00000_cd",
                                  "X_YSI.6136.DOWN_63680_00000_cd","tz_cd")))
+  
+  noData <- readNWISuv("01196500","00010", "2016-06-15", "2016-06-15")
+  # expect_equal(noData$X_00010_00000[1], as.numeric(NA))
   
 })
 
@@ -68,7 +76,7 @@ test_that("peak, rating curves, surface-water measurements", {
   emptyDF <- whatNWISdata("10312000",parameterCd = "50286")
   expect_that(nrow(emptyDF) == 0, is_true())
   
-  url <- "http://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000"
+  url <- "https://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000"
   x <- importRDB1(url)
 
 })

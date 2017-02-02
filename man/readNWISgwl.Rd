@@ -51,10 +51,10 @@ siteInfo \tab data.frame \tab A data frame containing information on the request
 }
 \description{
 Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service 
-depending on the year that the data was collected. See \url{http://waterdata.usgs.gov/usa/nwis/gw}
+depending on the year that the data was collected. See \url{https://waterdata.usgs.gov/usa/nwis/gw}
 for details about groundwater. By default the returned dates are converted to date objects, unless convertType
 is specified as FALSE. Sites with non-standard date formats (i.e. lacking a day) can be affected (see examples).
-See \url{http://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more information.
+See \url{https://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more information.
 }
 \examples{
 siteNumber <- "434400121275801"

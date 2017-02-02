@@ -1,8 +1,8 @@
 #' Raw Data Import for USGS NWIS QW Data
 #'
-#' Imports data from NWIS web service. This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/qwdata}
-#' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-#' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+#' Imports data from NWIS web service. This function gets the data from here: \url{https://nwis.waterdata.usgs.gov/nwis/qwdata}
+#' A list of parameter codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+#' A list of statistic codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
 #' @details Valid parameter code groups are "All," or group codes:
 #'\tabular{ll}{
@@ -106,7 +106,7 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   if(any(parameterCd == "all") | any(parameterCd == "All") ){
     
     siteNumbers <- paste(siteNumbers, collapse=",")
-    url <- paste0("http://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=", siteNumbers,
+    url <- paste0("https://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=", siteNumbers,
            "&sort_key=site_no&group_key=NONE&inventory_output=0",
            "&begin_date=", startDate, "&end_date=", endDate,
            "&TZoutput=0",
@@ -116,7 +116,7 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   } else if (all(parameterCd %in% pgrp)){
     siteNumbers <- paste(siteNumbers, collapse=",")
     groups <- paste(parameterCd, collapse=",")
-    url <- paste0("http://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=", siteNumbers,
+    url <- paste0("https://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=", siteNumbers,
                   "&sort_key=site_no&group_key=NONE&inventory_output=0",
                   "&begin_date=", startDate, "&end_date=", endDate,
                   "&TZoutput=0&param_group=", groups,

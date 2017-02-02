@@ -66,7 +66,7 @@ comment \tab character \tab Header comments from the RDB file \cr
 }
 }
 \description{
-Imports data from USGS site file site. This function gets data from here: \url{http://waterservices.usgs.gov/}
+Imports data from USGS site file site. This function gets data from here: \url{https://waterservices.usgs.gov/}
 }
 \examples{
 \dontrun{

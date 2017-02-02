@@ -1,6 +1,6 @@
 #' USGS data availability
 #'
-#' Imports a table of available parameters, period of record, and count. See \url{http://waterservices.usgs.gov/rest/Site-Service.html}
+#' Imports a table of available parameters, period of record, and count. See \url{https://waterservices.usgs.gov/rest/Site-Service.html}
 #' for more information.
 #'
 #' @param siteNumbers character USGS site number or multiple sites.

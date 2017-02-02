@@ -11,7 +11,7 @@ readWQPdata(..., zip = FALSE, querySummary = FALSE)
 
 \item{querySummary}{logical to ONLY return the number of records and unique sites that will be returned from this query.}
 
-\item{\dots}{see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options}
+\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options}
 }
 \value{
 A data frame with at least the following columns:
