@@ -163,7 +163,7 @@ readNGWMNsites <- function(featureID){
 
 retrieveObservation <- function(featureID, asDateTime, attrs){
   #will need to contruct this more piece by piece if other versions, properties are added
-  baseURL <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
+  baseURL <- "http://cida-test.er.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
   url <- paste0(baseURL, featureID)
   
   returnData <- importNGWMN_wml2(url, asDateTime)
@@ -193,7 +193,7 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
 #TODO: can do multisite calls
 #TODO: allow pass through srsName  needs to be worked in higher-up in dots
 retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:EPSG::4269"){
-  baseURL <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0"
+  baseURL <- "http://cida-test.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0"
   dots <- list(...)
   values <- convertDots(dots)
   
