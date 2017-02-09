@@ -135,4 +135,3 @@ nwisEx.summary <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),
 \keyword{import}
 \keyword{service}
 \keyword{web}
-
