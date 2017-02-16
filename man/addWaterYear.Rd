@@ -8,6 +8,10 @@ addWaterYear(rawData, dateColName = c("dateTime", "Date"))
 }
 \arguments{
 \item{rawData}{the daily- or unit-values datset retrieved from NWISweb.}
+
+\item{dateColName}{character value specifying which column in the dataset 
+should be used to calculate the water year. Defaults allow `dateTime` and
+`Date`.}
 }
 \value{
 data.frame with an additional integer column called waterYear

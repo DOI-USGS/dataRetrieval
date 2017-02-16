@@ -3,6 +3,9 @@
 #' add a column to the dataRetrieval data frame with the water year
 #' 
 #' @param rawData the daily- or unit-values datset retrieved from NWISweb. 
+#' @param dateColName character value specifying which column in the dataset 
+#' should be used to calculate the water year. Defaults allow `dateTime` and
+#' `Date`.
 #' 
 #' @return data.frame with an additional integer column called waterYear
 #' @export
