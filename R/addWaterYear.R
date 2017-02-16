@@ -13,7 +13,7 @@
 #' dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
 #' dataTemp <- addWaterYear(dataTemp)
 #' }
-addWaterYear <- function(rawData, ...){
+addWaterYear <- function(rawData){
 
   # if waterYear column already exists, don't add another
   if("waterYear" %in% names(rawData)){
