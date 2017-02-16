@@ -8,6 +8,7 @@
 #' @export
 #' 
 #' @importFrom dplyr select
+#' @importFrom dplyr everything
 #' @examples
 #' \dontrun{ 
 #' dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
