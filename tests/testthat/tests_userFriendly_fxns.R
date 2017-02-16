@@ -223,3 +223,55 @@ test_that("state county tests",{
   fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
   expect_equal(fromIDs, "Bacon County")
 })
+
+context("water year column")
+
+df_test <- data.frame(site_no = as.character(1:13),
+                      dateTime = seq(as.Date("2010-01-01"),as.Date("2011-01-31"), 
+                                     by="months"),
+                      result_va = 1:13, stringsAsFactors = FALSE)
+
+test_that("addWaterYear works with Date, POSIXct, character, but breaks with numeric", {
+  library(dplyr)
+  
+  df_date <- df_test
+  df_date_wy <- addWaterYear(df_date)
+  expect_equal(ncol(df_date_wy), ncol(df_date) + 1)
+  
+  df_posixct <- mutate(df_test, dateTime = as.POSIXct(dateTime))
+  df_posixct_wy <- addWaterYear(df_posixct)
+  expect_equal(ncol(df_posixct_wy), ncol(df_posixct) + 1)
+  
+  df_char <- mutate(df_test, dateTime = as.character(dateTime))
+  df_char_wy <- addWaterYear(df_char)
+  expect_equal(ncol(df_char_wy), ncol(df_char) + 1)
+  
+  df_num <- mutate(df_test, dateTime = as.numeric(dateTime))
+  expect_error(addWaterYear(df_num), "'origin' must be supplied")
+})
+
+test_that("addWaterYear correctly calculates the WY and is numeric", {
+  df_wy_test <- addWaterYear(df_test)
+  expect_is(df_wy_test$waterYear, "numeric")
+  expect_true(all(df_wy_test$waterYear[1:9] == 2010))
+  expect_true(all(df_wy_test$waterYear[10:13] == 2011))
+})
+
+test_that("addWaterYear adds column next to dateTime", {
+  df_wy_test <- addWaterYear(df_test)
+  dateTime_col <- which(names(df_wy_test) == "dateTime")
+  expect_equal(names(df_wy_test)[dateTime_col + 1], "waterYear")
+})
+
+test_that("addWaterYear can be used with pipes", {
+  library(dplyr)
+  df_wy_test <- df_test %>% addWaterYear()
+  expect_equal(ncol(df_wy_test), ncol(df_test) + 1)
+})
+
+test_that("addWaterYear doesn't add another WY column if it exists", {
+  df_wy_test <- addWaterYear(df_test)
+  expect_equal(ncol(df_wy_test), ncol(df_test) + 1)
+  expect_message(addWaterYear(df_wy_test), 
+                 "waterYear column already exists, returning df unchanged")
+})
