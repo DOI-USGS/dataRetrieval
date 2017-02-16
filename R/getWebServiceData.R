@@ -28,7 +28,7 @@
 getWebServiceData <- function(obs_url, ...){
   
   returnedList <- tryCatch({
-    RETRY("GET",obs_url, ..., user_agent(default_ua()))
+    retryGetOrPost(obs_url)
   }, error = function(e){
     NULL
   })
@@ -37,7 +37,7 @@ getWebServiceData <- function(obs_url, ...){
     message("Switching from https to http")
     obs_url <- gsub("https", "http", obs_url)
     returnedList <- tryCatch({
-      RETRY("GET",obs_url, ..., user_agent(default_ua()))
+      retryGetOrPost(obs_url)
     }, error = function(e){
       NULL
     })
@@ -97,3 +97,16 @@ getQuerySummary <- function(url){
   return(retquery)
 }
 
+retryGetOrPost <- function(url, ...) {
+  resp <- NULL
+  if (nchar(url) < 2048) {
+    resp <- RETRY("GET", url, ..., user_agent(default_ua()))
+  } else {
+    split <- strsplit(url, "?", fixed=TRUE)
+    url <- split[[1]][1]
+    query <- split[[1]][2]
+    resp <- RETRY("POST", url, ..., body = query,
+          content_type("application/x-www-form-urlencoded"), user_agent(default_ua()))
+  }
+  return(resp)
+}
