@@ -4,7 +4,7 @@
 \alias{addWaterYear}
 \title{add a water year column}
 \usage{
-addWaterYear(rawData)
+addWaterYear(rawData, dateColName = c("dateTime", "Date"))
 }
 \arguments{
 \item{rawData}{the daily- or unit-values datset retrieved from NWISweb.}

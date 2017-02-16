@@ -250,6 +250,32 @@ test_that("addWaterYear works with Date, POSIXct, character, but breaks with num
   expect_error(addWaterYear(df_num), "'origin' must be supplied")
 })
 
+test_that("addWaterYear works for specified column names", {
+  
+  nwisqw_style <- df_test
+  nwisqw_style_wy <- addWaterYear(nwisqw_style)
+  expect_equal(ncol(nwisqw_style_wy), ncol(nwisqw_style) + 1)
+  
+  nwisdata_style <- df_test
+  names(nwisdata_style)[2] <- "Date"
+  nwisdata_style_wy <- addWaterYear(nwisdata_style)
+  expect_equal(ncol(nwisdata_style_wy), ncol(nwisdata_style) + 1)
+  
+  wqp_style <- df_test
+  names(wqp_style)[2] <- "ActivityStartDateTime"
+  # expect_equal(ncol(wqp_style_wy), ncol(wqp_style) + 1)
+  expect_error(addWaterYear(wqp_style),
+               "specified date column does not exist in supplied data frame")
+  
+  userspecified_style <- df_test
+  names(userspecified_style)[2] <- "MyDateCol"
+  expect_error(addWaterYear(userspecified_style),
+               "specified date column does not exist in supplied data frame")
+  userspecified_style_wy <- addWaterYear(userspecified_style, 
+                                         dateColName = "MyDateCol")
+  expect_equal(ncol(userspecified_style_wy), ncol(userspecified_style) + 1)
+})
+
 test_that("addWaterYear correctly calculates the WY and is numeric", {
   df_wy_test <- addWaterYear(df_test)
   expect_is(df_wy_test$waterYear, "numeric")
