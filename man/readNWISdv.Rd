@@ -79,4 +79,3 @@ notActive <- readNWISdv(site, "00060", "2014-01-01","2014-01-07")
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

@@ -74,4 +74,3 @@ x <- readNWISstat(siteNumbers=c("02171500"),
 \seealso{
 \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 }
-

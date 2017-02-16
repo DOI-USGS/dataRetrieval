@@ -24,4 +24,3 @@ index <- stateCdLookup("WI", "tableIndex")
 stateCd[index,]
 stateCdLookup(c("West Virginia", "Wisconsin", 55, "MN"))
 }
-

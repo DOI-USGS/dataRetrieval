@@ -29,4 +29,3 @@ obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 rawData <- getWebServiceData(obs_url)
 }
 }
-

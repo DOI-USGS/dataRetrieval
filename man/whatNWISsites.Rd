@@ -39,4 +39,3 @@ Mapper format is used
 siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
 }
 }
-
