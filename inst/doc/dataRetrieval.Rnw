@@ -235,7 +235,7 @@ Table \ref{tab:func} describes the functions available in the dataRetrieval pack
   & startDate & \\
   & endDate & \\
   & expanded & \\
-  [5pt]\texttt{readNWISuv} & siteNumber & NWIS water quality data\\
+  [5pt]\texttt{readNWISuv} & siteNumber & NWIS instantaneous value data\\
   & parameterCd & \\
   & startDate & \\
   & endDate & \\
