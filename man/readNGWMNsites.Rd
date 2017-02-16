@@ -38,4 +38,3 @@ siteInfo <- readNGWMNsites(featureID = site)
 
 }
 }
-

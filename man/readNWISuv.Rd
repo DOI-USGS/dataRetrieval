@@ -87,4 +87,3 @@ GMTdata <- readNWISuv(siteNumber,parameterCd,
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

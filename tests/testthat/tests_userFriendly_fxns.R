@@ -222,6 +222,10 @@ test_that("NGWMN functions working", {
   noDataSite <- readNGWMNlevels(featureID = noDataSite)
   expect_true(is.data.frame(noDataSite))
   
+  #bounding box and a bigger request
+  bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
+  siteInfo <- readNGWMNsites(bboxSites$site[1:100])
+  
   #one site
   site <- "USGS.430427089284901"
   oneSite <- readNGWMNlevels(featureID = site)
@@ -236,6 +240,7 @@ test_that("NGWMN functions working", {
   data <- readNGWMNlevels(featureID = "MBMG.1388")
   expect_true(nrow(data) > 1)
   expect_true(is.numeric(oneSite$value))
+  
   
 })
 

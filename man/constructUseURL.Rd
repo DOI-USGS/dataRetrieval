@@ -25,4 +25,3 @@ Reconstructs URLs to retrieve data from here: \url{http://waterdata.usgs.gov/nwi
 url <- constructUseURL(years=c(1990,1995),stateCd="Ohio",countyCd = c(1,3), categories = "ALL")
 
 }
-

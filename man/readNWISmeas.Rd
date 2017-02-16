@@ -69,4 +69,3 @@ Meas07227500.exRaw <- readNWISmeas("07227500",expanded=TRUE, convertType = FALSE
 \seealso{
 \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 }
-

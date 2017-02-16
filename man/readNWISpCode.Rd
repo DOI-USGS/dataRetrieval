@@ -39,4 +39,3 @@ paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

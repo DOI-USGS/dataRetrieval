@@ -107,4 +107,3 @@ importFile <- importWaterML1(fullPath,TRUE)
 \seealso{
 \code{\link{renameNWISColumns}}
 }
-

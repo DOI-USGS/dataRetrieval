@@ -49,9 +49,9 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
   dots <- list(...)
   
   if(service == "observation"){
-    allObs <- NULL
-    allAttrs <- NULL
-    allSites <- NULL
+    allObs <- data.frame()
+    allAttrs <- data.frame()
+    
     #these attributes are pulled out and saved when doing binds to be reattached
     attrs <- c("url","gml:identifier","generationDate","responsibleParty", "contact")
     featureID <- na.omit(gsub(":",".",dots[['featureID']]))
@@ -62,26 +62,22 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
     #TODO: call featureOfInterest outside loop
     for(f in featureID){
       obsFID <- retrieveObservation(featureID = f, asDateTime, attrs)
-      siteFID <- retrieveFeatureOfInterest(featureID = f, asDateTime)
-      if(is.null(allObs)){
-        allObs <- obsFID
-        allAttrs <- saveAttrs(attrs, allObs)
-        allSites <- bind_cols(siteFID,allAttrs)
-      }else{
-        obsFIDatt <- saveAttrs(attrs, obsFID)
-        obsFID <- removeAttrs(attrs, obsFID)
-        allObs <- bind_rows(allObs, obsFID)
-        obsSites <- bind_cols(siteFID, obsFIDatt)
-        allSites <- bind_rows(allSites, obsSites)
-      }
+      obsFIDattr <- saveAttrs(attrs, obsFID)
+      obsFID <- removeAttrs(attrs, obsFID)
+      allObs <- bind_rows(allObs, obsFID)
+      allAttrs <- bind_rows(allAttrs, obsFIDattr)
       
-      attr(allObs, "siteInfo") <- allSites
-      returnData <- allObs
     }
+    allSites <- retrieveFeatureOfInterest(featureID = featureID)
+    attr(allObs, "siteInfo") <- allSites
+    attr(allObs, "other") <- allAttrs
+    returnData <- allObs
+    
   }else if(service == "featureOfInterest"){
     if("featureID" %in% names(dots)){
+      featureID <- na.omit(gsub(":",".",dots[['featureID']]))
       #TODO: can do multi site calls with encoded comma
-      allSites <- retrieveFeatureOfInterest(featureID = dots[['featureID']], asDateTime=asDateTime)
+      allSites <- retrieveFeatureOfInterest(featureID = featureID)
     }
     if("bbox" %in% names(dots)){
       allSites <- retrieveFeatureOfInterest(bbox=dots[['bbox']])
@@ -163,7 +159,7 @@ readNGWMNsites <- function(featureID){
 
 retrieveObservation <- function(featureID, asDateTime, attrs){
   #will need to contruct this more piece by piece if other versions, properties are added
-  baseURL <- "http://cida-test.er.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
+  baseURL <- "https://cida-test.er.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
   url <- paste0(baseURL, featureID)
   
   returnData <- importNGWMN_wml2(url, asDateTime)
@@ -193,7 +189,7 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
 #TODO: can do multisite calls
 #TODO: allow pass through srsName  needs to be worked in higher-up in dots
 retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:EPSG::4269"){
-  baseURL <- "http://cida-test.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0"
+  baseURL <- "https://cida-test.er.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0"
   dots <- list(...)
   values <- convertDots(dots)
   

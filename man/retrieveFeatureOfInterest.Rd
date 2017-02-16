@@ -10,4 +10,3 @@ retrieveFeatureOfInterest(..., asDateTime,
 \description{
 retrieve feature of interest
 }
-

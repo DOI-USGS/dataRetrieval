@@ -70,4 +70,3 @@ data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01")
 \seealso{
 \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 }
-

@@ -79,4 +79,3 @@ siteINFOMulti <- readNWISsite(c('05114000','09423350'))
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

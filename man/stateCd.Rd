@@ -24,4 +24,3 @@ head(stateCd)
 }
 \keyword{USGS}
 \keyword{stateCd}
-

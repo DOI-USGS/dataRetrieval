@@ -45,4 +45,3 @@ noDataSite <- readNGWMNdata(featureID = noDataSite, service = "observation")
 }
 
 }
-

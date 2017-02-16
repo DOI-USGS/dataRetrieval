@@ -51,4 +51,3 @@ fullPath <- file.path(filePath, fileName)
 UserData <- importWaterML2(fullPath)
 
 }
-

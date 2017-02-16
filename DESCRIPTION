@@ -46,4 +46,4 @@ VignetteBuilder: knitr
 BuildVignettes: true
 BugReports: https://github.com/USGS-R/dataRetrieval/issues
 URL: https://github.com/USGS-R/dataRetrieval, http://pubs.usgs.gov/tm/04/a10/
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

@@ -41,4 +41,3 @@ url_wqp <- constructWQPURL(paste("USGS",siteNumber,sep="-"),
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

@@ -31,4 +31,3 @@ Data pulled from Water Quality Portal on November 25, 2014. The data was pulled 
 head(pCodeToName[,1:2])
 }
 \keyword{internal}
-

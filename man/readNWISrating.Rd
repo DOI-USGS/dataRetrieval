@@ -54,4 +54,3 @@ attr(data, "RATING")
 \seealso{
 \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 }
-

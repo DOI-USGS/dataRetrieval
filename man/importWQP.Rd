@@ -42,4 +42,3 @@ STORETdata <- importWQP(STORETex)
 \seealso{
 \code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
 }
-

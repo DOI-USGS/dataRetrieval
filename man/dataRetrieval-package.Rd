@@ -28,4 +28,3 @@ Robert M. Hirsch \email{rhirsch@usgs.gov}, Laura De Cicco \email{ldecicco@usgs.g
 \keyword{USGS,}
 \keyword{services}
 \keyword{web}
-
