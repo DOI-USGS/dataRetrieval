@@ -13,7 +13,8 @@ statistics service). Note: "qw" and "measurement" calls go to:
 \url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
 The statistics service has a limited selection of arguments (see \url{https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}).}
 
-\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options}
+\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options.  A list of arguments can also be supplied. 
+If one of the default arguments (service, asDateTime, convertType) is supplied by the user, those arguments would trump any matches in the supplied list.}
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
 

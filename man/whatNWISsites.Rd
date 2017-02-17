@@ -7,7 +7,8 @@
 whatNWISsites(...)
 }
 \arguments{
-\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options}
+\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options. A 
+list can also be supplied.}
 }
 \value{
 A data frame with at least the following columns:

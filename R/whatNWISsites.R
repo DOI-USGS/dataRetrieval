@@ -4,7 +4,8 @@
 #' Arguments to the function should be based on \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service}
 #' Mapper format is used
 #'
-#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options
+#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options. A 
+#' list can also be supplied.
 #' @import utils
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{
@@ -39,7 +40,7 @@ whatNWISsites <- function(...){
   if(all(sapply(list(...), class) != "list")){
     matchReturn <- list(...)
   } else {
-    matchReturn <- (...)
+    matchReturn <- c(...)
   }
   
   values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))

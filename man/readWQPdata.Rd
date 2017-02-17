@@ -127,7 +127,14 @@ args_2 <- list('startDateLo' = startDate,
               querySummary=TRUE)
 
 wqp.summary <- readWQPdata(args_2) 
-              
+
+arg_3 <- list('startDateLo' = startDate, 
+             'startDateHi' = "2013-12-31")
+arg_4 <- list(statecode="WI", 
+              characteristicName=secchi.names,
+              querySummary=TRUE)
+wqp.summary <- readWQPdata(arg_3, arg_4) 
+               
 }
 }
 \keyword{WQP}

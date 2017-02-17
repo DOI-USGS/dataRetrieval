@@ -3,7 +3,8 @@
 #' Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
 #' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
 #'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options
+#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied. 
+#' If zip is supplied by the user as a function argument, it would trump any matches in the supplied list.
 #' @param zip logical to request data via downloading zip file. Default set to FALSE.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
@@ -63,7 +64,7 @@ whatWQPsites <- function(...,zip=FALSE){
   if(all(sapply(list(...), class) != "list")){
     matchReturn <- list(...)
   } else {
-    matchReturn <- (...)
+    matchReturn <- c(...)
     for(i in c("zip")){
       if(do.call(missing, list(i)) & i %in% names(matchReturn)){
         querySummary <- matchReturn[[i]]

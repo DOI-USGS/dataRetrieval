@@ -12,7 +12,8 @@
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
-#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options
+#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options.  A list of arguments can also be supplied. 
+#' If one of the default arguments (service, asDateTime, convertType) is supplied by the user, those arguments would trump any matches in the supplied list.
 #' @import utils
 #' @import stats
 #' @return A data frame with the following columns:
@@ -112,7 +113,7 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   if(all(sapply(list(...), class) != "list")){
     matchReturn <- list(...)
   } else {
-    matchReturn <- (...)
+    matchReturn <- c(...)
     for(i in c("asDateTime","service","convertType")){
       if(do.call(missing, list(i)) & i %in% names(matchReturn)){
         querySummary <- matchReturn[[i]]

@@ -116,14 +116,21 @@
 #'               querySummary=TRUE)
 #'
 #' wqp.summary <- readWQPdata(args_2) 
-#'               
+#' 
+#' arg_3 <- list('startDateLo' = startDate, 
+#'              'startDateHi' = "2013-12-31")
+#' arg_4 <- list(statecode="WI", 
+#'               characteristicName=secchi.names,
+#'               querySummary=TRUE)
+#' wqp.summary <- readWQPdata(arg_3, arg_4) 
+#'                
 #' }
 readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
   
   if(all(sapply(list(...), class) != "list")){
     matchReturn <- list(...)
   } else {
-    matchReturn <- (...)
+    matchReturn <- c(...)
     for(i in c("zip","querySummary")){
       if(do.call(missing, list(i)) & i %in% names(matchReturn)){
         querySummary <- matchReturn[[i]]
