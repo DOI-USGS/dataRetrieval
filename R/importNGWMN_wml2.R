@@ -117,7 +117,9 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
       url <- input
       attr(mergedDF, "url") <- url
     }
-    mergedDF$date <- as.Date(mergedDF$date)
+    if(asDateTime){
+      mergedDF$date <- as.Date(mergedDF$date)
+    }
     nonDateCols <- grep("date",names(mergedDF), value=TRUE, invert = TRUE)
     
     mergedDF[nonDateCols][mergedDF[nonDateCols] == "" | mergedDF[nonDateCols]== -999999.0] <- NA
@@ -140,7 +142,6 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     siteLocs <- data.frame(matrix(unlist(siteLocs), nrow=length(siteLocs), byrow=TRUE), stringsAsFactors = FALSE)
     names(siteLocs) <- c("dec_lat_va", "dec_lon_va")
     siteLocs <- mutate(siteLocs, dec_lat_va=as.numeric(dec_lat_va), dec_lon_va=as.numeric(dec_lon_va))
-    #siteLocs <- data.frame(dec_lat_va=as.numeric(siteLocs[[1]][1]), dec_lon_va=as.numeric(siteLocs[[1]][2]), stringsAsFactors = FALSE)
     mergedDF <- cbind.data.frame(site, description = siteDesc, siteLocs, stringsAsFactors = FALSE) 
   }
   else{

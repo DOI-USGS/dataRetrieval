@@ -5,8 +5,8 @@
 #' \code{FALSE} since time zone information is not included.  
 #' @param featureID character Vector of feature IDs in the formatted with agency code and site number 
 #' separated by a period, e.g. \code{USGS.404159100494601}.
-#' @param service character Identifies which web service to access.  Only \code{observation} is currently 
-#' supported, which retrieves all water level for each site.   
+#' @param service character Identifies which web service to access.  \code{observation} retrieves all water level for each site,
+#' and \code{featureOfInterest} retrieves a data frame of site information, including description, latitude, and longitude.   
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
@@ -26,10 +26,11 @@
 #' #multiple sites
 #' sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
 #' multiSiteData <- readNGWMNdata(sites)
-#' 
+#' attributes(multiSiteData)
 #' 
 #' #non-USGS site
-#' site <- "MBMG.892195"
+#' #accepts colon or period between agency and ID
+#' site <- "MBMG:892195"
 #' data <- readNGWMNdata(featureID = site)
 #' 
 #' #site with no data returns empty data frame
@@ -37,8 +38,6 @@
 #' noDataSite <- readNGWMNdata(featureID = noDataSite, service = "observation")
 #' }
 #' 
-#TODO: accept colon or period! change examples
-#TODO: deal with NA fIDs
 readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = ""){
   message("          ********************************************************
           DISCLAIMER: NGWMN retrieval functions are still in flux, 
@@ -56,10 +55,6 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
     attrs <- c("url","gml:identifier","generationDate","responsibleParty", "contact")
     featureID <- na.omit(gsub(":",".",dots[['featureID']]))
     
-    #featureID <- na.omit(featureID)
-    #featureID <- featureID[!is.na(featureID)]
-    #featureID <- gsub(":",".",featureID) #getFeatureOfInterest returns with colons
-    #TODO: call featureOfInterest outside loop
     for(f in featureID){
       obsFID <- retrieveObservation(featureID = f, asDateTime, attrs)
       obsFIDattr <- saveAttrs(attrs, obsFID)
@@ -76,7 +71,6 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
   }else if(service == "featureOfInterest"){
     if("featureID" %in% names(dots)){
       featureID <- na.omit(gsub(":",".",dots[['featureID']]))
-      #TODO: can do multi site calls with encoded comma
       allSites <- retrieveFeatureOfInterest(featureID = featureID)
     }
     if("bbox" %in% names(dots)){
@@ -94,6 +88,9 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
 #'
 #' @param featureID character Vector of feature IDs in the formatted with agency code and site number 
 #' separated by a period, e.g. \code{USGS.404159100494601}.
+#' @param asDateTime logical Should dates and times be converted to date/time objects,
+#' or returned as character?  Defaults to \code{TRUE}.  Must be set to \code{FALSE} if a site 
+#' contains non-standard dates.
 #' 
 #' @export
 #' 
@@ -116,8 +113,9 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
 #' noDataSite <- readNGWMNlevels(featureID = noDataSite)
 #' }
 
-readNGWMNlevels <- function(featureID){
-  data <- readNGWMNdata(featureID = featureID, service = "observation")
+readNGWMNlevels <- function(featureID, asDateTime = TRUE){
+  data <- readNGWMNdata(featureID = featureID, service = "observation",
+                        asDateTime = asDateTime)
   return(data)
 }
 
@@ -156,7 +154,6 @@ readNGWMNsites <- function(featureID){
 }
 
 
-
 retrieveObservation <- function(featureID, asDateTime, attrs){
   #will need to contruct this more piece by piece if other versions, properties are added
   baseURL <- "https://cida-test.er.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
@@ -185,17 +182,15 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
 
 #' retrieve feature of interest
 #' 
-#' @export
-#TODO: can do multisite calls
-#TODO: allow pass through srsName  needs to be worked in higher-up in dots
+#could allow pass through srsName - needs to be worked in higher-up in dots
 retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:EPSG::4269"){
   baseURL <- "https://cida-test.er.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0"
   dots <- list(...)
-  values <- convertDots(dots)
+  values <- gsub(x = convertDots(dots), pattern = ",", replacement = "%2C")
   
   if("featureID" %in% names(values)){
     foiURL <- "&featureOfInterest="
-    fidURL <- paste("VW_GWDP_GEOSERVER", values[['featureID']], sep=".", collapse = "%2C")
+    fidURL <- paste0("VW_GWDP_GEOSERVER.", values[['featureID']])
     url <- paste0(baseURL, foiURL, fidURL)
     
   }else if("bbox" %in% names(values)){
@@ -205,6 +200,8 @@ retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:
     stop()
   }
   siteDF <- importNGWMN_wml2(url, asDateTime)
+  attr(siteDF, "url") <- url
+  attr(siteDF, "queryTime") <- Sys.time()
   return(siteDF)
 }
 

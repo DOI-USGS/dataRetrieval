@@ -7,8 +7,8 @@
 readNGWMNdata(..., service = "observation", asDateTime = TRUE, tz = "")
 }
 \arguments{
-\item{service}{character Identifies which web service to access.  Only \code{observation} is currently 
-supported, which retrieves all water level for each site.}
+\item{service}{character Identifies which web service to access.  \code{observation} retrieves all water level for each site,
+and \code{featureOfInterest} retrieves a data frame of site information, including description, latitude, and longitude.}
 
 \item{asDateTime}{logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
 \code{FALSE} since time zone information is not included.}
@@ -33,10 +33,11 @@ oneSite <- readNGWMNdata(featureID = site)
 #multiple sites
 sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
 multiSiteData <- readNGWMNdata(sites)
-
+attributes(multiSiteData)
 
 #non-USGS site
-site <- "MBMG.892195"
+#accepts colon or period between agency and ID
+site <- "MBMG:892195"
 data <- readNGWMNdata(featureID = site)
 
 #site with no data returns empty data frame

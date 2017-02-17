@@ -4,11 +4,15 @@
 \alias{readNGWMNlevels}
 \title{Retrieve groundwater levels from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
 \usage{
-readNGWMNlevels(featureID)
+readNGWMNlevels(featureID, asDateTime = TRUE)
 }
 \arguments{
 \item{featureID}{character Vector of feature IDs in the formatted with agency code and site number 
 separated by a period, e.g. \code{USGS.404159100494601}.}
+
+\item{asDateTime}{logical Should dates and times be converted to date/time objects,
+or returned as character?  Defaults to \code{TRUE}.  Must be set to \code{FALSE} if a site 
+contains non-standard dates.}
 }
 \description{
 Retrieve groundwater levels from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.
