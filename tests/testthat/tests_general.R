@@ -56,6 +56,23 @@ test_that("General NWIS retrievals working", {
   x <- importWaterML1(urlTest)
   expect_equal(ncol(x), 8)
   
+  #Test list:
+  args <- list(sites="05114000", service="iv", 
+               parameterCd="00060", 
+               startDate="2014-05-01T00:00Z",
+               endDate="2014-05-01T12:00Z")
+  
+  instData <- readNWISdata(args)
+  
+  args <- list(sites="05114000", service="iv", 
+               parameterCd="00060", 
+               startDate="2014-05-01",
+               endDate="2014-05-01")
+  
+  #test that arg overrides list:
+  dailyData <- readNWISdata(args, service="dv")
+  expect_lt(nrow(dailyData), nrow(instData))
+  
 })
 
 
@@ -64,6 +81,35 @@ test_that("General WQP retrievals working", {
   nameToUse <- "pH"
   pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
   expect_is(pHData$ActivityStartDateTime, 'POSIXct')
+  
+  #testing lists:
+  startDate <- as.Date("2013-01-01")
+  secchi.names = c("Depth, Secchi disk depth",
+                   "Depth, Secchi disk depth (choice list)",
+                   "Secchi Reading Condition (choice list)",
+                   "Secchi depth",
+                   "Water transparency, Secchi disc")
+  args_2 <- list('startDateLo' = startDate,
+               'startDateHi' = "2013-12-31",
+                statecode="WI",
+                characteristicName=secchi.names,
+                querySummary=TRUE)
+
+  wqp.summary <- readWQPdata(args_2)
+  expect_true("list" %in% class(wqp.summary))
+  
+  #pretty sloooow:
+  wqp.data <- readWQPdata(args_2, querySummary = FALSE)
+  expect_false("list" %in% class(wqp.data))
+  
+  # Testing multiple lists:
+  arg_3 <- list('startDateLo' = startDate,
+               'startDateHi' = "2013-12-31")
+  arg_4 <- list(statecode="WI",
+                characteristicName=secchi.names,
+                querySummary=TRUE)
+  wqp.summary <- readWQPdata(arg_3, arg_4)
+  expect_true("list" %in% class(wqp.summary))
   
   # Known slow query for WQP:
   # pHDataExpanded2 <- readWQPdata(bBox=c(-90.1,42.9,-89.9,43.1),
@@ -123,3 +169,4 @@ test_that("whatNWISsites working", {
   expect_true(nrow(bboxSites) > 0)
   expect_true(is.numeric(bboxSites$dec_lat_va))
   })
+

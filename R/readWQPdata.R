@@ -133,7 +133,10 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
     matchReturn <- c(...)
     for(i in c("zip","querySummary")){
       if(do.call(missing, list(i)) & i %in% names(matchReturn)){
-        querySummary <- matchReturn[[i]]
+        assign(i, matchReturn[[i]])
+      }
+      
+      if(i %in% names(matchReturn)){
         matchReturn <- matchReturn[-which(names(matchReturn) %in% i)]
       }
     }

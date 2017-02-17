@@ -108,7 +108,7 @@
 #'                 parameterCd="00060")
 #'allDailyStats_2 <- readNWISdata(arg.list, service="stat")
 #' }
-readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
+readNWISdata <- function(..., service="dv", asDateTime=TRUE,convertType=TRUE){
   
   if(all(sapply(list(...), class) != "list")){
     matchReturn <- list(...)
@@ -116,7 +116,10 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     matchReturn <- c(...)
     for(i in c("asDateTime","service","convertType")){
       if(do.call(missing, list(i)) & i %in% names(matchReturn)){
-        querySummary <- matchReturn[[i]]
+        assign(i, matchReturn[[i]])
+      }
+      
+      if(i %in% names(matchReturn)){
         matchReturn <- matchReturn[-which(names(matchReturn) %in% i)]
       }
     }

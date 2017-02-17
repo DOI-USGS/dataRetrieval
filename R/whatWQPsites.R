@@ -65,11 +65,9 @@ whatWQPsites <- function(...,zip=FALSE){
     matchReturn <- list(...)
   } else {
     matchReturn <- c(...)
-    for(i in c("zip")){
-      if(do.call(missing, list(i)) & i %in% names(matchReturn)){
-        querySummary <- matchReturn[[i]]
-        matchReturn <- matchReturn[-which(names(matchReturn) %in% i)]
-      }
+    if(!missing(zip) & "zip" %in% names(matchReturn)){
+      zip <- matchReturn[[i]]
+      matchReturn <- matchReturn[-which(names(matchReturn) %in% "zip")]
     }
   }
   
