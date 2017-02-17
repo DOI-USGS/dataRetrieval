@@ -250,7 +250,7 @@ test_that("addWaterYear works with Date, POSIXct, character, but breaks with num
   expect_error(addWaterYear(df_num), "'origin' must be supplied")
 })
 
-test_that("addWaterYear works for specified column names", {
+test_that("addWaterYear works for each column name", {
   
   nwisqw_style <- df_test
   nwisqw_style_wy <- addWaterYear(nwisqw_style)
@@ -262,42 +262,48 @@ test_that("addWaterYear works for specified column names", {
   expect_equal(ncol(nwisdata_style_wy), ncol(nwisdata_style) + 1)
   
   wqp_style <- df_test
-  names(wqp_style)[2] <- "ActivityStartDateTime"
-  # expect_equal(ncol(wqp_style_wy), ncol(wqp_style) + 1)
-  expect_error(addWaterYear(wqp_style),
-               "specified date column does not exist in supplied data frame")
+  names(wqp_style)[2] <- "ActivityStartDate"
+  wqp_style[['ActivityEndDate']] <- wqp_style[["ActivityStartDate"]]
+  wqp_style_wy <- addWaterYear(wqp_style)
+  expect_equal(ncol(wqp_style_wy), ncol(wqp_style) + 2)
   
   userspecified_style <- df_test
   names(userspecified_style)[2] <- "MyDateCol"
   expect_error(addWaterYear(userspecified_style),
                "specified date column does not exist in supplied data frame")
-  userspecified_style_wy <- addWaterYear(userspecified_style, 
-                                         dateColName = "MyDateCol")
-  expect_equal(ncol(userspecified_style_wy), ncol(userspecified_style) + 1)
 })
 
 test_that("addWaterYear correctly calculates the WY and is numeric", {
-  df_wy_test <- addWaterYear(df_test)
-  expect_is(df_wy_test$waterYear, "numeric")
-  expect_true(all(df_wy_test$waterYear[1:9] == 2010))
-  expect_true(all(df_wy_test$waterYear[10:13] == 2011))
+  df_test_wy <- addWaterYear(df_test)
+  expect_is(df_test_wy[['dateTimeWY']], "numeric")
+  expect_true(all(df_test_wy[['dateTimeWY']][1:9] == 2010))
+  expect_true(all(df_test_wy[['dateTimeWY']][10:13] == 2011))
 })
 
 test_that("addWaterYear adds column next to dateTime", {
-  df_wy_test <- addWaterYear(df_test)
-  dateTime_col <- which(names(df_wy_test) == "dateTime")
-  expect_equal(names(df_wy_test)[dateTime_col + 1], "waterYear")
+  df_test_wy <- addWaterYear(df_test)
+  dateTime_col <- which(names(df_test_wy) == "dateTime")
+  expect_equal(names(df_test_wy)[dateTime_col + 1], "dateTimeWY")
 })
 
 test_that("addWaterYear can be used with pipes", {
   library(dplyr)
-  df_wy_test <- df_test %>% addWaterYear()
-  expect_equal(ncol(df_wy_test), ncol(df_test) + 1)
+  df_test_wy <- df_test %>% addWaterYear()
+  expect_equal(ncol(df_test_wy), ncol(df_test) + 1)
 })
 
 test_that("addWaterYear doesn't add another WY column if it exists", {
-  df_wy_test <- addWaterYear(df_test)
-  expect_equal(ncol(df_wy_test), ncol(df_test) + 1)
-  expect_message(addWaterYear(df_wy_test), 
-                 "waterYear column already exists, returning df unchanged")
+  df_test_wy <- addWaterYear(df_test)
+  expect_equal(ncol(df_test_wy), ncol(df_test) + 1)
+  df_test_wy2 <- addWaterYear(df_test_wy)
+  expect_equal(ncol(df_test_wy2), ncol(df_test_wy))
+})
+
+test_that("calcWaterYear can handle missing values", {
+  dateVec <- seq(as.Date("2010-01-01"),as.Date("2011-01-31"), by="months")
+  dateVec[c(3,7,12)] <- NA
+  wyVec <- dataRetrieval:::calcWaterYear(dateVec)
+  
+  expect_is(wyVec, "numeric")
+  expect_true(all(is.na(wyVec[c(3,7,12)])))
 })

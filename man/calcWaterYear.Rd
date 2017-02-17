@@ -8,7 +8,7 @@ calcWaterYear(dateVec)
 }
 \arguments{
 \item{dateVec}{vector of dates as character ("YYYY-DD-MM"),
-numeric, Date, or POSIXct}
+Date, or POSIXct. Numeric does not work.}
 }
 \description{
 extract WY from a date

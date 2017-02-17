@@ -4,18 +4,18 @@
 #' queries will return a water year column for the start and end dates
 #' of the data.
 #' 
-#' @param rawData the daily- or unit-values datset retrieved from NWISweb. 
-#' @param dateColName character value specifying which column in the dataset 
-#' should be used to calculate the water year. Defaults allow `dateTime`,
-#' `Date`, `ActivityStartDateTime`, `ActivityEndDateTime`.
+#' @param rawData the daily- or unit-values datset retrieved from NWISweb. Must
+#' have at least one of the following columns to add the new water year columns:
+#' `dateTime`, `Date`, `ActivityStartDate`, or `ActivityEndDate`. The date column(s)
+#' can be character, POSIXct, Date. They cannot be numeric.
 #' 
-#' @return data.frame with an additional integer column called `waterYear`. For WQP,
-#' there will be 2 columns - `startWaterYear` and `endWaterYear`.
+#' @return data.frame with an additional integer column with "WY" appended to the 
+#' date column name. For WQP, there will be 2 columns: `ActivityStartDateWY` and 
+#' `ActivityEndDateWY`.
 #' @export
 #' 
 #' @importFrom dplyr select
 #' @importFrom dplyr everything
-#' @importFrom dplyr mutate_
 #' @examples
 #' \dontrun{ 
 #' dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
@@ -24,56 +24,45 @@
 #' pHData <- readWQPdata(siteid="USGS-04024315",characteristicName="pH")
 #' pHData <- addWaterYear(pHData)
 #' }
-addWaterYear <- function(rawData, dateColName = c("dateTime", "Date", "ActivityStartDateTime",
-                                                  "ActivityEndDateTime")){
-
+addWaterYear <- function(rawData){
+  
+  allowedDateColNames <- c("dateTime", "Date", "ActivityStartDate", "ActivityEndDate")
+  
   # only allow WY to be added if there is an appropriate date column
-  if(all(!dateColName %in% names(rawData))){
+  if(all(!allowedDateColNames %in% names(rawData))){
     stop("specified date column does not exist in supplied data frame")
   }
   
-  # set the name of the date column to use for calculating the WY
-  dateCol <- names(rawData)[names(rawData) %in% dateColName]
+  # set the name of the date column(s) to use for calculating the WY
+  dateColName <- names(rawData)[names(rawData) %in% allowedDateColNames]
   
-  # if both these columns are in the df, we need to have 2 WY cols
-  isWQP <- all(c("ActivityStartDateTime", "ActivityEndDateTime") %in% dateCol)
-  
-  # if waterYear column already exists, don't add another
-  if("waterYear" %in% names(rawData)){
-    message("waterYear column already exists, returning df unchanged")
-    return(rawData)
-  }
-  
-  # add water year vector as new column(s)
+  # set up new df that will include water year columns
   wyData <- rawData
-  if(isWQP){
-
-    startCol <- dateCol[grepl("start", tolower(dateCol))]
-    endCol <- dateCol[grepl("end", tolower(dateCol))]
-    wyData[["startWaterYear"]] <- calcWaterYear(wyData[[startCol]])
-    wyData[["endWaterYear"]] <- calcWaterYear(wyData[[endCol]])
+  
+  for(dateCol in dateColName){
+    dateColWY <- paste0(dateCol, "WY")
     
-    # move the WY cols so that they is always come right after the date col
-    startDateTime_i <- which(names(wyData) == startCol)
-    endDateTime_i <- which(names(wyData) == endCol)
-    wyData <- select(wyData, 1:endDateTime_i, startWaterYear, 
-                     endWaterYear, everything())
+    # if this WY column already exists, do not add another
+    if(dateColWY %in% names(wyData)){
+      next
+    }
     
-  } else {
-    wyData[["waterYear"]] <- calcWaterYear(wyData[[dateCol]])
+    # calculate WY & add as new column
+    wyData[[dateColWY]] <- calcWaterYear(wyData[[dateCol]])
     
     # move waterYear so that it is always comes right after dateTime
-    dateTime_i <- which(names(wyData) == dateCol)
-    wyData <- select(wyData, 1:dateTime_i, waterYear, everything())
+    dateCol_i <- which(names(wyData) == dateCol)
+    dateColWY_i <- which(names(wyData) == dateColWY)
+    wyData <- select(wyData, 1:dateCol_i, dateColWY_i, everything())
   }
-
+  
   return(wyData)
 }
 
 #' extract WY from a date
 #' 
 #' @param dateVec vector of dates as character ("YYYY-DD-MM"),
-#' numeric, Date, or POSIXct
+#' Date, or POSIXct. Numeric does not work.
 #' 
 #' @keywords internal
 calcWaterYear <- function(dateVec){
