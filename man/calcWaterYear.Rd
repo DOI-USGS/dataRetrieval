@@ -2,7 +2,7 @@
 % Please edit documentation in R/addWaterYear.R
 \name{calcWaterYear}
 \alias{calcWaterYear}
-\title{extract WY from a date}
+\title{Extract WY from a date}
 \usage{
 calcWaterYear(dateVec)
 }
@@ -10,6 +10,21 @@ calcWaterYear(dateVec)
 \item{dateVec}{vector of dates as character ("YYYY-DD-MM"),
 Date, or POSIXct. Numeric does not work.}
 }
+\value{
+numeric vector indicating the water year
+}
 \description{
-extract WY from a date
+Determine the correct water year based on a calendar date.
+}
+\details{
+This function calculates a water year based on the USGS
+definition that a water year starts on October 1 of the year before, 
+and ends on September 30. For example, water year 2015 started on 
+2014-10-01 and ended on 2015-09-30. See the USGS definition at 
+\url{https://water.usgs.gov/nwc/explain_data.html}.
+}
+\examples{
+x <- seq(as.Date("2010-01-01"), as.Date("2010-12-31"))
+waterYear <- calcWaterYear(x)
+
 }
