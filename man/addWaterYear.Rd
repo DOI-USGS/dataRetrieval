@@ -4,24 +4,31 @@
 \alias{addWaterYear}
 \title{add a water year column}
 \usage{
-addWaterYear(rawData, dateColName = c("dateTime", "Date"))
+addWaterYear(rawData, dateColName = c("dateTime", "Date",
+  "ActivityStartDateTime", "ActivityEndDateTime"))
 }
 \arguments{
 \item{rawData}{the daily- or unit-values datset retrieved from NWISweb.}
 
 \item{dateColName}{character value specifying which column in the dataset 
-should be used to calculate the water year. Defaults allow `dateTime` and
-`Date`.}
+should be used to calculate the water year. Defaults allow `dateTime`,
+`Date`, `ActivityStartDateTime`, `ActivityEndDateTime`.}
 }
 \value{
-data.frame with an additional integer column called waterYear
+data.frame with an additional integer column called `waterYear`. For WQP,
+there will be 2 columns - `startWaterYear` and `endWaterYear`.
 }
 \description{
-add a column to the dataRetrieval data frame with the water year
+Add a column to the dataRetrieval data frame with the water year. WQP 
+queries will return a water year column for the start and end dates
+of the data.
 }
 \examples{
 \dontrun{ 
 dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
 dataTemp <- addWaterYear(dataTemp)
+
+pHData <- readWQPdata(siteid="USGS-04024315",characteristicName="pH")
+pHData <- addWaterYear(pHData)
 }
 }
