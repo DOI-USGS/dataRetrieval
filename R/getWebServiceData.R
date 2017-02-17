@@ -28,7 +28,7 @@
 getWebServiceData <- function(obs_url, ...){
   
   returnedList <- tryCatch({
-    retryGetOrPost(obs_url)
+    retryGetOrPost(obs_url, ...)
   }, error = function(e){
     NULL
   })
@@ -37,7 +37,7 @@ getWebServiceData <- function(obs_url, ...){
     message("Switching from https to http")
     obs_url <- gsub("https", "http", obs_url)
     returnedList <- tryCatch({
-      retryGetOrPost(obs_url)
+      retryGetOrPost(obs_url, ...)
     }, error = function(e){
       NULL
     })
@@ -52,6 +52,9 @@ getWebServiceData <- function(obs_url, ...){
 
     if(headerInfo$`content-type` == "text/tab-separated-values;charset=UTF-8"){
       returnedDoc <- content(returnedList, type="text",encoding = "UTF-8")
+    } else if (headerInfo$`content-type` %in% 
+               c("application/zip", "application/zip;charset=UTF-8")) {
+      returnedDoc <- returnedList
     } else if (headerInfo$`content-type` %in% c("text/html","text/html; charset=UTF-8") ){
       txt <- readBin(returnedList$content, character())
       message(txt)
