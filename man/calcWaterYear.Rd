@@ -13,4 +13,3 @@ Date, or POSIXct. Numeric does not work.}
 \description{
 extract WY from a date
 }
-\keyword{internal}

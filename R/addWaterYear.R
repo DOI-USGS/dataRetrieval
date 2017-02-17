@@ -64,7 +64,7 @@ addWaterYear <- function(rawData){
 #' @param dateVec vector of dates as character ("YYYY-DD-MM"),
 #' Date, or POSIXct. Numeric does not work.
 #' 
-#' @keywords internal
+#' @export
 calcWaterYear <- function(dateVec){
   # POSIXlt years start at 100, POSIXlt months start at 0
   dateTimeVec <- as.POSIXlt(dateVec)
