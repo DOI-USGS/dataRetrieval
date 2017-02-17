@@ -64,6 +64,12 @@ whatWQPsites <- function(...,zip=FALSE){
     matchReturn <- list(...)
   } else {
     matchReturn <- (...)
+    for(i in c("zip")){
+      if(do.call(missing, list(i)) & i %in% names(matchReturn)){
+        querySummary <- matchReturn[[i]]
+        matchReturn <- matchReturn[-which(names(matchReturn) %in% i)]
+      }
+    }
   }
   
   values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))

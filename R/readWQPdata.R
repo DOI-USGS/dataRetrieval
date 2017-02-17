@@ -3,7 +3,8 @@
 #' Imports data from Water Quality Portal web service. This function gets the data from here: \url{https://www.waterqualitydata.us}.
 #' because it allows for other agencies rather than the USGS.  
 #'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options
+#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied. 
+#' If one of the default arguments (zip or querySummary) is supplied by the user, those arguments would trump any matches in the supplied list.
 #' @param zip logical to request data via downloading zip file. Default set to FALSE.
 #' @param querySummary logical to ONLY return the number of records and unique sites that will be returned from this query.
 #' @keywords data import WQP web service
@@ -106,7 +107,16 @@
 #'               statecode="WI", 
 #'               characteristicName=secchi.names)
 #' 
-#' wqp.data <- readWQPdata(args)                  
+#' wqp.data <- readWQPdata(args)   
+#' 
+#' args_2 <- list('startDateLo' = startDate, 
+#'              'startDateHi' = "2013-12-31", 
+#'               statecode="WI", 
+#'               characteristicName=secchi.names,
+#'               querySummary=TRUE)
+#'
+#' wqp.summary <- readWQPdata(args_2) 
+#'               
 #' }
 readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
   
@@ -114,6 +124,12 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
     matchReturn <- list(...)
   } else {
     matchReturn <- (...)
+    for(i in c("zip","querySummary")){
+      if(do.call(missing, list(i)) & i %in% names(matchReturn)){
+        querySummary <- matchReturn[[i]]
+        matchReturn <- matchReturn[-which(names(matchReturn) %in% i)]
+      }
+    }
   }
 
   values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))

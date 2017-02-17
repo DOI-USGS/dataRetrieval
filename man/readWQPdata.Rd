@@ -7,7 +7,8 @@
 readWQPdata(..., zip = FALSE, querySummary = FALSE)
 }
 \arguments{
-\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options}
+\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied. 
+If one of the default arguments (zip or querySummary) is supplied by the user, those arguments would trump any matches in the supplied list.}
 
 \item{zip}{logical to request data via downloading zip file. Default set to FALSE.}
 
@@ -117,7 +118,16 @@ args <- list('startDateLo' = startDate,
               statecode="WI", 
               characteristicName=secchi.names)
 
-wqp.data <- readWQPdata(args)                  
+wqp.data <- readWQPdata(args)   
+
+args_2 <- list('startDateLo' = startDate, 
+             'startDateHi' = "2013-12-31", 
+              statecode="WI", 
+              characteristicName=secchi.names,
+              querySummary=TRUE)
+
+wqp.summary <- readWQPdata(args_2) 
+              
 }
 }
 \keyword{WQP}

@@ -113,7 +113,12 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
     matchReturn <- list(...)
   } else {
     matchReturn <- (...)
-    #TODO: extract service/asDateTime,convertType?
+    for(i in c("asDateTime","service","convertType")){
+      if(do.call(missing, list(i)) & i %in% names(matchReturn)){
+        querySummary <- matchReturn[[i]]
+        matchReturn <- matchReturn[-which(names(matchReturn) %in% i)]
+      }
+    }
   }
   
   match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata","stat"))
