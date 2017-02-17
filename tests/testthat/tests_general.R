@@ -72,7 +72,9 @@ test_that("General NWIS retrievals working", {
   #test that arg overrides list:
   dailyData <- readNWISdata(args, service="dv")
   expect_lt(nrow(dailyData), nrow(instData))
-  
+  args <- list(stateCd="OH",parameterCd="00665")
+  sites <- whatNWISsites(args)
+  expect_type(sites, "list")
 })
 
 
@@ -110,6 +112,9 @@ test_that("General WQP retrievals working", {
                 querySummary=TRUE)
   wqp.summary <- readWQPdata(arg_3, arg_4)
   expect_true("list" %in% class(wqp.summary))
+  
+  lakeSites <- whatWQPsites(args_2)
+  expect_type(lakeSites, "list")
   
   # Known slow query for WQP:
   # pHDataExpanded2 <- readWQPdata(bBox=c(-90.1,42.9,-89.9,43.1),
