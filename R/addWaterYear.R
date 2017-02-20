@@ -27,6 +27,8 @@
 addWaterYear <- function(rawData){
   
   allowedDateColNames <- c("dateTime", "Date", "ActivityStartDate", "ActivityEndDate")
+  allowedWYColNames <- c("waterYear", "waterYear", "ActivityStartWaterYear", "ActivityEndWaterYear")
+  names(allowedWYColNames) <- allowedDateColNames
   
   # only allow WY to be added if there is an appropriate date column
   if(all(!allowedDateColNames %in% names(rawData))){
@@ -37,7 +39,7 @@ addWaterYear <- function(rawData){
   dateColName <- names(rawData)[names(rawData) %in% allowedDateColNames]
   
   for(dateCol in dateColName){
-    dateColWY <- paste0(dateCol, "WY")
+    dateColWY <- allowedWYColNames[dateCol]
     
     # if this WY column already exists, do not add another
     if(dateColWY %in% names(rawData)){
