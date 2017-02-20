@@ -74,7 +74,7 @@ addWaterYear <- function(rawData){
 #' @return numeric vector indicating the water year
 #' @export
 #' @examples
-#' x <- seq(as.Date("2010-01-01"), as.Date("2010-12-31"))
+#' x <- seq(as.Date("2010-01-01"), as.Date("2010-12-31"), by="month")
 #' waterYear <- calcWaterYear(x)
 #' 
 calcWaterYear <- function(dateVec){
