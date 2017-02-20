@@ -36,27 +36,24 @@ addWaterYear <- function(rawData){
   # set the name of the date column(s) to use for calculating the WY
   dateColName <- names(rawData)[names(rawData) %in% allowedDateColNames]
   
-  # set up new df that will include water year columns
-  wyData <- rawData
-  
   for(dateCol in dateColName){
     dateColWY <- paste0(dateCol, "WY")
     
     # if this WY column already exists, do not add another
-    if(dateColWY %in% names(wyData)){
+    if(dateColWY %in% names(rawData)){
       next
     }
     
     # calculate WY & add as new column
-    wyData[[dateColWY]] <- calcWaterYear(wyData[[dateCol]])
+    rawData[[dateColWY]] <- calcWaterYear(rawData[[dateCol]])
     
     # move waterYear so that it is always comes right after dateTime
-    dateCol_i <- which(names(wyData) == dateCol)
-    dateColWY_i <- which(names(wyData) == dateColWY)
-    wyData <- select(wyData, 1:dateCol_i, dateColWY_i, everything())
+    dateCol_i <- which(names(rawData) == dateCol)
+    dateColWY_i <- which(names(rawData) == dateColWY)
+    rawData <- select(rawData, 1:dateCol_i, dateColWY_i, everything())
   }
   
-  return(wyData)
+  return(rawData)
 }
 
 #' Extract WY from a date
