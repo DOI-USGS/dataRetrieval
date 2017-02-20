@@ -275,15 +275,15 @@ test_that("addWaterYear works for each column name", {
 
 test_that("addWaterYear correctly calculates the WY and is numeric", {
   df_test_wy <- addWaterYear(df_test)
-  expect_is(df_test_wy[['dateTimeWY']], "numeric")
-  expect_true(all(df_test_wy[['dateTimeWY']][1:9] == 2010))
-  expect_true(all(df_test_wy[['dateTimeWY']][10:13] == 2011))
+  expect_is(df_test_wy[['waterYear']], "numeric")
+  expect_true(all(df_test_wy[['waterYear']][1:9] == 2010))
+  expect_true(all(df_test_wy[['waterYear']][10:13] == 2011))
 })
 
 test_that("addWaterYear adds column next to dateTime", {
   df_test_wy <- addWaterYear(df_test)
   dateTime_col <- which(names(df_test_wy) == "dateTime")
-  expect_equal(names(df_test_wy)[dateTime_col + 1], "dateTimeWY")
+  expect_equal(names(df_test_wy)[dateTime_col + 1], "waterYear")
 })
 
 test_that("addWaterYear can be used with pipes", {
