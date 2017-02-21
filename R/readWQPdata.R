@@ -172,9 +172,9 @@ readWQPdata <- function(..., querySummary=FALSE){
     tz <- "UTC"
   }
 
-  values_encoded <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
 
-  urlCall <- paste(paste(names(values_encoded),values,sep="="),collapse="&")
+  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
   baseURL <- drURL("wqpData")
   urlCall <- paste0(baseURL,

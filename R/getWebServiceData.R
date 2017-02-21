@@ -90,13 +90,13 @@ default_ua <- function() {
 getQuerySummary <- function(url){
   queryHEAD <- HEAD(url)
   retquery <- headers(queryHEAD)
-  countNames <- c('total-site-count', 'nwis-site-count', 'total-result-count', 'nwis-result-count')
-  retquery[which(names(retquery) %in% countNames)] <- unlist(lapply(countNames, retquery = retquery,
-                                                                    FUN = function(c, retquery){
-                                                                      retquery[[c]] <- as.numeric(retquery[[c]])
-                                                                      return(retquery[c])
-                                                                    }))
-  retquery$date <- as.Date(retquery$date, format = "%a, %d %b %Y %H:%M:%S")
+  
+  retquery[grep("-count",names(retquery))] <- as.numeric(retquery[grep("-count",names(retquery))])
+  
+  if("date" %in% names(retquery)){
+    retquery$date <- as.Date(retquery$date, format = "%a, %d %b %Y %H:%M:%S")
+  }
+  
   return(retquery)
 }
 
