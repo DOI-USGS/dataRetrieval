@@ -140,7 +140,7 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, 
     if(asDateTime & convertType){
       
       if("peak_dt" %in% names(data)){
-        if(any(nchar(as.character(data$peak_dt)) <= 7) | any(grepl("[0-9]*-[0-9]*-00",data$peak_dt))){
+        if(any(nchar(as.character(data$peak_dt)) <= 7, na.rm = TRUE) | any(grepl("[0-9]*-[0-9]*-00",data$peak_dt), na.rm = TRUE)){
           stop("Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text")
         } else {
           data$peak_dt <- as.Date(data$peak_dt, format="%Y-%m-%d")
