@@ -61,14 +61,6 @@ whatWQPsites <- function(...){
 
   values <- readWQPdots(...)
   
-  if("zip" %in% names(values)){
-    if(class(values["zip"]) == "logical"){
-      values["zip"] <- ifelse(values["zip"], "yes","no")
-    }
-  } else {
-    values["zip"] <- "no"
-  }
-  
   if("tz" %in% names(values)){
     values <- values[!(names(values) %in% "tz")]
   }
