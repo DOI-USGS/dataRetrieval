@@ -7,11 +7,11 @@
 readWQPdata(..., zip = FALSE, querySummary = FALSE)
 }
 \arguments{
+\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options}
+
 \item{zip}{logical to request data via downloading zip file. Default set to FALSE.}
 
 \item{querySummary}{logical to ONLY return the number of records and unique sites that will be returned from this query.}
-
-\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options}
 }
 \value{
 A data frame with at least the following columns:
@@ -116,4 +116,3 @@ nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

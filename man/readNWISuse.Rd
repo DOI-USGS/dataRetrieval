@@ -59,4 +59,3 @@ paData <- readNWISuse(stateCd = "42",countyCd = c("Allegheny County", "BUTLER", 
 ks <- readNWISuse(stateCd = "KS", countyCd = NULL, categories = c("IT","LI"))
 }
 }
-

@@ -12,4 +12,3 @@ getQuerySummary(url)
 \description{
 getting header information from a WQP query
 }
-

@@ -28,4 +28,3 @@ Laura De Cicco \email{ldecicco@usgs.gov}
 \keyword{USGS,}
 \keyword{services}
 \keyword{web}
-
