@@ -101,6 +101,9 @@
 #'                               parameterCd="00065")
 #'
 #'dailyWV <- readNWISdata(stateCd = "West Virginia", parameterCd = "00060")
+#'
+#' # use county names to get data
+#' dailyStaffordVA <- readNWISdata(stateCd = "Virginia", countyCd="Stafford", parameterCd = "00060")
 #' }
 readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   
@@ -130,6 +133,13 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   names(values)[names(values) == "statecode"] <- "stateCd"
   if("stateCd" %in% names(values)){
     values["stateCd"] <- stateCdLookup(values["stateCd"], "postal")
+  }
+  
+  names(values)[names(values) == "countycode"] <- "countyCd"
+  if("countyCd" %in% names(values)){
+    values["countyCd"] <- paste0(stateCdLookup(values["stateCd"], "id"), 
+                                 countyCdLookup(values["stateCd"], values["countyCd"], "id"))
+    values <- values[!names(values) == "stateCd"]
   }
   
   if (service %in% c("qwdata","measurements")){

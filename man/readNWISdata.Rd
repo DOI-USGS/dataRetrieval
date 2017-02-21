@@ -110,6 +110,9 @@ allDailyStats <- readNWISdata(site=c("03111548"),
                               parameterCd="00065")
 
 dailyWV <- readNWISdata(stateCd = "West Virginia", parameterCd = "00060")
+
+# use county names to get data
+dailyStaffordVA <- readNWISdata(stateCd = "Virginia", countyCd="Stafford", parameterCd = "00060")
 }
 }
 \seealso{
