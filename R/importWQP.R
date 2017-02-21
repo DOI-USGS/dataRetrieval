@@ -58,11 +58,11 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       message("zip encoding access still in development")
       temp <- tempfile()
       temp <- paste0(temp,".zip")
-      doc <- GET(obs_url, user_agent(default_ua()), 
-                          write_disk(temp))
-
+      doc <- getWebServiceData(obs_url, write_disk(temp))
       headerInfo <- headers(doc)
-      
+      doc <- unzip(temp, exdir=tempdir())
+      unlink(temp)
+      on.exit(unlink(doc))
     } else {
       doc <- getWebServiceData(obs_url)
       headerInfo <- attr(doc, "headerInfo")
@@ -89,10 +89,6 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       emptyReturn <- data.frame(NA)
       attr(emptyReturn, "headerInfo") <- headerInfo
       return(emptyReturn)
-    }  
-    
-    if(zip){
-      doc <- unzip(temp)
     }
     
   } else {
@@ -116,8 +112,6 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
                                         `WellHoleDepthMeasure/MeasureValue` = col_number(),
                                         `HUCEightDigitCode` = col_character()),
                        quote = "", delim = "\t"))
-    
-  if(zip) unlink(doc)
     
   if(!file.exists(obs_url)){
     actualNumReturned <- nrow(retval)
