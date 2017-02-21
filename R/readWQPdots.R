@@ -3,7 +3,9 @@
 #' 
 #' @keywords internal
 readWQPdots <- function(...){
-  matchReturn <- list(...)
+  
+  matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
+                   list(...)[sapply(list(...), class) != "list"]) # get the non-list parts
   
   values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))
   

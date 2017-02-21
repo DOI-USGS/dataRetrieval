@@ -3,8 +3,7 @@
 #' Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
 #' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
 #'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options
-#' @param zip logical to request data via downloading zip file. Default set to FALSE.
+#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -58,9 +57,17 @@
 #' sites <- whatWQPsites(countycode="US:55:025",siteType=type)
 #' lakeSites <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 #' }
-whatWQPsites <- function(...,zip=FALSE){
+whatWQPsites <- function(...){
 
   values <- readWQPdots(...)
+  
+  if("zip" %in% names(values)){
+    if(class(values["zip"]) == "logical"){
+      values["zip"] <- ifelse(values["zip"], "yes","no")
+    }
+  } else {
+    values["zip"] <- "no"
+  }
   
   if("tz" %in% names(values)){
     values <- values[!(names(values) %in% "tz")]
@@ -75,11 +82,8 @@ whatWQPsites <- function(...,zip=FALSE){
   urlCall <- paste0(baseURL,
                urlCall,
                "&mimeType=tsv&sorted=no")
-  if(zip){
-    urlCall <- paste0(urlCall,"&zip=yes")
-  }
-  
-  retval <- importWQP(urlCall, zip=zip)
+
+  retval <- importWQP(urlCall, zip=values["zip"] == "yes")
   
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- urlCall
