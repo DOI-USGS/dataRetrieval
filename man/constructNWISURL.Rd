@@ -76,4 +76,3 @@ urlQW <- constructNWISURL("450456092225801","70300",startDate="",endDate="","qw"
 \keyword{import}
 \keyword{service}
 \keyword{web}
-
