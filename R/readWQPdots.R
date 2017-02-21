@@ -34,12 +34,7 @@ readWQPdots <- function(...){
   if("tz" %in% names(values)){
     tz <- values["tz"]
     if(tz != ""){
-      rTZ <- c("America/New_York","America/Chicago",
-               "America/Denver","America/Los_Angeles",
-               "America/Anchorage","America/Honolulu",
-               "America/Jamaica","America/Managua",
-               "America/Phoenix","America/Metlakatla","UTC")
-      tz <- match.arg(tz, rTZ)
+      tz <- match.arg(tz, OlsonNames())
       if("UTC" == tz) tz <- ""
     }
     values["tz"] <- tz
