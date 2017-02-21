@@ -6,6 +6,7 @@
 #' @param obs_url character containing the url for the retrieval
 #' @param \dots information to pass to header request
 #' @importFrom httr GET
+#' @importFrom httr POST
 #' @importFrom httr RETRY
 #' @importFrom httr user_agent
 #' @importFrom httr stop_for_status

@@ -4,7 +4,7 @@
 \alias{readNWISdata}
 \title{General Data Import from NWIS}
 \usage{
-readNWISdata(..., asDateTime = TRUE, convertType = TRUE)
+readNWISdata(..., asDateTime = TRUE, convertType = TRUE, tz = "UTC")
 }
 \arguments{
 \item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options.  A list of arguments can also be supplied. 
@@ -18,6 +18,8 @@ The statistics service has a limited selection of arguments (see \url{https://wa
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
+
+\item{tz}{timezone as a character string. See \code{OlsonNames()} for a list of possibilities.}
 }
 \value{
 A data frame with the following columns:

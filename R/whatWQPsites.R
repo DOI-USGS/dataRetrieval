@@ -59,43 +59,11 @@
 #' }
 whatWQPsites <- function(...){
 
-  matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
-                   list(...)[sapply(list(...), class) != "list"]) # get the non-list parts
-  
-  values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))
-  
-  if("zip" %in% names(values)){
-    if(class(values["zip"]) == "logical"){
-      values["zip"] <- ifelse(values["zip"], "yes","no")
-    }
-  } else {
-    values["zip"] <- "no"
-  }
+  values <- readWQPdots(...)
   
   if("tz" %in% names(values)){
     values <- values[!(names(values) %in% "tz")]
   }
-  
-  if("statecode" %in% names(values)){
-    stCd <- values["statecode"]
-    if(!grepl("US:",stCd)){
-      values["statecode"] <- paste0("US:",stateCdLookup(stCd, "id"))
-    }
-  }
-  
-  if("stateCd" %in% names(values)){
-    stCd <- values["stateCd"]
-    if(!grepl("US:",stCd)){
-      values["stateCd"] <- paste0("US:",stateCdLookup(stCd, "id"))
-    }
-    names(values)[names(values) == "stateCd"] <- "statecode"
-  }
-  
-  if("bBox" %in% names(values)){
-    values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
-  }
-  
-  values <- checkWQPdates(values)
   
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
     
