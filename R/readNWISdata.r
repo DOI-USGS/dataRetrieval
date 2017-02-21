@@ -7,6 +7,7 @@
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
+#' @param tz timezone as a character string. See \code{OlsonNames()} for a list of possibilities.
 #' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options.  A list of arguments can also be supplied. 
 #' One important argument to include is 'service'. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
 #' (for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
@@ -107,7 +108,9 @@
 #'                 parameterCd="00060")
 #'allDailyStats_2 <- readNWISdata(arg.list, service="stat")
 #' }
-readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE){
+readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
+  
+  tz <- match.arg(tz, OlsonNames())
   
   matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
                    list(...)[sapply(list(...), class) != "list"]) # get the non-list parts
@@ -177,16 +180,6 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE){
       values["qw_sample_wide"] <- "wide"
     }
   } 
-  
-  if("tz" %in% names(values)){
-    tz <- values["tz"]
-    if(tz != ""){
-      tz <- match.arg(tz, OlsonNames())
-    }
-    values <- values[!(names(values) %in% "tz")]
-  } else {
-    tz <- "UTC"
-  }
   
   if(service %in% c("site","gwlevels","stat")){
     format.default <- "rdb"
