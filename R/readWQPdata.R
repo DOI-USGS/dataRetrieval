@@ -147,35 +147,38 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
 
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
 
-  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
+  values[["sorted"]] <- "no"
+  values[["mimeType"]] <- "tsv"
+  if (zip) values[["zip"]] <- "yes"
   
-  baseURL <- drURL("wqpData")
-  urlCall <- paste0(baseURL,
-                   urlCall,
-                   "&sorted=no&mimeType=tsv")
-  
-  if(zip) urlCall <- paste0(urlCall,"&zip=yes")
+  urlCall <- drURL("wqpData", arg.list=values)
   
   if(querySummary){
     retquery <- getQuerySummary(urlCall)
     return(retquery)
   } else {
   
+    siteInfo <- whatWQPsites(...,zip=zip)
+    
+    siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
+                                 agency_cd=siteInfo$OrganizationIdentifier,
+                                 site_no=siteInfo$MonitoringLocationIdentifier,
+                                 dec_lat_va=siteInfo$LatitudeMeasure,
+                                 dec_lon_va=siteInfo$LongitudeMeasure,
+                                 hucCd=siteInfo$HUCEightDigitCode,
+                                 stringsAsFactors=FALSE)
+    
+    siteInfo <- cbind(siteInfoCommon, siteInfo)
+    
+    values[["siteid"]] <- URLencode(paste(siteInfo$site_no, collapse = ";"), reserved = TRUE)
+    # rebuild urlCall
+    spatialParams <- c("bBox", "lat", "lon", "within", "countrycode",
+                       "statecode", "countycode", "siteType", "organization", # can org be within site?
+                       "huc") # should we include providers in this list?
+    urlCall <- drURL("wqpData", arg.list=values[!names(values) %in% spatialParams])
     retval <- importWQP(urlCall,zip=zip, tz=tz)
     
     if(!all(is.na(retval))){
-      siteInfo <- whatWQPsites(...,zip=zip)
-      
-      siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
-                                   agency_cd=siteInfo$OrganizationIdentifier,
-                                   site_no=siteInfo$MonitoringLocationIdentifier,
-                                   dec_lat_va=siteInfo$LatitudeMeasure,
-                                   dec_lon_va=siteInfo$LongitudeMeasure,
-                                   hucCd=siteInfo$HUCEightDigitCode,
-                                   stringsAsFactors=FALSE)
-      
-      siteInfo <- cbind(siteInfoCommon, siteInfo)
-      
       retvalVariableInfo <- retval[,c("CharacteristicName","USGSPCode",
                                       "ResultMeasure.MeasureUnitCode","ResultSampleFractionText")]
       retvalVariableInfo <- unique(retvalVariableInfo)
@@ -199,7 +202,7 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
         variableInfo <- merge(variableInfo, paramINFO, by="parameterCd", all = TRUE)
         variableInfo <- unique(variableInfo)
       }
-      
+
       attr(retval, "siteInfo") <- siteInfo
       attr(retval, "variableInfo") <- variableInfo
       attr(retval, "url") <- urlCall
