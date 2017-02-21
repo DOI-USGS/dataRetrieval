@@ -127,13 +127,9 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   
   format.default <- "waterml,1.1"
   
+  names(values)[names(values) == "statecode"] <- "stateCd"
   if("stateCd" %in% names(values)){
     values["stateCd"] <- stateCdLookup(values["stateCd"], "postal")
-  }
-  
-  if("statecode" %in% names(values)){
-    values["statecode"] <- stateCdLookup(values["statecode"], "postal")
-    names(values)[names(values) == "statecode"] <- "stateCd"
   }
   
   if (service %in% c("qwdata","measurements")){
