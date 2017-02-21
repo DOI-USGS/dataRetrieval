@@ -33,14 +33,5 @@ readWQPdots <- function(...){
     names(values)[names(values) == "stateCd"] <- "statecode"
   }
   
-  if("tz" %in% names(values)){
-    tz <- values["tz"]
-    if(tz != ""){
-      tz <- match.arg(tz, OlsonNames())
-      if("UTC" == tz) tz <- ""
-    }
-    values["tz"] <- tz
-  }
-  
   return(values)
 }

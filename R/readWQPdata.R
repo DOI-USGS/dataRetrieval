@@ -5,6 +5,7 @@
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied. 
 #' @param querySummary logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the \dots argument
+#' @param tz timezone as a character string. See \code{OlsonNames()} for a list of possibilities.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -125,17 +126,11 @@
 #'                               querySummary=TRUE)
 #'                
 #' }
-readWQPdata <- function(..., querySummary=FALSE){
+readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
+  
+  tz <- match.arg(tz, OlsonNames())
   
   values <- readWQPdots(...)
-  
-  if("tz" %in% names(values)){
-    tz <- values["tz"]
-    values <- values[!(names(values) %in% "tz")]
-  } else {
-    tz <- "UTC"
-  }
-
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
 
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
