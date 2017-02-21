@@ -108,7 +108,7 @@ startDate <- as.Date("2013-01-01")
 nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
                         characteristicType="Nutrient")
 
-                        
+dailyStaffordVA <- readWQPdata(statecode = "Virginia", countycode="Stafford", parameterCd = "00060")                      
 }
 }
 \keyword{WQP}

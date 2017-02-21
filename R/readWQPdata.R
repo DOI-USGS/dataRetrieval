@@ -97,7 +97,7 @@
 #' nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
 #'                         characteristicType="Nutrient")
 #' 
-#'                         
+#' dailyStaffordVA <- readWQPdata(statecode = "Virginia", countycode="Stafford", parameterCd = "00060")                      
 #' }
 readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
   
@@ -117,8 +117,19 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
   names(values)[names(values) == "stateCd"] <- "statecode"
   if("statecode" %in% names(values)){
     stCd <- values["statecode"]
-    if(!grepl("US:",stCd)){
-      values["statecode"] <- paste0("US:",stateCdLookup(stCd, "id"))
+    stCdPrefix <- "US:"
+    if(!grepl(stCdPrefix, stCd)){
+      values["statecode"] <- paste0(stCdPrefix, stateCdLookup(stCd, "id"))
+    }
+  }
+  
+  names(values)[names(values) == "countyCd"] <- "countycode"
+  if("countycode" %in% names(values)){
+    ctyCd <- values["countycode"]
+    ctyCdPrefix <- paste0(values["statecode"], ":")
+    if(!grepl(ctyCdPrefix, ctyCd)){
+      stCd <- gsub("US:", "", values["statecode"])
+      values["countycode"] <- paste0(ctyCdPrefix, countyCdLookup(stCd, ctyCd, "id"))
     }
   }
   
