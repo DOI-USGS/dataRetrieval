@@ -178,18 +178,18 @@ test_that("readWQPdots working", {
   
   # bbox vector turned into single string with coords separated by semicolons
   formArgs_bbox <- dataRetrieval:::readWQPdots(bbox = c(-92.5, 45.4, -87, 47))
-  expect_true(length(formArgs_bbox) == 1)
+  expect_true(length(formArgs_bbox) == 2)
   expect_true(length(gregexpr(";", formArgs_bbox)[[1]]) == 3)
   
   # NWIS names (siteNumber) converted to WQP expected names (siteid)
   formArgs_site <- dataRetrieval:::readWQPdots(siteNumber="04010301")
-  expect_true(length(formArgs_site) == 1)
+  expect_true(length(formArgs_site) == 2)
   expect_true("siteid" %in% names(formArgs_site))
   expect_false("siteNumber" %in% names(formArgs_site))
   
   # NWIS names (stateCd) converted to WQP expected names (statecode)
   formArgs <- dataRetrieval:::readWQPdots(stateCd="OH",parameterCd="00665")
-  expect_true(length(formArgs) == 2)
+  expect_true(length(formArgs) == 3)
   expect_true("statecode" %in% names(formArgs))
   expect_false("stateCd" %in% names(formArgs))
 })

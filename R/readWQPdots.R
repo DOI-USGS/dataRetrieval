@@ -33,5 +33,13 @@ readWQPdots <- function(...){
     names(values)[names(values) == "stateCd"] <- "statecode"
   }
   
+  if("zip" %in% names(values)){
+    if(class(values["zip"]) == "logical"){
+      values["zip"] <- ifelse(values["zip"], "yes","no")
+    }
+  } else {
+    values["zip"] <- "no"
+  }
+  
   return(values)
 }
