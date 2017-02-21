@@ -60,34 +60,11 @@
 #' }
 whatWQPsites <- function(...,zip=FALSE){
 
-  matchReturn <- list(...)
-  
-  values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))
+  values <- readWQPdots(...)
   
   if("tz" %in% names(values)){
     values <- values[!(names(values) %in% "tz")]
   }
-  
-  if("statecode" %in% names(values)){
-    stCd <- values["statecode"]
-    if(!grepl("US:",stCd)){
-      values["statecode"] <- paste0("US:",stateCdLookup(stCd, "id"))
-    }
-  }
-  
-  if("stateCd" %in% names(values)){
-    stCd <- values["stateCd"]
-    if(!grepl("US:",stCd)){
-      values["stateCd"] <- paste0("US:",stateCdLookup(stCd, "id"))
-    }
-    names(values)[names(values) == "stateCd"] <- "statecode"
-  }
-  
-  if("bBox" %in% names(values)){
-    values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
-  }
-  
-  values <- checkWQPdates(values)
   
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
     
