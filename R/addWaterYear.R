@@ -35,16 +35,14 @@ addWaterYear <- function(rawData){
     stop("specified date column does not exist in supplied data frame")
   }
   
-  # set the name of the date column(s) to use for calculating the WY
-  dateColName <- names(rawData)[names(rawData) %in% allowedDateColNames]
+  # set the name of the date column(s) to use for calculating the WY &
+  # if the WY column already exists, do not add another (rm that date col
+  # from the list that will be looped over)
+  dateColNames <- names(rawData)[names(rawData) %in% allowedDateColNames]
+  dateColNames <- dateColNames[!allowedWYColNames[dateColNames] %in% names(rawData)]
   
-  for(dateCol in dateColName){
+  for(dateCol in dateColNames){
     dateColWY <- allowedWYColNames[dateCol]
-    
-    # if this WY column already exists, do not add another
-    if(dateColWY %in% names(rawData)){
-      next
-    }
     
     # calculate WY & add as new column
     rawData[[dateColWY]] <- calcWaterYear(rawData[[dateCol]])
