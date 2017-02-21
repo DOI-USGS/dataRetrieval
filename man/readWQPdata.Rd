@@ -4,15 +4,12 @@
 \alias{readWQPdata}
 \title{General Data Import from Water Quality Portal}
 \usage{
-readWQPdata(..., zip = FALSE, querySummary = FALSE)
+readWQPdata(..., querySummary = FALSE)
 }
 \arguments{
-\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied. 
-If one of the default arguments (zip or querySummary) is supplied by the user, those arguments would trump any matches in the supplied list.}
+\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
 
-\item{zip}{logical to request data via downloading zip file. Default set to FALSE.}
-
-\item{querySummary}{logical to ONLY return the number of records and unique sites that will be returned from this query.}
+\item{querySummary}{logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the \dots argument}
 }
 \value{
 A data frame with at least the following columns:
@@ -131,9 +128,9 @@ wqp.summary <- readWQPdata(args_2)
 arg_3 <- list('startDateLo' = startDate, 
              'startDateHi' = "2013-12-31")
 arg_4 <- list(statecode="WI", 
-              characteristicName=secchi.names,
-              querySummary=TRUE)
-wqp.summary <- readWQPdata(arg_3, arg_4) 
+              characteristicName=secchi.names)
+wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
+wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", characteristicName=secchi.names, querySummary=TRUE)
                
 }
 }

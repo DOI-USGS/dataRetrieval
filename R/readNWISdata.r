@@ -4,16 +4,15 @@
 #' Arguments to the function should be based on \url{https://waterservices.usgs.gov} service calls.
 #' See examples below for ideas of constructing queries.
 #'
-#' @param service character. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
-#' (for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
-#' statistics service). Note: "qw" and "measurement" calls go to: 
-#' \url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
-#' The statistics service has a limited selection of arguments (see \url{https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}). 
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options.  A list of arguments can also be supplied. 
-#' If one of the default arguments (service, asDateTime, convertType) is supplied by the user, those arguments would trump any matches in the supplied list.
+#' One important argument to include is 'service'. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
+#' (for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
+#' statistics service). Note: "qw" and "measurement" calls go to: 
+#' \url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
+#' The statistics service has a limited selection of arguments (see \url{https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}). 
 #' @import utils
 #' @import stats
 #' @return A data frame with the following columns:
@@ -108,21 +107,16 @@
 #'                 parameterCd="00060")
 #'allDailyStats_2 <- readNWISdata(arg.list, service="stat")
 #' }
-readNWISdata <- function(..., service="dv", asDateTime=TRUE,convertType=TRUE){
+readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE){
   
-  if(all(sapply(list(...), class) != "list")){
-    matchReturn <- list(...)
+  matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
+                   list(...)[sapply(list(...), class) != "list"]) # get the non-list parts
+  
+  if("service" %in% names(matchReturn)){
+    service <- matchReturn$service
+    matchReturn$service <- NULL
   } else {
-    matchReturn <- c(...)
-    for(i in c("asDateTime","service","convertType")){
-      if(do.call(missing, list(i)) & i %in% names(matchReturn)){
-        assign(i, matchReturn[[i]])
-      }
-      
-      if(i %in% names(matchReturn)){
-        matchReturn <- matchReturn[-which(names(matchReturn) %in% i)]
-      }
-    }
+    service <- "dv"
   }
   
   match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata","stat"))

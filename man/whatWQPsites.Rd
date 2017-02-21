@@ -4,13 +4,10 @@
 \alias{whatWQPsites}
 \title{Site Data Import from Water Quality Portal}
 \usage{
-whatWQPsites(..., zip = FALSE)
+whatWQPsites(...)
 }
 \arguments{
-\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied. 
-If zip is supplied by the user as a function argument, it would trump any matches in the supplied list.}
-
-\item{zip}{logical to request data via downloading zip file. Default set to FALSE.}
+\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
 }
 \value{
 A data frame with at least the following columns:

@@ -64,13 +64,12 @@ test_that("General NWIS retrievals working", {
   
   instData <- readNWISdata(args)
   
-  args <- list(sites="05114000", service="iv", 
+  args <- list(sites="05114000", service="dv", 
                parameterCd="00060", 
                startDate="2014-05-01",
                endDate="2014-05-01")
   
-  #test that arg overrides list:
-  dailyData <- readNWISdata(args, service="dv")
+  dailyData <- readNWISdata(args)
   expect_lt(nrow(dailyData), nrow(instData))
   args <- list(stateCd="OH",parameterCd="00665")
   sites <- whatNWISsites(args)
@@ -108,9 +107,8 @@ test_that("General WQP retrievals working", {
   arg_3 <- list('startDateLo' = startDate,
                'startDateHi' = "2013-12-31")
   arg_4 <- list(statecode="WI",
-                characteristicName=secchi.names,
-                querySummary=TRUE)
-  wqp.summary <- readWQPdata(arg_3, arg_4)
+                characteristicName=secchi.names)
+  wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
   expect_true("list" %in% class(wqp.summary))
   
   lakeSites <- whatWQPsites(args_2)

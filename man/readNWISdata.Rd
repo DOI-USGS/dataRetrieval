@@ -4,13 +4,11 @@
 \alias{readNWISdata}
 \title{General Data Import from NWIS}
 \usage{
-readNWISdata(..., service = "dv", asDateTime = TRUE, convertType = TRUE)
+readNWISdata(..., asDateTime = TRUE, convertType = TRUE)
 }
 \arguments{
 \item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options.  A list of arguments can also be supplied. 
-If one of the default arguments (service, asDateTime, convertType) is supplied by the user, those arguments would trump any matches in the supplied list.}
-
-\item{service}{character. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
+One important argument to include is 'service'. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
 (for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
 statistics service). Note: "qw" and "measurement" calls go to: 
 \url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.

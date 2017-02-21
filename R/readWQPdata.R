@@ -4,9 +4,7 @@
 #' because it allows for other agencies rather than the USGS.  
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied. 
-#' If one of the default arguments (zip or querySummary) is supplied by the user, those arguments would trump any matches in the supplied list.
-#' @param zip logical to request data via downloading zip file. Default set to FALSE.
-#' @param querySummary logical to ONLY return the number of records and unique sites that will be returned from this query.
+#' @param querySummary logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the \dots argument
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -120,32 +118,28 @@
 #' arg_3 <- list('startDateLo' = startDate, 
 #'              'startDateHi' = "2013-12-31")
 #' arg_4 <- list(statecode="WI", 
-#'               characteristicName=secchi.names,
-#'               querySummary=TRUE)
-#' wqp.summary <- readWQPdata(arg_3, arg_4) 
+#'               characteristicName=secchi.names)
+#' wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
+#' wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", characteristicName=secchi.names, querySummary=TRUE)
 #'                
 #' }
-readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
+readWQPdata <- function(..., querySummary=FALSE){
   
-  if(all(sapply(list(...), class) != "list")){
-    matchReturn <- list(...)
-  } else {
-    matchReturn <- c(...)
-    for(i in c("zip","querySummary")){
-      if(do.call(missing, list(i)) & i %in% names(matchReturn)){
-        assign(i, matchReturn[[i]])
-      }
-      
-      if(i %in% names(matchReturn)){
-        matchReturn <- matchReturn[-which(names(matchReturn) %in% i)]
-      }
-    }
-  }
-
+  matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
+                   list(...)[sapply(list(...), class) != "list"]) # get the non-list parts
+  
   values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))
   
   if("bBox" %in% names(values)){
     values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
+  }
+  
+  if("zip" %in% names(values)){
+    if(class(values["zip"]) == "logical"){
+      values["zip"] <- ifelse(values["zip"], "yes","no")
+    }
+  } else {
+    values["zip"] <- "no"
   }
 
   values <- checkWQPdates(values)
@@ -186,18 +180,16 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
   urlCall <- paste0(baseURL,
                    urlCall,
                    "&sorted=no&mimeType=tsv")
-  
-  if(zip) urlCall <- paste0(urlCall,"&zip=yes")
-  
+
   if(querySummary){
     retquery <- getQuerySummary(urlCall)
     return(retquery)
   } else {
   
-    retval <- importWQP(urlCall,zip=zip, tz=tz)
+    retval <- importWQP(urlCall,zip=values["zip"] == "yes", tz=tz)
     
     if(!all(is.na(retval))){
-      siteInfo <- whatWQPsites(...,zip=zip)
+      siteInfo <- whatWQPsites(..., zip=values["zip"] == "yes")
       
       siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
                                    agency_cd=siteInfo$OrganizationIdentifier,

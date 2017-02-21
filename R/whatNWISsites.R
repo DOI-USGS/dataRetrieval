@@ -5,7 +5,7 @@
 #' Mapper format is used
 #'
 #' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options. A 
-#' list can also be supplied.
+#' list (or lists) can also be supplied.
 #' @import utils
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{
@@ -37,11 +37,8 @@
 #' }
 whatNWISsites <- function(...){
   
-  if(all(sapply(list(...), class) != "list")){
-    matchReturn <- list(...)
-  } else {
-    matchReturn <- c(...)
-  }
+  matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
+                   list(...)[sapply(list(...), class) != "list"]) # get the non-list parts
   
   values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
   
