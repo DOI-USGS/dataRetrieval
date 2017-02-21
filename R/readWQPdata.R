@@ -172,9 +172,9 @@ readWQPdata <- function(..., querySummary=FALSE){
     tz <- "UTC"
   }
 
-  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  values_encoded <- sapply(values, function(x) URLencode(x, reserved = TRUE))
 
-  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
+  urlCall <- paste(paste(names(values_encoded),values,sep="="),collapse="&")
   
   baseURL <- drURL("wqpData")
   urlCall <- paste0(baseURL,
@@ -189,7 +189,7 @@ readWQPdata <- function(..., querySummary=FALSE){
     retval <- importWQP(urlCall,zip=values["zip"] == "yes", tz=tz)
     
     if(!all(is.na(retval))){
-      siteInfo <- whatWQPsites(..., zip=values["zip"] == "yes")
+      siteInfo <- whatWQPsites(...)
       
       siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
                                    agency_cd=siteInfo$OrganizationIdentifier,
