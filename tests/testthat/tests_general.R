@@ -123,3 +123,25 @@ test_that("whatNWISsites working", {
   expect_true(nrow(bboxSites) > 0)
   expect_true(is.numeric(bboxSites$dec_lat_va))
   })
+
+context("readWQPdots")
+test_that("readWQPdots working", {
+  testthat::skip_on_cran()
+  
+  # bbox vector turned into single string with coords separated by semicolons
+  formArgs_bbox <- dataRetrieval:::readWQPdots(bbox = c(-92.5, 45.4, -87, 47))
+  expect_true(length(formArgs_bbox) == 1)
+  expect_true(length(gregexpr(";", formArgs_bbox)[[1]]))
+  
+  # NWIS names (siteNumber) converted to WQP expected names (siteid)
+  formArgs_site <- dataRetrieval:::readWQPdots(siteNumber="04010301")
+  expect_true(length(formArgs_site) == 1)
+  expect_true("siteid" %in% names(formArgs_site))
+  expect_false("siteNumber" %in% names(formArgs_site))
+  
+  # NWIS names (stateCd) converted to WQP expected names (statecode)
+  formArgs <- dataRetrieval:::readWQPdots(stateCd="OH",parameterCd="00665")
+  expect_true(length(formArgs) == 2)
+  expect_false("statecode" %in% names(formArgs))
+  expect_false("stateCd" %in% names(formArgs))
+})
