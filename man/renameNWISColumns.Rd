@@ -79,4 +79,3 @@ rdbResults <- renameNWISColumns(rdbResults)
 }
 \keyword{IO}
 \keyword{manip}
-

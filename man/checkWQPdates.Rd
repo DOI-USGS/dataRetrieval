@@ -22,4 +22,3 @@ values <- list(startDateLo="01-01-2002", characteristicName="Phosphorous",
 values <- checkWQPdates(values)
 }
 \keyword{internal}
-
