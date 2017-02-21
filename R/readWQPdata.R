@@ -114,19 +114,12 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
   names(values)[names(values) == "siteNumber"] <- "siteid"
   names(values)[names(values) == "siteNumbers"] <- "siteid"
   
+  names(values)[names(values) == "stateCd"] <- "statecode"
   if("statecode" %in% names(values)){
     stCd <- values["statecode"]
     if(!grepl("US:",stCd)){
       values["statecode"] <- paste0("US:",stateCdLookup(stCd, "id"))
     }
-  }
-  
-  if("stateCd" %in% names(values)){
-    stCd <- values["stateCd"]
-    if(!grepl("US:",stCd)){
-      values["stateCd"] <- paste0("US:",stateCdLookup(stCd, "id"))
-    }
-    names(values)[names(values) == "stateCd"] <- "statecode"
   }
   
   if("tz" %in% names(values)){
