@@ -93,10 +93,9 @@ test_that("General WQP retrievals working", {
   args_2 <- list('startDateLo' = startDate,
                'startDateHi' = "2013-12-31",
                 statecode="WI",
-                characteristicName=secchi.names,
-                querySummary=TRUE)
+                characteristicName=secchi.names)
 
-  wqp.summary <- readWQPdata(args_2)
+  wqp.summary <- readWQPdata(args_2, querySummary = TRUE)
   expect_true("list" %in% class(wqp.summary))
   
   #pretty sloooow:

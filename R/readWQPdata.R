@@ -120,7 +120,9 @@
 #' arg_4 <- list(statecode="WI", 
 #'               characteristicName=secchi.names)
 #' wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
-#' wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", characteristicName=secchi.names, querySummary=TRUE)
+#' wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", 
+#'                               characteristicName=secchi.names, 
+#'                               querySummary=TRUE)
 #'                
 #' }
 readWQPdata <- function(..., querySummary=FALSE){
@@ -189,7 +191,7 @@ readWQPdata <- function(..., querySummary=FALSE){
     retval <- importWQP(urlCall,zip=values["zip"] == "yes", tz=tz)
     
     if(!all(is.na(retval))){
-      siteInfo <- whatWQPsites(..., zip=values["zip"] == "yes")
+      siteInfo <- whatWQPsites(...)
       
       siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
                                    agency_cd=siteInfo$OrganizationIdentifier,
