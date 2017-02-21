@@ -147,6 +147,7 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
 
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
 
+  # add special parameters
   values[["sorted"]] <- "no"
   values[["mimeType"]] <- "tsv"
   if (zip) values[["zip"]] <- "yes"
@@ -170,13 +171,14 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
     
     siteInfo <- cbind(siteInfoCommon, siteInfo)
     
+    # siteid from siteInfo becomes the only "spatial" parameter in data request
     values[["siteid"]] <- URLencode(paste(siteInfo$site_no, collapse = ";"), reserved = TRUE)
-    # rebuild urlCall
+
     spatialParams <- c("bBox", "lat", "lon", "within", "countrycode",
                        "statecode", "countycode", "siteType", "organization", # can org be within site?
                        "huc") # should we include providers in this list?
     urlCall <- drURL("wqpData", arg.list=values[!names(values) %in% spatialParams])
-    retval <- importWQP(urlCall,zip=zip, tz=tz)
+    retval <- importWQP(urlCall, zip=zip, tz=tz)
     
     if(!all(is.na(retval))){
       retvalVariableInfo <- retval[,c("CharacteristicName","USGSPCode",
