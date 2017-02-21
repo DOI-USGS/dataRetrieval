@@ -123,11 +123,12 @@ test_that("External importWaterML1 test", {
   #raw XML
   url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
                           startDate = "2014-01-01", endDate = "2014-01-01")
-  raw <- content(GET(url), as = 'raw')
-  rawParsed <- importWaterML1(raw)
-  expect_true(nrow(rawParsed) > 0)
-  expect_true(data.class(rawParsed$X_00060_00003) == "numeric")
- 
+  # Will put back when https is converted:
+  # raw <- content(GET(url), as = 'raw')
+  # rawParsed <- importWaterML1(raw)
+  # expect_true(nrow(rawParsed) > 0)
+  # expect_true(data.class(rawParsed$X_00060_00003) == "numeric")
+  # 
   #no data
   url <- constructNWISURL("05212700", "00060", "2014-01-01", "2014-01-10",'dv', statCd = "00001")
   noData <- importWaterML1(url) 
@@ -139,6 +140,27 @@ test_that("External importWaterML1 test", {
   data <- importWaterML1(url, tz = "America/New_York", asDateTime = TRUE)
   expect_true(data.class(data$dateTime) == "POSIXct")
   expect_true(nrow(data) > 0)
+  
+  expect_error(readNWISdata(sites="05114000", 
+                              service="iv",
+                              parameterCd="00060",
+                              startDate="2014-05-01T00:00",
+                              endDate="2014-05-01T12:00",
+                              tz="blah"))
+
+  arg.list <- list(sites="05114000", 
+                   parameterCd="00060",
+                   startDate="2014-05-01T00:00",
+                   endDate="2014-05-01T12:00",
+                   tz="America/Chicago")
+  
+  chi_iv <- readNWISdata(arg.list, 
+                         service="iv")
+  
+  expect_true(all(chi_iv$tz_cd == "America/Chicago"))
+  expect_equal(chi_iv$dateTime[1], as.POSIXct("2014-05-01T00:00", format = "%Y-%m-%dT%H:%M", tz="America/Chicago"))
+  expect_equal(chi_iv$dateTime[nrow(chi_iv)], as.POSIXct("2014-05-01T12:00", format = "%Y-%m-%dT%H:%M", tz="America/Chicago"))
+  
 })
 
 context("importWaterML2")
@@ -183,11 +205,3 @@ test_that("External WQP tests", {
   expect_is(STORETdata$ActivityStartDateTime, 'POSIXct')
 })
 
-context("importNGWMN_wml2")
-test_that("External NGMMN import tests", {
-  testthat::skip_on_cran()
-  url <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401"
-  data <- importNGWMN_wml2(url)
-  expect_true(is.numeric(data$value))
-  expect_true(nrow(data) > 0)
-})

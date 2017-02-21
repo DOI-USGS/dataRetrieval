@@ -42,15 +42,15 @@ provide statistics for each month and year within the range individually.}
 
 \item{statType}{character Only used for statistics service requests. Type(s) of statistics to output for daily values.  Default is mean, which is the only
 option for monthly and yearly report types. See the statistics service documentation 
-at \url{http://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.}
+at \url{https://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.}
 }
 \value{
 url string
 }
 \description{
-Imports data from NWIS web service. This function gets the data from here: \url{http://nwis.waterdata.usgs.gov/nwis/qwdata}
-A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+Imports data from NWIS web service. This function gets the data from here: \url{https://nwis.waterdata.usgs.gov/nwis/qwdata}
+A list of parameter codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+A list of statistic codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 }
 \examples{
 siteNumber <- '01594440'

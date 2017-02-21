@@ -7,7 +7,8 @@
 whatNWISsites(...)
 }
 \arguments{
-\item{\dots}{see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options}
+\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options. A 
+list (or lists) can also be supplied.}
 }
 \value{
 A data frame with at least the following columns:
@@ -30,8 +31,8 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 }
 \description{
-Returns a list of sites from the NWIS web service. This function gets the data from: \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}.
-Arguments to the function should be based on \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service}
+Returns a list of sites from the NWIS web service. This function gets the data from: \url{https://waterservices.usgs.gov/rest/Site-Test-Tool.html}.
+Arguments to the function should be based on \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service}
 Mapper format is used
 }
 \examples{

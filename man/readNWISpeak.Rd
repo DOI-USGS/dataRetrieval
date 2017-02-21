@@ -51,7 +51,7 @@ siteInfo \tab data.frame \tab A data frame containing information on the request
 }
 }
 \description{
-Reads peak flow from NWISweb. Data is retrieved from \url{http://waterdata.usgs.gov/nwis}.
+Reads peak flow from NWISweb. Data is retrieved from \url{https://waterdata.usgs.gov/nwis}.
 In some cases, the specific date of the peak data is not know. This function will default to
 converting the complete dates, dropping rows with incomplete dates. If those incomplete dates are
 needed, set the `asDateTime` argument to FALSE. No rows will be removed, and no dates will be converted

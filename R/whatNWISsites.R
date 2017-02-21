@@ -1,10 +1,11 @@
 #' Site Data Import from NWIS
 #'
-#' Returns a list of sites from the NWIS web service. This function gets the data from: \url{http://waterservices.usgs.gov/rest/Site-Test-Tool.html}.
-#' Arguments to the function should be based on \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service}
+#' Returns a list of sites from the NWIS web service. This function gets the data from: \url{https://waterservices.usgs.gov/rest/Site-Test-Tool.html}.
+#' Arguments to the function should be based on \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service}
 #' Mapper format is used
 #'
-#' @param \dots see \url{http://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options
+#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options. A 
+#' list (or lists) can also be supplied.
 #' @import utils
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{
@@ -36,7 +37,9 @@
 #' }
 whatNWISsites <- function(...){
   
-  matchReturn <- list(...)
+  matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
+                   list(...)[sapply(list(...), class) != "list"]) # get the non-list parts
+  
   values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
   
   names(values)[names(values) == "siteNumber"] <- "sites"

@@ -25,7 +25,7 @@ last_rev_dt \tab character \tab Latest revision of information\cr
 }
 \description{
 Data pulled from Water Quality Portal on November 25, 2014. The data was pulled from
-\url{http://www.waterqualitydata.us/public_srsnames?mimeType=json}.
+\url{https://www.waterqualitydata.us/public_srsnames?mimeType=json}.
 }
 \examples{
 head(pCodeToName[,1:2])

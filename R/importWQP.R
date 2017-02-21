@@ -11,7 +11,7 @@
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
-#' start and end times, and converted to UTC. See \url{http://www.waterqualitydata.us/portal_userguide.jsp} for more information.
+#' start and end times, and converted to UTC. See \url{https://www.waterqualitydata.us/portal_userguide/} for more information.
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
 #' @import utils
@@ -47,11 +47,9 @@
 importWQP <- function(obs_url, zip=FALSE, tz=""){
   
   if(tz != ""){
-    tz <- match.arg(tz, c("America/New_York","America/Chicago",
-                          "America/Denver","America/Los_Angeles",
-                          "America/Anchorage","America/Honolulu",
-                          "America/Jamaica","America/Managua",
-                          "America/Phoenix","America/Metlakatla"))
+    tz <- match.arg(tz, OlsonNames())
+  } else {
+    tz <- "UTC"
   }
   
   if(!file.exists(obs_url)){
@@ -60,11 +58,11 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       message("zip encoding access still in development")
       temp <- tempfile()
       temp <- paste0(temp,".zip")
-      doc <- GET(obs_url, user_agent(default_ua()), 
-                          write_disk(temp))
-
+      doc <- getWebServiceData(obs_url, write_disk(temp))
       headerInfo <- headers(doc)
-      
+      doc <- unzip(temp, exdir=tempdir())
+      unlink(temp)
+      on.exit(unlink(doc))
     } else {
       doc <- getWebServiceData(obs_url)
       headerInfo <- attr(doc, "headerInfo")
@@ -91,10 +89,6 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       emptyReturn <- data.frame(NA)
       attr(emptyReturn, "headerInfo") <- headerInfo
       return(emptyReturn)
-    }  
-    
-    if(zip){
-      doc <- unzip(temp)
     }
     
   } else {
@@ -118,8 +112,6 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
                                         `WellHoleDepthMeasure/MeasureValue` = col_number(),
                                         `HUCEightDigitCode` = col_character()),
                        quote = "", delim = "\t"))
-    
-  if(zip) unlink(doc)
     
   if(!file.exists(obs_url)){
     actualNumReturned <- nrow(retval)
