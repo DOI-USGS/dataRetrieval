@@ -130,7 +130,9 @@ arg_3 <- list('startDateLo' = startDate,
 arg_4 <- list(statecode="WI", 
               characteristicName=secchi.names)
 wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
-wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", characteristicName=secchi.names, querySummary=TRUE)
+wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", 
+                              characteristicName=secchi.names, 
+                              querySummary=TRUE)
                
 }
 }

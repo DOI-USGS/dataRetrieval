@@ -12,6 +12,7 @@
 #' @importFrom httr status_code
 #' @importFrom httr headers
 #' @importFrom httr content
+#' @importFrom httr content_type
 #' @importFrom curl curl_version
 #' @export
 #' @return raw data from web services
