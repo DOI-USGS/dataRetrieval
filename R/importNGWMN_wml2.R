@@ -34,11 +34,7 @@
 #TODO: separate id and agency name, give also as separate dimensions
 importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
   if(tz != ""){
-    tz <- match.arg(tz, c("America/New_York","America/Chicago",
-                          "America/Denver","America/Los_Angeles",
-                          "America/Anchorage","America/Honolulu",
-                          "America/Jamaica","America/Managua",
-                          "America/Phoenix","America/Metlakatla"))
+    tz <- match.arg(tz, OlsonNames())
   }else{tz = "UTC"}
   
   raw <- FALSE

@@ -156,8 +156,10 @@ readNGWMNsites <- function(featureID){
 
 retrieveObservation <- function(featureID, asDateTime, attrs){
   #will need to contruct this more piece by piece if other versions, properties are added
-  baseURL <- "https://cida-test.er.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
-  url <- paste0(baseURL, featureID)
+  #baseURL <- "https://cida-test.er.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
+  url <- drURL(base.name = "NGWMN", access = pkg.env$access, request = "GetObservation", 
+               service = "SOS", version = "2.0.0", observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
+               responseFormat = "text/xml", featureOfInterest = paste("VW_GWDP_GEOSERVER", featureID, sep = "."))
   
   returnData <- importNGWMN_wml2(url, asDateTime)
   if(nrow(returnData) == 0){

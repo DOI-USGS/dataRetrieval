@@ -55,6 +55,8 @@ access = match.arg(access, c('public','internal','cooperator','USGS'))
   pkg.env$wqpData = "https://www.waterqualitydata.us/Result/search"
   pkg.env$wqpStation = "https://www.waterqualitydata.us/Station/search"
   
+  pkg.env$NGWMN = "https://cida-test.er.usgs.gov/ngwmn_cache/sos"
+  
   options(Access.dataRetrieval = access)
 }
 
