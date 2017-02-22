@@ -74,6 +74,15 @@ test_that("General NWIS retrievals working", {
   args <- list(stateCd="OH",parameterCd="00665")
   sites <- whatNWISsites(args)
   expect_type(sites, "list")
+  
+  #Test counties:
+  dailyStaffordVA <- readNWISdata(stateCd = "Virginia",
+                                  countyCd="Stafford",
+                                  parameterCd = "00060",
+                                  startDate = "2015-01-01",
+                                  endDate = "2015-01-30")
+  expect_gt(nrow(dailyStaffordVA),1)
+  
 })
 
 
@@ -112,6 +121,13 @@ test_that("General WQP retrievals working", {
   
   lakeSites <- whatWQPsites(args_2)
   expect_type(lakeSites, "list")
+  
+  # Test county code:
+   dailyLexingtonVA <- readWQPdata(statecode = "Virginia", 
+                                   countycode="Lexington", 
+                                   parameterCd = "00010")
+   
+   expect_equal(ncol(dailyLexingtonVA),65)
   
   # Known slow query for WQP:
   # pHDataExpanded2 <- readWQPdata(bBox=c(-90.1,42.9,-89.9,43.1),

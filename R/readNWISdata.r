@@ -109,7 +109,11 @@
 #' allDailyStats_2 <- readNWISdata(arg.list, service="stat")
 #'
 #' #' # use county names to get data
-#' dailyStaffordVA <- readNWISdata(stateCd = "Virginia", countyCd="Stafford", parameterCd = "00060")
+#' dailyStaffordVA <- readNWISdata(stateCd = "Virginia",
+#'                                 countyCd="Stafford",
+#'                                 parameterCd = "00060",
+#'                                 startDate = "2015-01-01",
+#'                                 endDate = "2015-01-30")
 #' }
 readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   
@@ -153,9 +157,8 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   
   names(values)[names(values) == "countycode"] <- "countyCd"
   if("countyCd" %in% names(values)){
-    values["countyCd"] <- paste(stateCdLookup(values["stateCd"], "id"), 
-                                countyCdLookup(values["stateCd"], values["countyCd"], "id"),
-                                sep=":")
+    values["countyCd"] <- paste0(stateCdLookup(values["stateCd"], "id"), 
+                                countyCdLookup(values["stateCd"], values["countyCd"], "id"))
     values <- values[names(values) != "stateCd"]
   }
   
