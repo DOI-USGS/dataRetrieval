@@ -67,24 +67,11 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
       doc <- getWebServiceData(obs_url)
       headerInfo <- attr(doc, "headerInfo")
     }
-    
-    numToBeReturned <- 0
-    sitesToBeReturned <- 0
-    
-    totals <- c("total-result-count","total-activity-count")
-    
-    if(any(totals %in% names(headerInfo))){
-      numToBeReturned <- sum(as.numeric(headerInfo[names(headerInfo) %in% totals]))
-    } 
-    
-    if("total-site-count" %in% names(headerInfo)){
-      sitesToBeReturned <- as.numeric(headerInfo["total-site-count"])
-    }
-    
-    
-    totalReturned <- sum(numToBeReturned, sitesToBeReturned,na.rm = TRUE)
-    
-    if(is.na(totalReturned) | totalReturned == 0){
+
+    headerInfo[grep("-count",names(headerInfo))] <- as.numeric(headerInfo[grep("-count",names(headerInfo))])
+
+    totalPossible <- sum(unlist(headerInfo[grep("-count",names(headerInfo))]), na.rm = TRUE)
+    if(is.na(totalPossible) | totalPossible == 0){
       for(i in grep("Warning",names(headerInfo))){
         warning(headerInfo[i])
       }
@@ -118,8 +105,8 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
   if(!file.exists(obs_url)){
     actualNumReturned <- nrow(retval)
     
-    if(actualNumReturned != numToBeReturned & actualNumReturned != sitesToBeReturned){
-      warning(totalReturned, " sample results were expected, ", actualNumReturned, " were returned")
+    if(!(actualNumReturned %in% unlist(headerInfo[grep("-count",names(headerInfo))]))){
+      warning("Number of rows returned not matched in header")
     } 
   }
   
