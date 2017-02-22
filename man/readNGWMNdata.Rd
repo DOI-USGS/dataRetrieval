@@ -7,6 +7,8 @@
 readNGWMNdata(..., service = "observation", asDateTime = TRUE, tz = "")
 }
 \arguments{
+\item{\dots}{Other parameters to supply, namely \code{featureID} or \code{bbox}}
+
 \item{service}{character Identifies which web service to access.  \code{observation} retrieves all water level for each site,
 and \code{featureOfInterest} retrieves a data frame of site information, including description, latitude, and longitude.}
 
@@ -17,9 +19,6 @@ and \code{featureOfInterest} retrieves a data frame of site information, includi
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
-
-\item{featureID}{character Vector of feature IDs in the formatted with agency code and site number 
-separated by a period, e.g. \code{USGS.404159100494601}.}
 }
 \description{
 Only water level data is currently available through the web service.
@@ -43,6 +42,9 @@ data <- readNGWMNdata(featureID = site)
 #site with no data returns empty data frame
 noDataSite <- "UTGS.401544112060301"
 noDataSite <- readNGWMNdata(featureID = noDataSite, service = "observation")
+
+#bounding box
+bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
 }
 
 }

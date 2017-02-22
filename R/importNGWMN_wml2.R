@@ -137,6 +137,8 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     siteLocs <- strsplit(xml_text(xml_find_all(featureMembers, ".//gml:pos")), " ")
     siteLocs <- data.frame(matrix(unlist(siteLocs), nrow=length(siteLocs), byrow=TRUE), stringsAsFactors = FALSE)
     names(siteLocs) <- c("dec_lat_va", "dec_lon_va")
+    dec_lat_va <- "dplyr var"
+    dec_lon_va <- "dplyr var"
     siteLocs <- mutate(siteLocs, dec_lat_va=as.numeric(dec_lat_va), dec_lon_va=as.numeric(dec_lon_va))
     mergedDF <- cbind.data.frame(site, description = siteDesc, siteLocs, stringsAsFactors = FALSE) 
   }

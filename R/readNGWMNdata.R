@@ -3,14 +3,13 @@
 #' Only water level data is currently available through the web service.  
 #' @param asDateTime logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
 #' \code{FALSE} since time zone information is not included.  
-#' @param featureID character Vector of feature IDs in the formatted with agency code and site number 
-#' separated by a period, e.g. \code{USGS.404159100494601}.
 #' @param service character Identifies which web service to access.  \code{observation} retrieves all water level for each site,
 #' and \code{featureOfInterest} retrieves a data frame of site information, including description, latitude, and longitude.   
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+#' @param \dots Other parameters to supply, namely \code{featureID} or \code{bbox}
 #' @import utils
 #' @importFrom dplyr mutate
 #' @importFrom dplyr bind_rows
@@ -36,6 +35,9 @@
 #' #site with no data returns empty data frame
 #' noDataSite <- "UTGS.401544112060301"
 #' noDataSite <- readNGWMNdata(featureID = noDataSite, service = "observation")
+#' 
+#' #bounding box
+#' bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
 #' }
 #' 
 readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = ""){
@@ -180,8 +182,7 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
   return(returnData)
 }
 
-#' retrieve feature of interest
-#' 
+#retrieve feature of interest
 #could allow pass through srsName - needs to be worked in higher-up in dots
 retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:EPSG::4269"){
   dots <- list(...)
