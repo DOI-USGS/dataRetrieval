@@ -3,9 +3,9 @@
 #' Imports data from Water Quality Portal web service. This function gets the data from here: \url{https://www.waterqualitydata.us}.
 #' because it allows for other agencies rather than the USGS.  
 #'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options
-#' @param zip logical to request data via downloading zip file. Default set to FALSE.
-#' @param querySummary logical to ONLY return the number of records and unique sites that will be returned from this query.
+#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied. 
+#' @param querySummary logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the \dots argument
+#' @param tz timezone as a character string. See \code{OlsonNames()} for a list of possibilities.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -96,70 +96,55 @@
 #' startDate <- as.Date("2013-01-01")
 #' nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
 #'                         characteristicType="Nutrient")
+#' secchi.names = c("Depth, Secchi disk depth", 
+#'                  "Depth, Secchi disk depth (choice list)", 
+#'                  "Secchi Reading Condition (choice list)", 
+#'                  "Secchi depth", 
+#'                  "Water transparency, Secchi disc")
+#' args <- list('startDateLo' = startDate, 
+#'              'startDateHi' = "2013-12-31", 
+#'               statecode="WI", 
+#'               characteristicName=secchi.names)
 #' 
-#'                         
+#' wqp.data <- readWQPdata(args)   
+#' 
+#' args_2 <- list('startDateLo' = startDate, 
+#'              'startDateHi' = "2013-12-31", 
+#'               statecode="WI", 
+#'               characteristicName=secchi.names,
+#'               querySummary=TRUE)
+#'
+#' wqp.summary <- readWQPdata(args_2) 
+#' 
+#' arg_3 <- list('startDateLo' = startDate, 
+#'              'startDateHi' = "2013-12-31")
+#' arg_4 <- list(statecode="WI", 
+#'               characteristicName=secchi.names)
+#' wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
+#' wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", 
+#'                               characteristicName=secchi.names, 
+#'                               querySummary=TRUE)
+#'                
 #' }
-readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
+readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
   
-  matchReturn <- list(...)
-
-  values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))
+  tz <- match.arg(tz, OlsonNames())
   
-  if("bBox" %in% names(values)){
-    values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
-  }
-
-  values <- checkWQPdates(values)
-
-  names(values)[names(values) == "siteNumber"] <- "siteid"
-  names(values)[names(values) == "siteNumbers"] <- "siteid"
-  
-  if("statecode" %in% names(values)){
-    stCd <- values["statecode"]
-    if(!grepl("US:",stCd)){
-      values["statecode"] <- paste0("US:",stateCdLookup(stCd, "id"))
-    }
-  }
-  
-  if("stateCd" %in% names(values)){
-    stCd <- values["stateCd"]
-    if(!grepl("US:",stCd)){
-      values["stateCd"] <- paste0("US:",stateCdLookup(stCd, "id"))
-    }
-    names(values)[names(values) == "stateCd"] <- "statecode"
-  }
-  
-  if("tz" %in% names(values)){
-    tz <- values["tz"]
-    if(tz != ""){
-      rTZ <- c("America/New_York","America/Chicago",
-               "America/Denver","America/Los_Angeles",
-               "America/Anchorage","America/Honolulu",
-               "America/Jamaica","America/Managua",
-               "America/Phoenix","America/Metlakatla","UTC")
-      tz <- match.arg(tz, rTZ)
-      if("UTC" == tz) tz <- ""
-    }
-    values <- values[!(names(values) %in% "tz")]
-  } else {
-    tz <- ""
-  }
-
+  values <- readWQPdots(...)
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
 
   # add special parameters
   values[["sorted"]] <- "no"
   values[["mimeType"]] <- "tsv"
-  if (zip) values[["zip"]] <- "yes"
-  
+
   urlCall <- drURL("wqpData", arg.list=values)
-  
+
   if(querySummary){
     retquery <- getQuerySummary(urlCall)
     return(retquery)
   } else {
   
-    siteInfo <- whatWQPsites(...,zip=zip)
+    siteInfo <- whatWQPsites(...)
     
     siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
                                  agency_cd=siteInfo$OrganizationIdentifier,
@@ -175,12 +160,13 @@ readWQPdata <- function(..., zip=FALSE, querySummary=FALSE){
     values[["siteid"]] <- URLencode(paste(siteInfo$site_no, collapse = ";"), reserved = TRUE)
 
     spatialParams <- c("bBox", "lat", "lon", "within", "countrycode",
-                       "statecode", "countycode", "siteType", "organization", # can org be within site?
-                       "huc") # should we include providers in this list?
+                       "statecode", "countycode", "siteType", "organization",
+                       "huc")
     urlCall <- drURL("wqpData", arg.list=values[!names(values) %in% spatialParams])
     retval <- importWQP(urlCall, zip=zip, tz=tz)
     
     if(!all(is.na(retval))){
+
       retvalVariableInfo <- retval[,c("CharacteristicName","USGSPCode",
                                       "ResultMeasure.MeasureUnitCode","ResultSampleFractionText")]
       retvalVariableInfo <- unique(retvalVariableInfo)

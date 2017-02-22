@@ -140,6 +140,27 @@ test_that("External importWaterML1 test", {
   data <- importWaterML1(url, tz = "America/New_York", asDateTime = TRUE)
   expect_true(data.class(data$dateTime) == "POSIXct")
   expect_true(nrow(data) > 0)
+  
+  expect_error(readNWISdata(sites="05114000", 
+                              service="iv",
+                              parameterCd="00060",
+                              startDate="2014-05-01T00:00",
+                              endDate="2014-05-01T12:00",
+                              tz="blah"))
+
+  arg.list <- list(sites="05114000", 
+                   parameterCd="00060",
+                   startDate="2014-05-01T00:00",
+                   endDate="2014-05-01T12:00")
+  
+  chi_iv <- readNWISdata(arg.list, 
+                         service="iv",
+                         tz="America/Chicago")
+  
+  expect_true(all(chi_iv$tz_cd == "America/Chicago"))
+  expect_equal(chi_iv$dateTime[1], as.POSIXct("2014-05-01T00:00", format = "%Y-%m-%dT%H:%M", tz="America/Chicago"))
+  expect_equal(chi_iv$dateTime[nrow(chi_iv)], as.POSIXct("2014-05-01T12:00", format = "%Y-%m-%dT%H:%M", tz="America/Chicago"))
+  
 })
 
 context("importWaterML2")
