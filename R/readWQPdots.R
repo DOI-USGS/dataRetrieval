@@ -29,11 +29,10 @@ readWQPdots <- function(...){
   
   names(values)[names(values) == "countyCd"] <- "countycode"
   if("countycode" %in% names(values)){
-    ctyCd <- values["countycode"]
-    ctyCdPrefix <- paste0(values["statecode"], ":")
-    if(!grepl(ctyCdPrefix, ctyCd)){
+    if(!grepl(values["statecode"], values["countycode"])){
       stCd <- gsub("US:", "", values["statecode"])
-      values["countycode"] <- paste0(ctyCdPrefix, countyCdLookup(stCd, ctyCd, "id"))
+      values["countycode"] <- paste0(values["statecode"], 
+                                     countyCdLookup(stCd, values["countycode"], "id"))
     }
   }
   
