@@ -288,6 +288,10 @@ stateCdLookup <- function(input, outputType="postal"){
     retVal <- c(retVal,output)
   }
   
+  if(length(retVal[-1]) == 0){
+    paste("Could not find", input, "in the state lookup table. See `stateCd` for complete list.")
+  }
+  
   return(retVal[-1])
 }
 
@@ -312,18 +316,32 @@ countyCdLookup <- function(state, county, outputType = "id"){
   stateCd <- stateCdLookup(state,outputType = "postal")
   
   if(is.numeric(county) | !is.na(suppressWarnings(as.numeric(county)))){
-    county <- which(as.numeric(county) == as.numeric(countyCd$COUNTY) & stateCd == countyCd$STUSAB)
+    county_i <- which(as.numeric(county) == as.numeric(countyCd$COUNTY) & stateCd == countyCd$STUSAB)
   } else {
-    #check if "County" was included on string - need it to match countyCd data frame
-    county <- ifelse(!grepl('(?i)\\County$',county),paste(county,"County"),county)
-    county <- which(tolower(county) == tolower(countyCd$COUNTY_NAME) & stateCd == countyCd$STUSAB)
+    # if no suffix was added, this will figure out what it should be (or throw a helpful error)
+    allSuffixes <- unique(tolower(unlist(lapply(strsplit(countyCd$COUNTY_NAME,split=" "), tail, 1))))
+    
+    county_i <- unlist(lapply(allSuffixes, function(suffix, stateCd, county){
+      currentSuffixExistsInString <- grepl(paste0('(?i)\\', suffix, '$'), county)
+      retCounty <- ifelse(currentSuffixExistsInString, county, paste(county, suffix))
+      retCounty_i <- which(tolower(retCounty) == tolower(countyCd$COUNTY_NAME) & stateCd == countyCd$STUSAB)
+      return(retCounty_i)
+    }, stateCd, county))
+    
+    if(length(county_i) == 0){
+      stop(paste("Could not find", county, "(county),", stateCd, 
+                 "(state) in the county lookup table. See `countyCd` for complete list."))
+    } else if(length(county_i) > 1){
+      stop(paste(county, "(county),", stateCd, "(state) matched more than one county. See `countyCd` for complete list."))
+    } 
+    
   }
   
   retVal <- switch(outputType,
-                   fullName = countyCd$COUNTY_NAME[county],
-                   tableIndex = county,
-                   id = countyCd$COUNTY[county],
-                   fullEntry = countyCd[county,]
+                   fullName = countyCd$COUNTY_NAME[county_i],
+                   tableIndex = county_i,
+                   id = countyCd$COUNTY[county_i],
+                   fullEntry = countyCd[county_i,]
   )
   
   return(retVal)
