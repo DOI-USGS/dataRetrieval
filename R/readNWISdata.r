@@ -139,7 +139,7 @@ readNWISdata <- function(service="dv", ..., asDateTime=TRUE,convertType=TRUE){
   if("countyCd" %in% names(values)){
     values["countyCd"] <- paste0(stateCdLookup(values["stateCd"], "id"), 
                                  countyCdLookup(values["stateCd"], values["countyCd"], "id"))
-    values <- values[!names(values) == "stateCd"]
+    values <- values[names(values) != "stateCd"]
   }
   
   if (service %in% c("qwdata","measurements")){
