@@ -137,7 +137,7 @@ wqp.summary_WI <- readWQPdata(arg_3, statecode="WI",
                               querySummary=TRUE)
                               
 # querying by county
-dailyStaffordVA <- readWQPdata(statecode = "Virginia", countycode="Stafford", parameterCd = "00060") 
+dailyLexingtonVA <- readWQPdata(statecode = "Virginia", countycode="Lexington", parameterCd = "00060") 
 }
 }
 \keyword{WQP}

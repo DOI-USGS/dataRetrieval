@@ -126,7 +126,7 @@
 #'                               querySummary=TRUE)
 #'                               
 #' # querying by county
-#' dailyStaffordVA <- readWQPdata(statecode = "Virginia", countycode="Stafford", parameterCd = "00060") 
+#' dailyLexingtonVA <- readWQPdata(statecode = "Virginia", countycode="Lexington", parameterCd = "00060") 
 #' }
 readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
   
