@@ -155,8 +155,6 @@ readNGWMNsites <- function(featureID){
 
 
 retrieveObservation <- function(featureID, asDateTime, attrs){
-  #will need to contruct this more piece by piece if other versions, properties are added
-  #baseURL <- "https://cida-test.er.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
   url <- drURL(base.name = "NGWMN", access = pkg.env$access, request = "GetObservation", 
                service = "SOS", version = "2.0.0", observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
                responseFormat = "text/xml", featureOfInterest = paste("VW_GWDP_GEOSERVER", featureID, sep = "."))
@@ -186,18 +184,19 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
 #' 
 #could allow pass through srsName - needs to be worked in higher-up in dots
 retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:EPSG::4269"){
-  baseURL <- "https://cida-test.er.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0"
   dots <- list(...)
   values <- gsub(x = convertDots(dots), pattern = ",", replacement = "%2C")
   
+  url <- drURL(base.name = "NGWMN", access = pkg.env$access, request = "GetFeatureOfInterest", 
+               service = "SOS", version = "2.0.0", responseFormat = "text/xml")
+  
   if("featureID" %in% names(values)){
-    foiURL <- "&featureOfInterest="
-    fidURL <- paste0("VW_GWDP_GEOSERVER.", values[['featureID']])
-    url <- paste0(baseURL, foiURL, fidURL)
+    url <- appendDrURL(url, featureOfInterest = paste("VW_GWDP_GEOSERVER", 
+                                                      values[['featureID']], sep = "."))
     
   }else if("bbox" %in% names(values)){
-    bbox <- paste(values[['bbox']], collapse=",")
-    url <- paste0(baseURL, "&bbox=", bbox, "&srsName=",srsName)
+    url <- appendDrURL(url, bbox = paste(values[['bbox']], collapse=","),
+                       srsName = srsName)
   }else{
     stop()
   }
