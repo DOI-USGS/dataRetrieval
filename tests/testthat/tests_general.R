@@ -161,7 +161,7 @@ test_that("Dates with no days can be handled", {
  })
 
 context("whatWQPsamples")
-test_that("whatNWISsites working", {
+test_that("whatWQPsamples working", {
   testthat::skip_on_cran()
   siteInfo <- whatWQPsamples(siteid="USGS-01594440")
   expect_true(nrow(siteInfo) > 0)
