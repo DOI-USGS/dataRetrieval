@@ -159,10 +159,10 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
     # siteid from siteInfo becomes the only "spatial" parameter in data request
     values[["siteid"]] <- URLencode(paste(siteInfo$site_no, collapse = ";"), reserved = TRUE)
 
-    spatialParams <- c("bBox", "lat", "lon", "within", "countrycode",
+    siteQueryParams <- c("bBox", "lat", "lon", "within", "countrycode",
                        "statecode", "countycode", "siteType", "organization",
                        "huc")
-    urlCall <- drURL("wqpData", arg.list=values[!names(values) %in% spatialParams])
+    urlCall <- drURL("wqpData", arg.list=values[!names(values) %in% siteQueryParams])
     retval <- importWQP(urlCall, zip=zip, tz=tz)
     
     if(!all(is.na(retval))){
