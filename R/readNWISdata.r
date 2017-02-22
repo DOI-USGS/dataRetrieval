@@ -153,8 +153,9 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   
   names(values)[names(values) == "countycode"] <- "countyCd"
   if("countyCd" %in% names(values)){
-    values["countyCd"] <- paste0(stateCdLookup(values["stateCd"], "id"), 
-                                 countyCdLookup(values["stateCd"], values["countyCd"], "id"))
+    values["countyCd"] <- paste(stateCdLookup(values["stateCd"], "id"), 
+                                countyCdLookup(values["stateCd"], values["countyCd"], "id"),
+                                sep=":")
     values <- values[names(values) != "stateCd"]
   }
   
