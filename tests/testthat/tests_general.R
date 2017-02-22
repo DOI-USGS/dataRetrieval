@@ -160,6 +160,14 @@ test_that("Dates with no days can be handled", {
   expect_error(readNWISgwl("425957088141001", startDate = "1980-01-01"))
  })
 
+context("whatWQPsamples")
+test_that("whatWQPsamples working", {
+  testthat::skip_on_cran()
+  siteInfo <- whatWQPsamples(siteid="USGS-01594440")
+  expect_true(nrow(siteInfo) > 0)
+  
+  })
+
 context("whatNWISsites")
 test_that("whatNWISsites working", {
   testthat::skip_on_cran()
@@ -170,7 +178,7 @@ test_that("whatNWISsites working", {
   bboxSites <- whatNWISsites(bbox = c(-92.5, 45.4, -87, 47), parameterCd="00060")
   expect_true(nrow(bboxSites) > 0)
   expect_true(is.numeric(bboxSites$dec_lat_va))
-  })
+})
 
 context("readWQPdots")
 test_that("readWQPdots working", {
