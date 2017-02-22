@@ -18,19 +18,23 @@ readWQPdots <- function(...){
   names(values)[names(values) == "siteNumber"] <- "siteid"
   names(values)[names(values) == "siteNumbers"] <- "siteid"
   
+  names(values)[names(values) == "stateCd"] <- "statecode"
   if("statecode" %in% names(values)){
     stCd <- values["statecode"]
-    if(!grepl("US:",stCd)){
-      values["statecode"] <- paste0("US:",stateCdLookup(stCd, "id"))
+    stCdPrefix <- "US:"
+    if(!grepl(stCdPrefix, stCd)){
+      values["statecode"] <- paste0(stCdPrefix, stateCdLookup(stCd, "id"))
     }
   }
   
-  if("stateCd" %in% names(values)){
-    stCd <- values["stateCd"]
-    if(!grepl("US:",stCd)){
-      values["stateCd"] <- paste0("US:",stateCdLookup(stCd, "id"))
+  names(values)[names(values) == "countyCd"] <- "countycode"
+  if("countycode" %in% names(values)){
+    if(!grepl(values["statecode"], values["countycode"])){
+      stCd <- gsub("US:", "", values["statecode"])
+      values["countycode"] <- paste(values["statecode"], 
+                                    countyCdLookup(stCd, values["countycode"], "id"),
+                                    sep=":")
     }
-    names(values)[names(values) == "stateCd"] <- "statecode"
   }
   
   if("zip" %in% names(values)){
