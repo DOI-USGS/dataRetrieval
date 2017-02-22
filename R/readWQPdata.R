@@ -163,7 +163,7 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
                        "statecode", "countycode", "siteType", "organization",
                        "huc")
     urlCall <- drURL("wqpData", arg.list=values[!names(values) %in% siteQueryParams])
-    retval <- importWQP(urlCall, zip=zip, tz=tz)
+    retval <- importWQP(urlCall, zip=(values[["zip"]]=="yes"), tz=tz)
     
     if(!all(is.na(retval))){
 
