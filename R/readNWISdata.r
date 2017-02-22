@@ -322,7 +322,7 @@ countyCdLookup <- function(state, county, outputType = "id"){
     allSuffixes <- unique(tolower(unlist(lapply(strsplit(countyCd$COUNTY_NAME,split=" "), tail, 1))))
     
     county_i <- unlist(lapply(allSuffixes, function(suffix, stateCd, county){
-      currentSuffixExistsInString <- grepl(paste0('(?i)\\', suffix, '$'), county)
+      currentSuffixExistsInString <- grepl(paste0('(?i)\\', suffix, '$'), tolower(county))
       retCounty <- ifelse(currentSuffixExistsInString, county, paste(county, suffix))
       retCounty_i <- which(tolower(retCounty) == tolower(countyCd$COUNTY_NAME) & stateCd == countyCd$STUSAB)
       return(retCounty_i)
