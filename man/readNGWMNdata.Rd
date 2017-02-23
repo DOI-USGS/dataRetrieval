@@ -4,13 +4,10 @@
 \alias{readNGWMNdata}
 \title{import data from the National Groundwater Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
 \usage{
-readNGWMNdata(..., service = "observation", asDateTime = TRUE, tz = "")
+readNGWMNdata(..., asDateTime = TRUE, tz = "")
 }
 \arguments{
 \item{\dots}{Other parameters to supply, namely \code{featureID} or \code{bbox}}
-
-\item{service}{character Identifies which web service to access.  \code{observation} retrieves all water level for each site,
-and \code{featureOfInterest} retrieves a data frame of site information, including description, latitude, and longitude.}
 
 \item{asDateTime}{logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
 \code{FALSE} since time zone information is not included.}

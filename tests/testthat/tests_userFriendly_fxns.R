@@ -232,7 +232,8 @@ test_that("NGWMN functions working", {
   
   #bounding box and a bigger request
   bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
-  #siteInfo <- readNGWMNsites(bboxSites$site[1:100])
+  expect_gt(nrow(bboxSites), 0)
+  # siteInfo <- readNGWMNsites(bboxSites$site[1:100])
   
   #one site
   site <- "USGS.430427089284901"
