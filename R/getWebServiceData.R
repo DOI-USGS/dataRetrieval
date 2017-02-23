@@ -6,12 +6,14 @@
 #' @param obs_url character containing the url for the retrieval
 #' @param \dots information to pass to header request
 #' @importFrom httr GET
+#' @importFrom httr POST
 #' @importFrom httr RETRY
 #' @importFrom httr user_agent
 #' @importFrom httr stop_for_status
 #' @importFrom httr status_code
 #' @importFrom httr headers
 #' @importFrom httr content
+#' @importFrom httr content_type
 #' @importFrom curl curl_version
 #' @export
 #' @return raw data from web services
@@ -28,7 +30,7 @@
 getWebServiceData <- function(obs_url, ...){
   
   returnedList <- tryCatch({
-    RETRY("GET",obs_url, ..., user_agent(default_ua()))
+    retryGetOrPost(obs_url, ...)
   }, error = function(e){
     NULL
   })
@@ -37,7 +39,7 @@ getWebServiceData <- function(obs_url, ...){
     message("Switching from https to http")
     obs_url <- gsub("https", "http", obs_url)
     returnedList <- tryCatch({
-      RETRY("GET",obs_url, ..., user_agent(default_ua()))
+      retryGetOrPost(obs_url, ...)
     }, error = function(e){
       NULL
     })
@@ -52,6 +54,9 @@ getWebServiceData <- function(obs_url, ...){
 
     if(headerInfo$`content-type` == "text/tab-separated-values;charset=UTF-8"){
       returnedDoc <- content(returnedList, type="text",encoding = "UTF-8")
+    } else if (headerInfo$`content-type` %in% 
+               c("application/zip", "application/zip;charset=UTF-8")) {
+      returnedDoc <- returnedList
     } else if (headerInfo$`content-type` %in% c("text/html","text/html; charset=UTF-8") ){
       txt <- readBin(returnedList$content, character())
       message(txt)
@@ -87,13 +92,26 @@ default_ua <- function() {
 getQuerySummary <- function(url){
   queryHEAD <- HEAD(url)
   retquery <- headers(queryHEAD)
-  countNames <- c('total-site-count', 'nwis-site-count', 'total-result-count', 'nwis-result-count')
-  retquery[which(names(retquery) %in% countNames)] <- unlist(lapply(countNames, retquery = retquery,
-                                                                    FUN = function(c, retquery){
-                                                                      retquery[[c]] <- as.numeric(retquery[[c]])
-                                                                      return(retquery[c])
-                                                                    }))
-  retquery$date <- as.Date(retquery$date, format = "%a, %d %b %Y %H:%M:%S")
+  
+  retquery[grep("-count",names(retquery))] <- as.numeric(retquery[grep("-count",names(retquery))])
+  
+  if("date" %in% names(retquery)){
+    retquery$date <- as.Date(retquery$date, format = "%a, %d %b %Y %H:%M:%S")
+  }
+  
   return(retquery)
 }
 
+retryGetOrPost <- function(url, ...) {
+  resp <- NULL
+  if (nchar(url) < 2048) {
+    resp <- RETRY("GET", url, ..., user_agent(default_ua()))
+  } else {
+    split <- strsplit(url, "?", fixed=TRUE)
+    url <- split[[1]][1]
+    query <- split[[1]][2]
+    resp <- RETRY("POST", url, ..., body = query,
+          content_type("application/x-www-form-urlencoded"), user_agent(default_ua()))
+  }
+  return(resp)
+}

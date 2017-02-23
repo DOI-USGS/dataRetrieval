@@ -56,6 +56,24 @@ test_that("General NWIS retrievals working", {
   x <- importWaterML1(urlTest)
   expect_equal(ncol(x), 8)
   
+  #Test list:
+  args <- list(sites="05114000", service="iv", 
+               parameterCd="00060", 
+               startDate="2014-05-01T00:00Z",
+               endDate="2014-05-01T12:00Z")
+  
+  instData <- readNWISdata(args)
+  
+  args <- list(sites="05114000", service="dv", 
+               parameterCd="00060", 
+               startDate="2014-05-01",
+               endDate="2014-05-01")
+  
+  dailyData <- readNWISdata(args)
+  expect_lt(nrow(dailyData), nrow(instData))
+  args <- list(stateCd="OH",parameterCd="00665")
+  sites <- whatNWISsites(args)
+  expect_type(sites, "list")
 })
 
 
@@ -64,6 +82,36 @@ test_that("General WQP retrievals working", {
   nameToUse <- "pH"
   pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
   expect_is(pHData$ActivityStartDateTime, 'POSIXct')
+  
+  #testing lists:
+  startDate <- as.Date("2013-01-01")
+  secchi.names = c("Depth, Secchi disk depth",
+                   "Depth, Secchi disk depth (choice list)",
+                   "Secchi Reading Condition (choice list)",
+                   "Secchi depth",
+                   "Water transparency, Secchi disc")
+  args_2 <- list('startDateLo' = startDate,
+               'startDateHi' = "2013-12-31",
+                statecode="WI",
+                characteristicName=secchi.names)
+
+  wqp.summary <- readWQPdata(args_2, querySummary = TRUE)
+  expect_true("list" %in% class(wqp.summary))
+  
+  #pretty sloooow:
+  wqp.data <- readWQPdata(args_2, querySummary = FALSE)
+  expect_false("list" %in% class(wqp.data))
+  
+  # Testing multiple lists:
+  arg_3 <- list('startDateLo' = startDate,
+               'startDateHi' = "2013-12-31")
+  arg_4 <- list(statecode="WI",
+                characteristicName=secchi.names)
+  wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
+  expect_true("list" %in% class(wqp.summary))
+  
+  lakeSites <- whatWQPsites(args_2)
+  expect_type(lakeSites, "list")
   
   # Known slow query for WQP:
   # pHDataExpanded2 <- readWQPdata(bBox=c(-90.1,42.9,-89.9,43.1),
@@ -112,6 +160,14 @@ test_that("Dates with no days can be handled", {
   expect_error(readNWISgwl("425957088141001", startDate = "1980-01-01"))
  })
 
+context("whatWQPsamples")
+test_that("whatWQPsamples working", {
+  testthat::skip_on_cran()
+  siteInfo <- whatWQPsamples(siteid="USGS-01594440")
+  expect_true(nrow(siteInfo) > 0)
+  
+  })
+
 context("whatNWISsites")
 test_that("whatNWISsites working", {
   testthat::skip_on_cran()
@@ -122,4 +178,26 @@ test_that("whatNWISsites working", {
   bboxSites <- whatNWISsites(bbox = c(-92.5, 45.4, -87, 47), parameterCd="00060")
   expect_true(nrow(bboxSites) > 0)
   expect_true(is.numeric(bboxSites$dec_lat_va))
-  })
+})
+
+context("readWQPdots")
+test_that("readWQPdots working", {
+  testthat::skip_on_cran()
+  
+  # bbox vector turned into single string with coords separated by semicolons
+  formArgs_bbox <- dataRetrieval:::readWQPdots(bbox = c(-92.5, 45.4, -87, 47))
+  expect_true(length(formArgs_bbox) == 2)
+  expect_true(length(gregexpr(";", formArgs_bbox)[[1]]) == 3)
+  
+  # NWIS names (siteNumber) converted to WQP expected names (siteid)
+  formArgs_site <- dataRetrieval:::readWQPdots(siteNumber="04010301")
+  expect_true(length(formArgs_site) == 2)
+  expect_true("siteid" %in% names(formArgs_site))
+  expect_false("siteNumber" %in% names(formArgs_site))
+  
+  # NWIS names (stateCd) converted to WQP expected names (statecode)
+  formArgs <- dataRetrieval:::readWQPdots(stateCd="OH",parameterCd="00665")
+  expect_true(length(formArgs) == 3)
+  expect_true("statecode" %in% names(formArgs))
+  expect_false("stateCd" %in% names(formArgs))
+})

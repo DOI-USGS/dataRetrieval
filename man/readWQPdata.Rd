@@ -4,14 +4,14 @@
 \alias{readWQPdata}
 \title{General Data Import from Water Quality Portal}
 \usage{
-readWQPdata(..., zip = FALSE, querySummary = FALSE)
+readWQPdata(..., querySummary = FALSE, tz = "UTC")
 }
 \arguments{
-\item{zip}{logical to request data via downloading zip file. Default set to FALSE.}
+\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
 
-\item{querySummary}{logical to ONLY return the number of records and unique sites that will be returned from this query.}
+\item{querySummary}{logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the \dots argument}
 
-\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options}
+\item{tz}{timezone as a character string. See \code{OlsonNames()} for a list of possibilities.}
 }
 \value{
 A data frame with at least the following columns:
@@ -107,8 +107,37 @@ pHData_summary <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),
 startDate <- as.Date("2013-01-01")
 nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
                         characteristicType="Nutrient")
+secchi.names = c("Depth, Secchi disk depth", 
+                 "Depth, Secchi disk depth (choice list)", 
+                 "Secchi Reading Condition (choice list)", 
+                 "Secchi depth", 
+                 "Water transparency, Secchi disc")
+args <- list('startDateLo' = startDate, 
+             'startDateHi' = "2013-12-31", 
+              statecode="WI", 
+              characteristicName=secchi.names)
 
-                        
+wqp.data <- readWQPdata(args)   
+
+args_2 <- list('startDateLo' = startDate, 
+             'startDateHi' = "2013-12-31", 
+              statecode="WI", 
+              characteristicName=secchi.names,
+              querySummary=TRUE)
+
+wqp.summary <- readWQPdata(args_2) 
+
+arg_3 <- list('startDateLo' = startDate, 
+             'startDateHi' = "2013-12-31")
+arg_4 <- list(statecode="WI", 
+              characteristicName=secchi.names)
+wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
+wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", 
+                              characteristicName=secchi.names, 
+                              querySummary=TRUE)
+                              
+# querying by county
+dailyLexingtonVA <- readWQPdata(statecode = "Virginia", countycode="Lexington", parameterCd = "00060") 
 }
 }
 \keyword{WQP}
@@ -116,4 +145,3 @@ nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

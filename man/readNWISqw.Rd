@@ -119,4 +119,3 @@ rawNWISOpe <- readNWISqw(siteNumbers,"OPE",
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

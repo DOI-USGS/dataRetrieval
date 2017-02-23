@@ -82,4 +82,3 @@ flowAndTemp <- whatNWISdata(siteNumbers, parameterCd=c("00060","00010"))
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

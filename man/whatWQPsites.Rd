@@ -4,12 +4,10 @@
 \alias{whatWQPsites}
 \title{Site Data Import from Water Quality Portal}
 \usage{
-whatWQPsites(..., zip = FALSE)
+whatWQPsites(...)
 }
 \arguments{
-\item{zip}{logical to request data via downloading zip file. Default set to FALSE.}
-
-\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options}
+\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
 }
 \value{
 A data frame with at least the following columns:
@@ -72,4 +70,3 @@ lakeSites <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode =
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

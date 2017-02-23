@@ -69,4 +69,3 @@ peakdata<-readNWISpeak(stations,convertType=FALSE)
 \seealso{
 \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 }
-
