@@ -46,6 +46,11 @@ test_that("External importRDB1 tests", {
 #   
 #   iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
 #   expect_that(sum(iceNoConvert$X01_00060 == "Ice") > 0, is_true())
+  
+  url <- "https://nwis.waterservices.usgs.gov/nwis/iv/?Access=3&site=441520088045001&format=rdb,1.0&ParameterCd=99234&startDT=2017-02-14&endDT=2017-02-22"
+  data_nwis <- importRDB1(url)
+  expect_is(data_nwis$X158804_00045, "numeric")
+  
 })
 
 context("importRDB")
