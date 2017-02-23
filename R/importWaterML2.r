@@ -72,7 +72,6 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz="UTC"){
   for(t in timeSeries){
     TVP <- xml_find_all(t, ".//wml2:MeasurementTVP")#time-value pairs
     time <- xml_text(xml_find_all(TVP,".//wml2:time"))
-    #TODO: if asDateTime....
     if(asDateTime){
       time <- parse_date_time(time, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M","%Y-%m-%dT%H:%M:%S",
                                       "%Y-%m-%dT%H:%M:%OS","%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
