@@ -119,8 +119,7 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   
   tz <- match.arg(tz, OlsonNames())
   
-  matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
-                   list(...)[sapply(list(...), class) != "list"]) # get the non-list parts
+  matchReturn <- convertLists(...)
   
   if("service" %in% names(matchReturn)){
     service <- matchReturn$service
@@ -353,8 +352,16 @@ countyCdLookup <- function(state, county, outputType = "id"){
 
 
 # convert variables in dots to usable format
-convertDots <- function(matchReturn){
+convertNWISdots <- function(matchReturn){
   retVal <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=",",sep="")))
   return(retVal)
+}
+
+# convert variables in dots to usable format
+convertLists <- function(...){
+  matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
+                   list(...)[sapply(list(...), class) != "list"]) # get the non-list parts
+  return(matchReturn)
+  
 }
 
