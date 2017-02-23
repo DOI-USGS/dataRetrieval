@@ -71,8 +71,10 @@ importWQP <- function(obs_url, zip=FALSE, tz=""){
     numToBeReturned <- 0
     sitesToBeReturned <- 0
     
-    if("total-result-count" %in% names(headerInfo)){
-      numToBeReturned <- as.numeric(headerInfo["total-result-count"])
+    totals <- c("total-result-count","total-activity-count")
+    
+    if(any(totals %in% names(headerInfo))){
+      numToBeReturned <- sum(as.numeric(headerInfo[names(headerInfo) %in% totals]))
     } 
     
     if("total-site-count" %in% names(headerInfo)){

@@ -4,12 +4,14 @@
 \alias{readWQPdata}
 \title{General Data Import from Water Quality Portal}
 \usage{
-readWQPdata(..., querySummary = FALSE)
+readWQPdata(..., querySummary = FALSE, tz = "UTC")
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
 
 \item{querySummary}{logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the \dots argument}
+
+\item{tz}{timezone as a character string. See \code{OlsonNames()} for a list of possibilities.}
 }
 \value{
 A data frame with at least the following columns:
@@ -133,7 +135,9 @@ wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
 wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", 
                               characteristicName=secchi.names, 
                               querySummary=TRUE)
-               
+                              
+# querying by county
+dailyLexingtonVA <- readWQPdata(statecode = "Virginia", countycode="Lexington", parameterCd = "00060") 
 }
 }
 \keyword{WQP}

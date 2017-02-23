@@ -5,6 +5,7 @@
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied. 
 #' @param querySummary logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the \dots argument
+#' @param tz timezone as a character string. See \code{OlsonNames()} for a list of possibilities.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -123,57 +124,15 @@
 #' wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", 
 #'                               characteristicName=secchi.names, 
 #'                               querySummary=TRUE)
-#'                
+#'                               
+#' # querying by county
+#' dailyLexingtonVA <- readWQPdata(statecode = "Virginia", countycode="Lexington", parameterCd = "00060") 
 #' }
-readWQPdata <- function(..., querySummary=FALSE){
+readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
   
-  matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
-                   list(...)[sapply(list(...), class) != "list"]) # get the non-list parts
+  tz <- match.arg(tz, OlsonNames())
   
-  values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))
-  
-  if("bBox" %in% names(values)){
-    values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
-  }
-  
-  if("zip" %in% names(values)){
-    if(class(values["zip"]) == "logical"){
-      values["zip"] <- ifelse(values["zip"], "yes","no")
-    }
-  } else {
-    values["zip"] <- "no"
-  }
-
-  values <- checkWQPdates(values)
-
-  names(values)[names(values) == "siteNumber"] <- "siteid"
-  names(values)[names(values) == "siteNumbers"] <- "siteid"
-  
-  if("statecode" %in% names(values)){
-    stCd <- values["statecode"]
-    if(!grepl("US:",stCd)){
-      values["statecode"] <- paste0("US:",stateCdLookup(stCd, "id"))
-    }
-  }
-  
-  if("stateCd" %in% names(values)){
-    stCd <- values["stateCd"]
-    if(!grepl("US:",stCd)){
-      values["stateCd"] <- paste0("US:",stateCdLookup(stCd, "id"))
-    }
-    names(values)[names(values) == "stateCd"] <- "statecode"
-  }
-  
-  if("tz" %in% names(values)){
-    tz <- values["tz"]
-    if(tz != ""){
-      tz <- match.arg(tz, OlsonNames())
-    }
-    values <- values[!(names(values) %in% "tz")]
-  } else {
-    tz <- "UTC"
-  }
-
+  values <- readWQPdots(...)
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
 
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
