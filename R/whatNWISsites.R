@@ -34,20 +34,18 @@
 #' @examples
 #' \dontrun{
 #' siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
+#' oneSite <- whatNWISsites(sites="05114000")
 #' }
 whatNWISsites <- function(...){
   
   values <- readNWISdots(...)
   
-  values <- sapply(values, function(x) URLencode(x))
-  # matchReturn <- convertLists(...)
-  # 
-  # values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
-  # 
-  # names(values)[names(values) == "siteNumber"] <- "sites"
-  # names(values)[names(values) == "siteNumbers"] <- "sites"
-  
-  urlCall <- drURL('site',Access=pkg.env$access, format="mapper", arg.list = values)
+  valuesList <- readNWISdots(...)
+
+  values <- sapply(valuesList$values, function(x) URLencode(x))
+  values["format"] <- "mapper" 
+
+  urlCall <- drURL('site',Access=pkg.env$access, arg.list = values)
 
   rawData <- getWebServiceData(urlCall, encoding='gzip')
 
@@ -81,7 +79,7 @@ whatNWISsites <- function(...){
   }
   
   retVal <- retVal[!duplicated(retVal),]
-  retVal$queryTime <- Sys.time()
+
   attr(retVal, "url") <- urlCall
   attr(retVal, "queryTime") <- Sys.time()
   
