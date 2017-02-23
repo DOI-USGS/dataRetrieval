@@ -66,7 +66,7 @@ comment \tab character \tab Header comments from the RDB file \cr
 }
 }
 \description{
-Imports data from USGS site file site. This function gets data from here: \url{http://waterservices.usgs.gov/}
+Imports data from USGS site file site. This function gets data from here: \url{https://waterservices.usgs.gov/}
 }
 \examples{
 \dontrun{
@@ -79,4 +79,3 @@ siteINFOMulti <- readNWISsite(c('05114000','09423350'))
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

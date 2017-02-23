@@ -110,7 +110,7 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 \description{
 Imports data from the Water Quality Portal. 
-This function gets the data from here: \url{http://www.waterqualitydata.us}. There
+This function gets the data from here: \url{https://www.waterqualitydata.us}. There
 are four required input arguments: siteNumber, parameterCd, startDate, and endDate.
 parameterCd can either be a USGS 5-digit code, or a characteristic name. The sites can be 
 either USGS, or other Water Quality Portal offered sites. It is required to use the 'full'
@@ -135,4 +135,3 @@ nwisEx.summary <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

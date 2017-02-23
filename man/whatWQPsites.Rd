@@ -4,12 +4,10 @@
 \alias{whatWQPsites}
 \title{Site Data Import from Water Quality Portal}
 \usage{
-whatWQPsites(..., zip = FALSE)
+whatWQPsites(...)
 }
 \arguments{
-\item{zip}{logical to request data via downloading zip file. Default set to FALSE.}
-
-\item{\dots}{see \url{www.waterqualitydata.us/webservices_documentation.jsp} for a complete list of options}
+\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
 }
 \value{
 A data frame with at least the following columns:
@@ -55,8 +53,8 @@ queryTime \tab POSIXct \tab Query time \cr
 * element is only in NWIS
 }
 \description{
-Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{http://www.waterqualitydata.us}.
-Arguments to the function should be based on \url{www.waterqualitydata.us/webservices_documentation.jsp}
+Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
+Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
 }
 \examples{
 \dontrun{
@@ -72,4 +70,3 @@ lakeSites <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode =
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

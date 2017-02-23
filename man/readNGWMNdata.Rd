@@ -4,15 +4,13 @@
 \alias{readNGWMNdata}
 \title{import data from the National Groundwater Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
 \usage{
-readNGWMNdata(featureID, service = "observation", asDateTime = TRUE,
-  tz = "")
+readNGWMNdata(..., service = "observation", asDateTime = TRUE, tz = "")
 }
 \arguments{
-\item{featureID}{character Vector of feature IDs in the formatted with agency code and site number 
-separated by a period, e.g. \code{USGS.404159100494601}.}
+\item{\dots}{Other parameters to supply, namely \code{featureID} or \code{bbox}}
 
-\item{service}{character Identifies which web service to access.  Only \code{observation} is currently 
-supported, which retrieves all water level for each site.}
+\item{service}{character Identifies which web service to access.  \code{observation} retrieves all water level for each site,
+and \code{featureOfInterest} retrieves a data frame of site information, including description, latitude, and longitude.}
 
 \item{asDateTime}{logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
 \code{FALSE} since time zone information is not included.}
@@ -34,15 +32,19 @@ oneSite <- readNGWMNdata(featureID = site)
 #multiple sites
 sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
 multiSiteData <- readNGWMNdata(sites)
+attributes(multiSiteData)
 
 #non-USGS site
-site <- "MBMG.892195"
+#accepts colon or period between agency and ID
+site <- "MBMG:892195"
 data <- readNGWMNdata(featureID = site)
 
 #site with no data returns empty data frame
 noDataSite <- "UTGS.401544112060301"
 noDataSite <- readNGWMNdata(featureID = noDataSite, service = "observation")
+
+#bounding box
+bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
 }
 
 }
-

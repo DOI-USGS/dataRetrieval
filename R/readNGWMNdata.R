@@ -3,18 +3,19 @@
 #' Only water level data is currently available through the web service.  
 #' @param asDateTime logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
 #' \code{FALSE} since time zone information is not included.  
-#' @param featureID character Vector of feature IDs in the formatted with agency code and site number 
-#' separated by a period, e.g. \code{USGS.404159100494601}.
-#' @param service character Identifies which web service to access.  Only \code{observation} is currently 
-#' supported, which retrieves all water level for each site.   
+#' @param service character Identifies which web service to access.  \code{observation} retrieves all water level for each site,
+#' and \code{featureOfInterest} retrieves a data frame of site information, including description, latitude, and longitude.   
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+#' @param \dots Other parameters to supply, namely \code{featureID} or \code{bbox}
 #' @import utils
 #' @importFrom dplyr mutate
 #' @importFrom dplyr bind_rows
-#' 
+#' @importFrom dplyr bind_cols
+#' @importFrom stats na.omit
+#' @export
 #' @examples 
 #' \dontrun{
 #' #one site
@@ -24,64 +25,64 @@
 #' #multiple sites
 #' sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
 #' multiSiteData <- readNGWMNdata(sites)
+#' attributes(multiSiteData)
 #' 
 #' #non-USGS site
-#' site <- "MBMG.892195"
+#' #accepts colon or period between agency and ID
+#' site <- "MBMG:892195"
 #' data <- readNGWMNdata(featureID = site)
 #' 
 #' #site with no data returns empty data frame
 #' noDataSite <- "UTGS.401544112060301"
 #' noDataSite <- readNGWMNdata(featureID = noDataSite, service = "observation")
+#' 
+#' #bounding box
+#' bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
 #' }
 #' 
-
-readNGWMNdata <- function(featureID, service = "observation", asDateTime = TRUE, tz = ""){
+readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = ""){
   message("          ********************************************************
           DISCLAIMER: NGWMN retrieval functions are still in flux, 
               and no future behavior or output is guaranteed
           *********************************************************")
-  match.arg(service, c("observation", "featureOfInterest"))
   
+  match.arg(service, c("observation", "featureOfInterest", "getCapabilities"))
+  dots <- list(...)
   
   if(service == "observation"){
-    allObs <- NULL
-    allAttrs <- NULL
-    allSites <- NULL
+    allObs <- data.frame()
+    allAttrs <- data.frame()
+    
     #these attributes are pulled out and saved when doing binds to be reattached
-    attrs <- c("url","gml:identifier","generationDate")
+    attrs <- c("url","gml:identifier","generationDate","responsibleParty", "contact")
+    featureID <- na.omit(gsub(":",".",dots[['featureID']]))
+    
     for(f in featureID){
-      obsFID <- retrieveObservation(f, asDateTime, attrs)
-      siteFID <- retrieveFeatureOfInterest(f, asDateTime)
-      if(is.null(allObs)){
-        allObs <- obsFID
-        allSites <- siteFID
-        allAttrs <- saveAttrs(attrs, allObs)
-      }else{
-        obsFIDatt <- saveAttrs(attrs, obsFID)
-        obsFID <- removeAttrs(attrs, obsFID)
-        allAttrs <- bind_rows(allAttrs, obsFIDatt)
-        allObs <- bind_rows(allObs, obsFID)
-        allSites <- bind_rows(allSites, siteFID)
-      }
-      attributes(allObs) <- c(attributes(allObs),as.list(allAttrs))
-      attr(allObs, "siteInfo") <- allSites
-      returnData <- allObs
+      obsFID <- retrieveObservation(featureID = f, asDateTime, attrs)
+      obsFIDattr <- saveAttrs(attrs, obsFID)
+      obsFID <- removeAttrs(attrs, obsFID)
+      allObs <- bind_rows(allObs, obsFID)
+      allAttrs <- bind_rows(allAttrs, obsFIDattr)
+      
     }
+    allSites <- retrieveFeatureOfInterest(featureID = featureID)
+    attr(allObs, "siteInfo") <- allSites
+    attr(allObs, "other") <- allAttrs
+    returnData <- allObs
+    
   }else if(service == "featureOfInterest"){
-    allSites <- NULL
-    for(f in featureID){
-      siteFID <- retrieveFeatureOfInterest(f, asDateTime)
-      if(is.null(allSites)){
-        allSites <- siteFID
-        }else{
-        allSites <- bind_rows(allSites, siteFID)
-      }
+    if("featureID" %in% names(dots)){
+      featureID <- na.omit(gsub(":",".",dots[['featureID']]))
+      allSites <- retrieveFeatureOfInterest(featureID = featureID)
+    }
+    if("bbox" %in% names(dots)){
+      allSites <- retrieveFeatureOfInterest(bbox=dots[['bbox']])
     }
     returnData <- allSites
   }else{
-    stop("unrecognized service request")
+    stop("getCapabilities is not yet implemented")
+    #TODO: fill in getCapabilites
   }
-  
   return(returnData)
 }
 
@@ -89,6 +90,9 @@ readNGWMNdata <- function(featureID, service = "observation", asDateTime = TRUE,
 #'
 #' @param featureID character Vector of feature IDs in the formatted with agency code and site number 
 #' separated by a period, e.g. \code{USGS.404159100494601}.
+#' @param asDateTime logical Should dates and times be converted to date/time objects,
+#' or returned as character?  Defaults to \code{TRUE}.  Must be set to \code{FALSE} if a site 
+#' contains non-standard dates.
 #' 
 #' @export
 #' 
@@ -111,8 +115,9 @@ readNGWMNdata <- function(featureID, service = "observation", asDateTime = TRUE,
 #' noDataSite <- readNGWMNlevels(featureID = noDataSite)
 #' }
 
-readNGWMNlevels <- function(featureID){
-  data <- readNGWMNdata(featureID, service = "observation")
+readNGWMNlevels <- function(featureID, asDateTime = TRUE){
+  data <- readNGWMNdata(featureID = featureID, service = "observation",
+                        asDateTime = asDateTime)
   return(data)
 }
 
@@ -146,16 +151,15 @@ readNGWMNlevels <- function(featureID){
 #' }
 
 readNGWMNsites <- function(featureID){
-  sites <- readNGWMNdata(featureID, service = "featureOfInterest")
+  sites <- readNGWMNdata(featureID = featureID, service = "featureOfInterest")
   return(sites)
 }
 
 
-
 retrieveObservation <- function(featureID, asDateTime, attrs){
-  #will need to contruct this more piece by piece if other versions, properties are added
-  baseURL <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
-  url <- paste0(baseURL, featureID)
+  url <- drURL(base.name = "NGWMN", access = pkg.env$access, request = "GetObservation", 
+               service = "SOS", version = "2.0.0", observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
+               responseFormat = "text/xml", featureOfInterest = paste("VW_GWDP_GEOSERVER", featureID, sep = "."))
   
   returnData <- importNGWMN_wml2(url, asDateTime)
   if(nrow(returnData) == 0){
@@ -179,12 +183,27 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
 }
 
 #retrieve feature of interest
-#don't expose until can support bbox
-#note: import function can only do single sites right now
-retrieveFeatureOfInterest <- function(featureID, asDateTime){
-  baseURL <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetFeatureOfInterest&service=SOS&version=2.0.0&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOfInterest=VW_GWDP_GEOSERVER."
-  url <- paste0(baseURL, featureID)
+#could allow pass through srsName - needs to be worked in higher-up in dots
+retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:EPSG::4269"){
+  dots <- list(...)
+  values <- gsub(x = convertDots(dots), pattern = ",", replacement = "%2C")
+  
+  url <- drURL(base.name = "NGWMN", access = pkg.env$access, request = "GetFeatureOfInterest", 
+               service = "SOS", version = "2.0.0", responseFormat = "text/xml")
+  
+  if("featureID" %in% names(values)){
+    url <- appendDrURL(url, featureOfInterest = paste("VW_GWDP_GEOSERVER", 
+                                                      values[['featureID']], sep = "."))
+    
+  }else if("bbox" %in% names(values)){
+    url <- appendDrURL(url, bbox = paste(values[['bbox']], collapse=","),
+                       srsName = srsName)
+  }else{
+    stop()
+  }
   siteDF <- importNGWMN_wml2(url, asDateTime)
+  attr(siteDF, "url") <- url
+  attr(siteDF, "queryTime") <- Sys.time()
   return(siteDF)
 }
 

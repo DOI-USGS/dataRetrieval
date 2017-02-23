@@ -25,4 +25,3 @@ head(countyCd)
 }
 \keyword{USGS}
 \keyword{countyCd}
-

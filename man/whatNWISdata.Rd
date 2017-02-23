@@ -64,7 +64,7 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 }
 \description{
-Imports a table of available parameters, period of record, and count. See \url{http://waterservices.usgs.gov/rest/Site-Service.html}
+Imports a table of available parameters, period of record, and count. See \url{https://waterservices.usgs.gov/rest/Site-Service.html}
 for more information.
 }
 \examples{
@@ -82,4 +82,3 @@ flowAndTemp <- whatNWISdata(siteNumbers, parameterCd=c("00060","00010"))
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

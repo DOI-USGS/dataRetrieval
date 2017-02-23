@@ -34,7 +34,7 @@ provide statistics for each month and year within the range indivually.}
 
 \item{statType}{character type(s) of statistics to output for daily values.  Default is mean, which is the only
 option for monthly and yearly report types. See the statistics service documentation 
-at \url{http://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.}
+at \url{https://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.}
 }
 \value{
 A data frame with the following columns:
@@ -49,7 +49,7 @@ Other columns will be present depending on statReportType and statType
 }
 \description{
 Retrieves site statistics from the USGS Statistics Web Service beta.  
-See \url{http://waterservices.usgs.gov/rest/Statistics-Service.html} for more information.
+See \url{https://waterservices.usgs.gov/rest/Statistics-Service.html} for more information.
 }
 \examples{
 \dontrun{
@@ -74,4 +74,3 @@ x <- readNWISstat(siteNumbers=c("02171500"),
 \seealso{
 \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 }
-

@@ -32,7 +32,7 @@ A data frame with at least the year of record, and all available statistics for 
 County and state fields will be included as appropriate.
 }
 \description{
-Retrieves water use data from USGS Water Use Data for the Nation.  See \url{http://waterdata.usgs.gov/nwis/wu} for 
+Retrieves water use data from USGS Water Use Data for the Nation.  See \url{https://waterdata.usgs.gov/nwis/wu} for 
 more information.  All available use categories for the supplied arguments are retrieved.
 }
 \examples{
@@ -59,4 +59,3 @@ paData <- readNWISuse(stateCd = "42",countyCd = c("Allegheny County", "BUTLER", 
 ks <- readNWISuse(stateCd = "KS", countyCd = NULL, categories = c("IT","LI"))
 }
 }
-

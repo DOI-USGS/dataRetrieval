@@ -47,7 +47,7 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 }
 \description{
-Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
+Imports data from NWIS web service. This function gets the data from here: \url{https://waterservices.usgs.gov/}
 }
 \examples{
 siteNumber <- '04085427'
@@ -79,4 +79,3 @@ notActive <- readNWISdv(site, "00060", "2014-01-01","2014-01-07")
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

@@ -14,11 +14,11 @@ readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "",
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the earliest possible record. Simple date arguments are specified in local time.
-See more information here: \url{http://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.}
+See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record. Simple date arguments are specified in local time.
-See more information here: \url{http://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.}
+See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.}
 
 \item{tz}{character to set timezone attribute of dateTime. Default is an empty quote, which converts the 
 dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
@@ -53,10 +53,10 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 }
 \description{
-Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
-A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}.
-More information on the web service can be found here: \url{http://waterservices.usgs.gov/rest/IV-Service.html}.
+Imports data from NWIS web service. This function gets the data from here: \url{https://waterservices.usgs.gov/}
+A list of parameter codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+A list of statistic codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}.
+More information on the web service can be found here: \url{https://waterservices.usgs.gov/rest/IV-Service.html}.
 }
 \examples{
 siteNumber <- '05114000'
@@ -87,4 +87,3 @@ GMTdata <- readNWISuv(siteNumber,parameterCd,
 \keyword{import}
 \keyword{service}
 \keyword{web}
-

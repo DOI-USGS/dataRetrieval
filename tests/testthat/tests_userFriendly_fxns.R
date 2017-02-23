@@ -10,6 +10,13 @@ test_that("Unit value data returns correct types", {
 
   rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
   rawData <- renameNWISColumns(rawData)
+  
+  spreadOver120 <- readNWISuv(siteNumber,parameterCd,
+                              as.Date(Sys.Date()-200),
+                              Sys.Date())
+  
+  expect_true(min(spreadOver120$dateTime) < as.POSIXct(Sys.Date(), tz="UTC"))
+  
   timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
                                "2013-11-03","2013-11-03", 
                                tz="America/Chicago")
@@ -18,9 +25,7 @@ test_that("Unit value data returns correct types", {
   timeZoneChange <- renameNWISColumns(timeZoneChange)
   expect_is(rawData$dateTime, 'POSIXct')
   expect_is(rawData$Flow_Inst, 'numeric')
-  # expect_that(attr(rawData, "url"), equals(
-  #     "http://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
-  # )
+  expect_equal(attr(rawData, "url"), "https://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
 #   #First switchover to standard time:
 #   expect_that(as.numeric(timeZoneChange[which(timeZoneChange$tz_cd == "America/Chicago")[1],"dateTime"]),
 #               equals(as.numeric(as.POSIXct("2013-11-03 01:00:00", tz="UTC")+60*60*6)))
@@ -31,9 +36,12 @@ test_that("Unit value data returns correct types", {
   endDate <- "2012-07-17"
   dd_2 <- readNWISuv(site, pCode, startDate, endDate)
   expect_true(all(names(dd_2) %in% c("agency_cd","site_no",                   
-                                 "dateTime","X_.YSI.6136.UP._63680_00011",   
-                                 "X_YSI.6136.DOWN_63680_00011","X_.YSI.6136.UP._63680_00011_cd",
-                                 "X_YSI.6136.DOWN_63680_00011_cd","tz_cd")))
+                                 "dateTime","X_.YSI.6136.UP._63680_00000",   
+                                 "X_YSI.6136.DOWN_63680_00000","X_.YSI.6136.UP._63680_00000_cd",
+                                 "X_YSI.6136.DOWN_63680_00000_cd","tz_cd")))
+  
+  noData <- readNWISuv("01196500","00010", "2016-06-15", "2016-06-15")
+  # expect_equal(noData$X_00010_00000[1], as.numeric(NA))
   
 })
 
@@ -68,7 +76,7 @@ test_that("peak, rating curves, surface-water measurements", {
   emptyDF <- whatNWISdata("10312000",parameterCd = "50286")
   expect_that(nrow(emptyDF) == 0, is_true())
   
-  url <- "http://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000"
+  url <- "https://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000"
   x <- importRDB1(url)
 
 })
@@ -222,6 +230,10 @@ test_that("NGWMN functions working", {
   noDataSite <- readNGWMNlevels(featureID = noDataSite)
   expect_true(is.data.frame(noDataSite))
   
+  #bounding box and a bigger request
+  bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
+  #siteInfo <- readNGWMNsites(bboxSites$site[1:100])
+  
   #one site
   site <- "USGS.430427089284901"
   oneSite <- readNGWMNlevels(featureID = site)
@@ -233,11 +245,104 @@ test_that("NGWMN functions working", {
   expect_true(nrow(oneSite) > 0)
   
   #non-USGS site
-  data <- readNGWMNlevels(featureID = "MBMG.892195")
+  data <- readNGWMNlevels(featureID = "MBMG.1388")
   expect_true(nrow(data) > 1)
   expect_true(is.numeric(oneSite$value))
   
+  #sites with colons and NAs work
+  na_colons <- c(NA, bboxSites$site[202], NA, NA)
+  returnDF <- readNGWMNdata(service = "observation", featureID = na_colons)
+  expect_is(returnDF, "data.frame")
+  expect_true(nrow(returnDF) > 1)
+  expect_true(!is.null(attributes(returnDF)$siteInfo))
+  
+  # sites <- c("USGS:424427089494701", NA)
+  # siteInfo <- readNGWMNsites(sites)
+  # expect_is(siteInfo, "data.frame")
+  # expect_true(nrow(siteInfo) == 1)
+  
 })
 
+context("water year column")
 
+df_test <- data.frame(site_no = as.character(1:13),
+                      dateTime = seq(as.Date("2010-01-01"),as.Date("2011-01-31"), 
+                                     by="months"),
+                      result_va = 1:13, stringsAsFactors = FALSE)
 
+test_that("addWaterYear works with Date, POSIXct, character, but breaks with numeric", {
+  library(dplyr)
+  
+  df_date <- df_test
+  df_date_wy <- addWaterYear(df_date)
+  expect_equal(ncol(df_date_wy), ncol(df_date) + 1)
+  
+  df_posixct <- mutate(df_test, dateTime = as.POSIXct(dateTime))
+  df_posixct_wy <- addWaterYear(df_posixct)
+  expect_equal(ncol(df_posixct_wy), ncol(df_posixct) + 1)
+  
+  df_char <- mutate(df_test, dateTime = as.character(dateTime))
+  df_char_wy <- addWaterYear(df_char)
+  expect_equal(ncol(df_char_wy), ncol(df_char) + 1)
+  
+  df_num <- mutate(df_test, dateTime = as.numeric(dateTime))
+  expect_error(addWaterYear(df_num), "'origin' must be supplied")
+})
+
+test_that("addWaterYear works for each column name", {
+  
+  nwisqw_style <- df_test
+  nwisqw_style_wy <- addWaterYear(nwisqw_style)
+  expect_equal(ncol(nwisqw_style_wy), ncol(nwisqw_style) + 1)
+  
+  nwisdata_style <- df_test
+  names(nwisdata_style)[2] <- "Date"
+  nwisdata_style_wy <- addWaterYear(nwisdata_style)
+  expect_equal(ncol(nwisdata_style_wy), ncol(nwisdata_style) + 1)
+  
+  wqp_style <- df_test
+  names(wqp_style)[2] <- "ActivityStartDate"
+  wqp_style[['ActivityEndDate']] <- wqp_style[["ActivityStartDate"]]
+  wqp_style_wy <- addWaterYear(wqp_style)
+  expect_equal(ncol(wqp_style_wy), ncol(wqp_style) + 2)
+  
+  userspecified_style <- df_test
+  names(userspecified_style)[2] <- "MyDateCol"
+  expect_error(addWaterYear(userspecified_style),
+               "specified date column does not exist in supplied data frame")
+})
+
+test_that("addWaterYear correctly calculates the WY and is numeric", {
+  df_test_wy <- addWaterYear(df_test)
+  expect_is(df_test_wy[['waterYear']], "numeric")
+  expect_true(all(df_test_wy[['waterYear']][1:9] == 2010))
+  expect_true(all(df_test_wy[['waterYear']][10:13] == 2011))
+})
+
+test_that("addWaterYear adds column next to dateTime", {
+  df_test_wy <- addWaterYear(df_test)
+  dateTime_col <- which(names(df_test_wy) == "dateTime")
+  expect_equal(names(df_test_wy)[dateTime_col + 1], "waterYear")
+})
+
+test_that("addWaterYear can be used with pipes", {
+  library(dplyr)
+  df_test_wy <- df_test %>% addWaterYear()
+  expect_equal(ncol(df_test_wy), ncol(df_test) + 1)
+})
+
+test_that("addWaterYear doesn't add another WY column if it exists", {
+  df_test_wy <- addWaterYear(df_test)
+  expect_equal(ncol(df_test_wy), ncol(df_test) + 1)
+  df_test_wy2 <- addWaterYear(df_test_wy)
+  expect_equal(ncol(df_test_wy2), ncol(df_test_wy))
+})
+
+test_that("calcWaterYear can handle missing values", {
+  dateVec <- seq(as.Date("2010-01-01"),as.Date("2011-01-31"), by="months")
+  dateVec[c(3,7,12)] <- NA
+  wyVec <- dataRetrieval:::calcWaterYear(dateVec)
+  
+  expect_is(wyVec, "numeric")
+  expect_true(all(is.na(wyVec[c(3,7,12)])))
+})
