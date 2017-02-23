@@ -37,12 +37,15 @@
 #' }
 whatNWISsites <- function(...){
   
-  matchReturn <- convertLists(...)
+  values <- readNWISdots(...)
   
-  values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
-  
-  names(values)[names(values) == "siteNumber"] <- "sites"
-  names(values)[names(values) == "siteNumbers"] <- "sites"
+  values <- sapply(values, function(x) URLencode(x))
+  # matchReturn <- convertLists(...)
+  # 
+  # values <- sapply(matchReturn, function(x) URLencode(as.character(paste(eval(x),collapse=",",sep=""))))
+  # 
+  # names(values)[names(values) == "siteNumber"] <- "sites"
+  # names(values)[names(values) == "siteNumbers"] <- "sites"
   
   urlCall <- drURL('site',Access=pkg.env$access, format="mapper", arg.list = values)
 

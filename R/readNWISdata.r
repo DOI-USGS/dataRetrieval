@@ -119,92 +119,11 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   
   tz <- match.arg(tz, OlsonNames())
   
-  matchReturn <- convertLists(...)
+  valuesList <- readNWISdots(...)
   
-  if("service" %in% names(matchReturn)){
-    service <- matchReturn$service
-    matchReturn$service <- NULL
-  } else {
-    service <- "dv"
-  }
+  service <- valuesList$service
   
-  match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata","stat"))
-  
-  if(service == "uv"){
-    service <- "iv"
-  } else if (service == "qw"){
-    service <- "qwdata"
-  }
-  
-  if(length(service) > 1){
-    stop("Only one service call allowed.")
-  }
-  
-  values <- convertDots(matchReturn) 
-  
-  names(values)[names(values) == "startDate"] <- "startDT"
-  names(values)[names(values) == "endDate"] <- "endDT"
-  names(values)[names(values) == "siteNumber"] <- "sites"
-  names(values)[names(values) == "siteNumbers"] <- "sites"
-  
-  format.default <- "waterml,1.1"
-  
-  names(values)[names(values) == "statecode"] <- "stateCd"
-  if("stateCd" %in% names(values)){
-    values["stateCd"] <- stateCdLookup(values["stateCd"], "postal")
-  }
-  
-  names(values)[names(values) == "countycode"] <- "countyCd"
-  if("countyCd" %in% names(values)){
-    values["countyCd"] <- paste0(stateCdLookup(values["stateCd"], "id"), 
-                                countyCdLookup(values["stateCd"], values["countyCd"], "id"))
-    values <- values[names(values) != "stateCd"]
-  }
-  
-  if (service %in% c("qwdata","measurements")){
-
-    format.default <- "rdb"
-    
-    names(values)[names(values) == "startDT"] <- "begin_date"
-    names(values)[names(values) == "endDT"] <- "end_date"
-    
-    if("bBox" %in% names(values)){
-      values["nw_longitude_va"] <- as.character(matchReturn$bBox[1])
-      values["nw_latitude_va"] <- as.character(matchReturn$bBox[2])
-      values["se_longitude_va"] <- as.character(matchReturn$bBox[3])
-      values["se_latitude_va"] <- as.character(matchReturn$bBox[4])
-      values["coordinate_format"] <- "decimal_degrees"
-      values <- values[-which("bBox" %in% names(values))] 
-    }
-    
-    values["date_format"] <- "YYYY-MM-DD"
-    values["rdb_inventory_output"] <- "file"
-    values["TZoutput"] <- "0"
-    
-    if(all(c("begin_date","end_date") %in% names(values))){
-      values["range_selection"] <- "date_range"
-    }
-    
-    if(service == "qwdata"){
-      values["qw_sample_wide"] <- "wide"
-    }
-  } 
-  
-  if(service %in% c("site","gwlevels","stat")){
-    format.default <- "rdb"
-  }
-  
-  if(service == "stat"){
-    message("Please be aware the NWIS data service feeding this function is in BETA.\n
-          Data formatting could be changed at any time, and is not guaranteed")
-    
-  }
-  
-  if(!("format" %in% names(values))){
-    values["format"] <- format.default
-  }
-  
-  values <- sapply(values, function(x) URLencode(x))
+  values <- sapply(valuesList$values, function(x) URLencode(x))
   
   baseURL <- drURL(service, arg.list=values)
   
@@ -350,11 +269,98 @@ countyCdLookup <- function(state, county, outputType = "id"){
   return(retVal)
 }
 
-
-# convert variables in dots to usable format
-convertNWISdots <- function(matchReturn){
-  retVal <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=",",sep="")))
-  return(retVal)
+#' 
+#' Format and organize NWIS arguments that are passed in as \code{...}.
+#'
+#' @keywords internal
+readNWISdots <- function(...){
+  
+  matchReturn <- convertLists(...)
+  
+  if("service" %in% names(matchReturn)){
+    service <- matchReturn$service
+    matchReturn$service <- NULL
+  } else {
+    service <- "dv"
+  }
+  
+  match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata","stat"))
+  
+  if(service == "uv"){
+    service <- "iv"
+  } else if (service == "qw"){
+    service <- "qwdata"
+  }
+  
+  if(length(service) > 1){
+    stop("Only one service call allowed.")
+  }
+  
+  values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=",",sep="")))
+  
+  names(values)[names(values) == "startDate"] <- "startDT"
+  names(values)[names(values) == "endDate"] <- "endDT"
+  names(values)[names(values) == "siteNumber"] <- "sites"
+  names(values)[names(values) == "siteNumbers"] <- "sites"
+  
+  format.default <- "waterml,1.1"
+  
+  names(values)[names(values) == "statecode"] <- "stateCd"
+  if("stateCd" %in% names(values)){
+    values["stateCd"] <- stateCdLookup(values["stateCd"], "postal")
+  }
+  
+  names(values)[names(values) == "countycode"] <- "countyCd"
+  if("countyCd" %in% names(values)){
+    values["countyCd"] <- paste0(stateCdLookup(values["stateCd"], "id"), 
+                                 countyCdLookup(values["stateCd"], values["countyCd"], "id"))
+    values <- values[names(values) != "stateCd"]
+  }
+  
+  if (service %in% c("qwdata","measurements")){
+    
+    format.default <- "rdb"
+    
+    names(values)[names(values) == "startDT"] <- "begin_date"
+    names(values)[names(values) == "endDT"] <- "end_date"
+    
+    if("bBox" %in% names(values)){
+      values["nw_longitude_va"] <- as.character(matchReturn$bBox[1])
+      values["nw_latitude_va"] <- as.character(matchReturn$bBox[2])
+      values["se_longitude_va"] <- as.character(matchReturn$bBox[3])
+      values["se_latitude_va"] <- as.character(matchReturn$bBox[4])
+      values["coordinate_format"] <- "decimal_degrees"
+      values <- values[-which("bBox" %in% names(values))] 
+    }
+    
+    values["date_format"] <- "YYYY-MM-DD"
+    values["rdb_inventory_output"] <- "file"
+    values["TZoutput"] <- "0"
+    
+    if(all(c("begin_date","end_date") %in% names(values))){
+      values["range_selection"] <- "date_range"
+    }
+    
+    if(service == "qwdata"){
+      values["qw_sample_wide"] <- "wide"
+    }
+  } 
+  
+  if(service %in% c("site","gwlevels","stat")){
+    format.default <- "rdb"
+  }
+  
+  if(service == "stat"){
+    message("Please be aware the NWIS data service feeding this function is in BETA.\n
+            Data formatting could be changed at any time, and is not guaranteed")
+    
+  }
+  
+  if(!("format" %in% names(values))){
+    values["format"] <- format.default
+  }
+  
+  return(list(values=values, service=service))
 }
 
 # convert variables in dots to usable format
