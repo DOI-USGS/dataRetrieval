@@ -177,19 +177,17 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     }
   
     columnsThatMayBeWrong <- grep("n",types.names)[which(!(sapply(readr.data[,grep("n",types.names)], typeof) %in% c("double","integer")))]
-    
-    # if(length(columnsThatMayBeWrong) > 0){
-      for(i in columnsThatMayBeWrong){
-        readr.data[[i]] <- tryCatch({
-            test_column <- as.numeric(readr.data[[i]])
-          },
-          warning=function(cond) {
-            test_column <- readr.data[[i]]
-          },
-          finally={
-            test_column
-          })
-      # }
+
+    for(i in columnsThatMayBeWrong){
+      readr.data[[i]] <- tryCatch({
+          test_column <- as.numeric(readr.data[[i]])
+        },
+        warning=function(cond) {
+          test_column <- readr.data[[i]]
+        },
+        finally={
+          test_column
+        })
     }
     
     comment(readr.data) <- readr.meta
