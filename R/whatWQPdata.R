@@ -74,7 +74,8 @@ whatWQPsamples <- function(...){
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
 #' @keywords data import WQP web service
-#' @return A data frame 
+#' @importFrom jsonlite fromJSON
+#' @return A list
 #' 
 #' @export
 #' @import utils
@@ -105,10 +106,12 @@ whatWQPdata <- function(...){
   doc <- getWebServiceData(urlCall)
   headerInfo <- attr(doc, "headerInfo")
   
+  retval <- fromJSON(doc)
+  
   # retval <- importGEOJSON(urlCall, zip=values["zip"] == "yes")
   # 
-  # attr(retval, "queryTime") <- Sys.time()
-  # attr(retval, "url") <- urlCall
+  attr(retval, "queryTime") <- Sys.time()
+  attr(retval, "url") <- urlCall
   
-  # return(retval)
+  return(retval)
 }

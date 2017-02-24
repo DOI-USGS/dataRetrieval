@@ -52,7 +52,8 @@ getWebServiceData <- function(obs_url, ...){
     
     headerInfo <- headers(returnedList)
 
-    if(headerInfo$`content-type` == "text/tab-separated-values;charset=UTF-8"){
+    if(headerInfo$`content-type` %in% c("text/tab-separated-values;charset=UTF-8",
+                                        "application/vnd.geo+json;charset=UTF-8")){
       returnedDoc <- content(returnedList, type="text",encoding = "UTF-8")
     } else if (headerInfo$`content-type` %in% 
                c("application/zip", "application/zip;charset=UTF-8")) {
@@ -61,7 +62,6 @@ getWebServiceData <- function(obs_url, ...){
       txt <- readBin(returnedList$content, character())
       message(txt)
       return(txt)
-      
     } else {
       returnedDoc <- content(returnedList,encoding = "UTF-8")
       if(grepl("No sites/data found using the selection criteria specified", returnedDoc)){

@@ -27,13 +27,11 @@ readWQPdots <- function(...){
   }
   
   names(values)[names(values) == "countyCd"] <- "countycode"
-  if("countycode" %in% names(values)){
-    if(!grepl(values["statecode"], values["countycode"])){
-      stCd <- gsub("US:", "", values["statecode"])
-      values["countycode"] <- paste(values["statecode"], 
-                                    countyCdLookup(stCd, values["countycode"], "id"),
-                                    sep=":")
-    }
+  if(all(c("countycode","statecode") %in% names(values))){
+    stCd <- gsub("US:", "", values["statecode"])
+    values["countycode"] <- paste(values["statecode"], 
+                                  countyCdLookup(stCd, values["countycode"], "id"),
+                                  sep=":")
   }
   
   if("zip" %in% names(values)){
