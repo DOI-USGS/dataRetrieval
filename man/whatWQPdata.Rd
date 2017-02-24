@@ -10,7 +10,7 @@ whatWQPdata(...)
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
 }
 \value{
-A data frame
+A list
 }
 \description{
 Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
