@@ -35,7 +35,8 @@ Imports:
     utils,
     dplyr,
     xml2,
-    readr (>= 1.0.0)
+    readr (>= 1.0.0),
+    jsonlite
 Suggests:
     xtable,
     knitr,
