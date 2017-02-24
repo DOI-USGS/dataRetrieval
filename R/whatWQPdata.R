@@ -19,9 +19,6 @@
 #' }
 whatWQPsamples <- function(...){
   
-  matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
-                   list(...)[sapply(list(...), class) != "list"]) # get the non-list parts
-  
   values <- readWQPdots(...)
   
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
@@ -68,3 +65,50 @@ whatWQPsamples <- function(...){
 #   return(retval)
 # }
 # 
+
+
+#' Data Available from Water Quality Portal
+#'
+#' Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
+#' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
+#'
+#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
+#' @keywords data import WQP web service
+#' @return A data frame 
+#' 
+#' @export
+#' @import utils
+#' @examples
+#' \dontrun{
+#' site1 <- whatWQPdata(siteid="USGS-01594440")
+#' 
+#' type <- "Stream"
+#' sites <- whatWQPdata(countycode="US:55:025",siteType=type)
+#' lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+#' }
+whatWQPdata <- function(...){
+
+  message("DISCLAIMER: This function is still in flux, 
+              and no future behavior or output is guaranteed")
+  
+  values <- readWQPdots(...)
+  
+  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  
+  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
+  
+  
+  baseURL <- drURL("wqpStation")
+  urlCall <- paste0(baseURL,
+                    urlCall,
+                    "&mimeType=geojson&sorted=no")
+  doc <- getWebServiceData(urlCall)
+  headerInfo <- attr(doc, "headerInfo")
+  
+  # retval <- importGEOJSON(urlCall, zip=values["zip"] == "yes")
+  # 
+  # attr(retval, "queryTime") <- Sys.time()
+  # attr(retval, "url") <- urlCall
+  
+  # return(retval)
+}
