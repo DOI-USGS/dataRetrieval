@@ -41,7 +41,8 @@ Suggests:
     xtable,
     knitr,
     testthat,
-    geojsonio
+    geojsonio,
+    leaflet
 VignetteBuilder: knitr
 BuildVignettes: true
 BugReports: https://github.com/USGS-R/dataRetrieval/issues
