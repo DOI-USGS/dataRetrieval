@@ -118,7 +118,11 @@ arg.list <- list(site="03111548",
 allDailyStats_2 <- readNWISdata(arg.list, service="stat")
 
 #' # use county names to get data
-dailyStaffordVA <- readNWISdata(stateCd = "Virginia", countyCd="Stafford", parameterCd = "00060")
+dailyStaffordVA <- readNWISdata(stateCd = "Virginia",
+                                countyCd="Stafford",
+                                parameterCd = "00060",
+                                startDate = "2015-01-01",
+                                endDate = "2015-01-30")
 }
 }
 \seealso{

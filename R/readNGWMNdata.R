@@ -3,8 +3,6 @@
 #' Only water level data and site locations and names are currently available through the web service.  
 #' @param asDateTime logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
 #' \code{FALSE} since time zone information is not included.  
-#' @param service character Identifies which web service to access.  \code{observation} retrieves all water level for each site,
-#' and \code{featureOfInterest} retrieves a data frame of site information, including description, latitude, and longitude.   
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
@@ -40,14 +38,20 @@
 #' bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
 #' }
 #' 
-readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = ""){
-  message("          ********************************************************
-          DISCLAIMER: NGWMN retrieval functions are still in flux, 
-              and no future behavior or output is guaranteed
-          *********************************************************")
+readNGWMNdata <- function(..., asDateTime = TRUE, tz = ""){
+  message("DISCLAIMER: NGWMN retrieval functions are still in flux, 
+              and no future behavior or output is guaranteed")
   
-  match.arg(service, c("observation", "featureOfInterest", "getCapabilities"))
-  dots <- list(...)
+  dots <- convertLists(...)
+  
+  if("service" %in% names(dots)){
+    service <- dots$service
+    dots$service <- NULL
+  } else {
+    service <- "observation"
+  }
+  
+  match.arg(service, c("observation", "featureOfInterest"))
   
   if(service == "observation"){
     allObs <- data.frame()
@@ -70,19 +74,20 @@ readNGWMNdata <- function(..., service = "observation", asDateTime = TRUE, tz = 
     attr(allObs, "other") <- allAttrs
     returnData <- allObs
     
-  }else if(service == "featureOfInterest"){
+  } else if (service == "featureOfInterest") {
+    
     if("featureID" %in% names(dots)){
       featureID <- na.omit(gsub(":",".",dots[['featureID']]))
       allSites <- retrieveFeatureOfInterest(featureID = featureID)
     }
+    
     if("bbox" %in% names(dots)){
       allSites <- retrieveFeatureOfInterest(bbox=dots[['bbox']])
     }
     returnData <- allSites
-  }else{
-    stop("getCapabilities is not yet implemented")
-    #TODO: fill in getCapabilites
-  }
+    
+  } 
+  
   return(returnData)
 }
 
@@ -149,7 +154,6 @@ readNGWMNlevels <- function(featureID, asDateTime = TRUE){
 #' siteInfo <- readNGWMNsites(featureID = site)
 #' 
 #' }
-
 readNGWMNsites <- function(featureID){
   sites <- readNGWMNdata(featureID = featureID, service = "featureOfInterest")
   return(sites)
@@ -185,8 +189,12 @@ retrieveObservation <- function(featureID, asDateTime, attrs){
 #retrieve feature of interest
 #could allow pass through srsName - needs to be worked in higher-up in dots
 retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:EPSG::4269"){
-  dots <- list(...)
-  values <- gsub(x = convertDots(dots), pattern = ",", replacement = "%2C")
+  
+  dots <- convertLists(...)
+  
+  values <- sapply(dots, function(x) as.character(paste(eval(x),collapse=",",sep="")))
+  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  # values <- gsub(x = convertDots(dots), pattern = ",", replacement = "%2C")
   
   url <- drURL(base.name = "NGWMN", access = pkg.env$access, request = "GetFeatureOfInterest", 
                service = "SOS", version = "2.0.0", responseFormat = "text/xml")
@@ -195,12 +203,13 @@ retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:
     url <- appendDrURL(url, featureOfInterest = paste("VW_GWDP_GEOSERVER", 
                                                       values[['featureID']], sep = "."))
     
-  }else if("bbox" %in% names(values)){
+  } else if("bbox" %in% names(values)) {
     url <- appendDrURL(url, bbox = paste(values[['bbox']], collapse=","),
                        srsName = srsName)
-  }else{
-    stop()
+  } else {
+    stop("Geographical filter not specified. Please use featureID or bbox")
   }
+  
   siteDF <- importNGWMN_wml2(url, asDateTime)
   attr(siteDF, "url") <- url
   attr(siteDF, "queryTime") <- Sys.time()
