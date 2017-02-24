@@ -184,6 +184,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
         },
         warning=function(cond) {
           test_column <- readr.data[[i]]
+          message(paste("Column",i,"contains characters that cannot be automatically converted to numeric."))
         },
         finally={
           test_column
