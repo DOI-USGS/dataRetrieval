@@ -22,6 +22,13 @@ site1 <- whatWQPdata(siteid="USGS-01594440")
 
 type <- "Stream"
 sites <- whatWQPdata(countycode="US:55:025",siteType=type)
+
+library(leaflet)
+library(geojsonio)
+leaflet() \%>\% 
+     addGeoJSON(geojson_read(attr(sites,"file"))) \%>\% 
+     addProviderTiles("CartoDB.Positron")
+
 lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 }
 }

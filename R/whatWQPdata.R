@@ -85,6 +85,13 @@ whatWQPsamples <- function(...){
 #' 
 #' type <- "Stream"
 #' sites <- whatWQPdata(countycode="US:55:025",siteType=type)
+#' 
+#' library(leaflet)
+#' library(geojsonio)
+#' leaflet() %>% 
+#'      addGeoJSON(geojson_read(attr(sites,"file"))) %>% 
+#'      addProviderTiles("CartoDB.Positron")
+#' 
 #' lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 #' }
 whatWQPdata <- function(...){
@@ -103,15 +110,14 @@ whatWQPdata <- function(...){
   urlCall <- paste0(baseURL,
                     urlCall,
                     "&mimeType=geojson&sorted=no")
-  doc <- getWebServiceData(urlCall)
+  temp <- tempfile()
+  temp <- paste0(temp,".geojson")
+  doc <- getWebServiceData(urlCall, write_disk(temp))
   headerInfo <- attr(doc, "headerInfo")
-  
-  retval <- fromJSON(doc)
-  
-  # retval <- importGEOJSON(urlCall, zip=values["zip"] == "yes")
-  # 
+
+  retval <- fromJSON(temp)
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- urlCall
-  
+  attr(retval, "file") <- temp
   return(retval)
 }
