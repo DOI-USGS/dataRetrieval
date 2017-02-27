@@ -7,8 +7,8 @@
 readNGWMNsites(featureID)
 }
 \arguments{
-\item{featureID}{character Vector of feature IDs in the formatted with agency code and site number 
-separated by a period, e.g. \code{USGS.404159100494601}.}
+\item{featureID}{character Vector of feature IDs formatted with agency code and site number 
+separated by a period or semicolon, e.g. \code{USGS.404159100494601}.}
 }
 \value{
 A data frame the following columns: 
@@ -29,7 +29,7 @@ site <- "USGS.430427089284901"
 oneSite <- readNGWMNsites(featureID = site)
 
 #multiple sites
-sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
+sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
 multiSiteInfo <- readNGWMNsites(sites)
 
 #non-USGS site

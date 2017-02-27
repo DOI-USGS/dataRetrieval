@@ -1,6 +1,6 @@
 #' import data from the National Groundwater Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.
 #' 
-#' Only water level data is currently available through the web service.  
+#' Only water level data and site locations and names are currently available through the web service.  
 #' @param asDateTime logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
 #' \code{FALSE} since time zone information is not included.  
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
@@ -93,8 +93,8 @@ readNGWMNdata <- function(..., asDateTime = TRUE, tz = ""){
 
 #' Retrieve groundwater levels from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.
 #'
-#' @param featureID character Vector of feature IDs in the formatted with agency code and site number 
-#' separated by a period, e.g. \code{USGS.404159100494601}.
+#' @param featureID character Vector of feature IDs formatted with agency code and site number 
+#' separated by a period or semicolon, e.g. \code{USGS.404159100494601}.
 #' @param asDateTime logical Should dates and times be converted to date/time objects,
 #' or returned as character?  Defaults to \code{TRUE}.  Must be set to \code{FALSE} if a site 
 #' contains non-standard dates.
@@ -108,12 +108,12 @@ readNGWMNdata <- function(..., asDateTime = TRUE, tz = ""){
 #' oneSite <- readNGWMNlevels(featureID = site)
 #' 
 #' #multiple sites
-#' sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
+#' sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
 #' multiSiteData <- readNGWMNlevels(sites)
 #' 
 #' #non-USGS site
 #' site <- "MBMG.892195"
-#' data <- readNGWMNlevels(featureID = site)
+#' data <- readNGWMNlevels(featureID = site, asDateTime = FALSE)
 #' 
 #' #site with no data returns empty data frame
 #' noDataSite <- "UTGS.401544112060301"
@@ -128,8 +128,8 @@ readNGWMNlevels <- function(featureID, asDateTime = TRUE){
 
 #' Retrieve site data from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.
 #'
-#' @param featureID character Vector of feature IDs in the formatted with agency code and site number 
-#' separated by a period, e.g. \code{USGS.404159100494601}.
+#' @param featureID character Vector of feature IDs formatted with agency code and site number 
+#' separated by a period or semicolon, e.g. \code{USGS.404159100494601}.
 #' 
 #' @export
 #' @return A data frame the following columns: 
@@ -146,7 +146,7 @@ readNGWMNlevels <- function(featureID, asDateTime = TRUE){
 #' oneSite <- readNGWMNsites(featureID = site)
 #' 
 #' #multiple sites
-#' sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
+#' sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
 #' multiSiteInfo <- readNGWMNsites(sites)
 #' 
 #' #non-USGS site
