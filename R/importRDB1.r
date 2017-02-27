@@ -176,19 +176,18 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
       readr.data[,vaCols] <- sapply(readr.data[,vaCols], as.numeric)
     }
   
-    columnsThatMayBeWrong <- grep("n",types.names)[which(!(sapply(readr.data[,grep("n",types.names)], typeof) %in% c("double","integer")))]
+    columnTypes <- apply(readr.data, 2, typeof)
+    columnsThatMayBeWrong <- grep("n",types.names)[which(!(columnTypes[grep("n",types.names)] %in% c("double","integer")))]
 
     for(i in columnsThatMayBeWrong){
       readr.data[[i]] <- tryCatch({
-          test_column <- as.numeric(readr.data[[i]])
+          as.numeric(readr.data[[i]])
         },
         warning=function(cond) {
-          test_column <- readr.data[[i]]
           message(paste("Column",i,"contains characters that cannot be automatically converted to numeric."))
-        },
-        finally={
-          test_column
-        })
+          return(readr.data[[i]])
+        }
+      )
     }
     
     comment(readr.data) <- readr.meta
