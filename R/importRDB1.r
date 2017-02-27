@@ -176,7 +176,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
       readr.data[,vaCols] <- sapply(readr.data[,vaCols], as.numeric)
     }
   
-    columnTypes <- apply(readr.data, 2, typeof)
+    columnTypes <- sapply(readr.data, typeof)
     columnsThatMayBeWrong <- grep("n",types.names)[which(!(columnTypes[grep("n",types.names)] %in% c("double","integer")))]
 
     for(i in columnsThatMayBeWrong){
