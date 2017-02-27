@@ -7,8 +7,8 @@
 readNGWMNlevels(featureID, asDateTime = TRUE)
 }
 \arguments{
-\item{featureID}{character Vector of feature IDs in the formatted with agency code and site number 
-separated by a period, e.g. \code{USGS.404159100494601}.}
+\item{featureID}{character Vector of feature IDs formatted with agency code and site number 
+separated by a period or semicolon, e.g. \code{USGS.404159100494601}.}
 
 \item{asDateTime}{logical Should dates and times be converted to date/time objects,
 or returned as character?  Defaults to \code{TRUE}.  Must be set to \code{FALSE} if a site 
@@ -24,12 +24,12 @@ site <- "USGS.430427089284901"
 oneSite <- readNGWMNlevels(featureID = site)
 
 #multiple sites
-sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
+sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
 multiSiteData <- readNGWMNlevels(sites)
 
 #non-USGS site
 site <- "MBMG.892195"
-data <- readNGWMNlevels(featureID = site)
+data <- readNGWMNlevels(featureID = site, asDateTime = FALSE)
 
 #site with no data returns empty data frame
 noDataSite <- "UTGS.401544112060301"
