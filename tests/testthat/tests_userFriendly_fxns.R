@@ -224,6 +224,7 @@ test_that("state county tests",{
   expect_equal(fromIDs, "Bacon County")
 })
 
+context("NGWMN")
 test_that("NGWMN functions working", {
   testthat::skip_on_cran()
   noDataSite <- "UTGS.401544112060301"

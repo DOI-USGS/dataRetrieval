@@ -18,7 +18,7 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \description{
-Only water level data is currently available through the web service.
+Only water level data and site locations and names are currently available through the web service.
 }
 \examples{
 \dontrun{
