@@ -254,7 +254,8 @@ test_that("NGWMN functions working", {
   
   #sites with colons and NAs work
   na_colons <- c(NA, bboxSites$site[200:212], NA, NA)
-  returnDF <- readNGWMNdata(service = "observation", featureID = na_colons)
+  returnDF <- readNGWMNdata(service = "observation", 
+                            featureID = na_colons, asDateTime = FALSE)
   expect_is(returnDF, "data.frame")
   expect_true(nrow(returnDF) > 1)
   expect_true(!is.null(attributes(returnDF)$siteInfo))
