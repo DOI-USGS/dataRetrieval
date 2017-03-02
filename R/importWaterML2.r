@@ -70,6 +70,10 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz="UTC"){
   mergedDF <- NULL
   
   for(t in timeSeries){
+    
+    df <- parseWaterML2Timeseries(t, asDateTime)
+    #remove time and date columns
+    
     TVP <- xml_find_all(t, ".//wml2:MeasurementTVP")#time-value pairs
     time <- xml_text(xml_find_all(TVP,".//wml2:time"))
     if(asDateTime){

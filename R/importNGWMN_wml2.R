@@ -113,18 +113,24 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
 }
 
 #' parse the timeseries portion of a waterML2 file
-#' @param input XML with only the wml2:MeasurementTimeseries node and children
 #' 
+#' Returns data frame columns of all information with each time series measurement;
+#' Anything defined as a default, is returned as an attribute of that data frame.
+#' 
+#' @param input XML with only the wml2:MeasurementTimeseries node and children
+#' @importFrom xml2 xml_attr xml_find_all xml_text 
+#' @importFrom dplyr mutate
+#' @importFrom lubridate parse_date_time
 #' @export
 parseWaterML2Timeseries <- function(input, asDateTime) {
-  gmlID <- xml_attr(input,"id")
+  gmlID <- xml_attr(input,"id") #TODO: make this an attribute
   TVP <- xml_find_all(input, ".//wml2:MeasurementTVP")#time-value pairs
   rawTime <- xml_text(xml_find_all(TVP,".//wml2:time"))
   
   valueNodes <- xml_find_all(TVP,".//wml2:value")
   values <- as.numeric(xml_text(valueNodes))
   nVals <- length(values)
-  gmlID <- rep(gmlID, nVals)
+  #gmlID <- rep(gmlID, nVals)
   
   #df of date, time, dateTime
   oneCol <- rep(NA, nVals) 
@@ -148,10 +154,21 @@ parseWaterML2Timeseries <- function(input, asDateTime) {
   }
   
   uom <- xml_attr(valueNodes, "uom", default = NA)
+  
   source <- xml_attr(xml_find_all(TVP, ".//wml2:source"), "title")
   comment <- xml_text(xml_find_all(TVP, ".//wml2:comment"))
-  
-  df <- cbind.data.frame(source, timeDF, value=values, uom, comment, gmlID,
-                         stringsAsFactors=FALSE)
+  #TODO: other fields, then list, then df from list
+  tvpQuals <- xml_text(xml_find_all(TVP, ".//swe:description"))
+  defaultMeta <- xml_find_all(input, ".//wml2:DefaultTVPMeasurementMetadata")
+  defaultQuals <- xml_text(xml_find_all(defaultMeta, ".//swe:description"))
+  defaultUOM <- xml_attr(xml_find_all(defaultMeta, ".//wml2:uom"), "title", default = NA)
+  #attach defaultQuals as attributes
+   
+  df_vars <- list(source, timeDF, value = values, uom, comment)
+  df_use <- df_vars[sapply(df_vars, function(x){length(x) > 0 && !all(is.na(x))})]
+  df <- data.frame(df_use, stringsAsFactors = FALSE)
+  attr(df, "defaultQualifier") <- defaultQuals
+  attr(df, "defaultUOM") <- defaultUOM
+  attr(df, "gmlID") <- gmlID
   return(df)
 }
