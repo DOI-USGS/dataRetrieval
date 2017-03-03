@@ -170,10 +170,7 @@ parseWaterML2Timeseries <- function(input, asDateTime) {
   
   #from the default metadata section
   #append to existing attributes if they aren't empty
-  # attr(df, "defaultQualifier") <- defaultQuals
-  # attr(df, "defaultUOM") <- defaultUOM
-  # attr(df, "gmlID") <- gmlID
-  mdAttribs <- list(defaultQualifier=defaultQuals, defaultUOM=defaultUOM, 
+   mdAttribs <- list(defaultQualifier=defaultQuals, defaultUOM=defaultUOM, 
                     gmlID=gmlID) #all attributes must have names
   mdAttribs_use <- mdAttribs[sapply(mdAttribs, function(x){length(x) > 0})]
   attributes(df) <- append(attributes(df), mdAttribs_use)
