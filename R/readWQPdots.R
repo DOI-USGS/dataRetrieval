@@ -22,7 +22,7 @@ readWQPdots <- function(...){
     stCd <- values["statecode"]
     stCdPrefix <- "US:"
     if(!grepl(stCdPrefix, stCd)){
-      values["statecode"] <- paste0(stCdPrefix, stateCdLookup(stCd, "id"))
+      values["statecode"] <- paste0(stCdPrefix, zeroPad(stateCdLookup(stCd, "id")),2)
     }
   }
   
