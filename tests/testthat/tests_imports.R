@@ -46,6 +46,12 @@ test_that("External importRDB1 tests", {
 #   
 #   iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
 #   expect_that(sum(iceNoConvert$X01_00060 == "Ice") > 0, is_true())
+  
+  
+  site <- "05427850"
+  url <- constructNWISURL(site,"00060","2015-01-01", "","dv",format="tsv")
+  expect_message(importRDB1(url))
+
 })
 
 context("importRDB")

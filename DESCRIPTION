@@ -35,11 +35,14 @@ Imports:
     utils,
     dplyr,
     xml2,
-    readr (>= 1.0.0)
+    readr (>= 1.0.0),
+    jsonlite
 Suggests:
     xtable,
     knitr,
-    testthat
+    testthat,
+    geojsonio,
+    leaflet
 VignetteBuilder: knitr
 BuildVignettes: true
 BugReports: https://github.com/USGS-R/dataRetrieval/issues

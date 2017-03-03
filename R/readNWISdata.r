@@ -363,7 +363,9 @@ readNWISdots <- function(...){
   return(list(values=values, service=service))
 }
 
-# convert variables in dots to usable format
+#' convert variables in dots to usable format
+#' 
+#' @keywords internal
 convertLists <- function(...){
   matchReturn <- c(do.call("c",list(...)[sapply(list(...), class) == "list"]), #get the list parts
                    list(...)[sapply(list(...), class) != "list"]) # get the non-list parts

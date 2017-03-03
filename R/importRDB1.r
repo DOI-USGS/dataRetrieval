@@ -111,7 +111,8 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   readr.meta <- readr.total[grep("^#", readr.total)]
   meta.rows <- length(readr.meta)
   header.names <- strsplit(readr.total[meta.rows+1],"\t")[[1]]
-
+  types.names <- strsplit(readr.total[meta.rows+2],"\t")[[1]]
+  
   if(convertType){
     readr.data <- suppressWarnings(read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE))
   #defaults to time in seconds in readr 0.2.2.9??  
@@ -175,6 +176,20 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
       readr.data[,vaCols] <- sapply(readr.data[,vaCols], as.numeric)
     }
   
+    columnTypes <- sapply(readr.data, typeof)
+    columnsThatMayBeWrong <- grep("n",types.names)[which(!(columnTypes[grep("n",types.names)] %in% c("double","integer")))]
+
+    for(i in columnsThatMayBeWrong){
+      readr.data[[i]] <- tryCatch({
+          as.numeric(readr.data[[i]])
+        },
+        warning=function(cond) {
+          message(paste("Column",i,"contains characters that cannot be automatically converted to numeric."))
+          return(readr.data[[i]])
+        }
+      )
+    }
+    
     comment(readr.data) <- readr.meta
     problems.orig <- problems(readr.data)
     
