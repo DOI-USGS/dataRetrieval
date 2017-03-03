@@ -178,11 +178,11 @@ test_that("importWaterML2 internal test", {
 
 test_that("importWaterML2 external test", {
   testthat::skip_on_cran()
-  url <- "http://waterservices.usgs.gov/nwis/iv/?format=waterml,2.0&sites=01646500&parameterCd=00060,00065"
-  data <- importWaterML2(url)
+  url <- "https://waterservices.usgs.gov/nwis/iv/?format=waterml,2.0&sites=01646500&parameterCd=00060,00065"
+  exData <- importWaterML2(url)
   # saveRDS(data, "rds/externalML2.rds")
-  expect_is(data$value, 'numeric')
-  expect_gt(nrow(data),0)
+  expect_is(exData$value, 'numeric')
+  expect_gt(nrow(exData),0)
 })
   
 

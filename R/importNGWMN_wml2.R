@@ -130,7 +130,6 @@ parseWaterML2Timeseries <- function(input, asDateTime) {
   valueNodes <- xml_find_all(TVP,".//wml2:value")
   values <- as.numeric(xml_text(valueNodes))
   nVals <- length(values)
-  #gmlID <- rep(gmlID, nVals)
   
   #df of date, time, dateTime
   oneCol <- rep(NA, nVals) 
@@ -145,7 +144,9 @@ parseWaterML2Timeseries <- function(input, asDateTime) {
   
   timeDF <- mutate(splitTime, dateTime = NA)
   logicVec <- nchar(rawTime) > 19
-  timeDF$dateTime[logicVec] <- rawTime[logicVec]
+  if(!all(!logicVec)) { #otherwise sets it to char <NA>
+    timeDF$dateTime[logicVec] <- rawTime[logicVec]
+  }
   if(asDateTime){
     timeDF$dateTime <- parse_date_time(timeDF$dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M","%Y-%m-%dT%H:%M:%S",
                                                           "%Y-%m-%dT%H:%M:%OS","%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
@@ -157,18 +158,24 @@ parseWaterML2Timeseries <- function(input, asDateTime) {
   
   source <- xml_attr(xml_find_all(TVP, ".//wml2:source"), "title")
   comment <- xml_text(xml_find_all(TVP, ".//wml2:comment"))
-  #TODO: other fields, then list, then df from list
   tvpQuals <- xml_text(xml_find_all(TVP, ".//swe:description"))
   defaultMeta <- xml_find_all(input, ".//wml2:DefaultTVPMeasurementMetadata")
   defaultQuals <- xml_text(xml_find_all(defaultMeta, ".//swe:description"))
   defaultUOM <- xml_attr(xml_find_all(defaultMeta, ".//wml2:uom"), "title", default = NA)
-  #attach defaultQuals as attributes
-   
-  df_vars <- list(source, timeDF, value = values, uom, comment)
+ 
+  df_vars <- list(source = source, timeDF, value = values, 
+                  uom = uom, comment = comment)
   df_use <- df_vars[sapply(df_vars, function(x){length(x) > 0 && !all(is.na(x))})]
   df <- data.frame(df_use, stringsAsFactors = FALSE)
-  attr(df, "defaultQualifier") <- defaultQuals
-  attr(df, "defaultUOM") <- defaultUOM
-  attr(df, "gmlID") <- gmlID
+  
+  #from the default metadata section
+  #append to existing attributes if they aren't empty
+  # attr(df, "defaultQualifier") <- defaultQuals
+  # attr(df, "defaultUOM") <- defaultUOM
+  # attr(df, "gmlID") <- gmlID
+  mdAttribs <- list(defaultQualifier=defaultQuals, defaultUOM=defaultUOM, 
+                    gmlID=gmlID) #all attributes must have names
+  mdAttribs_use <- mdAttribs[sapply(mdAttribs, function(x){length(x) > 0})]
+  attributes(df) <- append(attributes(df), mdAttribs_use)
   return(df)
 }
