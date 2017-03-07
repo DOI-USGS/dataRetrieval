@@ -16,7 +16,7 @@
 #' @importFrom xml2 xml_find_all
 #' @importFrom xml2 xml_text
 #' @importFrom xml2 xml_attr
-#' @importFrom dplyr rbind_all
+#' @importFrom dplyr rbind_all select
 #' @importFrom lubridate parse_date_time
 #' @examples
 #' baseURL <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
@@ -70,34 +70,19 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz="UTC"){
   mergedDF <- NULL
   
   for(t in timeSeries){
-    TVP <- xml_find_all(t, ".//wml2:MeasurementTVP")#time-value pairs
-    time <- xml_text(xml_find_all(TVP,".//wml2:time"))
-    if(asDateTime){
-      time <- parse_date_time(time, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M","%Y-%m-%dT%H:%M:%S",
-                                      "%Y-%m-%dT%H:%M:%OS","%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
-      #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
-      attr(time, 'tzone') <- tz 
-    }
-    values <- as.numeric(xml_text(xml_find_all(TVP,".//wml2:value")))
-    #TODO: deal with multiple identifiers (assigning column names)
-    idents <- xml_text(xml_find_all(t, ".//gml:identifier"))
-    useIdents <- rep(idents, length(values))
-    #TODO: check qualifiers in points against default, if both exist, same, etc
-    tvpQuals <- xml_text(xml_find_all(TVP, ".//swe:description"))
-    defaultPointMeta <- xml_find_all(t, ".//wml2:DefaultTVPMeasurementMetadata")
-    defaultQuals <- xml_text(xml_find_all(defaultPointMeta, ".//swe:description"))
     
-    if(length(tvpQuals) == 0){
-      useQuals <- rep(defaultQuals, length(values))
-    }else{
-      useQuals <- tvpQuals
-    }
-    if(length(useQuals) == 0){
-      df <- cbind.data.frame(time, value=values, identifier=useIdents,
-                             stringsAsFactors=FALSE)
-    }else{
-    df <- cbind.data.frame(time, value=values, qualifier=useQuals, identifier=useIdents,
-                           stringsAsFactors=FALSE)
+    df <- parseWaterML2Timeseries(t, asDateTime, tz)
+    #need to save attributes first, and create identifier column
+    saveAttribs <- attributes(df)[-(1:3)]
+    #remove time and date columns, add site col 
+    df <- mutate(df, identifier = saveAttribs$gmlID, 
+                 qualifier = ifelse(is.null(saveAttribs$defaultQualifier), 
+                                    NA, saveAttribs$defaultQualifier))
+    if(all(is.na(df$dateTime))){
+      df <- subset(df, select=-c(dateTime, time))
+      #should the remaining column be changed to dateTime?
+    } else {
+      df <- subset(df, select=-c(date, time))
     }
     if (is.null(mergedDF)){
       mergedDF <- df
@@ -105,6 +90,7 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz="UTC"){
       similarNames <- intersect(colnames(mergedDF), colnames(df))
       mergedDF <- full_join(mergedDF, df, by=similarNames)
     }
+    attributes(mergedDF) <- append(attributes(mergedDF), saveAttribs)
   }
   return(mergedDF)
 }

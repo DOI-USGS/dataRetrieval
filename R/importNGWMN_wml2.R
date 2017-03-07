@@ -32,7 +32,7 @@
 #' 
 #' 
 #TODO: separate id and agency name, give also as separate dimensions
-importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
+importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz){
   if(tz != ""){
     tz <- match.arg(tz, OlsonNames())
   }else{tz = "UTC"}
@@ -63,44 +63,8 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     mergedDF <- NULL
     
     for(t in timeSeries){
-      gmlID <- xml_attr(t,"id")
-      TVP <- xml_find_all(t, ".//wml2:MeasurementTVP")#time-value pairs
-      rawTime <- xml_text(xml_find_all(TVP,".//wml2:time"))
+      df <- parseWaterML2Timeseries(t, asDateTime, tz)
       
-      valueNodes <- xml_find_all(TVP,".//wml2:value")
-      values <- as.numeric(xml_text(valueNodes))
-      nVals <- length(values)
-      gmlID <- rep(gmlID, nVals)
-      
-      #df of date, time, dateTime
-      oneCol <- rep(NA, nVals) 
-      timeDF <- data.frame(date=oneCol, time=oneCol, dateTime=oneCol)
-      splitTime <- data.frame(matrix(unlist(strsplit(rawTime, "T")), nrow=nVals, byrow = TRUE), stringsAsFactors=FALSE)
-      if(ncol(splitTime) > 1){ #some sites only have a date
-        names(splitTime) <- c("date", "time")
-      }else{
-        names(splitTime) <- "date"
-        splitTime <- mutate(splitTime, time = NA)
-      }
-      
-      timeDF <- mutate(splitTime, dateTime = NA)
-      logicVec <- nchar(rawTime) > 19
-      timeDF$dateTime[logicVec] <- rawTime[logicVec]
-      if(asDateTime){
-        timeDF$dateTime <- parse_date_time(timeDF$dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M","%Y-%m-%dT%H:%M:%S",
-                                        "%Y-%m-%dT%H:%M:%OS","%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
-        #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
-        attr(time, 'tzone') <- tz 
-      }
-       
-      
-      
-      uom <- xml_attr(valueNodes, "uom", default = NA)
-      source <- xml_attr(xml_find_all(TVP, ".//wml2:source"), "title")
-      comment <- xml_text(xml_find_all(TVP, ".//wml2:comment"))
-      
-      df <- cbind.data.frame(source, timeDF, value=values, uom, comment, gmlID,
-                             stringsAsFactors=FALSE)
       if (is.null(mergedDF)){
         mergedDF <- df
       } else {
@@ -146,4 +110,69 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     stop("Unrecognized response from the web service")
   }
   return(mergedDF)
+}
+
+#' parse the timeseries portion of a waterML2 file
+#' 
+#' Returns data frame columns of all information with each time series measurement;
+#' Anything defined as a default, is returned as an attribute of that data frame.
+#' 
+#' @param input XML with only the wml2:MeasurementTimeseries node and children
+#' @importFrom xml2 xml_attr xml_find_all xml_text 
+#' @importFrom dplyr mutate
+#' @importFrom lubridate parse_date_time
+#' @export
+parseWaterML2Timeseries <- function(input, asDateTime, tz) {
+  gmlID <- xml_attr(input,"id") #TODO: make this an attribute
+  TVP <- xml_find_all(input, ".//wml2:MeasurementTVP")#time-value pairs
+  rawTime <- xml_text(xml_find_all(TVP,".//wml2:time"))
+  
+  valueNodes <- xml_find_all(TVP,".//wml2:value")
+  values <- as.numeric(xml_text(valueNodes))
+  nVals <- length(values)
+  
+  #df of date, time, dateTime
+  oneCol <- rep(NA, nVals) 
+  timeDF <- data.frame(date=oneCol, time=oneCol, dateTime=oneCol)
+  splitTime <- data.frame(matrix(unlist(strsplit(rawTime, "T")), nrow=nVals, byrow = TRUE), stringsAsFactors=FALSE)
+  if(ncol(splitTime) > 1){ #some sites only have a date
+    names(splitTime) <- c("date", "time")
+  }else{
+    names(splitTime) <- "date"
+    splitTime <- mutate(splitTime, time = NA)
+  }
+  
+  timeDF <- mutate(splitTime, dateTime = NA)
+  logicVec <- nchar(rawTime) > 19
+  if(!all(!logicVec)) { #otherwise sets it to char <NA>
+    timeDF$dateTime[logicVec] <- rawTime[logicVec]
+  }
+  if(asDateTime){
+    timeDF$dateTime <- parse_date_time(timeDF$dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M","%Y-%m-%dT%H:%M:%S",
+                                                          "%Y-%m-%dT%H:%M:%OS","%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
+    #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
+    attr(timeDF$dateTime, 'tzone') <- tz
+  }
+  
+  uom <- xml_attr(valueNodes, "uom", default = NA)
+  
+  source <- xml_attr(xml_find_all(TVP, ".//wml2:source"), "title")
+  comment <- xml_text(xml_find_all(TVP, ".//wml2:comment"))
+  tvpQuals <- xml_text(xml_find_all(TVP, ".//swe:description"))
+  defaultMeta <- xml_find_all(input, ".//wml2:DefaultTVPMeasurementMetadata")
+  defaultQuals <- xml_text(xml_find_all(defaultMeta, ".//swe:description"))
+  defaultUOM <- xml_attr(xml_find_all(defaultMeta, ".//wml2:uom"), "title", default = NA)
+ 
+  df_vars <- list(source = source, timeDF, value = values, 
+                  uom = uom, comment = comment)
+  df_use <- df_vars[sapply(df_vars, function(x){length(x) > 0 && !all(is.na(x))})]
+  df <- data.frame(df_use, stringsAsFactors = FALSE)
+  
+  #from the default metadata section
+  #append to existing attributes if they aren't empty
+   mdAttribs <- list(defaultQualifier=defaultQuals, defaultUOM=defaultUOM, 
+                    gmlID=gmlID) #all attributes must have names
+  mdAttribs_use <- mdAttribs[sapply(mdAttribs, function(x){length(x) > 0})]
+  attributes(df) <- append(attributes(df), mdAttribs_use)
+  return(df)
 }

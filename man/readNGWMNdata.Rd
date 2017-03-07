@@ -4,9 +4,11 @@
 \alias{readNGWMNdata}
 \title{import data from the National Groundwater Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
 \usage{
-readNGWMNdata(..., asDateTime = TRUE, tz = "")
+readNGWMNdata(service, ..., asDateTime = TRUE, tz = "")
 }
 \arguments{
+\item{service}{char Service for the request - "observation" and "featureOfInterest" are implemented.}
+
 \item{\dots}{Other parameters to supply, namely \code{featureID} or \code{bbox}}
 
 \item{asDateTime}{logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
@@ -14,8 +16,7 @@ readNGWMNdata(..., asDateTime = TRUE, tz = "")
 
 \item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
-Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
+Accepts all values from \code{OlsonNames()}.}
 }
 \description{
 Only water level data and site locations and names are currently available through the web service.
@@ -24,17 +25,17 @@ Only water level data and site locations and names are currently available throu
 \dontrun{
 #one site
 site <- "USGS.430427089284901"
-oneSite <- readNGWMNdata(featureID = site)
+oneSite <- readNGWMNdata(featureID = site, service = "observation")
 
 #multiple sites
 sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
-multiSiteData <- readNGWMNdata(sites)
+multiSiteData <- readNGWMNdata(featureID = sites, service = "observation")
 attributes(multiSiteData)
 
 #non-USGS site
 #accepts colon or period between agency and ID
-site <- "MBMG:892195"
-data <- readNGWMNdata(featureID = site)
+site <- "MBMG:702934"
+data <- readNGWMNdata(featureID = site, service = "featureOfInterest")
 
 #site with no data returns empty data frame
 noDataSite <- "UTGS.401544112060301"
@@ -42,6 +43,9 @@ noDataSite <- readNGWMNdata(featureID = noDataSite, service = "observation")
 
 #bounding box
 bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
+#retrieve 100 sites.  Set asDateTime to false since one site has an invalid date
+bboxData <- readNGWMNdata(service = "observation", featureID = bboxSites$site[1:100], 
+asDateTime = FALSE)
 }
 
 }

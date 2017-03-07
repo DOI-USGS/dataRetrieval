@@ -17,7 +17,8 @@ for every county in a state. Can be a vector of counties in the same state.}
 \item{years}{integer Years for data retrieval. Must be years ending in 0 or 5. Default is all available years.}
 
 \item{categories}{character categories of water use.  Defaults to \code{ALL}.  Specific categories must be supplied as two-
-letter abbreviations as seen in the URL when using the NWIS water use web interface.}
+letter abbreviations as seen in the URL when using the NWIS water use web interface.  Note that 
+there are different codes for national and state level data.}
 
 \item{convertType}{logical defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
 numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics

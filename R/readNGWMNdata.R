@@ -1,13 +1,13 @@
 #' import data from the National Groundwater Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.
 #' 
 #' Only water level data and site locations and names are currently available through the web service.  
+#' @param service char Service for the request - "observation" and "featureOfInterest" are implemented.
+#' @param \dots Other parameters to supply, namely \code{featureID} or \code{bbox}
 #' @param asDateTime logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
 #' \code{FALSE} since time zone information is not included.  
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
-#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
-#' @param \dots Other parameters to supply, namely \code{featureID} or \code{bbox}
+#' Accepts all values from \code{OlsonNames()}.
 #' @import utils
 #' @importFrom dplyr mutate
 #' @importFrom dplyr bind_rows
@@ -18,17 +18,17 @@
 #' \dontrun{
 #' #one site
 #' site <- "USGS.430427089284901"
-#' oneSite <- readNGWMNdata(featureID = site)
+#' oneSite <- readNGWMNdata(featureID = site, service = "observation")
 #' 
 #' #multiple sites
 #' sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
-#' multiSiteData <- readNGWMNdata(sites)
+#' multiSiteData <- readNGWMNdata(featureID = sites, service = "observation")
 #' attributes(multiSiteData)
 #' 
 #' #non-USGS site
 #' #accepts colon or period between agency and ID
-#' site <- "MBMG:892195"
-#' data <- readNGWMNdata(featureID = site)
+#' site <- "MBMG:702934"
+#' data <- readNGWMNdata(featureID = site, service = "featureOfInterest")
 #' 
 #' #site with no data returns empty data frame
 #' noDataSite <- "UTGS.401544112060301"
@@ -36,20 +36,16 @@
 #' 
 #' #bounding box
 #' bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
+#' #retrieve 100 sites.  Set asDateTime to false since one site has an invalid date
+#' bboxData <- readNGWMNdata(service = "observation", featureID = bboxSites$site[1:100], 
+#' asDateTime = FALSE)
 #' }
 #' 
-readNGWMNdata <- function(..., asDateTime = TRUE, tz = ""){
+readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = ""){
   message("DISCLAIMER: NGWMN retrieval functions are still in flux, 
               and no future behavior or output is guaranteed")
   
   dots <- convertLists(...)
-  
-  if("service" %in% names(dots)){
-    service <- dots$service
-    dots$service <- NULL
-  } else {
-    service <- "observation"
-  }
   
   match.arg(service, c("observation", "featureOfInterest"))
   
@@ -62,7 +58,7 @@ readNGWMNdata <- function(..., asDateTime = TRUE, tz = ""){
     featureID <- na.omit(gsub(":",".",dots[['featureID']]))
     
     for(f in featureID){
-      obsFID <- retrieveObservation(featureID = f, asDateTime, attrs)
+      obsFID <- retrieveObservation(featureID = f, asDateTime, attrs, tz = tz)
       obsFIDattr <- saveAttrs(attrs, obsFID)
       obsFID <- removeAttrs(attrs, obsFID)
       allObs <- bind_rows(allObs, obsFID)
@@ -120,9 +116,9 @@ readNGWMNdata <- function(..., asDateTime = TRUE, tz = ""){
 #' noDataSite <- readNGWMNlevels(featureID = noDataSite)
 #' }
 
-readNGWMNlevels <- function(featureID, asDateTime = TRUE){
+readNGWMNlevels <- function(featureID, asDateTime = TRUE, tz = ""){
   data <- readNGWMNdata(featureID = featureID, service = "observation",
-                        asDateTime = asDateTime)
+                        asDateTime = asDateTime, tz = tz)
   return(data)
 }
 
@@ -159,13 +155,12 @@ readNGWMNsites <- function(featureID){
   return(sites)
 }
 
-
-retrieveObservation <- function(featureID, asDateTime, attrs){
+retrieveObservation <- function(featureID, asDateTime, attrs, tz){
   url <- drURL(base.name = "NGWMN", access = pkg.env$access, request = "GetObservation", 
                service = "SOS", version = "2.0.0", observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
                responseFormat = "text/xml", featureOfInterest = paste("VW_GWDP_GEOSERVER", featureID, sep = "."))
   
-  returnData <- importNGWMN_wml2(url, asDateTime)
+  returnData <- importNGWMN_wml2(url, asDateTime, tz = tz)
   if(nrow(returnData) == 0){
     #need to add NA attributes, so they aren't messed up when stored as DFs
     attr(returnData, "gml:identifier") <- NA
@@ -210,7 +205,7 @@ retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:
     stop("Geographical filter not specified. Please use featureID or bbox")
   }
   
-  siteDF <- importNGWMN_wml2(url, asDateTime)
+  siteDF <- importNGWMN_wml2(url, asDateTime, tz = "")
   attr(siteDF, "url") <- url
   attr(siteDF, "queryTime") <- Sys.time()
   return(siteDF)

@@ -4,7 +4,7 @@
 \alias{importNGWMN_wml2}
 \title{Function to return data from the National Ground Water Monitoring Network waterML2 format}
 \usage{
-importNGWMN_wml2(input, asDateTime = FALSE, tz = "")
+importNGWMN_wml2(input, asDateTime = FALSE, tz)
 }
 \arguments{
 \item{input}{character or raw, containing the url for the retrieval or a path to the data file, or raw XML.}
