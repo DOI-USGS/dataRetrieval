@@ -87,12 +87,14 @@ whatWQPmetrics <- function(...){
 #' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
+#' @param saveFile path to save the incoming geojson output. 
 #' @keywords data import WQP web service
-#' @importFrom jsonlite fromJSON
 #' @return A list
 #' 
 #' @export
 #' @import utils
+#' @importFrom tools file_ext
+#' @importFrom jsonlite fromJSON
 #' @examples
 #' \dontrun{
 #' site1 <- whatWQPdata(siteid="USGS-01594440")
@@ -100,19 +102,10 @@ whatWQPmetrics <- function(...){
 #' type <- "Stream"
 #' sites <- whatWQPdata(countycode="US:55:025",siteType=type)
 #' 
-#' library(leaflet)
-#' library(geojsonio)
-#' leaflet() %>% 
-#'      addGeoJSON(geojson_read(attr(sites,"file"))) %>% 
-#'      addProviderTiles("CartoDB.Positron")
-#' 
 #' lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 #' }
-whatWQPdata <- function(...){
+whatWQPdata <- function(..., saveFile = tempfile()){
 
-  message("DISCLAIMER: This function is still in flux, 
-              and no future behavior or output is guaranteed")
-  
   values <- readWQPdots(...)
   
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
@@ -124,14 +117,26 @@ whatWQPdata <- function(...){
   urlCall <- paste0(baseURL,
                     urlCall,
                     "&mimeType=geojson&sorted=no")
-  temp <- tempfile()
-  temp <- paste0(temp,".geojson")
-  doc <- getWebServiceData(urlCall, write_disk(temp))
+  
+  if(file_ext(saveFile) != ".geojson"){
+    saveFile <- paste0(saveFile,".geojson")
+  }
+  
+  doc <- getWebServiceData(urlCall, write_disk(saveFile))
   headerInfo <- attr(doc, "headerInfo")
 
-  retval <- fromJSON(temp)
-  attr(retval, "queryTime") <- Sys.time()
-  attr(retval, "url") <- urlCall
-  attr(retval, "file") <- temp
-  return(retval)
+  retval <- as.data.frame(fromJSON(saveFile), stringsAsFactors = FALSE)
+  df_cols <- as.integer(which(sapply(retval, class) == "data.frame"))
+  y <- retval[,-df_cols]
+  
+  for(i in df_cols){
+    y <- bind_cols(y, retval[[i]])
+  }
+  
+  y[,grep("Count",names(y))] <- sapply(y[,grep("Count",names(y))], as.numeric)
+  
+  attr(y, "queryTime") <- Sys.time()
+  attr(y, "url") <- urlCall
+  attr(y, "file") <- saveFile
+  return(y)
 }
