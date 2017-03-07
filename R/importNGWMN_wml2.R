@@ -63,7 +63,7 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
     mergedDF <- NULL
     
     for(t in timeSeries){
-      df <- parseWaterML2Timeseries(t, asDateTime)
+      df <- parseWaterML2Timeseries(t, asDateTime, tz)
       
       if (is.null(mergedDF)){
         mergedDF <- df
@@ -122,7 +122,7 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
 #' @importFrom dplyr mutate
 #' @importFrom lubridate parse_date_time
 #' @export
-parseWaterML2Timeseries <- function(input, asDateTime) {
+parseWaterML2Timeseries <- function(input, asDateTime, tz) {
   gmlID <- xml_attr(input,"id") #TODO: make this an attribute
   TVP <- xml_find_all(input, ".//wml2:MeasurementTVP")#time-value pairs
   rawTime <- xml_text(xml_find_all(TVP,".//wml2:time"))
@@ -151,7 +151,7 @@ parseWaterML2Timeseries <- function(input, asDateTime) {
     timeDF$dateTime <- parse_date_time(timeDF$dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M","%Y-%m-%dT%H:%M:%S",
                                                           "%Y-%m-%dT%H:%M:%OS","%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
     #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
-    attr(time, 'tzone') <- tz
+    attr(timeDF$dateTime, 'tzone') <- tz
   }
   
   uom <- xml_attr(valueNodes, "uom", default = NA)

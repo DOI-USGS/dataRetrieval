@@ -58,7 +58,7 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = ""){
     featureID <- na.omit(gsub(":",".",dots[['featureID']]))
     
     for(f in featureID){
-      obsFID <- retrieveObservation(featureID = f, asDateTime, attrs)
+      obsFID <- retrieveObservation(featureID = f, asDateTime, attrs, tz = tz)
       obsFIDattr <- saveAttrs(attrs, obsFID)
       obsFID <- removeAttrs(attrs, obsFID)
       allObs <- bind_rows(allObs, obsFID)
@@ -156,12 +156,12 @@ readNGWMNsites <- function(featureID){
 }
 
 
-retrieveObservation <- function(featureID, asDateTime, attrs){
+retrieveObservation <- function(featureID, asDateTime, attrs, tz){
   url <- drURL(base.name = "NGWMN", access = pkg.env$access, request = "GetObservation", 
                service = "SOS", version = "2.0.0", observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
                responseFormat = "text/xml", featureOfInterest = paste("VW_GWDP_GEOSERVER", featureID, sep = "."))
   
-  returnData <- importNGWMN_wml2(url, asDateTime)
+  returnData <- importNGWMN_wml2(url, asDateTime, tz = tz)
   if(nrow(returnData) == 0){
     #need to add NA attributes, so they aren't messed up when stored as DFs
     attr(returnData, "gml:identifier") <- NA

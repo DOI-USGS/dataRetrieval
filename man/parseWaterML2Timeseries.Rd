@@ -4,7 +4,7 @@
 \alias{parseWaterML2Timeseries}
 \title{parse the timeseries portion of a waterML2 file}
 \usage{
-parseWaterML2Timeseries(input, asDateTime)
+parseWaterML2Timeseries(input, asDateTime, tz)
 }
 \arguments{
 \item{input}{XML with only the wml2:MeasurementTimeseries node and children}

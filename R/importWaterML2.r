@@ -71,7 +71,7 @@ importWaterML2 <- function(obs_url, asDateTime=FALSE, tz="UTC"){
   
   for(t in timeSeries){
     
-    df <- parseWaterML2Timeseries(t, asDateTime)
+    df <- parseWaterML2Timeseries(t, asDateTime, tz)
     #need to save attributes first, and create identifier column
     saveAttribs <- attributes(df)[-(1:3)]
     #remove time and date columns, add site col 
