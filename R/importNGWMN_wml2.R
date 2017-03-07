@@ -32,7 +32,7 @@
 #' 
 #' 
 #TODO: separate id and agency name, give also as separate dimensions
-importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz=""){
+importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz){
   if(tz != ""){
     tz <- match.arg(tz, OlsonNames())
   }else{tz = "UTC"}

@@ -224,50 +224,6 @@ test_that("state county tests",{
   expect_equal(fromIDs, "Bacon County")
 })
 
-context("NGWMN")
-test_that("NGWMN functions working", {
-  testthat::skip_on_cran()
-  noDataSite <- "UTGS.401544112060301"
-  noDataSite <- readNGWMNlevels(featureID = noDataSite)
-  expect_true(is.data.frame(noDataSite))
-  
-  #bounding box and a bigger request
-  bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
-  expect_gt(nrow(bboxSites), 0)
-  siteInfo <- readNGWMNsites(bboxSites$site[1:100])
-  expect_gt(nrow(siteInfo), 90)	  
-
-  #one site
-  site <- "USGS.430427089284901"
-  oneSite <- readNGWMNlevels(featureID = site)
-  siteInfo <- readNGWMNsites(site)
-  expect_true(is.numeric(oneSite$value))
-  expect_true(is.character(oneSite$site))
-  expect_true(is.data.frame(siteInfo))
-  expect_true(nrow(siteInfo) > 0)
-  expect_true(nrow(oneSite) > 0)
-  
-  #non-USGS site
-  data <- readNGWMNlevels(featureID = "MBMG.1388")
-  expect_true(nrow(data) > 1)
-  expect_true(is.numeric(oneSite$value))
-  
-  #sites with colons and NAs work
-
-  na_colons <- c(NA, bboxSites$site[200:212], NA, NA)
-  returnDF <- readNGWMNdata(service = "observation", 
-                            featureID = na_colons, asDateTime = FALSE)
-  expect_is(returnDF, "data.frame")
-  expect_true(nrow(returnDF) > 1)
-  expect_true(!is.null(attributes(returnDF)$siteInfo))
-
-  sites <- c("USGS:424427089494701", NA)
-  siteInfo <- readNGWMNsites(sites)
-  expect_is(siteInfo, "data.frame")
-  expect_true(nrow(siteInfo) == 1)
-  
-})
-
 context("water year column")
 
 df_test <- data.frame(site_no = as.character(1:13),

@@ -116,9 +116,9 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = ""){
 #' noDataSite <- readNGWMNlevels(featureID = noDataSite)
 #' }
 
-readNGWMNlevels <- function(featureID, asDateTime = TRUE){
+readNGWMNlevels <- function(featureID, asDateTime = TRUE, tz = ""){
   data <- readNGWMNdata(featureID = featureID, service = "observation",
-                        asDateTime = asDateTime)
+                        asDateTime = asDateTime, tz = tz)
   return(data)
 }
 
@@ -154,7 +154,6 @@ readNGWMNsites <- function(featureID){
   sites <- readNGWMNdata(featureID = featureID, service = "featureOfInterest")
   return(sites)
 }
-
 
 retrieveObservation <- function(featureID, asDateTime, attrs, tz){
   url <- drURL(base.name = "NGWMN", access = pkg.env$access, request = "GetObservation", 
@@ -206,7 +205,7 @@ retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:
     stop("Geographical filter not specified. Please use featureID or bbox")
   }
   
-  siteDF <- importNGWMN_wml2(url, asDateTime)
+  siteDF <- importNGWMN_wml2(url, asDateTime, tz = "")
   attr(siteDF, "url") <- url
   attr(siteDF, "queryTime") <- Sys.time()
   return(siteDF)

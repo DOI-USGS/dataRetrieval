@@ -4,7 +4,7 @@
 \alias{readNGWMNlevels}
 \title{Retrieve groundwater levels from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
 \usage{
-readNGWMNlevels(featureID, asDateTime = TRUE)
+readNGWMNlevels(featureID, asDateTime = TRUE, tz = "")
 }
 \arguments{
 \item{featureID}{character Vector of feature IDs formatted with agency code and site number 
