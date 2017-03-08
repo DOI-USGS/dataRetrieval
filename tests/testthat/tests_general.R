@@ -184,6 +184,31 @@ test_that("whatWQPsamples working", {
   
   })
 
+context("whatWQPmetrics")
+test_that("whatWQPmetrics working", {
+  testthat::skip_on_cran()
+  type <- "Stream"
+  siteInfo <- whatWQPmetrics(countycode="US:55:025",siteType=type)
+  expect_true(ncol(siteInfo) >= 21)
+  
+})
+
+context("whatWQPdata")
+test_that("whatWQPdata working", {
+  testthat::skip_on_cran()
+  
+  site1 <- whatWQPdata(siteid="USGS-01594440")
+  expect_is(site1, "data.frame")
+  expect_equal(1, nrow(site1))
+  
+  type <- "Stream"
+  sites <- whatWQPdata(countycode="US:55:025",siteType=type)
+  expect_gt(nrow(sites), 1)
+  
+  lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+  expect_is(lakeSites$activityCount, "numeric")
+})
+
 context("whatNWISsites")
 test_that("whatNWISsites working", {
   testthat::skip_on_cran()
