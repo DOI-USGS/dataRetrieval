@@ -19,20 +19,19 @@
 #' @importFrom lubridate parse_date_time
 #' @examples
 #' \dontrun{
-#' url <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0
-#' &observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOf
-#' Interest=VW_GWDP_GEOSERVER.USGS.403836085374401"
-#' data <- importNGWMN_wml2(url)
+#' obs_url <- paste0("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0",
+#' "&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOf",
+#' "Interest=VW_GWDP_GEOSERVER.USGS.403836085374401")
+#' data <- importNGWMN(obs_url)
 #' 
-#' url <- "http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0
-#' &observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOf
-#' Interest=VW_GWDP_GEOSERVER.USGS.474011117072901"
-#' data <- importNGWMN_wml2(url)
+#' obs_url <- paste0("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0",
+#' "&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOf",
+#' "Interest=VW_GWDP_GEOSERVER.USGS.474011117072901")
+#' data <- importNGWMN(obs_url)
 #' }
 #' 
-#' 
-#TODO: separate id and agency name, give also as separate dimensions
-importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz){
+importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
+  
   if(tz != ""){
     tz <- match.arg(tz, OlsonNames())
   }else{tz = "UTC"}
@@ -63,7 +62,7 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz){
     mergedDF <- NULL
     
     for(t in timeSeries){
-      df <- parseWaterML2Timeseries(t, asDateTime, tz)
+      df <- importWaterML2(t, asDateTime, tz)
       
       if (is.null(mergedDF)){
         mergedDF <- df
@@ -112,7 +111,7 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz){
   return(mergedDF)
 }
 
-#' parse the timeseries portion of a waterML2 file
+#' Parse the WaterML2 timeseries portion of a waterML2 file
 #' 
 #' Returns data frame columns of all information with each time series measurement;
 #' Anything defined as a default, is returned as an attribute of that data frame.
@@ -122,9 +121,23 @@ importNGWMN_wml2 <- function(input, asDateTime=FALSE, tz){
 #' @importFrom dplyr mutate
 #' @importFrom lubridate parse_date_time
 #' @export
-parseWaterML2Timeseries <- function(input, asDateTime, tz) {
-  gmlID <- xml_attr(input,"id") #TODO: make this an attribute
-  TVP <- xml_find_all(input, ".//wml2:MeasurementTVP")#time-value pairs
+#' @examples 
+#' baseURL <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
+#' URL <- paste(baseURL, "sites=01646500",
+#'      "startDT=2014-09-01",
+#'      "endDT=2014-09-08",
+#'      "statCd=00003",
+#'      "parameterCd=00060",sep="&")
+#' \dontrun{
+#' timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
+#' } 
+importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
+  
+  returnedDoc <- check_if_xml(input)
+  raw <- class(input) == 'raw'
+  
+  gmlID <- xml_attr(returnedDoc,"id") #TODO: make this an attribute
+  TVP <- xml_find_all(returnedDoc, ".//wml2:MeasurementTVP")#time-value pairs
   rawTime <- xml_text(xml_find_all(TVP,".//wml2:time"))
   
   valueNodes <- xml_find_all(TVP,".//wml2:value")
@@ -159,7 +172,7 @@ parseWaterML2Timeseries <- function(input, asDateTime, tz) {
   source <- xml_attr(xml_find_all(TVP, ".//wml2:source"), "title")
   comment <- xml_text(xml_find_all(TVP, ".//wml2:comment"))
   tvpQuals <- xml_text(xml_find_all(TVP, ".//swe:description"))
-  defaultMeta <- xml_find_all(input, ".//wml2:DefaultTVPMeasurementMetadata")
+  defaultMeta <- xml_find_all(returnedDoc, ".//wml2:DefaultTVPMeasurementMetadata")
   defaultQuals <- xml_text(xml_find_all(defaultMeta, ".//swe:description"))
   defaultUOM <- xml_attr(xml_find_all(defaultMeta, ".//wml2:uom"), "title", default = NA)
  
