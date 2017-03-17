@@ -44,7 +44,7 @@
 #' @export
 #' @import utils
 #' @import stats
-#' @import lubridate
+#' @importFrom lubridate parse_date_time
 #' @importFrom dplyr left_join
 #' @importFrom readr read_lines
 #' @importFrom readr read_delim
