@@ -7,7 +7,7 @@
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
-#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' Possible values are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return mergedDF a data frame source, time, value, uom, uomTitle, comment, gmlID
 #' @export
@@ -19,14 +19,18 @@
 #' @importFrom lubridate parse_date_time
 #' @examples
 #' \dontrun{
-#' obs_url <- paste0("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0",
-#' "&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOf",
-#' "Interest=VW_GWDP_GEOSERVER.USGS.403836085374401")
+#' obs_url <- paste("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
+#' "service=SOS","version=2.0.0",
+#' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
+#' "responseFormat=text/xml",
+#' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",sep="&")
 #' data <- importNGWMN(obs_url)
 #' 
-#' obs_url <- paste0("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation&service=SOS&version=2.0.0",
-#' "&observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel&responseFormat=text/xml&featureOf",
-#' "Interest=VW_GWDP_GEOSERVER.USGS.474011117072901")
+#' obs_url <- paste("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
+#' "service=SOS","version=2.0.0",
+#' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
+#' "responseFormat=text/xml",
+#' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.474011117072901",sep="&")
 #' data <- importNGWMN(obs_url)
 #' }
 #' 
@@ -117,6 +121,11 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
 #' Anything defined as a default, is returned as an attribute of that data frame.
 #' 
 #' @param input XML with only the wml2:MeasurementTimeseries node and children
+#' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character
+#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
+#' Possible values are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @importFrom xml2 xml_attr xml_find_all xml_text 
 #' @importFrom dplyr mutate
 #' @importFrom lubridate parse_date_time
