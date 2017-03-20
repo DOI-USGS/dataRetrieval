@@ -81,32 +81,29 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
   switch(service,
          qwdata = {
              if(multipleSites){    
-               
-               siteNumber <- paste("multiple_site_no",siteNumber,sep="=")
                searchCriteria <- "multiple_site_no"
+               url <- appendDrURL(baseURL,multiple_site_no=siteNumber)
              } else {
-               siteNumber <- paste("search_site_no",siteNumber,sep="=")
-               siteNumber <- paste(siteNumber,"search_site_no_match_type=exact",sep="&")
                searchCriteria <- "search_site_no"
+               url <- appendDrURL(baseURL,
+                                  search_site_no=siteNumber,
+                                  search_site_no_match_type="exact")
              }
              
              multiplePcodes <- length(parameterCd)>1
              
              if(multiplePcodes){
                pCodes <- paste(parameterCd, collapse=",")
-               pCodes <- paste('multiple_parameter_cds', pCodes, sep="=")
-               pCodes <- paste(pCodes, "param_cd_operator=OR",sep="&")
+               url <- appendDrURL(url,multiple_parameter_cds=pCodes,param_cd_operator="OR")
              } else {
-               pCodes <- paste("multiple_parameter_cds", parameterCd, sep="=")
-               pCodes <- paste(pCodes, "param_cd_operator=AND",sep="&")
+               url <- appendDrURL(url,multiple_parameter_cds=parameterCd,param_cd_operator="AND")
              }
              
              searchCriteria <- paste(searchCriteria, "multiple_parameter_cds", sep=",")
-             searchCriteria <- paste("list_of_search_criteria",searchCriteria,sep="=")
+             url <- appendDrURL(url, list_of_search_criteria = searchCriteria)
 
-             url <- paste0(baseURL,"&",siteNumber)
-             url <- paste(url, pCodes,searchCriteria,
-                          "group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd",
+             
+             url <- paste(url, "group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd",
                           "column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file",
                           "TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0",
                           "format=rdb&rdb_qw_attributes=0&date_format=YYYY-MM-DD",
