@@ -108,18 +108,11 @@
 #' fullPath <- file.path(filePath, fileName)
 #' importFile <- importWaterML1(fullPath,TRUE)
 #'
-
 importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   #note: obs_url is a dated name, does not have to be a url/path
-  raw <- FALSE
-  if(class(obs_url) == "character" && file.exists(obs_url)){
-    returnedDoc <- read_xml(obs_url)
-  }else if(class(obs_url) == 'raw'){
-    returnedDoc <- read_xml(obs_url)
-    raw <- TRUE
-  } else {
-    returnedDoc <- xml_root(getWebServiceData(obs_url, encoding='gzip'))
-  }
+  
+  returnedDoc <- check_if_xml(obs_url)
+  raw <- class(obs_url) == 'raw'
   
   if(tz == ""){  #check tz is valid if supplied
     tz <- "UTC"
@@ -345,4 +338,18 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   attr(mergedDF, "queryTime") <- Sys.time()
   
   return (mergedDF)
+}
+
+check_if_xml <- function(obs_url){
+
+  if(class(obs_url) == "character" && file.exists(obs_url)){
+    returnedDoc <- read_xml(obs_url)
+  }else if(class(obs_url) == 'raw'){
+    returnedDoc <- read_xml(obs_url)
+  } else if(class(obs_url) == "xml_node"){
+    returnedDoc <- obs_url
+  } else {
+    returnedDoc <- xml_root(getWebServiceData(obs_url, encoding='gzip'))
+  }
+  return(returnedDoc)
 }

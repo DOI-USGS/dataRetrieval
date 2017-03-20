@@ -44,7 +44,7 @@ noDataSite <- readNGWMNdata(featureID = noDataSite, service = "observation")
 #bounding box
 bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
 #retrieve 100 sites.  Set asDateTime to false since one site has an invalid date
-bboxData <- readNGWMNdata(service = "observation", featureID = bboxSites$site[1:100], 
+bboxData <- readNGWMNdata(service = "observation", featureID = bboxSites$site[1:3], 
 asDateTime = FALSE)
 }
 

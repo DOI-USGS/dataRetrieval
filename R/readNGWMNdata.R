@@ -37,7 +37,7 @@
 #' #bounding box
 #' bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
 #' #retrieve 100 sites.  Set asDateTime to false since one site has an invalid date
-#' bboxData <- readNGWMNdata(service = "observation", featureID = bboxSites$site[1:100], 
+#' bboxData <- readNGWMNdata(service = "observation", featureID = bboxSites$site[1:3], 
 #' asDateTime = FALSE)
 #' }
 #' 
@@ -115,7 +115,6 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = ""){
 #' noDataSite <- "UTGS.401544112060301"
 #' noDataSite <- readNGWMNlevels(featureID = noDataSite)
 #' }
-
 readNGWMNlevels <- function(featureID, asDateTime = TRUE, tz = ""){
   data <- readNGWMNdata(featureID = featureID, service = "observation",
                         asDateTime = asDateTime, tz = tz)
@@ -160,7 +159,7 @@ retrieveObservation <- function(featureID, asDateTime, attrs, tz){
                service = "SOS", version = "2.0.0", observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
                responseFormat = "text/xml", featureOfInterest = paste("VW_GWDP_GEOSERVER", featureID, sep = "."))
   
-  returnData <- importNGWMN_wml2(url, asDateTime, tz = tz)
+  returnData <- importNGWMN(url, asDateTime=asDateTime, tz = tz)
   if(nrow(returnData) == 0){
     #need to add NA attributes, so they aren't messed up when stored as DFs
     attr(returnData, "gml:identifier") <- NA
@@ -205,7 +204,7 @@ retrieveFeatureOfInterest <- function(..., asDateTime, srsName="urn:ogc:def:crs:
     stop("Geographical filter not specified. Please use featureID or bbox")
   }
   
-  siteDF <- importNGWMN_wml2(url, asDateTime, tz = "")
+  siteDF <- importNGWMN(url, asDateTime, tz = "")
   attr(siteDF, "url") <- url
   attr(siteDF, "queryTime") <- Sys.time()
   return(siteDF)
