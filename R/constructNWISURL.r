@@ -98,7 +98,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
              searchCriteria <- paste(searchCriteria, "multiple_parameter_cds", sep=",")
              searchCriteria <- paste("list_of_search_criteria",searchCriteria,sep="=")
 
-             baseURL <- drURL("qwdata")
+             baseURL <- drURL("qwdata", Access=pkg.env$access)
              
              url <- paste0(baseURL,siteNumber)
              url <- paste(url, pCodes,searchCriteria,
@@ -124,10 +124,10 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
            },
         rating = {
           ratingType <- match.arg(ratingType, c("base", "corr", "exsa"))
-          url <- drURL("rating", site_no=siteNumber,file_type=ratingType)
+          url <- drURL("rating", Access=pkg.env$access, site_no=siteNumber,file_type=ratingType)
         },
         peak = {
-          url <- drURL("peak", site_no=siteNumber,
+          url <- drURL("peak", site_no=siteNumber, Access=pkg.env$access,
                        range_selection="date_range",
                        format="rdb")
           if (nzchar(startDate)) {
@@ -138,7 +138,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           }
         },
         meas = {
-          url <- drURL("measurements", site_no=siteNumber,
+          url <- drURL("measurements", site_no=siteNumber, Access=pkg.env$access,
                        range_selection="date_range")
           if (nzchar(startDate)) {
             url <- appendDrURL(url,begin_date=startDate)
@@ -294,7 +294,7 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
     parameterCd <- paste(parameterCd, collapse=";")
   }
   
-  baseURL <- drURL("wqpData", siteid = siteNumber) 
+  baseURL <- drURL("wqpData", siteid = siteNumber, Access=pkg.env$access) 
   url <- paste0(baseURL,
                 ifelse(pCodeLogic,"&pCode=","&characteristicName="),
                 parameterCd)
@@ -335,7 +335,7 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
 constructUseURL <- function(years,stateCd,countyCd,categories){ 
 
     if(is.null(stateCd)){
-      baseURL <- drURL("useNat", format="rdb", rdb_compression="value")
+      baseURL <- drURL("useNat", format="rdb", rdb_compression="value", Access=pkg.env$access)
     } else {
       stateCd <- stateCdLookup(input = stateCd, outputType = "postal")
       baseURL <- "https://waterdata.usgs.gov/"
