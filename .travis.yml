@@ -20,7 +20,6 @@ env:
      - R_LIBS="http://cran.rstudio.com"
      - R_BUILD_ARGS="--no-build-vignettes --no-manual"
      - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
-     - BOOTSTRAP_LATEX=""
      - NOT_CRAN="true"
      
 warnings_are_errors: true
@@ -30,9 +29,6 @@ r_github_packages:
 
 after_success:
   - Rscript -e 'covr::coveralls()'
-
-after_failure:
-  - ./travis-tool.sh dump_logs
 
 notifications:
   email:
