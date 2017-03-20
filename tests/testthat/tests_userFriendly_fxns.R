@@ -319,21 +319,21 @@ test_that("Construct NWIS urls", {
   url_daily <- constructNWISURL(siteNumber,pCode,
              startDate,endDate,'dv',statCd=c("00003","00001"))
   
-  expect_equal(url_daily, "https://waterservices.usgs.gov/nwis/dv/?&site=01594440&format=waterml,1.1&ParameterCd=00060,00010&StatCd=00003,00001&startDT=1985-01-01")
+  expect_equal(url_daily, "https://waterservices.usgs.gov/nwis/dv/?site=01594440&format=waterml,1.1&ParameterCd=00060,00010&StatCd=00003,00001&startDT=1985-01-01")
   
   url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
-  expect_equal(url_unit, "https://nwis.waterservices.usgs.gov/nwis/iv/?&site=01594440&format=waterml,1.1&ParameterCd=00060,00010&startDT=2012-06-28&endDT=2012-06-30")
+  expect_equal(url_unit, "https://nwis.waterservices.usgs.gov/nwis/iv/?site=01594440&format=waterml,1.1&ParameterCd=00060,00010&startDT=2012-06-28&endDT=2012-06-30")
   
   url_qw_single <- constructNWISURL(siteNumber,"01075",startDate,endDate,'qw')
-  expect_equal(url_qw_single, "https://nwis.waterdata.usgs.gov/nwis/qwdata?&search_site_no=01594440&search_site_no_match_type=exact&multiple_parameter_cds=01075&param_cd_operator=AND&list_of_search_criteria=search_site_no,multiple_parameter_cds&group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd&column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file&TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0&format=rdb&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&qw_sample_wide=0&begin_date=1985-01-01")
+  expect_equal(url_qw_single, "https://nwis.waterdata.usgs.gov/nwis/qwdata?search_site_no=01594440&search_site_no_match_type=exact&multiple_parameter_cds=01075&param_cd_operator=AND&list_of_search_criteria=search_site_no,multiple_parameter_cds&group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd&column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file&TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0&format=rdb&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&qw_sample_wide=0&begin_date=1985-01-01")
   
   url_qw <- constructNWISURL(siteNumber,c('01075','00029','00453'),
              startDate,endDate,'qw')
-  expect_equal(url_qw, "https://nwis.waterdata.usgs.gov/nwis/qwdata?&search_site_no=01594440&search_site_no_match_type=exact&multiple_parameter_cds=01075,00029,00453&param_cd_operator=OR&list_of_search_criteria=search_site_no,multiple_parameter_cds&group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd&column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file&TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0&format=rdb&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&qw_sample_wide=0&begin_date=1985-01-01")
+  expect_equal(url_qw, "https://nwis.waterdata.usgs.gov/nwis/qwdata?search_site_no=01594440&search_site_no_match_type=exact&multiple_parameter_cds=01075,00029,00453&param_cd_operator=OR&list_of_search_criteria=search_site_no,multiple_parameter_cds&group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd&column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file&TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0&format=rdb&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&qw_sample_wide=0&begin_date=1985-01-01")
   
   url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',
              statCd=c("00003","00001"),format="tsv")
-  expect_equal(url_daily_tsv, "https://waterservices.usgs.gov/nwis/dv/?&site=01594440&format=rdb,1.0&ParameterCd=00060,00010&StatCd=00003,00001&startDT=1985-01-01")
+  expect_equal(url_daily_tsv, "https://waterservices.usgs.gov/nwis/dv/?site=01594440&format=rdb,1.0&ParameterCd=00060,00010&StatCd=00003,00001&startDT=1985-01-01")
   
   setAccess("internal")
   url_rating <- constructNWISURL(siteNumber,service="rating",ratingType="base")
