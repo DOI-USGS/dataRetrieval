@@ -4,34 +4,40 @@
 # see the wiki:
 #   https://github.com/craigcitro/r-travis/wiki
 
-language: objective-c
-sudo: required
+language: r
+cache: packages
+matrix:
+  include:
+    - os: linux
+      r: release
+    - os: linux
+      r: devel
+    - os: linux
+      dist: trusty
+      env: R_CODECOV=true
+      r_check_args: '--no-build-vignettes --no-manual --as-cran'
+sudo: false
+
+addons:
+  apt:
+    packages:
+    - libcurl4-openssl-dev
 
 env:
    global:
-     - R_LIBS="http://cran.rstudio.com"
      - R_BUILD_ARGS="--no-build-vignettes --no-manual"
      - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
-     - BOOTSTRAP_LATEX=""
      - NOT_CRAN="true"
+     - _R_CHECK_FORCE_SUGGESTS_=false
+     
+warnings_are_errors: true
 
-before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
-
-install:
-  - ./travis-tool.sh install_deps
-  - ./travis-tool.sh install_r covr
-
-script: ./travis-tool.sh run_tests
+r_github_packages:
+  - jimhester/covr
 
 after_success:
-  - Rscript -e 'covr::coveralls()'
-
-after_failure:
-  - ./travis-tool.sh dump_logs
-
+  - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
+  
 notifications:
   email:
     on_success: change

@@ -40,9 +40,7 @@ Imports:
 Suggests:
     xtable,
     knitr,
-    testthat,
-    geojsonio,
-    leaflet
+    testthat
 VignetteBuilder: knitr
 BuildVignettes: true
 BugReports: https://github.com/USGS-R/dataRetrieval/issues
