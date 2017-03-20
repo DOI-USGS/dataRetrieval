@@ -6,15 +6,25 @@
 
 language: r
 cache: packages
-r:
-#  - oldrel
-  - release
-  - devel
+matrix:
+  include:
+    - os: linux
+      r: release
+    - os: linux
+      r: devel
+    - os: linux
+      dist: trusty
+      env: R_CODECOV=true
+      r_check_args: '--no-build-vignettes --no-manual --as-cran'
 sudo: false
+
+addons:
+  apt:
+    packages:
+    - libcurl4-openssl-dev
 
 env:
    global:
-     - R_LIBS="http://cran.rstudio.com"
      - R_BUILD_ARGS="--no-build-vignettes --no-manual"
      - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
      - NOT_CRAN="true"
@@ -22,14 +32,12 @@ env:
      
 warnings_are_errors: true
 
-install: travis_wait 20 mvn install
-
 r_github_packages:
   - jimhester/covr
 
 after_success:
-  - Rscript -e 'covr::coveralls()'
-
+  - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
+  
 notifications:
   email:
     on_success: change
