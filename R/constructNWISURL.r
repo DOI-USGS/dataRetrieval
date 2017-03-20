@@ -53,7 +53,11 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
                              service,statCd="00003", format="xml",expanded=TRUE,
                              ratingType="base",statReportType="daily",statType="mean"){
 
-  service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas","stat"))
+  service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas","stat", "qwdata"))
+  
+  service[service == "qw"] <- "qwdata"
+  service[service == "meas"] <- "measurements"
+  service[service == "uv"] <- "iv"
   
   if(any(!is.na(parameterCd) & parameterCd != "all")){
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
@@ -72,8 +76,10 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
   
   siteNumber <- paste(siteNumber, collapse=",")
   
+  baseURL <- drURL(service, Access=pkg.env$access)
+  
   switch(service,
-         qw = {
+         qwdata = {
              if(multipleSites){    
                
                siteNumber <- paste("multiple_site_no",siteNumber,sep="=")
@@ -98,9 +104,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
              searchCriteria <- paste(searchCriteria, "multiple_parameter_cds", sep=",")
              searchCriteria <- paste("list_of_search_criteria",searchCriteria,sep="=")
 
-             baseURL <- drURL("qwdata", Access=pkg.env$access)
-             
-             url <- paste0(baseURL,siteNumber)
+             url <- paste0(baseURL,"&",siteNumber)
              url <- paste(url, pCodes,searchCriteria,
                           "group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd",
                           "column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file",
@@ -124,10 +128,10 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
            },
         rating = {
           ratingType <- match.arg(ratingType, c("base", "corr", "exsa"))
-          url <- drURL("rating", Access=pkg.env$access, site_no=siteNumber,file_type=ratingType)
+          url <- appendDrURL(baseURL, site_no=siteNumber,file_type=ratingType)
         },
         peak = {
-          url <- drURL("peak", site_no=siteNumber, Access=pkg.env$access,
+          url <- appendDrURL(baseURL, site_no=siteNumber, 
                        range_selection="date_range",
                        format="rdb")
           if (nzchar(startDate)) {
@@ -137,8 +141,8 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
             url <- appendDrURL(url, end_date=endDate)
           }
         },
-        meas = {
-          url <- drURL("measurements", site_no=siteNumber, Access=pkg.env$access,
+        measurements = {
+          url <- appendDrURL(baseURL, site_no=siteNumber, 
                        range_selection="date_range")
           if (nzchar(startDate)) {
             url <- appendDrURL(url,begin_date=startDate)
@@ -173,7 +177,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           }
           statType <- paste(statType,collapse=",")
           parameterCd <- paste(parameterCd,collapse=",")
-          url <- drURL("stat", sites=siteNumber,
+          url <- appendDrURL(baseURL, sites=siteNumber,
                        statType=statType,
                        statReportType=statReportType,
                        parameterCd=parameterCd)
@@ -189,17 +193,13 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           
         },
         
-        { # this will be either dv or uv
+        { # this will be either dv, uv, groundwater
           multiplePcodes <- length(parameterCd)>1
           # Check for 5 digit parameter code:
           if(multiplePcodes){
             parameterCd <- paste(parameterCd, collapse=",")
           } 
-          
-          if ("uv"==service) {
-            service <- "iv"
-          }
-          
+
           format <- match.arg(format, c("xml","tsv","wml1","wml2","rdb"))
           
           formatURL <- switch(format,
@@ -220,7 +220,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
             }
           )
 
-          url <- drURL(service, Access=pkg.env$access, site=siteNumber, format=formatURL)
+          url <- appendDrURL(baseURL, site=siteNumber, format=formatURL)
           
           if("gwlevels"!= service){
             url <- appendDrURL(url, ParameterCd=parameterCd)
