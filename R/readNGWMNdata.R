@@ -94,7 +94,10 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = ""){
 #' @param asDateTime logical Should dates and times be converted to date/time objects,
 #' or returned as character?  Defaults to \code{TRUE}.  Must be set to \code{FALSE} if a site 
 #' contains non-standard dates.
-#' 
+#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
+#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
+#' Possible values are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla" 
 #' @export
 #' 
 #' @examples 
