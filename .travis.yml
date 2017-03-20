@@ -4,8 +4,16 @@
 # see the wiki:
 #   https://github.com/craigcitro/r-travis/wiki
 
-language: objective-c
-sudo: required
+language: r
+cache: packages
+r:
+#  - oldrel
+  - release
+  - devel
+sudo: false
+
+repos:
+  CRAN: https://cloud.r-project.org
 
 env:
    global:
@@ -14,17 +22,11 @@ env:
      - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
      - BOOTSTRAP_LATEX=""
      - NOT_CRAN="true"
+     
+warnings_are_errors: true
 
-before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
-
-install:
-  - ./travis-tool.sh install_deps
-  - ./travis-tool.sh install_r covr
-
-script: ./travis-tool.sh run_tests
+r_github_packages:
+  - jimhester/covr
 
 after_success:
   - Rscript -e 'covr::coveralls()'
