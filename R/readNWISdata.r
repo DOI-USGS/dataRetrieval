@@ -275,7 +275,7 @@ countyCdLookup <- function(state, county, outputType = "id"){
 #' @keywords internal
 readNWISdots <- function(...){
   
-  if(length(...) == 0){
+  if(length(list(...)) == 0){
     stop("No arguments supplied")
   }
   

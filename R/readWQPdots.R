@@ -4,7 +4,7 @@
 #' @keywords internal
 readWQPdots <- function(...){
   
-  if(length(...) == 0){
+  if(length(list(...)) == 0){
     stop("No arguments supplied")
   }
   
