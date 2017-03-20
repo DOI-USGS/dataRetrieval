@@ -101,15 +101,15 @@ getQuerySummary <- function(url){
   return(retquery)
 }
 
-retryGetOrPost <- function(url, ...) {
+retryGetOrPost <- function(obs_url, ...) {
   resp <- NULL
-  if (nchar(url) < 2048 || grepl(pattern = "ngwmn", x = url)) {
-    resp <- RETRY("GET", url, ..., user_agent(default_ua()))
+  if (nchar(obs_url) < 2048 || grepl(pattern = "ngwmn", x = url)) {
+    resp <- RETRY("GET", obs_url, ..., user_agent(default_ua()))
   } else {
-    split <- strsplit(url, "?", fixed=TRUE)
-    url <- split[[1]][1]
+    split <- strsplit(obs_url, "?", fixed=TRUE)
+    obs_url <- split[[1]][1]
     query <- split[[1]][2]
-    resp <- RETRY("POST", url, ..., body = query,
+    resp <- RETRY("POST", obs_url, ..., body = query,
           content_type("application/x-www-form-urlencoded"), user_agent(default_ua()))
   }
   return(resp)
