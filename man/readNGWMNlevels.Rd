@@ -13,6 +13,11 @@ separated by a period or semicolon, e.g. \code{USGS.404159100494601}.}
 \item{asDateTime}{logical Should dates and times be converted to date/time objects,
 or returned as character?  Defaults to \code{TRUE}.  Must be set to \code{FALSE} if a site 
 contains non-standard dates.}
+
+\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the 
+datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
+Possible values are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \description{
 Retrieve groundwater levels from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.

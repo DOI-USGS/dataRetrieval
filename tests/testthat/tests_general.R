@@ -8,6 +8,8 @@ test_that("General NWIS retrievals working", {
   expect_is(multiSite$dateTime, 'POSIXct')
   # saveRDS(multiSite, "rds/multiSite.rds")
   
+  expect_error(readNWISdata(), "No arguments supplied")
+  
   bBoxEx <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010")
   expect_that(length(unique(bBoxEx$site_no)) > 1, is_true())
   # saveRDS(bBoxEx, "rds/bBoxEx.rds")

@@ -275,6 +275,10 @@ countyCdLookup <- function(state, county, outputType = "id"){
 #' @keywords internal
 readNWISdots <- function(...){
   
+  if(length(list(...)) == 0){
+    stop("No arguments supplied")
+  }
+  
   matchReturn <- convertLists(...)
   
   if("service" %in% names(matchReturn)){

@@ -82,5 +82,10 @@ drQueryArgs <- function(..., arg.list){
 appendDrURL <- function(url, ..., arg.list=NULL){
   
   queryString <- drQueryArgs(..., arg.list=arg.list)
-  return(paste0(url, "&", queryString))
+  if(length(strsplit(url,"\\?")[[1]]) > 1){
+    return_url <- paste0(url, "&", queryString)
+  } else {
+    return_url <- paste0(url, queryString)
+  }
+  return(return_url)
 }

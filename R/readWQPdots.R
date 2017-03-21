@@ -4,6 +4,10 @@
 #' @keywords internal
 readWQPdots <- function(...){
   
+  if(length(list(...)) == 0){
+    stop("No arguments supplied")
+  }
+  
   matchReturn <- convertLists(...)
   
   values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse=";",sep="")))
