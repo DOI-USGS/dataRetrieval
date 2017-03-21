@@ -7,6 +7,7 @@
 language: r
 cache: packages
 sudo: false
+dist: trusty
 
 matrix:
   include:
@@ -14,10 +15,6 @@ matrix:
       r: release
     - os: linux
       r: devel
-    - os: linux
-      dist: trusty
-      env: R_CODECOV=true
-      r_check_args: '--no-build-vignettes --no-manual --as-cran'
 
 addons:
   apt:
@@ -37,7 +34,7 @@ r_github_packages:
   - jimhester/covr
 
 after_success:
-  - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
+  - Rscript -e 'covr::codecov()'
   
 notifications:
   email:
