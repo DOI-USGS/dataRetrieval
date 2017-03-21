@@ -6,6 +6,8 @@
 
 language: r
 cache: packages
+sudo: false
+
 matrix:
   include:
     - os: linux
@@ -16,7 +18,6 @@ matrix:
       dist: trusty
       env: R_CODECOV=true
       r_check_args: '--no-build-vignettes --no-manual --as-cran'
-sudo: false
 
 addons:
   apt:
