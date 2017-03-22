@@ -53,9 +53,8 @@ siteInfo \tab data.frame \tab A data frame containing information on the request
 \description{
 Reads peak flow from NWISweb. Data is retrieved from \url{https://waterdata.usgs.gov/nwis}.
 In some cases, the specific date of the peak data is not know. This function will default to
-converting the complete dates, dropping rows with incomplete dates. If those incomplete dates are
-needed, set the `asDateTime` argument to FALSE. No rows will be removed, and no dates will be converted
-to R Date objects.
+converting complete dates to a "Date" object, and converting incomplete dates to "NA". If those incomplete dates are
+needed, set the `asDateTime` argument to FALSE. No dates will be converted to R Date objects.
 }
 \examples{
 siteNumbers <- c('01594440','040851325')
