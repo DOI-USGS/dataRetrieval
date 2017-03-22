@@ -26,11 +26,11 @@ url string
 Construct WQP url for data retrieval. This function gets the data from here: \url{https://www.waterqualitydata.us}
 }
 \examples{
-siteNumber <- '01594440'
+site_id <- '01594440'
 startDate <- '1985-01-01'
 endDate <- ''
 pCode <- c("00060","00010")
-url_wqp <- constructWQPURL(paste("USGS",siteNumber,sep="-"),
+url_wqp <- constructWQPURL(paste("USGS",site_id,sep="-"),
            c('01075','00029','00453'),
            startDate,endDate)
 }

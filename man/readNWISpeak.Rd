@@ -57,10 +57,10 @@ converting complete dates to a "Date" object, and converting incomplete dates to
 needed, set the `asDateTime` argument to FALSE. No dates will be converted to R Date objects.
 }
 \examples{
-siteNumbers <- c('01594440','040851325')
+site_ids <- c('01594440','040851325')
 \dontrun{
-data <- readNWISpeak(siteNumbers)
-data2 <- readNWISpeak(siteNumbers, asDateTime=FALSE)
+data <- readNWISpeak(site_ids)
+data2 <- readNWISpeak(site_ids, asDateTime=FALSE)
 stations<-c("06011000")
 peakdata<-readNWISpeak(stations,convertType=FALSE)
 }

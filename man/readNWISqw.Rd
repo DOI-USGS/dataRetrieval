@@ -89,24 +89,24 @@ POP \tab Population/community \cr
 If more than one parameter group is requested, only sites that data for all requested groups are returned.
 }
 \examples{
-siteNumbers <- c('04024430','04024000')
+site_ids <- c('04024430','04024000')
 startDate <- '2010-01-01'
 endDate <- ''
 parameterCd <- c('34247','30234','32104','34220')
 \dontrun{
-rawNWISqwData <- readNWISqw(siteNumbers,parameterCd,startDate,endDate)
-rawNWISqwDataReshaped <- readNWISqw(siteNumbers,parameterCd,
+rawNWISqwData <- readNWISqw(site_ids,parameterCd,startDate,endDate)
+rawNWISqwDataReshaped <- readNWISqw(site_ids,parameterCd,
           startDate,endDate,reshape=TRUE)
 parameterCd <- "all"
-rawNWISall <- readNWISqw(siteNumbers,parameterCd,
+rawNWISall <- readNWISqw(site_ids,parameterCd,
           startDate,endDate)
 pgroup <- c("NUT")
-rawNWISNutrients <- readNWISqw(siteNumbers,pgroup,
+rawNWISNutrients <- readNWISqw(site_ids,pgroup,
           startDate,endDate)
 groups <- c("NUT","OPE")
-rawNWISNutOpe <- readNWISqw(siteNumbers,groups,
+rawNWISNutOpe <- readNWISqw(site_ids,groups,
           startDate,endDate) 
-rawNWISOpe <- readNWISqw(siteNumbers,"OPE",
+rawNWISOpe <- readNWISqw(site_ids,"OPE",
           startDate,endDate) 
          } 
 }

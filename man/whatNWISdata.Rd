@@ -73,8 +73,8 @@ availableData <- whatNWISdata('05114000')
 # To find just unit value ('instantaneous') data:
 uvData <- whatNWISdata('05114000',service="uv")
 uvDataMulti <- whatNWISdata(c('05114000','09423350'),service=c("uv","dv"))
-siteNumbers <- c("01491000","01645000")
-flowAndTemp <- whatNWISdata(siteNumbers, parameterCd=c("00060","00010"))
+site_ids <- c("01491000","01645000")
+flowAndTemp <- whatNWISdata(site_ids, parameterCd=c("00060","00010"))
 }
 }
 \keyword{USGS}

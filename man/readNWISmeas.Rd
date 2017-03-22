@@ -57,9 +57,9 @@ Reads surface-water measurement data from NWISweb. Data is retrieved from \url{h
 See \url{https://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
 }
 \examples{
-siteNumbers <- c('01594440','040851325')
+site_ids <- c('01594440','040851325')
 \dontrun{
-data <- readNWISmeas(siteNumbers)
+data <- readNWISmeas(site_ids)
 Meas05316840 <- readNWISmeas("05316840")
 Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)
 Meas07227500.ex <- readNWISmeas("07227500",expanded=TRUE)

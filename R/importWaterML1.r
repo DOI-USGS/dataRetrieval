@@ -54,12 +54,12 @@
 #' @importFrom xml2 xml_attr
 #' @importFrom xml2 xml_root
 #' @examples
-#' siteNumber <- "02177000"
+#' site_id <- "02177000"
 #' startDate <- "2012-09-01"
 #' endDate <- "2012-10-01"
 #' offering <- '00003'
 #' property <- '00060'
-#' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
+#' obs_url <- constructNWISURL(site_id,property,startDate,endDate,'dv')
 #' \dontrun{
 #' data <- importWaterML1(obs_url, asDateTime=TRUE)
 #' 
@@ -71,7 +71,7 @@
 #' groundWater <- importWaterML1(groundwaterExampleURL)
 #' groundWater2 <- importWaterML1(groundwaterExampleURL, asDateTime=TRUE)
 #' 
-#' unitDataURL <- constructNWISURL(siteNumber,property,
+#' unitDataURL <- constructNWISURL(site_id,property,
 #'          "2013-11-03","2013-11-03",'uv')
 #' unitData <- importWaterML1(unitDataURL,TRUE)
 #' 

@@ -50,13 +50,13 @@
 #' @importFrom readr read_delim
 #' @importFrom readr problems
 #' @examples
-#' siteNumber <- "02177000"
+#' site_id <- "02177000"
 #' startDate <- "2012-09-01"
 #' endDate <- "2012-10-01"
 #' offering <- "00003"
 #' property <- "00060"
 #' 
-#' obs_url <- constructNWISURL(siteNumber,property,
+#' obs_url <- constructNWISURL(site_id,property,
 #'          startDate,endDate,"dv",format="tsv")
 #' \dontrun{
 #' data <- importRDB1(obs_url)
@@ -64,7 +64,7 @@
 #' urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),
 #'          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
 #' multiData <- importRDB1(urlMultiPcodes)
-#' unitDataURL <- constructNWISURL(siteNumber,property,
+#' unitDataURL <- constructNWISURL(site_id,property,
 #'          "2013-11-03","2013-11-03","uv",format="tsv") #includes timezone switch
 #' unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
 #' qwURL <- constructNWISURL(c('04024430','04024000'),
