@@ -45,9 +45,9 @@ Not all active USGS streamgages have traditional rating curves that
 relate flow to stage.
 }
 \examples{
-siteNumber <- '01594440'
+site_id <- '01594440'
 \dontrun{
-data <- readNWISrating(siteNumber, "base")
+data <- readNWISrating(site_id, "base")
 attr(data, "RATING")
 }
 }

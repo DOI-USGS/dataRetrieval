@@ -59,22 +59,22 @@ A list of statistic codes can be found here: \url{https://nwis.waterdata.usgs.go
 More information on the web service can be found here: \url{https://waterservices.usgs.gov/rest/IV-Service.html}.
 }
 \examples{
-siteNumber <- '05114000'
+site_id <- '05114000'
 parameterCd <- '00060'
 startDate <- "2014-10-10"
 endDate <- "2014-10-10"
 \dontrun{
-rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
+rawData <- readNWISuv(site_id,parameterCd,startDate,endDate)
 
 timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
          "2013-11-03","2013-11-03")
  
-centralTime <- readNWISuv(siteNumber,parameterCd,
+centralTime <- readNWISuv(site_id,parameterCd,
                            "2014-10-10T12:00", "2014-10-10T23:59",
                            tz="America/Chicago")
 
 # Adding 'Z' to the time indicates to the web service to call the data with UTC time:
-GMTdata <- readNWISuv(siteNumber,parameterCd,
+GMTdata <- readNWISuv(site_id,parameterCd,
                            "2014-10-10T00:00Z", "2014-10-10T23:59Z")
 }
 

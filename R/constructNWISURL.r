@@ -4,7 +4,7 @@
 #' A list of parameter codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
 #' A list of statistic codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
-#' @param siteNumber string or vector of strings USGS site number.  This is usually an 8 digit number
+#' @param siteNumbers string or vector of strings USGS site number.  This is usually an 8 digit number
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the earliest possible record.
@@ -32,24 +32,24 @@
 #' @export
 #' @import utils
 #' @examples
-#' siteNumber <- '01594440'
+#' site_id <- '01594440'
 #' startDate <- '1985-01-01'
 #' endDate <- ''
 #' pCode <- c("00060","00010")
-#' url_daily <- constructNWISURL(siteNumber,pCode,
+#' url_daily <- constructNWISURL(site_id,pCode,
 #'            startDate,endDate,'dv',statCd=c("00003","00001"))
-#' url_unit <- constructNWISURL(siteNumber,pCode,"2012-06-28","2012-06-30",'iv')
+#' url_unit <- constructNWISURL(site_id,pCode,"2012-06-28","2012-06-30",'iv')
 #' 
-#' url_qw_single <- constructNWISURL(siteNumber,"01075",startDate,endDate,'qw')
-#' url_qw <- constructNWISURL(siteNumber,c('01075','00029','00453'),
+#' url_qw_single <- constructNWISURL(site_id,"01075",startDate,endDate,'qw')
+#' url_qw <- constructNWISURL(site_id,c('01075','00029','00453'),
 #'            startDate,endDate,'qw')
-#' url_daily_tsv <- constructNWISURL(siteNumber,pCode,startDate,endDate,'dv',
+#' url_daily_tsv <- constructNWISURL(site_id,pCode,startDate,endDate,'dv',
 #'            statCd=c("00003","00001"),format="tsv")
-#' url_rating <- constructNWISURL(siteNumber,service="rating",ratingType="base")
-#' url_peak <- constructNWISURL(siteNumber, service="peak")
-#' url_meas <- constructNWISURL(siteNumber, service="meas")
+#' url_rating <- constructNWISURL(site_id,service="rating",ratingType="base")
+#' url_peak <- constructNWISURL(site_id, service="peak")
+#' url_meas <- constructNWISURL(site_id, service="meas")
 #' urlQW <- constructNWISURL("450456092225801","70300",startDate="",endDate="","qw",expanded=TRUE)
-constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate="",
+constructNWISURL <- function(siteNumbers,parameterCd="00060",startDate="",endDate="",
                              service,statCd="00003", format="xml",expanded=TRUE,
                              ratingType="base",statReportType="daily",statType="mean"){
 
@@ -72,9 +72,9 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
     }
   }
   
-  multipleSites <- length(siteNumber) > 1
+  multipleSites <- length(siteNumbers) > 1
   
-  siteNumber <- paste(siteNumber, collapse=",")
+  siteNumbers <- paste(siteNumbers, collapse=",")
   
   baseURL <- drURL(service, Access=pkg.env$access)
   
@@ -82,11 +82,11 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
          qwdata = {
              if(multipleSites){    
                searchCriteria <- "multiple_site_no"
-               url <- appendDrURL(baseURL,multiple_site_no=siteNumber)
+               url <- appendDrURL(baseURL,multiple_site_no=siteNumbers)
              } else {
                searchCriteria <- "search_site_no"
                url <- appendDrURL(baseURL,
-                                  search_site_no=siteNumber,
+                                  search_site_no=siteNumbers,
                                   search_site_no_match_type="exact")
              }
              
@@ -125,10 +125,10 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
            },
         rating = {
           ratingType <- match.arg(ratingType, c("base", "corr", "exsa"))
-          url <- appendDrURL(baseURL, site_no=siteNumber,file_type=ratingType)
+          url <- appendDrURL(baseURL, site_no=siteNumbers,file_type=ratingType)
         },
         peak = {
-          url <- appendDrURL(baseURL, site_no=siteNumber, 
+          url <- appendDrURL(baseURL, site_no=siteNumbers, 
                        range_selection="date_range",
                        format="rdb")
           if (nzchar(startDate)) {
@@ -139,7 +139,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           }
         },
         measurements = {
-          url <- appendDrURL(baseURL, site_no=siteNumber, 
+          url <- appendDrURL(baseURL, site_no=siteNumbers, 
                        range_selection="date_range")
           if (nzchar(startDate)) {
             url <- appendDrURL(url,begin_date=startDate)
@@ -174,7 +174,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
           }
           statType <- paste(statType,collapse=",")
           parameterCd <- paste(parameterCd,collapse=",")
-          url <- appendDrURL(baseURL, sites=siteNumber,
+          url <- appendDrURL(baseURL, sites=siteNumbers,
                        statType=statType,
                        statReportType=statReportType,
                        parameterCd=parameterCd)
@@ -217,7 +217,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
             }
           )
 
-          url <- appendDrURL(baseURL, site=siteNumber, format=formatURL)
+          url <- appendDrURL(baseURL, site=siteNumbers, format=formatURL)
           
           if("gwlevels"!= service){
             url <- appendDrURL(url, ParameterCd=parameterCd)
@@ -256,7 +256,7 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 #'
 #' Construct WQP url for data retrieval. This function gets the data from here: \url{https://www.waterqualitydata.us}
 #'
-#' @param siteNumber string or vector of strings USGS site number.  This is usually an 8 digit number
+#' @param siteNumbers string or vector of strings USGS site number.  This is usually an 8 digit number
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the earliest possible record.
@@ -267,18 +267,18 @@ constructNWISURL <- function(siteNumber,parameterCd="00060",startDate="",endDate
 #' @return url string
 #' @export
 #' @examples
-#' siteNumber <- '01594440'
+#' site_id <- '01594440'
 #' startDate <- '1985-01-01'
 #' endDate <- ''
 #' pCode <- c("00060","00010")
-#' url_wqp <- constructWQPURL(paste("USGS",siteNumber,sep="-"),
+#' url_wqp <- constructWQPURL(paste("USGS",site_id,sep="-"),
 #'            c('01075','00029','00453'),
 #'            startDate,endDate)
-constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
+constructWQPURL <- function(siteNumbers,parameterCd,startDate,endDate,zip=FALSE){
   
-  multipleSites <- length(siteNumber) > 1
+  multipleSites <- length(siteNumbers) > 1
   multiplePcodes <- length(parameterCd)>1
-  siteNumber <- paste(siteNumber, collapse=";")
+  siteNumbers <- paste(siteNumbers, collapse=";")
 
   if(all(nchar(parameterCd) == 5)){
     suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
@@ -291,7 +291,7 @@ constructWQPURL <- function(siteNumber,parameterCd,startDate,endDate,zip=FALSE){
     parameterCd <- paste(parameterCd, collapse=";")
   }
   
-  baseURL <- drURL("wqpData", siteid = siteNumber, Access=pkg.env$access) 
+  baseURL <- drURL("wqpData", siteid = siteNumbers, Access=pkg.env$access) 
   url <- paste0(baseURL,
                 ifelse(pCodeLogic,"&pCode=","&characteristicName="),
                 parameterCd)

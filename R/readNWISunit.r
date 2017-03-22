@@ -47,22 +47,22 @@
 #' @seealso \code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
 #' @export
 #' @examples
-#' siteNumber <- '05114000'
+#' site_id <- '05114000'
 #' parameterCd <- '00060'
 #' startDate <- "2014-10-10"
 #' endDate <- "2014-10-10"
 #' \dontrun{
-#' rawData <- readNWISuv(siteNumber,parameterCd,startDate,endDate)
+#' rawData <- readNWISuv(site_id,parameterCd,startDate,endDate)
 #' 
 #' timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
 #'          "2013-11-03","2013-11-03")
 #'  
-#' centralTime <- readNWISuv(siteNumber,parameterCd,
+#' centralTime <- readNWISuv(site_id,parameterCd,
 #'                            "2014-10-10T12:00", "2014-10-10T23:59",
 #'                            tz="America/Chicago")
 #' 
 #' # Adding 'Z' to the time indicates to the web service to call the data with UTC time:
-#' GMTdata <- readNWISuv(siteNumber,parameterCd,
+#' GMTdata <- readNWISuv(site_id,parameterCd,
 #'                            "2014-10-10T00:00Z", "2014-10-10T23:59Z")
 #' }
 #' 
@@ -79,9 +79,8 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' 
 #' Reads peak flow from NWISweb. Data is retrieved from \url{https://waterdata.usgs.gov/nwis}.
 #' In some cases, the specific date of the peak data is not know. This function will default to
-#' converting the complete dates, dropping rows with incomplete dates. If those incomplete dates are
-#' needed, set the `asDateTime` argument to FALSE. No rows will be removed, and no dates will be converted
-#' to R Date objects.
+#' converting complete dates to a "Date" object, and converting incomplete dates to "NA". If those incomplete dates are
+#' needed, set the `asDateTime` argument to FALSE. No dates will be converted to R Date objects.
 #' 
 #' @param siteNumbers character USGS site number(or multiple sites).  This is usually an 8 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
@@ -122,10 +121,10 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){
 #' @export
 #' @importFrom dplyr left_join
 #' @examples
-#' siteNumbers <- c('01594440','040851325')
+#' site_ids <- c('01594440','040851325')
 #' \dontrun{
-#' data <- readNWISpeak(siteNumbers)
-#' data2 <- readNWISpeak(siteNumbers, asDateTime=FALSE)
+#' data <- readNWISpeak(site_ids)
+#' data2 <- readNWISpeak(site_ids, asDateTime=FALSE)
 #' stations<-c("06011000")
 #' peakdata<-readNWISpeak(stations,convertType=FALSE)
 #' }
@@ -202,9 +201,9 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, 
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
 #' @examples
-#' siteNumber <- '01594440'
+#' site_id <- '01594440'
 #' \dontrun{
-#' data <- readNWISrating(siteNumber, "base")
+#' data <- readNWISrating(site_id, "base")
 #' attr(data, "RATING")
 #' }
 readNWISrating <- function (siteNumber,type="base",convertType = TRUE){  
@@ -282,9 +281,9 @@ readNWISrating <- function (siteNumber,type="base",convertType = TRUE){
 #' @export
 #' @importFrom dplyr left_join
 #' @examples
-#' siteNumbers <- c('01594440','040851325')
+#' site_ids <- c('01594440','040851325')
 #' \dontrun{
-#' data <- readNWISmeas(siteNumbers)
+#' data <- readNWISmeas(site_ids)
 #' Meas05316840 <- readNWISmeas("05316840")
 #' Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)
 #' Meas07227500.ex <- readNWISmeas("07227500",expanded=TRUE)
@@ -385,11 +384,11 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #' @export
 #' @importFrom dplyr left_join
 #' @examples
-#' siteNumber <- "434400121275801"
+#' site_id <- "434400121275801"
 #' \dontrun{
-#' data <- readNWISgwl(siteNumber, '','')
+#' data <- readNWISgwl(site_id, '','')
 #' sites <- c("434400121275801", "375907091432201")
-#' data2 <- readNWISgwl(sites, '','')
+#' data2 <- readNWISgwl(site_id, '','')
 #' data3 <- readNWISgwl("420125073193001", '','')
 #' #handling of data where date has no day
 #' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01") 

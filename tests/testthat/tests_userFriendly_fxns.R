@@ -359,5 +359,36 @@ test_that("Construct NWIS urls", {
   urlQW <- constructNWISURL("450456092225801","70300",startDate="",endDate="","qw",expanded=TRUE)
   expect_equal(urlQW, "https://nwis.waterdata.usgs.gov/nwis/qwdata?search_site_no=450456092225801&search_site_no_match_type=exact&multiple_parameter_cds=70300&param_cd_operator=AND&list_of_search_criteria=search_site_no,multiple_parameter_cds&group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd&column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file&TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0&format=rdb&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&qw_sample_wide=0")
   
+  url_use <- constructUseURL(years=c(1990,1995),stateCd="Ohio",countyCd = c(1,3), categories = "ALL")
+  expect_equal(url_use, "https://waterdata.usgs.gov/OH/nwis/water_use?format=rdb&rdb_compression=value&wu_area=county&wu_county=1%2C3&wu_year=1990%2C1995&wu_category=ALL")
+})
+
+context("Construct WQP urls")
+test_that("Construct WQP urls", {
   
+})
+
+context("checkWQPdates")
+test_that("checkWQPdates", {
+  values <- list(startDateLo="01-01-2002", characteristicName="Phosphorous",
+            endDate=as.Date("2014-01-01"))
+  values1 <- checkWQPdates(values)
+  expect_equal(values1$startDateHi, "01-01-2014")
+  expect_equal(values1$startDateLo, "01-01-2002")
+})
+
+context("Construct NWIS urls")
+test_that("Construct NWIS urls", {
+  siteNumber <- '01594440'
+  startDate <- '1985-01-01'
+  endDate <- ''
+  pCode <- c("00060","00010")
+  url_wqp <- constructWQPURL(paste("USGS",siteNumber,sep="-"),
+             c('01075','00029','00453'),
+             startDate,endDate)
+  
+  expect_equal(url_wqp, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&sorted=no&mimeType=tsv")
+
+  rawSampleURL_Zip <- constructWQPURL('USGS-01594440','01075', '', '', TRUE)
+  expect_equal(rawSampleURL_Zip, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075&sorted=no&mimeType=tsv&zip=yes")
 })

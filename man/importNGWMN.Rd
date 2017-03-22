@@ -11,9 +11,8 @@ importNGWMN(input, asDateTime = FALSE, tz = "UTC")
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character}
 
-\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the 
-datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
-Possible values are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+\item{tz}{character to set timezone attribute of datetime. Default is UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
+Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 }
 \value{

@@ -30,6 +30,9 @@ env:
      
 warnings_are_errors: true
 
+install:
+  - travis_wait 30 Rscript -e "0" 
+
 r_github_packages:
   - jimhester/covr
 

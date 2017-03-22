@@ -57,11 +57,11 @@ is specified as FALSE. Sites with non-standard date formats (i.e. lacking a day)
 See \url{https://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more information.
 }
 \examples{
-siteNumber <- "434400121275801"
+site_id <- "434400121275801"
 \dontrun{
-data <- readNWISgwl(siteNumber, '','')
+data <- readNWISgwl(site_id, '','')
 sites <- c("434400121275801", "375907091432201")
-data2 <- readNWISgwl(sites, '','')
+data2 <- readNWISgwl(site_id, '','')
 data3 <- readNWISgwl("420125073193001", '','')
 #handling of data where date has no day
 data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01") 
