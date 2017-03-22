@@ -50,6 +50,7 @@ access = match.arg(access, c('public','internal','cooperator','USGS'))
   pkg.env$qwdata = "https://nwis.waterdata.usgs.gov/nwis/qwdata"
   pkg.env$stat = "https://waterservices.usgs.gov/nwis/stat/"
   pkg.env$useNat = "https://waterdata.usgs.gov/nwis/water_use"
+  pkg.env$pCode = "https://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes"
   # NOTE: state water use are still in: constructUseURL
 
   pkg.env$wqpData = "https://www.waterqualitydata.us/Result/search"

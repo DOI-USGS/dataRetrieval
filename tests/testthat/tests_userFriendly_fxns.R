@@ -392,3 +392,13 @@ test_that("Construct NWIS urls", {
   rawSampleURL_Zip <- constructWQPURL('USGS-01594440','01075', '', '', TRUE)
   expect_equal(rawSampleURL_Zip, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075&sorted=no&mimeType=tsv&zip=yes")
 })
+
+
+context("pCode Stuff")
+test_that("pCode Stuff", {
+  paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
+  expect_equal(nrow(paramINFO), 4)
+  
+  paramINFO <- readNWISpCode("all")
+  expect_equal(attr(paramINFO, "url"),"https://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units")
+})
