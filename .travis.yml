@@ -28,6 +28,9 @@ env:
      - NOT_CRAN="true"
      - _R_CHECK_FORCE_SUGGESTS_=false
      
+install:
+  - travis_wait 30 Rscript -e "0" 
+     
 warnings_are_errors: true
 
 r_github_packages:
