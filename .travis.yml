@@ -32,6 +32,9 @@ script: travis_wait 30 ./travis-tool.sh run_tests
      
 warnings_are_errors: true
 
+install:
+  - travis_wait 30 Rscript -e "0" 
+
 r_github_packages:
   - jimhester/covr
 
