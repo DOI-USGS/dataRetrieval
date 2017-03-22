@@ -135,6 +135,22 @@ whatWQPdata <- function(..., saveFile = tempfile()){
   
   y[,grep("Count",names(y))] <- sapply(y[,grep("Count",names(y))], as.numeric)
   
+  names(y)[names(y) == "type"] <- paste("type",letters[1:length(names(y)[names(y) == "type"])],sep="_")
+  
+  if(all(c("type_a","type_b","features.type") %in% names(y))){
+    y$total_type <- paste(y$type_a, y$features.type, y$type_b)
+    y$type_a <- NULL
+    if(all(y$type_b == "Point")){
+      y$lon <- sapply(y$coordinates, function(x) x[[1]][1])
+      y$lat <- sapply(y$coordinates, function(x) x[[2]][1])
+    }
+    y$type_b <- NULL
+    y$coordinates <- NULL
+    y$features.type <- NULL
+    y <- y[,c("total_type","lat","lon",names(y)[!(names(y) %in% c("total_type","lat","lon"))])]
+  }
+
+  
   attr(y, "queryTime") <- Sys.time()
   attr(y, "url") <- urlCall
   attr(y, "file") <- saveFile
