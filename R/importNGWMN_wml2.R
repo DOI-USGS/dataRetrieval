@@ -5,9 +5,8 @@
 #' 
 #' @param input character or raw, containing the url for the retrieval or a path to the data file, or raw XML.
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character
-#' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
-#' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
-#' Possible values are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' @param tz character to set timezone attribute of datetime. Default is UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
+#' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @return mergedDF a data frame source, time, value, uom, uomTitle, comment, gmlID
 #' @export

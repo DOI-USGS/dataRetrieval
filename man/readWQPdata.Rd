@@ -140,6 +140,12 @@ wqp.summary_WI <- readWQPdata(arg_3, statecode="WI",
 dailyLexingtonVA <- readWQPdata(statecode = "Virginia", 
                                 countycode="Lexington", 
                                 parameterCd = "00010") 
+                                
+# Biological data:
+bioData <- readWQPdata(statecode = "WI",
+                       countycode = "Dane",
+                       providers = "BIODATA")
+                                
 }
 }
 \keyword{WQP}
