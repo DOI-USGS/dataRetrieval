@@ -28,8 +28,18 @@ readNWISpCode <- function(parameterCd){
   parameterCd.orig <- parameterCd
   parameterCd <- parameterCd[!is.na(parameterCd)]
   
+  baseURL <- drURL("pCode", Access=pkg.env$access)
+  
+  fullURL <- appendDrURL(baseURL,radio_pm_search="param_group",
+                         pm_group="All+--+include+all+parameter+groups",
+                         show="parameter_group_nm",
+                         show="parameter_nm",
+                         show="casrn",
+                         show="srsname",
+                         show="parameter_units",
+                         format="rdb")
+  
   if(any(parameterCd == "all")){
-    fullURL <- "https://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units"
     parameterData <- importRDB1(fullURL, asDateTime = FALSE)
   } else {
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
@@ -37,6 +47,16 @@ readNWISpCode <- function(parameterCd){
   
     if(nrow(parameterData) != length(parameterCd)){
       if(length(parameterCd) == 1){
+        
+        suburl <- appendDrURL(baseURL,radio_pm_search="pm_search",
+                               pm_search=parameterCd,
+                               show="parameter_group_nm",
+                               show="parameter_nm",
+                               show="casrn",
+                               show="srsname",
+                               show="parameter_units",
+                               format="rdb")
+        
         suburl <- paste0("https://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=pm_search",
                      "&pm_search=", parameterCd,
                      "&format=rdb", "&show=parameter_group_nm",
@@ -44,7 +64,7 @@ readNWISpCode <- function(parameterCd){
                      "&show=srsname", "&show=parameter_units")
         parameterData <- importRDB1(suburl,asDateTime = FALSE)
       } else {
-        fullURL <- "https://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units"
+        
         fullPcodeDownload <- importRDB1(fullURL)
         parameterData <- fullPcodeDownload[fullPcodeDownload$parameter_cd %in% parameterCd,]
       }
@@ -62,7 +82,5 @@ readNWISpCode <- function(parameterCd){
     parameterData <- rbind(parameterData, na.params)
   }
   
-  
   return(parameterData)
-  
 }

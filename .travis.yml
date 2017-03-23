@@ -6,7 +6,6 @@
 
 language: r
 cache: packages
-sudo: false
 dist: trusty
 
 matrix:
@@ -31,8 +30,10 @@ env:
      
 warnings_are_errors: true
 
-install:
-  - travis_wait 30 Rscript -e "0" 
+script: 
+  - |
+    R CMD build .
+    travis_wait 20 R CMD check dataRetrieval*tar.gz
 
 r_github_packages:
   - jimhester/covr
