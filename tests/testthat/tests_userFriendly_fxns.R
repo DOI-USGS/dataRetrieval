@@ -400,5 +400,5 @@ test_that("pCode Stuff", {
   expect_equal(nrow(paramINFO), 4)
   
   paramINFO <- readNWISpCode("all")
-  expect_equal(attr(paramINFO, "url"),"https://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units")
+  expect_equal(attr(paramINFO, "url"),"https://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units&format=rdb")
 })
