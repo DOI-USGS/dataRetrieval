@@ -256,7 +256,7 @@ context("NGWMN")
 test_that("NGWMN functions working", {
   testthat::skip_on_cran()
   noDataSite <- "UTGS.401544112060301"
-  noDataSite <- readNGWMNlevels(featureID = noDataSite)
+  noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
   expect_true(is.data.frame(noDataSite))
   
   #bounding box and a bigger request
@@ -267,7 +267,7 @@ test_that("NGWMN functions working", {
   
   #one site
   site <- "USGS.430427089284901"
-  oneSite <- readNGWMNlevels(featureID = site)
+  oneSite <- readNGWMNlevels(siteNumbers = site)
   siteInfo <- readNGWMNsites(site)
   expect_true(is.numeric(oneSite$value))
   expect_true(is.character(oneSite$site))
@@ -276,7 +276,7 @@ test_that("NGWMN functions working", {
   expect_true(nrow(oneSite) > 0)
   
   #non-USGS site
-  data <- readNGWMNlevels(featureID = "MBMG.1388")
+  data <- readNGWMNlevels(siteNumbers = "MBMG.1388")
   expect_true(nrow(data) > 1)
   expect_true(is.numeric(oneSite$value))
   
@@ -284,7 +284,7 @@ test_that("NGWMN functions working", {
   
   na_colons <- c(NA, bboxSites$site[200:212], NA, NA)
   returnDF <- readNGWMNdata(service = "observation", 
-                            featureID = na_colons, asDateTime = FALSE)
+                            siteNumbers = na_colons, asDateTime = FALSE)
   expect_is(returnDF, "data.frame")
   expect_true(nrow(returnDF) > 1)
   expect_true(!is.null(attributes(returnDF)$siteInfo))

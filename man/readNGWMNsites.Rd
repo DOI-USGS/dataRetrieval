@@ -4,10 +4,10 @@
 \alias{readNGWMNsites}
 \title{Retrieve site data from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
 \usage{
-readNGWMNsites(featureID)
+readNGWMNsites(siteNumbers)
 }
 \arguments{
-\item{featureID}{character Vector of feature IDs formatted with agency code and site number 
+\item{siteNumbers}{character Vector of feature IDs formatted with agency code and site number 
 separated by a period or semicolon, e.g. \code{USGS.404159100494601}.}
 }
 \value{
@@ -26,7 +26,7 @@ Retrieve site data from the National Ground Water Monitoring Network \url{http:/
 \dontrun{
 #one site
 site <- "USGS.430427089284901"
-oneSite <- readNGWMNsites(featureID = site)
+oneSite <- readNGWMNsites(siteNumbers = site)
 
 #multiple sites
 sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
@@ -34,7 +34,7 @@ multiSiteInfo <- readNGWMNsites(sites)
 
 #non-USGS site
 site <- "MBMG.892195"
-siteInfo <- readNGWMNsites(featureID = site)
+siteInfo <- readNGWMNsites(siteNumbers = site)
 
 }
 }
