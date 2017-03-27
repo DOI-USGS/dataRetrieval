@@ -84,7 +84,9 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
     }
     nonDateCols <- grep("date",names(mergedDF), value=TRUE, invert = TRUE)
     
-    mergedDF[nonDateCols][mergedDF[nonDateCols] == "" | mergedDF[nonDateCols]== -999999.0] <- NA
+    if(length(mergedDF) > 0){
+      mergedDF[nonDateCols][mergedDF[nonDateCols] == "" | mergedDF[nonDateCols]== -999999.0] <- NA
+    }
     attr(mergedDF, "gml:identifier") <- xml_text(xml_find_all(returnedDoc, ".//gml:identifier")) 
     attr(mergedDF, "generationDate") <- xml_text(xml_find_all(returnedDoc, ".//wml2:generationDate")) 
     meta <- xml_find_all(returnedDoc, ".//gmd:contact")
@@ -146,6 +148,9 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
   
   gmlID <- xml_attr(returnedDoc,"id") #TODO: make this an attribute
   TVP <- xml_find_all(returnedDoc, ".//wml2:MeasurementTVP")#time-value pairs
+  if(length(TVP) == 0) { #empty nodes on some sites
+    return(data.frame())
+  }
   rawTime <- xml_text(xml_find_all(TVP,".//wml2:time"))
   
   valueNodes <- xml_find_all(TVP,".//wml2:value")
