@@ -7,7 +7,12 @@
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
-#' @param tz timezone as a character string. See \code{OlsonNames()} for a list of possibilities.
+#' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+#' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
+#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
+#' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+#' for more information on time zones.
 #' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html#Service} for a complete list of options.  A list of arguments can also be supplied. 
 #' One important argument to include is 'service'. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
 #' (for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 

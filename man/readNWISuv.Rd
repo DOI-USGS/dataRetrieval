@@ -5,7 +5,7 @@
 \title{Instantaneous value data retrieval from USGS (NWIS)}
 \usage{
 readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "",
-  tz = "")
+  tz = "UTC")
 }
 \arguments{
 \item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
@@ -20,10 +20,12 @@ See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.h
 retrieval for the latest possible record. Simple date arguments are specified in local time.
 See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.}
 
-\item{tz}{character to set timezone attribute of dateTime. Default is an empty quote, which converts the 
-dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
+"America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
+"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+for more information on time zones.}
 }
 \value{
 A data frame with the following columns:

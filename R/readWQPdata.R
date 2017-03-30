@@ -5,7 +5,12 @@
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied. 
 #' @param querySummary logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the \dots argument
-#' @param tz timezone as a character string. See \code{OlsonNames()} for a list of possibilities.
+#' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+#' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
+#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
+#' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+#' for more information on time zones.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
