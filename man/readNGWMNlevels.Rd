@@ -4,10 +4,10 @@
 \alias{readNGWMNlevels}
 \title{Retrieve groundwater levels from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
 \usage{
-readNGWMNlevels(featureID, asDateTime = TRUE, tz = "")
+readNGWMNlevels(siteNumbers, asDateTime = TRUE, tz = "")
 }
 \arguments{
-\item{featureID}{character Vector of feature IDs formatted with agency code and site number 
+\item{siteNumbers}{character Vector of feature IDs formatted with agency code and site number 
 separated by a period or semicolon, e.g. \code{USGS.404159100494601}.}
 
 \item{asDateTime}{logical Should dates and times be converted to date/time objects,
@@ -26,7 +26,7 @@ Retrieve groundwater levels from the National Ground Water Monitoring Network \u
 \dontrun{
 #one site
 site <- "USGS.430427089284901"
-oneSite <- readNGWMNlevels(featureID = site)
+oneSite <- readNGWMNlevels(siteNumbers = site)
 
 #multiple sites
 sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
@@ -34,10 +34,10 @@ multiSiteData <- readNGWMNlevels(sites)
 
 #non-USGS site
 site <- "MBMG.892195"
-data <- readNGWMNlevels(featureID = site, asDateTime = FALSE)
+data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
 
 #site with no data returns empty data frame
 noDataSite <- "UTGS.401544112060301"
-noDataSite <- readNGWMNlevels(featureID = noDataSite)
+noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
 }
 }

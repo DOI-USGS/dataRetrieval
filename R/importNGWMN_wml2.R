@@ -84,13 +84,14 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
     }
     nonDateCols <- grep("date",names(mergedDF), value=TRUE, invert = TRUE)
     
-    mergedDF[nonDateCols][mergedDF[nonDateCols] == "" | mergedDF[nonDateCols]== -999999.0] <- NA
+    if(length(mergedDF) > 0){
+      mergedDF[nonDateCols][mergedDF[nonDateCols] == "" | mergedDF[nonDateCols]== -999999.0] <- NA
+    }
     attr(mergedDF, "gml:identifier") <- xml_text(xml_find_all(returnedDoc, ".//gml:identifier")) 
     attr(mergedDF, "generationDate") <- xml_text(xml_find_all(returnedDoc, ".//wml2:generationDate")) 
     meta <- xml_find_all(returnedDoc, ".//gmd:contact")
     attr(mergedDF, "contact") <- xml_attr(meta, "href")
     attr(mergedDF, "responsibleParty") <- xml_text(xml_find_all(meta, ".//gco:CharacterString"))
-    
     
   }else if(response == "GetFeatureOfInterestResponse"){
     featureMembers <- xml_find_all(returnedDoc, ".//sos:featureMember")
@@ -146,6 +147,11 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
   
   gmlID <- xml_attr(returnedDoc,"id") #TODO: make this an attribute
   TVP <- xml_find_all(returnedDoc, ".//wml2:MeasurementTVP")#time-value pairs
+  if(length(TVP) == 0) { #empty nodes on some sites
+    return(data.frame(site = character(0), source = character(0), date = character(0),
+                      time = character(0), dateTime = character(0), value = numeric(0),
+                      uom = character(0), comment = charater(0), stringsAsFactors = FALSE))
+  }
   rawTime <- xml_text(xml_find_all(TVP,".//wml2:time"))
   
   valueNodes <- xml_find_all(TVP,".//wml2:value")
