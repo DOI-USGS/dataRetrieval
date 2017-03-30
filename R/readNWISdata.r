@@ -312,6 +312,10 @@ readNWISdots <- function(...){
   names(values)[names(values) == "statecode"] <- "stateCd"
   if("stateCd" %in% names(values)){
     values["stateCd"] <- stateCdLookup(values["stateCd"], "postal")
+    values[["stateCd"]][values["stateCd"] == "AS"] <- "AQ" #Leaving the correct abb in stateCd
+    if(values["stateCd"] == "UM"){
+      stop("NWIS does not include U.S. Minor Outlying Islands")
+    }
   }
   
   names(values)[names(values) == "countycode"] <- "countyCd"
