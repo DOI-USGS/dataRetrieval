@@ -6,7 +6,7 @@
 #' @param asDateTime logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
 #' \code{FALSE} since time zone information is not included.  
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
-#' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
+#' date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
@@ -98,7 +98,7 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
 #' or returned as character?  Defaults to \code{TRUE}.  Must be set to \code{FALSE} if a site 
 #' contains non-standard dates.
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
-#' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
+#' date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
