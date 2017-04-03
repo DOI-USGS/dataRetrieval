@@ -85,6 +85,9 @@ test_that("General NWIS retrievals working", {
                                   endDate = "2015-01-30")
   expect_gt(nrow(dailyStaffordVA),1)
   
+  AS <- readNWISdata(stateCd = "AS", service="site")
+  expect_gt(nrow(AS),0)
+  
 })
 
 

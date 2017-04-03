@@ -11,9 +11,12 @@ importNGWMN(input, asDateTime = FALSE, tz = "UTC")
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character}
 
-\item{tz}{character to set timezone attribute of datetime. Default is UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
-Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
+Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+"America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
+"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+for more information on time zones.}
 }
 \value{
 mergedDF a data frame source, time, value, uom, uomTitle, comment, gmlID

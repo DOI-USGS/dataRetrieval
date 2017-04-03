@@ -5,7 +5,7 @@
 \title{Raw Data Import for USGS NWIS QW Data}
 \usage{
 readNWISqw(siteNumbers, parameterCd, startDate = "", endDate = "",
-  expanded = TRUE, reshape = FALSE, tz = "")
+  expanded = TRUE, reshape = FALSE, tz = "UTC")
 }
 \arguments{
 \item{siteNumbers}{character of USGS site numbers.  This is usually an 8 digit number}
@@ -29,10 +29,12 @@ sufficient information for unbiased statistical analysis.}
 If \code{FALSE} (default), then return a long data frame with each water-quality result in a single row. This
 argument is only applicable to expanded data. Data requested using \code{expanded=FALSE} is always returned in the wide format.}
 
-\item{tz}{character to set timezone attribute of output columns: startDateTime and endDateTime. Default is an empty quote, which converts the 
-datetimes to UTC (properly accounting for daylight savings times).
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
+"America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
+"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+for more information on time zones.}
 }
 \value{
 A data frame with at least the following columns:
