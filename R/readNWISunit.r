@@ -13,10 +13,12 @@
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record. Simple date arguments are specified in local time.
 #' See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.
-#' @param tz character to set timezone attribute of dateTime. Default is an empty quote, which converts the 
-#' dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+#' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+#' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
+#' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+#' for more information on time zones.
 #' @keywords data import USGS web service
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
@@ -66,7 +68,7 @@
 #'                            "2014-10-10T00:00Z", "2014-10-10T23:59Z")
 #' }
 #' 
-readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz=""){  
+readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz="UTC"){  
   
   url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,"uv",format="xml")
 
@@ -246,10 +248,12 @@ readNWISrating <- function (siteNumber,type="base",convertType = TRUE){
 #' retrieval for the earliest possible record.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record.
-#' @param tz character to set timezone attribute of dateTime. Default is an empty quote, which converts the 
-#' dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+#' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+#' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
+#' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+#' for more information on time zones.
 #' @param expanded logical. Whether or not (TRUE or FALSE) to call the expanded data.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
@@ -289,7 +293,7 @@ readNWISrating <- function (siteNumber,type="base",convertType = TRUE){
 #' Meas07227500.ex <- readNWISmeas("07227500",expanded=TRUE)
 #' Meas07227500.exRaw <- readNWISmeas("07227500",expanded=TRUE, convertType = FALSE)
 #' }
-readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=FALSE, convertType = TRUE){  
+readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expanded=FALSE, convertType = TRUE){  
   
   # Doesn't seem to be a WaterML1 format option
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"meas", expanded = expanded)
@@ -352,10 +356,12 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #' retrieval for the latest possible record.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
-#' @param tz character to set timezone attribute of dateTime. Default is an empty quote, which converts the 
-#' dateTimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+#' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+#' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
+#' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+#' for more information on time zones.
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -393,7 +399,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="", expanded=F
 #' #handling of data where date has no day
 #' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01") 
 #' }
-readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE, tz=""){  
+readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE, tz="UTC"){  
   
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="tsv")
   data <- importRDB1(url,asDateTime=TRUE, convertType = convertType, tz=tz)
@@ -500,7 +506,7 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' Retrieves water use data from USGS Water Use Data for the Nation.  See \url{https://waterdata.usgs.gov/nwis/wu} for 
 #' more information.  All available use categories for the supplied arguments are retrieved. 
 #' 
-#' @param  stateCd could be character (full name, abbreviation, id), or numeric (id). Only one is accepted per query.  
+#' @param stateCd could be character (full name, abbreviation, id), or numeric (id). Only one is accepted per query.  
 #' @param countyCd could be character (name, with or without "County", or "ALL"), numeric (id), or code{NULL}, which will 
 #' return state or national data depending on the stateCd argument.  \code{ALL} may also be supplied, which will return data 
 #' for every county in a state. Can be a vector of counties in the same state.  

@@ -4,8 +4,8 @@
 \alias{readWQPqw}
 \title{Raw Data Import for Water Quality Portal}
 \usage{
-readWQPqw(siteNumbers, parameterCd, startDate = "", endDate = "", tz = "",
-  querySummary = FALSE)
+readWQPqw(siteNumbers, parameterCd, startDate = "", endDate = "",
+  tz = "UTC", querySummary = FALSE)
 }
 \arguments{
 \item{siteNumbers}{character site number. This needs to include the full agency code prefix.}
@@ -19,11 +19,12 @@ retrieval for the earliest possible record. Date arguments are always specified 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record. Date arguments are always specified in local time.}
 
-\item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the 
-datetimes to UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
-querySummary logical to look at number of records and unique sites that will be returned from this query.}
+"America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
+"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+for more information on time zones.}
 
 \item{querySummary}{logical to look at number of records and unique sites that will be returned from this query.}
 }

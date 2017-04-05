@@ -49,9 +49,12 @@ test_that("External importRDB1 tests", {
   
   
   site <- "05427850"
-  url <- constructNWISURL(site,"00060","2015-01-01", "","dv",format="tsv")
-  urlData <- importRDB1(url)
-  expect_is(urlData, "data.frame")
+
+  url <- constructNWISURL(site,"00060","2015-01-01", "","dv",
+                          format="tsv",
+                          statCd = "laksjd")
+  # And....now there's data there:
+  expect_error(importRDB1(url))
 })
 
 context("importRDB")
@@ -121,10 +124,13 @@ test_that("External importWaterML1 test", {
   expect_that(nrow(inactiveSite) == 0, is_true())
 
   inactiveAndActive <- c("07334200","05212700")
-  inactiveAndActive <- constructNWISURL(inactiveAndActive, "00060", "2014-01-01", "2014-01-10",'dv')
+  inactiveAndActive <- constructNWISURL(inactiveAndActive, "00060", 
+                                        "2014-01-01", "2014-12-31",'dv')
   inactiveAndActive <- importWaterML1(inactiveAndActive)
   # saveRDS(inactiveAndActive, "rds/inactiveAndActive.rds")
-  expect_that(length(unique(inactiveAndActive$site_no)) == 1, is_true())
+  # 
+  expect_true(length(unique(inactiveAndActive$site_no)) < 2)
+  
   
   #raw XML
   url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
