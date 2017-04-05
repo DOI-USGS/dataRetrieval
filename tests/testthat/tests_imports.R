@@ -50,8 +50,8 @@ test_that("External importRDB1 tests", {
   
   site <- "05427850"
   url <- constructNWISURL(site,"00060","2015-01-01", "","dv",format="tsv")
-  expect_message(importRDB1(url))
-
+  urlData <- importRDB1(url)
+  expect_is(urlData, "data.frame")
 })
 
 context("importRDB")
