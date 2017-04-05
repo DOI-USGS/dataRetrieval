@@ -29,21 +29,7 @@
 #' }
 getWebServiceData <- function(obs_url, ...){
   
-  returnedList <- tryCatch({
-    retryGetOrPost(obs_url, ...)
-  }, error = function(e){
-    NULL
-  })
-    
-  if(is.null(returnedList)){
-    message("Switching from https to http")
-    obs_url <- gsub("https", "http", obs_url)
-    returnedList <- tryCatch({
-      retryGetOrPost(obs_url, ...)
-    }, error = function(e){
-      NULL
-    })
-  } 
+  returnedList <- retryGetOrPost(obs_url, ...)
   
   if(status_code(returnedList) != 200){
     message("For: ", obs_url,"\n")

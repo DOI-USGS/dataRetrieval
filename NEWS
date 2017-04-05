@@ -1,3 +1,6 @@
+dataRetrieval 2.6.8.1
+* Added National Groundwater Monitoring Network services, and new Water Quality Portal features.  
+
 dataRetrieval 2.6.3
 ==========
 * All USGS web services are being flipped from http to https. This version of dataRetrieval will attempt to access https, if that fails, will attempt http.

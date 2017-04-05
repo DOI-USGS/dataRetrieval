@@ -49,12 +49,12 @@ test_that("External importRDB1 tests", {
   
   
   site <- "05427850"
+
   url <- constructNWISURL(site,"00060","2015-01-01", "","dv",
                           format="tsv",
                           statCd = "laksjd")
   # And....now there's data there:
   expect_error(importRDB1(url))
-
 })
 
 context("importRDB")
