@@ -146,7 +146,7 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, 
         } else {
           data$peak_dt <- as.Date(data$peak_dt, format="%Y-%m-%d")
         }
-        if(any(is.na(data$peak_dt))) {
+        if(anyNA(data$peak_dt)){
           message("Some dates could not be converted to a valid date, and were returned as NA")
         }
       }
