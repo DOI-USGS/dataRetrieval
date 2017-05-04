@@ -35,6 +35,7 @@
 #' }
 #' 
 #' @seealso \code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
+#' @importFrom lubridate parse_date_time
 #' @export
 #' @keywords data import USGS web service
 #' @examples
@@ -64,7 +65,7 @@ readNWISdv <- function (siteNumbers,parameterCd,startDate="",endDate="",statCd="
 
   data <- importWaterML1(url, asDateTime=FALSE)
   if(nrow(data)>0){
-    data$dateTime <- as.Date(data$dateTime)
+    data$dateTime <- as.Date(parse_date_time(data$dateTime))
     data$tz_cd <- NULL
     
     names(data)[names(data) == "dateTime"] <- "Date"    
