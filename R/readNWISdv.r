@@ -65,7 +65,6 @@ readNWISdv <- function (siteNumbers,parameterCd,startDate="",endDate="",statCd="
 
   data <- importWaterML1(url, asDateTime=FALSE)
   if(nrow(data)>0){
-    data$dateTime <- as.Date(parse_date_time(data$dateTime))
     data$tz_cd <- NULL
     
     names(data)[names(data) == "dateTime"] <- "Date"    
