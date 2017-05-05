@@ -185,7 +185,7 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
                                  valueType=retval$ResultSampleFractionText,
                                  stringsAsFactors=FALSE)
       
-      if(any(!is.na(variableInfo$parameterCd))){
+      if(!anyNA(variableInfo$parameterCd)){
         pcodes <- unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)])
         pcodes <- pcodes["" != pcodes]
         paramINFO <- readNWISpCode(pcodes)
