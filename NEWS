@@ -1,4 +1,4 @@
-dataRetrieval 2.6.8
+dataRetrieval 2.7.0
 ==========
 * Added National Groundwater Monitoring Network services
 * Converted WaterML2 code from XML to XML2 dependency. NOTE: The output of this the parseWaterML2 function has changed. This is a first step to a more robust WaterML2 parser
