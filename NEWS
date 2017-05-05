@@ -1,5 +1,11 @@
-dataRetrieval 2.6.8.1
-* Added National Groundwater Monitoring Network services, and new Water Quality Portal features.  
+dataRetrieval 2.7.0
+==========
+* Added National Groundwater Monitoring Network services
+* Converted WaterML2 code from XML to XML2 dependency. NOTE: The output of this the parseWaterML2 function has changed. This is a first step to a more robust WaterML2 parser
+* Added new Water Quality Portal features: whatWQPmetrics, whatWQPdata, whatWQPsamples
+* Bug fix on converting GET -> POST
+* Bug fix on state abbrieviations
+* Minor updates to internal code to improve efficiencies.
 
 dataRetrieval 2.6.3
 ==========
