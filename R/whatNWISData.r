@@ -73,7 +73,7 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
   }
   
   if(!("all" %in% parameterCd)){
-    if(any(!is.na(parameterCd))){
+    if(anyNA(parameterCd)){
       pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
       
       if(!pcodeCheck){
