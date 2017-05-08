@@ -222,6 +222,9 @@ test_that("state county tests",{
   expect_equal(index, 2246)
   fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
   expect_equal(fromIDs, "Bacon County")
+  counties <-  c("51001","51003")
+  already_ready <- countyCdLookup(county = counties)
+  expect_equal(counties, already_ready)
 })
 
 context("water year column")

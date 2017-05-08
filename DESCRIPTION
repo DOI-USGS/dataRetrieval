@@ -44,5 +44,5 @@ Suggests:
 VignetteBuilder: knitr
 BuildVignettes: true
 BugReports: https://github.com/USGS-R/dataRetrieval/issues
-URL: https://pubs.er.usgs.gov/publication/tm4A10
+URL: https://pubs.usgs.gov/tm/04/a10/
 RoxygenNote: 6.0.1

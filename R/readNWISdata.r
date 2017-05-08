@@ -119,6 +119,9 @@
 #'                                 parameterCd = "00060",
 #'                                 startDate = "2015-01-01",
 #'                                 endDate = "2015-01-30")
+#' va_counties <- c("51001","51003","51005","51007","51009","51011","51013","51015")
+#' va_counties_data <- readNWISdata(startDate = "2015-01-01", endDate = "2015-12-31", 
+#' parameterCd = "00060", countycode = va_counties)
 #' }
 readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   
@@ -236,8 +239,17 @@ stateCdLookup <- function(input, outputType="postal"){
 #' name <- countyCdLookup(state = "OH", county = 13, output = "fullName")
 #' index <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "tableIndex")
 #' fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
+#' already_correct <- countyCdLookup(county = "51001")
 countyCdLookup <- function(state, county, outputType = "id"){
   outputType <- match.arg(outputType, c("fullName","tableIndex","id","fullEntry"))
+  
+  if(missing(state)){
+    return(county)
+  }
+  
+  if(missing(county)){
+    stop("No county code provided")
+  }
   
   #first turn state into stateCd postal name
   stateCd <- stateCdLookup(state,outputType = "postal")
@@ -325,9 +337,11 @@ readNWISdots <- function(...){
   
   names(values)[names(values) == "countycode"] <- "countyCd"
   if("countyCd" %in% names(values)){
-    values["countyCd"] <- paste0(stateCdLookup(values["stateCd"], "id"), 
-                                 countyCdLookup(values["stateCd"], values["countyCd"], "id"))
-    values <- values[names(values) != "stateCd"]
+    if("stateCd" %in% names(values)){
+      values["countyCd"] <- paste0(stateCdLookup(values["stateCd"], "id"), 
+                                   countyCdLookup(values["stateCd"], values["countyCd"], "id"))
+      values <- values[names(values) != "stateCd"]      
+    }
   }
   
   if (service %in% c("qwdata","measurements")){
