@@ -128,6 +128,9 @@ dailyStaffordVA <- readNWISdata(stateCd = "Virginia",
                                 parameterCd = "00060",
                                 startDate = "2015-01-01",
                                 endDate = "2015-01-30")
+va_counties <- c("51001","51003","51005","51007","51009","51011","51013","51015")
+va_counties_data <- readNWISdata(startDate = "2015-01-01", endDate = "2015-12-31", 
+parameterCd = "00060", countycode = va_counties)
 }
 }
 \seealso{

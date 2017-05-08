@@ -5,7 +5,6 @@ appveyor.yml
 .gitignore
 dataRetrieval.Rproj
 examplePhosQuery.R
-README.md
 dataRetrieval-concordance.tex
 ^.*\.Rproj$
 ^\.Rproj\.user$
