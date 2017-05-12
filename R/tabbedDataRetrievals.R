@@ -22,7 +22,7 @@
 #' 
 #' Please see \url{https://pubs.er.usgs.gov/publication/tm4A10} for more information.
 #'
-#' @name dataRetrieval-package
+#' @name dataRetrieval
 #' @docType package
 #' @author Laura De Cicco \email{ldecicco@@usgs.gov}
 #' @keywords USGS, web services
