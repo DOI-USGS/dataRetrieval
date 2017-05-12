@@ -81,7 +81,12 @@ whatNWISsites <- function(...){
   retVal <- retVal[!duplicated(retVal),]
 
   attr(retVal, "url") <- urlCall
-  attr(retVal, "queryTime") <- Sys.time()
+  
+  timenow <- Sys.time()
+  
+  attr(retVal, "queryTime") <- timenow
+  # Backwards compatible, might remove later:
+  retVal$queryTime <- timenow
   
   return(retVal)
 }

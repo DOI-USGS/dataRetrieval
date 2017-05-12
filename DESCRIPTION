@@ -3,14 +3,15 @@ Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
 Version: 2.7.0
 Date: 2017-05-05
-Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
+Authors@R: c(person("Robert", "Hirsch", role = c("aut"),
     email = "rhirsch@usgs.gov"),
     person("Laura", "DeCicco", role = c("aut","cre"),
     email = "ldecicco@usgs.gov"),
-    person("David","Lorenz", role=c("aut"),
-    email = "lorenz@usgs.gov"),
+    person("David","Lorenz", role=c("aut")),
     person("Jordan", "Read", role = c("ctb"),
     email = "jread@usgs.gov"),
+    person("Jordan", "Walker", role = c("ctb"),
+    email = "jiwalker@usgs.gov"),
     person("Lindsay","Carr", role=c("ctb"),
     email = "lcarr@usgs.gov"),
     person("David","Watkins", role=c("aut"),
