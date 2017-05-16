@@ -6,6 +6,7 @@ appveyor.yml
 dataRetrieval.Rproj
 examplePhosQuery.R
 dataRetrieval-concordance.tex
+README.md
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
