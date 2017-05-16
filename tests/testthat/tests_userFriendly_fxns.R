@@ -399,6 +399,9 @@ test_that("Construct NWIS urls", {
 
 context("pCode Stuff")
 test_that("pCode Stuff", {
+  
+  testthat::skip_on_cran()
+  
   paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
   expect_equal(nrow(paramINFO), 4)
   
