@@ -133,7 +133,7 @@ htmlTable(data.df,
 
 # USGS Web Retrievals
 
-In this section, examples of National Water Information System (NWIS) retrievals show how to get raw data into R. This data includes [site information](#site-information), measured [parameter information](#parameter-information), historical [daily values](#daily-data), [unit values](#unit-data) (which include real-time data but can also include other sensor data stored at regular time intervals), [water quality data](#water-quality-data), [groundwater level data](#groundwater-level-data), [peak flow data](#peak-flow-data), [rating curve data](#rating-curve-data), and [surface-water measurement data](#surface-water-measurement-data). The section [Embedded Metadata](#embedded-metadata) shows instructions for getting metadata that is attached to each returned data frame.
+In this section, examples of National Water Information System (NWIS) retrievals show how to get raw data into R. This data includes [site information](#site-information), measured [parameter information](#parameter-information), historical [daily values](#daily-data), [unit values](#unit-data) (which include real-time data but can also include other sensor data stored at regular time intervals), [water quality data](#water-quality-data), [groundwater level data](#groundwater-level-data), [peak flow data](#peak-flow-data), [rating curve data](#rating-curve-data),  [surface-water measurement data](#surface-water-measurement-data), [water use data](#water-use-data), and [statistics data](#statistics-data). The section [Embedded Metadata](#embedded-metadata) shows instructions for getting metadata that is attached to each returned data frame.
 
 The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the `dataRetrieval` package as `siteNumber`).  Often (but not always), these ID's are 8 digits for surface-water sites and 15 digits for groundwater sites.  The first step to finding data is discovering this `siteNumber`. There are many ways to do this, one is the [National Water Information System: Mapper](https://maps.waterdata.usgs.gov/mapper/index.html).
 
@@ -182,6 +182,8 @@ htmlTable(data.df,
 
 Examples for using these site numbers, parameter codes, and statistic codes will be presented in subsequent sections.
 
+There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as "Ice".  Any value that cannot be converted to a number will be reported as NA in this package (not including remark code columns), unless the user sets an argument `convertType` to `FALSE`. In that case, the data is returned as a data frame that is entirely character columns.
+
 ## Site Information
 
 
@@ -207,7 +209,7 @@ comment(siteINFO)
 
 ### whatNWISdata
 
-To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the `whatNWISdata` function. It is possible to limit the retrieval information to a subset of services. The possible choices for services are: "dv" (daily values), "uv", "rt", or "iv" (unit values), "qw" (water-quality), "sv" (sites visits), "pk" (peak measurements), "gw" (groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link), "aw" (sites monitored by the USGS Active Groundwater Level Network External Link), and "id" (historical instantaneous values).
+To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the `whatNWISdata` function. It is possible to limit the retrieval information to a subset of services. The possible choices for services are: "dv" (daily values), "uv", or "iv" (unit values), "qw" (water-quality), "sv" (sites visits), "pk" (peak measurements), "gw" (groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link), "aw" (sites monitored by the USGS Active Groundwater Level Network External Link), and "id" (historical instantaneous values).
 
 In the following example, we limit the retrieved data to only daily data. The default for "service" is `all`, which returns all of the available data for that site. Likewise, there are arguments for parameter code (`parameterCd`) and statistic code (`statCd`) to filter the results. The default for both is to return all possible values (`all`). The returned `count_nu` for "uv" data is the count of days with returned data, not the actual count of returned values.
 
@@ -344,9 +346,6 @@ title(paste(siteInfo$station_nm,"2012"))
 legend("topleft", variableInfo$param_units, 
        col=c("black","red"),lty=c(NA,1),pch=c(1,NA))
 ```
-
-
-There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as "Ice".  Any value that cannot be converted to a number will be reported as NA in this package (not including remark code columns).
 
 
 ## Unit Data
