@@ -312,6 +312,7 @@ test_that("NGWMN functions working", {
 
 context("getWebServiceData")
 test_that("long urls use POST", {
+  testthat::skip_on_cran()
   url <- paste0(rep("reallylongurl", 200), collapse = '')
   with_mock(
     RETRY = function(method, ...) {
@@ -324,7 +325,9 @@ test_that("long urls use POST", {
     .env = "httr"
   )
 })
+
 test_that("ngwmn urls don't use post", {
+  testthat::skip_on_cran()
   url <- paste0(rep("urlwithngwmn", 200), collapse = '')
   with_mock(
     RETRY = function(method, ...) {

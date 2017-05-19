@@ -39,11 +39,11 @@ Imports:
     readr (>= 1.0.0),
     jsonlite
 Suggests:
-    xtable,
+    htmlTable,
     knitr,
     testthat
-VignetteBuilder: knitr
 BuildVignettes: true
+VignetteBuilder: knitr
 BugReports: https://github.com/USGS-R/dataRetrieval/issues
 URL: https://pubs.usgs.gov/tm/04/a10/
 RoxygenNote: 6.0.1
