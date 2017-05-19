@@ -1,5 +1,5 @@
 .Rhistory
-vignettes/figure
+vignettes/figures
 appveyor.yml
 .travis.yml
 .gitignore
