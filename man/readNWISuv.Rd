@@ -14,11 +14,11 @@ readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "",
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the earliest possible record. Simple date arguments are specified in local time.
-See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.}
+See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html\#Specifying}.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record. Simple date arguments are specified in local time.
-See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.}
+See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html\#Specifying}.}
 
 \item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.

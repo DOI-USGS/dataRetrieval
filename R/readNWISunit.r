@@ -9,10 +9,10 @@
 #' @param parameterCd character USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the earliest possible record. Simple date arguments are specified in local time.
-#' See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.
+#' See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html\#Specifying}.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record. Simple date arguments are specified in local time.
-#' See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html#Specifying}.
+#' See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html\#Specifying}.
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
@@ -269,7 +269,7 @@ readNWISrating <- function (siteNumber,type="base",convertType = TRUE){
 #' }
 #'  
 #' See \url{https://waterdata.usgs.gov/usa/nwis/sw} for details about surface water, and 
-#' \url{https://waterdata.usgs.gov/nwis/help?output_formats_help#streamflow_measurement_data}
+#' \url{https://waterdata.usgs.gov/nwis/help?output_formats_help\#streamflow_measurement_data}
 #' for help on the columns and codes.
 #' 
 #' There are also several useful attributes attached to the data frame:
@@ -447,7 +447,7 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' provide statistics for each month and year within the range indivually.
 #' @param statType character type(s) of statistics to output for daily values.  Default is mean, which is the only
 #' option for monthly and yearly report types. See the statistics service documentation 
-#' at \url{https://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.  
+#' at \url{https://waterservices.usgs.gov/rest/Statistics-Service.html\#statType} for a full list of codes.  
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
