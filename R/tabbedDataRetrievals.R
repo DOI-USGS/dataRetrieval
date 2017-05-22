@@ -14,7 +14,7 @@
 #' that originally came from the United States Geological Survey, an agency of
 #' the United States Department of Interior. For more information, see the
 #' official USGS copyright policy at
-#' https://www.usgs.gov/visual-id/credit_usgs.html#copyright\cr
+#' \url{https://www.usgs.gov/visual-id/credit_usgs.html}\cr
 #' LazyLoad: \tab yes\cr
 #' }
 #'
@@ -30,9 +30,7 @@ NULL
 
 #' List of USGS parameter codes
 #'
-#' Complete list of USGS parameter codes as of November 7, 2014. The data was pulled from
-#' \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&
-#' format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}
+#' Complete list of USGS parameter codes as of May 22, 2017. 
 #'
 #' @name parameterCdFile
 #' @return parameterData data frame with information about USGS parameters.
@@ -50,7 +48,6 @@ NULL
 #'
 #'@docType data
 #'@export parameterCdFile 
-#'@keywords internal
 #'@examples
 #'head(parameterCdFile[,1:2])
 NULL

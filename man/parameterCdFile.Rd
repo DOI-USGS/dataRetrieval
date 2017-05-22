@@ -18,11 +18,8 @@ parameter_units \tab character \tab Parameter units\cr
 }
 }
 \description{
-Complete list of USGS parameter codes as of November 7, 2014. The data was pulled from
-\url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=param_group&pm_group=All+--+include+all+parameter+groups&
-format=rdb&show=parameter_group_nm&show=parameter_nm&show=casrn&show=srsname&show=parameter_units}
+Complete list of USGS parameter codes as of May 22, 2017.
 }
 \examples{
 head(parameterCdFile[,1:2])
 }
-\keyword{internal}

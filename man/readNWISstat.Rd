@@ -34,7 +34,7 @@ provide statistics for each month and year within the range indivually.}
 
 \item{statType}{character type(s) of statistics to output for daily values.  Default is mean, which is the only
 option for monthly and yearly report types. See the statistics service documentation 
-at \url{https://waterservices.usgs.gov/rest/Statistics-Service.html#statType} for a full list of codes.}
+at \url{https://waterservices.usgs.gov/rest/Statistics-Service.html} for a full list of codes.}
 }
 \value{
 A data frame with the following columns:

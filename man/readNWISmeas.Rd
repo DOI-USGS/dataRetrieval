@@ -41,7 +41,7 @@ tz_cd \tab character \tab The time zone code for the measurement_dt column \cr
 }
  
 See \url{https://waterdata.usgs.gov/usa/nwis/sw} for details about surface water, and 
-\url{https://waterdata.usgs.gov/nwis/help?output_formats_help#streamflow_measurement_data}
+\url{https://waterdata.usgs.gov/nwis/help?output_formats_help}
 for help on the columns and codes.
 
 There are also several useful attributes attached to the data frame:
