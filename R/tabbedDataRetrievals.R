@@ -14,7 +14,7 @@
 #' that originally came from the United States Geological Survey, an agency of
 #' the United States Department of Interior. For more information, see the
 #' official USGS copyright policy at
-#' \url{https://www.usgs.gov/visual-id/credit_usgs.html\#copyright}\cr
+#' \url{https://www.usgs.gov/visual-id/credit_usgs.html}\cr
 #' LazyLoad: \tab yes\cr
 #' }
 #'

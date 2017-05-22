@@ -13,7 +13,7 @@
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
-#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html\#Service} for a complete list of options.  A list of arguments can also be supplied. 
+#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A list of arguments can also be supplied. 
 #' One important argument to include is 'service'. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
 #' (for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
 #' statistics service). Note: "qw" and "measurement" calls go to: 
