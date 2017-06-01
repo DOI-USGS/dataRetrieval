@@ -28,6 +28,8 @@ env:
      - NOT_CRAN="true"
      - _R_CHECK_FORCE_SUGGESTS_=false
      
+script: travis_wait 30 ./travis-tool.sh run_tests
+     
 warnings_are_errors: true
 
 script: 
