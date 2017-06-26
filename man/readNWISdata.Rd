@@ -131,6 +131,8 @@ dailyStaffordVA <- readNWISdata(stateCd = "Virginia",
 va_counties <- c("51001","51003","51005","51007","51009","51011","51013","51015")
 va_counties_data <- readNWISdata(startDate = "2015-01-01", endDate = "2015-12-31", 
 parameterCd = "00060", countycode = va_counties)
+site_id <- '01594440'
+rating_curve <- readNWISdata(service = "rating", site_no = site_id, file_type="base")
 }
 }
 \seealso{

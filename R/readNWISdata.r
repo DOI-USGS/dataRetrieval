@@ -122,6 +122,8 @@
 #' va_counties <- c("51001","51003","51005","51007","51009","51011","51013","51015")
 #' va_counties_data <- readNWISdata(startDate = "2015-01-01", endDate = "2015-12-31", 
 #' parameterCd = "00060", countycode = va_counties)
+#' site_id <- '01594440'
+#' rating_curve <- readNWISdata(service = "rating", site_no = site_id, file_type="base")
 #' }
 readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   
@@ -140,6 +142,9 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   }
   #actually get the data
   if(length(grep("rdb",values["format"])) >0){
+    if(service == "rating"){
+      baseURL <- gsub(pattern = "&format=rdb",replacement = "", baseURL)
+    }
     retval <- importRDB1(baseURL, tz = tz, asDateTime=asDateTime, convertType=convertType)
   } else {
     retval <- importWaterML1(baseURL, tz= tz, asDateTime=asDateTime)
@@ -305,7 +310,7 @@ readNWISdots <- function(...){
     service <- "dv"
   }
   
-  match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata","stat"))
+  match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata","stat","rating"))
   
   if(service == "uv"){
     service <- "iv"
@@ -373,7 +378,7 @@ readNWISdots <- function(...){
     }
   } 
   
-  if(service %in% c("site","gwlevels","stat")){
+  if(service %in% c("site","gwlevels","stat","rating")){
     format.default <- "rdb"
   }
   
