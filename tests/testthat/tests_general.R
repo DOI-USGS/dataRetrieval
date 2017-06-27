@@ -88,6 +88,19 @@ test_that("General NWIS retrievals working", {
   AS <- readNWISdata(stateCd = "AS", service="site")
   expect_gt(nrow(AS),0)
   
+  site_id <- '01594440'
+  rating_curve <- readNWISdata(service = "rating", site_no = site_id, file_type="base")
+  rating_curve2 <- readNWISrating(siteNumber = site_id, type = "base")
+  expect_equal(attr(rating_curve,"url"), "https://waterdata.usgs.gov/nwisweb/get_ratings/?site_no=01594440&file_type=base")
+  expect_equal(rating_curve$INDEP, rating_curve2$INDEP)
+  
+  state_rating_list <- readNWISdata(service = "rating", stateCd = 55, file_type="base")
+  expect_true(all(names(state_rating_list) %in% c("agency_cd",
+                                              "site_no",
+                                              "type",
+                                              "update_time",
+                                              "url")))
+  
 })
 
 

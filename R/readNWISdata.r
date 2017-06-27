@@ -124,6 +124,7 @@
 #' parameterCd = "00060", countycode = va_counties)
 #' site_id <- '01594440'
 #' rating_curve <- readNWISdata(service = "rating", site_no = site_id, file_type="base")
+#' state_rating_list <- readNWISdata(service = "rating", stateCd = 55, file_type="base")
 #' }
 readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   
