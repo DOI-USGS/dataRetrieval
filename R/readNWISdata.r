@@ -124,7 +124,10 @@
 #' parameterCd = "00060", countycode = va_counties)
 #' site_id <- '01594440'
 #' rating_curve <- readNWISdata(service = "rating", site_no = site_id, file_type="base")
-#' state_rating_list <- readNWISdata(service = "rating", stateCd = 55, file_type="base")
+#' all_sites_base <- readNWISdata(service = "rating", file_type="base")
+#' all_sites_core <- readNWISdata(service = "rating", file_type="corr")
+#' all_sites_exsa <- readNWISdata(service = "rating", file_type="exsa")
+#' all_sites_24hrs <- readNWISdata(service = "rating", file_type="exsa", period = 24)
 #' }
 readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   
