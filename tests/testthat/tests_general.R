@@ -9,6 +9,7 @@ test_that("General NWIS retrievals working", {
   # saveRDS(multiSite, "rds/multiSite.rds")
   
   expect_error(readNWISdata(), "No arguments supplied")
+  expect_error(readNWISdata(siteNumber = NA), "NA's are not allowed in query")
   
   bBoxEx <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010")
   expect_that(length(unique(bBoxEx$site_no)) > 1, is_true())
