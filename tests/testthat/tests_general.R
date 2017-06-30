@@ -118,9 +118,12 @@ test_that("whatNWISdata",{
   expect_true(all(unique(uvDataMulti$data_type_cd) %in% c("uv","dv")))
   
   #state codes:
-  flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", parameterCd = c("00060","00010"))
-  expect_equal(unique(flowAndTemp$data_type_cd), "uv")
+  flowAndTemp <- whatNWISdata(stateCd = "WI", service = c("uv","dv"),
+                              parameterCd = c("00060","00010"),
+                              statCd = "00003")
+  expect_true(all(unique(flowAndTemp$data_type_cd) %in% c("uv","dv")))
   expect_true(all(unique(flowAndTemp$parm_cd) %in% c("00060","00010")))
+  expect_true(all(unique(flowAndTemp$stat_cd) %in% c("00003",NA)))
   
 })
 

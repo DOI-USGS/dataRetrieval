@@ -54,7 +54,9 @@
 #' # To find just unit value ('instantaneous') data:
 #' uvData <- whatNWISdata(siteNumber = '05114000',service="uv")
 #' uvDataMulti <- whatNWISdata(siteNumber = c('05114000','09423350'),service=c("uv","dv"))
-#' flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", parameterCd = c("00060","00010"))
+#' flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", 
+#'                              parameterCd = c("00060","00010"),
+#'                              statCd = "00003")
 #' }
 whatNWISdata <- function(...){
   
@@ -64,6 +66,19 @@ whatNWISdata <- function(...){
     service <- matchReturn$service
   } else {
     service <- "all"
+  }
+  
+  if("statCd" %in% names(matchReturn)){
+    statCd <- matchReturn$statCd
+    matchReturn <- matchReturn[names(matchReturn) != "statCd"]
+  } else {
+    statCd <- "all"
+  }
+  
+  if("parameterCd" %in% names(matchReturn)){
+    parameterCd <- matchReturn$parameterCd
+  } else {
+    parameterCd <- "all"
   }
   
   matchReturn$service <- "site"
@@ -76,18 +91,6 @@ whatNWISdata <- function(...){
     service[service == "iv"] <- "uv"
   }
   
-  if("statCd" %in% names(list(...))){
-    statCd <- list(...)$statCd
-  } else {
-    statCd <- "all"
-  }
-  
-  if("parameterCd" %in% names(list(...))){
-    parameterCd <- list(...)$parameterCd
-  } else {
-    parameterCd <- "all"
-  }
-  
   urlSitefile <- drURL('site', Access=pkg.env$access, seriesCatalogOutput='true',arg.list=values)
  
   SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE)
@@ -96,7 +99,7 @@ whatNWISdata <- function(...){
     SiteFile <- SiteFile[SiteFile$data_type_cd %in% service,]
   }
   if(!("all" %in% statCd)){
-    SiteFile <- SiteFile[SiteFile$stat_cd %in% statCd,]
+    SiteFile <- SiteFile[SiteFile$stat_cd %in% c(statCd,NA),]
   }
   if(!("all" %in% parameterCd)){
     SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd,]
