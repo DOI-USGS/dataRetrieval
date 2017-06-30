@@ -5,7 +5,7 @@
 \title{USGS data availability}
 \usage{
 whatNWISdata(siteNumbers, service = "all", parameterCd = "all",
-  statCd = "all")
+  statCd = "all", ...)
 }
 \arguments{
 \item{siteNumbers}{character USGS site number or multiple sites.}
@@ -19,6 +19,13 @@ instantaneous values)}
 \item{parameterCd}{character vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.}
 
 \item{statCd}{character vector of all statistic codes to return. Defaults to "all" which will not perform a filter.}
+
+\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A list of arguments can also be supplied. 
+One important argument to include is 'service'. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
+(for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
+statistics service). Note: "qw" and "measurement" calls go to: 
+\url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
+The statistics service has a limited selection of arguments (see \url{https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}).}
 }
 \value{
 A data frame with the following columns:

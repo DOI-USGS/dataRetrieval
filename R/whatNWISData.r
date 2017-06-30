@@ -11,6 +11,12 @@
 #'      instantaneous values)
 #' @param parameterCd character vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.
 #' @param statCd character vector of all statistic codes to return. Defaults to "all" which will not perform a filter.
+#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A list of arguments can also be supplied. 
+#' One important argument to include is 'service'. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
+#' (for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
+#' statistics service). Note: "qw" and "measurement" calls go to: 
+#' \url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
+#' The statistics service has a limited selection of arguments (see \url{https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}). 
 #' @keywords data import USGS web service
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
@@ -64,34 +70,43 @@
 #' site_ids <- c("01491000","01645000")
 #' flowAndTemp <- whatNWISdata(site_ids, parameterCd=c("00060","00010"))
 #' }
-whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all"){
+whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all", ...){
   
-  siteNumber <- paste(siteNumbers,collapse=",")
-  
-  if(!("all" %in% service)){
-    service <- match.arg(service, c("dv","uv","qw","ad","id","pk","sv","gw","aw","all","ad","iv"), several.ok = TRUE)
-    
-    if(service == "uv"){
-      service <- "iv"
-    }
-  } 
-  
-  if(!("all" %in% parameterCd)){
-    if(anyNA(parameterCd)){
-      pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
-      
-      if(!pcodeCheck){
-        badIndex <- which(nchar(parameterCd) != 5 | is.na(suppressWarnings(as.numeric(parameterCd))))
-        
-        stop("The following pCodes appear mistyped:",paste(parameterCd[badIndex],collapse=","))
-      } else {
-        parameterCdCheck <- readNWISpCode(parameterCd)
-      }
-      
-    }
+  if(length(list(...)) != 0){
+    valuesList <- readNWISdots(...)
+    service <- valuesList$service
+    values <- sapply(valuesList$values, function(x) URLencode(x))
+  } else {
+    values <- list(siteNumber=siteNumbers, parameterCd=parameterCd, statCd=statCd)
   }
   
-  urlSitefile <- drURL('site', Access=pkg.env$access, format='rdb', seriesCatalogOutput='true',sites=siteNumber)
+  # siteNumber <- paste(siteNumbers,collapse=",")
+  # 
+  # if(!("all" %in% service)){
+  #   service <- match.arg(service, c("dv","uv","qw","ad","id","pk","sv","gw","aw","all","ad","iv"), several.ok = TRUE)
+  #   
+  #   if(service == "uv"){
+  #     service <- "iv"
+  #   }
+  # } 
+  # 
+  # if(!("all" %in% parameterCd)){
+  #   if(anyNA(parameterCd)){
+  #     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
+  #     
+  #     if(!pcodeCheck){
+  #       badIndex <- which(nchar(parameterCd) != 5 | is.na(suppressWarnings(as.numeric(parameterCd))))
+  #       
+  #       stop("The following pCodes appear mistyped:",paste(parameterCd[badIndex],collapse=","))
+  #     } else {
+  #       parameterCdCheck <- readNWISpCode(parameterCd)
+  #     }
+  #     
+  #   }
+  # }
+  # 
+  
+  urlSitefile <- drURL('site', Access=pkg.env$access, format='rdb', seriesCatalogOutput='true', arg.list=values)
  
   SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE)
   
@@ -103,15 +118,15 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
   SiteFile <- merge(SiteFile,parameterCdINFO,by.x="parm_cd" ,by.y="parameter_cd",all=TRUE)
   
   
-  if(!("all" %in% service)){
-    SiteFile <- SiteFile[SiteFile$data_type_cd %in% service,]
-  }
-  if(!("all" %in% statCd)){
-    SiteFile <- SiteFile[SiteFile$stat_cd %in% statCd,]
-  }
-  if(!("all" %in% parameterCd)){
-    SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd,]
-  }
+  # if(!("all" %in% service)){
+  #   SiteFile <- SiteFile[SiteFile$data_type_cd %in% service,]
+  # }
+  # if(!("all" %in% statCd)){
+  #   SiteFile <- SiteFile[SiteFile$stat_cd %in% statCd,]
+  # }
+  # if(!("all" %in% parameterCd)){
+  #   SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd,]
+  # }
   
   if(nrow(SiteFile) > 0){
     SiteFile$begin_date <- as.Date(parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
