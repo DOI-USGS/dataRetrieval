@@ -4,21 +4,10 @@
 \alias{whatNWISdata}
 \title{USGS data availability}
 \usage{
-whatNWISdata(siteNumbers, service = "all", parameterCd = "all",
-  statCd = "all")
+whatNWISdata(...)
 }
 \arguments{
-\item{siteNumbers}{character USGS site number or multiple sites.}
-
-\item{service}{character. Options are "all", or one or many of "dv"(daily values),
-"uv","rt", or "iv"(unit values), "qw"(water-quality),"sv"(sites visits),"pk"(peak measurements),
-"gw"(groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link), 
-"aw" (sites monitored by the USGS Active Groundwater Level Network External Link), "id" (historical 
-instantaneous values)}
-
-\item{parameterCd}{character vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.}
-
-\item{statCd}{character vector of all statistic codes to return. Defaults to "all" which will not perform a filter.}
+\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A list of arguments can also be supplied.}
 }
 \value{
 A data frame with the following columns:
@@ -69,12 +58,11 @@ for more information.
 }
 \examples{
 \dontrun{
-availableData <- whatNWISdata('05114000')
+availableData <- whatNWISdata(siteNumber = '05114000')
 # To find just unit value ('instantaneous') data:
-uvData <- whatNWISdata('05114000',service="uv")
-uvDataMulti <- whatNWISdata(c('05114000','09423350'),service=c("uv","dv"))
-site_ids <- c("01491000","01645000")
-flowAndTemp <- whatNWISdata(site_ids, parameterCd=c("00060","00010"))
+uvData <- whatNWISdata(siteNumber = '05114000',service="uv")
+uvDataMulti <- whatNWISdata(siteNumber = c('05114000','09423350'),service=c("uv","dv"))
+flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", parameterCd = c("00060","00010"))
 }
 }
 \keyword{USGS}

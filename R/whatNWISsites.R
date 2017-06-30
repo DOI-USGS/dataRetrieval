@@ -37,8 +37,6 @@
 #' }
 whatNWISsites <- function(...){
   
-  values <- readNWISdots(...)
-  
   valuesList <- readNWISdots(...)
 
   values <- sapply(valuesList$values, function(x) URLencode(x))

@@ -103,6 +103,25 @@ test_that("General NWIS retrievals working", {
   
 })
 
+test_that("whatNWISdata",{
+  
+  #no service specified:
+  availableData <- whatNWISdata(siteNumber = '05114000')
+  expect_equal(ncol(availableData), 24)
+  
+  uvData <- whatNWISdata(siteNumber = '05114000',service="uv")
+  expect_equal(unique(uvData$data_type_cd), "uv")
+  
+  #multiple services
+  uvDataMulti <- whatNWISdata(siteNumber = c('05114000','09423350'),service=c("uv","dv"))
+  expect_true(all(unique(uvDataMulti$data_type_cd) %in% c("uv","dv")))
+  
+  #state codes:
+  flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", parameterCd = c("00060","00010"))
+  expect_equal(unique(flowAndTemp$data_type_cd), "uv")
+  expect_true(all(unique(flowAndTemp$parm_cd) %in% c("00060","00010")))
+  
+})
 
 test_that("General WQP retrievals working", {
   testthat::skip_on_cran()

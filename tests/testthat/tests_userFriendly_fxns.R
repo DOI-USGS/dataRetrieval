@@ -73,8 +73,7 @@ test_that("peak, rating curves, surface-water measurements", {
   expect_is(Meas07227500.ex$measurement_dt, 'Date')
   expect_is(Meas07227500.ex$measurement_dateTime, 'POSIXct')
   
-  emptyDF <- whatNWISdata("10312000",parameterCd = "50286")
-  expect_that(nrow(emptyDF) == 0, is_true())
+  expect_error(whatNWISdata(siteNumber = "10312000",parameterCd = "50286"))
   
   url <- "https://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000"
   x <- importRDB1(url)
