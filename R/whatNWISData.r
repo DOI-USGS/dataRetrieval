@@ -3,14 +3,7 @@
 #' Imports a table of available parameters, period of record, and count. See \url{https://waterservices.usgs.gov/rest/Site-Service.html}
 #' for more information.
 #'
-#' @param siteNumbers character USGS site number or multiple sites.
-#' @param service character. Options are "all", or one or many of "dv"(daily values),
-#'      "uv","rt", or "iv"(unit values), "qw"(water-quality),"sv"(sites visits),"pk"(peak measurements),
-#'      "gw"(groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link), 
-#'      "aw" (sites monitored by the USGS Active Groundwater Level Network External Link), "id" (historical 
-#'      instantaneous values)
-#' @param parameterCd character vector of valid parameter codes to return. Defaults to "all" which will not perform a filter.
-#' @param statCd character vector of all statistic codes to return. Defaults to "all" which will not perform a filter.
+#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A list of arguments can also be supplied. 
 #' @keywords data import USGS web service
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
@@ -57,57 +50,56 @@
 #' @importFrom lubridate parse_date_time
 #' @examples
 #' \dontrun{
-#' availableData <- whatNWISdata('05114000')
+#' availableData <- whatNWISdata(siteNumber = '05114000')
 #' # To find just unit value ('instantaneous') data:
-#' uvData <- whatNWISdata('05114000',service="uv")
-#' uvDataMulti <- whatNWISdata(c('05114000','09423350'),service=c("uv","dv"))
-#' site_ids <- c("01491000","01645000")
-#' flowAndTemp <- whatNWISdata(site_ids, parameterCd=c("00060","00010"))
+#' uvData <- whatNWISdata(siteNumber = '05114000',service="uv")
+#' uvDataMulti <- whatNWISdata(siteNumber = c('05114000','09423350'),service=c("uv","dv"))
+#' flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", 
+#'                              parameterCd = c("00060","00010"),
+#'                              statCd = "00003")
 #' }
-whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all"){
+whatNWISdata <- function(...){
   
-  siteNumber <- paste(siteNumbers,collapse=",")
+  matchReturn <- convertLists(...)
   
-  if(!("all" %in% service)){
-    service <- match.arg(service, c("dv","uv","qw","ad","id","pk","sv","gw","aw","all","ad","iv"), several.ok = TRUE)
-    
-    if(service == "uv"){
-      service <- "iv"
-    }
-  } 
-  
-  if(!("all" %in% parameterCd)){
-    if(anyNA(parameterCd)){
-      pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
-      
-      if(!pcodeCheck){
-        badIndex <- which(nchar(parameterCd) != 5 | is.na(suppressWarnings(as.numeric(parameterCd))))
-        
-        stop("The following pCodes appear mistyped:",paste(parameterCd[badIndex],collapse=","))
-      } else {
-        parameterCdCheck <- readNWISpCode(parameterCd)
-      }
-      
-    }
+  if("service" %in% names(matchReturn)){
+    service <- matchReturn$service
+  } else {
+    service <- "all"
   }
   
-  urlSitefile <- drURL('site', Access=pkg.env$access, format='rdb', seriesCatalogOutput='true',sites=siteNumber)
+  if("statCd" %in% names(matchReturn)){
+    statCd <- matchReturn$statCd
+    matchReturn <- matchReturn[names(matchReturn) != "statCd"]
+  } else {
+    statCd <- "all"
+  }
+  
+  if("parameterCd" %in% names(matchReturn)){
+    parameterCd <- matchReturn$parameterCd
+  } else {
+    parameterCd <- "all"
+  }
+  
+  matchReturn$service <- "site"
+  
+  valuesList <- readNWISdots(matchReturn)
+  
+  values <- sapply(valuesList$values, function(x) URLencode(x))
+
+  if(any(service == "iv")){
+    service[service == "iv"] <- "uv"
+  }
+  
+  urlSitefile <- drURL('site', Access=pkg.env$access, seriesCatalogOutput='true',arg.list=values)
  
   SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE)
-  
-  headerInfo <- comment(SiteFile)
-  
-  parameterCds <- unique(SiteFile$parm_cd)
-  
-  parameterCdINFO <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCds,]
-  SiteFile <- merge(SiteFile,parameterCdINFO,by.x="parm_cd" ,by.y="parameter_cd",all=TRUE)
-  
-  
+
   if(!("all" %in% service)){
     SiteFile <- SiteFile[SiteFile$data_type_cd %in% service,]
   }
   if(!("all" %in% statCd)){
-    SiteFile <- SiteFile[SiteFile$stat_cd %in% statCd,]
+    SiteFile <- SiteFile[SiteFile$stat_cd %in% c(statCd,NA),]
   }
   if(!("all" %in% parameterCd)){
     SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd,]
@@ -117,10 +109,6 @@ whatNWISdata <- function(siteNumbers,service="all",parameterCd="all",statCd="all
     SiteFile$begin_date <- as.Date(parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
     SiteFile$end_date <- as.Date(parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
   }
-  
-  comment(SiteFile) <- headerInfo
-  attr(SiteFile, "url") <- urlSitefile
-  attr(SiteFile, "queryTime") <- Sys.time()
   
   return(SiteFile)
 

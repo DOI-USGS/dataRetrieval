@@ -9,6 +9,7 @@ test_that("General NWIS retrievals working", {
   # saveRDS(multiSite, "rds/multiSite.rds")
   
   expect_error(readNWISdata(), "No arguments supplied")
+  expect_error(readNWISdata(siteNumber = NA), "NA's are not allowed in query")
   
   bBoxEx <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010")
   expect_that(length(unique(bBoxEx$site_no)) > 1, is_true())
@@ -103,6 +104,28 @@ test_that("General NWIS retrievals working", {
   
 })
 
+test_that("whatNWISdata",{
+  
+  #no service specified:
+  availableData <- whatNWISdata(siteNumber = '05114000')
+  expect_equal(ncol(availableData), 24)
+  
+  uvData <- whatNWISdata(siteNumber = '05114000',service="uv")
+  expect_equal(unique(uvData$data_type_cd), "uv")
+  
+  #multiple services
+  uvDataMulti <- whatNWISdata(siteNumber = c('05114000','09423350'),service=c("uv","dv"))
+  expect_true(all(unique(uvDataMulti$data_type_cd) %in% c("uv","dv")))
+  
+  #state codes:
+  flowAndTemp <- whatNWISdata(stateCd = "WI", service = c("uv","dv"),
+                              parameterCd = c("00060","00010"),
+                              statCd = "00003")
+  expect_true(all(unique(flowAndTemp$data_type_cd) %in% c("uv","dv")))
+  expect_true(all(unique(flowAndTemp$parm_cd) %in% c("00060","00010")))
+  expect_true(all(unique(flowAndTemp$stat_cd) %in% c("00003",NA)))
+  
+})
 
 test_that("General WQP retrievals working", {
   testthat::skip_on_cran()

@@ -307,6 +307,10 @@ readNWISdots <- function(...){
   
   matchReturn <- convertLists(...)
   
+  if(anyNA(unlist(matchReturn))){
+    stop("NA's are not allowed in query")
+  }
+  
   if("service" %in% names(matchReturn)){
     service <- matchReturn$service
     matchReturn$service <- NULL
@@ -342,6 +346,14 @@ readNWISdots <- function(...){
     if(values["stateCd"] == "UM"){
       stop("NWIS does not include U.S. Minor Outlying Islands")
     }
+  }
+		
+  if("parameterCd" %in% names(matchReturn)){
+    pcodeCheck <- (nchar(matchReturn$parameterCd) == 5) & !is.na(suppressWarnings(as.numeric(matchReturn$parameterCd)))
+    if(!all(pcodeCheck)){
+      badPcode <- matchReturn$parameterCd[which(!pcodeCheck)]
+      stop("The following pCodes appear mistyped:",paste(badPcode,collapse=","))
+    } 
   }
   
   names(values)[names(values) == "countycode"] <- "countyCd"
