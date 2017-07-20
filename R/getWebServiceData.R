@@ -15,6 +15,9 @@
 #' @importFrom httr content
 #' @importFrom httr content_type
 #' @importFrom curl curl_version
+#' @importFrom xml2 xml_text
+#' @importFrom xml2 xml_child
+#' @importFrom xml2 read_xml
 #' @export
 #' @return raw data from web services
 #' @examples
@@ -31,7 +34,12 @@ getWebServiceData <- function(obs_url, ...){
   
   returnedList <- retryGetOrPost(obs_url, ...)
   
-  if(status_code(returnedList) != 200){
+  if(status_code(returnedList) == 400){
+    response400 <- content(returnedList, type="text", encoding = "UTF-8")
+    statusReport <- xml_text(xml_child(read_xml(response400), 2)) # making assumption that - body is second node
+    statusMsg <- gsub(pattern=", server=.*", replacement="", x = statusReport)
+    stop(statusMsg)
+  } else if(status_code(returnedList) != 200){
     message("For: ", obs_url,"\n")
     stop_for_status(returnedList)
   } else {
