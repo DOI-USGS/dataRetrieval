@@ -4,8 +4,32 @@ Retrieval functions for USGS and EPA hydrologic and water quality data. For tuto
 
 [https://owi.usgs.gov/R/dataRetrieval.html](https://owi.usgs.gov/R/dataRetrieval.html)
 
-Installation
-------------
+## Package Status
+
+
+|Linux|Windows| Test Coverage | USGS Status |
+|----------|------------|------------|------------|
+| [![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master)](https://travis-ci.org/USGS-R/dataRetrieval)|[![Build status](https://ci.appveyor.com/api/projects/status/a2kogyfplo3valdg?svg=true)](https://ci.appveyor.com/project/ldecicco-USGS/dataRetrieval)| [![Coverage Status](https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=master)|[![status](https://img.shields.io/badge/USGS-Core-green.svg)](https://owi.usgs.gov/R/packages.html#core)|
+
+### Current CRAN information:
+
+|Version|Monthly Downloads|Total Downloads|
+|----------|------------|------------|
+|[![CRAN version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://CRAN.R-project.org/package=dataRetrieval)|[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://CRAN.R-project.org/package=dataRetrieval)|[![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://CRAN.R-project.org/package=dataRetrieval)|
+
+### Research software impact:
+[![Research software impact](http://depsy.org/api/package/cran/dataRetrieval/badge.svg)](http://depsy.org/package/r/dataRetrieval)
+
+### Reporting bugs
+
+Please consider reporting bugs and asking questions on the Issues page:
+[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
+
+Follow `@USGS_R` on Twitter for updates on USGS R packages:
+
+[![Twitter Follow](https://img.shields.io/twitter/follow/USGS_R.svg?style=social&label=Follow%20USGS_R)](https://twitter.com/USGS_R)
+
+## Installation
 
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
 
@@ -24,31 +48,6 @@ To get cutting-edge changes, install from GitHub using the `devtools` packages:
 library(devtools)
 install_github("USGS-R/dataRetrieval")
 ```
-
-Reporting bugs
-------------
-
-Please consider reporting bugs and asking questions on the Issues page:
-
-[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
-
-Follow `@USGS-R` on Twitter for updates on all USGS R packages:
-[https://twitter.com/USGS_R](https://twitter.com/USGS_R)
-
-### Current build tests:
-
-|Linux|Windows|Test Coverage|
-|----------|------------|------------|
-| [![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master)](https://travis-ci.org/USGS-R/dataRetrieval)|[![Build status](https://ci.appveyor.com/api/projects/status/msanha92b500grr7?svg=true)](https://ci.appveyor.com/project/ldecicco-USGS/dataretrieval-787)|[![Coverage Status](https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=master)|
-
-### Current CRAN information:
-
-|Version|Monthly Downloads|Total Downloads|
-|----------|------------|------------|
-|[![CRAN version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://CRAN.R-project.org/package=dataRetrieval)|[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://CRAN.R-project.org/package=dataRetrieval)|[![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://CRAN.R-project.org/package=dataRetrieval)|
-
-### Research software impact:
-[![Research software impact](http://depsy.org/api/package/cran/dataRetrieval/badge.svg)](http://depsy.org/package/r/dataRetrieval)
 
 
 ## Disclaimer
