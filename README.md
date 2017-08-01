@@ -33,6 +33,10 @@ Follow `@USGS_R` on Twitter for updates on USGS R packages:
 
 We want to encourage a warm, welcoming, and safe environment for contributing to this project. See the [code of conduct](https://github.com/USGS-R/dataRetrieval/blob/master/CONDUCT.md) for more information.
 
+### Package Support
+
+[USGS](http://usgs-r.github.io/images/USGS.png)
+
 ## Installation
 
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
