@@ -35,6 +35,8 @@ We want to encourage a warm, welcoming, and safe environment for contributing to
 
 ### Package Support
 
+The Water Mission Area of the USGS supports the development and maintainence of `dataRetrieval`. Resources are available primarily for maintenance and user questions. Priorities on the development of new features are determined by the `dataRetrieval` development team.
+
 ![USGS](http://usgs-r.github.io/images/usgs.png)
 
 ## Installation
