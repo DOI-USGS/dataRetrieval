@@ -35,7 +35,7 @@ We want to encourage a warm, welcoming, and safe environment for contributing to
 
 ### Package Support
 
-[USGS](http://usgs-r.github.io/images/USGS.png)
+![USGS](http://usgs-r.github.io/images/usgs.png)
 
 ## Installation
 
