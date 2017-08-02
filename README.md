@@ -33,6 +33,12 @@ Follow `@USGS_R` on Twitter for updates on USGS R packages:
 
 We want to encourage a warm, welcoming, and safe environment for contributing to this project. See the [code of conduct](https://github.com/USGS-R/dataRetrieval/blob/master/CONDUCT.md) for more information.
 
+### Package Support
+
+The Water Mission Area of the USGS supports the development and maintenance of `dataRetrieval` through September 2018, and most likely further into the future. Resources are available primarily for maintenance and responding to user questions. Priorities on the development of new features are determined by the `dataRetrieval` development team.
+
+![USGS](http://usgs-r.github.io/images/usgs.png)
+
 ## Installation
 
 To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
