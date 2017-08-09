@@ -37,7 +37,7 @@ We want to encourage a warm, welcoming, and safe environment for contributing to
 
 The Water Mission Area of the USGS supports the development and maintenance of `dataRetrieval` through September 2018, and most likely further into the future. Resources are available primarily for maintenance and responding to user questions. Priorities on the development of new features are determined by the `dataRetrieval` development team.
 
-![USGS](http://usgs-r.github.io/images/usgs.png)
+[![USGS](http://usgs-r.github.io/images/usgs.png)](https://www.usgs.gov/)
 
 ## Installation
 
