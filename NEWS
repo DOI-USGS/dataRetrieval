@@ -1,3 +1,8 @@
+dataRetrieval 2.7.3
+==========
+* Reworked whatNWISdata to allow the full flexibility of `...`
+* Check for dates in instantaneous data, allowing requests for recent data to be routed directly to waterservices.gov.
+
 dataRetrieval 2.7.1
 ==========
 * Converted vignette to html
