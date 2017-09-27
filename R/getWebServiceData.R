@@ -58,10 +58,23 @@ getWebServiceData <- function(obs_url, ...){
       txt <- readBin(returnedList$content, character())
       message(txt)
       return(txt)
+      
+
     } else {
       returnedDoc <- content(returnedList,encoding = "UTF-8")
       if(grepl("No sites/data found using the selection criteria specified", returnedDoc)){
         message(returnedDoc)
+      }
+      if(headerInfo$`content-type` == "text/xml"){
+        
+        if(xml_name(read_xml(returnedList)) == "ExceptionReport"){
+          statusReport <- tryCatch({
+            xml_text(xml_child(read_xml(returnedList)))
+          })
+          if(grepl("No feature found",statusReport )){
+            message(statusReport)
+          }
+        }
       }
     }
 

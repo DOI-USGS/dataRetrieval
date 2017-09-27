@@ -68,8 +68,15 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
       allAttrs <- bind_rows(allAttrs, obsFIDattr)
       
     }
-    allSites <- retrieveFeatureOfInterest(featureID = featureID)
-    attr(allObs, "siteInfo") <- allSites
+    
+    allSites <- tryCatch({
+      retrieveFeatureOfInterest(featureID = featureID)
+    })
+    
+    if(!is.null(allSites)){
+      attr(allObs, "siteInfo") <- allSites
+    }
+    
     attr(allObs, "other") <- allAttrs
     returnData <- allObs
     
@@ -77,11 +84,15 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
     
     if("siteNumbers" %in% names(dots)){
       featureID <- na.omit(gsub(":",".",dots[['siteNumbers']]))
-      allSites <- retrieveFeatureOfInterest(featureID = featureID)
+      allSites <- tryCatch({
+        retrieveFeatureOfInterest(featureID = featureID)
+      })
     }
     
     if("bbox" %in% names(dots)){
-      allSites <- retrieveFeatureOfInterest(bbox=dots[['bbox']])
+      allSites <- tryCatch({
+        retrieveFeatureOfInterest(bbox=dots[['bbox']])
+      })
     }
     returnData <- allSites
     
