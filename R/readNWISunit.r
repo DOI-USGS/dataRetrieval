@@ -56,6 +56,8 @@
 #' \dontrun{
 #' rawData <- readNWISuv(site_id,parameterCd,startDate,endDate)
 #' 
+#' rawData_today <- readNWISuv(site_id, parameterCd, Sys.Date(),Sys.Date())
+#' 
 #' timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
 #'          "2013-11-03","2013-11-03")
 #'  
@@ -70,7 +72,13 @@
 #' 
 readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz="UTC"){  
   
-  url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,"uv",format="xml")
+  if(as.character(startDate) == "" || (as.Date(startDate) <= Sys.Date()-120)){
+    service <- "iv"
+  } else {
+    service <- "iv_recent"
+  }
+  
+  url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,service,format="xml")
 
   data <- importWaterML1(url,asDateTime=TRUE,tz=tz)
   
