@@ -42,6 +42,7 @@ access = match.arg(access, c('public','internal','cooperator','USGS'))
   
   pkg.env$site = "https://waterservices.usgs.gov/nwis/site/"
   pkg.env$iv = "https://nwis.waterservices.usgs.gov/nwis/iv/"
+  pkg.env$iv_recent = "https://waterservices.usgs.gov/nwis/iv/"
   pkg.env$dv =  "https://waterservices.usgs.gov/nwis/dv/"
   pkg.env$gwlevels = "https://waterservices.usgs.gov/nwis/gwlevels/"
   pkg.env$measurements = "https://waterdata.usgs.gov/nwis/measurements/"

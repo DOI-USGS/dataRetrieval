@@ -53,7 +53,7 @@ constructNWISURL <- function(siteNumbers,parameterCd="00060",startDate="",endDat
                              service,statCd="00003", format="xml",expanded=TRUE,
                              ratingType="base",statReportType="daily",statType="mean"){
 
-  service <- match.arg(service, c("dv","uv","iv","qw","gwlevels","rating","peak","meas","stat", "qwdata"))
+  service <- match.arg(service, c("dv","uv","iv","iv_recent","qw","gwlevels","rating","peak","meas","stat", "qwdata"))
   
   service[service == "qw"] <- "qwdata"
   service[service == "meas"] <- "measurements"

@@ -13,9 +13,11 @@
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
-#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A list of arguments can also be supplied. 
-#' One important argument to include is 'service'. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
-#' (for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
+#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A 
+#' list of arguments can also be supplied. One important argument to include is 'service'. Possible values are "iv" 
+#' (for instantaneous), "iv_recent" (for instantaneous values within the last 120 days),
+#' "dv" (for daily values), "gwlevels" (for groundwater levels),
+#' "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
 #' statistics service). Note: "qw" and "measurement" calls go to: 
 #' \url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
 #' The statistics service has a limited selection of arguments (see \url{https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}). 
@@ -128,6 +130,10 @@
 #' all_sites_core <- readNWISdata(service = "rating", file_type="corr")
 #' all_sites_exsa <- readNWISdata(service = "rating", file_type="exsa")
 #' all_sites_24hrs <- readNWISdata(service = "rating", file_type="exsa", period = 24)
+#' 
+#' today <- readNWISdata(service="iv", startDate = Sys.Date(), 
+#'                       parameterCd = "00060", siteNumber = "05114000")
+#' 
 #' }
 readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   
@@ -175,7 +181,7 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
     
   }
     
-  if("iv" == service){
+  if("iv" == service | "iv_recent" == service){
     if(tz == ""){
       retval$tz_cd <- rep("UTC", nrow(retval))
     } else {
@@ -318,7 +324,7 @@ readNWISdots <- function(...){
     service <- "dv"
   }
   
-  match.arg(service, c("dv","iv","gwlevels","site", "uv","qw","measurements","qwdata","stat","rating"))
+  match.arg(service, c("dv","iv","iv_recent","gwlevels","site", "uv","qw","measurements","qwdata","stat","rating"))
   
   if(service == "uv"){
     service <- "iv"
@@ -338,6 +344,12 @@ readNWISdots <- function(...){
   names(values)[names(values) == "siteNumbers"] <- "sites"
   
   format.default <- "waterml,1.1"
+  
+  if(service == "iv" && "startDT" %in% names(values)){
+    if(as.Date(values[["startDT"]]) >= Sys.Date()-120){
+      service <- "iv_recent"
+    }
+  }
   
   names(values)[names(values) == "statecode"] <- "stateCd"
   if("stateCd" %in% names(values)){
