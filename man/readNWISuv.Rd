@@ -68,6 +68,8 @@ endDate <- "2014-10-10"
 \dontrun{
 rawData <- readNWISuv(site_id,parameterCd,startDate,endDate)
 
+rawData_today <- readNWISuv(site_id, parameterCd, Sys.Date(),Sys.Date())
+
 timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
          "2013-11-03","2013-11-03")
  

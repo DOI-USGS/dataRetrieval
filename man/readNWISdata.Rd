@@ -7,9 +7,11 @@
 readNWISdata(..., asDateTime = TRUE, convertType = TRUE, tz = "UTC")
 }
 \arguments{
-\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A list of arguments can also be supplied. 
-One important argument to include is 'service'. Possible values are "iv" (for instantaneous), "dv" (for daily values), "gwlevels" 
-(for groundwater levels), "site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
+\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A 
+list of arguments can also be supplied. One important argument to include is 'service'. Possible values are "iv" 
+(for instantaneous), "iv_recent" (for instantaneous values within the last 120 days),
+"dv" (for daily values), "gwlevels" (for groundwater levels),
+"site" (for site service), "qw" (water-quality),"measurement", and "stat" (for 
 statistics service). Note: "qw" and "measurement" calls go to: 
 \url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
 The statistics service has a limited selection of arguments (see \url{https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}).}
@@ -137,6 +139,10 @@ all_sites_base <- readNWISdata(service = "rating", file_type="base")
 all_sites_core <- readNWISdata(service = "rating", file_type="corr")
 all_sites_exsa <- readNWISdata(service = "rating", file_type="exsa")
 all_sites_24hrs <- readNWISdata(service = "rating", file_type="exsa", period = 24)
+
+today <- readNWISdata(service="iv", startDate = Sys.Date(), 
+                      parameterCd = "00060", siteNumber = "05114000")
+
 }
 }
 \seealso{
