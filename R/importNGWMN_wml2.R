@@ -49,7 +49,10 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
     returnedDoc <- read_xml(input)
     raw <- TRUE
   } else {
-    returnedDoc <- xml_root(getWebServiceData(input, encoding='gzip'))
+    returnedDoc <- getWebServiceData(input, encoding='gzip')
+    
+    returnedDoc <- xml_root(returnedDoc)
+    
   }
   
   response <- xml_name(returnedDoc)
@@ -96,7 +99,7 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
     attr(mergedDF, "contact") <- xml_attr(meta, "href")
     attr(mergedDF, "responsibleParty") <- xml_text(xml_find_all(meta, ".//gco:CharacterString"))
     
-  }else if(response == "GetFeatureOfInterestResponse"){
+  } else if (response == "GetFeatureOfInterestResponse"){
     featureMembers <- xml_find_all(returnedDoc, ".//sos:featureMember")
     site <- xml_text(xml_find_all(featureMembers,".//gml:identifier"))
     site <- substring(site, 8)
@@ -111,9 +114,12 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
     dec_lon_va <- "dplyr var"
     siteLocs <- mutate(siteLocs, dec_lat_va=as.numeric(dec_lat_va), dec_lon_va=as.numeric(dec_lon_va))
     mergedDF <- cbind.data.frame(site, description = siteDesc, siteLocs, stringsAsFactors = FALSE) 
-  }
-  else{
+  
+  } else if (response == "ExceptionReport"){
+    return(data.frame())
+  } else {
     stop("Unrecognized response from the web service")
+    return(data.frame())
   }
   return(mergedDF)
 }
