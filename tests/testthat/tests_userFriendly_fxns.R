@@ -20,8 +20,8 @@ test_that("Unit value data returns correct types", {
   recent_uv <- readNWISuv(siteNumber,parameterCd,
                           as.Date(Sys.Date()-10),
                           Sys.Date())
-  expect_equal(attr(recent_uv, "url"),"https://waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2017-09-17&endDT=2017-09-27")
-  expect_equal(attr(spreadOver120, "url"),"https://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2017-03-11&endDT=2017-09-27")
+  expect_equal(grep(x = attr(recent_uv, "url"), pattern = "https://waterservices.usgs.gov/nwis/iv/"),1)
+  expect_equal(grep(x = attr(spreadOver120, "url"),pattern = "https://nwis.waterservices.usgs.gov/nwis/iv/"),1)
   expect_equal(attr(rawData, "url"),"https://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
   
   timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,

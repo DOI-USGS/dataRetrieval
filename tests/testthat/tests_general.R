@@ -10,11 +10,11 @@ test_that("General NWIS retrievals working", {
   
   recent_uv <- readNWISdata(siteNumber="04025500",parameterCd="00060",service="uv",
                           startDate=as.Date(Sys.Date()-10),endDate=Sys.Date())
-  expect_equal(attr(recent_uv, "url"),"https://waterservices.usgs.gov/nwis/iv/?sites=04025500&parameterCd=00060&startDT=2017-09-17&endDT=2017-09-27&format=waterml,1.1")
+  expect_equal(grep(x = attr(recent_uv, "url"),pattern = "https://waterservices.usgs.gov/nwis/iv/"),1)
   
   older_uv <- readNWISdata(siteNumber="04025500",parameterCd="00060",service="uv",
                             startDate="2016-01-01",endDate="2016-01-02")
-  expect_equal(attr(older_uv, "url"),"https://nwis.waterservices.usgs.gov/nwis/iv/?sites=04025500&parameterCd=00060&startDT=2016-01-01&endDT=2016-01-02&format=waterml,1.1&")
+  expect_equal(grep(x = attr(older_uv, "url"),pattern = "https://nwis.waterservices.usgs.gov/nwis/iv/"),1)
   
   
   expect_error(readNWISdata(), "No arguments supplied")
