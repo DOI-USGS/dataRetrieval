@@ -83,7 +83,7 @@ renameNWISColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
   Conv$s00024<- "LoLoTide"
 
   dataColumns <- c(grep("X_", Cnames),grep("X\\d{2}", Cnames))
-  
+  dataColumnsChangedParam <- NULL 
   for (i in dataColumns){
     chunks <- strsplit(Cnames[i], "_")[[1]]
     
@@ -92,6 +92,7 @@ renameNWISColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
       if(paste0("p",chunks[j]) %in% names(Conv)){
         chunks[j] <- as.character(Conv[paste0("p",chunks[j])])
         Cnames[i] <- paste(chunks, collapse ="_")
+        dataColumnsChangedParam <- c(dataColumnsChangedParam, i)
         break
       }
     }
@@ -106,7 +107,7 @@ renameNWISColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
     }
   }
   
-  Cnames <- gsub("X_","",Cnames)
+  Cnames[dataColumnsChangedParam] <- gsub("X_","",Cnames[dataColumnsChangedParam])
 
   names(rawData) <- Cnames
   
