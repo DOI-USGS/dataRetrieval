@@ -114,7 +114,8 @@ test_that("External importWaterML1 test", {
   siteNumber <- c('01480015',"04085427") #one site seems to have lost it's 2nd dd
   obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
   data <- importWaterML1(obs_url)
-  # saveRDS(data, "rds/twoWML1.rds")
+  
+  expect_false(any(data$X_00010_00003) )
   expect_that(length(unique(data$site_no)) == 2, is_true())
   expect_that(ncol(data) == 8, is_true()) # 3 data, 3 remark codes, and 4 (agency, site, dateTime, tz)
 
@@ -135,12 +136,11 @@ test_that("External importWaterML1 test", {
   #raw XML
   url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
                           startDate = "2014-01-01", endDate = "2014-01-01")
-  # Will put back when https is converted:
-  # raw <- content(GET(url), as = 'raw')
-  # rawParsed <- importWaterML1(raw)
-  # expect_true(nrow(rawParsed) > 0)
-  # expect_true(data.class(rawParsed$X_00060_00003) == "numeric")
-  # 
+  raw <- content(GET(url), as = 'raw')
+  rawParsed <- importWaterML1(raw)
+  expect_true(nrow(rawParsed) > 0)
+  expect_true(data.class(rawParsed$X_00060_00003) == "numeric")
+  
   #no data
   url <- constructNWISURL("05212700", "00060", "2014-01-01", "2014-01-10",'dv', statCd = "00001")
   noData <- importWaterML1(url) 
@@ -173,6 +173,14 @@ test_that("External importWaterML1 test", {
   expect_equal(chi_iv$dateTime[1], as.POSIXct("2014-05-01T00:00", format = "%Y-%m-%dT%H:%M", tz="America/Chicago"))
   expect_equal(chi_iv$dateTime[nrow(chi_iv)], as.POSIXct("2014-05-01T12:00", format = "%Y-%m-%dT%H:%M", tz="America/Chicago"))
   
+})
+
+test_that("no data val replacement works", {
+  naSite <- "50043800"
+  naData <- readNWISuv(siteNumbers = naSite, parameterCd = "00065",
+                       startDate = "2017-09-17", endDate = "2017-09-20")
+  expect_gt(sum(is.na(naData$X_00065_00000)), 0)
+  expect_false(any(na.omit(naData$X_00065_00000 < -99)))
 })
 
 context("importWaterML2")
