@@ -75,7 +75,6 @@ test_that("CRAN-friendly importWaterML1 test", {
   fileName <- "WaterML1Example.xml"
   fullPath <- file.path(filePath, fileName)
   importUserWML1 <- importWaterML1(fullPath, asDateTime = TRUE)
-  # saveRDS(importUserWML1, "rds/importUserWML1.rds")
   # default is to turn dates to characters
   expect_is(importUserWML1$dateTime, 'POSIXct')
   
@@ -92,7 +91,6 @@ test_that("External importWaterML1 test", {
   obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 
   data <- importWaterML1(obs_url,TRUE)
-  # saveRDS(data, "rds/dvWML1.rds")
   expect_is(data$dateTime, 'POSIXct')
 
   groundWaterSite <- "431049071324301"
@@ -101,7 +99,6 @@ test_that("External importWaterML1 test", {
   groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
            startGW,endGW, service="gwlevels")
   groundWater <- importWaterML1(groundwaterExampleURL)
-  # saveRDS(groundWater, "rds/groundwater.rds")
 
   expect_is(groundWater$dateTime, 'character')
 
@@ -128,7 +125,6 @@ test_that("External importWaterML1 test", {
   inactiveAndActive <- constructNWISURL(inactiveAndActive, "00060", 
                                         "2014-01-01", "2014-12-31",'dv')
   inactiveAndActive <- importWaterML1(inactiveAndActive)
-  # saveRDS(inactiveAndActive, "rds/inactiveAndActive.rds")
   # 
   expect_true(length(unique(inactiveAndActive$site_no)) < 2)
   
