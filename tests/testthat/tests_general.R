@@ -352,7 +352,7 @@ test_that("NGWMN functions working", {
   expect_is(tzDataUTC$dateTime, "POSIXct")
   expect_is(tzDataMT$dateTime, "POSIXct")
   expect_equal(attr(tzDataMT$dateTime, 'tzone'), "US/Mountain")
-  expect_warning(tzDataUTC$dateTime == tzDataMT$dateTime)
+  expect_equal(attr(tzDataUTC$dateTime, 'tzone'), "UTC")
 })
 
 context("getWebServiceData")
