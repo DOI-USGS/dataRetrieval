@@ -180,9 +180,9 @@ context("importWaterML2")
 test_that("importWaterML2 internal test", {
   filePath <- system.file("extdata", package="dataRetrieval")
   fileName <- "WaterML2Example.xml"
-  fullPath <- file.path(filePath, fileName)
-  UserData <- importWaterML2(fullPath)
-  # saveRDS(UserData, "rds/UserData.rds")
+  xml_full <- xml2::read_xml(file.path(filePath, fileName))
+  measurementTS <- xml2::xml_find_all(xml_full, "//wml2:MeasurementTimeseries")
+  UserData <- importWaterML2(measurementTS)
   expect_is(UserData$value, 'numeric')
   # expect_is(UserData$qualifier, 'character')
   
@@ -191,8 +191,9 @@ test_that("importWaterML2 internal test", {
 test_that("importWaterML2 external test", {
   testthat::skip_on_cran()
   url <- "https://waterservices.usgs.gov/nwis/iv/?format=waterml,2.0&sites=01646500&parameterCd=00060,00065"
-  exData <- importWaterML2(url)
-  # saveRDS(data, "rds/externalML2.rds")
+  xml <- getWebServiceData(url)
+  measurementTS2 <- xml2::xml_find_all(xml, "//wml2:MeasurementTimeseries")
+  exData <- importWaterML2(measurementTS2)
   expect_is(exData$value, 'numeric')
   expect_gt(nrow(exData),0)
 })
