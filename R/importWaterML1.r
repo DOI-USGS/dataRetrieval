@@ -268,7 +268,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
     
     #replace no data vals with NA, change attribute df
     noDataVal <- as.numeric(varText$noDataValue)
-    if(nObs > 0 & obsColName %in% names(nObs)){
+    if(nObs > 0 & obsColName %in% names(obsDF)){
       obsDF[[obsColName]][obsDF[[obsColName]] == noDataVal] <- NA
     }
     varText$noDataValue <- NA
@@ -346,7 +346,7 @@ check_if_xml <- function(obs_url){
     returnedDoc <- read_xml(obs_url)
   }else if(class(obs_url) == 'raw'){
     returnedDoc <- read_xml(obs_url)
-  } else if(class(obs_url) == "xml_node"){
+  } else if(inherits(obs_url, c("xml_node", "xml_nodeset"))) {
     returnedDoc <- obs_url
   } else {
     returnedDoc <- xml_root(getWebServiceData(obs_url, encoding='gzip'))
