@@ -112,7 +112,6 @@ test_that("External importWaterML1 test", {
   obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
   data <- importWaterML1(obs_url)
   
-  expect_false(any(data$X_00010_00003) )
   expect_that(length(unique(data$site_no)) == 2, is_true())
   expect_that(ncol(data) == 8, is_true()) # 3 data, 3 remark codes, and 4 (agency, site, dateTime, tz)
 
