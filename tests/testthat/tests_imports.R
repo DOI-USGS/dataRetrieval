@@ -36,18 +36,7 @@ test_that("External importRDB1 tests", {
   expect_is(qwData$sample_dt, 'Date')
   expect_is(qwData$startDateTime, 'POSIXct')
   
-  #This data got deleted:
-#   iceSite <- '04024430'
-#   start <- "2014-11-09"
-#   end <- "2014-11-28"
-#   urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
-#   ice <- importRDB1(urlIce)
-#   expect_that(sum(is.na(ice$X01_00060)) > 0, is_true())
-#   
-#   iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
-#   expect_that(sum(iceNoConvert$X01_00060 == "Ice") > 0, is_true())
-  
-  
+ 
   site <- "05427850"
 
   url <- constructNWISURL(site,"00060","2015-01-01", "","dv",
@@ -171,11 +160,11 @@ test_that("External importWaterML1 test", {
 })
 
 test_that("no data val replacement works", {
-  naSite <- "50043800"
-  naData <- readNWISuv(siteNumbers = naSite, parameterCd = "00065",
-                       startDate = "2017-09-17", endDate = "2017-09-20")
-  expect_gt(sum(is.na(naData$X_00065_00000)), 0)
-  expect_false(any(na.omit(naData$X_00065_00000 < -99)))
+  iceSite <- "04024430"
+  naData <- readNWISuv(siteNumbers = iceSite, parameterCd = "00060",
+                       startDate = "2017-12-17", endDate = "2017-12-18")
+  expect_gt(sum(is.na(naData$X_00060_00000)), 0)
+  expect_false(any(na.omit(naData$X_00060_00000 < -99)))
 })
 
 context("importWaterML2")
