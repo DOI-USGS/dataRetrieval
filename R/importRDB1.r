@@ -112,9 +112,11 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   meta.rows <- length(readr.meta)
   header.names <- strsplit(readr.total[meta.rows+1],"\t")[[1]]
   types.names <- strsplit(readr.total[meta.rows+2],"\t")[[1]]
+  data.rows <- total.rows - meta.rows - 2
   
   if(convertType){
-    readr.data <- suppressWarnings(read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE))
+    readr.data <- read_delim_check_quote(file = doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, total.rows = data.rows)
+    
   #defaults to time in seconds in readr 0.2.2.9??  
     if(length(grep("hms",lapply(readr.data, class))) > 0){
       colHMS <- grep("hms",lapply(readr.data, class))
@@ -122,13 +124,16 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
       colList <- as.list(rep("c",length(colHMS)))
       names(colList) <- paste0("X",colHMS)
 
-      readr.data <- suppressWarnings(read_delim(doc, skip = (meta.rows+2),delim="\t",
-                                                col_names = FALSE, 
-                                                col_types = colList))
+      readr.data <- read_delim_check_quote(file = doc, skip = (meta.rows+2),delim="\t",
+                                           col_names = FALSE, 
+                                           col_types = colList, 
+                                           total.rows = data.rows)
     }
 
   } else {
-    readr.data <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c"))
+    
+    readr.data <- read_delim_check_quote(file = doc,skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c"), total.rows = data.rows)
+
   }
   
   if(nrow(readr.data) > 0){
@@ -136,6 +141,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     
     char.names <- c(header.names[grep("_cd",header.names)],
                     header.names[grep("_id",header.names)],
+                    header.names[grep("_tx",header.names)],
                     header.names[header.names == "site_no"])
     
     if(length(char.names) > 0){
@@ -146,8 +152,8 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     } 
     
     if(nrow(problems(readr.data)) > 0 | length(char.names) > 0){
-      readr.data.char <- read_delim(doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
-                                    col_types = cols(.default = "c"))
+      readr.data.char <- read_delim_check_quote(file = doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
+                                                col_types = cols(.default = "c"), total.rows = data.rows)
       names(readr.data.char) <- header.names    
     }
     
@@ -336,5 +342,16 @@ fixErrors <- function(readr.data, readr.data.char, message.text, FUN, ...){
     }
   }
   return(readr.data)
+}
+
+read_delim_check_quote <- function(..., total.rows){
+  rdb.data <- suppressWarnings(read_delim(...))
+  
+  if(nrow(rdb.data) < total.rows){
+    rdb.data <- suppressWarnings(read_delim(..., quote = ""))
+  }
+  
+  return(rdb.data)
+  
 }
 
