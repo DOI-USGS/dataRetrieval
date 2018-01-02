@@ -36,18 +36,7 @@ test_that("External importRDB1 tests", {
   expect_is(qwData$sample_dt, 'Date')
   expect_is(qwData$startDateTime, 'POSIXct')
   
-  #This data got deleted:
-#   iceSite <- '04024430'
-#   start <- "2014-11-09"
-#   end <- "2014-11-28"
-#   urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
-#   ice <- importRDB1(urlIce)
-#   expect_that(sum(is.na(ice$X01_00060)) > 0, is_true())
-#   
-#   iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
-#   expect_that(sum(iceNoConvert$X01_00060 == "Ice") > 0, is_true())
-  
-  
+ 
   site <- "05427850"
 
   url <- constructNWISURL(site,"00060","2015-01-01", "","dv",
@@ -75,7 +64,6 @@ test_that("CRAN-friendly importWaterML1 test", {
   fileName <- "WaterML1Example.xml"
   fullPath <- file.path(filePath, fileName)
   importUserWML1 <- importWaterML1(fullPath, asDateTime = TRUE)
-  # saveRDS(importUserWML1, "rds/importUserWML1.rds")
   # default is to turn dates to characters
   expect_is(importUserWML1$dateTime, 'POSIXct')
   
@@ -92,7 +80,6 @@ test_that("External importWaterML1 test", {
   obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 
   data <- importWaterML1(obs_url,TRUE)
-  # saveRDS(data, "rds/dvWML1.rds")
   expect_is(data$dateTime, 'POSIXct')
 
   groundWaterSite <- "431049071324301"
@@ -101,7 +88,6 @@ test_that("External importWaterML1 test", {
   groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
            startGW,endGW, service="gwlevels")
   groundWater <- importWaterML1(groundwaterExampleURL)
-  # saveRDS(groundWater, "rds/groundwater.rds")
 
   expect_is(groundWater$dateTime, 'character')
 
@@ -114,7 +100,7 @@ test_that("External importWaterML1 test", {
   siteNumber <- c('01480015',"04085427") #one site seems to have lost it's 2nd dd
   obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
   data <- importWaterML1(obs_url)
-  # saveRDS(data, "rds/twoWML1.rds")
+  
   expect_that(length(unique(data$site_no)) == 2, is_true())
   expect_that(ncol(data) == 8, is_true()) # 3 data, 3 remark codes, and 4 (agency, site, dateTime, tz)
 
@@ -127,7 +113,6 @@ test_that("External importWaterML1 test", {
   inactiveAndActive <- constructNWISURL(inactiveAndActive, "00060", 
                                         "2014-01-01", "2014-12-31",'dv')
   inactiveAndActive <- importWaterML1(inactiveAndActive)
-  # saveRDS(inactiveAndActive, "rds/inactiveAndActive.rds")
   # 
   expect_true(length(unique(inactiveAndActive$site_no)) < 2)
   
@@ -135,12 +120,11 @@ test_that("External importWaterML1 test", {
   #raw XML
   url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
                           startDate = "2014-01-01", endDate = "2014-01-01")
-  # Will put back when https is converted:
-  # raw <- content(GET(url), as = 'raw')
-  # rawParsed <- importWaterML1(raw)
-  # expect_true(nrow(rawParsed) > 0)
-  # expect_true(data.class(rawParsed$X_00060_00003) == "numeric")
-  # 
+  raw <- content(GET(url), as = 'raw')
+  rawParsed <- importWaterML1(raw)
+  expect_true(nrow(rawParsed) > 0)
+  expect_true(data.class(rawParsed$X_00060_00003) == "numeric")
+  
   #no data
   url <- constructNWISURL("05212700", "00060", "2014-01-01", "2014-01-10",'dv', statCd = "00001")
   noData <- importWaterML1(url) 
@@ -175,14 +159,24 @@ test_that("External importWaterML1 test", {
   
 })
 
+test_that("no data val replacement works", {
+  #may need to change dates and/or site if this data is estimated
+  #run this test when changing anything with ML1 parser!
+  # iceSite <- "04024430"
+  # naData <- readNWISuv(siteNumbers = iceSite, parameterCd = "00060",
+  #                      startDate = "2017-12-17", endDate = "2017-12-18")
+  # expect_gt(sum(is.na(naData$X_00060_00000)), 0)
+  # expect_false(any(na.omit(naData$X_00060_00000 < -99)))
+})
+
 context("importWaterML2")
 
 test_that("importWaterML2 internal test", {
   filePath <- system.file("extdata", package="dataRetrieval")
   fileName <- "WaterML2Example.xml"
-  fullPath <- file.path(filePath, fileName)
-  UserData <- importWaterML2(fullPath)
-  # saveRDS(UserData, "rds/UserData.rds")
+  xml_full <- xml2::read_xml(file.path(filePath, fileName))
+  measurementTS <- xml2::xml_find_all(xml_full, "//wml2:MeasurementTimeseries")
+  UserData <- importWaterML2(measurementTS)
   expect_is(UserData$value, 'numeric')
   # expect_is(UserData$qualifier, 'character')
   
@@ -191,8 +185,9 @@ test_that("importWaterML2 internal test", {
 test_that("importWaterML2 external test", {
   testthat::skip_on_cran()
   url <- "https://waterservices.usgs.gov/nwis/iv/?format=waterml,2.0&sites=01646500&parameterCd=00060,00065"
-  exData <- importWaterML2(url)
-  # saveRDS(data, "rds/externalML2.rds")
+  xml <- getWebServiceData(url)
+  measurementTS2 <- xml2::xml_find_all(xml, "//wml2:MeasurementTimeseries")
+  exData <- importWaterML2(measurementTS2)
   expect_is(exData$value, 'numeric')
   expect_gt(nrow(exData),0)
 })
