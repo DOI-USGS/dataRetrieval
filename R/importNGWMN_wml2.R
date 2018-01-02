@@ -161,9 +161,9 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
                       time = character(0), dateTime = character(0), value = numeric(0),
                       uom = character(0), comment = character(0), stringsAsFactors = FALSE))
   }
-  rawTime <- xml_text(xml_find_all(TVP,".//wml2:time"))
+  rawTime <- xml_text(xml_find_all(returnedDoc, "./wml2:point/wml2:MeasurementTVP/wml2:time"))
   
-  valueNodes <- xml_find_all(TVP,".//wml2:value")
+  valueNodes <- xml_find_all(returnedDoc,"./wml2:point/wml2:MeasurementTVP/wml2:value")
   values <- as.numeric(xml_text(valueNodes))
   nVals <- length(values)
   
@@ -192,9 +192,13 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
   
   uom <- xml_attr(valueNodes, "uom", default = NA)
   
-  source <- xml_attr(xml_find_all(TVP, ".//wml2:source"), "title")
-  comment <- xml_text(xml_find_all(TVP, ".//wml2:comment"))
-  tvpQuals <- xml_text(xml_find_all(TVP, ".//swe:description"))
+  source <- xml_attr(xml_find_all(returnedDoc, 
+                                  "./wml2:point/wml2:MeasurementTVP/wml2:metadata/wml2:source"), 
+                     "title")
+  comment <- xml_text(xml_find_all(returnedDoc, 
+                  "./wml2:point/wml2:MeasurementTVP/wml2:metadata/wml2:comment"))
+  tvpQuals <- xml_text(xml_find_all(returnedDoc, 
+                        "./wml2:point/wml2:MeasurementTVP/wml2:metadata/swe:description"))
   defaultMeta <- xml_find_all(returnedDoc, ".//wml2:DefaultTVPMeasurementMetadata")
   defaultQuals <- xml_text(xml_find_all(defaultMeta, ".//swe:description"))
   defaultUOM <- xml_attr(xml_find_all(defaultMeta, ".//wml2:uom"), "title", default = NA)
