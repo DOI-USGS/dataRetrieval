@@ -188,7 +188,7 @@ test_that("importWaterML2 external test", {
   xml <- getWebServiceData(url)
   measurementTS2 <- xml2::xml_find_all(xml, "//wml2:MeasurementTimeseries")
   exData <- importWaterML2(measurementTS2)
-  expect_is(exData$value, 'numeric')
+  expect_is(exData$value, c('numeric', 'logical'))
   expect_gt(nrow(exData),0)
 })
   
