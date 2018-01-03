@@ -71,7 +71,7 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
     
     allSites <- tryCatch({
       retrieveFeatureOfInterest(featureID = featureID)
-    })
+    }, error = function(cond){return(NULL)})
     
     if(!is.null(allSites)){
       attr(allObs, "siteInfo") <- allSites
