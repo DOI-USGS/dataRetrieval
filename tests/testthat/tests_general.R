@@ -327,7 +327,7 @@ test_that("NGWMN functions working", {
                             siteNumbers = na_colons, asDateTime = FALSE)
   expect_is(returnDF, "data.frame")
   expect_true(nrow(returnDF) > 1)
-  expect_true(!is.null(attributes(returnDF)$siteInfo))
+  #expect_true(!is.null(attributes(returnDF)$siteInfo))
   
   sites <- c("USGS:424427089494701", NA)
   siteInfo <- readNGWMNsites(sites)

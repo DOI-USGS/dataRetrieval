@@ -193,7 +193,6 @@ test_that("importWaterML2 external test", {
 })
   
 
-
 context("importWQP_noCRAN")
 
 test_that("External WQP tests", {

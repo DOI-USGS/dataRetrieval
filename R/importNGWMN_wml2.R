@@ -164,7 +164,10 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
   rawTime <- xml_text(xml_find_all(returnedDoc, "./wml2:point/wml2:MeasurementTVP/wml2:time"))
   
   valueNodes <- xml_find_all(returnedDoc,"./wml2:point/wml2:MeasurementTVP/wml2:value")
-  values <- as.numeric(xml_text(valueNodes))
+  charValues <- xml_text(valueNodes)
+  nilValues <- as.logical(xml_attr(valueNodes, "nil"))
+  charValues[nilValues] <- NA
+  values <- as.numeric(charValues)
   nVals <- length(values)
   
   #df of date, time, dateTime
@@ -207,7 +210,7 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
                   uom = uom, comment = comment)
   df_use <- df_vars[sapply(df_vars, function(x){length(x) > 0 && !all(is.na(x))})]
   df <- data.frame(df_use, stringsAsFactors = FALSE)
-  
+  if(!"value" %in% names(df)) {df$value <- NA_real_}
   #from the default metadata section
   #append to existing attributes if they aren't empty
    mdAttribs <- list(defaultQualifier=defaultQuals, defaultUOM=defaultUOM, 
