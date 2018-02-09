@@ -227,7 +227,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
           }
         }
       }
-      
+
       if("tz_cd" %in% header.names){
         date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
         if(length(date.time.cols) > 0){
@@ -246,7 +246,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
         readr.data <- convertTZ(readr.data,"TZCD",varname,tz, flip.cols=TRUE)
       }
       
-      if("sample_start_time_datum_cd" %in% header.names){
+      if(all(c("sample_start_time_datum_cd","sample_dateTime") %in% header.names)){
         readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd","sample_dateTime",tz)
         
         if(!("sample_end_time_datum_cd" %in% header.names) & "sample_end_dateTime" %in% names(readr.data)){
