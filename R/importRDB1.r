@@ -227,9 +227,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
           }
         }
       }
-      
-      header.names <- names(readr.data)
-      
+
       if("tz_cd" %in% header.names){
         date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
         if(length(date.time.cols) > 0){
