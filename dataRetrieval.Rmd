@@ -8,11 +8,11 @@ knit: (function(inputFile, encoding) {
       out_dir <- 'test';
       rmarkdown::render(inputFile,
                         encoding=encoding, 
-                        output_file='../dataRetrieval.html') })
+                        output_file='dataRetrieval.html') })
 output:
   ioslides_presentation:
-    css: ../styles.css
-    logo: ../images/simple-shadow.png
+    css: css/stylesSlides.css
+    logo: img/simple-shadow.png
     smaller: yes
     widescreen: yes
 ---
@@ -48,7 +48,7 @@ How to discover data?
 
 
 ## Overview
-<img src="../images/2015-12-15_13-52-29.png" alt="Overview" style="width: 800px;"/>
+<img src="img/2015-12-15_13-52-29.png" alt="Overview" style="width: 800px;"/>
 
 ## Installation
 
@@ -62,11 +62,11 @@ Bug fixes and feature upgrades are vetted through a version of `dataRetrieval` t
 
 ```{r echo=TRUE, eval=FALSE}
 install.packages("dataRetrieval", 
-                 repos=c("http://owi.usgs.gov/R",
+                 repos=c("https://owi.usgs.gov/R",
                          getOption("repos")))
 ```
 
-More information can be found at [http://owi.usgs.gov/R/gran.html](http://owi.usgs.gov/R/gran.html).
+More information can be found at [https://owi.usgs.gov/R/gran.html](https://owi.usgs.gov/R/gran.html).
 
 Finally, the absolute cutting-edge version of `dataRetrieval` can be installed using the `devtools` package which pulls from GitHub:
 
@@ -106,9 +106,7 @@ Finally, if there are still questions that the vignette and help files don't ans
 |Unit Data|
 |---------|
 |Data reported at the frequency it is collected – e.g. 15 minute|
-|Generally available back to 2007 (big improvement from 120 days!)|
 |Includes current real-time data|
-
 
 
 |Daily Data|
@@ -270,7 +268,7 @@ siteInfo <- attr(yahara, "siteInfo")
   
 ts <- ts +
       xlab("") +
-      ylab(parameterInfo$parameter_desc) +
+      ylab(parameterInfo$variableDescription) +
       ggtitle(siteInfo$station_nm)
 ts
 ```
@@ -334,7 +332,7 @@ Environmental Data Discovery and Transformation tool: [http://cida.usgs.gov/endd
 For dataRetrieval:
 Become familiar with the possibilities of the web services [http://waterservices.usgs.gov/](http://waterservices.usgs.gov/)
 
-<img src="../images/waterservices.png" alt="Overview" style="width: 450px;"/>
+<img src="img/waterservices.png" alt="Overview" title="dataRetrieval Overview" style="width: 450px;"/>
 
 ##  USGS Advanced Retrievals: readNWISdata
 
@@ -418,8 +416,6 @@ meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
 
 [Water Quality Portal](http://www.waterqualitydata.us/)
 
-<div class="columns-2">
-
 * Multiple agencies
     + USGS data comes from the NWIS database
     + EPA data comes from the STORET database (this includes many state, tribal, NGO, and academic groups)
@@ -430,9 +426,6 @@ meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
 
 * To get non-NWIS data, need to use CharacteristicName instead of parameter code.
 
-<img src="../images/WQP.png" alt="Overview" style="width: 300px;"/>
-
-</div>
 
 ## Water Quality Portal Basic Retrieval: readWQPqw
 
@@ -510,7 +503,7 @@ unique(phosData$ResultMeasure.MeasureUnitCode)
 ```
 
 ```{r echo=FALSE, eval=TRUE}
-phosData <- readRDS("phosData.rds")
+phosData <- readRDS("img/phosData.rds")
 unique(phosData$ResultMeasure.MeasureUnitCode)
 ```
 
@@ -699,7 +692,8 @@ pander(sitesVA.1[,c("site_no","station_nm","begin_date","end_date")])
 Get samples that have both parameters:
 
 ```{r echo=TRUE, eval = FALSE}
-comboData <- readNWISqw(sitesVA.1$site_no[1], pCode, reshape = TRUE) %>% 
+comboData <- readNWISqw(sitesVA.1$site_no[1], 
+                        pCode, reshape = TRUE) %>% 
                   filter(!is.na(result_va_00665) & !is.na(result_va_80154))
 
 variableInfo <- attr(comboData, "variableInfo")
@@ -781,9 +775,6 @@ plotResid
 
 ##  Supplemental Slides: USGS Basic Web Retrievals: readNWISdv
 
-Unit value discharge data is 15 minute data availabe back to 2007. 
-
-Daily mean data is available for far longer.
 
 ```{r echo=TRUE, eval=FALSE}
 siteNo <- "05427718"
@@ -793,26 +784,27 @@ daily <- readNWISdv(siteNo, pCode, "1990-01-01","2014-12-31")
 daily <- renameNWISColumns(daily)
 dd <- ggplot(daily, aes(Date,Flow)) +
   xlab("") +
-  ylab(attr(daily,"variableInfo")$parameter_nm) +
+  ylab(attr(daily,"variableInfo")$variableName) +
   geom_line()
 dd
 ```
    
 ##  Supplemental Slides: USGS Basic Web Retrievals: readNWISdv
 
-Unit value discharge data is 15 minute data availabe back to 2007. 
 
-Daily mean data is available for far longer.
 
 ```{r echo=FALSE, eval=TRUE}
+
+
 siteNo <- "05427718"
 pCode <- "00060"
 
 daily <- readNWISdv(siteNo, pCode, "1990-01-01","2014-12-31")
 daily <- renameNWISColumns(daily)
+
 dd <- ggplot(daily, aes(Date,Flow)) +
   xlab("") +
-  ylab(attr(daily,"variableInfo")$parameter_nm) +
+  ylab(attr(daily,"variableInfo")$variableName) +
   geom_line()
 dd
 ```
@@ -828,7 +820,10 @@ The NWIS functions can be used to get multiple sites and multiple parameters in 
 sites <- c("05427850","05427718") # 2 stations on Yahara
 pCodes <- c("00060","00010") #Temperature and discharge
 
-multi <- readNWISuv(sites,pCodes, "2016-03-01","2016-03-08")
+today <- Sys.Date()
+last.week <- Sys.Date()-7
+
+multi <- readNWISuv(sites,pCodes, last.week, today)
 multi <- renameNWISColumns(multi)
 
 names(multi)
@@ -966,8 +961,9 @@ longMulti <- gather(wideMulti, variable, value, -site_no, -dateTime) %>%
          mutate(variable = as.factor(variable)) %>%
          mutate(site_no = as.factor(site_no))
 
-levels(longMulti$variable) <- paramInfo$param_units
-levels(longMulti$site_no) <- siteInfo$station_nm
+levels(longMulti$variable) <- paramInfo$unit[which(paste0("X_",paramInfo$variableCode,"_00000") %in% levels(longMulti$variable))]
+
+levels(longMulti$site_no) <- siteInfo$station_nm[which(siteInfo$site_no %in% levels(longMulti$site_no))]
 
 gp <- ggplot(longMulti, 
              aes(dateTime, value, color=site_no)) +

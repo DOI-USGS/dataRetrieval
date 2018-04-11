@@ -90,7 +90,7 @@ article.rmdtable table th {
 }
 
 slides > slide {
-  background-image: url(images/usgs.png), url(images/simple-shadow.png);
+  background-image: url(../img/usgs.png), url(../img/simple-shadow.png);
   background-size: 150px, 35px;
   background-repeat: no-repeat;
   background-position: 3% 98%, 98% 98%;
