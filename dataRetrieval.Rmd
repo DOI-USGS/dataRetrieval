@@ -62,11 +62,11 @@ Bug fixes and feature upgrades are vetted through a version of `dataRetrieval` t
 
 ```{r echo=TRUE, eval=FALSE}
 install.packages("dataRetrieval", 
-                 repos=c("http://owi.usgs.gov/R",
+                 repos=c("https://owi.usgs.gov/R",
                          getOption("repos")))
 ```
 
-More information can be found at [http://owi.usgs.gov/R/gran.html](http://owi.usgs.gov/R/gran.html).
+More information can be found at [https://owi.usgs.gov/R/gran.html](https://owi.usgs.gov/R/gran.html).
 
 Finally, the absolute cutting-edge version of `dataRetrieval` can be installed using the `devtools` package which pulls from GitHub:
 
@@ -106,9 +106,7 @@ Finally, if there are still questions that the vignette and help files don't ans
 |Unit Data|
 |---------|
 |Data reported at the frequency it is collected – e.g. 15 minute|
-|Generally available back to 2007 (big improvement from 120 days!)|
 |Includes current real-time data|
-
 
 
 |Daily Data|
@@ -270,7 +268,7 @@ siteInfo <- attr(yahara, "siteInfo")
   
 ts <- ts +
       xlab("") +
-      ylab(parameterInfo$parameter_desc) +
+      ylab(parameterInfo$variableDescription) +
       ggtitle(siteInfo$station_nm)
 ts
 ```
@@ -777,9 +775,6 @@ plotResid
 
 ##  Supplemental Slides: USGS Basic Web Retrievals: readNWISdv
 
-Unit value discharge data is 15 minute data availabe back to 2007. 
-
-Daily mean data is available for far longer.
 
 ```{r echo=TRUE, eval=FALSE}
 siteNo <- "05427718"
@@ -789,26 +784,27 @@ daily <- readNWISdv(siteNo, pCode, "1990-01-01","2014-12-31")
 daily <- renameNWISColumns(daily)
 dd <- ggplot(daily, aes(Date,Flow)) +
   xlab("") +
-  ylab(attr(daily,"variableInfo")$parameter_nm) +
+  ylab(attr(daily,"variableInfo")$variableName) +
   geom_line()
 dd
 ```
    
 ##  Supplemental Slides: USGS Basic Web Retrievals: readNWISdv
 
-Unit value discharge data is 15 minute data availabe back to 2007. 
 
-Daily mean data is available for far longer.
 
 ```{r echo=FALSE, eval=TRUE}
+
+
 siteNo <- "05427718"
 pCode <- "00060"
 
 daily <- readNWISdv(siteNo, pCode, "1990-01-01","2014-12-31")
 daily <- renameNWISColumns(daily)
+
 dd <- ggplot(daily, aes(Date,Flow)) +
   xlab("") +
-  ylab(attr(daily,"variableInfo")$parameter_nm) +
+  ylab(attr(daily,"variableInfo")$variableName) +
   geom_line()
 dd
 ```
@@ -965,8 +961,9 @@ longMulti <- gather(wideMulti, variable, value, -site_no, -dateTime) %>%
          mutate(variable = as.factor(variable)) %>%
          mutate(site_no = as.factor(site_no))
 
-levels(longMulti$variable) <- paramInfo$param_units
-levels(longMulti$site_no) <- siteInfo$station_nm
+levels(longMulti$variable) <- paramInfo$unit[which(paste0("X_",paramInfo$variableCode,"_00000") %in% levels(longMulti$variable))]
+
+levels(longMulti$site_no) <- siteInfo$station_nm[which(siteInfo$site_no %in% levels(longMulti$site_no))]
 
 gp <- ggplot(longMulti, 
              aes(dateTime, value, color=site_no)) +
