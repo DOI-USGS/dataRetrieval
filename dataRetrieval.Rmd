@@ -777,6 +777,19 @@ plotResid
 
 
 ```{r echo=TRUE, eval=FALSE}
+unescape_html <- function(str){
+  
+  
+  fancy_chars <- regmatches(str, gregexpr("&#\\d{3};",str)) 
+
+  unescaped <- xml2::xml_text(xml2::read_html(paste0("<x>", fancy_chars, "</x>")))
+
+  fancy_chars <- gsub(pattern = "&#\\d{3};", 
+                      replacement = unescaped, x = str)
+
+  fancy_chars <- gsub("Â","", fancy_chars)
+  return(fancy_chars)
+}
 siteNo <- "05427718"
 pCode <- "00060"
 
@@ -784,7 +797,7 @@ daily <- readNWISdv(siteNo, pCode, "1990-01-01","2014-12-31")
 daily <- renameNWISColumns(daily)
 dd <- ggplot(daily, aes(Date,Flow)) +
   xlab("") +
-  ylab(attr(daily,"variableInfo")$variableName) +
+  ylab(unescape_html(attr(daily,"variableInfo")$variableName)) +
   geom_line()
 dd
 ```
@@ -794,8 +807,19 @@ dd
 
 
 ```{r echo=FALSE, eval=TRUE}
+unescape_html <- function(str){
+  
+  
+  fancy_chars <- regmatches(str, gregexpr("&#\\d{3};",str)) 
 
+  unescaped <- xml2::xml_text(xml2::read_html(paste0("<x>", fancy_chars, "</x>")))
 
+  fancy_chars <- gsub(pattern = "&#\\d{3};", 
+                      replacement = unescaped, x = str)
+
+  fancy_chars <- gsub("Â","", fancy_chars)
+  return(fancy_chars)
+}
 siteNo <- "05427718"
 pCode <- "00060"
 
@@ -804,7 +828,7 @@ daily <- renameNWISColumns(daily)
 
 dd <- ggplot(daily, aes(Date,Flow)) +
   xlab("") +
-  ylab(attr(daily,"variableInfo")$variableName) +
+  ylab(unescape_html(attr(daily, "variableInfo")$variableName)) +
   geom_line()
 dd
 ```
