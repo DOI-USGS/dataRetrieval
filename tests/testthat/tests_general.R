@@ -58,7 +58,7 @@ test_that("General NWIS retrievals working", {
   #2 data descriptors, but some random empty "values" tag:
   urlTest <- "https://nwis.waterservices.usgs.gov/nwis/iv/?site=11447650&format=waterml,1.1&ParameterCd=63680&startDT=2016-12-13&endDT=2016-12-13"
   x <- importWaterML1(urlTest)
-  expect_equal(ncol(x), 8)
+  expect_equal(ncol(x), 6)
   
   #Test list:
   args <- list(sites="05114000", service="iv", 
