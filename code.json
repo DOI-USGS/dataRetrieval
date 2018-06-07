@@ -11,7 +11,7 @@
       "licenses": [
         {
           "name": "Public Domain, CC0-1.0",
-          "URL": "https://github.com/usgs/REPOSITORY_NAME/blob/master/LICENSE.md"
+          "URL": "https://github.com/USGS-R/dataRetrieval/blob/master/LICENSE.note"
         }
       ]
     },
@@ -25,8 +25,10 @@
     "laborHours": 500,
 
     "tags": [
-      "TAG_1",
-      "TAG_2"
+      "R",
+      "rstats",
+	  "USGS",
+	  "water"
     ],
 
     "languages": [
