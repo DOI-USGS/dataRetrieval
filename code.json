@@ -4,7 +4,7 @@
     "organization": "U.S. Geological Survey",
     "description": "This R package is designed to obtain USGS or EPA water quality sample data, streamflow data, and metadata directly from web services",
     "version": "2.7.4",
-    "status": "Approved",
+    "status": "Production",
 
     "permissions": {
       "usageType": "openSource",
