@@ -503,7 +503,11 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
   data <- importRDB1(url,asDateTime=TRUE, convertType = convertType)
   
   siteInfo <- readNWISsite(siteNumbers)
-  siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+  
+  if(nrow(data) > 0){
+    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+  }
+  
   attr(data, "siteInfo") <- siteInfo
   
   return (data)
