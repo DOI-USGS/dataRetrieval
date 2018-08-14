@@ -133,7 +133,7 @@ whatWQPdata <- function(..., saveFile = tempfile()){
     y <- bind_cols(y, retval[[i]])
   }
   
-  y[,grep("Count",names(y))] <- sapply(y[,grep("Count",names(y))], as.numeric)
+  y[,grep("Count$",names(y))] <- sapply(y[,grep("Count$",names(y))], as.numeric)
   
   names(y)[names(y) == "type"] <- paste("type",letters[1:length(names(y)[names(y) == "type"])],sep="_")
   
