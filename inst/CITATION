@@ -7,7 +7,7 @@ bibentry(bibtype = "Manual",
               as.person("Robert M. Hirsch"),
               as.person("William Watkins")
               ),
-  title = "dataRetrieval: R packages for discovering and retrieving water data available from Federal hydrologic web services",
+  title = "dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services",
   publisher = "U.S. Geological Survey",
   address="Reston, VA",
   version = "2.7.4",
