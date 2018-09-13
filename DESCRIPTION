@@ -4,9 +4,11 @@ Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
 Version: 2.7.4
 Date: 2017-09-27
 Authors@R: c(person("Robert", "Hirsch", role = c("aut"),
-    email = "rhirsch@usgs.gov"),
+    email = "rhirsch@usgs.gov",
+    comment=c(ORCID="0000-0002-4534-075X")),
     person("Laura", "DeCicco", role = c("aut","cre"),
-    email = "ldecicco@usgs.gov"),
+    email = "ldecicco@usgs.gov",
+    comment=c(ORCID="0000-0002-3915-9487")),
     person("David","Lorenz", role=c("aut")),
     person("Jordan", "Read", role = c("ctb"),
     email = "jread@usgs.gov"),
@@ -46,4 +48,4 @@ BuildVignettes: true
 VignetteBuilder: knitr
 BugReports: https://github.com/USGS-R/dataRetrieval/issues
 URL: https://pubs.usgs.gov/tm/04/a10/
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
