@@ -47,7 +47,6 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @importFrom lubridate parse_date_time
 #' @examples
 #' \dontrun{
 #' availableData <- whatNWISdata(siteNumber = '05114000')
@@ -106,8 +105,8 @@ whatNWISdata <- function(...){
   }
   
   if(nrow(SiteFile) > 0){
-    SiteFile$begin_date <- as.Date(parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
-    SiteFile$end_date <- as.Date(parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
+    SiteFile$begin_date <- as.Date(lubridate::parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
+    SiteFile$end_date <- as.Date(lubridate::parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
   }
   
   return(SiteFile)

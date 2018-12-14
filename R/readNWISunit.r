@@ -129,7 +129,6 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz="UTC
 #' }
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
-#' @importFrom dplyr left_join
 #' @examples
 #' site_ids <- c('01594440','040851325')
 #' \dontrun{
@@ -166,7 +165,7 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, 
 
     
     siteInfo <- readNWISsite(siteNumbers)
-    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+    siteInfo <- dplyr::left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
     
     attr(data, "siteInfo") <- siteInfo
     attr(data, "variableInfo") <- NULL
@@ -291,7 +290,6 @@ readNWISrating <- function (siteNumber,type="base",convertType = TRUE){
 #' }
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
-#' @importFrom dplyr left_join
 #' @examples
 #' site_ids <- c('01594440','040851325')
 #' \dontrun{
@@ -334,7 +332,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
 
 
     siteInfo <- readNWISsite(siteNumbers)
-    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+    siteInfo <- dplyr::left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
     
     attr(data, "url") <- url
     attr(data, "comment") <- comment
@@ -396,7 +394,6 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
 #' 
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
-#' @importFrom dplyr left_join
 #' @examples
 #' site_id <- "434400121275801"
 #' \dontrun{
@@ -422,7 +419,7 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
       }
     }
     siteInfo <- readNWISsite(siteNumbers)
-    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+    siteInfo <- dplyr::left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
     
     attr(data, "siteInfo") <- siteInfo
   }
@@ -467,7 +464,6 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' }
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
-#' @importFrom dplyr left_join
 #' @examples
 #' \dontrun{
 #' x1 <- readNWISstat(siteNumbers=c("02319394"),
@@ -505,7 +501,7 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
   siteInfo <- readNWISsite(siteNumbers)
   
   if(nrow(data) > 0){
-    siteInfo <- left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+    siteInfo <- dplyr::left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
   }
   
   attr(data, "siteInfo") <- siteInfo

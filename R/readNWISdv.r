@@ -35,7 +35,6 @@
 #' }
 #' 
 #' @seealso \code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
-#' @importFrom lubridate parse_date_time
 #' @export
 #' @keywords data import USGS web service
 #' @examples

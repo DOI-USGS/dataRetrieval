@@ -28,7 +28,6 @@
 #' @importFrom xml2 xml_root
 #' @importFrom xml2 xml_children
 #' @importFrom xml2 xml_attr
-#' @importFrom dplyr bind_rows
 #' 
 #' @examples
 #' \dontrun{
@@ -71,7 +70,7 @@ whatNWISsites <- function(...){
     if(is.null(retVal)){
       retVal <- df
     }else{
-      retVal <- bind_rows(retVal, df)
+      retVal <- dplyr::bind_rows(retVal, df)
     }
   }
   
