@@ -17,4 +17,5 @@ README.md
 ^\.Rproj\.travis.yml
 ^\.Rproj\appveyor.yml
 CONDUCT.md
-
+DISCLAIMER.md
+code.json
