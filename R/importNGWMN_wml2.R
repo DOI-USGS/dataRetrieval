@@ -18,7 +18,6 @@
 #' @importFrom xml2 xml_text
 #' @importFrom xml2 xml_attr
 #' @importFrom xml2 xml_find_first
-#' @importFrom lubridate parse_date_time
 #' @examples
 #' \dontrun{
 #' obs_url <- paste("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
@@ -137,7 +136,6 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @importFrom xml2 xml_attr xml_find_all xml_text 
 #' @importFrom dplyr mutate
-#' @importFrom lubridate parse_date_time
 #' @export
 #' @examples 
 #' baseURL <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
@@ -187,7 +185,7 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
     timeDF$dateTime[logicVec] <- rawTime[logicVec]
   }
   if(asDateTime){
-    timeDF$dateTime <- parse_date_time(timeDF$dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M","%Y-%m-%dT%H:%M:%S",
+    timeDF$dateTime <- lubridate::parse_date_time(timeDF$dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M","%Y-%m-%dT%H:%M:%S",
                                                           "%Y-%m-%dT%H:%M:%OS","%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
     #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
     attr(timeDF$dateTime, 'tzone') <- tz

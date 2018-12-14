@@ -41,10 +41,6 @@
 #' @export
 #' @import utils
 #' @import stats
-#' @importFrom lubridate parse_date_time
-#' @importFrom dplyr full_join
-#' @importFrom dplyr bind_rows
-#' @importFrom dplyr arrange
 #' @importFrom xml2 read_xml
 #' @importFrom xml2 xml_find_all
 #' @importFrom xml2 xml_children
@@ -100,7 +96,7 @@
 #' #raw XML
 #' url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
 #'                          startDate = "2014-01-01", endDate = "2014-01-01")
-#' raw <- content(GET(url), as = 'raw')
+#' raw <- content(httr::GET(url), as = 'raw')
 #' rawParsed <- importWaterML1(raw)
 #' }
 #' filePath <- system.file("extdata", package="dataRetrieval")
@@ -186,7 +182,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
       dateTime <- xml_attr(obs,"dateTime")
       if(asDateTime){
         numChar <- nchar(dateTime)
-        dateTime <- parse_date_time(dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
+        dateTime <- lubridate::parse_date_time(dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M",
                                                 "%Y-%m-%dT%H:%M:%S","%Y-%m-%dT%H:%M:%OS",
                                                 "%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
         if(any(numChar < 20) & any(numChar > 16)){
@@ -232,7 +228,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
         if(is.null(obsDF)){
           obsDF <- valParentDF
         }else{
-          obsDF <- full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
+          obsDF <- dplyr::full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
         }
       }else{
         #need column names for joining later
@@ -295,17 +291,17 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
           deleteCols <- grepl(obsColName,colnames(sameSite))
           sameSite <- sameSite[,!deleteCols]
           sameSite_simNames <- intersect(colnames(sameSite), colnames(df))
-          sameSite <- full_join(sameSite, df, by = sameSite_simNames)
+          sameSite <- dplyr::full_join(sameSite, df, by = sameSite_simNames)
           sameSite <- sameSite[order(as.Date(sameSite$dateTime)),]
-          mergedDF <- bind_rows(sameSite, diffSite)
+          mergedDF <- dplyr::bind_rows(sameSite, diffSite)
         }else{
           similarNames <- intersect(colnames(mergedDF), colnames(df))
-          mergedDF <- full_join(mergedDF, df, by=similarNames)
+          mergedDF <- dplyr::full_join(mergedDF, df, by=similarNames)
         }
       }
-      mergedSite <- full_join(mergedSite, siteDF, by = colnames(mergedSite))
-      mergedVar <- full_join(mergedVar, varText, by = colnames(mergedVar))
-      mergedStat <- full_join(mergedStat, statDF, by = colnames(mergedStat))
+      mergedSite <- dplyr::full_join(mergedSite, siteDF, by = colnames(mergedSite))
+      mergedVar <- dplyr::full_join(mergedVar, varText, by = colnames(mergedVar))
+      mergedStat <- dplyr::full_join(mergedStat, statDF, by = colnames(mergedStat))
     }
   }
   
@@ -323,7 +319,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   mergedNames <- names(mergedDF)
   tzLoc <- grep("tz_cd", names(mergedDF))
   mergedDF <- mergedDF[c(mergedNames[-tzLoc],mergedNames[tzLoc])]
-  mergedDF <- arrange(mergedDF,site_no, dateTime)
+  mergedDF <- dplyr::arrange(mergedDF,site_no, dateTime)
   
   names(mergedDF) <- make.names(names(mergedDF))
   

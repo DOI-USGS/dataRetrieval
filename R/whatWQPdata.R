@@ -93,8 +93,6 @@ whatWQPmetrics <- function(...){
 #' 
 #' @export
 #' @import utils
-#' @importFrom tools file_ext
-#' @importFrom jsonlite fromJSON
 #' @examples
 #' \dontrun{
 #' site1 <- whatWQPdata(siteid="USGS-01594440")
@@ -118,14 +116,14 @@ whatWQPdata <- function(..., saveFile = tempfile()){
                     urlCall,
                     "&mimeType=geojson&sorted=no")
   
-  if(file_ext(saveFile) != ".geojson"){
+  if(tools::file_ext(saveFile) != ".geojson"){
     saveFile <- paste0(saveFile,".geojson")
   }
   
   doc <- getWebServiceData(urlCall, write_disk(saveFile))
   headerInfo <- attr(doc, "headerInfo")
 
-  retval <- as.data.frame(fromJSON(saveFile), stringsAsFactors = FALSE)
+  retval <- as.data.frame(jsonlite::fromJSON(saveFile), stringsAsFactors = FALSE)
   df_cols <- as.integer(which(sapply(retval, class) == "data.frame"))
   y <- retval[,-df_cols]
   
