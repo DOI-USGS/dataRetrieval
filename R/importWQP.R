@@ -92,7 +92,8 @@ importWQP <- function(obs_url, zip=FALSE, tz="UTC"){
                                         ResultMeasureValue = col_number(),
                                         `WellDepthMeasure/MeasureValue` = col_number(),
                                         `WellHoleDepthMeasure/MeasureValue` = col_number(),
-                                        `HUCEightDigitCode` = col_character()),
+                                        `HUCEightDigitCode` = col_character(), 
+                                        `ActivityEndTime/TimeZoneCode` = col_character()),
                        quote = "", delim = "\t"))
     
   if(!file.exists(obs_url)){
