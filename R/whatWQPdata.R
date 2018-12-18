@@ -120,7 +120,7 @@ whatWQPdata <- function(..., saveFile = tempfile()){
     saveFile <- paste0(saveFile,".geojson")
   }
   
-  doc <- getWebServiceData(urlCall, write_disk(saveFile))
+  doc <- getWebServiceData(urlCall, httr::write_disk(saveFile))
   headerInfo <- attr(doc, "headerInfo")
 
   retval <- as.data.frame(jsonlite::fromJSON(saveFile), stringsAsFactors = FALSE)
@@ -128,7 +128,7 @@ whatWQPdata <- function(..., saveFile = tempfile()){
   y <- retval[,-df_cols]
   
   for(i in df_cols){
-    y <- bind_cols(y, retval[[i]])
+    y <- dplyr::bind_cols(y, retval[[i]])
   }
   
   y[,grep("Count$",names(y))] <- sapply(y[,grep("Count$",names(y))], as.numeric)

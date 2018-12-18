@@ -108,7 +108,7 @@ retryGetOrPost <- function(obs_url, ...) {
     obs_url <- split[[1]][1]
     query <- split[[1]][2]
     resp <- httr::RETRY("POST", obs_url, ..., body = query,
-                        httr::content_type("application/x-www-form-urlencoded"), user_agent(default_ua()))
+                        httr::content_type("application/x-www-form-urlencoded"), httr::user_agent(default_ua()))
   }
   return(resp)
 }

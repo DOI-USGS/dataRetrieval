@@ -76,7 +76,7 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
         mergedDF <- df
       } else {
         similarNames <- intersect(colnames(mergedDF), colnames(df))
-        mergedDF <- full_join(mergedDF, df, by=similarNames)
+        mergedDF <- dplyr::full_join(mergedDF, df, by=similarNames)
       }
     }
     
