@@ -6,7 +6,7 @@
 
 language: r
 cache: packages
-dist: trusty
+dist: bionic
 
 matrix:
   include:
