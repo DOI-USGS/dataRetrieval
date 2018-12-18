@@ -9,6 +9,7 @@ install:
 
 environment:
   global:
+    USE_RTOOLS: true
     WARNINGS_ARE_ERRORS: 1
     NOT_CRAN: "true"
     
