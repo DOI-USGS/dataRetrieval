@@ -413,7 +413,7 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
     if(convertType){
       #check that the date includes a day, based on date string length
       if(any(nchar(as.character(data$lev_dt)) <= 7) | any(grepl("[0-9]*-[0-9]*-00",data$lev_dt))){
-        stop("Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text")
+        message("Not all dates were converted to Date object. Returning raw text for date columns.")
       } else {
         data$lev_dt <- as.Date(data$lev_dt)
       }
