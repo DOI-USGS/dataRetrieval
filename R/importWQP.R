@@ -52,8 +52,8 @@ importWQP <- function(obs_url, zip=FALSE, tz="UTC"){
       temp <- tempfile()
       temp <- paste0(temp,".zip")
       doc <- getWebServiceData(obs_url, httr::write_disk(temp))
-      headerInfo <- headers(doc)
-      doc <- unzip(temp, exdir=tempdir())
+      headerInfo <- httr::headers(doc)
+      doc <- utils::unzip(temp, exdir=tempdir())
       unlink(temp)
       on.exit(unlink(doc))
     } else {
