@@ -8,9 +8,24 @@ install:
   ps: Bootstrap
 
 environment:
-  NOT_CRAN: "true"
+  global:
+    WARNINGS_ARE_ERRORS: 1
+    NOT_CRAN: "true"
+    
+  matrix:
+  - R_VERSION: devel
+    GCC_PATH: mingw_32
+
+  - R_VERSION: release
+    R_ARCH: x64
+
+  - R_VERSION: patched
+  
+matrix:
+  fast_finish: true
 
 build_script:
+  - travis-tool.sh install_github tidyverse/readr
   - travis-tool.sh install_deps
 
 test_script:

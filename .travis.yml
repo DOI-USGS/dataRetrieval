@@ -23,20 +23,20 @@ addons:
 
 env:
    global:
-     - R_BUILD_ARGS="--no-build-vignettes --no-manual"
-     - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
      - NOT_CRAN="true"
      - _R_CHECK_FORCE_SUGGESTS_=false
      
 warnings_are_errors: true
 
+r_github_packages:
+  - jimhester/covr
+  - tidyverse/readr
+  
 script: 
   - |
     R CMD build .
     travis_wait 20 R CMD check dataRetrieval*tar.gz
 
-r_github_packages:
-  - jimhester/covr
 
 after_success:
   - if [[ "${R_CODECOV}" ]]; then R -e 'covr::coveralls()'; fi
