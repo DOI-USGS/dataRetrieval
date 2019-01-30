@@ -4,8 +4,8 @@
 \alias{readNWISpeak}
 \title{Peak flow data from USGS (NWIS)}
 \usage{
-readNWISpeak(siteNumbers, startDate = "", endDate = "", asDateTime = TRUE,
-  convertType = TRUE)
+readNWISpeak(siteNumbers, startDate = "", endDate = "",
+  asDateTime = TRUE, convertType = TRUE)
 }
 \arguments{
 \item{siteNumbers}{character USGS site number(or multiple sites).  This is usually an 8 digit number.}

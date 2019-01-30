@@ -1,16 +1,18 @@
 citHeader("To cite dataRetrieval in publications, please use:")
 
-bibentry(bibtype = "InBook",
+bibentry(bibtype = "Manual",
  author = personList(
+              as.person("Laura A. De Cicco"),
+              as.person("David Lorenz"),
               as.person("Robert M. Hirsch"),
-              as.person("Laura A. De Cicco")),
-  title = "User guide to Exploration and Graphics for RivEr Trends (EGRET) and dataRetrieval: R packages for hydrologic data",
+              as.person("William Watkins")
+              ),
+  title = "dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services",
   publisher = "U.S. Geological Survey",
   address="Reston, VA",
-  booktitle = "Techniques and Methods",
+  version = "2.7.4",
   institution = "U.S. Geological Survey",
-  year = 2015,
-  chapter = "A10",
-  url = "https://pubs.usgs.gov/tm/04/a10/",
-  textVersion = "Hirsch, R.M., and De Cicco, L.A., 2015, User guide to Exploration and Graphics for RivEr Trends (EGRET) and dataRetrieval: R packages for hydrologic data (version 2.0, February 2015): U.S. Geological Survey Techniques and Methods book 4, chap. A10, 93 p., https://doi.org/10.3133/tm4A10"
+  year = 2018,
+  url = "https://code.usgs.gov/water/dataRetrieval",
+  textVersion = "De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., 2018, dataRetrieval: R packages for discovering and retrieving water data available from Federal hydrologic web services, doi:10.5066/P9X4L3GE"
 )

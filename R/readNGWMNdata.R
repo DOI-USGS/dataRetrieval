@@ -13,9 +13,6 @@
 #' for more information on time zones.
 #' @import utils
 #' @importFrom dplyr mutate
-#' @importFrom dplyr bind_rows
-#' @importFrom dplyr bind_cols
-#' @importFrom stats na.omit
 #' @export
 #' @examples 
 #' \dontrun{
@@ -58,14 +55,14 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
     
     #these attributes are pulled out and saved when doing binds to be reattached
     attrs <- c("url","gml:identifier","generationDate","responsibleParty", "contact")
-    featureID <- na.omit(gsub(":",".",dots[['siteNumbers']]))
+    featureID <- stats::na.omit(gsub(":",".",dots[['siteNumbers']]))
     
     for(f in featureID){
       obsFID <- retrieveObservation(featureID = f, asDateTime, attrs, tz = tz)
       obsFIDattr <- saveAttrs(attrs, obsFID)
       obsFID <- removeAttrs(attrs, obsFID)
-      allObs <- bind_rows(allObs, obsFID)
-      allAttrs <- bind_rows(allAttrs, obsFIDattr)
+      allObs <- dplyr::bind_rows(allObs, obsFID)
+      allAttrs <- dplyr::bind_rows(allAttrs, obsFIDattr)
       
     }
     
@@ -83,7 +80,7 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
   } else if (service == "featureOfInterest") {
     
     if("siteNumbers" %in% names(dots)){
-      featureID <- na.omit(gsub(":",".",dots[['siteNumbers']]))
+      featureID <- stats::na.omit(gsub(":",".",dots[['siteNumbers']]))
       allSites <- tryCatch({
         retrieveFeatureOfInterest(featureID = featureID)
       })

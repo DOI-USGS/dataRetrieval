@@ -6,7 +6,7 @@
 
 language: r
 cache: packages
-dist: trusty
+dist: bionic
 
 matrix:
   include:
@@ -30,13 +30,15 @@ env:
      
 warnings_are_errors: true
 
+r_github_packages:
+  - jimhester/covr
+  - tidyverse/readr
+  
 script: 
   - |
     R CMD build .
-    travis_wait 20 R CMD check dataRetrieval*tar.gz
+    travis_wait 30 R CMD check dataRetrieval*tar.gz
 
-r_github_packages:
-  - jimhester/covr
 
 after_success:
   - if [[ "${R_CODECOV}" ]]; then R -e 'covr::coveralls()'; fi

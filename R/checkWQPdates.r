@@ -5,7 +5,6 @@
 #'
 #' @param values named list with arguments to send to the Water Quality Portal
 #' @return values named list with corrected arguments to send to the Water Quality Portal
-#' @importFrom lubridate parse_date_time
 #' @export
 #' @keywords internal
 #' @examples
@@ -30,7 +29,7 @@ checkWQPdates <- function(values){
         splitDates <- unlist(strsplit(dateInput, "-"))
         if(length(splitDates) == 3){
           if(nchar(splitDates[1]) == 4){ #R object
-            dates <- as.Date(parse_date_time(dateInput, "%Y-%m-%d"))
+            dates <- as.Date(lubridate::parse_date_time(dateInput, "%Y-%m-%d"))
             dates <- format(dates, format="%m-%d-%Y")
             values[i] <- dates
           } else if (nchar(splitDates[3]) != 4){ #The way WQP wants it == 4, so this is probably a 2 digit year or something
