@@ -222,7 +222,8 @@ test_that("zeroPad handles NAs", {
 
 test_that("Dates with no days can be handled", {
   testthat::skip_on_cran()
-  expect_error(readNWISgwl("425957088141001", startDate = "1980-01-01"))
+  empty_df <- readNWISgwl("425957088141001", startDate = "1980-01-01")
+  expect_true(nrow(empty_df) > 0) 
  })
 
 context("whatWQPsamples")

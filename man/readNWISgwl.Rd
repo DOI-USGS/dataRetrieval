@@ -4,8 +4,8 @@
 \alias{readNWISgwl}
 \title{Groundwater level measurements retrieval from USGS (NWIS)}
 \usage{
-readNWISgwl(siteNumbers, startDate = "", endDate = "", convertType = TRUE,
-  tz = "UTC")
+readNWISgwl(siteNumbers, startDate = "", endDate = "",
+  convertType = TRUE, tz = "UTC")
 }
 \arguments{
 \item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}

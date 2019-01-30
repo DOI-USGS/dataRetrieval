@@ -44,8 +44,6 @@
 #' @export
 #' @import utils
 #' @import stats
-#' @importFrom lubridate parse_date_time
-#' @importFrom dplyr left_join
 #' @importFrom readr read_lines
 #' @importFrom readr read_delim
 #' @importFrom readr problems
@@ -167,7 +165,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     
     if(length(badCols) > 0){
       readr.data <- fixErrors(readr.data, readr.data.char, "no trailing characters", as.numeric)
-      readr.data <- fixErrors(readr.data, readr.data.char, "date like", parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d","%Y"))
+      readr.data <- fixErrors(readr.data, readr.data.char, "date like", lubridate::parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d","%Y"))
     }
     
     if(length(grep("_va", names(readr.data))) > 0  && 
@@ -209,7 +207,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
         
         if(all(c(paste0(i,"_dt"),paste0(i,"_tm")) %in% header.names)){
           varname <- paste0(i,"_dateTime")
-          varval <- suppressWarnings(parse_date_time(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), c("%Y-%m-%d %H:%M:%S","%Y-%m-%d %H:%M"), tz = "UTC"))
+          varval <- suppressWarnings(lubridate::parse_date_time(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), c("%Y-%m-%d %H:%M:%S","%Y-%m-%d %H:%M"), tz = "UTC"))
         
           if(!all(is.na(varval))){
             readr.data[,varname] <- varval
@@ -236,12 +234,12 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
       }
       
       if("DATE" %in% header.names){
-        readr.data[,"DATE"] <- parse_date_time(readr.data[,"DATE"], "Ymd")
+        readr.data[,"DATE"] <- lubridate::parse_date_time(readr.data[,"DATE"], "Ymd")
       }
       
       if(all(c("DATE","TIME","TZCD") %in% header.names)){
         varname <- "DATETIME"
-        varval <- as.POSIXct(fast_strptime(paste(readr.data[,"DATE"],readr.data[,"TIME"]), "%Y-%m-%d %H%M%S", tz = "UTC"))
+        varval <- as.POSIXct(lubridate::fast_strptime(paste(readr.data[,"DATE"],readr.data[,"TIME"]), "%Y-%m-%d %H%M%S", tz = "UTC"))
         readr.data[,varname] <- varval
         readr.data <- convertTZ(readr.data,"TZCD",varname,tz, flip.cols=TRUE)
       }
@@ -291,7 +289,7 @@ convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
                               code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA),
                               stringsAsFactors = FALSE)
   
-  offset <- left_join(df[,tz.name,drop=FALSE],offsetLibrary, by=setNames("code",tz.name))
+  offset <- dplyr::left_join(df[,tz.name,drop=FALSE],offsetLibrary, by=setNames("code",tz.name))
   offset <- offset$offset
   df[,paste0(tz.name,"_reported")] <- df[,tz.name,drop=FALSE]
   
