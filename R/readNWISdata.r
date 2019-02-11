@@ -207,13 +207,13 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
 #' name <- stateCdLookup(55, "fullName")
 #' index <- stateCdLookup("WI", "tableIndex")
 #' stateCd[index,]
-#' stateCdLookup(c("West Virginia", "Wisconsin", 55, "MN"))
+#' stateCdLookup(c("West Virginia", "Wisconsin", 200, 55, "MN"))
 stateCdLookup <- function(input, outputType="postal"){
   
   outputType <- match.arg(outputType, c("postal","fullName","tableIndex","id"))
   
-  retVal <- NA
-  
+  retVal <- rep(NA, length(input))
+  index <- 1
   for(i in input){
     if(is.numeric(i) | !is.na(suppressWarnings(as.numeric(i)))){
       i <- which(as.numeric(i) == as.numeric(stateCd$STATE))
@@ -223,21 +223,24 @@ stateCdLookup <- function(input, outputType="postal"){
       i <- which(tolower(i) == tolower(stateCd$STATE_NAME))
     }
     
-    output <- switch(outputType,
+    if(length(i) > 0){
+          output <- switch(outputType,
                      postal = stateCd$STUSAB[i],
                      fullName = stateCd$STATE_NAME[i],
                      tableIndex = i,
                      id = as.integer(stateCd$STATE[i])
-    )
+      )
+      retVal[index] <- output
+    }
     
-    retVal <- c(retVal,output)
+    index <- index + 1
   }
   
   if(length(retVal[-1]) == 0){
     paste("Could not find", input, "in the state lookup table. See `stateCd` for complete list.")
   }
   
-  return(retVal[-1])
+  return(retVal)
 }
 
 #' County code look up 
