@@ -1,0 +1,13 @@
+template:
+  params:
+    ganalytics: UA-53797708-7
+navbar:
+  type: default
+  left:
+  - text: Background
+    href: articles/index.html
+  - text: Function Help
+    href: reference/index.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/USGS-R/dataRetrieval
