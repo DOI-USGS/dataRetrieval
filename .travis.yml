@@ -23,11 +23,11 @@ addons:
 
 env:
    global:
-     - R_BUILD_ARGS="--no-build-vignettes --no-manual"
-     - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
      - NOT_CRAN="true"
      - _R_CHECK_FORCE_SUGGESTS_=false
-     
+  
+r_build_args: --no-build-vignettes --no-manual --no-resave-data
+r_check_args: --no-build-vignettes --no-manual --as-cran   
 warnings_are_errors: true
 
 r_github_packages:
@@ -36,8 +36,8 @@ r_github_packages:
   
 script: 
   - |
-    R CMD build .
-    travis_wait 30 R CMD check dataRetrieval*tar.gz
+    R CMD build . 
+    travis_wait 60 R CMD check dataRetrieval*tar.gz --as-cran
 
 
 after_success:

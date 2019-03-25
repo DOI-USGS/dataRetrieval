@@ -2,13 +2,13 @@ Package: dataRetrieval
 Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
 Version: 2.7.4
-Date: 2017-09-27
-Authors@R: c(person("Robert", "Hirsch", role = c("aut"),
-    email = "rhirsch@usgs.gov",
-    comment=c(ORCID="0000-0002-4534-075X")),
+Authors@R: c(
     person("Laura", "DeCicco", role = c("aut","cre"),
     email = "ldecicco@usgs.gov",
     comment=c(ORCID="0000-0002-3915-9487")),
+    person("Robert", "Hirsch", role = c("aut"),
+    email = "rhirsch@usgs.gov",
+    comment=c(ORCID="0000-0002-4534-075X")),
     person("David","Lorenz", role=c("aut")),
     person("Jordan", "Read", role = c("ctb"),
     email = "jread@usgs.gov"),

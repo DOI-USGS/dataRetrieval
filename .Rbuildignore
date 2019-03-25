@@ -19,3 +19,7 @@ README.md
 CONDUCT.md
 DISCLAIMER.md
 code.json
+docs
+pkgdown
+_pkgdown.yml
+
