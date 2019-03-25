@@ -136,8 +136,6 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   comment <- attr(data, "comment")
   queryTime <- attr(data, "queryTime")
   header <- attr(data, "header")
-
-  
   
   if(reshape){
     if(expanded){
@@ -167,7 +165,7 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
     }
   }
   
-  if( !(is.null(siteNumbers)) && !(is.na(siteNumbers)) & length(siteNumbers) > 0){
+  if(exists("siteNumbers") &&  all(!(is.na(siteNumbers))) & length(siteNumbers) > 0){
     siteInfo <- readNWISsite(siteNumbers)
     if(nrow(data) > 0){
       siteInfo <- dplyr::left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
@@ -177,7 +175,7 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
 
   parameterCd <- unique(data$parm_cd)
   
-  if(!(is.null(parameterCd)) && !is.na(parameterCd) & length(parameterCd) > 0){
+  if(exists("parameterCd") && all(!is.na(parameterCd)) & length(parameterCd) > 0){
     parameterCd <- parameterCd[parameterCd != ""]
     varInfo <- readNWISpCode(parameterCd)
     attr(data, "variableInfo") <- varInfo

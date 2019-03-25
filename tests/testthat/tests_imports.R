@@ -160,7 +160,7 @@ test_that("External importWaterML1 test", {
   
 })
 
-test_that("no data val replacement works", {
+# test_that("no data val replacement works", {
   #may need to change dates and/or site if this data is estimated
   #run this test when changing anything with ML1 parser!
   # iceSite <- "04024430"
@@ -168,7 +168,7 @@ test_that("no data val replacement works", {
   #                      startDate = "2017-12-17", endDate = "2017-12-18")
   # expect_gt(sum(is.na(naData$X_00060_00000)), 0)
   # expect_false(any(na.omit(naData$X_00060_00000 < -99)))
-})
+# })
 
 context("importWaterML2")
 
