@@ -177,7 +177,7 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
 
   parameterCd <- unique(data$parm_cd)
   
-  if(!(is.null(parameterCd)) && !is.na(parameterCd) & length(parameterCd) > 0){
+  if(!all((is.null(parameterCd))) && !all(is.na(parameterCd)) & length(parameterCd) > 0){
     parameterCd <- parameterCd[parameterCd != ""]
     varInfo <- readNWISpCode(parameterCd)
     attr(data, "variableInfo") <- varInfo
