@@ -5,7 +5,7 @@ navbar:
   type: default
   left:
   - text: Background
-    href: articles/index.html
+    href: articles/dataRetrieval.html
   - text: Function Help
     href: reference/index.html
   right:

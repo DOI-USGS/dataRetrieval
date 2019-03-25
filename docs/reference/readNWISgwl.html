@@ -8,6 +8,13 @@
 
 <title>Groundwater level measurements retrieval from USGS (NWIS) — readNWISgwl • dataRetrieval</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
@@ -51,6 +58,16 @@ See https://waterservices.usgs.gov/rest/GW-Levels-Service.html for more informat
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-53797708-7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-53797708-7');
+</script>
+
   </head>
 
   <body>
@@ -74,21 +91,20 @@ See https://waterservices.usgs.gov/rest/GW-Levels-Service.html for more informat
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../articles/dataRetrieval.html">Background</a>
 </li>
 <li>
-  <a href="../articles/dataRetrieval.html">Get started</a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../reference/index.html">Function Help</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/USGS-R/dataRetrieval">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -217,7 +233,7 @@ for more information on time zones.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Robert Hirsch, Laura DeCicco, David Lorenz, David Watkins.</p>
+  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins.</p>
 </div>
 
 <div class="pkgdown">
