@@ -23,7 +23,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
@@ -159,15 +160,12 @@ for that value; and CORRINDEP, the corrected value for CORR.<br />
 If <code>type</code> is "base," then the data frame has an attribute called "RATING"
 that describes the rating curve is included.</p>
 <p>There are also several useful attributes attached to the data frame:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>url</td></tr>
-<tr><td>character</td><td>The url used to generate the data</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>url</td><td>character</td><td>The url used to generate the data</td></tr>
 <tr><td>queryTime</td><td>POSIXct</td><td>The time the data was returned</td></tr>
-<tr><td></td><td>comment</td><td>character</td></tr>
-<tr><td>Header comments from the RDB file</td><td></td><td>siteInfo</td></tr>
-<tr><td>data.frame</td><td>A data frame containing information on the requested sites</td><td></td></tr>
+<tr><td>comment</td><td>character</td><td>Header comments from the RDB file</td></tr>
+<tr><td>siteInfo</td><td>data.frame</td><td>A data frame containing information on the requested sites</td></tr>
 <tr><td>RATING</td><td>character</td><td>Rating information</td></tr>
-<tr><td></td><td></td><td>Name</td></tr>
 </table>
 
 
@@ -211,7 +209,7 @@ relate flow to stage.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
    </div>

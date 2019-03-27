@@ -23,7 +23,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
@@ -160,19 +161,15 @@ For a complete list, see <a href='https://en.wikipedia.org/wiki/List_of_tz_datab
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with the following columns:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>agency_cd</td></tr>
-<tr><td>character</td><td>The NWIS code for the agency reporting the data</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>agency_cd</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr>
 <tr><td>site_no</td><td>character</td><td>The USGS site number</td></tr>
-<tr><td></td><td>datetime</td><td>POSIXct</td></tr>
-<tr><td>The date and time of the value converted to UTC (if asDateTime =</td><td><code>TRUE</code></td><td>),</td></tr>
+<tr><td>datetime</td><td>POSIXct</td><td>The date and time of the value converted to UTC (if asDateTime = <code>TRUE</code>),</td></tr>
 <tr><td></td><td>character</td><td>or raw character string (if asDateTime = FALSE)</td></tr>
-<tr><td></td><td>tz_cd</td><td>character</td></tr>
-<tr><td>The time zone code for datetime</td><td></td><td>code</td></tr>
-<tr><td>character</td><td>Any codes that qualify the corresponding value</td><td></td></tr>
+<tr><td>tz_cd</td><td>character</td><td>The time zone code for datetime</td></tr>
+<tr><td>code</td><td>character</td><td>Any codes that qualify the corresponding value</td></tr>
 <tr><td>value</td><td>numeric</td><td>The numeric value for the parameter</td></tr>
-<tr><td></td><td>tz_cd_reported</td><td>The originally reported time zone</td></tr>
-<tr><td></td><td></td><td>Name</td></tr>
+<tr><td>tz_cd_reported</td><td>The originally reported time zone</td><td></td></tr>
 </table>
 <p>Note that code and value are repeated for the parameters requested. The names are of the form 
 XD_P_S, where X is literal, 
@@ -182,12 +179,10 @@ and S is the statistic code (if applicable).
 If a date/time (dt) column contained incomplete date and times, a new column of dates and time was inserted. This could happen
 when older data was reported as dates, and newer data was reported as a date/time.</p>
 <p>There are also several useful attributes attached to the data frame:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>url</td></tr>
-<tr><td>character</td><td>The url used to generate the data</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>url</td><td>character</td><td>The url used to generate the data</td></tr>
 <tr><td>queryTime</td><td>POSIXct</td><td>The time the data was returned</td></tr>
-<tr><td></td><td>comment</td><td>character</td></tr>
-<tr><td>Header comments from the RDB file</td><td></td><td></td></tr>
+<tr><td>comment</td><td>character</td><td>Header comments from the RDB file</td></tr>
 </table>
 
 
@@ -253,7 +248,7 @@ when older data was reported as dates, and newer data was reported as a date/tim
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
    </div>
