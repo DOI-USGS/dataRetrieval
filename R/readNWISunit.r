@@ -558,14 +558,14 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 readNWISuse <- function(stateCd, countyCd, years = "ALL", categories = "ALL", convertType = TRUE, transform = FALSE){
  
   countyID <- NULL
-  if(!is.null(countyCd) && toupper(countyCd) != "ALL" && countyCd != ""){
+  if(exists("countyCd") && toupper(countyCd) != "ALL" && countyCd != ""){
     for(c in countyCd){
       code <- countyCdLookup(state = stateCd, county = c, outputType = "id")
       countyID <- c(countyID,code)
     }
   }
   
-  if(!is.null(countyCd) && toupper(countyCd) == "ALL"){
+  if(exists("countyCd") && toupper(countyCd) == "ALL"){
     countyID <- toupper(countyID)
   } #case sensitive in URL
   

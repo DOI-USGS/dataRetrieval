@@ -23,7 +23,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
@@ -140,57 +141,44 @@ for more information.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with the following columns:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>agency_cd</td></tr>
-<tr><td>character</td><td>The NWIS code for the agency reporting the data</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>agency_cd</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr>
 <tr><td>site_no</td><td>character</td><td>The USGS site number</td></tr>
-<tr><td></td><td>station_nm</td><td>character</td></tr>
-<tr><td>Site name</td><td></td><td>site_tp_cd</td></tr>
-<tr><td>character</td><td>Site type</td><td></td></tr>
+<tr><td>station_nm</td><td>character</td><td>Site name</td></tr>
+<tr><td>site_tp_cd</td><td>character</td><td>Site type</td></tr>
 <tr><td>dec_lat_va</td><td>numeric</td><td>Decimal latitude</td></tr>
-<tr><td></td><td>dec_long_va</td><td>numeric</td></tr>
-<tr><td>Decimal longitude</td><td></td><td>coord_acy_cd</td></tr>
-<tr><td>character</td><td>Latitude-longitude accuracy</td><td></td></tr>
+<tr><td>dec_long_va</td><td>numeric</td><td>Decimal longitude</td></tr>
+<tr><td>coord_acy_cd</td><td>character</td><td>Latitude-longitude accuracy</td></tr>
 <tr><td>dec_coord_datum_cd</td><td>character</td><td>Decimal Latitude-longitude datum</td></tr>
-<tr><td></td><td>alt_va</td><td>character</td></tr>
-<tr><td>Altitude of Gage or land surface</td><td></td><td>alt_acy_va</td></tr>
-<tr><td>character</td><td>Altitude accuracy</td><td></td></tr>
+<tr><td>alt_va</td><td>character</td><td>Altitude of Gage or land surface</td></tr>
+<tr><td>alt_acy_va</td><td>character</td><td>Altitude accuracy</td></tr>
 <tr><td>alt_datum_cd</td><td>character</td><td>Altitude datum</td></tr>
-<tr><td></td><td>huc_cd</td><td>character</td></tr>
-<tr><td>Hydrologic unit code</td><td></td><td>data_type_cd</td></tr>
-<tr><td>character</td><td>Data type</td><td></td></tr>
+<tr><td>huc_cd</td><td>character</td><td>Hydrologic unit code</td></tr>
+<tr><td>data_type_cd</td><td>character</td><td>Data type</td></tr>
 <tr><td>parm_cd</td><td>character</td><td>Parameter code</td></tr>
-<tr><td></td><td>stat_cd</td><td>character</td></tr>
-<tr><td>Statistical code</td><td></td><td>dd_nu</td></tr>
-<tr><td>character</td><td>Internal database key</td><td></td></tr>
+<tr><td>stat_cd</td><td>character</td><td>Statistical code</td></tr>
+<tr><td>dd_nu</td><td>character</td><td>Internal database key</td></tr>
 <tr><td>loc_web_ds</td><td>character</td><td>Additional measurement description</td></tr>
-<tr><td></td><td>medium_grp_cd</td><td>character</td></tr>
-<tr><td>Medium group code</td><td></td><td>parm_grp_cd</td></tr>
-<tr><td>character</td><td>Parameter group code</td><td></td></tr>
+<tr><td>medium_grp_cd</td><td>character</td><td>Medium group code</td></tr>
+<tr><td>parm_grp_cd</td><td>character</td><td>Parameter group code</td></tr>
 <tr><td>srs_id</td><td>character</td><td>SRS ID</td></tr>
-<tr><td></td><td>access_cd</td><td>character</td></tr>
-<tr><td>Access code</td><td></td><td>begin_date</td></tr>
-<tr><td>Date</td><td>Begin date</td><td></td></tr>
+<tr><td>access_cd</td><td>character</td><td>Access code</td></tr>
+<tr><td>begin_date</td><td>Date</td><td>Begin date</td></tr>
 <tr><td>end_date</td><td>Date</td><td>End date</td></tr>
-<tr><td></td><td>count_nu</td><td>integer</td></tr>
-<tr><td>Record count</td><td></td><td>parameter_group_nm</td></tr>
-<tr><td>character</td><td>Parameter group name</td><td></td></tr>
+<tr><td>count_nu</td><td>integer</td><td>Record count</td></tr>
+<tr><td>parameter_group_nm</td><td>character</td><td>Parameter group name</td></tr>
 <tr><td>parameter_nm</td><td>character</td><td>Parameter name</td></tr>
-<tr><td></td><td>casrn</td><td>character</td></tr>
-<tr><td>Chemical Abstracts Service (CAS) Registry Number</td><td></td><td>srsname</td></tr>
-<tr><td>character</td><td>Substance Registry Services</td><td></td></tr>
+<tr><td>casrn</td><td>character</td><td>Chemical Abstracts Service (CAS) Registry Number</td></tr>
+<tr><td>srsname</td><td>character</td><td>Substance Registry Services</td></tr>
 <tr><td>parameter_units</td><td>character</td><td>Parameter units</td></tr>
-<tr><td></td><td></td><td>Name</td></tr>
 </table>
 
 
 <p>There are also several useful attributes attached to the data frame:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>url</td></tr>
-<tr><td>character</td><td>The url used to generate the data</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>url</td><td>character</td><td>The url used to generate the data</td></tr>
 <tr><td>comment</td><td>character</td><td>Header comments from the RDB file</td></tr>
-<tr><td></td><td>queryTime</td><td>POSIXct</td></tr>
-<tr><td>The time the data was returned</td><td></td><td></td></tr>
+<tr><td>queryTime</td><td>POSIXct</td><td>The time the data was returned</td></tr>
 </table>
 
 
@@ -226,7 +214,7 @@ for more information.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
    </div>

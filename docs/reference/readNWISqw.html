@@ -23,7 +23,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
@@ -181,31 +182,26 @@ for more information on time zones.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with at least the following columns:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>agency_cd</td></tr>
-<tr><td>character</td><td>The NWIS code for the agency reporting the data</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>agency_cd</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr>
 <tr><td>site_no</td><td>character</td><td>The USGS site number</td></tr>
-<tr><td></td><td>sample_dt</td><td>Date</td></tr>
-<tr><td>The date the sample was collected</td><td></td><td>sample_tm</td></tr>
-<tr><td>character</td><td>The reported sample collection time</td><td></td></tr>
-<tr><td>startDateTime</td><td>POSIXct</td><td>Combining sample_dt and sample_tm, a date/time column is created, and converted into UTC</td></tr>
-<tr><td>(unless the tz argument specifies a different time zone)</td><td></td><td>endDateTime</td></tr>
-<tr><td>POSIXct</td><td>If any sample_end_dt and sample_end_dt exist, this column is created similar to startDateTime</td><td></td></tr>
+<tr><td>sample_dt</td><td>Date</td><td>The date the sample was collected</td></tr>
+<tr><td>sample_tm</td><td>character</td><td>The reported sample collection time</td></tr>
+<tr><td>startDateTime</td><td>POSIXct</td><td>Combining sample_dt and sample_tm, a date/time column is created, and converted into UTC 
+(unless the tz argument specifies a different time zone)</td></tr>
+<tr><td>endDateTime</td><td>POSIXct</td><td>If any sample_end_dt and sample_end_dt exist, this column is created similar to startDateTime</td></tr>
 </table>
 
 
 <p>Further columns will be included depending on the requested output format (expanded = TRUE or FALSE).</p>
 
 <p>There are also several useful attributes attached to the data frame:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>url</td></tr>
-<tr><td>character</td><td>The url used to generate the data</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>url</td><td>character</td><td>The url used to generate the data</td></tr>
 <tr><td>queryTime</td><td>POSIXct</td><td>The time the data was returned</td></tr>
-<tr><td></td><td>comment</td><td>character</td></tr>
-<tr><td>Header comments from the RDB file</td><td></td><td>siteInfo</td></tr>
-<tr><td>data frame</td><td>A data frame containing information on the requested sites</td><td></td></tr>
+<tr><td>comment</td><td>character</td><td>Header comments from the RDB file</td></tr>
+<tr><td>siteInfo</td><td>data frame</td><td>A data frame containing information on the requested sites</td></tr>
 <tr><td>variableInfo</td><td>data frame</td><td>A data frame containing information on the requested parameters</td></tr>
-<tr><td></td><td></td><td>Name</td></tr>
 </table>
 
 
@@ -213,32 +209,23 @@ for more information on time zones.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Valid parameter code groups are "All," or group codes:</p><table class='table'>
-<tr><td></td><td>Code</td></tr>
-<tr><td>Description</td><td></td></tr>
+<tr><td>Code</td><td>Description</td></tr>
 <tr><td>INF</td><td>Information</td></tr>
-<tr><td></td><td>PHY</td></tr>
-<tr><td>Physical</td><td></td></tr>
+<tr><td>PHY</td><td>Physical</td></tr>
 <tr><td>INM</td><td>Inorganics, Major, Metals (major cations)</td></tr>
-<tr><td></td><td>INN</td></tr>
-<tr><td>Inorganics, Major, Non-metals (major anions)</td><td></td></tr>
+<tr><td>INN</td><td>Inorganics, Major, Non-metals (major anions)</td></tr>
 <tr><td>NUT</td><td>Nutrient</td></tr>
-<tr><td></td><td>MBI</td></tr>
-<tr><td>Microbiological</td><td></td></tr>
+<tr><td>MBI</td><td>Microbiological</td></tr>
 <tr><td>BIO</td><td>Biological</td></tr>
-<tr><td></td><td>IMN</td></tr>
-<tr><td>Inorganics, Minor, Non-metals</td><td></td></tr>
+<tr><td>IMN</td><td>Inorganics, Minor, Non-metals</td></tr>
 <tr><td>IMM</td><td>Inorganics, Minor, Metals</td></tr>
-<tr><td></td><td>TOX</td></tr>
-<tr><td>Toxicity</td><td></td></tr>
+<tr><td>TOX</td><td>Toxicity</td></tr>
 <tr><td>OPE</td><td>Organics, pesticide</td></tr>
-<tr><td></td><td>OPC</td></tr>
-<tr><td>Organics, PCBs</td><td></td></tr>
+<tr><td>OPC</td><td>Organics, PCBs</td></tr>
 <tr><td>OOT</td><td>Organics, other</td></tr>
-<tr><td></td><td>RAD</td></tr>
-<tr><td>Radiochemical</td><td></td></tr>
+<tr><td>RAD</td><td>Radiochemical</td></tr>
 <tr><td>SED</td><td>Sediment</td></tr>
-<tr><td></td><td>POP</td></tr>
-<tr><td>Population/community</td><td></td></tr>
+<tr><td>POP</td><td>Population/community</td></tr>
 </table>
 <p>If more than one parameter group is requested, only sites that data for all requested groups are returned.</p>
     
@@ -293,7 +280,7 @@ for more information on time zones.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
    </div>
