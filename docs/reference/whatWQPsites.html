@@ -23,7 +23,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
@@ -140,56 +141,43 @@ Arguments to the function should be based on <a href='https://www.waterqualityda
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with at least the following columns:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>OrganizationIdentifier</td></tr>
-<tr><td>character</td><td>A designator used to uniquely identify a unique business establishment within a context.</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>OrganizationIdentifier</td><td>character</td><td>A designator used to uniquely identify a unique business establishment within a context.</td></tr>
 <tr><td>OrganizationFormalName</td><td>character</td><td>The legal designator (i.e. formal name) of an organization.</td></tr>
-<tr><td></td><td>MonitoringLocationIdentifier</td><td>character</td></tr>
-<tr><td>A designator used to describe the unique name, number, or code assigned to identify the monitoring location.</td><td></td><td>MonitoringLocationName</td></tr>
-<tr><td>character</td><td>The designator specified by the sampling organization for the site at which sampling or other activities are conducted.</td><td></td></tr>
+<tr><td>MonitoringLocationIdentifier</td><td>character</td><td>A designator used to describe the unique name, number, or code assigned to identify the monitoring location.</td></tr>
+<tr><td>MonitoringLocationName</td><td>character</td><td>The designator specified by the sampling organization for the site at which sampling or other activities are conducted.</td></tr>
 <tr><td>MonitoringLocationTypeName</td><td>character</td><td>The descriptive name for a type of monitoring location.</td></tr>
-<tr><td></td><td>MonitoringLocationDescriptionText</td><td>character</td></tr>
-<tr><td>Text description of the monitoring location.</td><td></td><td>HUCEightDigitCode</td></tr>
-<tr><td>character</td><td>The 8 digit federal code used to identify the hydrologic unit of the monitoring location to the cataloging unit level of precision.</td><td></td></tr>
+<tr><td>MonitoringLocationDescriptionText</td><td>character</td><td>Text description of the monitoring location.</td></tr>
+<tr><td>HUCEightDigitCode</td><td>character</td><td>The 8 digit federal code used to identify the hydrologic unit of the monitoring location to the cataloging unit level of precision.</td></tr>
 <tr><td>DrainageAreaMeasure/MeasureValue *</td><td>character</td><td>The drainage basin of a lake, stream, wetland, or estuary site. Measure value is given in the units stored in DrainageAreaMeasure/MeasureUnitCode.</td></tr>
-<tr><td></td><td>DrainageAreaMeasure/MeasureUnitCode *</td><td>character</td></tr>
-<tr><td>The code that represents the unit for measuring the item.</td><td></td><td>ContributingDrainageAreaMeasure/MeasureValue *</td></tr>
-<tr><td>character</td><td>The contributing drainage area of a lake, stream, wetland, or estuary site. Measure value is given in the units stored in ContributingDrainageAreaMeasure/MeasureUnitCode.</td><td></td></tr>
+<tr><td>DrainageAreaMeasure/MeasureUnitCode *</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
+<tr><td>ContributingDrainageAreaMeasure/MeasureValue *</td><td>character</td><td>The contributing drainage area of a lake, stream, wetland, or estuary site. Measure value is given in the units stored in ContributingDrainageAreaMeasure/MeasureUnitCode.</td></tr>
 <tr><td>ContributingDrainageAreaMeasure/MeasureUnitCode *</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
-<tr><td></td><td>LatitudeMeasure</td><td>numeric</td></tr>
-<tr><td>The measure of the angular distance on a meridian north or south of the equator.</td><td></td><td>LongitudeMeasure</td></tr>
-<tr><td>numeric</td><td>The measure of the angular distance on a meridian east or west of the prime meridian.</td><td></td></tr>
+<tr><td>LatitudeMeasure</td><td>numeric</td><td>The measure of the angular distance on a meridian north or south of the equator.</td></tr>
+<tr><td>LongitudeMeasure</td><td>numeric</td><td>The measure of the angular distance on a meridian east or west of the prime meridian.</td></tr>
 <tr><td>SourceMapScaleNumeric</td><td>character</td><td>The number that represents the proportional distance on the ground for one unit of measure on the map or photo.</td></tr>
-<tr><td></td><td>HorizontalAccuracyMeasure/MeasureValue *</td><td>character</td></tr>
-<tr><td>The horizontal measure of the relative accuracy of the latitude and longitude coordinates." Measure value is given in the units stored in HorizontalAccuracyMeasure/MeasureUnitCode.</td><td></td><td>HorizontalAccuracyMeasure/MeasureUnitCode *</td></tr>
-<tr><td>character</td><td>The code that represents the unit for measuring the item.</td><td></td></tr>
+<tr><td>HorizontalAccuracyMeasure/MeasureValue *</td><td>character</td><td>The horizontal measure of the relative accuracy of the latitude and longitude coordinates." Measure value is given in the units stored in HorizontalAccuracyMeasure/MeasureUnitCode.</td></tr>
+<tr><td>HorizontalAccuracyMeasure/MeasureUnitCode *</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
 <tr><td>HorizontalCollectionMethodName</td><td>character</td><td>The name that identifies the method used to determine the latitude and longitude coordinates for a point on the earth.</td></tr>
-<tr><td></td><td>HorizontalCoordinateReferenceSystemDatumName</td><td>character</td></tr>
-<tr><td>The name that describes the reference datum used in determining latitude and longitude coordinates.</td><td></td><td>VerticalMeasure/MeasureValue</td></tr>
-<tr><td>character</td><td>The measure of elevation (i.e., the altitude), above or below a reference datum. Measure value is given in the units stored in VerticalMeasure/MeasureUnitCode.</td><td></td></tr>
+<tr><td>HorizontalCoordinateReferenceSystemDatumName</td><td>character</td><td>The name that describes the reference datum used in determining latitude and longitude coordinates.</td></tr>
+<tr><td>VerticalMeasure/MeasureValue</td><td>character</td><td>The measure of elevation (i.e., the altitude), above or below a reference datum. Measure value is given in the units stored in VerticalMeasure/MeasureUnitCode.</td></tr>
 <tr><td>VerticalMeasure/MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
-<tr><td></td><td>VerticalAccuracyMeasure/MeasureValue *</td><td>character</td></tr>
-<tr><td>The vertical measure of the relative accuracy of the latitude and longitude coordinates. Measure value is given in the units stored in VerticalAccuracyMeasure/MeasureUnitCode.</td><td></td><td>VerticalAccuracyMeasure/MeasureUnitCode *</td></tr>
-<tr><td>character</td><td>The code that represents the unit for measuring the item.</td><td></td></tr>
+<tr><td>VerticalAccuracyMeasure/MeasureValue *</td><td>character</td><td>The vertical measure of the relative accuracy of the latitude and longitude coordinates. Measure value is given in the units stored in VerticalAccuracyMeasure/MeasureUnitCode.</td></tr>
+<tr><td>VerticalAccuracyMeasure/MeasureUnitCode *</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
 <tr><td>VerticalCollectionMethodName</td><td>character</td><td>The name that identifies the method used to collect the vertical measure (i.e. the altitude) of a reference point.</td></tr>
-<tr><td></td><td>VerticalCoordinateReferenceSystemDatumName</td><td>character</td></tr>
-<tr><td>The name of the reference datum used to determine the vertical measure (i.e., the altitude).</td><td></td><td>CountryCode</td></tr>
-<tr><td>character</td><td>A code designator used to identify a primary geopolitical unit of the world.</td><td></td></tr>
+<tr><td>VerticalCoordinateReferenceSystemDatumName</td><td>character</td><td>The name of the reference datum used to determine the vertical measure (i.e., the altitude).</td></tr>
+<tr><td>CountryCode</td><td>character</td><td>A code designator used to identify a primary geopolitical unit of the world.</td></tr>
 <tr><td>StateCode</td><td>character</td><td>A code designator used to identify a principal administrative subdivision of the United States, Canada, or Mexico.</td></tr>
-<tr><td></td><td>CountyCode</td><td>character</td></tr>
-<tr><td>A code designator used to identify a U.S. county or county equivalent.</td><td></td><td>AquiferName *</td></tr>
-<tr><td>character</td><td>Name of the aquifer in which the well is completed.</td><td></td></tr>
+<tr><td>CountyCode</td><td>character</td><td>A code designator used to identify a U.S. county or county equivalent.</td></tr>
+<tr><td>AquiferName *</td><td>character</td><td>Name of the aquifer in which the well is completed.</td></tr>
 <tr><td>FormationTypeText *</td><td>character</td><td>Name of the primary formation or soils unit, in which the well is completed.</td></tr>
-<tr><td></td><td>AquiferTypeName *</td><td>character</td></tr>
-<tr><td>The type of aquifer, such as confined or unconfined.</td><td></td><td>ConstructionDateText *</td></tr>
-<tr><td>character</td><td>Date of construction when well was completed. May be year only.</td><td></td></tr>
+<tr><td>AquiferTypeName *</td><td>character</td><td>The type of aquifer, such as confined or unconfined.</td></tr>
+<tr><td>ConstructionDateText *</td><td>character</td><td>Date of construction when well was completed. May be year only.</td></tr>
 <tr><td>WellDepthMeasure/MeasureValue *</td><td>character</td><td>Depth below land surface datum (LSD) to the bottom of the hole on completion of drilling. Measure value is given in the units stored in WellDepthMeasure/MeasureUnitCode.</td></tr>
-<tr><td></td><td>WellDepthMeasure/MeasureUnitCode *</td><td>character</td></tr>
-<tr><td>The code that represents the unit for measuring the item.</td><td></td><td>WellHoleDepthMeasure/MeasureValue *</td></tr>
-<tr><td>character</td><td>Depth below land surface datum (LSD) to the bottom of the hole on completion of drilling. Measure value is given in the units stored in WellHoleDepthMeasure/MeasureUnitCode.</td><td></td></tr>
+<tr><td>WellDepthMeasure/MeasureUnitCode *</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
+<tr><td>WellHoleDepthMeasure/MeasureValue *</td><td>character</td><td>Depth below land surface datum (LSD) to the bottom of the hole on completion of drilling. Measure value is given in the units stored in WellHoleDepthMeasure/MeasureUnitCode.</td></tr>
 <tr><td>WellHoleDepthMeasure/MeasureUnitCode *</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
-<tr><td></td><td>queryTime</td><td>POSIXct</td></tr>
-<tr><td>Query time</td><td></td><td></td></tr>
+<tr><td>queryTime</td><td>POSIXct</td><td>Query time</td></tr>
 </table>
 <p>* element is only in NWIS</p>
     
@@ -222,7 +210,7 @@ Arguments to the function should be based on <a href='https://www.waterqualityda
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
    </div>

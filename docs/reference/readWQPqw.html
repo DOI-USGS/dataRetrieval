@@ -23,7 +23,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
@@ -177,104 +178,80 @@ for more information on time zones.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with at least the following columns:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>OrganizationIdentifier</td></tr>
-<tr><td>character</td><td>A designator used to uniquely identify a unique business establishment within a context.</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>OrganizationIdentifier</td><td>character</td><td>A designator used to uniquely identify a unique business establishment within a context.</td></tr>
 <tr><td>OrganizationFormalName</td><td>character</td><td>The legal designator (i.e. formal name) of an organization.</td></tr>
-<tr><td></td><td>ActivityIdentifier</td><td>character</td></tr>
-<tr><td>Designator that uniquely identifies an activity within an organization.</td><td></td><td>ActivityTypeCode</td></tr>
-<tr><td>character</td><td>The text describing the type of activity.</td><td></td></tr>
+<tr><td>ActivityIdentifier</td><td>character</td><td>Designator that uniquely identifies an activity within an organization.</td></tr>
+<tr><td>ActivityTypeCode</td><td>character</td><td>The text describing the type of activity.</td></tr>
 <tr><td>ActivityMediaName</td><td>character</td><td>Name or code indicating the environmental medium where the sample was taken.</td></tr>
-<tr><td></td><td>ActivityMediaSubdivisionName</td><td>character</td></tr>
-<tr><td>Name or code indicating the environmental matrix as a subdivision of the sample media.</td><td></td><td>ActivityStartDate</td></tr>
-<tr><td>character</td><td>The calendar date on which the field activity is started.</td><td></td></tr>
+<tr><td>ActivityMediaSubdivisionName</td><td>character</td><td>Name or code indicating the environmental matrix as a subdivision of the sample media.</td></tr>
+<tr><td>ActivityStartDate</td><td>character</td><td>The calendar date on which the field activity is started.</td></tr>
 <tr><td>ActivityStartTime/Time</td><td>character</td><td>The time of day that is reported when the field activity began, based on a 24-hour timescale.</td></tr>
-<tr><td></td><td>ActivityStartTime/TimeZoneCode</td><td>character</td></tr>
-<tr><td>The time zone for which the time of day is reported. Any of the longitudinal divisions of the earth's surface in which a standard time is kept.</td><td></td><td>ActivityEndDate</td></tr>
-<tr><td>character</td><td>The calendar date when the field activity is completed.</td><td></td></tr>
+<tr><td>ActivityStartTime/TimeZoneCode</td><td>character</td><td>The time zone for which the time of day is reported. Any of the longitudinal divisions of the earth's surface in which a standard time is kept.</td></tr>
+<tr><td>ActivityEndDate</td><td>character</td><td>The calendar date when the field activity is completed.</td></tr>
 <tr><td>ActivityEndTime/Time</td><td>character</td><td>The time of day that is reported when the field activity ended, based on a 24-hour timescale.</td></tr>
-<tr><td></td><td>ActivityEndTime/TimeZoneCode</td><td>character</td></tr>
-<tr><td>The time zone for which the time of day is reported. Any of the longitudinal divisions of the earth's surface in which a standard time is kept.</td><td></td><td>ActivityDepthHeightMeasure/MeasureValue</td></tr>
-<tr><td>character</td><td>A measurement of the vertical location (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityDepthHeightMeasure/MeasureUnitCode.</td><td></td></tr>
+<tr><td>ActivityEndTime/TimeZoneCode</td><td>character</td><td>The time zone for which the time of day is reported. Any of the longitudinal divisions of the earth's surface in which a standard time is kept.</td></tr>
+<tr><td>ActivityDepthHeightMeasure/MeasureValue</td><td>character</td><td>A measurement of the vertical location (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityDepthHeightMeasure/MeasureUnitCode.</td></tr>
 <tr><td>ActivityDepthHeightMeasure/MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
-<tr><td></td><td>ActivityDepthAltitudeReferencePointText</td><td>character</td></tr>
-<tr><td>The reference used to indicate the datum or reference used to establish the depth/altitude of an activity.</td><td></td><td>ActivityTopDepthHeightMeasure/MeasureValue</td></tr>
-<tr><td>character</td><td>A measurement of the upper vertical location of a vertical location range (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityTopDepthHeightMeasure/MeasureUnitCode.</td><td></td></tr>
+<tr><td>ActivityDepthAltitudeReferencePointText</td><td>character</td><td>The reference used to indicate the datum or reference used to establish the depth/altitude of an activity.</td></tr>
+<tr><td>ActivityTopDepthHeightMeasure/MeasureValue</td><td>character</td><td>A measurement of the upper vertical location of a vertical location range (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityTopDepthHeightMeasure/MeasureUnitCode.</td></tr>
 <tr><td>ActivityTopDepthHeightMeasure/MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
-<tr><td></td><td>ActivityBottomDepthHeightMeasure/MeasureValue</td><td>character</td></tr>
-<tr><td>A measurement of the lower vertical location of a vertical location range (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityBottomDepthHeightMeasure/MeasureUnitCode.</td><td></td><td>ActivityBottomDepthHeightMeasure/MeasureUnitCode</td></tr>
-<tr><td>character</td><td>The code that represents the unit for measuring the item.</td><td></td></tr>
+<tr><td>ActivityBottomDepthHeightMeasure/MeasureValue</td><td>character</td><td>A measurement of the lower vertical location of a vertical location range (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityBottomDepthHeightMeasure/MeasureUnitCode.</td></tr>
+<tr><td>ActivityBottomDepthHeightMeasure/MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
 <tr><td>ProjectIdentifier</td><td>character</td><td>A designator used to uniquely identify a data collection project within a context of an organization.</td></tr>
-<tr><td></td><td>ActivityConductingOrganizationText</td><td>character</td></tr>
-<tr><td>A name of the Organization conducting an activity.</td><td></td><td>MonitoringLocationIdentifier</td></tr>
-<tr><td>character</td><td>A designator used to describe the unique name, number, or code assigned to identify the monitoring location.</td><td></td></tr>
+<tr><td>ActivityConductingOrganizationText</td><td>character</td><td>A name of the Organization conducting an activity.</td></tr>
+<tr><td>MonitoringLocationIdentifier</td><td>character</td><td>A designator used to describe the unique name, number, or code assigned to identify the monitoring location.</td></tr>
 <tr><td>ActivityCommentText</td><td>character</td><td>General comments concerning the activity.</td></tr>
-<tr><td></td><td>SampleAquifer *</td><td>character</td></tr>
-<tr><td>A code that designates the aquifer associated with groundwater samples.</td><td></td><td>HydrologicCondition *</td></tr>
-<tr><td>character</td><td>Hydrologic condition is the hydrologic condition that is represented by the sample collected (i.e. ? normal, falling, rising, peak stage).</td><td></td></tr>
+<tr><td>SampleAquifer *</td><td>character</td><td>A code that designates the aquifer associated with groundwater samples.</td></tr>
+<tr><td>HydrologicCondition *</td><td>character</td><td>Hydrologic condition is the hydrologic condition that is represented by the sample collected (i.e. ? normal, falling, rising, peak stage).</td></tr>
 <tr><td>HydrologicEvent *</td><td>character</td><td>A hydrologic event that is represented by the sample collected (i.e. - storm, drought, snowmelt).</td></tr>
-<tr><td></td><td>SampleCollectionMethod/MethodIdentifier</td><td>character</td></tr>
-<tr><td>The identification number or code assigned by the method publisher.</td><td></td><td>SampleCollectionMethod/MethodIdentifierContext</td></tr>
-<tr><td>character</td><td>Identifies the source or data system that created or defined the identifier.</td><td></td></tr>
+<tr><td>SampleCollectionMethod/MethodIdentifier</td><td>character</td><td>The identification number or code assigned by the method publisher.</td></tr>
+<tr><td>SampleCollectionMethod/MethodIdentifierContext</td><td>character</td><td>Identifies the source or data system that created or defined the identifier.</td></tr>
 <tr><td>SampleCollectionMethod/MethodName</td><td>character</td><td>The title that appears on the method from the method publisher.</td></tr>
-<tr><td></td><td>SampleCollectionEquipmentName</td><td>character</td></tr>
-<tr><td>The name for the equipment used in collecting the sample.</td><td></td><td>ResultDetectionConditionText</td></tr>
-<tr><td>character</td><td>The textual descriptor of a result.</td><td></td></tr>
+<tr><td>SampleCollectionEquipmentName</td><td>character</td><td>The name for the equipment used in collecting the sample.</td></tr>
+<tr><td>ResultDetectionConditionText</td><td>character</td><td>The textual descriptor of a result.</td></tr>
 <tr><td>CharacteristicName</td><td>character</td><td>The object, property, or substance which is evaluated or enumerated by either a direct field measurement, a direct field observation, or by laboratory analysis of material collected in the field.</td></tr>
-<tr><td></td><td>ResultSampleFractionText</td><td>character</td></tr>
-<tr><td>The text name of the portion of the sample associated with results obtained from a physically-partitioned sample.</td><td></td><td>ResultMeasureValue</td></tr>
-<tr><td>numeric</td><td>The reportable measure of the result for the chemical, microbiological or other characteristic being analyzed. Measure value is given in the units stored in ResultMeasure/MeasureUnitCode.</td><td></td></tr>
+<tr><td>ResultSampleFractionText</td><td>character</td><td>The text name of the portion of the sample associated with results obtained from a physically-partitioned sample.</td></tr>
+<tr><td>ResultMeasureValue</td><td>numeric</td><td>The reportable measure of the result for the chemical, microbiological or other characteristic being analyzed. Measure value is given in the units stored in ResultMeasure/MeasureUnitCode.</td></tr>
 <tr><td>MeasureQualifierCode</td><td>character</td><td>A code used to identify any qualifying issues that affect the results.</td></tr>
-<tr><td></td><td>ResultMeasure/MeasureUnitCode</td><td>character</td></tr>
-<tr><td>The code that represents the unit for measuring the item.</td><td></td><td>ResultStatusIdentifier</td></tr>
-<tr><td>character</td><td>Indicates the acceptability of the result with respect to QA/QC criteria.</td><td></td></tr>
+<tr><td>ResultMeasure/MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
+<tr><td>ResultStatusIdentifier</td><td>character</td><td>Indicates the acceptability of the result with respect to QA/QC criteria.</td></tr>
 <tr><td>StatisticalBaseCode</td><td>character</td><td>The code for the method used to calculate derived results.</td></tr>
-<tr><td></td><td>ResultValueTypeName</td><td>character</td></tr>
-<tr><td>A name that qualifies the process which was used in the determination of the result value (e.g., actual, estimated, calculated).</td><td></td><td>ResultWeightBasisText</td></tr>
-<tr><td>character</td><td>The name that represents the form of the sample or portion of the sample which is associated with the result value (e.g., wet weight, dry weight, ash-free dry weight).</td><td></td></tr>
+<tr><td>ResultValueTypeName</td><td>character</td><td>A name that qualifies the process which was used in the determination of the result value (e.g., actual, estimated, calculated).</td></tr>
+<tr><td>ResultWeightBasisText</td><td>character</td><td>The name that represents the form of the sample or portion of the sample which is associated with the result value (e.g., wet weight, dry weight, ash-free dry weight).</td></tr>
 <tr><td>ResultTimeBasisText</td><td>character</td><td>The period of time (in days) over which a measurement was made. For example, BOD can be measured as 5 day or 20 day BOD.</td></tr>
-<tr><td></td><td>ResultTemperatureBasisText</td><td>character</td></tr>
-<tr><td>The name that represents the controlled temperature at which the sample was maintained during analysis, e.g. 25 deg BOD analysis.</td><td></td><td>ResultParticleSizeBasisText</td></tr>
-<tr><td>character</td><td>User defined free text describing the particle size class for which the associated result is defined.</td><td></td></tr>
+<tr><td>ResultTemperatureBasisText</td><td>character</td><td>The name that represents the controlled temperature at which the sample was maintained during analysis, e.g. 25 deg BOD analysis.</td></tr>
+<tr><td>ResultParticleSizeBasisText</td><td>character</td><td>User defined free text describing the particle size class for which the associated result is defined.</td></tr>
 <tr><td>PrecisionValue</td><td>character</td><td>A measure of mutual agreement among individual measurements of the same property usually under prescribed similar conditions.</td></tr>
-<tr><td></td><td>ResultCommentText</td><td>character</td></tr>
-<tr><td>Free text with general comments concerning the result.</td><td></td><td>USGSPCode *</td></tr>
-<tr><td>character</td><td>5-digit number used in the US Geological Survey computerized data system, National Water Information System (NWIS), to uniquely identify a specific constituent.</td><td></td></tr>
+<tr><td>ResultCommentText</td><td>character</td><td>Free text with general comments concerning the result.</td></tr>
+<tr><td>USGSPCode *</td><td>character</td><td>5-digit number used in the US Geological Survey computerized data system, National Water Information System (NWIS), to uniquely identify a specific constituent.</td></tr>
 <tr><td>ResultDepthHeightMeasure/MeasureValue +</td><td>character</td><td>A measurement of the vertical location (measured from a reference point) at which a result occurred.</td></tr>
-<tr><td></td><td>ResultDepthHeightMeasure/MeasureUnitCode +</td><td>character</td></tr>
-<tr><td>The code that represents the unit for measuring the item.</td><td></td><td>ResultDepthAltitudeReferencePointText +</td></tr>
-<tr><td>character</td><td>The reference used to indicate the datum or reference used to establish the depth/altitude of a result.</td><td></td></tr>
+<tr><td>ResultDepthHeightMeasure/MeasureUnitCode +</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
+<tr><td>ResultDepthAltitudeReferencePointText +</td><td>character</td><td>The reference used to indicate the datum or reference used to establish the depth/altitude of a result.</td></tr>
 <tr><td>SubjectTaxonomicName</td><td>character</td><td>The name of the organism from which a tissue sample was taken.</td></tr>
-<tr><td></td><td>SampleTissueAnatomyName  *</td><td>character</td></tr>
-<tr><td>The name of the anatomy from which a tissue sample was taken.</td><td></td><td>ResultAnalyticalMethod/MethodIdentifier</td></tr>
-<tr><td>character</td><td>The identification number or code assigned by the method publisher.</td><td></td></tr>
+<tr><td>SampleTissueAnatomyName  *</td><td>character</td><td>The name of the anatomy from which a tissue sample was taken.</td></tr>
+<tr><td>ResultAnalyticalMethod/MethodIdentifier</td><td>character</td><td>The identification number or code assigned by the method publisher.</td></tr>
 <tr><td>ResultAnalyticalMethod/MethodIdentifierContext</td><td>character</td><td>Identifies the source or data system that created or defined the identifier.</td></tr>
-<tr><td></td><td>ResultAnalyticalMethod/MethodName</td><td>character</td></tr>
-<tr><td>The title that appears on the method from the method publisher.</td><td></td><td>MethodDescriptionText *</td></tr>
-<tr><td>character</td><td>A brief summary that provides general information about the method.</td><td></td></tr>
+<tr><td>ResultAnalyticalMethod/MethodName</td><td>character</td><td>The title that appears on the method from the method publisher.</td></tr>
+<tr><td>MethodDescriptionText *</td><td>character</td><td>A brief summary that provides general information about the method.</td></tr>
 <tr><td>LaboratoryName</td><td>character</td><td>The name of Lab responsible for the result.</td></tr>
-<tr><td></td><td>AnalysisStartDate</td><td>character</td></tr>
-<tr><td>The calendar date on which the analysis began.</td><td></td><td>ResultLaboratoryCommentText</td></tr>
-<tr><td>character</td><td>Remarks which further describe the laboratory procedures which produced the result.</td><td></td></tr>
+<tr><td>AnalysisStartDate</td><td>character</td><td>The calendar date on which the analysis began.</td></tr>
+<tr><td>ResultLaboratoryCommentText</td><td>character</td><td>Remarks which further describe the laboratory procedures which produced the result.</td></tr>
 <tr><td>DetectionQuantitationLimitTypeName</td><td>character</td><td>Text describing the type of detection or quantitation level used in the analysis of a characteristic.</td></tr>
-<tr><td></td><td>DetectionQuantitationLimitMeasure/MeasureValue</td><td>numeric</td></tr>
-<tr><td>Constituent concentration that, when processed through the complete method, produces a signal that is statistically different from a blank. Measure value is given in the units stored in DetectionQuantitationLimitMeasure/MeasureUnitCode.</td><td></td><td>DetectionQuantitationLimitMeasure/MeasureUnitCode</td></tr>
-<tr><td>character</td><td>The code that represents the unit for measuring the item.</td><td></td></tr>
+<tr><td>DetectionQuantitationLimitMeasure/MeasureValue</td><td>numeric</td><td>Constituent concentration that, when processed through the complete method, produces a signal that is statistically different from a blank. Measure value is given in the units stored in DetectionQuantitationLimitMeasure/MeasureUnitCode.</td></tr>
+<tr><td>DetectionQuantitationLimitMeasure/MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
 <tr><td>PreparationStartDate</td><td>character</td><td>The calendar date when the preparation/extraction of the sample for analysis began.</td></tr>
-<tr><td></td><td>ActivityStartDateTime</td><td>POSIXct</td></tr>
-<tr><td>Activity start date and time converted to POSIXct UTC.</td><td></td><td>ActivityEndDateTime</td></tr>
-<tr><td>POSIXct</td><td>Activity end date and time converted to POSIXct UTC.</td><td></td></tr>
+<tr><td>ActivityStartDateTime</td><td>POSIXct</td><td>Activity start date and time converted to POSIXct UTC.</td></tr>
+<tr><td>ActivityEndDateTime</td><td>POSIXct</td><td>Activity end date and time converted to POSIXct UTC.</td></tr>
 </table>
 <p>* = elements only in NWIS
 + = elements only in STORET</p>
 <p>There are also several useful attributes attached to the data frame:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>url</td></tr>
-<tr><td>character</td><td>The url used to generate the data</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>url</td><td>character</td><td>The url used to generate the data</td></tr>
 <tr><td>siteInfo</td><td>data.frame</td><td>A data frame containing information on the requested sites</td></tr>
-<tr><td></td><td>variableInfo</td><td>data.frame</td></tr>
-<tr><td>A data frame containing information on the requested parameters</td><td></td><td>queryTime</td></tr>
-<tr><td>POSIXct</td><td>The time the data was returned</td><td></td></tr>
+<tr><td>variableInfo</td><td>data.frame</td><td>A data frame containing information on the requested parameters</td></tr>
+<tr><td>queryTime</td><td>POSIXct</td><td>The time the data was returned</td></tr>
 </table>
 
 
@@ -316,7 +293,7 @@ for more information on time zones.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
    </div>
