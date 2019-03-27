@@ -23,7 +23,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
@@ -169,14 +170,13 @@ numerics based on a standard algorithm. If false, everything is returned as a ch
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with at least the following columns:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>agency_cd</td></tr>
-<tr><td>character</td><td>The NWIS code for the agency reporting the data</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>agency_cd</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr>
 <tr><td>site_no</td><td>character</td><td>The USGS site number</td></tr>
-<tr><td></td><td>measurement_dt</td><td>POSIXct</td></tr>
-<tr><td>The date and time (in POSIXct) of the measurement. Unless specified</td><td>with the tz parameter, this is converted to UTC. If the measurement_dt column is an incomplete, a measurement_dt_date and</td><td>measurement_dt_time column are added to the returned data frame.</td></tr>
-<tr><td></td><td>tz_cd</td><td>character</td></tr>
-<tr><td>The time zone code for the measurement_dt column</td><td></td><td></td></tr>
+<tr><td>measurement_dt</td><td>POSIXct</td><td>The date and time (in POSIXct) of the measurement. Unless specified
+with the tz parameter, this is converted to UTC. If the measurement_dt column is an incomplete, a measurement_dt_date and
+measurement_dt_time column are added to the returned data frame.</td></tr>
+<tr><td>tz_cd</td><td>character</td><td>The time zone code for the measurement_dt column</td></tr>
 </table>
 
  
@@ -184,13 +184,11 @@ numerics based on a standard algorithm. If false, everything is returned as a ch
 <a href='https://waterdata.usgs.gov/nwis/help?output_formats_help'>https://waterdata.usgs.gov/nwis/help?output_formats_help</a>
 for help on the columns and codes.</p>
 <p>There are also several useful attributes attached to the data frame:</p><table class='table'>
-<tr><td></td><td>Name</td><td>Type</td></tr>
-<tr><td>Description</td><td></td><td>url</td></tr>
-<tr><td>character</td><td>The url used to generate the data</td><td></td></tr>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>url</td><td>character</td><td>The url used to generate the data</td></tr>
 <tr><td>queryTime</td><td>POSIXct</td><td>The time the data was returned</td></tr>
-<tr><td></td><td>comment</td><td>character</td></tr>
-<tr><td>Header comments from the RDB file</td><td></td><td>siteInfo</td></tr>
-<tr><td>data.frame</td><td>A data frame containing information on the requested sites</td><td></td></tr>
+<tr><td>comment</td><td>character</td><td>Header comments from the RDB file</td></tr>
+<tr><td>siteInfo</td><td>data.frame</td><td>A data frame containing information on the requested sites</td></tr>
 <tr><td>tz_cd_reported</td><td>The originally reported time zone</td><td></td></tr>
 </table>
 
@@ -231,7 +229,7 @@ for help on the columns and codes.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
    </div>
