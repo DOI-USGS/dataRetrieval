@@ -95,7 +95,7 @@ site_ids <- c('04024430','04024000')
 startDate <- '2010-01-01'
 endDate <- ''
 parameterCd <- c('34247','30234','32104','34220')
-\dontrun{
+\donttest{
 rawNWISqwData <- readNWISqw(site_ids,parameterCd,startDate,endDate)
 rawNWISqwDataReshaped <- readNWISqw(site_ids,parameterCd,
           startDate,endDate,reshape=TRUE)

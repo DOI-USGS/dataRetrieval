@@ -65,7 +65,7 @@ Arguments to the function should be based on \url{https://waterservices.usgs.gov
 See examples below for ideas of constructing queries.
 }
 \examples{
-\dontrun{
+\donttest{
 # Examples not run for time considerations
 dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
 instFlow <- readNWISdata(sites="05114000", service="iv", 

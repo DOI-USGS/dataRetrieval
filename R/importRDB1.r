@@ -56,7 +56,7 @@
 #' 
 #' obs_url <- constructNWISURL(site_id,property,
 #'          startDate,endDate,"dv",format="tsv")
-#' \dontrun{
+#' \donttest{
 #' data <- importRDB1(obs_url)
 #' 
 #' urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),

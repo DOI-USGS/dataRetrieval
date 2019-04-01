@@ -30,7 +30,7 @@
 #' @importFrom xml2 xml_attr
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
 #' oneSite <- whatNWISsites(sites="05114000")
 #' }

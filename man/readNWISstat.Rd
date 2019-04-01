@@ -52,7 +52,7 @@ Retrieves site statistics from the USGS Statistics Web Service beta.
 See \url{https://waterservices.usgs.gov/rest/Statistics-Service.html} for more information.
 }
 \examples{
-\dontrun{
+\donttest{
 x1 <- readNWISstat(siteNumbers=c("02319394"),
                   parameterCd=c("00060"),
                   statReportType="annual") 

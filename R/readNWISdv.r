@@ -42,7 +42,7 @@
 #' startDate <- '2012-01-01'
 #' endDate <- '2012-06-30'
 #' pCode <- '00060'
-#' \dontrun{
+#' \donttest{
 #' rawDailyQ <- readNWISdv(site_id,pCode, startDate, endDate)
 #' rawDailyQAndTempMeanMax <- readNWISdv(site_id,c('00010','00060'),
 #'        startDate, endDate, statCd=c('00001','00003'))

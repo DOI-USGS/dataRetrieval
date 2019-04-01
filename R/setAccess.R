@@ -15,7 +15,7 @@
 #'
 #'@examples
 #'
-#'\dontrun{
+#'\donttest{
 #'setAccess('internal')
 #'
 #'setAccess('public')
