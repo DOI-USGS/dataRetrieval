@@ -19,7 +19,7 @@
 #' @importFrom xml2 xml_attr
 #' @importFrom xml2 xml_find_first
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' obs_url <- paste("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
 #' "service=SOS","version=2.0.0",
 #' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
@@ -144,7 +144,7 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
 #'      "endDT=2014-09-08",
 #'      "statCd=00003",
 #'      "parameterCd=00060",sep="&")
-#' \dontrun{
+#' \donttest{
 #' timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
 #' } 
 importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {

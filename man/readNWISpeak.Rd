@@ -58,7 +58,7 @@ needed, set the `asDateTime` argument to FALSE. No dates will be converted to R 
 }
 \examples{
 site_ids <- c('01594440','040851325')
-\dontrun{
+\donttest{
 data <- readNWISpeak(site_ids)
 data2 <- readNWISpeak(site_ids, asDateTime=FALSE)
 stations<-c("06011000")

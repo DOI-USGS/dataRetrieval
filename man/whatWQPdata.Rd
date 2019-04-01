@@ -19,7 +19,7 @@ Returns a list of sites from the Water Quality Portal web service. This function
 Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
 }
 \examples{
-\dontrun{
+\donttest{
 site1 <- whatWQPdata(siteid="USGS-01594440")
 
 type <- "Stream"

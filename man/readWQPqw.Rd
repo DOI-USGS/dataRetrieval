@@ -118,7 +118,7 @@ either USGS, or other Water Quality Portal offered sites. It is required to use 
 site name, such as 'USGS-01234567'.
 }
 \examples{
-\dontrun{
+\donttest{
 rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
 rawPHsites <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')

@@ -185,15 +185,13 @@ for more information.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>availableData</span> <span class='kw'>&lt;-</span> <span class='fu'>whatNWISdata</span>(<span class='kw'>siteNumber</span> <span class='kw'>=</span> <span class='st'>'05114000'</span>)
+    <pre class="examples"><div class='input'><span class='no'>availableData</span> <span class='kw'>&lt;-</span> <span class='fu'>whatNWISdata</span>(<span class='kw'>siteNumber</span> <span class='kw'>=</span> <span class='st'>'05114000'</span>)
 <span class='co'># To find just unit value ('instantaneous') data:</span>
 <span class='no'>uvData</span> <span class='kw'>&lt;-</span> <span class='fu'>whatNWISdata</span>(<span class='kw'>siteNumber</span> <span class='kw'>=</span> <span class='st'>'05114000'</span>,<span class='kw'>service</span><span class='kw'>=</span><span class='st'>"uv"</span>)
 <span class='no'>uvDataMulti</span> <span class='kw'>&lt;-</span> <span class='fu'>whatNWISdata</span>(<span class='kw'>siteNumber</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'05114000'</span>,<span class='st'>'09423350'</span>),<span class='kw'>service</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"uv"</span>,<span class='st'>"dv"</span>))
 <span class='no'>flowAndTemp</span> <span class='kw'>&lt;-</span> <span class='fu'>whatNWISdata</span>(<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"WI"</span>, <span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"uv"</span>,
                              <span class='kw'>parameterCd</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"00060"</span>,<span class='st'>"00010"</span>),
-                             <span class='kw'>statCd</span> <span class='kw'>=</span> <span class='st'>"00003"</span>)
-<span class='co'># }</span></pre>
+                             <span class='kw'>statCd</span> <span class='kw'>=</span> <span class='st'>"00003"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

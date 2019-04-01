@@ -10,7 +10,7 @@
 #' @export
 #' @import utils
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' site1 <- whatWQPsamples(siteid="USGS-01594440")
 #' 
 #' type <- "Stream"
@@ -51,7 +51,7 @@ whatWQPsamples <- function(...){
 #' @export
 #' @import utils
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' 
 #' type <- "Stream"
 #' sites <- whatWQPmetrics(countycode="US:55:025",siteType=type)
@@ -94,7 +94,7 @@ whatWQPmetrics <- function(...){
 #' @export
 #' @import utils
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' site1 <- whatWQPdata(siteid="USGS-01594440")
 #' 
 #' type <- "Stream"

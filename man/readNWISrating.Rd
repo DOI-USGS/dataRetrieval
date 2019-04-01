@@ -46,7 +46,7 @@ relate flow to stage.
 }
 \examples{
 site_id <- '01594440'
-\dontrun{
+\donttest{
 data <- readNWISrating(site_id, "base")
 attr(data, "RATING")
 }

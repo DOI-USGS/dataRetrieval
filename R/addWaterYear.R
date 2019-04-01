@@ -17,7 +17,7 @@
 #' @importFrom dplyr select
 #' @importFrom dplyr everything
 #' @examples
-#' \dontrun{ 
+#' \donttest{ 
 #' dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
 #' dataTemp <- addWaterYear(dataTemp)
 #' 

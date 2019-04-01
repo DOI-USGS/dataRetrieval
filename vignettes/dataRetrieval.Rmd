@@ -24,14 +24,6 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       fig.height = 7,
                       fig.width = 7)
-
-opts_chunk$set(highlight=TRUE, 
-               tidy=TRUE, 
-               keep.space=TRUE,
-               keep.blank.space=FALSE,
-               keep.comment=TRUE)
-knit_hooks$set(inline = function(x) {
-   if (is.numeric(x)) round(x, 3)})
 ```
 
 The `dataRetrieval` package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). 

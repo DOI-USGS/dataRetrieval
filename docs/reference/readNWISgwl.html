@@ -202,14 +202,12 @@ for more information on time zones.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>site_id</span> <span class='kw'>&lt;-</span> <span class='st'>"434400121275801"</span></div><span class='co'># NOT RUN {</span>
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISgwl</span>(<span class='no'>site_id</span>, <span class='st'>''</span>,<span class='st'>''</span>)
+    <pre class="examples"><div class='input'><span class='no'>site_id</span> <span class='kw'>&lt;-</span> <span class='st'>"434400121275801"</span></div><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISgwl</span>(<span class='no'>site_id</span>, <span class='st'>''</span>,<span class='st'>''</span>)
 <span class='no'>sites</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"434400121275801"</span>, <span class='st'>"375907091432201"</span>)
 <span class='no'>data2</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISgwl</span>(<span class='no'>site_id</span>, <span class='st'>''</span>,<span class='st'>''</span>)
 <span class='no'>data3</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISgwl</span>(<span class='st'>"420125073193001"</span>, <span class='st'>''</span>,<span class='st'>''</span>)
 <span class='co'>#handling of data where date has no day</span>
-<span class='no'>data4</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISgwl</span>(<span class='st'>"425957088141001"</span>, <span class='kw'>startDate</span> <span class='kw'>=</span> <span class='st'>"1980-01-01"</span>)
-<span class='co'># }</span></pre>
+<span class='no'>data4</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISgwl</span>(<span class='st'>"425957088141001"</span>, <span class='kw'>startDate</span> <span class='kw'>=</span> <span class='st'>"1980-01-01"</span>)</div><div class='output co'>#&gt; <span class='message'>Not all dates were converted to Date object. Returning raw text for date columns.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -60,7 +60,7 @@
 #' }
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' siteINFO <- readNWISsite('05114000')
 #' siteINFOMulti <- readNWISsite(c('05114000','09423350'))
 #' }

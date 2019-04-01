@@ -199,12 +199,10 @@ numerics based on a standard algorithm. If false, everything is returned as a ch
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>site_ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'01594440'</span>,<span class='st'>'040851325'</span>)</div><span class='co'># NOT RUN {</span>
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISpeak</span>(<span class='no'>site_ids</span>)
+    <pre class="examples"><div class='input'><span class='no'>site_ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'01594440'</span>,<span class='st'>'040851325'</span>)</div><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISpeak</span>(<span class='no'>site_ids</span>)
 <span class='no'>data2</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISpeak</span>(<span class='no'>site_ids</span>, <span class='kw'>asDateTime</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
 <span class='no'>stations</span><span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"06011000"</span>)
-<span class='no'>peakdata</span><span class='kw'>&lt;-</span><span class='fu'>readNWISpeak</span>(<span class='no'>stations</span>,<span class='kw'>convertType</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-<span class='co'># }</span></pre>
+<span class='no'>peakdata</span><span class='kw'>&lt;-</span><span class='fu'>readNWISpeak</span>(<span class='no'>stations</span>,<span class='kw'>convertType</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

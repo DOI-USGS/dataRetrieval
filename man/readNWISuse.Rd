@@ -37,7 +37,7 @@ Retrieves water use data from USGS Water Use Data for the Nation.  See \url{http
 more information.  All available use categories for the supplied arguments are retrieved.
 }
 \examples{
-\dontrun{
+\donttest{
 #All data for a county
 allegheny <- readNWISuse(stateCd = "Pennsylvania",countyCd = "Allegheny")
 

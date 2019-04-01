@@ -53,7 +53,7 @@
 #' parameterCd <- '00060'
 #' startDate <- "2014-10-10"
 #' endDate <- "2014-10-10"
-#' \dontrun{
+#' \donttest{
 #' rawData <- readNWISuv(site_id,parameterCd,startDate,endDate)
 #' 
 #' rawData_today <- readNWISuv(site_id, parameterCd, Sys.Date(),Sys.Date())
@@ -131,7 +131,7 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz="UTC
 #' @export
 #' @examples
 #' site_ids <- c('01594440','040851325')
-#' \dontrun{
+#' \donttest{
 #' data <- readNWISpeak(site_ids)
 #' data2 <- readNWISpeak(site_ids, asDateTime=FALSE)
 #' stations<-c("06011000")
@@ -211,7 +211,7 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, 
 #' @export
 #' @examples
 #' site_id <- '01594440'
-#' \dontrun{
+#' \donttest{
 #' data <- readNWISrating(site_id, "base")
 #' attr(data, "RATING")
 #' }
@@ -292,7 +292,7 @@ readNWISrating <- function (siteNumber,type="base",convertType = TRUE){
 #' @export
 #' @examples
 #' site_ids <- c('01594440','040851325')
-#' \dontrun{
+#' \donttest{
 #' data <- readNWISmeas(site_ids)
 #' Meas05316840 <- readNWISmeas("05316840")
 #' Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)
@@ -396,7 +396,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
 #' @export
 #' @examples
 #' site_id <- "434400121275801"
-#' \dontrun{
+#' \donttest{
 #' data <- readNWISgwl(site_id, '','')
 #' sites <- c("434400121275801", "375907091432201")
 #' data2 <- readNWISgwl(site_id, '','')
@@ -465,7 +465,7 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' x1 <- readNWISstat(siteNumbers=c("02319394"),
 #'                   parameterCd=c("00060"),
 #'                   statReportType="annual") 
@@ -533,7 +533,7 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' 
 #' @export
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' #All data for a county
 #' allegheny <- readNWISuse(stateCd = "Pennsylvania",countyCd = "Allegheny")
 #' 

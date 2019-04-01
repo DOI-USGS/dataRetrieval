@@ -60,7 +60,7 @@ See \url{https://waterdata.usgs.gov/usa/nwis/sw} for details about surface water
 }
 \examples{
 site_ids <- c('01594440','040851325')
-\dontrun{
+\donttest{
 data <- readNWISmeas(site_ids)
 Meas05316840 <- readNWISmeas("05316840")
 Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)

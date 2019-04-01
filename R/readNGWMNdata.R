@@ -15,7 +15,7 @@
 #' @importFrom dplyr mutate
 #' @export
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"
 #' oneSite <- readNGWMNdata(siteNumbers = site, service = "observation")
@@ -114,7 +114,7 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
 #' @export
 #' 
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"
 #' oneSite <- readNGWMNlevels(siteNumbers = site)
@@ -151,7 +151,7 @@ readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC"){
 #' dec_lat_va, dec_lon_va \tab numeric \tab Site latitude and longitude \cr
 #' }
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"
 #' oneSite <- readNGWMNsites(siteNumbers = site)

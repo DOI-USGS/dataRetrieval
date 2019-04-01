@@ -78,7 +78,7 @@
       <h1>Introduction to the dataRetrieval package</h1>
                         <h4 class="author">Laura A. DeCicco and Robert M. Hirsch</h4>
             
-            <h4 class="date">27 March, 2019</h4>
+            <h4 class="date">01 April, 2019</h4>
       
       
       <div class="hidden name"><code>dataRetrieval.Rmd</code></div>
@@ -92,19 +92,20 @@
 <p>A quick workflow for USGS <code>dataRetrieval</code> functions:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dataRetrieval)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="co"># Choptank River near Greensboro, MD</span></a>
-<a class="sourceLine" id="cb1-3" title="3">siteNumber &lt;-<span class="st"> "01491000"</span></a>
+<a class="sourceLine" id="cb1-3" title="3">siteNumber &lt;-<span class="st"> "01491000"</span> </a>
 <a class="sourceLine" id="cb1-4" title="4">ChoptankInfo &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISsite.html">readNWISsite</a></span>(siteNumber)</a>
 <a class="sourceLine" id="cb1-5" title="5">parameterCd &lt;-<span class="st"> "00060"</span></a>
 <a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="co"># Raw daily data:</span></a>
-<a class="sourceLine" id="cb1-8" title="8">rawDailyData &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISdv.html">readNWISdv</a></span>(siteNumber, parameterCd, <span class="st">"1980-01-01"</span>, </a>
-<a class="sourceLine" id="cb1-9" title="9">    <span class="st">"2010-01-01"</span>)</a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="co">#Raw daily data:</span></a>
+<a class="sourceLine" id="cb1-8" title="8">rawDailyData &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISdv.html">readNWISdv</a></span>(siteNumber,parameterCd,</a>
+<a class="sourceLine" id="cb1-9" title="9">                      <span class="st">"1980-01-01"</span>,<span class="st">"2010-01-01"</span>)</a>
 <a class="sourceLine" id="cb1-10" title="10"></a>
 <a class="sourceLine" id="cb1-11" title="11"><span class="co"># Sample data Nitrate:</span></a>
 <a class="sourceLine" id="cb1-12" title="12">parameterCd &lt;-<span class="st"> "00618"</span></a>
-<a class="sourceLine" id="cb1-13" title="13">qwData &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISqw.html">readNWISqw</a></span>(siteNumber, parameterCd, <span class="st">"1980-01-01"</span>, <span class="st">"2010-01-01"</span>)</a>
-<a class="sourceLine" id="cb1-14" title="14"></a>
-<a class="sourceLine" id="cb1-15" title="15">pCode &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISpCode.html">readNWISpCode</a></span>(parameterCd)</a></code></pre></div>
+<a class="sourceLine" id="cb1-13" title="13">qwData &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISqw.html">readNWISqw</a></span>(siteNumber,parameterCd,</a>
+<a class="sourceLine" id="cb1-14" title="14">                      <span class="st">"1980-01-01"</span>,<span class="st">"2010-01-01"</span>)</a>
+<a class="sourceLine" id="cb1-15" title="15"></a>
+<a class="sourceLine" id="cb1-16" title="16">pCode &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISpCode.html">readNWISpCode</a></span>(parameterCd)</a></code></pre></div>
 <p>USGS data are made available through the National Water Information System (NWIS).</p>
 <p>Table 1 describes the functions available in the <code>dataRetrieval</code> package.</p>
 <table class="table gmisc_table">
@@ -725,7 +726,7 @@ Median
 <h3 class="hasAnchor">
 <a href="#readnwissite" class="anchor"></a>readNWISsite</h3>
 <p>Use the <code>readNWISsite</code> function to obtain all of the information available for a particular USGS site (or sites) such as full station name, drainage area, latitude, and longitude. <code>readNWISsite</code> can also access information about multiple sites with a vector input.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">siteNumbers &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"01491000"</span>, <span class="st">"01645000"</span>)</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">siteNumbers &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"01491000"</span>,<span class="st">"01645000"</span>) </a>
 <a class="sourceLine" id="cb2-2" title="2">siteINFO &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISsite.html">readNWISsite</a></span>(siteNumbers)</a></code></pre></div>
 <p>Site information is obtained from: <a href="https://waterservices.usgs.gov/rest/Site-Test-Tool.html">https://waterservices.usgs.gov/rest/Site-Test-Tool.html</a></p>
 <p>Information on the returned data can be found with the <code>comment</code> function as described in the <a href="#embedded-metadata">Metadata</a> section.</p>
@@ -736,11 +737,11 @@ Median
 <a href="#whatnwisdata" class="anchor"></a>whatNWISdata</h3>
 <p>To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the <code>whatNWISdata</code> function. It is possible to limit the retrieval information to a subset of services. The possible choices for services are: “dv” (daily values), “uv”, or “iv” (unit values), “qw” (water-quality), “sv” (sites visits), “pk” (peak measurements), “gw” (groundwater levels), “ad” (sites included in USGS Annual Water Data Reports External Link), “aw” (sites monitored by the USGS Active Groundwater Level Network External Link), and “id” (historical instantaneous values).</p>
 <p>In the following example, we limit the retrieved data to only daily data. The default for “service” is <code>all</code>, which returns all of the available data for that site. Likewise, there are arguments for parameter code (<code>parameterCd</code>) and statistic code (<code>statCd</code>) to filter the results. The default for both is to return all possible values (<code>all</code>). The returned <code>count_nu</code> for “uv” data is the count of days with returned data, not the actual count of returned values.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># Continuing from the previous example: This pulls out just</span></a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="co"># the daily, mean data:</span></a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># Continuing from the previous example:</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="co"># This pulls out just the daily, mean data:</span></a>
 <a class="sourceLine" id="cb4-3" title="3"></a>
-<a class="sourceLine" id="cb4-4" title="4">dailyDataAvailable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span>(siteNumbers, <span class="dt">service =</span> <span class="st">"dv"</span>, </a>
-<a class="sourceLine" id="cb4-5" title="5">    <span class="dt">statCd =</span> <span class="st">"00003"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb4-4" title="4">dailyDataAvailable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span>(siteNumbers,</a>
+<a class="sourceLine" id="cb4-5" title="5">                    <span class="dt">service=</span><span class="st">"dv"</span>, <span class="dt">statCd=</span><span class="st">"00003"</span>)</a></code></pre></div>
 <table class="table gmisc_table">
 <thead>
 <tr>
@@ -900,7 +901,7 @@ tons/day
 <a href="#parameter-information" class="anchor"></a>Parameter Information</h2>
 <p>To obtain all of the available information concerning a measured parameter (or multiple parameters), use the <code>readNWISpCode</code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># Using defaults:</span></a>
-<a class="sourceLine" id="cb5-2" title="2">parameterCd &lt;-<span class="st"> "00618"</span></a>
+<a class="sourceLine" id="cb5-2" title="2">parameterCd &lt;-<span class="st"> "00618"</span> </a>
 <a class="sourceLine" id="cb5-3" title="3">parameterINFO &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISpCode.html">readNWISpCode</a></span>(parameterCd)</a></code></pre></div>
 </div>
 <div id="daily-data" class="section level2">
@@ -911,20 +912,21 @@ tons/day
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># Choptank River near Greensboro, MD:</span></a>
 <a class="sourceLine" id="cb6-2" title="2">siteNumber &lt;-<span class="st"> "01491000"</span></a>
 <a class="sourceLine" id="cb6-3" title="3">parameterCd &lt;-<span class="st"> "00060"</span>  <span class="co"># Discharge</span></a>
-<a class="sourceLine" id="cb6-4" title="4">startDate &lt;-<span class="st"> "2009-10-01"</span></a>
-<a class="sourceLine" id="cb6-5" title="5">endDate &lt;-<span class="st"> "2012-09-30"</span></a>
+<a class="sourceLine" id="cb6-4" title="4">startDate &lt;-<span class="st"> "2009-10-01"</span>  </a>
+<a class="sourceLine" id="cb6-5" title="5">endDate &lt;-<span class="st"> "2012-09-30"</span> </a>
 <a class="sourceLine" id="cb6-6" title="6"></a>
-<a class="sourceLine" id="cb6-7" title="7">discharge &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISdv.html">readNWISdv</a></span>(siteNumber, parameterCd, startDate, endDate)</a></code></pre></div>
+<a class="sourceLine" id="cb6-7" title="7">discharge &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISdv.html">readNWISdv</a></span>(siteNumber, </a>
+<a class="sourceLine" id="cb6-8" title="8">                    parameterCd, startDate, endDate)</a></code></pre></div>
 <p>The column “datetime” in the returned data frame is automatically imported as a variable of class “Date” in R. Each requested parameter has a value and remark code column. The names of these columns depend on the requested parameter and stat code combinations. USGS daily value qualification codes are often “A” (approved for publication) or “P” (provisional data subject to revision).</p>
 <p>Another example would be a request for mean and maximum daily temperature and discharge in early 2012:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">siteNumber &lt;-<span class="st"> "01491000"</span></a>
-<a class="sourceLine" id="cb7-2" title="2">parameterCd &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"00010"</span>, <span class="st">"00060"</span>)  <span class="co"># Temperature and discharge</span></a>
-<a class="sourceLine" id="cb7-3" title="3">statCd &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"00001"</span>, <span class="st">"00003"</span>)  <span class="co"># Mean and maximum</span></a>
+<a class="sourceLine" id="cb7-2" title="2">parameterCd &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"00010"</span>,<span class="st">"00060"</span>)  <span class="co"># Temperature and discharge</span></a>
+<a class="sourceLine" id="cb7-3" title="3">statCd &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"00001"</span>,<span class="st">"00003"</span>)  <span class="co"># Mean and maximum</span></a>
 <a class="sourceLine" id="cb7-4" title="4">startDate &lt;-<span class="st"> "2012-01-01"</span></a>
 <a class="sourceLine" id="cb7-5" title="5">endDate &lt;-<span class="st"> "2012-05-01"</span></a>
 <a class="sourceLine" id="cb7-6" title="6"></a>
-<a class="sourceLine" id="cb7-7" title="7">temperatureAndFlow &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISdv.html">readNWISdv</a></span>(siteNumber, parameterCd, startDate, </a>
-<a class="sourceLine" id="cb7-8" title="8">    endDate, <span class="dt">statCd =</span> statCd)</a></code></pre></div>
+<a class="sourceLine" id="cb7-7" title="7">temperatureAndFlow &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISdv.html">readNWISdv</a></span>(siteNumber, parameterCd, </a>
+<a class="sourceLine" id="cb7-8" title="8">        startDate, endDate, <span class="dt">statCd=</span>statCd)</a></code></pre></div>
 <p>The column names can be shortened and simplified using the <code>renameNWISColumns</code> function. This is not necessary, but may streamline subsequent data analysis and presentation. Site information, daily statistic information, and measured parameter information is attached to the data frame as attributes. This is discussed further in the <a href="#embedded-metadata">metadata</a> section.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(temperatureAndFlow)</a></code></pre></div>
 <pre><code>## [1] "agency_cd"        "site_no"          "Date"            
@@ -935,7 +937,7 @@ tons/day
 <pre><code>## [1] "agency_cd"    "site_no"      "Date"        
 ## [4] "Wtemp_Max_cd" "Wtemp_Max"    "Wtemp_cd"    
 ## [7] "Wtemp"        "Flow_cd"      "Flow"</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># Information about the data frame attributes:</span></a>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co">#Information about the data frame attributes:</span></a>
 <a class="sourceLine" id="cb12-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attributes">attributes</a></span>(temperatureAndFlow))</a></code></pre></div>
 <pre><code>## [1] "names"         "row.names"     "url"          
 ## [4] "siteInfo"      "variableInfo"  "disclaimer"   
@@ -947,19 +949,19 @@ tons/day
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">variableInfo &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attr">attr</a></span>(temperatureAndFlow, <span class="st">"variableInfo"</span>)</a>
 <a class="sourceLine" id="cb15-2" title="2">siteInfo &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attr">attr</a></span>(temperatureAndFlow, <span class="st">"siteInfo"</span>)</a>
 <a class="sourceLine" id="cb15-3" title="3"></a>
-<a class="sourceLine" id="cb15-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mar =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>))  <span class="co">#sets the size of the plot window</span></a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mar=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>)) <span class="co">#sets the size of the plot window</span></a>
 <a class="sourceLine" id="cb15-5" title="5"></a>
-<a class="sourceLine" id="cb15-6" title="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(temperatureAndFlow<span class="op">$</span>Date, temperatureAndFlow<span class="op">$</span>Wtemp_Max, <span class="dt">ylab =</span> variableInfo<span class="op">$</span>parameter_desc[<span class="dv">1</span>], </a>
-<a class="sourceLine" id="cb15-7" title="7">    <span class="dt">xlab =</span> <span class="st">""</span>)</a>
-<a class="sourceLine" id="cb15-8" title="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">new =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb15-9" title="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(temperatureAndFlow<span class="op">$</span>Date, temperatureAndFlow<span class="op">$</span>Flow, <span class="dt">col =</span> <span class="st">"red"</span>, </a>
-<a class="sourceLine" id="cb15-10" title="10">    <span class="dt">type =</span> <span class="st">"l"</span>, <span class="dt">xaxt =</span> <span class="st">"n"</span>, <span class="dt">yaxt =</span> <span class="st">"n"</span>, <span class="dt">xlab =</span> <span class="st">""</span>, <span class="dt">ylab =</span> <span class="st">""</span>, </a>
-<a class="sourceLine" id="cb15-11" title="11">    <span class="dt">axes =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb15-12" title="12"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/axis">axis</a></span>(<span class="dv">4</span>, <span class="dt">col =</span> <span class="st">"red"</span>, <span class="dt">col.axis =</span> <span class="st">"red"</span>)</a>
-<a class="sourceLine" id="cb15-13" title="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/mtext">mtext</a></span>(variableInfo<span class="op">$</span>parameter_desc[<span class="dv">2</span>], <span class="dt">side =</span> <span class="dv">4</span>, <span class="dt">line =</span> <span class="dv">3</span>, <span class="dt">col =</span> <span class="st">"red"</span>)</a>
-<a class="sourceLine" id="cb15-14" title="14"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/title">title</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(siteInfo<span class="op">$</span>station_nm, <span class="st">"2012"</span>))</a>
-<a class="sourceLine" id="cb15-15" title="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/legend">legend</a></span>(<span class="st">"topleft"</span>, variableInfo<span class="op">$</span>param_units, <span class="dt">col =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"black"</span>, </a>
-<a class="sourceLine" id="cb15-16" title="16">    <span class="st">"red"</span>), <span class="dt">lty =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="ot">NA</span>, <span class="dv">1</span>), <span class="dt">pch =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="ot">NA</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb15-6" title="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(temperatureAndFlow<span class="op">$</span>Date, temperatureAndFlow<span class="op">$</span>Wtemp_Max,</a>
+<a class="sourceLine" id="cb15-7" title="7">  <span class="dt">ylab=</span>variableInfo<span class="op">$</span>parameter_desc[<span class="dv">1</span>],<span class="dt">xlab=</span><span class="st">""</span> )</a>
+<a class="sourceLine" id="cb15-8" title="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">new=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb15-9" title="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(temperatureAndFlow<span class="op">$</span>Date, temperatureAndFlow<span class="op">$</span>Flow,</a>
+<a class="sourceLine" id="cb15-10" title="10">  <span class="dt">col=</span><span class="st">"red"</span>,<span class="dt">type=</span><span class="st">"l"</span>,<span class="dt">xaxt=</span><span class="st">"n"</span>,<span class="dt">yaxt=</span><span class="st">"n"</span>,<span class="dt">xlab=</span><span class="st">""</span>,<span class="dt">ylab=</span><span class="st">""</span>,<span class="dt">axes=</span><span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb15-11" title="11">  )</a>
+<a class="sourceLine" id="cb15-12" title="12"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/axis">axis</a></span>(<span class="dv">4</span>,<span class="dt">col=</span><span class="st">"red"</span>,<span class="dt">col.axis=</span><span class="st">"red"</span>)</a>
+<a class="sourceLine" id="cb15-13" title="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/mtext">mtext</a></span>(variableInfo<span class="op">$</span>parameter_desc[<span class="dv">2</span>],<span class="dt">side=</span><span class="dv">4</span>,<span class="dt">line=</span><span class="dv">3</span>,<span class="dt">col=</span><span class="st">"red"</span>)</a>
+<a class="sourceLine" id="cb15-14" title="14"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/title">title</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(siteInfo<span class="op">$</span>station_nm,<span class="st">"2012"</span>))</a>
+<a class="sourceLine" id="cb15-15" title="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/legend">legend</a></span>(<span class="st">"topleft"</span>, variableInfo<span class="op">$</span>param_units, </a>
+<a class="sourceLine" id="cb15-16" title="16">       <span class="dt">col=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"black"</span>,<span class="st">"red"</span>),<span class="dt">lty=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="ot">NA</span>,<span class="dv">1</span>),<span class="dt">pch=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="ot">NA</span>))</a></code></pre></div>
 <p><img src="dataRetrieval_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
 </div>
 <div id="unit-data" class="section level2">
@@ -967,10 +969,10 @@ tons/day
 <a href="#unit-data" class="anchor"></a>Unit Data</h2>
 <p>Any data collected at regular time intervals (such as 15-minute or hourly) are known as “unit values”. Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function <code>readNWISuv</code>. Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days. Here is an example of a retrieval of such data.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">parameterCd &lt;-<span class="st"> "00060"</span>  <span class="co"># Discharge</span></a>
-<a class="sourceLine" id="cb16-2" title="2">startDate &lt;-<span class="st"> "2012-05-12"</span></a>
-<a class="sourceLine" id="cb16-3" title="3">endDate &lt;-<span class="st"> "2012-05-13"</span></a>
-<a class="sourceLine" id="cb16-4" title="4">dischargeUnit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISuv.html">readNWISuv</a></span>(siteNumber, parameterCd, startDate, </a>
-<a class="sourceLine" id="cb16-5" title="5">    endDate)</a>
+<a class="sourceLine" id="cb16-2" title="2">startDate &lt;-<span class="st"> "2012-05-12"</span> </a>
+<a class="sourceLine" id="cb16-3" title="3">endDate &lt;-<span class="st"> "2012-05-13"</span> </a>
+<a class="sourceLine" id="cb16-4" title="4">dischargeUnit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISuv.html">readNWISuv</a></span>(siteNumber, parameterCd, </a>
+<a class="sourceLine" id="cb16-5" title="5">        startDate, endDate)</a>
 <a class="sourceLine" id="cb16-6" title="6">dischargeUnit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/renameNWISColumns.html">renameNWISColumns</a></span>(dischargeUnit)</a></code></pre></div>
 <p>The retrieval produces a data frame that contains 96 rows (one for every 15 minute period in the day). They include all data collected from the <code>startDate</code> through the <code>endDate</code> (starting and ending with midnight locally-collected time). The dateTime column is converted to UTC (Coordinated Universal Time), so midnight EST will be 5 hours earlier in the dateTime column (the previous day, at 7pm).</p>
 <p>To override the UTC timezone, specify a valid timezone in the tz argument. Default is "", which will keep the dateTime column in UTC. Other valid timezones are:</p>
@@ -991,15 +993,16 @@ America/Metlakatla</code></pre>
 <a href="#water-quality-data" class="anchor"></a>Water Quality Data</h2>
 <p>To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function <code>readNWISqw</code>, with the input arguments: <code>siteNumber</code>, <code>parameterCd</code>, <code>startDate</code>, and <code>endDate</code>. Additionally, the argument <code>expanded</code> is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (<code>expanded=FALSE</code>), or a more complete and verbose output (<code>expanded=TRUE</code>). <code>expanded = TRUE</code> includes such columns as remark codes, value qualifying text, and detection level for each parameter code. There also includes an argument “reshape”, that converts the expanded dataset to a “wide” format (each requested parameter code gets individual columns). The defaults are <code>expanded=TRUE</code>, and <code>reshape=FALSE</code>.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="co"># Dissolved Nitrate parameter codes:</span></a>
-<a class="sourceLine" id="cb18-2" title="2">parameterCd &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"00618"</span>, <span class="st">"71851"</span>)</a>
+<a class="sourceLine" id="cb18-2" title="2">parameterCd &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"00618"</span>,<span class="st">"71851"</span>)</a>
 <a class="sourceLine" id="cb18-3" title="3">startDate &lt;-<span class="st"> "1985-10-01"</span></a>
 <a class="sourceLine" id="cb18-4" title="4">endDate &lt;-<span class="st"> "2012-09-30"</span></a>
 <a class="sourceLine" id="cb18-5" title="5"></a>
-<a class="sourceLine" id="cb18-6" title="6">dfLong &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISqw.html">readNWISqw</a></span>(siteNumber, parameterCd, startDate, endDate)</a>
-<a class="sourceLine" id="cb18-7" title="7"></a>
-<a class="sourceLine" id="cb18-8" title="8"><span class="co"># Or the wide return:</span></a>
-<a class="sourceLine" id="cb18-9" title="9">dfWide &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISqw.html">readNWISqw</a></span>(siteNumber, parameterCd, startDate, endDate, </a>
-<a class="sourceLine" id="cb18-10" title="10">    <span class="dt">reshape =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb18-6" title="6">dfLong &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISqw.html">readNWISqw</a></span>(siteNumber, parameterCd, </a>
+<a class="sourceLine" id="cb18-7" title="7">      startDate, endDate)</a>
+<a class="sourceLine" id="cb18-8" title="8"></a>
+<a class="sourceLine" id="cb18-9" title="9"><span class="co"># Or the wide return:</span></a>
+<a class="sourceLine" id="cb18-10" title="10">dfWide &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISqw.html">readNWISqw</a></span>(siteNumber, parameterCd,</a>
+<a class="sourceLine" id="cb18-11" title="11">      startDate, endDate, <span class="dt">reshape=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Site information and measured parameter information is attached to the data frame as attributes. This is discussed further in the <a href="#embedded-metadata">metadata</a> section. Additional metadata, such as information about the column names can be found by using the <code>comment</code> function, also described in the <a href="#embedded-metadata">metadata</a> section.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/comment">comment</a></span>(dfLong)</a></code></pre></div>
 </div>
@@ -1014,7 +1017,7 @@ America/Metlakatla</code></pre>
 <h2 class="hasAnchor">
 <a href="#peak-flow-data" class="anchor"></a>Peak Flow Data</h2>
 <p>Peak flow data are instantaneous discharge or stage data that record the maximum values of these variables during a flood event. They include the annual peak flood event but can also include records of other peaks that are lower than the annual maximum. Peak discharge measurements can be obtained with the <code>readNWISpeak</code> function. Information on the returned data can be found with the <code>comment</code> function and attached attributes as described in the <a href="#embedded-metadata">metadata</a> section.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">siteNumber &lt;-<span class="st"> "01594440"</span></a>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">siteNumber &lt;-<span class="st"> '01594440'</span></a>
 <a class="sourceLine" id="cb21-2" title="2">peakData &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISpeak.html">readNWISpeak</a></span>(siteNumber)</a></code></pre></div>
 </div>
 <div id="rating-curve-data" class="section level2">
@@ -1036,25 +1039,30 @@ America/Metlakatla</code></pre>
 <h2 class="hasAnchor">
 <a href="#water-use-data" class="anchor"></a>Water Use Data</h2>
 <p>Retrieves water use data from USGS Water Use Data for the Nation. See <a href="https://waterdata.usgs.gov/nwis/wu">https://waterdata.usgs.gov/nwis/wu</a> for more information. All available use categories for the supplied arguments are retrieved.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">allegheny &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISuse.html">readNWISuse</a></span>(<span class="dt">stateCd =</span> <span class="st">"Pennsylvania"</span>, <span class="dt">countyCd =</span> <span class="st">"Allegheny"</span>)</a>
-<a class="sourceLine" id="cb24-2" title="2"></a>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">allegheny &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISuse.html">readNWISuse</a></span>(<span class="dt">stateCd =</span> <span class="st">"Pennsylvania"</span>,</a>
+<a class="sourceLine" id="cb24-2" title="2">                         <span class="dt">countyCd =</span> <span class="st">"Allegheny"</span>)</a>
 <a class="sourceLine" id="cb24-3" title="3"></a>
-<a class="sourceLine" id="cb24-4" title="4">national &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISuse.html">readNWISuse</a></span>(<span class="dt">stateCd =</span> <span class="ot">NULL</span>, <span class="dt">countyCd =</span> <span class="ot">NULL</span>, <span class="dt">transform =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb24-4" title="4"></a>
+<a class="sourceLine" id="cb24-5" title="5">national &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISuse.html">readNWISuse</a></span>(<span class="dt">stateCd =</span> <span class="ot">NULL</span>, </a>
+<a class="sourceLine" id="cb24-6" title="6">                        <span class="dt">countyCd =</span> <span class="ot">NULL</span>, </a>
+<a class="sourceLine" id="cb24-7" title="7">                        <span class="dt">transform =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="statistics-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#statistics-data" class="anchor"></a>Statistics Data</h2>
 <p>Retrieves site statistics from the USGS Statistics Web Service beta.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">discharge_stats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISstat.html">readNWISstat</a></span>(<span class="dt">siteNumbers =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"02319394"</span>), </a>
-<a class="sourceLine" id="cb25-2" title="2">    <span class="dt">parameterCd =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"00060"</span>), <span class="dt">statReportType =</span> <span class="st">"annual"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">discharge_stats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISstat.html">readNWISstat</a></span>(<span class="dt">siteNumbers=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"02319394"</span>),</a>
+<a class="sourceLine" id="cb25-2" title="2">                   <span class="dt">parameterCd=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"00060"</span>),</a>
+<a class="sourceLine" id="cb25-3" title="3">                   <span class="dt">statReportType=</span><span class="st">"annual"</span>) </a></code></pre></div>
 </div>
 </div>
 <div id="water-quality-portal-web-retrievals" class="section level1">
 <h1 class="hasAnchor">
 <a href="#water-quality-portal-web-retrievals" class="anchor"></a>Water Quality Portal Web Retrievals</h1>
 <p>There are additional water quality data sets available from the <a href="https://www.waterqualitydata.us/">Water Quality Data Portal</a>. These data sets can be housed in either the STORET database (data from EPA), NWIS database (data from USGS), STEWARDS database (data from USDA), and additional databases are slated to be included in the future. Because only USGS uses parameter codes, a “characteristic name” must be supplied. The <code>readWQPqw</code> function can take either a USGS parameter code, or a more general characteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">specificCond &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readWQPqw.html">readWQPqw</a></span>(<span class="st">"WIDNR_WQX-10032762"</span>, <span class="st">"Specific conductance"</span>, </a>
-<a class="sourceLine" id="cb26-2" title="2">    <span class="st">"2011-05-01"</span>, <span class="st">"2011-09-30"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">specificCond &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readWQPqw.html">readWQPqw</a></span>(<span class="st">'WIDNR_WQX-10032762'</span>,</a>
+<a class="sourceLine" id="cb26-2" title="2">                          <span class="st">'Specific conductance'</span>,</a>
+<a class="sourceLine" id="cb26-3" title="3">                          <span class="st">'2011-05-01'</span>,<span class="st">'2011-09-30'</span>)</a></code></pre></div>
 <p>A tool for finding NWIS characteristic names can be found <a href="https://www.waterqualitydata.us/public_srsnames/">here</a></p>
 </div>
 <div id="generalized-retrievals" class="section level1">
@@ -1070,8 +1078,9 @@ America/Metlakatla</code></pre>
 <p>The function <code>whatNWISsites</code> can be used to discover NWIS sites based on any query that the NWIS Site Service offers. This is done by using the <code>...</code> argument, which allows the user to use any arbitrary input argument. We can then use the service <a href="https://waterservices.usgs.gov/rest/Site-Test-Tool.html">here</a> to discover many options for searching for NWIS sites. For example, you may want to search for sites in a lat/lon bounding box, or only sites tidal streams, or sites with water quality samples, sites above a certain altitude, etc. The results of this site query generate a URL. For example, the tool provided a search within a specified bounding box, for sites that have daily discharge (parameter code = 00060) and temperature (parameter code = 00010). The generated URL is:</p>
 <p><a href="https://waterservices.usgs.gov/nwis/site/?format=rdb&amp;bBox=-83.0,36.5,-81.0,38.5&amp;parameterCd=00010,00060&amp;hasDataTypeCd=dv">https://waterservices.usgs.gov/nwis/site/?format=rdb&amp;bBox=-83.0,36.5,-81.0,38.5&amp;parameterCd=00010,00060&amp;hasDataTypeCd=dv</a></p>
 <p>The following <code>dataRetrieval</code> code can be used to get those sites:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">sites &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatNWISsites.html">whatNWISsites</a></span>(<span class="dt">bBox =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="dv">83</span>, <span class="fl">36.5</span>, <span class="dv">-81</span>, <span class="fl">38.5</span>), <span class="dt">parameterCd =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"00010"</span>, </a>
-<a class="sourceLine" id="cb27-2" title="2">    <span class="st">"00060"</span>), <span class="dt">hasDataTypeCd =</span> <span class="st">"dv"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">sites &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatNWISsites.html">whatNWISsites</a></span>(<span class="dt">bBox=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="fl">83.0</span>,<span class="fl">36.5</span>,<span class="op">-</span><span class="fl">81.0</span>,<span class="fl">38.5</span>), </a>
+<a class="sourceLine" id="cb27-2" title="2">                      <span class="dt">parameterCd=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"00010"</span>,<span class="st">"00060"</span>),</a>
+<a class="sourceLine" id="cb27-3" title="3">                      <span class="dt">hasDataTypeCd=</span><span class="st">"dv"</span>)</a></code></pre></div>
 </div>
 <div id="data-readnwisdata" class="section level3">
 <h3 class="hasAnchor">
@@ -1184,10 +1193,13 @@ Statistics Service
 </tbody>
 </table>
 <p>The <code>...</code> argument allows the user to create their own queries based on the instructions found in the web links above. The links provide instructions on how to create a URL to request data. Perhaps you want sites only in Wisconsin, with a drainage area less than 50 mi<sup>2</sup>, and the most recent daily discharge data. That request would be done as follows:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">dischargeWI &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISdata.html">readNWISdata</a></span>(<span class="dt">service =</span> <span class="st">"dv"</span>, <span class="dt">stateCd =</span> <span class="st">"WI"</span>, <span class="dt">parameterCd =</span> <span class="st">"00060"</span>, </a>
-<a class="sourceLine" id="cb28-2" title="2">    <span class="dt">drainAreaMin =</span> <span class="st">"50"</span>, <span class="dt">statCd =</span> <span class="st">"00003"</span>)</a>
-<a class="sourceLine" id="cb28-3" title="3"></a>
-<a class="sourceLine" id="cb28-4" title="4">siteInfo &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attr">attr</a></span>(dischargeWI, <span class="st">"siteInfo"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">dischargeWI &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISdata.html">readNWISdata</a></span>(<span class="dt">service=</span><span class="st">"dv"</span>,</a>
+<a class="sourceLine" id="cb28-2" title="2">                           <span class="dt">stateCd=</span><span class="st">"WI"</span>,</a>
+<a class="sourceLine" id="cb28-3" title="3">                           <span class="dt">parameterCd=</span><span class="st">"00060"</span>,</a>
+<a class="sourceLine" id="cb28-4" title="4">                           <span class="dt">drainAreaMin=</span><span class="st">"50"</span>,</a>
+<a class="sourceLine" id="cb28-5" title="5">                           <span class="dt">statCd=</span><span class="st">"00003"</span>)</a>
+<a class="sourceLine" id="cb28-6" title="6"></a>
+<a class="sourceLine" id="cb28-7" title="7">siteInfo &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attr">attr</a></span>(dischargeWI, <span class="st">"siteInfo"</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="wqp" class="section level2">
@@ -1198,27 +1210,29 @@ Statistics Service
 <h3 class="hasAnchor">
 <a href="#sites-whatwqpsites" class="anchor"></a>Sites: whatWQPsites</h3>
 <p>To discover available sites in the WQP in New Jersey that have measured Chloride, use the function <code>whatWQPsites</code>.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">sitesNJ &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatWQPsites.html">whatWQPsites</a></span>(<span class="dt">statecode =</span> <span class="st">"US:34"</span>, <span class="dt">characteristicName =</span> <span class="st">"Chloride"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">sitesNJ &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatWQPsites.html">whatWQPsites</a></span>(<span class="dt">statecode=</span><span class="st">"US:34"</span>,</a>
+<a class="sourceLine" id="cb29-2" title="2">                       <span class="dt">characteristicName=</span><span class="st">"Chloride"</span>)</a></code></pre></div>
 </div>
 <div id="data-readwqpdata" class="section level3">
 <h3 class="hasAnchor">
 <a href="#data-readwqpdata" class="anchor"></a>Data: readWQPdata</h3>
 <p>To get data from the WQP using generalized Web service calls, use the function <code>readWQPdata</code>. For example, to get all the pH data in Wisconsin:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">dataPH &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readWQPdata.html">readWQPdata</a></span>(<span class="dt">statecode =</span> <span class="st">"US:55"</span>, <span class="dt">characteristicName =</span> <span class="st">"pH"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">dataPH &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readWQPdata.html">readWQPdata</a></span>(<span class="dt">statecode=</span><span class="st">"US:55"</span>, </a>
+<a class="sourceLine" id="cb30-2" title="2">                 <span class="dt">characteristicName=</span><span class="st">"pH"</span>)</a></code></pre></div>
 </div>
 <div id="availability-whatwqpdata" class="section level3">
 <h3 class="hasAnchor">
 <a href="#availability-whatwqpdata" class="anchor"></a>Availability: whatWQPdata</h3>
 <p>The function <code>whatWQPdata</code> returns a data frame with information on the amount of data collected at a site. For example:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">type &lt;-<span class="st"> "Stream"</span></a>
-<a class="sourceLine" id="cb31-2" title="2">sites &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatWQPdata.html">whatWQPdata</a></span>(<span class="dt">countycode =</span> <span class="st">"US:55:025"</span>, <span class="dt">siteType =</span> type)</a></code></pre></div>
+<a class="sourceLine" id="cb31-2" title="2">sites &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatWQPdata.html">whatWQPdata</a></span>(<span class="dt">countycode=</span><span class="st">"US:55:025"</span>,<span class="dt">siteType=</span>type)</a></code></pre></div>
 <p>This returns a data frame with all of the sites that were measured in streams in Dane County, WI. Also, in that table, there is a measure of <code>activityCount</code> (how often the site was sampled), and <code>resultCount</code> (how many individual results are available).</p>
 </div>
 <div id="samples-whatwqpsamples" class="section level3">
 <h3 class="hasAnchor">
 <a href="#samples-whatwqpsamples" class="anchor"></a>Samples: whatWQPsamples</h3>
 <p>The function <code>whatWQPsamples</code> returns information on the individual samples collected at a site. For example:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">site &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatWQPsamples.html">whatWQPsamples</a></span>(<span class="dt">siteid =</span> <span class="st">"USGS-01594440"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">site &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatWQPsamples.html">whatWQPsamples</a></span>(<span class="dt">siteid=</span><span class="st">"USGS-01594440"</span>)</a></code></pre></div>
 <p>This returns one row for each instance that a sample was collect.</p>
 </div>
 <div id="metrics-whatwqpmetrics" class="section level3">
@@ -1226,7 +1240,7 @@ Statistics Service
 <a href="#metrics-whatwqpmetrics" class="anchor"></a>Metrics: whatWQPmetrics</h3>
 <p>The function <code>whatWQPmetrics</code> provides metric information. This is only currently available for STORET data:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">type &lt;-<span class="st"> "Stream"</span></a>
-<a class="sourceLine" id="cb33-2" title="2">sites &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatWQPmetrics.html">whatWQPmetrics</a></span>(<span class="dt">countycode =</span> <span class="st">"US:55:025"</span>, <span class="dt">siteType =</span> type)</a></code></pre></div>
+<a class="sourceLine" id="cb33-2" title="2">sites &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatWQPmetrics.html">whatWQPmetrics</a></span>(<span class="dt">countycode=</span><span class="st">"US:55:025"</span>,<span class="dt">siteType=</span>type)</a></code></pre></div>
 </div>
 </div>
 </div>
@@ -1248,7 +1262,7 @@ Statistics Service
 <p>Data obtained from <code>readNWISpeak</code>, <code>readNWISmeas</code>, and <code>readNWISrating</code>, the <code>comment</code> attribute is useful.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/comment">comment</a></span>(peakData)</a>
 <a class="sourceLine" id="cb37-2" title="2"></a>
-<a class="sourceLine" id="cb37-3" title="3"><span class="co"># Which is equivalent to:</span></a>
+<a class="sourceLine" id="cb37-3" title="3"><span class="co">#Which is equivalent to:</span></a>
 <a class="sourceLine" id="cb37-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attr">attr</a></span>(peakData, <span class="st">"comment"</span>)</a></code></pre></div>
 </div>
 <div id="getting-started-in-r" class="section level1">
@@ -1281,14 +1295,19 @@ Statistics Service
 <a href="#creating-tables-in-microsoft-software-from-r" class="anchor"></a>Creating Tables in Microsoft® Software from R</h1>
 <p>There are a few steps that are required in order to create a table in Microsoft® software (Excel, Word, PowerPoint, etc.) from an R data frame. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Excel based on the data frame tableData:</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">availableData &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span>(siteNumber, <span class="st">"dv"</span>)</a>
-<a class="sourceLine" id="cb42-2" title="2">dailyData &lt;-<span class="st"> </span>availableData[<span class="st">"00003"</span> <span class="op">==</span><span class="st"> </span>availableData<span class="op">$</span>stat_cd, </a>
-<a class="sourceLine" id="cb42-3" title="3">    ]</a>
-<a class="sourceLine" id="cb42-4" title="4"></a>
-<a class="sourceLine" id="cb42-5" title="5">tableData &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/with">with</a></span>(dailyData, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">shortName =</span> srsname, </a>
-<a class="sourceLine" id="cb42-6" title="6">    <span class="dt">Start =</span> begin_date, <span class="dt">End =</span> end_date, <span class="dt">Count =</span> count_nu, <span class="dt">Units =</span> parameter_units))</a></code></pre></div>
+<a class="sourceLine" id="cb42-2" title="2">dailyData &lt;-<span class="st"> </span>availableData[<span class="st">"00003"</span> <span class="op">==</span><span class="st"> </span>availableData<span class="op">$</span>stat_cd,]</a>
+<a class="sourceLine" id="cb42-3" title="3"></a>
+<a class="sourceLine" id="cb42-4" title="4">tableData &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/with">with</a></span>(dailyData, </a>
+<a class="sourceLine" id="cb42-5" title="5">      <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(</a>
+<a class="sourceLine" id="cb42-6" title="6">        <span class="dt">shortName=</span>srsname, </a>
+<a class="sourceLine" id="cb42-7" title="7">        <span class="dt">Start=</span>begin_date, </a>
+<a class="sourceLine" id="cb42-8" title="8">        <span class="dt">End=</span>end_date, </a>
+<a class="sourceLine" id="cb42-9" title="9">        <span class="dt">Count=</span>count_nu,</a>
+<a class="sourceLine" id="cb42-10" title="10">        <span class="dt">Units=</span>parameter_units)</a>
+<a class="sourceLine" id="cb42-11" title="11">      )</a></code></pre></div>
 <p>First, save the data frame as a tab delimited file (you don’t want to use comma delimited because there are commas in some of the data elements):</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/write.table">write.table</a></span>(tableData, <span class="dt">file =</span> <span class="st">"tableData.tsv"</span>, <span class="dt">sep =</span> <span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, </a>
-<a class="sourceLine" id="cb43-2" title="2">    <span class="dt">quote =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/write.table">write.table</a></span>(tableData, <span class="dt">file=</span><span class="st">"tableData.tsv"</span>,<span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>,</a>
+<a class="sourceLine" id="cb43-2" title="2">            <span class="dt">row.names =</span> <span class="ot">FALSE</span>,<span class="dt">quote=</span><span class="ot">FALSE</span>)</a></code></pre></div>
 <p>This will save a file in your working directory called tableData.tsv. You can see your working directory by typing <code><a href="https://www.rdocumentation.org/packages/base/topics/getwd">getwd()</a></code> in the R console. Opening the file in a general-purpose text editor, you should see the following:</p>
 <pre><code>shortName  Start  End   Count   Units
 Temperature, water  2010-10-01  2012-06-24  575 deg C

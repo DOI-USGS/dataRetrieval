@@ -48,7 +48,7 @@
 #' }
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' availableData <- whatNWISdata(siteNumber = '05114000')
 #' # To find just unit value ('instantaneous') data:
 #' uvData <- whatNWISdata(siteNumber = '05114000',service="uv")

@@ -50,7 +50,7 @@
 #' @export
 #' @import utils
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' site1 <- whatWQPsites(siteid="USGS-01594440")
 #' 
 #' type <- "Stream"
