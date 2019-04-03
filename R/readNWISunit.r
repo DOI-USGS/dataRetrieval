@@ -579,12 +579,14 @@ readNWISuse <- function(stateCd, countyCd, years = "ALL", categories = "ALL", co
   if(transform){
     cmmnt <- comment(returned_data)
     returned_data <- t(returned_data)
-    colnames(data) <- returned_data[1,]
+    colnames(returned_data) <- returned_data[1,]
     returned_data <- as.data.frame(returned_data[-1,],stringsAsFactors=FALSE)
     returned_data <- cbind(Year=as.integer(substr(rownames(returned_data),2,5)),returned_data)
     rownames(returned_data) <- NULL
     comment(returned_data) <- cmmnt
-    if(exists("stateCd") && all(nchar(stateCd) != 0)){warning("transform = TRUE is only intended for national data")}
+    if(!all(is.null(stateCd)) && all(nchar(stateCd) != 0)){
+      warning("transform = TRUE is only intended for national data")
+      }
   }
   return(returned_data)
 }
