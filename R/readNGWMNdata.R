@@ -158,7 +158,7 @@ readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC"){
 #' 
 #' #multiple sites
 #' sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
-#' multiSiteInfo <- readNGWMNsites(sites)
+#' # multiSiteInfo <- readNGWMNsites(sites)
 #' 
 #' #non-USGS site
 #' site <- "MBMG.892195"
