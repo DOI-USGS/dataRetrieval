@@ -15,7 +15,6 @@
 #' 
 #' type <- "Stream"
 #' sites <- whatWQPsamples(countycode="US:55:025",siteType=type)
-#' lakeSites <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 #' }
 whatWQPsamples <- function(...){
   
