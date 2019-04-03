@@ -558,35 +558,35 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 readNWISuse <- function(stateCd, countyCd, years = "ALL", categories = "ALL", convertType = TRUE, transform = FALSE){
  
   countyID <- NULL
-  if(exists("countyCd") && toupper(countyCd) != "ALL" && countyCd != ""){
-    for(c in countyCd){
-      code <- countyCdLookup(state = stateCd, county = c, outputType = "id")
-      countyID <- c(countyID,code)
+  if(exists("countyCd") && !is.null(countyCd) ){
+    if(toupper(countyCd) != "ALL" && countyCd != ""){
+      for(c in countyCd){
+        code <- countyCdLookup(state = stateCd, county = c, outputType = "id")
+        countyID <- c(countyID,code)
+      }
+    } else if (toupper(countyCd) == "ALL"){
+      countyID <- toupper(countyID)
     }
   }
-  
-  if(exists("countyCd") && toupper(countyCd) == "ALL"){
-    countyID <- toupper(countyID)
-  } #case sensitive in URL
   
   years <- .capitalALL(years)
   categories <- .capitalALL(categories)
   
   url <- constructUseURL(years,stateCd,countyID,categories)
-  data <- importRDB1(url,convertType=convertType)  
+  returned_data <- importRDB1(url,convertType=convertType)  
   
   #for total country data arriving in named rows
   if(transform){
-    cmmnt <- comment(data)
-    data <- t(data)
-    colnames(data) <- data[1,]
-    data <- as.data.frame(data[-1,],stringsAsFactors=FALSE)
-    data <- cbind(Year=as.integer(substr(rownames(data),2,5)),data)
-    rownames(data) <- NULL
-    comment(data) <- cmmnt
+    cmmnt <- comment(returned_data)
+    returned_data <- t(returned_data)
+    colnames(data) <- returned_data[1,]
+    returned_data <- as.data.frame(returned_data[-1,],stringsAsFactors=FALSE)
+    returned_data <- cbind(Year=as.integer(substr(rownames(returned_data),2,5)),returned_data)
+    rownames(returned_data) <- NULL
+    comment(returned_data) <- cmmnt
     if(exists("stateCd") && all(nchar(stateCd) != 0)){warning("transform = TRUE is only intended for national data")}
   }
-  return(data)
+  return(returned_data)
 }
 
 .capitalALL <- function(input){
