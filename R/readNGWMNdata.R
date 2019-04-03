@@ -125,7 +125,7 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
 #' 
 #' #non-USGS site
 #' site <- "MBMG.892195"
-#' data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
+#' # data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
 #' 
 #' #site with no data returns empty data frame
 #' noDataSite <- "UTGS.401544112060301"
