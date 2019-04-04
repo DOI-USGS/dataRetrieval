@@ -204,8 +204,7 @@ and S is the statistic code (if applicable).</p>
     <pre class="examples"><div class='input'><span class='no'>site_id</span> <span class='kw'>&lt;-</span> <span class='st'>'05114000'</span>
 <span class='no'>parameterCd</span> <span class='kw'>&lt;-</span> <span class='st'>'00060'</span>
 <span class='no'>startDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span>
-<span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span></div><span class='co'># NOT RUN {</span>
-<span class='no'>rawData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>,<span class='no'>parameterCd</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>)
+<span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span></div><div class='input'><span class='no'>rawData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>,<span class='no'>parameterCd</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>)
 
 <span class='no'>rawData_today</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>, <span class='no'>parameterCd</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.time'>Sys.Date</a></span>(),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.time'>Sys.Date</a></span>())
 
@@ -218,8 +217,7 @@ and S is the statistic code (if applicable).</p>
 
 <span class='co'># Adding 'Z' to the time indicates to the web service to call the data with UTC time:</span>
 <span class='no'>GMTdata</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>,<span class='no'>parameterCd</span>,
-                           <span class='st'>"2014-10-10T00:00Z"</span>, <span class='st'>"2014-10-10T23:59Z"</span>)
-<span class='co'># }</span><div class='input'>
+                           <span class='st'>"2014-10-10T00:00Z"</span>, <span class='st'>"2014-10-10T23:59Z"</span>)</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

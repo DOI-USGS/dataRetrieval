@@ -160,17 +160,14 @@ start and end times, and converted to UTC. See <a href='https://www.waterquality
     <pre class="examples"><div class='input'># These examples require an internet connection to run
 
 ## Examples take longer than 5 seconds:
-</div><span class='co'># NOT RUN {</span>
-<span class='no'>rawSampleURL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructWQPURL.html'>constructWQPURL</a></span>(<span class='st'>'USGS-01594440'</span>,<span class='st'>'01075'</span>, <span class='st'>''</span>, <span class='st'>''</span>)
+</div><div class='input'><span class='no'>rawSampleURL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructWQPURL.html'>constructWQPURL</a></span>(<span class='st'>'USGS-01594440'</span>,<span class='st'>'01075'</span>, <span class='st'>''</span>, <span class='st'>''</span>)
 
 <span class='no'>rawSample</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>rawSampleURL</span>)
 
 <span class='no'>rawSampleURL_Zip</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructWQPURL.html'>constructWQPURL</a></span>(<span class='st'>'USGS-01594440'</span>,<span class='st'>'01075'</span>, <span class='st'>''</span>, <span class='st'>''</span>, <span class='fl'>TRUE</span>)
-<span class='no'>rawSample2</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>rawSampleURL_Zip</span>, <span class='kw'>zip</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-
+<span class='no'>rawSample2</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>rawSampleURL_Zip</span>, <span class='kw'>zip</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>zip encoding access still in development</span></div><div class='input'>
 <span class='no'>STORETex</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructWQPURL.html'>constructWQPURL</a></span>(<span class='st'>'WIDNR_WQX-10032762'</span>,<span class='st'>'Specific conductance'</span>, <span class='st'>''</span>, <span class='st'>''</span>)
-<span class='no'>STORETdata</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>STORETex</span>)
-<span class='co'># }</span></pre>
+<span class='no'>STORETdata</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>STORETex</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -15,7 +15,7 @@
 #' @importFrom dplyr mutate
 #' @export
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"
 #' oneSite <- readNGWMNdata(siteNumbers = site, service = "observation")
@@ -114,7 +114,7 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
 #' @export
 #' 
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"
 #' oneSite <- readNGWMNlevels(siteNumbers = site)
@@ -125,7 +125,7 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
 #' 
 #' #non-USGS site
 #' site <- "MBMG.892195"
-#' data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
+#' # data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
 #' 
 #' #site with no data returns empty data frame
 #' noDataSite <- "UTGS.401544112060301"
@@ -151,14 +151,14 @@ readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC"){
 #' dec_lat_va, dec_lon_va \tab numeric \tab Site latitude and longitude \cr
 #' }
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"
 #' oneSite <- readNGWMNsites(siteNumbers = site)
 #' 
 #' #multiple sites
 #' sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
-#' multiSiteInfo <- readNGWMNsites(sites)
+#' # multiSiteInfo <- readNGWMNsites(sites)
 #' 
 #' #non-USGS site
 #' site <- "MBMG.892195"

@@ -56,7 +56,7 @@
 #' @seealso \code{\link{renameNWISColumns}},  \code{\link{importWaterML1}}, \code{\link{importRDB1}}
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Examples not run for time considerations
 #' dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
 #' instFlow <- readNWISdata(sites="05114000", service="iv", 

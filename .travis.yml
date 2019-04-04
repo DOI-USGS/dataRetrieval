@@ -37,7 +37,7 @@ r_github_packages:
 script: 
   - |
     R CMD build . 
-    travis_wait 60 R CMD check dataRetrieval*tar.gz --as-cran
+    travis_wait 60 R CMD check dataRetrieval*tar.gz --as-cran --run-donttest
 
 
 after_success:

@@ -23,7 +23,7 @@ queries will return a water year column for the start and end dates
 of the data.
 }
 \examples{
-\dontrun{ 
+\donttest{ 
 dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
 dataTemp <- addWaterYear(dataTemp)
 
