@@ -24,7 +24,8 @@
 #'
 #' @export
 setAccess = function(access="public"){
-access = match.arg(access, c('public','internal','cooperator','USGS'))
+  
+  access = match.arg(access, c('public','internal','cooperator','USGS'))
   
   if(access=="internal"){
     pkg.env$access = '3'
