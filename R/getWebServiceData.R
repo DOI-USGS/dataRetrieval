@@ -80,7 +80,14 @@ default_ua <- function() {
     httr = as.character(packageVersion("httr")),
     dataRetrieval = as.character(packageVersion("dataRetrieval"))
   )
-  paste0(names(versions), "/", versions, collapse = " ")
+  
+  ua <- paste0(names(versions), "/", versions, collapse = " ")
+  
+  if("UA.dataRetrieval" %in% names(options)){
+    ua <- paste0(ua, "/", options()[["UA.dataRetrieval"]])
+  }
+    
+  return(ua)
 }
 
 #' getting header information from a WQP query
