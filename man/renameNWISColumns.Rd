@@ -65,7 +65,7 @@ The following statistics codes are converted by \code{renameNWISColumns}.
 siteWithTwo <- '01480015'
 startDate <- "2012-09-01"
 endDate <- "2012-10-01"
-\dontrun{
+\donttest{
 url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
 twoResults <- importWaterML1(url2,TRUE)
 twoResults <- renameNWISColumns(twoResults)

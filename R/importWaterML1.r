@@ -56,7 +56,7 @@
 #' offering <- '00003'
 #' property <- '00060'
 #' obs_url <- constructNWISURL(site_id,property,startDate,endDate,'dv')
-#' \dontrun{
+#' \donttest{
 #' data <- importWaterML1(obs_url, asDateTime=TRUE)
 #' 
 #' groundWaterSite <- "431049071324301"
@@ -89,14 +89,14 @@
 #' inactiveAndAcitive <- constructNWISURL(inactiveAndAcitive, "00060", "2014-01-01", "2014-01-10",'dv')
 #' inactiveAndAcitive <- importWaterML1(inactiveAndAcitive)
 #' 
-#' Timezone change with specified local timezone:
+#' # Timezone change with specified local timezone:
 #' tzURL <- constructNWISURL("04027000", c("00300","63680"), "2011-11-05", "2011-11-07","uv")
 #' tzIssue <- importWaterML1(tzURL, TRUE, "America/Chicago")
 #'
-#' #raw XML
+#' # raw XML
 #' url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
 #'                          startDate = "2014-01-01", endDate = "2014-01-01")
-#' raw <- content(httr::GET(url), as = 'raw')
+#' raw <- httr::content(httr::GET(url), as = 'raw')
 #' rawParsed <- importWaterML1(raw)
 #' }
 #' filePath <- system.file("extdata", package="dataRetrieval")

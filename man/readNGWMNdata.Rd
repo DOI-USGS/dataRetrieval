@@ -25,7 +25,7 @@ for more information on time zones.}
 Only water level data and site locations and names are currently available through the web service.
 }
 \examples{
-\dontrun{
+\donttest{
 #one site
 site <- "USGS.430427089284901"
 oneSite <- readNGWMNdata(siteNumbers = site, service = "observation")

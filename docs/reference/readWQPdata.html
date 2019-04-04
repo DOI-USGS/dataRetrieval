@@ -234,8 +234,7 @@ for more information on time zones.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>nameToUse</span> <span class='kw'>&lt;-</span> <span class='st'>"pH"</span>
+    <pre class="examples"><div class='input'><span class='no'>nameToUse</span> <span class='kw'>&lt;-</span> <span class='st'>"pH"</span>
 <span class='no'>pHData</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='kw'>siteid</span><span class='kw'>=</span><span class='st'>"USGS-04024315"</span>,<span class='kw'>characteristicName</span><span class='kw'>=</span><span class='no'>nameToUse</span>)
 <span class='no'>pHData_summary</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='kw'>bBox</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>90.10</span>,<span class='fl'>42.67</span>,-<span class='fl'>88.64</span>,<span class='fl'>43.35</span>),
      <span class='kw'>characteristicName</span><span class='kw'>=</span><span class='no'>nameToUse</span>, <span class='kw'>querySummary</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
@@ -279,9 +278,7 @@ for more information on time zones.</p></td>
 <span class='co'># Biological data:</span>
 <span class='no'>bioData</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='kw'>statecode</span> <span class='kw'>=</span> <span class='st'>"WI"</span>,
                        <span class='kw'>countycode</span> <span class='kw'>=</span> <span class='st'>"Dane"</span>,
-                       <span class='kw'>providers</span> <span class='kw'>=</span> <span class='st'>"BIODATA"</span>)
-
-<span class='co'># }</span></pre>
+                       <span class='kw'>providers</span> <span class='kw'>=</span> <span class='st'>"BIODATA"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

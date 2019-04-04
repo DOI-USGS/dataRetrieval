@@ -27,7 +27,7 @@ URL <- paste(baseURL, "sites=01646500",
      "endDT=2014-09-08",
      "statCd=00003",
      "parameterCd=00060",sep="&")
-\dontrun{
-timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
+\donttest{
+#timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
 } 
 }

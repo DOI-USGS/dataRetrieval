@@ -21,7 +21,7 @@ you want to use options: \code{c('public','internal')}
 }
 \examples{
 
-\dontrun{
+\donttest{
 setAccess('internal')
 
 setAccess('public')
