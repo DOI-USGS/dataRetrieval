@@ -558,13 +558,16 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 readNWISuse <- function(stateCd, countyCd, years = "ALL", categories = "ALL", convertType = TRUE, transform = FALSE){
  
   countyID <- NULL
+  countyCd <- countyCd[countyCd != ""]
+  
   if(exists("countyCd") && !is.null(countyCd) ){
-    if(toupper(countyCd) != "ALL" && countyCd != ""){
+
+    if(!any(toupper(countyCd) == "ALL")){
       for(c in countyCd){
         code <- countyCdLookup(state = stateCd, county = c, outputType = "id")
         countyID <- c(countyID,code)
       }
-    } else if (toupper(countyCd) == "ALL"){
+    } else {
       countyID <- toupper(countyID)
     }
   }
