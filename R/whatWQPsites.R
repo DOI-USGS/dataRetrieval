@@ -1,7 +1,10 @@
 #' Site Data Import from Water Quality Portal
 #'
 #' Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
-#' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
+#' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}. The return from 
+#' this function returns the basic metadata on WQP sites. It is
+#' generally faster than the \code{\link{whatWQPdata}} function, but does
+#' not return information on what data was collected at the site.
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
 #' @keywords data import WQP web service
@@ -48,6 +51,7 @@
 #' * element is only in NWIS
 #' 
 #' @export
+#' @seealso whatNWISdata
 #' @import utils
 #' @examples
 #' \donttest{
