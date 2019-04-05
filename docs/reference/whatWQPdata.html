@@ -41,7 +41,11 @@
 <meta property="og:title" content="Data Available from Water Quality Portal — whatWQPdata" />
 
 <meta property="og:description" content="Returns a list of sites from the Water Quality Portal web service. This function gets the data from: https://www.waterqualitydata.us.
-Arguments to the function should be based on https://www.waterqualitydata.us/webservices_documentation" />
+Arguments to the function should be based on https://www.waterqualitydata.us/webservices_documentation.
+The information returned from this function describes the
+available data at the WQP sites, and some metadata on the sites themselves." />
+
+<meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -82,7 +86,7 @@ Arguments to the function should be based on https://www.waterqualitydata.us/web
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
       </span>
     </div>
 
@@ -123,7 +127,9 @@ Arguments to the function should be based on https://www.waterqualitydata.us/web
     <div class="ref-description">
     
     <p>Returns a list of sites from the Water Quality Portal web service. This function gets the data from: <a href='https://www.waterqualitydata.us'>https://www.waterqualitydata.us</a>.
-Arguments to the function should be based on <a href='https://www.waterqualitydata.us/webservices_documentation'>https://www.waterqualitydata.us/webservices_documentation</a></p>
+Arguments to the function should be based on <a href='https://www.waterqualitydata.us/webservices_documentation'>https://www.waterqualitydata.us/webservices_documentation</a>.
+The information returned from this function describes the
+available data at the WQP sites, and some metadata on the sites themselves.</p>
     
     </div>
 
@@ -144,7 +150,37 @@ Arguments to the function should be based on <a href='https://www.waterqualityda
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list</p>
+    <p>A data frame with at least the following columns:</p><table class='table'>
+<tr><td>Name</td><td>Type</td><td>Description</td></tr>
+<tr><td>"type_a"</td><td>character</td><td>Geojson type</td></tr>
+<tr><td>"features.type"</td><td>character</td><td>Geojson feature type</td></tr>
+<tr><td>"type1"</td><td>character</td><td>Geojson spatial type</td></tr>
+<tr><td>"coordinates"</td><td>list</td><td>List of longitude/latitude</td></tr>
+<tr><td>"ProviderName"</td><td>character</td><td>The name of the database that provided the data to the Water Qaulity 
+portal (E.G. STORET, NWIS, STEWARDS)</td></tr>
+<tr><td>"OrganizationIdentifier"</td><td>character</td><td>A designator used to 
+uniquely identify a unique business establishment within a context.</td></tr>
+<tr><td>"OrganizationFormalName"</td><td>character</td><td>The legal designator (i.e. formal name) of an organization.</td></tr>
+<tr><td>"MonitoringLocationIdentifier"</td><td>character</td><td>A designator used to 
+describe the unique name, number, or code assigned to identify the monitoring location.</td></tr>
+<tr><td>"MonitoringLocationName"</td><td>character</td><td>The designator specified by the sampling organization 
+for the site at which sampling or other activities are conducted.</td></tr>
+<tr><td>"MonitoringLocationTypeName"</td><td>character</td><td>The descriptive name for a type of monitoring location.</td></tr>
+<tr><td>"ResolvedMonitoringLocationTypeName"</td><td>character</td><td></td></tr>
+<tr><td>"HUCEightDigitCode"</td><td>character</td><td>The 8 digit federal code used to identify the 
+hydrologic unit of the monitoring location to the cataloging unit level of precision.</td></tr>
+<tr><td>"siteUrl"</td><td>character</td><td>URL to site information</td></tr>
+<tr><td>"activityCount"</td><td>numeric</td><td></td></tr>
+<tr><td>"resultCount"</td><td>numeric</td><td></td></tr>
+<tr><td>"StateName"</td><td>character</td><td>State name</td></tr>
+<tr><td>"CountyName"</td><td>character</td><td>County name</td></tr>
+</table>
+
+
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>whatNWISsites</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -161,6 +197,8 @@ Arguments to the function should be based on <a href='https://www.waterqualityda
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

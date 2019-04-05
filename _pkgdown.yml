@@ -11,3 +11,42 @@ navbar:
   right:
   - icon: fa-github fa-lg
     href: https://github.com/USGS-R/dataRetrieval
+reference:
+  - title: National Water Information System (NWIS)
+    desc:  Functions to retrieve (USGS) NWIS data.
+    contents:
+      - readNWISdv
+      - readNWISuv
+      - readNWISsite
+      - readNWISqw
+      - readNWISstat
+      - readNWISmeas
+      - readNWISpCode
+      - readNWISrating
+      - readNWISgwl
+      - readNWISuse
+      - readNWISdata
+      - whatNWISsites
+      - whatNWISdata
+  - title: Water Quality Portal (WQP)
+    desc: Functions to retrieve WQP data.
+    contents:
+      - readWQPqw
+      - readWQPdata
+      - whatWQPsites
+      - whatWQPdata
+      - whatWQPsamples
+      - whatWQPmetrics
+  - title: National Ground-Water Monitoring Network
+    desc: Functions to retrieve NGWMN data.
+    contents:
+      - readNGWMNlevels
+      - readNGWMNsites
+      - readNGWMNdata
+  - title: Helper functions
+    contents:
+      - calcWaterYear
+      - addWaterYear
+      - countyCdLookup
+      - stateCdLookup
+      - zeroPad
