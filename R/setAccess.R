@@ -61,8 +61,7 @@ setAccess = function(access="public"){
   pkg.env$wqpMetrics = "https://www.waterqualitydata.us/ActivityMetric/search"
   
   pkg.env$NGWMN = "https://cida.usgs.gov/ngwmn_cache/sos"
-  
-  options(Access.dataRetrieval = access)
+
 }
 
 drURL <- function(base.name, ..., arg.list=NULL){
