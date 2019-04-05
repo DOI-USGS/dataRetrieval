@@ -296,13 +296,13 @@ test_that("readWQPdots working", {
 context("NGWMN")
 test_that("NGWMN functions working", {
   testthat::skip_on_cran()
-  noDataSite <- "UTGS.401544112060301"
-  noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
-  expect_true(is.data.frame(noDataSite))
-  
-  #bounding box and a bigger request
-  bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
-  expect_gt(nrow(bboxSites), 0)
+  # noDataSite <- "UTGS.401544112060301"
+  # noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
+  # expect_true(is.data.frame(noDataSite))
+  # 
+  # #bounding box and a bigger request
+  # bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
+  # expect_gt(nrow(bboxSites), 0)
   # siteInfo <- readNGWMNsites(bboxSites$site[1:3])
   # expect_equal(nrow(siteInfo), 3)
   
