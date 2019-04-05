@@ -200,16 +200,30 @@ constructNWISURL <- function(siteNumbers,parameterCd="00060",startDate="",endDat
           format <- match.arg(format, c("xml","tsv","wml1","wml2","rdb"))
           
           formatURL <- switch(format,
-            xml = {if ("gwlevels" == service) {
+            xml = {
+              if ("gwlevels" == service) {
                 "waterml"
               } else {
                 "waterml,1.1"
               }
             },
-            rdb = "rdb,1.0",
-            tsv = "rdb,1.0",
+            rdb = {
+              if("gwlevels" == service){
+                  "rdb"
+                } else {
+                  "rdb,1.0"
+                }
+              },
+            tsv = {
+              if("gwlevels" == service){
+                "rdb"
+              } else {
+                "rdb,1.0"
+              }
+            },
             wml2 = "waterml,2.0",
-            wml1 = {if ("gwlevels" == service) {
+            wml1 = {
+              if ("gwlevels" == service) {
                 "waterml"
               } else {
                 "waterml,1.1"
