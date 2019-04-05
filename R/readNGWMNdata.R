@@ -29,11 +29,11 @@
 #' #non-USGS site
 #' #accepts colon or period between agency and ID
 #' site <- "MBMG:702934"
-#' data <- readNGWMNdata(siteNumbers = site, service = "featureOfInterest")
+#' # data <- readNGWMNdata(siteNumbers = site, service = "featureOfInterest")
 #' 
 #' #site with no data returns empty data frame
 #' noDataSite <- "UTGS.401544112060301"
-#' noDataSite <- readNGWMNdata(siteNumbers = noDataSite, service = "observation")
+#' # noDataSite <- readNGWMNdata(siteNumbers = noDataSite, service = "observation")
 #' 
 #' #bounding box
 #' bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -102, 31, 99))
@@ -167,7 +167,7 @@ readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC"){
 #' 
 #' #non-USGS site
 #' site <- "MBMG.892195"
-#' siteInfo <- readNGWMNsites(siteNumbers = site)
+#' #siteInfo <- readNGWMNsites(siteNumbers = site)
 #' 
 #' }
 readNGWMNsites <- function(siteNumbers){
