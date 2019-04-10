@@ -34,7 +34,7 @@ sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703"
 
 #non-USGS site
 site <- "MBMG.892195"
-siteInfo <- readNGWMNsites(siteNumbers = site)
+#siteInfo <- readNGWMNsites(siteNumbers = site)
 
 }
 }

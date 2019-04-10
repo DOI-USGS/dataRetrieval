@@ -285,8 +285,8 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
 
 convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
   
-  offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0),
-                              code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA),
+  offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0, 0),
+                              code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","UTC","", NA),
                               stringsAsFactors = FALSE)
   
   offset <- dplyr::left_join(df[,tz.name,drop=FALSE],offsetLibrary, by=setNames("code",tz.name))
