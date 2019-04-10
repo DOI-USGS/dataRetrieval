@@ -8,6 +8,16 @@ navbar:
     href: articles/dataRetrieval.html
   - text: Function Help
     href: reference/index.html
+  - text: Articles
+    menu:
+    - text: Basic Mapping
+      href: articles/usMaps.html
+    - text: Moving Averages
+      href: articles/movingAverages.html
+    - text: Stat Service
+      href: articles/statsServiceMap.html
+    - text: Earthquake Exploration
+      href: articles/earthquake.html
   right:
   - icon: fa-github fa-lg
     href: https://github.com/USGS-R/dataRetrieval
