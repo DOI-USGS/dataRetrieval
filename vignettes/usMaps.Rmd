@@ -1,5 +1,5 @@
 ---
-title: "Map Stuff"
+title: "Mapping Points"
 author: "Laura DeCicco"
 date: "2019-04-05"
 output: 
@@ -129,14 +129,16 @@ reset_points <- function(x, move_variables,stuff_to_move,
 }
 ```
 
+Then, we create a pretty generic mapping function. This is all `ggplot2` code, and might be more appropriate outside of a function for complete customization. In this case, we want the ability to create a "quick-and-dirty" map.
+
 ```{r basicMap}
 plot_points_on_map <- function(x, move_variables, stuff_to_move,
+                               pt_size = 2,
+                               alpha_set = 0.75,
+                               base_fill = "azure3",
                                scale_by_color = TRUE, 
                                scale_by_size = FALSE){
-  
-  alpha_set <- 0.75
-  base_fill <- "azure3"
-  
+
   if(all(c("coords.x1","coords.x2", "n") %in% names(x))){
     sites.df <-  x
   } else {
@@ -160,14 +162,16 @@ plot_points_on_map <- function(x, move_variables, stuff_to_move,
                  aes(x = coords.x1, y=coords.x2, 
                      fill = n, size = n),
                  alpha = alpha_set,
-                 color="black",pch=21) 
+                 color="black",pch=21) +
+      scale_fill_continuous(type = "viridis", trans = "log10")
   } else if (scale_by_color){
     gsMap <- gsMap +
       geom_point(data = sites.df, 
                  aes(x = coords.x1, y=coords.x2, 
                      fill = n), 
                  alpha = alpha_set,
-                 size = 2, color="black",pch=21) 
+                 size = pt_size, color="black",pch=21) +
+      scale_fill_continuous(type = "viridis", trans = "log10")
   } else if (scale_by_size){
     gsMap <- gsMap +
       geom_point(data = sites.df, 
@@ -179,7 +183,7 @@ plot_points_on_map <- function(x, move_variables, stuff_to_move,
     gsMap <- gsMap +
       geom_point(data = sites.df, 
                  aes(x = coords.x1, y=coords.x2), 
-                 size = 2, color="black",pch=21,
+                 size = pt_size, color="black",pch=21,
                  fill=base_fill, alpha = alpha_set)
   }
   return(gsMap)
@@ -219,9 +223,9 @@ plot_points_on_map(x, move_variables, stuff_to_move)
 ```
 
 
-Now, let's get some data from `dataRetrieval`. We'll call the "site" service using `readNWISdata`, only pulling sites that have data in the water quality service, with at least 40 samples over at least 10 years.
+Now, let's get some data from `dataRetrieval`. We'll call the "site" service using `readNWISdata`, only pulling stream sites that have measured "Phosphorus, water, unfiltered, milligrams per liter as phosphorus" at least 100 times over at least 10 years:
 
-```{r getSites}
+```{r getSites, cache=TRUE}
 
 library(dataRetrieval)
 library(dplyr)
@@ -232,27 +236,32 @@ failed_sites <- c()
 #Running this full code takes about 15 minutes:
 # for now, we will not get US territories other than PR:
 for(i in stateCd$STUSAB[c(1:51,55)]){ 
-  
-  cat("Getting:",i,"\n")
-  
+
   all_sites <- tryCatch({
       
     sites <- readNWISdata(service = "site", 
                             seriesCatalogOutput=TRUE,
-                            siteType="ST",hasDataTypeCd="qw",
+                            siteType="ST",parameterCd="00665",
                             stateCd = i)
     
     sites_filtered <- sites %>%
-      filter(data_type_cd == "qw") %>%
-      filter(count_nu >= 40) %>%
+      filter(data_type_cd == "qw",
+             count_nu >= 100,
+             parm_cd == "00665") %>%
       select(site_no, station_nm, dec_lat_va, dec_long_va, 
-             begin_date, end_date) %>%
+             begin_date, end_date, count_nu) %>%
       distinct() %>%
       mutate(begin_date = as.Date(begin_date),
              end_date = as.Date(end_date),
              years = (end_date - begin_date)/365.25) %>%
       filter(years > 10) %>%
-      mutate(state = i)
+      mutate(state_abb = i,
+             scale = count_nu) %>%
+      group_by(site_no, station_nm, 
+               dec_lat_va, dec_long_va, state_abb) %>%
+      top_n(1, count_nu) %>%
+      distinct() %>%
+      ungroup()
   
     bind_rows(all_sites, sites_filtered)
   },
@@ -263,11 +272,9 @@ for(i in stateCd$STUSAB[c(1:51,55)]){
 
 }
 
-unique_sites <- all_sites %>%
-  group_by(site_no, station_nm, dec_lat_va, dec_long_va) %>%
-  top_n(1, years) %>%
-  data.frame() %>%
-  distinct()
-
 ```
 
+```{r plotIt}
+plot_points_on_map(all_sites, move_variables, stuff_to_move, pt_size = 2, scale_by_color = TRUE)
+
+```

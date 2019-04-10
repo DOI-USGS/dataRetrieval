@@ -28,6 +28,7 @@ hexSticker.R
 vignettes/earthquake.Rmd
 vignettes/statsServiceMap.Rmd
 vignettes/usMaps.Rmd
+vignettes/usMaps_cache
 vignettes/movingAverages.Rmd
 man/figures/highrezlogo-01.png
 man/figures/USGS_R.png
