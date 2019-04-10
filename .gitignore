@@ -6,3 +6,4 @@ doc
 .Ruserdata
 dataRetrieval.Rproj
 .gitignore
+vignettes/usMaps_cache
