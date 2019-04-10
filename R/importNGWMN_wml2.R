@@ -25,14 +25,14 @@
 #' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
 #' "responseFormat=text/xml",
 #' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",sep="&")
-#' # data <- importNGWMN(obs_url)
+#' data <- importNGWMN(obs_url)
 #' 
 #' obs_url <- paste("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
 #' "service=SOS","version=2.0.0",
 #' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
 #' "responseFormat=text/xml",
 #' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.474011117072901",sep="&")
-#' # data <- importNGWMN(obs_url)
+#' data <- importNGWMN(obs_url)
 #' }
 #' 
 importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
