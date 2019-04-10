@@ -1,6 +1,9 @@
+Meta
+doc
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
 dataRetrieval.Rproj
 .gitignore
+vignettes/usMaps_cache
