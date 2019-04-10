@@ -159,9 +159,9 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
                       time = character(0), dateTime = character(0), value = numeric(0),
                       uom = character(0), comment = character(0), stringsAsFactors = FALSE))
   }
-  rawTime <- xml_text(xml_find_all(TVP, "./wml2:time"))
+  rawTime <- xml_text(xml_find_all(returnedDoc, ".//wml2:MeasurementTVP/wml2:time"))
   
-  valueNodes <- xml_find_all(TVP,"./wml2:value")
+  valueNodes <- xml_find_all(returnedDoc, ".//wml2:MeasurementTVP/wml2:value")
   charValues <- xml_text(valueNodes)
   nilValues <- as.logical(xml_attr(valueNodes, "nil"))
   charValues[nilValues] <- NA
