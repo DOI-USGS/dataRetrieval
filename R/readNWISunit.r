@@ -53,7 +53,7 @@
 #' parameterCd <- '00060'
 #' startDate <- "2014-10-10"
 #' endDate <- "2014-10-10"
-#' \dontrun{
+#' \donttest{
 #' rawData <- readNWISuv(site_id,parameterCd,startDate,endDate)
 #' 
 #' rawData_today <- readNWISuv(site_id, parameterCd, Sys.Date(),Sys.Date())
@@ -131,7 +131,7 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz="UTC
 #' @export
 #' @examples
 #' site_ids <- c('01594440','040851325')
-#' \dontrun{
+#' \donttest{
 #' data <- readNWISpeak(site_ids)
 #' data2 <- readNWISpeak(site_ids, asDateTime=FALSE)
 #' stations<-c("06011000")
@@ -211,7 +211,7 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, 
 #' @export
 #' @examples
 #' site_id <- '01594440'
-#' \dontrun{
+#' \donttest{
 #' data <- readNWISrating(site_id, "base")
 #' attr(data, "RATING")
 #' }
@@ -292,7 +292,7 @@ readNWISrating <- function (siteNumber,type="base",convertType = TRUE){
 #' @export
 #' @examples
 #' site_ids <- c('01594440','040851325')
-#' \dontrun{
+#' \donttest{
 #' data <- readNWISmeas(site_ids)
 #' Meas05316840 <- readNWISmeas("05316840")
 #' Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)
@@ -396,7 +396,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
 #' @export
 #' @examples
 #' site_id <- "434400121275801"
-#' \dontrun{
+#' \donttest{
 #' data <- readNWISgwl(site_id, '','')
 #' sites <- c("434400121275801", "375907091432201")
 #' data2 <- readNWISgwl(site_id, '','')
@@ -465,7 +465,7 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
 #' @seealso \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' x1 <- readNWISstat(siteNumbers=c("02319394"),
 #'                   parameterCd=c("00060"),
 #'                   statReportType="annual") 
@@ -533,7 +533,7 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' 
 #' @export
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' #All data for a county
 #' allegheny <- readNWISuse(stateCd = "Pennsylvania",countyCd = "Allegheny")
 #' 
@@ -558,35 +558,40 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 readNWISuse <- function(stateCd, countyCd, years = "ALL", categories = "ALL", convertType = TRUE, transform = FALSE){
  
   countyID <- NULL
-  if(exists("countyCd") && toupper(countyCd) != "ALL" && countyCd != ""){
-    for(c in countyCd){
-      code <- countyCdLookup(state = stateCd, county = c, outputType = "id")
-      countyID <- c(countyID,code)
+  countyCd <- countyCd[countyCd != ""]
+  
+  if(exists("countyCd") && !is.null(countyCd) ){
+
+    if(!any(toupper(countyCd) == "ALL")){
+      for(c in countyCd){
+        code <- countyCdLookup(state = stateCd, county = c, outputType = "id")
+        countyID <- c(countyID,code)
+      }
+    } else {
+      countyID <- toupper(countyID)
     }
   }
-  
-  if(exists("countyCd") && toupper(countyCd) == "ALL"){
-    countyID <- toupper(countyID)
-  } #case sensitive in URL
   
   years <- .capitalALL(years)
   categories <- .capitalALL(categories)
   
   url <- constructUseURL(years,stateCd,countyID,categories)
-  data <- importRDB1(url,convertType=convertType)  
+  returned_data <- importRDB1(url,convertType=convertType)  
   
   #for total country data arriving in named rows
   if(transform){
-    cmmnt <- comment(data)
-    data <- t(data)
-    colnames(data) <- data[1,]
-    data <- as.data.frame(data[-1,],stringsAsFactors=FALSE)
-    data <- cbind(Year=as.integer(substr(rownames(data),2,5)),data)
-    rownames(data) <- NULL
-    comment(data) <- cmmnt
-    if(exists("stateCd") && all(nchar(stateCd) != 0)){warning("transform = TRUE is only intended for national data")}
+    cmmnt <- comment(returned_data)
+    returned_data <- t(returned_data)
+    colnames(returned_data) <- returned_data[1,]
+    returned_data <- as.data.frame(returned_data[-1,],stringsAsFactors=FALSE)
+    returned_data <- cbind(Year=as.integer(substr(rownames(returned_data),2,5)),returned_data)
+    rownames(returned_data) <- NULL
+    comment(returned_data) <- cmmnt
+    if(!all(is.null(stateCd)) && all(nchar(stateCd) != 0)){
+      warning("transform = TRUE is only intended for national data")
+      }
   }
-  return(data)
+  return(returned_data)
 }
 
 .capitalALL <- function(input){

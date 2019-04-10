@@ -93,7 +93,7 @@
 #' }
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' nameToUse <- "pH"
 #' pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
 #' pHData_summary <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),

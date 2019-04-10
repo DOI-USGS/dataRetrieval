@@ -60,7 +60,7 @@ See \url{https://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more in
 }
 \examples{
 site_id <- "434400121275801"
-\dontrun{
+\donttest{
 data <- readNWISgwl(site_id, '','')
 sites <- c("434400121275801", "375907091432201")
 data2 <- readNWISgwl(site_id, '','')

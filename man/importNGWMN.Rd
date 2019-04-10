@@ -26,20 +26,20 @@ This function accepts a url parameter for a WaterML2 getObservation. This functi
 but the general functionality is correct.
 }
 \examples{
-\dontrun{
+\donttest{
 obs_url <- paste("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
 "service=SOS","version=2.0.0",
 "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
 "responseFormat=text/xml",
 "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",sep="&")
-data <- importNGWMN(obs_url)
+# data <- importNGWMN(obs_url)
 
 obs_url <- paste("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
 "service=SOS","version=2.0.0",
 "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
 "responseFormat=text/xml",
 "featureOfInterest=VW_GWDP_GEOSERVER.USGS.474011117072901",sep="&")
-data <- importNGWMN(obs_url)
+# data <- importNGWMN(obs_url)
 }
 
 }

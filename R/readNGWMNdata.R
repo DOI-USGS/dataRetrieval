@@ -15,30 +15,32 @@
 #' @importFrom dplyr mutate
 #' @export
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"
-#' oneSite <- readNGWMNdata(siteNumbers = site, service = "observation")
+#' # oneSite <- readNGWMNdata(siteNumbers = site, service = "observation")
 #' 
 #' #multiple sites
 #' sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
-#' multiSiteData <- readNGWMNdata(siteNumbers = sites, service = "observation")
-#' attributes(multiSiteData)
+#' # Very slow:
+#' # multiSiteData <- readNGWMNdata(siteNumbers = sites, service = "observation")
+#' # attributes(multiSiteData)
 #' 
 #' #non-USGS site
 #' #accepts colon or period between agency and ID
 #' site <- "MBMG:702934"
-#' data <- readNGWMNdata(siteNumbers = site, service = "featureOfInterest")
+#' # data <- readNGWMNdata(siteNumbers = site, service = "featureOfInterest")
 #' 
 #' #site with no data returns empty data frame
 #' noDataSite <- "UTGS.401544112060301"
-#' noDataSite <- readNGWMNdata(siteNumbers = noDataSite, service = "observation")
+#' # noDataSite <- readNGWMNdata(siteNumbers = noDataSite, service = "observation")
 #' 
 #' #bounding box
-#' bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -102, 31, 99))
+#' #bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -102, 31, 99))
 #' #retrieve  sites.  Set asDateTime to false since one site has an invalid date
-#' bboxData <- readNGWMNdata(service = "observation", siteNumbers = bboxSites$site[1:3], 
-#' asDateTime = FALSE)
+#' # Very slow:
+#' #bboxData <- readNGWMNdata(service = "observation", siteNumbers = bboxSites$site[1:3], 
+#' #asDateTime = FALSE)
 #' }
 #' 
 readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
@@ -114,22 +116,25 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
 #' @export
 #' 
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"
-#' oneSite <- readNGWMNlevels(siteNumbers = site)
+#' # Really slow:
+#' #oneSite <- readNGWMNlevels(siteNumbers = site)
 #' 
 #' #multiple sites
 #' sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
-#' multiSiteData <- readNGWMNlevels(sites)
+#' # Really slow:
+#' # multiSiteData <- readNGWMNlevels(sites)
 #' 
 #' #non-USGS site
 #' site <- "MBMG.892195"
-#' data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
+#' # data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
 #' 
 #' #site with no data returns empty data frame
+#' # Really slow:
 #' noDataSite <- "UTGS.401544112060301"
-#' noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
+#' # noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
 #' }
 readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC"){
   data <- readNGWMNdata(siteNumbers = siteNumbers, service = "observation",
@@ -151,18 +156,18 @@ readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC"){
 #' dec_lat_va, dec_lon_va \tab numeric \tab Site latitude and longitude \cr
 #' }
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"
 #' oneSite <- readNGWMNsites(siteNumbers = site)
 #' 
 #' #multiple sites
 #' sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
-#' multiSiteInfo <- readNGWMNsites(sites)
+#' # multiSiteInfo <- readNGWMNsites(sites)
 #' 
 #' #non-USGS site
 #' site <- "MBMG.892195"
-#' siteInfo <- readNGWMNsites(siteNumbers = site)
+#' #siteInfo <- readNGWMNsites(siteNumbers = site)
 #' 
 #' }
 readNGWMNsites <- function(siteNumbers){

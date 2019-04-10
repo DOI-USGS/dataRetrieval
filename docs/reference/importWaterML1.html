@@ -189,8 +189,7 @@ and S is the statistic code (if applicable).</p>
 <span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2012-10-01"</span>
 <span class='no'>offering</span> <span class='kw'>&lt;-</span> <span class='st'>'00003'</span>
 <span class='no'>property</span> <span class='kw'>&lt;-</span> <span class='st'>'00060'</span>
-<span class='no'>obs_url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>site_id</span>,<span class='no'>property</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>,<span class='st'>'dv'</span>)</div># NOT RUN {
-data <- importWaterML1(obs_url, asDateTime=TRUE)
+<span class='no'>obs_url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>site_id</span>,<span class='no'>property</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>,<span class='st'>'dv'</span>)</div><div class='input'>data <- importWaterML1(obs_url, asDateTime=TRUE)
 
 groundWaterSite <- "431049071324301"
 startGW <- "2013-10-01"
@@ -231,8 +230,10 @@ url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "
                          startDate = "2014-01-01", endDate = "2014-01-01")
 raw <- content(httr::GET(url), as = 'raw')
 rawParsed <- importWaterML1(raw)
-# }
-<div class='input'><span class='no'>filePath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"dataRetrieval"</span>)
+</div><div class='output co'>#&gt; <span class='error'>Error: &lt;text&gt;:33:10: unexpected symbol</span>
+#&gt; <span class='error'>32: </span>
+#&gt; <span class='error'>33: Timezone change</span>
+#&gt; <span class='error'>             ^</span></div><div class='input'><span class='no'>filePath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"dataRetrieval"</span>)
 <span class='no'>fileName</span> <span class='kw'>&lt;-</span> <span class='st'>"WaterML1Example.xml"</span>
 <span class='no'>fullPath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='no'>filePath</span>, <span class='no'>fileName</span>)
 <span class='no'>importFile</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>fullPath</span>,<span class='fl'>TRUE</span>)</div></pre>
