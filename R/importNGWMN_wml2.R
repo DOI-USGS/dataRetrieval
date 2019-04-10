@@ -25,14 +25,14 @@
 #' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
 #' "responseFormat=text/xml",
 #' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",sep="&")
-#' # data <- importNGWMN(obs_url)
+#' data <- importNGWMN(obs_url)
 #' 
 #' obs_url <- paste("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
 #' "service=SOS","version=2.0.0",
 #' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
 #' "responseFormat=text/xml",
 #' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.474011117072901",sep="&")
-#' # data <- importNGWMN(obs_url)
+#' data <- importNGWMN(obs_url)
 #' }
 #' 
 importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
@@ -159,9 +159,9 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
                       time = character(0), dateTime = character(0), value = numeric(0),
                       uom = character(0), comment = character(0), stringsAsFactors = FALSE))
   }
-  rawTime <- xml_text(xml_find_all(TVP, "./wml2:time"))
+  rawTime <- xml_text(xml_find_all(returnedDoc, ".//wml2:MeasurementTVP/wml2:time"))
   
-  valueNodes <- xml_find_all(TVP,"./wml2:value")
+  valueNodes <- xml_find_all(returnedDoc, ".//wml2:MeasurementTVP/wml2:value")
   charValues <- xml_text(valueNodes)
   nilValues <- as.logical(xml_attr(valueNodes, "nil"))
   charValues[nilValues] <- NA
