@@ -262,16 +262,121 @@
 <a class="sourceLine" id="cb6-9" title="9">  <span class="dt">HI =</span> <span class="kw">to_sp</span>(<span class="st">"world"</span>, <span class="st">"USA:hawaii"</span>),</a>
 <a class="sourceLine" id="cb6-10" title="10">  <span class="dt">PR =</span> <span class="kw">to_sp</span>(<span class="st">"world"</span>, <span class="st">"Puerto Rico"</span>)</a>
 <a class="sourceLine" id="cb6-11" title="11">)</a></code></pre></div>
+<p>Let’s grab some fake data to make sure it works:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb7-3" title="3"></a>
+<a class="sourceLine" id="cb7-4" title="4">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">dec_long_va =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="dv">89</span>,<span class="op">-</span><span class="fl">156.3</span>,<span class="op">-</span><span class="fl">148.6</span>,<span class="op">-</span><span class="fl">66.5</span>),</a>
+<a class="sourceLine" id="cb7-5" title="5">                <span class="dt">dec_lat_va =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">45</span>,<span class="fl">20.7</span>,<span class="fl">62.8</span>,<span class="fl">18.2</span>),</a>
+<a class="sourceLine" id="cb7-6" title="6">                <span class="dt">state_abb =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"WI"</span>,<span class="st">"HI"</span>,<span class="st">"AK"</span>,<span class="st">"PR"</span>),</a>
+<a class="sourceLine" id="cb7-7" title="7">                <span class="dt">scale =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">strings_as_factors =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="kw">plot_points_on_map</span>(x, move_variables, stuff_to_move)</a></code></pre></div>
+<p><img src="usMaps_files/figure-html/fakePoints-1.png" width="700"></p>
 <p>Now, let’s get some data from <code>dataRetrieval</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dataRetrieval)</a></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dataRetrieval)</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
 <a class="sourceLine" id="cb8-3" title="3"></a>
-<a class="sourceLine" id="cb8-4" title="4">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">dec_long_va =</span> <span class="dv">-89</span>,</a>
-<a class="sourceLine" id="cb8-5" title="5">                          <span class="dt">dec_lat_va =</span> <span class="dv">45</span>,</a>
-<a class="sourceLine" id="cb8-6" title="6">                          <span class="dt">state_abb =</span> <span class="st">"WI"</span>,</a>
-<a class="sourceLine" id="cb8-7" title="7">                          <span class="dt">scale =</span> <span class="dv">1</span>, <span class="dt">strings_as_factors =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb8-8" title="8"><span class="kw">plot_points_on_map</span>(x, move_variables, stuff_to_move)</a></code></pre></div>
+<a class="sourceLine" id="cb8-4" title="4">all_sites &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>()</a>
+<a class="sourceLine" id="cb8-5" title="5">failed_sites &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>()</a>
+<a class="sourceLine" id="cb8-6" title="6"></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="co">#Running this full code takes about 15 minutes:</span></a>
+<a class="sourceLine" id="cb8-8" title="8"></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="cf">for</span>(i <span class="cf">in</span> stateCd<span class="op">$</span>STUSAB[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">51</span>,<span class="dv">55</span>)]){ </a>
+<a class="sourceLine" id="cb8-10" title="10">  </a>
+<a class="sourceLine" id="cb8-11" title="11">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="st">"Getting:"</span>,i,<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a>
+<a class="sourceLine" id="cb8-12" title="12">  </a>
+<a class="sourceLine" id="cb8-13" title="13">  all_sites &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/conditions">tryCatch</a></span>({</a>
+<a class="sourceLine" id="cb8-14" title="14">      </a>
+<a class="sourceLine" id="cb8-15" title="15">    sites &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISdata.html">readNWISdata</a></span>(<span class="dt">service =</span> <span class="st">"site"</span>, </a>
+<a class="sourceLine" id="cb8-16" title="16">                            <span class="dt">seriesCatalogOutput=</span><span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb8-17" title="17">                            <span class="dt">siteType=</span><span class="st">"ST"</span>,<span class="dt">hasDataTypeCd=</span><span class="st">"qw"</span>,</a>
+<a class="sourceLine" id="cb8-18" title="18">                            <span class="dt">stateCd =</span> i)</a>
+<a class="sourceLine" id="cb8-19" title="19">    </a>
+<a class="sourceLine" id="cb8-20" title="20">    sites_filtered &lt;-<span class="st"> </span>sites <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-21" title="21"><span class="st">      </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(data_type_cd <span class="op">==</span><span class="st"> "qw"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-22" title="22"><span class="st">      </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(count_nu <span class="op">&gt;=</span><span class="st"> </span><span class="dv">40</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-23" title="23"><span class="st">      </span><span class="kw">select</span>(site_no, station_nm, dec_lat_va, dec_long_va, </a>
+<a class="sourceLine" id="cb8-24" title="24">             begin_date, end_date) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-25" title="25"><span class="st">      </span><span class="kw">distinct</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-26" title="26"><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">begin_date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(begin_date),</a>
+<a class="sourceLine" id="cb8-27" title="27">             <span class="dt">end_date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(end_date),</a>
+<a class="sourceLine" id="cb8-28" title="28">             <span class="dt">years =</span> (end_date <span class="op">-</span><span class="st"> </span>begin_date)<span class="op">/</span><span class="fl">365.25</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-29" title="29"><span class="st">      </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(years <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-30" title="30"><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">state =</span> i)</a>
+<a class="sourceLine" id="cb8-31" title="31">  </a>
+<a class="sourceLine" id="cb8-32" title="32">    <span class="kw">bind_rows</span>(all_sites, sites_filtered)</a>
+<a class="sourceLine" id="cb8-33" title="33">  },</a>
+<a class="sourceLine" id="cb8-34" title="34">  <span class="dt">error=</span><span class="cf">function</span>(cond) {</a>
+<a class="sourceLine" id="cb8-35" title="35">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/message">message</a></span>(<span class="st">"***************Errored on"</span>,i,<span class="st">"***********</span><span class="ch">\n</span><span class="st">"</span>)</a>
+<a class="sourceLine" id="cb8-36" title="36">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(all_sites)</a>
+<a class="sourceLine" id="cb8-37" title="37">  })</a>
+<a class="sourceLine" id="cb8-38" title="38"></a>
+<a class="sourceLine" id="cb8-39" title="39">}</a></code></pre></div>
+<pre><code>## Getting: AL 
+## Getting: AK 
+## Getting: AZ 
+## Getting: AR 
+## Getting: CA 
+## Getting: CO 
+## Getting: CT 
+## Getting: DE 
+## Getting: DC 
+## Getting: FL 
+## Getting: GA 
+## Getting: HI 
+## Getting: ID 
+## Getting: IL 
+## Getting: IN 
+## Getting: IA 
+## Getting: KS 
+## Getting: KY 
+## Getting: LA 
+## Getting: ME 
+## Getting: MD 
+## Getting: MA 
+## Getting: MI 
+## Getting: MN 
+## Getting: MS 
+## Getting: MO 
+## Getting: MT 
+## Getting: NE 
+## Getting: NV 
+## Getting: NH 
+## Getting: NJ 
+## Getting: NM 
+## Getting: NY 
+## Getting: NC 
+## Getting: ND 
+## Getting: OH 
+## Getting: OK 
+## Getting: OR 
+## Getting: PA 
+## Getting: RI 
+## Getting: SC 
+## Getting: SD 
+## Getting: TN 
+## Getting: TX 
+## Getting: UT 
+## Getting: VT 
+## Getting: VA 
+## Getting: WA 
+## Getting: WV 
+## Getting: WI 
+## Getting: WY 
+## Getting: PR</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">unique_sites &lt;-<span class="st"> </span>all_sites <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(site_no, station_nm, dec_lat_va, dec_long_va) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="st">  </span><span class="kw">top_n</span>(<span class="dv">1</span>, years) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="st">  </span><span class="kw">distinct</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb11-3" title="3"></a>
+<a class="sourceLine" id="cb11-4" title="4">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">dec_long_va =</span> <span class="dv">-89</span>,</a>
+<a class="sourceLine" id="cb11-5" title="5">                          <span class="dt">dec_lat_va =</span> <span class="dv">45</span>,</a>
+<a class="sourceLine" id="cb11-6" title="6">                          <span class="dt">state_abb =</span> <span class="st">"WI"</span>,</a>
+<a class="sourceLine" id="cb11-7" title="7">                          <span class="dt">scale =</span> <span class="dv">1</span>, <span class="dt">strings_as_factors =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb11-8" title="8"><span class="kw">plot_points_on_map</span>(x, move_variables, stuff_to_move)</a></code></pre></div>
 <p><img src="usMaps_files/figure-html/makeMap-1.png" width="700"></p>
   </div>
 

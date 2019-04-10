@@ -96,6 +96,27 @@ NWIS site, parameter code, statistic, startdate and enddate." />
 <li>
   <a href="../reference/index.html">Function Help</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/usMaps.html">Basic Mapping</a>
+    </li>
+    <li>
+      <a href="../articles/movingAverages.html">Moving Averages</a>
+    </li>
+    <li>
+      <a href="../articles/statsServiceMap.html">Stat Service</a>
+    </li>
+    <li>
+      <a href="../articles/earthquake.html">Earthquake Exploration</a>
+    </li>
+  </ul>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -203,8 +224,7 @@ and S is the statistic code (if applicable).</p>
 
 <span class='no'>unitDataURL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>site_id</span>,<span class='no'>property</span>,
          <span class='st'>"2013-11-03"</span>,<span class='st'>"2013-11-03"</span>,<span class='st'>'uv'</span>)
-<span class='no'>unitData</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>unitDataURL</span>,<span class='fl'>TRUE</span>)
-
+<span class='no'>unitData</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>unitDataURL</span>,<span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in inherits(x, c("xml_node", "xml_document", "xml_nodeset")): no applicable method for 'http_error' applied to an object of class "c('simpleError', 'error', 'condition')"</span></div><div class='input'>
 <span class='co'># Two sites, two pcodes, one site has two data descriptors:</span>
 <span class='no'>siteNumber</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'01480015'</span>,<span class='st'>"04085427"</span>)
 <span class='no'>obs_url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>siteNumber</span>,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"00060"</span>,<span class='st'>"00010"</span>),<span class='no'>startDate</span>,<span class='no'>endDate</span>,<span class='st'>'dv'</span>)
@@ -224,8 +244,7 @@ and S is the statistic code (if applicable).</p>
 
 <span class='co'># Timezone change with specified local timezone:</span>
 <span class='no'>tzURL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='st'>"04027000"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"00300"</span>,<span class='st'>"63680"</span>), <span class='st'>"2011-11-05"</span>, <span class='st'>"2011-11-07"</span>,<span class='st'>"uv"</span>)
-<span class='no'>tzIssue</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>tzURL</span>, <span class='fl'>TRUE</span>, <span class='st'>"America/Chicago"</span>)
-
+<span class='no'>tzIssue</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>tzURL</span>, <span class='fl'>TRUE</span>, <span class='st'>"America/Chicago"</span>)</div><div class='output co'>#&gt; <span class='message'>Request failed [503]. Retrying in 1 seconds...</span></div><div class='input'>
 <span class='co'># raw XML</span>
 <span class='no'>url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>'dv'</span>, <span class='kw'>siteNumber</span> <span class='kw'>=</span> <span class='st'>'02319300'</span>, <span class='kw'>parameterCd</span> <span class='kw'>=</span> <span class='st'>"00060"</span>,
                          <span class='kw'>startDate</span> <span class='kw'>=</span> <span class='st'>"2014-01-01"</span>, <span class='kw'>endDate</span> <span class='kw'>=</span> <span class='st'>"2014-01-01"</span>)

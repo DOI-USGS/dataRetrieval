@@ -96,6 +96,27 @@ but the general functionality is correct." />
 <li>
   <a href="../reference/index.html">Function Help</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/usMaps.html">Basic Mapping</a>
+    </li>
+    <li>
+      <a href="../articles/movingAverages.html">Moving Averages</a>
+    </li>
+    <li>
+      <a href="../articles/statsServiceMap.html">Stat Service</a>
+    </li>
+    <li>
+      <a href="../articles/earthquake.html">Earthquake Exploration</a>
+    </li>
+  </ul>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -164,14 +185,14 @@ for more information on time zones.</p></td>
 <span class='st'>"observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel"</span>,
 <span class='st'>"responseFormat=text/xml"</span>,
 <span class='st'>"featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401"</span>,<span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"&amp;"</span>)
-<span class='co'># data &lt;- importNGWMN(obs_url)</span>
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>importNGWMN</span>(<span class='no'>obs_url</span>)
 
 <span class='no'>obs_url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='st'>"http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation"</span>,
 <span class='st'>"service=SOS"</span>,<span class='st'>"version=2.0.0"</span>,
 <span class='st'>"observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel"</span>,
 <span class='st'>"responseFormat=text/xml"</span>,
 <span class='st'>"featureOfInterest=VW_GWDP_GEOSERVER.USGS.474011117072901"</span>,<span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"&amp;"</span>)
-<span class='co'># data &lt;- importNGWMN(obs_url)</span></div><div class='input'>
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>importNGWMN</span>(<span class='no'>obs_url</span>)</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

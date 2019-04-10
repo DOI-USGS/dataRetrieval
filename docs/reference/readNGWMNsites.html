@@ -95,6 +95,27 @@
 <li>
   <a href="../reference/index.html">Function Help</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/usMaps.html">Basic Mapping</a>
+    </li>
+    <li>
+      <a href="../articles/movingAverages.html">Moving Averages</a>
+    </li>
+    <li>
+      <a href="../articles/statsServiceMap.html">Stat Service</a>
+    </li>
+    <li>
+      <a href="../articles/earthquake.html">Earthquake Exploration</a>
+    </li>
+  </ul>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -157,13 +178,11 @@ separated by a period or semicolon, e.g. <code>USGS.404159100494601</code>.</p><
 <span class='no'>site</span> <span class='kw'>&lt;-</span> <span class='st'>"USGS.430427089284901"</span>
 <span class='no'>oneSite</span> <span class='kw'>&lt;-</span> <span class='fu'>readNGWMNsites</span>(<span class='kw'>siteNumbers</span> <span class='kw'>=</span> <span class='no'>site</span>)</div><div class='output co'>#&gt; <span class='message'>DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
 #&gt; <span class='message'>              and no future behavior or output is guaranteed</span></div><div class='input'>
-<span class='co'>#multiple sites</span>
-<span class='no'>sites</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"USGS:272838082142201"</span>,<span class='st'>"USGS:404159100494601"</span>, <span class='st'>"USGS:401216080362703"</span>)
-<span class='co'># multiSiteInfo &lt;- readNGWMNsites(sites)</span>
-
 <span class='co'>#non-USGS site</span>
-<span class='no'>site</span> <span class='kw'>&lt;-</span> <span class='st'>"MBMG.892195"</span>
-<span class='co'>#siteInfo &lt;- readNGWMNsites(siteNumbers = site)</span></div></pre>
+<span class='no'>site</span> <span class='kw'>&lt;-</span> <span class='st'>"MBMG.103306"</span>
+<span class='no'>siteInfo</span> <span class='kw'>&lt;-</span> <span class='fu'>readNGWMNsites</span>(<span class='kw'>siteNumbers</span> <span class='kw'>=</span> <span class='no'>site</span>)</div><div class='output co'>#&gt; <span class='message'>DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
+#&gt; <span class='message'>              and no future behavior or output is guaranteed</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -204,8 +204,22 @@ stuff_to_move <- list(
 
 ```
 
+Let's grab some fake data to make sure it works:
 
-Now, let's get some data from `dataRetrieval`:
+```{r fakePoints}
+library(dplyr)
+library(ggplot2)
+
+x <- data.frame(dec_long_va = c(-89,-156.3,-148.6,-66.5),
+                dec_lat_va = c(45,20.7,62.8,18.2),
+                state_abb = c("WI","HI","AK","PR"),
+                scale = 1:4, strings_as_factors = FALSE)
+plot_points_on_map(x, move_variables, stuff_to_move)
+
+```
+
+
+Now, let's get some data from `dataRetrieval`. We'll call the "site" service using `readNWISdata`, only pulling sites that have data in the water quality service, with at least 40 samples over at least 10 years.
 
 ```{r getSites}
 
@@ -216,7 +230,7 @@ all_sites <- data.frame()
 failed_sites <- c()
 
 #Running this full code takes about 15 minutes:
-
+# for now, we will not get US territories other than PR:
 for(i in stateCd$STUSAB[c(1:51,55)]){ 
   
   cat("Getting:",i,"\n")
@@ -257,13 +271,3 @@ unique_sites <- all_sites %>%
 
 ```
 
-```{r makeMap}
-library(dplyr)
-library(ggplot2)
-
-x <- data.frame(dec_long_va = -89,
-                          dec_lat_va = 45,
-                          state_abb = "WI",
-                          scale = 1, strings_as_factors = FALSE)
-plot_points_on_map(x, move_variables, stuff_to_move)
-```
