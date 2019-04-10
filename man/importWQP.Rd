@@ -26,7 +26,7 @@ Imports data from the Water Quality Portal based on a specified url.
 # These examples require an internet connection to run
 
 ## Examples take longer than 5 seconds:
-\dontrun{
+\donttest{
 rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
 
 rawSample <- importWQP(rawSampleURL)

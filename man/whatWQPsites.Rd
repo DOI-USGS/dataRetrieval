@@ -54,16 +54,21 @@ queryTime \tab POSIXct \tab Query time \cr
 }
 \description{
 Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
-Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
+Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}. The return from 
+this function returns the basic metadata on WQP sites. It is
+generally faster than the \code{\link{whatWQPdata}} function, but does
+not return information on what data was collected at the site.
 }
 \examples{
-\dontrun{
+\donttest{
 site1 <- whatWQPsites(siteid="USGS-01594440")
 
 type <- "Stream"
 sites <- whatWQPsites(countycode="US:55:025",siteType=type)
-lakeSites <- whatWQPsites(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 }
+}
+\seealso{
+whatNWISdata
 }
 \keyword{WQP}
 \keyword{data}

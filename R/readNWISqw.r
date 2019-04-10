@@ -80,7 +80,7 @@
 #' startDate <- '2010-01-01'
 #' endDate <- ''
 #' parameterCd <- c('34247','30234','32104','34220')
-#' \dontrun{
+#' \donttest{
 #' rawNWISqwData <- readNWISqw(site_ids,parameterCd,startDate,endDate)
 #' rawNWISqwDataReshaped <- readNWISqw(site_ids,parameterCd,
 #'           startDate,endDate,reshape=TRUE)
@@ -151,7 +151,7 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
       if(sum(data$parm_cd == "") > 0){
         warning("Some or all data returned without pCodes, those data will not be included in reshape")
       }
-
+      parameterCd <- unique(dataWithPcodes$parm_cd)
       longDF <- reshape2::melt(dataWithPcodes, measure.vars =  measureCols,
                      variable.name = "variable", value.name = "value", na.rm = FALSE)
       wideDF <- reshape2::dcast(longDF, ... ~ variable + parm_cd )
@@ -163,6 +163,8 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
     } else {
       warning("Reshape can only be used with expanded data. Reshape request will be ignored.")
     }
+  } else {
+    parameterCd <- unique(data$parm_cd)
   }
   
   if(exists("siteNumbers") &&  all(!(is.na(siteNumbers))) & length(siteNumbers) > 0){
@@ -172,8 +174,6 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
     }
     attr(data, "siteInfo") <- siteInfo    
   }
-
-  parameterCd <- unique(data$parm_cd)
   
   if(exists("parameterCd") && all(!is.na(parameterCd)) & length(parameterCd) > 0){
     parameterCd <- parameterCd[parameterCd != ""]

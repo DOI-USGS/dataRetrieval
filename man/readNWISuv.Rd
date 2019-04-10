@@ -65,7 +65,7 @@ site_id <- '05114000'
 parameterCd <- '00060'
 startDate <- "2014-10-10"
 endDate <- "2014-10-10"
-\dontrun{
+\donttest{
 rawData <- readNWISuv(site_id,parameterCd,startDate,endDate)
 
 rawData_today <- readNWISuv(site_id, parameterCd, Sys.Date(),Sys.Date())

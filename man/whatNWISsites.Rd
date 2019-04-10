@@ -35,7 +35,7 @@ Returns a list of sites from the NWIS web service. This function gets the data f
 Mapper format is used
 }
 \examples{
-\dontrun{
+\donttest{
 siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
 oneSite <- whatNWISsites(sites="05114000")
 }

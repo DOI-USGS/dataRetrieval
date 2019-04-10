@@ -41,14 +41,14 @@
 #' siteWithTwo <- '01480015'
 #' startDate <- "2012-09-01"
 #' endDate <- "2012-10-01"
-#' \dontrun{
-#' url2 <- constructNWISURL(siteWithTwo, "00060",startDate,endDate,'dv')
-#' twoResults <- importWaterML1(url2,TRUE)
-#' twoResults <- renameNWISColumns(twoResults)
-#' url2RDB <- constructNWISURL(siteWithTwo,"00060",
-#'          startDate,endDate,"dv",format="tsv")
-#' rdbResults <- importRDB1(url2RDB)
-#' rdbResults <- renameNWISColumns(rdbResults) 
+#' \donttest{
+#' twoResults <- readNWISdv(siteWithTwo, "00060",startDate,endDate)
+#' names(twoResults)
+#' renamedCols <- renameNWISColumns(twoResults)
+#' names(renamedCols)
+#' #Custom names:
+#' newNames <- renameNWISColumns(twoResults, p00060="Discharge")
+#' names(newNames)
 #' }
 renameNWISColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
                           p00060="Flow", p00065="GH", p00095="SpecCond", p00300="DO",

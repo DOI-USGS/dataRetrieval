@@ -151,20 +151,19 @@ separated by a period or semicolon, e.g. <code>USGS.404159100494601</code>.</p><
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'>#one site</span>
+    <pre class="examples"><div class='input'><span class='co'>#one site</span>
 <span class='no'>site</span> <span class='kw'>&lt;-</span> <span class='st'>"USGS.430427089284901"</span>
-<span class='no'>oneSite</span> <span class='kw'>&lt;-</span> <span class='fu'>readNGWMNsites</span>(<span class='kw'>siteNumbers</span> <span class='kw'>=</span> <span class='no'>site</span>)
-
+<span class='no'>oneSite</span> <span class='kw'>&lt;-</span> <span class='fu'>readNGWMNsites</span>(<span class='kw'>siteNumbers</span> <span class='kw'>=</span> <span class='no'>site</span>)</div><div class='output co'>#&gt; <span class='message'>DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
+#&gt; <span class='message'>              and no future behavior or output is guaranteed</span></div><div class='input'>
 <span class='co'>#multiple sites</span>
 <span class='no'>sites</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"USGS:272838082142201"</span>,<span class='st'>"USGS:404159100494601"</span>, <span class='st'>"USGS:401216080362703"</span>)
-<span class='no'>multiSiteInfo</span> <span class='kw'>&lt;-</span> <span class='fu'>readNGWMNsites</span>(<span class='no'>sites</span>)
-
+<span class='no'>multiSiteInfo</span> <span class='kw'>&lt;-</span> <span class='fu'>readNGWMNsites</span>(<span class='no'>sites</span>)</div><div class='output co'>#&gt; <span class='message'>DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
+#&gt; <span class='message'>              and no future behavior or output is guaranteed</span></div><div class='output co'>#&gt; <span class='error'>Error in xml_root(returnedDoc): inherits(x, c("xml_node", "xml_document", "xml_nodeset")) is not TRUE</span></div><div class='input'>
 <span class='co'>#non-USGS site</span>
 <span class='no'>site</span> <span class='kw'>&lt;-</span> <span class='st'>"MBMG.892195"</span>
-<span class='no'>siteInfo</span> <span class='kw'>&lt;-</span> <span class='fu'>readNGWMNsites</span>(<span class='kw'>siteNumbers</span> <span class='kw'>=</span> <span class='no'>site</span>)
-
-<span class='co'># }</span></pre>
+<span class='no'>siteInfo</span> <span class='kw'>&lt;-</span> <span class='fu'>readNGWMNsites</span>(<span class='kw'>siteNumbers</span> <span class='kw'>=</span> <span class='no'>site</span>)</div><div class='output co'>#&gt; <span class='message'>DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
+#&gt; <span class='message'>              and no future behavior or output is guaranteed</span></div><div class='output co'>#&gt; <span class='message'>No feature found for given feature id</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

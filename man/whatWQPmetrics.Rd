@@ -17,7 +17,7 @@ Returns a list of sites from the Water Quality Portal web service. This function
 Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
 }
 \examples{
-\dontrun{
+\donttest{
 
 type <- "Stream"
 sites <- whatWQPmetrics(countycode="US:55:025",siteType=type)

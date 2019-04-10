@@ -239,8 +239,7 @@ for more information on time zones.</p></td>
     <pre class="examples"><div class='input'><span class='no'>site_ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'04024430'</span>,<span class='st'>'04024000'</span>)
 <span class='no'>startDate</span> <span class='kw'>&lt;-</span> <span class='st'>'2010-01-01'</span>
 <span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>''</span>
-<span class='no'>parameterCd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'34247'</span>,<span class='st'>'30234'</span>,<span class='st'>'32104'</span>,<span class='st'>'34220'</span>)</div><span class='co'># NOT RUN {</span>
-<span class='no'>rawNWISqwData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISqw</span>(<span class='no'>site_ids</span>,<span class='no'>parameterCd</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>)
+<span class='no'>parameterCd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'34247'</span>,<span class='st'>'30234'</span>,<span class='st'>'32104'</span>,<span class='st'>'34220'</span>)</div><div class='input'><span class='no'>rawNWISqwData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISqw</span>(<span class='no'>site_ids</span>,<span class='no'>parameterCd</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>)
 <span class='no'>rawNWISqwDataReshaped</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISqw</span>(<span class='no'>site_ids</span>,<span class='no'>parameterCd</span>,
           <span class='no'>startDate</span>,<span class='no'>endDate</span>,<span class='kw'>reshape</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>parameterCd</span> <span class='kw'>&lt;-</span> <span class='st'>"all"</span>
@@ -253,9 +252,7 @@ for more information on time zones.</p></td>
 <span class='no'>rawNWISNutOpe</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISqw</span>(<span class='no'>site_ids</span>,<span class='no'>groups</span>,
           <span class='no'>startDate</span>,<span class='no'>endDate</span>)
 <span class='no'>rawNWISOpe</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISqw</span>(<span class='no'>site_ids</span>,<span class='st'>"OPE"</span>,
-          <span class='no'>startDate</span>,<span class='no'>endDate</span>)
-
-<span class='co'># }</span></pre>
+          <span class='no'>startDate</span>,<span class='no'>endDate</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
