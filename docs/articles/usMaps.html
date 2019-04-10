@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Map Stuff • dataRetrieval</title>
+<title>Mapping Points • dataRetrieval</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Map Stuff">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Mapping Points">
 <meta property="og:description" content="">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
@@ -97,7 +97,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Map Stuff</h1>
+      <h1>Mapping Points</h1>
                         <h4 class="author">Laura DeCicco</h4>
             
             <h4 class="date">2019-04-05</h4>
@@ -196,13 +196,14 @@
 <a class="sourceLine" id="cb4-33" title="33">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(sites.df)</a>
 <a class="sourceLine" id="cb4-34" title="34">  </a>
 <a class="sourceLine" id="cb4-35" title="35">}</a></code></pre></div>
+<p>Then, we create a pretty generic mapping function. This is all <code>ggplot2</code> code, and might be more appropriate outside of a function for complete customization. In this case, we want the ability to create a “quick-and-dirty” map.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">plot_points_on_map &lt;-<span class="st"> </span><span class="cf">function</span>(x, move_variables, stuff_to_move,</a>
-<a class="sourceLine" id="cb5-2" title="2">                               <span class="dt">scale_by_color =</span> <span class="ot">TRUE</span>, </a>
-<a class="sourceLine" id="cb5-3" title="3">                               <span class="dt">scale_by_size =</span> <span class="ot">FALSE</span>){</a>
-<a class="sourceLine" id="cb5-4" title="4">  </a>
-<a class="sourceLine" id="cb5-5" title="5">  alpha_set &lt;-<span class="st"> </span><span class="fl">0.75</span></a>
-<a class="sourceLine" id="cb5-6" title="6">  base_fill &lt;-<span class="st"> "azure3"</span></a>
-<a class="sourceLine" id="cb5-7" title="7">  </a>
+<a class="sourceLine" id="cb5-2" title="2">                               <span class="dt">pt_size =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb5-3" title="3">                               <span class="dt">alpha_set =</span> <span class="fl">0.75</span>,</a>
+<a class="sourceLine" id="cb5-4" title="4">                               <span class="dt">base_fill =</span> <span class="st">"azure3"</span>,</a>
+<a class="sourceLine" id="cb5-5" title="5">                               <span class="dt">scale_by_color =</span> <span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb5-6" title="6">                               <span class="dt">scale_by_size =</span> <span class="ot">FALSE</span>){</a>
+<a class="sourceLine" id="cb5-7" title="7"></a>
 <a class="sourceLine" id="cb5-8" title="8">  <span class="cf">if</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/all">all</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"coords.x1"</span>,<span class="st">"coords.x2"</span>, <span class="st">"n"</span>) <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(x))){</a>
 <a class="sourceLine" id="cb5-9" title="9">    sites.df &lt;-<span class="st">  </span>x</a>
 <a class="sourceLine" id="cb5-10" title="10">  } <span class="cf">else</span> {</a>
@@ -226,30 +227,32 @@
 <a class="sourceLine" id="cb5-28" title="28">                 <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y=</span>coords.x2, </a>
 <a class="sourceLine" id="cb5-29" title="29">                     <span class="dt">fill =</span> n, <span class="dt">size =</span> n),</a>
 <a class="sourceLine" id="cb5-30" title="30">                 <span class="dt">alpha =</span> alpha_set,</a>
-<a class="sourceLine" id="cb5-31" title="31">                 <span class="dt">color=</span><span class="st">"black"</span>,<span class="dt">pch=</span><span class="dv">21</span>) </a>
-<a class="sourceLine" id="cb5-32" title="32">  } <span class="cf">else</span> <span class="cf">if</span> (scale_by_color){</a>
-<a class="sourceLine" id="cb5-33" title="33">    gsMap &lt;-<span class="st"> </span>gsMap <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-34" title="34"><span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sites.df, </a>
-<a class="sourceLine" id="cb5-35" title="35">                 <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y=</span>coords.x2, </a>
-<a class="sourceLine" id="cb5-36" title="36">                     <span class="dt">fill =</span> n), </a>
-<a class="sourceLine" id="cb5-37" title="37">                 <span class="dt">alpha =</span> alpha_set,</a>
-<a class="sourceLine" id="cb5-38" title="38">                 <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">color=</span><span class="st">"black"</span>,<span class="dt">pch=</span><span class="dv">21</span>) </a>
-<a class="sourceLine" id="cb5-39" title="39">  } <span class="cf">else</span> <span class="cf">if</span> (scale_by_size){</a>
-<a class="sourceLine" id="cb5-40" title="40">    gsMap &lt;-<span class="st"> </span>gsMap <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-41" title="41"><span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sites.df, </a>
-<a class="sourceLine" id="cb5-42" title="42">                 <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y=</span>coords.x2, </a>
-<a class="sourceLine" id="cb5-43" title="43">                     <span class="dt">size =</span> n), <span class="dt">fill=</span>base_fill, </a>
-<a class="sourceLine" id="cb5-44" title="44">                 <span class="dt">alpha =</span> alpha_set,</a>
-<a class="sourceLine" id="cb5-45" title="45">                 <span class="dt">color=</span><span class="st">"black"</span>,<span class="dt">pch=</span><span class="dv">21</span>) </a>
-<a class="sourceLine" id="cb5-46" title="46">  } <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb5-47" title="47">    gsMap &lt;-<span class="st"> </span>gsMap <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-48" title="48"><span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sites.df, </a>
-<a class="sourceLine" id="cb5-49" title="49">                 <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y=</span>coords.x2), </a>
-<a class="sourceLine" id="cb5-50" title="50">                 <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">color=</span><span class="st">"black"</span>,<span class="dt">pch=</span><span class="dv">21</span>,</a>
-<a class="sourceLine" id="cb5-51" title="51">                 <span class="dt">fill=</span>base_fill, <span class="dt">alpha =</span> alpha_set)</a>
-<a class="sourceLine" id="cb5-52" title="52">  }</a>
-<a class="sourceLine" id="cb5-53" title="53">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(gsMap)</a>
-<a class="sourceLine" id="cb5-54" title="54">}</a></code></pre></div>
+<a class="sourceLine" id="cb5-31" title="31">                 <span class="dt">color=</span><span class="st">"black"</span>,<span class="dt">pch=</span><span class="dv">21</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-32" title="32"><span class="st">      </span><span class="kw">scale_fill_continuous</span>(<span class="dt">type =</span> <span class="st">"viridis"</span>, <span class="dt">trans =</span> <span class="st">"log10"</span>)</a>
+<a class="sourceLine" id="cb5-33" title="33">  } <span class="cf">else</span> <span class="cf">if</span> (scale_by_color){</a>
+<a class="sourceLine" id="cb5-34" title="34">    gsMap &lt;-<span class="st"> </span>gsMap <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-35" title="35"><span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sites.df, </a>
+<a class="sourceLine" id="cb5-36" title="36">                 <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y=</span>coords.x2, </a>
+<a class="sourceLine" id="cb5-37" title="37">                     <span class="dt">fill =</span> n), </a>
+<a class="sourceLine" id="cb5-38" title="38">                 <span class="dt">alpha =</span> alpha_set,</a>
+<a class="sourceLine" id="cb5-39" title="39">                 <span class="dt">size =</span> pt_size, <span class="dt">color=</span><span class="st">"black"</span>,<span class="dt">pch=</span><span class="dv">21</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-40" title="40"><span class="st">      </span><span class="kw">scale_fill_continuous</span>(<span class="dt">type =</span> <span class="st">"viridis"</span>, <span class="dt">trans =</span> <span class="st">"log10"</span>)</a>
+<a class="sourceLine" id="cb5-41" title="41">  } <span class="cf">else</span> <span class="cf">if</span> (scale_by_size){</a>
+<a class="sourceLine" id="cb5-42" title="42">    gsMap &lt;-<span class="st"> </span>gsMap <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-43" title="43"><span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sites.df, </a>
+<a class="sourceLine" id="cb5-44" title="44">                 <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y=</span>coords.x2, </a>
+<a class="sourceLine" id="cb5-45" title="45">                     <span class="dt">size =</span> n), <span class="dt">fill=</span>base_fill, </a>
+<a class="sourceLine" id="cb5-46" title="46">                 <span class="dt">alpha =</span> alpha_set,</a>
+<a class="sourceLine" id="cb5-47" title="47">                 <span class="dt">color=</span><span class="st">"black"</span>,<span class="dt">pch=</span><span class="dv">21</span>) </a>
+<a class="sourceLine" id="cb5-48" title="48">  } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb5-49" title="49">    gsMap &lt;-<span class="st"> </span>gsMap <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-50" title="50"><span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sites.df, </a>
+<a class="sourceLine" id="cb5-51" title="51">                 <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y=</span>coords.x2), </a>
+<a class="sourceLine" id="cb5-52" title="52">                 <span class="dt">size =</span> pt_size, <span class="dt">color=</span><span class="st">"black"</span>,<span class="dt">pch=</span><span class="dv">21</span>,</a>
+<a class="sourceLine" id="cb5-53" title="53">                 <span class="dt">fill=</span>base_fill, <span class="dt">alpha =</span> alpha_set)</a>
+<a class="sourceLine" id="cb5-54" title="54">  }</a>
+<a class="sourceLine" id="cb5-55" title="55">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(gsMap)</a>
+<a class="sourceLine" id="cb5-56" title="56">}</a></code></pre></div>
 <p>We’ve fiddled with the scaling, shifting, and rotating to:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">move_variables &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
 <a class="sourceLine" id="cb6-2" title="2">  <span class="dt">AK =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">scale=</span><span class="fl">0.47</span>, <span class="dt">shift =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">90</span>,<span class="op">-</span><span class="dv">465</span>), <span class="dt">rotate=</span><span class="op">-</span><span class="dv">50</span>),</a>
@@ -272,7 +275,7 @@
 <a class="sourceLine" id="cb7-7" title="7">                <span class="dt">scale =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">strings_as_factors =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb7-8" title="8"><span class="kw">plot_points_on_map</span>(x, move_variables, stuff_to_move)</a></code></pre></div>
 <p><img src="usMaps_files/figure-html/fakePoints-1.png" width="700"></p>
-<p>Now, let’s get some data from <code>dataRetrieval</code>:</p>
+<p>Now, let’s get some data from <code>dataRetrieval</code>. We’ll call the “site” service using <code>readNWISdata</code>, only pulling stream sites that have measured “Phosphorus, water, unfiltered, milligrams per liter as phosphorus” at least 100 times over at least 10 years:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dataRetrieval)</a>
 <a class="sourceLine" id="cb8-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
 <a class="sourceLine" id="cb8-3" title="3"></a>
@@ -280,104 +283,45 @@
 <a class="sourceLine" id="cb8-5" title="5">failed_sites &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>()</a>
 <a class="sourceLine" id="cb8-6" title="6"></a>
 <a class="sourceLine" id="cb8-7" title="7"><span class="co">#Running this full code takes about 15 minutes:</span></a>
-<a class="sourceLine" id="cb8-8" title="8"></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co"># for now, we will not get US territories other than PR:</span></a>
 <a class="sourceLine" id="cb8-9" title="9"><span class="cf">for</span>(i <span class="cf">in</span> stateCd<span class="op">$</span>STUSAB[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">51</span>,<span class="dv">55</span>)]){ </a>
-<a class="sourceLine" id="cb8-10" title="10">  </a>
-<a class="sourceLine" id="cb8-11" title="11">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="st">"Getting:"</span>,i,<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a>
-<a class="sourceLine" id="cb8-12" title="12">  </a>
-<a class="sourceLine" id="cb8-13" title="13">  all_sites &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/conditions">tryCatch</a></span>({</a>
-<a class="sourceLine" id="cb8-14" title="14">      </a>
-<a class="sourceLine" id="cb8-15" title="15">    sites &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISdata.html">readNWISdata</a></span>(<span class="dt">service =</span> <span class="st">"site"</span>, </a>
-<a class="sourceLine" id="cb8-16" title="16">                            <span class="dt">seriesCatalogOutput=</span><span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb8-17" title="17">                            <span class="dt">siteType=</span><span class="st">"ST"</span>,<span class="dt">hasDataTypeCd=</span><span class="st">"qw"</span>,</a>
-<a class="sourceLine" id="cb8-18" title="18">                            <span class="dt">stateCd =</span> i)</a>
-<a class="sourceLine" id="cb8-19" title="19">    </a>
-<a class="sourceLine" id="cb8-20" title="20">    sites_filtered &lt;-<span class="st"> </span>sites <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-21" title="21"><span class="st">      </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(data_type_cd <span class="op">==</span><span class="st"> "qw"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-22" title="22"><span class="st">      </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(count_nu <span class="op">&gt;=</span><span class="st"> </span><span class="dv">40</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-23" title="23"><span class="st">      </span><span class="kw">select</span>(site_no, station_nm, dec_lat_va, dec_long_va, </a>
-<a class="sourceLine" id="cb8-24" title="24">             begin_date, end_date) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-25" title="25"><span class="st">      </span><span class="kw">distinct</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-26" title="26"><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">begin_date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(begin_date),</a>
-<a class="sourceLine" id="cb8-27" title="27">             <span class="dt">end_date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(end_date),</a>
-<a class="sourceLine" id="cb8-28" title="28">             <span class="dt">years =</span> (end_date <span class="op">-</span><span class="st"> </span>begin_date)<span class="op">/</span><span class="fl">365.25</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-29" title="29"><span class="st">      </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(years <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-30" title="30"><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">state =</span> i)</a>
-<a class="sourceLine" id="cb8-31" title="31">  </a>
-<a class="sourceLine" id="cb8-32" title="32">    <span class="kw">bind_rows</span>(all_sites, sites_filtered)</a>
-<a class="sourceLine" id="cb8-33" title="33">  },</a>
-<a class="sourceLine" id="cb8-34" title="34">  <span class="dt">error=</span><span class="cf">function</span>(cond) {</a>
-<a class="sourceLine" id="cb8-35" title="35">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/message">message</a></span>(<span class="st">"***************Errored on"</span>,i,<span class="st">"***********</span><span class="ch">\n</span><span class="st">"</span>)</a>
-<a class="sourceLine" id="cb8-36" title="36">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(all_sites)</a>
-<a class="sourceLine" id="cb8-37" title="37">  })</a>
-<a class="sourceLine" id="cb8-38" title="38"></a>
-<a class="sourceLine" id="cb8-39" title="39">}</a></code></pre></div>
-<pre><code>## Getting: AL 
-## Getting: AK 
-## Getting: AZ 
-## Getting: AR 
-## Getting: CA 
-## Getting: CO 
-## Getting: CT 
-## Getting: DE 
-## Getting: DC 
-## Getting: FL 
-## Getting: GA 
-## Getting: HI 
-## Getting: ID 
-## Getting: IL 
-## Getting: IN 
-## Getting: IA 
-## Getting: KS 
-## Getting: KY 
-## Getting: LA 
-## Getting: ME 
-## Getting: MD 
-## Getting: MA 
-## Getting: MI 
-## Getting: MN 
-## Getting: MS 
-## Getting: MO 
-## Getting: MT 
-## Getting: NE 
-## Getting: NV 
-## Getting: NH 
-## Getting: NJ 
-## Getting: NM 
-## Getting: NY 
-## Getting: NC 
-## Getting: ND 
-## Getting: OH 
-## Getting: OK 
-## Getting: OR 
-## Getting: PA 
-## Getting: RI 
-## Getting: SC 
-## Getting: SD 
-## Getting: TN 
-## Getting: TX 
-## Getting: UT 
-## Getting: VT 
-## Getting: VA 
-## Getting: WA 
-## Getting: WV 
-## Getting: WI 
-## Getting: WY 
-## Getting: PR</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">unique_sites &lt;-<span class="st"> </span>all_sites <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(site_no, station_nm, dec_lat_va, dec_long_va) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="st">  </span><span class="kw">top_n</span>(<span class="dv">1</span>, years) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-4" title="4"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-5" title="5"><span class="st">  </span><span class="kw">distinct</span>()</a></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb11-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb11-3" title="3"></a>
-<a class="sourceLine" id="cb11-4" title="4">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">dec_long_va =</span> <span class="dv">-89</span>,</a>
-<a class="sourceLine" id="cb11-5" title="5">                          <span class="dt">dec_lat_va =</span> <span class="dv">45</span>,</a>
-<a class="sourceLine" id="cb11-6" title="6">                          <span class="dt">state_abb =</span> <span class="st">"WI"</span>,</a>
-<a class="sourceLine" id="cb11-7" title="7">                          <span class="dt">scale =</span> <span class="dv">1</span>, <span class="dt">strings_as_factors =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb11-8" title="8"><span class="kw">plot_points_on_map</span>(x, move_variables, stuff_to_move)</a></code></pre></div>
-<p><img src="usMaps_files/figure-html/makeMap-1.png" width="700"></p>
+<a class="sourceLine" id="cb8-10" title="10"></a>
+<a class="sourceLine" id="cb8-11" title="11">  all_sites &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/conditions">tryCatch</a></span>({</a>
+<a class="sourceLine" id="cb8-12" title="12">      </a>
+<a class="sourceLine" id="cb8-13" title="13">    sites &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readNWISdata.html">readNWISdata</a></span>(<span class="dt">service =</span> <span class="st">"site"</span>, </a>
+<a class="sourceLine" id="cb8-14" title="14">                            <span class="dt">seriesCatalogOutput=</span><span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb8-15" title="15">                            <span class="dt">siteType=</span><span class="st">"ST"</span>,<span class="dt">parameterCd=</span><span class="st">"00665"</span>,</a>
+<a class="sourceLine" id="cb8-16" title="16">                            <span class="dt">stateCd =</span> i)</a>
+<a class="sourceLine" id="cb8-17" title="17">    </a>
+<a class="sourceLine" id="cb8-18" title="18">    sites_filtered &lt;-<span class="st"> </span>sites <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-19" title="19"><span class="st">      </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(data_type_cd <span class="op">==</span><span class="st"> "qw"</span>,</a>
+<a class="sourceLine" id="cb8-20" title="20">             count_nu <span class="op">&gt;=</span><span class="st"> </span><span class="dv">100</span>,</a>
+<a class="sourceLine" id="cb8-21" title="21">             parm_cd <span class="op">==</span><span class="st"> "00665"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-22" title="22"><span class="st">      </span><span class="kw">select</span>(site_no, station_nm, dec_lat_va, dec_long_va, </a>
+<a class="sourceLine" id="cb8-23" title="23">             begin_date, end_date, count_nu) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-24" title="24"><span class="st">      </span><span class="kw">distinct</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-25" title="25"><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">begin_date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(begin_date),</a>
+<a class="sourceLine" id="cb8-26" title="26">             <span class="dt">end_date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(end_date),</a>
+<a class="sourceLine" id="cb8-27" title="27">             <span class="dt">years =</span> (end_date <span class="op">-</span><span class="st"> </span>begin_date)<span class="op">/</span><span class="fl">365.25</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-28" title="28"><span class="st">      </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(years <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-29" title="29"><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">state_abb =</span> i,</a>
+<a class="sourceLine" id="cb8-30" title="30">             <span class="dt">scale =</span> count_nu) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-31" title="31"><span class="st">      </span><span class="kw">group_by</span>(site_no, station_nm, </a>
+<a class="sourceLine" id="cb8-32" title="32">               dec_lat_va, dec_long_va, state_abb) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-33" title="33"><span class="st">      </span><span class="kw">top_n</span>(<span class="dv">1</span>, count_nu) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-34" title="34"><span class="st">      </span><span class="kw">distinct</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-35" title="35"><span class="st">      </span><span class="kw">ungroup</span>()</a>
+<a class="sourceLine" id="cb8-36" title="36">  </a>
+<a class="sourceLine" id="cb8-37" title="37">    <span class="kw">bind_rows</span>(all_sites, sites_filtered)</a>
+<a class="sourceLine" id="cb8-38" title="38">  },</a>
+<a class="sourceLine" id="cb8-39" title="39">  <span class="dt">error=</span><span class="cf">function</span>(cond) {</a>
+<a class="sourceLine" id="cb8-40" title="40">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/message">message</a></span>(<span class="st">"***************Errored on"</span>,i,<span class="st">"***********</span><span class="ch">\n</span><span class="st">"</span>)</a>
+<a class="sourceLine" id="cb8-41" title="41">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(all_sites)</a>
+<a class="sourceLine" id="cb8-42" title="42">  })</a>
+<a class="sourceLine" id="cb8-43" title="43"></a>
+<a class="sourceLine" id="cb8-44" title="44">}</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">plot_points_on_map</span>(all_sites, move_variables, stuff_to_move, <span class="dt">pt_size =</span> <span class="dv">2</span>, <span class="dt">scale_by_color =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="usMaps_files/figure-html/plotIt-1.png" width="700"></p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
