@@ -43,6 +43,8 @@
 <meta property="og:description" content="Returns data from the NWIS web service.
 Arguments to the function should be based on https://waterservices.usgs.gov service calls.
 See examples below for ideas of constructing queries." />
+
+<meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -83,7 +85,7 @@ See examples below for ideas of constructing queries." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
       </span>
     </div>
 
@@ -94,6 +96,27 @@ See examples below for ideas of constructing queries." />
 </li>
 <li>
   <a href="../reference/index.html">Function Help</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/usMaps.html">Basic Mapping</a>
+    </li>
+    <li>
+      <a href="../articles/movingAverages.html">Moving Averages</a>
+    </li>
+    <li>
+      <a href="../articles/statsServiceMap.html">Stat Service</a>
+    </li>
+    <li>
+      <a href="../articles/earthquake.html">Earthquake Exploration</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -214,9 +237,11 @@ and S is the statistic code (if applicable).</p>
 
 <span class='co'>#Empty:</span>
 <span class='no'>multiSite</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>sites</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"04025000"</span>,<span class='st'>"04072150"</span>), <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"iv"</span>,
-                           <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00010"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in inherits(x, c("xml_node", "xml_document", "xml_nodeset")): argument is of length zero</span></div><div class='input'><span class='co'>#Not empty:</span>
+                           <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00010"</span>)
+<span class='co'>#Not empty:</span>
 <span class='no'>multiSite</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>sites</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"04025500"</span>,<span class='st'>"040263491"</span>),
-                           <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"iv"</span>, <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00060"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in inherits(x, c("xml_node", "xml_document", "xml_nodeset")): argument is of length zero</span></div><div class='input'><span class='no'>bBoxEx</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>bBox</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>83</span>,<span class='fl'>36.5</span>,-<span class='fl'>81</span>,<span class='fl'>38.5</span>), <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00010"</span>)
+                           <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"iv"</span>, <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00060"</span>)
+<span class='no'>bBoxEx</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>bBox</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>83</span>,<span class='fl'>36.5</span>,-<span class='fl'>81</span>,<span class='fl'>38.5</span>), <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00010"</span>)
 
 <span class='no'>startDate</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='st'>"2013-10-01"</span>)
 <span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='st'>"2014-09-30"</span>)

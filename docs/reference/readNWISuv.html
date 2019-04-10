@@ -44,6 +44,8 @@
 A list of parameter codes can be found here: https://nwis.waterdata.usgs.gov/nwis/pmcodes/
 A list of statistic codes can be found here: https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&amp;amp;format=table.
 More information on the web service can be found here: https://waterservices.usgs.gov/rest/IV-Service.html." />
+
+<meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -84,7 +86,7 @@ More information on the web service can be found here: https://waterservices.usg
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
       </span>
     </div>
 
@@ -95,6 +97,27 @@ More information on the web service can be found here: https://waterservices.usg
 </li>
 <li>
   <a href="../reference/index.html">Function Help</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/usMaps.html">Basic Mapping</a>
+    </li>
+    <li>
+      <a href="../articles/movingAverages.html">Moving Averages</a>
+    </li>
+    <li>
+      <a href="../articles/statsServiceMap.html">Stat Service</a>
+    </li>
+    <li>
+      <a href="../articles/earthquake.html">Earthquake Exploration</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -204,8 +227,7 @@ and S is the statistic code (if applicable).</p>
     <pre class="examples"><div class='input'><span class='no'>site_id</span> <span class='kw'>&lt;-</span> <span class='st'>'05114000'</span>
 <span class='no'>parameterCd</span> <span class='kw'>&lt;-</span> <span class='st'>'00060'</span>
 <span class='no'>startDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span>
-<span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span></div><div class='input'><span class='no'>rawData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>,<span class='no'>parameterCd</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>)
-
+<span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span></div><div class='input'><span class='no'>rawData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>,<span class='no'>parameterCd</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>)</div><div class='output co'>#&gt; <span class='message'>Request failed [503]. Retrying in 1.7 seconds...</span></div><div class='input'>
 <span class='no'>rawData_today</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>, <span class='no'>parameterCd</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.time'>Sys.Date</a></span>(),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.time'>Sys.Date</a></span>())
 
 <span class='no'>timeZoneChange</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'04024430'</span>,<span class='st'>'04024000'</span>),<span class='no'>parameterCd</span>,

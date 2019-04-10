@@ -42,6 +42,8 @@
 
 <meta property="og:description" content="This function accepts a url parameter that already contains the desired
 NWIS site, parameter code, statistic, startdate and enddate." />
+
+<meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -82,7 +84,7 @@ NWIS site, parameter code, statistic, startdate and enddate." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
       </span>
     </div>
 
@@ -93,6 +95,27 @@ NWIS site, parameter code, statistic, startdate and enddate." />
 </li>
 <li>
   <a href="../reference/index.html">Function Help</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/usMaps.html">Basic Mapping</a>
+    </li>
+    <li>
+      <a href="../articles/movingAverages.html">Moving Averages</a>
+    </li>
+    <li>
+      <a href="../articles/statsServiceMap.html">Stat Service</a>
+    </li>
+    <li>
+      <a href="../articles/earthquake.html">Earthquake Exploration</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -189,51 +212,44 @@ and S is the statistic code (if applicable).</p>
 <span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2012-10-01"</span>
 <span class='no'>offering</span> <span class='kw'>&lt;-</span> <span class='st'>'00003'</span>
 <span class='no'>property</span> <span class='kw'>&lt;-</span> <span class='st'>'00060'</span>
-<span class='no'>obs_url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>site_id</span>,<span class='no'>property</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>,<span class='st'>'dv'</span>)</div><div class='input'>data <- importWaterML1(obs_url, asDateTime=TRUE)
+<span class='no'>obs_url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>site_id</span>,<span class='no'>property</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>,<span class='st'>'dv'</span>)</div><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>obs_url</span>, <span class='kw'>asDateTime</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 
-groundWaterSite <- "431049071324301"
-startGW <- "2013-10-01"
-endGW <- "2014-06-30"
-groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
-          startGW,endGW, service="gwlevels")
-groundWater <- importWaterML1(groundwaterExampleURL)
-groundWater2 <- importWaterML1(groundwaterExampleURL, asDateTime=TRUE)
+<span class='no'>groundWaterSite</span> <span class='kw'>&lt;-</span> <span class='st'>"431049071324301"</span>
+<span class='no'>startGW</span> <span class='kw'>&lt;-</span> <span class='st'>"2013-10-01"</span>
+<span class='no'>endGW</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-06-30"</span>
+<span class='no'>groundwaterExampleURL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>groundWaterSite</span>, <span class='fl'>NA</span>,
+          <span class='no'>startGW</span>,<span class='no'>endGW</span>, <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"gwlevels"</span>)
+<span class='no'>groundWater</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>groundwaterExampleURL</span>)
+<span class='no'>groundWater2</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>groundwaterExampleURL</span>, <span class='kw'>asDateTime</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 
-unitDataURL <- constructNWISURL(site_id,property,
-         "2013-11-03","2013-11-03",'uv')
-unitData <- importWaterML1(unitDataURL,TRUE)
+<span class='no'>unitDataURL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>site_id</span>,<span class='no'>property</span>,
+         <span class='st'>"2013-11-03"</span>,<span class='st'>"2013-11-03"</span>,<span class='st'>'uv'</span>)
+<span class='no'>unitData</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>unitDataURL</span>,<span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in inherits(x, c("xml_node", "xml_document", "xml_nodeset")): no applicable method for 'http_error' applied to an object of class "c('simpleError', 'error', 'condition')"</span></div><div class='input'>
+<span class='co'># Two sites, two pcodes, one site has two data descriptors:</span>
+<span class='no'>siteNumber</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'01480015'</span>,<span class='st'>"04085427"</span>)
+<span class='no'>obs_url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>siteNumber</span>,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"00060"</span>,<span class='st'>"00010"</span>),<span class='no'>startDate</span>,<span class='no'>endDate</span>,<span class='st'>'dv'</span>)
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>obs_url</span>)
+<span class='no'>data</span>$<span class='no'>dateTime</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='no'>data</span>$<span class='no'>dateTime</span>)
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='renameNWISColumns.html'>renameNWISColumns</a></span>(<span class='no'>data</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attributes'>attributes</a></span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; [1] "row.names"     "names"         "url"           "siteInfo"     
+#&gt; [5] "variableInfo"  "disclaimer"    "statisticInfo" "queryTime"    
+#&gt; [9] "class"        </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr</a></span>(<span class='no'>data</span>, <span class='st'>"url"</span>)</div><div class='output co'>#&gt; [1] "https://waterservices.usgs.gov/nwis/dv/?site=01480015,04085427&amp;format=waterml,1.1&amp;ParameterCd=00060,00010&amp;StatCd=00003&amp;startDT=2012-09-01&amp;endDT=2012-10-01"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr</a></span>(<span class='no'>data</span>, <span class='st'>"disclaimer"</span>)</div><div class='output co'>#&gt; [1] "Provisional data are subject to revision. Go to http://waterdata.usgs.gov/nwis/help/?provisional for more information."</div><div class='input'>
+<span class='no'>inactiveSite</span> <span class='kw'>&lt;-</span> <span class='st'>"05212700"</span>
+<span class='no'>inactiveSite</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>inactiveSite</span>, <span class='st'>"00060"</span>, <span class='st'>"2014-01-01"</span>, <span class='st'>"2014-01-10"</span>,<span class='st'>'dv'</span>)
+<span class='no'>inactiveSite</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>inactiveSite</span>)
 
-# Two sites, two pcodes, one site has two data descriptors:
-siteNumber <- c('01480015',"04085427")
-obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
-data <- importWaterML1(obs_url)
-data$dateTime <- as.Date(data$dateTime)
-data <- renameNWISColumns(data)
-names(attributes(data))
-attr(data, "url")
-attr(data, "disclaimer")
+<span class='no'>inactiveAndAcitive</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"07334200"</span>,<span class='st'>"05212700"</span>)
+<span class='no'>inactiveAndAcitive</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>inactiveAndAcitive</span>, <span class='st'>"00060"</span>, <span class='st'>"2014-01-01"</span>, <span class='st'>"2014-01-10"</span>,<span class='st'>'dv'</span>)
+<span class='no'>inactiveAndAcitive</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>inactiveAndAcitive</span>)
 
-inactiveSite <- "05212700"
-inactiveSite <- constructNWISURL(inactiveSite, "00060", "2014-01-01", "2014-01-10",'dv')
-inactiveSite <- importWaterML1(inactiveSite)
-
-inactiveAndAcitive <- c("07334200","05212700")
-inactiveAndAcitive <- constructNWISURL(inactiveAndAcitive, "00060", "2014-01-01", "2014-01-10",'dv')
-inactiveAndAcitive <- importWaterML1(inactiveAndAcitive)
-
-Timezone change with specified local timezone:
-tzURL <- constructNWISURL("04027000", c("00300","63680"), "2011-11-05", "2011-11-07","uv")
-tzIssue <- importWaterML1(tzURL, TRUE, "America/Chicago")
-
-#raw XML
-url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
-                         startDate = "2014-01-01", endDate = "2014-01-01")
-raw <- content(httr::GET(url), as = 'raw')
-rawParsed <- importWaterML1(raw)
-</div><div class='output co'>#&gt; <span class='error'>Error: &lt;text&gt;:33:10: unexpected symbol</span>
-#&gt; <span class='error'>32: </span>
-#&gt; <span class='error'>33: Timezone change</span>
-#&gt; <span class='error'>             ^</span></div><div class='input'><span class='no'>filePath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"dataRetrieval"</span>)
+<span class='co'># Timezone change with specified local timezone:</span>
+<span class='no'>tzURL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='st'>"04027000"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"00300"</span>,<span class='st'>"63680"</span>), <span class='st'>"2011-11-05"</span>, <span class='st'>"2011-11-07"</span>,<span class='st'>"uv"</span>)
+<span class='no'>tzIssue</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>tzURL</span>, <span class='fl'>TRUE</span>, <span class='st'>"America/Chicago"</span>)</div><div class='output co'>#&gt; <span class='message'>Request failed [503]. Retrying in 1 seconds...</span></div><div class='input'>
+<span class='co'># raw XML</span>
+<span class='no'>url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>'dv'</span>, <span class='kw'>siteNumber</span> <span class='kw'>=</span> <span class='st'>'02319300'</span>, <span class='kw'>parameterCd</span> <span class='kw'>=</span> <span class='st'>"00060"</span>,
+                         <span class='kw'>startDate</span> <span class='kw'>=</span> <span class='st'>"2014-01-01"</span>, <span class='kw'>endDate</span> <span class='kw'>=</span> <span class='st'>"2014-01-01"</span>)
+<span class='no'>raw</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/httr/topics/content'>content</a></span>(<span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/httr/topics/GET'>GET</a></span>(<span class='no'>url</span>), <span class='kw'>as</span> <span class='kw'>=</span> <span class='st'>'raw'</span>)
+<span class='no'>rawParsed</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>raw</span>)</div><div class='input'><span class='no'>filePath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"dataRetrieval"</span>)
 <span class='no'>fileName</span> <span class='kw'>&lt;-</span> <span class='st'>"WaterML1Example.xml"</span>
 <span class='no'>fullPath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='no'>filePath</span>, <span class='no'>fileName</span>)
 <span class='no'>importFile</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>fullPath</span>,<span class='fl'>TRUE</span>)</div></pre>
