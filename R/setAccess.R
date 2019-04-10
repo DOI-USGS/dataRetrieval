@@ -24,7 +24,8 @@
 #'
 #' @export
 setAccess = function(access="public"){
-access = match.arg(access, c('public','internal','cooperator','USGS'))
+  
+  access = match.arg(access, c('public','internal','cooperator','USGS'))
   
   if(access=="internal"){
     pkg.env$access = '3'
@@ -60,8 +61,7 @@ access = match.arg(access, c('public','internal','cooperator','USGS'))
   pkg.env$wqpMetrics = "https://www.waterqualitydata.us/ActivityMetric/search"
   
   pkg.env$NGWMN = "https://cida.usgs.gov/ngwmn_cache/sos"
-  
-  options(Access.dataRetrieval = access)
+
 }
 
 drURL <- function(base.name, ..., arg.list=NULL){

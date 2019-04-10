@@ -296,56 +296,57 @@ test_that("readWQPdots working", {
 context("NGWMN")
 test_that("NGWMN functions working", {
   testthat::skip_on_cran()
-  noDataSite <- "UTGS.401544112060301"
-  noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
-  expect_true(is.data.frame(noDataSite))
-  
-  #bounding box and a bigger request
-  bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
-  expect_gt(nrow(bboxSites), 0)
+  # noDataSite <- "UTGS.401544112060301"
+  # noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
+  # expect_true(is.data.frame(noDataSite))
+  # 
+  # #bounding box and a bigger request
+  # bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -99, 31, 102))
+  # expect_gt(nrow(bboxSites), 0)
   # siteInfo <- readNGWMNsites(bboxSites$site[1:3])
   # expect_equal(nrow(siteInfo), 3)
   
   #one site
-  site <- "USGS.430427089284901"
-  oneSite <- readNGWMNlevels(siteNumbers = site)
-  siteInfo <- readNGWMNsites(site)
-  expect_true(is.numeric(oneSite$value))
-  expect_true(is.character(oneSite$site))
-  expect_true(is.data.frame(siteInfo))
-  # expect_true(nrow(siteInfo) > 0)
-  expect_true(nrow(oneSite) > 0)
+  # This takes forEVER
+  # site <- "USGS.430427089284901"
+  # oneSite <- readNGWMNlevels(siteNumbers = site)
+  # siteInfo <- readNGWMNsites(site)
+  # expect_true(is.numeric(oneSite$value))
+  # expect_true(is.character(oneSite$site))
+  # expect_true(is.data.frame(siteInfo))
+  # # expect_true(nrow(siteInfo) > 0)
+  # expect_true(nrow(oneSite) > 0)
   
   #non-USGS site
-  data <- readNGWMNlevels(siteNumbers = "MBMG.1388")
-  expect_true(nrow(data) > 1)
-  expect_true(is.numeric(oneSite$value))
-  
-  #sites with colons and NAs work
-  
-  na_colons <- c(NA, bboxSites$site[200:212], NA, NA)
-  returnDF <- readNGWMNdata(service = "observation", 
-                            siteNumbers = na_colons, asDateTime = FALSE)
-  expect_is(returnDF, "data.frame")
-  expect_true(nrow(returnDF) > 1)
-  #expect_true(!is.null(attributes(returnDF)$siteInfo))
-  
-  sites <- c("USGS:424427089494701", NA)
-  siteInfo <- readNGWMNsites(sites)
-  expect_is(siteInfo, "data.frame")
-  # expect_true(nrow(siteInfo) == 1)
-  
-  #time zones
-  tzSite <- "USGS.385111104214403"
-  tzDataUTC <- readNGWMNlevels(tzSite, asDateTime = TRUE) 
-  tzDataMT <- readNGWMNlevels(tzSite, asDateTime = TRUE, 
-                              tz = "US/Mountain")
-  expect_gt(nrow(tzDataMT), 1)
-  expect_gt(nrow(tzDataUTC), 1)
-  expect_is(tzDataUTC$dateTime, "POSIXct")
-  expect_is(tzDataMT$dateTime, "POSIXct")
-  expect_equal(attr(tzDataMT$dateTime, 'tzone'), "US/Mountain")
-  expect_equal(attr(tzDataUTC$dateTime, 'tzone'), "UTC")
+  # data <- readNGWMNlevels(siteNumbers = "MBMG.1388")
+  # expect_true(nrow(data) > 1)
+  # expect_true(is.numeric(oneSite$value))
+  # 
+  # #sites with colons and NAs work
+  # 
+  # na_colons <- c(NA, bboxSites$site[200:212], NA, NA)
+  # returnDF <- readNGWMNdata(service = "observation", 
+  #                           siteNumbers = na_colons, asDateTime = FALSE)
+  # expect_is(returnDF, "data.frame")
+  # expect_true(nrow(returnDF) > 1)
+  # #expect_true(!is.null(attributes(returnDF)$siteInfo))
+  # 
+  # sites <- c("USGS:424427089494701", NA)
+  # siteInfo <- readNGWMNsites(sites)
+  # expect_is(siteInfo, "data.frame")
+  # # expect_true(nrow(siteInfo) == 1)
+  # 
+  # #time zones
+  # tzSite <- "USGS.385111104214403"
+  # tzDataUTC <- readNGWMNlevels(tzSite, asDateTime = TRUE) 
+  # tzDataMT <- readNGWMNlevels(tzSite, asDateTime = TRUE, 
+  #                             tz = "US/Mountain")
+  # expect_gt(nrow(tzDataMT), 1)
+  # expect_gt(nrow(tzDataUTC), 1)
+  # expect_is(tzDataUTC$dateTime, "POSIXct")
+  # expect_is(tzDataMT$dateTime, "POSIXct")
+  # expect_equal(attr(tzDataMT$dateTime, 'tzone'), "US/Mountain")
+  # expect_equal(attr(tzDataUTC$dateTime, 'tzone'), "UTC")
 })
 
 context("getWebServiceData")
