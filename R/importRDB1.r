@@ -140,6 +140,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     char.names <- c(header.names[grep("_cd",header.names)],
                     header.names[grep("_id",header.names)],
                     header.names[grep("_tx",header.names)],
+                    header.names[grep("_tm",header.names)],
                     header.names[header.names == "site_no"])
     
     if(length(char.names) > 0){
