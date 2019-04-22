@@ -106,9 +106,15 @@ importWQP <- function(obs_url, zip=FALSE, tz="UTC"){
   
   if(length(grep("ActivityStartTime",names(retval))) > 0){
     
-
-    offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0),
-                                code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA),
+    #Time zones to characters:
+    if(length(grep("TimeZoneCode", names(retval))) > 0  &&
+       any(lapply(retval[,grep("TimeZoneCode", names(retval))], class) == "logical")) {
+      tzCols <- grep("TimeZoneCode", names(retval))
+      retval[,tzCols] <- sapply(retval[,tzCols], as.character)
+    }
+    
+    offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0, NA, 0, 0),
+                                code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA, NA, "UTC","GMT"),
                                 stringsAsFactors = FALSE)
     
     retval <- dplyr::left_join(retval, offsetLibrary, by=c("ActivityStartTime/TimeZoneCode"="code"))

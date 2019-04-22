@@ -409,7 +409,7 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
   url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="tsv")
   data <- importRDB1(url,asDateTime=TRUE, convertType = convertType, tz=tz)
 
-  if(nrow(data) > 0){
+  if(nrow(data) > 0 && !all(is.na(data$lev_dt))){
     if(convertType){
       #check that the date includes a day, based on date string length
       if(any(nchar(as.character(data$lev_dt)) <= 7) | any(grepl("[0-9]*-[0-9]*-00",data$lev_dt))){
