@@ -4,12 +4,12 @@
 \alias{importWQP}
 \title{Basic Water Quality Portal Data parser}
 \usage{
-importWQP(obs_url, zip = FALSE, tz = "UTC")
+importWQP(obs_url, zip = TRUE, tz = "UTC", ...)
 }
 \arguments{
 \item{obs_url}{character URL to Water Quality Portal#' @keywords data import USGS web service}
 
-\item{zip}{logical to request data via downloading zip file. Default set to FALSE.}
+\item{zip}{logical to request data via downloading zip file. Default set to TRUE.}
 
 \item{tz}{character to set timezone attribute of datetime. Default is UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
