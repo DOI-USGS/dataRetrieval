@@ -163,7 +163,9 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
     retval <- importWQP(urlCall,zip=values["zip"] == "yes", tz=tz)
     
     if(!all(is.na(retval))){
-      siteInfo <- whatWQPsites(...)
+      
+      site_list <- unique(retval$MonitoringLocationIdentifier)
+      siteInfo <- whatWQPsites(siteid=site_list, zip="yes")
       
       siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
                                    agency_cd=siteInfo$OrganizationIdentifier,
