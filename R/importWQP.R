@@ -34,7 +34,7 @@
 #' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' STORETdata <- importWQP(STORETex)
 #' }
-importWQP <- function(obs_url, zip=TRUE, tz="UTC", ...){
+importWQP <- function(obs_url, zip=TRUE, tz="UTC"){
   
   if(tz != ""){
     tz <- match.arg(tz, OlsonNames())

@@ -4,7 +4,7 @@
 \alias{importWQP}
 \title{Basic Water Quality Portal Data parser}
 \usage{
-importWQP(obs_url, zip = TRUE, tz = "UTC", ...)
+importWQP(obs_url, zip = TRUE, tz = "UTC")
 }
 \arguments{
 \item{obs_url}{character URL to Water Quality Portal#' @keywords data import USGS web service}

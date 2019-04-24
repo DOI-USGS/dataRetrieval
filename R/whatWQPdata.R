@@ -28,7 +28,7 @@ whatWQPsamples <- function(...){
   baseURL <- drURL("wqpActivity")
   urlCall <- paste0(baseURL,
                     urlCall,
-                    "&mimeType=tsv&sorted=no")
+                    "&mimeType=tsv")
   
   retval <- importWQP(urlCall, zip=values["zip"] == "yes")
   
@@ -68,7 +68,7 @@ whatWQPmetrics <- function(...){
   baseURL <- drURL("wqpMetrics")
   urlCall <- paste0(baseURL,
                     urlCall,
-                    "&mimeType=tsv&sorted=no")
+                    "&mimeType=tsv")
 
   retval <- importWQP(urlCall, zip=values["zip"] == "yes")
 
@@ -141,7 +141,7 @@ whatWQPdata <- function(..., saveFile = tempfile()){
   baseURL <- drURL("wqpStation")
   urlCall <- paste0(baseURL,
                     urlCall,
-                    "&mimeType=geojson&sorted=no")
+                    "&mimeType=geojson")
   
   if(tools::file_ext(saveFile) != ".geojson"){
     saveFile <- paste0(saveFile,".geojson")
