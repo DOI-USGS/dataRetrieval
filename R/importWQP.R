@@ -15,10 +15,6 @@
 #' @seealso \code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
 #' @import utils
 #' @import stats
-#' @importFrom readr read_delim
-#' @importFrom readr col_character
-#' @importFrom readr col_number
-#' @importFrom readr cols
 #' @examples
 #' # These examples require an internet connection to run
 #' 
@@ -89,18 +85,18 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC"){
     }
   }
 
-  retval <- suppressWarnings(read_delim(doc, 
-                       col_types = cols(`ActivityStartTime/Time` = col_character(),
-                                        `ActivityEndTime/Time` = col_character(),
-                                        USGSPCode = col_character(),
-                                        ResultCommentText=col_character(),
-                                        `ActivityDepthHeightMeasure/MeasureValue` = col_number(),
-                                        `DetectionQuantitationLimitMeasure/MeasureValue` = col_number(),
-                                        ResultMeasureValue = col_number(),
-                                        `WellDepthMeasure/MeasureValue` = col_number(),
-                                        `WellHoleDepthMeasure/MeasureValue` = col_number(),
-                                        `HUCEightDigitCode` = col_character(), 
-                                        `ActivityEndTime/TimeZoneCode` = col_character()),
+  retval <- suppressWarnings(readr::read_delim(doc, 
+                       col_types = readr::cols(`ActivityStartTime/Time` = readr::col_character(),
+                                        `ActivityEndTime/Time` = readr::col_character(),
+                                        USGSPCode = readr::col_character(),
+                                        ResultCommentText=readr::col_character(),
+                                        `ActivityDepthHeightMeasure/MeasureValue` = readr::col_number(),
+                                        `DetectionQuantitationLimitMeasure/MeasureValue` = readr::col_number(),
+                                        ResultMeasureValue = readr::col_number(),
+                                        `WellDepthMeasure/MeasureValue` = readr::col_number(),
+                                        `WellHoleDepthMeasure/MeasureValue` = readr::col_number(),
+                                        `HUCEightDigitCode` = readr::col_character(), 
+                                        `ActivityEndTime/TimeZoneCode` = readr::col_character()),
                        quote = "", delim = "\t"))
     
   if(!file.exists(obs_url)){
