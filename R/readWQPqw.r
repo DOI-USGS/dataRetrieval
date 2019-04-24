@@ -122,7 +122,7 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="UTC", 
     return(retquery)
   } else {
     
-    retval <- importWQP(url, tz = tz, post_body)
+    retval <- importWQP(url, zip = TRUE, tz = tz)
     
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     
