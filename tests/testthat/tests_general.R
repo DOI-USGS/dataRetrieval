@@ -175,7 +175,7 @@ test_that("General WQP retrievals working", {
                           countycode = "Dane",
                           providers = "BIODATA")
    
-   expect_equal(attr(bioData, "url"), "https://www.waterqualitydata.us/Result/search?statecode=US%3A55&countycode=US%3A55%3A025&providers=BIODATA&zip=no&sorted=no&mimeType=tsv")
+   expect_equal(attr(bioData, "url"), "https://www.waterqualitydata.us/Result/search?statecode=US%3A55&countycode=US%3A55%3A025&providers=BIODATA&zip=yes&mimeType=tsv")
    expect_gt(nrow(bioData), 1)
    
   # Known slow query for WQP:
