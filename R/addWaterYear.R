@@ -49,6 +49,8 @@ addWaterYear <- function(rawData){
     dateCol_i <- which(names(rawData) == dateCol)
     dateColWY_i <- which(names(rawData) == dateColWY)
     everything_else <- which(!(names(rawData) %in% c(dateCol,dateColWY)))
+    everything_else <- everything_else[!everything_else %in% c(1:dateCol_i, dateColWY_i)]
+
     rawData <- rawData[, c(1:dateCol_i, dateColWY_i, everything_else)]
   }
   

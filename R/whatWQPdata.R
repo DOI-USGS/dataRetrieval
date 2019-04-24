@@ -143,14 +143,17 @@ whatWQPdata <- function(..., saveFile = tempfile()){
                     urlCall,
                     "&mimeType=geojson")
   
-  if(tools::file_ext(saveFile) != ".geojson"){
-    saveFile <- paste0(saveFile,".geojson")
+  saveFile_zip <- saveFile
+  if(tools::file_ext(saveFile) != ".zip"){
+    saveFile_zip <- paste0(saveFile,".zip")
   }
-  
-  doc <- getWebServiceData(urlCall, httr::write_disk(saveFile))
-  headerInfo <- attr(doc, "headerInfo")
 
-  retval <- as.data.frame(jsonlite::fromJSON(saveFile), stringsAsFactors = FALSE)
+  doc <- getWebServiceData(urlCall, httr::write_disk(saveFile_zip))
+  headerInfo <- attr(doc, "headerInfo")
+  doc <- utils::unzip(saveFile_zip, exdir = saveFile)
+  unlink(saveFile_zip)
+
+  retval <- as.data.frame(jsonlite::fromJSON(doc), stringsAsFactors = FALSE)
   df_cols <- as.integer(which(sapply(retval, class) == "data.frame"))
   y <- retval[,-df_cols]
   
