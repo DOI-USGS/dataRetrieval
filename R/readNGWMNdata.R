@@ -12,7 +12,6 @@
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
 #' @import utils
-#' @importFrom dplyr mutate
 #' @export
 #' @examples 
 #' \donttest{
@@ -185,7 +184,7 @@ retrieveObservation <- function(featureID, asDateTime, attrs, tz){
   if(nrow(returnData) > 0){
     #tack on site number
     siteNum <- rep(sub('.*\\.', '', featureID), nrow(returnData))
-    returnData <- mutate(returnData, site = siteNum)
+    returnData$site <- siteNum
     numCol <- ncol(returnData)
     returnData <- returnData[,c(numCol,1:(numCol - 1))] #move siteNum to the left
   }
