@@ -76,7 +76,7 @@ whatWQPsites <- function(...){
   baseURL <- drURL("wqpStation")
   urlCall <- paste0(baseURL,
                urlCall,
-               "&mimeType=tsv&sorted=no")
+               "&mimeType=tsv")
 
   retval <- importWQP(urlCall, zip=values["zip"] == "yes")
   

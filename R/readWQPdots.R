@@ -43,7 +43,7 @@ readWQPdots <- function(...){
       values["zip"] <- ifelse(values["zip"], "yes","no")
     }
   } else {
-    values["zip"] <- "no"
+    values["zip"] <- "yes"
   }
   
   return(values)
