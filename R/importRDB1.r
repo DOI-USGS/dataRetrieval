@@ -44,9 +44,6 @@
 #' @export
 #' @import utils
 #' @import stats
-#' @importFrom readr read_lines
-#' @importFrom readr read_delim
-#' @importFrom readr problems
 #' @examples
 #' site_id <- "02177000"
 #' startDate <- "2012-09-01"
@@ -104,7 +101,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     }
   }
   
-  readr.total <- read_lines(doc)
+  readr.total <- readr::read_lines(doc)
   total.rows <- length(readr.total)
   readr.meta <- readr.total[grep("^#", readr.total)]
   meta.rows <- length(readr.meta)
@@ -130,7 +127,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
 
   } else {
     
-    readr.data <- read_delim_check_quote(file = doc,skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = cols(.default = "c"), total.rows = data.rows)
+    readr.data <- read_delim_check_quote(file = doc,skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = readr::cols(.default = "c"), total.rows = data.rows)
 
   }
   
@@ -150,9 +147,9 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
       char.names <- NULL
     } 
     
-    if(nrow(problems(readr.data)) > 0 | length(char.names) > 0){
+    if(nrow(readr::problems(readr.data)) > 0 | length(char.names) > 0){
       readr.data.char <- read_delim_check_quote(file = doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
-                                                col_types = cols(.default = "c"), total.rows = data.rows)
+                                                col_types = readr::cols(.default = "c"), total.rows = data.rows)
       names(readr.data.char) <- header.names    
     }
     
@@ -196,7 +193,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     }
     
     comment(readr.data) <- readr.meta
-    problems.orig <- problems(readr.data)
+    problems.orig <- readr::problems(readr.data)
     
     
     if (asDateTime & convertType){
@@ -344,10 +341,10 @@ fixErrors <- function(readr.data, readr.data.char, message.text, FUN, ...){
 }
 
 read_delim_check_quote <- function(..., total.rows){
-  rdb.data <- suppressWarnings(read_delim(...))
+  rdb.data <- suppressWarnings(readr::read_delim(...))
   
   if(nrow(rdb.data) < total.rows){
-    rdb.data <- suppressWarnings(read_delim(..., quote = ""))
+    rdb.data <- suppressWarnings(readr::read_delim(..., quote = ""))
   }
   
   return(rdb.data)
