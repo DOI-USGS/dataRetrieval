@@ -293,8 +293,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
           sameSite_simNames <- intersect(colnames(sameSite), colnames(df))
           sameSite <- dplyr::full_join(sameSite, df, by = sameSite_simNames)
           sameSite <- sameSite[order(as.Date(sameSite$dateTime)),]
-          mergedDF <- dplyr::bind_rows(sameSite, diffSite)
-        }else{
+          mergedDF <- rbind(sameSite, diffSite[names(sameSite)])
+        } else {
           similarNames <- intersect(colnames(mergedDF), colnames(df))
           mergedDF <- dplyr::full_join(mergedDF, df, by=similarNames)
         }
@@ -319,7 +319,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   mergedNames <- names(mergedDF)
   tzLoc <- grep("tz_cd", names(mergedDF))
   mergedDF <- mergedDF[c(mergedNames[-tzLoc],mergedNames[tzLoc])]
-  mergedDF <- dplyr::arrange(mergedDF,site_no, dateTime)
+  #order by site_no, dateTime:
+  # mergedDF <- mergedDF[,c(site_no, dateTime)]
   
   names(mergedDF) <- make.names(names(mergedDF))
   
