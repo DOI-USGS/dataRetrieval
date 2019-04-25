@@ -104,6 +104,8 @@ test_that("NWIS qw tests", {
   rawNWISqwDataReshaped <- readNWISqw(siteNumbers,parameterCd,
             startDate,endDate,reshape=TRUE)
   expect_is(rawNWISqwDataReshaped$startDateTime, 'POSIXct')
+  expect_gt(ncol(rawNWISqwDataReshaped), ncol(rawNWISqwData))
+  expect_lt(nrow(rawNWISqwDataReshaped), nrow(rawNWISqwData))
   
   parameterCd <- "all"
   rawNWISall <- readNWISqw(siteNumbers,parameterCd,
@@ -116,7 +118,7 @@ test_that("NWIS qw tests", {
   expect_is(rawNWISNutrients$startDateTime, 'POSIXct')
   
   qwret <- readNWISqw("413437087150601", parameterCd = c("NUT","INN"),startDate = "",endDate = "")
-  expect_that(nrow(qwret) == 0, is_true())
+  expect_true(nrow(qwret) == 0)
   
   siteNumber <- '455638089034501'
   wy_start <- paste0(2014, "-10-01")
@@ -395,7 +397,7 @@ test_that("Construct WQP urls", {
              c('01075','00029','00453'),
              startDate,endDate)
   
-  expect_equal(url_wqp, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv")
+  expect_equal(url_wqp, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes")
 })
 
 context("checkWQPdates")
