@@ -27,12 +27,6 @@
 #' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",sep="&")
 #' data <- importNGWMN(obs_url)
 #' 
-#' obs_url <- paste("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
-#' "service=SOS","version=2.0.0",
-#' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
-#' "responseFormat=text/xml",
-#' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.474011117072901",sep="&")
-#' data <- importNGWMN(obs_url)
 #' }
 #' 
 importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
@@ -76,7 +70,10 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
         mergedDF <- df
       } else {
         similarNames <- intersect(colnames(mergedDF), colnames(df))
-        mergedDF <- dplyr::full_join(mergedDF, df, by=similarNames)
+        mergedDF <- merge(x = mergedDF, 
+                          y = df, 
+                          by = similarNames, 
+                          all = TRUE)
       }
     }
     
@@ -109,8 +106,7 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
     siteLocs <- strsplit(xml_text(xml_find_all(featureMembers, ".//gml:pos")), " ")
     siteLocs <- data.frame(matrix(unlist(siteLocs), nrow=length(siteLocs), byrow=TRUE), stringsAsFactors = FALSE)
     names(siteLocs) <- c("dec_lat_va", "dec_lon_va")
-    dec_lat_va <- "dplyr var"
-    dec_lon_va <- "dplyr var"
+
     siteLocs$dec_lat_va <- as.numeric(siteLocs$dec_lat_va)
     siteLocs$dec_lon_va <- as.numeric(siteLocs$dec_lon_va)
     mergedDF <- cbind.data.frame(site, description = siteDesc, siteLocs, stringsAsFactors = FALSE) 
