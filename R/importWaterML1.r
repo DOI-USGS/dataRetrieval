@@ -381,15 +381,22 @@ add_empty_col <- function(df, df_ref, col_names){
 }
 
 empty_col <- function(column_type){
-  switch(column_type,
+  
+  if(all(column_type %in% c("POSIXct","POSIXt" ))){
+    column_type <- "POSIXct"
+  }
+  
+  col_return <- switch(column_type,
          "numeric" = as.numeric(),
          "factor" = as.factor(),
          "list" = list(),
          "integer" = as.integer(),
-         "Date" = as.Date(),
-         "POSIXct" = as.POSIXct(),
-         "POSIXlt" = as.POSIXlt(),
+         "Date" = as.Date(numeric(), origin = "1970-01-01"),
+         "POSIXct" = as.POSIXct(numeric(), origin = "1970-01-01"),
+         "POSIXlt" = as.POSIXlt(numeric(), origin = "1970-01-01"),
          "character" = as.character())
+  
+  return(col_return)
 }
 
 check_if_xml <- function(obs_url){
