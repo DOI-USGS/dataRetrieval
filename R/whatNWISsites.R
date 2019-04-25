@@ -70,7 +70,7 @@ whatNWISsites <- function(...){
     if(is.null(retVal)){
       retVal <- df
     } else {
-      retVal <- rbind(retVal, df[,names(retVal)[names(retVal) %in% names(df)]])
+      retVal <- r_bind_dr(retVal, df)
     }
   }
   

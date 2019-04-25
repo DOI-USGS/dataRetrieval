@@ -299,7 +299,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
                             by = sameSite_simNames, 
                             all=TRUE)
           sameSite <- sameSite[order(as.Date(sameSite$dateTime)),]
-          mergedDF <- rbind(sameSite, diffSite[names(sameSite)[names(sameSite) %in% names(diffSite)]])
+          sameSite[setdiff(names(diffSite), names(sameSite))] <- NA
+          diffSite[setdiff(names(sameSite), names(diffSite))] <- NA
+          mergedDF <- r_bind_dr(sameSite, diffSite)
         } else {
           similarNames <- intersect(colnames(mergedDF), colnames(df))
           mergedDF <- merge(x = mergedDF, 
@@ -353,6 +355,13 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   attr(mergedDF, "queryTime") <- Sys.time()
   
   return (mergedDF)
+}
+
+r_bind_dr <- function(df1, df2){
+  df1[setdiff(names(df2), names(df1))] <- NA
+  df2[setdiff(names(df1), names(df2))] <- NA
+  df3 <- rbind(df1, df2)
+  return(df3)
 }
 
 check_if_xml <- function(obs_url){
