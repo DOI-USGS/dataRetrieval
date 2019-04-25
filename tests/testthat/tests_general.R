@@ -20,7 +20,7 @@ test_that("General NWIS retrievals working", {
   expect_error(readNWISdata(siteNumber = NA), "NA's are not allowed in query")
   
   bBoxEx <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010")
-  expect_that(length(unique(bBoxEx$site_no)) > 1, is_true())
+  expect_true(length(unique(bBoxEx$site_no)) > 1)
   
   startDate <- as.Date("2013-10-01")
   endDate <- as.Date("2014-09-30")
@@ -43,11 +43,11 @@ test_that("General NWIS retrievals working", {
   
   urlEmpty <- "https://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=413437087150601&sort_key=site_no&group_key=NONE&inventory_output=0&begin_date=&end_date=&TZoutput=0&param_group=NUT,INN&qw_attributes=0&format=rdb&qw_sample_wide=0&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&list_of_search_criteria=multiple_site_no"
   dv <- importRDB1(urlEmpty, asDateTime = FALSE)
-  expect_that(nrow(dv) == 0, is_true())
+  expect_true(nrow(dv) == 0)
   
   dailyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="daily",
                            statType=c("p25","p50","p75","min","max"),parameterCd="00065",convertType=FALSE)
-  expect_that(length(dailyStat$min_va) > 1, is_true())
+  expect_true(length(dailyStat$min_va) > 1)
   expect_is(dailyStat$p25_va,"character")
   
   waterYearStat <- readNWISdata(site=c("03112500"),service="stat",statReportType="annual",

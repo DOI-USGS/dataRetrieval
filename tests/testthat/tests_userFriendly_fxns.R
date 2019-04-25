@@ -76,7 +76,7 @@ test_that("peak, rating curves, surface-water measurements", {
   expect_is(siteINFO$agency_cd, 'character')
   
   siteINFOMulti <- readNWISsite(c('05114000','09423350'))
-  expect_that(nrow(siteINFOMulti) == 2, is_true())
+  expect_true(nrow(siteINFOMulti) == 2)
   
   Meas07227500.ex <- readNWISmeas("07227500",expanded=TRUE)
   expect_is(Meas07227500.ex$measurement_dt, 'Date')
@@ -130,7 +130,7 @@ test_that("NWIS qw tests", {
                   startDate = wy_start, 
                   endDat = wy_end)
   
-  expect_that(nrow(no.data) == 0, is_true())
+  expect_true(nrow(no.data) == 0)
   
 })
 
@@ -149,21 +149,21 @@ test_that("NWIS dv tests", {
   
   rawDailyQAndTempMeanMax <- readNWISdv(siteNumber,c('00010','00060'),
         startDate, endDate, statCd=c('00001','00003'))
-  expect_that(length(grep("00060", names(rawDailyQAndTempMeanMax))) >= 2 & 
-                length(grep("00010", names(rawDailyQAndTempMeanMax))) >= 2, is_true())
+  expect_true(length(grep("00060", names(rawDailyQAndTempMeanMax))) >= 2 & 
+                length(grep("00010", names(rawDailyQAndTempMeanMax))) >= 2)
   
 
   rawDailyMultiSites<- readNWISdv(c("01491000","01645000"),c('00010','00060'),
         startDate, endDate, statCd=c('00001','00003'))
-  expect_that(length(unique(rawDailyMultiSites$site_no)) > 1, is_true())
+  expect_true(length(unique(rawDailyMultiSites$site_no)) > 1)
   
 #   # Site with no data:
 #   x <- readNWISdv("10258500","00060", "2015-02-08", "2015-02-14")
-#   expect_that(sum(is.na(x$X_00060_00003)) > 0, is_true())
+#   expect_true(sum(is.na(x$X_00060_00003)) > 0)
   
   site <- "05212700"
   notActive <- readNWISdv(site, "00060", "2014-01-01","2014-01-07")
-  expect_that(nrow(notActive) == 0, is_true())
+  expect_true(nrow(notActive) == 0)
 })
 
 test_that("WQP qw tests", {
@@ -185,7 +185,7 @@ test_that("readNWISstat tests", {
   data <- readNWISstat(siteNumbers=c("02171500"),parameterCd=c("00010","00060"),
                     statReportType="daily",statType=c("mean","p75","p25"),startDate="2000",endDate="2010")
   expect_is(data$begin_yr, 'numeric')
-  expect_that(length(data) > 3, is_true())
+  expect_true(length(data) > 3)
   
   monthData <- readNWISstat(siteNumbers=c("02171500"),parameterCd=c("00010","00060"),
                                                   statReportType="monthly",startDate="2000",endDate="2010")
@@ -200,14 +200,14 @@ context("readNWISuse tests")
 test_that("readNWISuse tests", {
   testthat::skip_on_cran()
   dc <- readNWISuse(years=c(2000,2005,2010),stateCd = "DC", countyCd = NULL)
-  expect_that(nrow(dc)==3, is_true())
+  expect_true(nrow(dc)==3)
   expect_is(dc$state_cd, 'character')
   
   ohio <- readNWISuse(years=2005,stateCd="OH",countyCd="ALL")
-  expect_that(nrow(ohio)==88, is_true())
+  expect_true(nrow(ohio)==88)
   
   twoCounties <- readNWISuse(years=2010,stateCd="PA",countyCd=c("Cambria","Indiana"))
-  expect_that(nrow(twoCounties)==2, is_true())
+  expect_true(nrow(twoCounties)==2)
 })
 
 context("state tests")
