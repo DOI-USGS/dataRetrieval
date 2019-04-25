@@ -248,21 +248,20 @@ df_test <- data.frame(site_no = as.character(1:13),
 
 test_that("addWaterYear works with Date, POSIXct, character, but breaks with numeric", {
   testthat::skip_on_cran()
-  library(dplyr)
   
   df_date <- df_test
   df_date_wy <- addWaterYear(df_date)
   expect_equal(ncol(df_date_wy), ncol(df_date) + 1)
-  
-  df_posixct <- mutate(df_test, dateTime = as.POSIXct(dateTime))
+  df_posixct <- df_test
+  df_posixct$dateTime <- as.POSIXct(df_posixct$dateTime)
   df_posixct_wy <- addWaterYear(df_posixct)
   expect_equal(ncol(df_posixct_wy), ncol(df_posixct) + 1)
-  
-  df_char <- mutate(df_test, dateTime = as.character(dateTime))
+  df_char <- df_test
+  df_char$dateTime <- as.character(df_char$dateTime)
   df_char_wy <- addWaterYear(df_char)
   expect_equal(ncol(df_char_wy), ncol(df_char) + 1)
-  
-  df_num <- mutate(df_test, dateTime = as.numeric(dateTime))
+  df_num <- df_test
+  df_num$dateTime <- as.numeric(dateTime)
   expect_error(addWaterYear(df_num), "'origin' must be supplied")
 })
 
@@ -306,8 +305,9 @@ test_that("addWaterYear adds column next to dateTime", {
 
 test_that("addWaterYear can be used with pipes", {
   testthat::skip_on_cran()
-  library(dplyr)
-  df_test_wy <- df_test %>% addWaterYear()
+
+  df_test_wy <- df_test
+  df_test_wy <- addWaterYear(df_test_wy)
   expect_equal(ncol(df_test_wy), ncol(df_test) + 1)
 })
 
