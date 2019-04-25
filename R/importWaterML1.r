@@ -227,10 +227,13 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
       if(nrow(valParentDF) > 0){
         if(is.null(obsDF)){
           obsDF <- valParentDF
-        }else{
-          obsDF <- dplyr::full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
+        } else {
+          obsDF <- merge(x = obsDF,
+                         y = valParentDF,
+                         by = c("dateTime","tz_cd"), 
+                         all = TRUE)
         }
-      }else{
+      } else {
         #need column names for joining later
         # but don't overwrite:
         if(is.null(obsDF)){
@@ -291,17 +294,32 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
           deleteCols <- grepl(obsColName,colnames(sameSite))
           sameSite <- sameSite[,!deleteCols]
           sameSite_simNames <- intersect(colnames(sameSite), colnames(df))
-          sameSite <- dplyr::full_join(sameSite, df, by = sameSite_simNames)
+          sameSite <- merge(x = sameSite, 
+                            y = df, 
+                            by = sameSite_simNames, 
+                            all=TRUE)
           sameSite <- sameSite[order(as.Date(sameSite$dateTime)),]
-          mergedDF <- rbind(sameSite, diffSite[names(sameSite)])
+          mergedDF <- rbind(sameSite, diffSite[names(sameSite)[names(sameSite) %in% names(diffSite)]])
         } else {
           similarNames <- intersect(colnames(mergedDF), colnames(df))
-          mergedDF <- dplyr::full_join(mergedDF, df, by=similarNames)
+          mergedDF <- merge(x = mergedDF, 
+                            y = df, 
+                            by=similarNames, 
+                            all = TRUE)
         }
       }
-      mergedSite <- dplyr::full_join(mergedSite, siteDF, by = colnames(mergedSite))
-      mergedVar <- dplyr::full_join(mergedVar, varText, by = colnames(mergedVar))
-      mergedStat <- dplyr::full_join(mergedStat, statDF, by = colnames(mergedStat))
+      mergedSite <- merge(x = mergedSite, 
+                          y = siteDF, 
+                          by = colnames(mergedSite), 
+                          all = TRUE)
+      mergedVar <- merge(x = mergedVar, 
+                         y = varText, 
+                         by = colnames(mergedVar), 
+                         all = TRUE)
+      mergedStat <- merge(x = mergedStat, 
+                          y = statDF, 
+                          by = colnames(mergedStat),
+                          all = TRUE)
     }
   }
   
@@ -319,9 +337,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   mergedNames <- names(mergedDF)
   tzLoc <- grep("tz_cd", names(mergedDF))
   mergedDF <- mergedDF[c(mergedNames[-tzLoc],mergedNames[tzLoc])]
-  #order by site_no, dateTime:
+  #Need to yet order by site_no, dateTime:
   # mergedDF <- mergedDF[,c(site_no, dateTime)]
-  
+###############################################################  
   names(mergedDF) <- make.names(names(mergedDF))
   
   #attach other site info etc as attributes of mergedDF
