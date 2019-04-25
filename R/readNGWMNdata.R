@@ -118,19 +118,19 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
 #' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"
-#' oneSite <- readNGWMNlevels(siteNumbers = site)
+#' #oneSite <- readNGWMNlevels(siteNumbers = site)
 #' 
 #' #multiple sites
 #' sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
-#' multiSiteData <- readNGWMNlevels(sites)
+#' #multiSiteData <- readNGWMNlevels(sites)
 #' 
 #' #non-USGS site
 #' site <- "MBMG.103306"
-#' data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
+#' #data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
 #' 
 #' #site with no data returns empty data frame
 #' noDataSite <- "UTGS.401544112060301"
-#' noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
+#' #noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
 #' }
 readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC"){
   data <- readNGWMNdata(siteNumbers = siteNumbers, service = "observation",
