@@ -299,8 +299,6 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
                             by = sameSite_simNames, 
                             all=TRUE)
           sameSite <- sameSite[order(as.Date(sameSite$dateTime)),]
-          sameSite[setdiff(names(diffSite), names(sameSite))] <- NA
-          diffSite[setdiff(names(sameSite), names(diffSite))] <- NA
           mergedDF <- r_bind_dr(sameSite, diffSite)
         } else {
           similarNames <- intersect(colnames(mergedDF), colnames(df))
@@ -358,10 +356,40 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
 }
 
 r_bind_dr <- function(df1, df2){
-  df1[setdiff(names(df2), names(df1))] <- NA
-  df2[setdiff(names(df1), names(df2))] <- NA
+  
+  df1 <- add_empty_col(df1, df2, setdiff(names(df2), names(df1)))
+  df2 <- add_empty_col(df2, df1, setdiff(names(df1), names(df2)))
+  
   df3 <- rbind(df1, df2)
+  
   return(df3)
+}
+
+add_empty_col <- function(df, df_ref, col_names){
+  
+  if(length(col_names) > 0){
+    if(nrow(df) > 0){
+      df[,col_names] <- NA
+    } else {
+      for(i in col_names){
+        column_type <- class(df_ref[[i]])
+        df[i] <- empty_col(column_type)
+      }
+    }
+  }
+  return(df)
+}
+
+empty_col <- function(column_type){
+  switch(column_type,
+         "numeric" = as.numeric(),
+         "factor" = as.factor(),
+         "list" = as.list(),
+         "integer" = as.integer(),
+         "Date" = as.Date(),
+         "POSIXct" = as.POSIXct(),
+         "POSIXlt" = as.POSIXlt(),
+         "character" = as.character())
 }
 
 check_if_xml <- function(obs_url){
