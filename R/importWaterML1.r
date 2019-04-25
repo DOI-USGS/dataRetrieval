@@ -384,7 +384,7 @@ empty_col <- function(column_type){
   switch(column_type,
          "numeric" = as.numeric(),
          "factor" = as.factor(),
-         "list" = as.list(),
+         "list" = list(),
          "integer" = as.integer(),
          "Date" = as.Date(),
          "POSIXct" = as.POSIXct(),
