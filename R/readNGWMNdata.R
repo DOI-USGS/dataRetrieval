@@ -62,8 +62,8 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
       obsFID <- retrieveObservation(featureID = f, asDateTime, attrs, tz = tz)
       obsFIDattr <- saveAttrs(attrs, obsFID)
       obsFID <- removeAttrs(attrs, obsFID)
-      allObs <- dplyr::bind_rows(allObs, obsFID)
-      allAttrs <- dplyr::bind_rows(allAttrs, obsFIDattr)
+      allObs <- rbind(allObs, obsFID[,names(allObs)])
+      allAttrs <- rbind(allAttrs, obsFIDattr[,names(allAttrs)])
       
     }
     
