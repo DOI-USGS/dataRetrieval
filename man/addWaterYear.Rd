@@ -24,10 +24,10 @@ of the data.
 }
 \examples{
 \donttest{ 
-dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
-dataTemp <- addWaterYear(dataTemp)
+nwisData <- readNWISdv('04085427','00060','2012-01-01','2012-06-30')
+nwisData <- addWaterYear(nwisData)
 
-pHData <- readWQPdata(siteid="USGS-04024315",characteristicName="pH")
-pHData <- addWaterYear(pHData)
+wqpData <- readWQPqw('USGS-01594440','01075', '', '')
+wqpData <- addWaterYear(wqpData)
 }
 }
