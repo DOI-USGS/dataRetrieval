@@ -158,7 +158,7 @@ whatWQPdata <- function(..., saveFile = tempfile()){
   y <- retval[,-df_cols]
   
   for(i in df_cols){
-    y <- dplyr::bind_cols(y, retval[[i]])
+    y <- cbind(y, retval[[i]])
   }
   
   y[,grep("Count$",names(y))] <- sapply(y[,grep("Count$",names(y))], as.numeric)
