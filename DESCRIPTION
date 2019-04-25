@@ -36,7 +36,6 @@ Imports:
     lubridate (>= 1.5.0),
     stats,
     utils,
-    dplyr,
     xml2,
     readr (>= 1.0.0),
     jsonlite

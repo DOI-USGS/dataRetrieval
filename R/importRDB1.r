@@ -287,7 +287,9 @@ convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
                               code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","UTC","", NA, "GMT"),
                               stringsAsFactors = FALSE)
   
-  offset <- dplyr::left_join(df[,tz.name,drop=FALSE],offsetLibrary, by=setNames("code",tz.name))
+  offset <- merge(x = df[,tz.name,drop=FALSE], 
+                  y = offsetLibrary, by.x=tz.name, by.y = "code", 
+                  all.x = TRUE)
   offset <- offset$offset
   df[,paste0(tz.name,"_reported")] <- df[,tz.name,drop=FALSE]
   

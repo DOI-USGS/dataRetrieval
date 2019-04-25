@@ -119,11 +119,22 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC"){
     offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0, NA, 0, 0),
                                 code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA, NA, "UTC","GMT"),
                                 stringsAsFactors = FALSE)
-    
-    retval <- dplyr::left_join(retval, offsetLibrary, by=c("ActivityStartTime/TimeZoneCode"="code"))
+    original_order <- names(retval)
+    retval <- merge(x = retval, 
+                    y = offsetLibrary, 
+                    by.x="ActivityStartTime/TimeZoneCode", 
+                    by.y = "code", 
+                    all.x = TRUE)
     names(retval)[names(retval) == "offset"] <- "timeZoneStart"
-    retval <- dplyr::left_join(retval, offsetLibrary, by=c("ActivityEndTime/TimeZoneCode"="code"))
+    retval <- retval[,c(original_order, "timeZoneStart")]
+    
+    retval <- merge(x = retval, 
+                    y = offsetLibrary, 
+                    by.x="ActivityEndTime/TimeZoneCode", 
+                    by.y = "code", 
+                    all.x = TRUE)
     names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
+    retval <- retval[,c(original_order, "timeZoneStart", "timeZoneEnd")]
     
     dateCols <- c("ActivityStartDate","ActivityEndDate","AnalysisStartDate","PreparationStartDate")
 
