@@ -261,7 +261,7 @@ test_that("addWaterYear works with Date, POSIXct, character, but breaks with num
   df_char_wy <- addWaterYear(df_char)
   expect_equal(ncol(df_char_wy), ncol(df_char) + 1)
   df_num <- df_test
-  df_num$dateTime <- as.numeric(dateTime)
+  df_num$dateTime <- as.numeric(df_num$dateTime)
   expect_error(addWaterYear(df_num), "'origin' must be supplied")
 })
 
