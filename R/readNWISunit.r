@@ -165,7 +165,10 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, 
 
     
     siteInfo <- readNWISsite(siteNumbers)
-    siteInfo <- dplyr::left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+    siteInfo <- merge(x = unique(data[,c("agency_cd","site_no")]), 
+                      y = siteInfo,
+                      by=c("agency_cd","site_no"), 
+                      all.x = TRUE)
     
     attr(data, "siteInfo") <- siteInfo
     attr(data, "variableInfo") <- NULL
@@ -332,8 +335,10 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
 
 
     siteInfo <- readNWISsite(siteNumbers)
-    siteInfo <- dplyr::left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
-    
+    siteInfo <- merge(x = unique(data[,c("agency_cd","site_no")]), 
+                      y = siteInfo,
+                      by=c("agency_cd","site_no"), 
+                      all.x = TRUE)
     attr(data, "url") <- url
     attr(data, "comment") <- comment
     attr(data, "queryTime") <- queryTime
@@ -419,8 +424,10 @@ readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE
       }
     }
     siteInfo <- readNWISsite(siteNumbers)
-    siteInfo <- dplyr::left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
-    
+    siteInfo <- merge(x = unique(data[,c("agency_cd","site_no")]), 
+                      y = siteInfo,
+                      by=c("agency_cd","site_no"), 
+                      all.x = TRUE)
     attr(data, "siteInfo") <- siteInfo
   }
     
@@ -501,7 +508,10 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
   siteInfo <- readNWISsite(siteNumbers)
   
   if(nrow(data) > 0){
-    siteInfo <- dplyr::left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+    siteInfo <- merge(x = unique(data[,c("agency_cd","site_no")]), 
+                      y = siteInfo,
+                      by=c("agency_cd","site_no"), 
+                      all.x = TRUE)
   }
   
   attr(data, "siteInfo") <- siteInfo
