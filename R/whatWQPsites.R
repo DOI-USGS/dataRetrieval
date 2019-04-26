@@ -8,6 +8,8 @@
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
 #' @keywords data import WQP web service
+#' @rdname wqpSpecials
+#' @name whatWQPsites
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
 #' Name \tab Type \tab Description \cr
@@ -72,7 +74,6 @@ whatWQPsites <- function(...){
     
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
-  
   baseURL <- drURL("wqpStation")
   urlCall <- paste0(baseURL,
                urlCall,
@@ -84,6 +85,46 @@ whatWQPsites <- function(...){
   attr(retval, "url") <- urlCall
   
   return(retval)
-  
-
 }
+
+
+#' @name searchWQPsites
+#' @rdname wqpSpecials
+#' @export
+#' @examples
+#' \donttest{
+#' site1 <- searchWQPsites(siteid="USGS-07144100",
+#'                         summaryYears=5,
+#'                         dataProfile="periodOfRecord")
+#' # Pretty slow:
+#' #state1 <- searchWQPsites(statecode="NJ",
+#' #                          dataProfile="periodOfRecord")
+#' }
+searchWQPsites <- function(...){
+  
+  values <- readWQPdots(...)
+  
+  if("tz" %in% names(values)){
+    values <- values[!(names(values) %in% "tz")]
+  }
+  
+  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  
+  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
+  
+  baseURL <- drURL("wqpSiteSummary")
+  urlCall <- paste0(baseURL,
+                    urlCall,
+                    "&mimeType=csv")
+  
+  retval <- suppressWarnings(importWQP(urlCall, zip=values["zip"] == "yes", csv = TRUE))
+  
+  attr(retval, "queryTime") <- Sys.time()
+  attr(retval, "url") <- urlCall
+  
+  return(retval)
+  
+  
+}
+
+
