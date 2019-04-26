@@ -26,8 +26,8 @@
 #' 
 #' rawSample <- importWQP(rawSampleURL)
 #' 
-#' rawSampleURL_Zip <- constructWQPURL('USGS-01594440','01075', '', '', TRUE)
-#' rawSample2 <- importWQP(rawSampleURL_Zip, zip=TRUE)
+#' rawSampleURL_NoZip <- constructWQPURL('USGS-01594440','01075', '', '', zip=FALSE)
+#' rawSample2 <- importWQP(rawSampleURL_Zip, zip=FALSE)
 #' 
 #' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' STORETdata <- importWQP(STORETex)
