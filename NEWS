@@ -3,6 +3,8 @@ dataRetrieval 2.7.5
 * Fixed some time zone joining bugs that were happening if the timezone column had no information in the first ~100 returned rows.
 * Changed WQP default behavior to a zip return
 * Remove reshape2 and dplyr dependencies
+* Added ability to customize user agent using options UA.dataRetrieval
+* 
 
 dataRetrieval 2.7.3
 ==========
