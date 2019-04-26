@@ -9,6 +9,8 @@
 #' @param tz character to set timezone attribute of datetime. Default is UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+#' @param csv logical. Is the data coming back with a csv or tsv format. Default is \code{FALSE}. Currently, the 
+#' summary service does not support tsv, but otherwise tsv is the safer choice. 
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
 #' start and end times, and converted to UTC. See \url{https://www.waterqualitydata.us/portal_userguide/} for more information.
 #' @export
@@ -30,17 +32,13 @@
 #' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
 #' STORETdata <- importWQP(STORETex)
 #' }
-importWQP <- function(obs_url, zip=TRUE, tz="UTC"){
+importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
   
   if(tz != ""){
     tz <- match.arg(tz, OlsonNames())
   } else {
     tz <- "UTC"
   }
-  
-  # post_obs_url <- post_url(obs_url=obs_url, zip = zip)
-  # 
-  # post_body <- post_body_create(obs_url, ...)
   
   if(!file.exists(obs_url)){
     
@@ -97,7 +95,7 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC"){
                                         `WellHoleDepthMeasure/MeasureValue` = readr::col_number(),
                                         `HUCEightDigitCode` = readr::col_character(), 
                                         `ActivityEndTime/TimeZoneCode` = readr::col_character()),
-                       quote = "", delim = "\t"))
+                       quote = ifelse(csv,'\"',""), delim = ifelse(csv,",","\t")))
     
   if(!file.exists(obs_url)){
     actualNumReturned <- nrow(retval)
@@ -175,9 +173,4 @@ post_url <- function(obs_url, zip){
   return(url)
 }
 
-post_body <- function(obs_url, ...){
-  browser()
-  
-  
-  return(body)
-}
+

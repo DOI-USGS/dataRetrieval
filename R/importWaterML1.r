@@ -357,6 +357,10 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
 
 r_bind_dr <- function(df1, df2){
   
+  # Note...this funciton doesn't retain factors/levels
+  # That is not a problem with any dataRetrieval function
+  # but, if this function gets used else-where, 
+  # that should be addressed.
   df1 <- add_empty_col(df1, df2, setdiff(names(df2), names(df1)))
   df2 <- add_empty_col(df2, df1, setdiff(names(df1), names(df2)))
   

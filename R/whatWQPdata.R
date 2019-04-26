@@ -1,14 +1,5 @@
-#' Sampling Activity Data Import from Water Quality Portal
-#'
-#' Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
-#' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
-#'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
-#' @keywords data import WQP web service
-#' @return A data frame 
-#' 
-#' @export
-#' @import utils
+#' @name whatWQPsamples
+#' @rdname wqpSpecials
 #' @examples
 #' \donttest{
 #' site1 <- whatWQPsamples(siteid="USGS-01594440")
@@ -38,17 +29,9 @@ whatWQPsamples <- function(...){
   return(retval)
 }
 
-#' Activity Metrics from Water Quality Portal
-#'
-#' Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
-#' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
-#'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
-#' @keywords data import WQP web service
-#' @return A data frame 
-#' 
+#' @name whatWQPmetrics
+#' @rdname wqpSpecials
 #' @export
-#' @import utils
 #' @examples
 #' \donttest{
 #' 
