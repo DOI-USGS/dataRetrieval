@@ -4,10 +4,12 @@
 \alias{importWQP}
 \title{Basic Water Quality Portal Data parser}
 \usage{
-importWQP(obs_url, zip = TRUE, tz = "UTC", csv = FALSE)
+importWQP(obs_url, post_body, zip = TRUE, tz = "UTC", csv = FALSE)
 }
 \arguments{
 \item{obs_url}{character URL to Water Quality Portal#' @keywords data import USGS web service}
+
+\item{post_body}{character in json format.}
 
 \item{zip}{logical to request data via downloading zip file. Default set to TRUE.}
 
@@ -16,7 +18,7 @@ Possible values include "America/New_York","America/Chicago", "America/Denver","
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 
 \item{csv}{logical. Is the data coming back with a csv or tsv format. Default is \code{FALSE}. Currently, the 
-summary service does not support tsv, but otherwise tsv is the safer choice.}
+summary service does not support tsv, for other services tsv is the safer choice.}
 }
 \value{
 retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
