@@ -33,6 +33,7 @@ reference:
       - readNWISmeas
       - readNWISpCode
       - readNWISrating
+      - readNWISpeak
       - readNWISgwl
       - readNWISuse
       - readNWISdata
@@ -47,6 +48,7 @@ reference:
       - whatWQPdata
       - whatWQPsamples
       - whatWQPmetrics
+      - searchWQPsites
   - title: National Ground-Water Monitoring Network
     desc: Functions to retrieve NGWMN data.
     contents:
@@ -57,6 +59,8 @@ reference:
     contents:
       - calcWaterYear
       - addWaterYear
+      - renameNWISColumns
+      - setAccess
       - countyCdLookup
       - stateCdLookup
       - zeroPad
