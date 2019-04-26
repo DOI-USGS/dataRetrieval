@@ -98,7 +98,6 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Mapping Points</h1>
-                        <h4 class="author">Laura DeCicco</h4>
             
             <h4 class="date">2019-04-05</h4>
       
@@ -110,6 +109,7 @@
     
     
 <p>We’re often tasked with plotting sites on a U.S. map that must include AK, HI, and PR. The following example uses the <code>sp</code>,<code>maps</code>, <code>maptools</code>, <code>rgeos</code>, and <code>ggplot2</code> packages to produce the information to plot points on a map. It was greatly inspired by Bob Rudis’s blog <a href="https://rud.is/b/2014/11/16/moving-the-earth-well-alaska-hawaii-with-r/">Moving The Earth (well, Alaska &amp; Hawaii) With R</a>.</p>
+<p>This blog uses the <code>sp</code> package, but significant improvements have been made in geospatial R work using the <code>sf</code> package. We would welcome examples of converting this process to <code>sf</code>.</p>
 <p>First we convert the code to some reusable functions:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">to_sp &lt;-<span class="st"> </span><span class="cf">function</span>(...){</a>
 <a class="sourceLine" id="cb1-2" title="2">  proj.string &lt;-<span class="st"> "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"</span></a>

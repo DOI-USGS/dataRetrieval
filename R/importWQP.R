@@ -10,7 +10,7 @@
 #' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @param csv logical. Is the data coming back with a csv or tsv format. Default is \code{FALSE}. Currently, the 
-#' summary service does not support tsv, but otherwise tsv is the safer choice. 
+#' summary service does not support tsv, for other services tsv is the safer choice. 
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
 #' start and end times, and converted to UTC. See \url{https://www.waterqualitydata.us/portal_userguide/} for more information.
 #' @export
@@ -48,8 +48,7 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
       temp <- paste0(temp,".zip")
       
       doc <- getWebServiceData(obs_url, 
-                               # body = post_body,
-                               httr::write_disk(temp), 
+                               httr::write_disk(temp),
                                httr::accept("application/zip"))
       headerInfo <- httr::headers(doc)
       doc <- utils::unzip(temp, exdir=tempdir())
@@ -57,7 +56,6 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
       on.exit(unlink(doc))
     } else {
       doc <- getWebServiceData(obs_url, 
-                               # body = post_body,
                                httr::accept("text/tsv"))
       headerInfo <- attr(doc, "headerInfo")
     }
@@ -155,12 +153,16 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
 }
 
 
-post_url <- function(obs_url, zip){
+post_url <- function(obs_url, zip, csv=FALSE){
 
   split <- strsplit(obs_url, "?", fixed=TRUE)
   
   url <- split[[1]][1]
-  url <- paste0(url, "?mimeType=tsv")
+  if(csv){
+    url <- paste0(url, "?mimeType=csv")
+  } else {
+    url <- paste0(url, "?mimeType=tsv")
+  }
 
   if(grepl("sorted",split[[1]][2])){
     url <- paste0(url, "&sorted=", strsplit(split[[1]][2], "sorted=", fixed=TRUE)[[1]][2])
