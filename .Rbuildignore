@@ -32,3 +32,4 @@ vignettes/usMaps_cache
 vignettes/movingAverages.Rmd
 man/figures/highrezlogo-01.png
 man/figures/USGS_R.png
+playing_with_post.R
