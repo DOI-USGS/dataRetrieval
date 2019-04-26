@@ -198,7 +198,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
         #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
         attr(dateTime, 'tzone') <- tz 
         tzCol <- rep(tz,nObs)
-      }else{
+      } else {
         tzCol <- rep(defaultTZ, nObs)
       }
       #create column names, addressing if methodDesc is needed
@@ -337,8 +337,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   mergedNames <- names(mergedDF)
   tzLoc <- grep("tz_cd", names(mergedDF))
   mergedDF <- mergedDF[c(mergedNames[-tzLoc],mergedNames[tzLoc])]
-  #Need to yet order by site_no, dateTime:
-  # mergedDF <- mergedDF[,c(site_no, dateTime)]
+
+  mergedDF <- mergedDF[order(mergedDF$site_no, mergedDF$dateTime),]
 ###############################################################  
   names(mergedDF) <- make.names(names(mergedDF))
   
@@ -403,7 +403,7 @@ check_if_xml <- function(obs_url){
 
   if(class(obs_url) == "character" && file.exists(obs_url)){
     returnedDoc <- read_xml(obs_url)
-  }else if(class(obs_url) == 'raw'){
+  } else if(class(obs_url) == 'raw'){
     returnedDoc <- read_xml(obs_url)
   } else if(inherits(obs_url, c("xml_node", "xml_nodeset"))) {
     returnedDoc <- obs_url
