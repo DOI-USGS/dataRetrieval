@@ -1,5 +1,6 @@
 #' @name whatWQPsamples
 #' @rdname wqpSpecials
+#' @export
 #' @examples
 #' \donttest{
 #' site1 <- whatWQPsamples(siteid="USGS-01594440")
