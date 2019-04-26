@@ -22,11 +22,7 @@
 #' }
 getWebServiceData <- function(obs_url, ...){
   
-  if(grepl(pattern = "waterqualitydata", x = obs_url)){
-    returnedList <- retryPOST(obs_url, ...)
-  } else {
-    returnedList <- retryGetOrPost(obs_url, ...)
-  }
+  returnedList <- retryGetOrPost(obs_url, ...)
   
   if(httr::status_code(returnedList) == 400){
     response400 <- httr::content(returnedList, type="text", encoding = "UTF-8")
@@ -107,40 +103,12 @@ getQuerySummary <- function(url){
   return(retquery)
 }
 
-retryPOST <- function(obs_url, ...) {
-
-  if (nchar(obs_url) < 2048){
-    resp <- httr::RETRY("GET", 
-                      obs_url, ..., 
-                      httr::user_agent(default_ua())) 
-  } else {
-    split <- strsplit(obs_url, "?", fixed=TRUE)
-    obs_url <- split[[1]][1]
-    query <- split[[1]][2]
-    # resp <- httr::RETRY("POST",
-    #                   obs_url, ...,
-    #                   httr::content_type("application/json"),
-    #                   httr::user_agent(default_ua()))
-    resp <- httr::RETRY("POST", obs_url, ..., 
-                        body = query,
-                        httr::content_type("application/x-www-form-urlencoded"), 
-                        httr::user_agent(default_ua())) 
-  }
-  return(resp)
-  
-}
-
 retryGetOrPost <- function(obs_url, ...) {
   resp <- NULL
   if (nchar(obs_url) < 2048 || grepl(pattern = "ngwmn", x = obs_url)) {
     resp <- httr::RETRY("GET", obs_url, ..., httr::user_agent(default_ua()))
   } else {
-    split <- strsplit(obs_url, "?", fixed=TRUE)
-    obs_url <- split[[1]][1]
-    query <- split[[1]][2]
     resp <- httr::RETRY("POST", obs_url, ..., 
-                        body = query,
-                        httr::content_type("application/x-www-form-urlencoded"), 
                         httr::user_agent(default_ua())) 
   }
   return(resp)
