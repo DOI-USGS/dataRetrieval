@@ -10,8 +10,6 @@ navbar:
     href: reference/index.html
   - text: Articles
     menu:
-    - text: Basic Mapping
-      href: articles/usMaps.html
     - text: Moving Averages
       href: articles/movingAverages.html
     - text: Stat Service
