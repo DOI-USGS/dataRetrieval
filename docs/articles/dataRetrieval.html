@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9001</span>
       </span>
     </div>
 
@@ -100,7 +100,7 @@
       <h1>Introduction to the dataRetrieval package</h1>
                         <h4 class="author">Laura A. DeCicco and Robert M. Hirsch</h4>
             
-            <h4 class="date">10 April, 2019</h4>
+            <h4 class="date">29 April, 2019</h4>
       
       
       <div class="hidden name"><code>dataRetrieval.Rmd</code></div>
@@ -1232,7 +1232,7 @@ Statistics Service
 <h3 class="hasAnchor">
 <a href="#sites-whatwqpsites" class="anchor"></a>Sites: whatWQPsites</h3>
 <p>To discover available sites in the WQP in New Jersey that have measured Chloride, use the function <code>whatWQPsites</code>.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">sitesNJ &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatWQPsites.html">whatWQPsites</a></span>(<span class="dt">statecode=</span><span class="st">"US:34"</span>,</a>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">sitesNJ &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wqpSpecials.html">whatWQPsites</a></span>(<span class="dt">statecode=</span><span class="st">"US:34"</span>,</a>
 <a class="sourceLine" id="cb29-2" title="2">                       <span class="dt">characteristicName=</span><span class="st">"Chloride"</span>)</a></code></pre></div>
 </div>
 <div id="data-readwqpdata" class="section level3">
@@ -1254,7 +1254,7 @@ Statistics Service
 <h3 class="hasAnchor">
 <a href="#samples-whatwqpsamples" class="anchor"></a>Samples: whatWQPsamples</h3>
 <p>The function <code>whatWQPsamples</code> returns information on the individual samples collected at a site. For example:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">site &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatWQPsamples.html">whatWQPsamples</a></span>(<span class="dt">siteid=</span><span class="st">"USGS-01594440"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">site &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wqpSpecials.html">whatWQPsamples</a></span>(<span class="dt">siteid=</span><span class="st">"USGS-01594440"</span>)</a></code></pre></div>
 <p>This returns one row for each instance that a sample was collect.</p>
 </div>
 <div id="metrics-whatwqpmetrics" class="section level3">
@@ -1262,7 +1262,7 @@ Statistics Service
 <a href="#metrics-whatwqpmetrics" class="anchor"></a>Metrics: whatWQPmetrics</h3>
 <p>The function <code>whatWQPmetrics</code> provides metric information. This is only currently available for STORET data:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">type &lt;-<span class="st"> "Stream"</span></a>
-<a class="sourceLine" id="cb33-2" title="2">sites &lt;-<span class="st"> </span><span class="kw"><a href="../reference/whatWQPmetrics.html">whatWQPmetrics</a></span>(<span class="dt">countycode=</span><span class="st">"US:55:025"</span>,<span class="dt">siteType=</span>type)</a></code></pre></div>
+<a class="sourceLine" id="cb33-2" title="2">sites &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wqpSpecials.html">whatWQPmetrics</a></span>(<span class="dt">countycode=</span><span class="st">"US:55:025"</span>,<span class="dt">siteType=</span>type)</a></code></pre></div>
 </div>
 </div>
 </div>

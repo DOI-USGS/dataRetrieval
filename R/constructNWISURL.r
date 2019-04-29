@@ -324,6 +324,8 @@ constructWQPURL <- function(siteNumbers,parameterCd,startDate,endDate,zip=TRUE){
   
   if(zip){
     url <- paste0(url,"&zip=yes")
+  } else {
+    url <- paste0(url,"&zip=no")
   }
   
   return(url)

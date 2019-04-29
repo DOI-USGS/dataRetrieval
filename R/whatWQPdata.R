@@ -22,7 +22,7 @@ whatWQPsamples <- function(...){
                     urlCall,
                     "&mimeType=tsv")
   
-  retval <- importWQP(urlCall, zip=values["zip"] == "yes")
+  retval <- suppressWarnings(importWQP(urlCall, zip=values["zip"] == "yes"))
   
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- urlCall
@@ -54,7 +54,7 @@ whatWQPmetrics <- function(...){
                     urlCall,
                     "&mimeType=tsv")
 
-  retval <- importWQP(urlCall, zip=values["zip"] == "yes")
+  retval <- suppressWarnings(importWQP(urlCall, zip=values["zip"] == "yes"))
 
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- urlCall

@@ -4,12 +4,10 @@
 \alias{importWQP}
 \title{Basic Water Quality Portal Data parser}
 \usage{
-importWQP(obs_url, post_body, zip = TRUE, tz = "UTC", csv = FALSE)
+importWQP(obs_url, zip = TRUE, tz = "UTC", csv = FALSE)
 }
 \arguments{
 \item{obs_url}{character URL to Water Quality Portal#' @keywords data import USGS web service}
-
-\item{post_body}{character in json format.}
 
 \item{zip}{logical to request data via downloading zip file. Default set to TRUE.}
 
@@ -36,8 +34,8 @@ rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
 
 rawSample <- importWQP(rawSampleURL)
 
-rawSampleURL_Zip <- constructWQPURL('USGS-01594440','01075', '', '', TRUE)
-rawSample2 <- importWQP(rawSampleURL_Zip, zip=TRUE)
+rawSampleURL_NoZip <- constructWQPURL('USGS-01594440','01075', '', '', zip=FALSE)
+rawSample2 <- importWQP(rawSampleURL_NoZip, zip=FALSE)
 
 STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
 STORETdata <- importWQP(STORETex)
