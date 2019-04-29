@@ -6,6 +6,8 @@
 #' generally faster than the \code{\link{whatWQPdata}} function, but does
 #' not return information on what data was collected at the site.
 #'
+#' The \code{readWQPsummary} function has 
+#'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
 #' @keywords data import WQP web service
 #' @rdname wqpSpecials
@@ -60,7 +62,9 @@
 #' site1 <- whatWQPsites(siteid="USGS-01594440")
 #' 
 #' type <- "Stream"
-#' sites <- whatWQPsites(countycode="US:55:025",siteType=type)
+#' sites <- whatWQPsites(countycode="US:55:025",
+#'                       characteristicName = "Phosphorus",
+#'                       siteType=type)
 #' }
 whatWQPsites <- function(...){
 
@@ -88,19 +92,19 @@ whatWQPsites <- function(...){
 }
 
 
-#' @name searchWQPsites
+#' @name readWQPsummary
 #' @rdname wqpSpecials
 #' @export
 #' @examples
 #' \donttest{
-#' site1 <- searchWQPsites(siteid="USGS-07144100",
+#' site1 <- readWQPsummary(siteid="USGS-07144100",
 #'                         summaryYears=5,
 #'                         dataProfile="periodOfRecord")
 #' # Pretty slow:
-#' #state1 <- searchWQPsites(statecode="NJ",
+#' #state1 <- readWQPsummary(statecode="NJ",
 #' #                          dataProfile="periodOfRecord")
 #' }
-searchWQPsites <- function(...){
+readWQPsummary <- function(...){
   
   values <- readWQPdots(...)
   

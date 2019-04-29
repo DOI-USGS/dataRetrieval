@@ -48,7 +48,7 @@ reference:
       - whatWQPdata
       - whatWQPsamples
       - whatWQPmetrics
-      - searchWQPsites
+      - readWQPsummary
   - title: National Ground-Water Monitoring Network
     desc: Functions to retrieve NGWMN data.
     contents:

@@ -4,7 +4,7 @@
 \alias{whatWQPsamples}
 \alias{whatWQPmetrics}
 \alias{whatWQPsites}
-\alias{searchWQPsites}
+\alias{readWQPsummary}
 \title{Site Data Import from Water Quality Portal}
 \usage{
 whatWQPsamples(...)
@@ -13,7 +13,7 @@ whatWQPmetrics(...)
 
 whatWQPsites(...)
 
-searchWQPsites(...)
+readWQPsummary(...)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
@@ -68,6 +68,9 @@ this function returns the basic metadata on WQP sites. It is
 generally faster than the \code{\link{whatWQPdata}} function, but does
 not return information on what data was collected at the site.
 }
+\details{
+The \code{readWQPsummary} function has
+}
 \examples{
 \donttest{
 site1 <- whatWQPsamples(siteid="USGS-01594440")
@@ -85,14 +88,16 @@ lakeSites <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode
 site1 <- whatWQPsites(siteid="USGS-01594440")
 
 type <- "Stream"
-sites <- whatWQPsites(countycode="US:55:025",siteType=type)
+sites <- whatWQPsites(countycode="US:55:025",
+                      characteristicName = "Phosphorus",
+                      siteType=type)
 }
 \donttest{
-site1 <- searchWQPsites(siteid="USGS-07144100",
+site1 <- readWQPsummary(siteid="USGS-07144100",
                         summaryYears=5,
                         dataProfile="periodOfRecord")
 # Pretty slow:
-#state1 <- searchWQPsites(statecode="NJ",
+#state1 <- readWQPsummary(statecode="NJ",
 #                          dataProfile="periodOfRecord")
 }
 }

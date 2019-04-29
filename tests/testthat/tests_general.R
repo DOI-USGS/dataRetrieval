@@ -178,7 +178,7 @@ test_that("General WQP retrievals working", {
    expect_equal(attr(bioData, "url"), "https://www.waterqualitydata.us/Result/search?statecode=US%3A55&countycode=US%3A55%3A025&providers=BIODATA&zip=yes&mimeType=tsv")
    expect_gt(nrow(bioData), 1)
    
-   site1 <- searchWQPsites(siteid="USGS-07144100",
+   site1 <- readWQPsummary(siteid="USGS-07144100",
                            summaryYears=5,
                            dataProfile="periodOfRecord")
    

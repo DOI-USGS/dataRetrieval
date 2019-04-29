@@ -165,10 +165,10 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
     if(!all(is.na(retval))){
       
       # When POST is working:
-      # site_list <- unique(retval$MonitoringLocationIdentifier)
-      # siteInfo <- whatWQPsites(siteid=site_list, zip="yes")
+      site_list <- unique(retval$MonitoringLocationIdentifier)
+      siteInfo <- whatWQPsites(siteid=site_list, zip="yes")
       
-      siteInfo <- whatWQPsites(...)
+      # siteInfo <- whatWQPsites(...)
       
       siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
                                    agency_cd=siteInfo$OrganizationIdentifier,

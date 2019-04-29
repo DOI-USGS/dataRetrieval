@@ -170,7 +170,7 @@ Possible values include "America/New_York","America/Chicago", "America/Denver","
     <tr>
       <th>csv</th>
       <td><p>logical. Is the data coming back with a csv or tsv format. Default is <code>FALSE</code>. Currently, the 
-summary service does not support tsv, but otherwise tsv is the safer choice.</p></td>
+summary service does not support tsv, for other services tsv is the safer choice.</p></td>
     </tr>
     </table>
     
@@ -192,8 +192,8 @@ start and end times, and converted to UTC. See <a href='https://www.waterquality
 
 <span class='no'>rawSample</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>rawSampleURL</span>)
 
-<span class='no'>rawSampleURL_Zip</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructWQPURL.html'>constructWQPURL</a></span>(<span class='st'>'USGS-01594440'</span>,<span class='st'>'01075'</span>, <span class='st'>''</span>, <span class='st'>''</span>, <span class='fl'>TRUE</span>)
-<span class='no'>rawSample2</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>rawSampleURL_Zip</span>, <span class='kw'>zip</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='no'>rawSampleURL_NoZip</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructWQPURL.html'>constructWQPURL</a></span>(<span class='st'>'USGS-01594440'</span>,<span class='st'>'01075'</span>, <span class='st'>''</span>, <span class='st'>''</span>, <span class='kw'>zip</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+<span class='no'>rawSample2</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>rawSampleURL_NoZip</span>, <span class='kw'>zip</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
 
 <span class='no'>STORETex</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructWQPURL.html'>constructWQPURL</a></span>(<span class='st'>'WIDNR_WQX-10032762'</span>,<span class='st'>'Specific conductance'</span>, <span class='st'>''</span>, <span class='st'>''</span>)
 <span class='no'>STORETdata</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>STORETex</span>)</div></pre>
