@@ -20,7 +20,7 @@ test_that("General NWIS retrievals working", {
   expect_error(readNWISdata(siteNumber = NA), "NA's are not allowed in query")
   
   bBoxEx <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010")
-  expect_that(length(unique(bBoxEx$site_no)) > 1, is_true())
+  expect_true(length(unique(bBoxEx$site_no)) > 1)
   
   startDate <- as.Date("2013-10-01")
   endDate <- as.Date("2014-09-30")
@@ -43,11 +43,11 @@ test_that("General NWIS retrievals working", {
   
   urlEmpty <- "https://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=413437087150601&sort_key=site_no&group_key=NONE&inventory_output=0&begin_date=&end_date=&TZoutput=0&param_group=NUT,INN&qw_attributes=0&format=rdb&qw_sample_wide=0&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&list_of_search_criteria=multiple_site_no"
   dv <- importRDB1(urlEmpty, asDateTime = FALSE)
-  expect_that(nrow(dv) == 0, is_true())
+  expect_true(nrow(dv) == 0)
   
   dailyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="daily",
                            statType=c("p25","p50","p75","min","max"),parameterCd="00065",convertType=FALSE)
-  expect_that(length(dailyStat$min_va) > 1, is_true())
+  expect_true(length(dailyStat$min_va) > 1)
   expect_is(dailyStat$p25_va,"character")
   
   waterYearStat <- readNWISdata(site=c("03112500"),service="stat",statReportType="annual",
@@ -175,19 +175,18 @@ test_that("General WQP retrievals working", {
                           countycode = "Dane",
                           providers = "BIODATA")
    
-   expect_equal(attr(bioData, "url"), "https://www.waterqualitydata.us/Result/search?statecode=US%3A55&countycode=US%3A55%3A025&providers=BIODATA&zip=no&sorted=no&mimeType=tsv")
+   expect_equal(attr(bioData, "url"), "https://www.waterqualitydata.us/Result/search?statecode=US%3A55&countycode=US%3A55%3A025&providers=BIODATA&zip=yes&mimeType=tsv")
    expect_gt(nrow(bioData), 1)
    
-  # Known slow query for WQP:
-  # pHDataExpanded2 <- readWQPdata(bBox=c(-90.1,42.9,-89.9,43.1),
-  #                                characteristicName=nameToUse, querySummary = TRUE)
-  # expect_is(pHDataExpanded2, 'list')
-  
-  # Super slow:
-  # startDate <- as.Date("2013-01-01")
-  # nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
-  #                        characteristicType="Nutrient")
-  # expect_is(nutrientDaneCounty$ActivityStartDateTime, 'POSIXct')
+   site1 <- readWQPsummary(siteid="USGS-07144100",
+                           summaryYears=5,
+                           dataProfile="periodOfRecord")
+   
+   expect_type(site1$ActivityCount, "double")
+   expect_type(site1$MonitoringLocationIdentifier, "character")
+
+   expect_equal(attr(site1, "url"), "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&dataProfile=periodOfRecord&zip=yes&mimeType=csv")
+   
 })
 
 test_that("WQP head query retrievals working", {
@@ -229,7 +228,8 @@ test_that("Dates with no days can be handled", {
 context("whatWQPsamples")
 test_that("whatWQPsamples working", {
   testthat::skip_on_cran()
-  siteInfo <- whatWQPsamples(siteid="USGS-01594440")
+  # The warning is caused by a confirmed bug in WQP
+  siteInfo <- suppressWarnings(whatWQPsamples(siteid="USGS-01594440"))
   expect_true(nrow(siteInfo) > 0)
   
   })
@@ -388,3 +388,39 @@ test_that("400 errors return a verbose error", {
   expect_equal(tryCatch(getWebServiceData(url), error = function(e) e$message), "HTTP Status 400 - syntactic error: Only one Major filter can be supplied. Found [bbox] and [stateCd]. Please remove the extra major filter[s].")
   
 })
+
+test_that("internal functions",{
+  
+  # get empty_col type
+  expect_equal(dataRetrieval:::empty_col("numeric"), numeric())
+  expect_equal(dataRetrieval:::empty_col("character"), character())
+  expect_equal(dataRetrieval:::empty_col("Date"), as.Date(numeric(),origin = "1970-01-01"))
+  
+  # add empty columns
+  df1 <- data.frame(a = 1:2,
+                    b = c("a","b"),
+                    c = as.Date(c("2010-01-01","2010-01-02")),
+                    stringsAsFactors = FALSE)
+  df2 <- data.frame(d = 1:2,
+                    b = c("a","b"),
+                    e = factor(c("c","d")),
+                    stringsAsFactors = FALSE)
+  
+  df2_ret <- dataRetrieval:::add_empty_col(df2, df1, c("a","c"))
+  df1_ret <- dataRetrieval:::add_empty_col(df1, df2, c("d","e"))
+  
+  expect_true(ncol(df2_ret) == 5)
+  expect_true(ncol(df1_ret) == 5)
+  expect_true(all(is.na(df2_ret[,c("a","c")])))
+  expect_true(all(is.na(df1_ret[,c("d","e")])))
+  
+  bound_df <- dataRetrieval:::r_bind_dr(df1, df2)
+  
+  expect_true(nrow(bound_df) == 4)
+  expect_true(class(bound_df$c) == "Date")
+  expect_true(class(bound_df$a) == "integer")
+  expect_true(class(bound_df$b) == "character")
+
+})
+
+

@@ -86,7 +86,7 @@ More information on the web service can be found here: https://waterservices.usg
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9</span>
       </span>
     </div>
 
@@ -105,9 +105,6 @@ More information on the web service can be found here: https://waterservices.usg
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/usMaps.html">Basic Mapping</a>
-    </li>
     <li>
       <a href="../articles/movingAverages.html">Moving Averages</a>
     </li>
@@ -186,7 +183,7 @@ See more information here: <a href='https://waterservices.usgs.gov/rest/IV-Servi
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  <code><a href='https://www.rdocumentation.org/packages/base/topics/timezones'>OlsonNames()</a></code> 
+"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  <code><a href='https://rdrr.io/r/base/timezones.html'>OlsonNames()</a></code> 
 for more information on time zones.</p></td>
     </tr>
     </table>
@@ -227,10 +224,11 @@ and S is the statistic code (if applicable).</p>
     <pre class="examples"><div class='input'><span class='no'>site_id</span> <span class='kw'>&lt;-</span> <span class='st'>'05114000'</span>
 <span class='no'>parameterCd</span> <span class='kw'>&lt;-</span> <span class='st'>'00060'</span>
 <span class='no'>startDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span>
-<span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span></div><div class='input'><span class='no'>rawData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>,<span class='no'>parameterCd</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>)</div><div class='output co'>#&gt; <span class='message'>Request failed [503]. Retrying in 1.7 seconds...</span></div><div class='input'>
-<span class='no'>rawData_today</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>, <span class='no'>parameterCd</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.time'>Sys.Date</a></span>(),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.time'>Sys.Date</a></span>())
+<span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span></div><div class='input'><span class='no'>rawData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>,<span class='no'>parameterCd</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>)
 
-<span class='no'>timeZoneChange</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'04024430'</span>,<span class='st'>'04024000'</span>),<span class='no'>parameterCd</span>,
+<span class='no'>rawData_today</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>, <span class='no'>parameterCd</span>, <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>(),<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>())
+
+<span class='no'>timeZoneChange</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'04024430'</span>,<span class='st'>'04024000'</span>),<span class='no'>parameterCd</span>,
          <span class='st'>"2013-11-03"</span>,<span class='st'>"2013-11-03"</span>)
 
 <span class='no'>centralTime</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>,<span class='no'>parameterCd</span>,

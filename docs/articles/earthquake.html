@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9</span>
       </span>
     </div>
 
@@ -64,9 +64,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/usMaps.html">Basic Mapping</a>
-    </li>
-    <li>
       <a href="../articles/movingAverages.html">Moving Averages</a>
     </li>
     <li>
@@ -124,9 +121,9 @@
 <p>Without question, the hardest part is to find the right data. Luckily for me, this was already done by 10am by the groundwater scientists Rodney A. Sheets, Charles Schalk, and Leonard Orzol (contact information is provided at the end of this post). They provided me with a list of unique site identification numbers from groundwater wells across the nation, and a “parameter code” that represents water levels measurements.</p>
 <p>Using the <a href="https://github.com/USGS-R/dataRetrieval">dataRetrieval</a> R package, it then becomes trivial to access USGS data and import it into the R environment.</p>
 <p>The following code retrieves the data:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dataRetrieval)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dataRetrieval)</a>
 <a class="sourceLine" id="cb1-2" title="2"></a>
-<a class="sourceLine" id="cb1-3" title="3">sites &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"402411077374801"</span>,</a>
+<a class="sourceLine" id="cb1-3" title="3">sites &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"402411077374801"</span>,</a>
 <a class="sourceLine" id="cb1-4" title="4">           <span class="st">"364818094185302"</span>,</a>
 <a class="sourceLine" id="cb1-5" title="5">           <span class="st">"405215084335400"</span>,</a>
 <a class="sourceLine" id="cb1-6" title="6">           <span class="st">"370812080261901"</span>,</a>
@@ -145,31 +142,31 @@
 <a class="sourceLine" id="cb1-19" title="19">                      <span class="dt">endDate =</span> <span class="st">"2017-09-08"</span>)</a></code></pre></div>
 <p>By default, <em>all</em> the data in this data frame comes back in the “UTC” time zone. So, we’ve already crossed one of the hurdles - unifying time zones.</p>
 <p><code>dataRetrieval</code> attaches an attribute <code>siteInfo</code> to the returned data. The information in that attribute includes station names and location. We can extract that information and sort the sites from south to north using a bit of <code>dplyr</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
 <a class="sourceLine" id="cb2-2" title="2"></a>
-<a class="sourceLine" id="cb2-3" title="3">unique_sites &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attr">attr</a></span>(gw_data, <span class="st">"siteInfo"</span>)</a>
+<a class="sourceLine" id="cb2-3" title="3">unique_sites &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(gw_data, <span class="st">"siteInfo"</span>)</a>
 <a class="sourceLine" id="cb2-4" title="4"></a>
 <a class="sourceLine" id="cb2-5" title="5">south_to_north &lt;-<span class="st"> </span>unique_sites <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb2-6" title="6"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(dec_lat_va))</a></code></pre></div>
 <p>Now, we can do a bit of filtering so that we will only plot the 24 hours of on September 8th (UTC). Also, we can use the <code>south_to_north</code> data frame to create ordered levels for the sites:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">gw_data_sub &lt;-<span class="st"> </span>gw_data <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="st">            </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(dateTime <span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.POSIXlt">as.POSIXct</a></span>(<span class="st">"2017-09-07 00:00:00"</span>, <span class="dt">tz=</span><span class="st">"UTC"</span>),</a>
-<a class="sourceLine" id="cb3-3" title="3">                   dateTime <span class="op">&lt;</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.POSIXlt">as.POSIXct</a></span>(<span class="st">"2017-09-09 00:00:00"</span>, <span class="dt">tz=</span><span class="st">"UTC"</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">site_no =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(site_no, </a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="st">            </span><span class="kw"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(dateTime <span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span>(<span class="st">"2017-09-07 00:00:00"</span>, <span class="dt">tz=</span><span class="st">"UTC"</span>),</a>
+<a class="sourceLine" id="cb3-3" title="3">                   dateTime <span class="op">&lt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span>(<span class="st">"2017-09-09 00:00:00"</span>, <span class="dt">tz=</span><span class="st">"UTC"</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">site_no =</span> <span class="kw"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(site_no, </a>
 <a class="sourceLine" id="cb3-5" title="5">                          <span class="dt">levels =</span> south_to_north<span class="op">$</span>site_no))</a></code></pre></div>
 </div>
 <div id="plot-explorations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#plot-explorations" class="anchor"></a>Plot Explorations</h2>
 <p>Since the y-axis is quite different between sites, it seemed to make the most sense to use <code>ggplot2</code>’s faceting. The first iteration was as follows:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
 <a class="sourceLine" id="cb4-2" title="2"></a>
 <a class="sourceLine" id="cb4-3" title="3">depth_plot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> gw_data_sub) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> dateTime, <span class="dt">y =</span> X_<span class="dv">72019</span>_<span class="dv">00000</span>)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-5" title="5"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">trans =</span> <span class="st">"reverse"</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-7" title="7"><span class="st">  </span><span class="kw">facet_grid</span>(site_no <span class="op">~</span><span class="st"> </span>., <span class="dt">scales =</span> <span class="st">"free"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attr">attr</a></span>(gw_data, <span class="st">"variableInfo"</span>)<span class="op">$</span>variableName) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="kw"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(gw_data, <span class="st">"variableInfo"</span>)<span class="op">$</span>variableName) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-9" title="9"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">"UTC time"</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-10" title="10"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),</a>
 <a class="sourceLine" id="cb4-11" title="11">        <span class="dt">strip.text.y =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">0</span>),</a>
@@ -184,28 +181,28 @@ Initial plot of water levels
 </div>
 <p>The <code>site_no</code> column (the unique site identification numbers) are not terribly useful for a general audience, so we decided to eliminate those facet labels on the right and add a map as a legend. Also, we wanted to use consistent colors across the map and lines.</p>
 <p>So, first, let’s map some colors to the unique <code>site_no</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">cbValues &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"#DCDA4B"</span>,<span class="st">"#999999"</span>,<span class="st">"#00FFFF"</span>,<span class="st">"#CEA226"</span>,<span class="st">"#CC79A7"</span>,<span class="st">"#4E26CE"</span>,</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">cbValues &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"#DCDA4B"</span>,<span class="st">"#999999"</span>,<span class="st">"#00FFFF"</span>,<span class="st">"#CEA226"</span>,<span class="st">"#CC79A7"</span>,<span class="st">"#4E26CE"</span>,</a>
 <a class="sourceLine" id="cb5-2" title="2">              <span class="st">"#0000ff"</span>,<span class="st">"#78C15A"</span>,<span class="st">"#79AEAE"</span>,<span class="st">"#FF0000"</span>,<span class="st">"#00FF00"</span>,<span class="st">"#B1611D"</span>,</a>
 <a class="sourceLine" id="cb5-3" title="3">              <span class="st">"#FFA500"</span>,<span class="st">"#F4426e"</span>, <span class="st">"#800000"</span>, <span class="st">"#808000"</span>)</a>
-<a class="sourceLine" id="cb5-4" title="4">cbValues &lt;-<span class="st"> </span>cbValues[<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(sites)]</a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cbValues) &lt;-<span class="st">   </span>sites</a></code></pre></div>
+<a class="sourceLine" id="cb5-4" title="4">cbValues &lt;-<span class="st"> </span>cbValues[<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(sites)]</a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(cbValues) &lt;-<span class="st">   </span>sites</a></code></pre></div>
 </div>
 <div id="map-legend" class="section level2">
 <h2 class="hasAnchor">
 <a href="#map-legend" class="anchor"></a>Map Legend</h2>
 <p>The following code was used to map the sites to a basic lower-48 map of the United States:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(maptools)</a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(maps)</a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sp)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(maptools)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(maps)</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sp)</a>
 <a class="sourceLine" id="cb6-4" title="4"></a>
 <a class="sourceLine" id="cb6-5" title="5">proj.string &lt;-<span class="st"> "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"</span></a>
 <a class="sourceLine" id="cb6-6" title="6"></a>
 <a class="sourceLine" id="cb6-7" title="7">to_sp &lt;-<span class="st"> </span><span class="cf">function</span>(...){</a>
-<a class="sourceLine" id="cb6-8" title="8">  map &lt;-<span class="st"> </span>maps<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/maps/topics/map">map</a></span>(..., <span class="dt">fill=</span><span class="ot">TRUE</span>, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb6-9" title="9">  IDs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">sapply</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/strsplit">strsplit</a></span>(map<span class="op">$</span>names, <span class="st">":"</span>), <span class="cf">function</span>(x) x[<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb6-8" title="8">  map &lt;-<span class="st"> </span>maps<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/maps/man/map.html">map</a></span>(..., <span class="dt">fill=</span><span class="ot">TRUE</span>, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb6-9" title="9">  IDs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(map<span class="op">$</span>names, <span class="st">":"</span>), <span class="cf">function</span>(x) x[<span class="dv">1</span>])</a>
 <a class="sourceLine" id="cb6-10" title="10">  map.sp &lt;-<span class="st"> </span><span class="kw">map2SpatialPolygons</span>(map, <span class="dt">IDs=</span>IDs, <span class="dt">proj4string=</span><span class="kw">CRS</span>(<span class="st">"+proj=longlat +datum=WGS84"</span>))</a>
 <a class="sourceLine" id="cb6-11" title="11">  map.sp.t &lt;-<span class="st"> </span><span class="kw">spTransform</span>(map.sp, <span class="kw">CRS</span>(proj.string))</a>
-<a class="sourceLine" id="cb6-12" title="12">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(map.sp.t)</a>
+<a class="sourceLine" id="cb6-12" title="12">  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(map.sp.t)</a>
 <a class="sourceLine" id="cb6-13" title="13">}</a>
 <a class="sourceLine" id="cb6-14" title="14"></a>
 <a class="sourceLine" id="cb6-15" title="15">conus &lt;-<span class="st"> </span><span class="kw">to_sp</span>(<span class="st">'state'</span>)</a>
@@ -214,12 +211,12 @@ Initial plot of water levels
 <a class="sourceLine" id="cb6-18" title="18"></a>
 <a class="sourceLine" id="cb6-19" title="19">sites_names &lt;-<span class="st"> </span><span class="kw">select</span>(unique_sites, dec_lon_va, dec_lat_va, site_no)</a>
 <a class="sourceLine" id="cb6-20" title="20"></a>
-<a class="sourceLine" id="cb6-21" title="21"><span class="kw">coordinates</span>(sites_names) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb6-21" title="21"><span class="kw">coordinates</span>(sites_names) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb6-22" title="22"><span class="kw">proj4string</span>(sites_names) &lt;-<span class="st"> </span><span class="kw">CRS</span>(wgs84)</a>
 <a class="sourceLine" id="cb6-23" title="23"></a>
 <a class="sourceLine" id="cb6-24" title="24">sites_names =<span class="st"> </span>sites_names <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-25" title="25"><span class="st">  </span><span class="kw">spTransform</span>(<span class="kw">CRS</span>(<span class="kw">proj4string</span>(conus)))</a>
-<a class="sourceLine" id="cb6-26" title="26">sites_names.df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(sites_names)</a>
+<a class="sourceLine" id="cb6-26" title="26">sites_names.df &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(sites_names)</a>
 <a class="sourceLine" id="cb6-27" title="27"></a>
 <a class="sourceLine" id="cb6-28" title="28">gsMap &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb6-29" title="29"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),</a>
@@ -251,7 +248,7 @@ Site locations on US map
 <a class="sourceLine" id="cb7-4" title="4"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb7-5" title="5"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">trans =</span> <span class="st">"reverse"</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw">facet_grid</span>(site_no <span class="op">~</span><span class="st"> </span>., <span class="dt">scales =</span> <span class="st">"free"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attr">attr</a></span>(gw_data, <span class="st">"variableInfo"</span>)<span class="op">$</span>variableName) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="kw"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(gw_data, <span class="st">"variableInfo"</span>)<span class="op">$</span>variableName) <span class="op">+</span></a>
 <a class="sourceLine" id="cb7-8" title="8"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">"UTC time"</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb7-9" title="9"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> cbValues) <span class="op">+</span></a>
 <a class="sourceLine" id="cb7-10" title="10"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),</a>
@@ -261,11 +258,11 @@ Site locations on US map
 <a class="sourceLine" id="cb7-14" title="14">        <span class="dt">legend.position=</span><span class="st">"none"</span>,</a>
 <a class="sourceLine" id="cb7-15" title="15">        <span class="dt">panel.spacing.y=</span><span class="kw">unit</span>(<span class="fl">0.04</span>, <span class="st">"lines"</span>))</a></code></pre></div>
 <p>Finally, the graphs were combined using the <code>viewport</code> function from the <code>grid</code> package:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(grid)</a>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(grid)</a>
 <a class="sourceLine" id="cb8-2" title="2">vp &lt;-<span class="st"> </span><span class="kw">viewport</span>(<span class="dt">width =</span> <span class="fl">0.35</span>, <span class="dt">height =</span> <span class="fl">0.22</span>, </a>
 <a class="sourceLine" id="cb8-3" title="3">               <span class="dt">x =</span> <span class="fl">0.26</span>, <span class="dt">y =</span> <span class="fl">0.87</span>)</a>
-<a class="sourceLine" id="cb8-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(depth_plot)</a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(gsMap, <span class="dt">vp =</span> vp)</a></code></pre></div>
+<a class="sourceLine" id="cb8-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(depth_plot)</a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(gsMap, <span class="dt">vp =</span> vp)</a></code></pre></div>
 <p><img src="earthquake_files/figure-html/earthquake-1.png" width="672"></p>
 </div>
 <div id="what-does-the-plot-mean" class="section level2">

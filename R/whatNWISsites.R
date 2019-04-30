@@ -69,8 +69,8 @@ whatNWISsites <- function(...){
     
     if(is.null(retVal)){
       retVal <- df
-    }else{
-      retVal <- dplyr::bind_rows(retVal, df)
+    } else {
+      retVal <- r_bind_dr(retVal, df)
     }
   }
   

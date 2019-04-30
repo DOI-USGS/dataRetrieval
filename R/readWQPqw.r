@@ -116,13 +116,13 @@
 readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="UTC", querySummary=FALSE){
 
   url <- constructWQPURL(siteNumbers,parameterCd,startDate,endDate)
-  
+
   if(querySummary){
     retquery <- getQuerySummary(url)
     return(retquery)
   } else {
     
-    retval <- importWQP(url, tz = tz)
+    retval <- importWQP(url, zip = TRUE, tz = tz)
     
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     

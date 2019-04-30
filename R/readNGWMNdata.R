@@ -12,7 +12,6 @@
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
 #' @import utils
-#' @importFrom dplyr mutate
 #' @export
 #' @examples 
 #' \donttest{
@@ -63,8 +62,8 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
       obsFID <- retrieveObservation(featureID = f, asDateTime, attrs, tz = tz)
       obsFIDattr <- saveAttrs(attrs, obsFID)
       obsFID <- removeAttrs(attrs, obsFID)
-      allObs <- dplyr::bind_rows(allObs, obsFID)
-      allAttrs <- dplyr::bind_rows(allAttrs, obsFIDattr)
+      allObs <- r_bind_dr(allObs, obsFID)
+      allAttrs <- r_bind_dr(allAttrs, obsFIDattr)
       
     }
     
@@ -119,19 +118,19 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC"){
 #' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"
-#' oneSite <- readNGWMNlevels(siteNumbers = site)
+#' #oneSite <- readNGWMNlevels(siteNumbers = site)
 #' 
 #' #multiple sites
 #' sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
-#' multiSiteData <- readNGWMNlevels(sites)
+#' #multiSiteData <- readNGWMNlevels(sites)
 #' 
 #' #non-USGS site
 #' site <- "MBMG.103306"
-#' data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
+#' #data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
 #' 
 #' #site with no data returns empty data frame
 #' noDataSite <- "UTGS.401544112060301"
-#' noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
+#' #noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
 #' }
 readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC"){
   data <- readNGWMNdata(siteNumbers = siteNumbers, service = "observation",
@@ -185,7 +184,7 @@ retrieveObservation <- function(featureID, asDateTime, attrs, tz){
   if(nrow(returnData) > 0){
     #tack on site number
     siteNum <- rep(sub('.*\\.', '', featureID), nrow(returnData))
-    returnData <- mutate(returnData, site = siteNum)
+    returnData$site <- siteNum
     numCol <- ncol(returnData)
     returnData <- returnData[,c(numCol,1:(numCol - 1))] #move siteNum to the left
   }

@@ -14,15 +14,13 @@
 #' `ActivityEndDateWY`.
 #' @export
 #' 
-#' @importFrom dplyr select
-#' @importFrom dplyr everything
 #' @examples
 #' \donttest{ 
-#' dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
-#' dataTemp <- addWaterYear(dataTemp)
+#' nwisData <- readNWISdv('04085427','00060','2012-01-01','2012-06-30')
+#' nwisData <- addWaterYear(nwisData)
 #' 
-#' pHData <- readWQPdata(siteid="USGS-04024315",characteristicName="pH")
-#' pHData <- addWaterYear(pHData)
+#' wqpData <- readWQPqw('USGS-01594440','01075', '', '')
+#' wqpData <- addWaterYear(wqpData)
 #' }
 addWaterYear <- function(rawData){
   
@@ -50,7 +48,10 @@ addWaterYear <- function(rawData){
     # move waterYear so that it is always comes right after dateTime
     dateCol_i <- which(names(rawData) == dateCol)
     dateColWY_i <- which(names(rawData) == dateColWY)
-    rawData <- select(rawData, 1:dateCol_i, dateColWY_i, everything())
+    everything_else <- which(!(names(rawData) %in% c(dateCol,dateColWY)))
+    everything_else <- everything_else[!everything_else %in% c(1:dateCol_i, dateColWY_i)]
+
+    rawData <- rawData[, c(1:dateCol_i, dateColWY_i, everything_else)]
   }
   
   return(rawData)

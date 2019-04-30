@@ -84,7 +84,7 @@ more information.  All available use categories for the supplied arguments are r
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9</span>
       </span>
     </div>
 
@@ -103,9 +103,6 @@ more information.  All available use categories for the supplied arguments are r
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/usMaps.html">Basic Mapping</a>
-    </li>
     <li>
       <a href="../articles/movingAverages.html">Moving Averages</a>
     </li>
@@ -201,10 +198,10 @@ County and state fields will be included as appropriate.</p>
 <span class='no'>allegheny</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuse</span>(<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"Pennsylvania"</span>,<span class='kw'>countyCd</span> <span class='kw'>=</span> <span class='st'>"Allegheny"</span>)
 
 <span class='co'>#Data for an entire state for certain years</span>
-<span class='no'>ohio</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuse</span>(<span class='kw'>years</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2000</span>,<span class='fl'>2005</span>,<span class='fl'>2010</span>),<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"OH"</span>, <span class='kw'>countyCd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='no'>ohio</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuse</span>(<span class='kw'>years</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2000</span>,<span class='fl'>2005</span>,<span class='fl'>2010</span>),<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"OH"</span>, <span class='kw'>countyCd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='co'>#Data for an entire state, county by county</span>
-<span class='no'>pr</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuse</span>(<span class='kw'>years</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2000</span>,<span class='fl'>2005</span>,<span class='fl'>2010</span>),<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"PR"</span>,<span class='kw'>countyCd</span><span class='kw'>=</span><span class='st'>"ALL"</span>)
+<span class='no'>pr</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuse</span>(<span class='kw'>years</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2000</span>,<span class='fl'>2005</span>,<span class='fl'>2010</span>),<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"PR"</span>,<span class='kw'>countyCd</span><span class='kw'>=</span><span class='st'>"ALL"</span>)
 
 <span class='co'>#All national-scale data, transforming data frame to named columns from named rows</span>
 <span class='no'>national</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuse</span>(<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>countyCd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
@@ -213,10 +210,10 @@ County and state fields will be included as appropriate.</p>
 <span class='no'>dc</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuse</span>(<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"DC"</span>,<span class='kw'>countyCd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='co'>#data for multiple counties, with different input formatting</span>
-<span class='no'>paData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuse</span>(<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"42"</span>,<span class='kw'>countyCd</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Allegheny County"</span>, <span class='st'>"BUTLER"</span>, <span class='fl'>1</span>, <span class='st'>"031"</span>))
+<span class='no'>paData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuse</span>(<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"42"</span>,<span class='kw'>countyCd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Allegheny County"</span>, <span class='st'>"BUTLER"</span>, <span class='fl'>1</span>, <span class='st'>"031"</span>))
 
 <span class='co'>#retrieving two specific categories for an entire state</span>
-<span class='no'>ks</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuse</span>(<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"KS"</span>, <span class='kw'>countyCd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>categories</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"IT"</span>,<span class='st'>"LI"</span>))</div></pre>
+<span class='no'>ks</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuse</span>(<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"KS"</span>, <span class='kw'>countyCd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>categories</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"IT"</span>,<span class='st'>"LI"</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -83,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9</span>
       </span>
     </div>
 
@@ -102,9 +102,6 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/usMaps.html">Basic Mapping</a>
-    </li>
     <li>
       <a href="../articles/movingAverages.html">Moving Averages</a>
     </li>
@@ -148,7 +145,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>importWQP</span>(<span class='no'>obs_url</span>, <span class='kw'>zip</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>)</pre>
+    <pre class="usage"><span class='fu'>importWQP</span>(<span class='no'>obs_url</span>, <span class='kw'>zip</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>, <span class='kw'>csv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,13 +156,18 @@
     </tr>
     <tr>
       <th>zip</th>
-      <td><p>logical to request data via downloading zip file. Default set to FALSE.</p></td>
+      <td><p>logical to request data via downloading zip file. Default set to TRUE.</p></td>
     </tr>
     <tr>
       <th>tz</th>
       <td><p>character to set timezone attribute of datetime. Default is UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"</p></td>
+    </tr>
+    <tr>
+      <th>csv</th>
+      <td><p>logical. Is the data coming back with a csv or tsv format. Default is <code>FALSE</code>. Currently, the 
+summary service does not support tsv, for other services tsv is the safer choice.</p></td>
     </tr>
     </table>
     
@@ -176,7 +178,7 @@ start and end times, and converted to UTC. See <a href='https://www.waterquality
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='readWQPdata.html'>readWQPdata</a></code>, <code><a href='readWQPqw.html'>readWQPqw</a></code>, <code><a href='whatWQPsites.html'>whatWQPsites</a></code></p></div>
+    <div class='dont-index'><p><code><a href='readWQPdata.html'>readWQPdata</a></code>, <code><a href='readWQPqw.html'>readWQPqw</a></code>, <code><a href='wqpSpecials.html'>whatWQPsites</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -187,8 +189,9 @@ start and end times, and converted to UTC. See <a href='https://www.waterquality
 
 <span class='no'>rawSample</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>rawSampleURL</span>)
 
-<span class='no'>rawSampleURL_Zip</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructWQPURL.html'>constructWQPURL</a></span>(<span class='st'>'USGS-01594440'</span>,<span class='st'>'01075'</span>, <span class='st'>''</span>, <span class='st'>''</span>, <span class='fl'>TRUE</span>)
-<span class='no'>rawSample2</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>rawSampleURL_Zip</span>, <span class='kw'>zip</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>zip encoding access still in development</span></div><div class='input'>
+<span class='no'>rawSampleURL_NoZip</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructWQPURL.html'>constructWQPURL</a></span>(<span class='st'>'USGS-01594440'</span>,<span class='st'>'01075'</span>, <span class='st'>''</span>, <span class='st'>''</span>, <span class='kw'>zip</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+<span class='no'>rawSample2</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>rawSampleURL_NoZip</span>, <span class='kw'>zip</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+
 <span class='no'>STORETex</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructWQPURL.html'>constructWQPURL</a></span>(<span class='st'>'WIDNR_WQX-10032762'</span>,<span class='st'>'Specific conductance'</span>, <span class='st'>''</span>, <span class='st'>''</span>)
 <span class='no'>STORETdata</span> <span class='kw'>&lt;-</span> <span class='fu'>importWQP</span>(<span class='no'>STORETex</span>)</div></pre>
   </div>

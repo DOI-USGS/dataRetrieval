@@ -83,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9</span>
       </span>
     </div>
 
@@ -102,9 +102,6 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/usMaps.html">Basic Mapping</a>
-    </li>
     <li>
       <a href="../articles/movingAverages.html">Moving Averages</a>
     </li>
@@ -172,7 +169,7 @@
 date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  <code><a href='https://www.rdocumentation.org/packages/base/topics/timezones'>OlsonNames()</a></code> 
+"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  <code><a href='https://rdrr.io/r/base/timezones.html'>OlsonNames()</a></code> 
 for more information on time zones.</p></td>
     </tr>
     </table>
@@ -184,7 +181,7 @@ for more information on time zones.</p></td>
 <span class='co'># oneSite &lt;- readNGWMNdata(siteNumbers = site, service = "observation")</span>
 
 <span class='co'>#multiple sites</span>
-<span class='no'>sites</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"USGS.272838082142201"</span>,<span class='st'>"USGS.404159100494601"</span>, <span class='st'>"USGS.401216080362703"</span>)
+<span class='no'>sites</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"USGS.272838082142201"</span>,<span class='st'>"USGS.404159100494601"</span>, <span class='st'>"USGS.401216080362703"</span>)
 <span class='co'># Very slow:</span>
 <span class='co'># multiSiteData &lt;- readNGWMNdata(siteNumbers = sites, service = "observation")</span>
 <span class='co'># attributes(multiSiteData)</span>
