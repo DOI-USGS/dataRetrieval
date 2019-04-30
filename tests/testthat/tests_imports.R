@@ -18,7 +18,7 @@ test_that("External importRDB1 tests", {
           startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
   multiData <- importRDB1(urlMultiPcodes)
   pCodeCols <- grep("X", colnames(multiData))
-  expect_that(length(pCodeCols)/2 > 2, is_true() )
+  expect_true(length(pCodeCols)/2 > 2)
   
   unitDataURL <- constructNWISURL(siteNumber,property,
           "2013-11-03","2013-11-03","uv",format="tsv") #includes timezone switch
@@ -101,13 +101,13 @@ test_that("External importWaterML1 test", {
   obs_url <- constructNWISURL(siteNumber,c("00060","00010"),startDate,endDate,'dv')
   data <- importWaterML1(obs_url)
   
-  expect_that(length(unique(data$site_no)) == 2, is_true())
-  expect_that(ncol(data) == 8, is_true()) # 3 data, 3 remark codes, and 4 (agency, site, dateTime, tz)
+  expect_true(length(unique(data$site_no)) == 2)
+  expect_true(ncol(data) == 8) # 3 data, 3 remark codes, and 4 (agency, site, dateTime, tz)
 
   inactiveSite <- "05212700"
   inactiveSite <- constructNWISURL(inactiveSite, "00060", "2014-01-01", "2014-01-10",'dv')
   inactiveSite <- importWaterML1(inactiveSite)
-  expect_that(nrow(inactiveSite) == 0, is_true())
+  expect_true(nrow(inactiveSite) == 0)
 
   inactiveAndActive <- c("07334200","05212700")
   inactiveAndActive <- constructNWISURL(inactiveAndActive, "00060", 
@@ -198,7 +198,7 @@ context("importWQP_noCRAN")
 
 test_that("External WQP tests", {
   testthat::skip_on_cran()
-  expect_that(1==1, is_true())   
+ 
   rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
   rawSample <- importWQP(rawSampleURL)
   expect_is(rawSample$ActivityStartDateTime, 'POSIXct')

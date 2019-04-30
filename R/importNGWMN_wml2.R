@@ -27,12 +27,6 @@
 #' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",sep="&")
 #' data <- importNGWMN(obs_url)
 #' 
-#' obs_url <- paste("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
-#' "service=SOS","version=2.0.0",
-#' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
-#' "responseFormat=text/xml",
-#' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.474011117072901",sep="&")
-#' data <- importNGWMN(obs_url)
 #' }
 #' 
 importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
@@ -76,7 +70,10 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
         mergedDF <- df
       } else {
         similarNames <- intersect(colnames(mergedDF), colnames(df))
-        mergedDF <- dplyr::full_join(mergedDF, df, by=similarNames)
+        mergedDF <- merge(x = mergedDF, 
+                          y = df, 
+                          by = similarNames, 
+                          all = TRUE)
       }
     }
     
@@ -109,9 +106,9 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
     siteLocs <- strsplit(xml_text(xml_find_all(featureMembers, ".//gml:pos")), " ")
     siteLocs <- data.frame(matrix(unlist(siteLocs), nrow=length(siteLocs), byrow=TRUE), stringsAsFactors = FALSE)
     names(siteLocs) <- c("dec_lat_va", "dec_lon_va")
-    dec_lat_va <- "dplyr var"
-    dec_lon_va <- "dplyr var"
-    siteLocs <- mutate(siteLocs, dec_lat_va=as.numeric(dec_lat_va), dec_lon_va=as.numeric(dec_lon_va))
+
+    siteLocs$dec_lat_va <- as.numeric(siteLocs$dec_lat_va)
+    siteLocs$dec_lon_va <- as.numeric(siteLocs$dec_lon_va)
     mergedDF <- cbind.data.frame(site, description = siteDesc, siteLocs, stringsAsFactors = FALSE) 
   
   } else if (response == "ExceptionReport"){
@@ -135,7 +132,6 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
 #' Possible values are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @importFrom xml2 xml_attr xml_find_all xml_text 
-#' @importFrom dplyr mutate
 #' @export
 #' @examples 
 #' baseURL <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
@@ -174,12 +170,13 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
   splitTime <- data.frame(matrix(unlist(strsplit(rawTime, "T")), nrow=nVals, byrow = TRUE), stringsAsFactors=FALSE)
   if(ncol(splitTime) > 1){ #some sites only have a date
     names(splitTime) <- c("date", "time")
-  }else{
+  } else {
     names(splitTime) <- "date"
-    splitTime <- mutate(splitTime, time = NA)
+    splitTime$time <- NA
   }
   
-  timeDF <- mutate(splitTime, dateTime = NA)
+  timeDF <- splitTime
+  timeDF$dateTime <- NA
   logicVec <- nchar(rawTime) > 19
   if(!all(!logicVec)) { #otherwise sets it to char <NA>
     timeDF$dateTime[logicVec] <- rawTime[logicVec]

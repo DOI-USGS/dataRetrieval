@@ -198,7 +198,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
         #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
         attr(dateTime, 'tzone') <- tz 
         tzCol <- rep(tz,nObs)
-      }else{
+      } else {
         tzCol <- rep(defaultTZ, nObs)
       }
       #create column names, addressing if methodDesc is needed
@@ -227,10 +227,13 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
       if(nrow(valParentDF) > 0){
         if(is.null(obsDF)){
           obsDF <- valParentDF
-        }else{
-          obsDF <- dplyr::full_join(obsDF, valParentDF, by = c("dateTime","tz_cd"))
+        } else {
+          obsDF <- merge(x = obsDF,
+                         y = valParentDF,
+                         by = c("dateTime","tz_cd"), 
+                         all = TRUE)
         }
-      }else{
+      } else {
         #need column names for joining later
         # but don't overwrite:
         if(is.null(obsDF)){
@@ -291,17 +294,32 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
           deleteCols <- grepl(obsColName,colnames(sameSite))
           sameSite <- sameSite[,!deleteCols]
           sameSite_simNames <- intersect(colnames(sameSite), colnames(df))
-          sameSite <- dplyr::full_join(sameSite, df, by = sameSite_simNames)
+          sameSite <- merge(x = sameSite, 
+                            y = df, 
+                            by = sameSite_simNames, 
+                            all=TRUE)
           sameSite <- sameSite[order(as.Date(sameSite$dateTime)),]
-          mergedDF <- dplyr::bind_rows(sameSite, diffSite)
-        }else{
+          mergedDF <- r_bind_dr(sameSite, diffSite)
+        } else {
           similarNames <- intersect(colnames(mergedDF), colnames(df))
-          mergedDF <- dplyr::full_join(mergedDF, df, by=similarNames)
+          mergedDF <- merge(x = mergedDF, 
+                            y = df, 
+                            by=similarNames, 
+                            all = TRUE)
         }
       }
-      mergedSite <- dplyr::full_join(mergedSite, siteDF, by = colnames(mergedSite))
-      mergedVar <- dplyr::full_join(mergedVar, varText, by = colnames(mergedVar))
-      mergedStat <- dplyr::full_join(mergedStat, statDF, by = colnames(mergedStat))
+      mergedSite <- merge(x = mergedSite, 
+                          y = siteDF, 
+                          by = colnames(mergedSite), 
+                          all = TRUE)
+      mergedVar <- merge(x = mergedVar, 
+                         y = varText, 
+                         by = colnames(mergedVar), 
+                         all = TRUE)
+      mergedStat <- merge(x = mergedStat, 
+                          y = statDF, 
+                          by = colnames(mergedStat),
+                          all = TRUE)
     }
   }
   
@@ -319,8 +337,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   mergedNames <- names(mergedDF)
   tzLoc <- grep("tz_cd", names(mergedDF))
   mergedDF <- mergedDF[c(mergedNames[-tzLoc],mergedNames[tzLoc])]
-  mergedDF <- dplyr::arrange(mergedDF,site_no, dateTime)
-  
+
+  mergedDF <- mergedDF[order(mergedDF$site_no, mergedDF$dateTime),]
+###############################################################  
   names(mergedDF) <- make.names(names(mergedDF))
   
   #attach other site info etc as attributes of mergedDF
@@ -336,11 +355,59 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   return (mergedDF)
 }
 
+r_bind_dr <- function(df1, df2){
+  
+  # Note...this funciton doesn't retain factors/levels
+  # That is not a problem with any dataRetrieval function
+  # but, if this function gets used else-where, 
+  # that should be addressed.
+  df1 <- add_empty_col(df1, df2, setdiff(names(df2), names(df1)))
+  df2 <- add_empty_col(df2, df1, setdiff(names(df1), names(df2)))
+  
+  df3 <- rbind(df1, df2)
+  
+  return(df3)
+}
+
+add_empty_col <- function(df, df_ref, col_names){
+  
+  if(length(col_names) > 0){
+    if(nrow(df) > 0){
+      df[,col_names] <- NA
+    } else {
+      for(i in col_names){
+        column_type <- class(df_ref[[i]])
+        df[i] <- empty_col(column_type)
+      }
+    }
+  }
+  return(df)
+}
+
+empty_col <- function(column_type){
+  
+  if(all(column_type %in% c("POSIXct","POSIXt" ))){
+    column_type <- "POSIXct"
+  }
+  
+  col_return <- switch(column_type,
+         "numeric" = as.numeric(),
+         "factor" = as.factor(),
+         "list" = list(),
+         "integer" = as.integer(),
+         "Date" = as.Date(numeric(), origin = "1970-01-01"),
+         "POSIXct" = as.POSIXct(numeric(), origin = "1970-01-01"),
+         "POSIXlt" = as.POSIXlt(numeric(), origin = "1970-01-01"),
+         "character" = as.character())
+  
+  return(col_return)
+}
+
 check_if_xml <- function(obs_url){
 
   if(class(obs_url) == "character" && file.exists(obs_url)){
     returnedDoc <- read_xml(obs_url)
-  }else if(class(obs_url) == 'raw'){
+  } else if(class(obs_url) == 'raw'){
     returnedDoc <- read_xml(obs_url)
   } else if(inherits(obs_url, c("xml_node", "xml_nodeset"))) {
     returnedDoc <- obs_url

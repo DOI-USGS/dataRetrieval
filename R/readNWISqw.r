@@ -151,15 +151,37 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
       if(sum(data$parm_cd == "") > 0){
         warning("Some or all data returned without pCodes, those data will not be included in reshape")
       }
+      original_start_dates <- dataWithPcodes$startDateTime
+      original_end_dates <- dataWithPcodes$endDateTime
+      
       parameterCd <- unique(dataWithPcodes$parm_cd)
-      longDF <- reshape2::melt(dataWithPcodes, measure.vars =  measureCols,
-                     variable.name = "variable", value.name = "value", na.rm = FALSE)
-      wideDF <- reshape2::dcast(longDF, ... ~ variable + parm_cd )
-      wideDF[,grep("_va_",names(wideDF))] <- sapply(wideDF[,grep("_va_",names(wideDF))], function(x) as.numeric(x))
-      pCodesReturned <- unique(dataWithPcodes$parm_cd)
-      groupByPCode <- as.vector(sapply(pCodesReturned, function(x) grep(x, names(wideDF)) ))
-      data <- wideDF[,c(which(names(wideDF) %in% columnsToMelt),groupByPCode)]
+      idcols <- names(dataWithPcodes)[!(names(dataWithPcodes) %in% c(measureCols,"parm_cd"))]
 
+      dataWithPcodes[,idcols] <- lapply(dataWithPcodes[,idcols], function(x) as.factor(x))
+      dataWithPcodes[,idcols] <- lapply(dataWithPcodes[,idcols], function(x) addNA(x))
+
+      wide2 <- stats::reshape(dataWithPcodes, 
+                              idvar = idcols,
+                              timevar = "parm_cd",
+                              v.names = measureCols,
+                              direction = "wide")
+      names(wide2) <- gsub("\\.","_",names(wide2))
+      idcols_factors <- idcols[unname(sapply(wide2[idcols], class) == "factor")]
+      idcols_dates <- idcols[grep("_dt",idcols)]
+      
+      wide2[,idcols_factors] <- sapply(wide2[,idcols_factors], as.character)
+      wide2[,idcols_dates] <- lapply(wide2[,idcols_dates], as.Date)
+      other_dates <- names(wide2)[grep("_dt",names(wide2))]
+      other_dates <- other_dates[!(other_dates %in% idcols_dates)]
+      wide2[,other_dates] <- lapply(wide2[,other_dates], function(x) as.Date(strptime(x, format = "%Y%m%d")))
+      if("startDateTime" %in% names(wide2)){
+        wide2[,"startDateTime"] <- as.POSIXct(wide2[,"startDateTime"], tz = attr(original_start_dates, "tzone"))
+      }
+      if("endDateTime" %in% names(wide2)){
+        wide2[,"endDateTime"] <- as.POSIXct(wide2[,"endDateTime"], tz = attr(original_end_dates, "tzone"))
+      }
+      
+      data <- wide2
     } else {
       warning("Reshape can only be used with expanded data. Reshape request will be ignored.")
     }
@@ -170,7 +192,10 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   if(exists("siteNumbers") &&  all(!(is.na(siteNumbers))) & length(siteNumbers) > 0){
     siteInfo <- readNWISsite(siteNumbers)
     if(nrow(data) > 0){
-      siteInfo <- dplyr::left_join(unique(data[,c("agency_cd","site_no")]),siteInfo, by=c("agency_cd","site_no"))
+      siteInfo <- merge(x = unique(data[,c("agency_cd","site_no")]), 
+                        y = siteInfo,
+                        by=c("agency_cd","site_no"), 
+                        all.x = TRUE)
     }
     attr(data, "siteInfo") <- siteInfo    
   }

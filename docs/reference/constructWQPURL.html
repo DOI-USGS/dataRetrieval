@@ -83,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9</span>
       </span>
     </div>
 
@@ -102,9 +102,6 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/usMaps.html">Basic Mapping</a>
-    </li>
     <li>
       <a href="../articles/movingAverages.html">Moving Averages</a>
     </li>
@@ -148,8 +145,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>constructWQPURL</span>(<span class='no'>siteNumbers</span>, <span class='no'>parameterCd</span>, <span class='no'>startDate</span>, <span class='no'>endDate</span>,
-  <span class='kw'>zip</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>constructWQPURL</span>(<span class='no'>siteNumbers</span>, <span class='no'>parameterCd</span>, <span class='no'>startDate</span>, <span class='no'>endDate</span>, <span class='kw'>zip</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,7 +170,7 @@ retrieval for the latest possible record.</p></td>
     </tr>
     <tr>
       <th>zip</th>
-      <td><p>logical to request data via downloading zip file. Default set to FALSE.</p></td>
+      <td><p>logical to request data via downloading zip file. Default set to TRUE.</p></td>
     </tr>
     </table>
     
@@ -187,9 +183,9 @@ retrieval for the latest possible record.</p></td>
     <pre class="examples"><div class='input'><span class='no'>site_id</span> <span class='kw'>&lt;-</span> <span class='st'>'01594440'</span>
 <span class='no'>startDate</span> <span class='kw'>&lt;-</span> <span class='st'>'1985-01-01'</span>
 <span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>''</span>
-<span class='no'>pCode</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"00060"</span>,<span class='st'>"00010"</span>)
-<span class='no'>url_wqp</span> <span class='kw'>&lt;-</span> <span class='fu'>constructWQPURL</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='st'>"USGS"</span>,<span class='no'>site_id</span>,<span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"-"</span>),
-           <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'01075'</span>,<span class='st'>'00029'</span>,<span class='st'>'00453'</span>),
+<span class='no'>pCode</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00060"</span>,<span class='st'>"00010"</span>)
+<span class='no'>url_wqp</span> <span class='kw'>&lt;-</span> <span class='fu'>constructWQPURL</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"USGS"</span>,<span class='no'>site_id</span>,<span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"-"</span>),
+           <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'01075'</span>,<span class='st'>'00029'</span>,<span class='st'>'00453'</span>),
            <span class='no'>startDate</span>,<span class='no'>endDate</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

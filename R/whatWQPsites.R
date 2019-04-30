@@ -6,8 +6,12 @@
 #' generally faster than the \code{\link{whatWQPdata}} function, but does
 #' not return information on what data was collected at the site.
 #'
+#' The \code{readWQPsummary} function has 
+#'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
 #' @keywords data import WQP web service
+#' @rdname wqpSpecials
+#' @name whatWQPsites
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
 #' Name \tab Type \tab Description \cr
@@ -58,7 +62,9 @@
 #' site1 <- whatWQPsites(siteid="USGS-01594440")
 #' 
 #' type <- "Stream"
-#' sites <- whatWQPsites(countycode="US:55:025",siteType=type)
+#' sites <- whatWQPsites(countycode="US:55:025",
+#'                       characteristicName = "Phosphorus",
+#'                       siteType=type)
 #' }
 whatWQPsites <- function(...){
 
@@ -72,11 +78,10 @@ whatWQPsites <- function(...){
     
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
   
-  
   baseURL <- drURL("wqpStation")
   urlCall <- paste0(baseURL,
                urlCall,
-               "&mimeType=tsv&sorted=no")
+               "&mimeType=tsv")
 
   retval <- importWQP(urlCall, zip=values["zip"] == "yes")
   
@@ -84,6 +89,50 @@ whatWQPsites <- function(...){
   attr(retval, "url") <- urlCall
   
   return(retval)
-  
-
 }
+
+
+#' @name readWQPsummary
+#' @rdname wqpSpecials
+#' @export
+#' @examples
+#' \donttest{
+#' site1 <- readWQPsummary(siteid="USGS-07144100",
+#'                         summaryYears=5,
+#'                         dataProfile="periodOfRecord")
+#' # Pretty slow:
+#' #state1 <- readWQPsummary(statecode="NJ",
+#' #                          dataProfile="periodOfRecord")
+#' }
+readWQPsummary <- function(...){
+  
+  values <- readWQPdots(...)
+  
+  if("tz" %in% names(values)){
+    values <- values[!(names(values) %in% "tz")]
+  }
+  
+  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  
+  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
+  
+  baseURL <- drURL("wqpSiteSummary")
+  urlCall <- paste0(baseURL,
+                    urlCall,
+                    "&mimeType=csv")
+  
+  withCallingHandlers({
+    retval <- importWQP(urlCall, zip=values["zip"] == "yes", csv = TRUE)
+  }, warning=function(w) {
+    if (any( grepl( "Number of rows returned not matched in header", w)))
+      invokeRestart("muffleWarning")
+  })
+  attr(retval, "queryTime") <- Sys.time()
+  attr(retval, "url") <- urlCall
+  
+  return(retval)
+  
+  
+}
+
+

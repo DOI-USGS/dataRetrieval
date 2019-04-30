@@ -33,7 +33,6 @@ getWebServiceData <- function(obs_url, ...){
     message("For: ", obs_url,"\n")
     httr::stop_for_status(returnedList)
   } else {
-    
     headerInfo <- httr::headers(returnedList)
 
     if(headerInfo$`content-type` %in% c("text/tab-separated-values;charset=UTF-8")){
@@ -48,8 +47,6 @@ getWebServiceData <- function(obs_url, ...){
       txt <- readBin(returnedList$content, character())
       message(txt)
       return(txt)
-      
-
     } else {
       returnedDoc <- httr::content(returnedList,encoding = "UTF-8")
       if(grepl("No sites/data found using the selection criteria specified", returnedDoc)){
@@ -114,8 +111,12 @@ retryGetOrPost <- function(obs_url, ...) {
     split <- strsplit(obs_url, "?", fixed=TRUE)
     obs_url <- split[[1]][1]
     query <- split[[1]][2]
-    resp <- httr::RETRY("POST", obs_url, ..., body = query,
-                        httr::content_type("application/x-www-form-urlencoded"), httr::user_agent(default_ua()))
+
+    resp <- httr::RETRY("POST", obs_url, ...,
+                        body = query,
+                        httr::content_type("application/x-www-form-urlencoded"),
+                        httr::user_agent(default_ua())) 
+
   }
   return(resp)
 }

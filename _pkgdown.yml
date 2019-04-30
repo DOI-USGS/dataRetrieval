@@ -10,8 +10,6 @@ navbar:
     href: reference/index.html
   - text: Articles
     menu:
-    - text: Basic Mapping
-      href: articles/usMaps.html
     - text: Moving Averages
       href: articles/movingAverages.html
     - text: Stat Service
@@ -33,6 +31,7 @@ reference:
       - readNWISmeas
       - readNWISpCode
       - readNWISrating
+      - readNWISpeak
       - readNWISgwl
       - readNWISuse
       - readNWISdata
@@ -47,6 +46,7 @@ reference:
       - whatWQPdata
       - whatWQPsamples
       - whatWQPmetrics
+      - readWQPsummary
   - title: National Ground-Water Monitoring Network
     desc: Functions to retrieve NGWMN data.
     contents:
@@ -57,6 +57,8 @@ reference:
     contents:
       - calcWaterYear
       - addWaterYear
+      - renameNWISColumns
+      - setAccess
       - countyCdLookup
       - stateCdLookup
       - zeroPad

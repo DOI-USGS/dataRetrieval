@@ -59,7 +59,7 @@ setAccess = function(access="public"){
   pkg.env$wqpStation = "https://www.waterqualitydata.us/Station/search"
   pkg.env$wqpActivity = "https://www.waterqualitydata.us/Activity/search"
   pkg.env$wqpMetrics = "https://www.waterqualitydata.us/ActivityMetric/search"
-  
+  pkg.env$wqpSiteSummary = "https://www.waterqualitydata.us/data/summary/monitoringLocation/search"
   pkg.env$NGWMN = "https://cida.usgs.gov/ngwmn_cache/sos"
 
 }

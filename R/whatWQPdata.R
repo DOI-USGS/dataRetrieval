@@ -1,14 +1,6 @@
-#' Sampling Activity Data Import from Water Quality Portal
-#'
-#' Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
-#' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
-#'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
-#' @keywords data import WQP web service
-#' @return A data frame 
-#' 
+#' @name whatWQPsamples
+#' @rdname wqpSpecials
 #' @export
-#' @import utils
 #' @examples
 #' \donttest{
 #' site1 <- whatWQPsamples(siteid="USGS-01594440")
@@ -23,32 +15,28 @@ whatWQPsamples <- function(...){
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
-  
-  
+ 
   baseURL <- drURL("wqpActivity")
   urlCall <- paste0(baseURL,
                     urlCall,
-                    "&mimeType=tsv&sorted=no")
+                    "&mimeType=tsv")
   
-  retval <- importWQP(urlCall, zip=values["zip"] == "yes")
-  
+  withCallingHandlers({
+    retval <- importWQP(urlCall, zip=values["zip"] == "yes")
+  }, warning=function(w) {
+    if (any( grepl( "Number of rows returned not matched in header", w)))
+      invokeRestart("muffleWarning")
+  })
+
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- urlCall
   
   return(retval)
 }
 
-#' Activity Metrics from Water Quality Portal
-#'
-#' Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
-#' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}
-#'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
-#' @keywords data import WQP web service
-#' @return A data frame 
-#' 
+#' @name whatWQPmetrics
+#' @rdname wqpSpecials
 #' @export
-#' @import utils
 #' @examples
 #' \donttest{
 #' 
@@ -64,20 +52,23 @@ whatWQPmetrics <- function(...){
 
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
 
-
   baseURL <- drURL("wqpMetrics")
   urlCall <- paste0(baseURL,
                     urlCall,
-                    "&mimeType=tsv&sorted=no")
-
-  retval <- importWQP(urlCall, zip=values["zip"] == "yes")
+                    "&mimeType=tsv")
+  
+  withCallingHandlers({
+    retval <- importWQP(urlCall, zip=values["zip"] == "yes")
+  }, warning=function(w) {
+    if (any( grepl( "Number of rows returned not matched in header", w)))
+      invokeRestart("muffleWarning")
+  })
 
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- urlCall
 
   return(retval)
 }
-
 
 
 #' Data Available from Water Quality Portal
@@ -141,21 +132,24 @@ whatWQPdata <- function(..., saveFile = tempfile()){
   baseURL <- drURL("wqpStation")
   urlCall <- paste0(baseURL,
                     urlCall,
-                    "&mimeType=geojson&sorted=no")
+                    "&mimeType=geojson")
   
-  if(tools::file_ext(saveFile) != ".geojson"){
-    saveFile <- paste0(saveFile,".geojson")
+  saveFile_zip <- saveFile
+  if(tools::file_ext(saveFile) != ".zip"){
+    saveFile_zip <- paste0(saveFile,".zip")
   }
-  
-  doc <- getWebServiceData(urlCall, httr::write_disk(saveFile))
-  headerInfo <- attr(doc, "headerInfo")
 
-  retval <- as.data.frame(jsonlite::fromJSON(saveFile), stringsAsFactors = FALSE)
+  doc <- getWebServiceData(urlCall, httr::write_disk(saveFile_zip))
+  headerInfo <- attr(doc, "headerInfo")
+  doc <- utils::unzip(saveFile_zip, exdir = saveFile)
+  unlink(saveFile_zip)
+
+  retval <- as.data.frame(jsonlite::fromJSON(doc), stringsAsFactors = FALSE)
   df_cols <- as.integer(which(sapply(retval, class) == "data.frame"))
   y <- retval[,-df_cols]
   
   for(i in df_cols){
-    y <- dplyr::bind_cols(y, retval[[i]])
+    y <- cbind(y, retval[[i]])
   }
   
   y[,grep("Count$",names(y))] <- sapply(y[,grep("Count$",names(y))], as.numeric)

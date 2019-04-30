@@ -76,7 +76,7 @@ test_that("peak, rating curves, surface-water measurements", {
   expect_is(siteINFO$agency_cd, 'character')
   
   siteINFOMulti <- readNWISsite(c('05114000','09423350'))
-  expect_that(nrow(siteINFOMulti) == 2, is_true())
+  expect_true(nrow(siteINFOMulti) == 2)
   
   Meas07227500.ex <- readNWISmeas("07227500",expanded=TRUE)
   expect_is(Meas07227500.ex$measurement_dt, 'Date')
@@ -104,6 +104,8 @@ test_that("NWIS qw tests", {
   rawNWISqwDataReshaped <- readNWISqw(siteNumbers,parameterCd,
             startDate,endDate,reshape=TRUE)
   expect_is(rawNWISqwDataReshaped$startDateTime, 'POSIXct')
+  expect_gt(ncol(rawNWISqwDataReshaped), ncol(rawNWISqwData))
+  expect_lt(nrow(rawNWISqwDataReshaped), nrow(rawNWISqwData))
   
   parameterCd <- "all"
   rawNWISall <- readNWISqw(siteNumbers,parameterCd,
@@ -116,7 +118,7 @@ test_that("NWIS qw tests", {
   expect_is(rawNWISNutrients$startDateTime, 'POSIXct')
   
   qwret <- readNWISqw("413437087150601", parameterCd = c("NUT","INN"),startDate = "",endDate = "")
-  expect_that(nrow(qwret) == 0, is_true())
+  expect_true(nrow(qwret) == 0)
   
   siteNumber <- '455638089034501'
   wy_start <- paste0(2014, "-10-01")
@@ -128,7 +130,7 @@ test_that("NWIS qw tests", {
                   startDate = wy_start, 
                   endDat = wy_end)
   
-  expect_that(nrow(no.data) == 0, is_true())
+  expect_true(nrow(no.data) == 0)
   
 })
 
@@ -147,21 +149,21 @@ test_that("NWIS dv tests", {
   
   rawDailyQAndTempMeanMax <- readNWISdv(siteNumber,c('00010','00060'),
         startDate, endDate, statCd=c('00001','00003'))
-  expect_that(length(grep("00060", names(rawDailyQAndTempMeanMax))) >= 2 & 
-                length(grep("00010", names(rawDailyQAndTempMeanMax))) >= 2, is_true())
+  expect_true(length(grep("00060", names(rawDailyQAndTempMeanMax))) >= 2 & 
+                length(grep("00010", names(rawDailyQAndTempMeanMax))) >= 2)
   
 
   rawDailyMultiSites<- readNWISdv(c("01491000","01645000"),c('00010','00060'),
         startDate, endDate, statCd=c('00001','00003'))
-  expect_that(length(unique(rawDailyMultiSites$site_no)) > 1, is_true())
+  expect_true(length(unique(rawDailyMultiSites$site_no)) > 1)
   
 #   # Site with no data:
 #   x <- readNWISdv("10258500","00060", "2015-02-08", "2015-02-14")
-#   expect_that(sum(is.na(x$X_00060_00003)) > 0, is_true())
+#   expect_true(sum(is.na(x$X_00060_00003)) > 0)
   
   site <- "05212700"
   notActive <- readNWISdv(site, "00060", "2014-01-01","2014-01-07")
-  expect_that(nrow(notActive) == 0, is_true())
+  expect_true(nrow(notActive) == 0)
 })
 
 test_that("WQP qw tests", {
@@ -183,7 +185,7 @@ test_that("readNWISstat tests", {
   data <- readNWISstat(siteNumbers=c("02171500"),parameterCd=c("00010","00060"),
                     statReportType="daily",statType=c("mean","p75","p25"),startDate="2000",endDate="2010")
   expect_is(data$begin_yr, 'numeric')
-  expect_that(length(data) > 3, is_true())
+  expect_true(length(data) > 3)
   
   monthData <- readNWISstat(siteNumbers=c("02171500"),parameterCd=c("00010","00060"),
                                                   statReportType="monthly",startDate="2000",endDate="2010")
@@ -198,14 +200,14 @@ context("readNWISuse tests")
 test_that("readNWISuse tests", {
   testthat::skip_on_cran()
   dc <- readNWISuse(years=c(2000,2005,2010),stateCd = "DC", countyCd = NULL)
-  expect_that(nrow(dc)==3, is_true())
+  expect_true(nrow(dc)==3)
   expect_is(dc$state_cd, 'character')
   
   ohio <- readNWISuse(years=2005,stateCd="OH",countyCd="ALL")
-  expect_that(nrow(ohio)==88, is_true())
+  expect_true(nrow(ohio)==88)
   
   twoCounties <- readNWISuse(years=2010,stateCd="PA",countyCd=c("Cambria","Indiana"))
-  expect_that(nrow(twoCounties)==2, is_true())
+  expect_true(nrow(twoCounties)==2)
 })
 
 context("state tests")
@@ -246,21 +248,20 @@ df_test <- data.frame(site_no = as.character(1:13),
 
 test_that("addWaterYear works with Date, POSIXct, character, but breaks with numeric", {
   testthat::skip_on_cran()
-  library(dplyr)
   
   df_date <- df_test
   df_date_wy <- addWaterYear(df_date)
   expect_equal(ncol(df_date_wy), ncol(df_date) + 1)
-  
-  df_posixct <- mutate(df_test, dateTime = as.POSIXct(dateTime))
+  df_posixct <- df_test
+  df_posixct$dateTime <- as.POSIXct(df_posixct$dateTime)
   df_posixct_wy <- addWaterYear(df_posixct)
   expect_equal(ncol(df_posixct_wy), ncol(df_posixct) + 1)
-  
-  df_char <- mutate(df_test, dateTime = as.character(dateTime))
+  df_char <- df_test
+  df_char$dateTime <- as.character(df_char$dateTime)
   df_char_wy <- addWaterYear(df_char)
   expect_equal(ncol(df_char_wy), ncol(df_char) + 1)
-  
-  df_num <- mutate(df_test, dateTime = as.numeric(dateTime))
+  df_num <- df_test
+  df_num$dateTime <- as.numeric(df_num$dateTime)
   expect_error(addWaterYear(df_num), "'origin' must be supplied")
 })
 
@@ -304,8 +305,9 @@ test_that("addWaterYear adds column next to dateTime", {
 
 test_that("addWaterYear can be used with pipes", {
   testthat::skip_on_cran()
-  library(dplyr)
-  df_test_wy <- df_test %>% addWaterYear()
+
+  df_test_wy <- df_test
+  df_test_wy <- addWaterYear(df_test_wy)
   expect_equal(ncol(df_test_wy), ncol(df_test) + 1)
 })
 
@@ -395,7 +397,7 @@ test_that("Construct WQP urls", {
              c('01075','00029','00453'),
              startDate,endDate)
   
-  expect_equal(url_wqp, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&sorted=no&mimeType=tsv")
+  expect_equal(url_wqp, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes")
 })
 
 context("checkWQPdates")
@@ -417,10 +419,10 @@ test_that("Construct NWIS urls", {
              c('01075','00029','00453'),
              startDate,endDate)
   
-  expect_equal(url_wqp, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&sorted=no&mimeType=tsv")
+  expect_equal(url_wqp, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes")
 
   rawSampleURL_Zip <- constructWQPURL('USGS-01594440','01075', '', '', TRUE)
-  expect_equal(rawSampleURL_Zip, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075&sorted=no&mimeType=tsv&zip=yes")
+  expect_equal(rawSampleURL_Zip, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075&mimeType=tsv&zip=yes")
 })
 
 

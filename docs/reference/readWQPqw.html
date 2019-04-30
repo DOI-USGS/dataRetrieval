@@ -88,7 +88,7 @@ site name, such as 'USGS-01234567'." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9</span>
       </span>
     </div>
 
@@ -107,9 +107,6 @@ site name, such as 'USGS-01234567'." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/usMaps.html">Basic Mapping</a>
-    </li>
     <li>
       <a href="../articles/movingAverages.html">Moving Averages</a>
     </li>
@@ -189,7 +186,7 @@ retrieval for the latest possible record. Date arguments are always specified in
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  <code><a href='https://www.rdocumentation.org/packages/base/topics/timezones'>OlsonNames()</a></code> 
+"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  <code><a href='https://rdrr.io/r/base/timezones.html'>OlsonNames()</a></code> 
 for more information on time zones.</p></td>
     </tr>
     <tr>
@@ -281,16 +278,16 @@ for more information on time zones.</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='readWQPdata.html'>readWQPdata</a></code>, <code><a href='whatWQPsites.html'>whatWQPsites</a></code>, 
+    <div class='dont-index'><p><code><a href='readWQPdata.html'>readWQPdata</a></code>, <code><a href='wqpSpecials.html'>whatWQPsites</a></code>, 
 <code><a href='readNWISqw.html'>readNWISqw</a></code>, and <code><a href='importWQP.html'>importWQP</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>rawPcode</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPqw</span>(<span class='st'>'USGS-01594440'</span>,<span class='st'>'01075'</span>, <span class='st'>''</span>, <span class='st'>''</span>)
 <span class='no'>rawCharacteristicName</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPqw</span>(<span class='st'>'WIDNR_WQX-10032762'</span>,<span class='st'>'Specific conductance'</span>, <span class='st'>''</span>, <span class='st'>''</span>)
-<span class='no'>rawPHsites</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPqw</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'USGS-05406450'</span>, <span class='st'>'USGS-05427949'</span>,<span class='st'>'WIDNR_WQX-133040'</span>), <span class='st'>'pH'</span>,<span class='st'>''</span>,<span class='st'>''</span>)
-<span class='no'>nwisEx</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPqw</span>(<span class='st'>'USGS-04024000'</span>,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'34247'</span>,<span class='st'>'30234'</span>,<span class='st'>'32104'</span>,<span class='st'>'34220'</span>),<span class='st'>''</span>,<span class='st'>'2012-12-20'</span>)
-<span class='no'>nwisEx.summary</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPqw</span>(<span class='st'>'USGS-04024000'</span>,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'34247'</span>,<span class='st'>'30234'</span>,<span class='st'>'32104'</span>,<span class='st'>'34220'</span>),
+<span class='no'>rawPHsites</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPqw</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'USGS-05406450'</span>, <span class='st'>'USGS-05427949'</span>,<span class='st'>'WIDNR_WQX-133040'</span>), <span class='st'>'pH'</span>,<span class='st'>''</span>,<span class='st'>''</span>)
+<span class='no'>nwisEx</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPqw</span>(<span class='st'>'USGS-04024000'</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'34247'</span>,<span class='st'>'30234'</span>,<span class='st'>'32104'</span>,<span class='st'>'34220'</span>),<span class='st'>''</span>,<span class='st'>'2012-12-20'</span>)
+<span class='no'>nwisEx.summary</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPqw</span>(<span class='st'>'USGS-04024000'</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'34247'</span>,<span class='st'>'30234'</span>,<span class='st'>'32104'</span>,<span class='st'>'34220'</span>),
     <span class='st'>''</span>,<span class='st'>'2012-12-20'</span>, <span class='kw'>querySummary</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
