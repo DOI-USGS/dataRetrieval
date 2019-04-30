@@ -15,15 +15,19 @@ whatWQPsamples <- function(...){
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
   
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
-  
-  
+ 
   baseURL <- drURL("wqpActivity")
   urlCall <- paste0(baseURL,
                     urlCall,
                     "&mimeType=tsv")
   
-  retval <- suppressWarnings(importWQP(urlCall, zip=values["zip"] == "yes"))
-  
+  withCallingHandlers({
+    retval <- importWQP(urlCall, zip=values["zip"] == "yes")
+  }, warning=function(w) {
+    if (any( grepl( "Number of rows returned not matched in header", w)))
+      invokeRestart("muffleWarning")
+  })
+
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- urlCall
   
@@ -48,20 +52,23 @@ whatWQPmetrics <- function(...){
 
   urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
 
-
   baseURL <- drURL("wqpMetrics")
   urlCall <- paste0(baseURL,
                     urlCall,
                     "&mimeType=tsv")
-
-  retval <- suppressWarnings(importWQP(urlCall, zip=values["zip"] == "yes"))
+  
+  withCallingHandlers({
+    retval <- importWQP(urlCall, zip=values["zip"] == "yes")
+  }, warning=function(w) {
+    if (any( grepl( "Number of rows returned not matched in header", w)))
+      invokeRestart("muffleWarning")
+  })
 
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- urlCall
 
   return(retval)
 }
-
 
 
 #' Data Available from Water Quality Portal

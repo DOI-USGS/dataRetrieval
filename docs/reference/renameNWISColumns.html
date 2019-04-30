@@ -240,11 +240,11 @@ form of the name must be like pXXXXX, where XXXXX is the parameter code.</p></td
     <pre class="examples"><div class='input'><span class='no'>siteWithTwo</span> <span class='kw'>&lt;-</span> <span class='st'>'01480015'</span>
 <span class='no'>startDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2012-09-01"</span>
 <span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2012-10-01"</span></div><div class='input'><span class='no'>twoResults</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readNWISdv.html'>readNWISdv</a></span>(<span class='no'>siteWithTwo</span>, <span class='st'>"00060"</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>twoResults</span>)</div><div class='output co'>#&gt; [1] "agency_cd"        "site_no"          "Date"             "X_00060_00003"   
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>twoResults</span>)</div><div class='output co'>#&gt; [1] "agency_cd"        "site_no"          "Date"             "X_00060_00003"   
 #&gt; [5] "X_00060_00003_cd"</div><div class='input'><span class='no'>renamedCols</span> <span class='kw'>&lt;-</span> <span class='fu'>renameNWISColumns</span>(<span class='no'>twoResults</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>renamedCols</span>)</div><div class='output co'>#&gt; [1] "agency_cd" "site_no"   "Date"      "Flow"      "Flow_cd"  </div><div class='input'><span class='co'>#Custom names:</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>renamedCols</span>)</div><div class='output co'>#&gt; [1] "agency_cd" "site_no"   "Date"      "Flow"      "Flow_cd"  </div><div class='input'><span class='co'>#Custom names:</span>
 <span class='no'>newNames</span> <span class='kw'>&lt;-</span> <span class='fu'>renameNWISColumns</span>(<span class='no'>twoResults</span>, <span class='kw'>p00060</span><span class='kw'>=</span><span class='st'>"Discharge"</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>newNames</span>)</div><div class='output co'>#&gt; [1] "agency_cd"    "site_no"      "Date"         "Discharge"    "Discharge_cd"</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>newNames</span>)</div><div class='output co'>#&gt; [1] "agency_cd"    "site_no"      "Date"         "Discharge"    "Discharge_cd"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

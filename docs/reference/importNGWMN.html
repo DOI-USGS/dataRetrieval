@@ -166,7 +166,7 @@ but the general functionality is correct.</p>
 date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  <code><a href='https://www.rdocumentation.org/packages/base/topics/timezones'>OlsonNames()</a></code> 
+"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  <code><a href='https://rdrr.io/r/base/timezones.html'>OlsonNames()</a></code> 
 for more information on time zones.</p></td>
     </tr>
     </table>
@@ -177,7 +177,7 @@ for more information on time zones.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>obs_url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='st'>"http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation"</span>,
+    <pre class="examples"><div class='input'><span class='no'>obs_url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation"</span>,
 <span class='st'>"service=SOS"</span>,<span class='st'>"version=2.0.0"</span>,
 <span class='st'>"observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel"</span>,
 <span class='st'>"responseFormat=text/xml"</span>,

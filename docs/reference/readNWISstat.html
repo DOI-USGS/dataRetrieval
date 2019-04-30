@@ -214,23 +214,23 @@ at <a href='https://waterservices.usgs.gov/rest/Statistics-Service.html'>https:/
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x1</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISstat</span>(<span class='kw'>siteNumbers</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"02319394"</span>),
-                  <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"00060"</span>),
+    <pre class="examples"><div class='input'><span class='no'>x1</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISstat</span>(<span class='kw'>siteNumbers</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"02319394"</span>),
+                  <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00060"</span>),
                   <span class='kw'>statReportType</span><span class='kw'>=</span><span class='st'>"annual"</span>)</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>          Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'>
 <span class='co'>#all the annual mean discharge data for two sites</span>
-<span class='no'>x2</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISstat</span>(<span class='kw'>siteNumbers</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"02319394"</span>,<span class='st'>"02171500"</span>),
-                  <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"00010"</span>,<span class='st'>"00060"</span>),
+<span class='no'>x2</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISstat</span>(<span class='kw'>siteNumbers</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"02319394"</span>,<span class='st'>"02171500"</span>),
+                  <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00010"</span>,<span class='st'>"00060"</span>),
                   <span class='kw'>statReportType</span><span class='kw'>=</span><span class='st'>"annual"</span>)</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>          Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'>
 <span class='co'>#Request p25, p75, and mean values for temperature and discharge for the 2000s</span>
 <span class='co'>#Note that p25 and p75 were not available for temperature, and return NAs</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISstat</span>(<span class='kw'>siteNumbers</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"02171500"</span>),
-                  <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"00010"</span>,<span class='st'>"00060"</span>),
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISstat</span>(<span class='kw'>siteNumbers</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"02171500"</span>),
+                  <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00010"</span>,<span class='st'>"00060"</span>),
                   <span class='kw'>statReportType</span><span class='kw'>=</span><span class='st'>"daily"</span>,
-                  <span class='kw'>statType</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"mean"</span>,<span class='st'>"median"</span>),
+                  <span class='kw'>statType</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>,<span class='st'>"median"</span>),
                   <span class='kw'>startDate</span><span class='kw'>=</span><span class='st'>"2000"</span>,<span class='kw'>endDate</span><span class='kw'>=</span><span class='st'>"2010"</span>)</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>          Data formatting could be changed at any time, and is not guaranteed</span></div></pre>
