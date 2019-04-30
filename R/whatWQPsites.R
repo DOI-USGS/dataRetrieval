@@ -121,8 +121,12 @@ readWQPsummary <- function(...){
                     urlCall,
                     "&mimeType=csv")
   
-  retval <- suppressWarnings(importWQP(urlCall, zip=values["zip"] == "yes", csv = TRUE))
-  
+  withCallingHandlers({
+    retval <- importWQP(urlCall, zip=values["zip"] == "yes", csv = TRUE)
+  }, warning=function(w) {
+    if (any( grepl( "Number of rows returned not matched in header", w)))
+      invokeRestart("muffleWarning")
+  })
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- urlCall
   
