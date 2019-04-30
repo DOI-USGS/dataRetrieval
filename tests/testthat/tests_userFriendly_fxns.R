@@ -398,6 +398,14 @@ test_that("Construct WQP urls", {
              startDate,endDate)
   
   expect_equal(url_wqp, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes")
+  
+  #Multiple characteristicNames
+  charNames <- c("Temperature","Temperature, sample","Temperature, water",
+                 "Temperature, water, deg F")
+  obs_url_orig <- constructWQPURL(siteNumbers = c("IIDFG-41WSSPAHS", "USGS-02352560"), 
+                                  parameterCd = c("Temperature","Temperature, sample","Temperature, water", "Temperature, water, deg F"),
+                                  "","")
+  expect_equal(obs_url_orig, "https://www.waterqualitydata.us/Result/search?siteid=IIDFG-41WSSPAHS;USGS-02352560&characteristicName=Temperature;Temperature%2C%20sample;Temperature%2C%20water;Temperature%2C%20water%2C%20deg%20F&mimeType=tsv&zip=yes")
 })
 
 context("checkWQPdates")
