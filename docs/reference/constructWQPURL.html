@@ -83,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.4.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.5</span>
       </span>
     </div>
 
@@ -186,7 +186,16 @@ retrieval for the latest possible record.</p></td>
 <span class='no'>pCode</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00060"</span>,<span class='st'>"00010"</span>)
 <span class='no'>url_wqp</span> <span class='kw'>&lt;-</span> <span class='fu'>constructWQPURL</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"USGS"</span>,<span class='no'>site_id</span>,<span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"-"</span>),
            <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'01075'</span>,<span class='st'>'00029'</span>,<span class='st'>'00453'</span>),
-           <span class='no'>startDate</span>,<span class='no'>endDate</span>)</div></pre>
+           <span class='no'>startDate</span>,<span class='no'>endDate</span>)
+<span class='no'>url_wqp</span></div><div class='output co'>#&gt; [1] "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&amp;pCode=01075;00029;00453&amp;startDateLo=01-01-1985&amp;mimeType=tsv&amp;zip=yes"</div><div class='input'><span class='no'>charNames</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Temperature"</span>,
+               <span class='st'>"Temperature, sample"</span>,
+               <span class='st'>"Temperature, water"</span>,
+               <span class='st'>"Temperature, water, deg F"</span>)
+<span class='no'>obs_url_orig</span> <span class='kw'>&lt;-</span> <span class='fu'>constructWQPURL</span>(<span class='kw'>siteNumbers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"IIDFG-41WSSPAHS"</span>,
+                                                <span class='st'>"USGS-02352560"</span>),
+                                <span class='kw'>parameterCd</span> <span class='kw'>=</span> <span class='no'>charNames</span>,
+                                <span class='no'>startDate</span>,<span class='st'>""</span>)
+<span class='no'>obs_url_orig</span></div><div class='output co'>#&gt; [1] "https://www.waterqualitydata.us/Result/search?siteid=IIDFG-41WSSPAHS;USGS-02352560&amp;characteristicName=Temperature;Temperature%2C%20sample;Temperature%2C%20water;Temperature%2C%20water%2C%20deg%20F&amp;startDateLo=01-01-1985&amp;mimeType=tsv&amp;zip=yes"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
