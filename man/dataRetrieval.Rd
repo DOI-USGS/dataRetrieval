@@ -26,6 +26,3 @@ Please see \url{https://pubs.er.usgs.gov/publication/tm4A10} for more informatio
 \author{
 Laura De Cicco \email{ldecicco@usgs.gov}
 }
-\keyword{USGS,}
-\keyword{services}
-\keyword{web}

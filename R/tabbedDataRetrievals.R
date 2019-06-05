@@ -25,7 +25,6 @@
 #' @name dataRetrieval
 #' @docType package
 #' @author Laura De Cicco \email{ldecicco@@usgs.gov}
-#' @keywords USGS, web services
 NULL
 
 #' List of USGS parameter codes
