@@ -170,13 +170,6 @@ test_that("General WQP retrievals working", {
                                    parameterCd = "00010")
    
    expect_equal(ncol(dailyLexingtonVA),65)
-  
-   bioData <- readWQPdata(statecode = "WI",
-                          countycode = "Dane",
-                          providers = "BIODATA")
-   
-   expect_equal(attr(bioData, "url"), "https://www.waterqualitydata.us/data/Result/search?statecode=US%3A55&countycode=US%3A55%3A025&providers=BIODATA&zip=yes&mimeType=tsv")
-   expect_gt(nrow(bioData), 1)
    
    site1 <- readWQPsummary(siteid="USGS-07144100",
                            summaryYears=5,
