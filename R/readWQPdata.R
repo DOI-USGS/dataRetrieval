@@ -104,7 +104,6 @@
 #' secchi.names = c("Depth, Secchi disk depth", 
 #'                  "Depth, Secchi disk depth (choice list)", 
 #'                  "Secchi Reading Condition (choice list)", 
-#'                  "Secchi depth", 
 #'                  "Water transparency, Secchi disc")
 #' args <- list('startDateLo' = startDate, 
 #'              'startDateHi' = "2013-12-31", 
