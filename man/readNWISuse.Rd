@@ -4,8 +4,14 @@
 \alias{readNWISuse}
 \title{Water use data retrieval from USGS (NWIS)}
 \usage{
-readNWISuse(stateCd, countyCd, years = "ALL", categories = "ALL",
-  convertType = TRUE, transform = FALSE)
+readNWISuse(
+  stateCd,
+  countyCd,
+  years = "ALL",
+  categories = "ALL",
+  convertType = TRUE,
+  transform = FALSE
+)
 }
 \arguments{
 \item{stateCd}{could be character (full name, abbreviation, id), or numeric (id). Only one is accepted per query.}

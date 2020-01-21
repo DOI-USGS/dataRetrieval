@@ -4,10 +4,20 @@
 \alias{renameNWISColumns}
 \title{renameColumns}
 \usage{
-renameNWISColumns(rawData, p00010 = "Wtemp", p00045 = "Precip",
-  p00060 = "Flow", p00065 = "GH", p00095 = "SpecCond",
-  p00300 = "DO", p00400 = "pH", p62611 = "GWL", p63680 = "Turb",
-  p72019 = "WLBLS", ...)
+renameNWISColumns(
+  rawData,
+  p00010 = "Wtemp",
+  p00045 = "Precip",
+  p00060 = "Flow",
+  p00065 = "GH",
+  p00095 = "SpecCond",
+  p00300 = "DO",
+  p00400 = "pH",
+  p62611 = "GWL",
+  p63680 = "Turb",
+  p72019 = "WLBLS",
+  ...
+)
 }
 \arguments{
 \item{rawData}{the daily- or unit-values datset retrieved from NWISweb.}

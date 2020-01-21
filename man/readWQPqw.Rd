@@ -4,8 +4,14 @@
 \alias{readWQPqw}
 \title{Raw Data Import for Water Quality Portal}
 \usage{
-readWQPqw(siteNumbers, parameterCd, startDate = "", endDate = "",
-  tz = "UTC", querySummary = FALSE)
+readWQPqw(
+  siteNumbers,
+  parameterCd,
+  startDate = "",
+  endDate = "",
+  tz = "UTC",
+  querySummary = FALSE
+)
 }
 \arguments{
 \item{siteNumbers}{character site number. This needs to include the full agency code prefix.}

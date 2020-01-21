@@ -4,8 +4,7 @@
 \alias{importRDB1}
 \title{Function to return data from the NWIS RDB 1.0 format}
 \usage{
-importRDB1(obs_url, asDateTime = TRUE, convertType = TRUE,
-  tz = "UTC")
+importRDB1(obs_url, asDateTime = TRUE, convertType = TRUE, tz = "UTC")
 }
 \arguments{
 \item{obs_url}{character containing the url for the retrieval or a file path to the data file.}
