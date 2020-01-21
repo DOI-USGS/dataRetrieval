@@ -397,7 +397,7 @@ test_that("Construct WQP urls", {
              c('01075','00029','00453'),
              startDate,endDate)
   
-  expect_equal(url_wqp, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes")
+  expect_equal(url_wqp, "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes")
   
   #Multiple characteristicNames
   charNames <- c("Temperature","Temperature, sample","Temperature, water",
@@ -405,7 +405,7 @@ test_that("Construct WQP urls", {
   obs_url_orig <- constructWQPURL(siteNumbers = c("IIDFG-41WSSPAHS", "USGS-02352560"), 
                                   parameterCd = c("Temperature","Temperature, sample","Temperature, water", "Temperature, water, deg F"),
                                   "","")
-  expect_equal(obs_url_orig, "https://www.waterqualitydata.us/Result/search?siteid=IIDFG-41WSSPAHS;USGS-02352560&characteristicName=Temperature;Temperature%2C%20sample;Temperature%2C%20water;Temperature%2C%20water%2C%20deg%20F&mimeType=tsv&zip=yes")
+  expect_equal(obs_url_orig, "https://www.waterqualitydata.us/data/Result/search?siteid=IIDFG-41WSSPAHS;USGS-02352560&characteristicName=Temperature;Temperature%2C%20sample;Temperature%2C%20water;Temperature%2C%20water%2C%20deg%20F&mimeType=tsv&zip=yes")
 })
 
 context("checkWQPdates")
@@ -417,8 +417,8 @@ test_that("checkWQPdates", {
   expect_equal(values1$startDateLo, "01-01-2002")
 })
 
-context("Construct NWIS urls")
-test_that("Construct NWIS urls", {
+context("Construct WQP urls")
+test_that("Construct WQP urls", {
   siteNumber <- '01594440'
   startDate <- '1985-01-01'
   endDate <- ''
@@ -427,10 +427,10 @@ test_that("Construct NWIS urls", {
              c('01075','00029','00453'),
              startDate,endDate)
   
-  expect_equal(url_wqp, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes")
+  expect_equal(url_wqp, "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes")
 
   rawSampleURL_Zip <- constructWQPURL('USGS-01594440','01075', '', '', TRUE)
-  expect_equal(rawSampleURL_Zip, "https://www.waterqualitydata.us/Result/search?siteid=USGS-01594440&pCode=01075&mimeType=tsv&zip=yes")
+  expect_equal(rawSampleURL_Zip, "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&pCode=01075&mimeType=tsv&zip=yes")
 })
 
 
