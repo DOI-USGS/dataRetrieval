@@ -4,8 +4,7 @@
 \alias{readNWISuv}
 \title{Instantaneous value data retrieval from USGS (NWIS)}
 \usage{
-readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "",
-  tz = "UTC")
+readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "", tz = "UTC")
 }
 \arguments{
 \item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
