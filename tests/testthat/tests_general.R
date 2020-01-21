@@ -55,10 +55,11 @@ test_that("General NWIS retrievals working", {
   expect_is(waterYearStat$mean_va,"numeric")
   expect_is(waterYearStat$parameter_cd,"character")
   
-  #2 data descriptors, but some random empty "values" tag:
+  #Empty data
+  
   urlTest <- "https://nwis.waterservices.usgs.gov/nwis/iv/?site=11447650&format=waterml,1.1&ParameterCd=63680&startDT=2016-12-13&endDT=2016-12-13"
   x <- importWaterML1(urlTest)
-  expect_equal(ncol(x), 6)
+  expect_equal(names(x), c("agency_cd","site_no","dateTime","tz_cd"))
   
   #Test list:
   args <- list(sites="05114000", service="iv", 
@@ -175,7 +176,7 @@ test_that("General WQP retrievals working", {
                           countycode = "Dane",
                           providers = "BIODATA")
    
-   expect_equal(attr(bioData, "url"), "https://www.waterqualitydata.us/Result/search?statecode=US%3A55&countycode=US%3A55%3A025&providers=BIODATA&zip=yes&mimeType=tsv")
+   expect_equal(attr(bioData, "url"), "https://www.waterqualitydata.us/data/Result/search?statecode=US%3A55&countycode=US%3A55%3A025&providers=BIODATA&zip=yes&mimeType=tsv")
    expect_gt(nrow(bioData), 1)
    
    site1 <- readWQPsummary(siteid="USGS-07144100",
