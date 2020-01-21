@@ -134,11 +134,6 @@
 #'                                 countycode="Lexington", 
 #'                                 parameterCd = "00010") 
 #'                                 
-#' # Biological data:
-#' bioData <- readWQPdata(statecode = "WI",
-#'                        countycode = "Dane",
-#'                        providers = "BIODATA")
-#'                                 
 #' }
 readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
   
