@@ -115,7 +115,6 @@ nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
 secchi.names = c("Depth, Secchi disk depth", 
                  "Depth, Secchi disk depth (choice list)", 
                  "Secchi Reading Condition (choice list)", 
-                 "Secchi depth", 
                  "Water transparency, Secchi disc")
 args <- list('startDateLo' = startDate, 
              'startDateHi' = "2013-12-31", 
@@ -145,11 +144,6 @@ wqp.summary_WI <- readWQPdata(arg_3, statecode="WI",
 dailyLexingtonVA <- readWQPdata(statecode = "Virginia", 
                                 countycode="Lexington", 
                                 parameterCd = "00010") 
-                                
-# Biological data:
-bioData <- readWQPdata(statecode = "WI",
-                       countycode = "Dane",
-                       providers = "BIODATA")
                                 
 }
 }

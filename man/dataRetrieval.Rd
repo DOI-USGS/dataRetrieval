@@ -3,7 +3,6 @@
 \docType{package}
 \name{dataRetrieval}
 \alias{dataRetrieval}
-\alias{dataRetrieval-package}
 \title{Retrieval functions for USGS and EPA data}
 \description{
 \tabular{ll}{
@@ -19,7 +18,7 @@ LazyLoad: \tab yes\cr
 }
 }
 \details{
-Retrieval functions for USGS and EPA hydrologic and water quality data.
+Retrieval functions for USGS and EPA hydrologic and water quality data. 
 
 Please see \url{https://pubs.er.usgs.gov/publication/tm4A10} for more information.
 }

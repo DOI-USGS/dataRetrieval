@@ -36,3 +36,4 @@ playing_with_post.R
 ^CRAN-RELEASE$
 ^cran-comments\.md$
 ^revdep$
+LICENSE.md

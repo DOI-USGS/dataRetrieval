@@ -104,7 +104,6 @@
 #' secchi.names = c("Depth, Secchi disk depth", 
 #'                  "Depth, Secchi disk depth (choice list)", 
 #'                  "Secchi Reading Condition (choice list)", 
-#'                  "Secchi depth", 
 #'                  "Water transparency, Secchi disc")
 #' args <- list('startDateLo' = startDate, 
 #'              'startDateHi' = "2013-12-31", 
@@ -134,11 +133,6 @@
 #' dailyLexingtonVA <- readWQPdata(statecode = "Virginia", 
 #'                                 countycode="Lexington", 
 #'                                 parameterCd = "00010") 
-#'                                 
-#' # Biological data:
-#' bioData <- readWQPdata(statecode = "WI",
-#'                        countycode = "Dane",
-#'                        providers = "BIODATA")
 #'                                 
 #' }
 readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){

@@ -4,8 +4,14 @@
 \alias{readNWISmeas}
 \title{Surface-water measurement data retrieval from USGS (NWIS)}
 \usage{
-readNWISmeas(siteNumbers, startDate = "", endDate = "", tz = "UTC",
-  expanded = FALSE, convertType = TRUE)
+readNWISmeas(
+  siteNumbers,
+  startDate = "",
+  endDate = "",
+  tz = "UTC",
+  expanded = FALSE,
+  convertType = TRUE
+)
 }
 \arguments{
 \item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
