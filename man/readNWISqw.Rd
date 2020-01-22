@@ -4,8 +4,15 @@
 \alias{readNWISqw}
 \title{Raw Data Import for USGS NWIS QW Data}
 \usage{
-readNWISqw(siteNumbers, parameterCd, startDate = "", endDate = "",
-  expanded = TRUE, reshape = FALSE, tz = "UTC")
+readNWISqw(
+  siteNumbers,
+  parameterCd,
+  startDate = "",
+  endDate = "",
+  expanded = TRUE,
+  reshape = FALSE,
+  tz = "UTC"
+)
 }
 \arguments{
 \item{siteNumbers}{character of USGS site numbers.  This is usually an 8 digit number}

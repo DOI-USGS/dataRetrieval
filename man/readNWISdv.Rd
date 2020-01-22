@@ -4,8 +4,13 @@
 \alias{readNWISdv}
 \title{Daily Value USGS NWIS Data Retrieval}
 \usage{
-readNWISdv(siteNumbers, parameterCd, startDate = "", endDate = "",
-  statCd = "00003")
+readNWISdv(
+  siteNumbers,
+  parameterCd,
+  startDate = "",
+  endDate = "",
+  statCd = "00003"
+)
 }
 \arguments{
 \item{siteNumbers}{character USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a character vector.}

@@ -4,10 +4,19 @@
 \alias{constructNWISURL}
 \title{Construct NWIS url for data retrieval}
 \usage{
-constructNWISURL(siteNumbers, parameterCd = "00060", startDate = "",
-  endDate = "", service, statCd = "00003", format = "xml",
-  expanded = TRUE, ratingType = "base", statReportType = "daily",
-  statType = "mean")
+constructNWISURL(
+  siteNumbers,
+  parameterCd = "00060",
+  startDate = "",
+  endDate = "",
+  service,
+  statCd = "00003",
+  format = "xml",
+  expanded = TRUE,
+  ratingType = "base",
+  statReportType = "daily",
+  statType = "mean"
+)
 }
 \arguments{
 \item{siteNumbers}{string or vector of strings USGS site number.  This is usually an 8 digit number}

@@ -4,8 +4,15 @@
 \alias{readNWISstat}
 \title{Site statistics retrieval from USGS (NWIS)}
 \usage{
-readNWISstat(siteNumbers, parameterCd, startDate = "", endDate = "",
-  convertType = TRUE, statReportType = "daily", statType = "mean")
+readNWISstat(
+  siteNumbers,
+  parameterCd,
+  startDate = "",
+  endDate = "",
+  convertType = TRUE,
+  statReportType = "daily",
+  statType = "mean"
+)
 }
 \arguments{
 \item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number.}
