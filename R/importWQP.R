@@ -86,6 +86,8 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
                                         `ActivityEndTime/Time` = readr::col_character(),
                                         USGSPCode = readr::col_character(),
                                         ResultCommentText=readr::col_character(),
+                                        ResultSampleFractionText = readr::col_character(),
+                                        ResultDetectionConditionText = readr::col_character(),
                                         `ActivityDepthHeightMeasure/MeasureValue` = readr::col_number(),
                                         `DetectionQuantitationLimitMeasure/MeasureValue` = readr::col_number(),
                                         ResultMeasureValue = readr::col_number(),
