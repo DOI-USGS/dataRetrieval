@@ -70,8 +70,10 @@ install.packages("dataRetrieval",repos="https://owi.usgs.gov/R")
 To get cutting-edge changes, install from GitHub using the `devtools` packages:
 
 ```r
-library(devtools)
-install_github("USGS-R/dataRetrieval")
+library(remotes)
+install_github("USGS-R/dataRetrieval", 
+               build_opts = c("--no-resave-data", "--no-manual"),
+               build_vignettes = TRUE)
 ```
 
 
