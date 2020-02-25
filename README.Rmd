@@ -1,0 +1,118 @@
+---
+title: "README"
+output:
+  md_document:
+    variant: gfm
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+                      collapse = TRUE,
+                      comment = "#>",
+                      fig.path = "man/figures/",
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.height = 7,
+                      fig.width = 7)
+```
+
+
+# dataRetrieval <img src="man/figures/logo.png" alt="toxEval" height="150px" align="right" />
+
+
+[![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master)](https://travis-ci.org/USGS-R/dataRetrieval) [![Coverage Status](https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=master) [![status](https://img.shields.io/badge/USGS-Research-blue.svg)](https://owi.usgs.gov/R/packages.html#research) [![CRAN version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
+
+Retrieval functions for USGS and EPA hydrologic and water quality data. 
+
+For complete tutorial information, see:
+
+[https://usgs-r.github.io/dataRetrieval](https://usgs-r.github.io/dataRetrieval)
+
+[https://owi.usgs.gov/R/dataRetrieval.html](https://owi.usgs.gov/R/dataRetrieval.html)
+
+# Sample Workflow
+
+## USGS
+
+```{r workUSGS, eval=FALSE}
+library(dataRetrieval)
+# Choptank River near Greensboro, MD
+siteNumber <- "01491000" 
+ChoptankInfo <- readNWISsite(siteNumber)
+parameterCd <- "00060"
+
+#Raw daily data:
+rawDailyData <- readNWISdv(siteNumber,parameterCd,
+                      "1980-01-01","2010-01-01")
+
+# Sample data Nitrate:
+parameterCd <- "00618"
+qwData <- readNWISqw(siteNumber,parameterCd,
+                      "1980-01-01","2010-01-01")
+
+pCode <- readNWISpCode(parameterCd)
+
+```
+
+## Water Quality Portal
+
+```{r WQP, eval=FALSE}
+specificCond <- readWQPqw(siteNumbers = 'WIDNR_WQX-10032762',
+                          parameterCd = 'Specific conductance',
+                          startDate = '2011-05-01',
+                          endDate = '2011-09-30')
+
+```
+
+# Reporting bugs
+
+Please consider reporting bugs and asking questions on the Issues page:
+[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
+
+Follow `@USGS_R` on Twitter for updates on USGS R packages:
+
+[![Twitter Follow](https://img.shields.io/twitter/follow/USGS_R.svg?style=social&label=Follow%20USGS_R)](https://twitter.com/USGS_R)
+
+# Citing dataRetrieval
+
+```{r cite, eval=TRUE}
+citation(package = "dataRetrieval")
+```
+
+# Package Support
+
+The Water Mission Area of the USGS supports the development and maintenance of `dataRetrieval`, and most likely further into the future. Resources are available primarily for maintenance and responding to user questions. Priorities on the development of new features are determined by the `dataRetrieval` development team.
+
+[![USGS](http://usgs-r.github.io/images/usgs.png)](https://www.usgs.gov/)
+
+# Installation
+
+To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:
+
+```{r install1, eval=FALSE}
+install.packages("dataRetrieval")
+```
+
+
+To get cutting-edge changes, install from GitHub using the `remotes` packages:
+
+```{r install2, eval=FALSE}
+library(remotes)
+install_github("USGS-R/dataRetrieval", 
+               build_opts = c("--no-resave-data", "--no-manual"),
+               build_vignettes = TRUE)
+```
+
+
+# Disclaimer
+
+This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the [official USGS copyright policy](https://www2.usgs.gov/visual-id/credit_usgs.html#copyright)
+
+Although this software program has been used by the U.S. Geological Survey (USGS), no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.
+
+This software is provided "AS IS."
+
+ [
+    ![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)
+  ](http://creativecommons.org/publicdomain/zero/1.0/)
+

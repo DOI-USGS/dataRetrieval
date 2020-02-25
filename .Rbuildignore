@@ -37,3 +37,4 @@ playing_with_post.R
 ^cran-comments\.md$
 ^revdep$
 LICENSE.md
+README.Rmd
