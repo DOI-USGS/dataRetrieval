@@ -123,8 +123,8 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
       retval[,tzCols] <- sapply(retval[,tzCols], as.character)
     }
     
-    offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0, NA, 0, 0),
-                                code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA, NA, "UTC","GMT"),
+    offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, NA, 0, 0),
+                                code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA, "UTC","GMT"),
                                 stringsAsFactors = FALSE)
     original_order <- names(retval)
     retval <- merge(x = retval, 
@@ -134,7 +134,7 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
                     all.x = TRUE)
     names(retval)[names(retval) == "offset"] <- "timeZoneStart"
     retval <- retval[,c(original_order, "timeZoneStart")]
-    
+
     retval <- merge(x = retval, 
                     y = offsetLibrary, 
                     by.x="ActivityEndTime/TimeZoneCode", 
