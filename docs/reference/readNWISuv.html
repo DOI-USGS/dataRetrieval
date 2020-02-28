@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -29,8 +31,9 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,15 +41,15 @@
 
 
 
-<meta property="og:title" content="Instantaneous value data retrieval from USGS (NWIS) — readNWISuv" />
 
+<meta property="og:title" content="Instantaneous value data retrieval from USGS (NWIS) — readNWISuv" />
 <meta property="og:description" content="Imports data from NWIS web service. This function gets the data from here: https://waterservices.usgs.gov/
 A list of parameter codes can be found here: https://nwis.waterdata.usgs.gov/nwis/pmcodes/
 A list of statistic codes can be found here: https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&amp;amp;format=table.
 More information on the web service can be found here: https://waterservices.usgs.gov/rest/IV-Service.html." />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -70,6 +73,7 @@ More information on the web service can be found here: https://waterservices.usg
   gtag('config', 'UA-53797708-7');
 </script>
 
+
   </head>
 
   <body>
@@ -86,7 +90,7 @@ More information on the web service can be found here: https://waterservices.usg
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.5.9001</span>
       </span>
     </div>
 
@@ -117,7 +121,6 @@ More information on the web service can be found here: https://waterservices.usg
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/dataRetrieval">
@@ -132,6 +135,7 @@ More information on the web service can be found here: https://waterservices.usg
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -143,17 +147,14 @@ More information on the web service can be found here: https://waterservices.usg
     </div>
 
     <div class="ref-description">
-    
     <p>Imports data from NWIS web service. This function gets the data from here: <a href='https://waterservices.usgs.gov/'>https://waterservices.usgs.gov/</a>
 A list of parameter codes can be found here: <a href='https://nwis.waterdata.usgs.gov/nwis/pmcodes/'>https://nwis.waterdata.usgs.gov/nwis/pmcodes/</a>
 A list of statistic codes can be found here: <a href='https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&amp;format=table'>https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&amp;format=table</a>.
 More information on the web service can be found here: <a href='https://waterservices.usgs.gov/rest/IV-Service.html'>https://waterservices.usgs.gov/rest/IV-Service.html</a>.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>readNWISuv</span>(<span class='no'>siteNumbers</span>, <span class='no'>parameterCd</span>, <span class='kw'>startDate</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>endDate</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>readNWISuv</span>(<span class='no'>siteNumbers</span>, <span class='no'>parameterCd</span>, <span class='kw'>startDate</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>endDate</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -187,7 +188,7 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 for more information on time zones.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with the following columns:</p><table class='table'>
@@ -214,17 +215,17 @@ and S is the statistic code (if applicable).</p>
 </table>
 
 
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='renameNWISColumns.html'>renameNWISColumns</a></code>, <code><a href='importWaterML1.html'>importWaterML1</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>site_id</span> <span class='kw'>&lt;-</span> <span class='st'>'05114000'</span>
 <span class='no'>parameterCd</span> <span class='kw'>&lt;-</span> <span class='st'>'00060'</span>
 <span class='no'>startDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span>
-<span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span></div><div class='input'><span class='no'>rawData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>,<span class='no'>parameterCd</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>)
+<span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-10-10"</span>
+<span class='co'># \donttest{</span>
+<span class='no'>rawData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>,<span class='no'>parameterCd</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>)
 
 <span class='no'>rawData_today</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>, <span class='no'>parameterCd</span>, <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>(),<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>())
 
@@ -237,23 +238,21 @@ and S is the statistic code (if applicable).</p>
 
 <span class='co'># Adding 'Z' to the time indicates to the web service to call the data with UTC time:</span>
 <span class='no'>GMTdata</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISuv</span>(<span class='no'>site_id</span>,<span class='no'>parameterCd</span>,
-                           <span class='st'>"2014-10-10T00:00Z"</span>, <span class='st'>"2014-10-10T23:59Z"</span>)</div><div class='input'>
-</div></pre>
+                           <span class='st'>"2014-10-10T00:00Z"</span>, <span class='st'>"2014-10-10T23:59Z"</span>)
+<span class='co'># }</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -261,13 +260,16 @@ and S is the statistic code (if applicable).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
