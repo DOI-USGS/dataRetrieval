@@ -2,7 +2,7 @@
 % Please edit documentation in R/readNGWMNdata.R
 \name{readNGWMNlevels}
 \alias{readNGWMNlevels}
-\title{Retrieve groundwater levels from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
+\title{Retrieve groundwater levels from the National Ground Water Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.}
 \usage{
 readNGWMNlevels(siteNumbers, asDateTime = TRUE, tz = "UTC")
 }
@@ -22,7 +22,7 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 for more information on time zones.}
 }
 \description{
-Retrieve groundwater levels from the National Ground Water Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.
+Retrieve groundwater levels from the National Ground Water Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.
 }
 \examples{
 \donttest{

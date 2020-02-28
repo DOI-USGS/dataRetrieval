@@ -2,7 +2,7 @@
 % Please edit documentation in R/readNGWMNdata.R
 \name{readNGWMNdata}
 \alias{readNGWMNdata}
-\title{import data from the National Groundwater Monitoring Network \url{http://cida.usgs.gov/ngwmn/}.}
+\title{import data from the National Groundwater Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.}
 \usage{
 readNGWMNdata(service, ..., asDateTime = TRUE, tz = "UTC")
 }

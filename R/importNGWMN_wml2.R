@@ -20,7 +20,7 @@
 #' @importFrom xml2 xml_find_first
 #' @examples
 #' \donttest{
-#' obs_url <- paste("http://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
+#' obs_url <- paste("https://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
 #' "service=SOS","version=2.0.0",
 #' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
 #' "responseFormat=text/xml",
