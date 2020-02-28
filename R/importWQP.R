@@ -92,6 +92,7 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
                                         ActivityCommentText = readr::col_character(),
                                         ResultWeightBasisText = readr::col_character(),
                                         ResultTimeBasisText = readr::col_character(),
+                                        ResultParticleSizeBasis  = readr::col_character(),
                                         ResultDepthAltitudeReferencePointText = readr::col_character(),
                                         ResultLaboratoryCommentText = readr::col_character(),
                                         ResultTemperatureBasisText = readr::col_character(),
