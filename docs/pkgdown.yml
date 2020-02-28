@@ -1,9 +1,0 @@
-pandoc: 2.7.2
-pkgdown: 1.4.1
-pkgdown_sha: ~
-articles:
-  dataRetrieval: dataRetrieval.html
-  earthquake: earthquake.html
-  movingAverages: movingAverages.html
-  statsServiceMap: statsServiceMap.html
-
