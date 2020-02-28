@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -29,8 +31,9 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,13 +41,13 @@
 
 
 
-<meta property="og:title" content="General Data Import from Water Quality Portal — readWQPdata" />
 
+<meta property="og:title" content="General Data Import from Water Quality Portal — readWQPdata" />
 <meta property="og:description" content="Imports data from Water Quality Portal web service. This function gets the data from here: https://www.waterqualitydata.us.
 because it allows for other agencies rather than the USGS." />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -68,6 +71,7 @@ because it allows for other agencies rather than the USGS." />
   gtag('config', 'UA-53797708-7');
 </script>
 
+
   </head>
 
   <body>
@@ -84,7 +88,7 @@ because it allows for other agencies rather than the USGS." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.5.9001</span>
       </span>
     </div>
 
@@ -115,7 +119,6 @@ because it allows for other agencies rather than the USGS." />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/dataRetrieval">
@@ -130,6 +133,7 @@ because it allows for other agencies rather than the USGS." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -141,24 +145,22 @@ because it allows for other agencies rather than the USGS." />
     </div>
 
     <div class="ref-description">
-    
     <p>Imports data from Water Quality Portal web service. This function gets the data from here: <a href='https://www.waterqualitydata.us'>https://www.waterqualitydata.us</a>.
 because it allows for other agencies rather than the USGS.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>readWQPdata</span>(<span class='no'>...</span>, <span class='kw'>querySummary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>readWQPdata</span>(<span class='no'>...</span>, <span class='kw'>querySummary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>, <span class='kw'>ignore_attributes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>&#8230;</th>
+      <th>...</th>
       <td><p>see <a href='https://www.waterqualitydata.us/webservices_documentation'>https://www.waterqualitydata.us/webservices_documentation</a> for a complete list of options. A list of arguments can also be supplied.</p></td>
     </tr>
     <tr>
       <th>querySummary</th>
-      <td><p>logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the &#8230; argument</p></td>
+      <td><p>logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the ... argument</p></td>
     </tr>
     <tr>
       <th>tz</th>
@@ -169,8 +171,12 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  <code><a href='https://rdrr.io/r/base/timezones.html'>OlsonNames()</a></code> 
 for more information on time zones.</p></td>
     </tr>
+    <tr>
+      <th>ignore_attributes</th>
+      <td><p>logical to choose to ignore fetching site and parameter attributes. Default is <code>FALSE</code>.</p></td>
+    </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with at least the following columns:</p><table class='table'>
@@ -182,18 +188,18 @@ for more information on time zones.</p></td>
 <tr><td>ActivityMediaName</td><td>character</td><td>Name or code indicating the environmental medium where the sample was taken.</td></tr>
 <tr><td>ActivityMediaSubdivisionName</td><td>character</td><td>Name or code indicating the environmental matrix as a subdivision of the sample media.</td></tr>
 <tr><td>ActivityStartDate</td><td>character</td><td>The calendar date on which the field activity is started.</td></tr>
-<tr><td>ActivityStartTime/Time</td><td>character</td><td>The time of day that is reported when the field activity began, based on a 24-hour timescale.</td></tr>
-<tr><td>ActivityStartTime/TimeZoneCode</td><td>character</td><td>The time zone for which the time of day is reported. Any of the longitudinal divisions of the earth's surface in which a standard time is kept.</td></tr>
+<tr><td>ActivityStartTime.Time</td><td>character</td><td>The time of day that is reported when the field activity began, based on a 24-hour timescale.</td></tr>
+<tr><td>ActivityStartTime.TimeZoneCode</td><td>character</td><td>The time zone for which the time of day is reported. Any of the longitudinal divisions of the earth's surface in which a standard time is kept.</td></tr>
 <tr><td>ActivityEndDate</td><td>character</td><td>The calendar date when the field activity is completed.</td></tr>
-<tr><td>ActivityEndTime/Time</td><td>character</td><td>The time of day that is reported when the field activity ended, based on a 24-hour timescale.</td></tr>
-<tr><td>ActivityEndTime/TimeZoneCode</td><td>character</td><td>The time zone for which the time of day is reported. Any of the longitudinal divisions of the earth's surface in which a standard time is kept.</td></tr>
-<tr><td>ActivityDepthHeightMeasure/MeasureValue</td><td>character</td><td>A measurement of the vertical location (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityDepthHeightMeasure/MeasureUnitCode.</td></tr>
-<tr><td>ActivityDepthHeightMeasure/MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
+<tr><td>ActivityEndTime.Time</td><td>character</td><td>The time of day that is reported when the field activity ended, based on a 24-hour timescale.</td></tr>
+<tr><td>ActivityEndTime.TimeZoneCode</td><td>character</td><td>The time zone for which the time of day is reported. Any of the longitudinal divisions of the earth's surface in which a standard time is kept.</td></tr>
+<tr><td>ActivityDepthHeightMeasure.MeasureValue</td><td>character</td><td>A measurement of the vertical location (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityDepthHeightMeasure.MeasureUnitCode.</td></tr>
+<tr><td>ActivityDepthHeightMeasure.MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
 <tr><td>ActivityDepthAltitudeReferencePointText</td><td>character</td><td>The reference used to indicate the datum or reference used to establish the depth/altitude of an activity.</td></tr>
-<tr><td>ActivityTopDepthHeightMeasure/MeasureValue</td><td>character</td><td>A measurement of the upper vertical location of a vertical location range (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityTopDepthHeightMeasure/MeasureUnitCode.</td></tr>
-<tr><td>ActivityTopDepthHeightMeasure/MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
-<tr><td>ActivityBottomDepthHeightMeasure/MeasureValue</td><td>character</td><td>A measurement of the lower vertical location of a vertical location range (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityBottomDepthHeightMeasure/MeasureUnitCode.</td></tr>
-<tr><td>ActivityBottomDepthHeightMeasure/MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
+<tr><td>ActivityTopDepthHeightMeasure.MeasureValue</td><td>character</td><td>A measurement of the upper vertical location of a vertical location range (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityTopDepthHeightMeasure.MeasureUnitCode.</td></tr>
+<tr><td>ActivityTopDepthHeightMeasure.MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
+<tr><td>ActivityBottomDepthHeightMeasure.MeasureValue</td><td>character</td><td>A measurement of the lower vertical location of a vertical location range (measured from a reference point) at which an activity occurred. Measure value is given in the units stored in ActivityBottomDepthHeightMeasure.MeasureUnitCode.</td></tr>
+<tr><td>ActivityBottomDepthHeightMeasure.MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
 <tr><td>ProjectIdentifier</td><td>character</td><td>A designator used to uniquely identify a data collection project within a context of an organization.</td></tr>
 <tr><td>ActivityConductingOrganizationText</td><td>character</td><td>A name of the Organization conducting an activity.</td></tr>
 <tr><td>MonitoringLocationIdentifier</td><td>character</td><td>A designator used to describe the unique name, number, or code assigned to identify the monitoring location.</td></tr>
@@ -201,16 +207,16 @@ for more information on time zones.</p></td>
 <tr><td>SampleAquifer *</td><td>character</td><td>A code that designates the aquifer associated with groundwater samples.</td></tr>
 <tr><td>HydrologicCondition *</td><td>character</td><td>Hydrologic condition is the hydrologic condition that is represented by the sample collected (i.e. ? normal, falling, rising, peak stage).</td></tr>
 <tr><td>HydrologicEvent *</td><td>character</td><td>A hydrologic event that is represented by the sample collected (i.e. - storm, drought, snowmelt).</td></tr>
-<tr><td>SampleCollectionMethod/MethodIdentifier</td><td>character</td><td>The identification number or code assigned by the method publisher.</td></tr>
-<tr><td>SampleCollectionMethod/MethodIdentifierContext</td><td>character</td><td>Identifies the source or data system that created or defined the identifier.</td></tr>
-<tr><td>SampleCollectionMethod/MethodName</td><td>character</td><td>The title that appears on the method from the method publisher.</td></tr>
+<tr><td>SampleCollectionMethod.MethodIdentifier</td><td>character</td><td>The identification number or code assigned by the method publisher.</td></tr>
+<tr><td>SampleCollectionMethod.MethodIdentifierContext</td><td>character</td><td>Identifies the source or data system that created or defined the identifier.</td></tr>
+<tr><td>SampleCollectionMethod.MethodName</td><td>character</td><td>The title that appears on the method from the method publisher.</td></tr>
 <tr><td>SampleCollectionEquipmentName</td><td>character</td><td>The name for the equipment used in collecting the sample.</td></tr>
 <tr><td>ResultDetectionConditionText</td><td>character</td><td>The textual descriptor of a result.</td></tr>
 <tr><td>CharacteristicName</td><td>character</td><td>The object, property, or substance which is evaluated or enumerated by either a direct field measurement, a direct field observation, or by laboratory analysis of material collected in the field.</td></tr>
 <tr><td>ResultSampleFractionText</td><td>character</td><td>The text name of the portion of the sample associated with results obtained from a physically-partitioned sample.</td></tr>
-<tr><td>ResultMeasureValue</td><td>numeric</td><td>The reportable measure of the result for the chemical, microbiological or other characteristic being analyzed. Measure value is given in the units stored in ResultMeasure/MeasureUnitCode.</td></tr>
+<tr><td>ResultMeasureValue</td><td>numeric</td><td>The reportable measure of the result for the chemical, microbiological or other characteristic being analyzed. Measure value is given in the units stored in ResultMeasure.MeasureUnitCode.</td></tr>
 <tr><td>MeasureQualifierCode</td><td>character</td><td>A code used to identify any qualifying issues that affect the results.</td></tr>
-<tr><td>ResultMeasure/MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
+<tr><td>ResultMeasure.MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
 <tr><td>ResultStatusIdentifier</td><td>character</td><td>Indicates the acceptability of the result with respect to QA/QC criteria.</td></tr>
 <tr><td>StatisticalBaseCode</td><td>character</td><td>The code for the method used to calculate derived results.</td></tr>
 <tr><td>ResultValueTypeName</td><td>character</td><td>A name that qualifies the process which was used in the determination of the result value (e.g., actual, estimated, calculated).</td></tr>
@@ -221,21 +227,21 @@ for more information on time zones.</p></td>
 <tr><td>PrecisionValue</td><td>character</td><td>A measure of mutual agreement among individual measurements of the same property usually under prescribed similar conditions.</td></tr>
 <tr><td>ResultCommentText</td><td>character</td><td>Free text with general comments concerning the result.</td></tr>
 <tr><td>USGSPCode *</td><td>character</td><td>5-digit number used in the US Geological Survey computerized data system, National Water Information System (NWIS), to uniquely identify a specific constituent.</td></tr>
-<tr><td>ResultDepthHeightMeasure/MeasureValue +</td><td>character</td><td>A measurement of the vertical location (measured from a reference point) at which a result occurred.</td></tr>
-<tr><td>ResultDepthHeightMeasure/MeasureUnitCode +</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
+<tr><td>ResultDepthHeightMeasure.MeasureValue +</td><td>character</td><td>A measurement of the vertical location (measured from a reference point) at which a result occurred.</td></tr>
+<tr><td>ResultDepthHeightMeasure.MeasureUnitCode +</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
 <tr><td>ResultDepthAltitudeReferencePointText +</td><td>character</td><td>The reference used to indicate the datum or reference used to establish the depth/altitude of a result.</td></tr>
 <tr><td>SubjectTaxonomicName</td><td>character</td><td>The name of the organism from which a tissue sample was taken.</td></tr>
 <tr><td>SampleTissueAnatomyName  *</td><td>character</td><td>The name of the anatomy from which a tissue sample was taken.</td></tr>
-<tr><td>ResultAnalyticalMethod/MethodIdentifier</td><td>character</td><td>The identification number or code assigned by the method publisher.</td></tr>
-<tr><td>ResultAnalyticalMethod/MethodIdentifierContext</td><td>character</td><td>Identifies the source or data system that created or defined the identifier.</td></tr>
-<tr><td>ResultAnalyticalMethod/MethodName</td><td>character</td><td>The title that appears on the method from the method publisher.</td></tr>
+<tr><td>ResultAnalyticalMethod.MethodIdentifier</td><td>character</td><td>The identification number or code assigned by the method publisher.</td></tr>
+<tr><td>ResultAnalyticalMethod.MethodIdentifierContext</td><td>character</td><td>Identifies the source or data system that created or defined the identifier.</td></tr>
+<tr><td>ResultAnalyticalMethod.MethodName</td><td>character</td><td>The title that appears on the method from the method publisher.</td></tr>
 <tr><td>MethodDescriptionText *</td><td>character</td><td>A brief summary that provides general information about the method.</td></tr>
 <tr><td>LaboratoryName</td><td>character</td><td>The name of Lab responsible for the result.</td></tr>
 <tr><td>AnalysisStartDate</td><td>character</td><td>The calendar date on which the analysis began.</td></tr>
 <tr><td>ResultLaboratoryCommentText</td><td>character</td><td>Remarks which further describe the laboratory procedures which produced the result.</td></tr>
 <tr><td>DetectionQuantitationLimitTypeName</td><td>character</td><td>Text describing the type of detection or quantitation level used in the analysis of a characteristic.</td></tr>
-<tr><td>DetectionQuantitationLimitMeasure/MeasureValue</td><td>numeric</td><td>Constituent concentration that, when processed through the complete method, produces a signal that is statistically different from a blank. Measure value is given in the units stored in DetectionQuantitationLimitMeasure/MeasureUnitCode.</td></tr>
-<tr><td>DetectionQuantitationLimitMeasure/MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
+<tr><td>DetectionQuantitationLimitMeasure.MeasureValue</td><td>numeric</td><td>Constituent concentration that, when processed through the complete method, produces a signal that is statistically different from a blank. Measure value is given in the units stored in DetectionQuantitationLimitMeasure.MeasureUnitCode.</td></tr>
+<tr><td>DetectionQuantitationLimitMeasure.MeasureUnitCode</td><td>character</td><td>The code that represents the unit for measuring the item.</td></tr>
 <tr><td>PreparationStartDate</td><td>character</td><td>The calendar date when the preparation/extraction of the sample for analysis began.</td></tr>
 <tr><td>ActivityStartDateTime</td><td>POSIXct</td><td>Activity start date and time converted to POSIXct UTC.</td></tr>
 <tr><td>ActivityEndDateTime</td><td>POSIXct</td><td>Activity end date and time converted to POSIXct UTC.</td></tr>
@@ -251,10 +257,10 @@ for more information on time zones.</p></td>
 </table>
 
 
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nameToUse</span> <span class='kw'>&lt;-</span> <span class='st'>"pH"</span>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='no'>nameToUse</span> <span class='kw'>&lt;-</span> <span class='st'>"pH"</span>
 <span class='no'>pHData</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='kw'>siteid</span><span class='kw'>=</span><span class='st'>"USGS-04024315"</span>,<span class='kw'>characteristicName</span><span class='kw'>=</span><span class='no'>nameToUse</span>)
 <span class='no'>pHData_summary</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='kw'>bBox</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>90.10</span>,<span class='fl'>42.67</span>,-<span class='fl'>88.64</span>,<span class='fl'>43.35</span>),
      <span class='kw'>characteristicName</span><span class='kw'>=</span><span class='no'>nameToUse</span>, <span class='kw'>querySummary</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
@@ -264,7 +270,6 @@ for more information on time zones.</p></td>
 <span class='no'>secchi.names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Depth, Secchi disk depth"</span>,
                  <span class='st'>"Depth, Secchi disk depth (choice list)"</span>,
                  <span class='st'>"Secchi Reading Condition (choice list)"</span>,
-                 <span class='st'>"Secchi depth"</span>,
                  <span class='st'>"Water transparency, Secchi disc"</span>)
 <span class='no'>args</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>'startDateLo'</span> <span class='kw'>=</span> <span class='no'>startDate</span>,
              <span class='st'>'startDateHi'</span> <span class='kw'>=</span> <span class='st'>"2013-12-31"</span>,
@@ -295,23 +300,19 @@ for more information on time zones.</p></td>
                                 <span class='kw'>countycode</span><span class='kw'>=</span><span class='st'>"Lexington"</span>,
                                 <span class='kw'>parameterCd</span> <span class='kw'>=</span> <span class='st'>"00010"</span>)
 
-<span class='co'># Biological data:</span>
-<span class='no'>bioData</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='kw'>statecode</span> <span class='kw'>=</span> <span class='st'>"WI"</span>,
-                       <span class='kw'>countycode</span> <span class='kw'>=</span> <span class='st'>"Dane"</span>,
-                       <span class='kw'>providers</span> <span class='kw'>=</span> <span class='st'>"BIODATA"</span>)</div></pre>
+<span class='co'># }</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -319,13 +320,16 @@ for more information on time zones.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
