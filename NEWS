@@ -1,3 +1,10 @@
+dataRetrieval 2.7.6
+==================
+* Adjusted Water Quality Portal (WPQ) URLs to follow new structure
+* Fixed bug where some WQP results were being duplicated
+* Added an argument to readWQPdata to ignore fetching site and parameter attributes.
+
+
 dataRetrieval 2.7.5
 ==========
 * Fixed some time zone joining bugs that were happening if the timezone column had no information in the first ~100 returned rows.

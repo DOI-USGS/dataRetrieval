@@ -11,6 +11,7 @@
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
+#' @param ignore_attributes logical to choose to ignore fetching site and parameter attributes. Default is \code{FALSE}.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -135,7 +136,7 @@
 #'                                 parameterCd = "00010") 
 #'                                 
 #' }
-readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
+readWQPdata <- function(..., querySummary=FALSE, tz="UTC", ignore_attributes = FALSE){
   
   tz <- match.arg(tz, OlsonNames())
   
@@ -156,12 +157,8 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
   
     retval <- importWQP(urlCall, zip= values["zip"] == "yes", tz=tz)
     
-    if(!all(is.na(retval))){
+    if(!all(is.na(retval)) & !ignore_attributes){
       
-      # When POST is working:
-      # site_list <- unique(retval$MonitoringLocationIdentifier)
-      # siteInfo <- whatWQPsites(siteid=site_list, zip="yes")
-      # 
       siteInfo <- whatWQPsites(...)
       
       siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
@@ -203,10 +200,14 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC"){
       attr(retval, "url") <- urlCall
       attr(retval, "queryTime") <- Sys.time()
       
-      return(retval)
+      
     } else {
+      
       message("The following url returned no data:\n")
       message(urlCall)
+      return(NULL)
     }
+    
+    return(retval)
   }
 }
