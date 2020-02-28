@@ -6,15 +6,15 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Site Data Import from NWIS — whatNWISsites • dataRetrieval</title>
+<title>License • dataRetrieval</title>
 
 <!-- favicons -->
-<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,15 +36,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Site Data Import from NWIS — whatNWISsites" />
-<meta property="og:description" content="Returns a list of sites from the NWIS web service. This function gets the data from: https://waterservices.usgs.gov/rest/Site-Test-Tool.html.
-Mapper format is used" />
+<meta property="og:title" content="License" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -75,7 +73,7 @@ Mapper format is used" />
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -87,7 +85,7 @@ Mapper format is used" />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">dataRetrieval</a>
+        <a class="navbar-link" href="index.html">dataRetrieval</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.5.9001</span>
       </span>
     </div>
@@ -95,10 +93,10 @@ Mapper format is used" />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../articles/dataRetrieval.html">Background</a>
+  <a href="articles/dataRetrieval.html">Background</a>
 </li>
 <li>
-  <a href="../reference/index.html">Function Help</a>
+  <a href="reference/index.html">Function Help</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -108,13 +106,13 @@ Mapper format is used" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/movingAverages.html">Moving Averages</a>
+      <a href="articles/movingAverages.html">Moving Averages</a>
     </li>
     <li>
-      <a href="../articles/statsServiceMap.html">Stat Service</a>
+      <a href="articles/statsServiceMap.html">Stat Service</a>
     </li>
     <li>
-      <a href="../articles/earthquake.html">Earthquake Exploration</a>
+      <a href="articles/earthquake.html">Earthquake Exploration</a>
     </li>
   </ul>
 </li>
@@ -137,68 +135,38 @@ Mapper format is used" />
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-    <h1>Site Data Import from NWIS</h1>
-    
-    <div class="hidden name"><code>whatNWISsites.Rd</code></div>
+      <h1>License</h1>
     </div>
 
-    <div class="ref-description">
-    <p>Returns a list of sites from the NWIS web service. This function gets the data from: <a href='https://waterservices.usgs.gov/rest/Site-Test-Tool.html'>https://waterservices.usgs.gov/rest/Site-Test-Tool.html</a>.
-Mapper format is used</p>
-    </div>
+<div id="license" class="section level1">
 
-    <pre class="usage"><span class='fu'>whatNWISsites</span>(<span class='no'>...</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>...</th>
-      <td><p>see <a href='https://waterservices.usgs.gov/rest/Site-Service.html'>https://waterservices.usgs.gov/rest/Site-Service.html</a> for a complete list of options. A 
-list (or lists) can also be supplied.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A data frame with at least the following columns:</p><table class='table'>
-<tr><td>Name</td><td>Type</td><td>Description</td></tr>
-<tr><td>agency_cd</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr>
-<tr><td>site_no</td><td>character</td><td>The USGS site number</td></tr>
-<tr><td>station_nm</td><td>character</td><td>Station name</td></tr>
-<tr><td>site_tp_cd</td><td>character</td><td>Site type code</td></tr>
-<tr><td>dec_lat_va</td><td>numeric</td><td>Decimal latitude</td></tr>
-<tr><td>dec_long_va</td><td>numeric</td><td>Decimal longitude</td></tr>
-<tr><td>queryTime</td><td>POSIXct</td><td>Query time</td></tr>
-</table>
-
-
-<p>There are also several useful attributes attached to the data frame:</p><table class='table'>
-<tr><td>Name</td><td>Type</td><td>Description</td></tr>
-<tr><td>url</td><td>character</td><td>The url used to generate the data</td></tr>
-<tr><td>queryTime</td><td>POSIXct</td><td>The time the data was returned</td></tr>
-</table>
-
-
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='no'>siteListPhos</span> <span class='kw'>&lt;-</span> <span class='fu'>whatNWISsites</span>(<span class='kw'>stateCd</span><span class='kw'>=</span><span class='st'>"OH"</span>,<span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00665"</span>)
-<span class='no'>oneSite</span> <span class='kw'>&lt;-</span> <span class='fu'>whatNWISsites</span>(<span class='kw'>sites</span><span class='kw'>=</span><span class='st'>"05114000"</span>)
-<span class='co'># }</span></div></pre>
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-  </div>
+<p>Unless otherwise noted, This project is in the public domain in the United States because it contains materials that originally came from the United States Geological Survey, an agency of the United States Department of Interior. For more information, see the official USGS copyright policy at <a href="https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits" class="uri">https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits</a></p>
+<p>Additionally, we waive copyright and related rights in the work worldwide through the CC0 1.0 Universal public domain dedication.</p>
+<div id="cc0-10-universal-summary" class="section level2">
+<h2 class="hasAnchor">
+<a href="#cc0-10-universal-summary" class="anchor"></a>CC0 1.0 Universal Summary</h2>
+<p>This is a human-readable summary of the <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode">Legal Code (read the full text)</a>.</p>
+<div id="no-copyright" class="section level3">
+<h3 class="hasAnchor">
+<a href="#no-copyright" class="anchor"></a>No Copyright</h3>
+<p>The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law.</p>
+<p>You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.</p>
 </div>
+<div id="other-information" class="section level3">
+<h3 class="hasAnchor">
+<a href="#other-information" class="anchor"></a>Other Information</h3>
+<p>In no way are the patent or trademark rights of any person affected by CC0, nor are the rights that other persons may have in the work or in how the work is used, such as publicity or privacy rights.</p>
+<p>Unless expressly stated otherwise, the person who associated a work with this deed makes no warranties about the work, and disclaims liability for all uses of the work, to the fullest extent permitted by applicable law. When using or citing the work, you should not imply endorsement by the author or the affirmer.</p>
+</div>
+</div>
+</div>
+
+  </div>
+
+</div>
+
 
 
       <footer>
