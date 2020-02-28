@@ -215,6 +215,12 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
               readr.data <- convertTZ(readr.data,tz.name,varname,tz)
             }
             
+            #Special case where they don't match up:
+            if("sample_start_time_datum_cd" %in% header.names &
+               attr(readr.data[[varname]], "tzone") != tz){
+              readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd",varname,tz)
+            }
+            
             tz.name <- paste0(i,"_tz_cd")
             
             if(tz.name %in% header.names){
