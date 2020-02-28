@@ -7,3 +7,4 @@ doc
 dataRetrieval.Rproj
 .gitignore
 vignettes/usMaps_cache
+docs

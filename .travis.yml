@@ -12,11 +12,6 @@ matrix:
   include:
     - os: linux
       r: release
-      before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
-      deploy:
-        provider: script
-        script: Rscript -e 'pkgdown::deploy_site_github(verbose = TRUE)'
-        skip_cleanup: true
     - os: linux
       r: devel
       env: R_CODECOV=true
