@@ -4,7 +4,7 @@
 \alias{readWQPdata}
 \title{General Data Import from Water Quality Portal}
 \usage{
-readWQPdata(..., querySummary = FALSE, tz = "UTC")
+readWQPdata(..., querySummary = FALSE, tz = "UTC", ignore_attributes = FALSE)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
@@ -17,6 +17,8 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 for more information on time zones.}
+
+\item{ignore_attributes}{logical to choose to ignore fetching site and parameter attributes. Default is \code{FALSE}.}
 }
 \value{
 A data frame with at least the following columns:
