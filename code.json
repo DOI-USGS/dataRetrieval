@@ -3,7 +3,7 @@
     "name": "dataRetrieval",
     "organization": "U.S. Geological Survey",
     "description": "This R package is designed to obtain USGS or EPA water quality sample data, streamflow data, and metadata directly from web services",
-    "version": "2.7.5",
+    "version": "2.7.6",
     "status": "Production",
 
     "permissions": {
@@ -16,10 +16,10 @@
       ]
     },
 
-    "homepageURL": "https://code.usgs.gov/WMA-Data-Science/dataRetrieval",
-    "downloadURL": "https://code.usgs.gov/WMA-Data-Science/dataRetrieval/-/archive/v2.7.5/dataRetrieval-v2.7.5.zip",
-    "disclaimerURL": "https://code.usgs.gov/WMA-Data-Science/dataRetrieval/blob/master/DISCLAIMER.md",
-    "repositoryURL": "https://code.usgs.gov/WMA-Data-Science/dataRetrieval.git",
+    "homepageURL": "https://code.usgs.gov/water/dataRetrieval",
+    "downloadURL": "https://code.usgs.gov/water/dataRetrieval/-/archive/v2.7.6/dataRetrieval-v2.7.6.zip",
+    "disclaimerURL": "https://code.usgs.gov/water/dataRetrieval/blob/master/DISCLAIMER.md",
+    "repositoryURL": "https://code.usgs.gov/water/dataRetrieval.git",
     "vcs": "git",
 
     "laborHours": 500,
@@ -41,7 +41,7 @@
     },
 
     "date": {
-      "metadataLastUpdated": "2019-06-05"
+      "metadataLastUpdated": "2020-03-10"
     }
   }
 ]
