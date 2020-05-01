@@ -38,3 +38,5 @@ playing_with_post.R
 ^revdep$
 LICENSE.md
 README.Rmd
+^codecov\.yml$
+^\.github$
