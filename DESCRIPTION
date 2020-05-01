@@ -42,7 +42,8 @@ Imports:
 Suggests:
     htmlTable,
     knitr,
-    testthat
+    testthat,
+    covr
 BuildVignettes: true
 VignetteBuilder: knitr
 BugReports: https://github.com/USGS-R/dataRetrieval/issues

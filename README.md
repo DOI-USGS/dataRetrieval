@@ -1,9 +1,9 @@
-# dataRetrieval <img src="man/figures/logo.png" alt="toxEval" height="150px" align="right" />
+# dataRetrieval <img src="man/figures/logo.png" alt="dataRetrieval" height="150px" align="right" />
 
-[![travis](https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master)](https://travis-ci.org/USGS-R/dataRetrieval)
-[![Coverage
+[![R build
+status](https://github.com/USGS-R/dataRetrieval/workflows/R-CMD-check/badge.svg)](https://github.com/USGS-R/dataRetrieval/actions)[![Coverage
 Status](https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=master)
-[![status](https://img.shields.io/badge/USGS-Research-blue.svg)](https://owi.usgs.gov/R/packages.html#research)
+[![status](https://img.shields.io/badge/USGS-Core-green.svg)](https://owi.usgs.gov/R/packages.html#core)
 [![CRAN
 version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
 [![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
@@ -77,7 +77,7 @@ citation(package = "dataRetrieval")
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
-#>     version = {2.7.4},
+#>     version = {2.7.6},
 #>     institution = {U.S. Geological Survey},
 #>     year = {2018},
 #>     doi = {10.5066/P9X4L3GE},
