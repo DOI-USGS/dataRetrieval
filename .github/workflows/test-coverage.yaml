@@ -11,6 +11,8 @@ name: test-coverage
 jobs:
   test-coverage:
     runs-on: macOS-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
 
@@ -35,6 +37,10 @@ jobs:
         run: |
           install.packages(c("remotes"))
           remotes::install_deps(dependencies = TRUE)
+          remotes::install_github("jimhester/pkgdown@github-actions-deploy2")
+        shell: Rscript {0}
+      - name: Install package
+        run: |
           remotes::install_cran("covr")
         shell: Rscript {0}
 
