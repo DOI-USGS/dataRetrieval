@@ -103,6 +103,7 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
                                         # ResultMeasureValue = readr::col_number(),
                                         `WellDepthMeasure/MeasureValue` = readr::col_number(),
                                         `WellHoleDepthMeasure/MeasureValue` = readr::col_number(),
+                                        `DetectionQuantitationLimitMeasure/MeasureUnitCode` = readr::col_character(),
                                         `HUCEightDigitCode` = readr::col_character(), 
                                         `ActivityEndTime/TimeZoneCode` = readr::col_character()),
                        quote = ifelse(csv,'\"',""), delim = ifelse(csv,",","\t")))
