@@ -45,12 +45,13 @@ test_that("General NWIS retrievals working", {
   dv <- importRDB1(urlEmpty, asDateTime = FALSE)
   expect_true(nrow(dv) == 0)
   
-  dailyStat <- readNWISdata(site=c("03112500","03111520"),service="stat",statReportType="daily",
-                           statType=c("p25","p50","p75","min","max"),parameterCd="00065",convertType=FALSE)
+  dailyStat <- readNWISdata(site=c("03112500","03111520","02319394"),service="stat",statReportType="daily",
+                           statType=c("p25","p50","p75","min","max"),
+                           parameterCd="00065",convertType=FALSE)
   expect_true(length(dailyStat$min_va) > 1)
   expect_is(dailyStat$p25_va,"character")
   
-  waterYearStat <- readNWISdata(site=c("03112500"),service="stat",statReportType="annual",
+  waterYearStat <- readNWISdata(site=c("01646500"),service="stat",statReportType="annual",
                                 statYearType="water", missingData="on")
   expect_is(waterYearStat$mean_va,"numeric")
   expect_is(waterYearStat$parameter_cd,"character")
