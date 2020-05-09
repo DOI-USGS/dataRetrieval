@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           options(pkgType = "binary")
-          install.packages("remotes")
+          install.packages(c("remotes", "dplyr", "purrr", "ggplot2"))
           remotes::install_deps(dependencies = TRUE)
           remotes::install_dev("pkgdown")
         shell: Rscript {0}
