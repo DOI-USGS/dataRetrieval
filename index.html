@@ -12,10 +12,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data">
 <meta property="og:description" content="Collection of functions to help retrieve U.S. Geological Survey
     (USGS) and U.S. Environmental Protection Agency (EPA) water quality and
@@ -23,7 +24,6 @@
     National Water Information System (NWIS) &lt;https://waterservices.usgs.gov/&gt; and &lt;https://waterdata.usgs.gov/nwis&gt;. 
     Both EPA and USGS water quality data are obtained from the Water Quality Portal &lt;https://www.waterqualitydata.us/&gt;.">
 <meta property="og:image" content="/logo.png">
-<meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -35,7 +35,7 @@
   gtag('config', 'UA-53797708-7');
 </script>
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.5.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.6.9000</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
 
 <div id="dataretrieval-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#dataretrieval-" class="anchor"></a>dataRetrieval <img src="reference/figures/logo.png" alt="toxEval" height="150px" align="right">
+<a href="#dataretrieval-" class="anchor"></a>dataRetrieval <img src="reference/figures/logo.png" alt="dataRetrieval" height="150px" align="right">
 </h1></div>
 
 <p>Retrieval functions for USGS and EPA hydrologic and water quality data.</p>
@@ -115,30 +115,30 @@
 <div id="usgs" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usgs" class="anchor"></a>USGS</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dataRetrieval)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="co"># Choptank River near Greensboro, MD</span></a>
-<a class="sourceLine" id="cb1-3" title="3">siteNumber &lt;-<span class="st"> "01491000"</span> </a>
-<a class="sourceLine" id="cb1-4" title="4">ChoptankInfo &lt;-<span class="st"> </span><span class="kw"><a href="reference/readNWISsite.html">readNWISsite</a></span>(siteNumber)</a>
-<a class="sourceLine" id="cb1-5" title="5">parameterCd &lt;-<span class="st"> "00060"</span></a>
-<a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="co">#Raw daily data:</span></a>
-<a class="sourceLine" id="cb1-8" title="8">rawDailyData &lt;-<span class="st"> </span><span class="kw"><a href="reference/readNWISdv.html">readNWISdv</a></span>(siteNumber,parameterCd,</a>
-<a class="sourceLine" id="cb1-9" title="9">                      <span class="st">"1980-01-01"</span>,<span class="st">"2010-01-01"</span>)</a>
-<a class="sourceLine" id="cb1-10" title="10"></a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="co"># Sample data Nitrate:</span></a>
-<a class="sourceLine" id="cb1-12" title="12">parameterCd &lt;-<span class="st"> "00618"</span></a>
-<a class="sourceLine" id="cb1-13" title="13">qwData &lt;-<span class="st"> </span><span class="kw"><a href="reference/readNWISqw.html">readNWISqw</a></span>(siteNumber,parameterCd,</a>
-<a class="sourceLine" id="cb1-14" title="14">                      <span class="st">"1980-01-01"</span>,<span class="st">"2010-01-01"</span>)</a>
-<a class="sourceLine" id="cb1-15" title="15"></a>
-<a class="sourceLine" id="cb1-16" title="16">pCode &lt;-<span class="st"> </span><span class="kw"><a href="reference/readNWISpCode.html">readNWISpCode</a></span>(parameterCd)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dataRetrieval</span>)
+<span class="co"># Choptank River near Greensboro, MD</span>
+<span class="no">siteNumber</span> <span class="kw">&lt;-</span> <span class="st">"01491000"</span>
+<span class="no">ChoptankInfo</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/readNWISsite.html">readNWISsite</a></span>(<span class="no">siteNumber</span>)
+<span class="no">parameterCd</span> <span class="kw">&lt;-</span> <span class="st">"00060"</span>
+
+<span class="co">#Raw daily data:</span>
+<span class="no">rawDailyData</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/readNWISdv.html">readNWISdv</a></span>(<span class="no">siteNumber</span>,<span class="no">parameterCd</span>,
+                      <span class="st">"1980-01-01"</span>,<span class="st">"2010-01-01"</span>)
+
+<span class="co"># Sample data Nitrate:</span>
+<span class="no">parameterCd</span> <span class="kw">&lt;-</span> <span class="st">"00618"</span>
+<span class="no">qwData</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/readNWISqw.html">readNWISqw</a></span>(<span class="no">siteNumber</span>,<span class="no">parameterCd</span>,
+                      <span class="st">"1980-01-01"</span>,<span class="st">"2010-01-01"</span>)
+
+<span class="no">pCode</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/readNWISpCode.html">readNWISpCode</a></span>(<span class="no">parameterCd</span>)</pre></div>
 </div>
 <div id="water-quality-portal" class="section level2">
 <h2 class="hasAnchor">
 <a href="#water-quality-portal" class="anchor"></a>Water Quality Portal</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">specificCond &lt;-<span class="st"> </span><span class="kw"><a href="reference/readWQPqw.html">readWQPqw</a></span>(<span class="dt">siteNumbers =</span> <span class="st">'WIDNR_WQX-10032762'</span>,</a>
-<a class="sourceLine" id="cb2-2" title="2">                          <span class="dt">parameterCd =</span> <span class="st">'Specific conductance'</span>,</a>
-<a class="sourceLine" id="cb2-3" title="3">                          <span class="dt">startDate =</span> <span class="st">'2011-05-01'</span>,</a>
-<a class="sourceLine" id="cb2-4" title="4">                          <span class="dt">endDate =</span> <span class="st">'2011-09-30'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="no">specificCond</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/readWQPqw.html">readWQPqw</a></span>(<span class="kw">siteNumbers</span> <span class="kw">=</span> <span class="st">'WIDNR_WQX-10032762'</span>,
+                          <span class="kw">parameterCd</span> <span class="kw">=</span> <span class="st">'Specific conductance'</span>,
+                          <span class="kw">startDate</span> <span class="kw">=</span> <span class="st">'2011-05-01'</span>,
+                          <span class="kw">endDate</span> <span class="kw">=</span> <span class="st">'2011-09-30'</span>)</pre></div>
 </div>
 </div>
 <div id="reporting-bugs" class="section level1">
@@ -151,27 +151,27 @@
 <div id="citing-dataretrieval" class="section level1">
 <h1 class="hasAnchor">
 <a href="#citing-dataretrieval" class="anchor"></a>Citing dataRetrieval</h1>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/citation.html">citation</a></span>(<span class="dt">package =</span> <span class="st">"dataRetrieval"</span>)</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; To cite dataRetrieval in publications, please use:</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt;   De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., 2018,</span></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt;   dataRetrieval: R packages for discovering and retrieving water data</span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt;   available from Federal hydrologic web services, doi:10.5066/P9X4L3GE</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt;   @Manual{,</span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt;     author = {Laura A. {De Cicco} and David Lorenz and Robert M. Hirsch and William Watkins},</span></a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt;     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},</span></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt;     publisher = {U.S. Geological Survey},</span></a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt;     address = {Reston, VA},</span></a>
-<a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt;     version = {2.7.4},</span></a>
-<a class="sourceLine" id="cb3-17" title="17"><span class="co">#&gt;     institution = {U.S. Geological Survey},</span></a>
-<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt;     year = {2018},</span></a>
-<a class="sourceLine" id="cb3-19" title="19"><span class="co">#&gt;     doi = {10.5066/P9X4L3GE},</span></a>
-<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt;     url = {https://code.usgs.gov/water/dataRetrieval},</span></a>
-<a class="sourceLine" id="cb3-21" title="21"><span class="co">#&gt;   }</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html">citation</a></span>(<span class="kw">package</span> <span class="kw">=</span> <span class="st">"dataRetrieval"</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; To cite dataRetrieval in publications, please use:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., 2018,</span>
+<span class="co">#&gt;   dataRetrieval: R packages for discovering and retrieving water data</span>
+<span class="co">#&gt;   available from Federal hydrologic web services, doi:10.5066/P9X4L3GE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   @Manual{,</span>
+<span class="co">#&gt;     author = {Laura A. {De Cicco} and David Lorenz and Robert M. Hirsch and William Watkins},</span>
+<span class="co">#&gt;     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},</span>
+<span class="co">#&gt;     publisher = {U.S. Geological Survey},</span>
+<span class="co">#&gt;     address = {Reston, VA},</span>
+<span class="co">#&gt;     version = {2.7.6},</span>
+<span class="co">#&gt;     institution = {U.S. Geological Survey},</span>
+<span class="co">#&gt;     year = {2018},</span>
+<span class="co">#&gt;     doi = {10.5066/P9X4L3GE},</span>
+<span class="co">#&gt;     url = {https://code.usgs.gov/water/dataRetrieval},</span>
+<span class="co">#&gt;   }</span></pre></div>
 </div>
 <div id="package-support" class="section level1">
 <h1 class="hasAnchor">
@@ -183,12 +183,12 @@
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"dataRetrieval"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"dataRetrieval"</span>)</pre></div>
 <p>To get cutting-edge changes, install from GitHub using the <code>remotes</code> packages:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(remotes)</a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="kw">install_github</span>(<span class="st">"USGS-R/dataRetrieval"</span>, </a>
-<a class="sourceLine" id="cb5-3" title="3">               <span class="dt">build_opts =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"--no-resave-data"</span>, <span class="st">"--no-manual"</span>),</a>
-<a class="sourceLine" id="cb5-4" title="4">               <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">remotes</span>)
+<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"USGS-R/dataRetrieval"</span>,
+               <span class="kw">build_opts</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"--no-resave-data"</span>, <span class="st">"--no-manual"</span>),
+               <span class="kw">build_vignettes</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
 </div>
 <div id="disclaimer" class="section level1">
 <h1 class="hasAnchor">
@@ -201,11 +201,13 @@
 
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=dataRetrieval">https://​cloud.r-project.org/​package=dataRetrieval</a>
+</li>
+<li>Browse source code at <br><a href="https://github.com/USGS-R/dataRetrieval/">https://​github.com/​USGS-R/​dataRetrieval/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/USGS-R/dataRetrieval/issues">https://​github.com/​USGS-R/​dataRetrieval/​issues</a>
 </li>
@@ -227,10 +229,10 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Laura DeCicco <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-3915-9487" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
-<li>Robert Hirsch <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4534-075X" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<li>Laura DeCicco <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-3915-9487" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Robert Hirsch <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4534-075X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>David Lorenz <br><small class="roles"> Author </small>  </li>
-<li>David Watkins <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-7544-0700" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<li>David Watkins <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-7544-0700" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
@@ -238,9 +240,9 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/USGS-R/dataRetrieval"><img src="https://travis-ci.org/USGS-R/dataRetrieval.svg?branch=master" alt="travis"></a></li>
+<li><a href="https://github.com/USGS-R/dataRetrieval/actions"><img src="https://github.com/USGS-R/dataRetrieval/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 <li><a href="https://coveralls.io/github/USGS-R/dataRetrieval?branch=master"><img src="https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=master" alt="Coverage Status"></a></li>
-<li><a href="https://owi.usgs.gov/R/packages.html#research"><img src="https://img.shields.io/badge/USGS-Research-blue.svg" alt="status"></a></li>
+<li><a href="https://owi.usgs.gov/R/packages.html#core"><img src="https://img.shields.io/badge/USGS-Core-green.svg" alt="status"></a></li>
 <li><a href="https://cran.r-project.org/package=dataRetrieval"><img src="http://www.r-pkg.org/badges/version/dataRetrieval" alt="CRAN version"></a></li>
 <li><a href="https://cran.r-project.org/package=dataRetrieval"><img src="http://cranlogs.r-pkg.org/badges/dataRetrieval"></a></li>
 <li><a href="https://cran.r-project.org/package=dataRetrieval"><img src="http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval"></a></li>
@@ -255,7 +257,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
