@@ -40,10 +40,15 @@ Imports:
     readr (>= 1.0.0),
     jsonlite
 Suggests:
+    covr,
+    dplyr,
+    ggplot2,
+    gridExtra,
     htmlTable,
     knitr,
     testthat,
-    covr
+    sf
+Encoding: UTF-8
 BuildVignettes: true
 VignetteBuilder: knitr
 BugReports: https://github.com/USGS-R/dataRetrieval/issues

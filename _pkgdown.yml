@@ -16,6 +16,8 @@ navbar:
       href: articles/statsServiceMap.html
     - text: Earthquake Exploration
       href: articles/earthquake.html
+    - text: NLDI Interface
+      href: articles/nldi.html
   right:
   - icon: fa-github fa-lg
     href: https://github.com/USGS-R/dataRetrieval
@@ -53,6 +55,11 @@ reference:
       - readNGWMNlevels
       - readNGWMNsites
       - readNGWMNdata
+  - title: Network Linked Data Index
+    desc: Functions to interface with the NLDI
+    contents:
+      - nldi_offerings
+      - findNLDI
   - title: Helper functions
     contents:
       - calcWaterYear
