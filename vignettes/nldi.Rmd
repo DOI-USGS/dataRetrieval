@@ -279,11 +279,6 @@ features  <- lapply(query, st_as_sf)
 
 Doing so allows for spatial as simple as length, area, and plotting, or more complex calculations. 
 
-```{r}
-sum(st_length(features$UT))
-st_area(features$basin)
-```
-
 ```{r, fig.cap = "NLDI Spatial Feature map"}
 plot(features$basin, border = "black", lwd = 4)
 plot(features$UT$geometry, col = "blue", add = TRUE)
