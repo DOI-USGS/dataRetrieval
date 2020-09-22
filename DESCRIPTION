@@ -46,8 +46,9 @@ Suggests:
     gridExtra,
     htmlTable,
     knitr,
-    testthat,
-    sf
+    rmarkdown,
+    sf,
+    testthat
 Encoding: UTF-8
 BuildVignettes: true
 VignetteBuilder: knitr
