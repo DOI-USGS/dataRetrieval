@@ -1,5 +1,6 @@
 dataRetrieval 2.7.6
 ==================
+* The NLDI service is now available through the `findNLDI` function.
 * Adjusted Water Quality Portal (WPQ) URLs to follow new structure
 * Fixed bug where some WQP results were being duplicated
 * Added an argument to readWQPdata to ignore fetching site and parameter attributes.
@@ -54,7 +55,7 @@ dataRetrieval 2.5.0
 dataRetrieval 2.4.0
 ==========
 * Package readr now used for tab delimited parsing
-* readr functions used to determine column types. Mostly, this produces the same results. 
+* readr functions used to determine column types. Mostly, this produces the same results.
 * In the case where there is text in a numeric column (specified by the RDB header), these now remain characters (previously was converted to numeric)
 * Columns that come back from web services as integers remain integers (previously was converted to numeric)
 * Added reported time zone code information. dateTime columns by default get converted to UTC, but the original time zone code (tz_cd for instance) is appended to the data frame.

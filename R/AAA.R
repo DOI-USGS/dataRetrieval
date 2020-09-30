@@ -4,5 +4,5 @@ pkg.env <- new.env()
     suppressMessages(setAccess('public'))
     pkg.env$nldi_base <- "https://labs.waterdata.usgs.gov/api/nldi/linked-data/"
     pkg.env$local_sf <- requireNamespace("sf")
-    pkg.env$current_nldi <- nldi_offerings()
+    pkg.env$current_nldi <- get_nldi_sources()
 }
