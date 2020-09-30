@@ -1,12 +1,7 @@
-# covr::file_report(covr::file_coverage(
-#   source_files = "R/findNLDI.R",
-#   test_files = "tests/testthat/tests_nldi.R"))
-#
-
 context("NLDI...")
 
 test_that("NLDI offerings...", {
-  expect_true(nrow(nldi_offerings()) > 1)
+  expect_true(nrow(get_nldi_sources()) > 1)
 })
 
 test_that("NLDI starting sources...", {
@@ -34,7 +29,7 @@ test_that("NLDI starting sources...", {
   # ERROR: TWO STARTS
   expect_error(findNLDI(nwis = 1000, comid = 101))
   # NON EXISTING SITE
-  expect_error(findNLDI(comid = 1))
+  expect_message(findNLDI(comid = 1))
 })
 
 test_that("NLDI navigation sources...", {
@@ -49,6 +44,8 @@ test_that("NLDI navigation sources...", {
   # ERRORS: Bad NAV REQUEST
   expect_error(findNLDI(nwis = '11120000', nav = c("DT")))
   expect_error(findNLDI(nwis = '11120000', nav = c("DT", "UM")))
+  # MESSAGE: Data not found
+  expect_message(findNLDI(comid = 101, nav = "UM", find = "nwis"))
 })
 
 test_that("NLDI find sources...", {
@@ -60,20 +57,23 @@ test_that("NLDI find sources...", {
 test_that("sf not installed...", {
   expect_true(!"geometry" %in% findNLDI(nwis = '11120000', no_sf = TRUE)[[1]])
   expect_equal(class(findNLDI(nwis = '11120000', nav = "UT", find = c("nwis"),  no_sf = TRUE)[[2]]), "character")
-  findNLDI(nwis = '11120000', nav = "UT", find = c("nwis"), no_sf = TRUE)
   expect_true(c("X") %in% names(findNLDI(nwis = '11120000', nav = "UT", find = c("nwis"), no_sf = TRUE)[[3]]))
 })
 
 
 test_that("Distance...", {
-  full = findNLDI(comid = 101, nav = "UT", find = "nwis")
-  part = findNLDI(comid = 101, nav = "UT", find = "nwis", distance_km = 100)
+  full = findNLDI(comid = 101, nav = "UT", find = "nwis", distance_km = 9999)
+  part = findNLDI(comid = 101, nav = "UT", find = "nwis")
   expect_true(nrow(full$UT_nwissite) > nrow(part$UT_nwissite))
 })
 
 test_that("basin", {
   xx = findNLDI(comid = 101, nav = "UT", find = "basin")
+  xx2 = findNLDI(comid = 101, nav = "UT", find = "basin", no_sf = TRUE)
   expect_true(sf::st_geometry_type(sf::st_as_sf(xx$basin)) == "POLYGON")
-  #expect_error(findNLDI(comid = 101, nav = "UT", find = "basin", no_sf = TRUE))
+  expect_true(ncol(xx2$basin) == 0)
 })
+
+
+
 

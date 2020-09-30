@@ -49,6 +49,14 @@ specificCond <- readWQPqw(siteNumbers = 'WIDNR_WQX-10032762',
                           endDate = '2011-09-30')
 ```
 
+## Network Linked Data Index
+
+``` r
+features <- findNLDI(nwis = "01491000",
+                     nav = "UT",
+                     find = c('basin', 'wqp'))
+```
+
 # Reporting bugs
 
 Please consider reporting bugs and asking questions on the Issues page:

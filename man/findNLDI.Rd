@@ -13,7 +13,7 @@ findNLDI(
   origin = NULL,
   nav = NULL,
   find = NULL,
-  distance_km = NULL,
+  distance_km = 100,
   no_sf = FALSE
 )
 }
@@ -32,9 +32,9 @@ findNLDI(
 
 \item{nav}{where to navigate from the starting point ("UM", "UT", DM", "DD")}
 
-\item{find}{what resources to find along the navigation path(s) (see nldi_offerings()$source). Can also include 'basin', which will return the upstream basin of the starting feature}
+\item{find}{what resources to find along the navigation path(s) (see get_nldi_sources()$source). Can also include 'basin', which will return the upstream basin of the starting feature}
 
-\item{distance_km}{how far to look along the navigation path in kilometers}
+\item{distance_km}{how far to look along the navigation path in kilometers (default = 100)}
 
 \item{no_sf}{if available, should `sf` be used for parsing, defaults to `TRUE` if `sf` is locally installed}
 }
@@ -42,7 +42,13 @@ findNLDI(
 a list of data.frames
 }
 \description{
-Provides a formal query to the \href{https://labs.waterdata.usgs.gov/about-nldi/index.html}{Network Linked Data Index}. The function is useful for topology and location based featrue discovery. A user must supply a starting feature, and can add optional navigation direction(s), and features to identify on the navigated networks. Valid starting options can be given by one of the following arguments: comid, nwis, huc12, wqp, location, and start.
+Provides a formal query to the
+\href{https://labs.waterdata.usgs.gov/about-nldi/index.html}{Network Linked Data Index}.
+The function is useful for topology and location based feature discovery.
+A user must supply a starting feature, and can add optional navigation direction(s),
+and features to identify on the navigated network.
+Valid starting options can be given by one of the following arguments: comid, nwis, huc12,
+ wqp, location, and start.
 }
 \examples{
 
