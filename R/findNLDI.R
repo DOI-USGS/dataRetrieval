@@ -93,7 +93,7 @@ get_nldi = function(url, type = "", use_sf = FALSE){
       if(sf::st_geometry_type(tmp)[1] =="POINT"){
 
         tmp$X = sf::st_coordinates(tmp)[,1]
-        tmp$Y = sf::st_coordinates(tmp)[,1]
+        tmp$Y = sf::st_coordinates(tmp)[,2]
 
         tmp = tmp[,c(good_name, "X", "Y")]
 
