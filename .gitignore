@@ -8,3 +8,4 @@ dataRetrieval.Rproj
 .gitignore
 vignettes/usMaps_cache
 docs
+.DS_Store
