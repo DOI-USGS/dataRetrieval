@@ -119,6 +119,9 @@ and readWQPdata." />
     <li>
       <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
+    <li>
+      <a href="../articles/nldi.html">NLDI Interface</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -152,7 +155,7 @@ and readWQPdata." />
 and <code>readWQPdata</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>checkWQPdates</span>(<span class='no'>values</span>)</pre>
+    <pre class="usage"><span class='fu'>checkWQPdates</span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,9 +171,10 @@ and <code>readWQPdata</code>.</p>
     <p>values named list with corrected arguments to send to the Water Quality Portal</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>values</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>startDateLo</span><span class='kw'>=</span><span class='st'>"01-01-2002"</span>, <span class='kw'>characteristicName</span><span class='kw'>=</span><span class='st'>"Phosphorous"</span>,
-          <span class='kw'>endDate</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2014-01-01"</span>))
-<span class='no'>values</span> <span class='kw'>&lt;-</span> <span class='fu'>checkWQPdates</span>(<span class='no'>values</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>startDateLo<span class='op'>=</span><span class='st'>"01-01-2002"</span>, characteristicName<span class='op'>=</span><span class='st'>"Phosphorous"</span>, 
+          endDate<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2014-01-01"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>values</span> <span class='op'>&lt;-</span> <span class='fu'>checkWQPdates</span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -186,7 +190,7 @@ and <code>readWQPdata</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

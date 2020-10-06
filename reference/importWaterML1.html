@@ -119,6 +119,9 @@ NWIS site, parameter code, statistic, startdate and enddate." />
     <li>
       <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
+    <li>
+      <a href="../articles/nldi.html">NLDI Interface</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -152,7 +155,7 @@ NWIS site, parameter code, statistic, startdate and enddate." />
 NWIS site, parameter code, statistic, startdate and enddate.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>importWaterML1</span>(<span class='no'>obs_url</span>, <span class='kw'>asDateTime</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>)</pre>
+    <pre class="usage"><span class='fu'>importWaterML1</span><span class='op'>(</span><span class='va'>obs_url</span>, asDateTime <span class='op'>=</span> <span class='cn'>FALSE</span>, tz <span class='op'>=</span> <span class='st'>"UTC"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -207,58 +210,63 @@ and S is the statistic code (if applicable).</p>
     <div class='dont-index'><p><code><a href='renameNWISColumns.html'>renameNWISColumns</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>site_id</span> <span class='kw'>&lt;-</span> <span class='st'>"02177000"</span>
-<span class='no'>startDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2012-09-01"</span>
-<span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='st'>"2012-10-01"</span>
-<span class='no'>offering</span> <span class='kw'>&lt;-</span> <span class='st'>'00003'</span>
-<span class='no'>property</span> <span class='kw'>&lt;-</span> <span class='st'>'00060'</span>
-<span class='no'>obs_url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>site_id</span>,<span class='no'>property</span>,<span class='no'>startDate</span>,<span class='no'>endDate</span>,<span class='st'>'dv'</span>)
+    <pre class="examples"><div class='input'><span class='va'>site_id</span> <span class='op'>&lt;-</span> <span class='st'>"02177000"</span>
+<span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-09-01"</span>
+<span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-10-01"</span>
+<span class='va'>offering</span> <span class='op'>&lt;-</span> <span class='st'>'00003'</span>
+<span class='va'>property</span> <span class='op'>&lt;-</span> <span class='st'>'00060'</span>
+<span class='va'>obs_url</span> <span class='op'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span><span class='op'>(</span><span class='va'>site_id</span>,<span class='va'>property</span>,<span class='va'>startDate</span>,<span class='va'>endDate</span>,<span class='st'>'dv'</span><span class='op'>)</span>
 <span class='co'># \donttest{</span>
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>obs_url</span>, <span class='kw'>asDateTime</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML1</span><span class='op'>(</span><span class='va'>obs_url</span>, asDateTime<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='no'>groundWaterSite</span> <span class='kw'>&lt;-</span> <span class='st'>"431049071324301"</span>
-<span class='no'>startGW</span> <span class='kw'>&lt;-</span> <span class='st'>"2013-10-01"</span>
-<span class='no'>endGW</span> <span class='kw'>&lt;-</span> <span class='st'>"2014-06-30"</span>
-<span class='no'>groundwaterExampleURL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>groundWaterSite</span>, <span class='fl'>NA</span>,
-          <span class='no'>startGW</span>,<span class='no'>endGW</span>, <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"gwlevels"</span>)
-<span class='no'>groundWater</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>groundwaterExampleURL</span>)
-<span class='no'>groundWater2</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>groundwaterExampleURL</span>, <span class='kw'>asDateTime</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='va'>groundWaterSite</span> <span class='op'>&lt;-</span> <span class='st'>"431049071324301"</span>
+<span class='va'>startGW</span> <span class='op'>&lt;-</span> <span class='st'>"2013-10-01"</span>
+<span class='va'>endGW</span> <span class='op'>&lt;-</span> <span class='st'>"2014-06-30"</span>
+<span class='va'>groundwaterExampleURL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span><span class='op'>(</span><span class='va'>groundWaterSite</span>, <span class='cn'>NA</span>,
+          <span class='va'>startGW</span>,<span class='va'>endGW</span>, service<span class='op'>=</span><span class='st'>"gwlevels"</span><span class='op'>)</span>
+<span class='va'>groundWater</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML1</span><span class='op'>(</span><span class='va'>groundwaterExampleURL</span><span class='op'>)</span>
+<span class='va'>groundWater2</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML1</span><span class='op'>(</span><span class='va'>groundwaterExampleURL</span>, asDateTime<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='no'>unitDataURL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>site_id</span>,<span class='no'>property</span>,
-         <span class='st'>"2013-11-03"</span>,<span class='st'>"2013-11-03"</span>,<span class='st'>'uv'</span>)
-<span class='no'>unitData</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>unitDataURL</span>,<span class='fl'>TRUE</span>)
+<span class='va'>unitDataURL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span><span class='op'>(</span><span class='va'>site_id</span>,<span class='va'>property</span>,
+         <span class='st'>"2013-11-03"</span>,<span class='st'>"2013-11-03"</span>,<span class='st'>'uv'</span><span class='op'>)</span>
+<span class='va'>unitData</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML1</span><span class='op'>(</span><span class='va'>unitDataURL</span>,<span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># Two sites, two pcodes, one site has two data descriptors:</span>
-<span class='no'>siteNumber</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'01480015'</span>,<span class='st'>"04085427"</span>)
-<span class='no'>obs_url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>siteNumber</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00060"</span>,<span class='st'>"00010"</span>),<span class='no'>startDate</span>,<span class='no'>endDate</span>,<span class='st'>'dv'</span>)
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>obs_url</span>)
-<span class='no'>data</span>$<span class='no'>dateTime</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='no'>data</span>$<span class='no'>dateTime</span>)
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='renameNWISColumns.html'>renameNWISColumns</a></span>(<span class='no'>data</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/attributes.html'>attributes</a></span>(<span class='no'>data</span>))</div><div class='output co'>#&gt; [1] "names"         "row.names"     "url"           "siteInfo"     
+<span class='va'>siteNumber</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'01480015'</span>,<span class='st'>"04085427"</span><span class='op'>)</span>
+<span class='va'>obs_url</span> <span class='op'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span><span class='op'>(</span><span class='va'>siteNumber</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00060"</span>,<span class='st'>"00010"</span><span class='op'>)</span>,<span class='va'>startDate</span>,<span class='va'>endDate</span>,<span class='st'>'dv'</span><span class='op'>)</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML1</span><span class='op'>(</span><span class='va'>obs_url</span><span class='op'>)</span>
+<span class='va'>data</span><span class='op'>$</span><span class='va'>dateTime</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>dateTime</span><span class='op'>)</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='renameNWISColumns.html'>renameNWISColumns</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/attributes.html'>attributes</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "names"         "row.names"     "url"           "siteInfo"     
 #&gt; [5] "variableInfo"  "disclaimer"    "statisticInfo" "queryTime"    
-#&gt; [9] "class"        </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>data</span>, <span class='st'>"url"</span>)</div><div class='output co'>#&gt; [1] "https://waterservices.usgs.gov/nwis/dv/?site=01480015,04085427&amp;format=waterml,1.1&amp;ParameterCd=00060,00010&amp;StatCd=00003&amp;startDT=2012-09-01&amp;endDT=2012-10-01"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>data</span>, <span class='st'>"disclaimer"</span>)</div><div class='output co'>#&gt; [1] "Provisional data are subject to revision. Go to http://waterdata.usgs.gov/nwis/help/?provisional for more information."</div><div class='input'>
-<span class='no'>inactiveSite</span> <span class='kw'>&lt;-</span> <span class='st'>"05212700"</span>
-<span class='no'>inactiveSite</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>inactiveSite</span>, <span class='st'>"00060"</span>, <span class='st'>"2014-01-01"</span>, <span class='st'>"2014-01-10"</span>,<span class='st'>'dv'</span>)
-<span class='no'>inactiveSite</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>inactiveSite</span>)
+#&gt; [9] "class"        </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='st'>"url"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "https://waterservices.usgs.gov/nwis/dv/?site=01480015,04085427&amp;format=waterml,1.1&amp;ParameterCd=00060,00010&amp;StatCd=00003&amp;startDT=2012-09-01&amp;endDT=2012-10-01"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='st'>"disclaimer"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "Provisional data are subject to revision. Go to http://waterdata.usgs.gov/nwis/help/?provisional for more information."</div><div class='input'>
+<span class='va'>inactiveSite</span> <span class='op'>&lt;-</span> <span class='st'>"05212700"</span>
+<span class='va'>inactiveSite</span> <span class='op'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span><span class='op'>(</span><span class='va'>inactiveSite</span>, <span class='st'>"00060"</span>, <span class='st'>"2014-01-01"</span>, <span class='st'>"2014-01-10"</span>,<span class='st'>'dv'</span><span class='op'>)</span>
+<span class='va'>inactiveSite</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML1</span><span class='op'>(</span><span class='va'>inactiveSite</span><span class='op'>)</span>
 
-<span class='no'>inactiveAndAcitive</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"07334200"</span>,<span class='st'>"05212700"</span>)
-<span class='no'>inactiveAndAcitive</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='no'>inactiveAndAcitive</span>, <span class='st'>"00060"</span>, <span class='st'>"2014-01-01"</span>, <span class='st'>"2014-01-10"</span>,<span class='st'>'dv'</span>)
-<span class='no'>inactiveAndAcitive</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>inactiveAndAcitive</span>)
+<span class='va'>inactiveAndAcitive</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"07334200"</span>,<span class='st'>"05212700"</span><span class='op'>)</span>
+<span class='va'>inactiveAndAcitive</span> <span class='op'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span><span class='op'>(</span><span class='va'>inactiveAndAcitive</span>, <span class='st'>"00060"</span>, <span class='st'>"2014-01-01"</span>, <span class='st'>"2014-01-10"</span>,<span class='st'>'dv'</span><span class='op'>)</span>
+<span class='va'>inactiveAndAcitive</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML1</span><span class='op'>(</span><span class='va'>inactiveAndAcitive</span><span class='op'>)</span>
 
 <span class='co'># Timezone change with specified local timezone:</span>
-<span class='no'>tzURL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='st'>"04027000"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00300"</span>,<span class='st'>"63680"</span>), <span class='st'>"2011-11-05"</span>, <span class='st'>"2011-11-07"</span>,<span class='st'>"uv"</span>)
-<span class='no'>tzIssue</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>tzURL</span>, <span class='fl'>TRUE</span>, <span class='st'>"America/Chicago"</span>)
+<span class='va'>tzURL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span><span class='op'>(</span><span class='st'>"04027000"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00300"</span>,<span class='st'>"63680"</span><span class='op'>)</span>, <span class='st'>"2011-11-05"</span>, <span class='st'>"2011-11-07"</span>,<span class='st'>"uv"</span><span class='op'>)</span>
+<span class='va'>tzIssue</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML1</span><span class='op'>(</span><span class='va'>tzURL</span>, <span class='cn'>TRUE</span>, <span class='st'>"America/Chicago"</span><span class='op'>)</span>
 
 <span class='co'># raw XML</span>
-<span class='no'>url</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span>(<span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>'dv'</span>, <span class='kw'>siteNumber</span> <span class='kw'>=</span> <span class='st'>'02319300'</span>, <span class='kw'>parameterCd</span> <span class='kw'>=</span> <span class='st'>"00060"</span>,
-                         <span class='kw'>startDate</span> <span class='kw'>=</span> <span class='st'>"2014-01-01"</span>, <span class='kw'>endDate</span> <span class='kw'>=</span> <span class='st'>"2014-01-01"</span>)
-<span class='no'>raw</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='https://httr.r-lib.org/reference/content.html'>content</a></span>(<span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='https://httr.r-lib.org/reference/GET.html'>GET</a></span>(<span class='no'>url</span>), <span class='kw'>as</span> <span class='kw'>=</span> <span class='st'>'raw'</span>)
-<span class='no'>rawParsed</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>raw</span>)
+<span class='va'>url</span> <span class='op'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>'dv'</span>, siteNumber <span class='op'>=</span> <span class='st'>'02319300'</span>, parameterCd <span class='op'>=</span> <span class='st'>"00060"</span>, 
+                         startDate <span class='op'>=</span> <span class='st'>"2014-01-01"</span>, endDate <span class='op'>=</span> <span class='st'>"2014-01-01"</span><span class='op'>)</span>
+<span class='va'>raw</span> <span class='op'>&lt;-</span> <span class='fu'>httr</span><span class='fu'>::</span><span class='fu'><a href='https://httr.r-lib.org/reference/content.html'>content</a></span><span class='op'>(</span><span class='fu'>httr</span><span class='fu'>::</span><span class='fu'><a href='https://httr.r-lib.org/reference/GET.html'>GET</a></span><span class='op'>(</span><span class='va'>url</span><span class='op'>)</span>, as <span class='op'>=</span> <span class='st'>'raw'</span><span class='op'>)</span>
+<span class='va'>rawParsed</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML1</span><span class='op'>(</span><span class='va'>raw</span><span class='op'>)</span>
 <span class='co'># }</span>
-<span class='no'>filePath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"dataRetrieval"</span>)
-<span class='no'>fileName</span> <span class='kw'>&lt;-</span> <span class='st'>"WaterML1Example.xml"</span>
-<span class='no'>fullPath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>filePath</span>, <span class='no'>fileName</span>)
-<span class='no'>importFile</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML1</span>(<span class='no'>fullPath</span>,<span class='fl'>TRUE</span>)</div></pre>
+<span class='va'>filePath</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, package<span class='op'>=</span><span class='st'>"dataRetrieval"</span><span class='op'>)</span>
+<span class='va'>fileName</span> <span class='op'>&lt;-</span> <span class='st'>"WaterML1Example.xml"</span>
+<span class='va'>fullPath</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>filePath</span>, <span class='va'>fileName</span><span class='op'>)</span>
+<span class='va'>importFile</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML1</span><span class='op'>(</span><span class='va'>fullPath</span>,<span class='cn'>TRUE</span><span class='op'>)</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -274,7 +282,7 @@ and S is the statistic code (if applicable).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

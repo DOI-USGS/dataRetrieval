@@ -119,6 +119,9 @@ See https://waterservices.usgs.gov/rest/Statistics-Service.html for more informa
     <li>
       <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
+    <li>
+      <a href="../articles/nldi.html">NLDI Interface</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -152,15 +155,15 @@ See https://waterservices.usgs.gov/rest/Statistics-Service.html for more informa
 See <a href='https://waterservices.usgs.gov/rest/Statistics-Service.html'>https://waterservices.usgs.gov/rest/Statistics-Service.html</a> for more information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>readNWISstat</span>(
-  <span class='no'>siteNumbers</span>,
-  <span class='no'>parameterCd</span>,
-  <span class='kw'>startDate</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>endDate</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>convertType</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>statReportType</span> <span class='kw'>=</span> <span class='st'>"daily"</span>,
-  <span class='kw'>statType</span> <span class='kw'>=</span> <span class='st'>"mean"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>readNWISstat</span><span class='op'>(</span>
+  <span class='va'>siteNumbers</span>,
+  <span class='va'>parameterCd</span>,
+  startDate <span class='op'>=</span> <span class='st'>""</span>,
+  endDate <span class='op'>=</span> <span class='st'>""</span>,
+  convertType <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  statReportType <span class='op'>=</span> <span class='st'>"daily"</span>,
+  statType <span class='op'>=</span> <span class='st'>"mean"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -225,26 +228,29 @@ at <a href='https://waterservices.usgs.gov/rest/Statistics-Service.html'>https:/
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='no'>x1</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISstat</span>(<span class='kw'>siteNumbers</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"02319394"</span>),
-                  <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00060"</span>),
-                  <span class='kw'>statReportType</span><span class='kw'>=</span><span class='st'>"annual"</span>)</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
+<span class='va'>x1</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISstat</span><span class='op'>(</span>siteNumbers<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"02319394"</span><span class='op'>)</span>,
+                  parameterCd<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00060"</span><span class='op'>)</span>,
+                  statReportType<span class='op'>=</span><span class='st'>"annual"</span><span class='op'>)</span> 
+</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>          Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'>
 <span class='co'>#all the annual mean discharge data for two sites</span>
-<span class='no'>x2</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISstat</span>(<span class='kw'>siteNumbers</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"02319394"</span>,<span class='st'>"02171500"</span>),
-                  <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00010"</span>,<span class='st'>"00060"</span>),
-                  <span class='kw'>statReportType</span><span class='kw'>=</span><span class='st'>"annual"</span>)</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
+<span class='va'>x2</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISstat</span><span class='op'>(</span>siteNumbers<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"02319394"</span>,<span class='st'>"02171500"</span><span class='op'>)</span>,
+                  parameterCd<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00010"</span>,<span class='st'>"00060"</span><span class='op'>)</span>,
+                  statReportType<span class='op'>=</span><span class='st'>"annual"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>          Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'>
 <span class='co'>#Request p25, p75, and mean values for temperature and discharge for the 2000s</span>
 <span class='co'>#Note that p25 and p75 were not available for temperature, and return NAs</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISstat</span>(<span class='kw'>siteNumbers</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"02171500"</span>),
-                  <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00010"</span>,<span class='st'>"00060"</span>),
-                  <span class='kw'>statReportType</span><span class='kw'>=</span><span class='st'>"daily"</span>,
-                  <span class='kw'>statType</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>,<span class='st'>"median"</span>),
-                  <span class='kw'>startDate</span><span class='kw'>=</span><span class='st'>"2000"</span>,<span class='kw'>endDate</span><span class='kw'>=</span><span class='st'>"2010"</span>)</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISstat</span><span class='op'>(</span>siteNumbers<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"02171500"</span><span class='op'>)</span>,
+                  parameterCd<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00010"</span>,<span class='st'>"00060"</span><span class='op'>)</span>,
+                  statReportType<span class='op'>=</span><span class='st'>"daily"</span>,
+                  statType<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mean"</span>,<span class='st'>"median"</span><span class='op'>)</span>,
+                  startDate<span class='op'>=</span><span class='st'>"2000"</span>,endDate<span class='op'>=</span><span class='st'>"2010"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>          Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'># }
+#&gt; <span class='message'>          Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -261,7 +267,7 @@ at <a href='https://waterservices.usgs.gov/rest/Statistics-Service.html'>https:/
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

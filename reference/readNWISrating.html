@@ -119,6 +119,9 @@ Data is retrieved from https://waterdata.usgs.gov/nwis." />
     <li>
       <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
+    <li>
+      <a href="../articles/nldi.html">NLDI Interface</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -152,7 +155,7 @@ Data is retrieved from https://waterdata.usgs.gov/nwis." />
 Data is retrieved from <a href='https://waterdata.usgs.gov/nwis'>https://waterdata.usgs.gov/nwis</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>readNWISrating</span>(<span class='no'>siteNumber</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"base"</span>, <span class='kw'>convertType</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>readNWISrating</span><span class='op'>(</span><span class='va'>siteNumber</span>, type <span class='op'>=</span> <span class='st'>"base"</span>, convertType <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,12 +206,13 @@ relate flow to stage.</p>
     <div class='dont-index'><p><code><a href='constructNWISURL.html'>constructNWISURL</a></code>, <code><a href='importRDB1.html'>importRDB1</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>site_id</span> <span class='kw'>&lt;-</span> <span class='st'>'01594440'</span>
+    <pre class="examples"><div class='input'><span class='va'>site_id</span> <span class='op'>&lt;-</span> <span class='st'>'01594440'</span>
 <span class='co'># \donttest{</span>
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISrating</span>(<span class='no'>site_id</span>, <span class='st'>"base"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>data</span>, <span class='st'>"RATING"</span>)</div><div class='output co'>#&gt; [1] "ID=20.0"               "TYPE=STGQ"             "NAME=stage-discharge" 
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISrating</span><span class='op'>(</span><span class='va'>site_id</span>, <span class='st'>"base"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='st'>"RATING"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "ID=20.0"               "TYPE=STGQ"             "NAME=stage-discharge" 
 #&gt; [4] "AGING=Working"         "REMARKS="              "EXPANSION=logarithmic"
-#&gt; [7] "OFFSET1=2.000000E+00" </div><div class='input'># }
+#&gt; [7] "OFFSET1=2.000000E+00" </div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -225,7 +229,7 @@ relate flow to stage.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

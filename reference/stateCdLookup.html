@@ -119,6 +119,9 @@ and readWQPdata." />
     <li>
       <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
+    <li>
+      <a href="../articles/nldi.html">NLDI Interface</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -152,7 +155,7 @@ and readWQPdata." />
 and <code>readWQPdata</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>stateCdLookup</span>(<span class='no'>input</span>, <span class='kw'>outputType</span> <span class='kw'>=</span> <span class='st'>"postal"</span>)</pre>
+    <pre class="usage"><span class='fu'>stateCdLookup</span><span class='op'>(</span><span class='va'>input</span>, outputType <span class='op'>=</span> <span class='st'>"postal"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,13 +172,15 @@ and <code>readWQPdata</code>.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>fullName</span> <span class='kw'>&lt;-</span> <span class='fu'>stateCdLookup</span>(<span class='st'>"wi"</span>, <span class='st'>"fullName"</span>)
-<span class='no'>abbriev</span> <span class='kw'>&lt;-</span> <span class='fu'>stateCdLookup</span>(<span class='st'>"Wisconsin"</span>, <span class='st'>"postal"</span>)
-<span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='fu'>stateCdLookup</span>(<span class='st'>"WI"</span>, <span class='st'>"id"</span>)
-<span class='no'>name</span> <span class='kw'>&lt;-</span> <span class='fu'>stateCdLookup</span>(<span class='fl'>55</span>, <span class='st'>"fullName"</span>)
-<span class='no'>index</span> <span class='kw'>&lt;-</span> <span class='fu'>stateCdLookup</span>(<span class='st'>"WI"</span>, <span class='st'>"tableIndex"</span>)
-<span class='no'>stateCd</span>[<span class='no'>index</span>,]</div><div class='output co'>#&gt;    STATE STUSAB STATE_NAME  STATENS
-#&gt; 50    55     WI  Wisconsin 01779806</div><div class='input'><span class='fu'>stateCdLookup</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"West Virginia"</span>, <span class='st'>"Wisconsin"</span>, <span class='fl'>200</span>, <span class='fl'>55</span>, <span class='st'>"MN"</span>))</div><div class='output co'>#&gt; [1] "WV" "WI" NA   "WI" "MN"</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>fullName</span> <span class='op'>&lt;-</span> <span class='fu'>stateCdLookup</span><span class='op'>(</span><span class='st'>"wi"</span>, <span class='st'>"fullName"</span><span class='op'>)</span>
+<span class='va'>abbriev</span> <span class='op'>&lt;-</span> <span class='fu'>stateCdLookup</span><span class='op'>(</span><span class='st'>"Wisconsin"</span>, <span class='st'>"postal"</span><span class='op'>)</span>
+<span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'>stateCdLookup</span><span class='op'>(</span><span class='st'>"WI"</span>, <span class='st'>"id"</span><span class='op'>)</span>
+<span class='va'>name</span> <span class='op'>&lt;-</span> <span class='fu'>stateCdLookup</span><span class='op'>(</span><span class='fl'>55</span>, <span class='st'>"fullName"</span><span class='op'>)</span>
+<span class='va'>index</span> <span class='op'>&lt;-</span> <span class='fu'>stateCdLookup</span><span class='op'>(</span><span class='st'>"WI"</span>, <span class='st'>"tableIndex"</span><span class='op'>)</span>
+<span class='va'>stateCd</span><span class='op'>[</span><span class='va'>index</span>,<span class='op'>]</span>
+</div><div class='output co'>#&gt;    STATE STUSAB STATE_NAME  STATENS
+#&gt; 50    55     WI  Wisconsin 01779806</div><div class='input'><span class='fu'>stateCdLookup</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"West Virginia"</span>, <span class='st'>"Wisconsin"</span>, <span class='fl'>200</span>, <span class='fl'>55</span>, <span class='st'>"MN"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "WV" "WI" NA   "WI" "MN"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -191,7 +196,7 @@ and <code>readWQPdata</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

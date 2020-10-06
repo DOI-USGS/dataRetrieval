@@ -120,6 +120,9 @@ See examples below for ideas of constructing queries." />
     <li>
       <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
+    <li>
+      <a href="../articles/nldi.html">NLDI Interface</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -154,7 +157,7 @@ Arguments to the function should be based on <a href='https://waterservices.usgs
 See examples below for ideas of constructing queries.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>readNWISdata</span>(<span class='no'>...</span>, <span class='kw'>asDateTime</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>convertType</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>)</pre>
+    <pre class="usage"><span class='fu'>readNWISdata</span><span class='op'>(</span><span class='va'>...</span>, asDateTime <span class='op'>=</span> <span class='cn'>TRUE</span>, convertType <span class='op'>=</span> <span class='cn'>TRUE</span>, tz <span class='op'>=</span> <span class='st'>"UTC"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -226,88 +229,94 @@ and S is the statistic code (if applicable).</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># Examples not run for time considerations</span>
-<span class='no'>dataTemp</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>stateCd</span><span class='kw'>=</span><span class='st'>"OH"</span>,<span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00010"</span>, <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"dv"</span>)
-<span class='no'>instFlow</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>sites</span><span class='kw'>=</span><span class='st'>"05114000"</span>, <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"iv"</span>,
-                   <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00060"</span>,
-                   <span class='kw'>startDate</span><span class='kw'>=</span><span class='st'>"2014-05-01T00:00Z"</span>,<span class='kw'>endDate</span><span class='kw'>=</span><span class='st'>"2014-05-01T12:00Z"</span>)
-
-<span class='no'>instFlowCDT</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>sites</span><span class='kw'>=</span><span class='st'>"05114000"</span>, <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"iv"</span>,
-                   <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00060"</span>,
-                   <span class='kw'>startDate</span><span class='kw'>=</span><span class='st'>"2014-05-01T00:00"</span>,<span class='kw'>endDate</span><span class='kw'>=</span><span class='st'>"2014-05-01T12:00"</span>,
-                   <span class='kw'>tz</span><span class='kw'>=</span><span class='st'>"America/Chicago"</span>)
+<span class='va'>dataTemp</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd<span class='op'>=</span><span class='st'>"OH"</span>,parameterCd<span class='op'>=</span><span class='st'>"00010"</span>, service<span class='op'>=</span><span class='st'>"dv"</span><span class='op'>)</span>
+<span class='va'>instFlow</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>sites<span class='op'>=</span><span class='st'>"05114000"</span>, service<span class='op'>=</span><span class='st'>"iv"</span>, 
+                   parameterCd<span class='op'>=</span><span class='st'>"00060"</span>, 
+                   startDate<span class='op'>=</span><span class='st'>"2014-05-01T00:00Z"</span>,endDate<span class='op'>=</span><span class='st'>"2014-05-01T12:00Z"</span><span class='op'>)</span>
+                                                   
+<span class='va'>instFlowCDT</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>sites<span class='op'>=</span><span class='st'>"05114000"</span>, service<span class='op'>=</span><span class='st'>"iv"</span>, 
+                   parameterCd<span class='op'>=</span><span class='st'>"00060"</span>, 
+                   startDate<span class='op'>=</span><span class='st'>"2014-05-01T00:00"</span>,endDate<span class='op'>=</span><span class='st'>"2014-05-01T12:00"</span>,
+                   tz<span class='op'>=</span><span class='st'>"America/Chicago"</span><span class='op'>)</span>
 
 <span class='co'>#Empty:</span>
-<span class='no'>multiSite</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>sites</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"04025000"</span>,<span class='st'>"04072150"</span>), <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"iv"</span>,
-                           <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00010"</span>)
+<span class='va'>multiSite</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>sites<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"04025000"</span>,<span class='st'>"04072150"</span><span class='op'>)</span>, service<span class='op'>=</span><span class='st'>"iv"</span>, 
+                           parameterCd<span class='op'>=</span><span class='st'>"00010"</span><span class='op'>)</span>
 <span class='co'>#Not empty:</span>
-<span class='no'>multiSite</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>sites</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"04025500"</span>,<span class='st'>"040263491"</span>),
-                           <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"iv"</span>, <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00060"</span>)
-<span class='no'>bBoxEx</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>bBox</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>83</span>,<span class='fl'>36.5</span>,-<span class='fl'>81</span>,<span class='fl'>38.5</span>), <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00010"</span>)
+<span class='va'>multiSite</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>sites<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"04025500"</span>,<span class='st'>"040263491"</span><span class='op'>)</span>, 
+                           service<span class='op'>=</span><span class='st'>"iv"</span>, parameterCd<span class='op'>=</span><span class='st'>"00060"</span><span class='op'>)</span>
+<span class='va'>bBoxEx</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>bBox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>83</span>,<span class='fl'>36.5</span>,<span class='op'>-</span><span class='fl'>81</span>,<span class='fl'>38.5</span><span class='op'>)</span>, parameterCd<span class='op'>=</span><span class='st'>"00010"</span><span class='op'>)</span>
 
-<span class='no'>startDate</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2013-10-01"</span>)
-<span class='no'>endDate</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2014-09-30"</span>)
-<span class='no'>waterYear</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>bBox</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>83</span>,<span class='fl'>36.5</span>,-<span class='fl'>81</span>,<span class='fl'>38.5</span>), <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00010"</span>,
-                  <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"dv"</span>, <span class='kw'>startDate</span><span class='kw'>=</span><span class='no'>startDate</span>, <span class='kw'>endDate</span><span class='kw'>=</span><span class='no'>endDate</span>)
-<span class='no'>siteInfo</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>stateCd</span><span class='kw'>=</span><span class='st'>"WI"</span>, <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00010"</span>,
-                  <span class='kw'>hasDataTypeCd</span><span class='kw'>=</span><span class='st'>"iv"</span>, <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"site"</span>)
-<span class='no'>qwData</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>bBox</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>82.5</span>,<span class='fl'>41.52</span>,-<span class='fl'>81</span>,<span class='fl'>41</span>),<span class='kw'>startDate</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2000-01-01"</span>),
-                  <span class='kw'>drain_area_va_min</span><span class='kw'>=</span><span class='fl'>50</span>, <span class='kw'>qw_count_nu</span><span class='kw'>=</span><span class='fl'>50</span>,<span class='kw'>qw_attributes</span><span class='kw'>=</span><span class='st'>"expanded"</span>,
-                  <span class='kw'>qw_sample_wide</span><span class='kw'>=</span><span class='st'>"wide"</span>,<span class='kw'>list_of_search_criteria</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lat_long_bounding_box"</span>,
-                  <span class='st'>"drain_area_va"</span>,<span class='st'>"obs_count_nu"</span>),<span class='kw'>service</span><span class='kw'>=</span><span class='st'>"qw"</span>)
-<span class='no'>temp</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>bBox</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>83</span>,<span class='fl'>36.5</span>,-<span class='fl'>81</span>,<span class='fl'>38.5</span>), <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00010"</span>, <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"site"</span>,
-                   <span class='kw'>seriesCatalogOutput</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='no'>wiGWL</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>stateCd</span><span class='kw'>=</span><span class='st'>"WI"</span>,<span class='kw'>service</span><span class='kw'>=</span><span class='st'>"gwlevels"</span>)
-<span class='no'>meas</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>state_cd</span><span class='kw'>=</span><span class='st'>"WI"</span>,<span class='kw'>service</span><span class='kw'>=</span><span class='st'>"measurements"</span>,<span class='kw'>format</span><span class='kw'>=</span><span class='st'>"rdb_expanded"</span>)
+<span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2013-10-01"</span><span class='op'>)</span>
+<span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2014-09-30"</span><span class='op'>)</span>
+<span class='va'>waterYear</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>bBox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>83</span>,<span class='fl'>36.5</span>,<span class='op'>-</span><span class='fl'>81</span>,<span class='fl'>38.5</span><span class='op'>)</span>, parameterCd<span class='op'>=</span><span class='st'>"00010"</span>, 
+                  service<span class='op'>=</span><span class='st'>"dv"</span>, startDate<span class='op'>=</span><span class='va'>startDate</span>, endDate<span class='op'>=</span><span class='va'>endDate</span><span class='op'>)</span>
+<span class='va'>siteInfo</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd<span class='op'>=</span><span class='st'>"WI"</span>, parameterCd<span class='op'>=</span><span class='st'>"00010"</span>,
+                  hasDataTypeCd<span class='op'>=</span><span class='st'>"iv"</span>, service<span class='op'>=</span><span class='st'>"site"</span><span class='op'>)</span>
+<span class='va'>qwData</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>bBox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>82.5</span>,<span class='fl'>41.52</span>,<span class='op'>-</span><span class='fl'>81</span>,<span class='fl'>41</span><span class='op'>)</span>,startDate<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2000-01-01"</span><span class='op'>)</span>,
+                  drain_area_va_min<span class='op'>=</span><span class='fl'>50</span>, qw_count_nu<span class='op'>=</span><span class='fl'>50</span>,qw_attributes<span class='op'>=</span><span class='st'>"expanded"</span>,
+                  qw_sample_wide<span class='op'>=</span><span class='st'>"wide"</span>,list_of_search_criteria<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"lat_long_bounding_box"</span>,
+                  <span class='st'>"drain_area_va"</span>,<span class='st'>"obs_count_nu"</span><span class='op'>)</span>,service<span class='op'>=</span><span class='st'>"qw"</span><span class='op'>)</span>
+<span class='va'>temp</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>bBox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>83</span>,<span class='fl'>36.5</span>,<span class='op'>-</span><span class='fl'>81</span>,<span class='fl'>38.5</span><span class='op'>)</span>, parameterCd<span class='op'>=</span><span class='st'>"00010"</span>, service<span class='op'>=</span><span class='st'>"site"</span>, 
+                   seriesCatalogOutput<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>wiGWL</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd<span class='op'>=</span><span class='st'>"WI"</span>,service<span class='op'>=</span><span class='st'>"gwlevels"</span><span class='op'>)</span>
+<span class='va'>meas</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>state_cd<span class='op'>=</span><span class='st'>"WI"</span>,service<span class='op'>=</span><span class='st'>"measurements"</span>,format<span class='op'>=</span><span class='st'>"rdb_expanded"</span><span class='op'>)</span>
 
-<span class='no'>waterYearStat</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>site</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"03112500"</span>),<span class='kw'>service</span><span class='kw'>=</span><span class='st'>"stat"</span>,<span class='kw'>statReportType</span><span class='kw'>=</span><span class='st'>"annual"</span>,
-                 <span class='kw'>statYearType</span><span class='kw'>=</span><span class='st'>"water"</span>, <span class='kw'>missingData</span><span class='kw'>=</span><span class='st'>"on"</span>)</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
+<span class='va'>waterYearStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"03112500"</span><span class='op'>)</span>,service<span class='op'>=</span><span class='st'>"stat"</span>,statReportType<span class='op'>=</span><span class='st'>"annual"</span>,
+                 statYearType<span class='op'>=</span><span class='st'>"water"</span>, missingData<span class='op'>=</span><span class='st'>"on"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='no'>monthlyStat</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>site</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"03112500"</span>,<span class='st'>"03111520"</span>),
-                            <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"stat"</span>,
-                            <span class='kw'>statReportType</span><span class='kw'>=</span><span class='st'>"monthly"</span>)</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
+#&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='va'>monthlyStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"03112500"</span>,<span class='st'>"03111520"</span><span class='op'>)</span>,
+                            service<span class='op'>=</span><span class='st'>"stat"</span>,
+                            statReportType<span class='op'>=</span><span class='st'>"monthly"</span><span class='op'>)</span>                                   
+</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='no'>dailyStat</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>site</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"03112500"</span>,<span class='st'>"03111520"</span>),
-                          <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"stat"</span>,
-                          <span class='kw'>statReportType</span><span class='kw'>=</span><span class='st'>"daily"</span>,
-                          <span class='kw'>statType</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"p25"</span>,<span class='st'>"p50"</span>,<span class='st'>"p75"</span>,<span class='st'>"min"</span>,<span class='st'>"max"</span>),
-                          <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00065"</span>)</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
+#&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='va'>dailyStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"03112500"</span>,<span class='st'>"03111520"</span><span class='op'>)</span>,
+                          service<span class='op'>=</span><span class='st'>"stat"</span>,
+                          statReportType<span class='op'>=</span><span class='st'>"daily"</span>,
+                          statType<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"p25"</span>,<span class='st'>"p50"</span>,<span class='st'>"p75"</span>,<span class='st'>"min"</span>,<span class='st'>"max"</span><span class='op'>)</span>,
+                          parameterCd<span class='op'>=</span><span class='st'>"00065"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='no'>allDailyStats</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>site</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"03111548"</span>),
-                              <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"stat"</span>,
-                              <span class='kw'>statReportType</span><span class='kw'>=</span><span class='st'>"daily"</span>,
-                              <span class='kw'>statType</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"p25"</span>,<span class='st'>"p50"</span>,<span class='st'>"p75"</span>,<span class='st'>"min"</span>,<span class='st'>"max"</span>),
-                              <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00060"</span>)</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
+#&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='va'>allDailyStats</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"03111548"</span><span class='op'>)</span>,
+                              service<span class='op'>=</span><span class='st'>"stat"</span>,
+                              statReportType<span class='op'>=</span><span class='st'>"daily"</span>,
+                              statType<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"p25"</span>,<span class='st'>"p50"</span>,<span class='st'>"p75"</span>,<span class='st'>"min"</span>,<span class='st'>"max"</span><span class='op'>)</span>,
+                              parameterCd<span class='op'>=</span><span class='st'>"00060"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'>
-<span class='no'>dailyWV</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"West Virginia"</span>, <span class='kw'>parameterCd</span> <span class='kw'>=</span> <span class='st'>"00060"</span>)
+<span class='va'>dailyWV</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"West Virginia"</span>, parameterCd <span class='op'>=</span> <span class='st'>"00060"</span><span class='op'>)</span>
 
-<span class='no'>arg.list</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>site</span><span class='kw'>=</span><span class='st'>"03111548"</span>,
-                 <span class='kw'>statReportType</span><span class='kw'>=</span><span class='st'>"daily"</span>,
-                 <span class='kw'>statType</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"p25"</span>,<span class='st'>"p50"</span>,<span class='st'>"p75"</span>,<span class='st'>"min"</span>,<span class='st'>"max"</span>),
-                 <span class='kw'>parameterCd</span><span class='kw'>=</span><span class='st'>"00060"</span>)
-<span class='no'>allDailyStats_2</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='no'>arg.list</span>, <span class='kw'>service</span><span class='kw'>=</span><span class='st'>"stat"</span>)</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
+<span class='va'>arg.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>site<span class='op'>=</span><span class='st'>"03111548"</span>,
+                 statReportType<span class='op'>=</span><span class='st'>"daily"</span>,
+                 statType<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"p25"</span>,<span class='st'>"p50"</span>,<span class='st'>"p75"</span>,<span class='st'>"min"</span>,<span class='st'>"max"</span><span class='op'>)</span>,
+                 parameterCd<span class='op'>=</span><span class='st'>"00060"</span><span class='op'>)</span>
+<span class='va'>allDailyStats_2</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span><span class='va'>arg.list</span>, service<span class='op'>=</span><span class='st'>"stat"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'>
 <span class='co'>#' # use county names to get data</span>
-<span class='no'>dailyStaffordVA</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>stateCd</span> <span class='kw'>=</span> <span class='st'>"Virginia"</span>,
-                                <span class='kw'>countyCd</span><span class='kw'>=</span><span class='st'>"Stafford"</span>,
-                                <span class='kw'>parameterCd</span> <span class='kw'>=</span> <span class='st'>"00060"</span>,
-                                <span class='kw'>startDate</span> <span class='kw'>=</span> <span class='st'>"2015-01-01"</span>,
-                                <span class='kw'>endDate</span> <span class='kw'>=</span> <span class='st'>"2015-01-30"</span>)
-<span class='no'>va_counties</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"51001"</span>,<span class='st'>"51003"</span>,<span class='st'>"51005"</span>,<span class='st'>"51007"</span>,<span class='st'>"51009"</span>,<span class='st'>"51011"</span>,<span class='st'>"51013"</span>,<span class='st'>"51015"</span>)
-<span class='no'>va_counties_data</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>startDate</span> <span class='kw'>=</span> <span class='st'>"2015-01-01"</span>, <span class='kw'>endDate</span> <span class='kw'>=</span> <span class='st'>"2015-12-31"</span>,
-<span class='kw'>parameterCd</span> <span class='kw'>=</span> <span class='st'>"00060"</span>, <span class='kw'>countycode</span> <span class='kw'>=</span> <span class='no'>va_counties</span>)
-<span class='no'>site_id</span> <span class='kw'>&lt;-</span> <span class='st'>'01594440'</span>
-<span class='no'>rating_curve</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"rating"</span>, <span class='kw'>site_no</span> <span class='kw'>=</span> <span class='no'>site_id</span>, <span class='kw'>file_type</span><span class='kw'>=</span><span class='st'>"base"</span>)
-<span class='no'>all_sites_base</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"rating"</span>, <span class='kw'>file_type</span><span class='kw'>=</span><span class='st'>"base"</span>)
-<span class='no'>all_sites_core</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"rating"</span>, <span class='kw'>file_type</span><span class='kw'>=</span><span class='st'>"corr"</span>)
-<span class='no'>all_sites_exsa</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"rating"</span>, <span class='kw'>file_type</span><span class='kw'>=</span><span class='st'>"exsa"</span>)
-<span class='no'>all_sites_24hrs</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"rating"</span>, <span class='kw'>file_type</span><span class='kw'>=</span><span class='st'>"exsa"</span>, <span class='kw'>period</span> <span class='kw'>=</span> <span class='fl'>24</span>)
+<span class='va'>dailyStaffordVA</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"Virginia"</span>,
+                                countyCd<span class='op'>=</span><span class='st'>"Stafford"</span>,
+                                parameterCd <span class='op'>=</span> <span class='st'>"00060"</span>,
+                                startDate <span class='op'>=</span> <span class='st'>"2015-01-01"</span>,
+                                endDate <span class='op'>=</span> <span class='st'>"2015-01-30"</span><span class='op'>)</span>
+<span class='va'>va_counties</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"51001"</span>,<span class='st'>"51003"</span>,<span class='st'>"51005"</span>,<span class='st'>"51007"</span>,<span class='st'>"51009"</span>,<span class='st'>"51011"</span>,<span class='st'>"51013"</span>,<span class='st'>"51015"</span><span class='op'>)</span>
+<span class='va'>va_counties_data</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>startDate <span class='op'>=</span> <span class='st'>"2015-01-01"</span>, endDate <span class='op'>=</span> <span class='st'>"2015-12-31"</span>, 
+parameterCd <span class='op'>=</span> <span class='st'>"00060"</span>, countycode <span class='op'>=</span> <span class='va'>va_counties</span><span class='op'>)</span>
+<span class='va'>site_id</span> <span class='op'>&lt;-</span> <span class='st'>'01594440'</span>
+<span class='va'>rating_curve</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"rating"</span>, site_no <span class='op'>=</span> <span class='va'>site_id</span>, file_type<span class='op'>=</span><span class='st'>"base"</span><span class='op'>)</span>
+<span class='va'>all_sites_base</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"rating"</span>, file_type<span class='op'>=</span><span class='st'>"base"</span><span class='op'>)</span>
+<span class='va'>all_sites_core</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"rating"</span>, file_type<span class='op'>=</span><span class='st'>"corr"</span><span class='op'>)</span>
+<span class='va'>all_sites_exsa</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"rating"</span>, file_type<span class='op'>=</span><span class='st'>"exsa"</span><span class='op'>)</span>
+<span class='va'>all_sites_24hrs</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"rating"</span>, file_type<span class='op'>=</span><span class='st'>"exsa"</span>, period <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span>
 
-<span class='no'>today</span> <span class='kw'>&lt;-</span> <span class='fu'>readNWISdata</span>(<span class='kw'>service</span><span class='kw'>=</span><span class='st'>"iv"</span>, <span class='kw'>startDate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>(),
-                      <span class='kw'>parameterCd</span> <span class='kw'>=</span> <span class='st'>"00060"</span>, <span class='kw'>siteNumber</span> <span class='kw'>=</span> <span class='st'>"05114000"</span>)
+<span class='va'>today</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service<span class='op'>=</span><span class='st'>"iv"</span>, startDate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span>, 
+                      parameterCd <span class='op'>=</span> <span class='st'>"00060"</span>, siteNumber <span class='op'>=</span> <span class='st'>"05114000"</span><span class='op'>)</span>
 
-<span class='co'># }</span></div></pre>
+<span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -323,7 +332,7 @@ and S is the statistic code (if applicable).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

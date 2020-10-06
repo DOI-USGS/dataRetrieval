@@ -121,6 +121,9 @@ available data at the WQP sites, and some metadata on the sites themselves." />
     <li>
       <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
+    <li>
+      <a href="../articles/nldi.html">NLDI Interface</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -156,7 +159,7 @@ The information returned from this function describes the
 available data at the WQP sites, and some metadata on the sites themselves.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>whatWQPdata</span>(<span class='no'>...</span>, <span class='kw'>saveFile</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>())</pre>
+    <pre class="usage"><span class='fu'>whatWQPdata</span><span class='op'>(</span><span class='va'>...</span>, saveFile <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -206,13 +209,14 @@ hydrologic unit of the monitoring location to the cataloging unit level of preci
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='no'>site1</span> <span class='kw'>&lt;-</span> <span class='fu'>whatWQPdata</span>(<span class='kw'>siteid</span><span class='kw'>=</span><span class='st'>"USGS-01594440"</span>)
+<span class='va'>site1</span> <span class='op'>&lt;-</span> <span class='fu'>whatWQPdata</span><span class='op'>(</span>siteid<span class='op'>=</span><span class='st'>"USGS-01594440"</span><span class='op'>)</span>
 
-<span class='no'>type</span> <span class='kw'>&lt;-</span> <span class='st'>"Stream"</span>
-<span class='no'>sites</span> <span class='kw'>&lt;-</span> <span class='fu'>whatWQPdata</span>(<span class='kw'>countycode</span><span class='kw'>=</span><span class='st'>"US:55:025"</span>,<span class='kw'>siteType</span><span class='kw'>=</span><span class='no'>type</span>)
+<span class='va'>type</span> <span class='op'>&lt;-</span> <span class='st'>"Stream"</span>
+<span class='va'>sites</span> <span class='op'>&lt;-</span> <span class='fu'>whatWQPdata</span><span class='op'>(</span>countycode<span class='op'>=</span><span class='st'>"US:55:025"</span>,siteType<span class='op'>=</span><span class='va'>type</span><span class='op'>)</span>
 
-<span class='no'>lakeSites</span> <span class='kw'>&lt;-</span> <span class='fu'>whatWQPdata</span>(<span class='kw'>siteType</span> <span class='kw'>=</span> <span class='st'>"Lake, Reservoir, Impoundment"</span>, <span class='kw'>statecode</span> <span class='kw'>=</span> <span class='st'>"US:55"</span>)
-<span class='co'># }</span></div></pre>
+<span class='va'>lakeSites</span> <span class='op'>&lt;-</span> <span class='fu'>whatWQPdata</span><span class='op'>(</span>siteType <span class='op'>=</span> <span class='st'>"Lake, Reservoir, Impoundment"</span>, statecode <span class='op'>=</span> <span class='st'>"US:55"</span><span class='op'>)</span>
+<span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -228,7 +232,7 @@ hydrologic unit of the monitoring location to the cataloging unit level of preci
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

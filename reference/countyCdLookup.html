@@ -119,6 +119,9 @@ and readNWISuse." />
     <li>
       <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
+    <li>
+      <a href="../articles/nldi.html">NLDI Interface</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -152,7 +155,7 @@ and readNWISuse." />
 and <code>readNWISuse</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>countyCdLookup</span>(<span class='no'>state</span>, <span class='no'>county</span>, <span class='kw'>outputType</span> <span class='kw'>=</span> <span class='st'>"id"</span>)</pre>
+    <pre class="usage"><span class='fu'>countyCdLookup</span><span class='op'>(</span><span class='va'>state</span>, <span class='va'>county</span>, outputType <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,11 +176,12 @@ and <code>readNWISuse</code>.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='fu'>countyCdLookup</span>(<span class='kw'>state</span> <span class='kw'>=</span> <span class='st'>"WI"</span>, <span class='kw'>county</span> <span class='kw'>=</span> <span class='st'>"Dane"</span>)
-<span class='no'>name</span> <span class='kw'>&lt;-</span> <span class='fu'>countyCdLookup</span>(<span class='kw'>state</span> <span class='kw'>=</span> <span class='st'>"OH"</span>, <span class='kw'>county</span> <span class='kw'>=</span> <span class='fl'>13</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"fullName"</span>)
-<span class='no'>index</span> <span class='kw'>&lt;-</span> <span class='fu'>countyCdLookup</span>(<span class='kw'>state</span> <span class='kw'>=</span> <span class='st'>"Pennsylvania"</span>, <span class='kw'>county</span> <span class='kw'>=</span> <span class='st'>"ALLEGHENY COUNTY"</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"tableIndex"</span>)
-<span class='no'>fromIDs</span> <span class='kw'>&lt;-</span> <span class='fu'>countyCdLookup</span>(<span class='kw'>state</span> <span class='kw'>=</span> <span class='fl'>13</span>, <span class='kw'>county</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"fullName"</span>)
-<span class='no'>already_correct</span> <span class='kw'>&lt;-</span> <span class='fu'>countyCdLookup</span>(<span class='kw'>county</span> <span class='kw'>=</span> <span class='st'>"51001"</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'>countyCdLookup</span><span class='op'>(</span>state <span class='op'>=</span> <span class='st'>"WI"</span>, county <span class='op'>=</span> <span class='st'>"Dane"</span><span class='op'>)</span>
+<span class='va'>name</span> <span class='op'>&lt;-</span> <span class='fu'>countyCdLookup</span><span class='op'>(</span>state <span class='op'>=</span> <span class='st'>"OH"</span>, county <span class='op'>=</span> <span class='fl'>13</span>, output <span class='op'>=</span> <span class='st'>"fullName"</span><span class='op'>)</span>
+<span class='va'>index</span> <span class='op'>&lt;-</span> <span class='fu'>countyCdLookup</span><span class='op'>(</span>state <span class='op'>=</span> <span class='st'>"Pennsylvania"</span>, county <span class='op'>=</span> <span class='st'>"ALLEGHENY COUNTY"</span>, output <span class='op'>=</span> <span class='st'>"tableIndex"</span><span class='op'>)</span>
+<span class='va'>fromIDs</span> <span class='op'>&lt;-</span> <span class='fu'>countyCdLookup</span><span class='op'>(</span>state <span class='op'>=</span> <span class='fl'>13</span>, county <span class='op'>=</span> <span class='fl'>5</span>, output <span class='op'>=</span> <span class='st'>"fullName"</span><span class='op'>)</span>
+<span class='va'>already_correct</span> <span class='op'>&lt;-</span> <span class='fu'>countyCdLookup</span><span class='op'>(</span>county <span class='op'>=</span> <span class='st'>"51001"</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -193,7 +197,7 @@ and <code>readNWISuse</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

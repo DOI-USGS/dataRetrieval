@@ -119,6 +119,9 @@ Anything defined as a default, is returned as an attribute of that data frame." 
     <li>
       <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
+    <li>
+      <a href="../articles/nldi.html">NLDI Interface</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -152,7 +155,7 @@ Anything defined as a default, is returned as an attribute of that data frame." 
 Anything defined as a default, is returned as an attribute of that data frame.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>importWaterML2</span>(<span class='no'>input</span>, <span class='kw'>asDateTime</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>)</pre>
+    <pre class="usage"><span class='fu'>importWaterML2</span><span class='op'>(</span><span class='va'>input</span>, asDateTime <span class='op'>=</span> <span class='cn'>FALSE</span>, tz <span class='op'>=</span> <span class='st'>"UTC"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,15 +179,16 @@ Possible values are "America/New_York","America/Chicago", "America/Denver","Amer
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>baseURL</span> <span class='kw'>&lt;-</span> <span class='st'>"https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"</span>
-<span class='no'>URL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>baseURL</span>, <span class='st'>"sites=01646500"</span>,
+    <pre class="examples"><div class='input'><span class='va'>baseURL</span> <span class='op'>&lt;-</span> <span class='st'>"https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"</span>
+<span class='va'>URL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>baseURL</span>, <span class='st'>"sites=01646500"</span>,
      <span class='st'>"startDT=2014-09-01"</span>,
      <span class='st'>"endDT=2014-09-08"</span>,
      <span class='st'>"statCd=00003"</span>,
-     <span class='st'>"parameterCd=00060"</span>,<span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"&amp;"</span>)
+     <span class='st'>"parameterCd=00060"</span>,sep<span class='op'>=</span><span class='st'>"&amp;"</span><span class='op'>)</span>
 <span class='co'># \donttest{</span>
-<span class='no'>timesereies</span> <span class='kw'>&lt;-</span> <span class='fu'>importWaterML2</span>(<span class='no'>URL</span>, <span class='kw'>asDateTime</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>tz</span><span class='kw'>=</span><span class='st'>"UTC"</span>)
-<span class='co'># } </span></div></pre>
+<span class='va'>timesereies</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML2</span><span class='op'>(</span><span class='va'>URL</span>, asDateTime<span class='op'>=</span><span class='cn'>TRUE</span>, tz<span class='op'>=</span><span class='st'>"UTC"</span><span class='op'>)</span>
+<span class='co'># } </span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -200,7 +204,7 @@ Possible values are "America/New_York","America/Chicago", "America/Denver","Amer
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

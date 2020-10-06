@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Retrieve site data from the National Ground Water Monitoring Network <a href='https://cida.usgs.gov/ngwmn/'>https://cida.usgs.gov/ngwmn/</a>. — readNGWMNsites • dataRetrieval</title>
+<title>Retrieve site data from the National Ground Water Monitoring Network https://cida.usgs.gov/ngwmn/. — readNGWMNsites • dataRetrieval</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Retrieve site data from the National Ground Water Monitoring Network <a href='https://cida.usgs.gov/ngwmn/'>https://cida.usgs.gov/ngwmn/</a>. — readNGWMNsites" />
+<meta property="og:title" content="Retrieve site data from the National Ground Water Monitoring Network https://cida.usgs.gov/ngwmn/. — readNGWMNsites" />
 <meta property="og:description" content="Retrieve site data from the National Ground Water Monitoring Network https://cida.usgs.gov/ngwmn/." />
 <meta property="og:image" content="/logo.png" />
 
@@ -118,6 +118,9 @@
     <li>
       <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
+    <li>
+      <a href="../articles/nldi.html">NLDI Interface</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -150,7 +153,7 @@
     <p>Retrieve site data from the National Ground Water Monitoring Network <a href='https://cida.usgs.gov/ngwmn/'>https://cida.usgs.gov/ngwmn/</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>readNGWMNsites</span>(<span class='no'>siteNumbers</span>)</pre>
+    <pre class="usage"><span class='fu'>readNGWMNsites</span><span class='op'>(</span><span class='va'>siteNumbers</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,14 +180,16 @@ separated by a period or semicolon, e.g. <code>USGS.404159100494601</code>.</p><
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'>#one site</span>
-<span class='no'>site</span> <span class='kw'>&lt;-</span> <span class='st'>"USGS.430427089284901"</span>
-<span class='no'>oneSite</span> <span class='kw'>&lt;-</span> <span class='fu'>readNGWMNsites</span>(<span class='kw'>siteNumbers</span> <span class='kw'>=</span> <span class='no'>site</span>)</div><div class='output co'>#&gt; <span class='message'>DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
+<span class='va'>site</span> <span class='op'>&lt;-</span> <span class='st'>"USGS.430427089284901"</span>
+<span class='va'>oneSite</span> <span class='op'>&lt;-</span> <span class='fu'>readNGWMNsites</span><span class='op'>(</span>siteNumbers <span class='op'>=</span> <span class='va'>site</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
 #&gt; <span class='message'>              and no future behavior or output is guaranteed</span></div><div class='input'>
 <span class='co'>#non-USGS site</span>
-<span class='no'>site</span> <span class='kw'>&lt;-</span> <span class='st'>"MBMG.103306"</span>
-<span class='no'>siteInfo</span> <span class='kw'>&lt;-</span> <span class='fu'>readNGWMNsites</span>(<span class='kw'>siteNumbers</span> <span class='kw'>=</span> <span class='no'>site</span>)</div><div class='output co'>#&gt; <span class='message'>DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
+<span class='va'>site</span> <span class='op'>&lt;-</span> <span class='st'>"MBMG.103306"</span>
+<span class='va'>siteInfo</span> <span class='op'>&lt;-</span> <span class='fu'>readNGWMNsites</span><span class='op'>(</span>siteNumbers <span class='op'>=</span> <span class='va'>site</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
 #&gt; <span class='message'>              and no future behavior or output is guaranteed</span></div><div class='input'>
-# }
+<span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -201,7 +206,7 @@ separated by a period or semicolon, e.g. <code>USGS.404159100494601</code>.</p><
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

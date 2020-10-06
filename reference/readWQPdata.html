@@ -119,6 +119,9 @@ because it allows for other agencies rather than the USGS." />
     <li>
       <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
+    <li>
+      <a href="../articles/nldi.html">NLDI Interface</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -152,7 +155,7 @@ because it allows for other agencies rather than the USGS." />
 because it allows for other agencies rather than the USGS.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>readWQPdata</span>(<span class='no'>...</span>, <span class='kw'>querySummary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>, <span class='kw'>ignore_attributes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>readWQPdata</span><span class='op'>(</span><span class='va'>...</span>, querySummary <span class='op'>=</span> <span class='cn'>FALSE</span>, tz <span class='op'>=</span> <span class='st'>"UTC"</span>, ignore_attributes <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -263,47 +266,48 @@ for more information on time zones.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='no'>nameToUse</span> <span class='kw'>&lt;-</span> <span class='st'>"pH"</span>
-<span class='no'>pHData</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='kw'>siteid</span><span class='kw'>=</span><span class='st'>"USGS-04024315"</span>,<span class='kw'>characteristicName</span><span class='kw'>=</span><span class='no'>nameToUse</span>)
-<span class='no'>pHData_summary</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='kw'>bBox</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>90.10</span>,<span class='fl'>42.67</span>,-<span class='fl'>88.64</span>,<span class='fl'>43.35</span>),
-     <span class='kw'>characteristicName</span><span class='kw'>=</span><span class='no'>nameToUse</span>, <span class='kw'>querySummary</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='no'>startDate</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2013-01-01"</span>)
-<span class='no'>nutrientDaneCounty</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='kw'>countycode</span><span class='kw'>=</span><span class='st'>"US:55:025"</span>,<span class='kw'>startDate</span><span class='kw'>=</span><span class='no'>startDate</span>,
-                        <span class='kw'>characteristicType</span><span class='kw'>=</span><span class='st'>"Nutrient"</span>)
-<span class='no'>secchi.names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Depth, Secchi disk depth"</span>,
-                 <span class='st'>"Depth, Secchi disk depth (choice list)"</span>,
-                 <span class='st'>"Secchi Reading Condition (choice list)"</span>,
-                 <span class='st'>"Water transparency, Secchi disc"</span>)
-<span class='no'>args</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>'startDateLo'</span> <span class='kw'>=</span> <span class='no'>startDate</span>,
-             <span class='st'>'startDateHi'</span> <span class='kw'>=</span> <span class='st'>"2013-12-31"</span>,
-              <span class='kw'>statecode</span><span class='kw'>=</span><span class='st'>"WI"</span>,
-              <span class='kw'>characteristicName</span><span class='kw'>=</span><span class='no'>secchi.names</span>)
+<span class='va'>nameToUse</span> <span class='op'>&lt;-</span> <span class='st'>"pH"</span>
+<span class='va'>pHData</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span>siteid<span class='op'>=</span><span class='st'>"USGS-04024315"</span>,characteristicName<span class='op'>=</span><span class='va'>nameToUse</span><span class='op'>)</span>
+<span class='va'>pHData_summary</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span>bBox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>90.10</span>,<span class='fl'>42.67</span>,<span class='op'>-</span><span class='fl'>88.64</span>,<span class='fl'>43.35</span><span class='op'>)</span>,
+     characteristicName<span class='op'>=</span><span class='va'>nameToUse</span>, querySummary<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2013-01-01"</span><span class='op'>)</span>
+<span class='va'>nutrientDaneCounty</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span>countycode<span class='op'>=</span><span class='st'>"US:55:025"</span>,startDate<span class='op'>=</span><span class='va'>startDate</span>,
+                        characteristicType<span class='op'>=</span><span class='st'>"Nutrient"</span><span class='op'>)</span>
+<span class='va'>secchi.names</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Depth, Secchi disk depth"</span>, 
+                 <span class='st'>"Depth, Secchi disk depth (choice list)"</span>, 
+                 <span class='st'>"Secchi Reading Condition (choice list)"</span>, 
+                 <span class='st'>"Water transparency, Secchi disc"</span><span class='op'>)</span>
+<span class='va'>args</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'startDateLo'</span> <span class='op'>=</span> <span class='va'>startDate</span>, 
+             <span class='st'>'startDateHi'</span> <span class='op'>=</span> <span class='st'>"2013-12-31"</span>, 
+              statecode<span class='op'>=</span><span class='st'>"WI"</span>, 
+              characteristicName<span class='op'>=</span><span class='va'>secchi.names</span><span class='op'>)</span>
 
-<span class='no'>wqp.data</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='no'>args</span>)
+<span class='va'>wqp.data</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span><span class='va'>args</span><span class='op'>)</span>   
 
-<span class='no'>args_2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>'startDateLo'</span> <span class='kw'>=</span> <span class='no'>startDate</span>,
-             <span class='st'>'startDateHi'</span> <span class='kw'>=</span> <span class='st'>"2013-12-31"</span>,
-              <span class='kw'>statecode</span><span class='kw'>=</span><span class='st'>"WI"</span>,
-              <span class='kw'>characteristicName</span><span class='kw'>=</span><span class='no'>secchi.names</span>,
-              <span class='kw'>querySummary</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='va'>args_2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'startDateLo'</span> <span class='op'>=</span> <span class='va'>startDate</span>, 
+             <span class='st'>'startDateHi'</span> <span class='op'>=</span> <span class='st'>"2013-12-31"</span>, 
+              statecode<span class='op'>=</span><span class='st'>"WI"</span>, 
+              characteristicName<span class='op'>=</span><span class='va'>secchi.names</span>,
+              querySummary<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='no'>wqp.summary</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='no'>args_2</span>)
+<span class='va'>wqp.summary</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span><span class='va'>args_2</span><span class='op'>)</span> 
 
-<span class='no'>arg_3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>'startDateLo'</span> <span class='kw'>=</span> <span class='no'>startDate</span>,
-             <span class='st'>'startDateHi'</span> <span class='kw'>=</span> <span class='st'>"2013-12-31"</span>)
-<span class='no'>arg_4</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>statecode</span><span class='kw'>=</span><span class='st'>"WI"</span>,
-              <span class='kw'>characteristicName</span><span class='kw'>=</span><span class='no'>secchi.names</span>)
-<span class='no'>wqp.summary</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='no'>arg_3</span>, <span class='no'>arg_4</span>, <span class='kw'>querySummary</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='no'>wqp.summary_WI</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='no'>arg_3</span>, <span class='kw'>statecode</span><span class='kw'>=</span><span class='st'>"WI"</span>,
-                              <span class='kw'>characteristicName</span><span class='kw'>=</span><span class='no'>secchi.names</span>,
-                              <span class='kw'>querySummary</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-
+<span class='va'>arg_3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'startDateLo'</span> <span class='op'>=</span> <span class='va'>startDate</span>, 
+             <span class='st'>'startDateHi'</span> <span class='op'>=</span> <span class='st'>"2013-12-31"</span><span class='op'>)</span>
+<span class='va'>arg_4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>statecode<span class='op'>=</span><span class='st'>"WI"</span>, 
+              characteristicName<span class='op'>=</span><span class='va'>secchi.names</span><span class='op'>)</span>
+<span class='va'>wqp.summary</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span><span class='va'>arg_3</span>, <span class='va'>arg_4</span>, querySummary<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>wqp.summary_WI</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span><span class='va'>arg_3</span>, statecode<span class='op'>=</span><span class='st'>"WI"</span>, 
+                              characteristicName<span class='op'>=</span><span class='va'>secchi.names</span>, 
+                              querySummary<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+                              
 <span class='co'># querying by county</span>
-<span class='no'>dailyLexingtonVA</span> <span class='kw'>&lt;-</span> <span class='fu'>readWQPdata</span>(<span class='kw'>statecode</span> <span class='kw'>=</span> <span class='st'>"Virginia"</span>,
-                                <span class='kw'>countycode</span><span class='kw'>=</span><span class='st'>"Lexington"</span>,
-                                <span class='kw'>parameterCd</span> <span class='kw'>=</span> <span class='st'>"00010"</span>)
-
-<span class='co'># }</span></div></pre>
+<span class='va'>dailyLexingtonVA</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span>statecode <span class='op'>=</span> <span class='st'>"Virginia"</span>, 
+                                countycode<span class='op'>=</span><span class='st'>"Lexington"</span>, 
+                                parameterCd <span class='op'>=</span> <span class='st'>"00010"</span><span class='op'>)</span> 
+                                
+<span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -319,7 +323,7 @@ for more information on time zones.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
