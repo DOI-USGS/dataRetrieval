@@ -116,7 +116,9 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
                                         `DetectionQuantitationLimitMeasure/MeasureUnitCode` = readr::col_character(),
                                         `HUCEightDigitCode` = readr::col_character(), 
                                         `ActivityEndTime/TimeZoneCode` = readr::col_character()),
-                       quote = ifelse(csv,'\"',""), delim = ifelse(csv,",","\t")))
+                       quote = ifelse(csv,'\"',""),
+                       delim = ifelse(csv,",","\t"),
+                       guess_max  = Inf))
     
   if(!file.exists(obs_url)){
     actualNumReturned <- nrow(retval)
