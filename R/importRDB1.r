@@ -292,11 +292,9 @@ convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
   offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0, 0, 0),
                               code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","UTC","", NA, "GMT"),
                               stringsAsFactors = FALSE)
-  
-  offset <- merge(x = df[,tz.name,drop=FALSE], 
-                  y = offsetLibrary, by.x=tz.name, by.y = "code", 
-                  all.x = TRUE)
-  offset <- offset$offset
+
+  offset <- offsetLibrary$offset[match(df[,tz.name], offsetLibrary$code)]
+
   df[,paste0(tz.name,"_reported")] <- df[,tz.name,drop=FALSE]
   
   df[,date.time.cols] <- df[,date.time.cols] + offset*60*60
