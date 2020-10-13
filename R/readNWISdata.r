@@ -133,6 +133,10 @@
 #' 
 #' today <- readNWISdata(service="iv", startDate = Sys.Date(), 
 #'                       parameterCd = "00060", siteNumber = "05114000")
+#'                       
+#' peak_data <- readNWISdata(service = "peak", 
+#'                           site_no = c("01594440","040851325"),
+#'                           range_selection = "data_range")
 #' 
 #' }
 readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
@@ -327,7 +331,9 @@ readNWISdots <- function(...){
     service <- "dv"
   }
   
-  match.arg(service, c("dv","iv","iv_recent","gwlevels","site", "uv","qw","measurements","qwdata","stat","rating"))
+  match.arg(service, c("dv","iv","iv_recent","gwlevels",
+                       "site", "uv","qw","measurements",
+                       "qwdata","stat","rating", "peak"))
   
   if(service == "uv"){
     service <- "iv"
@@ -409,7 +415,7 @@ readNWISdots <- function(...){
     }
   } 
   
-  if(service %in% c("site","gwlevels","stat","rating")){
+  if(service %in% c("site", "gwlevels", "stat", "rating", "peak")){
     format.default <- "rdb"
   }
   
