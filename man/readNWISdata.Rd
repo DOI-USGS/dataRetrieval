@@ -142,6 +142,10 @@ all_sites_24hrs <- readNWISdata(service = "rating", file_type="exsa", period = 2
 
 today <- readNWISdata(service="iv", startDate = Sys.Date(), 
                       parameterCd = "00060", siteNumber = "05114000")
+                      
+peak_data <- readNWISdata(service = "peak", 
+                          site_no = c("01594440","040851325"),
+                          range_selection = "data_range")
 
 }
 }
