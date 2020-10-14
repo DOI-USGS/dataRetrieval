@@ -314,6 +314,10 @@ parameterCd <span class='op'>=</span> <span class='st'>"00060"</span>, countycod
 
 <span class='va'>today</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service<span class='op'>=</span><span class='st'>"iv"</span>, startDate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span>, 
                       parameterCd <span class='op'>=</span> <span class='st'>"00060"</span>, siteNumber <span class='op'>=</span> <span class='st'>"05114000"</span><span class='op'>)</span>
+                      
+<span class='va'>peak_data</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"peak"</span>, 
+                          site_no <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"01594440"</span>,<span class='st'>"040851325"</span><span class='op'>)</span>,
+                          range_selection <span class='op'>=</span> <span class='st'>"data_range"</span><span class='op'>)</span>
 
 <span class='co'># }</span>
 </div></pre>

@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Data to convert USGS parameter code to characteristic names — pCodeToName" />
-<meta property="og:description" content="Data pulled from Water Quality Portal on November 25, 2014. The data was pulled from
+<meta property="og:description" content="Data pulled from Water Quality Portal on October 13, 2020. The data was pulled from
 https://www.waterqualitydata.us/public_srsnames?mimeType=json." />
 <meta property="og:image" content="/logo.png" />
 
@@ -151,7 +151,7 @@ https://www.waterqualitydata.us/public_srsnames?mimeType=json." />
     </div>
 
     <div class="ref-description">
-    <p>Data pulled from Water Quality Portal on November 25, 2014. The data was pulled from
+    <p>Data pulled from Water Quality Portal on October 13, 2020. The data was pulled from
 <a href='https://www.waterqualitydata.us/public_srsnames?mimeType=json'>https://www.waterqualitydata.us/public_srsnames?mimeType=json</a>.</p>
     </div>
 
@@ -180,13 +180,13 @@ relate to characteristic names (useful for WQP requests).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>pCodeToName</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   parm_cd                                 description
-#&gt; 1   00004                          Stream width, feet
-#&gt; 2   00010         Temperature, water, degrees Celsius
-#&gt; 3   00011      Temperature, water, degrees Fahrenheit
-#&gt; 4   00020           Temperature, air, degrees Celsius
-#&gt; 5   00021        Temperature, air, degrees Fahrenheit
-#&gt; 6   00025 Barometric pressure, millimeters of mercury</div></pre>
+</div><div class='output co'>#&gt;   parm_cd                            description
+#&gt; 1       4                     Stream width, feet
+#&gt; 2      10    Temperature, water, degrees Celsius
+#&gt; 3      11 Temperature, water, degrees Fahrenheit
+#&gt; 4      14  Wet bulb temperature, degrees Celsius
+#&gt; 5      20      Temperature, air, degrees Celsius
+#&gt; 6      21   Temperature, air, degrees Fahrenheit</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
