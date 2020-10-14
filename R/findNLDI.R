@@ -262,7 +262,7 @@ findNLDI <- function(comid = NULL,
 
   # Should sf be used? Both no_sf and pkg.env must agree
   use_sf = all(pkg.env$local_sf, !no_sf)
-
+  
   # Should the basin be identified?
   getBasin = ("basin" %in% find)
 
@@ -319,6 +319,10 @@ findNLDI <- function(comid = NULL,
   # Reset (if needed)
   start_type = names(starter)
 
+  if(is.null(pkg.env$current_nldi)) {
+    pkg.env$current_nldi <- get_nldi_sources()
+  }
+  
   # Defining the origin URL.
     #  Align request with formal name from offerings
     # If NWIS, add "USGS-" prefix
