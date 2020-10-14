@@ -58,7 +58,6 @@ reference:
   - title: Network Linked Data Index
     desc: Functions to interface with the NLDI
     contents:
-      - get_nldi
       - findNLDI
   - title: Helper functions
     contents:
