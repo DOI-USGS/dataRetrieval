@@ -56,7 +56,7 @@ reference:
       - readNGWMNsites
       - readNGWMNdata
   - title: Network Linked Data Index
-    desc: Functions to interface with the NLDI
+    desc: Functions to interface with the NLDI.
     contents:
       - findNLDI
   - title: Helper functions
