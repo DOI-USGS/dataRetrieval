@@ -11,7 +11,6 @@
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
-#' @import utils
 #' @export
 #' @examples 
 #' \donttest{

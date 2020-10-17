@@ -29,7 +29,7 @@ Copyright: This software is in the public domain because it contains materials
     that originally came from the United States Geological Survey, an agency of
     the United States Department of Interior. 
 Depends:
-    R (>= 3.0)
+    R (>= 3.5.0)
 Imports:
     httr (>= 1.0.0),
     curl,
