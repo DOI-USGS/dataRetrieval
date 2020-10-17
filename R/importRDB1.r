@@ -42,8 +42,6 @@
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' }
 #' @export
-#' @import utils
-#' @import stats
 #' @examples
 #' site_id <- "02177000"
 #' startDate <- "2012-09-01"
@@ -217,7 +215,8 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
             
             #Special case where they don't match up:
             if("sample_start_time_datum_cd" %in% header.names &
-               attr(readr.data[[varname]], "tzone") != tz){
+               attr(readr.data[[varname]], "tzone") != tz &
+               varname == "sample"){
               readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd",varname,tz)
             }
             

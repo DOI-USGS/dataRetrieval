@@ -39,8 +39,6 @@
 #' 
 #' @seealso \code{\link{renameNWISColumns}}
 #' @export
-#' @import utils
-#' @import stats
 #' @importFrom xml2 read_xml
 #' @importFrom xml2 xml_find_all
 #' @importFrom xml2 xml_children

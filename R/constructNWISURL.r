@@ -30,7 +30,6 @@
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
-#' @import utils
 #' @examples
 #' site_id <- '01594440'
 #' startDate <- '1985-01-01'
