@@ -19,6 +19,11 @@
 #'
 #' @name dataRetrieval
 #' @docType package
+#' @importFrom stats setNames
+#' @importFrom utils URLencode
+#' @importFrom utils packageVersion
+#' @importFrom utils tail
+#' @importFrom utils unzip
 #' @author Laura De Cicco \email{ldecicco@@usgs.gov}
 NULL
 
