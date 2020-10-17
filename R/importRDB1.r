@@ -42,8 +42,6 @@
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' }
 #' @export
-#' @import utils
-#' @import stats
 #' @examples
 #' site_id <- "02177000"
 #' startDate <- "2012-09-01"
@@ -217,7 +215,8 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
             
             #Special case where they don't match up:
             if("sample_start_time_datum_cd" %in% header.names &
-               attr(readr.data[[varname]], "tzone") != tz){
+               attr(readr.data[[varname]], "tzone") != tz &
+               varname == "sample_dateTime"){
               readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd",varname,tz)
             }
             
@@ -247,18 +246,17 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
         readr.data[,varname] <- varval
         readr.data <- convertTZ(readr.data,"TZCD",varname,tz, flip.cols=TRUE)
       }
-      
-      if(all(c("sample_start_time_datum_cd","sample_dateTime") %in% header.names)){
-        readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd","sample_dateTime",tz)
-        
-        if(!("sample_end_time_datum_cd" %in% header.names) & "sample_end_dateTime" %in% names(readr.data)){
+
+      if(!("sample_end_time_datum_cd" %in% header.names) &
+           "sample_end_dateTime" %in% names(readr.data)){
           readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd_reported","sample_end_dateTime",tz)
-          readr.data$sample_start_time_datum_cd_reported<- readr.data$sample_start_time_datum_cd_reported_reported 
-          readr.data$sample_start_time_datum_cd_reported_reported <- NULL 
-        }
+          names(readr.data)[names(readr.data) == "sample_end_dateTime"] <- "endDateTime"
       }
-      names(readr.data)[names(readr.data) == "sample_dateTime"] <- "startDateTime"
-      names(readr.data)[names(readr.data) == "sample_end_dateTime"] <- "endDateTime"
+      
+      if("sample_dateTime" %in% names(readr.data)){
+        names(readr.data)[names(readr.data) == "sample_dateTime"] <- "startDateTime"
+      }
+      
     }
     row.names(readr.data) <- NULL
     
@@ -281,6 +279,11 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
 
   if("spec" %in% names(attributes(readr.data))){
     attr(readr.data, "spec") <- NULL
+  }
+
+  if("sample_start_time_datum_cd_reported_reported" %in% names(readr.data)){
+    readr.data <- readr.data[,names(readr.data) != "sample_start_time_datum_cd_reported"]
+    names(readr.data)[names(readr.data) == "sample_start_time_datum_cd_reported_reported"] <- "sample_start_time_datum_cd_reported"
   }
   
   return(readr.data)
