@@ -6,10 +6,9 @@ Authors@R: c(
     person("Laura", "DeCicco", role = c("aut","cre"),
     email = "ldecicco@usgs.gov",
     comment=c(ORCID="0000-0002-3915-9487")),
-    person("Robert", "Hirsch", role = c("aut"),
-    email = "rhirsch@usgs.gov",
+    person("Robert", "Hirsch", role = c("ctb"),
     comment=c(ORCID="0000-0002-4534-075X")),
-    person("David","Lorenz", role=c("aut")),
+    person("David","Lorenz", role=c("ctb")),
     person("Jordan", "Read", role = c("ctb"),
     email = "jread@usgs.gov"),
     person("Jordan", "Walker", role = c("ctb"),
@@ -18,7 +17,9 @@ Authors@R: c(
     email = "lcarr@usgs.gov"),
     person("David","Watkins", role=c("aut"),
     email = "wwatkins@usgs.gov",
-    comment=c(ORCID="0000-0002-7544-0700")))
+    comment=c(ORCID="0000-0002-7544-0700")),
+    person("Mike", "Johnson", role=c("aut"),
+    email = "mikecp11@gmail.com"))
 Description: Collection of functions to help retrieve U.S. Geological Survey
     (USGS) and U.S. Environmental Protection Agency (EPA) water quality and
     hydrology data from web services. USGS web services are discovered from 
