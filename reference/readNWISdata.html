@@ -233,9 +233,7 @@ and S is the statistic code (if applicable).</p>
 <span class='va'>instFlow</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>sites<span class='op'>=</span><span class='st'>"05114000"</span>, service<span class='op'>=</span><span class='st'>"iv"</span>, 
                    parameterCd<span class='op'>=</span><span class='st'>"00060"</span>, 
                    startDate<span class='op'>=</span><span class='st'>"2014-05-01T00:00Z"</span>,endDate<span class='op'>=</span><span class='st'>"2014-05-01T12:00Z"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Error in curl::curl_fetch_memory(url, handle = handle): Timeout was reached: [nwis.waterservices.usgs.gov] Operation timed out after 10143 milliseconds with 0 out of 0 bytes received</span>
-#&gt; <span class='message'>Request failed [ERROR]. Retrying in 1.5 seconds...</span></div><div class='output co'>#&gt; <span class='message'>Error in curl::curl_fetch_memory(url, handle = handle): Timeout was reached: [nwis.waterservices.usgs.gov] Operation timed out after 10150 milliseconds with 0 out of 0 bytes received</span>
-#&gt; <span class='message'>Request failed [ERROR]. Retrying in 3.1 seconds...</span></div><div class='output co'>#&gt; <span class='error'>Error in curl::curl_fetch_memory(url, handle = handle): Timeout was reached: [nwis.waterservices.usgs.gov] Operation timed out after 10016 milliseconds with 0 out of 0 bytes received</span></div><div class='input'>                                                   
+                                                   
 <span class='va'>instFlowCDT</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>sites<span class='op'>=</span><span class='st'>"05114000"</span>, service<span class='op'>=</span><span class='st'>"iv"</span>, 
                    parameterCd<span class='op'>=</span><span class='st'>"00060"</span>, 
                    startDate<span class='op'>=</span><span class='st'>"2014-05-01T00:00"</span>,endDate<span class='op'>=</span><span class='st'>"2014-05-01T12:00"</span>,
@@ -259,38 +257,29 @@ and S is the statistic code (if applicable).</p>
                   drain_area_va_min<span class='op'>=</span><span class='fl'>50</span>, qw_count_nu<span class='op'>=</span><span class='fl'>50</span>,qw_attributes<span class='op'>=</span><span class='st'>"expanded"</span>,
                   qw_sample_wide<span class='op'>=</span><span class='st'>"wide"</span>,list_of_search_criteria<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"lat_long_bounding_box"</span>,
                   <span class='st'>"drain_area_va"</span>,<span class='st'>"obs_count_nu"</span><span class='op'>)</span>,service<span class='op'>=</span><span class='st'>"qw"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Error in curl::curl_fetch_memory(url, handle = handle): Timeout was reached: [nwis.waterdata.usgs.gov] Operation timed out after 10026 milliseconds with 0 out of 0 bytes received</span>
-#&gt; <span class='message'>Request failed [ERROR]. Retrying in 1.7 seconds...</span></div><div class='output co'>#&gt; <span class='message'>Error in curl::curl_fetch_memory(url, handle = handle): Timeout was reached: [nwis.waterdata.usgs.gov] Operation timed out after 10090 milliseconds with 0 out of 0 bytes received</span>
-#&gt; <span class='message'>Request failed [ERROR]. Retrying in 1 seconds...</span></div><div class='output co'>#&gt; <span class='error'>Error in `[.data.frame`(df, , tz.name): undefined columns selected</span></div><div class='input'><span class='va'>temp</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>bBox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>83</span>,<span class='fl'>36.5</span>,<span class='op'>-</span><span class='fl'>81</span>,<span class='fl'>38.5</span><span class='op'>)</span>, parameterCd<span class='op'>=</span><span class='st'>"00010"</span>, service<span class='op'>=</span><span class='st'>"site"</span>, 
+<span class='va'>temp</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>bBox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>83</span>,<span class='fl'>36.5</span>,<span class='op'>-</span><span class='fl'>81</span>,<span class='fl'>38.5</span><span class='op'>)</span>, parameterCd<span class='op'>=</span><span class='st'>"00010"</span>, service<span class='op'>=</span><span class='st'>"site"</span>, 
                    seriesCatalogOutput<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='va'>wiGWL</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd<span class='op'>=</span><span class='st'>"WI"</span>,service<span class='op'>=</span><span class='st'>"gwlevels"</span><span class='op'>)</span>
 <span class='va'>meas</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>state_cd<span class='op'>=</span><span class='st'>"WI"</span>,service<span class='op'>=</span><span class='st'>"measurements"</span>,format<span class='op'>=</span><span class='st'>"rdb_expanded"</span><span class='op'>)</span>
 
-<span class='va'>waterYearStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"03112500"</span><span class='op'>)</span>,service<span class='op'>=</span><span class='st'>"stat"</span>,statReportType<span class='op'>=</span><span class='st'>"annual"</span>,
+<span class='va'>waterYearStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"01646500"</span><span class='op'>)</span>,service<span class='op'>=</span><span class='st'>"stat"</span>,statReportType<span class='op'>=</span><span class='st'>"annual"</span>,
                  statYearType<span class='op'>=</span><span class='st'>"water"</span>, missingData<span class='op'>=</span><span class='st'>"on"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='va'>monthlyStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"03112500"</span>,<span class='st'>"03111520"</span><span class='op'>)</span>,
+#&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='va'>monthlyStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"01646500"</span><span class='op'>)</span>,
                             service<span class='op'>=</span><span class='st'>"stat"</span>,
                             statReportType<span class='op'>=</span><span class='st'>"monthly"</span><span class='op'>)</span>                                   
 </div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='va'>dailyStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"03112500"</span>,<span class='st'>"03111520"</span><span class='op'>)</span>,
+#&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='va'>dailyStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"01646500"</span><span class='op'>)</span>,
                           service<span class='op'>=</span><span class='st'>"stat"</span>,
                           statReportType<span class='op'>=</span><span class='st'>"daily"</span>,
                           statType<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"p25"</span>,<span class='st'>"p50"</span>,<span class='st'>"p75"</span>,<span class='st'>"min"</span>,<span class='st'>"max"</span><span class='op'>)</span>,
-                          parameterCd<span class='op'>=</span><span class='st'>"00065"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'><span class='va'>allDailyStats</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"03111548"</span><span class='op'>)</span>,
-                              service<span class='op'>=</span><span class='st'>"stat"</span>,
-                              statReportType<span class='op'>=</span><span class='st'>"daily"</span>,
-                              statType<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"p25"</span>,<span class='st'>"p50"</span>,<span class='st'>"p75"</span>,<span class='st'>"min"</span>,<span class='st'>"max"</span><span class='op'>)</span>,
-                              parameterCd<span class='op'>=</span><span class='st'>"00060"</span><span class='op'>)</span>
+                          parameterCd<span class='op'>=</span><span class='st'>"00060"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Please be aware the NWIS data service feeding this function is in BETA.</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>            Data formatting could be changed at any time, and is not guaranteed</span></div><div class='input'>
-<span class='va'>dailyWV</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"West Virginia"</span>, parameterCd <span class='op'>=</span> <span class='st'>"00060"</span><span class='op'>)</span>
+<span class='va'>dailyRI</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"Rhode Island"</span>, parameterCd <span class='op'>=</span> <span class='st'>"00060"</span><span class='op'>)</span>
 
 <span class='va'>arg.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>site<span class='op'>=</span><span class='st'>"03111548"</span>,
                  statReportType<span class='op'>=</span><span class='st'>"daily"</span>,
@@ -322,8 +311,7 @@ parameterCd <span class='op'>=</span> <span class='st'>"00060"</span>, countycod
 <span class='va'>peak_data</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"peak"</span>, 
                           site_no <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"01594440"</span>,<span class='st'>"040851325"</span><span class='op'>)</span>,
                           range_selection <span class='op'>=</span> <span class='st'>"data_range"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Error in curl::curl_fetch_memory(url, handle = handle): Timeout was reached: [nwis.waterdata.usgs.gov] Operation timed out after 10000 milliseconds with 0 out of 0 bytes received</span>
-#&gt; <span class='message'>Request failed [ERROR]. Retrying in 1 seconds...</span></div><div class='input'>
+
 <span class='co'># }</span>
 </div></pre>
   </div>
@@ -337,7 +325,7 @@ parameterCd <span class='op'>=</span> <span class='st'>"00060"</span>, countycod
 
       <footer>
       <div class="copyright">
-  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins.</p>
+  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
 </div>
 
 <div class="pkgdown">
