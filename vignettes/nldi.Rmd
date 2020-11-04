@@ -10,9 +10,11 @@ output:
     fig_height: 7
     fig_width: 7
 vignette: >
-  %\VignetteIndexEntry{Network Linked Data Index: `dataRetrieval`}
   \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Network Linked Data Index: `dataRetrieval`}
   %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -20,7 +22,11 @@ vignette: >
 library(knitr)
 library(dataRetrieval)
 
-opts_chunk$set(warning = FALSE, message = FALSE, out.width = "75%", fig.align = 'center', comment  = "#>")
+opts_chunk$set(warning = FALSE, 
+               message = FALSE, 
+               out.width = "75%",
+               fig.align = 'center',
+               comment  = "#>")
 ```
 
 This post will demonstrate `dataRetrieval` functions to query the [Network Linked Data Index](https://labs.waterdata.usgs.gov/about-nldi/index.html) (NLDI).
@@ -66,13 +72,13 @@ First, we need to know what features are currently indexed in the NLDI. The NLDI
 
 Only features that have been indexed to the network (or are part of the network) can be discovered. The most current offerings can be found using `get_nldi_sources`, and new features are regularly being added: 
 
-```{r, message = FALSE, warning=FALSE, eval = FALSE}
+```{r, eval = FALSE}
 library(dataRetrieval)
 
 get_nldi_sources()
 ```
 
-```{r, message = FALSE, warning=FALSE, echo = FALSE}
+```{r, echo = FALSE}
 kable(get_nldi_sources())
 ```
 
@@ -97,12 +103,12 @@ The `comid` argument of `findNLDI` can be used to specify a specific COMID. `fin
 To keep `dataRetrieval` lightweight, the simple features `sf` package is not a dependency. However, if it is installed on your machine, it can be leveraged to create "spatial-ready" outputs. 
 
 ```{r message=FALSE}
-(c101 = findNLDI(comid = 101))
+c101 = findNLDI(comid = 101)
 ```
 
 In the above example, the returned object is a `list` of length 1 containing a `data.frame` describing the feature requested (`comid=101`). All NLDI features have attribute information related to the data source and the identifier within that resource (`sourceName` and `identifer`). If `sf` is installed locally, an `sfc` (simple feature geometry column) column is added to the returned `data.frame`. 
 
-```{r message=FALSE}
+```{r}
 str(c101)
 ```
 
@@ -111,7 +117,7 @@ In the example above, we see the geometry column is of type `LINESTRING` and mad
 If `sf` is not installed locally - or `no_sf = TRUE` - then only the _sourceName_ and _identifier_ will be returned for `LINESTRING` objects.
 
 ```{r}
-(c101 = findNLDI(comid = 101, no_sf = TRUE))
+c101 = findNLDI(comid = 101, no_sf = TRUE)
 ```
 
 ### "On" network features
@@ -122,10 +128,10 @@ The core feature set of the NLDI include the USGS `NWIS` locations, `WQP` locati
 
 ```{r}
 # local sf installation
-findNLDI(nwis = 11120000)
+findNLDI(nwis = "11120000")
 
 # No sf use/installation
-findNLDI(nwis = 11120000, no_sf = TRUE)
+findNLDI(nwis = "11120000", no_sf = TRUE)
 ```
 
 ****
@@ -164,7 +170,9 @@ A example view of these navigation types can be seen below for NWIS site [111090
 ```{r, echo = FALSE, fig.cap= "NLDI Navigation Options"}
 library(ggplot2)
 
-x = lapply(findNLDI(nwis = 11109000, nav = c("UT", "DM", "UM", "DD")), sf::st_as_sf)
+x = lapply(findNLDI(nwis = 11109000,
+                    nav = c("UT", "DM", "UM", "DD")),
+           sf::st_as_sf)
 
 ggplot() +
   geom_sf(data = x$UT, aes(color = "UT")) +
@@ -172,17 +180,19 @@ ggplot() +
   geom_sf(data = x$DD,  aes(color = "DD")) +
   geom_sf(data = x$DM,   aes(color = "DM")) + 
   geom_sf(data = x$origin, col = "green", size = 2) + 
-  geom_sf_label(data = x$origin, aes(label = x$origin$identifier),
+  geom_sf_label(data = x$origin, 
+                aes(label = x$origin$identifier),
                 nudge_x = -.08,
-                nudge_y = .03,) + 
+                nudge_y = .03) + 
   theme_void() + 
   scale_color_manual(name = "Navigation Direction",
-                        breaks = c("UT", "UM", "DD", "DM"),
-                        values = c(UT = "blue", "UM" = "red", "DM" = "orange", "DD" = "purple") ) + 
-  theme(
-           legend.position = c(.05, .7), 
-      legend.justification = c(0, 0)
-  )
+                     breaks = c("UT", "UM", "DD", "DM"),
+                     values = c("UT" = "blue", 
+                                "UM" = "red", 
+                                "DM" = "orange", 
+                                "DD" = "purple")) + 
+  theme(legend.position = c(.05, .7), 
+        legend.justification = c(0, 0))
   
 ```
 
@@ -190,19 +200,25 @@ ggplot() +
 One or more modes of navigation can be supplied to the `findNLDI` `nav` argument. For example we can ask to navigate along the upper mainstem from COMID 101.
 
 ```{r}
-str(findNLDI(comid = 101, nav = "UM"), max.level = 2)
+str(findNLDI(comid = 101,
+             nav = "UM"), 
+    max.level = 2)
 ```
 
 Or along the upper mainstem _and_ upper tributary of COMID 101.
 
 ```{r}
-str(findNLDI(comid = 101, nav = c("UM", "DM")), max.level = 1)
+str(findNLDI(comid = 101, 
+             nav = c("UM", "DM")), 
+    max.level = 1)
 ```
 
 In both cases the returned named list includes the origin and the requested navigation. If `sf` is not enabled, the returned object for a flowpath navigation is a vector of COMIDs.
 
 ```{r}
-str(findNLDI(comid = 101, nav = c("UM", "DM"), no_sf = TRUE), max.level = 1)
+str(findNLDI(comid = 101, 
+             nav = c("UM", "DM"), no_sf = TRUE),
+    max.level = 1)
 ```
 
 
@@ -215,7 +231,9 @@ Two types of features can be discovered along a navigation including indexed fea
 Any of the features listed in `get_nldi_sources` can be searched for along the network, for example, we can find all NWIS gages, on the upper tributary, of COMID 101.
 
 ```{r}
-str(findNLDI(comid = 101, nav = "UT", find = "nwis"), max.level = 1)
+str(findNLDI(comid = 101,
+             nav = "UT", find = "nwis"), 
+    max.level = 1)
 ```
 
 Here the returned list includes the origin feature, the navigated network, and the identified NWIS sites on the UT navigation (2 in total). 
@@ -223,7 +241,10 @@ Here the returned list includes the origin feature, the navigated network, and t
 More than one resource can be requested, for example, lets replicate the previous search, this time adding Water Quality Points to the returned list:
 
 ```{r}
-str(findNLDI(comid = 101, nav = "UT", find = c("nwis", "wqp")), max.level = 1)
+str(findNLDI(comid = 101,
+             nav = "UT",
+             find = c("nwis", "wqp")),
+    max.level = 1)
 ```
 
 In total we find 29 WQP along the upper tributary of comid 101.
@@ -250,10 +271,15 @@ To illustrate, lets search the downstream mainstem for COMID 101 with a varying 
 
 ```{r}
 # Default 100 km
-str(findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp")), max.level = 1)
+str(findNLDI(comid = 101, nav = "DM",
+             find = c("nwis", "wqp")),
+    max.level = 1)
 
 # Extended 200 km search
-str(findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp"), distance_km = 200), max.level = 1)
+str(findNLDI(comid = 101, nav = "DM", 
+             find = c("nwis", "wqp"), 
+             distance_km = 200),
+    max.level = 1)
 ```
 
 The result, is that the navigation path and the number of returned features in the second request have expanded as expected.
@@ -271,7 +297,9 @@ We've seen the NLDI wrapper can provide `sf` "ready" objects if `sf` is installe
 
 ```{r}
 library(sf)
-query <- findNLDI(nwis = '11120000', nav = c("UT", "UM"), find = c("nwis", "wqp", "basin"))
+query <- findNLDI(nwis = '11120000', 
+                  nav = c("UT", "UM"), 
+                  find = c("nwis", "wqp", "basin"))
 features  <- lapply(query, st_as_sf)
 ```
 
@@ -281,10 +309,12 @@ Doing so allows for spatial as simple as length, area, and plotting, or more com
 plot(features$basin, border = "black", lwd = 4)
 plot(features$UT$geometry, col = "blue", add = TRUE)
 plot(features$UM$geometry, col = "red", lwd = 3, add = TRUE)
-plot(features$origin, col = "orange", lwd = 4, add = TRUE)
-
-plot(features$UM_WQP, col = "purple", pch = 16,,cex = .5, add = TRUE)
-plot(features$UT_nwissite, col = "darkgreen", pch = 16,  add = TRUE)
+plot(features$origin$geometry, col = "orange", 
+     lwd = 4, add = TRUE)
+plot(features$UM_WQP$geometry, col = "purple", 
+     pch = 16, cex = .5, add = TRUE)
+plot(features$UT_nwissite$geometry, col = "darkgreen", 
+     pch = 16,  add = TRUE)
 ```
 
 # Basic `dataRetrieval` integration
@@ -310,16 +340,18 @@ Q <- readNWISdv(fountainCreek$UM_nwissite$identifier,
 
 # Plot! 
 hydro <- ggplot() + 
-  geom_line(data = Q, aes(x = Date, y = Flow, col = site_no), size = .5) + 
+  geom_line(data = Q, aes(x = Date, y = Flow, col = site_no),
+            size = .5) + 
   facet_wrap(~site_no, nrow = 4) + 
-  theme_linedraw() + 
+  theme_minimal() + 
   scale_color_brewer(palette = "Set1") +
   theme(legend.position = "none")
 
 map <- ggplot() + 
   geom_sf(data = fountainCreek$basin, col = NA) + 
   geom_sf(data = fountainCreek$UM, col = "blue", alpha = .5) + 
-  geom_sf(data = fountainCreek$UM_nwissite, aes(col = identifier)) + 
+  geom_sf(data = fountainCreek$UM_nwissite, 
+          aes(col = identifier)) + 
   scale_color_brewer(palette = "Set1") +
   theme_void() +
   labs(title = "2020 Streamflow",
