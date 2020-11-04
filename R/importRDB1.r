@@ -199,40 +199,41 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
       header.suffix <- sapply(strsplit(header.names,"_"), function(x)x[length(x)])
       header.base <- substr(header.names,1,nchar(header.names)-3)
       
-      for(i in unique(header.base[header.suffix %in% c("dt","tm")])){
+      dt_cols <- unique(header.base[header.suffix %in% c("dt","tm")])
+      
+      if(all(c("sample","sample_end") %in% dt_cols)){
+        if("sample_start_time_datum_cd" %in% header.names){
+          readr.data[,"tz_cd"] <- readr.data[,"sample_start_time_datum_cd"]
+
+          readr.data[,"sample_start_time_datum_cd_reported"] <- readr.data[,"sample_start_time_datum_cd"]
+          readr.data[,"sample_end_time_datum_cd_reported"] <- readr.data[,"sample_start_time_datum_cd"]
+        }
+      }
+      
+      for(i in dt_cols){
         
         if(all(c(paste0(i,"_dt"),paste0(i,"_tm")) %in% header.names)){
           varname <- paste0(i,"_dateTime")
-          varval <- suppressWarnings(lubridate::parse_date_time(paste(readr.data[,paste0(i,"_dt")],readr.data[,paste0(i,"_tm")]), c("%Y-%m-%d %H:%M:%S","%Y-%m-%d %H:%M"), tz = "UTC"))
+          varval <- suppressWarnings(lubridate::parse_date_time(paste(readr.data[,paste0(i,"_dt")],
+                                                                      readr.data[,paste0(i,"_tm")]), 
+                                                                c("%Y-%m-%d %H:%M:%S","%Y-%m-%d %H:%M"),
+                                                                tz = "UTC"))
         
           if(!all(is.na(varval))){
             readr.data[,varname] <- varval
             tz.name <- paste0(i,"_time_datum_cd")
             
-            if(tz.name %in% header.names){
-              readr.data <- convertTZ(readr.data,tz.name,varname,tz)
-            }
-            
-            #Special case where they don't match up:
-            if("sample_start_time_datum_cd" %in% header.names &
-               attr(readr.data[[varname]], "tzone") != tz &
-               varname == "sample_dateTime"){
-              readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd",varname,tz)
-            }
-            
-            tz.name <- paste0(i,"_tz_cd")
-            
-            if(tz.name %in% header.names){
+            if(tz.name %in% names(readr.data)){
               readr.data <- convertTZ(readr.data,tz.name,varname,tz)
             }
           }
         }
       }
 
-      if("tz_cd" %in% header.names){
+      if("tz_cd" %in% names(readr.data)){
         date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
         if(length(date.time.cols) > 0){
-          readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
+            readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
         }
       }
       
@@ -245,12 +246,6 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
         varval <- as.POSIXct(lubridate::fast_strptime(paste(readr.data[,"DATE"],readr.data[,"TIME"]), "%Y-%m-%d %H%M%S", tz = "UTC"))
         readr.data[,varname] <- varval
         readr.data <- convertTZ(readr.data,"TZCD",varname,tz, flip.cols=TRUE)
-      }
-
-      if(!("sample_end_time_datum_cd" %in% header.names) &
-           "sample_end_dateTime" %in% names(readr.data)){
-          readr.data <- convertTZ(readr.data,"sample_start_time_datum_cd_reported","sample_end_dateTime",tz)
-          names(readr.data)[names(readr.data) == "sample_end_dateTime"] <- "endDateTime"
       }
       
       if("sample_dateTime" %in% names(readr.data)){
@@ -280,11 +275,6 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   if("spec" %in% names(attributes(readr.data))){
     attr(readr.data, "spec") <- NULL
   }
-
-  if("sample_start_time_datum_cd_reported_reported" %in% names(readr.data)){
-    readr.data <- readr.data[,names(readr.data) != "sample_start_time_datum_cd_reported"]
-    names(readr.data)[names(readr.data) == "sample_start_time_datum_cd_reported_reported"] <- "sample_start_time_datum_cd_reported"
-  }
   
   return(readr.data)
   
@@ -301,15 +291,19 @@ convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
   df[,paste0(tz.name,"_reported")] <- df[,tz.name,drop=FALSE]
   
   df[,date.time.cols] <- df[,date.time.cols] + offset*60*60
-  df[,date.time.cols] <- as.POSIXct(df[,date.time.cols])
   
-  if(tz != ""){
-    attr(df[,date.time.cols], "tzone") <- tz
-    df[,tz.name] <- tz
-  } else {
-    attr(df[,date.time.cols], "tzone") <- "UTC"
-    df[!is.na(df[,date.time.cols]),tz.name] <- "UTC"
+  for(i in date.time.cols){
+    df[,i] <- as.POSIXct(df[,i])
+    if(tz != ""){
+      attr(df[,i], "tzone") <- tz
+      df[,tz.name] <- tz
+    } else {
+      attr(df[,i], "tzone") <- "UTC"
+      df[!is.na(df[,i]),tz.name] <- "UTC"
+    }
   }
+
+
   
   if(flip.cols){
     reported.col <- which(names(df) %in% paste0(tz.name,"_reported"))
