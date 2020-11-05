@@ -10,6 +10,8 @@ navbar:
     href: reference/index.html
   - text: Articles
     menu:
+    - text: Tutorial
+      href: articles/tutorial.html
     - text: Moving Averages
       href: articles/movingAverages.html
     - text: Stat Service
