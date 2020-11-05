@@ -135,7 +135,7 @@ readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
   url <- attr(data, "url")
   comment <- attr(data, "comment")
   queryTime <- attr(data, "queryTime")
-  header <- attr(data, "header")
+  header <- attr(data, "headerInfo")
   
   if(reshape){
     if(expanded){

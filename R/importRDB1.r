@@ -89,9 +89,9 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     doc <- obs_url
   } else {
     doc <- getWebServiceData(obs_url, encoding='gzip')
-    if("warn" %in% names(attr(doc,"header"))){
+    if("warn" %in% names(attr(doc, "headerInfo"))){
       data <- data.frame()
-      attr(data, "header") <- attr(doc,"header")
+      attr(data, "headerInfo") <- attr(doc,"headerInfo")
       attr(data, "url") <- obs_url
       attr(data, "queryTime") <- Sys.time()
       
@@ -269,7 +269,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   attr(readr.data, "queryTime") <- Sys.time()
   if(!file.exists(obs_url)){
     attr(readr.data, "url") <- obs_url
-    attr(readr.data, "header") <- attr(doc, "header")
+    attr(readr.data, "headerInfo") <- attr(doc, "headerInfo")
   }
 
   if("spec" %in% names(attributes(readr.data))){
