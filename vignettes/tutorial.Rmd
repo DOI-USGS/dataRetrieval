@@ -18,9 +18,7 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.width = 7)
 ```
 
-
-
-# Installation
+# Package Overview
 
 `dataRetrieval` is available on the CRAN repository. The CRAN version is the most stable and user-tested:
 
@@ -35,15 +33,13 @@ library(remotes)
 install_github("USGS-R/dataRetrieval")
 ```
 
-## dataRetrieval Help
-
 Once the `dataRetrieval` package has been installed, it needs to be loaded in order to use any of the functions:
 
 ```{r echo=TRUE, eval=TRUE}
 library(dataRetrieval)
 ```
 
-There is a vignette that covers the full scope of the `dataRetrieval` package. It can be accessed with the following command:
+There are several vignettes  included within the `dataRetrieval` package. The following command will open the main package introduction:
 
 ```{r echo=TRUE, eval=FALSE}
 vignette("dataRetrieval", package = "dataRetrieval")
@@ -61,34 +57,25 @@ Finally, if there are still questions that the vignette and help files don't ans
 
 [https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
 
-# USGS: National Water Information System (NWIS) Overview 
+# National Water Information System (NWIS) 
+
+USGS data comes from the National Water Information System (NWIS). There are many types of data served from NWIS. To understand how the services are separated, it's helpful to understand the terms here:
+
+```{r}
+df <- data.frame(Type = c("Unit", "Daily", "Discrete"),
+                 Description = c("Regular frequency data reported from a sensor (e.g. 15 minute interval)",
+                                   "Data aggregated to a daily statistic such as mean, min, or max",
+                                   "Data collected at non-regular times"),
+                 service = c("uv", "dv", 
+                               "water quality (qw), groundwater (gwlevel), rating curves (rating), peak flow (peak), surfacewater (meas)"))
+
+knitr::kable(df)
+
+```
 
 
-|Unit Data|
-|---------|
-|Data reported at the frequency it is collected – e.g. 15 minute|
-|Includes current 'real-time' data|
 
-
-|Daily Data|
-|----------|
-|Data aggregated to a daily statistic such as mean, min, or max|
-|Includes, streamflow, groundwater levels, and water quality sensors|
-|These data can can go back many decades|
-
-
-
-|Discrete Data|Meta Data|
-|-------------|---------|
-|Water quality data|Site information|
-|Groundwater level|Parameter information|
-|Rating curves| |
-|Surfacewater measurements| |
-|Peak flow| |
-|Water Use | |
-
-
-## USGS Basic Web Retrievals
+## USGS Basic Retrievals
 
 The USGS uses various codes for basic retrievals. These codes can have leading zeros, therefore in R they need to be a character ("01234567").
 
@@ -126,9 +113,6 @@ names(df) <- c("Statistic Codes", "Short Name")
 knitr::kable(df)
 ```
 
-
-## USGS: Parameter Code
-
 Use the `readNWISpCode` function to get information on USGS parameter codes. You can use "all" to get a full list. Then use your favorite data analysis methods to pull out what you need. Here is one example to find all the phosphorous parameter codes:
 
 ```{r echo=TRUE, eval=TRUE}
@@ -149,9 +133,6 @@ Explore the wide variety of parameters that contain "phosphorus" in the paramete
 library(DT)
 datatable(phosCds, rownames = FALSE,options = list(pageLength = 8))
 ```
-
-
-## USGS Basic Web Retrievals
 
 Sometimes, you know exactly what you want. If you know:
 
@@ -178,8 +159,6 @@ names(df) <- c("Function Name", "Data")
 knitr::kable(df)
 
 ```
-
-## USGS Basic Web Retrievals: readNWISuv example
 
 Let's start by asking for discharge (parameter code = 00060) at a site right next to the USGS office in Wisconsin (Pheasant Branch Creek). 
 
@@ -256,7 +235,7 @@ ts
 ```
 
 
-##  Discover Data
+##  Discover Data: NWIS
 
 This is all great when you know your site numbers. What do you do when you don't?
 
@@ -297,7 +276,7 @@ leaflet(data=AZ_sites) %>%
         
 ```
 
-Now let's see what we get back from the `readNWISdata` function:
+Now let's see what we get back from the `whatNWISdata` function:
 
 ```{r azdata, echo=TRUE}
 AZ_data <- whatNWISdata(stateCd = "AZ", 
@@ -315,7 +294,7 @@ datatable(AZdata2, rownames = FALSE,options = list(pageLength = 8))
 ```
 
 
-##  Additional NWIS discovery tools
+###  Additional NWIS discovery tools
 
 
 Point-and-click mappers (good for general overviews):
@@ -332,7 +311,7 @@ See how to use those services by looking at the help page for the `readNWISdata`
 ?readNWISdata
 ````
 
-
+### Data Discovery: NWIS Example
 
 Let's look for long-term USGS phosphorous data in Wisconsin:
 
@@ -398,7 +377,7 @@ leaflet(data=phos_summary) %>%
 ```
 
     
-##  readNWISdata      
+##  Flexible data retrieval: readNWISdata 
 
 We can use the function `readNWISdata` to get the data from more complicated data requests. The help page for this function has many examples.
 
@@ -440,7 +419,7 @@ groundwaterHUC <- readNWISdata(huc="02070010",
 * To get non-NWIS data, need to use CharacteristicName instead of parameter code.
 
 
-## Water Quality Portal Basic Retrieval: readWQPqw
+## WQP Basic Retrievals
 
 Much like the convenience functions for NWIS, there's a simple function for retrievals if the site number and parameter code or characteristic name is known.
 
