@@ -1,7 +1,7 @@
 ---
 title: "dataRetrieval Tutorial"
 author: "Laura DeCicco"
-date: "`r format(Sys.time(), '%B-%d-%Y')`"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
   rmarkdown::html_vignette
 vignette: >
@@ -91,7 +91,7 @@ The USGS uses various codes for basic retrievals. These codes can have leading z
 
 Here are some examples of a few codes:
 
-
+<div style="float: left; width: 50%;">
 ```{r echo=FALSE, eval=TRUE}
 library(knitr)
 
@@ -104,6 +104,10 @@ knitr::kable(df)
 
 ```
 
+</div>
+
+<div style="float: right; width: 50%;">
+
 ```{r echo=FALSE, eval=TRUE}
 df <- data.frame(pCode = c("00001","00002","00003","00008"),
                  shName = c("Maximum","Minimum","Mean","Median"))
@@ -112,6 +116,8 @@ names(df) <- c("Statistic Codes", "Short Name")
 
 knitr::kable(df)
 ```
+
+</div>
 
 Use the `readNWISpCode` function to get information on USGS parameter codes. You can use "all" to get a full list. Then use your favorite data analysis methods to pull out what you need. Here is one example to find all the phosphorous parameter codes:
 
@@ -131,8 +137,10 @@ Explore the wide variety of parameters that contain "phosphorus" in the paramete
 
 ```{r echo=FALSE, eval=TRUE}
 library(DT)
-datatable(phosCds, rownames = FALSE,options = list(pageLength = 8))
+datatable(phosCds, rownames = FALSE,options = list(pageLength = 4))
 ```
+
+### User-friendly retrievals: NWIS
 
 Sometimes, you know exactly what you want. If you know:
 
@@ -188,9 +196,6 @@ The names of the columns are based on the parameter and statistic codes. In many
 pheasant <- renameNWISColumns(pheasant)
 names(pheasant)
 ```
-
-
-## NWIS data attributes:
 
 The returned data also has several attributes attached to the data frame. To see what the attributes are:
 
@@ -311,9 +316,7 @@ See how to use those services by looking at the help page for the `readNWISdata`
 ?readNWISdata
 ````
 
-### Data Discovery: NWIS Example
-
-Let's look for long-term USGS phosphorous data in Wisconsin:
+Let's do one more example, we'll look for long-term USGS phosphorous data in Wisconsin:
 
 ```{r echo=TRUE, eval=TRUE}
 pCode <- c("00665")
@@ -423,13 +426,16 @@ groundwaterHUC <- readNWISdata(huc="02070010",
 
 Much like the convenience functions for NWIS, there's a simple function for retrievals if the site number and parameter code or characteristic name is known.
 
+<div style="float: left; width: 50%;">
 ```{r echo=TRUE, eval=TRUE}
 nwisQW <- readNWISqw(phWI.1$site_no[1],
                      parameterCd = "00665")
 ncol(nwisQW)
 nrow(nwisQW)
 ```
+</div>
 
+<div style="float: right; width: 50%;">
 ```{r echo=TRUE, eval=TRUE}
 wqpQW <- readWQPqw(paste0("USGS-",phWI.1$site_no[1]),
                    parameterCd = "00665")
@@ -437,7 +443,7 @@ ncol(wqpQW)
 nrow(wqpQW)
 
 ```
-
+</div>
 
 ## Data Discovery: WQP
 
