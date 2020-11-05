@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.6.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.6.9002</span>
       </span>
     </div>
 
@@ -64,6 +64,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/tutorial.html">Tutorial</a>
+    </li>
+    <li>
       <a href="../articles/movingAverages.html">Moving Averages</a>
     </li>
     <li>
@@ -116,22 +119,22 @@
 <div id="get-data-using-dataretrieval" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-data-using-dataretrieval" class="anchor"></a>Get data using dataRetrieval</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/">dataRetrieval</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/">dataRetrieval</a></span><span class="op">)</span>
 
 <span class="co">#Retrieve daily Q</span>
 <span class="va">siteNumber</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"01538000"</span><span class="op">)</span>
 <span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"00060"</span> <span class="co">#Discharge</span>
 <span class="va">dailyQ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">siteNumber</span>, <span class="va">parameterCd</span><span class="op">)</span> 
 <span class="va">dailyQ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/renameNWISColumns.html">renameNWISColumns</a></span><span class="op">(</span><span class="va">dailyQ</span><span class="op">)</span>
-<span class="va">stationInfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISsite.html">readNWISsite</a></span><span class="op">(</span><span class="va">siteNumber</span><span class="op">)</span></pre></div>
+<span class="va">stationInfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISsite.html">readNWISsite</a></span><span class="op">(</span><span class="va">siteNumber</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="calculate-moving-average" class="section level2">
 <h2 class="hasAnchor">
 <a href="#calculate-moving-average" class="anchor"></a>Calculate moving average</h2>
 <p>Next, we calculate a 30-day moving average on all of the flow data:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
 <span class="co">#Check for missing days, if so, add NA rows:</span>
 <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">dailyQ</span><span class="op">$</span><span class="va">Date</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">!=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dailyQ</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
@@ -151,14 +154,14 @@
 <span class="va">dailyQ</span> <span class="op">&lt;-</span> <span class="va">dailyQ</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>rollMean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu">ma</span><span class="op">(</span><span class="va">Flow</span><span class="op">)</span><span class="op">)</span>,
          day.of.year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strptime.html">strftime</a></span><span class="op">(</span><span class="va">Date</span>, 
-                                           format <span class="op">=</span> <span class="st">"%j"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+                                           format <span class="op">=</span> <span class="st">"%j"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="calculate-historical-percentiles" class="section level2">
 <h2 class="hasAnchor">
 <a href="#calculate-historical-percentiles" class="anchor"></a>Calculate historical percentiles</h2>
 <p>We can use the <code>quantile</code> function to calculate historical percentile flows. Then use the <code>loess</code> function for smoothing. The argument <code>smooth.span</code> defines how much smoothing should be applied. To get a smooth transistion at the start of the graph, we can add include an earlier year which is not plotted at the end.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">summaryQ</span> <span class="op">&lt;-</span> <span class="va">dailyQ</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">summaryQ</span> <span class="op">&lt;-</span> <span class="va">dailyQ</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">day.of.year</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>p75 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">rollMean</span>, probs <span class="op">=</span> <span class="fl">.75</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
             p25 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">rollMean</span>, probs <span class="op">=</span> <span class="fl">.25</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
@@ -196,14 +199,14 @@
 
 <span class="va">latest.years</span> <span class="op">&lt;-</span> <span class="va">dailyQ</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Date</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">current.year</span><span class="op">-</span><span class="fl">1</span>,<span class="st">"-01-01"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>day.of.year <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span></pre></div>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>day.of.year <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="plot-using-base-r" class="section level2">
 <h2 class="hasAnchor">
 <a href="#plot-using-base-r" class="anchor"></a>Plot using base R</h2>
 <p>Many of the graphical requirements defined by the USGS are difficult to achieve in <code>ggplot2</code>. Base R plotting can be used to obtain these types of graphs:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">title.text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">stationInfo</span><span class="op">$</span><span class="va">station_nm</span>,<span class="st">"\n"</span>,
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">title.text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">stationInfo</span><span class="op">$</span><span class="va">station_nm</span>,<span class="st">"\n"</span>,
         <span class="st">"Provisional Data - Subject to change\n"</span>,
         <span class="st">"Record Start = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">dailyQ</span><span class="op">$</span><span class="va">Date</span><span class="op">)</span>,
         <span class="st">"  Number of years = "</span>,
@@ -267,7 +270,7 @@
 <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"bottom"</span>, <span class="va">label.text</span>, horiz <span class="op">=</span> <span class="cn">TRUE</span>,
        fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>,<span class="st">"yellow"</span>,<span class="st">"orange"</span>,<span class="st">"red"</span><span class="op">)</span>,
        inset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, xpd <span class="op">=</span> <span class="cn">TRUE</span>, bty <span class="op">=</span> <span class="st">"n"</span>, cex <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/box.html">box</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/box.html">box</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="movingAverages_files/figure-html/unnamed-chunk-4-1.png" alt="Simple 30-day moving average daily flow plot using base R" width="700"><p class="caption">
 Simple 30-day moving average daily flow plot using base R
@@ -278,8 +281,8 @@ Simple 30-day moving average daily flow plot using base R
 <h2 class="hasAnchor">
 <a href="#plot-using-ggplot2" class="anchor"></a>Plot using ggplot2</h2>
 <p>Finally, we can also try to create the graph using the <code>ggplot2</code> package. The following script shows a simple way to re-create the graph in <code>ggplot2</code> with no effort on imitating desired style:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">simple.plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">summaryQ</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">day.of.year</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">sm.25</span>, ymax <span class="op">=</span> <span class="va">sm.75</span>, fill <span class="op">=</span> <span class="st">"Normal"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -290,15 +293,15 @@ Simple 30-day moving average daily flow plot using base R
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">latest.years</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">day.of.year</span>, y<span class="op">=</span><span class="va">rollMean</span>, color <span class="op">=</span> <span class="st">"30-Day Mean"</span><span class="op">)</span>,size<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">365</span><span class="op">)</span> 
 
-<span class="va">simple.plot</span></pre></div>
+<span class="va">simple.plot</span></code></pre></div>
 <div class="figure">
 <img src="movingAverages_files/figure-html/unnamed-chunk-5-1.png" alt="Simple 30-day moving average daily flow plot using ggplot2" width="700"><p class="caption">
 Simple 30-day moving average daily flow plot using ggplot2
 </p>
 </div>
 <p>Next, we can play with various options to do a better job to imitate the style:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">styled.plot</span> <span class="op">&lt;-</span> <span class="va">simple.plot</span><span class="op">+</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">styled.plot</span> <span class="op">&lt;-</span> <span class="va">simple.plot</span><span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">mid.month.days</span>,<span class="fl">365</span><span class="op">+</span><span class="va">mid.month.days</span><span class="op">)</span>,
                    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">month.letters</span>,<span class="fl">2</span><span class="op">)</span>,
                    expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,
@@ -320,7 +323,7 @@ Simple 30-day moving average daily flow plot using ggplot2
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">""</span>, values <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"bottom"</span><span class="op">)</span>
 
-<span class="va">styled.plot</span></pre></div>
+<span class="va">styled.plot</span></code></pre></div>
 <div class="figure">
 <img src="movingAverages_files/figure-html/unnamed-chunk-6-1.png" alt="Detailed 30-day moving average daily flow plot" width="700"><p class="caption">
 Detailed 30-day moving average daily flow plot
