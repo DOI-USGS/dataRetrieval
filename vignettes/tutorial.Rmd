@@ -1,0 +1,561 @@
+---
+title: "dataRetrieval Tutorial"
+author: "Laura DeCicco"
+date: "`r format(Sys.time(), '%B-%d-%Y')`"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Introduction to the dataRetrieval package}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.height = 7,
+                      fig.width = 7)
+```
+
+
+
+# Installation
+
+`dataRetrieval` is available on the CRAN repository. The CRAN version is the most stable and user-tested:
+
+```{r echo=TRUE, eval=FALSE}
+install.packages("dataRetrieval")
+```
+
+The cutting-edge version of `dataRetrieval` can be installed using the `remotes` package which pulls from GitHub. This version will have newer changes than what is on CRAN, but potentially more fragile.
+
+```{r echo=TRUE, eval=FALSE}
+library(remotes)
+install_github("USGS-R/dataRetrieval")
+```
+
+## dataRetrieval Help
+
+Once the `dataRetrieval` package has been installed, it needs to be loaded in order to use any of the functions:
+
+```{r echo=TRUE, eval=TRUE}
+library(dataRetrieval)
+```
+
+There is a vignette that covers the full scope of the `dataRetrieval` package. It can be accessed with the following command:
+
+```{r echo=TRUE, eval=FALSE}
+vignette("dataRetrieval", package = "dataRetrieval")
+```
+
+Additionally, each function has a help file. These can be accessed by typing a question mark, followed by the function name in the R console:
+
+```{r echo=TRUE, eval=FALSE}
+?readNWISuv
+```
+
+Each function's help file has working examples to demonstrate the usage. The examples may have comments "## Not run". These examples CAN be run, they just are not run by the CRAN maintainers due to the external service calls.
+
+Finally, if there are still questions that the vignette and help files don't answer, please post an issue on the `dataRetrieval` GitHub page:
+
+[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
+
+# USGS: National Water Information System (NWIS) Overview 
+
+
+|Unit Data|
+|---------|
+|Data reported at the frequency it is collected – e.g. 15 minute|
+|Includes current 'real-time' data|
+
+
+|Daily Data|
+|----------|
+|Data aggregated to a daily statistic such as mean, min, or max|
+|Includes, streamflow, groundwater levels, and water quality sensors|
+|These data can can go back many decades|
+
+
+
+|Discrete Data|Meta Data|
+|-------------|---------|
+|Water quality data|Site information|
+|Groundwater level|Parameter information|
+|Rating curves| |
+|Surfacewater measurements| |
+|Peak flow| |
+|Water Use | |
+
+
+## USGS Basic Web Retrievals
+
+The USGS uses various codes for basic retrievals. These codes can have leading zeros, therefore in R they need to be a character ("01234567").
+
+* Site ID (often 8 or 15-digits)
+* Parameter Code (5 digits)
+    + Full list:
+    + [http://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&inline=true&group_cd=%](http://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&inline=true&group_cd=%)
+    + Alternatively use `readNWISpCode()`
+* Statistic Code (for daily values)
+    + Full list:
+    + [http://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=%25&fmt=html](http://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=%25&fmt=html)
+
+
+Here are some examples of a few codes:
+
+
+```{r echo=FALSE, eval=TRUE}
+library(knitr)
+
+df <- data.frame(pCode = c("00060","00065","00010","00400"),
+                 shName = c("Discharge","Gage Height","Temperature","pH"))
+
+names(df) <- c("Parameter Codes", "Short Name")
+
+knitr::kable(df)
+
+```
+
+```{r echo=FALSE, eval=TRUE}
+df <- data.frame(pCode = c("00001","00002","00003","00008"),
+                 shName = c("Maximum","Minimum","Mean","Median"))
+
+names(df) <- c("Statistic Codes", "Short Name")
+
+knitr::kable(df)
+```
+
+
+## USGS: Parameter Code
+
+Use the `readNWISpCode` function to get information on USGS parameter codes. You can use "all" to get a full list. Then use your favorite data analysis methods to pull out what you need. Here is one example to find all the phosphorous parameter codes:
+
+```{r echo=TRUE, eval=TRUE}
+pcode <- readNWISpCode("all")
+
+phosCds <- pcode[grep("phosphorus",
+                      pcode$parameter_nm,
+                      ignore.case=TRUE),]
+
+names(phosCds)
+unique(phosCds$parameter_units)
+
+```
+
+Explore the wide variety of parameters that contain "phosphorus" in the parameter_nm:
+
+```{r echo=FALSE, eval=TRUE}
+library(DT)
+datatable(phosCds, rownames = FALSE,options = list(pageLength = 8))
+```
+
+
+## USGS Basic Web Retrievals
+
+Sometimes, you know exactly what you want. If you know:
+
+1. The type of data (groundwater, unit, water quality, daily, etc..)
+2. USGS site number(s)
+3. USGS parameter code(s)
+4. Time frame (start and end date)
+
+You can use the "user-friendly" functions. These functions take the same 4 inputs (sites, parameter codes, start date, end date), and deliver data from different NWIS services:
+
+```{r echo=FALSE, eval=TRUE}
+
+df <- data.frame(functionName = c("readNWISuv", "readNWISdv",                              "readNWISgwl", "readNWISmeas","readNWISpeak", 
+                    "readNWISqw","readNWISrating","readNWISuse",
+                    "readNWISstat"),
+                 service = c("Unit", "Daily", "Groundwater Level",
+                             "Surface-water", "Peak Flow", 
+                             "Water Quality", "Rating Curves",
+                             "Water Use", "Statistics"),
+                 stringsAsFactors = FALSE)
+
+names(df) <- c("Function Name", "Data")
+
+knitr::kable(df)
+
+```
+
+## USGS Basic Web Retrievals: readNWISuv example
+
+Let's start by asking for discharge (parameter code = 00060) at a site right next to the USGS office in Wisconsin (Pheasant Branch Creek). 
+
+```{r echo=TRUE, eval=TRUE}
+siteNo <- "05427948"
+pCode <- "00060"
+start.date <- "2017-10-01"
+end.date <- "2018-09-30"
+
+pheasant <- readNWISuv(siteNumbers = siteNo,
+                     parameterCd = pCode,
+                     startDate = start.date,
+                     endDate = end.date)
+
+```
+
+From the Pheasant Creek example, let's look at the data. The column names are:
+
+```{r echo=TRUE, eval=TRUE}
+names(pheasant)
+```
+
+
+The names of the columns are based on the parameter and statistic codes. In many cases, you can clean up the names with the convenience function renameNWISColumns:
+
+```{r echo=TRUE, eval=TRUE}
+pheasant <- renameNWISColumns(pheasant)
+names(pheasant)
+```
+
+
+## NWIS data attributes:
+
+The returned data also has several attributes attached to the data frame. To see what the attributes are:
+
+```{r echo=TRUE, eval=TRUE}
+names(attributes(pheasant))
+
+```
+
+Each `dataRetrieval` return should have the attributes: url, siteInfo, and variableInfo. Additional attributes are available depending on the data.
+
+To access the attributes:
+
+```{r echo=TRUE, eval=TRUE}
+url <- attr(pheasant, "url")
+url
+```
+
+[Raw Data](`r url`)
+
+Make a simple plot to see the data:
+
+```{r echo=TRUE, eval=TRUE, fig.height=3.5}
+library(ggplot2)
+ts <- ggplot(data = pheasant,
+             aes(dateTime, Flow_Inst)) +
+      geom_line()
+ts
+```
+
+Then use the attributes attached to the data frame to create better labels:
+
+
+```{r echo=TRUE, eval=TRUE, fig.height=3.5}
+parameterInfo <- attr(pheasant, "variableInfo")
+siteInfo <- attr(pheasant, "siteInfo")
+  
+ts <- ts +
+      xlab("") +
+      ylab(parameterInfo$variableDescription) +
+      ggtitle(siteInfo$station_nm)
+ts
+```
+
+
+##  Discover Data
+
+This is all great when you know your site numbers. What do you do when you don't?
+
+There are 2 `dataRetrieval` functions that help:
+
+*  `whatNWISsites` finds sites within a specified filter (quicker)
+*  `whatNWISdata` summarizes the data within the specified filter (more information)
+
+There are several ways to specify the requests. The best way to discover how flexible the USGS web services are is to click on the links and see all of the filtering options:
+[http://waterservices.usgs.gov/](http://waterservices.usgs.gov/)
+
+```{r echo=FALSE}
+knitr::include_graphics("waterservices.png")
+
+```
+
+Available geographic filters are individual site(s), a single state, a bounding box, or a HUC (hydrologic unit code). For example, let's see which sites ever measured phosphorus in Arizona:
+
+
+```{r az, echo=TRUE}
+AZ_sites <- whatNWISsites(stateCd = "AZ", 
+                parameterCd = "00665")
+nrow(AZ_sites)
+names(AZ_sites)
+
+```
+
+
+```{r echo=FALSE, eval=TRUE, fig.height=4}
+library(leaflet)
+
+leaflet(data=AZ_sites) %>% 
+  addProviderTiles("CartoDB.Positron") %>%
+  addCircleMarkers(~dec_long_va,~dec_lat_va,
+                   color = "red", radius=3, stroke=FALSE,
+                   fillOpacity = 0.8, opacity = 0.8,
+                   popup=~station_nm)
+        
+```
+
+Now let's see what we get back from the `readNWISdata` function:
+
+```{r azdata, echo=TRUE}
+AZ_data <- whatNWISdata(stateCd = "AZ", 
+                         parameterCd = "00665")
+
+```
+
+```{r echo=FALSE, eval=TRUE}
+library(dplyr)
+AZdata2 <- AZ_data %>% 
+  select(station_nm, begin_date, end_date, count_nu)
+
+datatable(AZdata2, rownames = FALSE,options = list(pageLength = 8))
+
+```
+
+
+##  Additional NWIS discovery tools
+
+
+Point-and-click mappers (good for general overviews):
+NWIS Mapper:
+[http://maps.waterdata.usgs.gov/mapper/index.html](http://maps.waterdata.usgs.gov/mapper/index.html)
+
+New NWIS dashboard:
+[https://dashboard.waterdata.usgs.gov/app/nwd/?region=lower48](https://dashboard.waterdata.usgs.gov/app/nwd/?region=lower48)
+
+
+See how to use those services by looking at the help page for the `readNWISdata` function:
+
+```{r eval=FALSE, echo=TRUE}
+?readNWISdata
+````
+
+
+
+Let's look for long-term USGS phosphorous data in Wisconsin:
+
+```{r echo=TRUE, eval=TRUE}
+pCode <- c("00665")
+phWI <- whatNWISdata(stateCd="WI", 
+                     parameterCd=pCode)
+
+library(dplyr)
+phWI.1 <- phWI %>% 
+  filter(count_nu > 300) %>%
+  mutate(period = as.Date(end_date) - as.Date(begin_date)) %>%
+  filter(period > 15*365)
+
+phos_WI_data <- readNWISqw(siteNumbers = phWI.1$site_no,
+                         parameterCd = pCode)
+
+
+```
+
+
+Let's look at the maximum measured value, and number of samples:
+
+```{r echo=TRUE}
+phos_summary <- phos_WI_data %>% 
+  group_by(site_no) %>% 
+  summarize(max = max(result_va, na.rm = TRUE),
+            count = n()) %>% 
+  ungroup() %>% 
+  left_join(attr(phos_WI_data, "siteInfo"), 
+            by = "site_no")
+
+
+```
+
+Then map it:
+```{r echo=FALSE, eval=TRUE, fig.height=4}
+library(leaflet)
+
+col_types <- c("darkblue","dodgerblue","green4",
+               "gold1","orange","brown","red")
+leg_vals <- unique(as.numeric(quantile(phos_summary$max, probs=c(0,0.01,0.1,0.25,0.5,0.75,0.9,.99,1), na.rm=TRUE)))
+
+pal = colorBin(col_types, phos_summary$max, bins = leg_vals)
+rad <-3*seq(1,4,length.out = 16)
+phos_summary$sizes <- rad[as.numeric(cut(phos_summary$count, breaks=16))]
+          
+leaflet(data=phos_summary) %>% 
+  addProviderTiles("CartoDB.Positron") %>%
+  addCircleMarkers(~dec_long_va,~dec_lat_va,
+                   fillColor = ~pal(max),
+                   radius = ~sizes,
+                   fillOpacity = 0.8, opacity = 0.8,stroke=FALSE,
+                   popup=~station_nm) %>%
+  addLegend(position = 'bottomleft',
+            pal=pal,
+            values=~max,
+            opacity = 0.8,
+            labFormat = labelFormat(digits = 1),
+            title = 'Max Value')
+
+        
+```
+
+    
+##  readNWISdata      
+
+We can use the function `readNWISdata` to get the data from more complicated data requests. The help page for this function has many examples.
+
+You can request data for individual sites, states, a bounding box, HUC:
+
+```{r eval=FALSE, echo=TRUE}
+
+dataTemp <- readNWISdata(stateCd = "OH", 
+                         parameterCd = "00010",
+                         service="dv")
+
+instFlow <- readNWISdata(sites = "05114000",
+                         service = "iv", 
+                         parameterCd = "00060", 
+                         startDate = "2014-05-01T00:00Z",
+                         endDate = "2014-05-01T12:00Z",
+                         tz = "America/Chicago")
+
+bBoxEx <- readNWISdata(bBox = c(-83,36.5,-81,38.5),
+                       parameterCd = "00010")
+
+groundwaterHUC <- readNWISdata(huc="02070010",
+                               service="gwlevels")
+
+```
+    
+# Water Quality Portal (WQP)
+
+[Water Quality Portal](http://www.waterqualitydata.us/)
+
+* Multiple agencies
+    + USGS data comes from the NWIS database
+    + EPA data comes from the STORET database (this includes many state, tribal, NGO, and academic groups)
+
+* WQP brings data from all these organizations together and provides it in a single format
+
+* More verbose output than NWIS
+
+* To get non-NWIS data, need to use CharacteristicName instead of parameter code.
+
+
+## Water Quality Portal Basic Retrieval: readWQPqw
+
+Much like the convenience functions for NWIS, there's a simple function for retrievals if the site number and parameter code or characteristic name is known.
+
+```{r echo=TRUE, eval=TRUE}
+nwisQW <- readNWISqw(phWI.1$site_no[1],
+                     parameterCd = "00665")
+ncol(nwisQW)
+nrow(nwisQW)
+```
+
+```{r echo=TRUE, eval=TRUE}
+wqpQW <- readWQPqw(paste0("USGS-",phWI.1$site_no[1]),
+                   parameterCd = "00665")
+ncol(wqpQW)
+nrow(wqpQW)
+
+```
+
+
+## Data Discovery: WQP
+
+The value of the Water Quality Portal is to explore water quality data from different sources. 
+
+The following function returns sites that have collected phosphorus data in Wisconsin. There's no way to know if that site has collected one sample, or thousands.
+
+```{r echo=TRUE, eval=FALSE}
+
+phosSites <- whatWQPsites(statecode = "WI",
+                          characteristicName = "Phosphorus")
+  
+```
+
+
+To get that information, you need to actually get that data. With data coming from many different agencies, it will be important to look carefully at the returned data. For instance, this "Phosphorus" data comes back with many different units. It will be important to make smart decisions on how and if the total data can be used together.
+
+```{r echo=TRUE, eval=FALSE}
+phosData <- readWQPdata(statecode = "WI",
+                        characteristicName = "Phosphorus")
+
+unique(phosData$ResultMeasure.MeasureUnitCode)
+  
+```
+
+```{r eval=TRUE}
+phosData <- readRDS("phosData.rds")
+```
+
+
+Let’s look at the maximum measured value, and number of samples:
+
+```{r eval=TRUE, echo=TRUE}
+siteInfo <- attr(phosData, "siteInfo")
+
+wiSummary <- phosData %>%
+  filter(ResultMeasure.MeasureUnitCode %in% 
+           c("mg/l","mg/l as P")) %>%
+  group_by(MonitoringLocationIdentifier) %>%
+  summarise(count=n(),
+            max = max(ResultMeasureValue, na.rm = TRUE)) %>%
+  filter(count > 300) %>%
+  left_join(siteInfo, by = "MonitoringLocationIdentifier")
+
+```
+
+
+```{r echo=FALSE, eval=TRUE}
+col_types <- c("darkblue","dodgerblue","green4","gold1","orange","brown","red")
+leg_vals <- unique(as.numeric(quantile(wiSummary$max, probs=c(0,0.01,0.1,0.25,0.5,0.75,0.9,.99,1), na.rm=TRUE)))
+pal = colorBin(col_types, wiSummary$max, bins = leg_vals)
+rad <-3*seq(1,4,length.out = 16)
+wiSummary$sizes <- rad[as.numeric(cut(wiSummary$count, breaks=16))]
+          
+leaflet(data=wiSummary) %>% 
+  addProviderTiles("CartoDB.Positron") %>%
+  addCircleMarkers(~dec_lon_va,~dec_lat_va,
+                   fillColor = ~pal(max),
+                   radius = ~sizes,
+                   fillOpacity = 0.8, opacity = 0.8,stroke=FALSE,
+                   popup=~station_nm) %>%
+  addLegend(position = 'bottomleft',
+            pal=pal,
+            values=~max,
+            opacity = 0.8,
+            labFormat = labelFormat(digits = 1), 
+            title = 'Max Value')
+
+```
+
+
+#  Time/Time zone discussion
+
+* The arguments for all `dataRetrieval` functions concerning dates (startDate, endDate) can be R Date objects, or character strings, as long as the string is in the form "YYYY-MM-DD"
+
+* In R, one vector (or column in a data frame) can only have __ONE__ timezone attribute
+    + Sometimes in a single state, some sites will acknowledge daylight savings and some don't
+    + `dataRetrieval` queries could easily span multiple timezones    
+
+* Therefore, `dataRetrieval` converts all date/times to UTC.
+
+* The user can specify a single timezone to override UTC. The allowable tz arguments are `OlsonNames` (see also the help file for `readNWISuv`).
+
+# Coming Soon!
+
+Groundwater Monitoring Network
+
+Similar to WQP, it brings groundwater data from multiple sources into a single database. There are currently a few `dataRetrieval` functions included:
+
+
+*  `readNGWMNsites()`
+*  `readNGWMNlevels()`
+*  `readNGWMNdata()`.
+
+Network Linked Data Index
+
+`findNLDI()`
+
+[http://usgs-r.github.io/dataRetrieval/articles/nldi.html](http://usgs-r.github.io/dataRetrieval/articles/nldi.html)
+
