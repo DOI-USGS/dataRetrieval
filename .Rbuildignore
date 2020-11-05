@@ -40,3 +40,7 @@ LICENSE.md
 README.Rmd
 ^codecov\.yml$
 ^\.github$
+vignettes/tutorial.Rmd
+vignettes/phosData.rds
+vignettes/waterservices.png
+
