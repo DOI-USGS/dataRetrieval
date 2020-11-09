@@ -181,7 +181,9 @@ test_that("General WQP retrievals working", {
 
    expect_equal(attr(site1, "url"), "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&dataProfile=periodOfRecord&zip=yes&mimeType=csv")
    
-   wqp.summary_no_atts <- readWQPdata(args_2, ignore_attributes = TRUE)
+   wqp.summary_no_atts <- readWQPdata(siteid="USGS-04024315",
+                                      characteristicName=nameToUse,
+                                      ignore_attributes = TRUE)
    expect_true(!all(c("siteInfo","variableInfo") %in% names(attributes(wqp.summary_no_atts))))
 })
 
