@@ -197,16 +197,16 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC", ignore_attributes = F
       
       attr(retval, "siteInfo") <- siteInfo
       attr(retval, "variableInfo") <- variableInfo
-      attr(retval, "url") <- urlCall
-      attr(retval, "queryTime") <- Sys.time()
-      
       
     } else {
-      
-      message("The following url returned no data:\n")
-      message(urlCall)
-      return(NULL)
+      if(!ignore_attributes){
+        message("The following url returned no data:\n")
+        message(urlCall)        
+      }
+
     }
+    attr(retval, "queryTime") <- Sys.time()
+    attr(retval, "url") <- urlCall
     
     return(retval)
   }
