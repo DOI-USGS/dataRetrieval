@@ -170,10 +170,9 @@ A example view of these navigation types can be seen below for NWIS site [111090
 ```{r, echo = FALSE, fig.cap= "NLDI Navigation Options"}
 library(ggplot2)
 
-x = lapply(findNLDI(nwis = 11109000,
-                    nav = c("UT", "DM", "UM", "DD")),
-           sf::st_as_sf)
-
+x <- findNLDI(nwis = 11109000,
+              nav = c("UT", "DM", "UM", "DD"))
+              
 ggplot() +
   geom_sf(data = x$UT, aes(color = "UT")) +
   geom_sf(data = x$UM,  aes(color  = "UM")) +
@@ -293,14 +292,14 @@ install.packages('sf')
 ```
 
 
-We've seen the NLDI wrapper can provide `sf` "ready" objects if `sf` is installed. If you want to work with the spatial representations you can do so using the [`sf::st_as_sf`](https://r-spatial.github.io/sf/reference/st_as_sf.html) to convert your list of `data.frame`s to a list of spatial `sf` features. For this [`lapply`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/lapply) is a helpful tool:  
+We've seen the NLDI wrapper can provide `sf` objects if `sf` is installed.
 
 ```{r}
 library(sf)
 query <- findNLDI(nwis = '11120000', 
                   nav = c("UT", "UM"), 
                   find = c("nwis", "wqp", "basin"))
-features  <- lapply(query, st_as_sf)
+features  <- lapply(query, class)
 ```
 
 Doing so allows for spatial as simple as length, area, and plotting, or more complex calculations. 
@@ -329,8 +328,7 @@ library(gridExtra)
 # Spatial upstream nwis, basin
 fountainCreek <- findNLDI(location = c(-104.780837, 38.786796), 
                           nav = "UM", 
-                          find = c("nwis", "basin")) %>% 
-  lapply(st_as_sf)
+                          find = c("nwis", "basin"))
 
 # Extract Streamflow for identified sites
 Q <- readNWISdv(fountainCreek$UM_nwissite$identifier, 
