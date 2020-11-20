@@ -296,23 +296,22 @@ We've seen the NLDI wrapper can provide `sf` objects if `sf` is installed.
 
 ```{r}
 library(sf)
-query <- findNLDI(nwis = '11120000', 
-                  nav = c("UT", "UM"), 
-                  find = c("nwis", "wqp", "basin"))
-features  <- lapply(query, class)
+features <- findNLDI(nwis = '11120000', 
+                     nav = c("UT", "UM"), 
+                     find = c("nwis", "wqp", "basin"))
 ```
 
 Doing so allows for spatial as simple as length, area, and plotting, or more complex calculations. 
 
 ```{r, fig.cap = "NLDI Spatial Feature map"}
-plot(features$basin, border = "black", lwd = 4)
-plot(features$UT$geometry, col = "blue", add = TRUE)
-plot(features$UM$geometry, col = "red", lwd = 3, add = TRUE)
-plot(features$origin$geometry, col = "orange", 
+plot(sf::st_geometry(features$basin), border = "black", lwd = 4)
+plot(sf::st_geometry(features$UT), col = "blue", add = TRUE)
+plot(sf::st_geometry(features$UM), col = "red", lwd = 3, add = TRUE)
+plot(sf::st_geometry(features$origin), col = "orange", 
      lwd = 4, add = TRUE)
-plot(features$UM_WQP$geometry, col = "purple", 
+plot(sf::st_geometry(features$UM_WQP), col = "purple", 
      pch = 16, cex = .5, add = TRUE)
-plot(features$UT_nwissite$geometry, col = "darkgreen", 
+plot(sf::st_geometry(features$UT_nwissite), col = "darkgreen", 
      pch = 16,  add = TRUE)
 ```
 
