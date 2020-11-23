@@ -39,7 +39,11 @@ get_nldi_sources <- function() {
 }
 
 #' @title Query NLDI
-#' @description Queries the NLDI for a given URL. If local sf install is available the function returns a data.frame with the sfc geometry column listed. Such an object can be converted to sf with `sf::st_as_sf()`. If the object requested is a POINT object, the XY coordinates are added as columns. Otherwise the columns returned are "sourceName" and "identifier" for features, and "nhdplus_comid" for navigated paths.
+#' @description Queries the NLDI for a given URL. If local sf install is 
+#' available the function returns a sf data.frame. 
+#' If the object requested is a POINT object, the XY coordinates are added 
+#' as columns. Otherwise the columns returned are "sourceName" and 
+#' "identifier" for features, and "nhdplus_comid".
 #' @param url the URL to retrieve
 #' @param type the type of data being returned (nav or feature)
 #' @param use_sf should a local sf install be usedto parse data
@@ -65,7 +69,7 @@ get_nldi = function(url, type = "", use_sf = FALSE){
   if(type == "nav"){
     good_name = c("nhdplus_comid")
   } else if(type == "feature") {
-    good_name = c("sourceName", "identifier")
+    good_name = c("sourceName", "identifier", "comid")
   } else {
     good_name = NULL
   }
@@ -92,18 +96,18 @@ get_nldi = function(url, type = "", use_sf = FALSE){
       # if of type POINT at the X,Y coordinates as columns
       if(sf::st_geometry_type(tmp)[1] =="POINT"){
 
-        tmp$X = sf::st_coordinates(tmp)[,1]
-        tmp$Y = sf::st_coordinates(tmp)[,2]
+        tmp$X <- sf::st_coordinates(tmp)[,1]
+        tmp$Y <- sf::st_coordinates(tmp)[,2]
 
-        tmp = tmp[,c(good_name, "X", "Y")]
+        tmp <- tmp[,c(good_name, "X", "Y")]
 
       } else {
         # If line/polygon then keep geometry but don't expand
-        tmp = tmp[,c(good_name, "geometry")]
+        tmp <- tmp[,c(good_name, attr(tmp, "sf_column"))]
 
       }
        # Returning as data.frame drops the geometry column ...
-        return(data.frame(tmp))
+       return(tmp)
 
     } else {
 
@@ -143,9 +147,10 @@ get_nldi = function(url, type = "", use_sf = FALSE){
 
 clean_nwis_ids = function(tmp) {
   # If data.frame, and of type NWIS, then strip "USGS-" from identifiers
-  if (class(tmp) == 'data.frame') {
+  if (is.data.frame(tmp)) {
 
-    if (sum(tmp$sourceName[1] == "NWIS Sites") == 1) {
+    if ("sourceName" %in% names(tmp) && 
+        tmp$sourceName[1] == "NWIS Sites") {
 
       tmp$identifier = gsub("USGS-", "", tmp$identifier)
 
@@ -245,7 +250,7 @@ valid_ask = function(all, type){
 #' ## Convert returned list of data.frames to list of spatial features
 #' \donttest{
 #'  nldi = findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp"))
-#'  str(lapply(nldi, sf::st_as_sf), max.level = 1)
+#'  str(nldi, max.level = 1)
 #'  }
 
 
