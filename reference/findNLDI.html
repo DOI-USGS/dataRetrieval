@@ -237,101 +237,184 @@ Valid starting options can be given by one of the following arguments: comid, nw
 <span class='co'>## Find feature by COMID</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>comid <span class='op'>=</span> <span class='fl'>101</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $origin
-#&gt;      sourceName identifier                       geometry
-#&gt; 1 NHDPlus comid        101 LINESTRING (-94.64845 31.09...
+#&gt; Simple feature collection with 1 feature and 3 fields
+#&gt; geometry type:  LINESTRING
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
+#&gt; geographic CRS: WGS 84
+#&gt; <span style='color: #555555;'># A tibble: 1 x 4</span><span>
+#&gt;   sourceName   identifier comid                                         geometry
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #555555;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…
 #&gt; </div><div class='input'>
 <span class='co'>## Find feature by NWIS ID</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $origin
-#&gt;   sourceName identifier         X        Y                   geometry
-#&gt; 1 NWIS Sites   11120000 -119.8118 34.42472 POINT (-119.8118 34.42472)
+#&gt; Simple feature collection with 1 feature and 5 fields
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
+#&gt; geographic CRS: WGS 84
+#&gt; </span><span style='color: #555555;'># A tibble: 1 x 6</span><span>
+#&gt;   sourceName identifier comid        X     Y             geometry
+#&gt; </span><span style='color: #555555;'>*</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)
 #&gt; </div><div class='input'>
 <span class='co'>## Find feature by WQP ID</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>wqp <span class='op'>=</span> <span class='st'>'USGS-04024315'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $origin
-#&gt;             sourceName    identifier         X        Y
-#&gt; 1 Water Quality Portal USGS-04024315 -92.23492 46.50355
-#&gt;                     geometry
-#&gt; 1 POINT (-92.23492 46.50355)
+#&gt; Simple feature collection with 1 feature and 5 fields
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -92.23492 ymin: 46.50355 xmax: -92.23492 ymax: 46.50355
+#&gt; geographic CRS: WGS 84
+#&gt; </span><span style='color: #555555;'># A tibble: 1 x 6</span><span>
+#&gt;   sourceName           identifier    comid       X     Y             geometry
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> Water Quality Portal USGS-04024315 1800305 -</span><span style='color: #BB0000;'>92.2</span><span>  46.5 (-92.23492 46.50355)
 #&gt; </div><div class='input'>
 <span class='co'>## Find feature by LOCATION</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>location <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>115</span>,<span class='fl'>40</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $origin
-#&gt;      sourceName identifier                       geometry
-#&gt; 1 NHDPlus comid  946060315 LINESTRING (-115.0182 40.05...
+#&gt; Simple feature collection with 1 feature and 3 fields
+#&gt; geometry type:  LINESTRING
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -115.0326 ymin: 40.04013 xmax: -115.0182 ymax: 40.05183
+#&gt; geographic CRS: WGS 84
+#&gt; </span><span style='color: #555555;'># A tibble: 1 x 4</span><span>
+#&gt;   sourceName   identifier comid                                         geometry
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #555555;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> NHDPlus com… 946060315  94606… (-115.0182 40.05183, -115.0185 40.05176, -115.…
 #&gt; </div><div class='input'>
 <span class='co'>## GENERAL ORIGIN: COMID</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>origin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"comid"</span> <span class='op'>=</span> <span class='fl'>101</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $origin
-#&gt;      sourceName identifier                       geometry
-#&gt; 1 NHDPlus comid        101 LINESTRING (-94.64845 31.09...
+#&gt; Simple feature collection with 1 feature and 3 fields
+#&gt; geometry type:  LINESTRING
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
+#&gt; geographic CRS: WGS 84
+#&gt; </span><span style='color: #555555;'># A tibble: 1 x 4</span><span>
+#&gt;   sourceName   identifier comid                                         geometry
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #555555;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…
 #&gt; </div><div class='input'>
 <span class='co'>## GENERAL ORIGIN: WaDE</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>origin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"wade"</span> <span class='op'>=</span> <span class='st'>'CA_45206'</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $origin
-#&gt;                      sourceName identifier         X        Y
-#&gt; 1 Water Data Exchange 2.0 Sites   CA_45206 -119.7917 34.47273
-#&gt;                     geometry
-#&gt; 1 POINT (-119.7917 34.47273)
+#&gt; Simple feature collection with 1 feature and 5 fields
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -119.7917 ymin: 34.47273 xmax: -119.7917 ymax: 34.47273
+#&gt; geographic CRS: WGS 84
+#&gt; </span><span style='color: #555555;'># A tibble: 1 x 6</span><span>
+#&gt;   sourceName                identifier comid       X     Y              geometry
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> Water Data Exchange 2.0 … CA_45206   175952… -</span><span style='color: #BB0000;'>120.</span><span>  34.5  (-119.7917 34.47273)
 #&gt; </div><div class='input'>
 <span class='co'># Navigation</span>
 <span class='co'># UPPER MAINSTEM of USGS-11120000</span>
  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='st'>"UM"</span><span class='op'>)</span>, max.level <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; List of 2
-#&gt;  $ origin:'data.frame':	1 obs. of  5 variables:
-#&gt;  $ UM    :'data.frame':	4 obs. of  2 variables:</div><div class='input'>
+#&gt;  $ origin: tibble [1 × 6] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...
+#&gt;  $ UM    : tibble [4 × 2] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
+#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"</div><div class='input'>
 <span class='co'># MULTI-REQUEST</span>
 <span class='co'># UPPER MAINSTEM and TRIBUTARY of USGS-11120000</span>
  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"UT"</span>, <span class='st'>"UM"</span><span class='op'>)</span><span class='op'>)</span>, max.level <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; List of 3
-#&gt;  $ origin:'data.frame':	1 obs. of  5 variables:
-#&gt;  $ UT    :'data.frame':	25 obs. of  2 variables:
-#&gt;  $ UM    :'data.frame':	4 obs. of  2 variables:</div><div class='input'>
+#&gt;  $ origin: tibble [1 × 6] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...
+#&gt;  $ UT    : tibble [25 × 2] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
+#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"
+#&gt;  $ UM    : tibble [4 × 2] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
+#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"</div><div class='input'>
 <span class='co'># Discover Features</span>
 
 <span class='co'>## Find feature(s) on the upper tributary of USGS-11120000</span>
  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='st'>"UT"</span>, find <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nwis"</span>, <span class='st'>"wqp"</span><span class='op'>)</span><span class='op'>)</span>, max.level <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; List of 4
-#&gt;  $ origin     :'data.frame':	1 obs. of  5 variables:
-#&gt;  $ UT         :'data.frame':	25 obs. of  2 variables:
-#&gt;  $ UT_nwissite:'data.frame':	2 obs. of  5 variables:
-#&gt;  $ UT_WQP     :'data.frame':	64 obs. of  5 variables:</div><div class='input'>
+#&gt;  $ origin     : tibble [1 × 6] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...
+#&gt;  $ UT         : tibble [25 × 2] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
+#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"
+#&gt;  $ UT_nwissite: tibble [2 × 6] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...
+#&gt;  $ UT_WQP     : tibble [64 × 6] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...</div><div class='input'>
 <span class='co'>## Find upstream basin boundary of USGS-11120000</span>
  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>,  find <span class='op'>=</span> <span class='st'>"basin"</span><span class='op'>)</span>, max.level <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; List of 2
-#&gt;  $ origin:'data.frame':	1 obs. of  5 variables:
-#&gt;  $ basin :'data.frame':	1 obs. of  1 variable:</div><div class='input'>
+#&gt;  $ origin: tibble [1 × 6] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...
+#&gt;  $ basin : tibble [1 × 1] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: 
+#&gt;   .. ..- attr(*, "names")= chr(0) </div><div class='input'>
 <span class='co'># Control Distance</span>
 
 <span class='co'>## Limit search to 100 km</span>
  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>findNLDI</span><span class='op'>(</span>comid <span class='op'>=</span> <span class='fl'>101</span>, nav <span class='op'>=</span> <span class='st'>"DM"</span>, find <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nwis"</span>, <span class='st'>"wqp"</span><span class='op'>)</span>, distance_km <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>, max.level <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; List of 4
-#&gt;  $ origin     :'data.frame':	1 obs. of  3 variables:
-#&gt;  $ DM         :'data.frame':	43 obs. of  2 variables:
-#&gt;  $ DM_nwissite:'data.frame':	1 obs. of  5 variables:
-#&gt;  $ DM_WQP     :'data.frame':	5 obs. of  5 variables:</div><div class='input'>
-<span class='co'>## Convert returned list of data.frames to list of spatial features</span>
-<span class='co'># \donttest{</span>
- <span class='va'>nldi</span> <span class='op'>=</span> <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='st'>"UT"</span>, find <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nwis"</span>, <span class='st'>"wqp"</span><span class='op'>)</span><span class='op'>)</span>
- <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>nldi</span>, <span class='fu'>sf</span><span class='fu'>::</span><span class='va'><a href='https://r-spatial.github.io/sf/reference/st_as_sf.html'>st_as_sf</a></span><span class='op'>)</span>, max.level <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; List of 4
-#&gt;  $ origin     :Classes ‘sf’ and 'data.frame':	1 obs. of  5 variables:
+#&gt;  $ origin     : tibble [1 × 4] (S3: sf/tbl_df/tbl/data.frame)
 #&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:4] "sourceName" "identifier" "X" "Y"
-#&gt;  $ UT         :Classes ‘sf’ and 'data.frame':	25 obs. of  2 variables:
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:3] "sourceName" "identifier" "comid"
+#&gt;  $ DM         : tibble [43 × 2] (S3: sf/tbl_df/tbl/data.frame)
 #&gt;   ..- attr(*, "sf_column")= chr "geometry"
 #&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
 #&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"
-#&gt;  $ UT_nwissite:Classes ‘sf’ and 'data.frame':	2 obs. of  5 variables:
+#&gt;  $ DM_nwissite: tibble [1 × 6] (S3: sf/tbl_df/tbl/data.frame)
 #&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:4] "sourceName" "identifier" "X" "Y"
-#&gt;  $ UT_WQP     :Classes ‘sf’ and 'data.frame':	64 obs. of  5 variables:
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...
+#&gt;  $ DM_WQP     : tibble [5 × 6] (S3: sf/tbl_df/tbl/data.frame)
 #&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:4] "sourceName" "identifier" "X" "Y"</div><div class='input'> <span class='co'># }</span>
-</div></pre>
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...</div><div class='input'>
+<span class='co'>## Convert returned list of data.frames to list of spatial features</span>
+<span class='co'># \donttest{</span>
+ <span class='va'>nldi</span> <span class='op'>=</span> <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='st'>"UT"</span>, find <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nwis"</span>, <span class='st'>"wqp"</span><span class='op'>)</span><span class='op'>)</span>
+ <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>nldi</span>, max.level <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 4
+#&gt;  $ origin     : tibble [1 × 6] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...
+#&gt;  $ UT         : tibble [25 × 2] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
+#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"
+#&gt;  $ UT_nwissite: tibble [2 × 6] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...
+#&gt;  $ UT_WQP     : tibble [64 × 6] (S3: sf/tbl_df/tbl/data.frame)
+#&gt;   ..- attr(*, "sf_column")= chr "geometry"
+#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...</div><div class='input'> <span class='co'># }</span>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
