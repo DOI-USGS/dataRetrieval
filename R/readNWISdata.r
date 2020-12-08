@@ -21,8 +21,6 @@
 #' statistics service). Note: "qw" and "measurement" calls go to: 
 #' \url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
 #' The statistics service has a limited selection of arguments (see \url{https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}). 
-#' @import utils
-#' @import stats
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -91,23 +89,18 @@
 #' wiGWL <- readNWISdata(stateCd="WI",service="gwlevels")
 #' meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
 #' 
-#' waterYearStat <- readNWISdata(site=c("03112500"),service="stat",statReportType="annual",
+#' waterYearStat <- readNWISdata(site=c("01646500"),service="stat",statReportType="annual",
 #'                  statYearType="water", missingData="on")
-#' monthlyStat <- readNWISdata(site=c("03112500","03111520"),
+#' monthlyStat <- readNWISdata(site=c("01646500"),
 #'                             service="stat",
 #'                             statReportType="monthly")                                   
-#' dailyStat <- readNWISdata(site=c("03112500","03111520"),
+#' dailyStat <- readNWISdata(site=c("01646500"),
 #'                           service="stat",
 #'                           statReportType="daily",
 #'                           statType=c("p25","p50","p75","min","max"),
-#'                           parameterCd="00065")
-#' allDailyStats <- readNWISdata(site=c("03111548"),
-#'                               service="stat",
-#'                               statReportType="daily",
-#'                               statType=c("p25","p50","p75","min","max"),
-#'                               parameterCd="00060")
+#'                           parameterCd="00060")
 #'
-#' dailyWV <- readNWISdata(stateCd = "West Virginia", parameterCd = "00060")
+#' dailyRI <- readNWISdata(stateCd = "Rhode Island", parameterCd = "00060")
 #'
 #' arg.list <- list(site="03111548",
 #'                  statReportType="daily",
@@ -133,6 +126,10 @@
 #' 
 #' today <- readNWISdata(service="iv", startDate = Sys.Date(), 
 #'                       parameterCd = "00060", siteNumber = "05114000")
+#'                       
+#' peak_data <- readNWISdata(service = "peak", 
+#'                           site_no = c("01594440","040851325"),
+#'                           range_selection = "data_range")
 #' 
 #' }
 readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
@@ -327,7 +324,9 @@ readNWISdots <- function(...){
     service <- "dv"
   }
   
-  match.arg(service, c("dv","iv","iv_recent","gwlevels","site", "uv","qw","measurements","qwdata","stat","rating"))
+  match.arg(service, c("dv","iv","iv_recent","gwlevels",
+                       "site", "uv","qw","measurements",
+                       "qwdata","stat","rating", "peak"))
   
   if(service == "uv"){
     service <- "iv"
@@ -409,7 +408,7 @@ readNWISdots <- function(...){
     }
   } 
   
-  if(service %in% c("site","gwlevels","stat","rating")){
+  if(service %in% c("site", "gwlevels", "stat", "rating", "peak")){
     format.default <- "rdb"
   }
   

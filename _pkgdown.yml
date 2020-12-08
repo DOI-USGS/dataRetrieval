@@ -10,6 +10,8 @@ navbar:
     href: reference/index.html
   - text: Articles
     menu:
+    - text: Tutorial
+      href: articles/tutorial.html
     - text: Moving Averages
       href: articles/movingAverages.html
     - text: Stat Service
@@ -56,9 +58,8 @@ reference:
       - readNGWMNsites
       - readNGWMNdata
   - title: Network Linked Data Index
-    desc: Functions to interface with the NLDI
+    desc: Functions to interface with the NLDI.
     contents:
-      - nldi_offerings
       - findNLDI
   - title: Helper functions
     contents:

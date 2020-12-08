@@ -15,8 +15,6 @@
 #' start and end times, and converted to UTC. See \url{https://www.waterqualitydata.us/portal_userguide/} for more information.
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
-#' @import utils
-#' @import stats
 #' @examples
 #' # These examples require an internet connection to run
 #' 
@@ -100,7 +98,7 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
                                         ResultParticleSizeBasisText = readr::col_character(),
                                         `ActivityDepthHeightMeasure/MeasureValue` = readr::col_number(),
                                         `DetectionQuantitationLimitMeasure/MeasureValue` = readr::col_number(),
-                                        # ResultMeasureValue = readr::col_number(),
+                                        ResultMeasureValue = readr::col_character(),
                                         `WellDepthMeasure/MeasureValue` = readr::col_number(),
                                         `WellHoleDepthMeasure/MeasureValue` = readr::col_number(),
                                         DetectionQuantitationLimitTypeName = readr::col_character(),
@@ -116,7 +114,8 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
                                         `DetectionQuantitationLimitMeasure/MeasureUnitCode` = readr::col_character(),
                                         `HUCEightDigitCode` = readr::col_character(), 
                                         `ActivityEndTime/TimeZoneCode` = readr::col_character()),
-                       quote = ifelse(csv,'\"',""), delim = ifelse(csv,",","\t")))
+                       quote = ifelse(csv,'\"',""),
+                       delim = ifelse(csv,",","\t")))
     
   if(!file.exists(obs_url)){
     actualNumReturned <- nrow(retval)
@@ -125,7 +124,19 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
       warning("Number of rows returned not matched in header")
     } 
   }
-  
+  suppressWarnings({
+    val <- tryCatch(as.numeric(retval$ResultMeasureValue),
+                    warning = function(w) w)
+
+    # we don't want to convert it to numeric if there are non-numeric chars
+    # they often happen after readr has decided the column type if we left it to readr
+    # If we leave it to the user, it will probably break a lot of code
+    # If we bump up readr's guess_max...the computational time becomes really really long
+    if(!"warning" %in% class(val)){
+      retval$ResultMeasureValue <- val
+    }
+  })
+
   if(length(grep("ActivityStartTime",names(retval))) > 0){
     
     #Time zones to characters:

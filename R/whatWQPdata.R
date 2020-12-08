@@ -109,7 +109,6 @@ whatWQPmetrics <- function(...){
 #' }
 #' 
 #' @export
-#' @import utils
 #' @seealso whatNWISsites
 #' @examples
 #' \donttest{

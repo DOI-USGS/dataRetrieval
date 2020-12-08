@@ -5,7 +5,6 @@
 #'
 #' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options. A 
 #' list (or lists) can also be supplied.
-#' @import utils
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
