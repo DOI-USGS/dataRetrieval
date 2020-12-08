@@ -1,17 +1,22 @@
 context("NLDI...")
 
 test_that("NLDI offerings...", {
+  skip_on_cran()
+  
   expect_true(nrow(get_nldi_sources()) > 1)
 })
 
 test_that("NLDI starting sources...", {
 
+  skip_on_cran()
+  
   # LINESTRING GEOMETERY
-  expect_equal(sum(names(findNLDI(comid = 101)[[1]]) ==
-                     c('sourceName', 'identifier', "geometry")),  3)
+  expect_equal(sum(names(findNLDI(comid = 101)[[1]]) %in%
+                     c('sourceName', 'identifier', "comid", "geometry")),  4)
   # POINT GEOMETERY
   expect_equal(sum(names(findNLDI(nwis = '11120000')[[1]]) ==
-                     c('sourceName', 'identifier', "X", "Y", "geometry")),  5)
+                     c('sourceName', 'identifier', "comid", 
+                       "X", "Y", "geometry")),  6)
   # COMID
   expect_equal(findNLDI(comid = 101)[[1]]$sourceName, "NHDPlus comid")
   # NWIS
@@ -33,6 +38,9 @@ test_that("NLDI starting sources...", {
 })
 
 test_that("NLDI navigation sources...", {
+  
+  skip_on_cran()
+  
   # UPPER TRIBUTARY
   expect_equal(length(findNLDI(nwis = '11120000', nav = "UT")), 2)
   # UPPER MAIN
@@ -49,12 +57,18 @@ test_that("NLDI navigation sources...", {
 })
 
 test_that("NLDI find sources...", {
+  
+  skip_on_cran()
+  
   expect_equal(length(findNLDI(nwis = '11120000', nav = "UT", find = "wade")),3)
   expect_equal(length(findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp"))), 4)
   expect_equal(length(findNLDI(nwis = '11120000', nav = c("UT", "UM"), find = c("nwis", "wqp"))), 7)
 })
 
 test_that("sf not installed...", {
+  
+  skip_on_cran()
+  
   expect_true(!"geometry" %in% findNLDI(nwis = '11120000', no_sf = TRUE)[[1]])
   expect_equal(class(findNLDI(nwis = '11120000', nav = "UT", find = c("nwis"),  no_sf = TRUE)[[2]]), "character")
   expect_true(c("X") %in% names(findNLDI(nwis = '11120000', nav = "UT", find = c("nwis"), no_sf = TRUE)[[3]]))
@@ -62,15 +76,21 @@ test_that("sf not installed...", {
 
 
 test_that("Distance...", {
+  
+  skip_on_cran()
+  
   full = findNLDI(comid = 101, nav = "UT", find = "nwis", distance_km = 9999)
   part = findNLDI(comid = 101, nav = "UT", find = "nwis")
   expect_true(nrow(full$UT_nwissite) > nrow(part$UT_nwissite))
 })
 
 test_that("basin", {
+  
+  skip_on_cran()
+  
   xx = findNLDI(comid = 101, nav = "UT", find = "basin")
   xx2 = findNLDI(comid = 101, nav = "UT", find = "basin", no_sf = TRUE)
-  expect_true(sf::st_geometry_type(sf::st_as_sf(xx$basin)) == "POLYGON")
+  expect_true(sf::st_geometry_type(xx$basin) == "POLYGON")
   expect_true(ncol(xx2$basin) == 0)
 })
 

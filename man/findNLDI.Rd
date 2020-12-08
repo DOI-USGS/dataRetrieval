@@ -96,7 +96,7 @@ Valid starting options can be given by one of the following arguments: comid, nw
 ## Convert returned list of data.frames to list of spatial features
 \donttest{
  nldi = findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp"))
- str(lapply(nldi, sf::st_as_sf), max.level = 1)
+ str(nldi, max.level = 1)
  }
 }
 \keyword{nldi}
