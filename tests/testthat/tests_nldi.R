@@ -113,7 +113,6 @@ test_that("sf points", {
   p2 = st_sfc(st_point(c(-119.8458,34.4146)), crs = 4326)
   expect_equal(findNLDI(location = p2), findNLDI(location = sf::st_as_sf(p2)))
   expect_error(findNLDI(location = st_buffer(p2,.01)))
-  location
 })
 
 
