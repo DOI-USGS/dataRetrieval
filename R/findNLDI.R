@@ -260,6 +260,8 @@ valid_ask = function(all, type){
 #' ## Limit search to 50 km
 #'  findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
 
+
+location = AOI::geocode("UCSB", pt = TRUE)
 findNLDI <- function(comid = NULL,
                      nwis = NULL,
                      wqp = NULL,
@@ -307,7 +309,16 @@ findNLDI <- function(comid = NULL,
   # If location, ensure lng is first argument (hack for USA features)
   if (start_type == 'location') {
 
-    if (location[1] > 0) { stop("Provide location in the form c(lng,lat)") }
+    if(any(methods::is(location, "sf") | methods::is(location, "sfc")) & use_sf ) {
+
+      if(sf::st_geometry_type(location) != "POINT"){
+        stop("Only POINT objects can be passed to location")
+      }
+
+      location  = sf::st_coordinates(location)
+    } else {
+      if (location[1] > 0) { stop("Provide location in the form c(lng,lat)") }
+    }
 
   # Must convert location to COMID for tracing and discovery ...
     tmp_url <- paste0(

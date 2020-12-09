@@ -20,6 +20,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 library(knitr)
+library(dplyr)
 library(dataRetrieval)
 
 opts_chunk$set(warning = FALSE, 
@@ -46,7 +47,7 @@ knitr::include_graphics("ucsb.png")
 ```
 <br><br>
 
-Imagine then that you want to travel from UCSB to UCLA and know you need gas along the way. In Google Maps you might use UCSB at your **origin** and ask for directions to UCLA that include gas stations along your route.
+Imagine then that you want to travel from UCSB to UCLA and know you need gas along the way. In Google Maps you might use UCSB as your **origin** and ask for directions to UCLA that include gas stations along your route.
 
 <br><br>
 ```{r, fig.cap = "Gas stations between UCSB and UCLA",  echo = FALSE}
@@ -68,9 +69,7 @@ Each of these is discussed below:
 
 # What's available? 
 
-First, we need to know what features are currently indexed in the NLDI. The NLDI works across the NHDPlusV2 network and features that have been _indexed_ to this network (e.g. _this_ feature is on _that_ flowline) can be found in the same way "UCSB" or the gas stations can be found on a route. 
-
-Only features that have been indexed to the network (or are part of the network) can be discovered. The most current offerings can be found using `get_nldi_sources`, and new features are regularly being added: 
+First, we need to know what features are indexed in the NLDI. The most current offerings can be found using `get_nldi_sources`, and new features are regularly being added: 
 
 ```{r, eval = FALSE}
 library(dataRetrieval)
@@ -89,42 +88,23 @@ At the time of writing (`r Sys.Date()`), `r nrow(get_nldi_sources())` datasets h
 
 # Feature/Origin discovery
 
-Features can be discovered in three broad ways:
+Features can be requested in two primary ways: Using the the native data set identifier, and using a location. The core feature set of the NLDI include the NHD flowlines, USGS `NWIS` locations, `WQP` locations, and `HUC12` pour points. Each of these are available as arguments in `findNLDI` and can be used to request a feature object. 
 
-(1) a feature _of_ the network
-(2) a feature _on_  the network
-(3) a spatial location (lng, lat)
+### By Identifier
 
-### "Of" network features
-
-A network feature is a hydrographic feature of the NHDPlusV2, defined by an NHDPlusV2 common identifier (COMID). 
-
-The `comid` argument of `findNLDI` can be used to specify a specific COMID. `findNLDI` always returns a named list of `data.frames`. 
-To keep `dataRetrieval` lightweight, the simple features `sf` package is not a dependency. However, if it is installed on your machine, it can be leveraged to create "spatial-ready" outputs. 
+As an illustrative example, NHDPlus features can be requested by their COMID from the NHDPlusV2 dataset.
 
 ```{r message=FALSE}
-c101 = findNLDI(comid = 101)
+str(findNLDI(comid = 101))
 ```
 
-In the above example, the returned object is a `list` of length 1 containing a `data.frame` describing the feature requested (`comid=101`). All NLDI features have attribute information related to the data source and the identifier within that resource (`sourceName` and `identifer`). If `sf` is installed locally, an `sfc` (simple feature geometry column) column is added to the returned `data.frame`. 
+The returned simple features object contains the native dataset identifier ("identifer"), sourceName of he native dataset and the indexed NHD COMID (in this case a duplicate since an NHD feature was requested). In the example above, we see the geometry column is of type `LINESTRING` and made of 54 points (each with an X and Y coordinate). To keep `dataRetrieval` lightweight, the simple features `sf` package is not a dependency. Instead, if `sf` is not installed  - or `no_sf = TRUE` - only the _sourceName_, _comid_, and _identifier_ will be returned.
 
 ```{r}
-str(c101)
+findNLDI(comid = 101, no_sf = TRUE)
 ```
 
-In the example above, we see the geometry column is of type `LINESTRING` and made of 54 points (each with an X and Y coordinate). 
-
-If `sf` is not installed locally - or `no_sf = TRUE` - then only the _sourceName_ and _identifier_ will be returned for `LINESTRING` objects.
-
-```{r}
-c101 = findNLDI(comid = 101, no_sf = TRUE)
-```
-
-### "On" network features
-
-Features indexed to the NHDPlus are returned as `POINT` objects. If `sf` is enabled,  the _sourceName_, _identifier_, _X_, _Y_ and _geometry_ (`sfc`) are returned. If `sf` is not locally available, the _geometry_ is dropped but the _X_ and _Y_ values are are retained. 
-
-The core feature set of the NLDI include the USGS `NWIS` locations, `WQP` locations, and `HUC12` pour points. Each of these are available as arguments in `findNLDI` and can be used to request a feature object. For example, we can request the NLDI representation of USGS NWIS gage [11120000](https://waterdata.usgs.gov/monitoring-location/11120000) in both a `sf` and "non-sf" way:
+Features indexed to the NHDPlus are returned as `POINT` objects. If `sf` is enabled,  the _sourceName_, _identifier_, _X_, _Y_ and _geometry_ (`sfc`) are returned. If `sf` is not available, the _geometry_ is dropped but the _X_ and _Y_ values are retained. For example, we can request the NLDI representation of USGS NWIS gage [11120000](https://waterdata.usgs.gov/monitoring-location/11120000) in both a `sf` and "non-sf" way:
 
 ```{r}
 # local sf installation
@@ -136,24 +116,24 @@ findNLDI(nwis = "11120000", no_sf = TRUE)
 
 ****
 
-Any NLDI feature found with `get_nldi_source` can be requested by passing a `type`/`ID` pair as a list to the `origin` argument. This will allow the networking capabilities offered in `dataRetrieval` to grow naturally with the NLDI itself. For example, we can use the origin argument to identify both "core" and "non-core" datasets:
+Any NLDI feature found with `get_nldi_source` can be requested by passing a `type`/`ID` pair as a list to the `origin` argument. This will allow the networking capabilities offered in `dataRetrieval` to grow naturally with the NLDI itself. For example, we can use the origin argument to identify features that dont offer a specfic parameter.
 
 ```{r}
-# COMID 101
-findNLDI(origin = list("comid" = '101'))
-
 # Water Data Exchange 2.0 Site CA_45206
 findNLDI(origin = list("wade" = 'CA_45206'))
 ```
 
-Again, network features are returned as `LINESTRING`s, indexed features are returned as `POINT`s. If `sf` is enabled, both come with geometries. If `sf` is not enabled, `POINT` objects are returned with their X,Y coordinates and `LINESTRING` geometries only retain the _sourceName_ and _identifier_.
-
 ### Location (longitude/latitude)
 
-If you don't know a network or feature identifier, a `longitude`/`latitude` (XY) pair can be passed to the `location` argument as a numeric vector (length 2). Doing so will identify the NHDPlus catchment the coordinates fall within and will return the associated NHDPlusV2 flowline feature.
+If you don't know a feature ID, a `longitude`/`latitude` (X,Y) pair or a sf/sfc POINT object can be passed to the `location` argument. Doing so will identify the NHDPlus catchment the location fall within and will return the associated NHDPlusV2 flowline.
 
 ```{r}
+# Request by coordiantes
 findNLDI(location = c(-115, 40))
+
+# Request by geocoded POINT object
+library(AOI)
+findNLDI(location = AOI::geocode("UCSB", pt = TRUE))
 ```
 
 # Navigation
@@ -195,71 +175,57 @@ ggplot() +
   
 ```
 
-
 One or more modes of navigation can be supplied to the `findNLDI` `nav` argument. For example we can ask to navigate along the upper mainstem from COMID 101.
 
 ```{r}
-str(findNLDI(comid = 101,
-             nav = "UM"), 
-    max.level = 2)
+summary(findNLDI(comid = 101, nav = "UM"), max.level = 1)
 ```
 
 Or along the upper mainstem _and_ upper tributary of COMID 101.
 
 ```{r}
-str(findNLDI(comid = 101, 
-             nav = c("UM", "DM")), 
-    max.level = 1)
+summary(findNLDI(comid = 101, nav = c("UM", "DM")))
 ```
 
-In both cases the returned named list includes the origin and the requested navigation. If `sf` is not enabled, the returned object for a flowpath navigation is a vector of COMIDs.
+In both cases the returned named list includes the origin and the flowlines along the requested navigation. If `sf` is not enabled, the returned object for a flowpath navigation is a vector of COMIDs.
 
 ```{r}
-str(findNLDI(comid = 101, 
-             nav = c("UM", "DM"), no_sf = TRUE),
-    max.level = 1)
+summary(findNLDI(comid = 101, nav = c("UM", "DM"), no_sf = TRUE))
 ```
 
 
 # Searching along the Navigation
 
-Two types of features can be discovered along a navigation including indexed features and the upstream basin boundary of the origin feature. The desired feature(s) can be passed as a vector to the `find` argument.
-
-### Finding Features
-
-Any of the features listed in `get_nldi_sources` can be searched for along the network, for example, we can find all NWIS gages, on the upper tributary, of COMID 101.
+Like the origional gas station example, any of the features listed in `get_nldi_sources` can be searched for along the network, for example, we can find all NWIS gages, on the upper tributary, of COMID 101.
 
 ```{r}
-str(findNLDI(comid = 101,
-             nav = "UT", find = "nwis"), 
-    max.level = 1)
+summary(findNLDI(comid = 101, nav = "UT", find = "nwis"))
 ```
 
-Here the returned list includes the origin feature, the navigated network, and the identified NWIS sites on the UT navigation (2 in total). 
-
-More than one resource can be requested, for example, lets replicate the previous search, this time adding Water Quality Points to the returned list:
+Note that flowlines are no longer the default return for navigation once a new feature is requested. To retain flowlines, the must be explicitly requested.
 
 ```{r}
-str(findNLDI(comid = 101,
-             nav = "UT",
-             find = c("nwis", "wqp")),
-    max.level = 1)
+summary(findNLDI(comid = 101, nav = "UT", find = c("nwis", "flowlines")))
 ```
 
-In total we find 29 WQP along the upper tributary of comid 101.
+Of course, more than one resource can be requested, for example, lets replicate the previous search, this time adding Water Quality Points to the returned list:
+
+```{r}
+summary(findNLDI(comid = 101, nav = "UT", find = c("nwis", "wqp")))
+```
 
 ### Upstream Basin Boundary
 
-The Upstream Basin Boundary of any features can be found by adding "basin" to the vector of objects to find. Returned basins are only geometries and do not have specific attribute data. Therefore basins can only be returned if `sf` is installed locally. If it is not, the result will be a 0 column `data.frame`
+The Upstream Basin Boundary is a unique object that can be found for any feature by adding "basin" to objects to find. Basins are only geometries with no specific attribute data. Therefore basins can only be returned if `sf` is installed. Otherwise, the result will be a 0 column `data.frame`
 
 ```{r}
 # with sf
-str(findNLDI(comid = 101, find = "basin"))
+summary(findNLDI(comid = 101, find = "basin"))
 ```
 
 ```{r}
 # No sf
-str(findNLDI(comid = 101, find = "basin", no_sf = TRUE))
+summary(findNLDI(comid = 101, find = "basin", no_sf = TRUE))
 ```
 
 ### Distance Constraints
@@ -270,64 +236,30 @@ To illustrate, lets search the downstream mainstem for COMID 101 with a varying 
 
 ```{r}
 # Default 100 km
-str(findNLDI(comid = 101, nav = "DM",
-             find = c("nwis", "wqp")),
-    max.level = 1)
-
+dist100 = findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp"))
+nrow(dist100$DM_nwissite)
+nrow(dist100$DM_WQP)
 # Extended 200 km search
-str(findNLDI(comid = 101, nav = "DM", 
-             find = c("nwis", "wqp"), 
-             distance_km = 200),
-    max.level = 1)
+dist200 = findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp"), distance_km = 200)
+nrow(dist200$DM_nwissite)
+nrow(dist200$DM_WQP)
 ```
 
 The result, is that the navigation path and the number of returned features in the second request have expanded as expected.
 
-# Basic `sf` integration {#sf}
-
-While not necessary, having a local installation of [`sf`](https://r-spatial.github.io/sf/index.html) will enhance the usability of the NLDI data:
-
-```{r, eval = FALSE}
-install.packages('sf')
-```
-
-
-We've seen the NLDI wrapper can provide `sf` objects if `sf` is installed.
-
-```{r}
-library(sf)
-features <- findNLDI(nwis = '11120000', 
-                     nav = c("UT", "UM"), 
-                     find = c("nwis", "wqp", "basin"))
-```
-
-Doing so allows for spatial as simple as length, area, and plotting, or more complex calculations. 
-
-```{r, fig.cap = "NLDI Spatial Feature map"}
-plot(sf::st_geometry(features$basin), border = "black", lwd = 4)
-plot(sf::st_geometry(features$UT), col = "blue", add = TRUE)
-plot(sf::st_geometry(features$UM), col = "red", lwd = 3, add = TRUE)
-plot(sf::st_geometry(features$origin), col = "orange", 
-     lwd = 4, add = TRUE)
-plot(sf::st_geometry(features$UM_WQP), col = "purple", 
-     pch = 16, cex = .5, add = TRUE)
-plot(sf::st_geometry(features$UT_nwissite), col = "darkgreen", 
-     pch = 16,  add = TRUE)
-```
-
 # Basic `dataRetrieval` integration
 
-Last, as this functionality is being added to the `dataRetrieval` package, lets see a basic example of how the NLDI tools provide a discovery mechanism for working with the NWIS data retrieval tools. Here we will take a location that is near [Fountain Creek in Colorado Springs, Colorado](https://www.google.com/maps/place/Colorado+Springs,+CO/@38.7864572,-104.7829507,17z).
+Last, as this functionality is being added to the `dataRetrieval` package, lets see a basic example of how the NLDI tools provide a discovery mechanism for working with the `dataRetrieval` tools. Here we will take a location that is near [Fountain Creek in Colorado Springs, Colorado](https://www.google.com/maps/place/Colorado+Springs,+CO/@38.7864572,-104.7829507,17z).
 
-In this example we will use that location as the origin, navigate upstream along the mainstem, and search for NWIS gages. We will then make all returned features spatial and use the identified upstream NWIS siteIDs to query streamflow records for from January 1^st^ 2020 to the current data. 
+In this example we will use that location as the origin, navigate upstream along the mainstem, and search for NWIS gages, and use the identified siteIDs to query streamflow records for from January 1^st^ 2020 to the current data. 
 
-```{r, fig.cap = "Integrating NLDI and NWIS data retrieval tools"}
+```{r, fig.cap = "Integrating NLDI and NWIS dataRetrieval tools"}
 library(gridExtra)
 
 # Spatial upstream nwis, basin
 fountainCreek <- findNLDI(location = c(-104.780837, 38.786796), 
                           nav = "UM", 
-                          find = c("nwis", "basin"))
+                          find = c("nwis", "basin", "flowlines"))
 
 # Extract Streamflow for identified sites
 Q <- readNWISdv(fountainCreek$UM_nwissite$identifier, 
@@ -346,7 +278,7 @@ hydro <- ggplot() +
 
 map <- ggplot() + 
   geom_sf(data = fountainCreek$basin, col = NA) + 
-  geom_sf(data = fountainCreek$UM, col = "blue", alpha = .5) + 
+  geom_sf(data = fountainCreek$UM_flowlines, col = "blue", alpha = .5) + 
   geom_sf(data = fountainCreek$UM_nwissite, 
           aes(col = identifier)) + 
   scale_color_brewer(palette = "Set1") +
