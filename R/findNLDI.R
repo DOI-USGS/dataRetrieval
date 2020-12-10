@@ -251,7 +251,7 @@ valid_ask = function(all, type){
 #' # Discover Features(flowlines will not be returned unless included in find)
 #'
 #' ## Find feature(s) on the upper tributary of USGS-11120000
-#'  findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp")))
+#'  findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp"))
 #'
 #' ## Find upstream basin boundary and  of USGS-11120000
 #'  findNLDI(nwis = '11120000',  find = "basin")
@@ -307,7 +307,7 @@ findNLDI <- function(comid = NULL,
   # If location, ensure lng is first argument (hack for USA features)
   if (start_type == 'location') {
 
-    if(any(methods::is(location, "sf") | methods::is(location, "sfc")) & use_sf ) {
+    if(any(grepl("sfc$|sf$", class(location))) & use_sf ) {
 
       if(sf::st_geometry_type(location) != "POINT"){
         stop("Only POINT objects can be passed to location")
