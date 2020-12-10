@@ -240,7 +240,7 @@ valid_ask = function(all, type){
 #' ## GENERAL ORIGIN: WaDE
 #'  findNLDI(origin = list("wade" = 'CA_45206'))
 #'
-#' # Navigation (flowlines will be returned by default)
+#' # Navigation (flowlines will be returned if find is unspecified)
 #' # UPPER MAINSTEM of USGS-11120000
 #'  findNLDI(nwis = '11120000', nav = "UM")
 #'
@@ -248,7 +248,7 @@ valid_ask = function(all, type){
 #' # UPPER MAINSTEM and TRIBUTARY of USGS-11120000
 #'  findNLDI(nwis = '11120000', nav = c("UT", "UM"))
 #'
-#' # Discover Features(flowlines will not be returned by default)
+#' # Discover Features(flowlines will not be returned unless included in find)
 #'
 #' ## Find feature(s) on the upper tributary of USGS-11120000
 #'  findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp")))
@@ -260,8 +260,6 @@ valid_ask = function(all, type){
 #' ## Limit search to 50 km
 #'  findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
 
-
-location = AOI::geocode("UCSB", pt = TRUE)
 findNLDI <- function(comid = NULL,
                      nwis = NULL,
                      wqp = NULL,
