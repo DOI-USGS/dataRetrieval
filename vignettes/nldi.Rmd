@@ -64,7 +64,6 @@ Like any routing service, there are three types of information you can provide `
 Each of these is discussed below using the following packages:
 
 ```{r}
-library(sf)            # Spatial features
 library(dplyr)         # Data frame manipulation
 library(ggplot2)       # Plotting
 library(gridExtra)     # Arranging plots
