@@ -20,8 +20,6 @@ editor_options:
 
 ```{r setup, include=FALSE}
 library(knitr)
-library(dplyr)
-library(dataRetrieval)
 
 opts_chunk$set(warning = FALSE, 
                message = FALSE, 
@@ -63,7 +61,15 @@ Like any routing service, there are three types of information you can provide `
 (2) direction(s) to travel from that feature 
 (3) types of features to search for along the way 
 
-Each of these is discussed below:
+Each of these is discussed below using the following packages:
+
+```{r}
+library(sf)            # Spatial features
+library(dplyr)         # Data frame manipulation
+library(ggplot2)       # Plotting
+library(gridExtra)     # Arranging plots
+library(dataRetrieval) # The star of the show!
+```
 
 ******
 
@@ -72,17 +78,12 @@ Each of these is discussed below:
 First, we need to know what features are indexed in the NLDI. The most current offerings can be found using `get_nldi_sources`, and new features are regularly added. At the time of writing (`r Sys.Date()`), `r nrow(get_nldi_sources())` datasets have been indexed to the NHDPlus and cataloged in the NLDI. 
 
 ```{r, eval = FALSE}
-library(dataRetrieval)
-
 get_nldi_sources()
 ```
 
 ```{r, echo = FALSE}
 kable(get_nldi_sources())
 ```
-
-
-
 
 ******
 
@@ -133,9 +134,9 @@ If you don't know a feature ID, a `longitude`/`latitude` (X,Y) pair or a sf/sfc 
 # Request by coordiantes
 findNLDI(location = c(-115, 40))
 
-# Request by geocoded POINT object
-library(AOI)
-findNLDI(location = AOI::geocode("UCSB", pt = TRUE))
+# Request by sf/sfc POINT object
+ucsb <- sf::st_sfc(sf::st_point(c(-119.8458, Y = 34.4146)), crs = 4326)
+findNLDI(location = ucsb)
 ```
 
 # Navigation
@@ -150,8 +151,6 @@ From any feature (`comid`, `huc12`, `nwis`, `wqp`,`origin`) or `location`, four 
 A example view of these navigation types can be seen below for NWIS site [11109000](https://waterdata.usgs.gov/monitoring-location/11109000).
 
 ```{r, echo = FALSE, fig.cap= "NLDI Navigation Options"}
-library(ggplot2)
-
 x <- findNLDI(nwis = 11109000,
               nav = c("UT", "DM", "UM", "DD"))
               
@@ -256,9 +255,7 @@ Last, as this functionality is being added to the `dataRetrieval` package, lets 
 In this example we will use that location as the origin, navigate upstream along the mainstem,  search for NWIS gages, and use the identified siteIDs to query streamflow records from January 1^st^, 2020 to the current day. 
 
 ```{r, fig.cap = "Integrating NLDI and NWIS dataRetrieval tools"}
-library(gridExtra)
-
-# Spatial upstream nwis, basin
+# Upstream nwis, flowlines, and basin
 fountainCreek <- findNLDI(location = c(-104.780837, 38.786796), 
                           nav = "UM", 
                           find = c("nwis", "basin", "flowlines"))
