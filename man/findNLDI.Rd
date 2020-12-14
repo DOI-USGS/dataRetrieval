@@ -84,7 +84,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.
 ## GENERAL ORIGIN: WaDE
  findNLDI(origin = list("wade" = 'CA_45206'))
 
-# Navigation (flowlines will be returned by default)
+# Navigation (flowlines will be returned if find is unspecified)
 # UPPER MAINSTEM of USGS-11120000
  findNLDI(nwis = '11120000', nav = "UM")
 
@@ -92,10 +92,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.
 # UPPER MAINSTEM and TRIBUTARY of USGS-11120000
  findNLDI(nwis = '11120000', nav = c("UT", "UM"))
 
-# Discover Features(flowlines will not be returned by default)
+# Discover Features(flowlines will not be returned unless included in find)
 
 ## Find feature(s) on the upper tributary of USGS-11120000
- findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp")))
+ findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp"))
 
 ## Find upstream basin boundary and  of USGS-11120000
  findNLDI(nwis = '11120000',  find = "basin")
