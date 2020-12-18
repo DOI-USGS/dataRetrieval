@@ -39,10 +39,10 @@ get_nldi_sources <- function() {
 }
 
 #' @title Query NLDI
-#' @description Queries the NLDI for a given URL. If local sf install is 
-#' available the function returns a sf data.frame. 
-#' If the object requested is a POINT object, the XY coordinates are added 
-#' as columns. Otherwise the columns returned are "sourceName" and 
+#' @description Queries the NLDI for a given URL. If local sf install is
+#' available the function returns a sf data.frame.
+#' If the object requested is a POINT object, the XY coordinates are added
+#' as columns. Otherwise the columns returned are "sourceName" and
 #' "identifier" for features, and "nhdplus_comid".
 #' @param url the URL to retrieve
 #' @param type the type of data being returned (nav or feature)
@@ -57,7 +57,7 @@ get_nldi_sources <- function() {
 #'  base = "https://labs.waterdata.usgs.gov/api/nldi/linked-data/"
 #'  get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = FALSE)
 #'  get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = TRUE)
-#'  get_nldi(paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
+#'  get_nldi(url = paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
 #'  get_nldi(paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
 #'  }
 
@@ -149,7 +149,7 @@ clean_nwis_ids = function(tmp) {
   # If data.frame, and of type NWIS, then strip "USGS-" from identifiers
   if (is.data.frame(tmp)) {
 
-    if ("sourceName" %in% names(tmp) && 
+    if ("sourceName" %in% names(tmp) &&
         tmp$sourceName[1] == "NWIS Sites") {
 
       tmp$identifier = gsub("USGS-", "", tmp$identifier)
@@ -168,40 +168,54 @@ clean_nwis_ids = function(tmp) {
 #' @noRd
 #' @examples
 #' \dontrun{
-#' valid_ask(get_nldi_sources(), "nwis")
+#' valid_ask(all = get_nldi_sources(), "nwis")
 #' }
 
 valid_ask = function(all, type){
   # those where the requested pattern is included in a nldi_source ...
     # means we will catch nwis - not just nwissite ...
     # means we will catch both wqp and WQP ...
-  cond  <- grepl(paste0(tolower(type), collapse = "|"), tolower(all$source))
 
-  cond2 <- grepl(paste0(tolower(all$source), collapse = "|"), tolower(type))
+  ### WOW! This is hacky and will hopefully be unneeded latter on....
+  all = rbind(all, c("flowlines", "NHDPlus", NA))
+
+  cond  <- grepl(paste0(tolower(type), collapse = "|"), tolower(c(all$source)))
+
+  cond2 <- grepl(paste0(tolower(all$source), collapse = "|"), tolower(c(all$source)))
 
   list(good = all[cond,], bad = type[!cond2])
 
 }
 
-#' @title 	Retrieve features from the \href{https://labs.waterdata.usgs.gov/api/nldi/swagger-ui/index.html?configUrl=/api/nldi/v3/api-docs/swagger-config}{NLDI}
-#' @description Provides a formal query to the
+#' @title R Client for the Network Linked Data Index
+#' @description Provides a formal client to the USGS
 #' \href{https://labs.waterdata.usgs.gov/about-nldi/index.html}{Network Linked Data Index}.
-#' The function is useful for topology and location based feature discovery.
-#' A user must supply a starting feature, and can add optional navigation direction(s),
-#' and features to identify on the navigated network.
-#' Valid starting options can be given by one of the following arguments: comid, nwis, huc12,
-#'  wqp, location, and start.
-#' @param comid an NHDPlusV2 COMID
-#' @param nwis  a USGS NWIS siteID
-#' @param wqp a water quality point ID
-#' @param huc12 a HUC12 ID
-#' @param location Coordinate pair in WGS84 GCS provided as a numeric vector ordered lng/lat
-#' @param origin a named list specifying a feature type and ID (e.g. list("comid" = 101))
-#' @param nav where to navigate from the starting point ("UM", "UT", DM", "DD")
-#' @param find what resources to find along the navigation path(s) (see get_nldi_sources()$source). Can also include 'basin', which will return the upstream basin of the starting feature
-#' @param distance_km how far to look along the navigation path in kilometers (default = 100)
-#' @param no_sf if available, should `sf` be used for parsing, defaults to `TRUE` if `sf` is locally installed
-#' @return a list of data.frames
+#' @details The function is useful for topology and location based
+#' feature discovery. A user must specify an origin feature, optional navigation
+#' direction(s) along the network, as well as features to identify along the
+#' navigated paths. Valid starting options can be given by one of the following
+#' arguments: comid, nwis, huc12, wqp, location, and start.
+#' @param comid numeric or character. An NHDPlusV2 COMID
+#' @param nwis  numeric or character. A USGS NWIS siteID
+#' @param wqp   numeric or character. A water quality point ID
+#' @param huc12 numeric or character. A WBD HUC12 unit ID
+#' @param location numeric vector. Coordinate pair in WGS84
+#' SRS ordered lng/lat (X,Y)
+#' @param origin named list. Specifying a feature type and ID
+#' (e.g. list("comid" = 101))
+#' @param nav character vector. where to navigate from the starting point.
+#' Options include along the upper mainsteam (UM), upstream tributary (UT),
+#' downstream mainstem (DM) and downstream divergences (DD). You may select
+#' one or more of the abbreviations ("UM", "UT", DM", "DD").
+#' @param find character vector. Define what resources to find along the
+#' navigation path(s) (see get_nldi_sources()$source). Can also include 'basin'
+#' or 'flowline', which will return the upstream basin of the starting feature
+#' or flowlines along the navigation respectively. The default is "flowlines". If you provide any other resource, AND want flowlines, then flowlines must be explicitly requested.
+#' @param distance_km numeric. Define how far to look along the navigation path in
+#' kilometers (default = 100)
+#' @param no_sf if available, should `sf` be used for parsing,
+#' defaults to `TRUE` if `sf` is locally installed
+#' @return a list of data.frames if sf is not installed, a list of sf objects if it is
 #' @export
 #' @keywords nldi
 #' @examples
@@ -226,52 +240,45 @@ valid_ask = function(all, type){
 #' ## GENERAL ORIGIN: WaDE
 #'  findNLDI(origin = list("wade" = 'CA_45206'))
 #'
-#' # Navigation
+#' # Navigation (flowlines will be returned if find is unspecified)
 #' # UPPER MAINSTEM of USGS-11120000
-#'  str(findNLDI(nwis = '11120000', nav = "UM"), max.level = 1)
+#'  findNLDI(nwis = '11120000', nav = "UM")
 #'
 #' # MULTI-REQUEST
 #' # UPPER MAINSTEM and TRIBUTARY of USGS-11120000
-#'  str(findNLDI(nwis = '11120000', nav = c("UT", "UM")), max.level = 1)
+#'  findNLDI(nwis = '11120000', nav = c("UT", "UM"))
 #'
-#' # Discover Features
+#' # Discover Features(flowlines will not be returned unless included in find)
 #'
 #' ## Find feature(s) on the upper tributary of USGS-11120000
-#'  str(findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp")), max.level = 1)
+#'  findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp"))
 #'
-#' ## Find upstream basin boundary of USGS-11120000
-#'  str(findNLDI(nwis = '11120000',  find = "basin"), max.level = 1)
+#' ## Find upstream basin boundary and  of USGS-11120000
+#'  findNLDI(nwis = '11120000',  find = "basin")
 #'
 #' # Control Distance
-#'
-#' ## Limit search to 100 km
-#'  str(findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp"), distance_km = 100), max.level = 1)
-#'
-#' ## Convert returned list of data.frames to list of spatial features
-#' \donttest{
-#'  nldi = findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp"))
-#'  str(nldi, max.level = 1)
-#'  }
+#' ## Limit search to 50 km
+#'  findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
 
 
 findNLDI <- function(comid = NULL,
-                    nwis = NULL,
-                    wqp = NULL,
-                    huc12 = NULL,
-                    location = NULL,
-                    origin = NULL,
-                    nav = NULL,
-                    find = NULL,
-                    distance_km = 100,
-                    no_sf = FALSE) {
+                     nwis = NULL,
+                     wqp = NULL,
+                     huc12 = NULL,
+                     location = NULL,
+                     origin = NULL,
+                     nav = NULL,
+                     find = c("flowlines"),
+                     distance_km = 100,
+                     no_sf = FALSE) {
 
   # Should sf be used? Both no_sf and pkg.env must agree
   use_sf = all(pkg.env$local_sf, !no_sf)
-  
+
   # Should the basin be identified?
   getBasin = ("basin" %in% find)
 
-  # From the collection of all possible origins, pick 1 and remove NULLS
+  # From the collection of possible origins, pick 1 and remove NULLS
   starter <- tc(c(
     list(
       comid = comid,
@@ -289,10 +296,10 @@ findNLDI <- function(comid = NULL,
   }
 
   # Ensure nav types are valid
-  bad_nav = !nav %in% c("UM", "UT", "DD", "DM")
+  bad_nav <- !nav %in% c("UM", "UT", "DD", "DM")
 
   if (any(bad_nav)) {
-    stop(nav[bad_nav], " not a valid navigation. Use one of: UM, UT, DD, DM")
+    stop(nav[bad_nav], " not a valid navigation. Chose from: UM, UT, DD, DM")
   }
 
   # name of starter
@@ -300,42 +307,44 @@ findNLDI <- function(comid = NULL,
 
   # If location, ensure lng is first argument (hack for USA features)
   if (start_type == 'location') {
-    if (location[1] > 0) {
-      stop("Please provide location in the form c(lng,lat)")
+
+    if(any(grepl("sfc$|sf$", class(location))) & use_sf ) {
+
+      if(sf::st_geometry_type(location) != "POINT"){
+        stop("Only POINT objects can be passed to location")
+      }
+
+      location  = sf::st_coordinates(location)
+    } else {
+      if (location[1] > 0) { stop("Provide location in the form c(lng,lat)") }
     }
 
   # Must convert location to COMID for tracing and discovery ...
-    tmp_url = paste0(
+    tmp_url <- paste0(
       pkg.env$nldi_base,
       "comid/position?coords=POINT%28",
-      location[1] ,
-      "%20",
-      location[2] ,
-      "%29"
+      location[1] , "%20", location[2] , "%29"
     )
 
-    tmp_return = get_nldi(tmp_url, "feature", use_sf = use_sf)
+    tmp_return <- get_nldi(tmp_url, "feature", use_sf = use_sf)
 
     # Override starter with location based COMID
-    starter = list("comid" = tmp_return$identifier)
-
+    starter <- list("comid" = tmp_return$identifier)
   }
 
   # Reset (if needed)
-  start_type = names(starter)
+  start_type <- names(starter)
 
   if(is.null(pkg.env$current_nldi)) {
     pkg.env$current_nldi <- get_nldi_sources()
   }
-  
+
   # Defining the origin URL.
-    #  Align request with formal name from offerings
-    # If NWIS, add "USGS-" prefix
+    #  Align request with formal name from sources
+    #  If NWIS, add "USGS-" prefix
   start_url = paste0(
-    valid_ask(pkg.env$current_nldi, type = start_type)$good$feature,
-    "/",
-    ifelse(start_type == "nwis", paste0("USGS-", starter), starter),
-    "/"
+    valid_ask(pkg.env$current_nldi, type = start_type)$good$feature, "/",
+    ifelse(start_type == "nwis", paste0("USGS-", starter), starter), "/"
   )
 
   # Makes sure that all requested features to `find` are valid and name-aligned
@@ -344,67 +353,49 @@ findNLDI <- function(comid = NULL,
   }
 
   # Set empty lists to store origin, navigation, features, and basin requests ...
-  start <- navigate <- features <- basin <- list()
-
-  # Set origin url
-  start[["start"]] <- start_url
+  navigate <- features  <- list()
 
   # Build navigation URLs
   for (i in seq_along(nav)) {
       navigate[[nav[i]]] = paste0(start_url, "navigation/", nav[i])
   }
 
-  # Build basin URL
-  if (getBasin) {
-    basin[["basin"]] = paste0(start_url, "basin")
-  }
-
   # Build find URLs
   if (length(find) > 0) {
-    features = lapply(navigate, paste0, paste0("/", find))
+    features = lapply(navigate, paste0, paste0("/", find), paste0("?distance=", distance_km))
   }
 
-  # Add distance constraints to features
-  features = lapply(features, paste0, paste0("?distance=", distance_km))
 
-  # Add distance constraints to navigations flowpaths
-  navigate = lapply(navigate, paste0, paste0("/flowlines?distance=", distance_km))
+  names  <- unlist(lapply(nav, paste0, paste0("_", find)))
 
-  # combine, unlist, relist
-  ll = as.list(unlist(c(start, basin, navigate, features)))
+  search <- data.frame(
+    url = unlist(c(start_url,
+                   if (getBasin) { paste0(start_url, "basin") },
+                   features)),
 
-  # define the type of each URL (feature, basin, or nav)
-  # This is needed as the attribute names for each varies
-  types = c("feature",
-            if (getBasin) { 'basin' },
-            rep("nav", length(nav)),
-            rep("feature", length(find) * length(nav)))
+    type = c("feature",
+             if(getBasin) { 'basin' },
+             ifelse(rep(find, length(nav)) == "flowlines", "nav", "feature")),
+
+    name = c("origin",
+             if (getBasin) { 'basin' },
+             names[!names %in%  c("UM_", "UT_", "DD_", "DM_")])
+  )
 
   # Send NLDI queries ...
-  shp = lapply(seq_along(ll), function(x) {
-    get_nldi(ll[[x]], type = types[x], use_sf = use_sf)
+  shp <- lapply(1:nrow(search), function(x) {
+    get_nldi(search$url[x], type = search$type[x], use_sf = use_sf)
   })
 
-  # Remove basin from find list ...
-  find = find[find != 'basin']
-
-  # if no features (aside from basin) were requested then names are NULL
-  # else, the names are the combination of the navigation direction
-  # and the feature discovered ...
-
-  feats = if (is.null(find) | length(find) == 0) {
-    NULL
-  } else {
-    unlist(lapply(nav, paste0, paste0("_", find)))
-  }
-
   # Set the names of the parsed URL list
-  names(shp) = c("origin",
-                 if (getBasin){'basin'},
-                 nav,
-                 feats)
+  names(shp) <- search$name
 
   # Clean up NWIS ids, trim NULLs, and return ...
-  tc(lapply(shp, clean_nwis_ids))
+  shp = tc(lapply(shp, clean_nwis_ids))
+  if(length(shp) == 1){
+    shp = shp[[1]]
+  }
+
+  return(shp)
 }
 
