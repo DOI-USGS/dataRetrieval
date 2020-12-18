@@ -95,10 +95,10 @@ Features can be requested in two primary ways: Using the the native data set ide
 As an illustrative example, NHDPlus features can be requested by their COMID from the NHDPlusV2 dataset.
 
 ```{r message=FALSE}
-str(findNLDI(comid = 101))
+findNLDI(comid = 101)
 ```
 
-The returned simple features object contains the native dataset identifier ("identifer"), sourceName of the native dataset, and the indexed NHD COMID (in this case a duplicate since an NHD feature was requested). In the example above, we see the geometry column is of type `LINESTRING`. To keep `dataRetrieval` lightweight, the [`sf`] (https://r-spatial.github.io/sf/articles/sf1.html) package is not a dependency. Instead, if `sf` is not installed  - or `no_sf = TRUE` - only the _sourceName_, _comid_, and _identifier_ will be returned.
+The returned simple features object contains the native dataset identifier ("identifier"), sourceName of the native dataset, and the indexed NHD COMID (in this case a duplicate since an NHD feature was requested). In the example above, we see the geometry column is of type `LINESTRING`. To keep `dataRetrieval` lightweight, the [`sf`] (https://r-spatial.github.io/sf/articles/sf1.html) package is not a dependency. Instead, if `sf` is not installed  - or `no_sf = TRUE` - only the _sourceName_, _comid_, and _identifier_ will be returned.
 
 ```{r}
 findNLDI(comid = 101, no_sf = TRUE)
