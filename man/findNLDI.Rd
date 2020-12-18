@@ -2,7 +2,7 @@
 % Please edit documentation in R/findNLDI.R
 \name{findNLDI}
 \alias{findNLDI}
-\title{Retrieve features from the \href{https://labs.waterdata.usgs.gov/api/nldi/swagger-ui/index.html?configUrl=/api/nldi/v3/api-docs/swagger-config}{NLDI}}
+\title{R Client for the Network Linked Data Index}
 \usage{
 findNLDI(
   comid = NULL,
@@ -12,43 +12,55 @@ findNLDI(
   location = NULL,
   origin = NULL,
   nav = NULL,
-  find = NULL,
+  find = c("flowlines"),
   distance_km = 100,
   no_sf = FALSE
 )
 }
 \arguments{
-\item{comid}{an NHDPlusV2 COMID}
+\item{comid}{numeric or character. An NHDPlusV2 COMID}
 
-\item{nwis}{a USGS NWIS siteID}
+\item{nwis}{numeric or character. A USGS NWIS siteID}
 
-\item{wqp}{a water quality point ID}
+\item{wqp}{numeric or character. A water quality point ID}
 
-\item{huc12}{a HUC12 ID}
+\item{huc12}{numeric or character. A WBD HUC12 unit ID}
 
-\item{location}{Coordinate pair in WGS84 GCS provided as a numeric vector ordered lng/lat}
+\item{location}{numeric vector. Coordinate pair in WGS84
+SRS ordered lng/lat (X,Y)}
 
-\item{origin}{a named list specifying a feature type and ID (e.g. list("comid" = 101))}
+\item{origin}{named list. Specifying a feature type and ID
+(e.g. list("comid" = 101))}
 
-\item{nav}{where to navigate from the starting point ("UM", "UT", DM", "DD")}
+\item{nav}{character vector. where to navigate from the starting point.
+Options include along the upper mainsteam (UM), upstream tributary (UT),
+downstream mainstem (DM) and downstream divergences (DD). You may select
+one or more of the abbreviations ("UM", "UT", DM", "DD").}
 
-\item{find}{what resources to find along the navigation path(s) (see get_nldi_sources()$source). Can also include 'basin', which will return the upstream basin of the starting feature}
+\item{find}{character vector. Define what resources to find along the
+navigation path(s) (see get_nldi_sources()$source). Can also include 'basin'
+or 'flowline', which will return the upstream basin of the starting feature
+or flowlines along the navigation respectively. The default is "flowlines". If you provide any other resource, AND want flowlines, then flowlines must be explicitly requested.}
 
-\item{distance_km}{how far to look along the navigation path in kilometers (default = 100)}
+\item{distance_km}{numeric. Define how far to look along the navigation path in
+kilometers (default = 100)}
 
-\item{no_sf}{if available, should `sf` be used for parsing, defaults to `TRUE` if `sf` is locally installed}
+\item{no_sf}{if available, should `sf` be used for parsing,
+defaults to `TRUE` if `sf` is locally installed}
 }
 \value{
-a list of data.frames
+a list of data.frames if sf is not installed, a list of sf objects if it is
 }
 \description{
-Provides a formal query to the
+Provides a formal client to the USGS
 \href{https://labs.waterdata.usgs.gov/about-nldi/index.html}{Network Linked Data Index}.
-The function is useful for topology and location based feature discovery.
-A user must supply a starting feature, and can add optional navigation direction(s),
-and features to identify on the navigated network.
-Valid starting options can be given by one of the following arguments: comid, nwis, huc12,
- wqp, location, and start.
+}
+\details{
+The function is useful for topology and location based
+feature discovery. A user must specify an origin feature, optional navigation
+direction(s) along the network, as well as features to identify along the
+navigated paths. Valid starting options can be given by one of the following
+arguments: comid, nwis, huc12, wqp, location, and start.
 }
 \examples{
 
@@ -72,31 +84,24 @@ Valid starting options can be given by one of the following arguments: comid, nw
 ## GENERAL ORIGIN: WaDE
  findNLDI(origin = list("wade" = 'CA_45206'))
 
-# Navigation
+# Navigation (flowlines will be returned if find is unspecified)
 # UPPER MAINSTEM of USGS-11120000
- str(findNLDI(nwis = '11120000', nav = "UM"), max.level = 1)
+ findNLDI(nwis = '11120000', nav = "UM")
 
 # MULTI-REQUEST
 # UPPER MAINSTEM and TRIBUTARY of USGS-11120000
- str(findNLDI(nwis = '11120000', nav = c("UT", "UM")), max.level = 1)
+ findNLDI(nwis = '11120000', nav = c("UT", "UM"))
 
-# Discover Features
+# Discover Features(flowlines will not be returned unless included in find)
 
 ## Find feature(s) on the upper tributary of USGS-11120000
- str(findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp")), max.level = 1)
+ findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp"))
 
-## Find upstream basin boundary of USGS-11120000
- str(findNLDI(nwis = '11120000',  find = "basin"), max.level = 1)
+## Find upstream basin boundary and  of USGS-11120000
+ findNLDI(nwis = '11120000',  find = "basin")
 
 # Control Distance
-
-## Limit search to 100 km
- str(findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp"), distance_km = 100), max.level = 1)
-
-## Convert returned list of data.frames to list of spatial features
-\donttest{
- nldi = findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp"))
- str(nldi, max.level = 1)
- }
+## Limit search to 50 km
+ findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
 }
 \keyword{nldi}
