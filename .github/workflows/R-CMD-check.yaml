@@ -21,8 +21,8 @@ jobs:
           - {os: macOS-latest,   r: 'devel'}
           - {os: macOS-latest,   r: '4.0'}
           - {os: windows-latest, r: '4.0'}
-          - {os: ubuntu-16.04,   r: '4.0', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04,   r: '3.6', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+          - {os: ubuntu-18.04,   r: '4.0', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
+          - {os: ubuntu-18.04,   r: '3.6', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -61,6 +61,10 @@ jobs:
           sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
           sudo -s eval "$sysreqs"
 
+      - name: mac dependencies
+        if: runner.os == 'macOS'
+        run: brew install pkg-config gdal proj geos udunits
+        
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
