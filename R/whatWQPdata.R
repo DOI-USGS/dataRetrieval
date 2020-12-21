@@ -140,34 +140,56 @@ whatWQPdata <- function(..., saveFile = tempfile()){
 
   doc <- getWebServiceData(urlCall, httr::write_disk(saveFile_zip))
   headerInfo <- attr(doc, "headerInfo")
-  doc <- utils::unzip(saveFile_zip, exdir = saveFile)
-  unlink(saveFile_zip)
-
-  retval <- as.data.frame(jsonlite::fromJSON(doc), stringsAsFactors = FALSE)
-  df_cols <- as.integer(which(sapply(retval, class) == "data.frame"))
-  y <- retval[,-df_cols]
   
-  for(i in df_cols){
-    y <- cbind(y, retval[[i]])
-  }
+  if(headerInfo$`total-site-count` == 0){
+    y <- data.frame(total_type = character(),
+                     lat = numeric(),
+                     lon = numeric(),
+                     ProviderName = character(),
+                     OrganizationIdentifier = character(),
+                     OrganizationFormalName = character(),
+                     MonitoringLocationIdentifier = character(),
+                     MonitoringLocationName = character(),
+                     MonitoringLocationTypeName = character(),
+                     ResolvedMonitoringLocationTypeName = character(),
+                     HUCEightDigitCode = character(),
+                     siteUrl = character(),
+                     activityCount = numeric(),
+                     resultCount = numeric(),
+                     StateName = character(),
+                     CountyName = character(),
+                     stringsAsFactors=FALSE)
+    
+  } else {
+    
+    doc <- utils::unzip(saveFile_zip, exdir = saveFile)
+    unlink(saveFile_zip)
   
-  y[,grep("Count$",names(y))] <- sapply(y[,grep("Count$",names(y))], as.numeric)
-  
-  names(y)[names(y) == "type"] <- paste("type",letters[1:length(names(y)[names(y) == "type"])],sep="_")
-  
-  if(all(c("type_a","type_b","features.type") %in% names(y))){
-    y$total_type <- paste(y$type_a, y$features.type, y$type_b)
-    y$type_a <- NULL
-    if(all(y$type_b == "Point")){
-      y$lon <- sapply(y$coordinates, function(x) x[[1]][1])
-      y$lat <- sapply(y$coordinates, function(x) x[[2]][1])
+    retval <- as.data.frame(jsonlite::fromJSON(doc), stringsAsFactors = FALSE)
+    df_cols <- as.integer(which(sapply(retval, class) == "data.frame"))
+    y <- retval[,-df_cols]
+    
+    for(i in df_cols){
+      y <- cbind(y, retval[[i]])
     }
-    y$type_b <- NULL
-    y$coordinates <- NULL
-    y$features.type <- NULL
-    y <- y[,c("total_type","lat","lon",names(y)[!(names(y) %in% c("total_type","lat","lon"))])]
+    
+    y[,grep("Count$",names(y))] <- sapply(y[,grep("Count$",names(y))], as.numeric)
+    
+    names(y)[names(y) == "type"] <- paste("type",letters[1:length(names(y)[names(y) == "type"])],sep="_")
+    
+    if(all(c("type_a","type_b","features.type") %in% names(y))){
+      y$total_type <- paste(y$type_a, y$features.type, y$type_b)
+      y$type_a <- NULL
+      if(all(y$type_b == "Point")){
+        y$lon <- sapply(y$coordinates, function(x) x[[1]][1])
+        y$lat <- sapply(y$coordinates, function(x) x[[2]][1])
+      }
+      y$type_b <- NULL
+      y$coordinates <- NULL
+      y$features.type <- NULL
+      y <- y[,c("total_type","lat","lon",names(y)[!(names(y) %in% c("total_type","lat","lon"))])]
+    }
   }
-
   
   attr(y, "queryTime") <- Sys.time()
   attr(y, "url") <- urlCall
