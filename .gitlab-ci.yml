@@ -1,0 +1,26 @@
+variables:
+  _R_CHECK_CRAN_INCOMING_: "false"
+  _R_CHECK_FORCE_SUGGESTS_: "true"
+  _R_CHECK_DONTTEST_EXAMPLES_: "false"
+  NOT_CRAN: "true"
+
+before_script:
+  - apt-get update
+  - apt-get install -y --no-install-recommends qpdf pandoc pandoc-citeproc
+  - export PATH="/usr/local/lib/R/site-library/littler/examples/:${PATH}"
+  - echo "options(Ncpus = $(nproc --all))" >> /usr/local/lib/R/etc/Rprofile.site
+  - install2.r devtools
+  - r -e 'devtools::install_dev_deps()'
+
+test:
+  stage: test
+  tags:
+    - chs-shared
+  image: code.chs.usgs.gov:5001/wma/hydrogeoenv:rocker-geospatial
+  script:
+    - r -e 'devtools::check(check_dir = ".")'
+    - r -e 'capture.output(print(covr::coverage_to_list(covr::package_coverage(type = "all")), width = 20),  file = "covr.txt", split = TRUE)'
+  artifacts:
+    paths:
+      - "*.Rcheck"
+      - "covr.txt"
