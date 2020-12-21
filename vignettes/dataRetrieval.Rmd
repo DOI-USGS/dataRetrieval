@@ -57,71 +57,89 @@ USGS data are made available through the National Water Information System (NWIS
 Table 1 describes the functions available in the `dataRetrieval` package.
 
 ```{r echo=FALSE}
-
-library(htmlTable)
-
-Functions <- c("readNWISdata","",
-               "readNWISdv","","","","",
-               "readNWISqw","","","","",
-               "readNWISuv","","","",
-               "readNWISrating","",
-               "readNWISmeas","","",
-               "readNWISpeak","","",
-               "readNWISgwl","","",
-               "readNWISuse","","","",
-               "readNWISstat","","","","","",
+Functions <- c("readNWISdata",
+               "readNWISdv",
+               "readNWISqw",
+               "readNWISuv",
+               "readNWISrating",
+               "readNWISmeas",
+               "readNWISpeak",
+               "readNWISgwl",
+               "readNWISuse",
+               "readNWISstat",
                "readNWISpCode",
                "readNWISsite",
                "whatNWISsites",
-               "whatNWISdata","",
+               "whatNWISdata",
                "readWQPdata",
-               "readWQPqw","","","",
-               "whatWQPsites")
-Arguments <- c("...","service", #readNWISdata
-               "siteNumber","parameterCd","startDate","endDate","statCd", #readNWISdv
-               "siteNumber","parameterCd","startDate","endDate","expanded", #readNWISqw
-               "siteNumber","parameterCd","startDate","endDate", #readNWISuv
-               "siteNumber","type", #readNWISrating
-               "siteNumber","startDate","endDate", #readNWISmeas
-               "siteNumber","startDate","endDate", #readNWISpeak
-               "siteNumber","startDate","endDate", #readNWISgwl
-               "stateCd","countyCd","years","categories", #readNWISuse
-               "siteNumbers","parameterCd","startDate","endDate","statReportType","statType", #readNWISstat
-               "parameterCd", #readNWISpCode
-               "siteNumber", #readNWISsite
+               "readWQPqw",
+               "whatWQPsites",
+               "whatWQPdata",
+               "readWQPsummary",
+               "whatWQPmetrics",
+               "whatWQPsamples")
+Arguments <- c("service, tz='UTC', ...", #readNWISdata
+               "statCd='00003'", #readNWISdv
+               "expanded=TRUE, tz='UTC'", #readNWISqw
+               "tz='UTC'", #readNWISuv
+               "type='base", #readNWISrating
+               "tz='UTC'", #readNWISmeas
+               "", #readNWISpeak
+               "tz='UTC'", #readNWISgwl
+               "stateCd, countyCd, years='ALL', categories='ALL'", #readNWISuse
+               "statReportType='daily', statType='mean'",#readNWISstat
+               "", #readNWISpCode
+               "", #readNWISsite
                "...", #whatNWISsites
-               "siteNumber","service", #whatNWISdata
-               "...", #readWQPdata
-               "siteNumber","parameterCd","startDate","endDate", #readWQPqw
-               "...") #whatWQPsites
-Description <- c("NWIS data using user-specified queries","", #readNWISdata
-                 "NWIS daily data","","","","", #readNWISdv
-                 "NWIS water quality data","","","","", #readNWISqw
-                 "NWIS instantaneous value data","","","", #readNWISuv
-                 "NWIS rating table for active streamgage","", #readNWISrating
-                 "NWIS surface-water measurements","","", #readNWISmeas
-                 "NWIS peak flow data","","", #readNWISpeak
-                 "NWIS groundwater level measurements","","", #readNWISgwl
-                 "NWIS water use","","","", #readNWISuse
-                 "NWIS statistical service","","","","","", #readNWISstat
-                 "NWIS parameter code information", #readNWISpCode
-                 "NWIS site information", #readNWISsite
-                 "NWIS site search using user-specified queries",
-                 "NWIS data availability, including period of record and count","",
-                 "WQP data using user-specified queries",
-                 "WQP data","","","",
-                 "WQP site search using user-specified queries")
+               "service, ...", #whatNWISdata
+               "...",
+               "", #readWQPdata
+               "...",
+               "...", "...", "...", "...") #whatWQPsites
+Description <- c("Data using user-specified queries", #readNWISdata
+                 "Daily values", #readNWISdv
+                 "Water quality", #readNWISqw
+                 "Instantaneous values", #readNWISuv
+                 "Rating table for active streamgage", #readNWISrating
+                 "Surface-water measurements", #readNWISmeas
+                 "Peak flow", #readNWISpeak
+                 "Groundwater levels", #readNWISgwl
+                 "Water use", #readNWISuse
+                 "Statistical service", #readNWISstat
+                 "Parameter code information", #readNWISpCode
+                 "Site information", #readNWISsite
+                 "Site search using user-specified queries",
+                 "Data availability",
+                 "User-specified queries",
+                 "Water quality data",
+                 "Site search",
+                 "Data availability",
+                 "Summary data",
+                 "Metric availability",
+                 "Sample availability")
+Source <- c(rep("NWIS", 14), rep("WQP", 7))
+Site <- c("opt.", rep("req.", 7), "", 
+          rep("req.", 4), "opt.", "opt.", "req.", rep("opt.", 5))
+parameterCd <- c("opt.", rep("req.",3),
+                 rep("", 5), "req.", "req.",
+                 rep("",2), rep("opt.",2), "req.", rep("", 5))
+start <- c("opt.", rep("req.",3),"",
+           rep("req.", 3), "", "req.", rep("", 5), "req.", rep("opt.", 5))
 
-data.df <- data.frame(`Function Name` = Functions, Arguments, Description, stringsAsFactors=FALSE)
+data.df <- data.frame(Name = Functions,
+                      `Data Returned` = Description,
+                      siteNumbers = Site,
+                      parameterCd = parameterCd, 
+                      `startDate \n endDate` = start,
+                      Arguments,
+                      Source, stringsAsFactors=FALSE)
 
-htmlTable(data.df, 
-          caption="Table 1: dataRetrieval functions",
-          rnames=FALSE, align=c("l","l","l","l"),
-          col.rgroup = c("none", "#F7F7F7"), 
-          css.cell="padding-bottom: 0.0em; padding-right: 0.5em; padding-top: 0.0em;")
+kable(data.df, 
+      caption="Table 1: dataRetrieval functions")
 
 ```
 
+The arguments `startDate` and `endDate` have defaults to request the maximum data.
 
 # USGS Web Retrievals
 
@@ -141,10 +159,8 @@ shortName <- c("Discharge [ft<sup>3</sup>/s]","Gage height [ft]","Temperature [C
 
 data.df <- data.frame(pCode, shortName, stringsAsFactors=FALSE)
 
-htmlTable(data.df, 
-          caption="Table 2: Common USGS Parameter Codes",
-          rnames=FALSE, align=c("c","c"), col.rgroup = c("none", "#F7F7F7"), 
-          css.cell="padding-bottom: 0.0em; padding-right: 0.5em; padding-top: 0.0em;")
+kable(data.df, 
+          caption="Table 2: Common USGS Parameter Codes")
 
 
 ```
@@ -163,10 +179,8 @@ shortName <- c("Maximum","Minimum","Mean", "Median")
 
 data.df <- data.frame(StatCode, shortName, stringsAsFactors=FALSE)
 
-htmlTable(data.df, 
-          caption="Table 3: Commonly used USGS Stat Codes",
-          rnames=FALSE, align=c("c","c"), col.rgroup = c("none", "#F7F7F7"), 
-          css.cell="padding-bottom: 0.0em; padding-right: 0.5em; padding-top: 0.0em;")
+kable(data.df, 
+          caption="Table 3: Commonly used USGS Stat Codes")
 
 
 
@@ -219,7 +233,7 @@ dailyDataAvailable <- whatNWISdata(siteNumbers,
 ```{r echo=FALSE}
 
 tableData <- data.frame(
-  siteNumber = c("01491000","01491000","01645000","01491000","01491000","01491000"),
+  siteNumbers = c("01491000","01491000","01645000","01491000","01491000","01491000"),
   srsname = c("Temperature, water","Stream flow, mean daily",
               "Stream flow, mean daily",
               "Specific conductance",
@@ -232,11 +246,8 @@ tableData <- data.frame(
   stringsAsFactors = FALSE)
 
 
-htmlTable(tableData, 
-          caption="Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]",
-          rnames=FALSE, 
-          col.rgroup = c("none", "#F7F7F7"), 
-          css.cell="padding-bottom: 0.0em; padding-right: 0.5em; padding-top: 0.0em;")
+kable(tableData, 
+          caption="Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]")
 
 ```
 
@@ -255,7 +266,7 @@ parameterINFO <- readNWISpCode(parameterCd)
 
 ## Daily Data
 
-To obtain daily records of USGS data, use the `readNWISdv` function. The arguments for this function are `siteNumber`, `parameterCd`, `startDate`, `endDate`, and `statCd` (defaults to "00003").  If you want to use the default values, you do not need to list them in the function call. Daily data is pulled from [https://waterservices.usgs.gov/rest/DV-Test-Tool.html](https://waterservices.usgs.gov/rest/DV-Test-Tool.html).
+To obtain daily records of USGS data, use the `readNWISdv` function. The arguments for this function are `siteNumbers`, `parameterCd`, `startDate`, `endDate`, and `statCd` (defaults to "00003").  If you want to use the default values, you do not need to list them in the function call. Daily data is pulled from [https://waterservices.usgs.gov/rest/DV-Test-Tool.html](https://waterservices.usgs.gov/rest/DV-Test-Tool.html).
 
 The dates (start and end) must be in the format "YYYY-MM-DD" (note: the user must include the quotes).  Setting the start date to "" (no space) will prompt the program to ask for the earliest date, and setting the end date to "" (no space) will prompt for the latest available date.
 
@@ -530,11 +541,8 @@ tableData <- data.frame(Service,
   stringsAsFactors = FALSE)
 
 
-htmlTable(tableData, 
-          caption="Table 5: NWIS general data calls",
-          rnames=FALSE, align=c("l","l","l"),
-          col.rgroup = c("none", "#F7F7F7"), 
-          css.cell="padding-bottom: 0.0em; padding-right: 0.5em; padding-top: 0.0em;")
+kable(tableData, 
+          caption="Table 5: NWIS general data calls")
 
 ```
 
@@ -674,78 +682,8 @@ At any time, you can get information about any function in R by typing a questio
 
 Additionally, many R packages have vignette files attached (such as this paper). To view the vignette:
 ```{r seeVignette,eval = FALSE}
-vignette(dataRetrieval)
+vignette(topic = "Introduction", package = "dataRetrieval")
 ```
-
-
-## R User: Installing dataRetrieval
-
-The following command installs `dataRetrieval` and subsequent required packages:
-
-```{r installFromCran,eval = FALSE}
-install.packages("dataRetrieval")
-```
-
-After installing the package, you need to open the library each time you re-start R.  This is done with the simple command:
-
-```{r openLibraryTest, eval=FALSE}
-library(dataRetrieval)
-```
-
-
-
-# Creating Tables in Microsoft&#174; Software from R
-
-There are a few steps that are required in order to create a table in Microsoft&#174; software (Excel, Word, PowerPoint, etc.) from an R data frame. There are certainly a variety of good methods, one of which is detailed here. The example we will step through here will be to create a table in Microsoft Excel based on the data frame tableData:
-
-```{r label=getSiteApp, echo=TRUE, eval=FALSE}
-availableData <- whatNWISdata(siteNumber, "dv")
-dailyData <- availableData["00003" == availableData$stat_cd,]
-
-tableData <- with(dailyData, 
-      data.frame(
-        shortName=srsname, 
-        Start=begin_date, 
-        End=end_date, 
-        Count=count_nu,
-        Units=parameter_units)
-      )
-```
-
-First, save the data frame as a tab delimited file (you don't want to use comma delimited because there are commas in some of the data elements):
-
-
-```{r label=saveData, echo=TRUE, eval=FALSE}
-write.table(tableData, file="tableData.tsv",sep="\t",
-            row.names = FALSE,quote=FALSE)
-```
-
-This will save a file in your working directory called tableData.tsv.  You can see your working directory by typing `getwd()` in the R console. Opening the file in a general-purpose text editor, you should see the following:
-
-```
-shortName  Start  End	Count	Units
-Temperature, water	2010-10-01	2012-06-24	575	deg C
-Stream flow, mean. daily	1948-01-01	2013-03-13	23814	ft3/s
-Specific conductance	2010-10-01	2012-06-24	551	uS/cm 25C
-Suspended sediment concentration (SSC)	1980-10-01	1991-09-30	3651	mg/l
-Suspended sediment discharge	1980-10-01	1991-09-30	3652	tons/day
-```
-
-Next, follow the steps below to open this file in Excel:
-
-1. Open Excel
-2. Click on the File tab
-3. Click on the Open option
-4. Navigate to the working directory (as shown in the results of `getwd()`)
-5. Next to the File name text box, change the drop down type to All Files (*.*)
-6. Double click tableData.tsv
-7. A text import wizard will open up, in the first window, choose the Delimited radio button if it is not automatically picked, then click on Next.
-8. In the second window, click on the Tab delimiter if it is not automatically checked, then click Finished.
-9. Use the many formatting tools within Excel to customize the table
-
-From Excel, it is simple to copy and paste the tables in other Microsoft&#174; software. An example using one of the default Excel table formats is here. Additional formatting could be required in Excel, for example converting u to  $\mu$.
-
-![A simple table produced in Microsoft &#174; Excel.](table1.png)
 
 
 # Disclaimer
