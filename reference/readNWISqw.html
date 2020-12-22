@@ -231,8 +231,9 @@ for more information on time zones.</p></td>
 </table>
 
 
-<p>Further columns will be included depending on the requested output format (expanded = TRUE or FALSE).</p>
-
+<p>Further columns will be included depending on the requested output format (expanded = TRUE or FALSE).
+Columns that end in "_reported" are the originally reported timezones, 
+but the "tz_cd" column defines the timezone of any POSIXct columns.</p>
 <p>There are also several useful attributes attached to the data frame:</p><table class='table'>
 <tr><td>Name</td><td>Type</td><td>Description</td></tr>
 <tr><td>url</td><td>character</td><td>The url used to generate the data</td></tr>
@@ -307,7 +308,7 @@ for more information on time zones.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
