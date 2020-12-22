@@ -20,6 +20,8 @@ readWQPdots <- function(...){
   
   names(values)[names(values) == "siteNumber"] <- "siteid"
   names(values)[names(values) == "siteNumbers"] <- "siteid"
+  names(values)[names(values) == "parameterCd"] <- "pCode"
+  names(values)[names(values) == "USGSPCode"] <- "pCode"
   
   names(values)[names(values) == "stateCd"] <- "statecode"
   if("statecode" %in% names(values)){
