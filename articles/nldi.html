@@ -84,7 +84,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/USGS-R/dataRetrieval">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -105,7 +105,7 @@
 </h1>
                         <h4 class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
             
-            <h4 class="date">2020-11-23</h4>
+            <h4 class="date">2020-12-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/master/vignettes/nldi.Rmd"><code>vignettes/nldi.Rmd</code></a></small>
       <div class="hidden name"><code>nldi.Rmd</code></div>
@@ -115,12 +115,12 @@
     
     
 <p>This post will demonstrate <code>dataRetrieval</code> functions to query the <a href="https://labs.waterdata.usgs.gov/about-nldi/index.html">Network Linked Data Index</a> (NLDI).</p>
-<p>The NLDI provides a information backbone to navigate the NHDPlusV2 network and discover features indexed to the network. This process of feature discovery is very natural and mirrors web-based navigation tools like Google Maps, OpenStreetMap, and HERE.</p>
+<p>The NLDI provides a information backbone to navigate the NHDPlusV2 network and discover features indexed to the network. This process of feature discovery mirrors web-based navigation tools like Google Maps.</p>
 <hr>
 <div id="navigation-analogy" class="section level2">
 <h2 class="hasAnchor">
 <a href="#navigation-analogy" class="anchor"></a>Navigation Analogy</h2>
-<p>Imagine you want to know where UCSB is. For this we might use Google Maps. In asking about the entity ‘UCSB’ we get information related to the feature (links, operating hours, photos) and things nearby.</p>
+<p>Imagine you want to know about UCSB using Google Maps. In asking about the entity ‘UCSB’ we get information related to the feature (links, operating hours, photos) and things nearby.</p>
 <p><br><br></p>
 <div class="figure" style="text-align: center">
 <img src="ucsb.png" alt="UCSB via Google Maps" width="75%"><p class="caption">
@@ -128,7 +128,7 @@ UCSB via Google Maps
 </p>
 </div>
 <p><br><br></p>
-<p>Imagine then that you want to travel from UCSB to UCLA and know you need gas along the way. In Google Maps you might use UCSB at your <strong>origin</strong> and ask for directions to UCLA that include gas stations along your route.</p>
+<p>Imagine then that you want to travel from UCSB to UCLA and know you need gas along the way. In Google Maps you might use UCSB as your <strong>origin</strong> and ask for directions to UCLA that include gas stations along your route.</p>
 <br><br><div class="figure" style="text-align: center">
 <img src="nldi-gas-station-example.png" alt="Gas stations between UCSB and UCLA" width="75%"><p class="caption">
 Gas stations between UCSB and UCLA
@@ -142,18 +142,20 @@ Gas stations between UCSB and UCLA
 <li>direction(s) to travel from that feature</li>
 <li>types of features to search for along the way</li>
 </ol>
-<p>Each of these is discussed below:</p>
+<p>Each of these is discussed below using the following packages:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>         <span class="co"># Data frame manipulation</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>       <span class="co"># Plotting</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span>     <span class="co"># Arranging plots</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/">dataRetrieval</a></span><span class="op">)</span> <span class="co"># The star of the show!</span></code></pre></div>
 <hr>
 </div>
 <div id="whats-available" class="section level1">
 <h1 class="hasAnchor">
 <a href="#whats-available" class="anchor"></a>What’s available?</h1>
-<p>First, we need to know what features are currently indexed in the NLDI. The NLDI works across the NHDPlusV2 network and features that have been <em>indexed</em> to this network (e.g. <em>this</em> feature is on <em>that</em> flowline) can be found in the same way “UCSB” or the gas stations can be found on a route.</p>
-<p>Only features that have been indexed to the network (or are part of the network) can be discovered. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly being added:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/">dataRetrieval</a></span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2020-12-22), 6 datasets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="8%">
@@ -182,84 +184,35 @@ Gas stations between UCSB and UCLA
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite</a></td>
 </tr>
 <tr class="even">
+<td align="left">ref_gage</td>
+<td align="left">geoconnex.us reference gages</td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage</a></td>
+</tr>
+<tr class="odd">
 <td align="left">wade</td>
 <td align="left">Water Data Exchange 2.0 Sites</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">WQP</td>
 <td align="left">Water Quality Portal</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp</a></td>
 </tr>
 </tbody>
 </table>
-<p>At the time of writing (2020-11-23), 5 datasets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
 <hr>
 </div>
 <div id="featureorigin-discovery" class="section level1">
 <h1 class="hasAnchor">
 <a href="#featureorigin-discovery" class="anchor"></a>Feature/Origin discovery</h1>
-<p>Features can be discovered in three broad ways:</p>
-<ol style="list-style-type: decimal">
-<li>a feature <em>of</em> the network</li>
-<li>a feature <em>on</em> the network</li>
-<li>a spatial location (lng, lat)</li>
-</ol>
-<div id="of-network-features" class="section level3">
+<p>Features can be requested in two primary ways: Using the the native data set identifier, and using a location. The core feature set of the NLDI include the <code>NHD</code> flowlines, USGS <code>NWIS</code> locations, <code>WQP</code> locations, and <code>HUC12</code> pour points. Each of these are available as arguments in <code>findNLDI</code> and can be used to request a feature object.</p>
+<div id="by-identifier" class="section level3">
 <h3 class="hasAnchor">
-<a href="#of-network-features" class="anchor"></a>“Of” network features</h3>
-<p>A network feature is a hydrographic feature of the NHDPlusV2, defined by an NHDPlusV2 common identifier (COMID).</p>
-<p>The <code>comid</code> argument of <code>findNLDI</code> can be used to specify a specific COMID. <code>findNLDI</code> always returns a named list of <code>data.frames</code>. To keep <code>dataRetrieval</code> lightweight, the simple features <code>sf</code> package is not a dependency. However, if it is installed on your machine, it can be leveraged to create “spatial-ready” outputs.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">c101</span> <span class="op">=</span> <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span><span class="op">)</span></code></pre></div>
-<p>In the above example, the returned object is a <code>list</code> of length 1 containing a <code>data.frame</code> describing the feature requested (<code>comid=101</code>). All NLDI features have attribute information related to the data source and the identifier within that resource (<code>sourceName</code> and <code>identifer</code>). If <code>sf</code> is installed locally, an <code>sfc</code> (simple feature geometry column) column is added to the returned <code>data.frame</code>.</p>
+<a href="#by-identifier" class="anchor"></a>By Identifier</h3>
+<p>As an illustrative example, NHDPlus features can be requested by their COMID from the NHDPlusV2 dataset.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">c101</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; List of 1
-#&gt;  $ origin: tibble [1 × 4] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..$ sourceName: chr "NHDPlus comid"
-#&gt;   ..$ identifier: chr "101"
-#&gt;   ..$ comid     : chr "101"
-#&gt;   ..$ geometry  :sfc_LINESTRING of length 1; first list element:  'XY' num [1:54, 1:2] -94.6 -94.6 -94.6 -94.6 -94.6 ...
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:3] "sourceName" "identifier" "comid"</code></pre>
-<p>In the example above, we see the geometry column is of type <code>LINESTRING</code> and made of 54 points (each with an X and Y coordinate).</p>
-<p>If <code>sf</code> is not installed locally - or <code>no_sf = TRUE</code> - then only the <em>sourceName</em> and <em>identifier</em> will be returned for <code>LINESTRING</code> objects.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">c101</span> <span class="op">=</span> <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-</div>
-<div id="on-network-features" class="section level3">
-<h3 class="hasAnchor">
-<a href="#on-network-features" class="anchor"></a>“On” network features</h3>
-<p>Features indexed to the NHDPlus are returned as <code>POINT</code> objects. If <code>sf</code> is enabled, the <em>sourceName</em>, <em>identifier</em>, <em>X</em>, <em>Y</em> and <em>geometry</em> (<code>sfc</code>) are returned. If <code>sf</code> is not locally available, the <em>geometry</em> is dropped but the <em>X</em> and <em>Y</em> values are are retained.</p>
-<p>The core feature set of the NLDI include the USGS <code>NWIS</code> locations, <code>WQP</code> locations, and <code>HUC12</code> pour points. Each of these are available as arguments in <code>findNLDI</code> and can be used to request a feature object. For example, we can request the NLDI representation of USGS NWIS gage <a href="https://waterdata.usgs.gov/monitoring-location/11120000">11120000</a> in both a <code>sf</code> and “non-sf” way:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># local sf installation</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; $origin
-#&gt; Simple feature collection with 1 feature and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
-#&gt; geographic CRS: WGS 84
-#&gt; # A tibble: 1 x 6
-#&gt;   sourceName identifier comid        X     Y             geometry
-#&gt; * &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;          &lt;POINT [°]&gt;
-#&gt; 1 NWIS Sites 11120000   17595429 -120.  34.4 (-119.8118 34.42472)</code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># No sf use/installation</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; $origin
-#&gt;   sourceName identifier    comid         X        Y
-#&gt; 1 NWIS Sites   11120000 17595429 -119.8118 34.42472</code></pre>
-<hr>
-<p>Any NLDI feature found with <code>get_nldi_source</code> can be requested by passing a <code>type</code>/<code>ID</code> pair as a list to the <code>origin</code> argument. This will allow the networking capabilities offered in <code>dataRetrieval</code> to grow naturally with the NLDI itself. For example, we can use the origin argument to identify both “core” and “non-core” datasets:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># COMID 101</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"comid"</span> <span class="op">=</span> <span class="st">'101'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; $origin
-#&gt; Simple feature collection with 1 feature and 3 fields
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; Simple feature collection with 1 feature and 3 fields
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
@@ -268,11 +221,36 @@ Gas stations between UCSB and UCLA
 #&gt;   sourceName   identifier comid                                         geometry
 #&gt;   &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                                 &lt;LINESTRING [°]&gt;
 #&gt; 1 NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…</code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p>The returned simple features object contains the native dataset identifier (“identifier”), sourceName of the native dataset, and the indexed NHD COMID (in this case a duplicate since an NHD feature was requested). In the example above, we see the geometry column is of type <code>LINESTRING</code>. To keep <code>dataRetrieval</code> lightweight, the [<code>sf</code>] (<a href="https://r-spatial.github.io/sf/articles/sf1.html" class="uri">https://r-spatial.github.io/sf/articles/sf1.html</a>) package is not a dependency. Instead, if <code>sf</code> is not installed - or <code>no_sf = TRUE</code> - only the <em>sourceName</em>, <em>comid</em>, and <em>identifier</em> will be returned.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt;      sourceName identifier comid
+#&gt; 1 NHDPlus comid        101   101</code></pre>
+<hr>
+<p>To provide another example, we can request the NLDI representation of USGS NWIS gage <a href="https://waterdata.usgs.gov/monitoring-location/11120000">11120000</a> in both a <code>sf</code> and “non-sf” way. Features indexed to the NHDPlus are returned as <code>POINT</code> objects. If <code>sf</code> is enabled, the <em>sourceName</em>, <em>identifier</em>, <em>X</em>, <em>Y</em> and <em>geometry</em> (<code>sfc</code>) are returned. If <code>sf</code> is not available, the <em>geometry</em> is dropped but the <em>X</em> and <em>Y</em> values are retained.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># local sf installation</span>
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; Simple feature collection with 1 feature and 5 fields
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
+#&gt; geographic CRS: WGS 84
+#&gt; # A tibble: 1 x 6
+#&gt;   sourceName identifier comid        X     Y             geometry
+#&gt; * &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;          &lt;POINT [°]&gt;
+#&gt; 1 NWIS Sites 11120000   17595429 -120.  34.4 (-119.8118 34.42472)</code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># No sf use/installation</span>
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt;   sourceName identifier    comid         X        Y
+#&gt; 1 NWIS Sites   11120000 17595429 -119.8118 34.42472</code></pre>
+<hr>
+<p>Any NLDI feature found with <code>get_nldi_source</code> can be requested by passing a <code>type</code>/<code>ID</code> pair as a list to the <code>origin</code> argument. This will allow the networking capabilities offered in <code>dataRetrieval</code> to grow naturally with the NLDI itself. For example, we can use the origin argument to request features that dont offer a specific parameter.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Water Data Exchange 2.0 Site CA_45206</span>
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"wade"</span> <span class="op">=</span> <span class="st">'CA_45206'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; $origin
-#&gt; Simple feature collection with 1 feature and 5 fields
+<pre><code>#&gt; Simple feature collection with 1 feature and 5 fields
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.7917 ymin: 34.47273 xmax: -119.7917 ymax: 34.47273
@@ -281,16 +259,15 @@ Gas stations between UCSB and UCLA
 #&gt;   sourceName                identifier comid       X     Y              geometry
 #&gt;   &lt;chr&gt;                     &lt;chr&gt;      &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;           &lt;POINT [°]&gt;
 #&gt; 1 Water Data Exchange 2.0 … CA_45206   175952… -120.  34.5  (-119.7917 34.47273)</code></pre>
-<p>Again, network features are returned as <code>LINESTRING</code>s, indexed features are returned as <code>POINT</code>s. If <code>sf</code> is enabled, both come with geometries. If <code>sf</code> is not enabled, <code>POINT</code> objects are returned with their X,Y coordinates and <code>LINESTRING</code> geometries only retain the <em>sourceName</em> and <em>identifier</em>.</p>
 </div>
 <div id="location-longitudelatitude" class="section level3">
 <h3 class="hasAnchor">
 <a href="#location-longitudelatitude" class="anchor"></a>Location (longitude/latitude)</h3>
-<p>If you don’t know a network or feature identifier, a <code>longitude</code>/<code>latitude</code> (XY) pair can be passed to the <code>location</code> argument as a numeric vector (length 2). Doing so will identify the NHDPlus catchment the coordinates fall within and will return the associated NHDPlusV2 flowline feature.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">115</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; $origin
-#&gt; Simple feature collection with 1 feature and 3 fields
+<p>If you don’t know a feature ID, a <code>longitude</code>/<code>latitude</code> (X,Y) pair or a sf/sfc POINT object can be passed to the <code>location</code> argument. Doing so will identify the NHDPlus catchment the location fall within and will return the associated NHDPlusV2 flowline.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Request by coordiantes</span>
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">115</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; Simple feature collection with 1 feature and 3 fields
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -115.0326 ymin: 40.04013 xmax: -115.0182 ymax: 40.05183
@@ -299,6 +276,19 @@ Gas stations between UCSB and UCLA
 #&gt;   sourceName   identifier comid                                         geometry
 #&gt;   &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                                 &lt;LINESTRING [°]&gt;
 #&gt; 1 NHDPlus com… 946060315  94606… (-115.0182 40.05183, -115.0185 40.05176, -115.…</code></pre>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Request by sf/sfc POINT object</span>
+<span class="va">ucsb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">119.8458</span>, Y <span class="op">=</span> <span class="fl">34.4146</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="va">ucsb</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; Simple feature collection with 1 feature and 3 fields
+#&gt; geometry type:  LINESTRING
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -119.8823 ymin: 34.40438 xmax: -119.8256 ymax: 34.4179
+#&gt; geographic CRS: WGS 84
+#&gt; # A tibble: 1 x 4
+#&gt;   sourceName   identifier comid                                         geometry
+#&gt;   &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                                 &lt;LINESTRING [°]&gt;
+#&gt; 1 NHDPlus com… 948060316  94806… (-119.8823 34.41072, -119.8822 34.4106, -119.8…</code></pre>
 </div>
 </div>
 <div id="navigation" class="section level1">
@@ -321,226 +311,103 @@ Gas stations between UCSB and UCLA
 NLDI Navigation Options
 </p>
 </div>
-<p>One or more modes of navigation can be supplied to the <code>findNLDI</code> <code>nav</code> argument. For example we can ask to navigate along the upper mainstem from COMID 101.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>,
-             nav <span class="op">=</span> <span class="st">"UM"</span><span class="op">)</span>, 
-    max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; List of 2
-#&gt;  $ origin: tibble [1 × 4] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:3] "sourceName" "identifier" "comid"
-#&gt;  $ UM    : tibble [14 × 2] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
-#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"</code></pre>
-<p>Or along the upper mainstem <em>and</em> upper tributary of COMID 101.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, 
-             nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"DM"</span><span class="op">)</span><span class="op">)</span>, 
-    max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; List of 3
-#&gt;  $ origin: tibble [1 × 4] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:3] "sourceName" "identifier" "comid"
-#&gt;  $ UM    : tibble [14 × 2] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
-#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"
-#&gt;  $ DM    : tibble [43 × 2] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
-#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"</code></pre>
-<p>In both cases the returned named list includes the origin and the requested navigation. If <code>sf</code> is not enabled, the returned object for a flowpath navigation is a vector of COMIDs.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, 
-             nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"DM"</span><span class="op">)</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-    max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; List of 3
-#&gt;  $ origin:'data.frame':  1 obs. of  3 variables:
-#&gt;  $ UM    : chr [1:14] "101" "24599575" "1078635" "1078639" ...
-#&gt;  $ DM    : chr [1:43] "101" "1078719" "1078721" "1078725" ...</code></pre>
+<p>One or more modes of navigation can be supplied to the <code>nav</code> argument. For example we can ask to navigate along the upper mainstem (UM) from COMID 101.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UM"</span><span class="op">)</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt;              Length Class Mode
+#&gt; origin       4      sf    list
+#&gt; UM_flowlines 2      sf    list</code></pre>
+<p>Or along the upper mainstem (UM) <em>and</em> upper tributary (UT) of COMID 101.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"UT"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt;              Length Class Mode
+#&gt; origin       4      sf    list
+#&gt; UM_flowlines 2      sf    list
+#&gt; UT_flowlines 2      sf    list</code></pre>
+<p>In both cases the returned named list includes the origin and the flowlines along the requested navigation. If <code>sf</code> is not enabled, the returned object for a flowpath navigation is a vector of COMIDs.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"DM"</span><span class="op">)</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt;              Length Class      Mode     
+#&gt; origin        3     data.frame list     
+#&gt; UM_flowlines 14     -none-     character
+#&gt; DM_flowlines 43     -none-     character</code></pre>
 </div>
 <div id="searching-along-the-navigation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#searching-along-the-navigation" class="anchor"></a>Searching along the Navigation</h1>
-<p>Two types of features can be discovered along a navigation including indexed features and the upstream basin boundary of the origin feature. The desired feature(s) can be passed as a vector to the <code>find</code> argument.</p>
-<div id="finding-features" class="section level3">
-<h3 class="hasAnchor">
-<a href="#finding-features" class="anchor"></a>Finding Features</h3>
-<p>Any of the features listed in <code>get_nldi_sources</code> can be searched for along the network, for example, we can find all NWIS gages, on the upper tributary, of COMID 101.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>,
-             nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="st">"nwis"</span><span class="op">)</span>, 
-    max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; List of 3
-#&gt;  $ origin     : tibble [1 × 4] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:3] "sourceName" "identifier" "comid"
-#&gt;  $ UT         : tibble [325 × 2] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
-#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"
-#&gt;  $ UT_nwissite: tibble [2 × 6] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...</code></pre>
-<p>Here the returned list includes the origin feature, the navigated network, and the identified NWIS sites on the UT navigation (2 in total).</p>
-<p>More than one resource can be requested, for example, lets replicate the previous search, this time adding Water Quality Points to the returned list:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>,
-             nav <span class="op">=</span> <span class="st">"UT"</span>,
-             find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span>,
-    max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; List of 4
-#&gt;  $ origin     : tibble [1 × 4] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:3] "sourceName" "identifier" "comid"
-#&gt;  $ UT         : tibble [325 × 2] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
-#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"
-#&gt;  $ UT_nwissite: tibble [2 × 6] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...
-#&gt;  $ UT_WQP     : tibble [29 × 6] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...</code></pre>
-<p>In total we find 29 WQP along the upper tributary of comid 101.</p>
-</div>
+<p>Like the gas station example, any of the features listed in <code>get_nldi_sources</code> can be searched for along the network, for example, we can find all NWIS gages, on the upper tributary, of COMID 101.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, 
+                 nav <span class="op">=</span> <span class="st">"UT"</span>, 
+                 find <span class="op">=</span> <span class="st">"nwis"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt;             Length Class Mode
+#&gt; origin      4      sf    list
+#&gt; UT_nwissite 6      sf    list</code></pre>
+<p>Of course, more than one resource can be requested, for example, lets replicate the previous search, this time adding Water Quality Points to the returned list:</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt;             Length Class Mode
+#&gt; origin      4      sf    list
+#&gt; UT_nwissite 6      sf    list
+#&gt; UT_WQP      6      sf    list</code></pre>
+<p>Note that flowlines are no longer the default return for navigation once a new feature is requested. To retain flowlines, the must be explicitly requested.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, 
+                 nav <span class="op">=</span> <span class="st">"UT"</span>, 
+                 find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"flowlines"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt;              Length Class Mode
+#&gt; origin       4      sf    list
+#&gt; UT_nwissite  6      sf    list
+#&gt; UT_flowlines 2      sf    list</code></pre>
 <div id="upstream-basin-boundary" class="section level3">
 <h3 class="hasAnchor">
 <a href="#upstream-basin-boundary" class="anchor"></a>Upstream Basin Boundary</h3>
-<p>The Upstream Basin Boundary of any features can be found by adding “basin” to the vector of objects to find. Returned basins are only geometries and do not have specific attribute data. Therefore basins can only be returned if <code>sf</code> is installed locally. If it is not, the result will be a 0 column <code>data.frame</code></p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<p>The Upstream Basin Boundary is a unique object that can be found for any feature by adding “basin” to <code>find.</code> Basins are only geometries with no specific attribute data. Therefore basins can only be returned if <code>sf</code> is installed. Otherwise, the result will be a 0 column <code>data.frame</code></p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># with sf</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; List of 2
-#&gt;  $ origin: tibble [1 × 4] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..$ sourceName: chr "NHDPlus comid"
-#&gt;   ..$ identifier: chr "101"
-#&gt;   ..$ comid     : chr "101"
-#&gt;   ..$ geometry  :sfc_LINESTRING of length 1; first list element:  'XY' num [1:54, 1:2] -94.6 -94.6 -94.6 -94.6 -94.6 ...
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:3] "sourceName" "identifier" "comid"
-#&gt;  $ basin : tibble [1 × 1] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..$ geometry:sfc_POLYGON of length 1; first list element: List of 1
-#&gt;   .. ..$ : num [1:1016, 1:2] -94.6 -94.6 -94.6 -94.7 -94.7 ...
-#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: 
-#&gt;   .. ..- attr(*, "names")= chr(0)</code></pre>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt;        Length Class Mode
+#&gt; origin 4      sf    list
+#&gt; basin  1      sf    list</code></pre>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># No sf</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; List of 2
-#&gt;  $ origin:'data.frame':  1 obs. of  3 variables:
-#&gt;   ..$ sourceName: chr "NHDPlus comid"
-#&gt;   ..$ identifier: chr "101"
-#&gt;   ..$ comid     : chr "101"
-#&gt;  $ basin :'data.frame':  1 obs. of  0 variables</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt;        Length Class      Mode
+#&gt; origin 3      data.frame list
+#&gt; basin  0      data.frame list</code></pre>
 </div>
 <div id="distance-constraints" class="section level3">
 <h3 class="hasAnchor">
 <a href="#distance-constraints" class="anchor"></a>Distance Constraints</h3>
-<p>In some cases, particularly for DM and DD navigation, the network can extend for hundreds of kilometers. You can limit or extend the distance of your search using the <code>distance_km</code> argument. As the name implies the value provided should be the maximum kilometers you want to search for features. The default for <code>distance_km</code> is 100.</p>
-<p>To illustrate, lets search the downstream mainstem for COMID 101 with a varying distance threshold:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<p>In some cases, particularly for DM and DD navigation, the network can extend for hundreds of kilometers. You can limit (or extend) the distance of your search using the <code>distance_km</code> argument. As the name implies the value provided should be the maximum kilometers you want to search for features. The default for <code>distance_km</code> is 100.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Default 100 km</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>,
-             find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span>,
-    max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; List of 4
-#&gt;  $ origin     : tibble [1 × 4] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:3] "sourceName" "identifier" "comid"
-#&gt;  $ DM         : tibble [43 × 2] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
-#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"
-#&gt;  $ DM_nwissite: tibble [1 × 6] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...
-#&gt;  $ DM_WQP     : tibble [5 × 6] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...</code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Extended 200 km search</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, 
-             find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span>, 
-             distance_km <span class="op">=</span> <span class="fl">200</span><span class="op">)</span>,
-    max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; List of 4
-#&gt;  $ origin     : tibble [1 × 4] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:3] "sourceName" "identifier" "comid"
-#&gt;  $ DM         : tibble [85 × 2] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA
-#&gt;   .. ..- attr(*, "names")= chr "nhdplus_comid"
-#&gt;  $ DM_nwissite: tibble [4 × 6] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...
-#&gt;  $ DM_WQP     : tibble [17 × 6] (S3: sf/tbl_df/tbl/data.frame)
-#&gt;   ..- attr(*, "sf_column")= chr "geometry"
-#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
-#&gt;   .. ..- attr(*, "names")= chr [1:5] "sourceName" "identifier" "comid" "X" ...</code></pre>
-<p>The result, is that the navigation path and the number of returned features in the second request have expanded as expected.</p>
-</div>
-</div>
-<div id="sf" class="section level1">
-<h1 class="hasAnchor">
-<a href="#sf" class="anchor"></a>Basic <code>sf</code> integration</h1>
-<p>While not necessary, having a local installation of <a href="https://r-spatial.github.io/sf/index.html"><code>sf</code></a> will enhance the usability of the NLDI data:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">'sf'</span><span class="op">)</span></code></pre></div>
-<p>We’ve seen the NLDI wrapper can provide <code>sf</code> objects if <code>sf</code> is installed.</p>
+<span class="va">dist100</span> <span class="op">=</span> <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dist100</span><span class="op">$</span><span class="va">DM_nwissite</span><span class="op">)</span>, <span class="st">"NWIS sites w/in 100 km"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "1 NWIS sites w/in 100 km"</code></pre>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
-<span class="va">features</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">'11120000'</span>, 
-                     nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UT"</span>, <span class="st">"UM"</span><span class="op">)</span>, 
-                     find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span>, <span class="st">"basin"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Doing so allows for spatial as simple as length, area, and plotting, or more complex calculations.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">features</span><span class="op">$</span><span class="va">basin</span><span class="op">)</span>, border <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">features</span><span class="op">$</span><span class="va">UT</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">features</span><span class="op">$</span><span class="va">UM</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">3</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">features</span><span class="op">$</span><span class="va">origin</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"orange"</span>, 
-     lwd <span class="op">=</span> <span class="fl">4</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">features</span><span class="op">$</span><span class="va">UM_WQP</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"purple"</span>, 
-     pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">.5</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">features</span><span class="op">$</span><span class="va">UT_nwissite</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"darkgreen"</span>, 
-     pch <span class="op">=</span> <span class="fl">16</span>,  add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<div class="figure" style="text-align: center">
-<img src="nldi_files/figure-html/unnamed-chunk-22-1.png" alt="NLDI Spatial Feature map" width="75%"><p class="caption">
-NLDI Spatial Feature map
-</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dist100</span><span class="op">$</span><span class="va">DM_WQP</span><span class="op">)</span>, <span class="st">"WQP sites w/in 100 km"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "5 WQP sites w/in 100 km"</code></pre>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Extended 200 km search</span>
+<span class="va">dist200</span> <span class="op">=</span> <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span>, distance_km <span class="op">=</span> <span class="fl">200</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dist200</span><span class="op">$</span><span class="va">DM_nwissite</span><span class="op">)</span>, <span class="st">"NWIS sites w/in 200 km"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "4 NWIS sites w/in 200 km"</code></pre>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dist200</span><span class="op">$</span><span class="va">DM_WQP</span><span class="op">)</span>, <span class="st">"WQP sites w/in 200 km"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "17 WQP sites w/in 200 km"</code></pre>
 </div>
 </div>
 <div id="basic-dataretrieval-integration" class="section level1">
 <h1 class="hasAnchor">
 <a href="#basic-dataretrieval-integration" class="anchor"></a>Basic <code>dataRetrieval</code> integration</h1>
-<p>Last, as this functionality is being added to the <code>dataRetrieval</code> package, lets see a basic example of how the NLDI tools provide a discovery mechanism for working with the NWIS data retrieval tools. Here we will take a location that is near <a href="https://www.google.com/maps/place/Colorado+Springs,+CO/@38.7864572,-104.7829507,17z">Fountain Creek in Colorado Springs, Colorado</a>.</p>
-<p>In this example we will use that location as the origin, navigate upstream along the mainstem, and search for NWIS gages. We will then make all returned features spatial and use the identified upstream NWIS siteIDs to query streamflow records for from January 1<sup>st</sup> 2020 to the current data.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span>
-
-<span class="co"># Spatial upstream nwis, basin</span>
+<p>Last, as this functionality is being added to the <code>dataRetrieval</code> package, lets see a basic example of how the NLDI tools provide a discovery mechanism for working with the <code>dataRetrieval</code> tools. Here we will take a location that is near <a href="https://www.google.com/maps/place/Colorado+Springs,+CO/@38.7864572,-104.7829507,17z">Fountain Creek in Colorado Springs, Colorado</a>.</p>
+<p>In this example we will use that location as the origin, navigate upstream along the mainstem, search for NWIS gages, and use the identified siteIDs to query streamflow records from January 1<sup>st</sup>, 2020 to the current day.</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Upstream nwis, flowlines, and basin</span>
 <span class="va">fountainCreek</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">104.780837</span>, <span class="fl">38.786796</span><span class="op">)</span>, 
                           nav <span class="op">=</span> <span class="st">"UM"</span>, 
-                          find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"basin"</span><span class="op">)</span><span class="op">)</span>
+                          find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"basin"</span>, <span class="st">"flowlines"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Extract Streamflow for identified sites</span>
 <span class="va">Q</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span><span class="op">$</span><span class="va">identifier</span>, 
@@ -559,7 +426,7 @@ NLDI Spatial Feature map
 
 <span class="va">map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fountainCreek</span><span class="op">$</span><span class="va">basin</span>, col <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM</span>, col <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_flowlines</span>, col <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span>, 
           <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">identifier</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span>
@@ -571,8 +438,8 @@ NLDI Spatial Feature map
 
 <span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span><span class="va">hydro</span>, <span class="va">map</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="nldi_files/figure-html/unnamed-chunk-23-1.png" alt="Integrating NLDI and NWIS data retrieval tools" width="75%"><p class="caption">
-Integrating NLDI and NWIS data retrieval tools
+<img src="nldi_files/figure-html/unnamed-chunk-21-1.png" alt="Integrating NLDI and NWIS dataRetrieval tools" width="75%"><p class="caption">
+Integrating NLDI and NWIS dataRetrieval tools
 </p>
 </div>
 </div>
