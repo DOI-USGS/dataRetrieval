@@ -220,7 +220,7 @@ Gas stations between UCSB and UCLA
 #&gt; # A tibble: 1 x 4
 #&gt;   sourceName   identifier comid                                         geometry
 #&gt;   &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                                 &lt;LINESTRING [°]&gt;
-#&gt; 1 NHDPlus com~ 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64~</code></pre>
+#&gt; 1 NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…</code></pre>
 <p>The returned simple features object contains the native dataset identifier (“identifier”), sourceName of the native dataset, and the indexed NHD COMID (in this case a duplicate since an NHD feature was requested). In the example above, we see the geometry column is of type <code>LINESTRING</code>. To keep <code>dataRetrieval</code> lightweight, the [<code>sf</code>] (<a href="https://r-spatial.github.io/sf/articles/sf1.html" class="uri">https://r-spatial.github.io/sf/articles/sf1.html</a>) package is not a dependency. Instead, if <code>sf</code> is not installed - or <code>no_sf = TRUE</code> - only the <em>sourceName</em>, <em>comid</em>, and <em>identifier</em> will be returned.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
@@ -258,7 +258,7 @@ Gas stations between UCSB and UCLA
 #&gt; # A tibble: 1 x 6
 #&gt;   sourceName                identifier comid       X     Y              geometry
 #&gt;   &lt;chr&gt;                     &lt;chr&gt;      &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;           &lt;POINT [°]&gt;
-#&gt; 1 Water Data Exchange 2.0 ~ CA_45206   175952~ -120.  34.5  (-119.7917 34.47273)</code></pre>
+#&gt; 1 Water Data Exchange 2.0 … CA_45206   175952… -120.  34.5  (-119.7917 34.47273)</code></pre>
 </div>
 <div id="location-longitudelatitude" class="section level3">
 <h3 class="hasAnchor">
@@ -275,7 +275,7 @@ Gas stations between UCSB and UCLA
 #&gt; # A tibble: 1 x 4
 #&gt;   sourceName   identifier comid                                         geometry
 #&gt;   &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                                 &lt;LINESTRING [°]&gt;
-#&gt; 1 NHDPlus com~ 946060315  94606~ (-115.0182 40.05183, -115.0185 40.05176, -115.~</code></pre>
+#&gt; 1 NHDPlus com… 946060315  94606… (-115.0182 40.05183, -115.0185 40.05176, -115.…</code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Request by sf/sfc POINT object</span>
 <span class="va">ucsb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">119.8458</span>, Y <span class="op">=</span> <span class="fl">34.4146</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
@@ -288,7 +288,7 @@ Gas stations between UCSB and UCLA
 #&gt; # A tibble: 1 x 4
 #&gt;   sourceName   identifier comid                                         geometry
 #&gt;   &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                                 &lt;LINESTRING [°]&gt;
-#&gt; 1 NHDPlus com~ 948060316  94806~ (-119.8823 34.41072, -119.8822 34.4106, -119.8~</code></pre>
+#&gt; 1 NHDPlus com… 948060316  94806… (-119.8823 34.41072, -119.8822 34.4106, -119.8…</code></pre>
 </div>
 </div>
 <div id="navigation" class="section level1">
@@ -460,7 +460,7 @@ Integrating NLDI and NWIS dataRetrieval tools
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
