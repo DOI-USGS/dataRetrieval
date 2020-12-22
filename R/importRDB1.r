@@ -207,6 +207,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
 
           readr.data[,"sample_start_time_datum_cd_reported"] <- readr.data[,"sample_start_time_datum_cd"]
           readr.data[,"sample_end_time_datum_cd_reported"] <- readr.data[,"sample_start_time_datum_cd"]
+          readr.data <- readr.data[,names(readr.data)[names(readr.data) != "sample_start_time_datum_cd"]]
         }
       }
       
@@ -265,6 +266,14 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   }
 
   names(readr.data) <- make.names(names(readr.data))
+  
+  # People get confused having the tz_cd_reported next to the POSIXs:
+  
+  if("tz_cd_reported" %in% names(readr.data)){
+    new_order <- names(readr.data)
+    new_order <- c(new_order[!new_order %in% c("tz_cd_reported","tz_cd")], "tz_cd")
+    readr.data <- readr.data[,new_order]
+  }
   
   attr(readr.data, "queryTime") <- Sys.time()
   if(!file.exists(obs_url)){
