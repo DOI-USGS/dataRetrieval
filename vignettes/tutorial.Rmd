@@ -450,7 +450,7 @@ nrow(wqpQW)
 
 The value of the Water Quality Portal is to explore water quality data from different sources. 
 
-The following function returns sites that have collected phosphorus data in Wisconsin. There's no way to know if that site has collected one sample, or thousands.
+The following function returns sites that have collected phosphorus data in Wisconsin. There's no way to know if that site has collected one sample, or thousands. This function is pretty fast, but only reports what sites have data.
 
 ```{r echo=TRUE, eval=FALSE}
 
@@ -459,19 +459,36 @@ phosSites <- whatWQPsites(statecode = "WI",
   
 ```
 
+Similar to NWIS, to find out the scope of the available data, there is a `whatWQPdata` function:
 
-To get that information, you need to actually get that data. With data coming from many different agencies, it will be important to look carefully at the returned data. For instance, this "Phosphorus" data comes back with many different units. It will be important to make smart decisions on how and if the total data can be used together.
+```{r echo=TRUE, eval=TRUE}
+phos_data_available <- whatWQPdata(statecode = "WI",
+                                   characteristicName = "Phosphorus")
+
+```
+
+This function comes back with a few really useful columns such as "activityCount" and "resultCount". As with our NWIS query, let's filter down our data request to sites that have only had more than 300 measurements.
 
 ```{r echo=TRUE, eval=FALSE}
-phosData <- readWQPdata(statecode = "WI",
+phos_data_sites_to_get <- phos_data_available %>% 
+  filter(resultCount >= 300)
+
+phosData <- readWQPdata(siteNumbers = phos_data_sites_to_get$MonitoringLocationIdentifier,
                         characteristicName = "Phosphorus")
 
+```
+
+With data coming from many different agencies, it will be important to look carefully at the returned data. For instance, this "Phosphorus" data comes back with many different units. It will be important to make smart decisions on how and if the total data can be used together.
+
+```{r echo=TRUE, eval=FALSE}
 unique(phosData$ResultMeasure.MeasureUnitCode)
   
 ```
 
 ```{r eval=TRUE}
-phosData <- readRDS("phosData.rds")
+phosData <- readRDS("phosData.rds") %>% 
+  mutate(ResultMeasureValue = as.numeric(ResultMeasureValue))
+  
 ```
 
 
@@ -486,7 +503,6 @@ wiSummary <- phosData %>%
   group_by(MonitoringLocationIdentifier) %>%
   summarise(count=n(),
             max = max(ResultMeasureValue, na.rm = TRUE)) %>%
-  filter(count > 300) %>%
   left_join(siteInfo, by = "MonitoringLocationIdentifier")
 
 ```
@@ -525,13 +541,32 @@ leaflet(data=wiSummary) %>%
     + Sometimes in a single state, some sites will acknowledge daylight savings and some don't
     + `dataRetrieval` queries could easily span multiple timezones (or switching between daylight savings and regular time)
 
-* The user can specify a single timezone to override UTC. The allowable tz arguments are `OlsonNames` (see also the help file for `readNWISuv`).
+* The user can specify a single timezone to override UTC. The allowable tz arguments are `OlsonNames` (see also the help file for `readNWISuv`). 
 
-* `readNWISqw` may create both a "startDateTime" and "endDateTime" 
+* `readNWISqw` may create both a "startDateTime" and "endDateTime" if the data is appropriate. Both columns will have the timezone attribute from the user-defined "tz_cd" column. The originally reported timezones are retained in the "sample_start_time_datum_cd_reported" and "sample_end_time_datum_cd_reported" columns.
+
+# Large Data Requests
+
+It is increasingly common for R users to be interested in large-scale `dataRetrieval` analysis. A few tips to make those queries managable:
+
+* Please do NOT use multi-thread processes and simultaneously request hundreds or thousands of queries.
+
+* You can use a loop of either state codes (`stateCd$STATE`) or HUCs to make large requests. BUT without careful planning, those requests could be too large to complete. 
+
+
++ Take advantage of the `whatWQPdata` and `whatNWISdata` functions to filter out sites you don't need before requesting the data. Use what you can from these faster requests to filter the full data request as much as possible. 
+
++ Think about using `tryCatch`, saving the data after each iteration of the loop, and/or using a make-like data pipeline (for example, see the `drake` package). This way if a single query fails, you do not need to start over.
+
++ The WQP doesn't always perform that well when there are a lot of filtering arguments in the request. Even though those filters would reduce the amount of data needed to transfer, that sometimes causes the pre-processing of the request to take so long that it times-out before returning *any* data. It's a bit counterintuitive, but if you are having trouble getting your large requests to complete, remove arguments such as Sample Media, Site Type, these are things that can be filtered in a post-processing script. Another example: sometimes it is slower and error-prone requesting data year-by-year instead of requesting the entire period of record. 
+
+Pick a single state/HUC/bbox to practice your data retrievals before looping through larger sets, and optimize ahead of time as much as possible.
+
 
 # But wait, there's more!
 
 There are two services that also have functions in `dataRetrieval`, the National Groundwater Monitoring Network (NGWMN) and Network Linked Data Index (NLDI). These functions are not as mature as the WQP and NWIS functions. A future blog post will bring together these functions. 
+
 ## National Groundwater Monitoring Network (NGWMN)
 
 Similar to WQP, it brings groundwater data from multiple sources into a single database. There are currently a few `dataRetrieval` functions included:
