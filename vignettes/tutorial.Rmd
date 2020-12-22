@@ -137,7 +137,8 @@ Explore the wide variety of parameters that contain "phosphorus" in the paramete
 
 ```{r echo=FALSE, eval=TRUE}
 library(DT)
-datatable(phosCds, rownames = FALSE,options = list(pageLength = 4))
+datatable(phosCds[,c("parameter_cd", "parameter_nm", "parameter_units")],
+          rownames = FALSE,options = list(pageLength = 4))
 ```
 
 ### User-friendly retrievals: NWIS
@@ -190,7 +191,7 @@ names(pheasant)
 ```
 
 
-The names of the columns are based on the parameter and statistic codes. In many cases, you can clean up the names with the convenience function renameNWISColumns:
+The names of the columns are based on the parameter and statistic codes. In many cases, you can clean up the names with the convenience function `renameNWISColumns`:
 
 ```{r echo=TRUE, eval=TRUE}
 pheasant <- renameNWISColumns(pheasant)
@@ -517,19 +518,21 @@ leaflet(data=wiSummary) %>%
 
 #  Time/Time zone discussion
 
-* The arguments for all `dataRetrieval` functions concerning dates (startDate, endDate) can be R Date objects, or character strings, as long as the string is in the form "YYYY-MM-DD"
+* The arguments for all `dataRetrieval` functions concerning dates (startDate, endDate) can be R Date objects, or character strings, as long as the string is in the form "YYYY-MM-DD".
 
-* In R, one vector (or column in a data frame) can only have __ONE__ timezone attribute
+* For functions that include a date and time, `dataRetrieval` will take that information and create a column that is a POSIXct type. By default, this date/time POSIXct column is converted to "UTC". In R, one vector (or column in a data frame) can only have __ONE__ timezone attribute.
+
     + Sometimes in a single state, some sites will acknowledge daylight savings and some don't
-    + `dataRetrieval` queries could easily span multiple timezones    
-
-* Therefore, `dataRetrieval` converts all date/times to UTC.
+    + `dataRetrieval` queries could easily span multiple timezones (or switching between daylight savings and regular time)
 
 * The user can specify a single timezone to override UTC. The allowable tz arguments are `OlsonNames` (see also the help file for `readNWISuv`).
 
-# Coming Soon!
+* `readNWISqw` may create both a "startDateTime" and "endDateTime" 
 
-Groundwater Monitoring Network
+# But wait, there's more!
+
+There are two services that also have functions in `dataRetrieval`, the National Groundwater Monitoring Network (NGWMN) and Network Linked Data Index (NLDI). These functions are not as mature as the WQP and NWIS functions. A future blog post will bring together these functions. 
+## National Groundwater Monitoring Network (NGWMN)
 
 Similar to WQP, it brings groundwater data from multiple sources into a single database. There are currently a few `dataRetrieval` functions included:
 
@@ -538,9 +541,12 @@ Similar to WQP, it brings groundwater data from multiple sources into a single d
 *  `readNGWMNlevels()`
 *  `readNGWMNdata()`.
 
-Network Linked Data Index
+## Network Linked Data Index (NLDI)
+
+The NLDI provides a information backbone to navigate the NHDPlusV2 network and discover features indexed to the network. For an overview of the NLDI, see: [http://usgs-r.github.io/dataRetrieval/articles/nldi.html](http://usgs-r.github.io/dataRetrieval/articles/nldi.html)
+
 
 `findNLDI()`
 
-[http://usgs-r.github.io/dataRetrieval/articles/nldi.html](http://usgs-r.github.io/dataRetrieval/articles/nldi.html)
+
 
