@@ -166,11 +166,11 @@ test_that("General WQP retrievals working", {
   expect_type(lakeSites, "list")
   
   # Test county code:
-   dailyLexingtonVA <- readWQPdata(statecode = "Virginia", 
-                                   countycode="Lexington", 
-                                   parameterCd = "00010")
-   
-   expect_equal(ncol(dailyLexingtonVA),65)
+   # dailyLexingtonVA <- readWQPdata(statecode = "Virginia",
+   #                                 countycode="Lexington",
+   #                                 parameterCd = "00010")
+   # 
+   # expect_equal(ncol(dailyLexingtonVA),65)
    
    site1 <- readWQPsummary(siteid="USGS-07144100",
                            summaryYears=5,

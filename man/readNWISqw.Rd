@@ -57,7 +57,8 @@ endDateTime \tab POSIXct \tab If any sample_end_dt and sample_end_dt exist, this
 }
 
 Further columns will be included depending on the requested output format (expanded = TRUE or FALSE).
-
+Columns that end in "_reported" are the originally reported timezones, 
+but the "tz_cd" column defines the timezone of any POSIXct columns.
 
 There are also several useful attributes attached to the data frame:
 \tabular{lll}{
