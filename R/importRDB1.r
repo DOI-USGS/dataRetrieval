@@ -353,6 +353,10 @@ fixErrors <- function(readr.data, readr.data.char, message.text, FUN, ...){
 }
 
 read_delim_check_quote <- function(..., total.rows){
+  
+  if(total.rows <= 0){
+    total.rows <- 1
+  }
   rdb.data <- suppressWarnings(readr::read_delim(..., guess_max = total.rows))
   
   if(nrow(rdb.data) < total.rows){
