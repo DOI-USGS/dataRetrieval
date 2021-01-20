@@ -92,7 +92,7 @@ test_that("External importWaterML1 test", {
   expect_is(groundWater$dateTime, 'character')
 
   unitDataURL <- constructNWISURL(siteNumber,property,
-          "2013-11-03","2013-11-03",'uv')
+          "2020-10-30","2020-11-01",'uv')
   unitData <- importWaterML1(unitDataURL,TRUE)
   expect_is(unitData$dateTime, 'POSIXct')
 
