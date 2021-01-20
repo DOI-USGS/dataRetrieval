@@ -58,7 +58,7 @@
 #'          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
 #' multiData <- importRDB1(urlMultiPcodes)
 #' unitDataURL <- constructNWISURL(site_id,property,
-#'          "2013-11-03","2013-11-03","uv",format="tsv") #includes timezone switch
+#'          "2020-10-30","2020-11-01","uv",format="tsv") #includes timezone switch
 #' unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
 #' qwURL <- constructNWISURL(c('04024430','04024000'),
 #'           c('34247','30234','32104','34220'),
