@@ -343,7 +343,7 @@ findNLDI <- function(comid = NULL,
     #  Align request with formal name from sources
     #  If NWIS, add "USGS-" prefix
   start_url = paste0(
-    valid_ask(pkg.env$current_nldi, type = start_type)$good$feature, "/",
+    valid_ask(pkg.env$current_nldi, type = start_type)$good$features, "/",
     ifelse(start_type == "nwis", paste0("USGS-", starter), starter), "/"
   )
 
