@@ -317,7 +317,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
     url <- attr(data, "url")
     comment <- attr(data, "comment")
     queryTime <- attr(data, "queryTime")
-    header <- attr(data, "header")
+    header <- attr(data, "headerInfo")
     
     if(convertType){
       data$measurement_dateTime <- data$measurement_dt
