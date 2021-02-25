@@ -11,6 +11,7 @@ before_script:
   - echo "options(Ncpus = $(nproc --all))" >> /usr/local/lib/R/etc/Rprofile.site
   - install2.r devtools
   - r -e 'devtools::install_dev_deps()'
+  - r -e 'install.packages(c("zoo", "sf"))'
 
 test:
   stage: test
