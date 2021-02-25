@@ -12,6 +12,8 @@ vignette: >
   %\VignetteIndexEntry{Moving Averages}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 This post will show simple way to calculate moving averages, calculate historical-flow quantiles, and plot that information. The goal is to reproduce the graph at this link:
