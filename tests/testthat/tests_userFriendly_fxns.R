@@ -320,7 +320,7 @@ test_that("addWaterYear doesn't add another WY column if it exists", {
 })
 
 test_that("calcWaterYear can handle missing values", {
-  testthat::skip_on_cran()
+
   dateVec <- seq(as.Date("2010-01-01"),as.Date("2011-01-31"), by="months")
   dateVec[c(3,7,12)] <- NA
   wyVec <- dataRetrieval:::calcWaterYear(dateVec)

@@ -25,6 +25,8 @@ and ends on September 30. For example, water year 2015 started on
 }
 \examples{
 x <- seq(as.Date("2010-01-01"), as.Date("2010-12-31"), by="month")
-waterYear <- calcWaterYear(x)
+calcWaterYear(x)
 
+y <- c("2010-01-01", "1994-02", "1980", "2009-11-01", NA)
+calcWaterYear(y)
 }

@@ -74,11 +74,29 @@ addWaterYear <- function(rawData){
 #' @export
 #' @examples
 #' x <- seq(as.Date("2010-01-01"), as.Date("2010-12-31"), by="month")
-#' waterYear <- calcWaterYear(x)
+#' calcWaterYear(x)
 #' 
+#' y <- c("2010-01-01", "1994-02", "1980", "2009-11-01", NA)
+#' calcWaterYear(y)
 calcWaterYear <- function(dateVec){
+  
+  dateTimeVec <- tryCatch({
+      as.POSIXlt(dateVec)
+    }, 
+    error = function(e){
+      
+      date_vec <- as.Date(dateVec)
+      
+      if(any(is.na(date_vec))){
+        dateVec <- as.character(dateVec)
+        dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)] <- paste0(dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)],"-01")
+        dateVec <- as.Date(dateVec)
+      }
+      dateTimeVec <- as.POSIXlt(dateVec)
+      return(dateTimeVec)
+    })
+
   # POSIXlt years start at 100, POSIXlt months start at 0
-  dateTimeVec <- as.POSIXlt(dateVec)
   calYear <- dateTimeVec$year + 1900
   calMon <- dateTimeVec$mon + 1
   
