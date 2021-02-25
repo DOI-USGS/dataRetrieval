@@ -12,6 +12,8 @@ vignette: >
   %\VignetteIndexEntry{Moving Averages}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 This post will show simple way to calculate moving averages, calculate historical-flow quantiles, and plot that information. The goal is to reproduce the graph at this link:
@@ -41,24 +43,23 @@ Next, we calculate a 30-day moving average on all of the flow data:
 
 ```{r message=FALSE}
 library(dplyr)
+library(zoo)
 
 #Check for missing days, if so, add NA rows:
 if(as.numeric(diff(range(dailyQ$Date))) != (nrow(dailyQ)+1)){
-  fullDates <- seq(from=min(dailyQ$Date),
+  fullDates <- seq(from = min(dailyQ$Date),
                    to = max(dailyQ$Date), by="1 day")
   fullDates <- data.frame(Date = fullDates, 
-                          agency_cd = dailyQ$agency_cd[1],
-                          site_no = dailyQ$site_no[1],
-                          stringsAsFactors = FALSE)
-  dailyQ <- full_join(dailyQ, fullDates,
-                      by=c("Date","agency_cd","site_no")) %>%
+                          agency_cd = unique(dailyQ$agency_cd),
+                          site_no = unique(dailyQ$site_no))
+  dailyQ <- fullDates %>% 
+    left_join(dailyQ,
+              by=c("Date","agency_cd","site_no")) %>%
     arrange(Date)
 }
 
-ma <- function(x,n=30){stats::filter(x,rep(1/n,n), sides=1)}
-
 dailyQ <- dailyQ %>%
-  mutate(rollMean = as.numeric(ma(Flow)),
+  mutate(rollMean = rollmean(Flow, 30, fill = NA, align = "center"),
          day.of.year = as.numeric(strftime(Date, 
                                            format = "%j")))
 
@@ -93,6 +94,7 @@ summary.2 <- summaryQ %>%
 
 summaryQ <- bind_rows(summary.0, summary.1, summary.2) 
 
+
 smooth.span <- 0.3
 
 summaryQ$sm.75 <- predict(loess(p75~day.of.year, data = summaryQ, span = smooth.span))
@@ -101,14 +103,19 @@ summaryQ$sm.10 <- predict(loess(p10~day.of.year, data = summaryQ, span = smooth.
 summaryQ$sm.05 <- predict(loess(p05~day.of.year, data = summaryQ, span = smooth.span))
 summaryQ$sm.00 <- predict(loess(p00~day.of.year, data = summaryQ, span = smooth.span))
 
-summaryQ <- select(summaryQ, Date, day.of.year,
-                   sm.75, sm.25, sm.10, sm.05, sm.00) %>%
-  filter(Date >= as.Date(paste0(current.year-1,"-01-01")))
-
 latest.years <- dailyQ %>%
   filter(Date >= as.Date(paste0(current.year-1,"-01-01"))) %>%
   mutate(day.of.year = 1:nrow(.))
 
+#Let's just take the middle chunk:
+summaryQ <- summaryQ %>% 
+  filter(day.of.year %in% 1:365)  
+
+summaryQ <- summaryQ %>% 
+  bind_rows(summaryQ,
+            summaryQ) %>% 
+  mutate(day.of.year = 1:nrow(.) - 365)
+  
 
 ```
 
@@ -133,8 +140,6 @@ month.letters <- c("J","F","M","A","M","J","J","A","S","O","N","D")
 start.month.days <- c(1, 32, 61, 92, 121, 152, 182, 214, 245, 274, 305, 335)
 label.text <- c("Normal","Drought Watch","Drought Warning","Drought Emergency")
 
-summary.year1 <- data.frame(summaryQ[2:366,])
-summary.year2 <- data.frame(summaryQ[367:733,])
 
 plot(latest.years$day.of.year, latest.years$rollMean, 
      ylim = c(1, 1000), xlim = c(1, 733),
@@ -142,29 +147,17 @@ plot(latest.years$day.of.year, latest.years$rollMean,
      ylab = "30-day moving ave",
      xlab = "")
 title(title.text, cex.main = 0.75)
-polygon(c(summary.year1$day.of.year,rev(summary.year1$day.of.year)),
-        c(summary.year1$sm.75, rev(summary.year1$sm.25)), 
+polygon(c(summaryQ$day.of.year,rev(summaryQ$day.of.year)),
+        c(summaryQ$sm.75, rev(summaryQ$sm.25)), 
         col = "darkgreen", border = FALSE)
-polygon(c(summary.year2$day.of.year,rev(summary.year2$day.of.year)),
-        c(summary.year2$sm.75, rev(summary.year2$sm.25)), 
-        col = "darkgreen", border = FALSE)
-polygon(c(summary.year1$day.of.year,rev(summary.year1$day.of.year)),
-        c(summary.year1$sm.25, rev(summary.year1$sm.10)), 
+polygon(c(summaryQ$day.of.year,rev(summaryQ$day.of.year)),
+        c(summaryQ$sm.25, rev(summaryQ$sm.10)), 
         col = "yellow", border = FALSE)
-polygon(c(summary.year2$day.of.year,rev(summary.year2$day.of.year)),
-        c(summary.year2$sm.25, rev(summary.year2$sm.10)), 
-        col = "yellow", border = FALSE)
-polygon(c(summary.year1$day.of.year,rev(summary.year1$day.of.year)),
-        c(summary.year1$sm.10, rev(summary.year1$sm.05)), 
+polygon(c(summaryQ$day.of.year,rev(summaryQ$day.of.year)),
+        c(summaryQ$sm.10, rev(summaryQ$sm.05)), 
         col = "orange", border = FALSE)
-polygon(c(summary.year2$day.of.year,rev(summary.year2$day.of.year)),
-        c(summary.year2$sm.10, rev(summary.year2$sm.05)), 
-        col = "orange", border = FALSE)
-polygon(c(summary.year1$day.of.year,rev(summary.year1$day.of.year)),
-        c(summary.year1$sm.05, rev(summary.year1$sm.00)), 
-        col = "red", border = FALSE)
-polygon(c(summary.year2$day.of.year,rev(summary.year2$day.of.year)),
-        c(summary.year2$sm.05, rev(summary.year2$sm.00)), 
+polygon(c(summaryQ$day.of.year,rev(summaryQ$day.of.year)),
+        c(summaryQ$sm.05, rev(summaryQ$sm.00)), 
         col = "red", border = FALSE)
 lines(latest.years$day.of.year, latest.years$rollMean, 
       lwd=2, col = "black")
