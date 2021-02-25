@@ -36,6 +36,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -112,8 +114,8 @@
 
 <p>Retrieval functions for USGS and EPA hydrologic and water quality data.</p>
 <p>For complete tutorial information, see:</p>
-<p><a href="https://usgs-r.github.io/dataRetrieval" class="uri">https://usgs-r.github.io/dataRetrieval</a></p>
-<p><a href="https://owi.usgs.gov/R/dataRetrieval.html" class="uri">https://owi.usgs.gov/R/dataRetrieval.html</a></p>
+<p><a href="https://usgs-r.github.io/dataRetrieval" class="external-link uri">https://usgs-r.github.io/dataRetrieval</a></p>
+<p><a href="https://owi.usgs.gov/R/dataRetrieval.html" class="external-link uri">https://owi.usgs.gov/R/dataRetrieval.html</a></p>
 </div>
 <div id="sample-workflow" class="section level1">
 <h1 class="hasAnchor">
@@ -122,7 +124,7 @@
 <h2 class="hasAnchor">
 <a href="#usgs" class="anchor"></a>USGS</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/">dataRetrieval</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span>
 <span class="co"># Choptank River near Greensboro, MD</span>
 <span class="va">siteNumber</span> <span class="op">&lt;-</span> <span class="st">"01491000"</span> 
 <span class="va">ChoptankInfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readNWISsite.html">readNWISsite</a></span><span class="op">(</span><span class="va">siteNumber</span><span class="op">)</span>
@@ -154,21 +156,21 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">features</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"01491000"</span>,
                      nav <span class="op">=</span> <span class="st">"UT"</span>,
-                     find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'basin'</span>, <span class="st">'wqp'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+                     find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'basin'</span>, <span class="st">'wqp'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="reporting-bugs" class="section level1">
 <h1 class="hasAnchor">
 <a href="#reporting-bugs" class="anchor"></a>Reporting bugs</h1>
-<p>Please consider reporting bugs and asking questions on the Issues page: <a href="https://github.com/USGS-R/dataRetrieval/issues" class="uri">https://github.com/USGS-R/dataRetrieval/issues</a></p>
+<p>Please consider reporting bugs and asking questions on the Issues page: <a href="https://github.com/USGS-R/dataRetrieval/issues" class="external-link uri">https://github.com/USGS-R/dataRetrieval/issues</a></p>
 <p>Follow <code>@USGS_R</code> on Twitter for updates on USGS R packages:</p>
-<p><a href="https://twitter.com/USGS_R"><img src="https://img.shields.io/twitter/follow/USGS_R.svg?style=social&amp;label=Follow%20USGS_R" alt="Twitter Follow"></a></p>
+<p><a href="https://twitter.com/USGS_R" class="external-link"><img src="https://img.shields.io/twitter/follow/USGS_R.svg?style=social&amp;label=Follow%20USGS_R" alt="Twitter Follow"></a></p>
 </div>
 <div id="citing-dataretrieval" class="section level1">
 <h1 class="hasAnchor">
 <a href="#citing-dataretrieval" class="anchor"></a>Citing dataRetrieval</h1>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html">citation</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"dataRetrieval"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"dataRetrieval"</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; To cite dataRetrieval in publications, please use:</span>
 <span class="co">#&gt; </span>
@@ -194,35 +196,35 @@
 <h1 class="hasAnchor">
 <a href="#package-support" class="anchor"></a>Package Support</h1>
 <p>The Water Mission Area of the USGS supports the development and maintenance of <code>dataRetrieval</code>, and most likely further into the future. Resources are available primarily for maintenance and responding to user questions. Priorities on the development of new features are determined by the <code>dataRetrieval</code> development team.</p>
-<p><a href="https://www.usgs.gov/"><img src="http://usgs-r.github.io/images/usgs.png" alt="USGS"></a></p>
+<p><a href="https://www.usgs.gov/" class="external-link"><img src="http://usgs-r.github.io/images/usgs.png" alt="USGS"></a></p>
 </div>
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>To install the dataRetrieval package, you must be using R 3.0 or greater and run the following command:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"dataRetrieval"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"dataRetrieval"</span><span class="op">)</span></code></pre></div>
 <p>To get cutting-edge changes, install from GitHub using the <code>remotes</code> packages:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org">remotes</a></span><span class="op">)</span>
-<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"USGS-R/dataRetrieval"</span>, 
-               build_opts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"--no-resave-data"</span>, <span class="st">"--no-manual"</span><span class="op">)</span>,
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span>
+<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"USGS-R/dataRetrieval"</span>, 
+               build_opts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--no-resave-data"</span>, <span class="st">"--no-manual"</span><span class="op">)</span>,
                build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="disclaimer" class="section level1">
 <h1 class="hasAnchor">
 <a href="#disclaimer" class="anchor"></a>Disclaimer</h1>
-<p>This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the <a href="https://www2.usgs.gov/visual-id/credit_usgs.html#copyright">official USGS copyright policy</a></p>
+<p>This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the <a href="https://www2.usgs.gov/visual-id/credit_usgs.html#copyright" class="external-link">official USGS copyright policy</a></p>
 <p>Although this software program has been used by the U.S. Geological Survey (USGS), no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.</p>
 <p>This software is provided “AS IS.”</p>
-<p><a href="http://creativecommons.org/publicdomain/zero/1.0/"><img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC0"></a></p>
+<p><a href="http://creativecommons.org/publicdomain/zero/1.0/" class="external-link"><img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC0"></a></p>
 </div>
 
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=dataRetrieval">https://​cloud.r-project.org/​package=dataRetrieval</a>
 </li>
@@ -232,43 +234,48 @@
 </li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small>CC0</small></li>
 </ul>
 </div>
+
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
 <li><a href="authors.html">Citing dataRetrieval</a></li>
 </ul>
 </div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Laura DeCicco <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-3915-9487" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Robert Hirsch <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4534-075X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>David Lorenz <br><small class="roles"> Author </small>  </li>
 <li>David Watkins <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-7544-0700" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Mike Johnson <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html">More on authors...</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/USGS-R/dataRetrieval/actions"><img src="https://github.com/USGS-R/dataRetrieval/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://coveralls.io/github/USGS-R/dataRetrieval?branch=master"><img src="https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=master" alt="Coverage Status"></a></li>
-<li><a href="https://owi.usgs.gov/R/packages.html#core"><img src="https://img.shields.io/badge/USGS-Core-green.svg" alt="status"></a></li>
-<li><a href="https://cran.r-project.org/package=dataRetrieval"><img src="http://www.r-pkg.org/badges/version/dataRetrieval" alt="CRAN version"></a></li>
-<li><a href="https://cran.r-project.org/package=dataRetrieval"><img src="http://cranlogs.r-pkg.org/badges/dataRetrieval"></a></li>
-<li><a href="https://cran.r-project.org/package=dataRetrieval"><img src="http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval"></a></li>
+<li><a href="https://github.com/USGS-R/dataRetrieval/actions" class="external-link"><img src="https://github.com/USGS-R/dataRetrieval/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://coveralls.io/github/USGS-R/dataRetrieval?branch=master" class="external-link"><img src="https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=master" alt="Coverage Status"></a></li>
+<li><a href="https://owi.usgs.gov/R/packages.html#core" class="external-link"><img src="https://img.shields.io/badge/USGS-Core-green.svg" alt="status"></a></li>
+<li><a href="https://cran.r-project.org/package=dataRetrieval" class="external-link"><img src="http://www.r-pkg.org/badges/version/dataRetrieval" alt="CRAN version"></a></li>
+<li><a href="https://cran.r-project.org/package=dataRetrieval" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/dataRetrieval"></a></li>
+<li><a href="https://cran.r-project.org/package=dataRetrieval" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
@@ -277,7 +284,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
@@ -285,6 +292,8 @@
 
   
 
+
+  
 
   </body>
 </html>
