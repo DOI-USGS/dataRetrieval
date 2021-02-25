@@ -4,22 +4,22 @@ Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
 Version: 2.7.6.9003
 Authors@R: c(
     person("Laura", "DeCicco", role = c("aut","cre"),
-    email = "ldecicco@usgs.gov",
-     comment=c(ORCID="0000-0002-3915-9487")),
-     person("Robert", "Hirsch", role = c("aut"),
-     comment=c(ORCID="0000-0002-4534-075X")),
+            email = "ldecicco@usgs.gov",
+            comment=c(ORCID="0000-0002-3915-9487")),
+    person("Robert", "Hirsch", role = c("aut"),
+            comment=c(ORCID="0000-0002-4534-075X")),
     person("David","Lorenz", role=c("aut")),
     person("Jordan", "Read", role = c("ctb"),
-     email = "jread@usgs.gov"),
+            email = "jread@usgs.gov"),
     person("Jordan", "Walker", role = c("ctb")),
     person("Lindsay","Carr", role=c("ctb")),
     person("David","Watkins", role=c("aut"),
-     email = "wwatkins@usgs.gov",
-     comment=c(ORCID="0000-0002-7544-0700")),
+            email = "wwatkins@usgs.gov",
+            comment=c(ORCID="0000-0002-7544-0700")),
     person("David", "Blodgett", role="ctb"),
     person("Mike", "Johnson", role=c("aut"),
-     email = "mikecp11@gmail.com"),
-     comment=c(ORCID="0000-0002-5288-8350"))
+            email = "mikecp11@gmail.com",
+            comment=c(ORCID="0000-0002-5288-8350")))
 Description: Collection of functions to help retrieve U.S. Geological Survey
     (USGS) and U.S. Environmental Protection Agency (EPA) water quality and
     hydrology data from web services. USGS web services are discovered from 
