@@ -136,7 +136,8 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
                     header.names[grep("_id",header.names)],
                     header.names[grep("_tx",header.names)],
                     header.names[grep("_tm",header.names)],
-                    header.names[header.names == "site_no"])
+                    header.names[header.names == "site_no"],
+                    header.names[header.names == "project_no"])
     
     if(length(char.names) > 0){
       char.names.true <- char.names[sapply(readr.data[,char.names], is.character)]
