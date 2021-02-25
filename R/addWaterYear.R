@@ -80,7 +80,12 @@ addWaterYear <- function(rawData){
 #' calcWaterYear(y)
 calcWaterYear <- function(dateVec){
   
-  if(any(is.na(as.Date(dateVec)))){
+  date_vec <- as.Date(dateVec)
+  
+  if(all(is.na(date_vec))){
+
+    return(date_vec)
+  } else if(any(is.na(date_vec))){
     dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)] <- paste0(dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)],"-01")
     dateVec <- as.Date(dateVec)
   }
