@@ -130,7 +130,7 @@ findNLDI(origin = list("wade" = 'CA_45206'))
 If you don't know a feature ID, a `longitude`/`latitude` (X,Y) pair or a sf/sfc POINT object can be passed to the `location` argument. Doing so will identify the NHDPlus catchment the location fall within and will return the associated NHDPlusV2 flowline.
 
 ```{r}
-# Request by coordiantes
+# Request by coordinates
 findNLDI(location = c(-115, 40))
 
 # Request by sf/sfc POINT object
