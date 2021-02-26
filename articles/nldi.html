@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.6.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@
 </h1>
                         <h4 data-toc-skip class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
             
-            <h4 data-toc-skip class="date">2021-02-25</h4>
+            <h4 data-toc-skip class="date">2021-02-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/master/vignettes/nldi.Rmd" class="external-link"><code>vignettes/nldi.Rmd</code></a></small>
       <div class="hidden name"><code>nldi.Rmd</code></div>
@@ -155,7 +155,7 @@ Gas stations between UCSB and UCLA
 <div id="whats-available" class="section level1">
 <h1 class="hasAnchor">
 <a href="#whats-available" class="anchor"></a>What’s available?</h1>
-<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-02-25), 6 datasets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
+<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-02-26), 6 datasets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
@@ -267,7 +267,7 @@ Gas stations between UCSB and UCLA
 <a href="#location-longitudelatitude" class="anchor"></a>Location (longitude/latitude)</h3>
 <p>If you don’t know a feature ID, a <code>longitude</code>/<code>latitude</code> (X,Y) pair or a sf/sfc POINT object can be passed to the <code>location</code> argument. Doing so will identify the NHDPlus catchment the location fall within and will return the associated NHDPlusV2 flowline.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Request by coordiantes</span>
+<code class="sourceCode R"><span class="co"># Request by coordinates</span>
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">115</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Simple feature collection with 1 feature and 3 fields
 #&gt; geometry type:  LINESTRING
@@ -458,11 +458,13 @@ Integrating NLDI and NWIS dataRetrieval tools
 
 
       <footer><div class="copyright">
-  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
+  <p></p>
+<p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
