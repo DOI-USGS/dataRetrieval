@@ -80,6 +80,11 @@ addWaterYear <- function(rawData){
 #' calcWaterYear(y)
 calcWaterYear <- function(dateVec){
   
+  if(is.numeric(dateVec)){
+    message("dateVec is numeric, with insufficient information to determine water year.")
+    return(rep(NA, length(dateVec)))
+  }
+  
   dateTimeVec <- tryCatch({
       as.POSIXlt(dateVec)
     }, 
