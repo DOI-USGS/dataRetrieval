@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.6.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@
 </h1>
                         <h4 data-toc-skip class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
             
-            <h4 data-toc-skip class="date">2021-02-17</h4>
+            <h4 data-toc-skip class="date">2021-02-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/master/vignettes/nldi.Rmd" class="external-link"><code>vignettes/nldi.Rmd</code></a></small>
       <div class="hidden name"><code>nldi.Rmd</code></div>
@@ -155,7 +155,7 @@ Gas stations between UCSB and UCLA
 <div id="whats-available" class="section level1">
 <h1 class="hasAnchor">
 <a href="#whats-available" class="anchor"></a>What’s available?</h1>
-<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-02-17), 6 datasets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
+<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-02-26), 6 datasets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
@@ -173,32 +173,32 @@ Gas stations between UCSB and UCLA
 <tr class="odd">
 <td align="left">comid</td>
 <td align="left">NHDPlus comid</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid" class="external-link">https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid</a></td>
 </tr>
 <tr class="even">
 <td align="left">huc12pp</td>
 <td align="left">HUC12 Pour Points</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp" class="external-link">https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp</a></td>
 </tr>
 <tr class="odd">
 <td align="left">nwissite</td>
 <td align="left">NWIS Sites</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite" class="external-link">https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite</a></td>
 </tr>
 <tr class="even">
 <td align="left">ref_gage</td>
 <td align="left">geoconnex.us reference gages</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage" class="external-link">https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage</a></td>
 </tr>
 <tr class="odd">
 <td align="left">wade</td>
 <td align="left">Water Data Exchange 2.0 Sites</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade" class="external-link">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade</a></td>
 </tr>
 <tr class="even">
 <td align="left">WQP</td>
 <td align="left">Water Quality Portal</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp" class="external-link">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp</a></td>
 </tr>
 </tbody>
 </table>
@@ -223,7 +223,7 @@ Gas stations between UCSB and UCLA
 #&gt;   sourceName   identifier comid                                         geometry
 #&gt;   &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                                 &lt;LINESTRING [°]&gt;
 #&gt; 1 NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…</code></pre>
-<p>The returned simple features object contains the native dataset identifier (“identifier”), sourceName of the native dataset, and the indexed NHD COMID (in this case a duplicate since an NHD feature was requested). In the example above, we see the geometry column is of type <code>LINESTRING</code>. To keep <code>dataRetrieval</code> lightweight, the [<code>sf</code>] (<a href="https://r-spatial.github.io/sf/articles/sf1.html" class="external-link">https://r-spatial.github.io/sf/articles/sf1.html</a>) package is not a dependency. Instead, if <code>sf</code> is not installed - or <code>no_sf = TRUE</code> - only the <em>sourceName</em>, <em>comid</em>, and <em>identifier</em> will be returned.</p>
+<p>The returned simple features object contains the native dataset identifier (“identifier”), sourceName of the native dataset, and the indexed NHD COMID (in this case a duplicate since an NHD feature was requested). In the example above, we see the geometry column is of type <code>LINESTRING</code>. To keep <code>dataRetrieval</code> lightweight, the [<code>sf</code>] (<a href="https://r-spatial.github.io/sf/articles/sf1.html" class="external-link uri">https://r-spatial.github.io/sf/articles/sf1.html</a>) package is not a dependency. Instead, if <code>sf</code> is not installed - or <code>no_sf = TRUE</code> - only the <em>sourceName</em>, <em>comid</em>, and <em>identifier</em> will be returned.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;      sourceName identifier comid
@@ -267,7 +267,7 @@ Gas stations between UCSB and UCLA
 <a href="#location-longitudelatitude" class="anchor"></a>Location (longitude/latitude)</h3>
 <p>If you don’t know a feature ID, a <code>longitude</code>/<code>latitude</code> (X,Y) pair or a sf/sfc POINT object can be passed to the <code>location</code> argument. Doing so will identify the NHDPlus catchment the location fall within and will return the associated NHDPlusV2 flowline.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Request by coordiantes</span>
+<code class="sourceCode R"><span class="co"># Request by coordinates</span>
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">115</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Simple feature collection with 1 feature and 3 fields
 #&gt; geometry type:  LINESTRING
@@ -458,11 +458,13 @@ Integrating NLDI and NWIS dataRetrieval tools
 
 
       <footer><div class="copyright">
-  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
+  <p></p>
+<p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

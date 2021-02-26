@@ -99,7 +99,7 @@ Network Linked Data Index." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.6.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7</span>
       </span>
     </div>
 
@@ -246,7 +246,7 @@ navigated paths. Valid starting options can be given by one of the following
 arguments: comid, nwis, huc12, wqp, location, and start.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># Find Features / Define origin features</span>
 
 <span class='co'>## Find feature by COMID</span>
@@ -256,10 +256,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
 #&gt; geographic CRS: WGS 84
-#&gt; <span style='color: #555555;'># A tibble: 1 x 4</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 1 x 4</span><span>
 #&gt;   sourceName   identifier comid                                         geometry
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #555555;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…</div><div class='input'>
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…</div><div class='input'>
 <span class='co'>## Find feature by NWIS ID</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 1 feature and 5 fields
@@ -267,10 +267,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 6</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
-#&gt; </span><span style='color: #555555;'>*</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)</div><div class='input'>
+#&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)</div><div class='input'>
 <span class='co'>## Find feature by WQP ID</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>wqp <span class='op'>=</span> <span class='st'>'USGS-04024315'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 1 feature and 5 fields
@@ -278,10 +278,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -92.23492 ymin: 46.50355 xmax: -92.23492 ymax: 46.50355
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 6</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName           identifier    comid       X     Y             geometry
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> Water Quality Portal USGS-04024315 1800305 -</span><span style='color: #BB0000;'>92.2</span><span>  46.5 (-92.23492 46.50355)</div><div class='input'>
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> Water Quality Portal USGS-04024315 1800305 -</span><span style='color: #BB0000;'>92.2</span><span>  46.5 (-92.23492 46.50355)</div><div class='input'>
 <span class='co'>## Find feature by LOCATION</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>location <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>115</span>,<span class='fl'>40</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 1 feature and 3 fields
@@ -289,10 +289,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -115.0326 ymin: 40.04013 xmax: -115.0182 ymax: 40.05183
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 4</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 4</span><span>
 #&gt;   sourceName   identifier comid                                         geometry
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #555555;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> NHDPlus com… 946060315  94606… (-115.0182 40.05183, -115.0185 40.05176, -115.…</div><div class='input'>
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NHDPlus com… 946060315  94606… (-115.0182 40.05183, -115.0185 40.05176, -115.…</div><div class='input'>
 <span class='co'>## GENERAL ORIGIN: COMID</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>origin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"comid"</span> <span class='op'>=</span> <span class='fl'>101</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 1 feature and 3 fields
@@ -300,10 +300,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 4</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 4</span><span>
 #&gt;   sourceName   identifier comid                                         geometry
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #555555;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…</div><div class='input'>
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…</div><div class='input'>
 <span class='co'>## GENERAL ORIGIN: WaDE</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>origin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"wade"</span> <span class='op'>=</span> <span class='st'>'CA_45206'</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 1 feature and 5 fields
@@ -311,10 +311,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.7917 ymin: 34.47273 xmax: -119.7917 ymax: 34.47273
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 6</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName                identifier comid       X     Y              geometry
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> Water Data Exchange 2.0 … CA_45206   175952… -</span><span style='color: #BB0000;'>120.</span><span>  34.5  (-119.7917 34.47273)</div><div class='input'>
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> Water Data Exchange 2.0 … CA_45206   175952… -</span><span style='color: #BB0000;'>120.</span><span>  34.5  (-119.7917 34.47273)</div><div class='input'>
 <span class='co'># Navigation (flowlines will be returned if find is unspecified)</span>
 <span class='co'># UPPER MAINSTEM of USGS-11120000</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='st'>"UM"</span><span class='op'>)</span>
@@ -324,10 +324,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 6</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
-#&gt; </span><span style='color: #555555;'>*</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)
+#&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)
 #&gt; 
 #&gt; $UM_flowlines
 #&gt; Simple feature collection with 4 features and 1 field
@@ -335,13 +335,13 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.8296 ymin: 34.42015 xmax: -119.7607 ymax: 34.46831
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 4 x 2</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 4 x 2</span><span>
 #&gt;   nhdplus_comid                                                         geometry
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                                         </span><span style='color: #555555;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> 17595429      (-119.8104 34.42513, -119.8112 34.42476, -119.8123 34.42447, -1…
-#&gt; </span><span style='color: #555555;'>2</span><span> 17595395      (-119.7859 34.43139, -119.7861 34.43114, -119.7868 34.43091, -1…
-#&gt; </span><span style='color: #555555;'>3</span><span> 17595361      (-119.7755 34.43447, -119.7761 34.43406, -119.7782 34.43337, -1…
-#&gt; </span><span style='color: #555555;'>4</span><span> 17596117      (-119.7631 34.46831, -119.7626 34.46781, -119.7623 34.46721, -1…
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                                         </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 17595429      (-119.8104 34.42513, -119.8112 34.42476, -119.8123 34.42447, -1…
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 17595395      (-119.7859 34.43139, -119.7861 34.43114, -119.7868 34.43091, -1…
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 17595361      (-119.7755 34.43447, -119.7761 34.43406, -119.7782 34.43337, -1…
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 17596117      (-119.7631 34.46831, -119.7626 34.46781, -119.7623 34.46721, -1…
 #&gt; </div><div class='input'>
 <span class='co'># MULTI-REQUEST</span>
 <span class='co'># UPPER MAINSTEM and TRIBUTARY of USGS-11120000</span>
@@ -352,10 +352,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 6</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
-#&gt; </span><span style='color: #555555;'>*</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)
+#&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)
 #&gt; 
 #&gt; $UT_flowlines
 #&gt; Simple feature collection with 25 features and 1 field
@@ -363,20 +363,20 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.8296 ymin: 34.42015 xmax: -119.7332 ymax: 34.51769
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 25 x 2</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 25 x 2</span><span>
 #&gt;    nhdplus_comid                                                        geometry
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                                        </span><span style='color: #555555;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> 17595429      (-119.8104 34.42513, -119.8112 34.42476, -119.8123 34.42447, -…
-#&gt; </span><span style='color: #555555;'> 2</span><span> 17595393      (-119.8052 34.44199, -119.8051 34.44135, -119.8052 34.44069, -…
-#&gt; </span><span style='color: #555555;'> 3</span><span> 17595395      (-119.7859 34.43139, -119.7861 34.43114, -119.7868 34.43091, -…
-#&gt; </span><span style='color: #555555;'> 4</span><span> 17596113      (-119.7658 34.47264, -119.7658 34.47214, -119.766 34.4718, -11…
-#&gt; </span><span style='color: #555555;'> 5</span><span> 17596111      (-119.7944 34.45971, -119.7952 34.45939, -119.7956 34.45906, -…
-#&gt; </span><span style='color: #555555;'> 6</span><span> 17595361      (-119.7755 34.43447, -119.7761 34.43406, -119.7782 34.43337, -…
-#&gt; </span><span style='color: #555555;'> 7</span><span> 17596115      (-119.7709 34.45809, -119.7714 34.45738, -119.772 34.45692, -1…
-#&gt; </span><span style='color: #555555;'> 8</span><span> 17595239      (-119.7624 34.4798, -119.7626 34.47978, -119.7631 34.4796, -11…
-#&gt; </span><span style='color: #555555;'> 9</span><span> 17596077      (-119.7435 34.5, -119.7439 34.49933, -119.7447 34.49844, -119.…
-#&gt; </span><span style='color: #555555;'>10</span><span> 17595277      (-119.7914 34.47602, -119.7915 34.47557, -119.7914 34.47421, -…
-#&gt; </span><span style='color: #555555;'># … with 15 more rows</span><span>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                                        </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 17595429      (-119.8104 34.42513, -119.8112 34.42476, -119.8123 34.42447, -…
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 17595393      (-119.8052 34.44199, -119.8051 34.44135, -119.8052 34.44069, -…
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 17595395      (-119.7859 34.43139, -119.7861 34.43114, -119.7868 34.43091, -…
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 17596113      (-119.7658 34.47264, -119.7658 34.47214, -119.766 34.4718, -11…
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 17596111      (-119.7944 34.45971, -119.7952 34.45939, -119.7956 34.45906, -…
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 17595361      (-119.7755 34.43447, -119.7761 34.43406, -119.7782 34.43337, -…
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 17596115      (-119.7709 34.45809, -119.7714 34.45738, -119.772 34.45692, -1…
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 17595239      (-119.7624 34.4798, -119.7626 34.47978, -119.7631 34.4796, -11…
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 17596077      (-119.7435 34.5, -119.7439 34.49933, -119.7447 34.49844, -119.…
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 17595277      (-119.7914 34.47602, -119.7915 34.47557, -119.7914 34.47421, -…
+#&gt; </span><span style='color: #949494;'># … with 15 more rows</span><span>
 #&gt; 
 #&gt; $UM_flowlines
 #&gt; Simple feature collection with 4 features and 1 field
@@ -384,13 +384,13 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.8296 ymin: 34.42015 xmax: -119.7607 ymax: 34.46831
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 4 x 2</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 4 x 2</span><span>
 #&gt;   nhdplus_comid                                                         geometry
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                                         </span><span style='color: #555555;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> 17595429      (-119.8104 34.42513, -119.8112 34.42476, -119.8123 34.42447, -1…
-#&gt; </span><span style='color: #555555;'>2</span><span> 17595395      (-119.7859 34.43139, -119.7861 34.43114, -119.7868 34.43091, -1…
-#&gt; </span><span style='color: #555555;'>3</span><span> 17595361      (-119.7755 34.43447, -119.7761 34.43406, -119.7782 34.43337, -1…
-#&gt; </span><span style='color: #555555;'>4</span><span> 17596117      (-119.7631 34.46831, -119.7626 34.46781, -119.7623 34.46721, -1…
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                                         </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 17595429      (-119.8104 34.42513, -119.8112 34.42476, -119.8123 34.42447, -1…
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 17595395      (-119.7859 34.43139, -119.7861 34.43114, -119.7868 34.43091, -1…
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 17595361      (-119.7755 34.43447, -119.7761 34.43406, -119.7782 34.43337, -1…
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 17596117      (-119.7631 34.46831, -119.7626 34.46781, -119.7623 34.46721, -1…
 #&gt; </div><div class='input'>
 <span class='co'># Discover Features(flowlines will not be returned unless included in find)</span>
 
@@ -402,10 +402,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 6</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
-#&gt; </span><span style='color: #555555;'>*</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)
+#&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)
 #&gt; 
 #&gt; $UT_nwissite
 #&gt; Simple feature collection with 3 features and 5 fields
@@ -413,12 +413,12 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.7843 ymax: 34.445
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 3 x 6</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 3 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
-#&gt; </span><span style='color: #555555;'>*</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> NWIS Sites 11119900   17595361 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.7843 34.43222)
-#&gt; </span><span style='color: #555555;'>2</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)
-#&gt; </span><span style='color: #555555;'>3</span><span> NWIS Sites 11119940   17596111 -</span><span style='color: #BB0000;'>120.</span><span>  34.4   (-119.8037 34.445)
+#&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NWIS Sites 11119900   17595361 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.7843 34.43222)
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> NWIS Sites 11119940   17596111 -</span><span style='color: #BB0000;'>120.</span><span>  34.4   (-119.8037 34.445)
 #&gt; 
 #&gt; $UT_WQP
 #&gt; Simple feature collection with 64 features and 5 fields
@@ -426,20 +426,20 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.824 ymin: 34.4224 xmax: -119.7479 ymax: 34.4525
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 64 x 6</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 64 x 6</span><span>
 #&gt;    sourceName        identifier        comid       X     Y              geometry
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>             </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>             </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> Water Quality Po… USGS-34260511947… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.7951 34.43472)
-#&gt; </span><span style='color: #555555;'> 2</span><span> Water Quality Po… CEDEN-315GOLWRD   175954… -</span><span style='color: #BB0000;'>120.</span><span>  34.4    (-119.824 34.4224)
-#&gt; </span><span style='color: #555555;'> 3</span><span> Water Quality Po… CEDEN-315MYC      175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4    (-119.809 34.4254)
-#&gt; </span><span style='color: #555555;'> 4</span><span> Water Quality Po… USGS-34253911948… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4   (-119.8107 34.4275)
-#&gt; </span><span style='color: #555555;'> 5</span><span> Water Quality Po… USGS-34262911945… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.7674 34.44139)
-#&gt; </span><span style='color: #555555;'> 6</span><span> Water Quality Po… USGS-34263211945… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.7629 34.44222)
-#&gt; </span><span style='color: #555555;'> 7</span><span> Water Quality Po… USGS-34260911946… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4   (-119.771 34.43583)
-#&gt; </span><span style='color: #555555;'> 8</span><span> Water Quality Po… USGS-34264311947… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.8001 34.44527)
-#&gt; </span><span style='color: #555555;'> 9</span><span> Water Quality Po… USGS-34260211946… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4   (-119.784 34.43389)
-#&gt; </span><span style='color: #555555;'>10</span><span> Water Quality Po… USGS-34262311946… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.7807 34.43972)
-#&gt; </span><span style='color: #555555;'># … with 54 more rows</span><span>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>             </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>             </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> Water Quality Po… USGS-34261011948… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.8099 34.43611)
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> Water Quality Po… CEDEN-315ATA      175954… -</span><span style='color: #BB0000;'>120.</span><span>  34.4    (-119.819 34.4235)
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> Water Quality Po… USGS-34270511947… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.5  (-119.7999 34.45139)
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> Water Quality Po… USGS-34253811948… 175954… -</span><span style='color: #BB0000;'>120.</span><span>  34.4   (-119.814 34.42722)
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> Water Quality Po… USGS-34261211946… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.7742 34.43617)
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> Water Quality Po… USGS-34253911948… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4   (-119.8107 34.4275)
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> Water Quality Po… USGS-34261911948… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.8021 34.43861)
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> Water Quality Po… USGS-34264211947… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.4    (-119.7963 34.445)
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> Water Quality Po… USGS-34264211944… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4    (-119.7479 34.445)
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> Water Quality Po… USGS-34270511947… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.5  (-119.7999 34.45139)
+#&gt; </span><span style='color: #949494;'># … with 54 more rows</span><span>
 #&gt; </div><div class='input'>
 <span class='co'>## Find upstream basin boundary and  of USGS-11120000</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>,  find <span class='op'>=</span> <span class='st'>"basin"</span><span class='op'>)</span>
@@ -449,10 +449,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 6</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
-#&gt; </span><span style='color: #555555;'>*</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)
+#&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NWIS Sites 11120000   17595429 -</span><span style='color: #BB0000;'>120.</span><span>  34.4 (-119.8118 34.42472)
 #&gt; 
 #&gt; $basin
 #&gt; Simple feature collection with 1 feature and 0 fields
@@ -460,10 +460,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -119.8295 ymin: 34.41806 xmax: -119.7307 ymax: 34.52034
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 1</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 1</span><span>
 #&gt;                                                                         geometry
-#&gt;                                                                    </span><span style='color: #555555;font-style: italic;'>&lt;POLYGON [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> ((-119.7479 34.45901, -119.7452 34.45292, -119.745 34.44701, -119.7473 34.443…
+#&gt;                                                                    </span><span style='color: #949494;font-style: italic;'>&lt;POLYGON [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> ((-119.7479 34.45901, -119.7452 34.45292, -119.745 34.44701, -119.7473 34.443…
 #&gt; </div><div class='input'>
 <span class='co'># Control Distance</span>
 <span class='co'>## Limit search to 50 km</span>
@@ -474,10 +474,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 4</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 4</span><span>
 #&gt;   sourceName   identifier comid                                         geometry
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #555555;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…
 #&gt; 
 #&gt; $DM_nwissite
 #&gt; Simple feature collection with 1 feature and 5 fields
@@ -485,10 +485,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -94.39944 ymin: 31.025 xmax: -94.39944 ymax: 31.025
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 1 x 6</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid       X     Y           geometry
-#&gt; </span><span style='color: #555555;'>*</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> NWIS Sites 08033500   1109655 -</span><span style='color: #BB0000;'>94.4</span><span>  31.0 (-94.39944 31.025)
+#&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> NWIS Sites 08033500   1109655 -</span><span style='color: #BB0000;'>94.4</span><span>  31.0 (-94.39944 31.025)
 #&gt; 
 #&gt; $DM_WQP
 #&gt; Simple feature collection with 3 features and 5 fields
@@ -496,12 +496,12 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -94.3995 ymin: 31.0247 xmax: -94.38492 ymax: 31.03547
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 3 x 6</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 3 x 6</span><span>
 #&gt;   sourceName         identifier         comid      X     Y              geometry
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> Water Quality Por… TCEQMAIN-10585     11096… -</span><span style='color: #BB0000;'>94.4</span><span>  31.0    (-94.3995 31.0247)
-#&gt; </span><span style='color: #555555;'>2</span><span> Water Quality Por… USGS-310207094230… 11096… -</span><span style='color: #BB0000;'>94.4</span><span>  31.0  (-94.38492 31.03547)
-#&gt; </span><span style='color: #555555;'>3</span><span> Water Quality Por… USGS-08033500      11096… -</span><span style='color: #BB0000;'>94.4</span><span>  31.0    (-94.39944 31.025)
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> Water Quality Por… USGS-08033500      11096… -</span><span style='color: #BB0000;'>94.4</span><span>  31.0    (-94.39944 31.025)
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> Water Quality Por… TCEQMAIN-10585     11096… -</span><span style='color: #BB0000;'>94.4</span><span>  31.0    (-94.3995 31.0247)
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> Water Quality Por… USGS-310207094230… 11096… -</span><span style='color: #BB0000;'>94.4</span><span>  31.0  (-94.38492 31.03547)
 #&gt; 
 #&gt; $DM_flowlines
 #&gt; Simple feature collection with 20 features and 1 field
@@ -509,30 +509,31 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -94.64845 ymin: 31.00305 xmax: -94.37394 ymax: 31.09915
 #&gt; geographic CRS: WGS 84
-#&gt; </span><span style='color: #555555;'># A tibble: 20 x 2</span><span>
+#&gt; </span><span style='color: #949494;'># A tibble: 20 x 2</span><span>
 #&gt;    nhdplus_comid                                                        geometry
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                                        </span><span style='color: #555555;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> 101           (-94.64845 31.09915, -94.64803 31.09871, -94.64774 31.0981, -9…
-#&gt; </span><span style='color: #555555;'> 2</span><span> 1078719       (-94.62997 31.0838, -94.62957 31.08367, -94.6288 31.08371, -94…
-#&gt; </span><span style='color: #555555;'> 3</span><span> 1078721       (-94.61139 31.07963, -94.61205 31.07897, -94.61226 31.07844, -…
-#&gt; </span><span style='color: #555555;'> 4</span><span> 1078725       (-94.61216 31.07787, -94.61085 31.07759, -94.60894 31.07762, -…
-#&gt; </span><span style='color: #555555;'> 5</span><span> 1078733       (-94.60537 31.07764, -94.60502 31.07796, -94.60481 31.07805, -…
-#&gt; </span><span style='color: #555555;'> 6</span><span> 1078739       (-94.59281 31.07283, -94.59113 31.07301, -94.58833 31.07262, -…
-#&gt; </span><span style='color: #555555;'> 7</span><span> 1078769       (-94.56965 31.06817, -94.56946 31.06814, -94.56909 31.06826, -…
-#&gt; </span><span style='color: #555555;'> 8</span><span> 1078783       (-94.53857 31.05436, -94.53809 31.05429, -94.53764 31.05388, -…
-#&gt; </span><span style='color: #555555;'> 9</span><span> 1078807       (-94.53096 31.05568, -94.53093 31.05499, -94.53045 31.05451, -…
-#&gt; </span><span style='color: #555555;'>10</span><span> 1078835       (-94.51641 31.04992, -94.51633 31.04939, -94.5159 31.04891, -9…
-#&gt; </span><span style='color: #555555;'>11</span><span> 1079065       (-94.50175 31.04448, -94.50175 31.04438, -94.50101 31.0431, -9…
-#&gt; </span><span style='color: #555555;'>12</span><span> 1078885       (-94.49899 31.04272, -94.49737 31.04286, -94.49689 31.04275, -…
-#&gt; </span><span style='color: #555555;'>13</span><span> 1078897       (-94.48568 31.03226, -94.48568 31.03155, -94.48536 31.03128, -…
-#&gt; </span><span style='color: #555555;'>14</span><span> 1109679       (-94.45777 31.03345, -94.45771 31.033, -94.45779 31.03261, -94…
-#&gt; </span><span style='color: #555555;'>15</span><span> 1109681       (-94.45096 31.00347, -94.45066 31.00314, -94.45048 31.00305, -…
-#&gt; </span><span style='color: #555555;'>16</span><span> 1109675       (-94.4342 31.00714, -94.43401 31.00755, -94.43401 31.00787, -9…
-#&gt; </span><span style='color: #555555;'>17</span><span> 1109669       (-94.43277 31.01319, -94.43402 31.01303, -94.43455 31.01278, -…
-#&gt; </span><span style='color: #555555;'>18</span><span> 1109665       (-94.43287 31.01461, -94.43279 31.0147, -94.43138 31.01482, -9…
-#&gt; </span><span style='color: #555555;'>19</span><span> 1109655       (-94.40199 31.02606, -94.40188 31.02606, -94.401 31.02521, -94…
-#&gt; </span><span style='color: #555555;'>20</span><span> 1109651       (-94.39707 31.02849, -94.39696 31.02906, -94.39672 31.02917, -…
-#&gt; </div></span></pre>
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                                        </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 101           (-94.64845 31.09915, -94.64803 31.09871, -94.64774 31.0981, -9…
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 1078719       (-94.62997 31.0838, -94.62957 31.08367, -94.6288 31.08371, -94…
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 1078721       (-94.61139 31.07963, -94.61205 31.07897, -94.61226 31.07844, -…
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 1078725       (-94.61216 31.07787, -94.61085 31.07759, -94.60894 31.07762, -…
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 1078733       (-94.60537 31.07764, -94.60502 31.07796, -94.60481 31.07805, -…
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 1078739       (-94.59281 31.07283, -94.59113 31.07301, -94.58833 31.07262, -…
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 1078769       (-94.56965 31.06817, -94.56946 31.06814, -94.56909 31.06826, -…
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 1078783       (-94.53857 31.05436, -94.53809 31.05429, -94.53764 31.05388, -…
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 1078807       (-94.53096 31.05568, -94.53093 31.05499, -94.53045 31.05451, -…
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 1078835       (-94.51641 31.04992, -94.51633 31.04939, -94.5159 31.04891, -9…
+#&gt; </span><span style='color: #BCBCBC;'>11</span><span> 1079065       (-94.50175 31.04448, -94.50175 31.04438, -94.50101 31.0431, -9…
+#&gt; </span><span style='color: #BCBCBC;'>12</span><span> 1078885       (-94.49899 31.04272, -94.49737 31.04286, -94.49689 31.04275, -…
+#&gt; </span><span style='color: #BCBCBC;'>13</span><span> 1078897       (-94.48568 31.03226, -94.48568 31.03155, -94.48536 31.03128, -…
+#&gt; </span><span style='color: #BCBCBC;'>14</span><span> 1109679       (-94.45777 31.03345, -94.45771 31.033, -94.45779 31.03261, -94…
+#&gt; </span><span style='color: #BCBCBC;'>15</span><span> 1109681       (-94.45096 31.00347, -94.45066 31.00314, -94.45048 31.00305, -…
+#&gt; </span><span style='color: #BCBCBC;'>16</span><span> 1109675       (-94.4342 31.00714, -94.43401 31.00755, -94.43401 31.00787, -9…
+#&gt; </span><span style='color: #BCBCBC;'>17</span><span> 1109669       (-94.43277 31.01319, -94.43402 31.01303, -94.43455 31.01278, -…
+#&gt; </span><span style='color: #BCBCBC;'>18</span><span> 1109665       (-94.43287 31.01461, -94.43279 31.0147, -94.43138 31.01482, -9…
+#&gt; </span><span style='color: #BCBCBC;'>19</span><span> 1109655       (-94.40199 31.02606, -94.40188 31.02606, -94.401 31.02521, -94…
+#&gt; </span><span style='color: #BCBCBC;'>20</span><span> 1109651       (-94.39707 31.02849, -94.39696 31.02906, -94.39672 31.02917, -…
+#&gt; </div><div class='input'><span class='co'># }</span>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -544,11 +545,11 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
+  <p><p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
 </div>
 
       </footer>
