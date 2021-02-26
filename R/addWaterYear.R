@@ -85,7 +85,13 @@ calcWaterYear <- function(dateVec){
     }, 
     error = function(e){
       
-      date_vec <- as.Date(dateVec)
+      date_vec <- tryCatch({
+        as.Date(dateVec)
+      },
+      error = function(e){
+        return(rep(NA, length(dateVec)))
+      })
+      
       
       if(any(is.na(date_vec))){
         dateVec <- as.character(dateVec)

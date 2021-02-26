@@ -8,6 +8,7 @@ readNWISgwl(
   siteNumbers,
   startDate = "",
   endDate = "",
+  parameterCd = NA,
   convertType = TRUE,
   tz = "UTC"
 )
@@ -20,6 +21,8 @@ retrieval for the earliest possible record.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record.}
+
+\item{parameterCd}{character USGS parameter code.  This is usually an 5 digit number. Default is "".}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
@@ -66,12 +69,15 @@ See \url{https://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more in
 \examples{
 site_id <- "434400121275801"
 \donttest{
-data <- readNWISgwl(site_id, '','')
+data <- readNWISgwl(site_id)
 sites <- c("434400121275801", "375907091432201")
 data2 <- readNWISgwl(site_id, '','')
 data3 <- readNWISgwl("420125073193001", '','')
 #handling of data where date has no day
 data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01") 
+
+data5 <- readNWISgwl("263819081585801", parameterCd = "72019")
+
 }
 }
 \seealso{
