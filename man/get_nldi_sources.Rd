@@ -13,6 +13,8 @@ data.frame
 Used to query the current resources available through the NLDI
 }
 \examples{
+\donttest{
 get_nldi_sources()
+}
 }
 \keyword{nldi}

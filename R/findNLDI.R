@@ -17,8 +17,9 @@ tc <- function(x) {
 #' @importFrom httr RETRY content
 #' @importFrom jsonlite fromJSON
 #' @examples
+#' \donttest{
 #' get_nldi_sources()
-
+#' }
 get_nldi_sources <- function() {
   res <-
     httr::RETRY("GET",
@@ -53,14 +54,13 @@ get_nldi_sources <- function() {
 #' @importFrom httr content RETRY
 #' @importFrom jsonlite fromJSON
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'  base = "https://labs.waterdata.usgs.gov/api/nldi/linked-data/"
 #'  get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = FALSE)
 #'  get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = TRUE)
 #'  get_nldi(url = paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
 #'  get_nldi(paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
 #'  }
-
 get_nldi = function(url, type = "", use_sf = FALSE){
 
   # The features names are different across features, navigation, and basin returns
@@ -144,7 +144,6 @@ get_nldi = function(url, type = "", use_sf = FALSE){
 #' @return the input object with potentially modified identifiers
 #' @keywords nldi internal
 #' @noRd
-
 clean_nwis_ids = function(tmp) {
   # If data.frame, and of type NWIS, then strip "USGS-" from identifiers
   if (is.data.frame(tmp)) {
@@ -167,10 +166,9 @@ clean_nwis_ids = function(tmp) {
 #' @keywords nldi internal
 #' @noRd
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' valid_ask(all = get_nldi_sources(), "nwis")
 #' }
-
 valid_ask = function(all, type){
   # those where the requested pattern is included in a nldi_source ...
     # means we will catch nwis - not just nwissite ...
@@ -219,7 +217,7 @@ valid_ask = function(all, type){
 #' @export
 #' @keywords nldi
 #' @examples
-#'
+#' \donttest{
 #' # Find Features / Define origin features
 #'
 #' ## Find feature by COMID
@@ -259,8 +257,7 @@ valid_ask = function(all, type){
 #' # Control Distance
 #' ## Limit search to 50 km
 #'  findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
-
-
+#'}
 findNLDI <- function(comid = NULL,
                      nwis = NULL,
                      wqp = NULL,
