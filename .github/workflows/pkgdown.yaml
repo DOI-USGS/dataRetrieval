@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           options(pkgType = "binary")
-          install.packages(c("remotes", "dplyr", "purrr", "ggplot2", "maptools", "sp", "maps", "rgdal", "leaflet"))
+          install.packages(c("remotes", "dplyr", "purrr", "ggplot2", "maptools", "sp", "maps", "rgdal", "leaflet", "sf", "zoo"))
           remotes::install_deps(dependencies = TRUE)
           remotes::install_dev("pkgdown")
         shell: Rscript {0}
@@ -41,5 +41,6 @@ jobs:
       - name: Deploy package
         run: |
           Sys.setenv(CI = FALSE)
+          options(rmarkdown.html_vignette.check_title = FALSE)
           pkgdown::deploy_to_branch(new_process = FALSE)
         shell: Rscript {0}
