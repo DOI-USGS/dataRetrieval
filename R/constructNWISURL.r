@@ -208,7 +208,7 @@ constructNWISURL <- function(siteNumbers,parameterCd="00060",startDate="",endDat
             },
             rdb = {
               if("gwlevels" == service){
-                  "rdb"
+                  "rdb,3.0"
                 } else {
                   "rdb,1.0"
                 }
@@ -232,7 +232,7 @@ constructNWISURL <- function(siteNumbers,parameterCd="00060",startDate="",endDat
 
           url <- appendDrURL(baseURL, site=siteNumbers, format=formatURL)
           
-          if("gwlevels"!= service){
+          if(!is.na(parameterCd)){
             url <- appendDrURL(url, ParameterCd=parameterCd)
           }
           

@@ -365,6 +365,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
 #' retrieval for the earliest possible record.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record.
+#' @param parameterCd character USGS parameter code.  This is usually an 5 digit number. Default is "".
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
@@ -402,17 +403,22 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
 #' @examples
 #' site_id <- "434400121275801"
 #' \donttest{
-#' data <- readNWISgwl(site_id, '','')
+#' data <- readNWISgwl(site_id)
 #' sites <- c("434400121275801", "375907091432201")
 #' data2 <- readNWISgwl(site_id, '','')
 #' data3 <- readNWISgwl("420125073193001", '','')
 #' #handling of data where date has no day
 #' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01") 
+#' 
+#' data5 <- readNWISgwl("263819081585801", parameterCd = "72019")
+#' 
 #' }
-readNWISgwl <- function (siteNumbers,startDate="",endDate="", convertType = TRUE, tz="UTC"){  
+readNWISgwl <- function(siteNumbers, startDate = "", endDate = "",
+                        parameterCd = NA,
+                        convertType = TRUE, tz = "UTC"){  
   
-  url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"gwlevels",format="tsv")
-  data <- importRDB1(url,asDateTime=TRUE, convertType = convertType, tz=tz)
+  url <- constructNWISURL(siteNumbers, parameterCd, startDate,endDate,"gwlevels",format="rdb")
+  data <- importRDB1(url, asDateTime= TRUE, convertType = convertType, tz=tz)
 
   if(nrow(data) > 0 && !all(is.na(data$lev_dt))){
     if(convertType){
