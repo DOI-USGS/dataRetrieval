@@ -112,8 +112,6 @@ pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
 pHData_summary <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),
      characteristicName=nameToUse, querySummary=TRUE)
 startDate <- as.Date("2013-01-01")
-nutrientDaneCounty <- readWQPdata(countycode="US:55:025",startDate=startDate,
-                        characteristicType="Nutrient")
 secchi.names = c("Depth, Secchi disk depth", 
                  "Depth, Secchi disk depth (choice list)", 
                  "Secchi Reading Condition (choice list)", 
