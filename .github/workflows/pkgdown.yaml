@@ -6,7 +6,7 @@ name: pkgdown
 
 jobs:
   pkgdown:
-    runs-on: windows-latest
+    runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
 
@@ -16,7 +16,7 @@ jobs:
 
       - name: Query dependencies
         run: |
-          install.packages(c('remotes', 'zoo', 'sf'))
+          install.packages(c('remotes'))
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
         shell: Rscript {0}
 
@@ -24,8 +24,8 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: macOS-r-4.0-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: macOS-r-4.0-1-
+          key: macOS-r-4.0-3-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: macOS-r-4.0-3-
 
       - name: Install dependencies
         run: |
