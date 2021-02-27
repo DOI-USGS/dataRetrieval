@@ -24,7 +24,9 @@ readWQPdots <- function(...){
   }
   
   match.arg(service, c("Result", "Station", "Activity",
-                       "ActivityMetric", "SiteSummary"))
+                       "ActivityMetric", "SiteSummary",
+                       "Project", "ProjectMonitoringLocationWeighting",
+                       "ResultDetectionQuantitationLimit", "BiologicalMetric"))
   
   values <- checkWQPdates(values)
   

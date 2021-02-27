@@ -60,6 +60,10 @@ setAccess = function(access="public"){
   pkg.env$Activity = "https://www.waterqualitydata.us/data/Activity/search"
   pkg.env$ActivityMetric = "https://www.waterqualitydata.us/data/ActivityMetric/search"
   pkg.env$SiteSummary = "https://www.waterqualitydata.us/data/summary/monitoringLocation/search"
+  pkg.env$Project = "https://www.waterqualitydata.us/data/Project/search"
+  pkg.env$ProjectMonitoringLocationWeighting = "https://www.waterqualitydata.us/data/ProjectMonitoringLocationWeighting/search"
+  pkg.env$ResultDetectionQuantitationLimit = "https://www.waterqualitydata.us/data/ResultDetectionQuantitationLimit/search"
+  pkg.env$BiologicalMetric = "https://www.waterqualitydata.us/data/BiologicalMetric/search"
   
   pkg.env$NGWMN = "https://cida.usgs.gov/ngwmn_cache/sos"
 
