@@ -16,6 +16,18 @@ readWQPdots <- function(...){
     values['bBox'] <- gsub(pattern = ";", replacement = ",", x = values['bBox'])
   }
   
+  if("service" %in% names(matchReturn)){
+    service <- matchReturn$service
+    matchReturn$service <- NULL
+  } else {
+    service <- "Result"
+  }
+  
+  match.arg(service, c("Result", "Station", "Activity",
+                       "ActivityMetric", "SiteSummary",
+                       "Project", "ProjectMonitoringLocationWeighting",
+                       "ResultDetectionQuantitationLimit", "BiologicalMetric"))
+  
   values <- checkWQPdates(values)
   
   names(values)[names(values) == "siteNumber"] <- "siteid"
@@ -48,5 +60,5 @@ readWQPdots <- function(...){
     values["zip"] <- "yes"
   }
   
-  return(values)
+  return(list(values=values, service=service))
 }
