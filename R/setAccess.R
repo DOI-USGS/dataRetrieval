@@ -55,11 +55,12 @@ setAccess = function(access="public"){
   pkg.env$pCode = "https://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes"
   # NOTE: state water use are still in: constructUseURL
 
-  pkg.env$wqpData = "https://www.waterqualitydata.us/data/Result/search"
-  pkg.env$wqpStation = "https://www.waterqualitydata.us/data/Station/search"
-  pkg.env$wqpActivity = "https://www.waterqualitydata.us/data/Activity/search"
-  pkg.env$wqpMetrics = "https://www.waterqualitydata.us/data/ActivityMetric/search"
-  pkg.env$wqpSiteSummary = "https://www.waterqualitydata.us/data/summary/monitoringLocation/search"
+  pkg.env$Result = "https://www.waterqualitydata.us/data/Result/search"
+  pkg.env$Station = "https://www.waterqualitydata.us/data/Station/search"
+  pkg.env$Activity = "https://www.waterqualitydata.us/data/Activity/search"
+  pkg.env$ActivityMetric = "https://www.waterqualitydata.us/data/ActivityMetric/search"
+  pkg.env$SiteSummary = "https://www.waterqualitydata.us/data/summary/monitoringLocation/search"
+  
   pkg.env$NGWMN = "https://cida.usgs.gov/ngwmn_cache/sos"
 
 }

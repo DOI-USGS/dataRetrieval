@@ -7,6 +7,7 @@ dataRetrieval 2.7.7
 * Fixed timezone bug in RDB requests that had mixed timezones.
 * Updated internal data for parameter codes
 * Added parameterCd argument to readNWISgwl as the services had changed
+* Allow a "service" argument in readWQPdata, whatWQPsites
 
 dataRetrieval 2.7.5
 ==========

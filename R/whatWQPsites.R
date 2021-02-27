@@ -69,23 +69,26 @@ whatWQPsites <- function(...){
 
   values <- readWQPdots(...)
   
+  values <- values$values
+  
   if("tz" %in% names(values)){
     values <- values[!(names(values) %in% "tz")]
   }
   
+  if("service" %in% names(values)){
+    values <- values[!(names(values) %in% "service")]
+  }
+  
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
     
-  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
-  
-  baseURL <- drURL("wqpStation")
-  urlCall <- paste0(baseURL,
-               urlCall,
-               "&mimeType=tsv")
+  baseURL <- drURL("Station", arg.list = values)
 
-  retval <- importWQP(urlCall, zip=values["zip"] == "yes")
+  baseURL <- appendDrURL(baseURL, mimeType = "tsv")
+
+  retval <- importWQP(baseURL, zip=values["zip"] == "yes")
   
   attr(retval, "queryTime") <- Sys.time()
-  attr(retval, "url") <- urlCall
+  attr(retval, "url") <- baseURL
   
   return(retval)
 }
@@ -107,27 +110,29 @@ readWQPsummary <- function(...){
   
   values <- readWQPdots(...)
   
+  values <- values$values
+  
   if("tz" %in% names(values)){
     values <- values[!(names(values) %in% "tz")]
   }
   
+  if("service" %in% names(values)){
+    values <- values[!(names(values) %in% "service")]
+  }
+  
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
   
-  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
-  
-  baseURL <- drURL("wqpSiteSummary")
-  urlCall <- paste0(baseURL,
-                    urlCall,
-                    "&mimeType=csv")
-  
+  baseURL <- drURL("SiteSummary", arg.list = values)
+  baseURL <- appendDrURL(baseURL, mimeType = "csv")
+
   withCallingHandlers({
-    retval <- importWQP(urlCall, zip=values["zip"] == "yes", csv = TRUE)
+    retval <- importWQP(baseURL, zip=values["zip"] == "yes", csv = TRUE)
   }, warning=function(w) {
     if (any( grepl( "Number of rows returned not matched in header", w)))
       invokeRestart("muffleWarning")
   })
   attr(retval, "queryTime") <- Sys.time()
-  attr(retval, "url") <- urlCall
+  attr(retval, "url") <- baseURL
   
   return(retval)
   
