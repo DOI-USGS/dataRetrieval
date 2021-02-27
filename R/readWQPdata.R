@@ -134,30 +134,31 @@
 #'                                 parameterCd = "00010") 
 #'                                 
 #' }
-readWQPdata <- function(..., querySummary=FALSE, tz="UTC", ignore_attributes = FALSE){
+readWQPdata <- function(..., querySummary=FALSE, tz="UTC", 
+                        ignore_attributes = FALSE){
   
   tz <- match.arg(tz, OlsonNames())
   
-  values <- readWQPdots(...)
-  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
-
-  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
+  valuesList <- readWQPdots(...)
   
-  baseURL <- drURL("wqpData")
-  urlCall <- paste0(baseURL,
-                   urlCall,
-                   "&mimeType=tsv")
+  service <- valuesList$service
+  
+  values <- sapply(valuesList$values, function(x) URLencode(x, reserved = TRUE))
+
+  baseURL <- drURL(service, arg.list=values)
+
+  baseURL <- appendDrURL(baseURL, mimeType = "tsv")
 
   if(querySummary){
-    retquery <- getQuerySummary(urlCall)
+    retquery <- getQuerySummary(baseURL)
     return(retquery)
   } else {
   
-    retval <- importWQP(urlCall, zip= values["zip"] == "yes", tz=tz)
+    retval <- importWQP(baseURL, zip = values["zip"] == "yes", tz=tz)
     
     if(!all(is.na(retval)) & !ignore_attributes){
       
-      siteInfo <- whatWQPsites(...)
+      siteInfo <- whatWQPsites(..., service = "Station")
       
       siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
                                    agency_cd=siteInfo$OrganizationIdentifier,
@@ -199,12 +200,12 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC", ignore_attributes = F
     } else {
       if(!ignore_attributes){
         message("The following url returned no data:\n")
-        message(urlCall)        
+        message(baseURL)        
       }
 
     }
     attr(retval, "queryTime") <- Sys.time()
-    attr(retval, "url") <- urlCall
+    attr(retval, "url") <- baseURL
     
     return(retval)
   }

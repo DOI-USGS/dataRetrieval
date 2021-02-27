@@ -314,7 +314,7 @@ constructWQPURL <- function(siteNumbers,parameterCd,startDate,endDate,zip=TRUE){
     parameterCd <- paste(parameterCd, collapse=";")
   }
   
-  baseURL <- drURL("wqpData", siteid = siteNumbers, Access=pkg.env$access) 
+  baseURL <- drURL("Result", siteid = siteNumbers, Access=pkg.env$access) 
   url <- paste0(baseURL,
                 ifelse(pCodeLogic,"&pCode=","&characteristicName="),
                 parameterCd)
