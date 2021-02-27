@@ -12,24 +12,31 @@ whatWQPsamples <- function(...){
   
   values <- readWQPdots(...)
   
+  values <- values$values
+  
+  if("tz" %in% names(values)){
+    values <- values[!(names(values) %in% "tz")]
+  }
+  
+  if("service" %in% names(values)){
+    values <- values[!(names(values) %in% "service")]
+  }
+  
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
   
-  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
- 
-  baseURL <- drURL("wqpActivity")
-  urlCall <- paste0(baseURL,
-                    urlCall,
-                    "&mimeType=tsv")
+  baseURL <- drURL("Activity", arg.list = values)
+
+  baseURL <- appendDrURL(baseURL, mimeType = "tsv")
   
   withCallingHandlers({
-    retval <- importWQP(urlCall, zip=values["zip"] == "yes")
+    retval <- importWQP(baseURL, zip=values["zip"] == "yes")
   }, warning=function(w) {
     if (any( grepl( "Number of rows returned not matched in header", w)))
       invokeRestart("muffleWarning")
   })
 
   attr(retval, "queryTime") <- Sys.time()
-  attr(retval, "url") <- urlCall
+  attr(retval, "url") <- baseURL
   
   return(retval)
 }
@@ -48,24 +55,31 @@ whatWQPmetrics <- function(...){
 
   values <- readWQPdots(...)
 
+  values <- values$values
+  
+  if("tz" %in% names(values)){
+    values <- values[!(names(values) %in% "tz")]
+  }
+  
+  if("service" %in% names(values)){
+    values <- values[!(names(values) %in% "service")]
+  }
+  
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
-
-  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
-
-  baseURL <- drURL("wqpMetrics")
-  urlCall <- paste0(baseURL,
-                    urlCall,
-                    "&mimeType=tsv")
+  
+  baseURL <- drURL("ActivityMetric", arg.list = values)
+  
+  baseURL <- appendDrURL(baseURL, mimeType = "tsv")
   
   withCallingHandlers({
-    retval <- importWQP(urlCall, zip=values["zip"] == "yes")
+    retval <- importWQP(baseURL, zip=values["zip"] == "yes")
   }, warning=function(w) {
     if (any( grepl( "Number of rows returned not matched in header", w)))
       invokeRestart("muffleWarning")
   })
 
   attr(retval, "queryTime") <- Sys.time()
-  attr(retval, "url") <- urlCall
+  attr(retval, "url") <- baseURL
 
   return(retval)
 }
@@ -123,22 +137,28 @@ whatWQPdata <- function(..., saveFile = tempfile()){
 
   values <- readWQPdots(...)
   
+  values <- values$values
+  
+  if("tz" %in% names(values)){
+    values <- values[!(names(values) %in% "tz")]
+  }
+  
+  if("service" %in% names(values)){
+    values <- values[!(names(values) %in% "service")]
+  }
+  
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
   
-  urlCall <- paste(paste(names(values),values,sep="="),collapse="&")
+  baseURL <- drURL("Station", arg.list = values)
   
-  
-  baseURL <- drURL("wqpStation")
-  urlCall <- paste0(baseURL,
-                    urlCall,
-                    "&mimeType=geojson")
-  
+  baseURL <- appendDrURL(baseURL, mimeType = "geojson")
+
   saveFile_zip <- saveFile
   if(tools::file_ext(saveFile) != ".zip"){
     saveFile_zip <- paste0(saveFile,".zip")
   }
 
-  doc <- getWebServiceData(urlCall, httr::write_disk(saveFile_zip))
+  doc <- getWebServiceData(baseURL, httr::write_disk(saveFile_zip))
   headerInfo <- attr(doc, "headerInfo")
   
   if(headerInfo$`total-site-count` == 0){
@@ -192,7 +212,7 @@ whatWQPdata <- function(..., saveFile = tempfile()){
   }
   
   attr(y, "queryTime") <- Sys.time()
-  attr(y, "url") <- urlCall
+  attr(y, "url") <- baseURL
   attr(y, "file") <- saveFile
   return(y)
 }
