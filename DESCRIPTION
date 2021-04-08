@@ -1,7 +1,7 @@
 Package: dataRetrieval
 Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
-Version: 2.7.7
+Version: 2.7.7.0001
 Authors@R: c(
     person("Laura", "DeCicco", role = c("aut","cre"),
             email = "ldecicco@usgs.gov",
