@@ -216,6 +216,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
         
         if(all(c(paste0(i,"_dt"),paste0(i,"_tm")) %in% header.names)){
           varname <- paste0(i,"_dateTime")
+
           varval <- suppressWarnings(lubridate::parse_date_time(paste(readr.data[,paste0(i,"_dt")],
                                                                       readr.data[,paste0(i,"_tm")]), 
                                                                 c("%Y-%m-%d %H:%M:%S","%Y-%m-%d %H:%M"),
@@ -223,7 +224,11 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
         
           if(!all(is.na(varval))){
             readr.data[,varname] <- varval
-            tz.name <- paste0(i,"_time_datum_cd")
+            if(paste0(i, "_tz_cd") %in% names(readr.data)){
+              tz.name <- paste0(i, "_tz_cd") 
+            } else {
+              tz.name <- paste0(i,"_time_datum_cd")
+            }
             
             if(tz.name %in% names(readr.data)){
               readr.data <- convertTZ(readr.data,tz.name,varname,tz)
