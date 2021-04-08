@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7.0001</span>
       </span>
     </div>
 
@@ -106,9 +106,9 @@
       <h1 data-toc-skip>Introduction to the dataRetrieval package</h1>
                         <h4 data-toc-skip class="author">Laura A. DeCicco and Robert M. Hirsch</h4>
             
-            <h4 data-toc-skip class="date">26 February, 2021</h4>
+            <h4 data-toc-skip class="date">08 April, 2021</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/master/vignettes/dataRetrieval.Rmd" class="external-link"><code>vignettes/dataRetrieval.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/USGS/dataRetrieval/blob/master/vignettes/dataRetrieval.Rmd" class="external-link"><code>vignettes/dataRetrieval.Rmd</code></a></small>
       <div class="hidden name"><code>dataRetrieval.Rmd</code></div>
 
     </div>
@@ -387,7 +387,7 @@
 </tbody>
 </table>
 <p>Two output columns that may not be obvious are “srsname” and “casrn”. Srsname stands for “Substance Registry Services”. More information on the srs name can be found <a href="http://ofmpub.epa.gov/sor_internet/registry/substreg/home/overview/home.do" class="external-link">here</a>.</p>
-<p>Casrn stands for “Chemical Abstracts Service (CAS) Registry Number”. More information on CAS can be found <a href="http://www.cas.org/content/chemical-substances/faqs" class="external-link">here</a>.</p>
+<p>Casrn stands for “Chemical Abstracts Service (CAS) Registry Number”. More information on CAS can be found <a href="http://www.cas.org/support/documentation/chemical-substances/faqs" class="external-link">here</a>.</p>
 <p>For unit values data (sensor data measured at regular time intervals such as 15 minutes or hourly), knowing the parameter code and <code>siteNumber</code> is enough to make a request for data. For most variables that are measured on a continuous basis, the USGS also stores the historical data as daily values. These daily values are statistical summaries of the continuous data, e.g. maximum, minimum, mean, or median. The different statistics are specified by a 5-digit statistics code.</p>
 <p>Some common codes are shown in Table 3.</p>
 <table class="table">
@@ -809,7 +809,7 @@ America/Metlakatla</code></pre>
 <a href="#sites-whatwqpsites" class="anchor"></a>Sites: whatWQPsites</h3>
 <p>To discover available sites in the WQP in New Jersey that have measured Chloride, use the function <code>whatWQPsites</code>.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sitesNJ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatWQPsamples.html">whatWQPsites</a></span><span class="op">(</span>statecode<span class="op">=</span><span class="st">"US:34"</span>,
+<code class="sourceCode R"><span class="va">sitesNJ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wqpSpecials.html">whatWQPsites</a></span><span class="op">(</span>statecode<span class="op">=</span><span class="st">"US:34"</span>,
                        characteristicName<span class="op">=</span><span class="st">"Chloride"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="data-readwqpdata" class="section level3">
@@ -834,7 +834,7 @@ America/Metlakatla</code></pre>
 <a href="#samples-whatwqpsamples" class="anchor"></a>Samples: whatWQPsamples</h3>
 <p>The function <code>whatWQPsamples</code> returns information on the individual samples collected at a site. For example:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">site</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatWQPsamples.html">whatWQPsamples</a></span><span class="op">(</span>siteid<span class="op">=</span><span class="st">"USGS-01594440"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">site</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wqpSpecials.html">whatWQPsamples</a></span><span class="op">(</span>siteid<span class="op">=</span><span class="st">"USGS-01594440"</span><span class="op">)</span></code></pre></div>
 <p>This returns one row for each instance that a sample was collect.</p>
 </div>
 <div id="metrics-whatwqpmetrics" class="section level3">
@@ -843,7 +843,7 @@ America/Metlakatla</code></pre>
 <p>The function <code>whatWQPmetrics</code> provides metric information. This is only currently available for STORET data:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">"Stream"</span>
-<span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatWQPsamples.html">whatWQPmetrics</a></span><span class="op">(</span>countycode<span class="op">=</span><span class="st">"US:55:025"</span>,siteType<span class="op">=</span><span class="va">type</span><span class="op">)</span></code></pre></div>
+<span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wqpSpecials.html">whatWQPmetrics</a></span><span class="op">(</span>countycode<span class="op">=</span><span class="st">"US:55:025"</span>,siteType<span class="op">=</span><span class="va">type</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -914,7 +914,7 @@ America/Metlakatla</code></pre>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>

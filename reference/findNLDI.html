@@ -77,6 +77,9 @@ Network Linked Data Index." />
 </script>
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -99,7 +102,7 @@ Network Linked Data Index." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7.0001</span>
       </span>
     </div>
 
@@ -157,7 +160,7 @@ Network Linked Data Index." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R Client for the Network Linked Data Index</h1>
-    <small class="dont-index">Source: <a href='https://github.com/USGS-R/dataRetrieval/blob/master/R/findNLDI.R'><code>R/findNLDI.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/USGS/dataRetrieval/blob/master/R/findNLDI.R'><code>R/findNLDI.R</code></a></small>
     <div class="hidden name"><code>findNLDI.Rd</code></div>
     </div>
 
@@ -252,10 +255,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class='co'>## Find feature by COMID</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>comid <span class='op'>=</span> <span class='fl'>101</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 1 feature and 3 fields
-#&gt; geometry type:  LINESTRING
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
+#&gt; Geodetic CRS:  WGS 84
 #&gt; <span style='color: #949494;'># A tibble: 1 x 4</span><span>
 #&gt;   sourceName   identifier comid                                         geometry
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
@@ -263,10 +266,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class='co'>## Find feature by NWIS ID</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 1 feature and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
 #&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
@@ -274,10 +277,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class='co'>## Find feature by WQP ID</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>wqp <span class='op'>=</span> <span class='st'>'USGS-04024315'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 1 feature and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -92.23492 ymin: 46.50355 xmax: -92.23492 ymax: 46.50355
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -92.23492 ymin: 46.50355 xmax: -92.23492 ymax: 46.50355
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName           identifier    comid       X     Y             geometry
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
@@ -285,10 +288,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class='co'>## Find feature by LOCATION</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>location <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>115</span>,<span class='fl'>40</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 1 feature and 3 fields
-#&gt; geometry type:  LINESTRING
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -115.0326 ymin: 40.04013 xmax: -115.0182 ymax: 40.05183
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -115.0326 ymin: 40.04013 xmax: -115.0182 ymax: 40.05183
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 4</span><span>
 #&gt;   sourceName   identifier comid                                         geometry
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
@@ -296,10 +299,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class='co'>## GENERAL ORIGIN: COMID</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>origin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"comid"</span> <span class='op'>=</span> <span class='fl'>101</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 1 feature and 3 fields
-#&gt; geometry type:  LINESTRING
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 4</span><span>
 #&gt;   sourceName   identifier comid                                         geometry
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
@@ -307,10 +310,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class='co'>## GENERAL ORIGIN: WaDE</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>origin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"wade"</span> <span class='op'>=</span> <span class='st'>'CA_45206'</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 1 feature and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.7917 ymin: 34.47273 xmax: -119.7917 ymax: 34.47273
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.7917 ymin: 34.47273 xmax: -119.7917 ymax: 34.47273
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName                identifier comid       X     Y              geometry
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
@@ -320,10 +323,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
  <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='st'>"UM"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $origin
 #&gt; Simple feature collection with 1 feature and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
 #&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
@@ -331,10 +334,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; 
 #&gt; $UM_flowlines
 #&gt; Simple feature collection with 4 features and 1 field
-#&gt; geometry type:  LINESTRING
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.8296 ymin: 34.42015 xmax: -119.7607 ymax: 34.46831
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.8296 ymin: 34.42015 xmax: -119.7607 ymax: 34.46831
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 4 x 2</span><span>
 #&gt;   nhdplus_comid                                                         geometry
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                                         </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
@@ -348,10 +351,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
  <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"UT"</span>, <span class='st'>"UM"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $origin
 #&gt; Simple feature collection with 1 feature and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
 #&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
@@ -359,10 +362,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; 
 #&gt; $UT_flowlines
 #&gt; Simple feature collection with 25 features and 1 field
-#&gt; geometry type:  LINESTRING
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.8296 ymin: 34.42015 xmax: -119.7332 ymax: 34.51769
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.8296 ymin: 34.42015 xmax: -119.7332 ymax: 34.51769
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 25 x 2</span><span>
 #&gt;    nhdplus_comid                                                        geometry
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                                        </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
@@ -380,10 +383,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; 
 #&gt; $UM_flowlines
 #&gt; Simple feature collection with 4 features and 1 field
-#&gt; geometry type:  LINESTRING
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.8296 ymin: 34.42015 xmax: -119.7607 ymax: 34.46831
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.8296 ymin: 34.42015 xmax: -119.7607 ymax: 34.46831
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 4 x 2</span><span>
 #&gt;   nhdplus_comid                                                         geometry
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                                         </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
@@ -398,10 +401,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
  <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='st'>"UT"</span>, find <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nwis"</span>, <span class='st'>"wqp"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $origin
 #&gt; Simple feature collection with 1 feature and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
 #&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
@@ -409,10 +412,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; 
 #&gt; $UT_nwissite
 #&gt; Simple feature collection with 3 features and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.7843 ymax: 34.445
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.7843 ymax: 34.445
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 3 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
 #&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
@@ -422,33 +425,33 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; 
 #&gt; $UT_WQP
 #&gt; Simple feature collection with 64 features and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.824 ymin: 34.4224 xmax: -119.7479 ymax: 34.4525
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.824 ymin: 34.4224 xmax: -119.7479 ymax: 34.4525
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 64 x 6</span><span>
 #&gt;    sourceName        identifier        comid       X     Y              geometry
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>             </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>             </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> Water Quality Po… USGS-34261011948… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.8099 34.43611)
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> Water Quality Po… CEDEN-315ATA      175954… -</span><span style='color: #BB0000;'>120.</span><span>  34.4    (-119.819 34.4235)
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> Water Quality Po… USGS-34270511947… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.5  (-119.7999 34.45139)
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> Water Quality Po… USGS-34253811948… 175954… -</span><span style='color: #BB0000;'>120.</span><span>  34.4   (-119.814 34.42722)
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> Water Quality Po… USGS-34261211946… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.7742 34.43617)
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> Water Quality Po… USGS-34253911948… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4   (-119.8107 34.4275)
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> Water Quality Po… USGS-34261911948… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.8021 34.43861)
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> Water Quality Po… USGS-34264211947… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.4    (-119.7963 34.445)
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> Water Quality Po… USGS-34264211944… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4    (-119.7479 34.445)
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> Water Quality Po… USGS-34270511947… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.5  (-119.7999 34.45139)
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> Water Quality Po… USGS-34270511947… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.5  (-119.7999 34.45139)
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> Water Quality Po… USGS-34253811948… 175954… -</span><span style='color: #BB0000;'>120.</span><span>  34.4   (-119.814 34.42722)
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> Water Quality Po… USGS-34261211946… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.7742 34.43617)
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> Water Quality Po… USGS-34253911948… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4   (-119.8107 34.4275)
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> Water Quality Po… USGS-34261911948… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.8021 34.43861)
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> Water Quality Po… USGS-34264211947… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.4    (-119.7963 34.445)
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> Water Quality Po… USGS-34264211944… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4    (-119.7479 34.445)
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> Water Quality Po… USGS-34270511947… 175961… -</span><span style='color: #BB0000;'>120.</span><span>  34.5  (-119.7999 34.45139)
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> Water Quality Po… USGS-34261911946… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.7679 34.43861)
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> Water Quality Po… USGS-34262111947… 175953… -</span><span style='color: #BB0000;'>120.</span><span>  34.4  (-119.7957 34.43916)
 #&gt; </span><span style='color: #949494;'># … with 54 more rows</span><span>
 #&gt; </div><div class='input'>
 <span class='co'>## Find upstream basin boundary and  of USGS-11120000</span>
  <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>,  find <span class='op'>=</span> <span class='st'>"basin"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $origin
 #&gt; Simple feature collection with 1 feature and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid        X     Y             geometry
 #&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
@@ -456,10 +459,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; 
 #&gt; $basin
 #&gt; Simple feature collection with 1 feature and 0 fields
-#&gt; geometry type:  POLYGON
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -119.8295 ymin: 34.41806 xmax: -119.7307 ymax: 34.52034
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -119.8295 ymin: 34.41806 xmax: -119.7307 ymax: 34.52034
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 1</span><span>
 #&gt;                                                                         geometry
 #&gt;                                                                    </span><span style='color: #949494;font-style: italic;'>&lt;POLYGON [°]&gt;</span><span>
@@ -470,10 +473,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
  <span class='fu'>findNLDI</span><span class='op'>(</span>comid <span class='op'>=</span> <span class='fl'>101</span>, nav <span class='op'>=</span> <span class='st'>"DM"</span>, find <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nwis"</span>, <span class='st'>"wqp"</span>, <span class='st'>"flowlines"</span><span class='op'>)</span>, distance_km <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $origin
 #&gt; Simple feature collection with 1 feature and 3 fields
-#&gt; geometry type:  LINESTRING
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 4</span><span>
 #&gt;   sourceName   identifier comid                                         geometry
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                 </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
@@ -481,10 +484,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; 
 #&gt; $DM_nwissite
 #&gt; Simple feature collection with 1 feature and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -94.39944 ymin: 31.025 xmax: -94.39944 ymax: 31.025
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -94.39944 ymin: 31.025 xmax: -94.39944 ymax: 31.025
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 1 x 6</span><span>
 #&gt;   sourceName identifier comid       X     Y           geometry
 #&gt; </span><span style='color: #BCBCBC;'>*</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
@@ -492,10 +495,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; 
 #&gt; $DM_WQP
 #&gt; Simple feature collection with 3 features and 5 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -94.3995 ymin: 31.0247 xmax: -94.38492 ymax: 31.03547
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -94.3995 ymin: 31.0247 xmax: -94.38492 ymax: 31.03547
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 3 x 6</span><span>
 #&gt;   sourceName         identifier         comid      X     Y              geometry
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;POINT [°]&gt;</span><span>
@@ -505,10 +508,10 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 #&gt; 
 #&gt; $DM_flowlines
 #&gt; Simple feature collection with 20 features and 1 field
-#&gt; geometry type:  LINESTRING
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -94.64845 ymin: 31.00305 xmax: -94.37394 ymax: 31.09915
-#&gt; geographic CRS: WGS 84
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -94.64845 ymin: 31.00305 xmax: -94.37394 ymax: 31.09915
+#&gt; Geodetic CRS:  WGS 84
 #&gt; </span><span style='color: #949494;'># A tibble: 20 x 2</span><span>
 #&gt;    nhdplus_comid                                                        geometry
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                                        </span><span style='color: #949494;font-style: italic;'>&lt;LINESTRING [°]&gt;</span><span>
@@ -549,7 +552,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
