@@ -218,33 +218,47 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC", csv=FALSE){
                                 code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA, "UTC","GMT"),
                                 stringsAsFactors = FALSE)
     original_order <- names(retval)
-    retval <- merge(x = retval, 
-                    y = offsetLibrary, 
-                    by.x="ActivityStartTime/TimeZoneCode", 
-                    by.y = "code", 
-                    all.x = TRUE)
+    if("ActivityStartTime/TimeZoneCode" %in% names(retval)){
+      retval <- merge(x = retval, 
+                      y = offsetLibrary, 
+                      by.x="ActivityStartTime/TimeZoneCode", 
+                      by.y = "code", 
+                      all.x = TRUE)      
+    }
+
     names(retval)[names(retval) == "offset"] <- "timeZoneStart"
     retval <- retval[,c(original_order, "timeZoneStart")]
 
-    retval <- merge(x = retval, 
-                    y = offsetLibrary, 
-                    by.x="ActivityEndTime/TimeZoneCode", 
-                    by.y = "code", 
-                    all.x = TRUE)
-    names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
-    retval <- retval[,c(original_order, "timeZoneStart", "timeZoneEnd")]
+    if("ActivityEndTime/TimeZoneCode" %in% names(retval)){
+      retval <- merge(x = retval, 
+                      y = offsetLibrary, 
+                      by.x="ActivityEndTime/TimeZoneCode", 
+                      by.y = "code", 
+                      all.x = TRUE)
+      names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
+      retval <- retval[,c(original_order, "timeZoneStart", "timeZoneEnd")]     
+    }
+
     
     dateCols <- c("ActivityStartDate","ActivityEndDate","AnalysisStartDate","PreparationStartDate")
 
     for(i in dateCols){
-      retval[,i] <- suppressWarnings(as.Date(lubridate::parse_date_time(retval[[i]], c("Ymd", "mdY"))))
+      
+      if(i %in% names(retval)){
+        retval[,i] <- suppressWarnings(as.Date(lubridate::parse_date_time(retval[[i]], c("Ymd", "mdY"))))
+      }
+      
     }
-
-    retval$ActivityStartDateTime <- paste(retval$ActivityStartDate, retval$`ActivityStartTime/Time`)
-    retval$ActivityEndDateTime <- paste(retval$ActivityEndDate, retval$`ActivityEndTime/Time`)
+  
+    if(all(c("ActivityStartDate", "ActivityStartTime/Time") %in% names(retval))){
+      retval$ActivityStartDateTime <- paste(retval$ActivityStartDate, retval$`ActivityStartTime/Time`)
+      retval$ActivityStartDateTime <- lubridate::fast_strptime(retval$ActivityStartDateTime, '%Y-%m-%d %H:%M:%S')+60*60*retval$timeZoneStart
+    }
     
-    retval$ActivityStartDateTime <- lubridate::fast_strptime(retval$ActivityStartDateTime, '%Y-%m-%d %H:%M:%S')+60*60*retval$timeZoneStart
-    retval$ActivityEndDateTime <- lubridate::fast_strptime(retval$ActivityEndDateTime, '%Y-%m-%d %H:%M:%S')+60*60*retval$timeZoneStart
+    if(all(c("ActivityEndDate","ActivityEndTime/Time") %in% names(retval))){
+      retval$ActivityEndDateTime <- paste(retval$ActivityEndDate, retval$`ActivityEndTime/Time`)
+      retval$ActivityEndDateTime <- lubridate::fast_strptime(retval$ActivityEndDateTime, '%Y-%m-%d %H:%M:%S')+60*60*retval$timeZoneStart
+    }
     
     retval <- retval[,names(retval)[!(names(retval) %in% c("timeZoneEnd", "timeZoneStart"))]]
   }

@@ -158,17 +158,24 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC",
     
     if(!all(is.na(retval)) & !ignore_attributes){
       
-      siteInfo <- whatWQPsites(..., service = "Station")
+      siteInfo <- suppressWarnings(whatWQPsites(..., service = "Station")) #doesn't alway have a header count returned...which is probably going away soon anyway
       
-      siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
-                                   agency_cd=siteInfo$OrganizationIdentifier,
-                                   site_no=siteInfo$MonitoringLocationIdentifier,
-                                   dec_lat_va=siteInfo$LatitudeMeasure,
-                                   dec_lon_va=siteInfo$LongitudeMeasure,
-                                   hucCd=siteInfo$HUCEightDigitCode,
-                                   stringsAsFactors=FALSE)
-      
-      siteInfo <- cbind(siteInfoCommon, siteInfo)
+      if(all(c("MonitoringLocationName",
+               "OrganizationIdentifier",
+               "MonitoringLocationIdentifier",
+               "LatitudeMeasure",
+               "LongitudeMeasure",
+               "HUCEightDigitCode") %in% names(siteInfo))){
+        siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
+                                     agency_cd=siteInfo$OrganizationIdentifier,
+                                     site_no=siteInfo$MonitoringLocationIdentifier,
+                                     dec_lat_va=siteInfo$LatitudeMeasure,
+                                     dec_lon_va=siteInfo$LongitudeMeasure,
+                                     hucCd=siteInfo$HUCEightDigitCode,
+                                     stringsAsFactors=FALSE)
+        
+        siteInfo <- cbind(siteInfoCommon, siteInfo)        
+      }
       
       retvalVariableInfo <- retval[,c("CharacteristicName","USGSPCode",
                                       "ResultMeasure.MeasureUnitCode","ResultSampleFractionText")]
