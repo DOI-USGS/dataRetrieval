@@ -1,6 +1,6 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1.9001
-pkgdown_sha: c6bd498aa2e0ae2e15e267891aaa69c6c15ab79f
+pkgdown_sha: a068586d33ec11787013d25e3f12c0d5c0ae4b2a
 articles:
   dataRetrieval: dataRetrieval.html
   earthquake: earthquake.html
@@ -8,5 +8,5 @@ articles:
   nldi: nldi.html
   statsServiceMap: statsServiceMap.html
   tutorial: tutorial.html
-last_built: 2021-04-08T16:58Z
+last_built: 2021-04-22T19:38Z
 

@@ -120,7 +120,7 @@
 <p>It may be important to note that this script is a bit lazy in handling leap days.</p>
 <div id="get-data-using-dataretrieval" class="section level2">
 <h2 class="hasAnchor">
-<a href="#get-data-using-dataretrieval" class="anchor"></a>Get data using dataRetrieval</h2>
+<a href="#get-data-using-dataretrieval" class="anchor" aria-hidden="true"></a>Get data using dataRetrieval</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span>
 
@@ -133,7 +133,7 @@
 </div>
 <div id="calculate-moving-average" class="section level2">
 <h2 class="hasAnchor">
-<a href="#calculate-moving-average" class="anchor"></a>Calculate moving average</h2>
+<a href="#calculate-moving-average" class="anchor" aria-hidden="true"></a>Calculate moving average</h2>
 <p>Next, we calculate a 30-day moving average on all of the flow data:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
@@ -159,7 +159,7 @@
 </div>
 <div id="calculate-historical-percentiles" class="section level2">
 <h2 class="hasAnchor">
-<a href="#calculate-historical-percentiles" class="anchor"></a>Calculate historical percentiles</h2>
+<a href="#calculate-historical-percentiles" class="anchor" aria-hidden="true"></a>Calculate historical percentiles</h2>
 <p>We can use the <code>quantile</code> function to calculate historical percentile flows. Then use the <code>loess</code> function for smoothing. The argument <code>smooth.span</code> defines how much smoothing should be applied. To get a smooth transistion at the start of the graph, we can add include an earlier year which is not plotted at the end.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">summaryQ</span> <span class="op">&lt;-</span> <span class="va">dailyQ</span> <span class="op">%&gt;%</span>
@@ -210,7 +210,7 @@
 </div>
 <div id="plot-using-base-r" class="section level2">
 <h2 class="hasAnchor">
-<a href="#plot-using-base-r" class="anchor"></a>Plot using base R</h2>
+<a href="#plot-using-base-r" class="anchor" aria-hidden="true"></a>Plot using base R</h2>
 <p>Many of the graphical requirements defined by the USGS are difficult to achieve in <code>ggplot2</code>. Base R plotting can be used to obtain these types of graphs:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">title.text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">stationInfo</span><span class="op">$</span><span class="va">station_nm</span>,<span class="st">"\n"</span>,
@@ -272,7 +272,7 @@ Simple 30-day moving average daily flow plot using base R
 </div>
 <div id="plot-using-ggplot2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#plot-using-ggplot2" class="anchor"></a>Plot using ggplot2</h2>
+<a href="#plot-using-ggplot2" class="anchor" aria-hidden="true"></a>Plot using ggplot2</h2>
 <p>Finally, we can also try to create the graph using the <code>ggplot2</code> package. The following script shows a simple way to re-create the graph in <code>ggplot2</code> with no effort on imitating desired style:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
