@@ -191,9 +191,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
       )
     }
     
-    comment(readr.data) <- readr.meta
     problems.orig <- readr::problems(readr.data)
-    
     
     if (asDateTime & convertType){
   
@@ -290,6 +288,8 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   if("spec" %in% names(attributes(readr.data))){
     attr(readr.data, "spec") <- NULL
   }
+  
+  attr(readr.data, "comment") <- readr.meta
   
   return(readr.data)
   
