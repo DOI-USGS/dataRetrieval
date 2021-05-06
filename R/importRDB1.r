@@ -289,7 +289,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     attr(readr.data, "spec") <- NULL
   }
   
-  attr(readr.data, "comments") <- readr.meta
+  attr(readr.data, "comment") <- readr.meta
   
   return(readr.data)
   
