@@ -81,8 +81,8 @@ Valid parameter code groups are "All," or group codes:
 Code \tab Description\cr
 INF \tab Information \cr
 PHY \tab Physical \cr
-INM \tab Inorganics, Major, Metals (major cations) \cr
-INN \tab Inorganics, Major, Non-metals (major anions) \cr
+INM \tab Inorganics, Major, Metals \cr
+INN \tab Inorganics, Major, Non-metals \cr
 NUT \tab Nutrient \cr
 MBI \tab Microbiological \cr
 BIO \tab Biological \cr
@@ -92,9 +92,12 @@ TOX \tab Toxicity \cr
 OPE \tab Organics, pesticide \cr
 OPC \tab Organics, PCBs \cr
 OOT \tab Organics, other \cr
-RAD \tab Radiochemical \cr
+RAD \tab Radiochemistry \cr
 SED \tab Sediment \cr
 POP \tab Population/community \cr
+OTH \tab  Other \cr
+HAB \tab  Habitat \cr
+ISO \tab  Stable Isotopes \cr
 }
 If more than one parameter group is requested, only sites that data for all requested groups are returned.
 }
@@ -116,8 +119,7 @@ rawNWISNutrients <- readNWISqw(site_ids,pgroup,
 groups <- c("NUT","OPE")
 rawNWISNutOpe <- readNWISqw(site_ids,groups,
           startDate,endDate) 
-rawNWISOpe <- readNWISqw(site_ids,"OPE",
-          startDate,endDate) 
+rawISO <- readNWISqw("413144073115701", "ISO") 
          } 
 }
 \seealso{
