@@ -117,7 +117,7 @@
     
 <div id="what-happened" class="section level1">
 <h1 class="hasAnchor">
-<a href="#what-happened" class="anchor"></a>What happened?</h1>
+<a href="#what-happened" class="anchor" aria-hidden="true"></a>What happened?</h1>
 <p>A magnitude 8.1 earthquake was measured in the Pacific region offshore Chiapas, Mexico at 04:49:21 UTC on September 8th 2017.</p>
 <p>Working in the Water Mission Area for the USGS, our <a href="https://owi.usgs.gov/datascience/" class="external-link">Data Science Team</a> was already hard at work polishing up water visualizations for the devastating <a href="https://owi.usgs.gov/vizlab/hurricane-harvey/" class="external-link">Hurricane Harvey</a>, as well as creating a new visualization for <a href="https://owi.usgs.gov/vizlab/hurricane-irma/" class="external-link">Hurricane Irma</a>. That is to say, the resources available for a timely visualization were already spent.</p>
 <p>By 10 am on Friday however, a team of USGS groundwater scientist had realized that the affects of the earthquake were being observed in groundwater water level measurements across the United States, and were collecting a list of sites that clearly showed the phenomena. It was interesting to view the data directly from the National Water Information System <a href="https://waterdata.usgs.gov/nwis" class="external-link">NWIS</a> pages.</p>
@@ -126,7 +126,7 @@
 <p>The challenge was on: could we very quickly get a graph out that aggregates this data, unifies the time zones, and visualize the information in an intuitive way for the general population? This blog documents the process of rapidly creating the plot in order to get the information out to social media in a timely manner. The final plot could certainly be improved, but with the limited resources and time constraints, it still managed to be a fun and interesting graphic.</p>
 <div id="aggregate-usgs-data" class="section level2">
 <h2 class="hasAnchor">
-<a href="#aggregate-usgs-data" class="anchor"></a>Aggregate USGS Data</h2>
+<a href="#aggregate-usgs-data" class="anchor" aria-hidden="true"></a>Aggregate USGS Data</h2>
 <p>Without question, the hardest part is to find the right data. Luckily for me, this was already done by 10am by the groundwater scientists Rodney A. Sheets, Charles Schalk, and Leonard Orzol (contact information is provided at the end of this post). They provided me with a list of unique site identification numbers from groundwater wells across the nation, and a “parameter code” that represents water levels measurements.</p>
 <p>Using the <a href="https://github.com/USGS-R/dataRetrieval" class="external-link">dataRetrieval</a> R package, it then becomes trivial to access USGS data and import it into the R environment.</p>
 <p>The following code retrieves the data:</p>
@@ -157,19 +157,19 @@
 
 <span class="va">unique_sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">gw_data</span>, <span class="st">"siteInfo"</span><span class="op">)</span>
 
-<span class="va">south_to_north</span> <span class="op">&lt;-</span> <span class="va">unique_sites</span> <span class="op">%&gt;%</span>
+<span class="va">south_to_north</span> <span class="op">&lt;-</span> <span class="va">unique_sites</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">dec_lat_va</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Now, we can do a bit of filtering so that we will only plot the 24 hours of on September 8th (UTC). Also, we can use the <code>south_to_north</code> data frame to create ordered levels for the sites:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gw_data_sub</span> <span class="op">&lt;-</span> <span class="va">gw_data</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">gw_data_sub</span> <span class="op">&lt;-</span> <span class="va">gw_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
             <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">dateTime</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2017-09-07 00:00:00"</span>, tz<span class="op">=</span><span class="st">"UTC"</span><span class="op">)</span>,
-                   <span class="va">dateTime</span> <span class="op">&lt;</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2017-09-09 00:00:00"</span>, tz<span class="op">=</span><span class="st">"UTC"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+                   <span class="va">dateTime</span> <span class="op">&lt;</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2017-09-09 00:00:00"</span>, tz<span class="op">=</span><span class="st">"UTC"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>site_no <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">site_no</span>, 
                           levels <span class="op">=</span> <span class="va">south_to_north</span><span class="op">$</span><span class="va">site_no</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="plot-explorations" class="section level2">
 <h2 class="hasAnchor">
-<a href="#plot-explorations" class="anchor"></a>Plot Explorations</h2>
+<a href="#plot-explorations" class="anchor" aria-hidden="true"></a>Plot Explorations</h2>
 <p>Since the y-axis is quite different between sites, it seemed to make the most sense to use <code>ggplot2</code>’s faceting. The first iteration was as follows:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
@@ -203,7 +203,7 @@ Initial plot of water levels
 </div>
 <div id="map-legend" class="section level2">
 <h2 class="hasAnchor">
-<a href="#map-legend" class="anchor"></a>Map Legend</h2>
+<a href="#map-legend" class="anchor" aria-hidden="true"></a>Map Legend</h2>
 <p>The following code was used to map the sites to a basic lower-48 map of the United States:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://maptools.r-forge.r-project.org/" class="external-link">maptools</a></span><span class="op">)</span>
@@ -231,7 +231,7 @@ Initial plot of water levels
 <span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html" class="external-link">coordinates</a></span><span class="op">(</span><span class="va">sites_names</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html" class="external-link">proj4string</a></span><span class="op">(</span><span class="va">sites_names</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html" class="external-link">CRS</a></span><span class="op">(</span><span class="va">wgs84</span><span class="op">)</span>
 
-<span class="va">sites_names</span> <span class="op">=</span> <span class="va">sites_names</span> <span class="op">%&gt;%</span> 
+<span class="va">sites_names</span> <span class="op">=</span> <span class="va">sites_names</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html" class="external-link">spTransform</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html" class="external-link">CRS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html" class="external-link">proj4string</a></span><span class="op">(</span><span class="va">conus</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning in proj4string(conus): CRS object has comment, which is lost in output</code></pre>
 <pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
@@ -291,7 +291,7 @@ Site locations on US map
 </div>
 <div id="what-does-the-plot-mean" class="section level2">
 <h2 class="hasAnchor">
-<a href="#what-does-the-plot-mean" class="anchor"></a>What does the plot mean?</h2>
+<a href="#what-does-the-plot-mean" class="anchor" aria-hidden="true"></a>What does the plot mean?</h2>
 <p>While this blog is primarily focused on the process used to create the plot, far more effort was expended by others in understanding and describing the data. The following information was released with the graph, initially as a Facebook post</p>
 <p><a href="https://www.facebook.com/USGSNaturalHazards/posts/136010120350602" class="external-link">USGSNaturalHazards</a>:</p>
 <p>Did you know? We often see a response to large (and sometimes not so large) earthquakes in groundwater levels in wells. The USGS maintains a network of wells for monitoring various things like natural variability in water levels and response to pumping and climate change across the U.S. The well network can be seen here: <a href="https://groundwaterwatch.usgs.gov/" class="external-link uri">https://groundwaterwatch.usgs.gov/</a> The M8.1 earthquake that took place 9-8-2017 in the Pacific region offshore Chiapas, Mexico was observed across the U.S. in confined aquifer wells within the network. The wells in this plot are available from the National Water Information System (NWIS) web are from: TX, CA (southern), OK, MO, VA, CA (central), MD, NJ, PA, OH, NY and ME (from south to north). This is just a small sampling of the wells. USGS hydrologists are poring over the data from other states to see what the full extent of response might have been.</p>

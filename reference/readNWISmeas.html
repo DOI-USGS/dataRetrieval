@@ -246,15 +246,15 @@ for help on the columns and codes.</p>
     <div class='dont-index'><p><code><a href='constructNWISURL.html'>constructNWISURL</a></code>, <code><a href='importRDB1.html'>importRDB1</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>site_ids</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'01594440'</span>,<span class='st'>'040851325'</span><span class='op'>)</span>
-<span class='co'># \donttest{</span>
-<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISmeas</span><span class='op'>(</span><span class='va'>site_ids</span><span class='op'>)</span>
-<span class='va'>Meas05316840</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISmeas</span><span class='op'>(</span><span class='st'>"05316840"</span><span class='op'>)</span>
-<span class='va'>Meas05316840.ex</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISmeas</span><span class='op'>(</span><span class='st'>"05316840"</span>,expanded<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>Meas07227500.ex</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISmeas</span><span class='op'>(</span><span class='st'>"07227500"</span>,expanded<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>Meas07227500.exRaw</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISmeas</span><span class='op'>(</span><span class='st'>"07227500"</span>,expanded<span class='op'>=</span><span class='cn'>TRUE</span>, convertType <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>site_ids</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'01594440'</span>,<span class='st'>'040851325'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISmeas</span><span class='op'>(</span><span class='va'>site_ids</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>Meas05316840</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISmeas</span><span class='op'>(</span><span class='st'>"05316840"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>Meas05316840.ex</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISmeas</span><span class='op'>(</span><span class='st'>"05316840"</span>,expanded<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>Meas07227500.ex</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISmeas</span><span class='op'>(</span><span class='st'>"07227500"</span>,expanded<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>Meas07227500.exRaw</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISmeas</span><span class='op'>(</span><span class='st'>"07227500"</span>,expanded<span class='op'>=</span><span class='cn'>TRUE</span>, convertType <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

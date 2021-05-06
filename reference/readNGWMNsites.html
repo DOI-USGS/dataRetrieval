@@ -192,19 +192,23 @@ separated by a period or semicolon, e.g. <code>USGS.404159100494601</code>.</p><
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'>#one site</span>
-<span class='va'>site</span> <span class='op'>&lt;-</span> <span class='st'>"USGS.430427089284901"</span>
-<span class='va'>oneSite</span> <span class='op'>&lt;-</span> <span class='fu'>readNGWMNsites</span><span class='op'>(</span>siteNumbers <span class='op'>=</span> <span class='va'>site</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
-#&gt; <span class='message'>              and no future behavior or output is guaranteed</span></div><div class='output co'>#&gt; <span class='message'>No feature found for given feature id</span></div><div class='input'>
-<span class='co'>#non-USGS site</span>
-<span class='va'>site</span> <span class='op'>&lt;-</span> <span class='st'>"MBMG.103306"</span>
-<span class='va'>siteInfo</span> <span class='op'>&lt;-</span> <span class='fu'>readNGWMNsites</span><span class='op'>(</span>siteNumbers <span class='op'>=</span> <span class='va'>site</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
-#&gt; <span class='message'>              and no future behavior or output is guaranteed</span></div><div class='output co'>#&gt; <span class='message'>No feature found for given feature id</span></div><div class='input'>
-<span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='co'>#one site</span></span>
+<span class='r-in'><span class='va'>site</span> <span class='op'>&lt;-</span> <span class='st'>"USGS.430427089284901"</span></span>
+<span class='r-in'><span class='va'>oneSite</span> <span class='op'>&lt;-</span> <span class='fu'>readNGWMNsites</span><span class='op'>(</span>siteNumbers <span class='op'>=</span> <span class='va'>site</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>               and no future behavior or output is guaranteed</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> No feature found for given feature id</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#non-USGS site</span></span>
+<span class='r-in'><span class='va'>site</span> <span class='op'>&lt;-</span> <span class='st'>"MBMG.103306"</span></span>
+<span class='r-in'><span class='va'>siteInfo</span> <span class='op'>&lt;-</span> <span class='fu'>readNGWMNsites</span><span class='op'>(</span>siteNumbers <span class='op'>=</span> <span class='va'>site</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> DISCLAIMER: NGWMN retrieval functions are still in flux, </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>               and no future behavior or output is guaranteed</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> No feature found for given feature id</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

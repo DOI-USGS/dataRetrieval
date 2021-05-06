@@ -193,16 +193,16 @@ Possible values are "America/New_York","America/Chicago", "America/Denver","Amer
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>baseURL</span> <span class='op'>&lt;-</span> <span class='st'>"https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"</span>
-<span class='va'>URL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>baseURL</span>, <span class='st'>"sites=01646500"</span>,
-     <span class='st'>"startDT=2014-09-01"</span>,
-     <span class='st'>"endDT=2014-09-08"</span>,
-     <span class='st'>"statCd=00003"</span>,
-     <span class='st'>"parameterCd=00060"</span>,sep<span class='op'>=</span><span class='st'>"&amp;"</span><span class='op'>)</span>
-<span class='co'># \donttest{</span>
-<span class='va'>timesereies</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML2</span><span class='op'>(</span><span class='va'>URL</span>, asDateTime<span class='op'>=</span><span class='cn'>TRUE</span>, tz<span class='op'>=</span><span class='st'>"UTC"</span><span class='op'>)</span>
-<span class='co'># } </span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>baseURL</span> <span class='op'>&lt;-</span> <span class='st'>"https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"</span></span>
+<span class='r-in'><span class='va'>URL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>baseURL</span>, <span class='st'>"sites=01646500"</span>,</span>
+<span class='r-in'>     <span class='st'>"startDT=2014-09-01"</span>,</span>
+<span class='r-in'>     <span class='st'>"endDT=2014-09-08"</span>,</span>
+<span class='r-in'>     <span class='st'>"statCd=00003"</span>,</span>
+<span class='r-in'>     <span class='st'>"parameterCd=00060"</span>,sep<span class='op'>=</span><span class='st'>"&amp;"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='va'>timesereies</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML2</span><span class='op'>(</span><span class='va'>URL</span>, asDateTime<span class='op'>=</span><span class='cn'>TRUE</span>, tz<span class='op'>=</span><span class='st'>"UTC"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># } </span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
