@@ -107,7 +107,7 @@
 </h1>
                         <h4 data-toc-skip class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
             
-            <h4 data-toc-skip class="date">2021-04-22</h4>
+            <h4 data-toc-skip class="date">2021-05-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USGS/dataRetrieval/blob/master/vignettes/nldi.Rmd" class="external-link"><code>vignettes/nldi.Rmd</code></a></small>
       <div class="hidden name"><code>nldi.Rmd</code></div>
@@ -155,14 +155,14 @@ Gas stations between UCSB and UCLA
 <div id="whats-available" class="section level1">
 <h1 class="hasAnchor">
 <a href="#whats-available" class="anchor" aria-hidden="true"></a>What’s available?</h1>
-<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-04-22), 6 datasets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
+<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-05-06), 7 datasets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="8%">
-<col width="29%">
-<col width="61%">
+<col width="30%">
+<col width="60%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">source</th>
@@ -176,26 +176,31 @@ Gas stations between UCSB and UCLA
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid</a></td>
 </tr>
 <tr class="even">
+<td align="left">ca_gages</td>
+<td align="left">Streamgage catalog for CA SB19</td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/ca_gages" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/ca_gages</a></td>
+</tr>
+<tr class="odd">
 <td align="left">huc12pp</td>
 <td align="left">HUC12 Pour Points</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">nwissite</td>
 <td align="left">NWIS Sites</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">ref_gage</td>
 <td align="left">geoconnex.us reference gages</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">wade</td>
 <td align="left">Water Data Exchange 2.0 Sites</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">WQP</td>
 <td align="left">Water Quality Portal</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp</a></td>
@@ -414,7 +419,7 @@ NLDI Navigation Options
 <span class="co"># Extract Streamflow for identified sites</span>
 <span class="va">Q</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span><span class="op">$</span><span class="va">identifier</span>, 
                 parameterCd <span class="op">=</span> <span class="st">"00060"</span>, 
-                startDate <span class="op">=</span> <span class="st">"2020-01-01"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+                startDate <span class="op">=</span> <span class="st">"2020-01-01"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="../reference/renameNWISColumns.html">renameNWISColumns</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># Plot! </span>

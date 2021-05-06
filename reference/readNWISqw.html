@@ -261,8 +261,8 @@ but the "tz_cd" column defines the timezone of any POSIXct columns.</p>
 <tr><td>Code</td><td>Description</td></tr>
 <tr><td>INF</td><td>Information</td></tr>
 <tr><td>PHY</td><td>Physical</td></tr>
-<tr><td>INM</td><td>Inorganics, Major, Metals (major cations)</td></tr>
-<tr><td>INN</td><td>Inorganics, Major, Non-metals (major anions)</td></tr>
+<tr><td>INM</td><td>Inorganics, Major, Metals</td></tr>
+<tr><td>INN</td><td>Inorganics, Major, Non-metals</td></tr>
 <tr><td>NUT</td><td>Nutrient</td></tr>
 <tr><td>MBI</td><td>Microbiological</td></tr>
 <tr><td>BIO</td><td>Biological</td></tr>
@@ -272,9 +272,12 @@ but the "tz_cd" column defines the timezone of any POSIXct columns.</p>
 <tr><td>OPE</td><td>Organics, pesticide</td></tr>
 <tr><td>OPC</td><td>Organics, PCBs</td></tr>
 <tr><td>OOT</td><td>Organics, other</td></tr>
-<tr><td>RAD</td><td>Radiochemical</td></tr>
+<tr><td>RAD</td><td>Radiochemistry</td></tr>
 <tr><td>SED</td><td>Sediment</td></tr>
 <tr><td>POP</td><td>Population/community</td></tr>
+<tr><td>OTH</td><td>Other</td></tr>
+<tr><td>HAB</td><td>Habitat</td></tr>
+<tr><td>ISO</td><td>Stable Isotopes</td></tr>
 </table>
 <p>If more than one parameter group is requested, only sites that data for all requested groups are returned.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -283,27 +286,26 @@ but the "tz_cd" column defines the timezone of any POSIXct columns.</p>
 <code><a href='readWQPqw.html'>readWQPqw</a></code>, <code><a href='constructNWISURL.html'>constructNWISURL</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>site_ids</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'04024430'</span>,<span class='st'>'04024000'</span><span class='op'>)</span>
-<span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>'2010-01-01'</span>
-<span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>''</span>
-<span class='va'>parameterCd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'34247'</span>,<span class='st'>'30234'</span>,<span class='st'>'32104'</span>,<span class='st'>'34220'</span><span class='op'>)</span>
-<span class='co'># \donttest{</span>
-<span class='va'>rawNWISqwData</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,<span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span>
-<span class='va'>rawNWISqwDataReshaped</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,
-          <span class='va'>startDate</span>,<span class='va'>endDate</span>,reshape<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>parameterCd</span> <span class='op'>&lt;-</span> <span class='st'>"all"</span>
-<span class='va'>rawNWISall</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,
-          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span>
-<span class='va'>pgroup</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"NUT"</span><span class='op'>)</span>
-<span class='va'>rawNWISNutrients</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>pgroup</span>,
-          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span>
-<span class='va'>groups</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"NUT"</span>,<span class='st'>"OPE"</span><span class='op'>)</span>
-<span class='va'>rawNWISNutOpe</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>groups</span>,
-          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span> 
-<span class='va'>rawNWISOpe</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='st'>"OPE"</span>,
-          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span> 
-         <span class='co'># } </span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>site_ids</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'04024430'</span>,<span class='st'>'04024000'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>'2010-01-01'</span></span>
+<span class='r-in'><span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>''</span></span>
+<span class='r-in'><span class='va'>parameterCd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'34247'</span>,<span class='st'>'30234'</span>,<span class='st'>'32104'</span>,<span class='st'>'34220'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='va'>rawNWISqwData</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,<span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>rawNWISqwDataReshaped</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,</span>
+<span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span>,reshape<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>parameterCd</span> <span class='op'>&lt;-</span> <span class='st'>"all"</span></span>
+<span class='r-in'><span class='va'>rawNWISall</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,</span>
+<span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pgroup</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"NUT"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>rawNWISNutrients</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>pgroup</span>,</span>
+<span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>groups</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"NUT"</span>,<span class='st'>"OPE"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>rawNWISNutOpe</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>groups</span>,</span>
+<span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span> </span>
+<span class='r-in'><span class='va'>rawISO</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='st'>"413144073115701"</span>, <span class='st'>"ISO"</span><span class='op'>)</span> </span>
+<span class='r-in'>         <span class='co'># } </span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
