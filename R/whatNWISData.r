@@ -4,6 +4,8 @@
 #' for more information.
 #'
 #' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A list of arguments can also be supplied. 
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @keywords data import USGS web service
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
@@ -57,7 +59,7 @@
 #'                              parameterCd = c("00060","00010"),
 #'                              statCd = "00003")
 #' }
-whatNWISdata <- function(...){
+whatNWISdata <- function(..., convertType=TRUE){
   
   matchReturn <- convertLists(...)
   
@@ -92,7 +94,7 @@ whatNWISdata <- function(...){
   
   urlSitefile <- drURL('site', Access=pkg.env$access, seriesCatalogOutput='true',arg.list=values)
  
-  SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE)
+  SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE, convertType = convertType)
 
   if(!("all" %in% service)){
     SiteFile <- SiteFile[SiteFile$data_type_cd %in% service,]
@@ -104,7 +106,7 @@ whatNWISdata <- function(...){
     SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd,]
   }
   
-  if(nrow(SiteFile) > 0){
+  if(nrow(SiteFile) > 0 & convertType){
     SiteFile$begin_date <- as.Date(lubridate::parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
     SiteFile$end_date <- as.Date(lubridate::parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
   }
