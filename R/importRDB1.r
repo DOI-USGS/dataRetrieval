@@ -114,22 +114,21 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   data.rows <- total.rows - meta.rows - 2
 
   if(data.rows > 0){
+    args_list <- list(file = f,
+                 delim = "\t",
+                 skip = meta.rows + 2,
+                 col_names = FALSE)
+    if(packageVersion("readr") > 1.9){
+      args_list[["show_col_types"]] <- FALSE
+    }
     if(convertType){
-      readr.data <- readr::read_delim(file = f, delim = "\t",
-                                      skip = meta.rows + 2,
-                                      guess_max = data.rows,
-                                      show_col_types = FALSE,
-                                      col_names = FALSE)  
+      args_list[["guess_max"]] <- data.rows  
     } else {
-
-      readr.data <- readr::read_delim(file = f, delim = "\t",
-                                      skip = meta.rows + 2,
-                                      col_types = readr::cols(.default = "c"),
-                                      show_col_types = FALSE,
-                                      col_names = FALSE)
-
+      args_list[["col_types"]] <- readr::cols(.default = "c")
     } 
     
+    readr.data <- do.call(readr::read_delim, args = args_list)
+
     readr.problems <- readr::problems(readr.data)
 
     readr.data <- as.data.frame(readr.data)
