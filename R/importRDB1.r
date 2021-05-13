@@ -86,9 +86,14 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   tz <- match.arg(tz, OlsonNames())
 
   if(file.exists(obs_url)){
-    doc <- obs_url
+    f <- obs_url
   } else {
-    doc <- getWebServiceData(obs_url, encoding='gzip')
+    f <- tempfile()
+    on.exit(unlink(f))
+    
+    doc <- getWebServiceData(obs_url,
+                             httr::write_disk(f),
+                             encoding='gzip')
     if("warn" %in% names(attr(doc, "headerInfo"))){
       data <- data.frame()
       attr(data, "headerInfo") <- attr(doc,"headerInfo")
@@ -99,7 +104,8 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     }
   }
   
-  readr.total <- readr::read_lines(doc)
+  readr.total <- readLines(f)
+
   total.rows <- length(readr.total)
   readr.meta <- readr.total[grep("^#", readr.total)]
   meta.rows <- length(readr.meta)
@@ -107,23 +113,27 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   types.names <- strsplit(readr.total[meta.rows+2],"\t")[[1]]
   data.rows <- total.rows - meta.rows - 2
 
-
-
   if(data.rows > 0){
     if(convertType){
-      readr.data <- readr::read_delim(file = doc, delim = "\t",
+      readr.data <- readr::read_delim(file = f, delim = "\t",
                                       skip = meta.rows + 2,
                                       guess_max = data.rows,
                                       show_col_types = FALSE,
                                       col_names = FALSE)  
     } else {
-      readr.data <- readr::read_delim(file = doc, delim = "\t",
+
+      readr.data <- readr::read_delim(file = f, delim = "\t",
                                       skip = meta.rows + 2,
                                       col_types = readr::cols(.default = "c"),
                                       show_col_types = FALSE,
-                                      col_names = FALSE)      
-    }
+                                      col_names = FALSE)
+
+    } 
     
+    readr.problems <- readr::problems(readr.data)
+
+    readr.data <- as.data.frame(readr.data)
+
     if(nrow(readr.data) > 0){
       names(readr.data) <- header.names
 
@@ -291,43 +301,3 @@ convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
   
   return(df)
 }
-
-fixErrors <- function(readr.data, readr.data.char, message.text, FUN, ...){
-  FUN <- match.fun(FUN)
-  badCols <- attr(readr.data, "problems")[["col"]] 
-  int.message <- grep(message.text, attr(readr.data, "problems")[["expected"]])
-  if(length(int.message) > 0){
-    unique.bad.cols <- unique(badCols[int.message])
-    index.col <- as.integer(gsub("X","",unique.bad.cols))
-    
-    for(i in index.col){
-      readr.data[,i] <- tryCatch({
-        FUN(readr.data.char[[i]], ...)
-      }, warning=function(cond){
-        readr.data.char[[i]]
-      })
-      attr(readr.data, "problems") <- attr(readr.data, "problems")[attr(readr.data, "problems")[["col"]] != paste0("X",i),]
-    }
-  }
-  return(readr.data)
-}
-
-read_delim_check_quote <- function(..., total.rows){
-  
-  if(total.rows <= 0){
-    total.rows <- 1
-  }
-  rdb.data <- suppressWarnings(readr::read_delim(..., 
-                                                 show_col_types = FALSE,
-                                                 guess_max = total.rows))
-  
-  if(nrow(rdb.data) < total.rows){
-    rdb.data <- suppressWarnings(readr::read_delim(..., quote = "", 
-                                                   show_col_types = FALSE,
-                                                   guess_max = total.rows))
-  }
-  
-  return(rdb.data)
-  
-}
-
