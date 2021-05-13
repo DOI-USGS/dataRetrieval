@@ -146,7 +146,8 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
       char.names <- NULL
     } 
     
-    if(nrow(readr::problems(readr.data)) > 0 | length(char.names) > 0){
+    readr.problems <- readr::problems(readr.data)
+    if(nrow(readr.problems) > 0 | length(char.names) > 0){
       readr.data.char <- read_delim_check_quote(file = doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
                                                 col_types = readr::cols(.default = "c"), total.rows = data.rows)
       names(readr.data.char) <- header.names    
@@ -154,10 +155,10 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     
     for(j in char.names){
       readr.data[,j] <- readr.data.char[[j]]
-      attr(readr.data, "problems")  <- attr(readr.data, "problems")[attr(readr.data, "problems")[["col"]] != paste0("X",j),]
+      attr(readr.data, "problems") <- readr.problems[readr.problems[["col"]] != paste0("X",j),]
     }
   
-    badCols <- attr(readr.data, "problems")[["col"]]  
+    badCols <- readr.problems[["col"]]  
     readr.data <- as.data.frame(readr.data)
     
     if(length(badCols) > 0){
@@ -339,9 +340,10 @@ convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
 }
 
 fixErrors <- function(readr.data, readr.data.char, message.text, FUN, ...){
+  readr.problems <- readr::problems(readr.data)
   FUN <- match.fun(FUN)
-  badCols <- attr(readr.data, "problems")[["col"]] 
-  int.message <- grep(message.text, attr(readr.data, "problems")[["expected"]])
+  badCols <- readr.problems[["col"]]
+  int.message <- grep(message.text, readr.problems[["expected"]])
   if(length(int.message) > 0){
     unique.bad.cols <- unique(badCols[int.message])
     index.col <- as.integer(gsub("X","",unique.bad.cols))
@@ -352,7 +354,7 @@ fixErrors <- function(readr.data, readr.data.char, message.text, FUN, ...){
       }, warning=function(cond){
         readr.data.char[[i]]
       })
-      attr(readr.data, "problems") <- attr(readr.data, "problems")[attr(readr.data, "problems")[["col"]] != paste0("X",i),]
+      attr(readr.data, "problems") <- readr.problems[readr.problems[["col"]] != paste0("X",i),]
     }
   }
   return(readr.data)
