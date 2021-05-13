@@ -267,26 +267,128 @@ and S is the statistic code (if applicable).</p>
 <span class='r-in'>                  service<span class='op'>=</span><span class='st'>"dv"</span>, startDate<span class='op'>=</span><span class='va'>startDate</span>, endDate<span class='op'>=</span><span class='va'>endDate</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>siteInfo</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd<span class='op'>=</span><span class='st'>"WI"</span>, parameterCd<span class='op'>=</span><span class='st'>"00010"</span>,</span>
 <span class='r-in'>                  hasDataTypeCd<span class='op'>=</span><span class='st'>"iv"</span>, service<span class='op'>=</span><span class='st'>"site"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X9 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X11 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #BB0000;'>col_character()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'><span class='va'>qwData</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>bBox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>82.5</span>,<span class='fl'>41.52</span>,<span class='op'>-</span><span class='fl'>81</span>,<span class='fl'>41</span><span class='op'>)</span>,startDate<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2000-01-01"</span><span class='op'>)</span>,</span>
 <span class='r-in'>                  drain_area_va_min<span class='op'>=</span><span class='fl'>50</span>, qw_count_nu<span class='op'>=</span><span class='fl'>50</span>,qw_attributes<span class='op'>=</span><span class='st'>"expanded"</span>,</span>
 <span class='r-in'>                  qw_sample_wide<span class='op'>=</span><span class='st'>"wide"</span>,list_of_search_criteria<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"lat_long_bounding_box"</span>,</span>
 <span class='r-in'>                  <span class='st'>"drain_area_va"</span>,<span class='st'>"obs_count_nu"</span><span class='op'>)</span>,service<span class='op'>=</span><span class='st'>"qw"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #0000BB;'>col_date(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_time(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #0000BB;'>col_date(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #0000BB;'>col_time(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X11 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #BBBB00;'>col_logical()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'><span class='va'>temp</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>bBox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>83</span>,<span class='fl'>36.5</span>,<span class='op'>-</span><span class='fl'>81</span>,<span class='fl'>38.5</span><span class='op'>)</span>, parameterCd<span class='op'>=</span><span class='st'>"00010"</span>, service<span class='op'>=</span><span class='st'>"site"</span>, </span>
 <span class='r-in'>                   seriesCatalogOutput<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X20 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X21 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X24 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'><span class='va'>wiGWL</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd<span class='op'>=</span><span class='st'>"WI"</span>,service<span class='op'>=</span><span class='st'>"gwlevels"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #0000BB;'>col_time(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X9 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X11 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X15 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #BB0000;'>col_character()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'><span class='va'>meas</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>state_cd<span class='op'>=</span><span class='st'>"WI"</span>,service<span class='op'>=</span><span class='st'>"measurements"</span>,format<span class='op'>=</span><span class='st'>"rdb_expanded"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_datetime(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X9 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X21 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X22 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X23 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X24 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X32 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>waterYearStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"01646500"</span><span class='op'>)</span>,service<span class='op'>=</span><span class='st'>"stat"</span>,statReportType<span class='op'>=</span><span class='st'>"annual"</span>,</span>
 <span class='r-in'>                 statYearType<span class='op'>=</span><span class='st'>"water"</span>, missingData<span class='op'>=</span><span class='st'>"on"</span><span class='op'>)</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> Please be aware the NWIS data service feeding this function is in BETA.</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span>             Data formatting could be changed at any time, and is not guaranteed</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'><span class='va'>monthlyStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"01646500"</span><span class='op'>)</span>,</span>
 <span class='r-in'>                            service<span class='op'>=</span><span class='st'>"stat"</span>,</span>
 <span class='r-in'>                            statReportType<span class='op'>=</span><span class='st'>"monthly"</span><span class='op'>)</span>                                   </span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> Please be aware the NWIS data service feeding this function is in BETA.</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span>             Data formatting could be changed at any time, and is not guaranteed</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X9 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'><span class='va'>dailyStat</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>site<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"01646500"</span><span class='op'>)</span>,</span>
 <span class='r-in'>                          service<span class='op'>=</span><span class='st'>"stat"</span>,</span>
 <span class='r-in'>                          statReportType<span class='op'>=</span><span class='st'>"daily"</span>,</span>
@@ -295,6 +397,27 @@ and S is the statistic code (if applicable).</p>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> Please be aware the NWIS data service feeding this function is in BETA.</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span>             Data formatting could be changed at any time, and is not guaranteed</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X9 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X11 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X15 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X17 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>dailyRI</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"Rhode Island"</span>, parameterCd <span class='op'>=</span> <span class='st'>"00060"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
@@ -306,6 +429,27 @@ and S is the statistic code (if applicable).</p>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> Please be aware the NWIS data service feeding this function is in BETA.</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span>             Data formatting could be changed at any time, and is not guaranteed</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X9 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X11 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X15 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X17 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>#' # use county names to get data</span></span>
 <span class='r-in'><span class='va'>dailyStaffordVA</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"Virginia"</span>,</span>
@@ -318,10 +462,53 @@ and S is the statistic code (if applicable).</p>
 <span class='r-in'>parameterCd <span class='op'>=</span> <span class='st'>"00060"</span>, countycode <span class='op'>=</span> <span class='va'>va_counties</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>site_id</span> <span class='op'>&lt;-</span> <span class='st'>'01594440'</span></span>
 <span class='r-in'><span class='va'>rating_curve</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"rating"</span>, site_no <span class='op'>=</span> <span class='va'>site_id</span>, file_type<span class='op'>=</span><span class='st'>"base"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'><span class='va'>all_sites_base</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"rating"</span>, file_type<span class='op'>=</span><span class='st'>"base"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_datetime(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BB0000;'>col_character()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'><span class='va'>all_sites_core</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"rating"</span>, file_type<span class='op'>=</span><span class='st'>"corr"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_datetime(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BB0000;'>col_character()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'><span class='va'>all_sites_exsa</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"rating"</span>, file_type<span class='op'>=</span><span class='st'>"exsa"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_datetime(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BB0000;'>col_character()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'><span class='va'>all_sites_24hrs</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"rating"</span>, file_type<span class='op'>=</span><span class='st'>"exsa"</span>, period <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_datetime(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BB0000;'>col_character()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>today</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service<span class='op'>=</span><span class='st'>"iv"</span>, startDate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span>, </span>
 <span class='r-in'>                      parameterCd <span class='op'>=</span> <span class='st'>"00060"</span>, siteNumber <span class='op'>=</span> <span class='st'>"05114000"</span><span class='op'>)</span></span>
@@ -329,6 +516,23 @@ and S is the statistic code (if applicable).</p>
 <span class='r-in'><span class='va'>peak_data</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdata</span><span class='op'>(</span>service <span class='op'>=</span> <span class='st'>"peak"</span>, </span>
 <span class='r-in'>                          site_no <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"01594440"</span>,<span class='st'>"040851325"</span><span class='op'>)</span>,</span>
 <span class='r-in'>                          range_selection <span class='op'>=</span> <span class='st'>"data_range"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #0000BB;'>col_date(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_time(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_number()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X9 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #0000BB;'>col_date(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X11 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># }</span></span>
 </pre>

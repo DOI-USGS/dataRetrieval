@@ -224,24 +224,191 @@ County and state fields will be included as appropriate.</p>
     <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
 <span class='r-in'><span class='co'>#All data for a county</span></span>
 <span class='r-in'><span class='va'>allegheny</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"Pennsylvania"</span>,countyCd <span class='op'>=</span> <span class='st'>"Allegheny"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X9 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X34 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X35 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X61 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X62 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X63 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X64 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X65 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X66 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X67 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X68 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X69 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   # ... with 15 more columns</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>#Data for an entire state for certain years</span></span>
 <span class='r-in'><span class='va'>ohio</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>years<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2000</span>,<span class='fl'>2005</span>,<span class='fl'>2010</span><span class='op'>)</span>,stateCd <span class='op'>=</span> <span class='st'>"OH"</span>, countyCd <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X11 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X26 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X32 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X33 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X42 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X58 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X59 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X60 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X61 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X62 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X63 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   # ... with 72 more columns</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>#Data for an entire state, county by county</span></span>
 <span class='r-in'><span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>years<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2000</span>,<span class='fl'>2005</span>,<span class='fl'>2010</span><span class='op'>)</span>,stateCd <span class='op'>=</span> <span class='st'>"PR"</span>,countyCd<span class='op'>=</span><span class='st'>"ALL"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X9 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X34 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X35 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X61 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X62 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X63 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X64 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X65 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X66 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X67 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X68 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X69 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   # ... with 49 more columns</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>#All national-scale data, transforming data frame to named columns from named rows</span></span>
 <span class='r-in'><span class='va'>national</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='cn'>NULL</span>, countyCd <span class='op'>=</span> <span class='cn'>NULL</span>, transform <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X9 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X11 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X15 = <span style='color: #BB0000;'>col_character()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>#Washington, DC data</span></span>
 <span class='r-in'><span class='va'>dc</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"DC"</span>,countyCd <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X11 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X26 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X32 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X33 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X58 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X59 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X60 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X61 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X62 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X63 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X64 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   # ... with 17 more columns</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>#data for multiple counties, with different input formatting</span></span>
 <span class='r-in'><span class='va'>paData</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"42"</span>,countyCd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Allegheny County"</span>, <span class='st'>"BUTLER"</span>, <span class='fl'>1</span>, <span class='st'>"031"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X9 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X34 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X35 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X61 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X62 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X63 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X64 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X65 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X66 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X67 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X68 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X69 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   # ... with 15 more columns</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>#retrieving two specific categories for an entire state</span></span>
 <span class='r-in'><span class='va'>ks</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"KS"</span>, countyCd <span class='op'>=</span> <span class='cn'>NULL</span>, categories <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"IT"</span>,<span class='st'>"LI"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X1 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X11 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X21 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X23 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'><span class='co'># }</span></span>
 </pre>
   </div>
