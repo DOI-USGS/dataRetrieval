@@ -118,7 +118,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
                  delim = "\t",
                  skip = meta.rows + 2,
                  col_names = FALSE)
-    if(packageVersion("readr") > 1.9){
+    if(utils::packageVersion("readr") > 1.9){
       args_list[["show_col_types"]] <- FALSE
     }
     if(convertType){
