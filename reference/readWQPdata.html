@@ -295,6 +295,10 @@ for more information on time zones.</p></td>
 <span class='r-in'>              characteristicName<span class='op'>=</span><span class='va'>secchi.names</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>wqp.data</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span><span class='va'>args</span><span class='op'>)</span>   </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Request failed [502]. Retrying in 1.5 seconds...</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Request failed [502]. Retrying in 2.5 seconds...</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> For: https://www.waterqualitydata.us/data/Result/search?startDateLo=01-01-2013&amp;startDateHi=12-31-2013&amp;statecode=US%3A55&amp;characteristicName=Depth%2C%20Secchi%20disk%20depth%3BDepth%2C%20Secchi%20disk%20depth%20%28choice%20list%29%3BSecchi%20Reading%20Condition%20%28choice%20list%29%3BWater%20transparency%2C%20Secchi%20disc&amp;zip=yes&amp;mimeType=tsv</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in getWebServiceData(obs_url, httr::write_disk(temp), httr::accept("application/zip"))</span> Bad Gateway (HTTP 502).</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>args_2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'startDateLo'</span> <span class='op'>=</span> <span class='va'>startDate</span>, </span>
 <span class='r-in'>             <span class='st'>'startDateHi'</span> <span class='op'>=</span> <span class='st'>"2013-12-31"</span>, </span>

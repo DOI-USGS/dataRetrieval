@@ -292,18 +292,288 @@ but the "tz_cd" column defines the timezone of any POSIXct columns.</p>
 <span class='r-in'><span class='va'>parameterCd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'34247'</span>,<span class='st'>'30234'</span>,<span class='st'>'32104'</span>,<span class='st'>'34220'</span><span class='op'>)</span></span>
 <span class='r-in'><span class='co'># \donttest{</span></span>
 <span class='r-in'><span class='va'>rawNWISqwData</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,<span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #0000BB;'>col_date(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_time(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X15 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X19 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X21 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X27 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X22 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X30 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X34 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X36 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X37 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X38 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X39 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X40 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X41 = <span style='color: #BBBB00;'>col_logical()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'><span class='va'>rawNWISqwDataReshaped</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,</span>
 <span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span>,reshape<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #0000BB;'>col_date(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_time(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X15 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X19 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X21 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X27 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X22 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X30 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X34 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X36 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X37 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X38 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X39 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X40 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X41 = <span style='color: #BBBB00;'>col_logical()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'><span class='va'>parameterCd</span> <span class='op'>&lt;-</span> <span class='st'>"all"</span></span>
 <span class='r-in'><span class='va'>rawNWISall</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,</span>
 <span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #0000BB;'>col_date(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_time(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #0000BB;'>col_date(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #0000BB;'>col_time(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X21 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X27 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X22 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X30 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X34 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X36 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X37 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X38 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X39 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X40 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X41 = <span style='color: #BBBB00;'>col_logical()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'><span class='va'>pgroup</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"NUT"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>rawNWISNutrients</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>pgroup</span>,</span>
 <span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #0000BB;'>col_date(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_time(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X21 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X27 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X22 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X30 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X34 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X36 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X37 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X38 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X39 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X40 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X41 = <span style='color: #BBBB00;'>col_logical()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'><span class='va'>groups</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"NUT"</span>,<span class='st'>"OPE"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>rawNWISNutOpe</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>groups</span>,</span>
 <span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #0000BB;'>col_date(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_time(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X15 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X21 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X27 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X22 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X30 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X34 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X36 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X37 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X38 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X39 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X40 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X41 = <span style='color: #BBBB00;'>col_logical()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'><span class='va'>rawISO</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='st'>"413144073115701"</span>, <span class='st'>"ISO"</span><span class='op'>)</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X3 = <span style='color: #0000BB;'>col_date(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X4 = <span style='color: #0000BB;'>col_time(format = "")</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X12 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X16 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X19 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X20 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X21 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X22 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X26 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X27 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X33 = <span style='color: #BBBB00;'>col_logical()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X2 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X17 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X26 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X30 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X38 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X39 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X40 = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'>         <span class='co'># } </span></span>
 </pre>
   </div>
