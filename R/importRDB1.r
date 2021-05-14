@@ -86,9 +86,14 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   tz <- match.arg(tz, OlsonNames())
 
   if(file.exists(obs_url)){
-    doc <- obs_url
+    f <- obs_url
   } else {
-    doc <- getWebServiceData(obs_url, encoding='gzip')
+    f <- tempfile()
+    on.exit(unlink(f))
+    
+    doc <- getWebServiceData(obs_url,
+                             httr::write_disk(f),
+                             encoding='gzip')
     if("warn" %in% names(attr(doc, "headerInfo"))){
       data <- data.frame()
       attr(data, "headerInfo") <- attr(doc,"headerInfo")
@@ -99,170 +104,127 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     }
   }
   
-  readr.total <- readr::read_lines(doc)
+  readr.total <- readLines(f)
+
   total.rows <- length(readr.total)
   readr.meta <- readr.total[grep("^#", readr.total)]
   meta.rows <- length(readr.meta)
   header.names <- strsplit(readr.total[meta.rows+1],"\t")[[1]]
   types.names <- strsplit(readr.total[meta.rows+2],"\t")[[1]]
   data.rows <- total.rows - meta.rows - 2
-  
-  if(convertType){
-    readr.data <- read_delim_check_quote(file = doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, total.rows = data.rows)
-    
-  #defaults to time in seconds in readr 0.2.2.9??  
-    if(length(grep("hms",lapply(readr.data, class))) > 0){
-      colHMS <- grep("hms",lapply(readr.data, class))
-      
-      colList <- as.list(rep("c",length(colHMS)))
-      names(colList) <- paste0("X",colHMS)
 
-      readr.data <- read_delim_check_quote(file = doc, skip = (meta.rows+2),delim="\t",
-                                           col_names = FALSE, 
-                                           col_types = colList, 
-                                           total.rows = data.rows)
+  if(data.rows > 0){
+    args_list <- list(file = f,
+                 delim = "\t",
+                 skip = meta.rows + 2,
+                 col_names = FALSE)
+    if(utils::packageVersion("readr") > 1.9){
+      args_list[["show_col_types"]] <- FALSE
     }
-
-  } else {
-    
-    readr.data <- read_delim_check_quote(file = doc,skip = (meta.rows+2),delim="\t",col_names = FALSE, col_types = readr::cols(.default = "c"), total.rows = data.rows)
-
-  }
-  
-  if(nrow(readr.data) > 0){
-    names(readr.data) <- header.names
-    
-    char.names <- c(header.names[grep("_cd",header.names)],
-                    header.names[grep("_id",header.names)],
-                    header.names[grep("_tx",header.names)],
-                    header.names[grep("_tm",header.names)],
-                    header.names[header.names == "site_no"],
-                    header.names[header.names == "project_no"])
-    
-    if(length(char.names) > 0){
-      char.names.true <- char.names[sapply(readr.data[,char.names], is.character)]
-      char.names <- char.names[!(char.names %in% char.names.true)]
+    if(convertType){
+      args_list[["guess_max"]] <- data.rows  
     } else {
-      char.names <- NULL
+      args_list[["col_types"]] <- readr::cols(.default = "c")
     } 
     
+    readr.data <- do.call(readr::read_delim, args = args_list)
+
     readr.problems <- readr::problems(readr.data)
-    if(nrow(readr.problems) > 0 | length(char.names) > 0){
-      readr.data.char <- read_delim_check_quote(file = doc, skip = (meta.rows+2),delim="\t",col_names = FALSE, 
-                                                col_types = readr::cols(.default = "c"), total.rows = data.rows)
-      names(readr.data.char) <- header.names    
-    }
-    
-    for(j in char.names){
-      readr.data[,j] <- readr.data.char[[j]]
-      attr(readr.data, "problems") <- readr.problems[readr.problems[["col"]] != paste0("X",j),]
-    }
-  
-    badCols <- readr.problems[["col"]]  
+
     readr.data <- as.data.frame(readr.data)
-    
-    if(length(badCols) > 0){
-      readr.data <- fixErrors(readr.data, readr.data.char, "no trailing characters", as.numeric)
-      readr.data <- fixErrors(readr.data, readr.data.char, "date like", lubridate::parse_date_time, c("%Y-%m-%d %H:%M:%S","%Y-%m-%d","%Y"))
-    }
-    
-    if(length(grep("_va", names(readr.data))) > 0  && 
-       any(lapply(readr.data[,grep("_va", names(readr.data))], class) %in% "integer")){ 
-      #note... if we simply convert any _va to numeric...we lose some QW censoring information from some formats
-      vaCols <- grep("_va", names(readr.data))
-      
-      if(length(vaCols) > 1){
-        vaCols <- vaCols[lapply(readr.data[,vaCols], class) %in% "integer"]
-      } 
-      
-      readr.data[,vaCols] <- sapply(readr.data[,vaCols], as.numeric)
-    }
-  
-    columnTypes <- sapply(readr.data, typeof)
-    columnsThatMayBeWrong <- grep("n",types.names)[which(!(columnTypes[grep("n",types.names)] %in% c("double","integer")))]
 
-    for(i in columnsThatMayBeWrong){
-      readr.data[[i]] <- tryCatch({
-          as.numeric(readr.data[[i]])
-        },
-        warning=function(cond) {
-          message(paste("Column",i,"contains characters that cannot be automatically converted to numeric."))
-          return(readr.data[[i]])
-        }
-      )
-    }
-    
-    problems.orig <- readr::problems(readr.data)
-    
-    if (asDateTime & convertType){
-  
-      header.suffix <- sapply(strsplit(header.names,"_"), function(x)x[length(x)])
-      header.base <- substr(header.names,1,nchar(header.names)-3)
-      
-      dt_cols <- unique(header.base[header.suffix %in% c("dt","tm")])
-      
-      if(all(c("sample","sample_end") %in% dt_cols)){
-        if("sample_start_time_datum_cd" %in% header.names){
-          readr.data[,"tz_cd"] <- readr.data[,"sample_start_time_datum_cd"]
+    if(nrow(readr.data) > 0){
+      names(readr.data) <- header.names
 
-          readr.data[,"sample_start_time_datum_cd_reported"] <- readr.data[,"sample_start_time_datum_cd"]
-          readr.data[,"sample_end_time_datum_cd_reported"] <- readr.data[,"sample_start_time_datum_cd"]
-          readr.data <- readr.data[,names(readr.data)[names(readr.data) != "sample_start_time_datum_cd"]]
-        }
-      }
+      readr.data <- as.data.frame(readr.data)
       
-      for(i in dt_cols){
+      if(convertType){
         
-        if(all(c(paste0(i,"_dt"),paste0(i,"_tm")) %in% header.names)){
-          varname <- paste0(i,"_dateTime")
-
-          varval <- suppressWarnings(lubridate::parse_date_time(paste(readr.data[,paste0(i,"_dt")],
-                                                                      readr.data[,paste0(i,"_tm")]), 
-                                                                c("%Y-%m-%d %H:%M:%S","%Y-%m-%d %H:%M"),
-                                                                tz = "UTC"))
-        
-          if(!all(is.na(varval))){
-            readr.data[,varname] <- varval
-            if(paste0(i, "_tz_cd") %in% names(readr.data)){
-              tz.name <- paste0(i, "_tz_cd") 
-            } else {
-              tz.name <- paste0(i,"_time_datum_cd")
+        if(length(grep("_va", names(readr.data))) > 0 ){ 
+          #note... if we simply convert any _va to numeric...we lose some QW censoring information from some formats
+          vaCols <- grep("_va", names(readr.data))
+          
+          for(i in vaCols){
+            readr.data[[i]] <- tryCatch({
+              as.numeric(readr.data[[i]])
+            },
+            warning=function(cond) {
+              message(paste("Column",i,"contains characters that cannot be automatically converted to numeric."))
+              return(readr.data[[i]])
             }
-            
-            if(tz.name %in% names(readr.data)){
-              readr.data <- convertTZ(readr.data,tz.name,varname,tz)
+            )
+          }
+    
+        }
+
+        if (asDateTime & convertType){
+      
+          header.suffix <- sapply(strsplit(header.names,"_"), function(x)x[length(x)])
+          header.base <- substr(header.names,1,nchar(header.names)-3)
+          
+          dt_cols <- unique(header.base[header.suffix %in% c("dt","tm")])
+          
+          if(all(c("sample","sample_end") %in% dt_cols)){
+            if("sample_start_time_datum_cd" %in% header.names){
+              readr.data[,"tz_cd"] <- readr.data[,"sample_start_time_datum_cd"]
+    
+              readr.data[,"sample_start_time_datum_cd_reported"] <- readr.data[,"sample_start_time_datum_cd"]
+              readr.data[,"sample_end_time_datum_cd_reported"] <- readr.data[,"sample_start_time_datum_cd"]
+              readr.data <- readr.data[,names(readr.data)[names(readr.data) != "sample_start_time_datum_cd"]]
             }
           }
-        }
-      }
-
-      if("tz_cd" %in% names(readr.data)){
-        date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
-        if(length(date.time.cols) > 0){
-            readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
-        }
-      }
-      
-      if("DATE" %in% header.names){
-        readr.data[,"DATE"] <- lubridate::parse_date_time(readr.data[,"DATE"], "Ymd")
-      }
-      
-      if(all(c("DATE","TIME","TZCD") %in% header.names)){
-        varname <- "DATETIME"
-        varval <- as.POSIXct(lubridate::fast_strptime(paste(readr.data[,"DATE"],readr.data[,"TIME"]), "%Y-%m-%d %H%M%S", tz = "UTC"))
-        readr.data[,varname] <- varval
-        readr.data <- convertTZ(readr.data,"TZCD",varname,tz, flip.cols=TRUE)
-      }
-      
-      if("sample_dateTime" %in% names(readr.data)){
-        names(readr.data)[names(readr.data) == "sample_dateTime"] <- "startDateTime"
-      }
-      
-    }
-    row.names(readr.data) <- NULL
+          
+          for(i in dt_cols){
+            
+            if(all(c(paste0(i,"_dt"),paste0(i,"_tm")) %in% header.names)){
+              varname <- paste0(i,"_dateTime")
     
-    if(nrow(problems.orig) > 0){
-      attr(readr.data, "problems") <- problems.orig
+              varval <- suppressWarnings(lubridate::parse_date_time(paste(readr.data[,paste0(i,"_dt")],
+                                                                          readr.data[,paste0(i,"_tm")]), 
+                                                                    c("%Y-%m-%d %H:%M:%S","%Y-%m-%d %H:%M"),
+                                                                    tz = "UTC"))
+            
+              if(!all(is.na(varval))){
+                readr.data[,varname] <- varval
+                if(paste0(i, "_tz_cd") %in% names(readr.data)){
+                  tz.name <- paste0(i, "_tz_cd") 
+                } else {
+                  tz.name <- paste0(i,"_time_datum_cd")
+                }
+                
+                if(tz.name %in% names(readr.data)){
+                  readr.data <- convertTZ(readr.data,tz.name,varname,tz)
+                }
+              }
+            }
+          }
+    
+          if("tz_cd" %in% names(readr.data)){
+            date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
+            if(length(date.time.cols) > 0){
+                readr.data <- convertTZ(readr.data,"tz_cd",date.time.cols,tz, flip.cols=FALSE)
+            }
+          }
+          
+          if("DATE" %in% header.names){
+            readr.data[,"DATE"] <- lubridate::parse_date_time(readr.data[,"DATE"], "Ymd")
+          }
+          
+          if(all(c("DATE","TIME","TZCD") %in% header.names)){
+            varname <- "DATETIME"
+            varval <- as.POSIXct(lubridate::fast_strptime(paste(readr.data[,"DATE"],readr.data[,"TIME"]), "%Y-%m-%d %H%M%S", tz = "UTC"))
+            readr.data[,varname] <- varval
+            readr.data <- convertTZ(readr.data,"TZCD",varname,tz, flip.cols=TRUE)
+          }
+          
+          if("sample_dateTime" %in% names(readr.data)){
+            names(readr.data)[names(readr.data) == "sample_dateTime"] <- "startDateTime"
+          }
+          
+        }
+        row.names(readr.data) <- NULL
+        
+      }
     }
   } else {
     readr.data <- data.frame(matrix(vector(), 0, length(header.names),
@@ -338,40 +300,3 @@ convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols=TRUE){
   
   return(df)
 }
-
-fixErrors <- function(readr.data, readr.data.char, message.text, FUN, ...){
-  readr.problems <- readr::problems(readr.data)
-  FUN <- match.fun(FUN)
-  badCols <- readr.problems[["col"]]
-  int.message <- grep(message.text, readr.problems[["expected"]])
-  if(length(int.message) > 0){
-    unique.bad.cols <- unique(badCols[int.message])
-    index.col <- as.integer(gsub("X","",unique.bad.cols))
-    
-    for(i in index.col){
-      readr.data[,i] <- tryCatch({
-        FUN(readr.data.char[[i]], ...)
-      }, warning=function(cond){
-        readr.data.char[[i]]
-      })
-      attr(readr.data, "problems") <- readr.problems[readr.problems[["col"]] != paste0("X",i),]
-    }
-  }
-  return(readr.data)
-}
-
-read_delim_check_quote <- function(..., total.rows){
-  
-  if(total.rows <= 0){
-    total.rows <- 1
-  }
-  rdb.data <- suppressWarnings(readr::read_delim(..., guess_max = total.rows))
-  
-  if(nrow(rdb.data) < total.rows){
-    rdb.data <- suppressWarnings(readr::read_delim(..., quote = "", guess_max = total.rows))
-  }
-  
-  return(rdb.data)
-  
-}
-

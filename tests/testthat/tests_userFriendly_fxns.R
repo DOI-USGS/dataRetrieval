@@ -201,7 +201,7 @@ test_that("readNWISuse tests", {
   testthat::skip_on_cran()
   dc <- readNWISuse(years=c(2000,2005,2010),stateCd = "DC", countyCd = NULL)
   expect_true(nrow(dc)==3)
-  expect_is(dc$state_cd, 'character')
+  expect_is(dc$state_cd, 'numeric')
   
   ohio <- readNWISuse(years=2005,stateCd="OH",countyCd="ALL")
   expect_true(nrow(ohio)==88)

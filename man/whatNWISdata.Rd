@@ -4,10 +4,13 @@
 \alias{whatNWISdata}
 \title{USGS data availability}
 \usage{
-whatNWISdata(...)
+whatNWISdata(..., convertType = TRUE)
 }
 \arguments{
 \item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A list of arguments can also be supplied.}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character}
 }
 \value{
 A data frame with the following columns:
