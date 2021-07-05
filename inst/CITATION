@@ -11,10 +11,10 @@ bibentry(bibtype = "Manual",
   title = "dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services",
   publisher = "U.S. Geological Survey",
   address="Reston, VA",
-  version = "2.7.7",
+  version = "2.7.8",
   institution = "U.S. Geological Survey",
-  year = 2018,
+  year = 2021,
   doi = "10.5066/P9X4L3GE",
   url = "https://code.usgs.gov/water/dataRetrieval",
-  textVersion = "De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., 2018, dataRetrieval: R packages for discovering and retrieving water data available from Federal hydrologic web services, doi:10.5066/P9X4L3GE"
+  textVersion = "De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., 2021, dataRetrieval: R packages for discovering and retrieving water data available from Federal hydrologic web services, doi:10.5066/P9X4L3GE"
 )

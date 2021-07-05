@@ -112,17 +112,25 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   header.names <- strsplit(readr.total[meta.rows+1],"\t")[[1]]
   types.names <- strsplit(readr.total[meta.rows+2],"\t")[[1]]
   data.rows <- total.rows - meta.rows - 2
-
+  
+  char.names <- c(header.names[grep("_cd",header.names)],
+                  header.names[grep("_id",header.names)],
+                  header.names[grep("_tx",header.names)],
+                  header.names[grep("_tm",header.names)],
+                  header.names[header.names == "site_no"],
+                  header.names[header.names == "project_no"])
+  
   if(data.rows > 0){
     args_list <- list(file = f,
                  delim = "\t",
                  skip = meta.rows + 2,
                  col_names = FALSE)
-    if(utils::packageVersion("readr") > 1.9){
+    if(utils::packageVersion("readr") > 1.4){
       args_list[["show_col_types"]] <- FALSE
     }
     if(convertType){
-      args_list[["guess_max"]] <- data.rows  
+      args_list[["guess_max"]] <- data.rows 
+      args_list[["col_types"]] <- readr::cols()
     } else {
       args_list[["col_types"]] <- readr::cols(.default = "c")
     } 
@@ -137,6 +145,21 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
       names(readr.data) <- header.names
 
       readr.data <- as.data.frame(readr.data)
+      
+      if(length(char.names) > 0){
+        char.names.true <- char.names[sapply(readr.data[,char.names], is.character)]
+        char.names <- char.names[!(char.names %in% char.names.true)]
+      }
+      
+      if(length(char.names) > 0){
+        args_list[["col_types"]] <- readr::cols(.default = "c")
+        readr.data.char <- do.call(readr::read_delim, args = args_list)
+        names(readr.data.char) <- header.names   
+        
+        for(j in char.names){
+          readr.data[,j] <- readr.data.char[[j]]
+        }
+      }
       
       if(convertType){
         

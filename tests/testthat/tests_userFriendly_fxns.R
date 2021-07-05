@@ -74,6 +74,7 @@ test_that("peak, rating curves, surface-water measurements", {
   
   siteINFO <- readNWISsite('05114000')
   expect_is(siteINFO$agency_cd, 'character')
+  expect_equal(siteINFO$site_no, '05114000')
   
   siteINFOMulti <- readNWISsite(c('05114000','09423350'))
   expect_true(nrow(siteINFOMulti) == 2)
@@ -86,6 +87,10 @@ test_that("peak, rating curves, surface-water measurements", {
   
   url <- "https://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000"
   x <- importRDB1(url)
+  
+  siteID <- "263819081585801"
+  gwl_1 <- readNWISgwl(siteID)
+  expect_equal(unique(gwl_1$site_no), siteID)
 
 })
 
