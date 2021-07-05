@@ -78,6 +78,7 @@ whatNWISdata <- function(..., convertType=TRUE){
   
   if("parameterCd" %in% names(matchReturn)){
     parameterCd <- matchReturn$parameterCd
+    matchReturn[["parameterCd"]] <- NULL
   } else {
     parameterCd <- "all"
   }

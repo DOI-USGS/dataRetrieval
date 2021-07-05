@@ -44,7 +44,7 @@ getWebServiceData <- function(obs_url, ...){
       returnedDoc <- returnedList
     } else if (headerInfo$`content-type` %in% c("text/html",
                                                 "text/html; charset=UTF-8") ){
-      txt <- readBin(returnedList$content, character())
+      txt <- readLines(returnedList$content)
       message(txt)
       return(txt)
     } else {

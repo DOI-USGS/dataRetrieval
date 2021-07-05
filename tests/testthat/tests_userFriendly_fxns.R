@@ -74,6 +74,7 @@ test_that("peak, rating curves, surface-water measurements", {
   
   siteINFO <- readNWISsite('05114000')
   expect_is(siteINFO$agency_cd, 'character')
+  expect_equal(siteINFO$site_no, '05114000')
   
   siteINFOMulti <- readNWISsite(c('05114000','09423350'))
   expect_true(nrow(siteINFOMulti) == 2)
@@ -82,10 +83,15 @@ test_that("peak, rating curves, surface-water measurements", {
   expect_is(Meas07227500.ex$measurement_dt, 'Date')
   expect_is(Meas07227500.ex$measurement_dateTime, 'POSIXct')
   
-  expect_error(whatNWISdata(siteNumber = "10312000",parameterCd = "50286"))
+  expect_equal(nrow(whatNWISdata(siteNumber = "10312000",parameterCd = "50286")), 0)
+  expect_equal(ncol(whatNWISdata(siteNumber = "10312000",parameterCd = "50286")), 24)
   
   url <- "https://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000"
   x <- importRDB1(url)
+  
+  siteID <- "263819081585801"
+  gwl_1 <- readNWISgwl(siteID)
+  expect_equal(unique(gwl_1$site_no), siteID)
 
 })
 
@@ -201,7 +207,7 @@ test_that("readNWISuse tests", {
   testthat::skip_on_cran()
   dc <- readNWISuse(years=c(2000,2005,2010),stateCd = "DC", countyCd = NULL)
   expect_true(nrow(dc)==3)
-  expect_is(dc$state_cd, 'numeric')
+  expect_is(dc$state_cd, 'character')
   
   ohio <- readNWISuse(years=2005,stateCd="OH",countyCd="ALL")
   expect_true(nrow(ohio)==88)
