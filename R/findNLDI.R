@@ -117,13 +117,15 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
       # Parse as simplified JSON
       d <- jsonlite::fromJSON(d, simplifyDataFrame = TRUE)
       
-      good_name = find_good_names(d, type)
+      input <-  d$features$properties
+      
+      good_name = find_good_names(input, type)
       
       # if of type POINT at the X,Y coordinates as columns
       if (d$features$geometry$type[1] == "Point") {
         geom = d$features$geometry$coordinates
         
-        tmp = cbind(d$features$properties[, good_name], do.call(rbind, geom))
+        tmp = cbind(input[, good_name], do.call(rbind, geom))
         
         names(tmp) <- c(good_name, "X", "Y")
         
@@ -131,7 +133,7 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
         
       } else {
         # If line/polygon then keep geometry but don't expand
-        return(d$features$properties[, good_name])
+        return(input[, good_name])
       }
     }
     
