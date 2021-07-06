@@ -20,7 +20,7 @@ findNLDI(
 \arguments{
 \item{comid}{numeric or character. An NHDPlusV2 COMID}
 
-\item{nwis}{numeric or character. A USGS NWIS siteID}
+\item{nwis}{numeric or character. A USGS NWIS surface water siteID}
 
 \item{wqp}{numeric or character. A water quality point ID}
 
