@@ -19,7 +19,7 @@ test_that("NLDI starting sources...", {
   # COMID
   expect_equal(findNLDI(comid = 101)$sourceName, "NHDPlus comid")
   # NWIS
-  expect_equal(findNLDI(nwis = '11120000')$sourceName, "NWIS Sites")
+  expect_equal(findNLDI(nwis = '11120000')$sourceName, "NWIS Surface Water Sites")
   # WQP
   expect_equal(findNLDI(wqp = 'USGS-04024315')$sourceName, "Water Quality Portal")
   # LOCATION
