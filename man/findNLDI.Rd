@@ -40,7 +40,9 @@ one or more of the abbreviations ("UM", "UT", DM", "DD").}
 \item{find}{character vector. Define what resources to find along the
 navigation path(s) (see get_nldi_sources()$source). Can also include 'basin'
 or 'flowline', which will return the upstream basin of the starting feature
-or flowlines along the navigation respectively. The default is "flowlines". If you provide any other resource, AND want flowlines, then flowlines must be explicitly requested.}
+or flowlines along the navigation respectively. The default is "flowlines". 
+If you provide any other resource, AND want flowlines, then flowlines must 
+be explicitly requested.}
 
 \item{distance_km}{numeric. Define how far to look along the navigation path in
 kilometers (default = 100)}
