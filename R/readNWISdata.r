@@ -139,6 +139,12 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   valuesList <- readNWISdots(...)
   
   service <- valuesList$service
+  if(service %in% c("qw", "qwdata")){
+    .Deprecated(old = "readNWISdata", package = "dataRetrieval",
+                new = "readWQPdata",
+                msg = "NWIS qw web services are being retired. Please see the vignette 
+'Changes to NWIS QW services' for more information.")
+  }
   
   values <- sapply(valuesList$values, function(x) URLencode(x))
   

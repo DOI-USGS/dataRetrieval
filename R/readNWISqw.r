@@ -102,6 +102,10 @@
 readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
                         expanded=TRUE,reshape=FALSE,tz="UTC"){  
   
+  .Deprecated(new = "readWQPqw", package = "dataRetrieval", 
+              msg = "NWIS qw web services are being retired. Please see the vignette 
+'Changes to NWIS QW services' for more information.")
+  
   pgrp <- c("INF", "PHY", "INM", "INN", "NUT", "MBI", "BIO", "IMM", "IMN", "TOX",
             "OPE", "OPC", "OOT", "RAD", "XXX", "SED", "POP",
             "ISO", "OTH", "HAB")
