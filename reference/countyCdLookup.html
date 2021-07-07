@@ -77,9 +77,6 @@ and readNWISuse." />
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -102,7 +99,7 @@ and readNWISuse." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9.0002</span>
       </span>
     </div>
 
@@ -142,7 +139,7 @@ and readNWISuse." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/dataRetrieval">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -169,7 +166,7 @@ and readNWISuse." />
 and <code>readNWISuse</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>countyCdLookup</span><span class='op'>(</span><span class='va'>state</span>, <span class='va'>county</span>, outputType <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>countyCdLookup</span><span class='op'>(</span><span class='va'>state</span>, <span class='va'>county</span>, outputType <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,12 +187,12 @@ and <code>readNWISuse</code>.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'>countyCdLookup</span><span class='op'>(</span>state <span class='op'>=</span> <span class='st'>"WI"</span>, county <span class='op'>=</span> <span class='st'>"Dane"</span><span class='op'>)</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'>countyCdLookup</span><span class='op'>(</span>state <span class='op'>=</span> <span class='st'>"WI"</span>, county <span class='op'>=</span> <span class='st'>"Dane"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>name</span> <span class='op'>&lt;-</span> <span class='fu'>countyCdLookup</span><span class='op'>(</span>state <span class='op'>=</span> <span class='st'>"OH"</span>, county <span class='op'>=</span> <span class='fl'>13</span>, output <span class='op'>=</span> <span class='st'>"fullName"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>index</span> <span class='op'>&lt;-</span> <span class='fu'>countyCdLookup</span><span class='op'>(</span>state <span class='op'>=</span> <span class='st'>"Pennsylvania"</span>, county <span class='op'>=</span> <span class='st'>"ALLEGHENY COUNTY"</span>, output <span class='op'>=</span> <span class='st'>"tableIndex"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>fromIDs</span> <span class='op'>&lt;-</span> <span class='fu'>countyCdLookup</span><span class='op'>(</span>state <span class='op'>=</span> <span class='fl'>13</span>, county <span class='op'>=</span> <span class='fl'>5</span>, output <span class='op'>=</span> <span class='st'>"fullName"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>already_correct</span> <span class='op'>&lt;-</span> <span class='fu'>countyCdLookup</span><span class='op'>(</span>county <span class='op'>=</span> <span class='st'>"51001"</span><span class='op'>)</span></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

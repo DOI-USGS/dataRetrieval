@@ -77,9 +77,6 @@ and readWQPdata." />
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -102,7 +99,7 @@ and readWQPdata." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9.0002</span>
       </span>
     </div>
 
@@ -142,7 +139,7 @@ and readWQPdata." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/dataRetrieval">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -169,7 +166,7 @@ and readWQPdata." />
 and <code>readWQPdata</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>checkWQPdates</span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>checkWQPdates</span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -185,10 +182,10 @@ and <code>readWQPdata</code>.</p>
     <p>values named list with corrected arguments to send to the Water Quality Portal</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='va'>values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>startDateLo<span class='op'>=</span><span class='st'>"01-01-2002"</span>, characteristicName<span class='op'>=</span><span class='st'>"Phosphorous"</span>, </span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>startDateLo<span class='op'>=</span><span class='st'>"01-01-2002"</span>, characteristicName<span class='op'>=</span><span class='st'>"Phosphorous"</span>, </span>
 <span class='r-in'>          endDate<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2014-01-01"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>values</span> <span class='op'>&lt;-</span> <span class='fu'>checkWQPdates</span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
