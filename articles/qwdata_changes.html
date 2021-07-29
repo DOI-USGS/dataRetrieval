@@ -107,7 +107,7 @@
                         <h4 data-toc-skip class="author">Laura A. DeCicco</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/USGS/dataRetrieval/blob/master/vignettes/qwdata_changes.Rmd" class="external-link"><code>vignettes/qwdata_changes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/master/vignettes/qwdata_changes.Rmd" class="external-link"><code>vignettes/qwdata_changes.Rmd</code></a></small>
       <div class="hidden name"><code>qwdata_changes.Rmd</code></div>
 
     </div>
@@ -128,8 +128,9 @@
 <code class="sourceCode R"><span class="va">site_ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'04024430'</span>,<span class="st">'04024000'</span><span class="op">)</span>
 <span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'34247'</span>,<span class="st">'30234'</span>,<span class="st">'32104'</span>,<span class="st">'34220'</span><span class="op">)</span>
 <span class="va">nwisData</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISqw.html">readNWISqw</a></span><span class="op">(</span><span class="va">site_ids</span>, <span class="va">parameterCd</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning: NWIS qw web services are being retired. Please see the vignette 
-## 'Changes to NWIS QW services' for more information.</code></pre>
+<pre><code>Warning message:                                                                                               
+NWIS qw web services are being retired. Please see the vignette 
+'Changes to NWIS QW services' for more information. </code></pre>
 <p>Please don’t ignore this warning, the function will eventually be <em>removed</em> from the <code>dataRetrieval</code> package.</p>
 <p>So…what do you do instead? The function you will need to move to is <code>readWQPqw</code>. First, you’ll need to convert the USGS site ID’s into something that the Water Quality Portal will accept. Luckily, that’s a single line pasting a prefix “USGS-”. Here’s an example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -192,13 +193,13 @@ WQP
 <span class="va">param_NWIS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">nwisData</span>, <span class="st">"variableInfo"</span><span class="op">)</span>
 <span class="va">param_WQP</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">wqpData</span>, <span class="st">"variableInfo"</span><span class="op">)</span></code></pre></div>
 <p>The next big task is figuring out which columns from the WQP output map to the original columns from the NWIS output. The vast majority of workflows will not need to completely re-engineer the WQP output back into the NWIS format. Instead, look at your workflow and determine what columns from the original NWIS output are needed to preserve the integrity of the workflow.</p>
-<p>Let’s use the <code>dplyr</code> package to pull out the columns are used in this example workflow, and make sure both NWIS and WQP are ordered in the same way. (NOTE: the <code>|&gt;</code> is the native pipe operator found in R &gt;= 4.1)</p>
+<p>Let’s use the <code>dplyr</code> package to pull out the columns are used in this example workflow, and make sure both NWIS and WQP are ordered in the same way.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
 
-<span class="va">nwisData_USED</span> <span class="op">&lt;-</span> <span class="va">nwisData</span> |&gt; 
+<span class="va">nwisData_USED</span> <span class="op">&lt;-</span> <span class="va">nwisData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">site_no</span>, <span class="va">startDateTime</span>, <span class="va">parm_cd</span>,
-         <span class="va">hyd_cond_cd</span>, <span class="va">remark_cd</span>, <span class="va">result_va</span><span class="op">)</span> |&gt; 
+         <span class="va">hyd_cond_cd</span>, <span class="va">remark_cd</span>, <span class="va">result_va</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">startDateTime</span>, <span class="va">parm_cd</span><span class="op">)</span>
 
 <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nwisData_USED</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -264,13 +265,13 @@ WQP
 </table>
 <p>If we explore the output from WQP, we can try to find the columns that include the same information:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">wqpData_USED</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> |&gt; 
+<code class="sourceCode R"><span class="va">wqpData_USED</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>site_no <span class="op">=</span> <span class="va">MonitoringLocationIdentifier</span>,
          startDateTime <span class="op">=</span> <span class="va">ActivityStartDateTime</span>,
          parm_cd <span class="op">=</span> <span class="va">USGSPCode</span>,
          hyd_cond_cd <span class="op">=</span> <span class="va">HydrologicCondition</span>,
          remark_cd <span class="op">=</span> <span class="va">ResultDetectionConditionText</span>,
-         result_va <span class="op">=</span> <span class="va">ResultMeasureValue</span><span class="op">)</span> |&gt; 
+         result_va <span class="op">=</span> <span class="va">ResultMeasureValue</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">startDateTime</span>, <span class="va">parm_cd</span><span class="op">)</span>
 <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">wqpData_USED</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
@@ -337,9 +338,8 @@ WQP
 <div id="censored-values" class="section level3">
 <h3 class="hasAnchor">
 <a href="#censored-values" class="anchor" aria-hidden="true"></a>Censored values</h3>
-<p>The result_va in the NWIS service came back with a value. However, the data is actually censored, meaning we only know it’s below the detection limit. With some lazier coding, it might be really easy to not realize these values are left-censored. So, while we could substitute the detection levels into the measured values if there’s an <code>NA</code> in the measured value, this might be a great time to update your workflow to handle censored values more robustly. We are probably interested in maintaining the detection level in another column.</p>
-<p>It’s up to you if you want to convert the text “Not Detected” to a more simple “&lt;”. On one hand, all future calls to the Water Quality Portal will be using “Not Detected” rather than “&lt;”, so it might be worth converting your downstream code to using the “Not Detected”. On the other hand, maybe you’ve created a lot of functions over the years that hardcode “&lt;” into the workflow, that might be a reason to change all “Not Detected” into “&lt;”. It’s a question individual coders will need to assess by themselves.</p>
-<p>For this theoretical workflow, let’s think about what we are trying to find out. We want to know if a value is “left-censored” or not. Maybe in this case, what would make the most sense is to have a column that is a logical TRUE/FALSE. For this example, there was only “Not Detected” as text in the “ResultDetectionConditionText” column. However, other data may include different messages. Here’s an example from the <code>EGRET</code> package on how to decide if a “ResultDetectionConditionText” should be considered a censored value:</p>
+<p>The result_va in the NWIS service came back with a value. However, the data is actually censored, meaning we only know it’s below the detection limit. With some lazier coding, it might have been really easy to not realize these values are left-censored. So, while we could substitute the detection levels into the measured values if there’s an <code>NA</code> in the measured value, this might be a great time to update your workflow to handle censored values more robustly. We are probably interested in maintaining the detection level in another column.</p>
+<p>For this theoretical workflow, let’s think about what we are trying to find out. Let’s say that we want to know if a value is “left-censored” or not. Maybe in this case, what would make the most sense is to have a column that is a logical TRUE/FALSE. For this example, there was only the text “Not Detected” in the “ResultDetectionConditionText” column PLEASE NOTE that other data may include different messages about detection conditions, you will need to examine your data carefully. Here’s an example from the <code>EGRET</code> package on how to decide if a “ResultDetectionConditionText” should be considered a censored value:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">censored_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Not Detected"</span>,
                    <span class="st">"Non-Detect"</span>,
@@ -347,17 +347,17 @@ WQP
                    <span class="st">"Detected Not Quantified"</span>,
                    <span class="st">"Below Quantification Limit"</span><span class="op">)</span>
 
-<span class="va">wqpData_USED</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> |&gt; 
+<span class="va">wqpData_USED</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>left_censored <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">censored_text</span>, collapse<span class="op">=</span><span class="st">"|"</span><span class="op">)</span>, 
                                <span class="va">ResultDetectionConditionText</span>,
-                               ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> |&gt; 
+                               ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>site_no <span class="op">=</span> <span class="va">MonitoringLocationIdentifier</span>,
          startDateTime <span class="op">=</span> <span class="va">ActivityStartDateTime</span>,
          parm_cd <span class="op">=</span> <span class="va">USGSPCode</span>,
          <span class="va">left_censored</span>,
          result_va <span class="op">=</span> <span class="va">ResultMeasureValue</span>,
          detection_level <span class="op">=</span> <span class="va">DetectionQuantitationLimitMeasure.MeasureValue</span>,
-         dl_units <span class="op">=</span> <span class="va">DetectionQuantitationLimitMeasure.MeasureUnitCode</span><span class="op">)</span> |&gt; 
+         dl_units <span class="op">=</span> <span class="va">DetectionQuantitationLimitMeasure.MeasureUnitCode</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">startDateTime</span>, <span class="va">parm_cd</span><span class="op">)</span>
 
 <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">wqpData_USED</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -436,13 +436,13 @@ WQP
 <p>To take full advantage of the Water Quality Portal, it would be a good idea to begin to move away from USGS parameter codes. While USGS data includes a parameter code, there are many other water quality data sources within the Water Quality Portal. To compare USGS and non-USGS data, you’ll need to compare data that has at least the same characteristic name and measured units. There are many other fields that may be required to assure you are comparing apples-to-apples. For example, “ResultSampleFractionText” is important in many measured parameters.</p>
 <p>The measurement units are found in EITHER the “ResultMeasure.MeasureUnitCode” column, OR the “DetectionQuantitationLimitMeasure.MeasureUnitCode” column, depending on if the individual measurement is censored or not.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">wqpData_USED_codes</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> |&gt; 
+<code class="sourceCode R"><span class="va">wqpData_USED_codes</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ResultMeasure.MeasureUnitCode</span><span class="op">)</span>,
                              <span class="va">DetectionQuantitationLimitMeasure.MeasureUnitCode</span>,
-                             <span class="va">ResultMeasure.MeasureUnitCode</span><span class="op">)</span><span class="op">)</span> |&gt; 
+                             <span class="va">ResultMeasure.MeasureUnitCode</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>parm_cd <span class="op">=</span> <span class="va">USGSPCode</span>,
          <span class="va">CharacteristicName</span>,<span class="va">ResultSampleFractionText</span>,
-         <span class="va">units</span><span class="op">)</span> |&gt; 
+         <span class="va">units</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">wqpData_USED_codes</span><span class="op">)</span></code></pre></div>
@@ -482,9 +482,9 @@ WQP
 </table>
 <p>If there are USGS codes that you are using in your analysis, begin to move away from those codes, and move to the text. In the data we are looking at here:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">wqpData_USED_codes</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> |&gt; 
+<code class="sourceCode R"><span class="va">wqpData_USED_codes</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">HydrologicCondition</span>,<span class="va">HydrologicEvent</span>,
-         <span class="va">ActivityTypeCode</span>, <span class="va">ActivityMediaName</span><span class="op">)</span> |&gt; 
+         <span class="va">ActivityTypeCode</span>, <span class="va">ActivityMediaName</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">wqpData_USED_codes</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -587,8 +587,9 @@ WQP
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">whatNWIS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>siteNumber <span class="op">=</span> <span class="va">site_ids</span>,
                        service <span class="op">=</span> <span class="st">"qw"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning: NWIS qw web services are being retired. Please see the vignette 
-## 'Changes to NWIS QW services' for more information.</code></pre>
+<pre><code>Warning message:                                                                                               
+NWIS qw web services are being retired. Please see the vignette 
+'Changes to NWIS QW services' for more information.</code></pre>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">whatWQP</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatWQPdata.html">whatWQPdata</a></span><span class="op">(</span>siteNumber <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="va">site_ids</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>There are some major differences in the output. The NWIS services offers back one row per site/parameter code to learn how many samples are available. This is not <em>currently</em> available from the Water Quality Portal, however there are new summary services being developed. When those become available, we will include new documentation on how to get this information.</p>
@@ -616,8 +617,7 @@ NWIS qw web services are being retired. Please see the vignette
 <div id="how-to-find-more-help" class="section level1">
 <h1 class="hasAnchor">
 <a href="#how-to-find-more-help" class="anchor" aria-hidden="true"></a>How to find more help</h1>
-<p>These changes are big, and initially sound overwelming. But in the end, they are thoughtful changes that will make understanding USGS water data more intuitive. Please reach out for questions and comments to:</p>
-<p>WHERE? I’M NOT SURE?</p>
+<p>These changes are big, and initially sound overwhelming. But in the end, they are thoughtful changes that will make understanding USGS water data more intuitive. Please reach out for questions and comments to: <a href="mailto:gs-w-IOW_PO_team@usgs.gov" class="email">gs-w-IOW_PO_team@usgs.gov</a></p>
 </div>
 <div id="disclaimer" class="section level1">
 <h1 class="hasAnchor">
