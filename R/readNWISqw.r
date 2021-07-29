@@ -79,26 +79,6 @@
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
 #' \code{\link{readWQPqw}}, \code{\link{constructNWISURL}}
-#' @examples
-#' site_ids <- c('04024430','04024000')
-#' startDate <- '2010-01-01'
-#' endDate <- ''
-#' parameterCd <- c('34247','30234','32104','34220')
-#' \donttest{
-#' rawNWISqwData <- readNWISqw(site_ids,parameterCd,startDate,endDate)
-#' rawNWISqwDataReshaped <- readNWISqw(site_ids,parameterCd,
-#'           startDate,endDate,reshape=TRUE)
-#' parameterCd <- "all"
-#' rawNWISall <- readNWISqw(site_ids,parameterCd,
-#'           startDate,endDate)
-#' pgroup <- c("NUT")
-#' rawNWISNutrients <- readNWISqw(site_ids,pgroup,
-#'           startDate,endDate)
-#' groups <- c("NUT","OPE")
-#' rawNWISNutOpe <- readNWISqw(site_ids,groups,
-#'           startDate,endDate) 
-#' rawISO <- readNWISqw("413144073115701", "ISO") 
-#'          } 
 readNWISqw <- function (siteNumbers,parameterCd,startDate="",endDate="",
                         expanded=TRUE,reshape=FALSE,tz="UTC"){  
   
