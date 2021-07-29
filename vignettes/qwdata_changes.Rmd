@@ -38,7 +38,7 @@ This vignette is being provided well in advance of any breaking changes, and mor
 
 Starting with version 2.7.9, users will notice a Warning message when using this function:
 
-```{r}
+```{r eval=FALSE}
 
 site_ids <- c('04024430','04024000')
 parameterCd <- c('34247','30234','32104','34220')
@@ -46,14 +46,25 @@ nwisData <- readNWISqw(site_ids, parameterCd)
 
 ```
 
+```
+Warning message:                                                                                               
+NWIS qw web services are being retired. Please see the vignette 
+'Changes to NWIS QW services' for more information. 
+```
+
 Please don't ignore this warning, the function will eventually be *removed* from the `dataRetrieval` package.
 
 So...what do you do instead? The function you will need to move to is `readWQPqw`. First, you'll need to convert the USGS site ID's into something that the Water Quality Portal will accept. Luckily, that's a single line pasting a prefix "USGS-". Here's an example:
 
-```{r}
+```{r eval=FALSE}
 wqpData <- readWQPqw(paste0("USGS-", site_ids), parameterCd)
 ```
 
+```{r echo=FALSE}
+nwisData <- readRDS("nwisData.rds")
+wqpData <- readRDS("wqpData.rds")
+
+```
 
 Let's compare the number of rows, number of columns, and attributes to each return:
 
@@ -110,14 +121,14 @@ param_WQP <- attr(wqpData, "variableInfo")
 
 The next big task is figuring out which columns from the WQP output map to the original columns from the NWIS output. The vast majority of workflows will not need to completely re-engineer the WQP output back into the NWIS format. Instead, look at your workflow and determine what columns from the original NWIS output are needed to preserve the integrity of the workflow. 
 
-Let's use the `dplyr` package to pull out the columns are used in this example workflow, and make sure both NWIS and WQP are ordered in the same way. (NOTE: the `|>` is the native pipe operator found in R >= 4.1)
+Let's use the `dplyr` package to pull out the columns are used in this example workflow, and make sure both NWIS and WQP are ordered in the same way.
 
 ```{r}
 library(dplyr)
 
-nwisData_USED <- nwisData |> 
+nwisData_USED <- nwisData %>% 
   select(site_no, startDateTime, parm_cd,
-         hyd_cond_cd, remark_cd, result_va) |> 
+         hyd_cond_cd, remark_cd, result_va) %>% 
   arrange(startDateTime, parm_cd)
 
 knitr::kable(head(nwisData_USED))
@@ -125,13 +136,13 @@ knitr::kable(head(nwisData_USED))
 
 If we explore the output from WQP, we can try to find the columns that include the same information:
 ```{r}
-wqpData_USED <- wqpData |> 
+wqpData_USED <- wqpData %>% 
   select(site_no = MonitoringLocationIdentifier,
          startDateTime = ActivityStartDateTime,
          parm_cd = USGSPCode,
          hyd_cond_cd = HydrologicCondition,
          remark_cd = ResultDetectionConditionText,
-         result_va = ResultMeasureValue) |> 
+         result_va = ResultMeasureValue) %>% 
   arrange(startDateTime, parm_cd)
 knitr::kable(head(wqpData_USED))
 
@@ -141,11 +152,9 @@ Now we can start looking at the results and trying to decide how future workflow
 
 ### Censored values
 
-The result_va in the NWIS service came back with a value. However, the data is actually censored, meaning we only know it's below the detection limit. With some lazier coding, it might be really easy to not realize these values are left-censored. So, while we could substitute the detection levels into the measured values if there's an `NA` in the measured value, this might be a great time to update your workflow to handle censored values more robustly. We are probably interested in maintaining the detection level in another column. 
+The result_va in the NWIS service came back with a value. However, the data is actually censored, meaning we only know it's below the detection limit. With some lazier coding, it might have been really easy to not realize these values are left-censored. So, while we could substitute the detection levels into the measured values if there's an `NA` in the measured value, this might be a great time to update your workflow to handle censored values more robustly. We are probably interested in maintaining the detection level in another column. 
 
-It's up to you if you want to convert the text "Not Detected" to a more simple "<". On one hand, all future calls to the Water Quality Portal will be using "Not Detected" rather than "<", so it might be worth converting your downstream code to using the "Not Detected". On the other hand, maybe you've created a lot of functions over the years that hardcode "<" into the workflow, that might be a reason to change all "Not Detected" into "<". It's a question individual coders will need to assess by themselves. 
-
-For this theoretical workflow, let's think about what we are trying to find out. We want to know if a value is "left-censored" or not. Maybe in this case, what would make the most sense is to have a column that is a logical TRUE/FALSE. For this example, there was only "Not Detected" as text in the "ResultDetectionConditionText" column. However, other data may include different messages. Here's an example from the `EGRET` package on how to decide if a "ResultDetectionConditionText" should be considered a censored value:
+For this theoretical workflow, let's think about what we are trying to find out. Let's say that we want to know if a value is "left-censored" or not. Maybe in this case, what would make the most sense is to have a column that is a logical TRUE/FALSE. For this example, there was only the text "Not Detected" in the "ResultDetectionConditionText" column PLEASE NOTE that other data may include different messages about detection conditions, you will need to examine your data carefully. Here's an example from the `EGRET` package on how to decide if a "ResultDetectionConditionText" should be considered a censored value:
 
 
 ```{r}
@@ -156,17 +165,17 @@ censored_text <- c("Not Detected",
                    "Detected Not Quantified",
                    "Below Quantification Limit")
 
-wqpData_USED <- wqpData |> 
+wqpData_USED <- wqpData %>% 
   mutate(left_censored = grepl(paste(censored_text, collapse="|"), 
                                ResultDetectionConditionText,
-                               ignore.case = TRUE)) |> 
+                               ignore.case = TRUE)) %>% 
   select(site_no = MonitoringLocationIdentifier,
          startDateTime = ActivityStartDateTime,
          parm_cd = USGSPCode,
          left_censored,
          result_va = ResultMeasureValue,
          detection_level = DetectionQuantitationLimitMeasure.MeasureValue,
-         dl_units = DetectionQuantitationLimitMeasure.MeasureUnitCode) |> 
+         dl_units = DetectionQuantitationLimitMeasure.MeasureUnitCode) %>% 
   arrange(startDateTime, parm_cd)
 
 knitr::kable(head(wqpData_USED))
@@ -183,13 +192,13 @@ The measurement units are found in EITHER the "ResultMeasure.MeasureUnitCode" co
 
 
 ```{r}
-wqpData_USED_codes <- wqpData |> 
+wqpData_USED_codes <- wqpData %>% 
   mutate(units = ifelse(is.na(ResultMeasure.MeasureUnitCode),
                              DetectionQuantitationLimitMeasure.MeasureUnitCode,
-                             ResultMeasure.MeasureUnitCode)) |> 
+                             ResultMeasure.MeasureUnitCode)) %>% 
   select(parm_cd = USGSPCode,
          CharacteristicName,ResultSampleFractionText,
-         units) |> 
+         units) %>% 
   distinct()
 
 knitr::kable(wqpData_USED_codes)
@@ -199,9 +208,9 @@ knitr::kable(wqpData_USED_codes)
 If there are USGS codes that you are using in your analysis, begin to move away from those codes, and move to the text. In the data we are looking at here:
 
 ```{r}
-wqpData_USED_codes <- wqpData |> 
+wqpData_USED_codes <- wqpData %>% 
   select(HydrologicCondition,HydrologicEvent,
-         ActivityTypeCode, ActivityMediaName) |> 
+         ActivityTypeCode, ActivityMediaName) %>% 
   distinct()
 
 knitr::kable(head(wqpData_USED_codes))
@@ -238,10 +247,18 @@ This function will continue to work for any service except "qw" (water quality d
 
 The function to replace this functionality is `whatWQPdata`:
 
-```{r whatdata, warning=TRUE}
+```{r whatdata, eval=FALSE}
 whatNWIS <- whatNWISdata(siteNumber = site_ids,
                        service = "qw")
+```
 
+```
+Warning message:                                                                                               
+NWIS qw web services are being retired. Please see the vignette 
+'Changes to NWIS QW services' for more information.
+```
+
+```{r whatdatanew, eval=FALSE}
 whatWQP <- whatWQPdata(siteNumber = paste0("USGS-", site_ids))
 
 ```
@@ -276,9 +293,7 @@ See `?readWQPdata` to see all the ways to query data in the Water Quality Portal
 
 # How to find more help
 
-These changes are big, and initially sound overwelming. But in the end, they are thoughtful changes that will make understanding USGS water data more intuitive. Please reach out for questions and comments to:
-
-WHERE? I'M NOT SURE?
+These changes are big, and initially sound overwhelming. But in the end, they are thoughtful changes that will make understanding USGS water data more intuitive. Please reach out for questions and comments to: gs-w-IOW_PO_team@usgs.gov
 
 # Disclaimer
 
