@@ -1,3 +1,9 @@
+dataRetrieval 2.7.9
+===================
+* Fix bug caused by changes in NLDI services
+* Adding warnings to NWIS qw functions
+* Added new vignette on changes
+
 dataRetrieval 2.7.8
 ==================
 * Fixed missing comments in readNWISqw
