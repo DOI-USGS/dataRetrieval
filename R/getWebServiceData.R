@@ -22,6 +22,11 @@
 #' }
 getWebServiceData <- function(obs_url, ...){
   
+  if (!curl::has_internet()) {
+    message("No internet connection.")
+    return(invisible(NULL))
+  }
+  
   returnedList <- retryGetOrPost(obs_url, ...)
   
   if(httr::status_code(returnedList) == 400){
