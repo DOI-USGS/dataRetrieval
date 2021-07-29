@@ -65,7 +65,7 @@ whatNWISdata <- function(..., convertType=TRUE){
   
   if("service" %in% names(matchReturn)){
     service <- matchReturn$service
-    if(service %in% c("qw", "qwdata")){
+    if(any(service %in% c("qw", "qwdata"))){
       .Deprecated(old = "whatNWISdata", package = "dataRetrieval", 
                   new = "whatWQPdata",
                   msg = "NWIS qw web services are being retired. Please see the vignette 
