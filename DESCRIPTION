@@ -53,6 +53,6 @@ Suggests:
 Encoding: UTF-8
 BuildVignettes: true
 VignetteBuilder: knitr
-BugReports: https://github.com/USGS/dataRetrieval/issues
+BugReports: https://github.com/USGS-R/dataRetrieval/issues
 URL: https://pubs.usgs.gov/tm/04/a10/
 RoxygenNote: 7.1.1
