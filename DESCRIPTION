@@ -1,7 +1,7 @@
 Package: dataRetrieval
 Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
-Version: 2.7.9.0001
+Version: 2.7.9
 Authors@R: c(
     person("Laura", "DeCicco", role = c("aut","cre"),
             email = "ldecicco@usgs.gov",
@@ -53,6 +53,6 @@ Suggests:
 Encoding: UTF-8
 BuildVignettes: true
 VignetteBuilder: knitr
-BugReports: https://github.com/USGS/dataRetrieval/issues
+BugReports: https://github.com/USGS-R/dataRetrieval/issues
 URL: https://pubs.usgs.gov/tm/04/a10/
 RoxygenNote: 7.1.1
