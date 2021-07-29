@@ -33,19 +33,10 @@ test_that("General NWIS retrievals working", {
                            service="site")
   expect_is(siteInfo$station_nm, "character")
   
-  qwData <- readNWISdata(bBox=c(-82.5,41.52,-81,41),startDate=as.Date("2000-01-01"),
-                   drain_area_va_min=50, qw_count_nu=50,qw_attributes="expanded",
-                    qw_sample_wide="wide",list_of_search_criteria=c("lat_long_bounding_box",
-                    "drain_area_va","obs_count_nu"),service="qw")
-  expect_is(qwData$startDateTime, "POSIXct")
-  
+
   url <- "https://waterservices.usgs.gov/nwis/dv/?site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06"
   dv <- importRDB1(url, asDateTime = FALSE)
-  
-  urlEmpty <- "https://nwis.waterdata.usgs.gov/nwis/qwdata?multiple_site_no=413437087150601&sort_key=site_no&group_key=NONE&inventory_output=0&begin_date=&end_date=&TZoutput=0&param_group=NUT,INN&qw_attributes=0&format=rdb&qw_sample_wide=0&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&list_of_search_criteria=multiple_site_no"
-  dv <- importRDB1(urlEmpty, asDateTime = FALSE)
-  expect_true(nrow(dv) == 0)
-  
+
   dailyStat <- readNWISdata(site=c("03112500","03111520","02319394"),service="stat",statReportType="daily",
                            statType=c("p25","p50","p75","min","max"),
                            parameterCd="00065",convertType=FALSE)

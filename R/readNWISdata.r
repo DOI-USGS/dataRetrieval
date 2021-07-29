@@ -139,7 +139,12 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   valuesList <- readNWISdots(...)
   
   service <- valuesList$service
-  if(service %in% c("qw", "qwdata")){
+  if(length(service) > 1){
+    warning("Only one service value is allowed. Service: ", service[1], " will be used.")
+    service <- service[1]
+  }
+  
+  if(any(service %in% c("qw", "qwdata"))){
     .Deprecated(old = "readNWISdata", package = "dataRetrieval",
                 new = "readWQPdata",
                 msg = "NWIS qw web services are being retired. Please see the vignette 
