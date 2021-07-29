@@ -282,39 +282,6 @@ but the "tz_cd" column defines the timezone of any POSIXct columns.</p>
     <div class='dont-index'><p><code><a href='readWQPdata.html'>readWQPdata</a></code>, <code><a href='wqpSpecials.html'>whatWQPsites</a></code>, 
 <code><a href='readWQPqw.html'>readWQPqw</a></code>, <code><a href='constructNWISURL.html'>constructNWISURL</a></code></p></div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>site_ids</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'04024430'</span>,<span class='st'>'04024000'</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>'2010-01-01'</span></span>
-<span class='r-in'><span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>''</span></span>
-<span class='r-in'><span class='va'>parameterCd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'34247'</span>,<span class='st'>'30234'</span>,<span class='st'>'32104'</span>,<span class='st'>'34220'</span><span class='op'>)</span></span>
-<span class='r-in'><span class='co'># \donttest{</span></span>
-<span class='r-in'><span class='va'>rawNWISqwData</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,<span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span></span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>NWIS qw web services are being retired. Please see the vignette </span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> 'Changes to NWIS QW services' for more information.</span>
-<span class='r-in'><span class='va'>rawNWISqwDataReshaped</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,</span>
-<span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span>,reshape<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>NWIS qw web services are being retired. Please see the vignette </span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> 'Changes to NWIS QW services' for more information.</span>
-<span class='r-in'><span class='va'>parameterCd</span> <span class='op'>&lt;-</span> <span class='st'>"all"</span></span>
-<span class='r-in'><span class='va'>rawNWISall</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>parameterCd</span>,</span>
-<span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span></span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>NWIS qw web services are being retired. Please see the vignette </span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> 'Changes to NWIS QW services' for more information.</span>
-<span class='r-in'><span class='va'>pgroup</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"NUT"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>rawNWISNutrients</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>pgroup</span>,</span>
-<span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span></span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>NWIS qw web services are being retired. Please see the vignette </span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> 'Changes to NWIS QW services' for more information.</span>
-<span class='r-in'><span class='va'>groups</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"NUT"</span>,<span class='st'>"OPE"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>rawNWISNutOpe</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='va'>site_ids</span>,<span class='va'>groups</span>,</span>
-<span class='r-in'>          <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span> </span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>NWIS qw web services are being retired. Please see the vignette </span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> 'Changes to NWIS QW services' for more information.</span>
-<span class='r-in'><span class='va'>rawISO</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISqw</span><span class='op'>(</span><span class='st'>"413144073115701"</span>, <span class='st'>"ISO"</span><span class='op'>)</span> </span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>NWIS qw web services are being retired. Please see the vignette </span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> 'Changes to NWIS QW services' for more information.</span>
-<span class='r-in'>         <span class='co'># } </span></span>
-</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
