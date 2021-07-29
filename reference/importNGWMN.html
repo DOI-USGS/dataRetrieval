@@ -77,9 +77,6 @@ but the general functionality is correct." />
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -102,7 +99,7 @@ but the general functionality is correct." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9</span>
       </span>
     </div>
 
@@ -142,7 +139,7 @@ but the general functionality is correct." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/dataRetrieval">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -160,7 +157,7 @@ but the general functionality is correct." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Function to return data from the National Ground Water Monitoring Network waterML2 format</h1>
-    <small class="dont-index">Source: <a href='https://github.com/USGS/dataRetrieval/blob/master/R/importNGWMN_wml2.R'><code>R/importNGWMN_wml2.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/USGS-R/dataRetrieval/blob/master/R/importNGWMN_wml2.R'><code>R/importNGWMN_wml2.R</code></a></small>
     <div class="hidden name"><code>importNGWMN.Rd</code></div>
     </div>
 
@@ -169,7 +166,7 @@ but the general functionality is correct." />
 but the general functionality is correct.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>importNGWMN</span><span class='op'>(</span><span class='va'>input</span>, asDateTime <span class='op'>=</span> <span class='cn'>FALSE</span>, tz <span class='op'>=</span> <span class='st'>"UTC"</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>importNGWMN</span><span class='op'>(</span><span class='va'>input</span>, asDateTime <span class='op'>=</span> <span class='cn'>FALSE</span>, tz <span class='op'>=</span> <span class='st'>"UTC"</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,7 +195,7 @@ for more information on time zones.</p></td>
     <p>mergedDF a data frame source, time, value, uom, uomTitle, comment, gmlID</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># \donttest{</span></span>
 <span class='r-in'><span class='va'>obs_url</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"https://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation"</span>,</span>
 <span class='r-in'><span class='st'>"service=SOS"</span>,<span class='st'>"version=2.0.0"</span>,</span>
 <span class='r-in'><span class='st'>"observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel"</span>,</span>
@@ -208,7 +205,7 @@ for more information on time zones.</p></td>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># }</span></span>
 <span class='r-in'></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -76,9 +76,6 @@
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -101,7 +98,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9</span>
       </span>
     </div>
 
@@ -141,7 +138,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/dataRetrieval">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -159,7 +156,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>USGS Site File Data Retrieval</h1>
-    <small class="dont-index">Source: <a href='https://github.com/USGS/dataRetrieval/blob/master/R/readNWISsite.r'><code>R/readNWISsite.r</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/USGS-R/dataRetrieval/blob/master/R/readNWISsite.r'><code>R/readNWISsite.r</code></a></small>
     <div class="hidden name"><code>readNWISsite.Rd</code></div>
     </div>
 
@@ -167,7 +164,7 @@
     <p>Imports data from USGS site file site. This function gets data from here: <a href='https://waterservices.usgs.gov/'>https://waterservices.usgs.gov/</a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>readNWISsite</span><span class='op'>(</span><span class='va'>siteNumbers</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>readNWISsite</span><span class='op'>(</span><span class='va'>siteNumbers</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -237,63 +234,11 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># \donttest{</span></span>
 <span class='r-in'><span class='va'>siteINFO</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISsite</span><span class='op'>(</span><span class='st'>'05114000'</span><span class='op'>)</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X13 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X14 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X26 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X30 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X34 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X36 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X37 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X38 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X39 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X40 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X41 = <span style='color: #BBBB00;'>col_logical()</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   # ... with 1 more columns</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'><span class='va'>siteINFOMulti</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISsite</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'05114000'</span>,<span class='st'>'09423350'</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Column specification</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   .default = col_character(),</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X5 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X6 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X7 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X8 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X10 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X25 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X26 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X28 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X29 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X30 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X31 = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X34 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X36 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X37 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X38 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X39 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X40 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X41 = <span style='color: #BBBB00;'>col_logical()</span><span>,</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   X42 = <span style='color: #BBBB00;'>col_logical()</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span><span> Use </span><span style='color: #262626;background-color: #DADADA;'>`spec()`</span><span> for the full column specifications.</span></span>
 <span class='r-in'><span class='co'># }</span></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -77,9 +77,6 @@ because it allows for other agencies rather than the USGS." />
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -102,7 +99,7 @@ because it allows for other agencies rather than the USGS." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9</span>
       </span>
     </div>
 
@@ -142,7 +139,7 @@ because it allows for other agencies rather than the USGS." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/dataRetrieval">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -160,7 +157,7 @@ because it allows for other agencies rather than the USGS." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>General Data Import from Water Quality Portal</h1>
-    <small class="dont-index">Source: <a href='https://github.com/USGS/dataRetrieval/blob/master/R/readWQPdata.R'><code>R/readWQPdata.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/USGS-R/dataRetrieval/blob/master/R/readWQPdata.R'><code>R/readWQPdata.R</code></a></small>
     <div class="hidden name"><code>readWQPdata.Rd</code></div>
     </div>
 
@@ -169,7 +166,7 @@ because it allows for other agencies rather than the USGS." />
 because it allows for other agencies rather than the USGS.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>readWQPdata</span><span class='op'>(</span><span class='va'>...</span>, querySummary <span class='op'>=</span> <span class='cn'>FALSE</span>, tz <span class='op'>=</span> <span class='st'>"UTC"</span>, ignore_attributes <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>readWQPdata</span><span class='op'>(</span><span class='va'>...</span>, querySummary <span class='op'>=</span> <span class='cn'>FALSE</span>, tz <span class='op'>=</span> <span class='st'>"UTC"</span>, ignore_attributes <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -279,7 +276,7 @@ for more information on time zones.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># \donttest{</span></span>
 <span class='r-in'><span class='va'>nameToUse</span> <span class='op'>&lt;-</span> <span class='st'>"pH"</span></span>
 <span class='r-in'><span class='va'>pHData</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span>siteid<span class='op'>=</span><span class='st'>"USGS-04024315"</span>,characteristicName<span class='op'>=</span><span class='va'>nameToUse</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>pHData_summary</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span>bBox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>90.10</span>,<span class='fl'>42.67</span>,<span class='op'>-</span><span class='fl'>88.64</span>,<span class='fl'>43.35</span><span class='op'>)</span>,</span>
@@ -295,10 +292,6 @@ for more information on time zones.</p></td>
 <span class='r-in'>              characteristicName<span class='op'>=</span><span class='va'>secchi.names</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>wqp.data</span> <span class='op'>&lt;-</span> <span class='fu'>readWQPdata</span><span class='op'>(</span><span class='va'>args</span><span class='op'>)</span>   </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Request failed [502]. Retrying in 1.5 seconds...</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Request failed [502]. Retrying in 2.5 seconds...</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> For: https://www.waterqualitydata.us/data/Result/search?startDateLo=01-01-2013&amp;startDateHi=12-31-2013&amp;statecode=US%3A55&amp;characteristicName=Depth%2C%20Secchi%20disk%20depth%3BDepth%2C%20Secchi%20disk%20depth%20%28choice%20list%29%3BSecchi%20Reading%20Condition%20%28choice%20list%29%3BWater%20transparency%2C%20Secchi%20disc&amp;zip=yes&amp;mimeType=tsv</span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in getWebServiceData(obs_url, httr::write_disk(temp), httr::accept("application/zip"))</span> Bad Gateway (HTTP 502).</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>args_2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'startDateLo'</span> <span class='op'>=</span> <span class='va'>startDate</span>, </span>
 <span class='r-in'>             <span class='st'>'startDateHi'</span> <span class='op'>=</span> <span class='st'>"2013-12-31"</span>, </span>
@@ -325,7 +318,7 @@ for more information on time zones.</p></td>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> https://www.waterqualitydata.us/data/Result/search?statecode=US%3A51&amp;countycode=US%3A51%3A678&amp;pCode=00010&amp;zip=yes&amp;mimeType=tsv</span>
 <span class='r-in'>                                </span>
 <span class='r-in'><span class='co'># }</span></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -77,9 +77,6 @@ Anything defined as a default, is returned as an attribute of that data frame." 
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -102,7 +99,7 @@ Anything defined as a default, is returned as an attribute of that data frame." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9</span>
       </span>
     </div>
 
@@ -142,7 +139,7 @@ Anything defined as a default, is returned as an attribute of that data frame." 
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/dataRetrieval">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -160,7 +157,7 @@ Anything defined as a default, is returned as an attribute of that data frame." 
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Parse the WaterML2 timeseries portion of a waterML2 file</h1>
-    <small class="dont-index">Source: <a href='https://github.com/USGS/dataRetrieval/blob/master/R/importNGWMN_wml2.R'><code>R/importNGWMN_wml2.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/USGS-R/dataRetrieval/blob/master/R/importNGWMN_wml2.R'><code>R/importNGWMN_wml2.R</code></a></small>
     <div class="hidden name"><code>importWaterML2.Rd</code></div>
     </div>
 
@@ -169,7 +166,7 @@ Anything defined as a default, is returned as an attribute of that data frame." 
 Anything defined as a default, is returned as an attribute of that data frame.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>importWaterML2</span><span class='op'>(</span><span class='va'>input</span>, asDateTime <span class='op'>=</span> <span class='cn'>FALSE</span>, tz <span class='op'>=</span> <span class='st'>"UTC"</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>importWaterML2</span><span class='op'>(</span><span class='va'>input</span>, asDateTime <span class='op'>=</span> <span class='cn'>FALSE</span>, tz <span class='op'>=</span> <span class='st'>"UTC"</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,7 +190,7 @@ Possible values are "America/New_York","America/Chicago", "America/Denver","Amer
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='va'>baseURL</span> <span class='op'>&lt;-</span> <span class='st'>"https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>baseURL</span> <span class='op'>&lt;-</span> <span class='st'>"https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"</span></span>
 <span class='r-in'><span class='va'>URL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>baseURL</span>, <span class='st'>"sites=01646500"</span>,</span>
 <span class='r-in'>     <span class='st'>"startDT=2014-09-01"</span>,</span>
 <span class='r-in'>     <span class='st'>"endDT=2014-09-08"</span>,</span>
@@ -202,7 +199,7 @@ Possible values are "America/New_York","America/Chicago", "America/Denver","Amer
 <span class='r-in'><span class='co'># \donttest{</span></span>
 <span class='r-in'><span class='va'>timesereies</span> <span class='op'>&lt;-</span> <span class='fu'>importWaterML2</span><span class='op'>(</span><span class='va'>URL</span>, asDateTime<span class='op'>=</span><span class='cn'>TRUE</span>, tz<span class='op'>=</span><span class='st'>"UTC"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='co'># } </span></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

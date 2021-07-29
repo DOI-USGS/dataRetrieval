@@ -79,9 +79,6 @@ to rename those columns." />
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -104,7 +101,7 @@ to rename those columns." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.7.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9</span>
       </span>
     </div>
 
@@ -144,7 +141,7 @@ to rename those columns." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/dataRetrieval">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -162,7 +159,7 @@ to rename those columns." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>renameColumns</h1>
-    <small class="dont-index">Source: <a href='https://github.com/USGS/dataRetrieval/blob/master/R/renameColumns.R'><code>R/renameColumns.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/USGS-R/dataRetrieval/blob/master/R/renameColumns.R'><code>R/renameColumns.R</code></a></small>
     <div class="hidden name"><code>renameNWISColumns.Rd</code></div>
     </div>
 
@@ -173,7 +170,7 @@ function reads information from the header and the arguments in the call to
 to rename those columns.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>renameNWISColumns</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>renameNWISColumns</span><span class='op'>(</span>
   <span class='va'>rawData</span>,
   p00010 <span class='op'>=</span> <span class='st'>"Wtemp"</span>,
   p00045 <span class='op'>=</span> <span class='st'>"Precip"</span>,
@@ -186,7 +183,7 @@ to rename those columns.</p>
   p63680 <span class='op'>=</span> <span class='st'>"Turb"</span>,
   p72019 <span class='op'>=</span> <span class='st'>"WLBLS"</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -268,7 +265,7 @@ form of the name must be like pXXXXX, where XXXXX is the parameter code.</p></td
     <div class='dont-index'><p><code><a href='readNWISdv.html'>readNWISdv</a></code>, <code><a href='readNWISuv.html'>readNWISuv</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='va'>siteWithTwo</span> <span class='op'>&lt;-</span> <span class='st'>'01480015'</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>siteWithTwo</span> <span class='op'>&lt;-</span> <span class='st'>'01480015'</span></span>
 <span class='r-in'><span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-09-01"</span></span>
 <span class='r-in'><span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-10-01"</span></span>
 <span class='r-in'><span class='co'># \donttest{</span></span>
@@ -284,7 +281,7 @@ form of the name must be like pXXXXX, where XXXXX is the parameter code.</p></td
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>newNames</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "agency_cd"    "site_no"      "Date"         "Discharge"    "Discharge_cd"</span>
 <span class='r-in'><span class='co'># }</span></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
