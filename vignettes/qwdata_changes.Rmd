@@ -29,7 +29,7 @@ knitr::opts_chunk$set(echo = TRUE,
 
 # Changes to water quality services
 
-There was a recent announcement that the NWIS water quality web services will be shut down in spring of 2022. What does this mean for `dataRetrieval` users? The water quality data will continue to be available, but it must be accessed from the [Water Quality Portal](https://www.waterqualitydata.us/) rather than the NWIS services. There are 3 major `dataRetrieval` functions that will be affected: `readNWISqw`, `whatNWISdata`, and `readNWISdata`. This vignette will describe the most common workflows conversions needed to update existing scripts. 
+There was a recent announcement that the NWIS discrete water quality web services will be shut down in spring of 2022  (continuous water quality data will continue to be made available via NWIS functions). What does this mean for `dataRetrieval` users? The water quality data will continue to be available, but it must be accessed from the [Water Quality Portal](https://www.waterqualitydata.us/) rather than the NWIS services. There are 3 major `dataRetrieval` functions that will be affected: `readNWISqw`, `whatNWISdata`, and `readNWISdata`. This vignette will describe the most common workflows conversions needed to update existing scripts. 
 
 This vignette is being provided well in advance of any breaking changes, and more information and guidance will be provided. If you need more help than is provided here, please reach out to gs-w-IOW_PO_team@usgs.gov
 
