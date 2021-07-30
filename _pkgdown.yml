@@ -12,6 +12,8 @@ navbar:
     menu:
     - text: Tutorial
       href: articles/tutorial.html
+    - text: Changes to QW
+      href: articles/qwdata_changes.html
     - text: Moving Averages
       href: articles/movingAverages.html
     - text: Stat Service
