@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9.0001</span>
       </span>
     </div>
 
@@ -67,6 +67,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/tutorial.html">Tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/qwdata_changes.html">Changes to QW</a>
     </li>
     <li>
       <a href="../articles/movingAverages.html">Moving Averages</a>
@@ -117,7 +120,7 @@
 <div id="changes-to-water-quality-services" class="section level1">
 <h1 class="hasAnchor">
 <a href="#changes-to-water-quality-services" class="anchor" aria-hidden="true"></a>Changes to water quality services</h1>
-<p>There was a recent announcement that the NWIS water quality web services will be shut down in spring of 2022. What does this mean for <code>dataRetrieval</code> users? The water quality data will continue to be available, but it must be accessed from the <a href="https://www.waterqualitydata.us/" class="external-link">Water Quality Portal</a> rather than the NWIS services. There are 3 major <code>dataRetrieval</code> functions that will be affected: <code>readNWISqw</code>, <code>whatNWISdata</code>, and <code>readNWISdata</code>. This vignette will describe the most common workflows conversions needed to update existing scripts.</p>
+<p>There was a recent announcement that the NWIS discrete water quality web services will be shut down in spring of 2022 (continuous water quality data will continue to be made available via NWIS functions). What does this mean for <code>dataRetrieval</code> users? The water quality data will continue to be available, but it must be accessed from the <a href="https://www.waterqualitydata.us/" class="external-link">Water Quality Portal</a> rather than the NWIS services. There are 3 major <code>dataRetrieval</code> functions that will be affected: <code>readNWISqw</code>, <code>whatNWISdata</code>, and <code>readNWISdata</code>. This vignette will describe the most common workflows conversions needed to update existing scripts.</p>
 <p>This vignette is being provided well in advance of any breaking changes, and more information and guidance will be provided. If you need more help than is provided here, please reach out to <a href="mailto:gs-w-IOW_PO_team@usgs.gov" class="email">gs-w-IOW_PO_team@usgs.gov</a></p>
 <div id="readnwisqw" class="section level2">
 <h2 class="hasAnchor">
