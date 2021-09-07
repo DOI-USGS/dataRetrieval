@@ -130,7 +130,7 @@ test_that("External importWaterML1 test", {
   url <- constructNWISURL("05212700", "00060", "2014-01-01", "2014-01-10",'dv', statCd = "00001")
   noData <- importWaterML1(url) 
   expect_true(class(attr(noData,"url"))=="character")
-  expect_true(all(dim(noData)==0))
+  expect_true(all(dim(noData) == c(0, 4)))
   
   url <- constructNWISURL(service = 'iv', site = c('02319300','02171500'), 
                           startDate = "2015-04-04", endDate = "2015-04-05")
