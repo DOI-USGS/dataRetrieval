@@ -25,8 +25,9 @@
 #' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
 #' "responseFormat=text/xml",
 #' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",sep="&")
-#' data <- importNGWMN(obs_url)
-#' 
+#' if(!httr::http_error(obs_url)){
+#'   data_returned <- importNGWMN(obs_url)
+#' }
 #' }
 #' 
 importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
@@ -141,8 +142,10 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
 #'      "statCd=00003",
 #'      "parameterCd=00060",sep="&")
 #' \donttest{
-#' timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
+#' if(!httr::http_error(URL)){
+#'   timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
 #' } 
+#' }
 importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
   
   returnedDoc <- check_if_xml(input)

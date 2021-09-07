@@ -153,13 +153,17 @@ readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC"){
 #' @examples 
 #' \donttest{
 #' #one site
-#' site <- "USGS.430427089284901"
-#' oneSite <- readNGWMNsites(siteNumbers = site)
+#' if(!httr::http_error("https://cida.usgs.gov/ngwmn_cache")){
+#'   site <- "USGS.430427089284901"
+#'   oneSite <- readNGWMNsites(siteNumbers = site)   
+#' }
 #' 
+#'  
 #' #non-USGS site
-#' site <- "MBMG.103306"
-#' siteInfo <- readNGWMNsites(siteNumbers = site)
-#' 
+#' if(!httr::http_error("https://cida.usgs.gov/ngwmn_cache")){
+#'   site <- "MBMG.103306"
+#'   siteInfo <- readNGWMNsites(siteNumbers = site)
+#' }
 #' }
 readNGWMNsites <- function(siteNumbers){
   sites <- readNGWMNdata(siteNumbers = siteNumbers, service = "featureOfInterest")

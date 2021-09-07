@@ -18,7 +18,9 @@
 #' property <- '00060'
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 #' \donttest{
-#' rawData <- getWebServiceData(obs_url)
+#' if(!httr::http_error(obs_url)){
+#'   rawData <- getWebServiceData(obs_url)
+#' }
 #' }
 getWebServiceData <- function(obs_url, ...){
   
