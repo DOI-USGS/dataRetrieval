@@ -21,6 +21,7 @@
 #' @export
 #' @seealso \code{\link{importRDB1}}
 #' @examples
+#' if(!httr::http_error("https://waterservices.usgs.gov")){
 #' paramINFO <- readNWISpCode(c('01075','00060','00931'))
 #' paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
 readNWISpCode <- function(parameterCd){
