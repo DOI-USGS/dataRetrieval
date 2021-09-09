@@ -230,7 +230,6 @@ valid_ask = function(all, type) {
 #' # Find Features / Define origin features
 #'
 #' ## Find feature by COMID
-#' if(!httr::http_error("https://labs.waterdata.usgs.gov/api/nldi/linked-data")){
 #'  findNLDI(comid = 101)
 #'  
 #' ## Find feature by NWIS ID
@@ -267,7 +266,6 @@ valid_ask = function(all, type) {
 #' # Control Distance
 #' ## Limit search to 50 km
 #'  findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
-#'}
 #'}
 findNLDI <- function(comid = NULL,
                      nwis = NULL,

@@ -67,7 +67,7 @@ See examples below for ideas of constructing queries.
 \examples{
 \donttest{
 # Examples not run for time considerations
-if(!httr::http_error("https://waterservices.usgs.gov")){
+
 dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
 instFlow <- readNWISdata(sites="05114000", service="iv", 
                    parameterCd="00060", 
@@ -128,10 +128,7 @@ dailyStaffordVA <- readNWISdata(stateCd = "Virginia",
 va_counties <- c("51001","51003","51005","51007","51009","51011","51013","51015")
 va_counties_data <- readNWISdata(startDate = "2015-01-01", endDate = "2015-12-31", 
 parameterCd = "00060", countycode = va_counties)
-}
-
-
-if(!httr::http_error("https://nwis.waterdata.usgs.gov")){
+ 
 site_id <- '01594440'
 rating_curve <- readNWISdata(service = "rating", site_no = site_id, file_type="base")
 all_sites_base <- readNWISdata(service = "rating", file_type="base")
@@ -143,7 +140,7 @@ peak_data <- readNWISdata(service = "peak",
                           site_no = c("01594440","040851325"),
                           range_selection = "data_range")
 
-}
+
 }
 }
 \seealso{

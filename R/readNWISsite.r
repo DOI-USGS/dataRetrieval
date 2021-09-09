@@ -61,10 +61,10 @@
 #' @export
 #' @examples
 #' \donttest{
-#' try({
+#' 
 #' siteINFO <- readNWISsite('05114000')
 #' siteINFOMulti <- readNWISsite(c('05114000','09423350'))
-#' })
+#' 
 #' }
 readNWISsite <- function(siteNumbers){
   

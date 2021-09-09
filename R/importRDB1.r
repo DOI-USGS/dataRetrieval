@@ -52,34 +52,33 @@
 #' obs_url <- constructNWISURL(site_id,property,
 #'          startDate,endDate,"dv",format="tsv")
 #' \donttest{
-#' if(!httr::http_error(obs_url)){
-#'   data <- importRDB1(obs_url)
-#' }
+#' data <- importRDB1(obs_url)
+#' 
 #' 
 #' urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),
 #'          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
-#' if(!httr::http_error(urlMultiPcodes)){
+#' 
 #'   multiData <- importRDB1(urlMultiPcodes)
-#' }
+#' 
 #' unitDataURL <- constructNWISURL(site_id,property,
 #'          "2020-10-30","2020-11-01","uv",format="tsv") #includes timezone switch
-#' if(!httr::http_error(unitDataURL)){
+#' 
 #'   unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
-#' }
+#' 
 #' qwURL <- constructNWISURL(c('04024430','04024000'),
 #'           c('34247','30234','32104','34220'),
 #'          "2010-11-03","","qw",format="rdb")
-#' if(!httr::http_error(qwURL)){ 
-#'   qwData <- importRDB1(qwURL, asDateTime=TRUE, tz="America/Chicago")
-#' }
+#' 
+#' qwData <- importRDB1(qwURL, asDateTime=TRUE, tz="America/Chicago")
+#' 
 #' iceSite <- '04024000'
 #' start <- "2015-11-09"
 #' end <- "2015-11-24"
 #' urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
-#' if(!httr::http_error(urlIce)){
+#' 
 #'   ice <- importRDB1(urlIce, asDateTime=TRUE)
 #'   iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
-#' }
+#' 
 #' }
 #' # User file:
 #' filePath <- system.file("extdata", package="dataRetrieval")
