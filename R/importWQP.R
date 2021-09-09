@@ -52,6 +52,9 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
       doc <- getWebServiceData(obs_url, 
                                httr::write_disk(temp),
                                httr::accept("application/zip"))
+      if(is.null(doc)){
+        return(invisible(NULL))
+      }
       headerInfo <- httr::headers(doc)
       doc <- utils::unzip(temp, exdir=tempdir())
       unlink(temp)
@@ -59,6 +62,9 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
     } else {
       doc <- getWebServiceData(obs_url, 
                                httr::accept("text/tsv"))
+      if(is.null(doc)){
+        return(invisible(NULL))
+      }
       headerInfo <- attr(doc, "headerInfo")
     }
 

@@ -103,6 +103,9 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
     doc <- getWebServiceData(obs_url,
                              httr::write_disk(f),
                              encoding='gzip')
+    if(is.null(doc)){
+      return(invisible(NULL))
+    }
     if("warn" %in% names(attr(doc, "headerInfo"))){
       data <- data.frame()
       attr(data, "headerInfo") <- attr(doc,"headerInfo")

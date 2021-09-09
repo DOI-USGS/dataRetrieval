@@ -44,7 +44,9 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
     raw <- TRUE
   } else {
     returnedDoc <- getWebServiceData(input, encoding='gzip')
-    
+    if(is.null(returnedDoc)){
+      return(invisible(NULL))
+    }
     returnedDoc <- xml_root(returnedDoc)
     
   }

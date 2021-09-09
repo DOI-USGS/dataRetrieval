@@ -413,7 +413,12 @@ check_if_xml <- function(obs_url){
   } else if(inherits(obs_url, c("xml_node", "xml_nodeset"))) {
     returnedDoc <- obs_url
   } else {
-    returnedDoc <- xml_root(getWebServiceData(obs_url, encoding='gzip'))
+    
+    doc <- getWebServiceData(obs_url, encoding='gzip')
+    if(is.null(doc)){
+      return(invisible(NULL))
+    }
+    returnedDoc <- xml_root(doc)
   }
   return(returnedDoc)
 }
