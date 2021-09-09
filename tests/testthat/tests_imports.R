@@ -43,7 +43,7 @@ test_that("External importRDB1 tests", {
                           format="tsv",
                           statCd = "laksjd")
   # And....now there's data there:
-  expect_error(importRDB1(url))
+  expect_null(importRDB1(url))
 })
 
 context("importRDB")

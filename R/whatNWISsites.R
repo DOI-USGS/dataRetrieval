@@ -45,7 +45,9 @@ whatNWISsites <- function(...){
   urlCall <- drURL('site',Access=pkg.env$access, arg.list = values)
 
   rawData <- getWebServiceData(urlCall, encoding='gzip')
-
+  if(is.null(rawData)){
+    return(invisible(NULL))
+  }
   doc <- xml_root(rawData)
   siteCategories <- xml_children(doc)
   retVal <- NULL

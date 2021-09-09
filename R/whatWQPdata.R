@@ -161,6 +161,9 @@ whatWQPdata <- function(..., saveFile = tempfile()){
   }
 
   doc <- getWebServiceData(baseURL, httr::write_disk(saveFile_zip))
+  if(is.null(doc)){
+    return(invisible(NULL))
+  }
   headerInfo <- attr(doc, "headerInfo")
   
   if(headerInfo$`total-site-count` == 0){
