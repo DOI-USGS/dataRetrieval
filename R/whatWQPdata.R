@@ -3,12 +3,12 @@
 #' @export
 #' @examples
 #' \donttest{
-#' try({
+#' 
 #' site1 <- whatWQPsamples(siteid="USGS-01594440")
 #' 
 #' type <- "Stream"
 #' sites <- whatWQPsamples(countycode="US:55:025",siteType=type)
-#' })
+#' 
 #' }
 whatWQPsamples <- function(...){
   

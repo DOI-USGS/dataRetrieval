@@ -26,8 +26,6 @@ offering <- '00003'
 property <- '00060'
 obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 \donttest{
-if(!httr::http_error(obs_url)){
   rawData <- getWebServiceData(obs_url)
-}
 }
 }

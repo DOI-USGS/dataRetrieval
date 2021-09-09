@@ -51,7 +51,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' try({
+#' 
 #' availableData <- whatNWISdata(siteNumber = '05114000')
 #' # To find just unit value ('instantaneous') data:
 #' uvData <- whatNWISdata(siteNumber = '05114000',service="uv")
@@ -59,7 +59,7 @@
 #' flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", 
 #'                              parameterCd = c("00060","00010"),
 #'                              statCd = "00003")
-#' })
+#' 
 #' }
 whatNWISdata <- function(..., convertType=TRUE){
   

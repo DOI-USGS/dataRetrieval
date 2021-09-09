@@ -69,7 +69,6 @@ arguments: comid, nwis, huc12, wqp, location, and start.
 # Find Features / Define origin features
 
 ## Find feature by COMID
-if(!httr::http_error("https://labs.waterdata.usgs.gov/api/nldi/linked-data")){
  findNLDI(comid = 101)
  
 ## Find feature by NWIS ID
@@ -106,7 +105,6 @@ if(!httr::http_error("https://labs.waterdata.usgs.gov/api/nldi/linked-data")){
 # Control Distance
 ## Limit search to 50 km
  findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
-}
 }
 }
 \keyword{nldi}

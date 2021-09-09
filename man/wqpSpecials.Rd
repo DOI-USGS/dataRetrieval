@@ -73,12 +73,12 @@ The \code{readWQPsummary} function has
 }
 \examples{
 \donttest{
-try({
+
 site1 <- whatWQPsamples(siteid="USGS-01594440")
 
 type <- "Stream"
 sites <- whatWQPsamples(countycode="US:55:025",siteType=type)
-})
+
 }
 \donttest{
 
@@ -87,14 +87,14 @@ sites <- whatWQPmetrics(countycode="US:55:025",siteType=type)
 lakeSites <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 }
 \donttest{
-try({
+
 site1 <- whatWQPsites(siteid="USGS-01594440")
 
 type <- "Stream"
 sites <- whatWQPsites(countycode="US:55:025",
                       characteristicName = "Phosphorus",
                       siteType=type)
-})
+
 }
 \donttest{
 site1 <- readWQPsummary(siteid="USGS-07144100",
