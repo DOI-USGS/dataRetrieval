@@ -60,6 +60,7 @@ A list of statistic codes can be found here: \url{https://nwis.waterdata.usgs.go
 More information on the web service can be found here: \url{https://waterservices.usgs.gov/rest/IV-Service.html}.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 site_id <- '05114000'
 parameterCd <- '00060'
 startDate <- "2014-10-10"
@@ -82,6 +83,7 @@ GMTdata <- readNWISuv(site_id,parameterCd,
                            "2014-10-10T00:00Z", "2014-10-10T23:59Z")
 
 }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}

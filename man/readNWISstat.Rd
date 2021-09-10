@@ -59,6 +59,7 @@ Retrieves site statistics from the USGS Statistics Web Service beta.
 See \url{https://waterservices.usgs.gov/rest/Statistics-Service.html} for more information.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 x1 <- readNWISstat(siteNumbers=c("02319394"),
                   parameterCd=c("00060"),
@@ -77,6 +78,7 @@ x <- readNWISstat(siteNumbers=c("02171500"),
                   statType=c("mean","median"),
                   startDate="2000",endDate="2010")
 }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link{constructNWISURL}}, \code{\link{importRDB1}}

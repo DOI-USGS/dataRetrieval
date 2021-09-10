@@ -91,3 +91,4 @@ reference:
       - constructWQPURL
       - getQuerySummary
       - getWebServiceData
+      - is_dataRetrieval_user

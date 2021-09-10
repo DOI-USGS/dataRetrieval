@@ -93,7 +93,7 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' nameToUse <- "pH"
 #' pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)

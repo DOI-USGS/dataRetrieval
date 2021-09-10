@@ -104,7 +104,7 @@
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
 #' \code{\link{readNWISqw}}, and \code{\link{importWQP}}
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 #' rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')

@@ -67,6 +67,7 @@ is specified as FALSE. Sites with non-standard date formats (i.e. lacking a day)
 See \url{https://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more information.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 site_id <- "434400121275801"
 \donttest{
 data <- readNWISgwl(site_id)
@@ -79,6 +80,7 @@ data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01")
 data5 <- readNWISgwl("263819081585801", parameterCd = "72019")
 
 }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link{constructNWISURL}}, \code{\link{importRDB1}}
