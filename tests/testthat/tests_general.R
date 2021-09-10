@@ -376,8 +376,7 @@ test_that("400 errors return a verbose error", {
   url <- "https://waterservices.usgs.gov/nwis/site/?stateCd=IA&bBox=-92.821445,42.303044,-92.167168,42.646524&format=mapper"
 
   expect_message(getWebServiceData(url))
-  expect_equal(tryCatch(getWebServiceData(url), message = function(e) e$message)[1], "Request failed [400]. Retrying in 1 seconds...\n")
-  
+ 
 })
 
 test_that("internal functions",{
