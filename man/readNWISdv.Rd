@@ -55,6 +55,7 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 Imports data from NWIS web service. This function gets the data from here: \url{https://waterservices.usgs.gov/}
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 site_id <- '04085427'
 startDate <- '2012-01-01'
 endDate <- '2012-06-30'
@@ -75,6 +76,7 @@ attr(x, "variableInfo")
 site <- "05212700"
 notActive <- readNWISdv(site, "00060", "2014-01-01","2014-01-07")
 }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}

@@ -106,6 +106,7 @@ Imports data from Water Quality Portal web service. This function gets the data 
 because it allows for other agencies rather than the USGS.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 nameToUse <- "pH"
 pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
@@ -146,6 +147,7 @@ dailyLexingtonVA <- readWQPdata(statecode = "Virginia",
                                 parameterCd = "00010") 
                                 
 }
+\dontshow{\}) # examplesIf}
 }
 \keyword{WQP}
 \keyword{data}

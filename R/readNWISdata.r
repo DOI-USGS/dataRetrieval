@@ -53,7 +53,7 @@
 #' 
 #' @seealso \code{\link{renameNWISColumns}},  \code{\link{importWaterML1}}, \code{\link{importRDB1}}
 #' @export
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' # Examples not run for time considerations
 #' 

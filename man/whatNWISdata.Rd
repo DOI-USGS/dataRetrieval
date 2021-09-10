@@ -60,6 +60,7 @@ Imports a table of available parameters, period of record, and count. See \url{h
 for more information.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 
 availableData <- whatNWISdata(siteNumber = '05114000')
@@ -71,6 +72,7 @@ flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv",
                              statCd = "00003")
 
 }
+\dontshow{\}) # examplesIf}
 }
 \keyword{USGS}
 \keyword{data}
