@@ -28,8 +28,8 @@ URL <- paste(baseURL, "sites=01646500",
      "statCd=00003",
      "parameterCd=00060",sep="&")
 \donttest{
-if(!httr::http_error(URL)){
-  timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
-} 
+
+timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
+ 
 }
 }

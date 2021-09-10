@@ -144,9 +144,9 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
 #'      "statCd=00003",
 #'      "parameterCd=00060",sep="&")
 #' \donttest{
-#' if(!httr::http_error(URL)){
-#'   timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
-#' } 
+#' 
+#' timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
+#'  
 #' }
 importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
   
