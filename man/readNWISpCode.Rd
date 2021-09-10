@@ -27,6 +27,11 @@ parameterData data frame with the following information:
 Imports data from NWIS about meaured parameter based on user-supplied parameter code or codes.
 This function gets the data from here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes}
 }
+\examples{
+
+paramINFO <- readNWISpCode(c('01075','00060','00931'))
+paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
+}
 \seealso{
 \code{\link{importRDB1}}
 }
