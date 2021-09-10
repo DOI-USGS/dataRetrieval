@@ -14,5 +14,7 @@ pkg.env <- new.env()
 #' @examples 
 #' is_dataRetrieval_user()
 is_dataRetrieval_user <- function(){
-  interactive() | !!identical(Sys.getenv("CI"), "")
+  interactive() ||
+    !identical(Sys.getenv("CI"), "") ||
+    identical(Sys.getenv("NOT_CRAN"), "true")
 }
