@@ -54,6 +54,7 @@
 #' startDate <- "2014-10-10"
 #' endDate <- "2014-10-10"
 #' \donttest{
+#' 
 #' rawData <- readNWISuv(site_id,parameterCd,startDate,endDate)
 #' 
 #' rawData_today <- readNWISuv(site_id, parameterCd, Sys.Date(),Sys.Date())
@@ -68,8 +69,8 @@
 #' # Adding 'Z' to the time indicates to the web service to call the data with UTC time:
 #' GMTdata <- readNWISuv(site_id,parameterCd,
 #'                            "2014-10-10T00:00Z", "2014-10-10T23:59Z")
-#' }
 #' 
+#' }
 readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz="UTC"){  
   
   if(as.character(startDate) == "" || (as.Date(startDate) <= Sys.Date()-120)){

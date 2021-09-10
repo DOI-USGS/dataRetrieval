@@ -3,10 +3,12 @@
 #' @export
 #' @examples
 #' \donttest{
+#' 
 #' site1 <- whatWQPsamples(siteid="USGS-01594440")
 #' 
 #' type <- "Stream"
 #' sites <- whatWQPsamples(countycode="US:55:025",siteType=type)
+#' 
 #' }
 whatWQPsamples <- function(...){
   
@@ -159,6 +161,9 @@ whatWQPdata <- function(..., saveFile = tempfile()){
   }
 
   doc <- getWebServiceData(baseURL, httr::write_disk(saveFile_zip))
+  if(is.null(doc)){
+    return(invisible(NULL))
+  }
   headerInfo <- attr(doc, "headerInfo")
   
   if(headerInfo$`total-site-count` == 0){

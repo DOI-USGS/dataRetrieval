@@ -30,8 +30,10 @@
 #' 
 #' @examples
 #' \donttest{
+#' 
 #' siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
 #' oneSite <- whatNWISsites(sites="05114000")
+#' 
 #' }
 whatNWISsites <- function(...){
   
@@ -43,7 +45,9 @@ whatNWISsites <- function(...){
   urlCall <- drURL('site',Access=pkg.env$access, arg.list = values)
 
   rawData <- getWebServiceData(urlCall, encoding='gzip')
-
+  if(is.null(rawData)){
+    return(invisible(NULL))
+  }
   doc <- xml_root(rawData)
   siteCategories <- xml_children(doc)
   retVal <- NULL

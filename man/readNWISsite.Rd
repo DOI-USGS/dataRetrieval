@@ -70,8 +70,10 @@ Imports data from USGS site file site. This function gets data from here: \url{h
 }
 \examples{
 \donttest{
+
 siteINFO <- readNWISsite('05114000')
 siteINFOMulti <- readNWISsite(c('05114000','09423350'))
+
 }
 }
 \keyword{USGS}

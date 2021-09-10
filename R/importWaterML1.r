@@ -115,7 +115,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   
   timeSeries <- xml_find_all(returnedDoc, ".//ns1:timeSeries") #each parameter/site combo
   
-  #some intial attributes
+  #some initial attributes
   queryNodes <- xml_children(xml_find_all(returnedDoc,".//ns1:queryInfo"))
   notes <- queryNodes[xml_name(queryNodes)=="note"]
   noteTitles <- xml_attrs(notes)
@@ -124,7 +124,10 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   names(noteList) <- noteTitles
   
   if(0 == length(timeSeries)){
-    df <- data.frame()
+    df <- data.frame(agency_cd = character(),
+                     site_no = character(),
+                     dateTime = as.POSIXct(character()),
+                     tz_cd = character())
     attr(df, "queryInfo") <- noteList
     if(!raw){
       attr(df, "url") <- obs_url
@@ -410,7 +413,12 @@ check_if_xml <- function(obs_url){
   } else if(inherits(obs_url, c("xml_node", "xml_nodeset"))) {
     returnedDoc <- obs_url
   } else {
-    returnedDoc <- xml_root(getWebServiceData(obs_url, encoding='gzip'))
+    
+    doc <- getWebServiceData(obs_url, encoding='gzip')
+    if(is.null(doc)){
+      return(invisible(NULL))
+    }
+    returnedDoc <- xml_root(doc)
   }
   return(returnedDoc)
 }

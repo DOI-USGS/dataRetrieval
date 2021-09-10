@@ -66,22 +66,31 @@ obs_url <- constructNWISURL(site_id,property,
 \donttest{
 data <- importRDB1(obs_url)
 
+
 urlMultiPcodes <- constructNWISURL("04085427",c("00060","00010"),
          startDate,endDate,"dv",statCd=c("00003","00001"),"tsv")
-multiData <- importRDB1(urlMultiPcodes)
+
+  multiData <- importRDB1(urlMultiPcodes)
+
 unitDataURL <- constructNWISURL(site_id,property,
          "2020-10-30","2020-11-01","uv",format="tsv") #includes timezone switch
-unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
+
+  unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
+
 qwURL <- constructNWISURL(c('04024430','04024000'),
           c('34247','30234','32104','34220'),
-         "2010-11-03","","qw",format="rdb") 
+         "2010-11-03","","qw",format="rdb")
+
 qwData <- importRDB1(qwURL, asDateTime=TRUE, tz="America/Chicago")
+
 iceSite <- '04024000'
 start <- "2015-11-09"
 end <- "2015-11-24"
 urlIce <- constructNWISURL(iceSite,"00060",start, end,"uv",format="tsv")
-ice <- importRDB1(urlIce, asDateTime=TRUE)
-iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
+
+  ice <- importRDB1(urlIce, asDateTime=TRUE)
+  iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
+
 }
 # User file:
 filePath <- system.file("extdata", package="dataRetrieval")

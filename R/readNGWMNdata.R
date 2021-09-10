@@ -152,9 +152,9 @@ readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC"){
 #' }
 #' @examples 
 #' \donttest{
-#' #one site
+#' #one site 
 #' site <- "USGS.430427089284901"
-#' oneSite <- readNGWMNsites(siteNumbers = site)
+#' oneSite <- readNGWMNsites(siteNumbers = site)   
 #' 
 #' #non-USGS site
 #' site <- "MBMG.103306"

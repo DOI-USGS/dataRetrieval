@@ -67,6 +67,7 @@ See examples below for ideas of constructing queries.
 \examples{
 \donttest{
 # Examples not run for time considerations
+
 dataTemp <- readNWISdata(stateCd="OH",parameterCd="00010", service="dv")
 instFlow <- readNWISdata(sites="05114000", service="iv", 
                    parameterCd="00060", 
@@ -87,32 +88,35 @@ bBoxEx <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010")
 
 startDate <- as.Date("2013-10-01")
 endDate <- as.Date("2014-09-30")
-waterYear <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", 
+waterYear <- readNWISdata(bBox=c(-83,36.5,-82.5,36.75), parameterCd="00010", 
                   service="dv", startDate=startDate, endDate=endDate)
 siteInfo <- readNWISdata(stateCd="WI", parameterCd="00010",
                   hasDataTypeCd="iv", service="site")
-temp <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd="00010", service="site", 
+temp <- readNWISdata(bBox=c(-83,36.5,-82.5,36.75), parameterCd="00010", service="site", 
                    seriesCatalogOutput=TRUE)
-wiGWL <- readNWISdata(stateCd="WI",service="gwlevels")
-meas <- readNWISdata(state_cd="WI",service="measurements",format="rdb_expanded")
+wiGWL <- readNWISdata(stateCd = "WI", service = "gwlevels")
+meas <- readNWISdata(state_cd = "WI", service = "measurements",
+                     format = "rdb_expanded")
 
-waterYearStat <- readNWISdata(site=c("01646500"),service="stat",statReportType="annual",
-                 statYearType="water", missingData="on")
+waterYearStat <- readNWISdata(site = c("01646500"), 
+                              service = "stat",
+                              statReportType="annual",
+                              statYearType = "water",
+                              missingData = "on")
 monthlyStat <- readNWISdata(site=c("01646500"),
                             service="stat",
-                            statReportType="monthly")                                   
-dailyStat <- readNWISdata(site=c("01646500"),
-                          service="stat",
-                          statReportType="daily",
-                          statType=c("p25","p50","p75","min","max"),
-                          parameterCd="00060")
+                            statReportType="monthly")  
+                                                             
+dailyStat <- readNWISdata(site = c("01646500"),
+                          service = "stat",
+                          statReportType = "daily",
+                          statType = c("p25","p50","p75","min","max"),
+                          parameterCd = "00060")
 
-dailyRI <- readNWISdata(stateCd = "Rhode Island", parameterCd = "00060")
-
-arg.list <- list(site="03111548",
-                 statReportType="daily",
-                 statType=c("p25","p50","p75","min","max"),
-                 parameterCd="00060")
+arg.list <- list(site = "03111548",
+                 statReportType = "daily",
+                 statType = c("p25","p50","p75","min","max"),
+                 parameterCd = "00060")
 allDailyStats_2 <- readNWISdata(arg.list, service="stat")
 
 #' # use county names to get data
@@ -124,19 +128,18 @@ dailyStaffordVA <- readNWISdata(stateCd = "Virginia",
 va_counties <- c("51001","51003","51005","51007","51009","51011","51013","51015")
 va_counties_data <- readNWISdata(startDate = "2015-01-01", endDate = "2015-12-31", 
 parameterCd = "00060", countycode = va_counties)
+ 
 site_id <- '01594440'
 rating_curve <- readNWISdata(service = "rating", site_no = site_id, file_type="base")
 all_sites_base <- readNWISdata(service = "rating", file_type="base")
 all_sites_core <- readNWISdata(service = "rating", file_type="corr")
 all_sites_exsa <- readNWISdata(service = "rating", file_type="exsa")
 all_sites_24hrs <- readNWISdata(service = "rating", file_type="exsa", period = 24)
-
-today <- readNWISdata(service="iv", startDate = Sys.Date(), 
-                      parameterCd = "00060", siteNumber = "05114000")
                       
 peak_data <- readNWISdata(service = "peak", 
                           site_no = c("01594440","040851325"),
                           range_selection = "data_range")
+
 
 }
 }

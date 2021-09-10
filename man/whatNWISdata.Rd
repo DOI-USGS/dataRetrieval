@@ -61,6 +61,7 @@ for more information.
 }
 \examples{
 \donttest{
+
 availableData <- whatNWISdata(siteNumber = '05114000')
 # To find just unit value ('instantaneous') data:
 uvData <- whatNWISdata(siteNumber = '05114000',service="uv")
@@ -68,6 +69,7 @@ uvDataMulti <- whatNWISdata(siteNumber = c('05114000','09423350'),service=c("uv"
 flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", 
                              parameterCd = c("00060","00010"),
                              statCd = "00003")
+
 }
 }
 \keyword{USGS}
