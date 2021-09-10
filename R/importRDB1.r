@@ -42,7 +42,7 @@
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' }
 #' @export
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' site_id <- "02177000"
 #' startDate <- "2012-09-01"
 #' endDate <- "2012-10-01"

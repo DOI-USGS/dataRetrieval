@@ -225,7 +225,7 @@ valid_ask = function(all, type) {
 #' @return a list of data.frames if sf is not installed, a list of sf objects if it is
 #' @export
 #' @keywords nldi
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' # Find Features / Define origin features
 #'

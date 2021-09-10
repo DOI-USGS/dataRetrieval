@@ -47,7 +47,7 @@
 #' @importFrom xml2 xml_attrs
 #' @importFrom xml2 xml_attr
 #' @importFrom xml2 xml_root
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' site_id <- "02177000"
 #' startDate <- "2012-09-01"
 #' endDate <- "2012-10-01"
