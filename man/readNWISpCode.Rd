@@ -28,6 +28,7 @@ Imports data from NWIS about meaured parameter based on user-supplied parameter 
 This function gets the data from here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes}
 }
 \examples{
+
 paramINFO <- readNWISpCode(c('01075','00060','00931'))
 paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
 }

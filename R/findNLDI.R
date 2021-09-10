@@ -231,11 +231,11 @@ valid_ask = function(all, type) {
 #'
 #' ## Find feature by COMID
 #'  findNLDI(comid = 101)
-#'
+#'  
 #' ## Find feature by NWIS ID
-#'  findNLDI(nwis = '11120000')
-#'
-#' ## Find feature by WQP ID
+#'   findNLDI(nwis = '11120000')
+#' 
+#' ## Find feature by WQP ID 
 #'  findNLDI(wqp = 'USGS-04024315')
 #'
 #' ## Find feature by LOCATION

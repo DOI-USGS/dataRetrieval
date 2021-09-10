@@ -25,11 +25,14 @@
 #' rawSample <- importWQP(rawSampleURL)
 #' 
 #' rawSampleURL_NoZip <- constructWQPURL('USGS-01594440','01075', '', '', zip=FALSE)
+#' 
 #' rawSample2 <- importWQP(rawSampleURL_NoZip, zip=FALSE)
 #' 
 #' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
-#' STORETdata <- importWQP(STORETex)
+#' 
+#'  STORETdata <- importWQP(STORETex)
 #' }
+#' 
 importWQP <- function(obs_url, zip=TRUE, tz="UTC", 
                       csv=FALSE){
   
@@ -49,6 +52,9 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
       doc <- getWebServiceData(obs_url, 
                                httr::write_disk(temp),
                                httr::accept("application/zip"))
+      if(is.null(doc)){
+        return(invisible(NULL))
+      }
       headerInfo <- httr::headers(doc)
       doc <- utils::unzip(temp, exdir=tempdir())
       unlink(temp)
@@ -56,6 +62,9 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
     } else {
       doc <- getWebServiceData(obs_url, 
                                httr::accept("text/tsv"))
+      if(is.null(doc)){
+        return(invisible(NULL))
+      }
       headerInfo <- attr(doc, "headerInfo")
     }
 

@@ -70,11 +70,11 @@ arguments: comid, nwis, huc12, wqp, location, and start.
 
 ## Find feature by COMID
  findNLDI(comid = 101)
-
+ 
 ## Find feature by NWIS ID
- findNLDI(nwis = '11120000')
+  findNLDI(nwis = '11120000')
 
-## Find feature by WQP ID
+## Find feature by WQP ID 
  findNLDI(wqp = 'USGS-04024315')
 
 ## Find feature by LOCATION

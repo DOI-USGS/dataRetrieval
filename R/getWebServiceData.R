@@ -18,7 +18,7 @@
 #' property <- '00060'
 #' obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
 #' \donttest{
-#' rawData <- getWebServiceData(obs_url)
+#'   rawData <- getWebServiceData(obs_url)
 #' }
 getWebServiceData <- function(obs_url, ...){
   
@@ -33,13 +33,20 @@ getWebServiceData <- function(obs_url, ...){
     response400 <- httr::content(returnedList, type="text", encoding = "UTF-8")
     statusReport <- xml_text(xml_child(read_xml(response400), 2)) # making assumption that - body is second node
     statusMsg <- gsub(pattern=", server=.*", replacement="", x = statusReport)
-    stop(statusMsg)
+    message(statusMsg)
+    return(invisible(NULL))
   } else if(httr::status_code(returnedList) != 200){
     message("For: ", obs_url,"\n")
-    httr::stop_for_status(returnedList)
+    httr::message_for_status(returnedList)
+    return(invisible(NULL))
   } else {
     headerInfo <- httr::headers(returnedList)
-
+    
+    if(!"content-type" %in% names(headerInfo)){
+      message("Unknown content, returning NULL")
+      return(invisible(NULL))
+    }
+    
     if(headerInfo$`content-type` %in% c("text/tab-separated-values;charset=UTF-8")){
       returnedDoc <- httr::content(returnedList, type="text",encoding = "UTF-8")
     } else if (headerInfo$`content-type` %in% 

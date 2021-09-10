@@ -1,3 +1,7 @@
+dataRetrieval 2.8.10
+==================
+* Functions that come back from a server that had and error now return with a message and NULL rather than error.
+
 dataRetrieval 2.7.9
 ===================
 * Fix bug caused by changes in NLDI services
