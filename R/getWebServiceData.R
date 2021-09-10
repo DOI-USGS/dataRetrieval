@@ -41,7 +41,12 @@ getWebServiceData <- function(obs_url, ...){
     return(invisible(NULL))
   } else {
     headerInfo <- httr::headers(returnedList)
-
+    
+    if(!"content-type" %in% names(headerInfo)){
+      message("Unknown content, returning NULL")
+      return(invisible(NULL))
+    }
+    
     if(headerInfo$`content-type` %in% c("text/tab-separated-values;charset=UTF-8")){
       returnedDoc <- httr::content(returnedList, type="text",encoding = "UTF-8")
     } else if (headerInfo$`content-type` %in% 
