@@ -53,8 +53,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -76,15 +74,9 @@
 </script>
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -98,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.10</span>
       </span>
     </div>
 
@@ -128,9 +120,6 @@
     </li>
     <li>
       <a href="../articles/statsServiceMap.html">Stat Service</a>
-    </li>
-    <li>
-      <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
     <li>
       <a href="../articles/nldi.html">NLDI Interface</a>
@@ -167,7 +156,7 @@
     <p>Used to query the current resources available through the NLDI</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>get_nldi_sources</span><span class='op'>(</span><span class='op'>)</span></code></pre></div>
+    <pre class="usage"><span class='fu'>get_nldi_sources</span><span class='op'>(</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -175,32 +164,31 @@
     <p>data.frame</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># \donttest{</span></span>
-<span class='r-in'><span class='fu'>get_nldi_sources</span><span class='op'>(</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>        source                                     sourceName</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       comid                                  NHDPlus comid</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    ca_gages                 Streamgage catalog for CA SB19</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  gfv11_pois USGS Geospatial Fabric V1.1 Points of Interest</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     huc12pp                              HUC12 Pour Points</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      nwisgw                         NWIS Groundwater Sites</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6    nwissite                       NWIS Surface Water Sites</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7    ref_gage                   geoconnex.us reference gages</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8       vigil                             Vigil Network Data</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 9        wade                  Water Data Exchange 2.0 Sites</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 10        WQP                           Water Quality Portal</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                           features</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    https://labs.waterdata.usgs.gov/api/nldi/linked-data/ca_gages</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  https://labs.waterdata.usgs.gov/api/nldi/linked-data/gfv11_pois</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwisgw</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6    https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7    https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8       https://labs.waterdata.usgs.gov/api/nldi/linked-data/vigil</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 9        https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 10        https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp</span>
-<span class='r-in'><span class='co'># }</span></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='fu'>get_nldi_sources</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;        source                                     sourceName
+#&gt; 1       comid                                  NHDPlus comid
+#&gt; 2    ca_gages                 Streamgage catalog for CA SB19
+#&gt; 3  gfv11_pois USGS Geospatial Fabric V1.1 Points of Interest
+#&gt; 4     huc12pp                              HUC12 Pour Points
+#&gt; 5      nwisgw                         NWIS Groundwater Sites
+#&gt; 6    nwissite                       NWIS Surface Water Sites
+#&gt; 7    ref_gage                   geoconnex.us reference gages
+#&gt; 8       vigil                             Vigil Network Data
+#&gt; 9        wade                  Water Data Exchange 2.0 Sites
+#&gt; 10        WQP                           Water Quality Portal
+#&gt;                                                           features
+#&gt; 1       https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid
+#&gt; 2    https://labs.waterdata.usgs.gov/api/nldi/linked-data/ca_gages
+#&gt; 3  https://labs.waterdata.usgs.gov/api/nldi/linked-data/gfv11_pois
+#&gt; 4     https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp
+#&gt; 5      https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwisgw
+#&gt; 6    https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite
+#&gt; 7    https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage
+#&gt; 8       https://labs.waterdata.usgs.gov/api/nldi/linked-data/vigil
+#&gt; 9        https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade
+#&gt; 10        https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp</div><div class='input'><span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -212,11 +200,11 @@
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p></p>
+  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -224,8 +212,6 @@
 
   
 
-
-  
 
   </body>
 </html>

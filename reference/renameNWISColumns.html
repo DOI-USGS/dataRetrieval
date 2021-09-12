@@ -56,8 +56,6 @@ to rename those columns." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -79,15 +77,9 @@ to rename those columns." />
 </script>
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -101,7 +93,7 @@ to rename those columns." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.10</span>
       </span>
     </div>
 
@@ -131,9 +123,6 @@ to rename those columns." />
     </li>
     <li>
       <a href="../articles/statsServiceMap.html">Stat Service</a>
-    </li>
-    <li>
-      <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
     <li>
       <a href="../articles/nldi.html">NLDI Interface</a>
@@ -173,7 +162,7 @@ function reads information from the header and the arguments in the call to
 to rename those columns.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>renameNWISColumns</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>renameNWISColumns</span><span class='op'>(</span>
   <span class='va'>rawData</span>,
   p00010 <span class='op'>=</span> <span class='st'>"Wtemp"</span>,
   p00045 <span class='op'>=</span> <span class='st'>"Precip"</span>,
@@ -186,7 +175,7 @@ to rename those columns.</p>
   p63680 <span class='op'>=</span> <span class='st'>"Turb"</span>,
   p72019 <span class='op'>=</span> <span class='st'>"WLBLS"</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></code></pre></div>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -268,23 +257,20 @@ form of the name must be like pXXXXX, where XXXXX is the parameter code.</p></td
     <div class='dont-index'><p><code><a href='readNWISdv.html'>readNWISdv</a></code>, <code><a href='readNWISuv.html'>readNWISuv</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>siteWithTwo</span> <span class='op'>&lt;-</span> <span class='st'>'01480015'</span></span>
-<span class='r-in'><span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-09-01"</span></span>
-<span class='r-in'><span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-10-01"</span></span>
-<span class='r-in'><span class='co'># \donttest{</span></span>
-<span class='r-in'><span class='va'>twoResults</span> <span class='op'>&lt;-</span> <span class='fu'><a href='readNWISdv.html'>readNWISdv</a></span><span class='op'>(</span><span class='va'>siteWithTwo</span>, <span class='st'>"00060"</span>,<span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>twoResults</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "agency_cd"        "site_no"          "Date"             "X_00060_00003"   </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [5] "X_00060_00003_cd"</span>
-<span class='r-in'><span class='va'>renamedCols</span> <span class='op'>&lt;-</span> <span class='fu'>renameNWISColumns</span><span class='op'>(</span><span class='va'>twoResults</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>renamedCols</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "agency_cd" "site_no"   "Date"      "Flow"      "Flow_cd"  </span>
-<span class='r-in'><span class='co'>#Custom names:</span></span>
-<span class='r-in'><span class='va'>newNames</span> <span class='op'>&lt;-</span> <span class='fu'>renameNWISColumns</span><span class='op'>(</span><span class='va'>twoResults</span>, p00060<span class='op'>=</span><span class='st'>"Discharge"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>newNames</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "agency_cd"    "site_no"      "Date"         "Discharge"    "Discharge_cd"</span>
-<span class='r-in'><span class='co'># }</span></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='va'>siteWithTwo</span> <span class='op'>&lt;-</span> <span class='st'>'01480015'</span>
+<span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-09-01"</span>
+<span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-10-01"</span>
+<span class='co'># \donttest{</span>
+<span class='va'>twoResults</span> <span class='op'>&lt;-</span> <span class='fu'><a href='readNWISdv.html'>readNWISdv</a></span><span class='op'>(</span><span class='va'>siteWithTwo</span>, <span class='st'>"00060"</span>,<span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>twoResults</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "agency_cd"        "site_no"          "Date"             "X_00060_00003"   
+#&gt; [5] "X_00060_00003_cd"</div><div class='input'><span class='va'>renamedCols</span> <span class='op'>&lt;-</span> <span class='fu'>renameNWISColumns</span><span class='op'>(</span><span class='va'>twoResults</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>renamedCols</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "agency_cd" "site_no"   "Date"      "Flow"      "Flow_cd"  </div><div class='input'><span class='co'>#Custom names:</span>
+<span class='va'>newNames</span> <span class='op'>&lt;-</span> <span class='fu'>renameNWISColumns</span><span class='op'>(</span><span class='va'>twoResults</span>, p00060<span class='op'>=</span><span class='st'>"Discharge"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>newNames</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "agency_cd"    "site_no"      "Date"         "Discharge"    "Discharge_cd"</div><div class='input'><span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -296,11 +282,11 @@ form of the name must be like pXXXXX, where XXXXX is the parameter code.</p></td
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p></p>
+  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -308,8 +294,6 @@ form of the name must be like pXXXXX, where XXXXX is the parameter code.</p></td
 
   
 
-
-  
 
   </body>
 </html>

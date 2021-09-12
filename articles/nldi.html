@@ -32,8 +32,6 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -46,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.10</span>
       </span>
     </div>
 
@@ -78,9 +76,6 @@
       <a href="../articles/statsServiceMap.html">Stat Service</a>
     </li>
     <li>
-      <a href="../articles/earthquake.html">Earthquake Exploration</a>
-    </li>
-    <li>
       <a href="../articles/nldi.html">NLDI Interface</a>
     </li>
   </ul>
@@ -88,7 +83,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/USGS-R/dataRetrieval" class="external-link">
+  <a href="https://github.com/USGS-R/dataRetrieval">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -108,23 +103,23 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Network Linked Data Index: <code>dataRetrieval</code>
 </h1>
-                        <h4 data-toc-skip class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
+                        <h4 class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
             
-            <h4 data-toc-skip class="date">2021-07-30</h4>
+            <h4 class="date">2021-09-12</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/master/vignettes/nldi.Rmd" class="external-link"><code>vignettes/nldi.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/master/vignettes/nldi.Rmd"><code>vignettes/nldi.Rmd</code></a></small>
       <div class="hidden name"><code>nldi.Rmd</code></div>
 
     </div>
 
     
     
-<p>This post will demonstrate <code>dataRetrieval</code> functions to query the <a href="https://labs.waterdata.usgs.gov/about-nldi/index.html" class="external-link">Network Linked Data Index</a> (NLDI).</p>
+<p>This post will demonstrate <code>dataRetrieval</code> functions to query the <a href="https://labs.waterdata.usgs.gov/about-nldi/index.html">Network Linked Data Index</a> (NLDI).</p>
 <p>The NLDI provides a information backbone to navigate the NHDPlusV2 network and discover features indexed to the network. This process of feature discovery mirrors web-based navigation tools like Google Maps.</p>
 <hr>
 <div id="navigation-analogy" class="section level2">
 <h2 class="hasAnchor">
-<a href="#navigation-analogy" class="anchor" aria-hidden="true"></a>Navigation Analogy</h2>
+<a href="#navigation-analogy" class="anchor"></a>Navigation Analogy</h2>
 <p>Imagine you want to know about UCSB using Google Maps. In asking about the entity ‘UCSB’ we get information related to the feature (links, operating hours, photos) and things nearby.</p>
 <p><br><br></p>
 <div class="figure" style="text-align: center">
@@ -149,16 +144,16 @@ Gas stations between UCSB and UCLA
 </ol>
 <p>Each of these is discussed below using the following packages:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>         <span class="co"># Data frame manipulation</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>       <span class="co"># Plotting</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span>     <span class="co"># Arranging plots</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span> <span class="co"># The star of the show!</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>         <span class="co"># Data frame manipulation</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>       <span class="co"># Plotting</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>     <span class="co"># Arranging plots</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/">dataRetrieval</a></span><span class="op">)</span> <span class="co"># The star of the show!</span></code></pre></div>
 <hr>
 </div>
 <div id="whats-available" class="section level1">
 <h1 class="hasAnchor">
-<a href="#whats-available" class="anchor" aria-hidden="true"></a>What’s available?</h1>
-<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-07-30), 10 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
+<a href="#whats-available" class="anchor"></a>What’s available?</h1>
+<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-09-12), 10 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
@@ -176,52 +171,52 @@ Gas stations between UCSB and UCLA
 <tr class="odd">
 <td align="left">comid</td>
 <td align="left">NHDPlus comid</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid</a></td>
 </tr>
 <tr class="even">
 <td align="left">ca_gages</td>
 <td align="left">Streamgage catalog for CA SB19</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/ca_gages" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/ca_gages</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/ca_gages" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/ca_gages</a></td>
 </tr>
 <tr class="odd">
 <td align="left">gfv11_pois</td>
 <td align="left">USGS Geospatial Fabric V1.1 Points of Interest</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/gfv11_pois" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/gfv11_pois</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/gfv11_pois" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/gfv11_pois</a></td>
 </tr>
 <tr class="even">
 <td align="left">huc12pp</td>
 <td align="left">HUC12 Pour Points</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp</a></td>
 </tr>
 <tr class="odd">
 <td align="left">nwisgw</td>
 <td align="left">NWIS Groundwater Sites</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwisgw" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwisgw</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwisgw" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwisgw</a></td>
 </tr>
 <tr class="even">
 <td align="left">nwissite</td>
 <td align="left">NWIS Surface Water Sites</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite</a></td>
 </tr>
 <tr class="odd">
 <td align="left">ref_gage</td>
 <td align="left">geoconnex.us reference gages</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage</a></td>
 </tr>
 <tr class="even">
 <td align="left">vigil</td>
 <td align="left">Vigil Network Data</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/vigil" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/vigil</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/vigil" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/vigil</a></td>
 </tr>
 <tr class="odd">
 <td align="left">wade</td>
 <td align="left">Water Data Exchange 2.0 Sites</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade</a></td>
 </tr>
 <tr class="even">
 <td align="left">WQP</td>
 <td align="left">Water Quality Portal</td>
-<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp" class="external-link uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp</a></td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp</a></td>
 </tr>
 </tbody>
 </table>
@@ -229,11 +224,11 @@ Gas stations between UCSB and UCLA
 </div>
 <div id="featureorigin-discovery" class="section level1">
 <h1 class="hasAnchor">
-<a href="#featureorigin-discovery" class="anchor" aria-hidden="true"></a>Feature/Origin discovery</h1>
+<a href="#featureorigin-discovery" class="anchor"></a>Feature/Origin discovery</h1>
 <p>Features can be requested in two primary ways: Using the the native data set identifier, and using a location. The core feature set of the NLDI include the <code>NHD</code> flowlines, USGS <code>NWIS</code> locations, <code>WQP</code> locations, and <code>HUC12</code> pour points. Each of these are available as arguments in <code>findNLDI</code> and can be used to request a feature object.</p>
 <div id="by-identifier" class="section level3">
 <h3 class="hasAnchor">
-<a href="#by-identifier" class="anchor" aria-hidden="true"></a>By Identifier</h3>
+<a href="#by-identifier" class="anchor"></a>By Identifier</h3>
 <p>As an illustrative example, NHDPlus features can be requested by their COMID from the NHDPlusV2 data set.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span><span class="op">)</span></code></pre></div>
@@ -241,18 +236,18 @@ Gas stations between UCSB and UCLA
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
-#&gt; Geodetic CRS:  WGS 84
+#&gt; CRS:           4326
 #&gt; # A tibble: 1 × 4
-#&gt;   sourceName   identifier comid                                         geometry
-#&gt;   &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                                 &lt;LINESTRING [°]&gt;
-#&gt; 1 NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…</code></pre>
-<p>The returned simple features object contains the native data set identifier (“identifier”), sourceName of the native data set, and the indexed NHD COMID (in this case a duplicate since an NHD feature was requested). In the example above, we see the geometry column is of type <code>LINESTRING</code>. To keep <code>dataRetrieval</code> lightweight, the <a href="https://r-spatial.github.io/sf/articles/sf1.html" class="external-link"><code>sf</code></a> package is not a dependency. Instead, if <code>sf</code> is not installed - or <code>no_sf = TRUE</code> - only the <em>sourceName</em>, <em>comid</em>, and <em>identifier</em> will be returned.</p>
+#&gt;   sourceName    identifier comid                                        geometry
+#&gt;   &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;                                &lt;LINESTRING [°]&gt;
+#&gt; 1 NHDPlus comid 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.6…</code></pre>
+<p>The returned simple features object contains the native data set identifier (“identifier”), sourceName of the native data set, and the indexed NHD COMID (in this case a duplicate since an NHD feature was requested). In the example above, we see the geometry column is of type <code>LINESTRING</code>. To keep <code>dataRetrieval</code> lightweight, the <a href="https://r-spatial.github.io/sf/articles/sf1.html"><code>sf</code></a> package is not a dependency. Instead, if <code>sf</code> is not installed - or <code>no_sf = TRUE</code> - only the <em>sourceName</em>, <em>comid</em>, and <em>identifier</em> will be returned.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;      sourceName identifier comid
 #&gt; 1 NHDPlus comid        101   101</code></pre>
 <hr>
-<p>To provide another example, we can request the NLDI representation of USGS NWIS gauge <a href="https://waterdata.usgs.gov/monitoring-location/11120000" class="external-link">11120000</a> in both a <code>sf</code> and “non-sf” way. Features indexed to the NHDPlus are returned as <code>POINT</code> objects. If <code>sf</code> is enabled, the <em>sourceName</em>, <em>identifier</em>, <em>X</em>, <em>Y</em> and <em>geometry</em> (<code>sfc</code>) are returned. If <code>sf</code> is not available, the <em>geometry</em> is dropped but the <em>X</em> and <em>Y</em> values are retained.</p>
+<p>To provide another example, we can request the NLDI representation of USGS NWIS gauge <a href="https://waterdata.usgs.gov/monitoring-location/11120000">11120000</a> in both a <code>sf</code> and “non-sf” way. Features indexed to the NHDPlus are returned as <code>POINT</code> objects. If <code>sf</code> is enabled, the <em>sourceName</em>, <em>identifier</em>, <em>X</em>, <em>Y</em> and <em>geometry</em> (<code>sfc</code>) are returned. If <code>sf</code> is not available, the <em>geometry</em> is dropped but the <em>X</em> and <em>Y</em> values are retained.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># local sf installation</span>
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span><span class="op">)</span></code></pre></div>
@@ -260,11 +255,11 @@ Gas stations between UCSB and UCLA
 #&gt; Geometry type: POINT
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
-#&gt; Geodetic CRS:  WGS 84
+#&gt; CRS:           4326
 #&gt; # A tibble: 1 × 6
-#&gt;   sourceName              identifier    comid       X     Y             geometry
-#&gt;   &lt;chr&gt;                   &lt;chr&gt;         &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;          &lt;POINT [°]&gt;
-#&gt; 1 NWIS Surface Water Sit… USGS-11120000 175954… -120.  34.4 (-119.8118 34.42472)</code></pre>
+#&gt;   sourceName               identifier    comid        X     Y             geometry
+#&gt;   &lt;chr&gt;                    &lt;chr&gt;         &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;          &lt;POINT [°]&gt;
+#&gt; 1 NWIS Surface Water Sites USGS-11120000 17595429 -120.  34.4 (-119.8118 34.42472)</code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># No sf use/installation</span>
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
@@ -274,51 +269,51 @@ Gas stations between UCSB and UCLA
 <p>Any NLDI feature found with <code>get_nldi_source</code> can be requested by passing a <code>type</code>/<code>ID</code> pair as a list to the <code>origin</code> argument. This will allow the networking capabilities offered in <code>dataRetrieval</code> to grow naturally with the NLDI itself. For example, we can use the origin argument to request features that don’t offer a specific parameter.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Water Data Exchange 2.0 Site CA_45206</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"wade"</span> <span class="op">=</span> <span class="st">'CA_45206'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"wade"</span> <span class="op">=</span> <span class="st">'CA_45206'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Simple feature collection with 1 feature and 5 fields
 #&gt; Geometry type: POINT
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: -119.7917 ymin: 34.47273 xmax: -119.7917 ymax: 34.47273
-#&gt; Geodetic CRS:  WGS 84
+#&gt; CRS:           4326
 #&gt; # A tibble: 1 × 6
-#&gt;   sourceName                identifier comid       X     Y              geometry
-#&gt;   &lt;chr&gt;                     &lt;chr&gt;      &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;           &lt;POINT [°]&gt;
-#&gt; 1 Water Data Exchange 2.0 … CA_45206   175952… -120.  34.5  (-119.7917 34.47273)</code></pre>
+#&gt;   sourceName                    identifier comid        X     Y             geometry
+#&gt;   &lt;chr&gt;                         &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;          &lt;POINT [°]&gt;
+#&gt; 1 Water Data Exchange 2.0 Sites CA_45206   17595277 -120.  34.5 (-119.7917 34.47273)</code></pre>
 </div>
 <div id="location-longitudelatitude" class="section level3">
 <h3 class="hasAnchor">
-<a href="#location-longitudelatitude" class="anchor" aria-hidden="true"></a>Location (longitude/latitude)</h3>
+<a href="#location-longitudelatitude" class="anchor"></a>Location (longitude/latitude)</h3>
 <p>If you don’t know a feature ID, a <code>longitude</code>/<code>latitude</code> (X,Y) pair or a sf/sfc POINT object can be passed to the <code>location</code> argument. Doing so will identify the NHDPlus catchment the location fall within and will return the associated NHDPlusV2 flowline.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Request by coordinates</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">115</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">115</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Simple feature collection with 1 feature and 3 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: -115.0326 ymin: 40.04013 xmax: -115.0182 ymax: 40.05183
-#&gt; Geodetic CRS:  WGS 84
+#&gt; CRS:           4326
 #&gt; # A tibble: 1 × 4
-#&gt;   sourceName   identifier comid                                         geometry
-#&gt;   &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                                 &lt;LINESTRING [°]&gt;
-#&gt; 1 NHDPlus com… 946060315  94606… (-115.0182 40.05183, -115.0185 40.05176, -115.…</code></pre>
+#&gt;   sourceName    identifier comid                                        geometry
+#&gt;   &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;                                &lt;LINESTRING [°]&gt;
+#&gt; 1 NHDPlus comid 946060315  946060315 (-115.0182 40.05183, -115.0185 40.05176, -…</code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Request by sf/sfc POINT object</span>
-<span class="va">ucsb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">119.8458</span>, Y <span class="op">=</span> <span class="fl">34.4146</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
+<span class="va">ucsb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">119.8458</span>, Y <span class="op">=</span> <span class="fl">34.4146</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="va">ucsb</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Simple feature collection with 1 feature and 3 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: -119.8823 ymin: 34.40438 xmax: -119.8256 ymax: 34.4179
-#&gt; Geodetic CRS:  WGS 84
+#&gt; CRS:           4326
 #&gt; # A tibble: 1 × 4
-#&gt;   sourceName   identifier comid                                         geometry
-#&gt;   &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                                 &lt;LINESTRING [°]&gt;
-#&gt; 1 NHDPlus com… 948060316  94806… (-119.8823 34.41072, -119.8822 34.4106, -119.8…</code></pre>
+#&gt;   sourceName    identifier comid                                        geometry
+#&gt;   &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;                                &lt;LINESTRING [°]&gt;
+#&gt; 1 NHDPlus comid 948060316  948060316 (-119.8823 34.41072, -119.8822 34.4106, -1…</code></pre>
 </div>
 </div>
 <div id="navigation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#navigation" class="anchor" aria-hidden="true"></a>Navigation</h1>
+<a href="#navigation" class="anchor"></a>Navigation</h1>
 <p>From any feature (<code>comid</code>, <code>huc12</code>, <code>nwis</code>, <code>wqp</code>, <code>origin</code>) or <code>location</code>, four modes of navigation are available and include:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -330,7 +325,7 @@ Gas stations between UCSB and UCLA
 <li>
 <strong>DD</strong>: Downstream Diversions</li>
 </ol>
-<p>A example view of these navigation types can be seen below for NWIS site <a href="https://waterdata.usgs.gov/monitoring-location/11109000" class="external-link">11109000</a>.</p>
+<p>A example view of these navigation types can be seen below for NWIS site <a href="https://waterdata.usgs.gov/monitoring-location/11109000">11109000</a>.</p>
 <div class="figure" style="text-align: center">
 <img src="nldi_files/figure-html/unnamed-chunk-11-1.png" alt="NLDI Navigation Options" width="75%"><p class="caption">
 NLDI Navigation Options
@@ -339,22 +334,22 @@ NLDI Navigation Options
 <p>One or more modes of navigation can be supplied to the <code>nav</code> argument. For example we can ask to navigate along the upper mainstem (UM) from COMID 101.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">summarize.nldi</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">input</span><span class="op">)</span>, 
-             class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">class</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, 
-             row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>feature_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">class</span> <span class="op">==</span> <span class="st">"sf"</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">nrow</span><span class="op">)</span>, 
-                                  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">length</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">input</span><span class="op">)</span>, 
+             class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">class</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, 
+             row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>feature_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">class</span> <span class="op">==</span> <span class="st">"sf"</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">nrow</span><span class="op">)</span>, 
+                                  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">length</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
 
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UM"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;           name class feature_count
 #&gt; 1       origin    sf             1
 #&gt; 2 UM_flowlines    sf            14</code></pre>
 <p>Or along the upper mainstem (UM) <em>and</em> upper tributary (UT) of COMID 101.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"UT"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"UT"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;           name class feature_count
 #&gt; 1       origin    sf             1
@@ -362,7 +357,7 @@ NLDI Navigation Options
 #&gt; 3 UT_flowlines    sf           325</code></pre>
 <p>In both cases the returned named list includes the origin and the flowlines along the requested navigation. If <code>sf</code> is not enabled, the returned object for a flowpath navigation is a vector of COMIDs.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"DM"</span><span class="op">)</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"DM"</span><span class="op">)</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;           name      class feature_count
 #&gt; 1       origin data.frame             3
@@ -371,17 +366,17 @@ NLDI Navigation Options
 </div>
 <div id="searching-along-the-navigation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#searching-along-the-navigation" class="anchor" aria-hidden="true"></a>Searching along the Navigation</h1>
+<a href="#searching-along-the-navigation" class="anchor"></a>Searching along the Navigation</h1>
 <p>Like the gas station example, any of the features listed in <code>get_nldi_sources</code> can be searched for along the network, for example, we can find all NWIS gauges, on the upper tributary, of COMID 101.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="st">"nwis"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="st">"nwis"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;          name class feature_count
 #&gt; 1      origin    sf             1
 #&gt; 2 UT_nwissite    sf             2</code></pre>
 <p>Of course, more than one resource can be requested, for example, lets replicate the previous search, this time adding Water Quality Points to the returned list:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;          name class feature_count
 #&gt; 1      origin    sf             1
@@ -389,7 +384,7 @@ NLDI Navigation Options
 #&gt; 3      UT_WQP    sf            29</code></pre>
 <p>Note that flowlines are no longer the default return for navigation once a new feature is requested. To retain flowlines, the must be explicitly requested.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"flowlines"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"flowlines"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;           name class feature_count
 #&gt; 1       origin    sf             1
@@ -397,18 +392,18 @@ NLDI Navigation Options
 #&gt; 3 UT_flowlines    sf           325</code></pre>
 <div id="upstream-basin-boundary" class="section level3">
 <h3 class="hasAnchor">
-<a href="#upstream-basin-boundary" class="anchor" aria-hidden="true"></a>Upstream Basin Boundary</h3>
+<a href="#upstream-basin-boundary" class="anchor"></a>Upstream Basin Boundary</h3>
 <p>The Upstream Basin Boundary is a unique object that can be found for any feature by adding “basin” to <code>find.</code> Basins are only geometries with no specific attribute data. Therefore basins can only be returned if <code>sf</code> is installed. Otherwise, the result will be a 0 column <code>data.frame</code></p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># with sf</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;     name class feature_count
 #&gt; 1 origin    sf             1
 #&gt; 2  basin    sf             1</code></pre>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># No sf</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;     name      class feature_count
 #&gt; 1 origin data.frame             3
@@ -416,11 +411,11 @@ NLDI Navigation Options
 </div>
 <div id="distance-constraints" class="section level3">
 <h3 class="hasAnchor">
-<a href="#distance-constraints" class="anchor" aria-hidden="true"></a>Distance Constraints</h3>
+<a href="#distance-constraints" class="anchor"></a>Distance Constraints</h3>
 <p>In some cases, particularly for DM and DD navigation, the network can extend for hundreds of kilometers. You can limit (or extend) the distance of your search using the <code>distance_km</code> argument. As the name implies the value provided should be the maximum kilometers you want to search for features. The default for <code>distance_km</code> is 100.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Default 100 km</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;          name class feature_count
 #&gt; 1      origin    sf             1
@@ -428,7 +423,7 @@ NLDI Navigation Options
 #&gt; 3      DM_WQP    sf             5</code></pre>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Extended 200 km search</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span>, distance_km <span class="op">=</span> <span class="fl">200</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span>, distance_km <span class="op">=</span> <span class="fl">200</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;          name class feature_count
 #&gt; 1      origin    sf             1
@@ -438,14 +433,14 @@ NLDI Navigation Options
 </div>
 <div id="basic-dataretrieval-integration" class="section level1">
 <h1 class="hasAnchor">
-<a href="#basic-dataretrieval-integration" class="anchor" aria-hidden="true"></a>Basic <code>dataRetrieval</code> integration</h1>
-<p>Last, as this functionality is being added to the <code>dataRetrieval</code> package, lets see a basic example of how the NLDI tools provide a discovery mechanism for working with the <code>dataRetrieval</code> tools. Here we will take a location that is near <a href="https://www.google.com/maps/place/Colorado+Springs,+CO/@38.7864572,-104.7829507,17z" class="external-link">Fountain Creek in Colorado Springs, Colorado</a>.</p>
+<a href="#basic-dataretrieval-integration" class="anchor"></a>Basic <code>dataRetrieval</code> integration</h1>
+<p>Last, as this functionality is being added to the <code>dataRetrieval</code> package, lets see a basic example of how the NLDI tools provide a discovery mechanism for working with the <code>dataRetrieval</code> tools. Here we will take a location that is near <a href="https://www.google.com/maps/place/Colorado+Springs,+CO/@38.7864572,-104.7829507,17z">Fountain Creek in Colorado Springs, Colorado</a>.</p>
 <p>In this example we will use that location as the origin, navigate upstream along the mainstem, search for NWIS gauges, and use the identified siteIDs to query streamflow records from January 1<sup>st</sup>, 2020 to the current day.</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Upstream nwis, flowlines, and basin</span>
-<span class="va">fountainCreek</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">104.780837</span>, <span class="fl">38.786796</span><span class="op">)</span>, 
+<span class="va">fountainCreek</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">104.780837</span>, <span class="fl">38.786796</span><span class="op">)</span>, 
                           nav <span class="op">=</span> <span class="st">"UM"</span>, 
-                          find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"basin"</span>, <span class="st">"flowlines"</span><span class="op">)</span><span class="op">)</span>
+                          find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"basin"</span>, <span class="st">"flowlines"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu">summarize.nldi</span><span class="op">(</span><span class="va">fountainCreek</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;           name class feature_count
@@ -457,39 +452,39 @@ NLDI Navigation Options
 <code class="sourceCode R"><span class="co"># Identify NLDI sites with daily values "dv"</span>
 <span class="co">#     and record streamflow ("00060")</span>
 <span class="co">#     and recorded flows in 2020</span>
-<span class="va">find</span> <span class="op">=</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>sites <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="st">""</span>, <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span><span class="op">$</span><span class="va">identifier</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">data_type_cd</span> <span class="op">==</span> <span class="st">"dv"</span>, 
+<span class="va">find</span> <span class="op">=</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>sites <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="st">""</span>, <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span><span class="op">$</span><span class="va">identifier</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">data_type_cd</span> <span class="op">==</span> <span class="st">"dv"</span>, 
          <span class="va">parm_cd</span> <span class="op">==</span> <span class="st">"00060"</span>,
-         <span class="va">end_date</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2020-01-01"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>identifier  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="va">site_no</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span><span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span>, by <span class="op">=</span> <span class="st">"identifier"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span>
+         <span class="va">end_date</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html">as.Date</a></span><span class="op">(</span><span class="st">"2020-01-01"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>identifier  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="va">site_no</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span>, by <span class="op">=</span> <span class="st">"identifier"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># Extract Streamflow for identified sites</span>
 <span class="va">Q</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">find</span><span class="op">$</span><span class="va">site_no</span>, 
                 parameterCd <span class="op">=</span> <span class="st">"00060"</span>, 
-                startDate <span class="op">=</span> <span class="st">"2020-01-01"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+                startDate <span class="op">=</span> <span class="st">"2020-01-01"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/renameNWISColumns.html">renameNWISColumns</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># Plot! </span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Q</span>, 
-            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Date</span>, y <span class="op">=</span> <span class="va">Flow</span>, col <span class="op">=</span> <span class="va">site_no</span><span class="op">)</span>,
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Q</span>, 
+            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Date</span>, y <span class="op">=</span> <span class="va">Flow</span>, col <span class="op">=</span> <span class="va">site_no</span><span class="op">)</span>,
             size <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">site_no</span>, nrow <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span> 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fountainCreek</span><span class="op">$</span><span class="va">basin</span>, col <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_flowlines</span>, col <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">find</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">site_no</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"2020 Streamflow"</span>,
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">site_no</span>, nrow <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span> 
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fountainCreek</span><span class="op">$</span><span class="va">basin</span>, col <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_flowlines</span>, col <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">find</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">site_no</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"2020 Streamflow"</span>,
        caption <span class="op">=</span> <span class="st">"Fountain Creek, Colorado"</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span>,
-         plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, hjust <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span>,
+         plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, hjust <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="nldi_files/figure-html/unnamed-chunk-22-1.png" width="75%" style="display: block; margin: auto;"></p>
 </div>
   </div>
@@ -505,13 +500,11 @@ NLDI Navigation Options
 
 
       <footer><div class="copyright">
-  <p></p>
-<p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
+  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -519,8 +512,6 @@ NLDI Navigation Options
 
   
 
-
-  
 
   </body>
 </html>

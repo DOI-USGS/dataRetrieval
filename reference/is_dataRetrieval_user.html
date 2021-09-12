@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>List of USGS parameter codes — parameterCdFile • dataRetrieval</title>
+<title>Is this a dataRetrieval user — is_dataRetrieval_user • dataRetrieval</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="List of USGS parameter codes — parameterCdFile" />
-<meta property="og:description" content="Complete list of USGS parameter codes as of Oct. 13, 2020." />
+<meta property="og:title" content="Is this a dataRetrieval user — is_dataRetrieval_user" />
+<meta property="og:description" content="Reveals if this is a user or not" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -147,41 +147,22 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>List of USGS parameter codes</h1>
-    <small class="dont-index">Source: <a href='https://github.com/USGS-R/dataRetrieval/blob/master/R/tabbedDataRetrievals.R'><code>R/tabbedDataRetrievals.R</code></a></small>
-    <div class="hidden name"><code>parameterCdFile.Rd</code></div>
+    <h1>Is this a dataRetrieval user</h1>
+    <small class="dont-index">Source: <a href='https://github.com/USGS-R/dataRetrieval/blob/master/R/AAA.R'><code>R/AAA.R</code></a></small>
+    <div class="hidden name"><code>is_dataRetrieval_user.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Complete list of USGS parameter codes as of Oct. 13, 2020.</p>
+    <p>Reveals if this is a user or not</p>
     </div>
 
-
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>parameterData data frame with information about USGS parameters.</p>
-<table class='table'>
-<tr><td>Name</td><td>Type</td><td>Description</td></tr>
-<tr><td>parameter_cd</td><td>character</td><td>5-digit USGS parameter code</td></tr>
-<tr><td>parameter_group_nm</td><td>character</td><td>USGS parameter group name</td></tr>
-<tr><td>parameter_nm</td><td>character</td><td>USGS parameter name</td></tr>
-<tr><td>casrn</td><td>character</td><td>Chemical Abstracts Service (CAS) Registry Number</td></tr>
-<tr><td>srsname</td><td>character</td><td>Substance Registry Services Name</td></tr>
-<tr><td>parameter_units</td><td>character</td><td>Parameter units</td></tr>
-</table>
+    <pre class="usage"><span class='fu'>is_dataRetrieval_user</span><span class='op'>(</span><span class='op'>)</span></pre>
 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>parameterCdFile</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   parameter_cd parameter_group_nm
-#&gt; 1        00001        Information
-#&gt; 2        00002        Information
-#&gt; 3        00003        Information
-#&gt; 4        00005        Information
-#&gt; 5        00008        Information
-#&gt; 6        00009        Information</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>is_dataRetrieval_user</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

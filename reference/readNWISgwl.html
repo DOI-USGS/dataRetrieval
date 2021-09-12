@@ -57,8 +57,6 @@ See https://waterservices.usgs.gov/rest/GW-Levels-Service.html for more informat
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -80,15 +78,9 @@ See https://waterservices.usgs.gov/rest/GW-Levels-Service.html for more informat
 </script>
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -102,7 +94,7 @@ See https://waterservices.usgs.gov/rest/GW-Levels-Service.html for more informat
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.10</span>
       </span>
     </div>
 
@@ -132,9 +124,6 @@ See https://waterservices.usgs.gov/rest/GW-Levels-Service.html for more informat
     </li>
     <li>
       <a href="../articles/statsServiceMap.html">Stat Service</a>
-    </li>
-    <li>
-      <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
     <li>
       <a href="../articles/nldi.html">NLDI Interface</a>
@@ -175,14 +164,14 @@ is specified as FALSE. Sites with non-standard date formats (i.e. lacking a day)
 See <a href='https://waterservices.usgs.gov/rest/GW-Levels-Service.html'>https://waterservices.usgs.gov/rest/GW-Levels-Service.html</a> for more information.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>readNWISgwl</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>readNWISgwl</span><span class='op'>(</span>
   <span class='va'>siteNumbers</span>,
   startDate <span class='op'>=</span> <span class='st'>""</span>,
   endDate <span class='op'>=</span> <span class='st'>""</span>,
   parameterCd <span class='op'>=</span> <span class='cn'>NA</span>,
   convertType <span class='op'>=</span> <span class='cn'>TRUE</span>,
   tz <span class='op'>=</span> <span class='st'>"UTC"</span>
-<span class='op'>)</span></code></pre></div>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -252,20 +241,19 @@ for more information on time zones.</p></td>
     <div class='dont-index'><p><code><a href='constructNWISURL.html'>constructNWISURL</a></code>, <code><a href='importRDB1.html'>importRDB1</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>site_id</span> <span class='op'>&lt;-</span> <span class='st'>"434400121275801"</span></span>
-<span class='r-in'><span class='co'># \donttest{</span></span>
-<span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISgwl</span><span class='op'>(</span><span class='va'>site_id</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>sites</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"434400121275801"</span>, <span class='st'>"375907091432201"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>data2</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISgwl</span><span class='op'>(</span><span class='va'>site_id</span>, <span class='st'>''</span>,<span class='st'>''</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>data3</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISgwl</span><span class='op'>(</span><span class='st'>"420125073193001"</span>, <span class='st'>''</span>,<span class='st'>''</span><span class='op'>)</span></span>
-<span class='r-in'><span class='co'>#handling of data where date has no day</span></span>
-<span class='r-in'><span class='va'>data4</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISgwl</span><span class='op'>(</span><span class='st'>"425957088141001"</span>, startDate <span class='op'>=</span> <span class='st'>"1980-01-01"</span><span class='op'>)</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Not all dates were converted to Date object. Returning raw text for date columns.</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>data5</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISgwl</span><span class='op'>(</span><span class='st'>"263819081585801"</span>, parameterCd <span class='op'>=</span> <span class='st'>"72019"</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># }</span></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='va'>site_id</span> <span class='op'>&lt;-</span> <span class='st'>"434400121275801"</span>
+<span class='co'># \donttest{</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISgwl</span><span class='op'>(</span><span class='va'>site_id</span><span class='op'>)</span>
+<span class='va'>sites</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"434400121275801"</span>, <span class='st'>"375907091432201"</span><span class='op'>)</span>
+<span class='va'>data2</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISgwl</span><span class='op'>(</span><span class='va'>site_id</span>, <span class='st'>''</span>,<span class='st'>''</span><span class='op'>)</span>
+<span class='va'>data3</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISgwl</span><span class='op'>(</span><span class='st'>"420125073193001"</span>, <span class='st'>''</span>,<span class='st'>''</span><span class='op'>)</span>
+<span class='co'>#handling of data where date has no day</span>
+<span class='va'>data4</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISgwl</span><span class='op'>(</span><span class='st'>"425957088141001"</span>, startDate <span class='op'>=</span> <span class='st'>"1980-01-01"</span><span class='op'>)</span> 
+</div><div class='output co'>#&gt; <span class='message'>Not all dates were converted to Date object. Returning raw text for date columns.</span></div><div class='input'>
+<span class='va'>data5</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISgwl</span><span class='op'>(</span><span class='st'>"263819081585801"</span>, parameterCd <span class='op'>=</span> <span class='st'>"72019"</span><span class='op'>)</span>
+
+<span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -277,11 +265,11 @@ for more information on time zones.</p></td>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p></p>
+  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -289,8 +277,6 @@ for more information on time zones.</p></td>
 
   
 
-
-  
 
   </body>
 </html>

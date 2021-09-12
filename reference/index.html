@@ -52,8 +52,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -75,15 +73,9 @@
 </script>
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -97,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.10</span>
       </span>
     </div>
 
@@ -127,9 +119,6 @@
     </li>
     <li>
       <a href="../articles/statsServiceMap.html">Stat Service</a>
-    </li>
-    <li>
-      <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
     <li>
       <a href="../articles/nldi.html">NLDI Interface</a>
@@ -351,6 +340,55 @@
           <p><code><a href="findNLDI.html">findNLDI()</a></code> </p>
         </td>
         <td><p>R Client for the Network Linked Data Index</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_nldi_sources.html">get_nldi_sources()</a></code> </p>
+        </td>
+        <td><p>Get current NLDI offerings</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-import-data" class="hasAnchor"><a href="#section-import-data" class="anchor"></a>Import data</h2>
+          <p class="section-desc"><p>Functions to import different data formats</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="importRDB1.html">importRDB1()</a></code> </p>
+        </td>
+        <td><p>Function to return data from the NWIS RDB 1.0 format</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="importNGWMN.html">importNGWMN()</a></code> </p>
+        </td>
+        <td><p>Function to return data from the National Ground Water Monitoring Network waterML2 format</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="importWaterML1.html">importWaterML1()</a></code> </p>
+        </td>
+        <td><p>Function to return data from the NWISWeb WaterML1.1 service</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="importWaterML2.html">importWaterML2()</a></code> </p>
+        </td>
+        <td><p>Parse the WaterML2 timeseries portion of a waterML2 file</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="importWQP.html">importWQP()</a></code> </p>
+        </td>
+        <td><p>Basic Water Quality Portal Data parser</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -403,9 +441,82 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="countyCd.html">countyCd</a></code> </p>
+        </td>
+        <td><p>US County Code Lookup Table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="parameterCdFile.html">parameterCdFile</a></code> </p>
+        </td>
+        <td><p>List of USGS parameter codes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="stateCd.html">stateCd</a></code> </p>
+        </td>
+        <td><p>US State Code Lookup Table</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="zeroPad.html">zeroPad()</a></code> </p>
         </td>
         <td><p>Pad string with leading zeros</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dataRetrieval.html">dataRetrieval</a></code> </p>
+        </td>
+        <td><p>Retrieval functions for USGS and EPA data</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-web-query-utilities" class="hasAnchor"><a href="#section-web-query-utilities" class="anchor"></a>Web query utilities</h2>
+          <p class="section-desc"><p>Functions to create web queries</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="constructNWISURL.html">constructNWISURL()</a></code> </p>
+        </td>
+        <td><p>Construct NWIS url for data retrieval</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="constructUseURL.html">constructUseURL()</a></code> </p>
+        </td>
+        <td><p>Construct URL for NWIS water use data service</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="constructWQPURL.html">constructWQPURL()</a></code> </p>
+        </td>
+        <td><p>Construct WQP url for data retrieval</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getQuerySummary.html">getQuerySummary()</a></code> </p>
+        </td>
+        <td><p>getting header information from a WQP query</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getWebServiceData.html">getWebServiceData()</a></code> </p>
+        </td>
+        <td><p>Function to return data from web services</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_dataRetrieval_user.html">is_dataRetrieval_user()</a></code> </p>
+        </td>
+        <td><p>Is this a dataRetrieval user</p></td>
       </tr>
     </tbody>
     </table>
@@ -421,11 +532,11 @@
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p></p>
+  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -433,8 +544,6 @@
 
   
 
-
-  
 
   </body>
 </html>
