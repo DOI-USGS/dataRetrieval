@@ -12,7 +12,7 @@
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
 #' @export
-#' @examples 
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' #one site
 #' site <- "USGS.430427089284901"

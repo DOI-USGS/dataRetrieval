@@ -311,7 +311,12 @@ leaflet(data=AZ_sites) %>%
 
 Now let's see what we get back from the `whatNWISdata` function:
 
-```{r azdata, echo=TRUE}
+```{r echo=FALSE}
+AZ_data <- readRDS("az_data.rds")
+names(AZ_data)
+```
+
+```{r azdata, echo=TRUE, eval=FALSE}
 AZ_data <- whatNWISdata(stateCd = "AZ", 
                          parameterCd = "00665")
 names(AZ_data)
@@ -343,7 +348,19 @@ The National Water Dashboard:
 
 Let's do one more example, we'll look for long-term USGS phosphorous data in Wisconsin. This time, we will take the information from the `whatNWISdata` function, filter down the sites to exactly our interest, and then get the data. Let's say we want data from sites that have been collecting data for at least 15 years and have at least 300 measurements:
 
-```{r echo=TRUE, eval=TRUE}
+```{r echo=FALSE}
+phWI <- readRDS("phWI.rds")
+
+library(dplyr)
+phWI.1 <- phWI %>% 
+  filter(count_nu > 300) %>%
+  mutate(period = as.Date(end_date) - as.Date(begin_date)) %>%
+  filter(period > 15*365)
+
+
+```
+
+```{r echo=TRUE, eval=FALSE}
 pCode <- c("00665")
 phWI <- whatNWISdata(stateCd="WI", 
                      parameterCd=pCode)
@@ -354,12 +371,14 @@ phWI.1 <- phWI %>%
   mutate(period = as.Date(end_date) - as.Date(begin_date)) %>%
   filter(period > 15*365)
 
-phos_WI_data <- readNWISqw(siteNumbers = phWI.1$site_no,
-                         parameterCd = pCode)
-
 
 ```
 
+```{r }
+phos_WI_data <- readNWISqw(siteNumbers = phWI.1$site_no,
+                           parameterCd = pCode)
+
+```
 
 Let's look at the maximum measured value, and number of samples:
 

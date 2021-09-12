@@ -126,7 +126,7 @@ whatWQPmetrics <- function(...){
 #' 
 #' @export
 #' @seealso whatNWISsites
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' site1 <- whatWQPdata(siteid="USGS-01594440")
 #' 

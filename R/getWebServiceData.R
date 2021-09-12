@@ -10,7 +10,7 @@
 #' @importFrom xml2 read_xml
 #' @export
 #' @return raw data from web services
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
 #' endDate <- "2012-10-01"

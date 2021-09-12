@@ -65,6 +65,7 @@ Arguments to the function should be based on \url{https://waterservices.usgs.gov
 See examples below for ideas of constructing queries.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Examples not run for time considerations
 
@@ -142,6 +143,7 @@ peak_data <- readNWISdata(service = "peak",
 
 
 }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link{renameNWISColumns}},  \code{\link{importWaterML1}}, \code{\link{importRDB1}}

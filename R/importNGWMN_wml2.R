@@ -136,7 +136,7 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
 #' @importFrom xml2 xml_attr xml_find_all xml_text 
 #' @export
-#' @examples 
+#' @examplesIf is_dataRetrieval_user()
 #' baseURL <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
 #' URL <- paste(baseURL, "sites=01646500",
 #'      "startDT=2014-09-01",
