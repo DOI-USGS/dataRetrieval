@@ -32,6 +32,8 @@ vignettes/usMaps_cache
 vignettes/movingAverages.Rmd
 vignettes/tutorial_slides.Rmd
 vignettes/nldi*
+vignettes/phWI.rds
+vignettes/az_data.rds
 vignettes/atascadero-creek-nldi.png
 vignettes/ucsb.png
 man/figures/highrezlogo-01.png
