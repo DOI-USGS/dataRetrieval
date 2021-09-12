@@ -56,7 +56,7 @@
 #' 
 #' @export
 #' @seealso whatNWISdata
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' 
 #' site1 <- whatWQPsites(siteid="USGS-01594440")

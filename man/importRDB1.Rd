@@ -55,6 +55,7 @@ NWIS site, parameter code, statistic, startdate and enddate. It is not
 recommended to use the RDB format for importing multi-site data.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 site_id <- "02177000"
 startDate <- "2012-09-01"
 endDate <- "2012-10-01"
@@ -97,5 +98,5 @@ filePath <- system.file("extdata", package="dataRetrieval")
 fileName <- "RDB1Example.txt"
 fullPath <- file.path(filePath, fileName)
 importUserRDB <- importRDB1(fullPath)
-
+\dontshow{\}) # examplesIf}
 }

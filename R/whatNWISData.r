@@ -49,7 +49,7 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' 
 #' availableData <- whatNWISdata(siteNumber = '05114000')

@@ -25,6 +25,7 @@ for more information on time zones.}
 Only water level data and site locations and names are currently available through the web service.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 #one site
 site <- "USGS.430427089284901"
@@ -52,5 +53,5 @@ noDataSite <- "UTGS.401544112060301"
 #bboxData <- readNGWMNdata(service = "observation", siteNumbers = bboxSites$site[1:3], 
 #asDateTime = FALSE)
 }
-
+\dontshow{\}) # examplesIf}
 }

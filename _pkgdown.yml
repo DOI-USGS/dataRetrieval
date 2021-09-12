@@ -18,8 +18,6 @@ navbar:
       href: articles/movingAverages.html
     - text: Stat Service
       href: articles/statsServiceMap.html
-    - text: Earthquake Exploration
-      href: articles/earthquake.html
     - text: NLDI Interface
       href: articles/nldi.html
   right:
@@ -63,6 +61,15 @@ reference:
     desc: Functions to interface with the NLDI.
     contents:
       - findNLDI
+      - get_nldi_sources
+  - title: Import data
+    desc: Functions to import different data formats
+    contents:
+      - importRDB1
+      - importNGWMN
+      - importWaterML1
+      - importWaterML2
+      - importWQP
   - title: Helper functions
     contents:
       - calcWaterYear
@@ -71,4 +78,17 @@ reference:
       - setAccess
       - countyCdLookup
       - stateCdLookup
+      - countyCd
+      - parameterCdFile
+      - stateCd
       - zeroPad
+      - dataRetrieval
+  - title: Web query utilities
+    desc: Functions to create web queries
+    contents:
+      - constructNWISURL
+      - constructUseURL
+      - constructWQPURL
+      - getQuerySummary
+      - getWebServiceData
+      - is_dataRetrieval_user

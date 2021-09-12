@@ -124,6 +124,7 @@ either USGS, or other Water Quality Portal offered sites. It is required to use 
 site name, such as 'USGS-01234567'.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
 rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
@@ -132,6 +133,7 @@ nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','2012-
 nwisEx.summary <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),
     '','2012-12-20', querySummary=TRUE)
 }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 

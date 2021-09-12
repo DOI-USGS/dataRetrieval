@@ -65,6 +65,7 @@ navigated paths. Valid starting options can be given by one of the following
 arguments: comid, nwis, huc12, wqp, location, and start.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Find Features / Define origin features
 
@@ -106,5 +107,6 @@ arguments: comid, nwis, huc12, wqp, location, and start.
 ## Limit search to 50 km
  findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
 }
+\dontshow{\}) # examplesIf}
 }
 \keyword{nldi}
