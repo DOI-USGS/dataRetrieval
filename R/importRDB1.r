@@ -135,6 +135,7 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz="UTC"){
   if(data.rows > 0){
     args_list <- list(file = f,
                  delim = "\t",
+                 quote = "",
                  skip = meta.rows + 2,
                  col_names = FALSE)
     if(utils::packageVersion("readr") > 1.4){
