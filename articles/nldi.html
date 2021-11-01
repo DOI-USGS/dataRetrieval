@@ -105,7 +105,7 @@
 </h1>
                         <h4 class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
             
-            <h4 class="date">2021-09-12</h4>
+            <h4 class="date">2021-11-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/master/vignettes/nldi.Rmd"><code>vignettes/nldi.Rmd</code></a></small>
       <div class="hidden name"><code>nldi.Rmd</code></div>
@@ -153,7 +153,7 @@ Gas stations between UCSB and UCLA
 <div id="whats-available" class="section level1">
 <h1 class="hasAnchor">
 <a href="#whats-available" class="anchor"></a>What’s available?</h1>
-<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-09-12), 10 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
+<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-11-01), 11 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
@@ -189,31 +189,36 @@ Gas stations between UCSB and UCLA
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp</a></td>
 </tr>
 <tr class="odd">
+<td align="left">nmwdi-st</td>
+<td align="left">New Mexico Water Data Initative Sites</td>
+<td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/nmwdi-st" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/nmwdi-st</a></td>
+</tr>
+<tr class="even">
 <td align="left">nwisgw</td>
 <td align="left">NWIS Groundwater Sites</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwisgw" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwisgw</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">nwissite</td>
 <td align="left">NWIS Surface Water Sites</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">ref_gage</td>
 <td align="left">geoconnex.us reference gages</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">vigil</td>
 <td align="left">Vigil Network Data</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/vigil" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/vigil</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">wade</td>
 <td align="left">Water Data Exchange 2.0 Sites</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">WQP</td>
 <td align="left">Water Quality Portal</td>
 <td align="left"><a href="https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp" class="uri">https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp</a></td>
@@ -232,53 +237,56 @@ Gas stations between UCSB and UCLA
 <p>As an illustrative example, NHDPlus features can be requested by their COMID from the NHDPlusV2 data set.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; Simple feature collection with 1 feature and 3 fields
+<pre><code>#&gt; Simple feature collection with 1 feature and 4 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915
 #&gt; CRS:           4326
-#&gt; # A tibble: 1 × 4
-#&gt;   sourceName    identifier comid                                        geometry
-#&gt;   &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;                                &lt;LINESTRING [°]&gt;
-#&gt; 1 NHDPlus comid 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.6…</code></pre>
+#&gt; # A tibble: 1 × 5
+#&gt;   sourceName    identifier comid name                                   geometry
+#&gt;   &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;                          &lt;LINESTRING [°]&gt;
+#&gt; 1 NHDPlus comid 101        101   ""    (-94.64845 31.09915, -94.64803 31.09871,…</code></pre>
 <p>The returned simple features object contains the native data set identifier (“identifier”), sourceName of the native data set, and the indexed NHD COMID (in this case a duplicate since an NHD feature was requested). In the example above, we see the geometry column is of type <code>LINESTRING</code>. To keep <code>dataRetrieval</code> lightweight, the <a href="https://r-spatial.github.io/sf/articles/sf1.html"><code>sf</code></a> package is not a dependency. Instead, if <code>sf</code> is not installed - or <code>no_sf = TRUE</code> - only the <em>sourceName</em>, <em>comid</em>, and <em>identifier</em> will be returned.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt;      sourceName identifier comid
+<pre><code>#&gt;      sourceName identifier comid name
 #&gt; 1 NHDPlus comid        101   101</code></pre>
 <hr>
 <p>To provide another example, we can request the NLDI representation of USGS NWIS gauge <a href="https://waterdata.usgs.gov/monitoring-location/11120000">11120000</a> in both a <code>sf</code> and “non-sf” way. Features indexed to the NHDPlus are returned as <code>POINT</code> objects. If <code>sf</code> is enabled, the <em>sourceName</em>, <em>identifier</em>, <em>X</em>, <em>Y</em> and <em>geometry</em> (<code>sfc</code>) are returned. If <code>sf</code> is not available, the <em>geometry</em> is dropped but the <em>X</em> and <em>Y</em> values are retained.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># local sf installation</span>
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; Simple feature collection with 1 feature and 5 fields
+<pre><code>#&gt; Simple feature collection with 1 feature and 8 fields
 #&gt; Geometry type: POINT
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472
 #&gt; CRS:           4326
-#&gt; # A tibble: 1 × 6
-#&gt;   sourceName               identifier    comid        X     Y             geometry
-#&gt;   &lt;chr&gt;                    &lt;chr&gt;         &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;          &lt;POINT [°]&gt;
-#&gt; 1 NWIS Surface Water Sites USGS-11120000 17595429 -120.  34.4 (-119.8118 34.42472)</code></pre>
+#&gt; # A tibble: 1 × 9
+#&gt;   sourceName               identifier  comid name  reachcode measure     X     Y
+#&gt;   &lt;chr&gt;                    &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1 NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -120.  34.4
+#&gt; # … with 1 more variable: geometry &lt;POINT [°]&gt;</code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># No sf use/installation</span>
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt;                 sourceName    identifier    comid         X        Y
-#&gt; 1 NWIS Surface Water Sites USGS-11120000 17595429 -119.8118 34.42472</code></pre>
+<pre><code>#&gt;                 sourceName    identifier    comid                      name
+#&gt; 1 NWIS Surface Water Sites USGS-11120000 17595429 ATASCADERO C NR GOLETA CA
+#&gt;        reachcode       measure         X        Y
+#&gt; 1 18060013000423 92.6508200000 -119.8118 34.42472</code></pre>
 <hr>
 <p>Any NLDI feature found with <code>get_nldi_source</code> can be requested by passing a <code>type</code>/<code>ID</code> pair as a list to the <code>origin</code> argument. This will allow the networking capabilities offered in <code>dataRetrieval</code> to grow naturally with the NLDI itself. For example, we can use the origin argument to request features that don’t offer a specific parameter.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Water Data Exchange 2.0 Site CA_45206</span>
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"wade"</span> <span class="op">=</span> <span class="st">'CA_45206'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; Simple feature collection with 1 feature and 5 fields
+<pre><code>#&gt; Simple feature collection with 1 feature and 6 fields
 #&gt; Geometry type: POINT
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: -119.7917 ymin: 34.47273 xmax: -119.7917 ymax: 34.47273
 #&gt; CRS:           4326
-#&gt; # A tibble: 1 × 6
-#&gt;   sourceName                    identifier comid        X     Y             geometry
-#&gt;   &lt;chr&gt;                         &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;          &lt;POINT [°]&gt;
-#&gt; 1 Water Data Exchange 2.0 Sites CA_45206   17595277 -120.  34.5 (-119.7917 34.47273)</code></pre>
+#&gt; # A tibble: 1 × 7
+#&gt;   sourceName           identifier comid   name      X     Y             geometry
+#&gt;   &lt;chr&gt;                &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;          &lt;POINT [°]&gt;
+#&gt; 1 Water Data Exchange… CA_45206   175952… ""    -120.  34.5 (-119.7917 34.47273)</code></pre>
 </div>
 <div id="location-longitudelatitude" class="section level3">
 <h3 class="hasAnchor">
@@ -287,28 +295,28 @@ Gas stations between UCSB and UCLA
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Request by coordinates</span>
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">115</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; Simple feature collection with 1 feature and 3 fields
+<pre><code>#&gt; Simple feature collection with 1 feature and 4 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: -115.0326 ymin: 40.04013 xmax: -115.0182 ymax: 40.05183
 #&gt; CRS:           4326
-#&gt; # A tibble: 1 × 4
-#&gt;   sourceName    identifier comid                                        geometry
-#&gt;   &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;                                &lt;LINESTRING [°]&gt;
-#&gt; 1 NHDPlus comid 946060315  946060315 (-115.0182 40.05183, -115.0185 40.05176, -…</code></pre>
+#&gt; # A tibble: 1 × 5
+#&gt;   sourceName    identifier comid     name                               geometry
+#&gt;   &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;                      &lt;LINESTRING [°]&gt;
+#&gt; 1 NHDPlus comid 946060315  946060315 ""    (-115.0182 40.05183, -115.0185 40.05…</code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Request by sf/sfc POINT object</span>
 <span class="va">ucsb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">119.8458</span>, Y <span class="op">=</span> <span class="fl">34.4146</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="va">ucsb</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; Simple feature collection with 1 feature and 3 fields
+<pre><code>#&gt; Simple feature collection with 1 feature and 4 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: -119.8823 ymin: 34.40438 xmax: -119.8256 ymax: 34.4179
 #&gt; CRS:           4326
-#&gt; # A tibble: 1 × 4
-#&gt;   sourceName    identifier comid                                        geometry
-#&gt;   &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;                                &lt;LINESTRING [°]&gt;
-#&gt; 1 NHDPlus comid 948060316  948060316 (-119.8823 34.41072, -119.8822 34.4106, -1…</code></pre>
+#&gt; # A tibble: 1 × 5
+#&gt;   sourceName    identifier comid     name                               geometry
+#&gt;   &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;                      &lt;LINESTRING [°]&gt;
+#&gt; 1 NHDPlus comid 948060316  948060316 ""    (-119.8823 34.41072, -119.8822 34.41…</code></pre>
 </div>
 </div>
 <div id="navigation" class="section level1">
@@ -360,7 +368,7 @@ NLDI Navigation Options
 <code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"DM"</span><span class="op">)</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;           name      class feature_count
-#&gt; 1       origin data.frame             3
+#&gt; 1       origin data.frame             4
 #&gt; 2 UM_flowlines data.frame            14
 #&gt; 3 DM_flowlines data.frame            43</code></pre>
 </div>
@@ -406,7 +414,7 @@ NLDI Navigation Options
 <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;     name      class feature_count
-#&gt; 1 origin data.frame             3
+#&gt; 1 origin data.frame             4
 #&gt; 2  basin data.frame             0</code></pre>
 </div>
 <div id="distance-constraints" class="section level3">
