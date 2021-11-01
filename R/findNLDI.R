@@ -23,7 +23,8 @@ find_good_names = function(input, type) {
   if (type == "nav") {
     grep("comid", names(input), value = TRUE)
   } else if (type == "feature") {
-    c("sourceName", "identifier", "comid")
+    c("sourceName", "identifier", "comid",
+      names(input)[names(input) %in% c("name", "reachcode", "measure")])
   } else {
     NULL
   }
