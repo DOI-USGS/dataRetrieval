@@ -15,7 +15,8 @@ test_that("NLDI starting sources...", {
   # POINT GEOMETERY
   expect_equal(sum(names(findNLDI(nwis = '11120000')) ==
                      c('sourceName', 'identifier', "comid",
-                       "X", "Y", "geometry")),  6)
+                       "name", "reachcode", "measure",
+                       "X", "Y", "geometry")),  9)
   # COMID
   expect_equal(findNLDI(comid = 101)$sourceName, "NHDPlus comid")
   # NWIS
