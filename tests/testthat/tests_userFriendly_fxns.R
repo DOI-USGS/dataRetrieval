@@ -372,15 +372,6 @@ test_that("Construct WQP urls", {
   expect_equal(obs_url_orig, "https://www.waterqualitydata.us/data/Result/search?siteid=IIDFG-41WSSPAHS;USGS-02352560&characteristicName=Temperature;Temperature%2C%20sample;Temperature%2C%20water;Temperature%2C%20water%2C%20deg%20F&mimeType=tsv&zip=yes")
 })
 
-context("checkWQPdates")
-test_that("checkWQPdates", {
-  values <- list(startDateLo="01-01-2002", characteristicName="Phosphorous",
-            endDate=as.Date("2014-01-01"))
-  values1 <- checkWQPdates(values)
-  expect_equal(values1$startDateHi, "01-01-2014")
-  expect_equal(values1$startDateLo, "01-01-2002")
-})
-
 context("Construct WQP urls")
 test_that("Construct WQP urls", {
   siteNumber <- '01594440'
