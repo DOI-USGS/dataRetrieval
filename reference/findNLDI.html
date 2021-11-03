@@ -54,8 +54,6 @@ Network Linked Data Index." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -77,15 +75,9 @@ Network Linked Data Index." />
 </script>
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -99,7 +91,7 @@ Network Linked Data Index." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.9.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.7.10</span>
       </span>
     </div>
 
@@ -129,9 +121,6 @@ Network Linked Data Index." />
     </li>
     <li>
       <a href="../articles/statsServiceMap.html">Stat Service</a>
-    </li>
-    <li>
-      <a href="../articles/earthquake.html">Earthquake Exploration</a>
     </li>
     <li>
       <a href="../articles/nldi.html">NLDI Interface</a>
@@ -169,7 +158,7 @@ Network Linked Data Index." />
 <a href='https://labs.waterdata.usgs.gov/about-nldi/index.html'>Network Linked Data Index</a>.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>findNLDI</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>findNLDI</span><span class='op'>(</span>
   comid <span class='op'>=</span> <span class='cn'>NULL</span>,
   nwis <span class='op'>=</span> <span class='cn'>NULL</span>,
   wqp <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -180,7 +169,7 @@ Network Linked Data Index." />
   find <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"flowlines"</span><span class='op'>)</span>,
   distance_km <span class='op'>=</span> <span class='fl'>100</span>,
   no_sf <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></code></pre></div>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -251,101 +240,103 @@ navigated paths. Valid starting options can be given by one of the following
 arguments: comid, nwis, huc12, wqp, location, and start.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># \donttest{</span></span>
+    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
 <span class='r-in'><span class='co'># Find Features / Define origin features</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>## Find feature by COMID</span></span>
 <span class='r-in'> <span class='fu'>findNLDI</span><span class='op'>(</span>comid <span class='op'>=</span> <span class='fl'>101</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 4 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 4</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName   identifier comid                                         geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                                 <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…</span>
-<span class='r-in'></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 5</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName    identifier comid name                                   geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                          <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NHDPlus comid 101        101   <span style='color: #949494;'>""</span>    (-94.64845 31.09915, -94.64803 31.09871,…</span>
+<span class='r-in'> </span>
 <span class='r-in'><span class='co'>## Find feature by NWIS ID</span></span>
-<span class='r-in'> <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 5 fields</span>
+<span class='r-in'>  <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 8 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 6</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName              identifier    comid       X     Y             geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sit… USGS-11120000 175954… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.8118 34.42472)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style='color: #BB0000;'>120.</span>  34.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class='r-in'></span>
-<span class='r-in'><span class='co'>## Find feature by WQP ID</span></span>
+<span class='r-in'><span class='co'>## Find feature by WQP ID </span></span>
 <span class='r-in'> <span class='fu'>findNLDI</span><span class='op'>(</span>wqp <span class='op'>=</span> <span class='st'>'USGS-04024315'</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 5 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 6 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -92.23492 ymin: 46.50355 xmax: -92.23492 ymax: 46.50355</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 6</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName           identifier    comid       X     Y             geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> Water Quality Portal USGS-04024315 1800305 -<span style='color: #BB0000;'>92.2</span>  46.5 (-92.23492 46.50355)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 7</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName       identifier  comid name           X     Y             geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> Water Quality P… USGS-04024… 1800… LITTLE BA… -<span style='color: #BB0000;'>92.2</span>  46.5 (-92.23492 46.50355)</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>## Find feature by LOCATION</span></span>
 <span class='r-in'> <span class='fu'>findNLDI</span><span class='op'>(</span>location <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>115</span>,<span class='fl'>40</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 4 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -115.0326 ymin: 40.04013 xmax: -115.0182 ymax: 40.05183</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 4</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName   identifier comid                                         geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                                 <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NHDPlus com… 946060315  94606… (-115.0182 40.05183, -115.0185 40.05176, -115.…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 5</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName    identifier comid     name                               geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                      <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NHDPlus comid 946060315  946060315 <span style='color: #949494;'>""</span>    (-115.0182 40.05183, -115.0185 40.05…</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>## GENERAL ORIGIN: COMID</span></span>
 <span class='r-in'> <span class='fu'>findNLDI</span><span class='op'>(</span>origin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"comid"</span> <span class='op'>=</span> <span class='fl'>101</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 4 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 4</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName   identifier comid                                         geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                                 <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 5</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName    identifier comid name                                   geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                          <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NHDPlus comid 101        101   <span style='color: #949494;'>""</span>    (-94.64845 31.09915, -94.64803 31.09871,…</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>## GENERAL ORIGIN: WaDE</span></span>
 <span class='r-in'> <span class='fu'>findNLDI</span><span class='op'>(</span>origin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"wade"</span> <span class='op'>=</span> <span class='st'>'CA_45206'</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 5 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 6 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.7917 ymin: 34.47273 xmax: -119.7917 ymax: 34.47273</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 6</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName                identifier comid       X     Y              geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> Water Data Exchange 2.0 … CA_45206   175952… -<span style='color: #BB0000;'>120.</span>  34.5  (-119.7917 34.47273)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 7</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName           identifier comid   name      X     Y             geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> Water Data Exchange… CA_45206   175952… <span style='color: #949494;'>""</span>    -<span style='color: #BB0000;'>120.</span>  34.5 (-119.7917 34.47273)</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Navigation (flowlines will be returned if find is unspecified)</span></span>
 <span class='r-in'><span class='co'># UPPER MAINSTEM of USGS-11120000</span></span>
 <span class='r-in'> <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='st'>"UM"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $origin</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 5 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 8 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 6</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName              identifier    comid       X     Y             geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sit… USGS-11120000 175954… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.8118 34.42472)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style='color: #BB0000;'>120.</span>  34.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $UM_flowlines</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 4 features and 1 field</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.8296 ymin: 34.42015 xmax: -119.7607 ymax: 34.46831</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 4 × 2</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   nhdplus_comid                                                         geometry</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                                                         <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
@@ -359,22 +350,23 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class='r-in'><span class='co'># UPPER MAINSTEM and TRIBUTARY of USGS-11120000</span></span>
 <span class='r-in'> <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"UT"</span>, <span class='st'>"UM"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $origin</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 5 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 8 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 6</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName              identifier    comid       X     Y             geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sit… USGS-11120000 175954… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.8118 34.42472)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style='color: #BB0000;'>120.</span>  34.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $UT_flowlines</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 25 features and 1 field</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.8296 ymin: 34.42015 xmax: -119.7332 ymax: 34.51769</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 25 × 2</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>    nhdplus_comid                                                        geometry</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                                                        <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
@@ -395,7 +387,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.8296 ymin: 34.42015 xmax: -119.7607 ymax: 34.46831</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 4 × 2</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   nhdplus_comid                                                         geometry</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                                                         <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
@@ -410,70 +402,73 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class='r-in'><span class='co'>## Find feature(s) on the upper tributary of USGS-11120000</span></span>
 <span class='r-in'> <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>, nav <span class='op'>=</span> <span class='st'>"UT"</span>, find <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nwis"</span>, <span class='st'>"wqp"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $origin</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 5 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 8 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 6</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName              identifier    comid       X     Y             geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sit… USGS-11120000 175954… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.8118 34.42472)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style='color: #BB0000;'>120.</span>  34.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $UT_nwissite</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 3 features and 5 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 3 features and 8 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.7843 ymax: 34.445</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 3 × 6</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName              identifier    comid       X     Y             geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sit… USGS-11119900 175953… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.7843 34.43222)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> NWIS Surface Water Sit… USGS-11120000 175954… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.8118 34.42472)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> NWIS Surface Water Sit… USGS-11119940 175961… -<span style='color: #BB0000;'>120.</span>  34.4   (-119.8037 34.445)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 3 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sites USGS-11119… 1759… ATAS… 18060013… 15.525… -<span style='color: #BB0000;'>120.</span>  34.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style='color: #BB0000;'>120.</span>  34.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> NWIS Surface Water Sites USGS-11119… 1759… MARI… 18060013… 14.036… -<span style='color: #BB0000;'>120.</span>  34.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $UT_WQP</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 64 features and 5 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 64 features and 6 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.824 ymin: 34.4224 xmax: -119.7479 ymax: 34.4525</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 64 × 6</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    sourceName        identifier        comid       X     Y              geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> Water Quality Po… USGS-34253811948… 175954… -<span style='color: #BB0000;'>120.</span>  34.4   (-119.814 34.42722)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> Water Quality Po… USGS-34270511947… 175961… -<span style='color: #BB0000;'>120.</span>  34.5  (-119.7999 34.45139)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> Water Quality Po… USGS-34261211946… 175961… -<span style='color: #BB0000;'>120.</span>  34.4  (-119.7742 34.43617)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> Water Quality Po… USGS-34253911948… 175953… -<span style='color: #BB0000;'>120.</span>  34.4   (-119.8107 34.4275)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> Water Quality Po… USGS-34261911948… 175953… -<span style='color: #BB0000;'>120.</span>  34.4  (-119.8021 34.43861)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> Water Quality Po… USGS-34264211947… 175961… -<span style='color: #BB0000;'>120.</span>  34.4    (-119.7963 34.445)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> Water Quality Po… USGS-34264211944… 175953… -<span style='color: #BB0000;'>120.</span>  34.4    (-119.7479 34.445)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> Water Quality Po… USGS-34270511947… 175961… -<span style='color: #BB0000;'>120.</span>  34.5  (-119.7999 34.45139)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> Water Quality Po… USGS-34261911946… 175953… -<span style='color: #BB0000;'>120.</span>  34.4  (-119.7679 34.43861)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> Water Quality Po… USGS-34262111947… 175953… -<span style='color: #BB0000;'>120.</span>  34.4  (-119.7957 34.43916)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 64 × 7</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    sourceName       identifier    comid name        X     Y             geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> Water Quality P… USGS-3426131… 1759… 004N02… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.7679 34.43694)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> Water Quality P… USGS-3426061… 1759… 004N02… -<span style='color: #BB0000;'>120.</span>  34.4   (-119.8071 34.435)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> Water Quality P… USGS-3426231… 1759… 004N02… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.7599 34.43972)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> Water Quality P… USGS-3427081… 1759… 004N02… -<span style='color: #BB0000;'>120.</span>  34.5 (-119.7816 34.45219)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> Water Quality P… USGS-3426431… 1759… 004N02… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.8049 34.44527)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> Water Quality P… USGS-3426581… 1759… 004N02… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.7687 34.44939)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> Water Quality P… USGS-3426051… 1759… 004N02… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.7962 34.43472)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> Water Quality P… USGS-3426171… 1759… 004N02… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.7896 34.43805)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> Water Quality P… USGS-3426171… 1759… 004N02… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.8085 34.43805)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> Water Quality P… USGS-3427011… 1759… 004N02… -<span style='color: #BB0000;'>120.</span>  34.5 (-119.7968 34.45027)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 54 more rows</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>## Find upstream basin boundary and  of USGS-11120000</span></span>
 <span class='r-in'> <span class='fu'>findNLDI</span><span class='op'>(</span>nwis <span class='op'>=</span> <span class='st'>'11120000'</span>,  find <span class='op'>=</span> <span class='st'>"basin"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $origin</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 5 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 8 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 6</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName              identifier    comid       X     Y             geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sit… USGS-11120000 175954… -<span style='color: #BB0000;'>120.</span>  34.4 (-119.8118 34.42472)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style='color: #BB0000;'>120.</span>  34.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $basin</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 0 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POLYGON</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -119.8295 ymin: 34.41806 xmax: -119.7307 ymax: 34.52034</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 1</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>                                                                         geometry</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>                                                                    <span style='color: #949494; font-style: italic;'>&lt;POLYGON [°]&gt;</span></span>
@@ -484,46 +479,47 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class='r-in'><span class='co'>## Limit search to 50 km</span></span>
 <span class='r-in'> <span class='fu'>findNLDI</span><span class='op'>(</span>comid <span class='op'>=</span> <span class='fl'>101</span>, nav <span class='op'>=</span> <span class='st'>"DM"</span>, find <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nwis"</span>, <span class='st'>"wqp"</span>, <span class='st'>"flowlines"</span><span class='op'>)</span>, distance_km <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $origin</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 4 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 4</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName   identifier comid                                         geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                                 <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NHDPlus com… 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.64…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 5</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName    identifier comid name                                   geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                          <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NHDPlus comid 101        101   <span style='color: #949494;'>""</span>    (-94.64845 31.09915, -94.64803 31.09871,…</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $DM_nwissite</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 5 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 1 feature and 8 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -94.39944 ymin: 31.025 xmax: -94.39944 ymax: 31.025</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 6</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName               identifier    comid       X     Y           geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sites USGS-08033500 1109655 -<span style='color: #BB0000;'>94.4</span>  31.0 (-94.39944 31.025)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> NWIS Surface Water Sites USGS-08033… 1109… Nech… 12020003… 68.316… -<span style='color: #BB0000;'>94.4</span>  31.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $DM_WQP</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 3 features and 5 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 3 features and 6 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -94.3995 ymin: 31.0247 xmax: -94.38492 ymax: 31.03547</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 3 × 6</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName         identifier         comid      X     Y              geometry</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> Water Quality Por… USGS-08033500      11096… -<span style='color: #BB0000;'>94.4</span>  31.0    (-94.39944 31.025)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> Water Quality Por… TCEQMAIN-10585     11096… -<span style='color: #BB0000;'>94.4</span>  31.0    (-94.3995 31.0247)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> Water Quality Por… USGS-310207094230… 11096… -<span style='color: #BB0000;'>94.4</span>  31.0  (-94.38492 31.03547)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 3 × 7</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   sourceName       identifier   comid  name         X     Y             geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;POINT [°]&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> Water Quality P… TCEQMAIN-10… 11096… NECHES … -<span style='color: #BB0000;'>94.4</span>  31.0   (-94.3995 31.0247)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> Water Quality P… USGS-310207… 11096… PR-37-6… -<span style='color: #BB0000;'>94.4</span>  31.0 (-94.38492 31.03547)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> Water Quality P… USGS-080335… 11096… Neches … -<span style='color: #BB0000;'>94.4</span>  31.0   (-94.39944 31.025)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $DM_flowlines</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 20 features and 1 field</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -94.64845 ymin: 31.00305 xmax: -94.37394 ymax: 31.09915</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           4326</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 20 × 2</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>    nhdplus_comid                                                        geometry</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                                                        <span style='color: #949494; font-style: italic;'>&lt;LINESTRING [°]&gt;</span></span>
@@ -549,7 +545,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>20</span> 1109651       (-94.39707 31.02849, -94.39696 31.02906, -94.39672 31.02917, -…</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'><span class='co'># }</span></span>
-</code></pre></div>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -561,11 +557,11 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p></p>
+  <p>Developed by Laura DeCicco, Robert Hirsch, David Lorenz, David Watkins, Mike Johnson.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -573,8 +569,6 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 
   
 
-
-  
 
   </body>
 </html>
