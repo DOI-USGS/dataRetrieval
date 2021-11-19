@@ -84,6 +84,9 @@ getWebServiceData <- function(obs_url, ...){
   }
 }
 
+#' Create user agent
+#' 
+#' @keywords internal
 default_ua <- function() {
   versions <- c(
     libcurl = curl::curl_version()$version,
@@ -98,6 +101,24 @@ default_ua <- function() {
   }
     
   return(ua)
+}
+
+#' has_internet2
+#' 
+#' Function to check for internet even if the user
+#' is behind a proxy
+#' 
+#' @keywords internal
+#' @param obs_url character obs_url to check
+has_internet_2 <- function(obs_url) {
+  # For now, we know exactly where we're sending our queries
+  # But, if we expose a setter, we'll probably need to move it
+  # to the url construction, set a host in the package enviornment?,
+  # or come up with some better regex here:
+  
+  host <- gsub("^https://(?:www[.])?([^/]*).*$", "\\1", obs_url )
+  
+  !is.null(curl::nslookup(host, error = FALSE))
 }
 
 #' getting header information from a WQP query
