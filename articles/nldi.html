@@ -105,7 +105,7 @@
 </h1>
                         <h4 class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
             
-            <h4 class="date">2021-11-01</h4>
+            <h4 class="date">2021-11-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/master/vignettes/nldi.Rmd"><code>vignettes/nldi.Rmd</code></a></small>
       <div class="hidden name"><code>nldi.Rmd</code></div>
@@ -153,7 +153,7 @@ Gas stations between UCSB and UCLA
 <div id="whats-available" class="section level1">
 <h1 class="hasAnchor">
 <a href="#whats-available" class="anchor"></a>What’s available?</h1>
-<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-11-01), 11 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
+<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-11-19), 11 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
@@ -344,20 +344,20 @@ NLDI Navigation Options
 <code class="sourceCode R"><span class="va">summarize.nldi</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">input</span><span class="op">)</span>, 
              class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">class</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, 
-             row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+             row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>feature_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">class</span> <span class="op">==</span> <span class="st">"sf"</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">nrow</span><span class="op">)</span>, 
                                   <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">length</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
 
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UM"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;           name class feature_count
 #&gt; 1       origin    sf             1
 #&gt; 2 UM_flowlines    sf            14</code></pre>
 <p>Or along the upper mainstem (UM) <em>and</em> upper tributary (UT) of COMID 101.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"UT"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"UT"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;           name class feature_count
 #&gt; 1       origin    sf             1
@@ -365,7 +365,7 @@ NLDI Navigation Options
 #&gt; 3 UT_flowlines    sf           325</code></pre>
 <p>In both cases the returned named list includes the origin and the flowlines along the requested navigation. If <code>sf</code> is not enabled, the returned object for a flowpath navigation is a vector of COMIDs.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"DM"</span><span class="op">)</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UM"</span>, <span class="st">"DM"</span><span class="op">)</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;           name      class feature_count
 #&gt; 1       origin data.frame             4
@@ -377,14 +377,14 @@ NLDI Navigation Options
 <a href="#searching-along-the-navigation" class="anchor"></a>Searching along the Navigation</h1>
 <p>Like the gas station example, any of the features listed in <code>get_nldi_sources</code> can be searched for along the network, for example, we can find all NWIS gauges, on the upper tributary, of COMID 101.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="st">"nwis"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="st">"nwis"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;          name class feature_count
 #&gt; 1      origin    sf             1
 #&gt; 2 UT_nwissite    sf             2</code></pre>
 <p>Of course, more than one resource can be requested, for example, lets replicate the previous search, this time adding Water Quality Points to the returned list:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;          name class feature_count
 #&gt; 1      origin    sf             1
@@ -392,7 +392,7 @@ NLDI Navigation Options
 #&gt; 3      UT_WQP    sf            29</code></pre>
 <p>Note that flowlines are no longer the default return for navigation once a new feature is requested. To retain flowlines, the must be explicitly requested.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"flowlines"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"flowlines"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;           name class feature_count
 #&gt; 1       origin    sf             1
@@ -404,14 +404,14 @@ NLDI Navigation Options
 <p>The Upstream Basin Boundary is a unique object that can be found for any feature by adding “basin” to <code>find.</code> Basins are only geometries with no specific attribute data. Therefore basins can only be returned if <code>sf</code> is installed. Otherwise, the result will be a 0 column <code>data.frame</code></p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># with sf</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;     name class feature_count
 #&gt; 1 origin    sf             1
 #&gt; 2  basin    sf             1</code></pre>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># No sf</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, find <span class="op">=</span> <span class="st">"basin"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;     name      class feature_count
 #&gt; 1 origin data.frame             4
@@ -423,7 +423,7 @@ NLDI Navigation Options
 <p>In some cases, particularly for DM and DD navigation, the network can extend for hundreds of kilometers. You can limit (or extend) the distance of your search using the <code>distance_km</code> argument. As the name implies the value provided should be the maximum kilometers you want to search for features. The default for <code>distance_km</code> is 100.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Default 100 km</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;          name class feature_count
 #&gt; 1      origin    sf             1
@@ -431,7 +431,7 @@ NLDI Navigation Options
 #&gt; 3      DM_WQP    sf             5</code></pre>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Extended 200 km search</span>
-<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span>, distance_km <span class="op">=</span> <span class="fl">200</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span>, distance_km <span class="op">=</span> <span class="fl">200</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu">summarize.nldi</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;          name class feature_count
 #&gt; 1      origin    sf             1
@@ -460,18 +460,18 @@ NLDI Navigation Options
 <code class="sourceCode R"><span class="co"># Identify NLDI sites with daily values "dv"</span>
 <span class="co">#     and record streamflow ("00060")</span>
 <span class="co">#     and recorded flows in 2020</span>
-<span class="va">find</span> <span class="op">=</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>sites <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="st">""</span>, <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span><span class="op">$</span><span class="va">identifier</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="va">find</span> <span class="op">=</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>sites <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="st">""</span>, <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span><span class="op">$</span><span class="va">identifier</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">data_type_cd</span> <span class="op">==</span> <span class="st">"dv"</span>, 
          <span class="va">parm_cd</span> <span class="op">==</span> <span class="st">"00060"</span>,
-         <span class="va">end_date</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html">as.Date</a></span><span class="op">(</span><span class="st">"2020-01-01"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>identifier  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="va">site_no</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span>, by <span class="op">=</span> <span class="st">"identifier"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+         <span class="va">end_date</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html">as.Date</a></span><span class="op">(</span><span class="st">"2020-01-01"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>identifier  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="va">site_no</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span>, by <span class="op">=</span> <span class="st">"identifier"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># Extract Streamflow for identified sites</span>
 <span class="va">Q</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">find</span><span class="op">$</span><span class="va">site_no</span>, 
                 parameterCd <span class="op">=</span> <span class="st">"00060"</span>, 
-                startDate <span class="op">=</span> <span class="st">"2020-01-01"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+                startDate <span class="op">=</span> <span class="st">"2020-01-01"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="../reference/renameNWISColumns.html">renameNWISColumns</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># Plot! </span>

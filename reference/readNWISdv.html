@@ -221,37 +221,40 @@ and S is the statistic code (if applicable).</p>
     <div class='dont-index'><p><code><a href='renameNWISColumns.html'>renameNWISColumns</a></code>, <code><a href='importWaterML1.html'>importWaterML1</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>site_id</span> <span class='op'>&lt;-</span> <span class='st'>'04085427'</span>
-<span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>'2012-01-01'</span>
-<span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>'2012-06-30'</span>
-<span class='va'>pCode</span> <span class='op'>&lt;-</span> <span class='st'>'00060'</span>
-<span class='co'># \donttest{</span>
-<span class='va'>rawDailyQ</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdv</span><span class='op'>(</span><span class='va'>site_id</span>,<span class='va'>pCode</span>, <span class='va'>startDate</span>, <span class='va'>endDate</span><span class='op'>)</span>
-<span class='va'>rawDailyQAndTempMeanMax</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdv</span><span class='op'>(</span><span class='va'>site_id</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'00010'</span>,<span class='st'>'00060'</span><span class='op'>)</span>,
-       <span class='va'>startDate</span>, <span class='va'>endDate</span>, statCd<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'00001'</span>,<span class='st'>'00003'</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>rawDailyQAndTempMeanMax</span> <span class='op'>&lt;-</span> <span class='fu'><a href='renameNWISColumns.html'>renameNWISColumns</a></span><span class='op'>(</span><span class='va'>rawDailyQAndTempMeanMax</span><span class='op'>)</span>
-<span class='va'>rawDailyMultiSites</span><span class='op'>&lt;-</span> <span class='fu'>readNWISdv</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"01491000"</span>,<span class='st'>"01645000"</span><span class='op'>)</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'00010'</span>,<span class='st'>'00060'</span><span class='op'>)</span>,
-       <span class='va'>startDate</span>, <span class='va'>endDate</span>, statCd<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'00001'</span>,<span class='st'>'00003'</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># Site with no data:</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdv</span><span class='op'>(</span><span class='st'>"10258500"</span>,<span class='st'>"00060"</span>, <span class='st'>"2014-09-08"</span>, <span class='st'>"2014-09-14"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/attributes.html'>attributes</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "names"         "row.names"     "url"           "siteInfo"     
-#&gt; [5] "variableInfo"  "disclaimer"    "statisticInfo" "queryTime"    
-#&gt; [9] "class"        </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"siteInfo"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                      station_nm  site_no agency_cd timeZoneOffset
-#&gt; 1 PALM CYN C NR PALM SPRINGS CA 10258500      USGS         -08:00
-#&gt;   timeZoneAbbreviation dec_lat_va dec_lon_va       srs siteTypeCd    hucCd
-#&gt; 1                  PST   33.74502  -116.5356 EPSG:4326         ST 18100201
-#&gt;   stateCd countyCd network
-#&gt; 1      06    06065    NWIS</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"variableInfo"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   variableCode           variableName              variableDescription
-#&gt; 1        00060 Streamflow, ft&amp;#179;/s Discharge, cubic feet per second
-#&gt;       valueType  unit options noDataValue
-#&gt; 1 Derived Value ft3/s    Mean          NA</div><div class='input'>
-<span class='va'>site</span> <span class='op'>&lt;-</span> <span class='st'>"05212700"</span>
-<span class='va'>notActive</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdv</span><span class='op'>(</span><span class='va'>site</span>, <span class='st'>"00060"</span>, <span class='st'>"2014-01-01"</span>,<span class='st'>"2014-01-07"</span><span class='op'>)</span>
-<span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>site_id</span> <span class='op'>&lt;-</span> <span class='st'>'04085427'</span></span>
+<span class='r-in'><span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>'2012-01-01'</span></span>
+<span class='r-in'><span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>'2012-06-30'</span></span>
+<span class='r-in'><span class='va'>pCode</span> <span class='op'>&lt;-</span> <span class='st'>'00060'</span></span>
+<span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='va'>rawDailyQ</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdv</span><span class='op'>(</span><span class='va'>site_id</span>,<span class='va'>pCode</span>, <span class='va'>startDate</span>, <span class='va'>endDate</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>rawDailyQAndTempMeanMax</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdv</span><span class='op'>(</span><span class='va'>site_id</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'00010'</span>,<span class='st'>'00060'</span><span class='op'>)</span>,</span>
+<span class='r-in'>       <span class='va'>startDate</span>, <span class='va'>endDate</span>, statCd<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'00001'</span>,<span class='st'>'00003'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>rawDailyQAndTempMeanMax</span> <span class='op'>&lt;-</span> <span class='fu'><a href='renameNWISColumns.html'>renameNWISColumns</a></span><span class='op'>(</span><span class='va'>rawDailyQAndTempMeanMax</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>rawDailyMultiSites</span><span class='op'>&lt;-</span> <span class='fu'>readNWISdv</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"01491000"</span>,<span class='st'>"01645000"</span><span class='op'>)</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'00010'</span>,<span class='st'>'00060'</span><span class='op'>)</span>,</span>
+<span class='r-in'>       <span class='va'>startDate</span>, <span class='va'>endDate</span>, statCd<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'00001'</span>,<span class='st'>'00003'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># Site with no data:</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdv</span><span class='op'>(</span><span class='st'>"10258500"</span>,<span class='st'>"00060"</span>, <span class='st'>"2014-09-08"</span>, <span class='st'>"2014-09-14"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/attributes.html'>attributes</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "names"         "row.names"     "url"           "siteInfo"     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [5] "variableInfo"  "disclaimer"    "statisticInfo" "queryTime"    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [9] "class"        </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"siteInfo"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      station_nm  site_no agency_cd timeZoneOffset</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 PALM CYN C NR PALM SPRINGS CA 10258500      USGS         -08:00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   timeZoneAbbreviation dec_lat_va dec_lon_va       srs siteTypeCd    hucCd</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1                  PST   33.74502  -116.5356 EPSG:4326         ST 18100201</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   stateCd countyCd network</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      06    06065    NWIS</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"variableInfo"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   variableCode           variableName              variableDescription</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        00060 Streamflow, ft&amp;#179;/s Discharge, cubic feet per second</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       valueType  unit options noDataValue</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 Derived Value ft3/s    Mean          NA</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>site</span> <span class='op'>&lt;-</span> <span class='st'>"05212700"</span></span>
+<span class='r-in'><span class='va'>notActive</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISdv</span><span class='op'>(</span><span class='va'>site</span>, <span class='st'>"00060"</span>, <span class='st'>"2014-01-01"</span>,<span class='st'>"2014-01-07"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

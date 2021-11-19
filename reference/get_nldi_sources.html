@@ -164,33 +164,34 @@
     <p>data.frame</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>get_nldi_sources</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        source                                     sourceName
-#&gt; 1       comid                                  NHDPlus comid
-#&gt; 2    ca_gages                 Streamgage catalog for CA SB19
-#&gt; 3  gfv11_pois USGS Geospatial Fabric V1.1 Points of Interest
-#&gt; 4     huc12pp                              HUC12 Pour Points
-#&gt; 5    nmwdi-st          New Mexico Water Data Initative Sites
-#&gt; 6      nwisgw                         NWIS Groundwater Sites
-#&gt; 7    nwissite                       NWIS Surface Water Sites
-#&gt; 8    ref_gage                   geoconnex.us reference gages
-#&gt; 9       vigil                             Vigil Network Data
-#&gt; 10       wade                  Water Data Exchange 2.0 Sites
-#&gt; 11        WQP                           Water Quality Portal
-#&gt;                                                           features
-#&gt; 1       https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid
-#&gt; 2    https://labs.waterdata.usgs.gov/api/nldi/linked-data/ca_gages
-#&gt; 3  https://labs.waterdata.usgs.gov/api/nldi/linked-data/gfv11_pois
-#&gt; 4     https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp
-#&gt; 5    https://labs.waterdata.usgs.gov/api/nldi/linked-data/nmwdi-st
-#&gt; 6      https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwisgw
-#&gt; 7    https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite
-#&gt; 8    https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage
-#&gt; 9       https://labs.waterdata.usgs.gov/api/nldi/linked-data/vigil
-#&gt; 10       https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade
-#&gt; 11        https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp</div><div class='input'><span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='fu'>get_nldi_sources</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        source                                     sourceName</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       comid                                  NHDPlus comid</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    ca_gages                 Streamgage catalog for CA SB19</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  gfv11_pois USGS Geospatial Fabric V1.1 Points of Interest</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     huc12pp                              HUC12 Pour Points</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5    nmwdi-st          New Mexico Water Data Initative Sites</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      nwisgw                         NWIS Groundwater Sites</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7    nwissite                       NWIS Surface Water Sites</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8    ref_gage                   geoconnex.us reference gages</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9       vigil                             Vigil Network Data</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10       wade                  Water Data Exchange 2.0 Sites</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11        WQP                           Water Quality Portal</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                           features</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    https://labs.waterdata.usgs.gov/api/nldi/linked-data/ca_gages</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  https://labs.waterdata.usgs.gov/api/nldi/linked-data/gfv11_pois</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     https://labs.waterdata.usgs.gov/api/nldi/linked-data/huc12pp</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5    https://labs.waterdata.usgs.gov/api/nldi/linked-data/nmwdi-st</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwisgw</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7    https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8    https://labs.waterdata.usgs.gov/api/nldi/linked-data/ref_gage</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9       https://labs.waterdata.usgs.gov/api/nldi/linked-data/vigil</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10       https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11        https://labs.waterdata.usgs.gov/api/nldi/linked-data/wqp</span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

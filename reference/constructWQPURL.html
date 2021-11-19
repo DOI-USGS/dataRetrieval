@@ -190,24 +190,26 @@ retrieval for the latest possible record.</p></td>
     <p>url string</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>site_id</span> <span class='op'>&lt;-</span> <span class='st'>'01594440'</span>
-<span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>'1985-01-01'</span>
-<span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>''</span>
-<span class='va'>pCode</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00060"</span>,<span class='st'>"00010"</span><span class='op'>)</span>
-<span class='va'>url_wqp</span> <span class='op'>&lt;-</span> <span class='fu'>constructWQPURL</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"USGS"</span>,<span class='va'>site_id</span>,sep<span class='op'>=</span><span class='st'>"-"</span><span class='op'>)</span>,
-           <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'01075'</span>,<span class='st'>'00029'</span>,<span class='st'>'00453'</span><span class='op'>)</span>,
-           <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span>
-<span class='va'>url_wqp</span>
-</div><div class='output co'>#&gt; [1] "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&amp;pCode=01075;00029;00453&amp;startDateLo=01-01-1985&amp;mimeType=tsv&amp;zip=yes"</div><div class='input'><span class='va'>charNames</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Temperature"</span>,
-               <span class='st'>"Temperature, sample"</span>,
-               <span class='st'>"Temperature, water"</span>,
-               <span class='st'>"Temperature, water, deg F"</span><span class='op'>)</span>
-<span class='va'>obs_url_orig</span> <span class='op'>&lt;-</span> <span class='fu'>constructWQPURL</span><span class='op'>(</span>siteNumbers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"IIDFG-41WSSPAHS"</span>,
-                                                <span class='st'>"USGS-02352560"</span><span class='op'>)</span>, 
-                                parameterCd <span class='op'>=</span> <span class='va'>charNames</span>,
-                                <span class='va'>startDate</span>,<span class='st'>""</span><span class='op'>)</span>
-<span class='va'>obs_url_orig</span>
-</div><div class='output co'>#&gt; [1] "https://www.waterqualitydata.us/data/Result/search?siteid=IIDFG-41WSSPAHS;USGS-02352560&amp;characteristicName=Temperature;Temperature%2C%20sample;Temperature%2C%20water;Temperature%2C%20water%2C%20deg%20F&amp;startDateLo=01-01-1985&amp;mimeType=tsv&amp;zip=yes"</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>site_id</span> <span class='op'>&lt;-</span> <span class='st'>'01594440'</span></span>
+<span class='r-in'><span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>'1985-01-01'</span></span>
+<span class='r-in'><span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>''</span></span>
+<span class='r-in'><span class='va'>pCode</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00060"</span>,<span class='st'>"00010"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>url_wqp</span> <span class='op'>&lt;-</span> <span class='fu'>constructWQPURL</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"USGS"</span>,<span class='va'>site_id</span>,sep<span class='op'>=</span><span class='st'>"-"</span><span class='op'>)</span>,</span>
+<span class='r-in'>           <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'01075'</span>,<span class='st'>'00029'</span>,<span class='st'>'00453'</span><span class='op'>)</span>,</span>
+<span class='r-in'>           <span class='va'>startDate</span>,<span class='va'>endDate</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>url_wqp</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&amp;pCode=01075;00029;00453&amp;startDateLo=01-01-1985&amp;mimeType=tsv&amp;zip=yes"</span>
+<span class='r-in'><span class='va'>charNames</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Temperature"</span>,</span>
+<span class='r-in'>               <span class='st'>"Temperature, sample"</span>,</span>
+<span class='r-in'>               <span class='st'>"Temperature, water"</span>,</span>
+<span class='r-in'>               <span class='st'>"Temperature, water, deg F"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>obs_url_orig</span> <span class='op'>&lt;-</span> <span class='fu'>constructWQPURL</span><span class='op'>(</span>siteNumbers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"IIDFG-41WSSPAHS"</span>,</span>
+<span class='r-in'>                                                <span class='st'>"USGS-02352560"</span><span class='op'>)</span>, </span>
+<span class='r-in'>                                parameterCd <span class='op'>=</span> <span class='va'>charNames</span>,</span>
+<span class='r-in'>                                <span class='va'>startDate</span>,<span class='st'>""</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>obs_url_orig</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "https://www.waterqualitydata.us/data/Result/search?siteid=IIDFG-41WSSPAHS;USGS-02352560&amp;characteristicName=Temperature;Temperature%2C%20sample;Temperature%2C%20water;Temperature%2C%20water%2C%20deg%20F&amp;startDateLo=01-01-1985&amp;mimeType=tsv&amp;zip=yes"</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

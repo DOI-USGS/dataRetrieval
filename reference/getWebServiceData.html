@@ -178,16 +178,16 @@ GET with more informative error messages." />
     <p>raw data from web services</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>siteNumber</span> <span class='op'>&lt;-</span> <span class='st'>"02177000"</span>
-<span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-09-01"</span>
-<span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-10-01"</span>
-<span class='va'>offering</span> <span class='op'>&lt;-</span> <span class='st'>'00003'</span>
-<span class='va'>property</span> <span class='op'>&lt;-</span> <span class='st'>'00060'</span>
-<span class='va'>obs_url</span> <span class='op'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span><span class='op'>(</span><span class='va'>siteNumber</span>,<span class='va'>property</span>,<span class='va'>startDate</span>,<span class='va'>endDate</span>,<span class='st'>'dv'</span><span class='op'>)</span>
-<span class='co'># \donttest{</span>
-  <span class='va'>rawData</span> <span class='op'>&lt;-</span> <span class='fu'>getWebServiceData</span><span class='op'>(</span><span class='va'>obs_url</span><span class='op'>)</span>
-<span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>siteNumber</span> <span class='op'>&lt;-</span> <span class='st'>"02177000"</span></span>
+<span class='r-in'><span class='va'>startDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-09-01"</span></span>
+<span class='r-in'><span class='va'>endDate</span> <span class='op'>&lt;-</span> <span class='st'>"2012-10-01"</span></span>
+<span class='r-in'><span class='va'>offering</span> <span class='op'>&lt;-</span> <span class='st'>'00003'</span></span>
+<span class='r-in'><span class='va'>property</span> <span class='op'>&lt;-</span> <span class='st'>'00060'</span></span>
+<span class='r-in'><span class='va'>obs_url</span> <span class='op'>&lt;-</span> <span class='fu'><a href='constructNWISURL.html'>constructNWISURL</a></span><span class='op'>(</span><span class='va'>siteNumber</span>,<span class='va'>property</span>,<span class='va'>startDate</span>,<span class='va'>endDate</span>,<span class='st'>'dv'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'>  <span class='va'>rawData</span> <span class='op'>&lt;-</span> <span class='fu'>getWebServiceData</span><span class='op'>(</span><span class='va'>obs_url</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

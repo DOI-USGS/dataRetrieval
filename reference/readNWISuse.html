@@ -210,29 +210,29 @@ national data to be similar to state data.</p></td>
 County and state fields will be included as appropriate.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'>#All data for a county</span>
-<span class='va'>allegheny</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"Pennsylvania"</span>,countyCd <span class='op'>=</span> <span class='st'>"Allegheny"</span><span class='op'>)</span>
-
-<span class='co'>#Data for an entire state for certain years</span>
-<span class='va'>ohio</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>years<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2000</span>,<span class='fl'>2005</span>,<span class='fl'>2010</span><span class='op'>)</span>,stateCd <span class='op'>=</span> <span class='st'>"OH"</span>, countyCd <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
-
-<span class='co'>#Data for an entire state, county by county</span>
-<span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>years<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2000</span>,<span class='fl'>2005</span>,<span class='fl'>2010</span><span class='op'>)</span>,stateCd <span class='op'>=</span> <span class='st'>"PR"</span>,countyCd<span class='op'>=</span><span class='st'>"ALL"</span><span class='op'>)</span>
-
-<span class='co'>#All national-scale data, transforming data frame to named columns from named rows</span>
-<span class='va'>national</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='cn'>NULL</span>, countyCd <span class='op'>=</span> <span class='cn'>NULL</span>, transform <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='co'>#Washington, DC data</span>
-<span class='va'>dc</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"DC"</span>,countyCd <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
-
-<span class='co'>#data for multiple counties, with different input formatting</span>
-<span class='va'>paData</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"42"</span>,countyCd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Allegheny County"</span>, <span class='st'>"BUTLER"</span>, <span class='fl'>1</span>, <span class='st'>"031"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'>#retrieving two specific categories for an entire state</span>
-<span class='va'>ks</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"KS"</span>, countyCd <span class='op'>=</span> <span class='cn'>NULL</span>, categories <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"IT"</span>,<span class='st'>"LI"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='co'>#All data for a county</span></span>
+<span class='r-in'><span class='va'>allegheny</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"Pennsylvania"</span>,countyCd <span class='op'>=</span> <span class='st'>"Allegheny"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#Data for an entire state for certain years</span></span>
+<span class='r-in'><span class='va'>ohio</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>years<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2000</span>,<span class='fl'>2005</span>,<span class='fl'>2010</span><span class='op'>)</span>,stateCd <span class='op'>=</span> <span class='st'>"OH"</span>, countyCd <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#Data for an entire state, county by county</span></span>
+<span class='r-in'><span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>years<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2000</span>,<span class='fl'>2005</span>,<span class='fl'>2010</span><span class='op'>)</span>,stateCd <span class='op'>=</span> <span class='st'>"PR"</span>,countyCd<span class='op'>=</span><span class='st'>"ALL"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#All national-scale data, transforming data frame to named columns from named rows</span></span>
+<span class='r-in'><span class='va'>national</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='cn'>NULL</span>, countyCd <span class='op'>=</span> <span class='cn'>NULL</span>, transform <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#Washington, DC data</span></span>
+<span class='r-in'><span class='va'>dc</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"DC"</span>,countyCd <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#data for multiple counties, with different input formatting</span></span>
+<span class='r-in'><span class='va'>paData</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"42"</span>,countyCd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Allegheny County"</span>, <span class='st'>"BUTLER"</span>, <span class='fl'>1</span>, <span class='st'>"031"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#retrieving two specific categories for an entire state</span></span>
+<span class='r-in'><span class='va'>ks</span> <span class='op'>&lt;-</span> <span class='fu'>readNWISuse</span><span class='op'>(</span>stateCd <span class='op'>=</span> <span class='st'>"KS"</span>, countyCd <span class='op'>=</span> <span class='cn'>NULL</span>, categories <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"IT"</span>,<span class='st'>"LI"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
