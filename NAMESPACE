@@ -2,7 +2,6 @@
 
 export(addWaterYear)
 export(calcWaterYear)
-export(checkWQPdates)
 export(constructNWISURL)
 export(constructUseURL)
 export(constructWQPURL)

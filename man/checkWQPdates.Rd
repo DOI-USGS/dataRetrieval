@@ -16,9 +16,4 @@ values named list with corrected arguments to send to the Water Quality Portal
 Checks date format for inputs to the Water Quality Portal. Used in \code{readWQPqw} 
 and \code{readWQPdata}.
 }
-\examples{
-values <- list(startDateLo="01-01-2002", characteristicName="Phosphorous", 
-          endDate=as.Date("2014-01-01"))
-values <- checkWQPdates(values)
-}
 \keyword{internal}
