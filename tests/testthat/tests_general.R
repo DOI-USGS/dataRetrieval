@@ -49,10 +49,10 @@ test_that("General NWIS retrievals working", {
   expect_is(waterYearStat$parameter_cd,"character")
   
   #Empty data
-  
+  # note....not empty anymore!
   urlTest <- "https://nwis.waterservices.usgs.gov/nwis/iv/?site=11447650&format=waterml,1.1&ParameterCd=63680&startDT=2016-12-13&endDT=2016-12-13"
   x <- importWaterML1(urlTest)
-  expect_equal(names(x), c("agency_cd","site_no","dateTime","tz_cd"))
+  expect_true(all(c("agency_cd","site_no","dateTime","tz_cd") %in% names(x)))
   
   #Test list:
   args <- list(sites="05114000", service="iv", 
@@ -342,7 +342,9 @@ test_that("readWQPdots working", {
 context("getWebServiceData")
 test_that("long urls use POST", {
   testthat::skip_on_cran()
-  url <- paste0(rep("reallylongurl", 200), collapse = '')
+  baseURL <- dataRetrieval:::drURL("Result") 
+  url <- paste0(baseURL,
+                rep("reallylongurl", 200), collapse = '')
   with_mock(
     RETRY = function(method, ...) {
       return(method == "POST")
@@ -357,7 +359,9 @@ test_that("long urls use POST", {
 
 test_that("ngwmn urls don't use post", {
   testthat::skip_on_cran()
-  url <- paste0(rep("urlwithngwmn", 200), collapse = '')
+  baseURL <- dataRetrieval:::drURL("NGWMN") 
+  url <- paste0(baseURL,
+                rep("urlwithngwmn", 200), collapse = '')
   with_mock(
     RETRY = function(method, ...) {
       return(method == "POST")

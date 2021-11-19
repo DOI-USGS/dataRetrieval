@@ -22,7 +22,7 @@
 #' }
 getWebServiceData <- function(obs_url, ...){
   
-  if (!curl::has_internet()) {
+  if (!has_internet_2(obs_url)) {
     message("No internet connection.")
     return(invisible(NULL))
   }
@@ -47,7 +47,8 @@ getWebServiceData <- function(obs_url, ...){
       return(invisible(NULL))
     }
     
-    if(headerInfo$`content-type` %in% c("text/tab-separated-values;charset=UTF-8")){
+    if(headerInfo$`content-type` %in% c("text/tab-separated-values;charset=UTF-8",
+                                        "text/csv;charset=UTF-8")){
       returnedDoc <- httr::content(returnedList, type="text",encoding = "UTF-8")
     } else if (headerInfo$`content-type` %in% 
                c("application/zip", 
@@ -61,7 +62,7 @@ getWebServiceData <- function(obs_url, ...){
       return(txt)
     } else {
       returnedDoc <- httr::content(returnedList,encoding = "UTF-8")
-      if(grepl("No sites/data found using the selection criteria specified", returnedDoc)){
+      if(all(grepl("No sites/data found using the selection criteria specified", returnedDoc))){
         message(returnedDoc)
       }
       if(headerInfo$`content-type` == "text/xml"){
@@ -83,6 +84,9 @@ getWebServiceData <- function(obs_url, ...){
   }
 }
 
+#' Create user agent
+#' 
+#' @keywords internal
 default_ua <- function() {
   versions <- c(
     libcurl = curl::curl_version()$version,
@@ -97,6 +101,20 @@ default_ua <- function() {
   }
     
   return(ua)
+}
+
+#' has_internet2
+#' 
+#' Function to check for internet even if the user
+#' is behind a proxy
+#' 
+#' @keywords internal
+#' @param obs_url character obs_url to check
+has_internet_2 <- function(obs_url) {
+
+  host <- gsub("^https://(?:www[.])?([^/]*).*$", "\\1", obs_url )
+  
+  !is.null(curl::nslookup(host, error = FALSE))
 }
 
 #' getting header information from a WQP query
