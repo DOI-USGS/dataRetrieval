@@ -49,10 +49,10 @@ test_that("General NWIS retrievals working", {
   expect_is(waterYearStat$parameter_cd,"character")
   
   #Empty data
-  
+  # note....not empty anymore!
   urlTest <- "https://nwis.waterservices.usgs.gov/nwis/iv/?site=11447650&format=waterml,1.1&ParameterCd=63680&startDT=2016-12-13&endDT=2016-12-13"
   x <- importWaterML1(urlTest)
-  expect_equal(names(x), c("agency_cd","site_no","dateTime","tz_cd"))
+  expect_true(all(c("agency_cd","site_no","dateTime","tz_cd") %in% names(x)))
   
   #Test list:
   args <- list(sites="05114000", service="iv", 
