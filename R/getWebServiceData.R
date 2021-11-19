@@ -47,7 +47,8 @@ getWebServiceData <- function(obs_url, ...){
       return(invisible(NULL))
     }
     
-    if(headerInfo$`content-type` %in% c("text/tab-separated-values;charset=UTF-8")){
+    if(headerInfo$`content-type` %in% c("text/tab-separated-values;charset=UTF-8",
+                                        "text/csv;charset=UTF-8")){
       returnedDoc <- httr::content(returnedList, type="text",encoding = "UTF-8")
     } else if (headerInfo$`content-type` %in% 
                c("application/zip", 
@@ -61,7 +62,7 @@ getWebServiceData <- function(obs_url, ...){
       return(txt)
     } else {
       returnedDoc <- httr::content(returnedList,encoding = "UTF-8")
-      if(grepl("No sites/data found using the selection criteria specified", returnedDoc)){
+      if(all(grepl("No sites/data found using the selection criteria specified", returnedDoc))){
         message(returnedDoc)
       }
       if(headerInfo$`content-type` == "text/xml"){
