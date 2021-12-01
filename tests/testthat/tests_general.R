@@ -418,3 +418,41 @@ test_that("internal functions",{
 })
 
 
+test_that("whatWQPdata2", {
+  testthat::skip_on_cran()
+  
+  dane_county_data <- whatWQPdata2(countycode = "US:55:025",
+                                   summaryYears = 5,
+                                   siteType = "Stream")
+  
+  summary_names <- c("Provider",                          
+                     "MonitoringLocationIdentifier",      
+                     "YearSummarized",                    
+                     "CharacteristicType",                
+                     "CharacteristicName",                
+                     "ActivityCount",                     
+                     "ResultCount",                       
+                     "LastResultSubmittedDate",           
+                     "OrganizationIdentifier",            
+                     "OrganizationFormalName",           
+                     "MonitoringLocationName",           
+                     "MonitoringLocationTypeName",        
+                     "ResolvedMonitoringLocationTypeName",
+                     "HUCEightDigitCode",
+                     "MonitoringLocationUrl",             
+                     "CountyName",            
+                     "StateName",                       
+                     "MonitoringLocationLatitude",        
+                     "MonitoringLocationLongitude" )
+  
+  expect_true(all(summary_names %in% names(dane_county_data)))
+  expect_true(diff(range(dane_county_data$YearSummarized)) <= 5)
+  
+  lake_sites <- whatWQPdata2(siteType = "Lake, Reservoir, Impoundment",
+                             CharacteristicName = "Temperature, water",
+                             countycode = "US:55:025")
+  
+  expect_true(all(summary_names %in% names(lake_sites)))
+  expect_true(diff(range(lake_sites$YearSummarized)) >= 5)
+})
+
