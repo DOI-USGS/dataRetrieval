@@ -1,4 +1,9 @@
-dataRetrieval 2.8.10
+dataRetrieval 2.7.11
+==================
+* Added whatWQPdata2 function. Returns more information than the 
+whatWQPdata.
+
+dataRetrieval 2.7.10
 ==================
 * Functions that come back from a server that had and error now return with a message and NULL rather than error.
 
