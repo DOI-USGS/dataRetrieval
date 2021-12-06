@@ -1,7 +1,7 @@
 dataRetrieval 2.7.11
 ==================
-* Added whatWQPdata2 function. Returns more information than the 
-whatWQPdata.
+* Updated some documentation to improve examples.
+* Changed the check for internet to better account for proxies.
 
 dataRetrieval 2.7.10
 ==================
