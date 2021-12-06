@@ -166,8 +166,7 @@ test_that("General WQP retrievals working", {
    
 
 
-   expect_equal(attr(site1, "url"), "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&dataProfile=periodOfRecord&zip=yes&mimeType=csv")
-   
+  
    wqp.summary_no_atts <- readWQPdata(siteid="USGS-04024315",
                                       characteristicName=nameToUse,
                                       ignore_attributes = TRUE)
@@ -455,6 +454,9 @@ test_that("readWQPsummary", {
   
   expect_type(site1$ActivityCount, "double")
   expect_type(site1$MonitoringLocationIdentifier, "character")
+  
+  expect_equal(attr(site1, "url"), "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&zip=yes&dataProfile=periodOfRecord&mimeType=csv")
+  
   
 })
 
