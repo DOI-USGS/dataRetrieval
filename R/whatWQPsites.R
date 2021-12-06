@@ -96,17 +96,69 @@ whatWQPsites <- function(...){
 }
 
 
-#' @name readWQPsummary
-#' @rdname wqpSpecials
+#' Summary of Data Available from Water Quality Portal
+#'
+#' Returns a list of sites from the Water Quality Portal web service. This
+#' function gets the data from: \url{https://www.waterqualitydata.us}.
+#' Arguments to the function should be based on
+#' \url{https://www.waterqualitydata.us/webservices_documentation}.
+#' The information returned from this function describes the
+#' available data at the WQP sites, and some metadata on the sites themselves.
+#'
+#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation}
+#'  for a complete list of options. A list of arguments can also be supplied. 
+
+#' @return A data frame with at least the following columns:
+#' \tabular{lll}{ 
+#' Name \tab Type \tab Description \cr
+#'  "Provider" \tab character \tab Providing database.  \cr            
+#'  "MonitoringLocationIdentifier" \tab character \tab	A designator used to 
+#' describe the unique name, number, or code assigned to identify 
+#' the monitoring location.\cr
+#'  "YearSummarized" \tab numeric \tab The year of the summary \cr
+#'  "CharacteristicType" \tab character \tab CharacteristicType  \cr  
+#'  "CharacteristicName" \tab character \tab	The object, property, or substance 
+#' which is evaluated or enumerated by either a direct field measurement,
+#' a direct field observation, or by laboratory analysis of material
+#' collected in the field.\cr 
+#'  "ActivityCount" \tab numeric \tab The number of times the location was sampled \cr
+#'  "ResultCount" \tab numeric \tab The number of individual data results. \cr
+#'  "LastResultSubmittedDate" \tab Date \tab Date when data was last submitted. \cr
+#'  "OrganizationIdentifier" \tab character \tab  A designator used to uniquely 
+#' identify a unique business establishment within a context.\cr
+#'  "OrganizationFormalName" \tab character \tab  The legal designator
+#' (i.e. formal name) of an organization.\cr
+#'  "MonitoringLocationName \tab character \tab MonitoringLocationName \cr 
+#'  "MonitoringLocationTypeName" \tab character \tab MonitoringLocationTypeName \cr
+#'  "ResolvedMonitoringLocationTypeName" \tab character \tab  \cr
+#'  "HUCEightDigitCode" \tab character \tab 8-digit HUC id. \cr
+#'  "MonitoringLocationUrl" \tab character \tab URL to monitoring location. \cr
+#'  "CountyName" \tab character \tab County of sampling location. \cr
+#'  "StateName" \tab character \tab State of sampling location. \cr  
+#'  "MonitoringLocationLatitude"  \tab numeric \tab latitude of sampling 
+#'  location. \cr
+#'  "MonitoringLocationLongitude" \tab numeric \tab longitude of sampling 
+#'  location. \cr
+#' }
 #' @export
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' site1 <- readWQPsummary(siteid="USGS-07144100",
-#'                         summaryYears=5,
-#'                         dataProfile="periodOfRecord")
-#' # Pretty slow:
-#' #state1 <- readWQPsummary(statecode="NJ",
-#' #                          dataProfile="periodOfRecord")
+#' site_5 <- readWQPsummary(siteid="USGS-07144100",
+#'                         summaryYears=5)
+#'                         
+#' site_all <- readWQPsummary(siteid="USGS-07144100",
+#'                            summaryYears="all")
+#'                            
+#' dane_county_data <- readWQPsummary(countycode = "US:55:025",
+#'                         summaryYears = 5,
+#'                         siteType = "Stream")
+#' 
+#' 
+#' lake_sites <- readWQPsummary(siteType = "Lake, Reservoir, Impoundment",
+#'                          countycode = "US:55:025")
+#'                            
+#' # Very slow:
+#' #state1 <- readWQPsummary(statecode="NJ")
 #' }
 readWQPsummary <- function(...){
   
@@ -120,6 +172,10 @@ readWQPsummary <- function(...){
   
   if("service" %in% names(values)){
     values <- values[!(names(values) %in% "service")]
+  }
+  
+  if(!"dataProfile" %in% names(values)){
+    values[["dataProfile"]] <- "periodOfRecord"
   }
   
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))

@@ -164,12 +164,7 @@ test_that("General WQP retrievals working", {
    # 
    # expect_equal(ncol(dailyLexingtonVA),65)
    
-   site1 <- readWQPsummary(siteid="USGS-07144100",
-                           summaryYears=5,
-                           dataProfile="periodOfRecord")
-   
-   expect_type(site1$ActivityCount, "double")
-   expect_type(site1$MonitoringLocationIdentifier, "character")
+
 
    expect_equal(attr(site1, "url"), "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&dataProfile=periodOfRecord&zip=yes&mimeType=csv")
    
@@ -418,10 +413,10 @@ test_that("internal functions",{
 })
 
 
-test_that("whatWQPdata2", {
+test_that("readWQPsummary", {
   testthat::skip_on_cran()
   
-  dane_county_data <- whatWQPdata2(countycode = "US:55:025",
+  dane_county_data <- readWQPsummary(countycode = "US:55:025",
                                    summaryYears = 5,
                                    siteType = "Stream")
   
@@ -448,11 +443,18 @@ test_that("whatWQPdata2", {
   expect_true(all(summary_names %in% names(dane_county_data)))
   expect_true(diff(range(dane_county_data$YearSummarized)) <= 5)
   
-  lake_sites <- whatWQPdata2(siteType = "Lake, Reservoir, Impoundment",
+  lake_sites <- readWQPsummary(siteType = "Lake, Reservoir, Impoundment",
                              CharacteristicName = "Temperature, water",
                              countycode = "US:55:025")
   
   expect_true(all(summary_names %in% names(lake_sites)))
   expect_true(diff(range(lake_sites$YearSummarized)) >= 5)
+  
+  site1 <- readWQPsummary(siteid="USGS-07144100",
+                          summaryYears=5)
+  
+  expect_type(site1$ActivityCount, "double")
+  expect_type(site1$MonitoringLocationIdentifier, "character")
+  
 })
 
