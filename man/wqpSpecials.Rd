@@ -4,7 +4,6 @@
 \alias{whatWQPsamples}
 \alias{whatWQPmetrics}
 \alias{whatWQPsites}
-\alias{readWQPsummary}
 \title{Site Data Import from Water Quality Portal}
 \usage{
 whatWQPsamples(...)
@@ -12,8 +11,6 @@ whatWQPsamples(...)
 whatWQPmetrics(...)
 
 whatWQPsites(...)
-
-readWQPsummary(...)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
@@ -98,14 +95,6 @@ sites <- whatWQPsites(countycode="US:55:025",
 
 }
 \dontshow{\}) # examplesIf}
-\donttest{
-site1 <- readWQPsummary(siteid="USGS-07144100",
-                        summaryYears=5,
-                        dataProfile="periodOfRecord")
-# Pretty slow:
-#state1 <- readWQPsummary(statecode="NJ",
-#                          dataProfile="periodOfRecord")
-}
 }
 \seealso{
 whatNWISdata

@@ -164,15 +164,9 @@ test_that("General WQP retrievals working", {
    # 
    # expect_equal(ncol(dailyLexingtonVA),65)
    
-   site1 <- readWQPsummary(siteid="USGS-07144100",
-                           summaryYears=5,
-                           dataProfile="periodOfRecord")
-   
-   expect_type(site1$ActivityCount, "double")
-   expect_type(site1$MonitoringLocationIdentifier, "character")
 
-   expect_equal(attr(site1, "url"), "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&dataProfile=periodOfRecord&zip=yes&mimeType=csv")
-   
+
+  
    wqp.summary_no_atts <- readWQPdata(siteid="USGS-04024315",
                                       characteristicName=nameToUse,
                                       ignore_attributes = TRUE)
@@ -417,4 +411,52 @@ test_that("internal functions",{
 
 })
 
+
+test_that("readWQPsummary", {
+  testthat::skip_on_cran()
+  
+  dane_county_data <- readWQPsummary(countycode = "US:55:025",
+                                   summaryYears = 5,
+                                   siteType = "Stream")
+  
+  summary_names <- c("Provider",                          
+                     "MonitoringLocationIdentifier",      
+                     "YearSummarized",                    
+                     "CharacteristicType",                
+                     "CharacteristicName",                
+                     "ActivityCount",                     
+                     "ResultCount",                       
+                     "LastResultSubmittedDate",           
+                     "OrganizationIdentifier",            
+                     "OrganizationFormalName",           
+                     "MonitoringLocationName",           
+                     "MonitoringLocationTypeName",        
+                     "ResolvedMonitoringLocationTypeName",
+                     "HUCEightDigitCode",
+                     "MonitoringLocationUrl",             
+                     "CountyName",            
+                     "StateName",                       
+                     "MonitoringLocationLatitude",        
+                     "MonitoringLocationLongitude" )
+  
+  expect_true(all(summary_names %in% names(dane_county_data)))
+  expect_true(diff(range(dane_county_data$YearSummarized)) <= 5)
+  
+  lake_sites <- readWQPsummary(siteType = "Lake, Reservoir, Impoundment",
+                             CharacteristicName = "Temperature, water",
+                             countycode = "US:55:025")
+  
+  expect_true(all(summary_names %in% names(lake_sites)))
+  expect_true(diff(range(lake_sites$YearSummarized)) >= 5)
+  
+  site1 <- readWQPsummary(siteid="USGS-07144100",
+                          summaryYears=5)
+  
+  expect_type(site1$ActivityCount, "double")
+  expect_type(site1$MonitoringLocationIdentifier, "character")
+  
+  expect_equal(attr(site1, "url"), "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&zip=yes&dataProfile=periodOfRecord&mimeType=csv")
+  
+  
+})
 
