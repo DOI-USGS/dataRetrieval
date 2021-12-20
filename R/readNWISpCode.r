@@ -24,6 +24,10 @@
 #' 
 #' paramINFO <- readNWISpCode(c('01075','00060','00931'))
 #' paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
+#' \donttest{
+#' all_codes <- readNWISpCode("all")
+#' 
+#' }
 readNWISpCode <- function(parameterCd){
  
   parameterCd.orig <- parameterCd
@@ -31,50 +35,58 @@ readNWISpCode <- function(parameterCd){
   
   baseURL <- drURL("pCode", Access=pkg.env$access)
   
-  fullURL <- appendDrURL(baseURL,radio_pm_search="param_group",
-                         pm_group="All+--+include+all+parameter+groups",
-                         show="parameter_group_nm",
-                         show="parameter_nm",
-                         show="casrn",
-                         show="srsname",
-                         show="parameter_units",
-                         format="rdb")
+  fullURL <- paste0(baseURL, "fmt=rdb&group_cd=%")
   
   if(any(parameterCd == "all")){
-    parameterData <- importRDB1(fullURL, asDateTime = FALSE)
+    temp_df <- importRDB1(fullURL, asDateTime = FALSE)
+    parameterData <- data.frame(
+      parameter_cd = temp_df$parm_cd, 
+      parameter_group_nm = temp_df$group,
+      parameter_nm = temp_df$parm_nm, 
+      casrn = temp_df$CASRN,
+      srsname = temp_df$SRSName,
+      parameter_units = temp_df$parm_unit,
+      stringsAsFactors = FALSE
+    )
+    attr(parameterData, "url") <- fullURL
   } else {
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd,]
-  
+    
     if(nrow(parameterData) != length(parameterCd)){
       if(length(parameterCd) == 1){
-        
-        suburl <- appendDrURL(baseURL,radio_pm_search="pm_search",
-                               pm_search=parameterCd,
-                               show="parameter_group_nm",
-                               show="parameter_nm",
-                               show="casrn",
-                               show="srsname",
-                               show="parameter_units",
-                               format="rdb")
-        
-        suburl <- paste0("https://nwis.waterdata.usgs.gov/nwis/pmcodes/pmcodes?radio_pm_search=pm_search",
-                     "&pm_search=", parameterCd,
-                     "&format=rdb", "&show=parameter_group_nm",
-                     "&show=parameter_nm", "&show=casrn",
-                     "&show=srsname", "&show=parameter_units")
-        parameterData <- importRDB1(suburl,asDateTime = FALSE)
+        subURL <- paste0(baseURL, "fmt=rdb&parm_nm_cd=", parameterCd)
+        temp_df <- importRDB1(subURL, asDateTime = FALSE)
+        parameterData <- data.frame(
+          parameter_cd = temp_df$parm_cd, 
+          parameter_group_nm = temp_df$group,
+          parameter_nm = temp_df$parm_nm, 
+          casrn = temp_df$CASRN,
+          srsname = temp_df$SRSName,
+          parameter_units = temp_df$parm_unit,
+          stringsAsFactors = FALSE
+        )
+        attr(parameterData, "url") <- subURL
       } else {
-        
-        fullPcodeDownload <- importRDB1(fullURL)
-        parameterData <- fullPcodeDownload[fullPcodeDownload$parameter_cd %in% parameterCd,]
+        temp_df <- importRDB1(fullURL, asDateTime = FALSE)
+        trim_df <- data.frame(
+          parameter_cd = temp_df$parm_cd, 
+          parameter_group_nm = temp_df$group,
+          parameter_nm = temp_df$parm_nm, 
+          casrn = temp_df$CASRN,
+          srsname = temp_df$SRSName,
+          parameter_units = temp_df$parm_unit,
+          stringsAsFactors = FALSE
+        )
+        parameterData <- trim_df[trim_df$parameter_cd %in% parameterCd,]
+        attr(parameterData, "url") <- fullURL
       }
       
       if(nrow(parameterData) != length(parameterCd)){
         badPcode <- parameterCd[!(parameterCd %in% parameterData$parameter_cd)]
         warning("The following pCodes seem mistyped, and no information was returned: ",paste(badPcode,collapse=","))
       }
-    } 
+    }
   }
   
   if(nrow(parameterData) != sum(is.na(parameterCd.orig))){
@@ -82,6 +94,7 @@ readNWISpCode <- function(parameterCd){
     names(na.params) <- names(parameterData)
     parameterData <- rbind(parameterData, na.params)
   }
+  
   
   return(parameterData)
 }

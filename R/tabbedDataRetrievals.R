@@ -29,7 +29,7 @@ NULL
 
 #' List of USGS parameter codes
 #'
-#' Complete list of USGS parameter codes as of Oct. 13, 2020. 
+#' Complete list of USGS parameter codes as of Dec. 20, 2021. 
 #'
 #' @name parameterCdFile
 #' @return parameterData data frame with information about USGS parameters.
@@ -56,8 +56,8 @@ NULL
 
 #' Data to convert USGS parameter code to characteristic names
 #'
-#' Data pulled from Water Quality Portal on October 13, 2020. The data was pulled from
-#' \url{https://www.waterqualitydata.us/public_srsnames?mimeType=json}.
+#' Data pulled from Water Quality Portal on December 20, 2021. The data was pulled from
+#' \url{https://www.waterqualitydata.us/Codes/public_srsnames/?mimeType=csv}.
 #'
 #' @name pCodeToName
 #' @return pCodeToName data frame with information about USGS parameters and how they
