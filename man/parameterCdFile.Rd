@@ -18,7 +18,7 @@ parameter_units \tab character \tab Parameter units\cr
 }
 }
 \description{
-Complete list of USGS parameter codes as of Oct. 13, 2020.
+Complete list of USGS parameter codes as of Dec. 20, 2021.
 }
 \examples{
 head(parameterCdFile[,1:2])
