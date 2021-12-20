@@ -53,6 +53,7 @@ setAccess = function(access="public"){
   pkg.env$stat = "https://waterservices.usgs.gov/nwis/stat/"
   pkg.env$useNat = "https://waterdata.usgs.gov/nwis/water_use"
   pkg.env$pCode = "https://help.waterdata.usgs.gov/code/parameter_cd_query"
+  pkg.env$pCodeSingle = "https://help.waterdata.usgs.gov/code/parameter_cd_nm_query"
   # NOTE: state water use are still in: constructUseURL
 
   pkg.env$Result = "https://www.waterqualitydata.us/data/Result/search"
