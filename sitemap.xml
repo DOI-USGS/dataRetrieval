@@ -16,9 +16,6 @@
     <loc>/articles/dataRetrieval.html</loc>
   </url>
   <url>
-    <loc>/articles/earthquake.html</loc>
-  </url>
-  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -73,6 +70,9 @@
     <loc>/reference/dataRetrieval.html</loc>
   </url>
   <url>
+    <loc>/reference/default_ua.html</loc>
+  </url>
+  <url>
     <loc>/reference/findNLDI.html</loc>
   </url>
   <url>
@@ -83,6 +83,9 @@
   </url>
   <url>
     <loc>/reference/get_nldi_sources.html</loc>
+  </url>
+  <url>
+    <loc>/reference/has_internet_2.html</loc>
   </url>
   <url>
     <loc>/reference/importNGWMN.html</loc>
@@ -101,6 +104,9 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/is_dataRetrieval_user.html</loc>
   </url>
   <url>
     <loc>/reference/pCodeToName.html</loc>
@@ -164,6 +170,9 @@
   </url>
   <url>
     <loc>/reference/readWQPqw.html</loc>
+  </url>
+  <url>
+    <loc>/reference/readWQPsummary.html</loc>
   </url>
   <url>
     <loc>/reference/renameNWISColumns.html</loc>
