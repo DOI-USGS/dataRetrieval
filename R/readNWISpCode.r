@@ -48,6 +48,7 @@ readNWISpCode <- function(parameterCd){
       parameter_units = temp_df$parm_unit,
       stringsAsFactors = FALSE
     )
+    attr(parameterData, "url") <- fullURL
   } else {
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd,]
@@ -65,6 +66,7 @@ readNWISpCode <- function(parameterCd){
           parameter_units = temp_df$parm_unit,
           stringsAsFactors = FALSE
         )
+        attr(parameterData, "url") <- subURL
       } else {
         temp_df <- importRDB1(fullURL, asDateTime = FALSE)
         trim_df <- data.frame(
@@ -77,6 +79,7 @@ readNWISpCode <- function(parameterCd){
           stringsAsFactors = FALSE
         )
         parameterData <- trim_df[trim_df$parameter_cd %in% parameterCd,]
+        attr(parameterData, "url") <- fullURL
       }
       
       if(nrow(parameterData) != length(parameterCd)){
@@ -91,6 +94,7 @@ readNWISpCode <- function(parameterCd){
     names(na.params) <- names(parameterData)
     parameterData <- rbind(parameterData, na.params)
   }
+  
   
   return(parameterData)
 }
