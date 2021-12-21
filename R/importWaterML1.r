@@ -275,7 +275,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
     
     #rep site no & agency, combine into DF
     obsDFrows <- nrow(obsDF)
-    df <- cbind.data.frame(agency_cd = rep(agency_cd,obsDFrows), site_no = rep(site_no,obsDFrows), 
+    df <- cbind.data.frame(agency_cd = rep(agency_cd,obsDFrows), 
+                           site_no = rep(site_no,obsDFrows), 
                            obsDF, stringsAsFactors = FALSE)
     
     #join by site no 
@@ -299,7 +300,23 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
                             y = df, 
                             by = sameSite_simNames, 
                             all=TRUE)
+          na.omit.unique <- function(x){
+            if(all(is.na(x))) NA else na.omit(x)
+          }
+          if(any(duplicated(sameSite[,c("agency_cd", "site_no", 
+                                        "dateTime", "tz_cd")]))){
+
+            types <- lapply(sameSite, class)
+            sameSite <- aggregate(.~ agency_cd + site_no + dateTime + tz_cd,
+                        data = sameSite,
+                        FUN = na.omit.unique, na.action=NULL )
+            sameSite[,which(types == "numeric")] <- sapply(sameSite[,which(types == "numeric")], as.numeric)
+            sameSite[,which(types == "character")] <- sapply(sameSite[,which(types == "character")], as.character)
+            
+          }
+          
           sameSite <- sameSite[order(as.Date(sameSite$dateTime)),]
+
           mergedDF <- r_bind_dr(sameSite, diffSite)
         } else {
           similarNames <- intersect(colnames(mergedDF), colnames(df))
@@ -358,7 +375,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
 
 r_bind_dr <- function(df1, df2){
   
-  # Note...this funciton doesn't retain factors/levels
+  # Note...this function doesn't retain factors/levels
   # That is not a problem with any dataRetrieval function
   # but, if this function gets used else-where, 
   # that should be addressed.
