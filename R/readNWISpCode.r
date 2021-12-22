@@ -56,14 +56,15 @@ readNWISpCode <- function(parameterCd){
     if(nrow(parameterData) != length(parameterCd)){
       
       if(nrow(parameterData) > 0){
-        parameterCd <- parameterCd[!parameterCd %in% unique(parameterData$parameter_cd)]
+        parameterCd_lookup <- parameterCd[!parameterCd %in% unique(parameterData$parameter_cd)]
       }
-      if(length(parameterCd) == 1){
+      if(length(parameterCd_lookup) == 1){
         baseURL <- drURL("pCodeSingle", Access=pkg.env$access)
-        subURL <- paste0(baseURL, "fmt=rdb&parm_nm_cd=", parameterCd)
+        subURL <- paste0(baseURL, "fmt=rdb&parm_nm_cd=", parameterCd_lookup)
         temp_df <- importRDB1(subURL, asDateTime = FALSE)
-        parameterData <- data.frame(
-          parameter_cd = temp_df$parm_cd, 
+        
+        temp_df <- data.frame(
+          parameter_cd = temp_df$parameter_cd, 
           parameter_group_nm = temp_df$group,
           parameter_nm = temp_df$parm_nm, 
           casrn = temp_df$CASRN,
@@ -71,6 +72,8 @@ readNWISpCode <- function(parameterCd){
           parameter_units = temp_df$parm_unit,
           stringsAsFactors = FALSE
         )
+        
+        parameterData <- rbind(parameterData, temp_df)
         attr(parameterData, "url") <- subURL
       } else {
         temp_df <- importRDB1(fullURL, asDateTime = FALSE)
@@ -89,7 +92,8 @@ readNWISpCode <- function(parameterCd){
       
       if(nrow(parameterData) != length(parameterCd)){
         badPcode <- parameterCd[!(parameterCd %in% parameterData$parameter_cd)]
-        warning("The following pCodes seem mistyped, and no information was returned: ",paste(badPcode,collapse=","))
+        warning("The following pCodes seem mistyped, and no information was returned: ",
+                paste(badPcode,collapse=","))
       }
     }
   }
@@ -99,7 +103,7 @@ readNWISpCode <- function(parameterCd){
     names(na.params) <- names(parameterData)
     parameterData <- rbind(parameterData, na.params)
   }
-  
-  
+  # order by parameterCd.orig
+  parameterData <- parameterData[match(parameterCd.orig, parameterData$parameter_cd),]
   return(parameterData)
 }
