@@ -97,6 +97,14 @@ test_that("General NWIS retrievals working", {
                                               "update_time",
                                               "url")))
   
+  multi_hucs <- c("07130007", "07130011")
+  multi_huc <- dataRetrieval::readNWISdata(huc = multi_hucs, 
+                                           parameterCd = "63680", 
+                                           startDate = "2015-06-18", 
+                                           endDate = "2015-06-18", 
+                                           service="dv") 
+  expect_equal(2, nrow(multi_huc))
+  
 })
 
 test_that("whatNWISdata",{
