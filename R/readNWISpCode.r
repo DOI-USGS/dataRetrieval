@@ -104,6 +104,8 @@ readNWISpCode <- function(parameterCd){
     parameterData <- rbind(parameterData, na.params)
   }
   # order by parameterCd.orig
-  parameterData <- parameterData[match(parameterCd.orig, parameterData$parameter_cd),]
+  if(!isTRUE(parameterCd.orig == "all")){
+    parameterData <- parameterData[match(parameterCd.orig, parameterData$parameter_cd),]
+  }
   return(parameterData)
 }
