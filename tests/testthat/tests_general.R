@@ -104,6 +104,8 @@ test_that("General NWIS retrievals working", {
                                            endDate = "2015-06-18", 
                                            service="dv") 
   expect_equal(2, nrow(multi_huc))
+
+  
   
 })
 
