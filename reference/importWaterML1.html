@@ -160,8 +160,8 @@ There are also several useful attributes attached to the data frame:</p><table c
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Timezone change with specified local timezone:</span></span>
 <span class="r-in"><span class="va">tzURL</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="st">"04027000"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00300"</span>,<span class="st">"63680"</span><span class="op">)</span>, <span class="st">"2011-11-05"</span>, <span class="st">"2011-11-07"</span>,<span class="st">"uv"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tzIssue</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">tzURL</span>, <span class="cn">TRUE</span>, <span class="st">"America/Chicago"</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in lapply(X = X, FUN = FUN, ...):</span> 'list' object cannot be coerced to type 'double'</span>
+<span class="r-in"><span class="va">tzIssue</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">tzURL</span>, </span>
+<span class="r-in">                          asDateTime <span class="op">=</span> <span class="cn">TRUE</span>, tz <span class="op">=</span> <span class="st">"America/Chicago"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># raw XML</span></span>
 <span class="r-in"><span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span>service <span class="op">=</span> <span class="st">'dv'</span>, siteNumber <span class="op">=</span> <span class="st">'02319300'</span>, parameterCd <span class="op">=</span> <span class="st">"00060"</span>, </span>
