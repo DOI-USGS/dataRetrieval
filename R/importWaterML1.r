@@ -89,7 +89,8 @@
 #' 
 #' # Timezone change with specified local timezone:
 #' tzURL <- constructNWISURL("04027000", c("00300","63680"), "2011-11-05", "2011-11-07","uv")
-#' tzIssue <- importWaterML1(tzURL, TRUE, "America/Chicago")
+#' tzIssue <- importWaterML1(tzURL, 
+#'                           asDateTime = TRUE, tz = "America/Chicago")
 #'
 #' # raw XML
 #' url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
@@ -197,7 +198,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
         }                                        
         
         #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
-        attr(dateTime, 'tzone') <- tz 
+        # Set to UTC now, convert the whole thing to tz later.
+        attr(dateTime, 'tzone') <- "UTC"
         tzCol <- rep(tz,nObs)
       } else {
         tzCol <- rep(defaultTZ, nObs)
@@ -241,7 +243,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
           obsDF <- data.frame(dateTime=character(0), tz_cd=character(0), stringsAsFactors = FALSE)
           if(asDateTime){
             obsDF$dateTime <- as.POSIXct(obsDF$dateTime)
-            attr(obsDF$dateTime, "tzone") <- tz
+            attr(obsDF$dateTime, "tzone") <- "UTC"
           }
         }
       }
@@ -275,7 +277,8 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
     
     #rep site no & agency, combine into DF
     obsDFrows <- nrow(obsDF)
-    df <- cbind.data.frame(agency_cd = rep(agency_cd,obsDFrows), site_no = rep(site_no,obsDFrows), 
+    df <- cbind.data.frame(agency_cd = rep(agency_cd,obsDFrows), 
+                           site_no = rep(site_no,obsDFrows), 
                            obsDF, stringsAsFactors = FALSE)
     
     #join by site no 
@@ -299,7 +302,24 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
                             y = df, 
                             by = sameSite_simNames, 
                             all=TRUE)
+          na.omit.unique <- function(x){
+            if(all(is.na(x))) NA else stats::na.omit(x)
+          }
+          
+          if(any(duplicated(sameSite[,c("agency_cd", "site_no", 
+                                        "dateTime", "tz_cd")]))){
+
+            types <- lapply(sameSite, class)
+            sameSite <- stats::aggregate(.~ agency_cd + site_no + dateTime + tz_cd,
+                        data = sameSite,
+                        FUN = na.omit.unique, na.action=NULL )
+            sameSite[,which(types == "numeric")] <- sapply(sameSite[,which(types == "numeric")], as.numeric)
+            sameSite[,which(types == "character")] <- sapply(sameSite[,which(types == "character")], as.character)
+            
+          }
+          
           sameSite <- sameSite[order(as.Date(sameSite$dateTime)),]
+
           mergedDF <- r_bind_dr(sameSite, diffSite)
         } else {
           similarNames <- intersect(colnames(mergedDF), colnames(df))
@@ -337,8 +357,9 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   #move tz column to far right and sort by increasing site number to be consistent with old version
   mergedNames <- names(mergedDF)
   tzLoc <- grep("tz_cd", names(mergedDF))
+  attr(mergedDF$dateTime, 'tzone') <- tz
   mergedDF <- mergedDF[c(mergedNames[-tzLoc],mergedNames[tzLoc])]
-
+  
   mergedDF <- mergedDF[order(mergedDF$site_no, mergedDF$dateTime),]
 ###############################################################  
   names(mergedDF) <- make.names(names(mergedDF))
@@ -358,7 +379,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
 
 r_bind_dr <- function(df1, df2){
   
-  # Note...this funciton doesn't retain factors/levels
+  # Note...this function doesn't retain factors/levels
   # That is not a problem with any dataRetrieval function
   # but, if this function gets used else-where, 
   # that should be addressed.

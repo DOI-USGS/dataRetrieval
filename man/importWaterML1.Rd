@@ -92,7 +92,8 @@ inactiveAndAcitive <- importWaterML1(inactiveAndAcitive)
 
 # Timezone change with specified local timezone:
 tzURL <- constructNWISURL("04027000", c("00300","63680"), "2011-11-05", "2011-11-07","uv")
-tzIssue <- importWaterML1(tzURL, TRUE, "America/Chicago")
+tzIssue <- importWaterML1(tzURL, 
+                          asDateTime = TRUE, tz = "America/Chicago")
 
 # raw XML
 url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
