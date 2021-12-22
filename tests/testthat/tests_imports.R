@@ -176,6 +176,14 @@ test_that("External importWaterML1 test", {
   expect_equal(chi_iv$dateTime[1], as.POSIXct("2014-05-01T00:00", format = "%Y-%m-%dT%H:%M", tz="America/Chicago"))
   expect_equal(chi_iv$dateTime[nrow(chi_iv)], as.POSIXct("2014-05-01T12:00", format = "%Y-%m-%dT%H:%M", tz="America/Chicago"))
   
+  # Time over daylight saving switch:
+  tzURL <- constructNWISURL("04027000", c("00300","63680"),
+                            "2011-11-05", "2011-11-07","uv")
+  tzIssue <- importWaterML1(tzURL, 
+                            asDateTime = TRUE,
+                            tz = "America/Chicago")
+  expect_false(any(duplicated(tzIssue$dateTime)))
+  
 })
 
 # test_that("no data val replacement works", {
