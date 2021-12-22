@@ -394,10 +394,12 @@ test_that("pCode Stuff", {
   
   testthat::skip_on_cran()
   
-  paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
+  paramINFO <- readNWISpCode(c('00060','01075','00931', NA))
   expect_equal(nrow(paramINFO), 4)
+  expect_equal(paramINFO$parameter_cd, c('00060','01075','00931', NA) )
   
   paramINFO <- readNWISpCode("all")
+  expect_true(nrow(paramINFO) > 24000)
   expect_equal(attr(paramINFO, "url"),
                "https://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&group_cd=%")
 })
