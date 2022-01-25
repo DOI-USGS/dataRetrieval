@@ -107,7 +107,7 @@
 </h1>
                         <h4 data-toc-skip class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
             
-            <h4 data-toc-skip class="date">2021-12-22</h4>
+            <h4 data-toc-skip class="date">2022-01-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/vignettes/nldi.Rmd" class="external-link"><code>vignettes/nldi.Rmd</code></a></small>
       <div class="hidden name"><code>nldi.Rmd</code></div>
@@ -119,9 +119,9 @@
 <p>This post will demonstrate <code>dataRetrieval</code> functions to query the <a href="https://labs.waterdata.usgs.gov/about-nldi/index.html" class="external-link">Network Linked Data Index</a> (NLDI).</p>
 <p>The NLDI provides a information backbone to navigate the NHDPlusV2 network and discover features indexed to the network. This process of feature discovery mirrors web-based navigation tools like Google Maps.</p>
 <hr>
-<div class="section level2">
-<h2 id="navigation-analogy">Navigation Analogy<a class="anchor" aria-label="anchor" href="#navigation-analogy"></a>
-</h2>
+<div class="section level3">
+<h3 id="navigation-analogy">Navigation Analogy<a class="anchor" aria-label="anchor" href="#navigation-analogy"></a>
+</h3>
 <p>Imagine you want to know about UCSB using Google Maps. In asking about the entity ‘UCSB’ we get information related to the feature (links, operating hours, photos) and things nearby.</p>
 <p><br><br></p>
 <div class="figure" style="text-align: center">
@@ -152,10 +152,10 @@ Gas stations between UCSB and UCLA
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span> <span class="co"># The star of the show!</span></code></pre></div>
 <hr>
 </div>
-<div class="section level1">
-<h1 id="whats-available">What’s available?<a class="anchor" aria-label="anchor" href="#whats-available"></a>
-</h1>
-<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2021-12-22), 11 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
+<div class="section level2">
+<h2 id="whats-available">What’s available?<a class="anchor" aria-label="anchor" href="#whats-available"></a>
+</h2>
+<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2022-01-25), 11 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
@@ -229,13 +229,13 @@ Gas stations between UCSB and UCLA
 </table>
 <hr>
 </div>
-<div class="section level1">
-<h1 id="featureorigin-discovery">Feature/Origin discovery<a class="anchor" aria-label="anchor" href="#featureorigin-discovery"></a>
-</h1>
+<div class="section level2">
+<h2 id="featureorigin-discovery">Feature/Origin discovery<a class="anchor" aria-label="anchor" href="#featureorigin-discovery"></a>
+</h2>
 <p>Features can be requested in two primary ways: Using the the native data set identifier, and using a location. The core feature set of the NLDI include the <code>NHD</code> flowlines, USGS <code>NWIS</code> locations, <code>WQP</code> locations, and <code>HUC12</code> pour points. Each of these are available as arguments in <code>findNLDI</code> and can be used to request a feature object.</p>
-<div class="section level3">
-<h3 id="by-identifier">By Identifier<a class="anchor" aria-label="anchor" href="#by-identifier"></a>
-</h3>
+<div class="section level4">
+<h4 id="by-identifier">By Identifier<a class="anchor" aria-label="anchor" href="#by-identifier"></a>
+</h4>
 <p>As an illustrative example, NHDPlus features can be requested by their COMID from the NHDPlusV2 data set.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span><span class="op">)</span></code></pre></div>
@@ -266,7 +266,7 @@ Gas stations between UCSB and UCLA
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 9</span></span>
 <span class="co">#&gt;   sourceName               identifier  comid name  reachcode measure     X     Y</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style="color: #BB0000;">120.</span>  34.4</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.505… -<span style="color: #BB0000;">120.</span>  34.4</span>
 <span class="co">#&gt; <span style="color: #949494;"># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># No sf use/installation</span>
@@ -274,7 +274,7 @@ Gas stations between UCSB and UCLA
 <pre><code><span class="co">#&gt;                 sourceName    identifier    comid                      name</span>
 <span class="co">#&gt; 1 NWIS Surface Water Sites USGS-11120000 17595429 ATASCADERO C NR GOLETA CA</span>
 <span class="co">#&gt;        reachcode       measure         X        Y</span>
-<span class="co">#&gt; 1 18060013000423 92.6508200000 -119.8118 34.42472</span></code></pre>
+<span class="co">#&gt; 1 18060013000423 92.5052327398 -119.8118 34.42472</span></code></pre>
 <hr>
 <p>Any NLDI feature found with <code>get_nldi_source</code> can be requested by passing a <code>type</code>/<code>ID</code> pair as a list to the <code>origin</code> argument. This will allow the networking capabilities offered in <code>dataRetrieval</code> to grow naturally with the NLDI itself. For example, we can use the origin argument to request features that don’t offer a specific parameter.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -286,13 +286,13 @@ Gas stations between UCSB and UCLA
 <span class="co">#&gt; Bounding box:  xmin: -119.7917 ymin: 34.47273 xmax: -119.7917 ymax: 34.47273</span>
 <span class="co">#&gt; CRS:           4326</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 7</span></span>
-<span class="co">#&gt;   sourceName           identifier comid   name      X     Y             geometry</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Water Data Exchange… CA_45206   175952… <span style="color: #949494;">""</span>    -<span style="color: #BB0000;">120.</span>  34.5 (-119.7917 34.47273)</span></code></pre>
+<span class="co">#&gt;   sourceName        identifier comid name      X     Y             geometry</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Water Data Excha… CA_45206   1759… <span style="color: #949494;">""</span>    -<span style="color: #BB0000;">120.</span>  34.5 (-119.7917 34.47273)</span></code></pre>
 </div>
-<div class="section level3">
-<h3 id="location-longitudelatitude">Location (longitude/latitude)<a class="anchor" aria-label="anchor" href="#location-longitudelatitude"></a>
-</h3>
+<div class="section level4">
+<h4 id="location-longitudelatitude">Location (longitude/latitude)<a class="anchor" aria-label="anchor" href="#location-longitudelatitude"></a>
+</h4>
 <p>If you don’t know a feature ID, a <code>longitude</code>/<code>latitude</code> (X,Y) pair or a sf/sfc POINT object can be passed to the <code>location</code> argument. Doing so will identify the NHDPlus catchment the location fall within and will return the associated NHDPlusV2 flowline.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Request by coordinates</span>
@@ -321,9 +321,9 @@ Gas stations between UCSB and UCLA
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span> NHDPlus comid 948060316  948060316 <span style="color: #949494;">""</span>    (-119.8823 34.41072, -119.8822 34.41…</span></code></pre>
 </div>
 </div>
-<div class="section level1">
-<h1 id="navigation">Navigation<a class="anchor" aria-label="anchor" href="#navigation"></a>
-</h1>
+<div class="section level2">
+<h2 id="navigation">Navigation<a class="anchor" aria-label="anchor" href="#navigation"></a>
+</h2>
 <p>From any feature (<code>comid</code>, <code>huc12</code>, <code>nwis</code>, <code>wqp</code>, <code>origin</code>) or <code>location</code>, four modes of navigation are available and include:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -374,9 +374,9 @@ NLDI Navigation Options
 <span class="co">#&gt; 2 UM_flowlines data.frame            14</span>
 <span class="co">#&gt; 3 DM_flowlines data.frame            43</span></code></pre>
 </div>
-<div class="section level1">
-<h1 id="searching-along-the-navigation">Searching along the Navigation<a class="anchor" aria-label="anchor" href="#searching-along-the-navigation"></a>
-</h1>
+<div class="section level2">
+<h2 id="searching-along-the-navigation">Searching along the Navigation<a class="anchor" aria-label="anchor" href="#searching-along-the-navigation"></a>
+</h2>
 <p>Like the gas station example, any of the features listed in <code>get_nldi_sources</code> can be searched for along the network, for example, we can find all NWIS gauges, on the upper tributary, of COMID 101.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="st">"nwis"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
@@ -400,9 +400,9 @@ NLDI Navigation Options
 <span class="co">#&gt; 1       origin    sf             1</span>
 <span class="co">#&gt; 2  UT_nwissite    sf             2</span>
 <span class="co">#&gt; 3 UT_flowlines    sf           325</span></code></pre>
-<div class="section level3">
-<h3 id="upstream-basin-boundary">Upstream Basin Boundary<a class="anchor" aria-label="anchor" href="#upstream-basin-boundary"></a>
-</h3>
+<div class="section level4">
+<h4 id="upstream-basin-boundary">Upstream Basin Boundary<a class="anchor" aria-label="anchor" href="#upstream-basin-boundary"></a>
+</h4>
 <p>The Upstream Basin Boundary is a unique object that can be found for any feature by adding “basin” to <code>find.</code> Basins are only geometries with no specific attribute data. Therefore basins can only be returned if <code>sf</code> is installed. Otherwise, the result will be a 0 column <code>data.frame</code></p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># with sf</span>
@@ -419,9 +419,9 @@ NLDI Navigation Options
 <span class="co">#&gt; 1 origin data.frame             4</span>
 <span class="co">#&gt; 2  basin data.frame             0</span></code></pre>
 </div>
-<div class="section level3">
-<h3 id="distance-constraints">Distance Constraints<a class="anchor" aria-label="anchor" href="#distance-constraints"></a>
-</h3>
+<div class="section level4">
+<h4 id="distance-constraints">Distance Constraints<a class="anchor" aria-label="anchor" href="#distance-constraints"></a>
+</h4>
 <p>In some cases, particularly for DM and DD navigation, the network can extend for hundreds of kilometers. You can limit (or extend) the distance of your search using the <code>distance_km</code> argument. As the name implies the value provided should be the maximum kilometers you want to search for features. The default for <code>distance_km</code> is 100.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Default 100 km</span>
@@ -441,9 +441,9 @@ NLDI Navigation Options
 <span class="co">#&gt; 3      DM_WQP    sf            17</span></code></pre>
 </div>
 </div>
-<div class="section level1">
-<h1 id="basic-dataretrieval-integration">Basic <code>dataRetrieval</code> integration<a class="anchor" aria-label="anchor" href="#basic-dataretrieval-integration"></a>
-</h1>
+<div class="section level2">
+<h2 id="basic-dataretrieval-integration">Basic <code>dataRetrieval</code> integration<a class="anchor" aria-label="anchor" href="#basic-dataretrieval-integration"></a>
+</h2>
 <p>Last, as this functionality is being added to the <code>dataRetrieval</code> package, lets see a basic example of how the NLDI tools provide a discovery mechanism for working with the <code>dataRetrieval</code> tools. Here we will take a location that is near <a href="https://www.google.com/maps/place/Colorado+Springs,+CO/@38.7864572,-104.7829507,17z" class="external-link">Fountain Creek in Colorado Springs, Colorado</a>.</p>
 <p>In this example we will use that location as the origin, navigate upstream along the mainstem, search for NWIS gauges, and use the identified siteIDs to query streamflow records from January 1<sup>st</sup>, 2020 to the current day.</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
@@ -516,7 +516,7 @@ NLDI Navigation Options
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

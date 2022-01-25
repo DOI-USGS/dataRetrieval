@@ -106,7 +106,7 @@
       <h1 data-toc-skip>Introduction to the dataRetrieval package</h1>
                         <h4 data-toc-skip class="author">Laura A. DeCicco and Robert M. Hirsch</h4>
             
-            <h4 data-toc-skip class="date">22 December, 2021</h4>
+            <h4 data-toc-skip class="date">25 January, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/vignettes/dataRetrieval.Rmd" class="external-link"><code>vignettes/dataRetrieval.Rmd</code></a></small>
       <div class="hidden name"><code>dataRetrieval.Rmd</code></div>
@@ -350,9 +350,9 @@
 </tbody>
 </table>
 <p>The arguments <code>startDate</code> and <code>endDate</code> have defaults to request the maximum data.</p>
-<div class="section level1">
-<h1 id="usgs-web-retrievals">USGS Web Retrievals<a class="anchor" aria-label="anchor" href="#usgs-web-retrievals"></a>
-</h1>
+<div class="section level2">
+<h2 id="usgs-web-retrievals">USGS Web Retrievals<a class="anchor" aria-label="anchor" href="#usgs-web-retrievals"></a>
+</h2>
 <p>In this section, examples of National Water Information System (NWIS) retrievals show how to get raw data into R. This data includes <a href="#site-information">site information</a>, measured <a href="#parameter-information">parameter information</a>, historical <a href="#daily-data">daily values</a>, <a href="#unit-data">unit values</a> (which include real-time data but can also include other sensor data stored at regular time intervals), <a href="#water-quality-data">water quality data</a>, <a href="#groundwater-level-data">groundwater level data</a>, <a href="#peak-flow-data">peak flow data</a>, <a href="#rating-curve-data">rating curve data</a>, <a href="#surface-water-measurement-data">surface-water measurement data</a>, <a href="#water-use-data">water use data</a>, and <a href="#statistics-data">statistics data</a>. The section <a href="#embedded-metadata">Embedded Metadata</a> shows instructions for getting metadata that is attached to each returned data frame.</p>
 <p>The USGS organizes hydrologic data in a standard structure. Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the <code>dataRetrieval</code> package as <code>siteNumber</code>). Often (but not always), these ID’s are 8 digits for surface-water sites and 15 digits for groundwater sites. The first step to finding data is discovering this <code>siteNumber</code>. There are many ways to do this, one is the <a href="https://maps.waterdata.usgs.gov/mapper/index.html" class="external-link">National Water Information System: Mapper</a>.</p>
 <p>Once the <code>siteNumber</code> is known, the next required input for USGS data retrievals is the “parameter code”. This is a 5-digit code that specifies the measured parameter being requested. For example, parameter code 00631 represents “Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen”, with units of “mg/l as N”.</p>
@@ -417,12 +417,12 @@
 </table>
 <p>Examples for using these site numbers, parameter codes, and statistic codes will be presented in subsequent sections.</p>
 <p>There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as “Ice”. Any value that cannot be converted to a number will be reported as NA in this package (not including remark code columns), unless the user sets an argument <code>convertType</code> to <code>FALSE</code>. In that case, the data is returned as a data frame that is entirely character columns.</p>
-<div class="section level2">
-<h2 id="site-information">Site Information<a class="anchor" aria-label="anchor" href="#site-information"></a>
-</h2>
 <div class="section level3">
-<h3 id="readnwissite">readNWISsite<a class="anchor" aria-label="anchor" href="#readnwissite"></a>
+<h3 id="site-information">Site Information<a class="anchor" aria-label="anchor" href="#site-information"></a>
 </h3>
+<div class="section level4">
+<h4 id="readnwissite">readNWISsite<a class="anchor" aria-label="anchor" href="#readnwissite"></a>
+</h4>
 <p>Use the <code>readNWISsite</code> function to obtain all of the information available for a particular USGS site (or sites) such as full station name, drainage area, latitude, and longitude. <code>readNWISsite</code> can also access information about multiple sites with a vector input.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">siteNumbers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"01491000"</span>,<span class="st">"01645000"</span><span class="op">)</span> 
@@ -432,9 +432,9 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/comment.html" class="external-link">comment</a></span><span class="op">(</span><span class="va">siteINFO</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="whatnwisdata">whatNWISdata<a class="anchor" aria-label="anchor" href="#whatnwisdata"></a>
-</h3>
+<div class="section level4">
+<h4 id="whatnwisdata">whatNWISdata<a class="anchor" aria-label="anchor" href="#whatnwisdata"></a>
+</h4>
 <p>To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the <code>whatNWISdata</code> function. It is possible to limit the retrieval information to a subset of services. The possible choices for services are: “dv” (daily values), “uv”, or “iv” (unit values), “qw” (water-quality), “sv” (sites visits), “pk” (peak measurements), “gw” (groundwater levels), “ad” (sites included in USGS Annual Water Data Reports External Link), “aw” (sites monitored by the USGS Active Groundwater Level Network External Link), and “id” (historical instantaneous values).</p>
 <p>In the following example, we limit the retrieved data to only daily data. The default for “service” is <code>all</code>, which returns all of the available data for that site. Likewise, there are arguments for parameter code (<code>parameterCd</code>) and statistic code (<code>statCd</code>) to filter the results. The default for both is to return all possible values (<code>all</code>). The returned <code>count_nu</code> for “uv” data is the count of days with returned data, not the actual count of returned values.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -516,18 +516,18 @@
 <p>See <a href="#creating-tables-in-microsoft-software-from-r">Creating Tables</a> for instructions on converting an R data frame to a table in Microsoft® software Excel or Word to display a data availability table similar to Table 4. Excel, Microsoft, PowerPoint, Windows, and Word are registered trademarks of Microsoft Corporation in the United States and other countries.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="parameter-information">Parameter Information<a class="anchor" aria-label="anchor" href="#parameter-information"></a>
-</h2>
+<div class="section level3">
+<h3 id="parameter-information">Parameter Information<a class="anchor" aria-label="anchor" href="#parameter-information"></a>
+</h3>
 <p>To obtain all of the available information concerning a measured parameter (or multiple parameters), use the <code>readNWISpCode</code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Using defaults:</span>
 <span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"00618"</span> 
 <span class="va">parameterINFO</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISpCode.html">readNWISpCode</a></span><span class="op">(</span><span class="va">parameterCd</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="daily-data">Daily Data<a class="anchor" aria-label="anchor" href="#daily-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="daily-data">Daily Data<a class="anchor" aria-label="anchor" href="#daily-data"></a>
+</h3>
 <p>To obtain daily records of USGS data, use the <code>readNWISdv</code> function. The arguments for this function are <code>siteNumbers</code>, <code>parameterCd</code>, <code>startDate</code>, <code>endDate</code>, and <code>statCd</code> (defaults to “00003”). If you want to use the default values, you do not need to list them in the function call. Daily data is pulled from <a href="https://waterservices.usgs.gov/rest/DV-Test-Tool.html" class="external-link">https://waterservices.usgs.gov/rest/DV-Test-Tool.html</a>.</p>
 <p>The dates (start and end) must be in the format “YYYY-MM-DD” (note: the user must include the quotes). Setting the start date to "" (no space) will prompt the program to ask for the earliest date, and setting the end date to "" (no space) will prompt for the latest available date.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -592,9 +592,9 @@
        col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>,<span class="st">"red"</span><span class="op">)</span>,lty<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>,<span class="fl">1</span><span class="op">)</span>,pch<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="cn">NA</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="dataRetrieval_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
 </div>
-<div class="section level2">
-<h2 id="unit-data">Unit Data<a class="anchor" aria-label="anchor" href="#unit-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="unit-data">Unit Data<a class="anchor" aria-label="anchor" href="#unit-data"></a>
+</h3>
 <p>Any data collected at regular time intervals (such as 15-minute or hourly) are known as “unit values”. Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function <code>readNWISuv</code>. Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days. Here is an example of a retrieval of such data.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"00060"</span>  <span class="co"># Discharge</span>
@@ -617,9 +617,9 @@
 <span class="va">America</span><span class="op">/</span><span class="va">Metlakatla</span></code></pre>
 <p>Data are retrieved from <a href="https://waterservices.usgs.gov/rest/IV-Test-Tool.html" class="external-link">https://waterservices.usgs.gov/rest/IV-Test-Tool.html</a>. There are occasions where NWIS values are not reported as numbers, instead a common example is “Ice”. Any value that cannot be converted to a number will be reported as NA in this package. Site information and measured parameter information is attached to the data frame as attributes. This is discussed further in <a href="#embedded-metadata">metadata</a> section.</p>
 </div>
-<div class="section level2">
-<h2 id="water-quality-data">Water Quality Data<a class="anchor" aria-label="anchor" href="#water-quality-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="water-quality-data">Water Quality Data<a class="anchor" aria-label="anchor" href="#water-quality-data"></a>
+</h3>
 <p>To get USGS water quality data from water samples collected at the streamgage or other monitoring site (as distinct from unit values collected through some type of automatic monitor) we can use the function <code>readNWISqw</code>, with the input arguments: <code>siteNumber</code>, <code>parameterCd</code>, <code>startDate</code>, and <code>endDate</code>. Additionally, the argument <code>expanded</code> is a logical input that allows the user to choose between a simple return of datetimes/qualifier/values (<code>expanded=FALSE</code>), or a more complete and verbose output (<code>expanded=TRUE</code>). <code>expanded = TRUE</code> includes such columns as remark codes, value qualifying text, and detection level for each parameter code. There also includes an argument “reshape”, that converts the expanded dataset to a “wide” format (each requested parameter code gets individual columns). The defaults are <code>expanded=TRUE</code>, and <code>reshape=FALSE</code>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Dissolved Nitrate parameter codes:</span>
@@ -637,42 +637,42 @@
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/comment.html" class="external-link">comment</a></span><span class="op">(</span><span class="va">dfLong</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="groundwater-level-data">Groundwater Level Data<a class="anchor" aria-label="anchor" href="#groundwater-level-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="groundwater-level-data">Groundwater Level Data<a class="anchor" aria-label="anchor" href="#groundwater-level-data"></a>
+</h3>
 <p>Groundwater level measurements can be obtained with the <code>readNWISgwl</code> function. Information on the returned data can be found with the <code>comment</code> function, and attached attributes as described in the <a href="#embedded-metadata">metadata</a> section.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">siteNumber</span> <span class="op">&lt;-</span> <span class="st">"434400121275801"</span>
 <span class="va">groundWater</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISgwl.html">readNWISgwl</a></span><span class="op">(</span><span class="va">siteNumber</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="peak-flow-data">Peak Flow Data<a class="anchor" aria-label="anchor" href="#peak-flow-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="peak-flow-data">Peak Flow Data<a class="anchor" aria-label="anchor" href="#peak-flow-data"></a>
+</h3>
 <p>Peak flow data are instantaneous discharge or stage data that record the maximum values of these variables during a flood event. They include the annual peak flood event but can also include records of other peaks that are lower than the annual maximum. Peak discharge measurements can be obtained with the <code>readNWISpeak</code> function. Information on the returned data can be found with the <code>comment</code> function and attached attributes as described in the <a href="#embedded-metadata">metadata</a> section.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">siteNumber</span> <span class="op">&lt;-</span> <span class="st">'01594440'</span>
 <span class="va">peakData</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISpeak.html">readNWISpeak</a></span><span class="op">(</span><span class="va">siteNumber</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="rating-curve-data">Rating Curve Data<a class="anchor" aria-label="anchor" href="#rating-curve-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="rating-curve-data">Rating Curve Data<a class="anchor" aria-label="anchor" href="#rating-curve-data"></a>
+</h3>
 <p>Rating curves are the calibration curves that are used to convert measurements of stage to discharge. Because of changing hydrologic conditions these rating curves change over time. Information on the returned data can be found with the <code>comment</code> function and attached attributes as described in the <a href="#embedded-metadata">metadata</a> section.</p>
 <p>Rating curves can be obtained with the <code>readNWISrating</code> function.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ratingData</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISrating.html">readNWISrating</a></span><span class="op">(</span><span class="va">siteNumber</span>, <span class="st">"base"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">ratingData</span>, <span class="st">"RATING"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="surface-water-measurement-data">Surface-Water Measurement Data<a class="anchor" aria-label="anchor" href="#surface-water-measurement-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="surface-water-measurement-data">Surface-Water Measurement Data<a class="anchor" aria-label="anchor" href="#surface-water-measurement-data"></a>
+</h3>
 <p>These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve. Information on the returned data can be found with the <code>comment</code> function and attached attributes as described in the <a href="#embedded-metadata">metadata</a> section.</p>
 <p>Surface-water measurement data can be obtained with the <code>readNWISmeas</code> function.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">surfaceData</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISmeas.html">readNWISmeas</a></span><span class="op">(</span><span class="va">siteNumber</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="water-use-data">Water Use Data<a class="anchor" aria-label="anchor" href="#water-use-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="water-use-data">Water Use Data<a class="anchor" aria-label="anchor" href="#water-use-data"></a>
+</h3>
 <p>Retrieves water use data from USGS Water Use Data for the Nation. See <a href="https://waterdata.usgs.gov/nwis/wu" class="external-link">https://waterdata.usgs.gov/nwis/wu</a> for more information. All available use categories for the supplied arguments are retrieved.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">allegheny</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISuse.html">readNWISuse</a></span><span class="op">(</span>stateCd <span class="op">=</span> <span class="st">"Pennsylvania"</span>,
@@ -683,9 +683,9 @@
                         countyCd <span class="op">=</span> <span class="cn">NULL</span>, 
                         transform <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="statistics-data">Statistics Data<a class="anchor" aria-label="anchor" href="#statistics-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="statistics-data">Statistics Data<a class="anchor" aria-label="anchor" href="#statistics-data"></a>
+</h3>
 <p>Retrieves site statistics from the USGS Statistics Web Service beta.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">discharge_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISstat.html">readNWISstat</a></span><span class="op">(</span>siteNumbers<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"02319394"</span><span class="op">)</span>,
@@ -693,9 +693,9 @@
                    statReportType<span class="op">=</span><span class="st">"annual"</span><span class="op">)</span> </code></pre></div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="water-quality-portal-web-retrievals">Water Quality Portal Web Retrievals<a class="anchor" aria-label="anchor" href="#water-quality-portal-web-retrievals"></a>
-</h1>
+<div class="section level2">
+<h2 id="water-quality-portal-web-retrievals">Water Quality Portal Web Retrievals<a class="anchor" aria-label="anchor" href="#water-quality-portal-web-retrievals"></a>
+</h2>
 <p>There are additional water quality data sets available from the <a href="https://www.waterqualitydata.us/" class="external-link">Water Quality Data Portal</a>. These data sets can be housed in either the STORET database (data from EPA), NWIS database (data from USGS), STEWARDS database (data from USDA), and additional databases are slated to be included in the future. Because only USGS uses parameter codes, a “characteristic name” must be supplied. The <code>readWQPqw</code> function can take either a USGS parameter code, or a more general characteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">specificCond</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readWQPqw.html">readWQPqw</a></span><span class="op">(</span><span class="st">'WIDNR_WQX-10032762'</span>,
@@ -703,16 +703,16 @@
                           <span class="st">'2011-05-01'</span>,<span class="st">'2011-09-30'</span><span class="op">)</span></code></pre></div>
 <p>A tool for finding NWIS characteristic names can be found <a href="https://www.waterqualitydata.us/public_srsnames/" class="external-link">here</a></p>
 </div>
-<div class="section level1">
-<h1 id="generalized-retrievals">Generalized Retrievals<a class="anchor" aria-label="anchor" href="#generalized-retrievals"></a>
-</h1>
-<p>The previous examples all took specific input arguments: <code>siteNumber</code>, <code>parameterCd</code> (or characteristic name), <code>startDate</code>, <code>endDate</code>, etc. However, the Web services that supply the data can accept a wide variety of additional arguments.</p>
 <div class="section level2">
-<h2 id="nwis">NWIS<a class="anchor" aria-label="anchor" href="#nwis"></a>
+<h2 id="generalized-retrievals">Generalized Retrievals<a class="anchor" aria-label="anchor" href="#generalized-retrievals"></a>
 </h2>
+<p>The previous examples all took specific input arguments: <code>siteNumber</code>, <code>parameterCd</code> (or characteristic name), <code>startDate</code>, <code>endDate</code>, etc. However, the Web services that supply the data can accept a wide variety of additional arguments.</p>
 <div class="section level3">
-<h3 id="sites-whatnwissites">Sites: whatNWISsites<a class="anchor" aria-label="anchor" href="#sites-whatnwissites"></a>
+<h3 id="nwis">NWIS<a class="anchor" aria-label="anchor" href="#nwis"></a>
 </h3>
+<div class="section level4">
+<h4 id="sites-whatnwissites">Sites: whatNWISsites<a class="anchor" aria-label="anchor" href="#sites-whatnwissites"></a>
+</h4>
 <p>The function <code>whatNWISsites</code> can be used to discover NWIS sites based on any query that the NWIS Site Service offers. This is done by using the <code>...</code> argument, which allows the user to use any arbitrary input argument. We can then use the service <a href="https://waterservices.usgs.gov/rest/Site-Test-Tool.html" class="external-link">here</a> to discover many options for searching for NWIS sites. For example, you may want to search for sites in a lat/lon bounding box, or only sites tidal streams, or sites with water quality samples, sites above a certain altitude, etc. The results of this site query generate a URL. For example, the tool provided a search within a specified bounding box, for sites that have daily discharge (parameter code = 00060) and temperature (parameter code = 00010). The generated URL is:</p>
 <p><a href="https://waterservices.usgs.gov/nwis/site/?format=rdb&amp;bBox=-83.0,36.5,-81.0,38.5&amp;parameterCd=00010,00060&amp;hasDataTypeCd=dv" class="external-link">https://waterservices.usgs.gov/nwis/site/?format=rdb&amp;bBox=-83.0,36.5,-81.0,38.5&amp;parameterCd=00010,00060&amp;hasDataTypeCd=dv</a></p>
 <p>The following <code>dataRetrieval</code> code can be used to get those sites:</p>
@@ -721,9 +721,9 @@
                       parameterCd<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00010"</span>,<span class="st">"00060"</span><span class="op">)</span>,
                       hasDataTypeCd<span class="op">=</span><span class="st">"dv"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="data-readnwisdata">Data: readNWISdata<a class="anchor" aria-label="anchor" href="#data-readnwisdata"></a>
-</h3>
+<div class="section level4">
+<h4 id="data-readnwisdata">Data: readNWISdata<a class="anchor" aria-label="anchor" href="#data-readnwisdata"></a>
+</h4>
 <p>For NWIS data, the function <code>readNWISdata</code> can be used. The argument listed in the R help file is <code>...</code> and <code>service</code> (only for data requests). Table 5 describes the services are available.</p>
 <table class="table">
 <caption>Table 5: NWIS general data calls</caption>
@@ -800,46 +800,46 @@
 <span class="va">siteInfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">dischargeWI</span>, <span class="st">"siteInfo"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div class="section level2">
-<h2 id="wqp">WQP<a class="anchor" aria-label="anchor" href="#wqp"></a>
-</h2>
-<p>Just as with NWIS, the Water Quality Portal (WQP) offers a variety of ways to search for sites and request data. The possible Web service arguments for WQP site searches is found <a href="https://www.waterqualitydata.us/webservices_documentation" class="external-link">here</a>.</p>
 <div class="section level3">
-<h3 id="sites-whatwqpsites">Sites: whatWQPsites<a class="anchor" aria-label="anchor" href="#sites-whatwqpsites"></a>
+<h3 id="wqp">WQP<a class="anchor" aria-label="anchor" href="#wqp"></a>
 </h3>
+<p>Just as with NWIS, the Water Quality Portal (WQP) offers a variety of ways to search for sites and request data. The possible Web service arguments for WQP site searches is found <a href="https://www.waterqualitydata.us/webservices_documentation" class="external-link">here</a>.</p>
+<div class="section level4">
+<h4 id="sites-whatwqpsites">Sites: whatWQPsites<a class="anchor" aria-label="anchor" href="#sites-whatwqpsites"></a>
+</h4>
 <p>To discover available sites in the WQP in New Jersey that have measured Chloride, use the function <code>whatWQPsites</code>.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sitesNJ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wqpSpecials.html">whatWQPsites</a></span><span class="op">(</span>statecode<span class="op">=</span><span class="st">"US:34"</span>,
                        characteristicName<span class="op">=</span><span class="st">"Chloride"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="data-readwqpdata">Data: readWQPdata<a class="anchor" aria-label="anchor" href="#data-readwqpdata"></a>
-</h3>
+<div class="section level4">
+<h4 id="data-readwqpdata">Data: readWQPdata<a class="anchor" aria-label="anchor" href="#data-readwqpdata"></a>
+</h4>
 <p>To get data from the WQP using generalized Web service calls, use the function <code>readWQPdata</code>. For example, to get all the pH data in Wisconsin:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dataPH</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readWQPdata.html">readWQPdata</a></span><span class="op">(</span>statecode<span class="op">=</span><span class="st">"US:55"</span>, 
                  characteristicName<span class="op">=</span><span class="st">"pH"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="availability-whatwqpdata">Availability: whatWQPdata<a class="anchor" aria-label="anchor" href="#availability-whatwqpdata"></a>
-</h3>
+<div class="section level4">
+<h4 id="availability-whatwqpdata">Availability: whatWQPdata<a class="anchor" aria-label="anchor" href="#availability-whatwqpdata"></a>
+</h4>
 <p>The function <code>whatWQPdata</code> returns a data frame with information on the amount of data collected at a site. For example:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">"Stream"</span>
 <span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatWQPdata.html">whatWQPdata</a></span><span class="op">(</span>countycode<span class="op">=</span><span class="st">"US:55:025"</span>,siteType<span class="op">=</span><span class="va">type</span><span class="op">)</span></code></pre></div>
 <p>This returns a data frame with all of the sites that were measured in streams in Dane County, WI. Also, in that table, there is a measure of <code>activityCount</code> (how often the site was sampled), and <code>resultCount</code> (how many individual results are available).</p>
 </div>
-<div class="section level3">
-<h3 id="samples-whatwqpsamples">Samples: whatWQPsamples<a class="anchor" aria-label="anchor" href="#samples-whatwqpsamples"></a>
-</h3>
+<div class="section level4">
+<h4 id="samples-whatwqpsamples">Samples: whatWQPsamples<a class="anchor" aria-label="anchor" href="#samples-whatwqpsamples"></a>
+</h4>
 <p>The function <code>whatWQPsamples</code> returns information on the individual samples collected at a site. For example:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">site</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wqpSpecials.html">whatWQPsamples</a></span><span class="op">(</span>siteid<span class="op">=</span><span class="st">"USGS-01594440"</span><span class="op">)</span></code></pre></div>
 <p>This returns one row for each instance that a sample was collect.</p>
 </div>
-<div class="section level3">
-<h3 id="metrics-whatwqpmetrics">Metrics: whatWQPmetrics<a class="anchor" aria-label="anchor" href="#metrics-whatwqpmetrics"></a>
-</h3>
+<div class="section level4">
+<h4 id="metrics-whatwqpmetrics">Metrics: whatWQPmetrics<a class="anchor" aria-label="anchor" href="#metrics-whatwqpmetrics"></a>
+</h4>
 <p>The function <code>whatWQPmetrics</code> provides metric information. This is only currently available for STORET data:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">"Stream"</span>
@@ -847,9 +847,9 @@
 </div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="embedded-metadata">Embedded Metadata<a class="anchor" aria-label="anchor" href="#embedded-metadata"></a>
-</h1>
+<div class="section level2">
+<h2 id="embedded-metadata">Embedded Metadata<a class="anchor" aria-label="anchor" href="#embedded-metadata"></a>
+</h2>
 <p>All data frames returned from the Web services have some form of associated metadata. This information is included as attributes to the data frame. All data frames will have a <code>url</code> (returning a character of the url used to obtain the data), <code>siteInfo</code> (returning a data frame with information on sites), and <code>queryTime</code> (returning a POSIXct datetime) attributes. For example, the url and query time used to obtain the data can be found as follows:</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">dischargeWI</span>, <span class="st">"url"</span><span class="op">)</span>
@@ -872,13 +872,13 @@
 <span class="co">#Which is equivalent to:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">peakData</span>, <span class="st">"comment"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level1">
-<h1 id="getting-started-in-r">Getting Started in R<a class="anchor" aria-label="anchor" href="#getting-started-in-r"></a>
-</h1>
-<p>This section describes the options for downloading and installing the <code>dataRetrieval</code> package.</p>
 <div class="section level2">
-<h2 id="new-to-r">New to R?<a class="anchor" aria-label="anchor" href="#new-to-r"></a>
+<h2 id="getting-started-in-r">Getting Started in R<a class="anchor" aria-label="anchor" href="#getting-started-in-r"></a>
 </h2>
+<p>This section describes the options for downloading and installing the <code>dataRetrieval</code> package.</p>
+<div class="section level3">
+<h3 id="new-to-r">New to R?<a class="anchor" aria-label="anchor" href="#new-to-r"></a>
+</h3>
 <p>If you are new to R, you will need to first install the latest version of R, which can be found [here] (www.R-project.org).</p>
 <p>At any time, you can get information about any function in R by typing a question mark before the functions name. This will open a file (in RStudio, in the Help window) that describes the function, the required arguments, and provides working examples. This will open a help file similar to the image below. To see the raw code for a particular code, type the name of the function, without parentheses.</p>
 <pre><code><span class="op">?</span><span class="va">readNWISpCode</span></code></pre>
@@ -890,9 +890,9 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span>topic <span class="op">=</span> <span class="st">"Introduction"</span>, package <span class="op">=</span> <span class="st">"dataRetrieval"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
-</h1>
+<div class="section level2">
+<h2 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
+</h2>
 <p>This information is preliminary and is subject to revision. It is being provided to meet the need for timely best science. The information is provided on the condition that neither the U.S. Geological Survey nor the U.S. Government may be held liable for any damages resulting from the authorized or unauthorized use of the information.</p>
 </div>
   </div>
@@ -914,7 +914,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

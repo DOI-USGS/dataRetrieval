@@ -172,7 +172,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style="color: #BB0000;">120.</span>  34.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.505… -<span style="color: #BB0000;">120.</span>  34.4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## Find feature by WQP ID </span></span>
@@ -183,9 +183,9 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -92.23492 ymin: 46.50355 xmax: -92.23492 ymax: 46.50355</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           4326</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName       identifier  comid name           X     Y             geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Water Quality P… USGS-04024… 1800… LITTLE BA… -<span style="color: #BB0000;">92.2</span>  46.5 (-92.23492 46.50355)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName        identifier comid name      X     Y             geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Water Quality Po… USGS-0402… 1800… LITT… -<span style="color: #BB0000;">92.2</span>  46.5 (-92.23492 46.50355)</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## Find feature by LOCATION</span></span>
 <span class="r-in"> <span class="fu">findNLDI</span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">115</span>,<span class="fl">40</span><span class="op">)</span><span class="op">)</span></span>
@@ -219,9 +219,9 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -119.7917 ymin: 34.47273 xmax: -119.7917 ymax: 34.47273</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           4326</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName           identifier comid   name      X     Y             geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Water Data Exchange… CA_45206   175952… <span style="color: #949494;">""</span>    -<span style="color: #BB0000;">120.</span>  34.5 (-119.7917 34.47273)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName        identifier comid name      X     Y             geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Water Data Excha… CA_45206   1759… <span style="color: #949494;">""</span>    -<span style="color: #BB0000;">120.</span>  34.5 (-119.7917 34.47273)</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Navigation (flowlines will be returned if find is unspecified)</span></span>
 <span class="r-in"><span class="co"># UPPER MAINSTEM of USGS-11120000</span></span>
@@ -235,7 +235,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style="color: #BB0000;">120.</span>  34.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.505… -<span style="color: #BB0000;">120.</span>  34.4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $UM_flowlines</span>
@@ -265,7 +265,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style="color: #BB0000;">120.</span>  34.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.505… -<span style="color: #BB0000;">120.</span>  34.4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $UT_flowlines</span>
@@ -317,7 +317,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style="color: #BB0000;">120.</span>  34.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.505… -<span style="color: #BB0000;">120.</span>  34.4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $UT_nwissite</span>
@@ -330,8 +330,8 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11119… 1759… ATAS… 18060013… 15.525… -<span style="color: #BB0000;">120.</span>  34.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style="color: #BB0000;">120.</span>  34.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> NWIS Surface Water Sites USGS-11119… 1759… MARI… 18060013… 14.036… -<span style="color: #BB0000;">120.</span>  34.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.505… -<span style="color: #BB0000;">120.</span>  34.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> NWIS Surface Water Sites USGS-11119… 1759… MARI… 18060013… 14.308… -<span style="color: #BB0000;">120.</span>  34.4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $UT_WQP</span>
@@ -341,18 +341,18 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -119.824 ymin: 34.4224 xmax: -119.7479 ymax: 34.4525</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           4326</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 64 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    sourceName       identifier    comid name        X     Y             geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Water Quality P… USGS-3425381… 1759… 004N02… -<span style="color: #BB0000;">120.</span>  34.4  (-119.814 34.42722)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Water Quality P… USGS-3427051… 1759… 004N02… -<span style="color: #BB0000;">120.</span>  34.5 (-119.7999 34.45139)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Water Quality P… USGS-3426121… 1759… 004N02… -<span style="color: #BB0000;">120.</span>  34.4 (-119.7742 34.43617)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Water Quality P… USGS-3425391… 1759… 004N02… -<span style="color: #BB0000;">120.</span>  34.4  (-119.8107 34.4275)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Water Quality P… USGS-3426191… 1759… 004N02… -<span style="color: #BB0000;">120.</span>  34.4 (-119.8021 34.43861)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Water Quality P… USGS-3426421… 1759… 004N02… -<span style="color: #BB0000;">120.</span>  34.4   (-119.7963 34.445)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Water Quality P… USGS-3426421… 1759… 004N02… -<span style="color: #BB0000;">120.</span>  34.4   (-119.7479 34.445)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Water Quality P… USGS-3427051… 1759… 004N02… -<span style="color: #BB0000;">120.</span>  34.5 (-119.7999 34.45139)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Water Quality P… USGS-3426191… 1759… 004N02… -<span style="color: #BB0000;">120.</span>  34.4 (-119.7679 34.43861)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Water Quality P… USGS-3426211… 1759… 004N02… -<span style="color: #BB0000;">120.</span>  34.4 (-119.7957 34.43916)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    sourceName       identifier comid name      X     Y             geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Water Quality P… USGS-3425… 1759… 004N… -<span style="color: #BB0000;">120.</span>  34.4  (-119.814 34.42722)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Water Quality P… USGS-3427… 1759… 004N… -<span style="color: #BB0000;">120.</span>  34.5 (-119.7999 34.45139)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Water Quality P… USGS-3426… 1759… 004N… -<span style="color: #BB0000;">120.</span>  34.4 (-119.7742 34.43617)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Water Quality P… USGS-3425… 1759… 004N… -<span style="color: #BB0000;">120.</span>  34.4  (-119.8107 34.4275)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Water Quality P… USGS-3426… 1759… 004N… -<span style="color: #BB0000;">120.</span>  34.4 (-119.8021 34.43861)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Water Quality P… USGS-3426… 1759… 004N… -<span style="color: #BB0000;">120.</span>  34.4   (-119.7963 34.445)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Water Quality P… USGS-3426… 1759… 004N… -<span style="color: #BB0000;">120.</span>  34.4   (-119.7479 34.445)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Water Quality P… USGS-3427… 1759… 004N… -<span style="color: #BB0000;">120.</span>  34.5 (-119.7999 34.45139)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Water Quality P… USGS-3426… 1759… 004N… -<span style="color: #BB0000;">120.</span>  34.4 (-119.7679 34.43861)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Water Quality P… USGS-3426… 1759… 004N… -<span style="color: #BB0000;">120.</span>  34.4 (-119.7957 34.43916)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 54 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
@@ -367,7 +367,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.650… -<span style="color: #BB0000;">120.</span>  34.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-11120… 1759… ATAS… 18060013… 92.505… -<span style="color: #BB0000;">120.</span>  34.4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $basin</span>
@@ -405,7 +405,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName               identifier  comid name  reachcode measure     X     Y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-08033… 1109… Nech… 12020003… 68.316… -<span style="color: #BB0000;">94.4</span>  31.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NWIS Surface Water Sites USGS-08033… 1109… Nech… 12020003… 68.708… -<span style="color: #BB0000;">94.4</span>  31.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: geometry &lt;POINT [°]&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $DM_WQP</span>
@@ -415,11 +415,11 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -94.3995 ymin: 31.0247 xmax: -94.38492 ymax: 31.03547</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           4326</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName       identifier   comid  name         X     Y             geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Water Quality P… USGS-080335… 11096… Neches … -<span style="color: #BB0000;">94.4</span>  31.0   (-94.39944 31.025)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Water Quality P… TCEQMAIN-10… 11096… NECHES … -<span style="color: #BB0000;">94.4</span>  31.0   (-94.3995 31.0247)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Water Quality P… USGS-310207… 11096… PR-37-6… -<span style="color: #BB0000;">94.4</span>  31.0 (-94.38492 31.03547)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName        identifier comid name      X     Y             geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Water Quality Po… USGS-0803… 1109… Nech… -<span style="color: #BB0000;">94.4</span>  31.0   (-94.39944 31.025)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Water Quality Po… TCEQMAIN-… 1109… NECH… -<span style="color: #BB0000;">94.4</span>  31.0   (-94.3995 31.0247)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Water Quality Po… USGS-3102… 1109… PR-3… -<span style="color: #BB0000;">94.4</span>  31.0 (-94.38492 31.03547)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $DM_flowlines</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 20 features and 1 field</span>
@@ -466,7 +466,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

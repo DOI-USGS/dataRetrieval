@@ -114,15 +114,15 @@
 
     
     
-<div class="section level1">
-<h1 id="changes-to-water-quality-services">Changes to water quality services<a class="anchor" aria-label="anchor" href="#changes-to-water-quality-services"></a>
-</h1>
+<div class="section level2">
+<h2 id="changes-to-water-quality-services">Changes to water quality services<a class="anchor" aria-label="anchor" href="#changes-to-water-quality-services"></a>
+</h2>
 <p>There was a recent announcement that the NWIS discrete water quality web services will be shut down in spring of 2022 (continuous water quality data will continue to be made available via NWIS functions). What does this mean for <code>dataRetrieval</code> users? The water quality data will continue to be available, but it must be accessed from the <a href="https://www.waterqualitydata.us/" class="external-link">Water Quality Portal</a> rather than the NWIS services. There are 3 major <code>dataRetrieval</code> functions that will be affected: <code>readNWISqw</code>, <code>whatNWISdata</code>, and <code>readNWISdata</code>. This vignette will describe the most common workflows conversions needed to update existing scripts.</p>
 <p>This vignette is being provided well in advance of any breaking changes, and more information and guidance will be provided. If you need more help than is provided here, please reach out to <a href="mailto:gs-w-IOW_PO_team@usgs.gov" class="email">gs-w-IOW_PO_team@usgs.gov</a></p>
-<div class="section level2">
-<h2 id="readnwisqw">
+<div class="section level3">
+<h3 id="readnwisqw">
 <code>readNWISqw</code><a class="anchor" aria-label="anchor" href="#readnwisqw"></a>
-</h2>
+</h3>
 <p>Starting with version 2.7.9, users will notice a Warning message when using this function:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">site_ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'04024430'</span>,<span class="st">'04024000'</span><span class="op">)</span>
@@ -335,9 +335,9 @@ WQP
 </tbody>
 </table>
 <p>Now we can start looking at the results and trying to decide how future workflows should be setup. Here are some decisions for this example that we can consider:</p>
-<div class="section level3">
-<h3 id="censored-values">Censored values<a class="anchor" aria-label="anchor" href="#censored-values"></a>
-</h3>
+<div class="section level4">
+<h4 id="censored-values">Censored values<a class="anchor" aria-label="anchor" href="#censored-values"></a>
+</h4>
 <p>The result_va in the NWIS service came back with a value. However, the data is actually censored, meaning we only know it’s below the detection limit. With some lazier coding, it might have been really easy to not realize these values are left-censored. So, while we could substitute the detection levels into the measured values if there’s an <code>NA</code> in the measured value, this might be a great time to update your workflow to handle censored values more robustly. We are probably interested in maintaining the detection level in another column.</p>
 <p>For this theoretical workflow, let’s think about what we are trying to find out. Let’s say that we want to know if a value is “left-censored” or not. Maybe in this case, what would make the most sense is to have a column that is a logical TRUE/FALSE. For this example, there was only the text “Not Detected” in the “ResultDetectionConditionText” column PLEASE NOTE that other data may include different messages about detection conditions, you will need to examine your data carefully. Here’s an example from the <code>EGRET</code> package on how to decide if a “ResultDetectionConditionText” should be considered a censored value:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
@@ -429,9 +429,9 @@ WQP
 </tbody>
 </table>
 </div>
-<div class="section level3">
-<h3 id="nwis-codes">NWIS codes<a class="anchor" aria-label="anchor" href="#nwis-codes"></a>
-</h3>
+<div class="section level4">
+<h4 id="nwis-codes">NWIS codes<a class="anchor" aria-label="anchor" href="#nwis-codes"></a>
+</h4>
 <p>Another difference that is going to require some thoughtful decisions is how to interpret additional NWIS codes. They will now be descriptive text. Columns such as hyd_cond_cd, samp_type_cd, hyd_event_cd, medium_cd will now all be reported with descriptive words rather than single letters or numbers. It will be the responsibility of the user to consider the best way to deal with these changes.</p>
 <p>To take full advantage of the Water Quality Portal, it would be a good idea to begin to move away from USGS parameter codes. While USGS data includes a parameter code, there are many other water quality data sources within the Water Quality Portal. To compare USGS and non-USGS data, you’ll need to compare data that has at least the same characteristic name and measured units. There are many other fields that may be required to assure you are comparing apples-to-apples. For example, “ResultSampleFractionText” is important in many measured parameters.</p>
 <p>The measurement units are found in EITHER the “ResultMeasure.MeasureUnitCode” column, OR the “DetectionQuantitationLimitMeasure.MeasureUnitCode” column, depending on if the individual measurement is censored or not.</p>
@@ -579,9 +579,9 @@ WQP
 </div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="whatnwisdata">whatNWISdata<a class="anchor" aria-label="anchor" href="#whatnwisdata"></a>
-</h1>
+<div class="section level2">
+<h2 id="whatnwisdata">whatNWISdata<a class="anchor" aria-label="anchor" href="#whatnwisdata"></a>
+</h2>
 <p>This function will continue to work for any service except “qw” (water quality discrete data). “qw” results will no longer be returned. This function is used to discover what water quality data is available.</p>
 <p>The function to replace this functionality is <code>whatWQPdata</code>:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
@@ -594,9 +594,9 @@ NWIS qw web services are being retired. Please see the vignette
 <code class="sourceCode R"><span class="va">whatWQP</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatWQPdata.html">whatWQPdata</a></span><span class="op">(</span>siteNumber <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="va">site_ids</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>There are some major differences in the output. The NWIS services offers back one row per site/parameter code to learn how many samples are available. This is not <em>currently</em> available from the Water Quality Portal, however there are new summary services being developed. When those become available, we will include new documentation on how to get this information.</p>
 </div>
-<div class="section level1">
-<h1 id="readnwisdata">readNWISdata<a class="anchor" aria-label="anchor" href="#readnwisdata"></a>
-</h1>
+<div class="section level2">
+<h2 id="readnwisdata">readNWISdata<a class="anchor" aria-label="anchor" href="#readnwisdata"></a>
+</h2>
 <p>If you get your water quality data from the <code>readNWISdata</code> function, you will receive a warning. Note, this is <em>only</em> for the “qwdata” service. All other web services are not being deprecated, and should receive no warning.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">qwData</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdata.html">readNWISdata</a></span><span class="op">(</span>state_cd <span class="op">=</span> <span class="st">"WI"</span>,
@@ -614,14 +614,14 @@ NWIS qw web services are being retired. Please see the vignette
 <p>This is not an especially common <code>dataRetrieval</code> workflow, so there are not a lot of details here. Please reach out if more information is needed to update your workflows.</p>
 <p>See <code><a href="../reference/readWQPdata.html">?readWQPdata</a></code> to see all the ways to query data in the Water Quality Portal. Use the suggestions above to convert the output of the <code>readWQPdata</code> function to convert the WQP output to what is important for your workflow.</p>
 </div>
-<div class="section level1">
-<h1 id="how-to-find-more-help">How to find more help<a class="anchor" aria-label="anchor" href="#how-to-find-more-help"></a>
-</h1>
+<div class="section level2">
+<h2 id="how-to-find-more-help">How to find more help<a class="anchor" aria-label="anchor" href="#how-to-find-more-help"></a>
+</h2>
 <p>These changes are big, and initially sound overwhelming. But in the end, they are thoughtful changes that will make understanding USGS water data more intuitive. Please reach out for questions and comments to: <a href="mailto:gs-w-IOW_PO_team@usgs.gov" class="email">gs-w-IOW_PO_team@usgs.gov</a></p>
 </div>
-<div class="section level1">
-<h1 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
-</h1>
+<div class="section level2">
+<h2 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
+</h2>
 <p>This information is preliminary and is subject to revision. It is being provided to meet the need for timely best science. The information is provided on the condition that neither the U.S. Geological Survey nor the U.S. Government may be held liable for any damages resulting from the authorized or unauthorized use of the information.</p>
 </div>
   </div>
@@ -643,7 +643,7 @@ NWIS qw web services are being retired. Please see the vignette
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
