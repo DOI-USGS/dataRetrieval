@@ -157,7 +157,7 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
     }
   }
 
-  retval <- suppressWarnings(readr::read_delim(doc, 
+  retval <- suppressWarnings(readr::read_delim(doc,
                        col_types = readr::cols(`ActivityStartTime/Time` = readr::col_character(),
                                         `ActivityEndTime/Time` = readr::col_character(),
                                         USGSPCode = readr::col_character(),
@@ -191,9 +191,18 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
                                         `ResultDepthHeightMeasure/MeasureUnitCode` = readr::col_character(),
                                         `DetectionQuantitationLimitMeasure/MeasureUnitCode` = readr::col_character(),
                                         `HUCEightDigitCode` = readr::col_character(), 
-                                        `ActivityEndTime/TimeZoneCode` = readr::col_character()),
+                                        `ActivityEndTime/TimeZoneCode` = readr::col_character(),
+                                        `ResultAnalyticalMethod/MethodIdentifier` = readr::col_character(), 
+                                        `ResultAnalyticalMethod/MethodIdentifierContext` = readr::col_character(),
+                                        ResultStatusIdentifier = readr::col_character(),
+                                        `SampleCollectionMethod/MethodIdentifier` = readr::col_character(),
+                                        `SampleCollectionMethod/MethodIdentifierContext` = readr::col_character(),
+                                        MonitoringLocationIdentifier = readr::col_character(),
+                                        ProjectIdentifier = readr::col_character(),
+                                        ActivityIdentifier = readr::col_character()),
                        quote = ifelse(csv,'\"',""),
-                       delim = ifelse(csv,",","\t")))
+                       delim = ifelse(csv,",","\t"), 
+                       guess_max = totalPossible))
     
   if(!file.exists(obs_url)){
     actualNumReturned <- nrow(retval)

@@ -156,9 +156,10 @@ whatWQPsites <- function(...){
 #' 
 #' lake_sites <- readWQPsummary(siteType = "Lake, Reservoir, Impoundment",
 #'                          countycode = "US:55:025")
-#'                            
-#' # Very slow:
-#' #state1 <- readWQPsummary(statecode="NJ")
+#'                     
+#' state1 <- readWQPsummary(statecode="NJ",
+#'                          summaryYears = 5,
+#'                          siteType = "Stream")
 #' }
 readWQPsummary <- function(...){
   
