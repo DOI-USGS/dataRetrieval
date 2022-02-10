@@ -146,6 +146,54 @@ dailyLexingtonVA <- readWQPdata(statecode = "Virginia",
                                 countycode="Lexington", 
                                 parameterCd = "00010") 
                                 
+# Data profiles: "Organization Data"
+org_data <- readWQPdata(statecode = "WI",
+                        countycode = "Dane",
+                        service = "Organization")
+
+# Data profiles: "Site Data Only" 
+site_data <- readWQPdata(statecode = "WI",
+                         countycode = "Dane",
+                         service = "Station")
+                         
+# Data profiles: "Project Data"
+project_data <- readWQPdata(statecode = "WI",
+                         countycode = "Dane",
+                         service = "Project")
+                         
+# Data profiles: "Project Monitoring Location Weighting Data"
+proj_mlwd <- readWQPdata(statecode = "WI",
+                         countycode = "Dane",
+                         service = "ProjectMonitoringLocationWeighting")
+                         
+# Data profiles: "Sample Results (physical/chemical metadata)":
+samp_data <- readWQPdata(siteid = "USGS-04024315",
+                         dataProfile = "resultPhysChem",
+                         service = "Result")
+                         
+# Data profiles: "Sample Results (biological metadata)"
+samp_bio <- readWQPdata(siteid="USGS-04024315",
+                        dataProfile = "biological",
+                        service = "Result")
+                         
+# Data profiles: "Sample Results (narrow)"
+samp_narrow <- readWQPdata(siteid="USGS-04024315",
+                           dataProfile = "narrowResult",
+                           service = "Result")
+                           
+# Data profiles: "Sampling Activity"
+samp_activity <- readWQPdata(siteid="USGS-04024315",
+                             dataProfile = "activityAll",
+                             service = "Activity")
+                             
+# Data profile: "Sampling Activity Metrics"
+act_metrics <- readWQPdata(statecode = "WI",
+                           countycode = "Dane",
+                           service = "ActivityMetric")
+                           
+# Data profile: "Result Detection Quantitation Limit Data"
+dl_data <- readWQPdata(siteid="USGS-04024315",
+                       service = "ResultDetectionQuantitationLimit")
 }
 \dontshow{\}) # examplesIf}
 }
