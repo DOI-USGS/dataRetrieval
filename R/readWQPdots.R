@@ -23,7 +23,7 @@ readWQPdots <- function(...){
     service <- "Result"
   }
   
-  match.arg(service, c("Result", "Station", "Activity",
+  match.arg(service, c("Result", "Station", "Activity", "Organization",
                        "ActivityMetric", "SiteSummary",
                        "Project", "ProjectMonitoringLocationWeighting",
                        "ResultDetectionQuantitationLimit", "BiologicalMetric"))

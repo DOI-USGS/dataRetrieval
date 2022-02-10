@@ -133,6 +133,54 @@
 #'                                 countycode="Lexington", 
 #'                                 parameterCd = "00010") 
 #'                                 
+#' # Data profiles: "Organization Data"
+#' org_data <- readWQPdata(statecode = "WI",
+#'                         countycode = "Dane",
+#'                         service = "Organization")
+#' 
+#' # Data profiles: "Site Data Only" 
+#' site_data <- readWQPdata(statecode = "WI",
+#'                          countycode = "Dane",
+#'                          service = "Station")
+#'                          
+#' # Data profiles: "Project Data"
+#' project_data <- readWQPdata(statecode = "WI",
+#'                          countycode = "Dane",
+#'                          service = "Project")
+#'                          
+#' # Data profiles: "Project Monitoring Location Weighting Data"
+#' proj_mlwd <- readWQPdata(statecode = "WI",
+#'                          countycode = "Dane",
+#'                          service = "ProjectMonitoringLocationWeighting")
+#'                          
+#' # Data profiles: "Sample Results (physical/chemical metadata)":
+#' samp_data <- readWQPdata(siteid = "USGS-04024315",
+#'                          dataProfile = "resultPhysChem",
+#'                          service = "Result")
+#'                          
+#' # Data profiles: "Sample Results (biological metadata)"
+#' samp_bio <- readWQPdata(siteid="USGS-04024315",
+#'                         dataProfile = "biological",
+#'                         service = "Result")
+#'                          
+#' # Data profiles: "Sample Results (narrow)"
+#' samp_narrow <- readWQPdata(siteid="USGS-04024315",
+#'                            dataProfile = "narrowResult",
+#'                            service = "Result")
+#'                            
+#' # Data profiles: "Sampling Activity"
+#' samp_activity <- readWQPdata(siteid="USGS-04024315",
+#'                              dataProfile = "activityAll",
+#'                              service = "Activity")
+#'                              
+#' # Data profile: "Sampling Activity Metrics"
+#' act_metrics <- readWQPdata(statecode = "WI",
+#'                            countycode = "Dane",
+#'                            service = "ActivityMetric")
+#'                            
+#' # Data profile: "Result Detection Quantitation Limit Data"
+#' dl_data <- readWQPdata(siteid="USGS-04024315",
+#'                        service = "ResultDetectionQuantitationLimit")
 #' }
 readWQPdata <- function(..., querySummary=FALSE, tz="UTC", 
                         ignore_attributes = FALSE){
@@ -177,33 +225,36 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC",
         siteInfo <- cbind(siteInfoCommon, siteInfo)        
       }
       
-      retvalVariableInfo <- retval[,c("CharacteristicName","USGSPCode",
-                                      "ResultMeasure.MeasureUnitCode","ResultSampleFractionText")]
-      retvalVariableInfo <- unique(retvalVariableInfo)
-      
-      variableInfo <- data.frame(characteristicName=retval$CharacteristicName,
-                                 parameterCd=retval$USGSPCode,
-                                 param_units=retval$ResultMeasure.MeasureUnitCode,
-                                 valueType=retval$ResultSampleFractionText,
-                                 stringsAsFactors=FALSE)
-      
-      if(!anyNA(variableInfo$parameterCd)){
-        pcodes <- unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)])
-        pcodes <- pcodes["" != pcodes]
-        paramINFO <- readNWISpCode(pcodes)
-        names(paramINFO)["parameter_cd" == names(paramINFO)] <- "parameterCd"
-        
-        pCodeToName <- pCodeToName
-        varExtras <- pCodeToName[pCodeToName$parm_cd %in% unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
-        names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
-        variableInfo <- merge(variableInfo, varExtras, by="parameterCd", all = TRUE)
-        variableInfo <- merge(variableInfo, paramINFO, by="parameterCd", all = TRUE)
-        variableInfo <- unique(variableInfo)
-      }
-      
       attr(retval, "siteInfo") <- siteInfo
-      attr(retval, "variableInfo") <- variableInfo
       
+      if(all(c("CharacteristicName","USGSPCode",
+               "ResultMeasure.MeasureUnitCode","ResultSampleFractionText") %in% names(retval))){
+        retvalVariableInfo <- retval[,c("CharacteristicName","USGSPCode",
+                                        "ResultMeasure.MeasureUnitCode","ResultSampleFractionText")]
+        retvalVariableInfo <- unique(retvalVariableInfo)
+        
+        variableInfo <- data.frame(characteristicName=retval$CharacteristicName,
+                                   parameterCd=retval$USGSPCode,
+                                   param_units=retval$ResultMeasure.MeasureUnitCode,
+                                   valueType=retval$ResultSampleFractionText,
+                                   stringsAsFactors=FALSE)
+        
+        if(!anyNA(variableInfo$parameterCd)){
+          pcodes <- unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)])
+          pcodes <- pcodes["" != pcodes]
+          paramINFO <- readNWISpCode(pcodes)
+          names(paramINFO)["parameter_cd" == names(paramINFO)] <- "parameterCd"
+          
+          pCodeToName <- pCodeToName
+          varExtras <- pCodeToName[pCodeToName$parm_cd %in% unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
+          names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
+          variableInfo <- merge(variableInfo, varExtras, by="parameterCd", all = TRUE)
+          variableInfo <- merge(variableInfo, paramINFO, by="parameterCd", all = TRUE)
+          variableInfo <- unique(variableInfo)
+        }
+        attr(retval, "variableInfo") <- variableInfo
+      }
+
     } else {
       if(!ignore_attributes){
         message("The following url returned no data:\n")
