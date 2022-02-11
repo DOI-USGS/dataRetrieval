@@ -129,9 +129,9 @@
 #'                               querySummary=TRUE)
 #'                               
 #' # querying by county
-#' dailyLexingtonVA <- readWQPdata(statecode = "Virginia", 
-#'                                 countycode="Lexington", 
-#'                                 parameterCd = "00010") 
+#' DeWitt <- readWQPdata(statecode = "Illinois", 
+#'                       countycode= "DeWitt", 
+#'                       characteristicName = "Nitrogen") 
 #'                                 
 #' # Data profiles: "Organization Data"
 #' org_data <- readWQPdata(statecode = "WI",
