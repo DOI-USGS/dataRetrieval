@@ -155,23 +155,19 @@
 #'                          
 #' # Data profiles: "Sample Results (physical/chemical metadata)":
 #' samp_data <- readWQPdata(siteid = "USGS-04024315",
-#'                          dataProfile = "resultPhysChem",
-#'                          service = "Result")
+#'                          dataProfile = "resultPhysChem")
 #'                          
 #' # Data profiles: "Sample Results (biological metadata)"
 #' samp_bio <- readWQPdata(siteid="USGS-04024315",
-#'                         dataProfile = "biological",
-#'                         service = "Result")
+#'                         dataProfile = "biological")
 #'                          
 #' # Data profiles: "Sample Results (narrow)"
 #' samp_narrow <- readWQPdata(siteid="USGS-04024315",
-#'                            dataProfile = "narrowResult",
-#'                            service = "Result")
+#'                            dataProfile = "narrowResult")
 #'                            
 #' # Data profiles: "Sampling Activity"
 #' samp_activity <- readWQPdata(siteid="USGS-04024315",
-#'                              dataProfile = "activityAll",
-#'                              service = "Activity")
+#'                              dataProfile = "activityAll")
 #'                              
 #' # Data profile: "Sampling Activity Metrics"
 #' act_metrics <- readWQPdata(statecode = "WI",

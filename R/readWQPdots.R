@@ -23,6 +23,19 @@ readWQPdots <- function(...){
     service <- "Result"
   }
   
+  if("dataProfile" %in% names(matchReturn)){
+    profile <- matchReturn$dataProfile
+    if(profile == "activityAll"){
+      service <- "Activity"
+      matchReturn$service <- NULL
+    } else if(profile %in% c("resultPhysChem",
+                             "biological",
+                             "narrowResult")){
+      service <- "Result"
+      matchReturn$service <- NULL
+    }
+  }
+  
   match.arg(service, c("Result", "Station", "Activity", "Organization",
                        "ActivityMetric", "SiteSummary",
                        "Project", "ProjectMonitoringLocationWeighting",
