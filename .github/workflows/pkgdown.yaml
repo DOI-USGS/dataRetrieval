@@ -33,6 +33,7 @@ jobs:
         run: |
           options(pkgType = "binary")
           install.packages(c("zoo", "maps"))
+        shell: Rscript {0}
           
       - name: Deploy package
         run: |
