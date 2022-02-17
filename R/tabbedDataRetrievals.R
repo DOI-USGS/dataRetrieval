@@ -131,16 +131,26 @@ NULL
 #' head(countyCd)
 NULL
 
+# Here's how to incorporate the state_county.json into the historic
+# sysdata.rda. The original data included some IDs that aren't in the json
+# We're leaving those in for now because maybe it's helpful,
+# even though to my knowledge it's not used in any dataRetrieval query.
 
+# #Step 1: open the json file, parse out what's needed:
 # x <- jsonlite::read_json("inst/extdata/state_county.json")
 # states <- x[["US"]]
 # state_df <- data.frame("STATE" = names(sapply(states$state_cd, function(x) x[[1]])),
 #                        "STATE_NAME" = as.character(sapply(states$state_cd, function(x) x[[1]])))
+# #Step 2: join it into the original stateCd data frame:
+# # This preserves STATE_NAME, which is nice
+#
 # library(dplyr)
 # state_df <- state_df %>%
 #   left_join(stateCd, by = c("STATE", "STATE_NAME"))
+#
 # state_df$STUSAB[state_df$STATE_NAME == "Virgin Islands"] <- "VI"
 # 
+# #Step 3: now get the county names/ids:
 # y <- sapply(states$state_cd, function(x) x[["county_cd"]])
 # 
 # county_df <- data.frame()
@@ -162,5 +172,5 @@ NULL
 # countyCd <- county_df_full
 # stateCd <- state_df
 # save(countyCd, stateCd, parameterCdFile, pCodeToName,
-#      file = "sysdata.rda", compress = "xz")
+#      file = "R/sysdata.rda", compress = "xz")
 
