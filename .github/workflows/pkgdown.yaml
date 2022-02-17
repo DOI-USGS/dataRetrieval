@@ -31,7 +31,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          install.packages(c("zoo", "maps", "patchwork"))
+          install.packages(c("zoo", "maps", "patchwork", "leaflet"))
         shell: Rscript {0}
           
       - name: Deploy package
