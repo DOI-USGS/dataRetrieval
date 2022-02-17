@@ -25,9 +25,13 @@ jobs:
           extra-packages: pkgdown
           needs: website
           
+      - uses: r-lib/actions/setup-r-dependencies@v1
+        with:
+          extra-packages: rcmdcheck
+          
       - name: Query dependencies
         run: |
-          install.packages('zoo', 'sf', 'DT', 'maps', 'patchwork', 'leaflet')
+          install.packages('zoo', 'DT', 'maps', 'patchwork', 'leaflet')
         shell: Rscript {0}
 
       - name: Deploy package
