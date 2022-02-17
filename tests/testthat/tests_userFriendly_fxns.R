@@ -194,7 +194,7 @@ test_that("state county tests",{
   name <- countyCdLookup(state = "OH", county = 13, output = "fullName")
   expect_equal(name, "Belmont County")
   index <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "tableIndex")
-  expect_equal(index, 2246)
+  expect_equal(index, 2258)
   fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
   expect_equal(fromIDs, "Bacon County")
   counties <-  c("51001","51003")

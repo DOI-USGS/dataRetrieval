@@ -421,6 +421,81 @@ test_that("internal functions",{
 
 })
 
+test_that("profiles", {
+  # Data profiles: "Organization Data"
+  org_data <- readWQPdata(statecode = "WI",
+                          countycode = "Dane",
+                          service = "Organization")
+  
+  expect_true(all(c("OrganizationIdentifier",
+                    "OrganizationFormalName") %in% names(org_data)))
+  
+  # Data profiles: "Site Data Only"
+  site_data <- readWQPdata(statecode = "WI",
+                           countycode = "Dane",
+                           service = "Station")
+  
+  expect_true(all(c("ProviderName", "MonitoringLocationIdentifier") %in% names(site_data)))
+  
+  # Data profiles: "Project Data"
+  project_data <- readWQPdata(statecode = "WI",
+                              countycode = "Dane",
+                              service = "Project")
+  
+  expect_true(all(c("OrganizationIdentifier",
+                    "OrganizationFormalName") %in% names(project_data)))
+  
+  # Data profiles: "Project Monitoring Location Weighting Data"
+  proj_mlwd <- readWQPdata(statecode = "WI",
+                           countycode = "Dane",
+                           service = "ProjectMonitoringLocationWeighting")
+  
+  expect_true(all(c("OrganizationIdentifier",
+                    "OrganizationFormalName") %in% names(proj_mlwd)))
+  
+  # Data profiles: "Sample Results (physical/chemical metadata)":
+  samp_data <- readWQPdata(siteid = "USGS-04024315",
+                           dataProfile = "resultPhysChem")
+  
+  expect_true(all(c("OrganizationIdentifier",
+                    "OrganizationFormalName") %in% names(samp_data)))
+  
+  # Data profiles: "Sample Results (biological metadata)"
+  samp_bio <- readWQPdata(siteid="USGS-04024315",
+                          dataProfile = "biological")
+  
+  expect_true(all(c("OrganizationIdentifier",
+                    "OrganizationFormalName") %in% names(samp_bio)))
+  
+  # Data profiles: "Sample Results (narrow)"
+  samp_narrow <- readWQPdata(siteid="USGS-04024315",
+                             dataProfile = "narrowResult")
+  
+  expect_true(all(c("OrganizationIdentifier",
+                    "OrganizationFormalName") %in% names(samp_narrow)))
+  
+  # Data profiles: "Sampling Activity"
+  samp_activity <- readWQPdata(siteid="USGS-04024315",
+                               dataProfile = "activityAll")
+  
+  expect_true(all(c("OrganizationIdentifier",
+                    "OrganizationFormalName") %in% names(samp_activity)))
+  
+  # Data profile: "Sampling Activity Metrics"
+  act_metrics <- readWQPdata(statecode = "WI",
+                             countycode = "Dane",
+                             service = "ActivityMetric")
+  
+  expect_true(all(c("OrganizationIdentifier",
+                    "OrganizationFormalName") %in% names(act_metrics)))
+  
+  # Data profile: "Result Detection Quantitation Limit Data"
+  dl_data <- readWQPdata(siteid="USGS-04024315",
+                         service = "ResultDetectionQuantitationLimit")
+  
+  expect_true(all(c("OrganizationIdentifier",
+                    "OrganizationFormalName") %in% names(dl_data)))
+})
 
 test_that("readWQPsummary", {
   testthat::skip_on_cran()

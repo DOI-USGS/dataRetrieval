@@ -86,8 +86,9 @@ NULL
 
 #' US State Code Lookup Table
 #'
-#' Data pulled from \url{https://www2.census.gov/geo/docs/reference/state.txt}
-#' on April 1, 2015. 
+#' Data originally pulled from \url{https://www2.census.gov/geo/docs/reference/state.txt}
+#' on April 1, 2015. On Feb. 11, 2022, the fields were updated with the
+#' file found in inst/extdata, which is used internally with NWIS retrievals. 
 #'
 #' @name stateCd
 #' @return stateCd data frame.
@@ -108,8 +109,9 @@ NULL
 
 #' US County Code Lookup Table
 #'
-#' Data pulled from \url{https://www2.census.gov/geo/docs/reference/codes/files/national_county.txt}
-#' on April 1, 2015. 
+#' Data originally pulled from \url{https://www2.census.gov/geo/docs/reference/codes/files/national_county.txt}
+#' on April 1, 2015. On Feb. 11, 2022, the fields were updated with the
+#' file found in inst/extdata, which is used internally with NWIS retrievals.
 #'
 #' @name countyCd
 #' @return countyCd data frame.
@@ -128,3 +130,47 @@ NULL
 #' @examples
 #' head(countyCd)
 NULL
+
+# Here's how to incorporate the state_county.json into the historic
+# sysdata.rda. The original data included some IDs that aren't in the json
+# We're leaving those in for now because maybe it's helpful,
+# even though to my knowledge it's not used in any dataRetrieval query.
+
+# #Step 1: open the json file, parse out what's needed:
+# x <- jsonlite::read_json("inst/extdata/state_county.json")
+# states <- x[["US"]]
+# state_df <- data.frame("STATE" = names(sapply(states$state_cd, function(x) x[[1]])),
+#                        "STATE_NAME" = as.character(sapply(states$state_cd, function(x) x[[1]])))
+# #Step 2: join it into the original stateCd data frame:
+# # This preserves STATE_NAME, which is nice
+#
+# library(dplyr)
+# state_df <- state_df %>%
+#   left_join(stateCd, by = c("STATE", "STATE_NAME"))
+#
+# state_df$STUSAB[state_df$STATE_NAME == "Virgin Islands"] <- "VI"
+# 
+# #Step 3: now get the county names/ids:
+# y <- sapply(states$state_cd, function(x) x[["county_cd"]])
+# 
+# county_df <- data.frame()
+# 
+# for(st in state_df$STATE){
+#   county_nums <- names(y[[st]])
+#   county_names <- as.character(unlist(y[[st]]))
+#   county_df_st <- data.frame(STATE = st,
+#                              COUNTY = county_nums,
+#                              COUNTY_NAME = county_names)
+#   county_df <- dplyr::bind_rows(county_df, county_df_st)
+# }
+# 
+# county_df_full <- county_df %>%
+#   left_join(select(state_df, STUSAB, STATE), by = "STATE") %>%
+#   left_join(select(countyCd, STATE, STUSAB, COUNTY, COUNTY_ID),
+#             by = c("STATE", "STUSAB", "COUNTY"))
+# 
+# countyCd <- county_df_full
+# stateCd <- state_df
+# save(countyCd, stateCd, parameterCdFile, pCodeToName,
+#      file = "R/sysdata.rda", compress = "xz")
+

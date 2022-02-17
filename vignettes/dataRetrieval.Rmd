@@ -496,8 +496,6 @@ specificCond <- readWQPqw('WIDNR_WQX-10032762',
                           '2011-05-01','2011-09-30')
 ```
 
-A tool for finding NWIS characteristic names can be found [here](https://www.waterqualitydata.us/public_srsnames/)
-
 
 # Generalized Retrievals
 

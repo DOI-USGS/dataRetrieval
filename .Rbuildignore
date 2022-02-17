@@ -50,3 +50,5 @@ vignettes/tutorial.Rmd
 vignettes/phosData.rds
 vignettes/waterservices.png
 .gitlab-ci.yml
+sample_large_pull.R
+
