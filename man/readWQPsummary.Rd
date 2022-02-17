@@ -55,22 +55,27 @@ available data at the WQP sites, and some metadata on the sites themselves.
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
+# Summary of a single site for the last 5 years:
 site_5 <- readWQPsummary(siteid="USGS-07144100",
                         summaryYears=5)
                         
+# Summary of a single site for the full period of record:
 site_all <- readWQPsummary(siteid="USGS-07144100",
                            summaryYears="all")
-                           
+
+# Summary of the data available from streams in a single county:       
 dane_county_data <- readWQPsummary(countycode = "US:55:025",
                         summaryYears = 5,
                         siteType = "Stream")
 
-
+# Summary of the data all available from lakes in a single county:
 lake_sites <- readWQPsummary(siteType = "Lake, Reservoir, Impoundment",
                          countycode = "US:55:025")
-                           
-# Very slow:
-#state1 <- readWQPsummary(statecode="NJ")
+
+# Summary of the data available for the last 5 years in New Jersey:
+state1 <- readWQPsummary(statecode="NJ",
+                         summaryYears = 5,
+                         siteType = "Stream")
 }
 \dontshow{\}) # examplesIf}
 }

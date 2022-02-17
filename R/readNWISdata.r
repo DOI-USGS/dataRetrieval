@@ -146,8 +146,10 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   if(any(service %in% c("qw", "qwdata"))){
     .Deprecated(old = "readNWISdata", package = "dataRetrieval",
                 new = "readWQPdata",
-                msg = "NWIS qw web services are being retired. Please see the vignette 
-'Changes to NWIS QW services' for more information.")
+                msg = "NWIS qw web services are being retired. 
+Please see vignette('qwdata_changes', package = 'dataRetrieval') 
+for more information.
+https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.html")
   }
   
   values <- sapply(valuesList$values, function(x) URLencode(x))
@@ -276,21 +278,22 @@ countyCdLookup <- function(state, county, outputType = "id"){
     stop("No county code provided")
   }
   
+  if(length(state) > 1){
+    stop("Only one state allowed in countyCdLookup.")
+  }
+  
   #first turn state into stateCd postal name
   stateCd <- stateCdLookup(state,outputType = "postal")
+  state_counties <- countyCd[countyCd$STUSAB == stateCd,]
   
   if(is.numeric(county) | !is.na(suppressWarnings(as.numeric(county)))){
     county_i <- which(as.numeric(county) == as.numeric(countyCd$COUNTY) & stateCd == countyCd$STUSAB)
   } else {
-    # if no suffix was added, this will figure out what it should be (or throw a helpful error)
-    allSuffixes <- unique(tolower(unlist(lapply(strsplit(countyCd$COUNTY_NAME,split=" "), tail, 1))))
+
+    county_in_state <- grep(tolower(county), tolower(state_counties$COUNTY_NAME))
     
-    county_i <- unlist(lapply(allSuffixes, function(suffix, stateCd, county){
-      currentSuffixExistsInString <- grepl(paste0('(?i)\\', suffix, '$'), tolower(county))
-      retCounty <- ifelse(currentSuffixExistsInString, county, paste(county, suffix))
-      retCounty_i <- which(tolower(retCounty) == tolower(countyCd$COUNTY_NAME) & stateCd == countyCd$STUSAB)
-      return(retCounty_i)
-    }, stateCd, county))
+    county_i <- which(countyCd$STUSAB == stateCd &
+                        countyCd$COUNTY_NAME == state_counties$COUNTY_NAME[county_in_state] )
     
     if(length(county_i) == 0){
       stop(paste("Could not find", county, "(county),", stateCd, 

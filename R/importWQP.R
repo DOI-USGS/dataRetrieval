@@ -157,43 +157,11 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
     }
   }
 
-  retval <- suppressWarnings(readr::read_delim(doc, 
-                       col_types = readr::cols(`ActivityStartTime/Time` = readr::col_character(),
-                                        `ActivityEndTime/Time` = readr::col_character(),
-                                        USGSPCode = readr::col_character(),
-                                        ResultCommentText = readr::col_character(),
-                                        ResultSampleFractionText = readr::col_character(),
-                                        ActivityDepthAltitudeReferencePointText = readr::col_character(),
-                                        ActivityConductingOrganizationText = readr::col_character(),
-                                        ActivityCommentText = readr::col_character(),
-                                        ResultWeightBasisText = readr::col_character(),
-                                        ResultTimeBasisText = readr::col_character(),
-                                        ResultParticleSizeBasis  = readr::col_character(),
-                                        ResultDepthAltitudeReferencePointText = readr::col_character(),
-                                        ResultLaboratoryCommentText = readr::col_character(),
-                                        ResultTemperatureBasisText = readr::col_character(),
-                                        ResultDetectionConditionText = readr::col_character(),
-                                        ResultParticleSizeBasisText = readr::col_character(),
-                                        `ActivityDepthHeightMeasure/MeasureValue` = readr::col_number(),
-                                        `DetectionQuantitationLimitMeasure/MeasureValue` = readr::col_number(),
-                                        ResultMeasureValue = readr::col_character(),
-                                        `WellDepthMeasure/MeasureValue` = readr::col_number(),
-                                        `WellHoleDepthMeasure/MeasureValue` = readr::col_number(),
-                                        DetectionQuantitationLimitTypeName = readr::col_character(),
-                                        LaboratoryName = readr::col_character(),
-                                        MethodDescriptionText = readr::col_character(),
-                                        `ResultAnalyticalMethod/MethodName` = readr::col_character(),
-                                        `ResultAnalyticalMethod/MethodIdentifier` = readr::col_character(),
-                                        `ResultAnalyticalMethod/MethodIdentifierContext` = readr::col_character(),
-                                        SampleTissueAnatomyName = readr::col_character(),
-                                        SubjectTaxonomicName = readr::col_character(),
-                                        ResultDepthAltitudeReferencePointText = readr::col_character(),
-                                        `ResultDepthHeightMeasure/MeasureUnitCode` = readr::col_character(),
-                                        `DetectionQuantitationLimitMeasure/MeasureUnitCode` = readr::col_character(),
-                                        `HUCEightDigitCode` = readr::col_character(), 
-                                        `ActivityEndTime/TimeZoneCode` = readr::col_character()),
+  retval <- suppressWarnings(readr::read_delim(doc,
+                       col_types = readr::cols(.default = "c"),
                        quote = ifelse(csv,'\"',""),
-                       delim = ifelse(csv,",","\t")))
+                       delim = ifelse(csv,",","\t"), 
+                       guess_max = totalPossible))
     
   if(!file.exists(obs_url)){
     actualNumReturned <- nrow(retval)
@@ -202,18 +170,24 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
       warning("Number of rows returned not matched in header")
     } 
   }
-  suppressWarnings({
-    val <- tryCatch(as.numeric(retval$ResultMeasureValue),
-                    warning = function(w) w)
+  
+  valueCols <- names(retval)[grep("MeasureValue", names(retval))]
+  countCols <- names(retval)[grep("Count", names(retval))]
+  yearCols <- names(retval)[grep("Year", names(retval))]
+  
+  for(numberCol in unique(c(valueCols, countCols, yearCols))){
+    suppressWarnings({
+      val <- tryCatch(as.numeric(retval[[numberCol]]),
+                      warning = function(w) w)
+      # we don't want to convert it to numeric if there are non-numeric chars
+      # If we leave it to the user, it will probably break a lot of code
+      if(!"warning" %in% class(val)){
+        retval[[numberCol]] <- val
+      }
+    })
+  }
+  
 
-    # we don't want to convert it to numeric if there are non-numeric chars
-    # they often happen after readr has decided the column type if we left it to readr
-    # If we leave it to the user, it will probably break a lot of code
-    # If we bump up readr's guess_max...the computational time becomes really really long
-    if(!"warning" %in% class(val)){
-      retval$ResultMeasureValue <- val
-    }
-  })
 
   if(length(grep("ActivityStartTime",names(retval))) > 0){
     

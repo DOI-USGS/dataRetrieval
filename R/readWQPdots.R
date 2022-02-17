@@ -23,7 +23,20 @@ readWQPdots <- function(...){
     service <- "Result"
   }
   
-  match.arg(service, c("Result", "Station", "Activity",
+  if("dataProfile" %in% names(matchReturn)){
+    profile <- matchReturn$dataProfile
+    if(profile == "activityAll"){
+      service <- "Activity"
+      matchReturn$service <- NULL
+    } else if(profile %in% c("resultPhysChem",
+                             "biological",
+                             "narrowResult")){
+      service <- "Result"
+      matchReturn$service <- NULL
+    }
+  }
+  
+  match.arg(service, c("Result", "Station", "Activity", "Organization",
                        "ActivityMetric", "SiteSummary",
                        "Project", "ProjectMonitoringLocationWeighting",
                        "ResultDetectionQuantitationLimit", "BiologicalMetric"))
@@ -47,6 +60,10 @@ readWQPdots <- function(...){
   names(values)[names(values) == "countyCd"] <- "countycode"
   if(all(c("countycode","statecode") %in% names(values))){
     stCd <- gsub("US:", "", values["statecode"])
+    # This will error if more than 1 state is requested
+    # It's possible that someone could requst more than one state
+    # in WQP, but if they also then request county codes,
+    # it gets really confusing, and the WQP developers don't recommend.
     values["countycode"] <- paste(values["statecode"], 
                                   countyCdLookup(stCd, values["countycode"], "id"),
                                   sep=":")

@@ -2,6 +2,8 @@ dataRetrieval 2.7.11
 ==================
 * Updated some documentation to improve examples.
 * Changed the check for internet to better account for proxies.
+* Fixed bug due to new behavior in NWIS parameter code service.
+* Updated documentation for readWQPdata and readWQPsummary
 
 dataRetrieval 2.7.10
 ==================
