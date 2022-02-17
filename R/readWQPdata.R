@@ -223,31 +223,19 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC",
       
       attr(retval, "siteInfo") <- siteInfo
       
-      if(all(c("CharacteristicName","USGSPCode",
-               "ResultMeasure.MeasureUnitCode","ResultSampleFractionText") %in% names(retval))){
-        retvalVariableInfo <- retval[,c("CharacteristicName","USGSPCode",
-                                        "ResultMeasure.MeasureUnitCode","ResultSampleFractionText")]
+      if(all(c("CharacteristicName",
+               "ResultMeasure.MeasureUnitCode",
+               "ResultSampleFractionText") %in% names(retval))){
+        retvalVariableInfo <- retval[,c("CharacteristicName",
+                                        "ResultMeasure.MeasureUnitCode",
+                                        "ResultSampleFractionText")]
         retvalVariableInfo <- unique(retvalVariableInfo)
         
         variableInfo <- data.frame(characteristicName=retval$CharacteristicName,
-                                   parameterCd=retval$USGSPCode,
                                    param_units=retval$ResultMeasure.MeasureUnitCode,
                                    valueType=retval$ResultSampleFractionText,
                                    stringsAsFactors=FALSE)
         
-        if(!anyNA(variableInfo$parameterCd)){
-          pcodes <- unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)])
-          pcodes <- pcodes["" != pcodes]
-          paramINFO <- readNWISpCode(pcodes)
-          names(paramINFO)["parameter_cd" == names(paramINFO)] <- "parameterCd"
-          
-          pCodeToName <- pCodeToName
-          varExtras <- pCodeToName[pCodeToName$parm_cd %in% unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
-          names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
-          variableInfo <- merge(variableInfo, varExtras, by="parameterCd", all = TRUE)
-          variableInfo <- merge(variableInfo, paramINFO, by="parameterCd", all = TRUE)
-          variableInfo <- unique(variableInfo)
-        }
         attr(retval, "variableInfo") <- variableInfo
       }
 

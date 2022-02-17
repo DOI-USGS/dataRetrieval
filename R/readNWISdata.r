@@ -146,8 +146,10 @@ readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
   if(any(service %in% c("qw", "qwdata"))){
     .Deprecated(old = "readNWISdata", package = "dataRetrieval",
                 new = "readWQPdata",
-                msg = "NWIS qw web services are being retired. Please see the vignette 
-'Changes to NWIS QW services' for more information.")
+                msg = "NWIS qw web services are being retired. 
+Please see vignette('qwdata_changes', package = 'dataRetrieval') 
+for more information.
+https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.html")
   }
   
   values <- sapply(valuesList$values, function(x) URLencode(x))
