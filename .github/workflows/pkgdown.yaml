@@ -28,7 +28,12 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
           extra-packages: rcmdcheck
-
+      
+      - name: Install dependencies
+        run: |
+          options(pkgType = "binary")
+          install.packages(c("zoo", "maps"))
+          
       - name: Deploy package
         run: |
           git config --local user.name "$GITHUB_ACTOR"
