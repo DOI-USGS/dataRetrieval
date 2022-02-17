@@ -28,11 +28,6 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
           extra-packages: rcmdcheck
-          
-      - name: Query dependencies
-        run: |
-          install.packages('zoo', 'DT', 'maps', 'patchwork', 'leaflet')
-        shell: Rscript {0}
 
       - name: Deploy package
         run: |
