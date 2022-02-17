@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataRetrieval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.10.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.11</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@
 </h1>
                         <h4 data-toc-skip class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
             
-            <h4 data-toc-skip class="date">2022-01-25</h4>
+            <h4 data-toc-skip class="date">2022-02-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/vignettes/nldi.Rmd" class="external-link"><code>vignettes/nldi.Rmd</code></a></small>
       <div class="hidden name"><code>nldi.Rmd</code></div>
@@ -155,7 +155,7 @@ Gas stations between UCSB and UCLA
 <div class="section level2">
 <h2 id="whats-available">What’s available?<a class="anchor" aria-label="anchor" href="#whats-available"></a>
 </h2>
-<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2022-01-25), 11 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
+<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2022-02-17), 11 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
@@ -243,7 +243,7 @@ Gas stations between UCSB and UCLA
 <span class="co">#&gt; Geometry type: LINESTRING</span>
 <span class="co">#&gt; Dimension:     XY</span>
 <span class="co">#&gt; Bounding box:  xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915</span>
-<span class="co">#&gt; CRS:           4326</span>
+<span class="co">#&gt; Geodetic CRS:  WGS 84</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="co">#&gt;   sourceName    identifier comid name                                   geometry</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;LINESTRING [°]&gt;</span></span>
@@ -262,7 +262,7 @@ Gas stations between UCSB and UCLA
 <span class="co">#&gt; Geometry type: POINT</span>
 <span class="co">#&gt; Dimension:     XY</span>
 <span class="co">#&gt; Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472</span>
-<span class="co">#&gt; CRS:           4326</span>
+<span class="co">#&gt; Geodetic CRS:  WGS 84</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 9</span></span>
 <span class="co">#&gt;   sourceName               identifier  comid name  reachcode measure     X     Y</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -284,7 +284,7 @@ Gas stations between UCSB and UCLA
 <span class="co">#&gt; Geometry type: POINT</span>
 <span class="co">#&gt; Dimension:     XY</span>
 <span class="co">#&gt; Bounding box:  xmin: -119.7917 ymin: 34.47273 xmax: -119.7917 ymax: 34.47273</span>
-<span class="co">#&gt; CRS:           4326</span>
+<span class="co">#&gt; Geodetic CRS:  WGS 84</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 7</span></span>
 <span class="co">#&gt;   sourceName        identifier comid name      X     Y             geometry</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span>
@@ -301,7 +301,7 @@ Gas stations between UCSB and UCLA
 <span class="co">#&gt; Geometry type: LINESTRING</span>
 <span class="co">#&gt; Dimension:     XY</span>
 <span class="co">#&gt; Bounding box:  xmin: -115.0326 ymin: 40.04013 xmax: -115.0182 ymax: 40.05183</span>
-<span class="co">#&gt; CRS:           4326</span>
+<span class="co">#&gt; Geodetic CRS:  WGS 84</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="co">#&gt;   sourceName    identifier comid     name                               geometry</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;LINESTRING [°]&gt;</span></span>
@@ -314,7 +314,7 @@ Gas stations between UCSB and UCLA
 <span class="co">#&gt; Geometry type: LINESTRING</span>
 <span class="co">#&gt; Dimension:     XY</span>
 <span class="co">#&gt; Bounding box:  xmin: -119.8823 ymin: 34.40438 xmax: -119.8256 ymax: 34.4179</span>
-<span class="co">#&gt; CRS:           4326</span>
+<span class="co">#&gt; Geodetic CRS:  WGS 84</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="co">#&gt;   sourceName    identifier comid     name                               geometry</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;LINESTRING [°]&gt;</span></span>
