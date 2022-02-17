@@ -1,4 +1,4 @@
-# dataRetrieval <img src="man/figures/logo.png" alt="dataRetrieval" height="150px" align="right" />
+# dataRetrieval <img src="man/figures/logo.png" alt="dataRetrieval" style="width:150px;height:auto;" align="right" />
  
 Retrieval functions for USGS and EPA hydrologic and water quality data.
 
