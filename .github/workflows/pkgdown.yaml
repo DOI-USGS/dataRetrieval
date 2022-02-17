@@ -27,9 +27,7 @@ jobs:
           
       - name: Query dependencies
         run: |
-          install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/")
           install.packages('zoo', 'sf', 'DT', 'maps', 'patchwork', 'leaflet')
-          saveRDS(pak::pkg_deps("local::.", dependencies = TRUE), ".github/r-depends.rds")
         shell: Rscript {0}
 
       - name: Deploy package
