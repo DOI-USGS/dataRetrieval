@@ -5,9 +5,16 @@
 #'
 #' @param values named list with arguments to send to the Water Quality Portal
 #' @return values named list with corrected arguments to send to the Water Quality Portal
-#' @keywords internal
+#' @export
+#' @examples
+#' values <- list(startDateLo = "01-01-2002",
+#'                characteristicName = "Phosphorous", 
+#'                endDate = as.Date("2014-01-01"))
+#' values <- checkWQPdates(values)
 checkWQPdates <- function(values){
-  dateNames <- c("startDateLo","startDateHi","startDate","endDate")
+  
+  dateNames <- c("startDateLo","startDateHi",
+                 "startDate","endDate")
   
   if(any(names(values) %in% dateNames)){
     index <- which(names(values) %in% dateNames)

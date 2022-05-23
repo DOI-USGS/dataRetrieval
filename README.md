@@ -1,4 +1,6 @@
-# dataRetrieval <img src="man/figures/logo.png" alt="dataRetrieval" style="width:150px;height:auto;" align="right" />
+# dataRetrieval <img src="man/figures/USGS_R.png" class="logo"  alt="dataRetrieval" style="width:90px;height:auto;" align="right" />
+ 
+[![R build status](https://github.com/USGS-R/dataRetrieval/workflows/R-CMD-check/badge.svg)](https://github.com/USGS-R/dataRetrieval/actions)[![Coverage Status](https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=main)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=main) [![status](https://img.shields.io/badge/USGS-Core-green.svg)](https://owi.usgs.gov/R/packages.html#core) [![CRAN version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
  
 Retrieval functions for USGS and EPA hydrologic and water quality data.
 
