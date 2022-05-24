@@ -36,6 +36,8 @@ vignettes/phWI.rds
 vignettes/az_data.rds
 vignettes/atascadero-creek-nldi.png
 vignettes/ucsb.png
+vignettes/summary_service_cache/*
+vignettes/summary_service_test_cache/*
 man/figures/highrezlogo-01.png
 man/figures/USGS_R.png
 playing_with_post.R
