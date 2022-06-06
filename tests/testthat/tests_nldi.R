@@ -30,7 +30,7 @@ test_that("NLDI starting sources...", {
   # GENERAL START: STABLE
   expect_equal(findNLDI(origin = list("comid" = 101))$sourceName, "NHDPlus comid")
   # GENERAL START: NON-STABLE
-  expect_equal(findNLDI(origin = list("wade" = 'CA_45206'))$sourceName, "Water Data Exchange 2.0 Sites")
+  expect_equal(findNLDI(origin = list("wade" = 'NMwr_S148023'))$sourceName, "Water Data Exchange 2.0 Sites")
   # ERROR: TWO STARTS
   expect_error(findNLDI(nwis = 1000, comid = 101))
   # NON EXISTING SITE
