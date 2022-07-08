@@ -1,6 +1,6 @@
 context("NLDI...")
 
-test_that("NLDI offerings...", {
+test_that("NLDI messageing NULL", {
   skip_on_cran()
   xx = findNLDI(wqp = "TCEQMAIN-10016",
                 nav = "UM",
@@ -37,10 +37,10 @@ test_that("NLDI starting sources...", {
   expect_equal(sum(names(findNLDI(comid = 101)) %in%
                      c('sourceName', 'identifier', "comid", "geometry")),  4)
   # POINT GEOMETERY
-  expect_equal(sum(names(findNLDI(nwis = '11120000')) ==
+  expect_true(all(names(findNLDI(nwis = '11120000')) %in%
                      c('sourceName', 'identifier', "comid",
                        "name", "reachcode", "measure",
-                       "X", "Y", "geometry")),  9)
+                       "X", "Y", "geometry")))
   # COMID
   expect_equal(findNLDI(comid = 101)$sourceName, "NHDPlus comid")
   # NWIS
@@ -76,17 +76,16 @@ test_that("NLDI navigation sources...", {
   # ERRORS: Bad NAV REQUEST
   expect_error(findNLDI(nwis = '11120000', nav = c("DT")))
   expect_error(findNLDI(nwis = '11120000', nav = c("DT", "UM")))
-  # MESSAGE: Data not found
-  expect_message(findNLDI(comid = 101, nav = "UM", find = "nwis"))
+  # WARNING: Data not found
+  expect_warning(findNLDI(comid = 101, nav = "UM", find = "nwis"))
 })
 
 test_that("NLDI find sources...", {
 
   skip_on_cran()
 
-  expect_equal(length(findNLDI(nwis = '11120000', nav = "UT", find = "wade")),2)
-  expect_equal(length(findNLDI(nwis = '11120000', nav = "UT", find = c("nwis", "wqp"))), 3)
-  expect_equal(length(findNLDI(nwis = '11120000', nav = c("UT", "UM"), find = c("nwis", "wqp", "flowlines"))), 7)
+  expect_equal(length(findNLDI(nwis = '11120000', nav = "UT", find = "wade")), 2)
+  expect_equal(length(findNLDI(nwis = '11120000', nav = c("UT", "UM"), find = c("nwis", "wade", "flowlines"))), 6)
 })
 
 test_that("sf not installed...", {

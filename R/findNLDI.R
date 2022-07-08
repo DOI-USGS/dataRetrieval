@@ -80,6 +80,7 @@ get_nldi_sources <- function() {
 #'  get_nldi(url = paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
 #'  get_nldi(paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
 #'  }
+
 get_nldi = function(url, type = "", use_sf = FALSE) {
   # Query
   res <- httr::RETRY("GET", url, times = 3, pause_cap = 60)
@@ -136,10 +137,10 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
       d <- jsonlite::fromJSON(d, simplifyDataFrame = TRUE)
       
       input <-  d$features$properties
-      
+     
       good_name = find_good_names(input, type)
       
-      if(is.null(input)){
+      if(is.null(input) & type != "basin"){
         tmp = NULL
       } else {
         # if of type POINT at the X,Y coordinates as columns
@@ -337,6 +338,7 @@ findNLDI <- function(comid = NULL,
   
   # If location, ensure lng is first argument (hack for USA features)
   if (start_type == 'location') {
+    
     if (any(grepl("sfc$|sf$", class(location))) & use_sf) {
       if (sf::st_geometry_type(location) != "POINT") {
         stop("Only POINT objects can be passed to location")
@@ -352,14 +354,14 @@ findNLDI <- function(comid = NULL,
     # Must convert location to COMID for tracing and discovery ...
     tmp_url <- paste0(
       pkg.env$nldi_base,
-      "comid/position?coords=POINT%28",
+      "comid/position?f=json&coords=POINT%28",
       location[1] ,
       "%20",
       location[2] ,
       "%29"
     )
     
-    tmp_return <- get_nldi(tmp_url, "feature", use_sf = use_sf)
+    tmp_return <- get_nldi(tmp_url, type = "feature", use_sf = use_sf)
     
     # Override starter with location based COMID
     starter <- list("comid" = tmp_return$identifier)
@@ -400,7 +402,7 @@ findNLDI <- function(comid = NULL,
     features = lapply(navigate,
                       paste0,
                       paste0("/", find),
-                      paste0("?distance=", distance_km))
+                      paste0("?f=json&distance=", distance_km))
   }
   
   names  <- unlist(lapply(nav, paste0, paste0("_", find)))
@@ -408,7 +410,7 @@ findNLDI <- function(comid = NULL,
   search <- data.frame(
     url = unlist(c(start_url,
                    if (getBasin) {
-                     paste0(start_url, "basin")
+                     paste0(start_url, "basin?f=json")
                    },
                    features)),
     
