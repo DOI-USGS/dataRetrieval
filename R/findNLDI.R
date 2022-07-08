@@ -104,8 +104,12 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
       
       tmp <- tryCatch({
         sf::read_sf(d) }, 
-      error   = function(e){ NULL },
-      warning = function(w){ NULL }
+      error   = function(e){ 
+        message("No data found for: ", basename(url))
+        return(NULL)},
+      warning = function(w){  
+        message("No data found for: ", basename(url))
+        return(NULL) }
       )
         
       good_name = find_good_names(tmp, type)
@@ -191,6 +195,7 @@ clean_nwis_ids = function(tmp) {
 #' \donttest{
 #' valid_ask(all = get_nldi_sources(), "nwis")
 #' }
+
 valid_ask = function(all, type) {
   # those where the requested pattern is included in a nldi_source ...
   # means we will catch nwis - not just nwissite ...
@@ -285,6 +290,7 @@ valid_ask = function(all, type) {
 #' ## Limit search to 50 km
 #'  findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
 #'}
+
 findNLDI <- function(comid = NULL,
                      nwis = NULL,
                      wqp = NULL,

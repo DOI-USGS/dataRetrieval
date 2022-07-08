@@ -5,8 +5,12 @@ test_that("NLDI offerings...", {
   xx = findNLDI(wqp = "TCEQMAIN-10016",
                 nav = "UM",
                 find = "nwissite",
-                distance_km = 2,
-                no_sf = FALSE)
+                distance_km = 2)
+  
+  expect_message(findNLDI(wqp = "TCEQMAIN-10016",
+                               nav = "UM",
+                               find = "nwissite",
+                               distance_km = 2))
   
   expect_true(nrow(xx) == 1)
 })
