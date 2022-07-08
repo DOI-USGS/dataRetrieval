@@ -89,28 +89,41 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
     # Interpret as text
     d <- httr::content(res, "text", encoding = "UTF8")
     
+    if(grepl('An HTML representation is not available for this resource', d)){
+      warning("No data returned for: ", url, call. = FALSE)
+      return(NULL)
+    }
+    
     if (d == "") {
-      message("No data returned for: ", url, call. = FALSE)
+      warning("No data returned for: ", url, call. = FALSE)
       return(NULL)
     }
     
     if (use_sf) {
       #Parse with sf
-      tmp <- sf::read_sf(d)
+      
+      tmp <- tryCatch({
+        sf::read_sf(d) }, 
+      error   = function(e){ NULL },
+      warning = function(w){ NULL }
+      )
+        
       good_name = find_good_names(tmp, type)
       
-      # if of type POINT at the X,Y coordinates as columns
-      if (sf::st_geometry_type(tmp)[1] == "POINT") {
-        tmp$X <- sf::st_coordinates(tmp)[, 1]
-        tmp$Y <- sf::st_coordinates(tmp)[, 2]
-        
-        tmp <- tmp[, c(good_name, "X", "Y")]
-        
-      } else {
-        # If line/polygon then keep geometry but don't expand
-        tmp <- tmp[, c(good_name, attr(tmp, "sf_column"))]
-        
+      if(!is.null(tmp)){
+        # if of type POINT at the X,Y coordinates as columns
+        if (sf::st_geometry_type(tmp)[1] == "POINT") {
+          tmp$X <- sf::st_coordinates(tmp)[, 1]
+          tmp$Y <- sf::st_coordinates(tmp)[, 2]
+          
+          tmp <- tmp[, c(good_name, "X", "Y")]
+        } else {
+          # If line/polygon then keep geometry but don't expand
+          tmp <- tmp[, c(good_name, attr(tmp, "sf_column"))]
+        }
       }
+     
+      
       # Returning as data.frame drops the geometry column ...
       return(tmp)
       
@@ -122,19 +135,23 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
       
       good_name = find_good_names(input, type)
       
-      # if of type POINT at the X,Y coordinates as columns
-      if (d$features$geometry$type[1] == "Point") {
-        geom = d$features$geometry$coordinates
-        
-        tmp = cbind(input[, good_name], do.call(rbind, geom))
-        
-        names(tmp) <- c(good_name, "X", "Y")
-        
-        return(tmp)
-        
+      if(is.null(input)){
+        tmp = NULL
       } else {
-        # If line/polygon then keep geometry but don't expand
-        return(input[, good_name])
+        # if of type POINT at the X,Y coordinates as columns
+        if (d$features$geometry$type[1] == "Point") {
+          geom = d$features$geometry$coordinates
+          
+          tmp = cbind(input[, good_name], do.call(rbind, geom))
+          
+          names(tmp) <- c(good_name, "X", "Y")
+          
+          return(tmp)
+          
+        } else {
+          # If line/polygon then keep geometry but don't expand
+          return(input[, good_name])
+        }
       }
     }
     
@@ -278,6 +295,7 @@ findNLDI <- function(comid = NULL,
                      find = c("flowlines"),
                      distance_km = 100,
                      no_sf = FALSE) {
+  
   # Should sf be used? Both no_sf and pkg.env must agree
   use_sf = all(pkg.env$local_sf, !no_sf)
   

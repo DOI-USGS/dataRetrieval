@@ -2,8 +2,28 @@ context("NLDI...")
 
 test_that("NLDI offerings...", {
   skip_on_cran()
+  xx = findNLDI(wqp = "TCEQMAIN-10016",
+                nav = "UM",
+                find = "nwissite",
+                distance_km = 2,
+                no_sf = FALSE)
+  
+  expect_true(nrow(xx) == 1)
+})
+
+
+test_that("NLDI offerings...", {
+  skip_on_cran()
   expect_true(nrow(get_nldi_sources()) > 1)
 })
+
+
+xx = findNLDI(wqp = "TCEQMAIN-10016",
+              nav = "UM",
+              find = "nwissite",
+              distance_km = 2,
+              no_sf = FALSE)
+
 
 test_that("NLDI starting sources...", {
 
