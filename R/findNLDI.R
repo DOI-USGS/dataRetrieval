@@ -332,7 +332,7 @@ findNLDI <- function(comid = NULL,
       location[1] ,
       "%20",
       location[2] ,
-      "%29"
+      "%29", "&f=json"
     )
     
     tmp_return <- get_nldi(tmp_url, "feature", use_sf = use_sf)
@@ -376,7 +376,7 @@ findNLDI <- function(comid = NULL,
     features = lapply(navigate,
                       paste0,
                       paste0("/", find),
-                      paste0("?distance=", distance_km))
+                      paste0("?distance=", distance_km, "&f=json"))
   }
   
   names  <- unlist(lapply(nav, paste0, paste0("_", find)))
