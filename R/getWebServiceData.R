@@ -30,10 +30,20 @@ getWebServiceData <- function(obs_url, ...){
   returnedList <- retryGetOrPost(obs_url, ...)
   
   if(httr::status_code(returnedList) == 400){
-    response400 <- httr::content(returnedList, type="text", encoding = "UTF-8")
-    statusReport <- xml_text(xml_child(read_xml(response400), 2)) # making assumption that - body is second node
-    statusMsg <- gsub(pattern=", server=.*", replacement="", x = statusReport)
-    message(statusMsg)
+    if(httr::has_content(returnedList)){
+      response400 <- httr::content(returnedList, type="text", encoding = "UTF-8")
+      statusReport <- xml_text(xml_child(read_xml(response400), 2)) # making assumption that - body is second node
+      statusMsg <- gsub(pattern=", server=.*", replacement="", x = statusReport)
+      message(statusMsg)
+      
+    } else {
+      httr::message_for_status(returnedList)
+      warning_message <- httr::headers(returnedList)
+      if("warning" %in% names(warning_message)){
+        warning_message <- warning_message$warning
+        message(warning_message)
+      }
+    }
     return(invisible(NULL))
   } else if(httr::status_code(returnedList) != 200){
     message("For: ", obs_url,"\n")
