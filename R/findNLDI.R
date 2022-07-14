@@ -90,11 +90,6 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
     # Interpret as text
     d <- httr::content(res, "text", encoding = "UTF8")
     
-    if(grepl('An HTML representation is not available for this resource', d)){
-      warning("No data returned for: ", url, call. = FALSE)
-      return(NULL)
-    }
-    
     if (d == "") {
       warning("No data returned for: ", url, call. = FALSE)
       return(NULL)
@@ -112,6 +107,11 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
         message("No data found for: ", basename(url))
         return(NULL) }
       )
+      
+      if(nrow(tmp) == 0) {
+        warning("No data returned for: ", url, call. = FALSE)
+        return(NULL)
+      }
         
       good_name = find_good_names(tmp, type)
       
@@ -141,6 +141,7 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
       good_name = find_good_names(input, type)
       
       if(is.null(input) & type != "basin"){
+        warning("No data returned for: ", url, call. = FALSE)
         tmp = NULL
       } else {
         # if of type POINT at the X,Y coordinates as columns
@@ -358,7 +359,7 @@ findNLDI <- function(comid = NULL,
       location[1] ,
       "%20",
       location[2] ,
-      "%29", "&f=json"
+      "%29"
     )
     
     tmp_return <- get_nldi(tmp_url, type = "feature", use_sf = use_sf)
