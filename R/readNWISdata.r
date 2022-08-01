@@ -108,7 +108,7 @@
 #'                  parameterCd = "00060")
 #' allDailyStats_2 <- readNWISdata(arg.list, service="stat")
 #'
-#' #' # use county names to get data
+#' # use county names to get data
 #' dailyStaffordVA <- readNWISdata(stateCd = "Virginia",
 #'                                 countyCd="Stafford",
 #'                                 parameterCd = "00060",
@@ -129,6 +129,11 @@
 #'                           site_no = c("01594440","040851325"),
 #'                           range_selection = "data_range")
 #' 
+#' peak_data <- readNWISdata(service = "peak", 
+#'                           state_cd = "PA")
+#'                           
+#' peak_data <- readNWISdata(service = "peak", 
+#'                           huc2_cd = "20")
 #' 
 #' }
 readNWISdata <- function(..., asDateTime=TRUE,convertType=TRUE,tz="UTC"){
@@ -392,7 +397,7 @@ readNWISdots <- function(...){
     }
   }
   
-  if (service %in% c("qwdata","measurements")){
+  if (service %in% c("peak","qwdata","measurements")){
     
     format.default <- "rdb"
     
@@ -419,7 +424,20 @@ readNWISdots <- function(...){
     if(service == "qwdata"){
       values["qw_sample_wide"] <- "wide"
     }
+    
   } 
+  
+  if (service == "peak" & "state_cd" %in% names(values)){
+    values["list_of_search_criteria"] <- "state_cd"
+  }
+  
+  if (service == "peak" & "huc2_cd" %in% names(values)){
+    values["list_of_search_criteria"] <- "huc2_cd"
+  }  
+  
+  if (service == "peak" & "bBox" %in% names(values)){
+    values["list_of_search_criteria"] <- "lat_long_bounding_box"
+  }   
   
   if(service %in% c("site", "gwlevels", "stat", "rating", "peak")){
     format.default <- "rdb"
