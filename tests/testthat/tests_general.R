@@ -106,7 +106,14 @@ test_that("General NWIS retrievals working", {
   expect_equal(2, nrow(multi_huc))
 
   
-  
+ peak_data <- readNWISdata(service = "peak", 
+                           state_cd = "PA")
+ expect_lt(nrow(peak_data, 100000))
+ 
+ peak_data <- readNWISdata(service = "peak", 
+                           huc2_cd = "20")
+ expect_lt(nrow(peak_data, 100000))
+ 
 })
 
 test_that("whatNWISdata",{
