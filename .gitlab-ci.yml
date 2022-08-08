@@ -13,8 +13,14 @@ variables:
   CONNECT_API_KEY: $CONNECT_API_KEY
   CONNECT_SERVER: $CONNECT_SERVER
 
+stages:
+  - getready
+  - check
+  - test
+  - end
+
 getready:
-  stage: .pre
+  stage: getready
   script:
     - mkdir -p $R_LIBS_USER
     - echo "options(Ncpus=$(nproc --all), repos=c(CRAN='$CRAN'))" >> $R_PROFILE
