@@ -100,7 +100,19 @@ whatNWISdata <- function(..., convertType=TRUE){
   if(any(service == "iv")){
     service[service == "iv"] <- "uv"
   }
-    
+
+  if(any(service == "dv")){
+    service[service == "dv"] <- "dv"
+  }
+  
+  if(any(service == "peak")){
+    service[service == "peak"] <- "pk"
+  }
+  
+  if(any(service == "measurement")){
+    service[service == "measurement"] <- "uv"
+  }
+  
   urlSitefile <- drURL('site', Access=pkg.env$access, seriesCatalogOutput='true',arg.list=values)
  
   SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE, convertType = convertType)
