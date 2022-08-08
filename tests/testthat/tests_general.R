@@ -108,11 +108,11 @@ test_that("General NWIS retrievals working", {
   
  peak_data <- readNWISdata(service = "peak", 
                            state_cd = "PA")
- expect_lt(nrow(peak_data, 100000))
+ expect_lt(nrow(peak_data), 100000)
  
  peak_data <- readNWISdata(service = "peak", 
                            huc2_cd = "20")
- expect_lt(nrow(peak_data, 100000))
+ expect_lt(nrow(peak_data), 100000)
  
 })
 
@@ -138,8 +138,9 @@ test_that("whatNWISdata",{
   expect_true(all(unique(flowAndTemp$stat_cd) %in% c("00003",NA)))
  
   #site service
-  sites <- whatNWISdata(stateCd = "WI", parameterCd = "00060", siteType = "ST", service = "site")
-  expect_true(all(unique(sites$data_type_cd) %in% c("all")))  
+  sites <- whatNWISdata(stateCd = "WI", siteType = "ST", service = "site")
+  expect_true(all(c("gw", "sv", "qw", "dv", "pk",  "uv")
+                  %in% unique(sites$data_type_cd)))  
 })
 
 test_that("General WQP retrievals working", {

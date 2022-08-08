@@ -1,8 +1,22 @@
 template:
   params:
     ganalytics: UA-53797708-7
+  includes:
+    before_title: '<a href="https://www.usgs.gov/"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>'
+  bootstrap: 5
+  theme: atom-one-light
+  bslib:
+    bg: "white"
+    fg: "#283140"
+    navbar-brand-color: "white"
+    navbar-light-color: "white"
+    nav-link-color: "white"
+    nav-link-hover-color: "#a9a9a9"
+    navbar-light-brand-hover-color: "white"
+    navbar-light-hover-color: "white"
+    text-muted: "white"
+    pkgdown-nav-height: 125px
 navbar:
-  type: default
   left:
   - text: Background
     href: articles/dataRetrieval.html
@@ -92,3 +106,4 @@ reference:
       - getQuerySummary
       - getWebServiceData
       - is_dataRetrieval_user
+      - checkWQPdates
