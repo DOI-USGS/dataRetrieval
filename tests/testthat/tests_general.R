@@ -108,11 +108,11 @@ test_that("General NWIS retrievals working", {
   
  peak_data <- readNWISdata(service = "peak", 
                            state_cd = "PA")
- expect_lt(nrow(peak_data, 100000))
+ expect_lt(nrow(peak_data), 100000)
  
  peak_data <- readNWISdata(service = "peak", 
                            huc2_cd = "20")
- expect_lt(nrow(peak_data, 100000))
+ expect_lt(nrow(peak_data), 100000)
  
 })
 
