@@ -70,7 +70,7 @@ readWQPdots <- function(...){
   }
   
   if("zip" %in% names(values)){
-    if(class(values["zip"]) == "logical"){
+    if(is.logical(values["zip"])){
       values["zip"] <- ifelse(values["zip"], "yes","no")
     }
   } else {
