@@ -139,7 +139,7 @@ test_that("whatNWISdata",{
  
   #site service
   sites <- whatNWISdata(stateCd = "WI", parameterCd = "00060", siteType = "ST", service = "site")
-  expect_true(all(unique(flowAndTemp$data_type_cd) %in% c("all")))  
+  expect_true(all(unique(sites$data_type_cd) %in% c("all")))  
 })
 
 test_that("General WQP retrievals working", {
