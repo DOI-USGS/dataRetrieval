@@ -59,6 +59,7 @@
 #' flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", 
 #'                              parameterCd = c("00060","00010"),
 #'                              statCd = "00003")
+#' sites <- whatNWISdata(stateCd = "WI", parameterCd = "00060", siteType = "ST", service = "site")
 #' 
 #' }
 whatNWISdata <- function(..., convertType=TRUE){
@@ -97,20 +98,14 @@ whatNWISdata <- function(..., convertType=TRUE){
   
   values <- sapply(valuesList$values, function(x) URLencode(x))
 
-  if(any(service == "iv")){
+  if(any(service == "site")){
+    service <- "all"
+  } else if(any(service == "iv")){
     service[service == "iv"] <- "uv"
-  }
-
-  if(any(service == "dv")){
-    service[service == "dv"] <- "dv"
-  }
-  
-  if(any(service == "peak")){
+  } else if(any(service == "peak")){
     service[service == "peak"] <- "pk"
-  }
-  
-  if(any(service == "measurement")){
-    service[service == "measurement"] <- "uv"
+  } else if(any(service == "measurements")){
+    service[service == "measurements"] <- "sv"
   }
   
   urlSitefile <- drURL('site', Access=pkg.env$access, seriesCatalogOutput='true',arg.list=values)
