@@ -31,7 +31,7 @@ whatWQPsamples <- function(...){
   baseURL <- appendDrURL(baseURL, mimeType = "tsv")
   
   withCallingHandlers({
-    retval <- importWQP(baseURL, zip=values["zip"] == "yes")
+    retval <- importWQP(baseURL, zip=values["zip"] == "yes", convertType=convertType)
   }, warning=function(w) {
     if (any( grepl( "Number of rows returned not matched in header", w)))
       invokeRestart("muffleWarning")
@@ -52,6 +52,8 @@ whatWQPsamples <- function(...){
 #' type <- "Stream"
 #' sites <- whatWQPmetrics(countycode="US:55:025",siteType=type)
 #' lakeSites <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+#' lakeSites_chars <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", 
+#'                        statecode = "US:55", convertType=FALSE)
 #' }
 whatWQPmetrics <- function(...){
 
@@ -74,7 +76,7 @@ whatWQPmetrics <- function(...){
   baseURL <- appendDrURL(baseURL, mimeType = "tsv")
   
   withCallingHandlers({
-    retval <- importWQP(baseURL, zip=values["zip"] == "yes")
+    retval <- importWQP(baseURL, zip=values["zip"] == "yes", convertType=convertType)
   }, warning=function(w) {
     if (any( grepl( "Number of rows returned not matched in header", w)))
       invokeRestart("muffleWarning")
@@ -96,6 +98,8 @@ whatWQPmetrics <- function(...){
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
 #' @param saveFile path to save the incoming geojson output. 
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -134,8 +138,10 @@ whatWQPmetrics <- function(...){
 #' sites <- whatWQPdata(countycode="US:55:025",siteType=type)
 #' 
 #' lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+#' lakeSites_chars <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", 
+#'                        statecode = "US:55", convertType=FALSE)
 #' }
-whatWQPdata <- function(..., saveFile = tempfile()){
+whatWQPdata <- function(..., saveFile = tempfile(), convertType=TRUE){
 
   values <- readWQPdots(...)
   
