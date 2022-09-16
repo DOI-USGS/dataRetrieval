@@ -70,6 +70,7 @@ uvDataMulti <- whatNWISdata(siteNumber = c('05114000','09423350'),service=c("uv"
 flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", 
                              parameterCd = c("00060","00010"),
                              statCd = "00003")
+sites <- whatNWISdata(stateCd = "WI", parameterCd = "00060", siteType = "ST", service = "site")
 
 }
 \dontshow{\}) # examplesIf}
