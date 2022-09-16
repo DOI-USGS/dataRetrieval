@@ -4,7 +4,13 @@
 \alias{readWQPdata}
 \title{General Data Import from Water Quality Portal}
 \usage{
-readWQPdata(..., querySummary = FALSE, tz = "UTC", ignore_attributes = FALSE)
+readWQPdata(
+  ...,
+  querySummary = FALSE,
+  tz = "UTC",
+  ignore_attributes = FALSE,
+  convertType = TRUE
+)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
@@ -19,6 +25,9 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 for more information on time zones.}
 
 \item{ignore_attributes}{logical to choose to ignore fetching site and parameter attributes. Default is \code{FALSE}.}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character.}
 }
 \value{
 A data frame with at least the following columns:
@@ -190,6 +199,9 @@ act_metrics <- readWQPdata(statecode = "WI",
 # Data profile: "Result Detection Quantitation Limit Data"
 dl_data <- readWQPdata(siteid="USGS-04024315",
                        service = "ResultDetectionQuantitationLimit")
+                       
+pH <- readWQPdata(statecode="WI", countycode="Dane", characteristicName="pH", 
+                       convertType=FALSE)
 }
 \dontshow{\}) # examplesIf}
 }

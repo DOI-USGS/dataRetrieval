@@ -22,21 +22,21 @@
 #' 
 #' ## Examples take longer than 5 seconds:
 #' \donttest{
-#' rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
+#' rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '', '')
 #' 
 #' rawSample <- importWQP(rawSampleURL)
 #' 
-#' rawSampleURL_NoZip <- constructWQPURL('USGS-01594440','01075', '', '', zip=FALSE)
+#' rawSampleURL_NoZip <- constructWQPURL('USGS-01594440','01075', '', '', '', zip=FALSE)
 #' 
 #' rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip=FALSE, convertType=FALSE)
 #' 
 #' rawSample2 <- importWQP(rawSampleURL_NoZip, zip=FALSE)
 #' 
-#' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
+#' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '', '')
 #' 
-#'  STORETdata <- importWQP(STORETex)
+#' STORETdata <- importWQP(STORETex)
 #'  
-#'  STORETdata_char <- importWQP(STORETdata, zip=FALSE, convertType=FALSE)
+#' STORETdata_char <- importWQP(STORETex, convertType=FALSE)
 #' }
 #' 
 importWQP <- function(obs_url, zip=TRUE, tz="UTC", 
@@ -88,18 +88,18 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
                                 ActivityTypeCode = character(),                       
                                 ActivityMediaName = character(),                                 
                                 ActivityMediaSubdivisionName = character(),                  
-                                ActivityStartDate = as.Date(x = character(), origin = "1970-01-01"),       
+                                ActivityStartDate = as.Date(x = integer(), origin = "1970-01-01"),       
                                 ActivityStartTime.Time = character(),                  
                                 ActivityStartTime.TimeZoneCode = character(),             
-                                ActivityEndDate = as.Date(x = character(), origin = "1970-01-01"),            
+                                ActivityEndDate = as.Date(x = integer(), origin = "1970-01-01"),            
                                 ActivityEndTime.Time = character(),  
                                 ActivityEndTime.TimeZoneCode = character(), 
-                                ActivityDepthHeightMeasure.MeasureValue = character(),       
+                                ActivityDepthHeightMeasure.MeasureValue = numeric(),       
                                 ActivityDepthHeightMeasure.MeasureUnitCode = character(), 
                                 ActivityDepthAltitudeReferencePointText = character(), 
-                                ActivityTopDepthHeightMeasure.MeasureValue = character(), 
+                                ActivityTopDepthHeightMeasure.MeasureValue = numeric(), 
                                 ActivityTopDepthHeightMeasure.MeasureUnitCode = character(), 
-                                ActivityBottomDepthHeightMeasure.MeasureValue = character(), 
+                                ActivityBottomDepthHeightMeasure.MeasureValue = numeric(), 
                                 ActivityBottomDepthHeightMeasure.MeasureUnitCode = character(), 
                                 ProjectIdentifier = character(), 
                                 ActivityConductingOrganizationText = character(), 
@@ -128,7 +128,7 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
                                 PrecisionValue = numeric(), 
                                 ResultCommentText = character(), 
                                 USGSPCode = character(), 
-                                ResultDepthHeightMeasure.MeasureValue = character(),      
+                                ResultDepthHeightMeasure.MeasureValue = numeric(),      
                                 ResultDepthHeightMeasure.MeasureUnitCode = character(), 
                                 ResultDepthAltitudeReferencePointText = character(), 
                                 SubjectTaxonomicName = character(), 
@@ -138,21 +138,22 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
                                 ResultAnalyticalMethod.MethodName = character(), 
                                 MethodDescriptionText = character(),  
                                 LaboratoryName = character(),              
-                                AnalysisStartDate = as.Date(x = character(), origin = "1970-01-01"), 
+                                AnalysisStartDate = as.Date(x = integer(), origin = "1970-01-01"), 
                                 ResultLaboratoryCommentText = character(), 
                                 DetectionQuantitationLimitTypeName = character(), 
-                                DetectionQuantitationLimitMeasure.MeasureValue = character(), 
+                                DetectionQuantitationLimitMeasure.MeasureValue = numeric(), 
                                 DetectionQuantitationLimitMeasure.MeasureUnitCode = character(), 
-                                PreparationStartDate = as.Date(x = character(), origin = "1970-01-01"), 
+                                PreparationStartDate = as.Date(x = integer(), origin = "1970-01-01"), 
                                 ProviderName = character(),               
-                                ActivityStartDateTime = as.POSIXct(character()), 
-                                ActivityEndDateTime = as.POSIXct(character()))
+                                ActivityStartDateTime = as.POSIXct(integer()), 
+                                ActivityEndDateTime = as.POSIXct(integer()))
       
       attr(emptyReturn$ActivityStartDateTime, "tzone") <- tz
       attr(emptyReturn$ActivityEndDateTime, "tzone") <- tz
       
       if(!convertType){
-        
+        i <- sapply(emptyReturn, !is.character)
+        emptyReturn[i] <- lapply(emptyReturn[i], as.character)
       }
       attr(emptyReturn, "headerInfo") <- headerInfo
       return(emptyReturn)

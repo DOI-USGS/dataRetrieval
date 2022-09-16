@@ -120,7 +120,7 @@ arg.list <- list(site = "03111548",
                  parameterCd = "00060")
 allDailyStats_2 <- readNWISdata(arg.list, service="stat")
 
-#' # use county names to get data
+# use county names to get data
 dailyStaffordVA <- readNWISdata(stateCd = "Virginia",
                                 countyCd="Stafford",
                                 parameterCd = "00060",
@@ -141,6 +141,11 @@ peak_data <- readNWISdata(service = "peak",
                           site_no = c("01594440","040851325"),
                           range_selection = "data_range")
 
+peak_data <- readNWISdata(service = "peak", 
+                          state_cd = "PA")
+                          
+peak_data <- readNWISdata(service = "peak", 
+                          huc2_cd = "20")
 
 }
 \dontshow{\}) # examplesIf}

@@ -11,6 +11,10 @@
 #' type <- "Stream"
 #' sites <- whatWQPsamples(countycode="US:55:025",siteType=type)
 #' 
+#' lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+#' lakeSites_samples_chars <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
+#'                               statecode = "US:55", convertType=FALSE)
+#' 
 #' }
 whatWQPsamples <- function(..., convertType=TRUE){
   
@@ -55,8 +59,8 @@ whatWQPsamples <- function(..., convertType=TRUE){
 #' 
 #' type <- "Stream"
 #' sites <- whatWQPmetrics(countycode="US:55:025",siteType=type)
-#' lakeSites <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
-#' lakeSites_chars <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", 
+#' lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+#' lakeSites_metrics_chars <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", 
 #'                        statecode = "US:55", convertType=FALSE)
 #' }
 whatWQPmetrics <- function(..., convertType=TRUE){
