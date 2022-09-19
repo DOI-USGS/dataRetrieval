@@ -559,7 +559,7 @@ test_that("readWQPsummary", {
 test_that("importWQP convertType", {
   testthat::skip_on_cran()
  
-  rawSampleURL_NoZip <- constructWQPURL('USGS-01594440','01075', '', '', '', zip=FALSE) 
+  rawSampleURL_NoZip <- constructWQPURL('USGS-01594440','01075', '', '', zip=FALSE) 
   rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip=FALSE, convertType=FALSE)
   expect_is(rawSampleURL_NoZip_char$ResultMeasureValue, "character")
   
