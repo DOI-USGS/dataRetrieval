@@ -243,17 +243,18 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
         }
         
       }
-    
-    if(all(c("ActivityStartDate", "ActivityStartTime/Time") %in% names(retval))){
-      retval$ActivityStartDateTime <- paste(retval$ActivityStartDate, retval$`ActivityStartTime/Time`)
-      retval$ActivityStartDateTime <- lubridate::fast_strptime(retval$ActivityStartDateTime, '%Y-%m-%d %H:%M:%S')+60*60*retval$timeZoneStart
-      attr(retval$ActivityStartDateTime, "tzone") <- tz
-    }
-    
-    if(all(c("ActivityEndDate","ActivityEndTime/Time") %in% names(retval))){
-      retval$ActivityEndDateTime <- paste(retval$ActivityEndDate, retval$`ActivityEndTime/Time`)
-      retval$ActivityEndDateTime <- lubridate::fast_strptime(retval$ActivityEndDateTime, '%Y-%m-%d %H:%M:%S')+60*60*retval$timeZoneStart
-      attr(retval$ActivityEndDateTime, "tzone") <- tz
+      
+      if(all(c("ActivityStartDate", "ActivityStartTime/Time") %in% names(retval))){
+        retval$ActivityStartDateTime <- paste(retval$ActivityStartDate, retval$`ActivityStartTime/Time`)
+        retval$ActivityStartDateTime <- lubridate::fast_strptime(retval$ActivityStartDateTime, '%Y-%m-%d %H:%M:%S')+60*60*retval$timeZoneStart
+        attr(retval$ActivityStartDateTime, "tzone") <- tz
+      }
+      
+      if(all(c("ActivityEndDate","ActivityEndTime/Time") %in% names(retval))){
+        retval$ActivityEndDateTime <- paste(retval$ActivityEndDate, retval$`ActivityEndTime/Time`)
+        retval$ActivityEndDateTime <- lubridate::fast_strptime(retval$ActivityEndDateTime, '%Y-%m-%d %H:%M:%S')+60*60*retval$timeZoneStart
+        attr(retval$ActivityEndDateTime, "tzone") <- tz
+      }
     }
   }
   names(retval)[grep("/",names(retval))] <- gsub("/",".",names(retval)[grep("/",names(retval))])
