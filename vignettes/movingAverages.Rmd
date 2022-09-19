@@ -9,7 +9,7 @@ output:
     fig_height: 7
     fig_width: 7
 vignette: >
-  %\VignetteIndexEntry{Moving Averages}
+  %\VignetteIndexEntry{Calculating Moving Averages and Historical Flow Quantiles}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
