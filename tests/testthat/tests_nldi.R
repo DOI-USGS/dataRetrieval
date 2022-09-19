@@ -7,7 +7,7 @@ test_that("NLDI messageing NULL", {
                 find = "nwissite",
                 distance_km = 2)
   
-  expect_message(findNLDI(wqp = "TCEQMAIN-10016",
+  expect_warning(findNLDI(wqp = "TCEQMAIN-10016",
                                nav = "UM",
                                find = "nwissite",
                                distance_km = 2))

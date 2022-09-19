@@ -1,0 +1,365 @@
+/* ================INSTRUCTIONS=================*/ 
+/* By changing the info below, you can reduce the size of the logo or hide the search box. You can also override the standard font characteristics if you would like to use your own custom styles. In order for your changes to work though, you MUST include a reference in your HTML pages to both the common CSS file and custom CSS file in that order.
+
+Instructions are provided below for customizing these classes. */
+
+/* =============Width===============*/ 
+/* BY DEFAULT, THERE IS NO MAX WIDTH:
+If you want the want to restrict the width of the page, remove the comment out slashes and astricks surrounding the ".tmp-container  {max-width: 1170px;}". you can change the 1170px to a smaller/larger max width if you'd like */
+ 
+/* .tmp-container {
+	max-width: 1170px;
+} */
+
+/* =============Search===============*/ 
+/* BY DEFAULT, Search box is displayed:
+If you want the to hide the search, remove the comment out slashes and astricks surrounding the ".search-box {display:none;}" below.  */
+ 
+/*
+#search-box {
+	display: none;
+}
+*/
+
+/* =============LOGO===============*/ 
+/* THE DEFAULT LOGO HEIGHT IS 65PX:
+If you want the logo to be smaller (50px), comment out the ".logo-header img {height 65px;}" below and remove the comment out slashes and astricks surrounding the ".logo-header img {height: 50px...margin-top: 18px;}" and the header search input (so the search box size is reduced too). 50px is the MINIMUM HEIGHT for the logo. */
+ .logo-header img {
+    height: 65px;
+}
+/*
+.logo-header img {
+	height: 50px;
+} 
+.header-search input[type="search"] {
+	height: 30px;
+	margin-top: 16px;
+}
+.header-search button[type="submit"] {
+	width: 26px;
+	height: 30px;
+	margin-top: 18px;
+}
+*/
+
+/* =============STANDARD CONTENT===============*/ 
+/* TO CHANGE THE TEXT SIZE OF THE CONTENT, FONT, ETC:
+By default, USGS has set the font size, family, etc. in order to provide a consistent size for content across all pages. If you would prefer not to have any of these pre-defined formats, you can change them below. NOTE: header and footer will not be changed. */
+#maincontent {
+	font-family: 'Source Sans Pro',sans-serif;
+	font-size: 14px;
+    line-height: 1.42857;
+    color: #333333;
+    background-color: #fff;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+/* =============SEARCH===============*/ 
+/* THIS HIDES THE SEARCH BOX ON VERY SMALL DEVICES:
+For simplification, search bar is visible on larger screens but is hidden on small screens. If you would prefer not to have the search box at all, you can remove the "@media (max-width:500px) {" and the second closing "}". below */
+@media (max-width:500px) {
+.header-search form { 
+	display: none}
+}
+
+/* =============SOCIAL MEDIA===============*/ 
+/* If you would prefer not to have the social media links, you can remove the comment out slashes and astricks surrounding the content below */
+ /* .footer-social-links { 
+	display: none} */
+	
+@charset "UTF-8";
+/* CSS Document */
+
+footer, #navbar {
+	font-family: 'Source Sans Pro',sans-serif;
+	margin: 0;
+	position: relative;
+}
+
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}	
+
+footer, header, main, nav, div {
+    display: block;
+}
+
+.tmp-container {
+	margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.tmp-container a {
+	text-decoration: none;
+    background: transparent;
+}
+.tmp-container a:-webkit-any-link {
+    cursor: auto;
+}
+.tmp-container:before, .tmp-container:after {
+    content: " ";
+    display: table;
+}
+.tmp-container:after {
+    clear: both;
+}
+
+hr {
+	width: 100%; 
+	margin-top: 42px;
+	clear: both;
+}
+@media only screen and (max-width:490px) {
+    hr {
+    margin-top: 60px;
+    }
+}
+
+/* header (only) nav */
+.header-nav {
+	background: #00264c;
+}
+
+.logo-header img {
+	margin-top: 8px;
+	margin-bottom: 8px;
+	border: 0;
+	max-width: 100%;
+	height: auto;
+}
+
+.header-search form {
+  float: right;
+  width: auto;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-right: 0;
+  margin-left: 0;
+  border: 0;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.header-search input[type="search"] {
+	height: 30px;
+	width: 260px;
+	margin-top: 18px;
+}
+.header-search button[type="submit"] {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 15px;
+	border: 0;
+	color: #666;
+	background: transparent;
+	padding: 0;
+	width: 39px;
+	height: 39px;
+	margin-top: 21px;
+}
+
+input{line-height:normal}
+input[type="search"]{-webkit-appearance:textfield;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box}
+input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}
+input,button{font-family:inherit;font-size:inherit;line-height:inherit}
+
+
+/* Always float the navbar header */
+.navbar-header {
+  float: left;
+}
+
+/* footer (only) css */
+
+.menu.nav {
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.nav:before, .nav:after {
+   content: none;
+}
+footer.footer {
+	background: #00264c;
+	padding-bottom: 0px;
+	position: relative;
+	width: 100%;
+	border-top: 1px solid #E5E5E5;
+}
+
+footer.footer .footer-doi {
+	padding-right: 0;
+	padding-left: 0;
+}
+
+footer.footer .footer-doi ul.menu li a {
+    padding: 5px 0px;
+    color: #ffffff;
+    float: left;
+    font-size: 12px;
+}
+
+footer.footer .footer-doi ul.menu li:first-of-type {
+    padding-left: 0px;
+}
+
+footer.footer .footer-doi ul.menu li {
+    float: left;
+    padding-right: 2px;
+    padding-left: 5px;
+}
+
+footer.footer .footer-doi ul.menu li:after {
+    content: "|";
+    color: #ffffff;
+    float: left;
+    padding-top: 5px;
+    padding-left: 7px;
+    font-size: 12px;
+}
+
+footer.footer .footer-doi ul.menu li:last-child:after {
+    content: "";
+}
+
+footer.footer .footer-wrap .menu.nav a {
+	padding: 4px 0px;
+	color: #ffffff;
+	font-size: 12px;
+}
+
+footer.footer .footer-social-links {
+	color: #ffffff;
+	font-size: 12px;
+	padding-right: 0;
+}
+
+footer.footer .footer-social-links ul {
+    float: right;
+	margin-top: 0px;
+}
+
+footer.footer .footer-social-links ul li.follow {
+    padding-top: 6px;
+    padding-right: 5px;
+}
+
+footer.footer .footer-social-links ul li {
+    float: left;
+    height: 24px;
+    margin: 0 2px;
+    list-style: none;
+    list-style-type: none;
+}
+
+footer.footer .footer-social-links ul li:last-of-type {
+    margin-right: 0px;
+}
+
+footer.footer .footer-social-links ul li a i {
+	color:#fff;
+	font-size: 24px;
+}
+
+/* Font Awesome Social Media icons */
+/*!
+ *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
+ *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ */
+/* FONT PATH
+ * -------------------------- */
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('../fonts/fontawesome-webfont.eot');
+  src: url('../fonts/fontawesome-webfont.eot') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2') format('woff2'), url('../fonts/fontawesome-webfont.woff') format('woff'), url('../fonts/fontawesome-webfont.ttf') format('truetype'), url('../fonts/fontawesome-webfont.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.fa-wrapper {
+	position: relative
+}
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.fa-ul {
+  padding-left: 0;
+  margin-left: 2.14285714em;
+  list-style-type: none;
+}
+.fa-ul > li {
+  position: relative;
+}
+.fa-li {
+  position: absolute;
+  left: -2.14285714em;
+  width: 2.14285714em;
+  top: 0.14285714em;
+  text-align: center;
+}
+.fa-search:before {
+	content: "\f002";
+}
+.fa-twitter-square:before {
+Content: "\f081";
+}
+.fa-facebook-square:before {
+Content: "\f082";
+}
+.fa-github:before {
+    content: "\f09b";
+}
+.fa-flickr:before {
+	content: "\f16e";
+}
+.fa-youtube-play:before {
+    content: "\f16a";
+}
+.fa-instagram:before {
+    content: "\f16d";
+}
+.only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+[role="button"]{cursor:pointer}
+
+.navbar {
+  background:  bottom/contain no-repeat,linear-gradient(94.45deg,#00264c 1.55%,#00264c 98.46%);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px 5px rgba(0,0,0,.15);
+  border: none;
+  min-height: 40px;
+}
+
+.navbar-light .navbar-brand {
+  color: white !important;
+}
+
+.navbar-nav a:hover {
+  text-decoration: underline;
+}
+
+#hexlogo {
+  height: 80px;
+  float: right;
+  margin: 5px;
+  margin-left: 15px;
+  margin-right: 5px;
+}

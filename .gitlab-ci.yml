@@ -1,27 +1,75 @@
+image: artifactory.wma.chs.usgs.gov/docker-official-mirror/rocker/geospatial:latest
+
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
   _R_CHECK_FORCE_SUGGESTS_: "true"
   _R_CHECK_DONTTEST_EXAMPLES_: "false"
+  CRAN: "https://rpkg.chs.usgs.gov/prod-cran/latest"
   NOT_CRAN: "true"
+  PKG_PATH: "$CI_PROJECT_DIR/docs"
+  R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
+  R_LIBS: "$CI_PROJECT_DIR/ci/lib"
+  BUILD_LOGS_DIR: "$CI_PROJECT_DIR/ci/logs"
+  CONNECT_API_KEY: $CONNECT_API_KEY
+  CONNECT_SERVER: $CONNECT_SERVER
 
-before_script:
-  - apt-get update
-  - apt-get install -y --no-install-recommends qpdf pandoc pandoc-citeproc
-  - export PATH="/usr/local/lib/R/site-library/littler/examples/:${PATH}"
-  - echo "options(Ncpus = $(nproc --all))" >> /usr/local/lib/R/etc/Rprofile.site
-  - install2.r devtools
-  - r -e 'devtools::install_dev_deps()'
-  - r -e 'install.packages(c("zoo", "sf"))'
+stages:
+  - getready
+  - check
+  - test
+  - end
 
-test:
-  stage: test
-  tags:
-    - chs-shared
-  image: code.chs.usgs.gov:5001/wma/hydrogeoenv:rocker-geospatial
+getready:
+  stage: getready
   script:
-    - r -e 'devtools::check(check_dir = ".")'
-    - r -e 'capture.output(print(covr::coverage_to_list(covr::package_coverage(type = "all")), width = 20),  file = "covr.txt", split = TRUE)'
+    - mkdir -p $R_LIBS_USER
+    - Rscript -e "install.packages(c('devtools','pkgdown', 'kableExtra','covr', 'connectapi', 'patchwork'))"
+    - Rscript -e "devtools::install_deps(dependencies = TRUE, quiet = TRUE)"
+  cache:
+    paths:
+     - $R_LIBS_USER
   artifacts:
     paths:
-      - "*.Rcheck"
-      - "covr.txt"
+     - $R_LIBS_USER
+
+buildcheck:
+  stage: check
+  script:
+    - mkdir -p $BUILD_LOGS_DIR
+    - R CMD build . --no-build-vignettes --no-manual
+    - R -e 'devtools::check(document = FALSE, args = "--no-tests", error_on = "error", check_dir = Sys.getenv("BUILD_LOGS_DIR"))'
+  artifacts:
+    paths:
+      - $BUILD_LOGS_DIR
+
+unittests:
+  stage: test
+  dependencies:
+    - getready
+    - buildcheck
+  script:
+    - R -e 'if (any(as.data.frame(devtools::test())[["failed"]] > 0)) stop("Some tests failed.")'
+
+covertests:
+  stage: test
+  dependencies:
+    - getready
+    - buildcheck
+  script:
+    - R -e 'x <- covr::package_coverage();x;saveRDS(x, file = "cover.rds")'
+  artifacts:
+    paths: 
+      - cover.rds
+  coverage: '/Coverage: \d+.\d+\%/'
+
+deploy:
+  stage: end
+  only: 
+    - main
+  script:
+    - Rscript -e 'pkgdown::build_site()'
+    - Rscript -e 'cat("Hi!")'
+  artifacts:
+    paths:
+      - $PKG_PATH
+    expire_in: 1 week

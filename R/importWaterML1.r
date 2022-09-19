@@ -107,7 +107,7 @@ importWaterML1 <- function(obs_url,asDateTime=FALSE, tz="UTC"){
   #note: obs_url is a dated name, does not have to be a url/path
   
   returnedDoc <- check_if_xml(obs_url)
-  raw <- class(obs_url) == 'raw'
+  raw <- !is.character(obs_url)
   
   if(tz == ""){  #check tz is valid if supplied
     tz <- "UTC"
