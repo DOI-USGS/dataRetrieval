@@ -224,7 +224,7 @@ In the following example, we limit the retrieved data to only daily data. The de
 # Continuing from the previous example:
 # This pulls out just the daily, mean data:
 
-dailyDataAvailable <- whatNWISdata(siteNumbers,
+dailyDataAvailable <- whatNWISdata(siteNumber=siteNumbers,
                     service="dv", statCd="00003")
 
 
