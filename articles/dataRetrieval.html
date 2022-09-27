@@ -91,7 +91,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Introduction to the dataRetrieval package</h1>
                         <h4 data-toc-skip class="author">Laura A. DeCicco and Robert M. Hirsch</h4>
             
-            <h4 data-toc-skip class="date">31 August, 2022</h4>
+            <h4 data-toc-skip class="date">27 September, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/vignettes/dataRetrieval.Rmd" class="external-link"><code>vignettes/dataRetrieval.Rmd</code></a></small>
       <div class="d-none name"><code>dataRetrieval.Rmd</code></div>
@@ -425,7 +425,7 @@
 <code class="sourceCode R"><span><span class="co"># Continuing from the previous example:</span></span>
 <span><span class="co"># This pulls out just the daily, mean data:</span></span>
 <span></span>
-<span><span class="va">dailyDataAvailable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span><span class="va">siteNumbers</span>,</span>
+<span><span class="va">dailyDataAvailable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>siteNumber<span class="op">=</span><span class="va">siteNumbers</span>,</span>
 <span>                    service<span class="op">=</span><span class="st">"dv"</span>, statCd<span class="op">=</span><span class="st">"00003"</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <caption>Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]</caption>
