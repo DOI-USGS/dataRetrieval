@@ -9,6 +9,6 @@ client <- connect(server = Sys.getenv("CONNECT_SERVER"),
 bundle <- bundle_dir("./docs")
 
 content <- client %>% 
-  deploy(bundle, name = "wqReport") %>% 
+  deploy(bundle, name = "dataRetrieval") %>% 
   poll_task()
 
