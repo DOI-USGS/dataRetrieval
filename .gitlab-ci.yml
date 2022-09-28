@@ -31,6 +31,18 @@ getready:
   artifacts:
     paths:
      - $R_LIBS_USER
+     
+buildcheck:
+  stage: check
+  script:
+    - mkdir -p $BUILD_LOGS_DIR
+    - apt-get update
+    - apt-get -o dir::cache::archives=${APT_CACHE} install -y --no-install-recommends qpdf pandoc pandoc-citeproc
+    - R CMD build . --no-build-vignettes --no-manual
+    - R -e 'devtools::check(document = FALSE, args = "--no-tests", error_on = "error", check_dir = Sys.getenv("BUILD_LOGS_DIR"))'
+  artifacts:
+    paths:
+      - $BUILD_LOGS_DIR
 
 unittests:
   stage: test
