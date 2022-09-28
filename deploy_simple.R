@@ -1,5 +1,7 @@
 library(connectapi)
 
+rsconnect::writeManifest(appDir = "./docs")
+
 file.copy(from = "./docs/articles/logo.png", 
           to = "./docs/reference/logo.png")
 
