@@ -32,34 +32,32 @@ getready:
     paths:
      - $R_LIBS_USER
 
-buildcheck:
-  stage: check
-  script:
-    - mkdir -p $BUILD_LOGS_DIR
-    - R CMD build . --no-build-vignettes --no-manual
-    - R -e 'devtools::check(document = FALSE, args = "--no-tests", error_on = "error", check_dir = Sys.getenv("BUILD_LOGS_DIR"))'
-  artifacts:
-    paths:
-      - $BUILD_LOGS_DIR
-
 unittests:
   stage: test
   dependencies:
     - getready
     - buildcheck
   script:
-    - R -e 'if (any(as.data.frame(devtools::test())[["failed"]] > 0)) stop("Some tests failed.")'
-
+    - R -e 'library(testthat); options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml")); devtools::test(reporter = "junit")'
+  artifacts:
+    when: always
+    paths: 
+      - test-out.xml
+    reports:
+      junit: test-out.xml
+        
 covertests:
   stage: test
   dependencies:
     - getready
     - buildcheck
   script:
-    - R -e 'x <- covr::package_coverage();x;saveRDS(x, file = "cover.rds")'
+    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
   artifacts:
-    paths: 
-      - cover.rds
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: cobertura.xml
   coverage: '/Coverage: \d+.\d+\%/'
 
 deploy:
@@ -68,7 +66,7 @@ deploy:
     - main
   script:
     - Rscript -e 'pkgdown::build_site()'
-    - Rscript -e 'cat("Hi!")'
+    - Rscript -e 'source("deploy_simple.R")'
   artifacts:
     paths:
       - $PKG_PATH
