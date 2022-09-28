@@ -25,9 +25,9 @@ Retrieval functions for USGS and EPA hydrologic and water quality data.
 
 For complete tutorial information, see:
 
-[https://usgs-r.github.io/dataRetrieval](https://usgs-r.github.io/dataRetrieval)
+[https://rconnect.usgs.gov/dataRetrieval/](https://rconnect.usgs.gov/dataRetrieval/)
 
-[https://owi.usgs.gov/R/dataRetrieval.html](https://owi.usgs.gov/R/dataRetrieval.html)
+[https://waterdata.usgs.gov/blog/dataretrieval/](https://waterdata.usgs.gov/blog/dataretrieval/)
 
 # Sample Workflow
 
