@@ -1,7 +1,14 @@
-# dataRetrieval <img src="man/figures/USGS_R.png" class="logo"  alt="dataRetrieval" style="width:90px;height:auto;" align="right" />
- 
-[![R build status](https://github.com/USGS-R/dataRetrieval/workflows/R-CMD-check/badge.svg)](https://github.com/USGS-R/dataRetrieval/actions)[![Coverage Status](https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=main)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=main) [![status](https://img.shields.io/badge/USGS-Core-green.svg)](https://owi.usgs.gov/R/packages.html#core) [![CRAN version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
- 
+# dataRetrieval <img src="man/figures/hex_logo.png" class="logo"  alt="dataRetrieval" style="width:90px;height:auto;" align="right" />
+
+[![R build
+status](https://code.usgs.gov/water/dataRetrieval/badges/main/pipeline.svg)](https://code.usgs.gov/water/dataRetrieval/pipelines)[![Coverage
+Status](https://code.usgs.gov/water/dataRetrieval/badges/main/coverage.svg)](https://code.usgs.gov/water/dataRetrieval/pipelines)
+[![status](https://img.shields.io/badge/USGS-Core-green.svg)](https://owi.usgs.gov/R/packages.html#core)
+[![CRAN
+version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
+[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
+
 Retrieval functions for USGS and EPA hydrologic and water quality data.
 
 For complete tutorial information, see:
@@ -67,20 +74,21 @@ citation(package = "dataRetrieval")
 #> 
 #> To cite dataRetrieval in publications, please use:
 #> 
-#>   De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., 2018,
+#>   De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., 2022,
 #>   dataRetrieval: R packages for discovering and retrieving water data
-#>   available from Federal hydrologic web services, doi:10.5066/P9X4L3GE
+#>   available from Federal hydrologic web services, v.2.7.11,
+#>   doi:10.5066/P9X4L3GE
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
-#>     author = {Laura A. {De Cicco} and David Lorenz and Robert M. Hirsch and William Watkins},
+#>     author = {Laura A. {De Cicco} and David Lorenz and Robert M. Hirsch and William Watkins and Mike Johnson},
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
-#>     version = {2.7.6},
+#>     version = {2.7.11},
 #>     institution = {U.S. Geological Survey},
-#>     year = {2018},
+#>     year = {2022},
 #>     doi = {10.5066/P9X4L3GE},
 #>     url = {https://code.usgs.gov/water/dataRetrieval},
 #>   }
