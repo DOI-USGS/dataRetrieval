@@ -9,7 +9,7 @@ output:
     fig_height: 7
     fig_width: 7
 vignette: >
-  %\VignetteIndexEntry{Stat Service}
+  %\VignetteIndexEntry{Using the dataRetrieval Stats Service}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 ---

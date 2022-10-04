@@ -19,15 +19,15 @@ knitr::opts_chunk$set(
 
 # dataRetrieval <img src="man/figures/hex_logo.png" class="logo"  alt="dataRetrieval" style="width:90px;height:auto;" align="right" />
 
-[![R build status](https://github.com/USGS-R/dataRetrieval/workflows/R-CMD-check/badge.svg)](https://github.com/USGS-R/dataRetrieval/actions)[![Coverage Status](https://coveralls.io/repos/github/USGS-R/dataRetrieval/badge.svg?branch=main)](https://coveralls.io/github/USGS-R/dataRetrieval?branch=main) [![status](https://img.shields.io/badge/USGS-Core-green.svg)](https://owi.usgs.gov/R/packages.html#core) [![CRAN version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
+[![R build status](https://code.usgs.gov/water/dataRetrieval/badges/main/pipeline.svg)](https://code.usgs.gov/water/dataRetrieval/pipelines)[![Coverage Status](https://code.usgs.gov/water/dataRetrieval/badges/main/coverage.svg)](https://code.usgs.gov/water/dataRetrieval/pipelines) [![status](https://img.shields.io/badge/USGS-Core-green.svg)](https://owi.usgs.gov/R/packages.html#core) [![CRAN version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
 
 Retrieval functions for USGS and EPA hydrologic and water quality data. 
 
 For complete tutorial information, see:
 
-[https://usgs-r.github.io/dataRetrieval](https://usgs-r.github.io/dataRetrieval)
+[https://rconnect.usgs.gov/dataRetrieval/](https://rconnect.usgs.gov/dataRetrieval/)
 
-[https://owi.usgs.gov/R/dataRetrieval.html](https://owi.usgs.gov/R/dataRetrieval.html)
+[https://waterdata.usgs.gov/blog/dataretrieval/](https://waterdata.usgs.gov/blog/dataretrieval/)
 
 # Sample Workflow
 
