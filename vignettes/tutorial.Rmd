@@ -6,7 +6,7 @@ output:
   rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Introduction to the dataRetrieval package}
+  %\VignetteIndexEntry{dataRetrieval Tutorial}
   \usepackage[utf8]{inputenc}
 ---
 

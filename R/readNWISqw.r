@@ -190,7 +190,9 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
     attr(data, "siteInfo") <- siteInfo    
   }
   
-  if(exists("parameterCd") && all(!is.na(parameterCd)) & length(parameterCd) > 0){
+  if(exists("parameterCd") && any(!is.na(parameterCd)) &
+     length(parameterCd) > 0){
+    parameterCd <- parameterCd[!is.na(parameterCd)]
     parameterCd <- parameterCd[parameterCd != ""]
     varInfo <- readNWISpCode(parameterCd)
     attr(data, "variableInfo") <- varInfo
