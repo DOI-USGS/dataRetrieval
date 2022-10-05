@@ -4,7 +4,7 @@
 on:
   pull_request:
     paths: ["**.[rR]", "**.[rR]md", "**.[rR]markdown", "**.[rR]nw"]
-    branches= [main]
+    branches: [main]
 
 name: Style and Lint
 
