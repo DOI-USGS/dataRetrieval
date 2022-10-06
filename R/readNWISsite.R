@@ -68,7 +68,7 @@
 #' }
 readNWISsite <- function(siteNumbers) {
   
-  siteNumber <- paste(siteNumbers,collapse = ", ")
+  siteNumber <- paste(siteNumbers,collapse = ",")
   names(siteNumber) <- "site"
   urlSitefile <- drURL("site", 
                        Access = pkg.env$access,

@@ -99,7 +99,7 @@ constructNWISURL <- function(siteNumbers,
   
   multipleSites <- length(siteNumbers) > 1
   
-  siteNumbers <- paste(siteNumbers, collapse = ", ")
+  siteNumbers <- paste(siteNumbers, collapse = ",")
   
   baseURL <- drURL(service, Access = pkg.env$access)
   
@@ -118,7 +118,7 @@ constructNWISURL <- function(siteNumbers,
              multiplePcodes <- length(parameterCd) > 1
              
              if(multiplePcodes) {
-               pCodes <- paste(parameterCd, collapse = ", ")
+               pCodes <- paste(parameterCd, collapse = ",")
                url <- appendDrURL(url,
                                   multiple_parameter_cds = pCodes,
                                   param_cd_operator = "OR")
@@ -207,8 +207,8 @@ constructNWISURL <- function(siteNumbers,
           if(grepl("(?i)annual", statReportType) && (grepl("-", startDate) || grepl("-", endDate))) {
             stop("Start and end dates for annual statReportType can only include years")
           }
-          statType <- paste(statType, collapse = ", ")
-          parameterCd <- paste(parameterCd, collapse = ", ")
+          statType <- paste(statType, collapse = ",")
+          parameterCd <- paste(parameterCd, collapse = ",")
           url <- appendDrURL(baseURL, sites = siteNumbers,
                              statType = statType,
                            statReportType = statReportType,
@@ -229,7 +229,7 @@ constructNWISURL <- function(siteNumbers,
           multiplePcodes <- length(parameterCd) > 1
           # Check for 5 digit parameter code:
           if(multiplePcodes) {
-            parameterCd <- paste(parameterCd, collapse = ", ")
+            parameterCd <- paste(parameterCd, collapse = ",")
           } 
 
           format <- match.arg(format, c("xml", "tsv", "wml1", "wml2", "rdb"))
@@ -276,7 +276,7 @@ constructNWISURL <- function(siteNumbers,
           
           if("dv" == service) {
             if(length(statCd) > 1) {
-              statCd <- paste(statCd, collapse = ", ")
+              statCd <- paste(statCd, collapse = ",")
             }            
             url <- appendDrURL(url, StatCd = statCd)
           }

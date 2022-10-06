@@ -30,16 +30,18 @@
 #' 
 #' }
 #' 
-importNGWMN <- function(input, asDateTime=FALSE, tz= "UTC") {
+importNGWMN <- function(input, asDateTime=FALSE, tz = "UTC") {
   
   if(tz != "") {
     tz <- match.arg(tz, OlsonNames())
-  }else{tz = "UTC"}
+  } else {
+    tz <- "UTC"
+  }
   
   raw <- FALSE
   if(class(input) == "character" && file.exists(input)) {
     returnedDoc <- read_xml(input)
-  }else if(class(input) == 'raw') {
+  } else if(class(input) == 'raw') {
     returnedDoc <- read_xml(input)
     raw <- TRUE
   } else {

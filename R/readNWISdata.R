@@ -77,8 +77,12 @@
 #' 
 #' startDate <- as.Date("2013-10-01")
 #' endDate <- as.Date("2014-09-30")
-#' waterYear <- readNWISdata(bBox=c(-83,36.5,-82.5,36.75), parameterCd= "00010", 
-#'                   service= "dv", startDate=startDate, endDate=endDate)
+#' waterYear <- readNWISdata(bBox=c(-83, 36.5, -82.5, 36.75),
+#'                           parameterCd = "00010", 
+#'                           service= "dv",
+#'                           startDate = startDate, 
+#'                           endDate = endDate)
+#'
 #' siteInfo <- readNWISdata(stateCd= "WI", parameterCd= "00010",
 #'                   hasDataTypeCd= "iv", service= "site")
 #' temp <- readNWISdata(bBox=c(-83,36.5,-82.5,36.75), parameterCd= "00010", service= "site", 
@@ -162,16 +166,16 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
   baseURL <- drURL(service, arg.list=values)
   
   if(service %in% c("site", "dv", "iv", "gwlevels")) {
-    baseURL <- appendDrURL(baseURL, Access=pkg.env$access)
+    baseURL <- appendDrURL(baseURL, Access = pkg.env$access)
   }
   #actually get the data
-  if(length(grep("rdb",values["format"])) >0) {
+  if(length(grep("rdb",values["format"])) > 0) {
     if(service == "rating") {
       baseURL <- gsub(pattern = "&format=rdb",replacement = "", baseURL)
     }
     retval <- importRDB1(baseURL, tz = tz, asDateTime=asDateTime, convertType=convertType)
   } else {
-    retval <- importWaterML1(baseURL, tz= tz, asDateTime=asDateTime)
+    retval <- importWaterML1(baseURL, tz = tz, asDateTime = asDateTime)
   }
   
   if("dv" == service) {
@@ -229,7 +233,7 @@ stateCdLookup <- function(input, outputType= "postal") {
   retVal <- rep(NA, length(input))
   index <- 1
   for(i in input) {
-    if(is.numeric(i) | !is.na(suppressWarnings(as.numeric(i)))) {
+    if(is.numeric(i) || !is.na(suppressWarnings(as.numeric(i)))) {
       i <- which(as.numeric(i) == as.numeric(stateCd$STATE))
     } else if(nchar(i) == 2) {
       i <- which(tolower(i) == tolower(stateCd$STUSAB))
@@ -356,7 +360,7 @@ readNWISdots <- function(...) {
     stop("Only one service call allowed.")
   }
   
-  values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse= ", ",sep= "")))
+  values <- sapply(matchReturn, function(x) as.character(paste(eval(x),collapse= ",",sep= "")))
   
   names(values)[names(values) == "startDate"] <- "startDT"
   names(values)[names(values) == "endDate"] <- "endDT"
