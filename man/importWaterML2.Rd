@@ -13,8 +13,8 @@ importWaterML2(input, asDateTime = FALSE, tz = "UTC")
 
 \item{tz}{character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
-Possible values are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
+Possible values are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
+"America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla"}
 }
 \description{
 Returns data frame columns of all information with each time series measurement;
@@ -27,10 +27,10 @@ URL <- paste(baseURL, "sites=01646500",
      "startDT=2014-09-01",
      "endDT=2014-09-08",
      "statCd=00003",
-     "parameterCd=00060",sep="&")
+     "parameterCd=00060",sep= "&")
 \donttest{
 
-timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
+timesereies <- importWaterML2(URL, asDateTime=TRUE, tz= "UTC")
  
 }
 \dontshow{\}) # examplesIf}

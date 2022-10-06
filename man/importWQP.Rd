@@ -12,8 +12,8 @@ importWQP(obs_url, zip = TRUE, tz = "UTC", csv = FALSE)
 \item{zip}{logical to request data via downloading zip file. Default set to TRUE.}
 
 \item{tz}{character to set timezone attribute of datetime. Default is UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
-Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
+Possible values include "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
+"America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla"}
 
 \item{csv}{logical. Is the data coming back with a csv or tsv format. Default is \code{FALSE}. Currently, the 
 summary service does not support tsv, for other services tsv is the safer choice.}

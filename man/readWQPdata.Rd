@@ -109,7 +109,7 @@ because it allows for other agencies rather than the USGS.
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 nameToUse <- "pH"
-pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
+pHData <- readWQPdata(siteid= "USGS-04024315",characteristicName=nameToUse)
 pHData_summary <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),
      characteristicName=nameToUse, querySummary=TRUE)
 startDate <- as.Date("2013-01-01")
@@ -119,14 +119,14 @@ secchi.names = c("Depth, Secchi disk depth",
                  "Water transparency, Secchi disc")
 args <- list('startDateLo' = startDate, 
              'startDateHi' = "2013-12-31", 
-              statecode="WI", 
+              statecode= "WI", 
               characteristicName=secchi.names)
 
 wqp.data <- readWQPdata(args)   
 
 args_2 <- list('startDateLo' = startDate, 
              'startDateHi' = "2013-12-31", 
-              statecode="WI", 
+              statecode= "WI", 
               characteristicName=secchi.names,
               querySummary=TRUE)
 
@@ -134,10 +134,10 @@ wqp.summary <- readWQPdata(args_2)
 
 arg_3 <- list('startDateLo' = startDate, 
              'startDateHi' = "2013-12-31")
-arg_4 <- list(statecode="WI", 
+arg_4 <- list(statecode= "WI", 
               characteristicName=secchi.names)
 wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
-wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", 
+wqp.summary_WI <- readWQPdata(arg_3, statecode= "WI", 
                               characteristicName=secchi.names, 
                               querySummary=TRUE)
                               
@@ -171,15 +171,15 @@ samp_data <- readWQPdata(siteid = "USGS-04024315",
                          dataProfile = "resultPhysChem")
                          
 # Data profiles: "Sample Results (biological metadata)"
-samp_bio <- readWQPdata(siteid="USGS-04024315",
+samp_bio <- readWQPdata(siteid= "USGS-04024315",
                         dataProfile = "biological")
                          
 # Data profiles: "Sample Results (narrow)"
-samp_narrow <- readWQPdata(siteid="USGS-04024315",
+samp_narrow <- readWQPdata(siteid= "USGS-04024315",
                            dataProfile = "narrowResult")
                            
 # Data profiles: "Sampling Activity"
-samp_activity <- readWQPdata(siteid="USGS-04024315",
+samp_activity <- readWQPdata(siteid= "USGS-04024315",
                              dataProfile = "activityAll")
                              
 # Data profile: "Sampling Activity Metrics"
@@ -188,7 +188,7 @@ act_metrics <- readWQPdata(statecode = "WI",
                            service = "ActivityMetric")
                            
 # Data profile: "Result Detection Quantitation Limit Data"
-dl_data <- readWQPdata(siteid="USGS-04024315",
+dl_data <- readWQPdata(siteid= "USGS-04024315",
                        service = "ResultDetectionQuantitationLimit")
 }
 \dontshow{\}) # examplesIf}

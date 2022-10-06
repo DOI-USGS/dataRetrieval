@@ -1,69 +1,69 @@
-#" Construct NWIS url for data retrieval
-#"
-#" Imports data from NWIS web service. This function gets the data from here: 
-#" \url{https://nwis.waterdata.usgs.gov/nwis/qwdata}
-#" A list of parameter codes can be found here: 
-#" \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-#" A list of statistic codes can be found here: 
-#" \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
-#"
-#" @param siteNumbers string or vector of strings USGS site number.  This is usually an 8 digit number
-#" @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
-#" @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-#" retrieval for the earliest possible record.
-#" @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-#" retrieval for the latest possible record.
-#" @param statCd string or vector USGS statistic code only used for daily value service. 
-#" This is usually 5 digits.  Daily mean (00003) is the default.
-#" @param service string USGS service to call. Possible values are "dv" (daily values),
-#" "uv" (unit/instantaneous values), 
-#" "qw" (water quality data), "gwlevels" (groundwater),and "rating" (rating curve),
-#" "peak", "meas" (discrete streamflow measurements),
-#" "stat" (statistics web service BETA).
-#" @param format string, can be "tsv" or "xml", and is only applicable for daily 
-#" and unit value requests.  "tsv" returns results faster, but there is a possibility 
-#" that an incomplete file is returned without warning. XML is slower, 
-#" but will offer a warning if the file was incomplete (for example, if there was a 
-#" momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
-#" but the user must carefully check the results to see if the data returns matches 
-#" what is expected. The default is therefore "xml". 
-#" @param expanded logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional 
-#" information, only applicable for qw data.
-#" @param ratingType can be "base", "corr", or "exsa". Only applies to rating curve data.
-#" @param statReportType character Only used for statistics service requests.  Time 
-#" division for statistics: daily, monthly, or annual.  Default is daily.
-#" Note that daily provides statistics for each calendar day over the specified 
-#" range of water years, i.e. no more than 366 data points will be returned for 
-#" each site/parameter.  Use \code{readNWISdata} or \code{readNWISdv} for daily averages. 
-#" Also note that "annual" returns statistics for the calendar year.  Use 
-#" \code{readNWISdata} for water years. Monthly and yearly 
-#" provide statistics for each month and year within the range individually.
-#" @param statType character Only used for statistics service requests. Type(s) 
-#" of statistics to output for daily values.  Default is mean, which is the only
-#" option for monthly and yearly report types. See the statistics service documentation 
-#" at \url{https://waterservices.usgs.gov/rest/Statistics-Service.html} for a 
-#" full list of codes.
-#" @keywords data import USGS web service
-#" @return url string
-#" @export
-#" @examples
-#" site_id <- "01594440"
-#" startDate <- "1985-01-01"
-#" endDate <- ""
-#" pCode <- c("00060", "00010")
-#" url_daily <- constructNWISURL(site_id, pCode,
-#"            startDate,endDate, "dv",statCd = c("00003", "00001"))
-#" url_unit <- constructNWISURL(site_id, pCode, "2012-06-28", "2012-06-30", "iv")
-#" 
-#" url_qw_single <- constructNWISURL(site_id, "01075", startDate, endDate, "qw")
-#" url_qw <- constructNWISURL(site_id,c("01075", "00029", "00453"),
-#"            startDate,endDate, "qw")
-#" url_daily_tsv <- constructNWISURL(site_id, pCode, startDate, endDate, "dv",
-#"            statCd=c("00003", "00001"), format= "tsv")
-#" url_rating <- constructNWISURL(site_id, service= "rating",ratingType = "base")
-#" url_peak <- constructNWISURL(site_id, service = "peak")
-#" url_meas <- constructNWISURL(site_id, service = "meas")
-#" urlQW <- constructNWISURL("450456092225801", "70300", startDate= "", endDate= "",
+#' Construct NWIS url for data retrieval
+#'
+#' Imports data from NWIS web service. This function gets the data from here: 
+#' \url{https://nwis.waterdata.usgs.gov/nwis/qwdata}
+#' A list of parameter codes can be found here: 
+#' \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+#' A list of statistic codes can be found here: 
+#' \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+#'
+#' @param siteNumbers string or vector of strings USGS site number.  This is usually an 8 digit number
+#' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the earliest possible record.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the latest possible record.
+#' @param statCd string or vector USGS statistic code only used for daily value service. 
+#' This is usually 5 digits.  Daily mean (00003) is the default.
+#' @param service string USGS service to call. Possible values are "dv" (daily values),
+#' "uv" (unit/instantaneous values), 
+#' "qw" (water quality data), "gwlevels" (groundwater),and "rating" (rating curve),
+#' "peak", "meas" (discrete streamflow measurements),
+#' "stat" (statistics web service BETA).
+#' @param format string, can be "tsv" or "xml", and is only applicable for daily 
+#' and unit value requests.  "tsv" returns results faster, but there is a possibility 
+#' that an incomplete file is returned without warning. XML is slower, 
+#' but will offer a warning if the file was incomplete (for example, if there was a 
+#' momentary problem with the internet connection). It is possible to safely use the "tsv" option, 
+#' but the user must carefully check the results to see if the data returns matches 
+#' what is expected. The default is therefore "xml". 
+#' @param expanded logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional 
+#' information, only applicable for qw data.
+#' @param ratingType can be "base", "corr", or "exsa". Only applies to rating curve data.
+#' @param statReportType character Only used for statistics service requests.  Time 
+#' division for statistics: daily, monthly, or annual.  Default is daily.
+#' Note that daily provides statistics for each calendar day over the specified 
+#' range of water years, i.e. no more than 366 data points will be returned for 
+#' each site/parameter.  Use \code{readNWISdata} or \code{readNWISdv} for daily averages. 
+#' Also note that "annual" returns statistics for the calendar year.  Use 
+#' \code{readNWISdata} for water years. Monthly and yearly 
+#' provide statistics for each month and year within the range individually.
+#' @param statType character Only used for statistics service requests. Type(s) 
+#' of statistics to output for daily values.  Default is mean, which is the only
+#' option for monthly and yearly report types. See the statistics service documentation 
+#' at \url{https://waterservices.usgs.gov/rest/Statistics-Service.html} for a 
+#' full list of codes.
+#' @keywords data import USGS web service
+#' @return url string
+#' @export
+#' @examples
+#' site_id <- "01594440"
+#' startDate <- "1985-01-01"
+#' endDate <- ""
+#' pCode <- c("00060", "00010")
+#' url_daily <- constructNWISURL(site_id, pCode,
+#'            startDate,endDate, "dv",statCd = c("00003", "00001"))
+#' url_unit <- constructNWISURL(site_id, pCode, "2012-06-28", "2012-06-30", "iv")
+#' 
+#' url_qw_single <- constructNWISURL(site_id, "01075", startDate, endDate, "qw")
+#' url_qw <- constructNWISURL(site_id,c("01075", "00029", "00453"),
+#'            startDate,endDate, "qw")
+#' url_daily_tsv <- constructNWISURL(site_id, pCode, startDate, endDate, "dv",
+#'            statCd=c("00003", "00001"), format= "tsv")
+#' url_rating <- constructNWISURL(site_id, service= "rating",ratingType = "base")
+#' url_peak <- constructNWISURL(site_id, service = "peak")
+#' url_meas <- constructNWISURL(site_id, service = "meas")
+#' urlQW <- constructNWISURL("450456092225801", "70300", startDate= "", endDate= "",
 #'                           "qw", expanded = TRUE)
 constructNWISURL <- function(siteNumbers,
                              parameterCd = "00060",
@@ -210,9 +210,9 @@ constructNWISURL <- function(siteNumbers,
           statType <- paste(statType, collapse = ", ")
           parameterCd <- paste(parameterCd, collapse = ", ")
           url <- appendDrURL(baseURL, sites = siteNumbers,
-                       statType = statType,
-                       statReportType = statReportType,
-                       parameterCd = parameterCd)
+                             statType = statType,
+                           statReportType = statReportType,
+                           parameterCd = parameterCd)
           if (nzchar(startDate)) {
             url <- appendDrURL(url, startDT = startDate)
           }
@@ -274,7 +274,7 @@ constructNWISURL <- function(siteNumbers,
             url <- appendDrURL(url, ParameterCd = parameterCd)
           }
           
-          if("dv"==service) {
+          if("dv" == service) {
             if(length(statCd) > 1) {
               statCd <- paste(statCd, collapse = ", ")
             }            
@@ -282,7 +282,7 @@ constructNWISURL <- function(siteNumbers,
           }
           
           if (nzchar(startDate)) {
-            url <- appendDrURL(url, startDT=startDate)
+            url <- appendDrURL(url, startDT = startDate)
           } else {
             startorgin <- "1851-01-01"
             if ("iv" == service) startorgin <- "1900-01-01"            
@@ -303,47 +303,46 @@ constructNWISURL <- function(siteNumbers,
 
 
 
-#" Construct WQP url for data retrieval
-#"
-#" Construct WQP url for data retrieval. This function gets the data from here: \url{https://www.waterqualitydata.us}
-#"
-#" @param siteNumbers string or vector of strings USGS site number.  This is usually an 8 digit number
-#" @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
-#" @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-#" retrieval for the earliest possible record.
-#" @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-#" retrieval for the latest possible record.
-#" @param zip logical to request data via downloading zip file. Default set to TRUE.
-#" @keywords data import WQP web service
-#" @return url string
-#" @export
-#" @examples
-#" site_id <- "01594440"
-#" startDate <- "1985-01-01"
-#" endDate <- ""
-#" pCode <- c("00060", "00010")
-#" url_wqp <- constructWQPURL(paste("USGS",site_id,sep= "-"),
-#"            c("01075", "00029", "00453"),
-#"            startDate,endDate)
-#" url_wqp
-#" charNames <- c("Temperature",
-#"                "Temperature, sample",
-#"                "Temperature, water",
-#"                "Temperature, water, deg F")
-#" obs_url_orig <- constructWQPURL(siteNumbers = c("IIDFG-41WSSPAHS",
-#"                                                 "USGS-02352560"), 
-#"                                 parameterCd = charNames,
-#"                                 startDate, "")
-#" obs_url_orig
+#' Construct WQP url for data retrieval
+#'
+#' Construct WQP url for data retrieval. This function gets the data from here: \url{https://www.waterqualitydata.us}
+#'
+#' @param siteNumbers string or vector of strings USGS site number.  This is usually an 8 digit number
+#' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the earliest possible record.
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' retrieval for the latest possible record.
+#' @param zip logical to request data via downloading zip file. Default set to TRUE.
+#' @keywords data import WQP web service
+#' @return url string
+#' @export
+#' @examples
+#' site_id <- "01594440"
+#' startDate <- "1985-01-01"
+#' endDate <- ""
+#' pCode <- c("00060", "00010")
+#' url_wqp <- constructWQPURL(paste("USGS",site_id,sep= "-"),
+#'            c("01075", "00029", "00453"),
+#'            startDate,endDate)
+#' url_wqp
+#' charNames <- c("Temperature",
+#'                "Temperature, sample",
+#'                "Temperature, water",
+#'                "Temperature, water, deg F")
+#' obs_url_orig <- constructWQPURL(siteNumbers = c("IIDFG-41WSSPAHS",
+#'                                                 "USGS-02352560"), 
+#'                                 parameterCd = charNames,
+#'                                 startDate, "")
+#' obs_url_orig
 constructWQPURL <- function(siteNumbers, 
                             parameterCd,
                             startDate,
                             endDate,
                             zip = TRUE) {
-  
-  multipleSites <- length(siteNumbers) > 1
+
   multiplePcodes <- length(parameterCd) > 1
-  siteNumbers <- paste(siteNumbers, collapse= ";")
+  siteNumbers <- paste(siteNumbers, collapse = ";")
 
   if(all(nchar(parameterCd) == 5)) {
     suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
@@ -353,22 +352,22 @@ constructWQPURL <- function(siteNumbers,
   }
   
   if(multiplePcodes) {
-    parameterCd <- paste(parameterCd, collapse= ";")
+    parameterCd <- paste(parameterCd, collapse = ";")
   }
   
-  baseURL <- drURL("Result", siteid = siteNumbers, Access=pkg.env$access) 
+  baseURL <- drURL("Result", siteid = siteNumbers, Access = pkg.env$access) 
   url <- paste0(baseURL,
-                ifelse(pCodeLogic, "&pCode= ", "&characteristicName= "),
+                ifelse(pCodeLogic, "&pCode=", "&characteristicName="),
                 parameterCd)
   
   if (nzchar(startDate)) {
-    startDate <- format(as.Date(startDate), format= "%m-%d-%Y")
-    url <- paste0(url, "&startDateLo= ",startDate)
+    startDate <- format(as.Date(startDate), format = "%m-%d-%Y")
+    url <- paste0(url, "&startDateLo=", startDate)
   }
   
   if (nzchar(endDate)) {
-    endDate <- format(as.Date(endDate), format= "%m-%d-%Y")
-    url <- paste0(url, "&startDateHi= ",endDate)
+    endDate <- format(as.Date(endDate), format = "%m-%d-%Y")
+    url <- paste0(url, "&startDateHi=", endDate)
   }
   
   url <- paste0(url, "&mimeType=tsv")
@@ -383,20 +382,24 @@ constructWQPURL <- function(siteNumbers,
 
 }
 
-#" Construct URL for NWIS water use data service
-#" 
-#" Reconstructs URLs to retrieve data from here: \url{https://waterdata.usgs.gov/nwis/wu}
-#" 
-#" @param years integer Years for data retrieval. Must be years ending in 0 or 5, or "ALL", which retrieves all available years.
-#" @param stateCd could be character (full name, abbreviation, id), or numeric (id)
-#" @param countyCd could be numeric (County IDs from countyCdLookup) or character ("ALL") 
-#" @param categories character Two-letter cateogory abbreviation(s)
-#" @return url string
-#" @export
-#" @examples
-#" url <- constructUseURL(years=c(1990,1995),stateCd= "Ohio",countyCd = c(1,3), categories = "ALL")
-#" 
-constructUseURL <- function(years,stateCd,countyCd,categories) { 
+#' Construct URL for NWIS water use data service
+#' 
+#' Reconstructs URLs to retrieve data from here: \url{https://waterdata.usgs.gov/nwis/wu}
+#' 
+#' @param years integer Years for data retrieval. Must be years ending in 0 or 5, 
+#' or "ALL", which retrieves all available years.
+#' @param stateCd could be character (full name, abbreviation, id), or numeric (id)
+#' @param countyCd could be numeric (County IDs from countyCdLookup) or character ("ALL") 
+#' @param categories character Two-letter cateogory abbreviation(s)
+#' @return url string
+#' @export
+#' @examples
+#' url <- constructUseURL(years = c(1990, 1995),
+#'                        stateCd = "Ohio",
+#'                        countyCd = c(1, 3),
+#'                        categories = "ALL")
+#' 
+constructUseURL <- function(years, stateCd, countyCd, categories) { 
 
     if(is.null(stateCd)) {
       baseURL <- drURL("useNat", format = "rdb", 
@@ -406,20 +409,20 @@ constructUseURL <- function(years,stateCd,countyCd,categories) {
       stateCd <- stateCdLookup(input = stateCd, outputType = "postal")
       baseURL <- "https://waterdata.usgs.gov/"
       base2 <- "nwis/water_use?format=rdb&rdb_compression=value"
-      baseURL <- paste0(baseURL,paste0(stateCd, "/"), base2)
+      baseURL <- paste0(baseURL, paste0(stateCd, "/"), base2)
       
       if(!is.null(countyCd)) {
         if(length(countyCd) > 1) {
-          countyCd <- paste(countyCd,collapse= "%2C")
+          countyCd <- paste(countyCd, collapse = "%2C")
         }
-        baseURL <- paste0(baseURL, "&wu_area=county&wu_county= ", countyCd)
+        baseURL <- paste0(baseURL, "&wu_area=county&wu_county=", countyCd)
       } else {
         baseURL <- paste0(baseURL, "&wu_area=State%20Total")
       }
     }
     years <- paste(years, collapse = "%2C")
     categories <- paste(categories, collapse = "%2C")
-    retURL <- paste0(baseURL, "&wu_year= ", years, "&wu_category= ", categories)
+    retURL <- paste0(baseURL, "&wu_year=", years, "&wu_category=", categories)
     
     return(retURL)
 }
