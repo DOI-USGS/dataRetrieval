@@ -15,9 +15,9 @@
 #' See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html}.
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
-#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-#' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
 #' @keywords data import USGS web service
 #' @return A data frame with the following columns:
@@ -60,26 +60,26 @@
 #' rawData_today <- readNWISuv(site_id, parameterCd, Sys.Date(),Sys.Date())
 #' 
 #' timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
-#'          "2013-11-03","2013-11-03")
+#'          "2013-11-03", "2013-11-03")
 #'  
 #' centralTime <- readNWISuv(site_id,parameterCd,
 #'                            "2014-10-10T12:00", "2014-10-10T23:59",
-#'                            tz="America/Chicago")
+#'                            tz= "America/Chicago")
 #' 
 #' # Adding 'Z' to the time indicates to the web service to call the data with UTC time:
 #' GMTdata <- readNWISuv(site_id,parameterCd,
 #'                            "2014-10-10T00:00Z", "2014-10-10T23:59Z")
 #' 
 #' }
-readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz="UTC"){  
+readNWISuv <- function (siteNumbers,parameterCd,startDate= "",endDate= "", tz= "UTC") {  
   
-  if(as.character(startDate) == "" || (as.Date(startDate) <= Sys.Date()-120)){
+  if(as.character(startDate) == "" || (as.Date(startDate) <= Sys.Date()-120)) {
     service <- "iv"
   } else {
     service <- "iv_recent"
   }
   
-  url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,service,format="xml")
+  url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,service,format= "xml")
 
   data <- importWaterML1(url,asDateTime=TRUE,tz=tz)
   
@@ -138,37 +138,37 @@ readNWISuv <- function (siteNumbers,parameterCd,startDate="",endDate="", tz="UTC
 #' stations<-c("06011000")
 #' peakdata<-readNWISpeak(stations,convertType=FALSE)
 #' }
-readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, convertType = TRUE){  
+readNWISpeak <- function (siteNumbers,startDate= "",endDate= "", asDateTime=TRUE, convertType = TRUE) {  
   
   # Doesn't seem to be a peak xml service
-  url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"peak")
+  url <- constructNWISURL(siteNumbers,NA,startDate,endDate, "peak")
   
   data <- importRDB1(url, asDateTime=asDateTime, convertType = convertType)
   
-  if(nrow(data) > 0){
-    if(asDateTime & convertType){
+  if(nrow(data) > 0) {
+    if(asDateTime & convertType) {
       
-      if("peak_dt" %in% names(data)){
-        if(any(nchar(as.character(data$peak_dt)) <= 7, na.rm = TRUE) | any(grepl("[0-9]*-[0-9]*-00",data$peak_dt), na.rm = TRUE)){
+      if("peak_dt" %in% names(data)) {
+        if(any(nchar(as.character(data$peak_dt)) <= 7, na.rm = TRUE) | any(grepl("[0-9]*-[0-9]*-00",data$peak_dt), na.rm = TRUE)) {
           stop("Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text")
         } else {
-          data$peak_dt <- as.Date(data$peak_dt, format="%Y-%m-%d")
+          data$peak_dt <- as.Date(data$peak_dt, format= "%Y-%m-%d")
         }
-        if(anyNA(data$peak_dt)){
+        if(anyNA(data$peak_dt)) {
           message("Some dates could not be converted to a valid date, and were returned as NA")
         }
       }
       
       badDates <- which(grepl("[0-9]*-[0-9]*-00",data$peak_dt))
  
-      if("ag_dt" %in% names(data))  data$ag_dt <- as.Date(data$ag_dt, format="%Y-%m-%d")
+      if("ag_dt" %in% names(data))  data$ag_dt <- as.Date(data$ag_dt, format= "%Y-%m-%d")
     }
 
     
     siteInfo <- readNWISsite(siteNumbers)
-    siteInfo <- merge(x = unique(data[,c("agency_cd","site_no")]), 
+    siteInfo <- merge(x = unique(data[,c("agency_cd", "site_no")]), 
                       y = siteInfo,
-                      by=c("agency_cd","site_no"), 
+                      by=c("agency_cd", "site_no"), 
                       all.x = TRUE)
     
     attr(data, "siteInfo") <- siteInfo
@@ -188,15 +188,15 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, 
 #' @param type character can be "base", "corr", or "exsa"
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
-#' @return A data frame. If \code{type} is "base," then the columns are
+#' @return A data frame. If \code{type} is "base, " then the columns are
 #'INDEP, typically the gage height, in feet; DEP, typically the streamflow,
 #'in cubic feet per second; and STOR, where "*" indicates that the pair are
-#'a fixed point of the rating curve. If \code{type} is "exsa," then an
+#'a fixed point of the rating curve. If \code{type} is "exsa, " then an
 #'additional column, SHIFT, is included that indicates the current shift in
-#'the rating for that value of INDEP. If \code{type} is "corr," then the
+#'the rating for that value of INDEP. If \code{type} is "corr, " then the
 #'columns are INDEP, typically the gage height, in feet; CORR, the correction
 #'for that value; and CORRINDEP, the corrected value for CORR.\cr
-#'If \code{type} is "base," then the data frame has an attribute called "RATING"
+#'If \code{type} is "base, " then the data frame has an attribute called "RATING"
 #'that describes the rating curve is included.
 #'
 #' There are also several useful attributes attached to the data frame:
@@ -219,23 +219,23 @@ readNWISpeak <- function (siteNumbers,startDate="",endDate="", asDateTime=TRUE, 
 #' data <- readNWISrating(site_id, "base")
 #' attr(data, "RATING")
 #' }
-readNWISrating <- function (siteNumber,type="base",convertType = TRUE){  
+readNWISrating <- function (siteNumber,type= "base",convertType = TRUE) {  
   
   # No rating xml service 
-  url <- constructNWISURL(siteNumber,service="rating",ratingType = type)
+  url <- constructNWISURL(siteNumber,service= "rating",ratingType = type)
     
   data <- importRDB1(url, asDateTime=FALSE, convertType = convertType)
   
-  if("current_rating_nu" %in% names(data)){
+  if("current_rating_nu" %in% names(data)) {
     intColumns <- intColumns[!("current_rating_nu" %in% names(data)[intColumns])]
     data$current_rating_nu <- gsub(" ", "", data$current_rating_nu)
   }
   
-  if(nrow(data) > 0){
+  if(nrow(data) > 0) {
     if(type == "base") {
       Rat <- grep("//RATING ", comment(data), value=TRUE, fixed=TRUE)
       Rat <- sub("# //RATING ", "", Rat)
-      Rat <- scan(text=Rat, sep=" ", what="")
+      Rat <- scan(text=Rat, sep= " ", what= "")
       attr(data, "RATING") <- Rat
     }
     
@@ -261,9 +261,9 @@ readNWISrating <- function (siteNumber,type="base",convertType = TRUE){
 #' retrieval for the latest possible record.
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
-#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-#' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
 #' @param expanded logical. Whether or not (TRUE or FALSE) to call the expanded data.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
@@ -303,15 +303,15 @@ readNWISrating <- function (siteNumber,type="base",convertType = TRUE){
 #' Meas07227500.ex <- readNWISmeas("07227500",expanded=TRUE)
 #' Meas07227500.exRaw <- readNWISmeas("07227500",expanded=TRUE, convertType = FALSE)
 #' }
-readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expanded=FALSE, convertType = TRUE){  
+readNWISmeas <- function (siteNumbers,startDate= "",endDate= "", tz= "UTC", expanded=FALSE, convertType = TRUE) {  
   
   # Doesn't seem to be a WaterML1 format option
-  url <- constructNWISURL(siteNumbers,NA,startDate,endDate,"meas", expanded = expanded)
+  url <- constructNWISURL(siteNumbers,NA,startDate,endDate, "meas", expanded = expanded)
   
   data <- importRDB1(url,asDateTime=TRUE,tz=tz, convertType = convertType)
   
-  if(nrow(data) > 0){
-    if("diff_from_rating_pc" %in% names(data)){
+  if(nrow(data) > 0) {
+    if("diff_from_rating_pc" %in% names(data)) {
       data$diff_from_rating_pc <- as.numeric(data$diff_from_rating_pc)
     }
     
@@ -320,7 +320,7 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
     queryTime <- attr(data, "queryTime")
     header <- attr(data, "headerInfo")
     
-    if(convertType){
+    if(convertType) {
       data$measurement_dateTime <- data$measurement_dt
       data$measurement_dt <- suppressWarnings(as.Date(data$measurement_dateTime))
       data$measurement_tm <- strftime(data$measurement_dateTime, "%H:%M")
@@ -336,9 +336,9 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
 
 
     siteInfo <- readNWISsite(siteNumbers)
-    siteInfo <- merge(x = unique(data[,c("agency_cd","site_no")]), 
+    siteInfo <- merge(x = unique(data[,c("agency_cd", "site_no")]), 
                       y = siteInfo,
-                      by=c("agency_cd","site_no"), 
+                      by=c("agency_cd", "site_no"), 
                       all.x = TRUE)
     attr(data, "url") <- url
     attr(data, "comment") <- comment
@@ -371,9 +371,9 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
-#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-#' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
@@ -416,24 +416,24 @@ readNWISmeas <- function (siteNumbers,startDate="",endDate="", tz="UTC", expande
 #' }
 readNWISgwl <- function(siteNumbers, startDate = "", endDate = "",
                         parameterCd = NA,
-                        convertType = TRUE, tz = "UTC"){  
+                        convertType = TRUE, tz = "UTC") {  
   
-  url <- constructNWISURL(siteNumbers, parameterCd, startDate,endDate,"gwlevels",format="rdb")
+  url <- constructNWISURL(siteNumbers, parameterCd, startDate,endDate, "gwlevels",format= "rdb")
   data <- importRDB1(url, asDateTime= TRUE, convertType = convertType, tz=tz)
 
-  if(nrow(data) > 0 && !all(is.na(data$lev_dt))){
-    if(convertType){
+  if(nrow(data) > 0 && !all(is.na(data$lev_dt))) {
+    if(convertType) {
       #check that the date includes a day, based on date string length
-      if(any(nchar(as.character(data$lev_dt)) <= 7) | any(grepl("[0-9]*-[0-9]*-00",data$lev_dt))){
+      if(any(nchar(as.character(data$lev_dt)) <= 7) | any(grepl("[0-9]*-[0-9]*-00",data$lev_dt))) {
         message("Not all dates were converted to Date object. Returning raw text for date columns.")
       } else {
         data$lev_dt <- as.Date(data$lev_dt)
       }
     }
     siteInfo <- readNWISsite(siteNumbers)
-    siteInfo <- merge(x = unique(data[,c("agency_cd","site_no")]), 
+    siteInfo <- merge(x = unique(data[,c("agency_cd", "site_no")]), 
                       y = siteInfo,
-                      by=c("agency_cd","site_no"), 
+                      by=c("agency_cd", "site_no"), 
                       all.x = TRUE)
     attr(data, "siteInfo") <- siteInfo
   }
@@ -482,28 +482,28 @@ readNWISgwl <- function(siteNumbers, startDate = "", endDate = "",
 #' \donttest{
 #' x1 <- readNWISstat(siteNumbers=c("02319394"),
 #'                   parameterCd=c("00060"),
-#'                   statReportType="annual") 
+#'                   statReportType= "annual") 
 #' 
 #' #all the annual mean discharge data for two sites
-#' x2 <- readNWISstat(siteNumbers=c("02319394","02171500"),
-#'                   parameterCd=c("00010","00060"),
-#'                   statReportType="annual")
+#' x2 <- readNWISstat(siteNumbers=c("02319394", "02171500"),
+#'                   parameterCd=c("00010", "00060"),
+#'                   statReportType= "annual")
 #' 
 #' #Request p25, p75, and mean values for temperature and discharge for the 2000s
 #' #Note that p25 and p75 were not available for temperature, and return NAs
 #' x <- readNWISstat(siteNumbers=c("02171500"),
-#'                   parameterCd=c("00010","00060"),
-#'                   statReportType="daily",
-#'                   statType=c("mean","median"),
-#'                   startDate="2000",endDate="2010")
+#'                   parameterCd=c("00010", "00060"),
+#'                   statReportType= "daily",
+#'                   statType=c("mean", "median"),
+#'                   startDate= "2000",endDate= "2010")
 #' }
 readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE, 
-                          statReportType = "daily", statType = "mean"){
+                          statReportType = "daily", statType = "mean") {
 
   #check for NAs in site numbers
-  if(any(is.na(siteNumbers))){
+  if(any(is.na(siteNumbers))) {
     siteNumbers <- siteNumbers[!is.na(siteNumbers)]
-    if(length(siteNumbers)==0){
+    if(length(siteNumbers)==0) {
       stop("siteNumbers was all NAs")
     }
     warning("NAs were passed in siteNumbers; they were ignored")
@@ -514,10 +514,10 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
   
   siteInfo <- readNWISsite(siteNumbers)
   
-  if(nrow(data) > 0){
-    siteInfo <- merge(x = unique(data[,c("agency_cd","site_no")]), 
+  if(nrow(data) > 0) {
+    siteInfo <- merge(x = unique(data[,c("agency_cd", "site_no")]), 
                       y = siteInfo,
-                      by=c("agency_cd","site_no"), 
+                      by=c("agency_cd", "site_no"), 
                       all.x = TRUE)
   }
   
@@ -558,7 +558,7 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' ohio <- readNWISuse(years=c(2000,2005,2010),stateCd = "OH", countyCd = NULL)
 #' 
 #' #Data for an entire state, county by county
-#' pr <- readNWISuse(years=c(2000,2005,2010),stateCd = "PR",countyCd="ALL")
+#' pr <- readNWISuse(years=c(2000,2005,2010),stateCd = "PR",countyCd= "ALL")
 #' 
 #' #All national-scale data, transforming data frame to named columns from named rows
 #' national <- readNWISuse(stateCd = NULL, countyCd = NULL, transform = TRUE)
@@ -570,17 +570,17 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' paData <- readNWISuse(stateCd = "42",countyCd = c("Allegheny County", "BUTLER", 1, "031"))
 #' 
 #' #retrieving two specific categories for an entire state
-#' ks <- readNWISuse(stateCd = "KS", countyCd = NULL, categories = c("IT","LI"))
+#' ks <- readNWISuse(stateCd = "KS", countyCd = NULL, categories = c("IT", "LI"))
 #' }
-readNWISuse <- function(stateCd, countyCd, years = "ALL", categories = "ALL", convertType = TRUE, transform = FALSE){
+readNWISuse <- function(stateCd, countyCd, years = "ALL", categories = "ALL", convertType = TRUE, transform = FALSE) {
  
   countyID <- NULL
   countyCd <- countyCd[countyCd != ""]
   
-  if(exists("countyCd") && !is.null(countyCd) ){
+  if(exists("countyCd") && !is.null(countyCd) ) {
 
-    if(!any(toupper(countyCd) == "ALL")){
-      for(c in countyCd){
+    if(!any(toupper(countyCd) == "ALL")) {
+      for(c in countyCd) {
         code <- countyCdLookup(state = stateCd, county = c, outputType = "id")
         countyID <- c(countyID,code)
       }
@@ -596,7 +596,7 @@ readNWISuse <- function(stateCd, countyCd, years = "ALL", categories = "ALL", co
   returned_data <- importRDB1(url,convertType=convertType)  
   
   #for total country data arriving in named rows
-  if(transform){
+  if(transform) {
     cmmnt <- comment(returned_data)
     returned_data <- t(returned_data)
     colnames(returned_data) <- returned_data[1,]
@@ -604,15 +604,15 @@ readNWISuse <- function(stateCd, countyCd, years = "ALL", categories = "ALL", co
     returned_data <- cbind(Year=as.integer(substr(rownames(returned_data),2,5)),returned_data)
     rownames(returned_data) <- NULL
     comment(returned_data) <- cmmnt
-    if(!all(is.null(stateCd)) && all(nchar(stateCd) != 0)){
+    if(!all(is.null(stateCd)) && all(nchar(stateCd) != 0)) {
       warning("transform = TRUE is only intended for national data")
       }
   }
   return(returned_data)
 }
 
-.capitalALL <- function(input){
-  if(any(grepl("(?i)all",input))){
+.capitalALL <- function(input) {
+  if(any(grepl("(?i)all",input))) {
     input <- toupper(input)
   }
   return(input)

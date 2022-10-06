@@ -23,17 +23,17 @@
 #'}
 #'
 #' @export
-setAccess = function(access="public"){
+setAccess = function(access= "public") {
   
   access = match.arg(access, c('public','internal','cooperator','USGS'))
   
-  if(access=="internal"){
+  if(access== "internal") {
     pkg.env$access = '3'
     message('setting access to internal')
-  } else if(access=="cooperator"){
+  } else if(access== "cooperator") {
     pkg.env$access = '1'
     message('setting access to cooperator')
-  } else if(access=="USGS"){
+  } else if(access== "USGS") {
     pkg.env$access = '2'
     message('setting access to all USGS Water Science Centers')    
   } else {
@@ -71,14 +71,14 @@ setAccess = function(access="public"){
 
 }
 
-drURL <- function(base.name, ..., arg.list=NULL){
+drURL <- function(base.name, ..., arg.list=NULL) {
   queryString <- drQueryArgs(..., arg.list=arg.list)
   #to do: add something to check for redundant params
   
   return(paste0(pkg.env[[base.name]], '?', queryString))
 }
 
-drQueryArgs <- function(..., arg.list){
+drQueryArgs <- function(..., arg.list) {
   dots <- list(...)
   dots <- dots[!vapply(X=dots,FUN=is.null,FUN.VALUE = TRUE)]
   
@@ -88,10 +88,10 @@ drQueryArgs <- function(..., arg.list){
   return(paste(keyValues, collapse='&'))
 }
 
-appendDrURL <- function(url, ..., arg.list=NULL){
+appendDrURL <- function(url, ..., arg.list=NULL) {
   
   queryString <- drQueryArgs(..., arg.list=arg.list)
-  if(length(strsplit(url,"\\?")[[1]]) > 1){
+  if(length(strsplit(url,"\\?")[[1]]) > 1) {
     return_url <- paste0(url, "&", queryString)
   } else {
     return_url <- paste0(url, queryString)

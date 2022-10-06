@@ -31,8 +31,8 @@
 #' @examples
 #' \donttest{
 #' 
-#' siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
-#' oneSite <- whatNWISsites(sites="05114000")
+#' siteListPhos <- whatNWISsites(stateCd= "OH",parameterCd= "00665")
+#' oneSite <- whatNWISsites(sites= "05114000")
 #' 
 #' }
 whatNWISsites <- function(...){
@@ -61,7 +61,7 @@ whatNWISsites <- function(...){
     dec_long_va <- as.numeric(xml_attr(sites, "lng"))
     agency_cd <- xml_attr(sites, "agc")
     
-    if(xml_name(sc)=="colocated_sites"){
+    if(xml_name(sc)== "colocated_sites"){
       colocated <- TRUE
     }else{
       colocated <- FALSE

@@ -28,7 +28,7 @@
 #' all_codes <- readNWISpCode("all")
 #' 
 #' }
-readNWISpCode <- function(parameterCd){
+readNWISpCode <- function(parameterCd) {
  
   parameterCd.orig <- parameterCd
   parameterCd <- parameterCd[!is.na(parameterCd)]
@@ -36,7 +36,7 @@ readNWISpCode <- function(parameterCd){
   baseURL <- drURL("pCode", Access=pkg.env$access)
   fullURL <- paste0(baseURL, "fmt=rdb&group_cd=%")
   
-  if(any(parameterCd == "all")){
+  if(any(parameterCd == "all")) {
 
     temp_df <- importRDB1(fullURL, asDateTime = FALSE)
     parameterData <- data.frame(
@@ -53,14 +53,14 @@ readNWISpCode <- function(parameterCd){
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd,]
     
-    if(nrow(parameterData) != length(parameterCd)){
+    if(nrow(parameterData) != length(parameterCd)) {
       
-      if(nrow(parameterData) > 0){
+      if(nrow(parameterData) > 0) {
         parameterCd_lookup <- parameterCd[!parameterCd %in% unique(parameterData$parameter_cd)]
       }
-      if(length(parameterCd_lookup) == 1){
+      if(length(parameterCd_lookup) == 1) {
         baseURL <- drURL("pCodeSingle", Access=pkg.env$access)
-        subURL <- paste0(baseURL, "fmt=rdb&parm_nm_cd=", parameterCd_lookup)
+        subURL <- paste0(baseURL, "fmt=rdb&parm_nm_cd= ", parameterCd_lookup)
         temp_df <- importRDB1(subURL, asDateTime = FALSE)
         
         temp_df <- data.frame(
@@ -90,21 +90,21 @@ readNWISpCode <- function(parameterCd){
         attr(parameterData, "url") <- fullURL
       }
       
-      if(nrow(parameterData) != length(parameterCd)){
+      if(nrow(parameterData) != length(parameterCd)) {
         badPcode <- parameterCd[!(parameterCd %in% parameterData$parameter_cd)]
         warning("The following pCodes seem mistyped, and no information was returned: ",
-                paste(badPcode,collapse=","))
+                paste(badPcode,collapse= ", "))
       }
     }
   }
   
-  if(nrow(parameterData) != sum(is.na(parameterCd.orig))){
+  if(nrow(parameterData) != sum(is.na(parameterCd.orig))) {
     na.params <- data.frame(matrix(ncol = ncol(parameterData), nrow = sum(is.na(parameterCd.orig))))
     names(na.params) <- names(parameterData)
     parameterData <- rbind(parameterData, na.params)
   }
   # order by parameterCd.orig
-  if(!isTRUE(parameterCd.orig == "all")){
+  if(!isTRUE(parameterCd.orig == "all")) {
     parameterData <- parameterData[match(parameterCd.orig, parameterData$parameter_cd),]
   }
   return(parameterData)

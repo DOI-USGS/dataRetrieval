@@ -54,7 +54,7 @@
 #' 
 #' availableData <- whatNWISdata(siteNumber = '05114000')
 #' # To find just unit value ('instantaneous') data:
-#' uvData <- whatNWISdata(siteNumber = '05114000',service="uv")
+#' uvData <- whatNWISdata(siteNumber = '05114000',service= "uv")
 #' uvDataMulti <- whatNWISdata(siteNumber = c('05114000','09423350'),service=c("uv","dv"))
 #' flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", 
 #'                              parameterCd = c("00060","00010"),
@@ -62,13 +62,13 @@
 #' sites <- whatNWISdata(stateCd = "WI", parameterCd = "00060", siteType = "ST", service = "site")
 #' 
 #' }
-whatNWISdata <- function(..., convertType=TRUE){
+whatNWISdata <- function(..., convertType=TRUE) {
   
   matchReturn <- convertLists(...)
   
-  if("service" %in% names(matchReturn)){
+  if("service" %in% names(matchReturn)) {
     service <- matchReturn$service
-    if(any(service %in% c("qw", "qwdata"))){
+    if(any(service %in% c("qw", "qwdata"))) {
       .Deprecated(old = "whatNWISdata", package = "dataRetrieval", 
                   new = "whatWQPdata",
                   msg = "NWIS qw web services are being retired. Please see the vignette 
@@ -78,14 +78,14 @@ whatNWISdata <- function(..., convertType=TRUE){
     service <- "all"
   }
   
-  if("statCd" %in% names(matchReturn)){
+  if("statCd" %in% names(matchReturn)) {
     statCd <- matchReturn$statCd
     matchReturn <- matchReturn[names(matchReturn) != "statCd"]
   } else {
     statCd <- "all"
   }
   
-  if("parameterCd" %in% names(matchReturn)){
+  if("parameterCd" %in% names(matchReturn)) {
     parameterCd <- matchReturn$parameterCd
     matchReturn[["parameterCd"]] <- NULL
   } else {
@@ -98,13 +98,13 @@ whatNWISdata <- function(..., convertType=TRUE){
   
   values <- sapply(valuesList$values, function(x) URLencode(x))
 
-  if(any(service == "site")){
+  if(any(service == "site")) {
     service <- "all"
-  } else if(any(service == "iv")){
+  } else if(any(service == "iv")) {
     service[service == "iv"] <- "uv"
-  } else if(any(service == "peak")){
+  } else if(any(service == "peak")) {
     service[service == "peak"] <- "pk"
-  } else if(any(service == "measurements")){
+  } else if(any(service == "measurements")) {
     service[service == "measurements"] <- "sv"
   }
   
@@ -112,17 +112,17 @@ whatNWISdata <- function(..., convertType=TRUE){
  
   SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE, convertType = convertType)
 
-  if(!("all" %in% service)){
+  if(!("all" %in% service)) {
     SiteFile <- SiteFile[SiteFile$data_type_cd %in% service,]
   }
-  if(!("all" %in% statCd)){
+  if(!("all" %in% statCd)) {
     SiteFile <- SiteFile[SiteFile$stat_cd %in% c(statCd,NA),]
   }
-  if(!("all" %in% parameterCd)){
+  if(!("all" %in% parameterCd)) {
     SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd,]
   }
   
-  if(nrow(SiteFile) > 0 & convertType){
+  if(nrow(SiteFile) > 0 & convertType) {
     SiteFile$begin_date <- as.Date(lubridate::parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
     SiteFile$end_date <- as.Date(lubridate::parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
   }

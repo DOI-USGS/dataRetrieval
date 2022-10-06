@@ -20,7 +20,7 @@
 #' \donttest{
 #'   rawData <- getWebServiceData(obs_url)
 #' }
-getWebServiceData <- function(obs_url, ...){
+getWebServiceData <- function(obs_url, ...) {
   
   if (!has_internet_2(obs_url)) {
     message("No internet connection.")
@@ -29,59 +29,59 @@ getWebServiceData <- function(obs_url, ...){
   
   returnedList <- retryGetOrPost(obs_url, ...)
   
-  if(httr::status_code(returnedList) == 400){
-    if(httr::has_content(returnedList)){
-      response400 <- httr::content(returnedList, type="text", encoding = "UTF-8")
+  if(httr::status_code(returnedList) == 400) {
+    if(httr::has_content(returnedList)) {
+      response400 <- httr::content(returnedList, type= "text", encoding = "UTF-8")
       statusReport <- xml_text(xml_child(read_xml(response400), 2)) # making assumption that - body is second node
-      statusMsg <- gsub(pattern=", server=.*", replacement="", x = statusReport)
+      statusMsg <- gsub(pattern= ", server=.*", replacement= "", x = statusReport)
       message(statusMsg)
       
     } else {
       httr::message_for_status(returnedList)
       warning_message <- httr::headers(returnedList)
-      if("warning" %in% names(warning_message)){
+      if("warning" %in% names(warning_message)) {
         warning_message <- warning_message$warning
         message(warning_message)
       }
     }
     return(invisible(NULL))
-  } else if(httr::status_code(returnedList) != 200){
-    message("For: ", obs_url,"\n")
+  } else if(httr::status_code(returnedList) != 200) {
+    message("For: ", obs_url, "\n")
     httr::message_for_status(returnedList)
     return(invisible(NULL))
   } else {
     headerInfo <- httr::headers(returnedList)
     
-    if(!"content-type" %in% names(headerInfo)){
+    if(!"content-type" %in% names(headerInfo)) {
       message("Unknown content, returning NULL")
       return(invisible(NULL))
     }
     
     if(headerInfo$`content-type` %in% c("text/tab-separated-values;charset=UTF-8",
-                                        "text/csv;charset=UTF-8")){
-      returnedDoc <- httr::content(returnedList, type="text",encoding = "UTF-8")
+                                        "text/csv;charset=UTF-8")) {
+      returnedDoc <- httr::content(returnedList, type= "text",encoding = "UTF-8")
     } else if (headerInfo$`content-type` %in% 
                c("application/zip", 
                  "application/zip;charset=UTF-8",
                  "application/vnd.geo+json;charset=UTF-8")) {
       returnedDoc <- returnedList
     } else if (headerInfo$`content-type` %in% c("text/html",
-                                                "text/html; charset=UTF-8") ){
+                                                "text/html; charset=UTF-8") ) {
       txt <- readLines(returnedList$content)
       message(txt)
       return(txt)
     } else {
       returnedDoc <- httr::content(returnedList,encoding = "UTF-8")
-      if(all(grepl("No sites/data found using the selection criteria specified", returnedDoc))){
+      if(all(grepl("No sites/data found using the selection criteria specified", returnedDoc))) {
         message(returnedDoc)
       }
-      if(headerInfo$`content-type` == "text/xml"){
+      if(headerInfo$`content-type` == "text/xml") {
         
-        if(xml_name(read_xml(returnedList)) == "ExceptionReport"){
+        if(xml_name(read_xml(returnedList)) == "ExceptionReport") {
           statusReport <- tryCatch({
             xml_text(xml_child(read_xml(returnedList)))
           })
-          if(grepl("No feature found",statusReport )){
+          if(grepl("No feature found",statusReport )) {
             message(statusReport)
           }
         }
@@ -106,7 +106,7 @@ default_ua <- function() {
   
   ua <- paste0(names(versions), "/", versions, collapse = " ")
   
-  if("UA.dataRetrieval" %in% names(options)){
+  if("UA.dataRetrieval" %in% names(options)) {
     ua <- paste0(ua, "/", options()[["UA.dataRetrieval"]])
   }
     
@@ -130,13 +130,13 @@ has_internet_2 <- function(obs_url) {
 #' getting header information from a WQP query
 #'
 #'@param url the query url
-getQuerySummary <- function(url){
+getQuerySummary <- function(url) {
   queryHEAD <- httr::HEAD(url)
   retquery <- httr::headers(queryHEAD)
   
   retquery[grep("-count",names(retquery))] <- as.numeric(retquery[grep("-count",names(retquery))])
   
-  if("date" %in% names(retquery)){
+  if("date" %in% names(retquery)) {
     retquery$date <- as.Date(retquery$date, format = "%a, %d %b %Y %H:%M:%S")
   }
   
