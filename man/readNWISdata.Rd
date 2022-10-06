@@ -89,8 +89,12 @@ bBoxEx <- readNWISdata(bBox=c(-83,36.5,-81,38.5), parameterCd= "00010")
 
 startDate <- as.Date("2013-10-01")
 endDate <- as.Date("2014-09-30")
-waterYear <- readNWISdata(bBox=c(-83,36.5,-82.5,36.75), parameterCd= "00010", 
-                  service= "dv", startDate=startDate, endDate=endDate)
+waterYear <- readNWISdata(bBox=c(-83, 36.5, -82.5, 36.75),
+                          parameterCd = "00010", 
+                          service= "dv",
+                          startDate = startDate, 
+                          endDate = endDate)
+
 siteInfo <- readNWISdata(stateCd= "WI", parameterCd= "00010",
                   hasDataTypeCd= "iv", service= "site")
 temp <- readNWISdata(bBox=c(-83,36.5,-82.5,36.75), parameterCd= "00010", service= "site", 

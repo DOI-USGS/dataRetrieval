@@ -426,7 +426,7 @@ findNLDI <- function(comid = NULL,
     
     name = c("origin",
              if (getBasin) {
-               'basin'
+               "basin"
              },
              names[!names %in%  c("UM_", "UT_", "DD_", "DM_")])
   )

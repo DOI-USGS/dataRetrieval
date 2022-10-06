@@ -54,27 +54,28 @@ NWIS site, parameter code, statistic, startdate and enddate.
 site_id <- "02177000"
 startDate <- "2012-09-01"
 endDate <- "2012-10-01"
-offering <- '00003'
-property <- '00060'
-obs_url <- constructNWISURL(site_id,property,startDate,endDate,'dv')
+offering <- "00003"
+property <- "00060"
+obs_url <- constructNWISURL(site_id, property, startDate, endDate, "dv")
 \donttest{
-data <- importWaterML1(obs_url, asDateTime=TRUE)
+data <- importWaterML1(obs_url, asDateTime = TRUE)
 
 groundWaterSite <- "431049071324301"
 startGW <- "2013-10-01"
 endGW <- "2014-06-30"
 groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
-          startGW,endGW, service= "gwlevels")
+          startGW, endGW, service= "gwlevels")
 groundWater <- importWaterML1(groundwaterExampleURL)
-groundWater2 <- importWaterML1(groundwaterExampleURL, asDateTime=TRUE)
+groundWater2 <- importWaterML1(groundwaterExampleURL, asDateTime = TRUE)
 
 unitDataURL <- constructNWISURL(site_id,property,
-         "2013-11-03", "2013-11-03",'uv')
-unitData <- importWaterML1(unitDataURL,TRUE)
+         "2013-11-03", "2013-11-03", "uv")
+unitData <- importWaterML1(unitDataURL, TRUE)
 
 # Two sites, two pcodes, one site has two data descriptors:
-siteNumber <- c('01480015', "04085427")
-obs_url <- constructNWISURL(siteNumber,c("00060", "00010"),startDate,endDate,'dv')
+siteNumber <- c("01480015", "04085427")
+obs_url <- constructNWISURL(siteNumber,c("00060", "00010"),
+                            startDate, endDate, "dv")
 data <- importWaterML1(obs_url)
 data$dateTime <- as.Date(data$dateTime)
 data <- renameNWISColumns(data)
