@@ -65,7 +65,7 @@ See https://waterservices.usgs.gov/rest/GW-Levels-Service.html for more informat
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Groundwater level measurements retrieval from USGS (NWIS)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/R/readNWISunit.r" class="external-link"><code>R/readNWISunit.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/R/readNWISunit.R" class="external-link"><code>R/readNWISunit.R</code></a></small>
       <div class="d-none name"><code>readNWISgwl.Rd</code></div>
     </div>
 
@@ -117,9 +117,9 @@ numerics based on a standard algorithm. If false, everything is returned as a ch
 <dt>tz</dt>
 <dd><p>character to set timezone attribute of dateTime. Default is "UTC", and converts the 
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
-Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code> 
+"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code> 
 for more information on time zones.</p></dd>
 
 </dl></div>

@@ -59,7 +59,7 @@ Data is retrieved from https://waterdata.usgs.gov/nwis."><meta property="og:imag
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Rating table for an active USGS streamgage retrieval</h1>
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/R/readNWISunit.r" class="external-link"><code>R/readNWISunit.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/R/readNWISunit.R" class="external-link"><code>R/readNWISunit.R</code></a></small>
       <div class="d-none name"><code>readNWISrating.Rd</code></div>
     </div>
 
@@ -92,17 +92,17 @@ numerics based on a standard algorithm. If false, everything is returned as a ch
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data frame. If <code>type</code> is "base," then the columns are
+<p>A data frame. If <code>type</code> is "base, " then the columns are
 INDEP, typically the gage height, in feet; DEP, typically the streamflow,
 in cubic feet per second; and STOR, where "*" indicates that the pair are
-a fixed point of the rating curve. If <code>type</code> is "exsa," then an
+a fixed point of the rating curve. If <code>type</code> is "exsa, " then an
 additional column, SHIFT, is included that indicates the current shift in
-the rating for that value of INDEP. If <code>type</code> is "corr," then the
+the rating for that value of INDEP. If <code>type</code> is "corr, " then the
 columns are INDEP, typically the gage height, in feet; CORR, the correction
 for that value; and CORRINDEP, the corrected value for CORR.<br></p>
 
 
-<p>If <code>type</code> is "base," then the data frame has an attribute called "RATING"
+<p>If <code>type</code> is "base, " then the data frame has an attribute called "RATING"
 that describes the rating curve is included.</p>
 
 

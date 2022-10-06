@@ -59,7 +59,7 @@ for more information."><meta property="og:image" content="/logo.png"><!-- mathja
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>USGS data availability</h1>
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/R/whatNWISData.r" class="external-link"><code>R/whatNWISData.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/R/whatNWISdata.R" class="external-link"><code>R/whatNWISdata.R</code></a></small>
       <div class="d-none name"><code>whatNWISdata.Rd</code></div>
     </div>
 
@@ -96,7 +96,7 @@ numerics based on a standard algorithm. If false, everything is returned as a ch
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">availableData</span> <span class="op">&lt;-</span> <span class="fu">whatNWISdata</span><span class="op">(</span>siteNumber <span class="op">=</span> <span class="st">'05114000'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># To find just unit value ('instantaneous') data:</span></span></span>
-<span class="r-in"><span><span class="va">uvData</span> <span class="op">&lt;-</span> <span class="fu">whatNWISdata</span><span class="op">(</span>siteNumber <span class="op">=</span> <span class="st">'05114000'</span>,service<span class="op">=</span><span class="st">"uv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">uvData</span> <span class="op">&lt;-</span> <span class="fu">whatNWISdata</span><span class="op">(</span>siteNumber <span class="op">=</span> <span class="st">'05114000'</span>,service<span class="op">=</span> <span class="st">"uv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">uvDataMulti</span> <span class="op">&lt;-</span> <span class="fu">whatNWISdata</span><span class="op">(</span>siteNumber <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'05114000'</span>,<span class="st">'09423350'</span><span class="op">)</span>,service<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"uv"</span>,<span class="st">"dv"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">flowAndTemp</span> <span class="op">&lt;-</span> <span class="fu">whatNWISdata</span><span class="op">(</span>stateCd <span class="op">=</span> <span class="st">"WI"</span>, service <span class="op">=</span> <span class="st">"uv"</span>, </span></span>
 <span class="r-in"><span>                             parameterCd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00060"</span>,<span class="st">"00010"</span><span class="op">)</span>,</span></span>
