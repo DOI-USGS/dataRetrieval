@@ -173,4 +173,3 @@ NULL
 # stateCd <- state_df
 # save(countyCd, stateCd, parameterCdFile, pCodeToName,
 #      file = "R/sysdata.rda", compress = "xz")
-

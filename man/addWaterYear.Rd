@@ -13,17 +13,17 @@ have at least one of the following columns to add the new water year columns:
 can be character, POSIXct, Date. They cannot be numeric.}
 }
 \value{
-data.frame with an additional integer column with "WY" appended to the 
-date column name. For WQP, there will be 2 columns: `ActivityStartDateWY` and 
+data.frame with an additional integer column with "WY" appended to the
+date column name. For WQP, there will be 2 columns: `ActivityStartDateWY` and
 `ActivityEndDateWY`.
 }
 \description{
-Add a column to the dataRetrieval data frame with the water year. WQP 
+Add a column to the dataRetrieval data frame with the water year. WQP
 queries will return a water year column for the start and end dates
 of the data.
 }
 \examples{
-\donttest{ 
+\donttest{
 nwisData <- readNWISdv('04085427','00060','2012-01-01','2012-06-30')
 nwisData <- addWaterYear(nwisData)
 

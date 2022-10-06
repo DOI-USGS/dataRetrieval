@@ -139,17 +139,17 @@ get_nldi <- function(url, type = "", use_sf = FALSE) {
       
       input <-  d$features$properties
      
-      good_name = find_good_names(input, type)
+      good_name <- find_good_names(input, type)
       
       if(is.null(input) && type != "basin") {
         warning("No data returned for: ", url, call. = FALSE)
-        tmp = NULL
+        tmp <- NULL
       } else {
         # if of type POINT at the X,Y coordinates as columns
         if (d$features$geometry$type[1] == "Point") {
-          geom = d$features$geometry$coordinates
+          geom <- d$features$geometry$coordinates
           
-          tmp = cbind(input[, good_name], do.call(rbind, geom))
+          tmp <- cbind(input[, good_name], do.call(rbind, geom))
           
           names(tmp) <- c(good_name, "X", "Y")
           
@@ -175,12 +175,12 @@ get_nldi <- function(url, type = "", use_sf = FALSE) {
 #' @return the input object with potentially modified identifiers
 #' @keywords nldi internal
 #' @noRd
-clean_nwis_ids = function(tmp) {
+clean_nwis_ids <- function(tmp) {
   # If data.frame, and of type NWIS, then strip "USGS-" from identifiers
   if (is.data.frame(tmp)) {
     if ("sourceName" %in% names(tmp) &&
         tmp$sourceName[1] == "NWIS Sites") {
-      tmp$identifier = gsub("USGS-", "", tmp$identifier)
+      tmp$identifier <- gsub("USGS-", "", tmp$identifier)
       
     }
   }
@@ -199,20 +199,20 @@ clean_nwis_ids = function(tmp) {
 #' valid_ask(all = get_nldi_sources(), "nwis")
 #' }
 
-valid_ask = function(all, type) {
+valid_ask <- function(all, type) {
   # those where the requested pattern is included in a nldi_source ...
   # means we will catch nwis - not just nwissite ...
   # means we will catch both wqp and WQP ...
   
   ### WOW! This is hacky and will hopefully be unneeded latter on....
-  type = ifelse(type == "nwis", "nwissite", type)
-  all = rbind(all, c("flowlines", "NHDPlus comid", NA))
+  type <- ifelse(type == "nwis", "nwissite", type)
+  all <- rbind(all, c("flowlines", "NHDPlus comid", NA))
   
-  good  <-
-    grepl(paste0(tolower(type), collapse = "|"), tolower(c(all$source)))
+  good <- grepl(paste0(tolower(type), collapse = "|"), 
+                tolower(c(all$source)))
   
-  bad <-
-    grepl(paste0(tolower(all$source), collapse = "|"), tolower(c(all$source)))
+  bad <- grepl(paste0(tolower(all$source), collapse = "|"),
+          tolower(c(all$source)))
   
   list(good = all[good, ], bad = type[!bad])
   
@@ -306,10 +306,10 @@ findNLDI <- function(comid = NULL,
                      no_sf = FALSE) {
   
   # Should sf be used? Both no_sf and pkg.env must agree
-  use_sf = all(pkg.env$local_sf, !no_sf)
+  use_sf <- all(pkg.env$local_sf, !no_sf)
   
   # Should the basin be identified?
-  getBasin = ("basin" %in% find)
+  getBasin <- ("basin" %in% find)
   
   # From the collection of possible origins, pick 1 and remove NULLS
   starter <- tc(c(
@@ -324,7 +324,7 @@ findNLDI <- function(comid = NULL,
   ))
   
   # a single starting location must be given ...
-  if (is.null(starter) | length(starter) > 1) {
+  if (is.null(starter) || length(starter) > 1) {
     stop("Define a single starting point. Use `find` to identify other resources.")
   }
   
@@ -336,17 +336,17 @@ findNLDI <- function(comid = NULL,
   }
   
   # name of starter
-  start_type = names(starter)
+  start_type <- names(starter)
   
   # If location, ensure lng is first argument (hack for USA features)
-  if (start_type == 'location') {
+  if (start_type == "location") {
     
-    if (any(grepl("sfc$|sf$", class(location))) & use_sf) {
+    if (any(grepl("sfc$|sf$", class(location))) && use_sf) {
       if (sf::st_geometry_type(location) != "POINT") {
         stop("Only POINT objects can be passed to location")
       }
       
-      location  = sf::st_coordinates(location)
+      location  <- sf::st_coordinates(location)
     } else {
       if (location[1] > 0) {
         stop("Provide location in the form c(lng,lat)")
@@ -357,9 +357,9 @@ findNLDI <- function(comid = NULL,
     tmp_url <- paste0(
       pkg.env$nldi_base,
       "comid/position?f=json&coords=POINT%28",
-      location[1] ,
+      location[1],
       "%20",
-      location[2] ,
+      location[2],
       "%29"
     )
     
@@ -379,7 +379,7 @@ findNLDI <- function(comid = NULL,
   # Defining the origin URL.
   #  Align request with formal name from sources
   #  If NWIS, add "USGS-" prefix
-  start_url = paste0(
+  start_url <- paste0(
     valid_ask(all = pkg.env$current_nldi, type = start_type)$good$features,
     "/",
     ifelse(start_type == "nwis", paste0("USGS-", starter), starter),
@@ -388,7 +388,7 @@ findNLDI <- function(comid = NULL,
   
   # Makes sure that all requested features to `find` are valid and name-aligned
   if (!is.null(find)) {
-    find = valid_ask(pkg.env$current_nldi, type = find)$good$source
+    find <- valid_ask(pkg.env$current_nldi, type = find)$good$source
   }
   
   # Set empty lists to store origin, navigation, features, and basin requests ...
@@ -396,12 +396,12 @@ findNLDI <- function(comid = NULL,
   
   # Build navigation URLs
   for (i in seq_along(nav)) {
-    navigate[[nav[i]]] = paste0(start_url, "navigation/", nav[i])
+    navigate[[nav[i]]] <- paste0(start_url, "navigation/", nav[i])
   }
   
   # Build find URLs
   if (length(find) > 0) {
-    features = lapply(navigate,
+    features <- lapply(navigate,
                       paste0,
                       paste0("/", find),
                       paste0("?f=json&distance= ", distance_km))
@@ -418,7 +418,7 @@ findNLDI <- function(comid = NULL,
     
     type = c("feature",
              if (getBasin) {
-               'basin'
+               "basin"
              },
              ifelse(
                rep(find, length(nav)) == "flowlines", "nav", "feature"
@@ -432,7 +432,7 @@ findNLDI <- function(comid = NULL,
   )
   
   # Send NLDI queries ...
-  shp <- lapply(1:nrow(search), function(x) {
+  shp <- lapply(seq_len(nrow(search)), function(x) {
     get_nldi(url = search$url[x],
              type = search$type[x],
              use_sf = use_sf)
@@ -442,11 +442,11 @@ findNLDI <- function(comid = NULL,
   names(shp) <- search$name
   
   # Clean up NWIS ids, trim NULLs, and return ...
-  shp = tc(lapply(shp, clean_nwis_ids))
+  shp <- tc(lapply(shp, clean_nwis_ids))
   
   # dont return list for one length elements
   if (length(shp) == 1) {
-    shp = shp[[1]]
+    shp <- shp[[1]]
   }
   
   return(shp)

@@ -68,12 +68,14 @@
 #' }
 readNWISsite <- function(siteNumbers) {
   
-  siteNumber <- paste(siteNumbers,collapse= ", ")
+  siteNumber <- paste(siteNumbers,collapse = ", ")
   names(siteNumber) <- "site"
-  urlSitefile <- drURL("site", Access=pkg.env$access, siteOutput= "Expanded",format= "rdb")
-  urlSitefile <- appendDrURL(urlSitefile,arg.list = siteNumber)
+  urlSitefile <- drURL("site", 
+                       Access = pkg.env$access,
+                       siteOutput = "Expanded",format= "rdb")
+  urlSitefile <- appendDrURL(urlSitefile, arg.list = siteNumber)
    
-  data <- importRDB1(urlSitefile,asDateTime=FALSE)
+  data <- importRDB1(urlSitefile, asDateTime = FALSE)
   #readr needs multiple lines to convert to anything but characters:  
   data[grep("_va",names(data))][data[grep("_va",names(data))] == "."] <- NA
   

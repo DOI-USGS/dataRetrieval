@@ -37,8 +37,8 @@ Mapper format is used
 \examples{
 \donttest{
 
-siteListPhos <- whatNWISsites(stateCd="OH",parameterCd="00665")
-oneSite <- whatNWISsites(sites="05114000")
+siteListPhos <- whatNWISsites(stateCd= "OH",parameterCd= "00665")
+oneSite <- whatNWISsites(sites= "05114000")
 
 }
 }

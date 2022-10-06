@@ -81,7 +81,7 @@ names(twoResults)
 renamedCols <- renameNWISColumns(twoResults)
 names(renamedCols)
 #Custom names:
-newNames <- renameNWISColumns(twoResults, p00060="Discharge")
+newNames <- renameNWISColumns(twoResults, p00060= "Discharge")
 names(newNames)
 }
 }

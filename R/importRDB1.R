@@ -122,13 +122,13 @@ importRDB1 <- function(obs_url, asDateTime=TRUE, convertType = TRUE, tz= "UTC") 
   readr.meta <- readr.total[grep("^#", readr.total)]
   meta.rows <- length(readr.meta)
   header.names <- strsplit(readr.total[meta.rows+1], "\t")[[1]]
-  types.names <- strsplit(readr.total[meta.rows+2], "\t")[[1]]
+  
   data.rows <- total.rows - meta.rows - 2
   
-  char.names <- c(header.names[grep("_cd",header.names)],
-                  header.names[grep("_id",header.names)],
-                  header.names[grep("_tx",header.names)],
-                  header.names[grep("_tm",header.names)],
+  char.names <- c(header.names[grep("_cd", header.names)],
+                  header.names[grep("_id", header.names)],
+                  header.names[grep("_tx", header.names)],
+                  header.names[grep("_tm", header.names)],
                   header.names[header.names == "site_no"],
                   header.names[header.names == "project_no"])
   
