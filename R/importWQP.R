@@ -159,8 +159,8 @@ importWQP <- function(obs_url, zip=TRUE, tz= "UTC",
 
   retval <- suppressWarnings(readr::read_delim(doc,
                        col_types = readr::cols(.default = "c"),
-                       quote = ifelse(csv,'\"', ""),
-                       delim = ifelse(csv, ", ", "\t"), 
+                       quote = ifelse(csv, '\"', ""),
+                       delim = ifelse(csv, ",", "\t"), 
                        guess_max = totalPossible))
     
   if(!file.exists(obs_url)) {
