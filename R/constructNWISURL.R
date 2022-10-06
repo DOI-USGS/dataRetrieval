@@ -128,7 +128,7 @@ constructNWISURL <- function(siteNumbers,
                                   param_cd_operator = "AND")
              }
              
-             searchCriteria <- paste(searchCriteria, "multiple_parameter_cds", sep = ", ")
+             searchCriteria <- paste(searchCriteria, "multiple_parameter_cds", sep = ",")
              url <- appendDrURL(url, list_of_search_criteria = searchCriteria)
 
              
