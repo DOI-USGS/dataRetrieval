@@ -113,11 +113,11 @@
 #' nwisEx.summary <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),
 #'     '','2012-12-20', querySummary=TRUE)
 #' }
-readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="UTC", querySummary=FALSE){
+readWQPqw <- function(siteNumbers,parameterCd,startDate= "",endDate= "",tz= "UTC", querySummary=FALSE) {
 
   url <- constructWQPURL(siteNumbers,parameterCd,startDate,endDate)
 
-  if(querySummary){
+  if(querySummary) {
     retquery <- getQuerySummary(url)
     return(retquery)
   } else {
@@ -126,21 +126,21 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="UTC", 
     
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     
-    if (nzchar(startDate)){
-      startDate <- format(as.Date(startDate), format="%m-%d-%Y")
+    if (nzchar(startDate)) {
+      startDate <- format(as.Date(startDate), format= "%m-%d-%Y")
     }
     
-    if (nzchar(endDate)){
-      endDate <- format(as.Date(endDate), format="%m-%d-%Y")
+    if (nzchar(endDate)) {
+      endDate <- format(as.Date(endDate), format= "%m-%d-%Y")
     }
     
-    if(pcodeCheck){
-      siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse=";"),
-                               pCode=paste0(parameterCd,collapse=";"), 
+    if(pcodeCheck) {
+      siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse= ";"),
+                               pCode=paste0(parameterCd,collapse= ";"), 
                                startDateLo=startDate, startDateHi=endDate)
     } else {
-      siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse=";"), 
-                               characteristicName=URLencode(paste0(parameterCd,collapse=";")), 
+      siteInfo <- whatWQPsites(siteid=paste0(siteNumbers,collapse= ";"), 
+                               characteristicName=URLencode(paste0(parameterCd,collapse= ";")), 
                                startDateLo=startDate, startDateHi=endDate)
     }
       
@@ -162,7 +162,7 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="UTC", 
                                stringsAsFactors=FALSE)
     variableInfo <- unique(variableInfo)
     
-    if(!anyNA(variableInfo$parameterCd)){
+    if(!anyNA(variableInfo$parameterCd)) {
       pcodes <- unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)])
       pcodes <- pcodes["" != pcodes]
       paramINFO <- readNWISpCode(pcodes)
@@ -171,8 +171,8 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="UTC", 
       pCodeToName <- pCodeToName
       varExtras <- pCodeToName[pCodeToName$parm_cd %in% unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]),]
       names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
-      variableInfo <- merge(variableInfo, varExtras, by="parameterCd", all = TRUE)
-      variableInfo <- merge(variableInfo, paramINFO, by="parameterCd", all = TRUE)
+      variableInfo <- merge(variableInfo, varExtras, by= "parameterCd", all = TRUE)
+      variableInfo <- merge(variableInfo, paramINFO, by= "parameterCd", all = TRUE)
       variableInfo <- unique(variableInfo)
     }
     

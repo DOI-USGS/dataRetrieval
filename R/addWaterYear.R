@@ -1,35 +1,34 @@
 #' add a water year column
-#' 
-#' Add a column to the dataRetrieval data frame with the water year. WQP 
+#'
+#' Add a column to the dataRetrieval data frame with the water year. WQP
 #' queries will return a water year column for the start and end dates
 #' of the data.
-#' 
+#'
 #' @param rawData the daily- or unit-values datset retrieved from NWISweb. Must
 #' have at least one of the following columns to add the new water year columns:
 #' `dateTime`, `Date`, `ActivityStartDate`, or `ActivityEndDate`. The date column(s)
 #' can be character, POSIXct, Date. They cannot be numeric.
-#' 
-#' @return data.frame with an additional integer column with "WY" appended to the 
-#' date column name. For WQP, there will be 2 columns: `ActivityStartDateWY` and 
+#'
+#' @return data.frame with an additional integer column with "WY" appended to the
+#' date column name. For WQP, there will be 2 columns: `ActivityStartDateWY` and
 #' `ActivityEndDateWY`.
 #' @export
-#' 
+#'
 #' @examples
-#' \donttest{ 
+#' \donttest{
 #' nwisData <- readNWISdv('04085427','00060','2012-01-01','2012-06-30')
 #' nwisData <- addWaterYear(nwisData)
-#' 
+#'
 #' wqpData <- readWQPqw('USGS-01594440','01075', '', '')
 #' wqpData <- addWaterYear(wqpData)
 #' }
-addWaterYear <- function(rawData){
-  
+addWaterYear <- function(rawData) {
+
   allowedDateColNames <- c("dateTime", "Date", "ActivityStartDate", "ActivityEndDate")
   allowedWYColNames <- c("waterYear", "waterYear", "ActivityStartWaterYear", "ActivityEndWaterYear")
   names(allowedWYColNames) <- allowedDateColNames
-  
   # only allow WY to be added if there is an appropriate date column
-  if(all(!allowedDateColNames %in% names(rawData))){
+  if(all(!allowedDateColNames %in% names(rawData))) {
     stop("specified date column does not exist in supplied data frame")
   }
   
@@ -39,7 +38,7 @@ addWaterYear <- function(rawData){
   dateColNames <- names(rawData)[names(rawData) %in% allowedDateColNames]
   dateColNames <- dateColNames[!allowedWYColNames[dateColNames] %in% names(rawData)]
   
-  for(dateCol in dateColNames){
+  for(dateCol in dateColNames) {
     dateColWY <- allowedWYColNames[dateCol]
     
     # calculate WY & add as new column
@@ -48,7 +47,7 @@ addWaterYear <- function(rawData){
     # move waterYear so that it is always comes right after dateTime
     dateCol_i <- which(names(rawData) == dateCol)
     dateColWY_i <- which(names(rawData) == dateColWY)
-    everything_else <- which(!(names(rawData) %in% c(dateCol,dateColWY)))
+    everything_else <- which(!(names(rawData) %in% c(dateCol, dateColWY)))
     everything_else <- everything_else[!everything_else %in% c(1:dateCol_i, dateColWY_i)]
 
     rawData <- rawData[, c(1:dateCol_i, dateColWY_i, everything_else)]
@@ -73,14 +72,14 @@ addWaterYear <- function(rawData){
 #' @return numeric vector indicating the water year
 #' @export
 #' @examples
-#' x <- seq(as.Date("2010-01-01"), as.Date("2010-12-31"), by="month")
+#' x <- seq(as.Date("2010-01-01"), as.Date("2010-12-31"), by= "month")
 #' calcWaterYear(x)
 #' 
 #' y <- c("2010-01-01", "1994-02", "1980", "2009-11-01", NA)
 #' calcWaterYear(y)
-calcWaterYear <- function(dateVec){
+calcWaterYear <- function(dateVec) {
   
-  if(is.numeric(dateVec)){
+  if(is.numeric(dateVec)) {
     message("dateVec is numeric, with insufficient information to determine water year.")
     return(rep(NA, length(dateVec)))
   }
@@ -88,19 +87,19 @@ calcWaterYear <- function(dateVec){
   dateTimeVec <- tryCatch({
       as.POSIXlt(dateVec)
     }, 
-    error = function(e){
+    error = function(e) {
       
       date_vec <- tryCatch({
         as.Date(dateVec)
       },
-      error = function(e){
+      error = function(e) {
         return(rep(NA, length(dateVec)))
       })
       
       
-      if(any(is.na(date_vec))){
+      if(any(is.na(date_vec))) {
         dateVec <- as.character(dateVec)
-        dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)] <- paste0(dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)],"-01")
+        dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)] <- paste0(dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)], "-01")
         dateVec <- as.Date(dateVec)
       }
       dateTimeVec <- as.POSIXlt(dateVec)

@@ -155,7 +155,7 @@ NULL
 # 
 # county_df <- data.frame()
 # 
-# for(st in state_df$STATE){
+# for(st in state_df$STATE) {
 #   county_nums <- names(y[[st]])
 #   county_names <- as.character(unlist(y[[st]]))
 #   county_df_st <- data.frame(STATE = st,

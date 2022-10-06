@@ -1,6 +1,9 @@
 linters: linters_with_defaults(
     object_name_linter=NULL,
-    line_length_linter=NULL,
-    cyclocomp_linter=NULL
+    line_length_linter(120),
+    cyclocomp_linter=NULL,
+    spaces_left_parentheses_linter=NULL,
+    trailing_whitespace_linter=NULL,
+    paren_body_linter=NULL
    ) # see vignette("lintr")
 encoding: "UTF-8"

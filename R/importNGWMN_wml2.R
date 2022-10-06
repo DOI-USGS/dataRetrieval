@@ -7,9 +7,9 @@
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
-#' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-#' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
 #' @return mergedDF a data frame source, time, value, uom, uomTitle, comment, gmlID
 #' @export
@@ -21,30 +21,30 @@
 #' @examples
 #' \donttest{
 #' obs_url <- paste("https://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
-#' "service=SOS","version=2.0.0",
+#' "service=SOS", "version=2.0.0",
 #' "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
 #' "responseFormat=text/xml",
-#' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",sep="&")
+#' "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",sep= "&")
 #' 
 #'  data_returned <- importNGWMN(obs_url)
 #' 
 #' }
 #' 
-importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
+importNGWMN <- function(input, asDateTime=FALSE, tz= "UTC") {
   
-  if(tz != ""){
+  if(tz != "") {
     tz <- match.arg(tz, OlsonNames())
   }else{tz = "UTC"}
   
   raw <- FALSE
-  if(class(input) == "character" && file.exists(input)){
+  if(class(input) == "character" && file.exists(input)) {
     returnedDoc <- read_xml(input)
-  }else if(class(input) == 'raw'){
+  }else if(class(input) == 'raw') {
     returnedDoc <- read_xml(input)
     raw <- TRUE
   } else {
     returnedDoc <- getWebServiceData(input, encoding='gzip')
-    if(is.null(returnedDoc)){
+    if(is.null(returnedDoc)) {
       return(invisible(NULL))
     }
     returnedDoc <- xml_root(returnedDoc)
@@ -52,13 +52,13 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
   }
   
   response <- xml_name(returnedDoc)
-  if(response == "GetObservationResponse"){
+  if(response == "GetObservationResponse") {
     
     timeSeries <- xml_find_all(returnedDoc, "//wml2:MeasurementTimeseries") #each parameter/site combo
     
-    if(0 == length(timeSeries)){
+    if(0 == length(timeSeries)) {
       df <- data.frame()
-      if(!raw){
+      if(!raw) {
         attr(df, "url") <- input
       }
       return(df)
@@ -66,10 +66,10 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
     
     mergedDF <- NULL
     
-    for(t in timeSeries){
+    for(t in timeSeries) {
       df <- importWaterML2(t, asDateTime, tz)
       
-      if (is.null(mergedDF)){
+      if (is.null(mergedDF)) {
         mergedDF <- df
       } else {
         similarNames <- intersect(colnames(mergedDF), colnames(df))
@@ -80,16 +80,16 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
       }
     }
     
-    if(!raw){
+    if(!raw) {
       url <- input
       attr(mergedDF, "url") <- url
     }
-    if(asDateTime){
+    if(asDateTime) {
       mergedDF$date <- as.Date(mergedDF$date)
     }
     nonDateCols <- grep("date",names(mergedDF), value=TRUE, invert = TRUE)
     
-    if(nrow(mergedDF) > 0){
+    if(nrow(mergedDF) > 0) {
       mergedDF[nonDateCols][mergedDF[nonDateCols] == "" | mergedDF[nonDateCols]== -999999.0] <- NA
     }
     attr(mergedDF, "gml:identifier") <- xml_text(xml_find_all(returnedDoc, ".//gml:identifier")) 
@@ -98,9 +98,9 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
     attr(mergedDF, "contact") <- xml_attr(meta, "href")
     attr(mergedDF, "responsibleParty") <- xml_text(xml_find_all(meta, ".//gco:CharacterString"))
     
-  } else if (response == "GetFeatureOfInterestResponse"){
+  } else if (response == "GetFeatureOfInterestResponse") {
     featureMembers <- xml_find_all(returnedDoc, ".//sos:featureMember")
-    site <- xml_text(xml_find_all(featureMembers,".//gml:identifier"))
+    site <- xml_text(xml_find_all(featureMembers, ".//gml:identifier"))
     site <- substring(site, 8)
     
     #some sites don't have a description
@@ -114,7 +114,7 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
     siteLocs$dec_lon_va <- as.numeric(siteLocs$dec_lon_va)
     mergedDF <- cbind.data.frame(site, description = siteDesc, siteLocs, stringsAsFactors = FALSE) 
   
-  } else if (response == "ExceptionReport"){
+  } else if (response == "ExceptionReport") {
     return(data.frame())
   } else {
     stop("Unrecognized response from the web service")
@@ -132,8 +132,8 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
 #' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the 
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
-#' Possible values are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+#' Possible values are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
+#' "America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla"
 #' @importFrom xml2 xml_attr xml_find_all xml_text 
 #' @export
 #' @examplesIf is_dataRetrieval_user()
@@ -142,18 +142,18 @@ importNGWMN <- function(input, asDateTime=FALSE, tz="UTC"){
 #'      "startDT=2014-09-01",
 #'      "endDT=2014-09-08",
 #'      "statCd=00003",
-#'      "parameterCd=00060",sep="&")
+#'      "parameterCd=00060",sep= "&")
 #' \donttest{
 #' 
-#' timesereies <- importWaterML2(URL, asDateTime=TRUE, tz="UTC")
+#' timesereies <- importWaterML2(URL, asDateTime=TRUE, tz= "UTC")
 #'  
 #' }
-importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
+importWaterML2 <- function(input, asDateTime=FALSE, tz= "UTC") {
   
   returnedDoc <- check_if_xml(input)
   raw <- class(input) == 'raw'
   
-  gmlID <- xml_attr(returnedDoc,"id") #TODO: make this an attribute
+  gmlID <- xml_attr(returnedDoc, "id") #TODO: make this an attribute
   TVP <- xml_find_all(returnedDoc, ".//wml2:MeasurementTVP")#time-value pairs
   if(length(TVP) == 0) { #empty nodes on some sites
     return(data.frame(site = character(0), source = character(0), date = character(0),
@@ -173,7 +173,7 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
   oneCol <- rep(NA, nVals) 
   timeDF <- data.frame(date=oneCol, time=oneCol, dateTime=oneCol)
   splitTime <- data.frame(matrix(unlist(strsplit(rawTime, "T")), nrow=nVals, byrow = TRUE), stringsAsFactors=FALSE)
-  if(ncol(splitTime) > 1){ #some sites only have a date
+  if(ncol(splitTime) > 1) { #some sites only have a date
     names(splitTime) <- c("date", "time")
   } else {
     names(splitTime) <- "date"
@@ -186,9 +186,9 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
   if(!all(!logicVec)) { #otherwise sets it to char <NA>
     timeDF$dateTime[logicVec] <- rawTime[logicVec]
   }
-  if(asDateTime){
-    timeDF$dateTime <- lubridate::parse_date_time(timeDF$dateTime, c("%Y","%Y-%m-%d","%Y-%m-%dT%H:%M","%Y-%m-%dT%H:%M:%S",
-                                                          "%Y-%m-%dT%H:%M:%OS","%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
+  if(asDateTime) {
+    timeDF$dateTime <- lubridate::parse_date_time(timeDF$dateTime, c("%Y", "%Y-%m-%d", "%Y-%m-%dT%H:%M", "%Y-%m-%dT%H:%M:%S",
+                                                          "%Y-%m-%dT%H:%M:%OS", "%Y-%m-%dT%H:%M:%OS%z"), exact = TRUE)
     #^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
     attr(timeDF$dateTime, 'tzone') <- tz
   }
@@ -208,14 +208,14 @@ importWaterML2 <- function(input, asDateTime=FALSE, tz="UTC") {
  
   df_vars <- list(source = source, timeDF, value = values, 
                   uom = uom, comment = comment)
-  df_use <- df_vars[sapply(df_vars, function(x){length(x) > 0 && !all(is.na(x))})]
+  df_use <- df_vars[sapply(df_vars, function(x) {length(x) > 0 && !all(is.na(x))})]
   df <- data.frame(df_use, stringsAsFactors = FALSE)
   if(!"value" %in% names(df)) {df$value <- NA_real_}
   #from the default metadata section
   #append to existing attributes if they aren't empty
    mdAttribs <- list(defaultQualifier=defaultQuals, defaultUOM=defaultUOM, 
                     gmlID=gmlID) #all attributes must have names
-  mdAttribs_use <- mdAttribs[sapply(mdAttribs, function(x){length(x) > 0})]
+  mdAttribs_use <- mdAttribs[sapply(mdAttribs, function(x) {length(x) > 0})]
   attributes(df) <- append(attributes(df), mdAttribs_use)
   return(df)
 }

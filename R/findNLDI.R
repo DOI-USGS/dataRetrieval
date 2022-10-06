@@ -17,7 +17,7 @@ tc <- function(x) {
 #' @return a list
 #' @noRd
 
-find_good_names = function(input, type) {
+find_good_names <- function(input, type) {
   # The features names are different across features, navigation, and basin returns
   # This sets the environment for what to expect
   if (type == "nav") {
@@ -81,7 +81,7 @@ get_nldi_sources <- function() {
 #'  get_nldi(paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
 #'  }
 
-get_nldi = function(url, type = "", use_sf = FALSE) {
+get_nldi <- function(url, type = "", use_sf = FALSE) {
   # Query
   res <- httr::RETRY("GET", url, times = 3, pause_cap = 60)
   
@@ -100,12 +100,13 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
       
       tmp <- tryCatch({
         sf::read_sf(d) }, 
-      error   = function(e){ 
+      error   = function(e) { 
         message("No data found for: ", basename(url))
         return(NULL)},
-      warning = function(w){  
-        message("No data found for: ", basename(url))
-        return(NULL) }
+      warning = function(w) {  
+          message("No data found for: ", basename(url))
+          return(NULL) 
+        }
       )
       
       if(nrow(tmp) == 0) {
@@ -113,9 +114,9 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
         return(NULL)
       }
         
-      good_name = find_good_names(tmp, type)
+      good_name <- find_good_names(tmp, type)
       
-      if(!is.null(tmp)){
+      if(!is.null(tmp)) {
         # if of type POINT at the X,Y coordinates as columns
         if (sf::st_geometry_type(tmp)[1] == "POINT") {
           tmp$X <- sf::st_coordinates(tmp)[, 1]
@@ -140,7 +141,7 @@ get_nldi = function(url, type = "", use_sf = FALSE) {
      
       good_name = find_good_names(input, type)
       
-      if(is.null(input) & type != "basin"){
+      if(is.null(input) && type != "basin") {
         warning("No data returned for: ", url, call. = FALSE)
         tmp = NULL
       } else {
@@ -403,7 +404,7 @@ findNLDI <- function(comid = NULL,
     features = lapply(navigate,
                       paste0,
                       paste0("/", find),
-                      paste0("?f=json&distance=", distance_km))
+                      paste0("?f=json&distance= ", distance_km))
   }
   
   names  <- unlist(lapply(nav, paste0, paste0("_", find)))

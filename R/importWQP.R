@@ -7,8 +7,8 @@
 #' @param obs_url character URL to Water Quality Portal#' @keywords data import USGS web service
 #' @param zip logical to request data via downloading zip file. Default set to TRUE.
 #' @param tz character to set timezone attribute of datetime. Default is UTC (properly accounting for daylight savings times based on the data's provided tz_cd column).
-#' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"
+#' Possible values include "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
+#' "America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla"
 #' @param csv logical. Is the data coming back with a csv or tsv format. Default is \code{FALSE}. Currently, the 
 #' summary service does not support tsv, for other services tsv is the safer choice. 
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
@@ -33,26 +33,26 @@
 #'  STORETdata <- importWQP(STORETex)
 #' }
 #' 
-importWQP <- function(obs_url, zip=TRUE, tz="UTC", 
-                      csv=FALSE){
+importWQP <- function(obs_url, zip=TRUE, tz= "UTC", 
+                      csv=FALSE) {
   
-  if(tz != ""){
+  if(tz != "") {
     tz <- match.arg(tz, OlsonNames())
   } else {
     tz <- "UTC"
   }
   
-  if(!file.exists(obs_url)){
+  if(!file.exists(obs_url)) {
     
-    if(zip){
+    if(zip) {
 
       temp <- tempfile()
-      temp <- paste0(temp,".zip")
+      temp <- paste0(temp, ".zip")
       
       doc <- getWebServiceData(obs_url, 
                                httr::write_disk(temp),
                                httr::accept("application/zip"))
-      if(is.null(doc)){
+      if(is.null(doc)) {
         return(invisible(NULL))
       }
       headerInfo <- httr::headers(doc)
@@ -62,7 +62,7 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
     } else {
       doc <- getWebServiceData(obs_url, 
                                httr::accept("text/tsv"))
-      if(is.null(doc)){
+      if(is.null(doc)) {
         return(invisible(NULL))
       }
       headerInfo <- attr(doc, "headerInfo")
@@ -72,8 +72,8 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
 
     totalPossible <- sum(unlist(headerInfo[grep("-count",names(headerInfo))]), na.rm = TRUE)
     
-    if(is.na(totalPossible) | totalPossible == 0){
-      for(i in grep("Warning",names(headerInfo))){
+    if(is.na(totalPossible) | totalPossible == 0) {
+      for(i in grep("Warning",names(headerInfo))) {
         warning(headerInfo[i])
       }
       emptyReturn <- data.frame(OrganizationIdentifier = character(),                        
@@ -150,7 +150,7 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
     }
     
   } else {
-    if(zip){
+    if(zip) {
       doc <- unzip(obs_url)
     } else {
       doc <- obs_url
@@ -159,14 +159,14 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
 
   retval <- suppressWarnings(readr::read_delim(doc,
                        col_types = readr::cols(.default = "c"),
-                       quote = ifelse(csv,'\"',""),
-                       delim = ifelse(csv,",","\t"), 
+                       quote = ifelse(csv,'\"', ""),
+                       delim = ifelse(csv, ", ", "\t"), 
                        guess_max = totalPossible))
     
-  if(!file.exists(obs_url)){
+  if(!file.exists(obs_url)) {
     actualNumReturned <- nrow(retval)
     
-    if(!(actualNumReturned %in% unlist(headerInfo[grep("-count",names(headerInfo))]))){
+    if(!(actualNumReturned %in% unlist(headerInfo[grep("-count",names(headerInfo))]))) {
       warning("Number of rows returned not matched in header")
     } 
   }
@@ -175,13 +175,13 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
   countCols <- names(retval)[grep("Count", names(retval))]
   yearCols <- names(retval)[grep("Year", names(retval))]
   
-  for(numberCol in unique(c(valueCols, countCols, yearCols))){
+  for(numberCol in unique(c(valueCols, countCols, yearCols))) {
     suppressWarnings({
       val <- tryCatch(as.numeric(retval[[numberCol]]),
                       warning = function(w) w)
       # we don't want to convert it to numeric if there are non-numeric chars
       # If we leave it to the user, it will probably break a lot of code
-      if(!"warning" %in% class(val)){
+      if(!"warning" %in% class(val)) {
         retval[[numberCol]] <- val
       }
     })
@@ -189,7 +189,7 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
   
 
 
-  if(length(grep("ActivityStartTime",names(retval))) > 0){
+  if(length(grep("ActivityStartTime",names(retval))) > 0) {
     
     #Time zones to characters:
     if(length(grep("TimeZoneCode", names(retval))) > 0  &&
@@ -199,13 +199,13 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
     }
     
     offsetLibrary <- data.frame(offset=c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, NA, 0, 0),
-                                code=c("EST","EDT","CST","CDT","MST","MDT","PST","PDT","AKST","AKDT","HAST","HST","", NA, "UTC","GMT"),
+                                code=c("EST", "EDT", "CST", "CDT", "MST", "MDT", "PST", "PDT", "AKST", "AKDT", "HAST", "HST", "", NA, "UTC", "GMT"),
                                 stringsAsFactors = FALSE)
     original_order <- names(retval)
-    if("ActivityStartTime/TimeZoneCode" %in% names(retval)){
+    if("ActivityStartTime/TimeZoneCode" %in% names(retval)) {
       retval <- merge(x = retval, 
                       y = offsetLibrary, 
-                      by.x="ActivityStartTime/TimeZoneCode", 
+                      by.x= "ActivityStartTime/TimeZoneCode", 
                       by.y = "code", 
                       all.x = TRUE)      
     }
@@ -213,10 +213,10 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
     names(retval)[names(retval) == "offset"] <- "timeZoneStart"
     retval <- retval[,c(original_order, "timeZoneStart")]
 
-    if("ActivityEndTime/TimeZoneCode" %in% names(retval)){
+    if("ActivityEndTime/TimeZoneCode" %in% names(retval)) {
       retval <- merge(x = retval, 
                       y = offsetLibrary, 
-                      by.x="ActivityEndTime/TimeZoneCode", 
+                      by.x= "ActivityEndTime/TimeZoneCode", 
                       by.y = "code", 
                       all.x = TRUE)
       names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
@@ -224,23 +224,23 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
     }
 
     
-    dateCols <- c("ActivityStartDate","ActivityEndDate","AnalysisStartDate","PreparationStartDate")
+    dateCols <- c("ActivityStartDate", "ActivityEndDate", "AnalysisStartDate", "PreparationStartDate")
 
-    for(i in dateCols){
+    for(i in dateCols) {
       
-      if(i %in% names(retval)){
+      if(i %in% names(retval)) {
         retval[,i] <- suppressWarnings(as.Date(lubridate::parse_date_time(retval[[i]], c("Ymd", "mdY"))))
       }
       
     }
   
-    if(all(c("ActivityStartDate", "ActivityStartTime/Time") %in% names(retval))){
+    if(all(c("ActivityStartDate", "ActivityStartTime/Time") %in% names(retval))) {
       retval$ActivityStartDateTime <- paste(retval$ActivityStartDate, retval$`ActivityStartTime/Time`)
       retval$ActivityStartDateTime <- lubridate::fast_strptime(retval$ActivityStartDateTime, '%Y-%m-%d %H:%M:%S')+60*60*retval$timeZoneStart
       attr(retval$ActivityStartDateTime, "tzone") <- tz
     }
     
-    if(all(c("ActivityEndDate","ActivityEndTime/Time") %in% names(retval))){
+    if(all(c("ActivityEndDate", "ActivityEndTime/Time") %in% names(retval))) {
       retval$ActivityEndDateTime <- paste(retval$ActivityEndDate, retval$`ActivityEndTime/Time`)
       retval$ActivityEndDateTime <- lubridate::fast_strptime(retval$ActivityEndDateTime, '%Y-%m-%d %H:%M:%S')+60*60*retval$timeZoneStart
       attr(retval$ActivityEndDateTime, "tzone") <- tz
@@ -248,29 +248,29 @@ importWQP <- function(obs_url, zip=TRUE, tz="UTC",
     
     retval <- retval[,names(retval)[!(names(retval) %in% c("timeZoneEnd", "timeZoneStart"))]]
   }
-  names(retval)[grep("/",names(retval))] <- gsub("/",".",names(retval)[grep("/",names(retval))])
+  names(retval)[grep("/",names(retval))] <- gsub("/", ".",names(retval)[grep("/",names(retval))])
   
   return(retval)
   
 }
 
 
-post_url <- function(obs_url, zip, csv=FALSE){
+post_url <- function(obs_url, zip, csv=FALSE) {
 
   split <- strsplit(obs_url, "?", fixed=TRUE)
   
   url <- split[[1]][1]
-  if(csv){
+  if(csv) {
     url <- paste0(url, "?mimeType=csv")
   } else {
     url <- paste0(url, "?mimeType=tsv")
   }
 
-  if(grepl("sorted",split[[1]][2])){
-    url <- paste0(url, "&sorted=", strsplit(split[[1]][2], "sorted=", fixed=TRUE)[[1]][2])
+  if(grepl("sorted",split[[1]][2])) {
+    url <- paste0(url, "&sorted= ", strsplit(split[[1]][2], "sorted= ", fixed=TRUE)[[1]][2])
   }
   
-  if(zip){
+  if(zip) {
     url <- paste0(url, "&zip=yes")
   } 
   

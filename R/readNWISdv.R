@@ -47,23 +47,23 @@
 #' rawDailyQAndTempMeanMax <- readNWISdv(site_id,c('00010','00060'),
 #'        startDate, endDate, statCd=c('00001','00003'))
 #' rawDailyQAndTempMeanMax <- renameNWISColumns(rawDailyQAndTempMeanMax)
-#' rawDailyMultiSites<- readNWISdv(c("01491000","01645000"),c('00010','00060'),
+#' rawDailyMultiSites<- readNWISdv(c("01491000", "01645000"),c('00010','00060'),
 #'        startDate, endDate, statCd=c('00001','00003'))
 #' # Site with no data:
-#' x <- readNWISdv("10258500","00060", "2014-09-08", "2014-09-14")
+#' x <- readNWISdv("10258500", "00060", "2014-09-08", "2014-09-14")
 #' names(attributes(x))
 #' attr(x, "siteInfo")
 #' attr(x, "variableInfo")
 #' 
 #' site <- "05212700"
-#' notActive <- readNWISdv(site, "00060", "2014-01-01","2014-01-07")
+#' notActive <- readNWISdv(site, "00060", "2014-01-01", "2014-01-07")
 #' }
-readNWISdv <- function (siteNumbers,parameterCd,startDate="",endDate="",statCd="00003"){  
+readNWISdv <- function (siteNumbers,parameterCd,startDate= "",endDate= "",statCd= "00003") {  
   
-  url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate,"dv",statCd=statCd)
+  url <- constructNWISURL(siteNumbers,parameterCd,startDate,endDate, "dv",statCd=statCd)
 
   data <- importWaterML1(url, asDateTime=FALSE)
-  if(nrow(data)>0){
+  if(nrow(data)>0) {
     data$dateTime <- as.Date(data$dateTime)
     data$tz_cd <- NULL
     

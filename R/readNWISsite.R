@@ -66,11 +66,11 @@
 #' siteINFOMulti <- readNWISsite(c('05114000','09423350'))
 #' 
 #' }
-readNWISsite <- function(siteNumbers){
+readNWISsite <- function(siteNumbers) {
   
-  siteNumber <- paste(siteNumbers,collapse=",")
+  siteNumber <- paste(siteNumbers,collapse= ", ")
   names(siteNumber) <- "site"
-  urlSitefile <- drURL("site", Access=pkg.env$access, siteOutput="Expanded",format="rdb")
+  urlSitefile <- drURL("site", Access=pkg.env$access, siteOutput= "Expanded",format= "rdb")
   urlSitefile <- appendDrURL(urlSitefile,arg.list = siteNumber)
    
   data <- importRDB1(urlSitefile,asDateTime=FALSE)

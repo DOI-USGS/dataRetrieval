@@ -47,13 +47,13 @@
 #' renamedCols <- renameNWISColumns(twoResults)
 #' names(renamedCols)
 #' #Custom names:
-#' newNames <- renameNWISColumns(twoResults, p00060="Discharge")
+#' newNames <- renameNWISColumns(twoResults, p00060= "Discharge")
 #' names(newNames)
 #' }
-renameNWISColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
-                          p00060="Flow", p00065="GH", p00095="SpecCond", p00300="DO",
-                          p00400="pH", p62611="GWL", p63680="Turb", p72019="WLBLS",
-                          ...){
+renameNWISColumns <- function(rawData, p00010= "Wtemp", p00045= "Precip",
+                          p00060= "Flow", p00065= "GH", p00095= "SpecCond", p00300= "DO",
+                          p00400= "pH", p62611= "GWL", p63680= "Turb", p72019= "WLBLS",
+                          ...) {
   
   Cnames <- names(rawData)
   
@@ -84,24 +84,24 @@ renameNWISColumns <- function(rawData, p00010="Wtemp", p00045="Precip",
 
   dataColumns <- c(grep("X_", Cnames),grep("X\\d{2}", Cnames))
   dataColumnsChangedParam <- NULL 
-  for (i in dataColumns){
+  for (i in dataColumns) {
     chunks <- strsplit(Cnames[i], "_")[[1]]
     
     #Pcodes:
-    for(j in 1:length(chunks)){
-      if(paste0("p",chunks[j]) %in% names(Conv)){
+    for(j in 1:length(chunks)) {
+      if(paste0("p",chunks[j]) %in% names(Conv)) {
         chunks[j] <- as.character(Conv[paste0("p",chunks[j])])
-        Cnames[i] <- paste(chunks, collapse ="_")
+        Cnames[i] <- paste(chunks, collapse = "_")
         dataColumnsChangedParam <- c(dataColumnsChangedParam, i)
         break
       }
     }
     #Stat codes:
-    for(j in 1:length(chunks)){
-      if(paste0("s",chunks[j]) %in% names(Conv)){
+    for(j in 1:length(chunks)) {
+      if(paste0("s",chunks[j]) %in% names(Conv)) {
         chunks[j] <- as.character(Conv[paste0("s",chunks[j])])
         chunks <- chunks[chunks != ""]
-        Cnames[i] <- paste(chunks, collapse ="_")
+        Cnames[i] <- paste(chunks, collapse = "_")
         break
       }
     }
