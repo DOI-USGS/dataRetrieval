@@ -39,9 +39,9 @@ importNGWMN <- function(input, asDateTime=FALSE, tz = "UTC") {
   }
   
   raw <- FALSE
-  if(class(input) == "character" && file.exists(input)) {
+  if(is.character(input) && file.exists(input)) {
     returnedDoc <- read_xml(input)
-  } else if(class(input) == 'raw') {
+  } else if(is.raw(input)) {
     returnedDoc <- read_xml(input)
     raw <- TRUE
   } else {

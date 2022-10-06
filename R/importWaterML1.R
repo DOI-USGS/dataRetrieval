@@ -428,9 +428,9 @@ empty_col <- function(column_type) {
 
 check_if_xml <- function(obs_url) {
 
-  if(class(obs_url) == "character" && file.exists(obs_url)) {
+  if(is.character(obs_url) && file.exists(obs_url)) {
     returnedDoc <- read_xml(obs_url)
-  } else if(class(obs_url) == 'raw') {
+  } else if(is.raw(obs_url)) {
     returnedDoc <- read_xml(obs_url)
   } else if(inherits(obs_url, c("xml_node", "xml_nodeset"))) {
     returnedDoc <- obs_url
