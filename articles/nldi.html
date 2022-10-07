@@ -129,9 +129,9 @@ Gas stations between UCSB and UCLA
 </ol>
 <p>Each of these is discussed below using the following packages:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>         <span class="co"># Data frame manipulation</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>       <span class="co"># Plotting</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span>     <span class="co"># Arranging plots</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> <span class="co"># Data frame manipulation</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span> <span class="co"># Plotting</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span> <span class="co"># Arranging plots</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span> <span class="co"># The star of the show!</span></span></code></pre></div>
 <hr>
 </div>
@@ -325,11 +325,14 @@ NLDI Navigation Options
 <p>One or more modes of navigation can be supplied to the <code>nav</code> argument. For example we can ask to navigate along the upper mainstem (UM) from COMID 101.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarize.nldi</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">input</span><span class="op">)</span>,</span>
-<span>             class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">class</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>             row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">input</span><span class="op">)</span>,</span>
+<span>    class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">class</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>    row.names <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>feature_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">class</span> <span class="op">==</span> <span class="st">"sf"</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">nrow</span><span class="op">)</span>,</span>
-<span>                                  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">length</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">length</span><span class="op">)</span></span>
+<span>    <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span></span>
@@ -429,9 +432,11 @@ NLDI Navigation Options
 <p>In this example we will use that location as the origin, navigate upstream along the mainstem, search for NWIS gauges, and use the identified siteIDs to query streamflow records from January 1<sup>st</sup>, 2020 to the current day.</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Upstream nwis, flowlines, and basin</span></span>
-<span><span class="va">fountainCreek</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">104.780837</span>, <span class="fl">38.786796</span><span class="op">)</span>,</span>
-<span>                          nav <span class="op">=</span> <span class="st">"UM"</span>,</span>
-<span>                          find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"basin"</span>, <span class="st">"flowlines"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">fountainCreek</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span></span>
+<span>  location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">104.780837</span>, <span class="fl">38.786796</span><span class="op">)</span>,</span>
+<span>  nav <span class="op">=</span> <span class="st">"UM"</span>,</span>
+<span>  find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"basin"</span>, <span class="st">"flowlines"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">summarize.nldi</span><span class="op">(</span><span class="va">fountainCreek</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;           name class feature_count</span></span>
@@ -443,40 +448,51 @@ NLDI Navigation Options
 <code class="sourceCode R"><span><span class="co"># Identify NLDI sites with daily values "dv"</span></span>
 <span><span class="co">#     and record streamflow ("00060")</span></span>
 <span><span class="co">#     and recorded flows in 2020</span></span>
-<span><span class="va">find</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>sites <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="st">""</span>,</span>
-<span>                                  <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span><span class="op">$</span><span class="va">identifier</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">data_type_cd</span> <span class="op">==</span> <span class="st">"dv"</span>,</span>
-<span>         <span class="va">parm_cd</span> <span class="op">==</span> <span class="st">"00060"</span>,</span>
-<span>         <span class="va">end_date</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2020-01-01"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>identifier  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="va">site_no</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">find</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>sites <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span></span>
+<span>  <span class="st">"USGS-"</span>, <span class="st">""</span>,</span>
+<span>  <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span><span class="op">$</span><span class="va">identifier</span></span>
+<span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">data_type_cd</span> <span class="op">==</span> <span class="st">"dv"</span>,</span>
+<span>    <span class="va">parm_cd</span> <span class="op">==</span> <span class="st">"00060"</span>,</span>
+<span>    <span class="va">end_date</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2020-01-01"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>identifier <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="va">site_no</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span><span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span>, by <span class="op">=</span> <span class="st">"identifier"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract Streamflow for identified sites</span></span>
 <span><span class="va">Q</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">find</span><span class="op">$</span><span class="va">site_no</span>,</span>
-<span>                parameterCd <span class="op">=</span> <span class="st">"00060"</span>,</span>
-<span>                startDate <span class="op">=</span> <span class="st">"2020-01-01"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  parameterCd <span class="op">=</span> <span class="st">"00060"</span>,</span>
+<span>  startDate <span class="op">=</span> <span class="st">"2020-01-01"</span></span>
+<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/renameNWISColumns.html">renameNWISColumns</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot!</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Q</span>,</span>
-<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Date</span>, y <span class="op">=</span> <span class="va">Flow</span>, col <span class="op">=</span> <span class="va">site_no</span><span class="op">)</span>,</span>
-<span>            size <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">Q</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Date</span>, y <span class="op">=</span> <span class="va">Flow</span>, col <span class="op">=</span> <span class="va">site_no</span><span class="op">)</span>,</span>
+<span>    size <span class="op">=</span> <span class="fl">.5</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">site_no</span>, nrow <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fountainCreek</span><span class="op">$</span><span class="va">basin</span>, col <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_flowlines</span>, col <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">find</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">site_no</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"2020 Streamflow"</span>,</span>
-<span>       caption <span class="op">=</span> <span class="st">"Fountain Creek, Colorado"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span>,</span>
-<span>         plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, hjust <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"2020 Streamflow"</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Fountain Creek, Colorado"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>    legend.position <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, hjust <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="nldi_files/figure-html/unnamed-chunk-22-1.png" width="75%" style="display: block; margin: auto;"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

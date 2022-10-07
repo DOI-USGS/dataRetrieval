@@ -182,8 +182,10 @@ WQP
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">nwisData_USED</span> <span class="op">&lt;-</span> <span class="va">nwisData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">site_no</span>, <span class="va">startDateTime</span>, <span class="va">parm_cd</span>,</span>
-<span>         <span class="va">hyd_cond_cd</span>, <span class="va">remark_cd</span>, <span class="va">result_va</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    <span class="va">site_no</span>, <span class="va">startDateTime</span>, <span class="va">parm_cd</span>,</span>
+<span>    <span class="va">hyd_cond_cd</span>, <span class="va">remark_cd</span>, <span class="va">result_va</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">startDateTime</span>, <span class="va">parm_cd</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nwisData_USED</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -250,12 +252,14 @@ WQP
 <p>If we explore the output from WQP, we can try to find the columns that include the same information:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wqpData_USED</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>site_no <span class="op">=</span> <span class="va">MonitoringLocationIdentifier</span>,</span>
-<span>         startDateTime <span class="op">=</span> <span class="va">ActivityStartDateTime</span>,</span>
-<span>         parm_cd <span class="op">=</span> <span class="va">USGSPCode</span>,</span>
-<span>         hyd_cond_cd <span class="op">=</span> <span class="va">HydrologicCondition</span>,</span>
-<span>         remark_cd <span class="op">=</span> <span class="va">ResultDetectionConditionText</span>,</span>
-<span>         result_va <span class="op">=</span> <span class="va">ResultMeasureValue</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    site_no <span class="op">=</span> <span class="va">MonitoringLocationIdentifier</span>,</span>
+<span>    startDateTime <span class="op">=</span> <span class="va">ActivityStartDateTime</span>,</span>
+<span>    parm_cd <span class="op">=</span> <span class="va">USGSPCode</span>,</span>
+<span>    hyd_cond_cd <span class="op">=</span> <span class="va">HydrologicCondition</span>,</span>
+<span>    remark_cd <span class="op">=</span> <span class="va">ResultDetectionConditionText</span>,</span>
+<span>    result_va <span class="op">=</span> <span class="va">ResultMeasureValue</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">startDateTime</span>, <span class="va">parm_cd</span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">wqpData_USED</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -325,23 +329,28 @@ WQP
 <p>The result_va in the NWIS service came back with a value. However, the data is actually censored, meaning we only know it’s below the detection limit. With some lazier coding, it might have been really easy to not realize these values are left-censored. So, while we could substitute the detection levels into the measured values if there’s an <code>NA</code> in the measured value, this might be a great time to update your workflow to handle censored values more robustly. We are probably interested in maintaining the detection level in another column.</p>
 <p>For this theoretical workflow, let’s think about what we are trying to find out. Let’s say that we want to know if a value is “left-censored” or not. Maybe in this case, what would make the most sense is to have a column that is a logical TRUE/FALSE. For this example, there was only the text “Not Detected” in the “ResultDetectionConditionText” column PLEASE NOTE that other data may include different messages about detection conditions, you will need to examine your data carefully. Here’s an example from the <code>EGRET</code> package on how to decide if a “ResultDetectionConditionText” should be considered a censored value:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">censored_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Not Detected"</span>,</span>
-<span>                   <span class="st">"Non-Detect"</span>,</span>
-<span>                   <span class="st">"Non Detect"</span>,</span>
-<span>                   <span class="st">"Detected Not Quantified"</span>,</span>
-<span>                   <span class="st">"Below Quantification Limit"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">censored_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Not Detected"</span>,</span>
+<span>  <span class="st">"Non-Detect"</span>,</span>
+<span>  <span class="st">"Non Detect"</span>,</span>
+<span>  <span class="st">"Detected Not Quantified"</span>,</span>
+<span>  <span class="st">"Below Quantification Limit"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">wqpData_USED</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>left_censored <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">censored_text</span>, collapse <span class="op">=</span> <span class="st">"|"</span><span class="op">)</span>,</span>
-<span>                               <span class="va">ResultDetectionConditionText</span>,</span>
-<span>                               ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>site_no <span class="op">=</span> <span class="va">MonitoringLocationIdentifier</span>,</span>
-<span>         startDateTime <span class="op">=</span> <span class="va">ActivityStartDateTime</span>,</span>
-<span>         parm_cd <span class="op">=</span> <span class="va">USGSPCode</span>,</span>
-<span>         <span class="va">left_censored</span>,</span>
-<span>         result_va <span class="op">=</span> <span class="va">ResultMeasureValue</span>,</span>
-<span>         detection_level <span class="op">=</span> <span class="va">DetectionQuantitationLimitMeasure.MeasureValue</span>,</span>
-<span>         dl_units <span class="op">=</span> <span class="va">DetectionQuantitationLimitMeasure.MeasureUnitCode</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="va">ResultDetectionConditionText</span>,</span>
+<span>    ignore.case <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    site_no <span class="op">=</span> <span class="va">MonitoringLocationIdentifier</span>,</span>
+<span>    startDateTime <span class="op">=</span> <span class="va">ActivityStartDateTime</span>,</span>
+<span>    parm_cd <span class="op">=</span> <span class="va">USGSPCode</span>,</span>
+<span>    <span class="va">left_censored</span>,</span>
+<span>    result_va <span class="op">=</span> <span class="va">ResultMeasureValue</span>,</span>
+<span>    detection_level <span class="op">=</span> <span class="va">DetectionQuantitationLimitMeasure.MeasureValue</span>,</span>
+<span>    dl_units <span class="op">=</span> <span class="va">DetectionQuantitationLimitMeasure.MeasureUnitCode</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">startDateTime</span>, <span class="va">parm_cd</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">wqpData_USED</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -422,11 +431,14 @@ WQP
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wqpData_USED_codes</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ResultMeasure.MeasureUnitCode</span><span class="op">)</span>,</span>
-<span>                             <span class="va">DetectionQuantitationLimitMeasure.MeasureUnitCode</span>,</span>
-<span>                             <span class="va">ResultMeasure.MeasureUnitCode</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>parm_cd <span class="op">=</span> <span class="va">USGSPCode</span>,</span>
-<span>         <span class="va">CharacteristicName</span>, <span class="va">ResultSampleFractionText</span>,</span>
-<span>         <span class="va">units</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="va">DetectionQuantitationLimitMeasure.MeasureUnitCode</span>,</span>
+<span>    <span class="va">ResultMeasure.MeasureUnitCode</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    parm_cd <span class="op">=</span> <span class="va">USGSPCode</span>,</span>
+<span>    <span class="va">CharacteristicName</span>, <span class="va">ResultSampleFractionText</span>,</span>
+<span>    <span class="va">units</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">wqpData_USED_codes</span><span class="op">)</span></span></code></pre></div>
@@ -467,8 +479,10 @@ WQP
 <p>If there are USGS codes that you are using in your analysis, begin to move away from those codes, and move to the text. In the data we are looking at here:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wqpData_USED_codes</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">HydrologicCondition</span>, <span class="va">HydrologicEvent</span>,</span>
-<span>         <span class="va">ActivityTypeCode</span>, <span class="va">ActivityMediaName</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    <span class="va">HydrologicCondition</span>, <span class="va">HydrologicEvent</span>,</span>
+<span>    <span class="va">ActivityTypeCode</span>, <span class="va">ActivityMediaName</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">wqpData_USED_codes</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -569,8 +583,10 @@ WQP
 <p>This function will continue to work for any service except “qw” (water quality discrete data). “qw” results will no longer be returned. This function is used to discover what water quality data is available.</p>
 <p>The function to replace this functionality is <code>whatWQPdata</code>:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">whatNWIS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>siteNumber <span class="op">=</span> <span class="va">site_ids</span>,</span>
-<span>                         service <span class="op">=</span> <span class="st">"qw"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">whatNWIS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span></span>
+<span>  siteNumber <span class="op">=</span> <span class="va">site_ids</span>,</span>
+<span>  service <span class="op">=</span> <span class="st">"qw"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>Warning message:                                                                                               
 NWIS qw web services are being retired. Please see the vignette 
 'Changes to NWIS QW services' for more information.</code></pre>
@@ -583,15 +599,19 @@ NWIS qw web services are being retired. Please see the vignette
 </h2>
 <p>If you get your water quality data from the <code>readNWISdata</code> function, you will receive a warning. Note, this is <em>only</em> for the “qwdata” service. All other web services are not being deprecated, and should receive no warning.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">qwData</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdata.html">readNWISdata</a></span><span class="op">(</span>state_cd <span class="op">=</span> <span class="st">"WI"</span>,</span>
-<span>                       startDate <span class="op">=</span> <span class="st">"2000-01-01"</span>,</span>
-<span>                       drain_area_va_min <span class="op">=</span> <span class="fl">50</span>, qw_count_nu <span class="op">=</span> <span class="fl">50</span>,</span>
-<span>                       qw_attributes <span class="op">=</span> <span class="st">"expanded"</span>,</span>
-<span>                       qw_sample_wide <span class="op">=</span> <span class="st">"wide"</span>,</span>
-<span>                       list_of_search_criteria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"state_cd"</span>,</span>
-<span>                                                   <span class="st">"drain_area_va"</span>,</span>
-<span>                                                   <span class="st">"obs_count_nu"</span><span class="op">)</span>,</span>
-<span>                       service <span class="op">=</span> <span class="st">"qw"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">qwData</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdata.html">readNWISdata</a></span><span class="op">(</span></span>
+<span>  state_cd <span class="op">=</span> <span class="st">"WI"</span>,</span>
+<span>  startDate <span class="op">=</span> <span class="st">"2000-01-01"</span>,</span>
+<span>  drain_area_va_min <span class="op">=</span> <span class="fl">50</span>, qw_count_nu <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  qw_attributes <span class="op">=</span> <span class="st">"expanded"</span>,</span>
+<span>  qw_sample_wide <span class="op">=</span> <span class="st">"wide"</span>,</span>
+<span>  list_of_search_criteria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"state_cd"</span>,</span>
+<span>    <span class="st">"drain_area_va"</span>,</span>
+<span>    <span class="st">"obs_count_nu"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  service <span class="op">=</span> <span class="st">"qw"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>Warning message:
 NWIS qw web services are being retired. Please see the vignette 
 'Changes to NWIS QW services' for more information. </code></pre>
