@@ -261,9 +261,10 @@ tableData <- data.frame(
   units = c("deg C", "ft<sup>3</sup>/s", "ft<sup>3</sup>/s", "uS/cm @25C", "mg/l", "tons/day"),
   stringsAsFactors = FALSE)
 
-
+# nolint start
 kable(tableData,
           caption = "Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]")
+# nolint end
 ```
 
 See [Creating Tables](#creating-tables-in-microsoft-software-from-r) for instructions on converting an R data frame to a table in Microsoft&#174; software Excel or Word to display a data availability table similar to Table 4. Excel, Microsoft, PowerPoint, Windows, and Word are registered trademarks of Microsoft Corporation in the United States and other countries.
@@ -509,16 +510,16 @@ sites <- whatNWISsites(bBox = c(-83.0, 36.5, -81.0, 38.5),
 For NWIS data, the function `readNWISdata` can be used. The argument listed in the R help file is `...` and `service` (only for data requests). Table 5 describes the services are available.
 
 ```{r echo=FALSE}
-
+# nolint start
 Service <- c("dv", "iv", "gwlevels", "qwdata", "measurements", "peak", "stat")
 Description <- c("Daily", "Instantaneous", "Groundwater Levels", "Water Quality", "Surface Water Measurements", "Peak Flow", "Statistics Service")
 URL <- c("<a href='https://waterservices.usgs.gov/rest/DV-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/DV-Test-Tool.html<a>",
-         "<a href='https://waterservices.usgs.gov/rest/IV-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/IV-Test-Tool.html<a>",
-         "<a href='https://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html<a>",
-         "<a href='https://nwis.waterdata.usgs.gov/nwis/qwdata' target='_blank'>https://nwis.waterdata.usgs.gov/nwis/qwdata<a>",
-         "<a href='https://waterdata.usgs.gov/nwis/measurements/' target='_blank'>https://waterdata.usgs.gov/nwis/measurements/<a>",
-         "<a href='https://nwis.waterdata.usgs.gov/usa/nwis/peak/' target='_blank'>https://nwis.waterdata.usgs.gov/usa/nwis/peak/<a>",
-         "<a href='https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html<a>")
+"<a href='https://waterservices.usgs.gov/rest/IV-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/IV-Test-Tool.html<a>",
+"<a href='https://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html<a>",
+"<a href='https://nwis.waterdata.usgs.gov/nwis/qwdata' target='_blank'>https://nwis.waterdata.usgs.gov/nwis/qwdata<a>",
+"<a href='https://waterdata.usgs.gov/nwis/measurements/' target='_blank'>https://waterdata.usgs.gov/nwis/measurements/<a>",
+"<a href='https://nwis.waterdata.usgs.gov/usa/nwis/peak/' target='_blank'>https://nwis.waterdata.usgs.gov/usa/nwis/peak/<a>",
+"<a href='https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html<a>")
 
 tableData <- data.frame(Service,
                         Description,
@@ -528,7 +529,7 @@ tableData <- data.frame(Service,
 
 kable(tableData,
           caption = "Table 5: NWIS general data calls")
-
+# nolint end
 ```
 
 

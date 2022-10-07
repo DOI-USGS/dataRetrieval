@@ -74,7 +74,9 @@ statData.storm <- statData[statData$month_nu == month(storm.date) &
 finalJoin <- left_join(storm.data, statData.storm)
 finalJoin <- left_join(finalJoin, sites)
 
-finalJoin[, grep("_va", names(finalJoin))] <- sapply(finalJoin[, grep("_va", names(finalJoin))], function(x) as.numeric(x))
+finalJoin[, grep("_va", names(finalJoin))] <- sapply(finalJoin[,
+                              grep("_va", names(finalJoin))],
+                              function(x) as.numeric(x))
 
 #remove sites without current data
 finalJoin <- finalJoin[!is.na(finalJoin$Flow), ]
