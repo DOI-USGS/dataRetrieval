@@ -130,7 +130,7 @@ legend("bottomleft", inset = c(0.01, .01),
        pch = 19, cex = 0.75, pt.cex = 1.2,
        col = legend.colors,
        ncol = 2)
-map.scale(ratio = FALSE,cex = 0.75,
+map.scale(ratio = FALSE, cex = 0.75,
           grconvertX(.07, "npc"), 
           grconvertY(.2, "npc"))
 text("*Other percentiles not available for these sites", cex = 0.75,
