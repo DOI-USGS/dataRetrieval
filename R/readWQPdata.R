@@ -1,20 +1,20 @@
 #' General Data Import from Water Quality Portal
 #'
 #' Imports data from Water Quality Portal web service. This function gets the data from here: \url{https://www.waterqualitydata.us}.
-#' because it allows for other agencies rather than the USGS.  
+#' because it allows for other agencies rather than the USGS.
 #'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied. 
+#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
 #' @param querySummary logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the \dots argument
-#' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+#' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 #' Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-#' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+#' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 #' for more information on time zones.
 #' @param ignore_attributes logical to choose to ignore fetching site and parameter attributes. Default is \code{FALSE}.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
-#' \tabular{lll}{ 
+#' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
 #' OrganizationIdentifier \tab character \tab  A designator used to uniquely identify a unique business establishment within a context.\cr
 #' OrganizationFormalName \tab character \tab  The legal designator (i.e. formal name) of an organization.\cr
@@ -83,7 +83,7 @@
 #' }
 #' * = elements only in NWIS
 #' + = elements only in STORET
-#' 
+#'
 #' There are also several useful attributes attached to the data frame:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -96,159 +96,202 @@
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' nameToUse <- "pH"
-#' pHData <- readWQPdata(siteid= "USGS-04024315",characteristicName=nameToUse)
-#' pHData_summary <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),
-#'      characteristicName=nameToUse, querySummary=TRUE)
+#' pHData <- readWQPdata(siteid = "USGS-04024315", characteristicName = nameToUse)
+#' pHData_summary <- readWQPdata(
+#'   bBox = c(-90.10, 42.67, -88.64, 43.35),
+#'   characteristicName = nameToUse, querySummary = TRUE
+#' )
 #' startDate <- as.Date("2013-01-01")
-#' secchi.names = c("Depth, Secchi disk depth", 
-#'                  "Depth, Secchi disk depth (choice list)", 
-#'                  "Secchi Reading Condition (choice list)", 
-#'                  "Water transparency, Secchi disc")
-#' args <- list('startDateLo' = startDate, 
-#'              'startDateHi' = "2013-12-31", 
-#'               statecode= "WI", 
-#'               characteristicName=secchi.names)
-#' 
-#' wqp.data <- readWQPdata(args)   
-#' 
-#' args_2 <- list('startDateLo' = startDate, 
-#'              'startDateHi' = "2013-12-31", 
-#'               statecode= "WI", 
-#'               characteristicName=secchi.names,
-#'               querySummary=TRUE)
+#' secchi.names <- c(
+#'   "Depth, Secchi disk depth",
+#'   "Depth, Secchi disk depth (choice list)",
+#'   "Secchi Reading Condition (choice list)",
+#'   "Water transparency, Secchi disc"
+#' )
+#' args <- list(
+#'   "startDateLo" = startDate,
+#'   "startDateHi" = "2013-12-31",
+#'   statecode = "WI",
+#'   characteristicName = secchi.names
+#' )
 #'
-#' wqp.summary <- readWQPdata(args_2) 
-#' 
-#' arg_3 <- list('startDateLo' = startDate, 
-#'              'startDateHi' = "2013-12-31")
-#' arg_4 <- list(statecode= "WI", 
-#'               characteristicName=secchi.names)
-#' wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
-#' wqp.summary_WI <- readWQPdata(arg_3, statecode= "WI", 
-#'                               characteristicName=secchi.names, 
-#'                               querySummary=TRUE)
-#'                               
+#' wqp.data <- readWQPdata(args)
+#'
+#' args_2 <- list(
+#'   "startDateLo" = startDate,
+#'   "startDateHi" = "2013-12-31",
+#'   statecode = "WI",
+#'   characteristicName = secchi.names,
+#'   querySummary = TRUE
+#' )
+#'
+#' wqp.summary <- readWQPdata(args_2)
+#'
+#' arg_3 <- list(
+#'   "startDateLo" = startDate,
+#'   "startDateHi" = "2013-12-31"
+#' )
+#' arg_4 <- list(
+#'   statecode = "WI",
+#'   characteristicName = secchi.names
+#' )
+#' wqp.summary <- readWQPdata(arg_3, arg_4, querySummary = TRUE)
+#' wqp.summary_WI <- readWQPdata(arg_3,
+#'   statecode = "WI",
+#'   characteristicName = secchi.names,
+#'   querySummary = TRUE
+#' )
+#'
 #' # querying by county
-#' DeWitt <- readWQPdata(statecode = "Illinois", 
-#'                       countycode= "DeWitt", 
-#'                       characteristicName = "Nitrogen") 
-#'                                 
+#' DeWitt <- readWQPdata(
+#'   statecode = "Illinois",
+#'   countycode = "DeWitt",
+#'   characteristicName = "Nitrogen"
+#' )
+#'
 #' # Data profiles: "Organization Data"
-#' org_data <- readWQPdata(statecode = "WI",
-#'                         countycode = "Dane",
-#'                         service = "Organization")
-#' 
-#' # Data profiles: "Site Data Only" 
-#' site_data <- readWQPdata(statecode = "WI",
-#'                          countycode = "Dane",
-#'                          service = "Station")
-#'                          
+#' org_data <- readWQPdata(
+#'   statecode = "WI",
+#'   countycode = "Dane",
+#'   service = "Organization"
+#' )
+#'
+#' # Data profiles: "Site Data Only"
+#' site_data <- readWQPdata(
+#'   statecode = "WI",
+#'   countycode = "Dane",
+#'   service = "Station"
+#' )
+#'
 #' # Data profiles: "Project Data"
-#' project_data <- readWQPdata(statecode = "WI",
-#'                          countycode = "Dane",
-#'                          service = "Project")
-#'                          
+#' project_data <- readWQPdata(
+#'   statecode = "WI",
+#'   countycode = "Dane",
+#'   service = "Project"
+#' )
+#'
 #' # Data profiles: "Project Monitoring Location Weighting Data"
-#' proj_mlwd <- readWQPdata(statecode = "WI",
-#'                          countycode = "Dane",
-#'                          service = "ProjectMonitoringLocationWeighting")
-#'                          
+#' proj_mlwd <- readWQPdata(
+#'   statecode = "WI",
+#'   countycode = "Dane",
+#'   service = "ProjectMonitoringLocationWeighting"
+#' )
+#'
 #' # Data profiles: "Sample Results (physical/chemical metadata)":
-#' samp_data <- readWQPdata(siteid = "USGS-04024315",
-#'                          dataProfile = "resultPhysChem")
-#'                          
+#' samp_data <- readWQPdata(
+#'   siteid = "USGS-04024315",
+#'   dataProfile = "resultPhysChem"
+#' )
+#'
 #' # Data profiles: "Sample Results (biological metadata)"
-#' samp_bio <- readWQPdata(siteid= "USGS-04024315",
-#'                         dataProfile = "biological")
-#'                          
+#' samp_bio <- readWQPdata(
+#'   siteid = "USGS-04024315",
+#'   dataProfile = "biological"
+#' )
+#'
 #' # Data profiles: "Sample Results (narrow)"
-#' samp_narrow <- readWQPdata(siteid= "USGS-04024315",
-#'                            dataProfile = "narrowResult")
-#'                            
+#' samp_narrow <- readWQPdata(
+#'   siteid = "USGS-04024315",
+#'   dataProfile = "narrowResult"
+#' )
+#'
 #' # Data profiles: "Sampling Activity"
-#' samp_activity <- readWQPdata(siteid= "USGS-04024315",
-#'                              dataProfile = "activityAll")
-#'                              
+#' samp_activity <- readWQPdata(
+#'   siteid = "USGS-04024315",
+#'   dataProfile = "activityAll"
+#' )
+#'
 #' # Data profile: "Sampling Activity Metrics"
-#' act_metrics <- readWQPdata(statecode = "WI",
-#'                            countycode = "Dane",
-#'                            service = "ActivityMetric")
-#'                            
+#' act_metrics <- readWQPdata(
+#'   statecode = "WI",
+#'   countycode = "Dane",
+#'   service = "ActivityMetric"
+#' )
+#'
 #' # Data profile: "Result Detection Quantitation Limit Data"
-#' dl_data <- readWQPdata(siteid= "USGS-04024315",
-#'                        service = "ResultDetectionQuantitationLimit")
+#' dl_data <- readWQPdata(
+#'   siteid = "USGS-04024315",
+#'   service = "ResultDetectionQuantitationLimit"
+#' )
 #' }
-readWQPdata <- function(..., querySummary=FALSE, tz= "UTC", 
+readWQPdata <- function(...,
+                        querySummary = FALSE,
+                        tz = "UTC",
                         ignore_attributes = FALSE) {
-  
   tz <- match.arg(tz, OlsonNames())
-  
+
   valuesList <- readWQPdots(...)
-  
+
   service <- valuesList$service
-  
+
   values <- sapply(valuesList$values, function(x) URLencode(x, reserved = TRUE))
 
-  baseURL <- drURL(service, arg.list=values)
+  baseURL <- drURL(service, arg.list = values)
 
   baseURL <- appendDrURL(baseURL, mimeType = "tsv")
 
-  if(querySummary) {
+  if (querySummary) {
     retquery <- getQuerySummary(baseURL)
     return(retquery)
   } else {
-  
-    retval <- importWQP(baseURL, zip = values["zip"] == "yes", tz=tz)
-    
-    if(!all(is.na(retval)) & !ignore_attributes) {
-      
-      siteInfo <- suppressWarnings(whatWQPsites(..., service = "Station")) #doesn't alway have a header count returned...which is probably going away soon anyway
-      
-      if(all(c("MonitoringLocationName",
-               "OrganizationIdentifier",
-               "MonitoringLocationIdentifier",
-               "LatitudeMeasure",
-               "LongitudeMeasure",
-               "HUCEightDigitCode") %in% names(siteInfo))) {
-        siteInfoCommon <- data.frame(station_nm=siteInfo$MonitoringLocationName,
-                                     agency_cd=siteInfo$OrganizationIdentifier,
-                                     site_no=siteInfo$MonitoringLocationIdentifier,
-                                     dec_lat_va=siteInfo$LatitudeMeasure,
-                                     dec_lon_va=siteInfo$LongitudeMeasure,
-                                     hucCd=siteInfo$HUCEightDigitCode,
-                                     stringsAsFactors=FALSE)
-        
-        siteInfo <- cbind(siteInfoCommon, siteInfo)        
+    retval <- importWQP(baseURL, zip = values["zip"] == "yes", tz = tz)
+
+    if (!all(is.na(retval)) && !ignore_attributes) {
+      siteInfo <- suppressWarnings(whatWQPsites(..., service = "Station"))
+
+      if (all(c(
+        "MonitoringLocationName",
+        "OrganizationIdentifier",
+        "MonitoringLocationIdentifier",
+        "LatitudeMeasure",
+        "LongitudeMeasure",
+        "HUCEightDigitCode"
+      ) %in% names(siteInfo))) {
+        siteInfoCommon <- data.frame(
+          station_nm = siteInfo$MonitoringLocationName,
+          agency_cd = siteInfo$OrganizationIdentifier,
+          site_no = siteInfo$MonitoringLocationIdentifier,
+          dec_lat_va = siteInfo$LatitudeMeasure,
+          dec_lon_va = siteInfo$LongitudeMeasure,
+          hucCd = siteInfo$HUCEightDigitCode,
+          stringsAsFactors = FALSE
+        )
+
+        siteInfo <- cbind(siteInfoCommon, siteInfo)
       }
-      
+
       attr(retval, "siteInfo") <- siteInfo
-      
-      if(all(c("CharacteristicName",
-               "ResultMeasure.MeasureUnitCode",
-               "ResultSampleFractionText") %in% names(retval))) {
-        retvalVariableInfo <- retval[,c("CharacteristicName",
-                                        "ResultMeasure.MeasureUnitCode",
-                                        "ResultSampleFractionText")]
+
+      if (all(c(
+        "CharacteristicName",
+        "ResultMeasure.MeasureUnitCode",
+        "ResultSampleFractionText"
+      ) %in% names(retval))) {
+        retvalVariableInfo <- retval[, c(
+          "CharacteristicName",
+          "ResultMeasure.MeasureUnitCode",
+          "ResultSampleFractionText"
+        )]
         retvalVariableInfo <- unique(retvalVariableInfo)
-        
-        variableInfo <- data.frame(characteristicName=retval$CharacteristicName,
-                                   param_units=retval$ResultMeasure.MeasureUnitCode,
-                                   valueType=retval$ResultSampleFractionText,
-                                   stringsAsFactors=FALSE)
-        
+
+        variableInfo <- data.frame(
+          characteristicName = retval$CharacteristicName,
+          param_units = retval$ResultMeasure.MeasureUnitCode,
+          valueType = retval$ResultSampleFractionText,
+          stringsAsFactors = FALSE
+        )
+
         attr(retval, "variableInfo") <- variableInfo
       }
-
     } else {
-      if(!ignore_attributes) {
+      if (!ignore_attributes) {
         message("The following url returned no data:\n")
-        message(baseURL)        
+        message(baseURL)
       }
-
     }
     attr(retval, "queryTime") <- Sys.time()
     attr(retval, "url") <- baseURL
-    
+
     return(retval)
   }
 }

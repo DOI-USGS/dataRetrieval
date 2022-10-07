@@ -13,8 +13,8 @@
 #' LazyLoad: \tab yes\cr
 #' }
 #'
-#' Retrieval functions for USGS and EPA hydrologic and water quality data. 
-#' 
+#' Retrieval functions for USGS and EPA hydrologic and water quality data.
+#'
 #' Please see \url{https://pubs.er.usgs.gov/publication/tm4A10} for more information.
 #'
 #' @name dataRetrieval
@@ -29,7 +29,7 @@ NULL
 
 #' List of USGS parameter codes
 #'
-#' Complete list of USGS parameter codes as of Dec. 20, 2021. 
+#' Complete list of USGS parameter codes as of Dec. 20, 2021.
 #'
 #' @name parameterCdFile
 #' @return parameterData data frame with information about USGS parameters.
@@ -43,12 +43,12 @@ NULL
 #' srsname \tab character \tab Substance Registry Services Name\cr
 #' parameter_units \tab character \tab Parameter units\cr
 #' }
-#' 
 #'
-#'@docType data
-#'@export parameterCdFile 
-#'@examples
-#'head(parameterCdFile[,1:2])
+#'
+#' @docType data
+#' @export parameterCdFile
+#' @examples
+#' head(parameterCdFile[, 1:2])
 NULL
 
 
@@ -78,17 +78,17 @@ NULL
 #' last_rev_dt \tab character \tab Latest revision of information\cr
 #' }
 #' @docType data
-#' @export pCodeToName 
+#' @export pCodeToName
 #' @keywords internal
 #' @examples
-#' head(pCodeToName[,1:2])
+#' head(pCodeToName[, 1:2])
 NULL
 
 #' US State Code Lookup Table
 #'
 #' Data originally pulled from \url{https://www2.census.gov/geo/docs/reference/state.txt}
 #' on April 1, 2015. On Feb. 11, 2022, the fields were updated with the
-#' file found in inst/extdata, which is used internally with NWIS retrievals. 
+#' file found in inst/extdata, which is used internally with NWIS retrievals.
 #'
 #' @name stateCd
 #' @return stateCd data frame.
@@ -149,12 +149,12 @@ NULL
 #   left_join(stateCd, by = c("STATE", "STATE_NAME"))
 #
 # state_df$STUSAB[state_df$STATE_NAME == "Virgin Islands"] <- "VI"
-# 
+#
 # #Step 3: now get the county names/ids:
 # y <- sapply(states$state_cd, function(x) x[["county_cd"]])
-# 
+#
 # county_df <- data.frame()
-# 
+#
 # for(st in state_df$STATE) {
 #   county_nums <- names(y[[st]])
 #   county_names <- as.character(unlist(y[[st]]))
@@ -163,12 +163,12 @@ NULL
 #                              COUNTY_NAME = county_names)
 #   county_df <- dplyr::bind_rows(county_df, county_df_st)
 # }
-# 
+#
 # county_df_full <- county_df %>%
 #   left_join(select(state_df, STUSAB, STATE), by = "STATE") %>%
 #   left_join(select(countyCd, STATE, STUSAB, COUNTY, COUNTY_ID),
 #             by = c("STATE", "STUSAB", "COUNTY"))
-# 
+#
 # countyCd <- county_df_full
 # stateCd <- state_df
 # save(countyCd, stateCd, parameterCdFile, pCodeToName,

@@ -7,14 +7,16 @@
 importWaterML1(obs_url, asDateTime = FALSE, tz = "UTC")
 }
 \arguments{
-\item{obs_url}{character or raw, containing the url for the retrieval or a file path to the data file, or raw XML.}
+\item{obs_url}{character or raw, containing the url for the retrieval or a
+file path to the data file, or raw XML.}
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
 
-\item{tz}{character to set timezone attribute of datetime. Default converts the datetimes to UTC 
+\item{tz}{character to set timezone attribute of datetime. Default converts the datetimes to UTC
 (properly accounting for daylight savings times based on the data's provided tz_cd column).
-Recommended US values include "UTC", "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
-"America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla".
+Recommended US values include "UTC", "America/New_York", "America/Chicago", "America/Denver",
+"America/Los_Angeles", "America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua",
+"America/Phoenix", and "America/Metlakatla".
 For a complete list, see \url{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}}
 }
 \value{
@@ -23,16 +25,16 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
- \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr 
+ \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr
 \tab character \tab or raw character string (if asDateTime = FALSE) \cr
 tz_cd \tab character \tab The time zone code for  \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
 }
-Note that code and value are repeated for the parameters requested. The names are of the form 
-X_D_P_S, where X is literal, 
-D is an option description of the parameter, 
-P is the parameter code, 
+Note that code and value are repeated for the parameters requested. The names are of the form
+X_D_P_S, where X is literal,
+D is an option description of the parameter,
+P is the parameter code,
 and S is the statistic code (if applicable).
 
 There are also several useful attributes attached to the data frame:
@@ -64,18 +66,24 @@ groundWaterSite <- "431049071324301"
 startGW <- "2013-10-01"
 endGW <- "2014-06-30"
 groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
-          startGW, endGW, service= "gwlevels")
+  startGW, endGW,
+  service = "gwlevels"
+)
 groundWater <- importWaterML1(groundwaterExampleURL)
 groundWater2 <- importWaterML1(groundwaterExampleURL, asDateTime = TRUE)
 
-unitDataURL <- constructNWISURL(site_id,property,
-         "2013-11-03", "2013-11-03", "uv")
+unitDataURL <- constructNWISURL(
+  site_id, property,
+  "2013-11-03", "2013-11-03", "uv"
+)
 unitData <- importWaterML1(unitDataURL, TRUE)
 
 # Two sites, two pcodes, one site has two data descriptors:
 siteNumber <- c("01480015", "04085427")
-obs_url <- constructNWISURL(siteNumber,c("00060", "00010"),
-                            startDate, endDate, "dv")
+obs_url <- constructNWISURL(
+  siteNumber, c("00060", "00010"),
+  startDate, endDate, "dv"
+)
 data <- importWaterML1(obs_url)
 data$dateTime <- as.Date(data$dateTime)
 data <- renameNWISColumns(data)
@@ -84,28 +92,31 @@ attr(data, "url")
 attr(data, "disclaimer")
 
 inactiveSite <- "05212700"
-inactiveSite <- constructNWISURL(inactiveSite, "00060", "2014-01-01", "2014-01-10",'dv')
+inactiveSite <- constructNWISURL(inactiveSite, "00060", "2014-01-01", "2014-01-10", "dv")
 inactiveSite <- importWaterML1(inactiveSite)
 
 inactiveAndAcitive <- c("07334200", "05212700")
-inactiveAndAcitive <- constructNWISURL(inactiveAndAcitive, "00060", "2014-01-01", "2014-01-10",'dv')
+inactiveAndAcitive <- constructNWISURL(inactiveAndAcitive, "00060", "2014-01-01", "2014-01-10", "dv")
 inactiveAndAcitive <- importWaterML1(inactiveAndAcitive)
 
 # Timezone change with specified local timezone:
 tzURL <- constructNWISURL("04027000", c("00300", "63680"), "2011-11-05", "2011-11-07", "uv")
-tzIssue <- importWaterML1(tzURL, 
-                          asDateTime = TRUE, tz = "America/Chicago")
+tzIssue <- importWaterML1(tzURL,
+  asDateTime = TRUE, tz = "America/Chicago"
+)
 
 # raw XML
-url <- constructNWISURL(service = 'dv', siteNumber = '02319300', parameterCd = "00060", 
-                         startDate = "2014-01-01", endDate = "2014-01-01")
-raw <- httr::content(httr::GET(url), as = 'raw')
+url <- constructNWISURL(
+  service = "dv", siteNumber = "02319300", parameterCd = "00060",
+  startDate = "2014-01-01", endDate = "2014-01-01"
+)
+raw <- httr::content(httr::GET(url), as = "raw")
 rawParsed <- importWaterML1(raw)
 }
-filePath <- system.file("extdata", package= "dataRetrieval")
+filePath <- system.file("extdata", package = "dataRetrieval")
 fileName <- "WaterML1Example.xml"
 fullPath <- file.path(filePath, fileName)
-importFile <- importWaterML1(fullPath,TRUE)
+importFile <- importWaterML1(fullPath, TRUE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

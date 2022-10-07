@@ -36,19 +36,19 @@ library(lubridate)
 library(dataRetrieval)
 
 #pick state(s) and date
-states <- c("WI","MN","ND","SD","IA")
+states <- c("WI", "MN", "ND", "SD", "IA")
 storm.date <- "2016-07-12"
 
 #download each state individually
 for(st in states){
 
-  stDV <- renameNWISColumns(readNWISdata(service="dv",
-                                       parameterCd="00060",
+  stDV <- renameNWISColumns(readNWISdata(service = "dv",
+                                       parameterCd = "00060",
                                        stateCd = st,
                                        startDate = storm.date,
                                        endDate = storm.date))
-  if(st != states[1]){
-    storm.data <- full_join(storm.data,stDV)
+  if(st != states[1]) {
+    storm.data <- full_join(storm.data, stDV)
     sites <- full_join(sites, attr(stDV, "siteInfo"))
   } else {
     storm.data <- stDV
@@ -57,27 +57,27 @@ for(st in states){
 }
 
 #retrieve stats data, dealing with 10 site limit to stat service requests
-reqBks <- seq(1,nrow(sites),by=10)
+reqBks <- seq(1, nrow(sites), by = 10)
 statData <- data.frame()
 for(i in reqBks) {
-  getSites <- sites$site_no[i:(i+9)]
+  getSites <- sites$site_no[i:(i + 9)]
   currentSites <- readNWISstat(siteNumbers = getSites,
                                parameterCd = "00060", 
-                    statReportType="daily",
-                    statType=c("p10","p25","p50","p75","p90","mean"))
-  statData <- rbind(statData,currentSites)
+                    statReportType = "daily",
+                    statType = c("p10", "p25", "p50", "p75", "p90", "mean"))
+  statData <- rbind(statData, currentSites)
 }
 
 statData.storm <- statData[statData$month_nu == month(storm.date) & 
-                            statData$day_nu == day(storm.date),]
+                            statData$day_nu == day(storm.date), ]
 
-finalJoin <- left_join(storm.data,statData.storm)
-finalJoin <- left_join(finalJoin,sites) 
+finalJoin <- left_join(storm.data, statData.storm)
+finalJoin <- left_join(finalJoin, sites) 
 
-finalJoin[,grep("_va",names(finalJoin))] <- sapply(finalJoin[,grep("_va",names(finalJoin))], function(x) as.numeric(x))
+finalJoin[, grep("_va", names(finalJoin))] <- sapply(finalJoin[, grep("_va", names(finalJoin))], function(x) as.numeric(x))
 
 #remove sites without current data 
-finalJoin <- finalJoin[!is.na(finalJoin$Flow),] 
+finalJoin <- finalJoin[!is.na(finalJoin$Flow), ] 
 
 
 #classify current discharge values
@@ -97,7 +97,7 @@ finalJoin$class[is.na(finalJoin$class) &
                   finalJoin$Flow < finalJoin$p50_va] <- "yellow"
 
 #take a look at the columns that we will plot later:
-head(finalJoin[,c("dec_lon_va","dec_lat_va","class")])
+head(finalJoin[, c("dec_lon_va", "dec_lat_va", "class")])
 ```
 
 #  Make the static plot
@@ -107,35 +107,35 @@ The base map consists of two plots.  The first makes the county lines with a gra
 ```{r plot, fig.cap="Map discharge percentiles"}
 #convert states from postal codes to full names
 states <- stateCdLookup(states, outputType = "fullName")
-par(pty="s")
-map('county',regions=states,fill=TRUE, col="gray87", lwd=0.5)
-map('state',regions=states,fill=FALSE, lwd=2, add=TRUE)
+par(pty = "s")
+map("county", regions = states, fill = TRUE, col = "gray87", lwd = 0.5)
+map("state", regions = states, fill = FALSE, lwd = 2, add = TRUE)
 points(finalJoin$dec_lon_va,
        finalJoin$dec_lat_va,
-       col=finalJoin$class, pch=19)
-title(paste("Daily discharge value percentile rank\n",storm.date),line=1)
-par(mar=c(5.1, 4.1, 4.1, 6), xpd=TRUE)
+       col = finalJoin$class, pch = 19)
+title(paste("Daily discharge value percentile rank\n", storm.date), line = 1)
+par(mar = c(5.1, 4.1, 4.1, 6), xpd = TRUE)
 
-legend.colors <- c("cyan","yellow",
+legend.colors <- c("cyan", "yellow",
                "red",
-               "green","blue",
+               "green", "blue",
                "navy")
-legend.names <- c("Q > P50*","Q < P50*",
+legend.names <- c("Q > P50*", "Q < P50*",
                 "Q < P25",
-                "P25 < Q < P50","P50 < Q < P75",
+                "P25 < Q < P50", "P50 < Q < P75",
                 "Q > P75")
 
-legend("bottomleft",inset=c(0.01,.01),
-       legend=legend.names,
-       pch=19,cex = 0.75,pt.cex = 1.2,
+legend("bottomleft", inset = c(0.01, .01),
+       legend = legend.names,
+       pch = 19, cex = 0.75, pt.cex = 1.2,
        col = legend.colors,
        ncol = 2)
-map.scale(ratio=FALSE,cex = 0.75,
-          grconvertX(.07,"npc"), 
+map.scale(ratio = FALSE,cex = 0.75,
+          grconvertX(.07, "npc"), 
           grconvertY(.2, "npc"))
-text("*Other percentiles not available for these sites", cex=0.75,
-     x=grconvertX(0.2,"npc"), 
-     y=grconvertY(-0.08, "npc"))
+text("*Other percentiles not available for these sites", cex = 0.75,
+     x = grconvertX(0.2, "npc"), 
+     y = grconvertY(-0.08, "npc"))
 ```
 
 # Make an interactive plot
@@ -145,25 +145,29 @@ Static maps are great for papers and presentations. When possible, interactive m
 ```{r leaflet, fig.height=5}
 library(leaflet)
 
-finalJoin$popup <- with(finalJoin, paste("<b>",station_nm,"</b></br>",
-                                         "Measured Flow:",Flow,"ft3/s</br>",
-                                         "25% historical:",p25_va,"ft3/s</br>",
-                                         "50% historical:",p50_va,"ft3/s</br>",
-                                         "75% historical:",p75_va,"ft3/s"))
+finalJoin$popup <- with(finalJoin, paste("<b>", station_nm, 
+                                         "</b></br>",
+                                         "Measured Flow:", Flow, 
+                                         "ft3/s</br>",
+                                         "25% historical:", p25_va,
+                                         "ft3/s</br>",
+                                         "50% historical:", p50_va,
+                                         "ft3/s</br>",
+                                         "75% historical:", p75_va,
+                                         "ft3/s"))
 
-leafMapStat <- leaflet(data=finalJoin) %>% 
+leafMapStat <- leaflet(data = finalJoin) %>% 
   addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(~dec_lon_va,~dec_lat_va,
-                   color = ~class, radius=3, stroke=FALSE,
+  addCircleMarkers(~dec_lon_va, ~dec_lat_va,
+                   color = ~class, radius = 3, stroke = FALSE,
                    fillOpacity = 0.8, opacity = 0.8,
-                   popup=~popup)
+                   popup = ~popup)
 
 leafMapStat <- addLegend(leafMapStat,
-        position = 'bottomleft',
-        colors= legend.colors,
-        labels= legend.names,
+        position = "bottomleft",
+        colors = legend.colors,
+        labels = legend.names,
         opacity = 0.8)
 
 leafMapStat
-
 ```

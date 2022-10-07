@@ -18,13 +18,13 @@ Determine the correct water year based on a calendar date.
 }
 \details{
 This function calculates a water year based on the USGS
-definition that a water year starts on October 1 of the year before, 
-and ends on September 30. For example, water year 2015 started on 
-2014-10-01 and ended on 2015-09-30. See the USGS definition at 
+definition that a water year starts on October 1 of the year before,
+and ends on September 30. For example, water year 2015 started on
+2014-10-01 and ended on 2015-09-30. See the USGS definition at
 \url{https://water.usgs.gov/nwc/explain_data.html}.
 }
 \examples{
-x <- seq(as.Date("2010-01-01"), as.Date("2010-12-31"), by= "month")
+x <- seq(as.Date("2010-01-01"), as.Date("2010-12-31"), by = "month")
 calcWaterYear(x)
 
 y <- c("2010-01-01", "1994-02", "1980", "2009-11-01", NA)

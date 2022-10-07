@@ -32,15 +32,15 @@ dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_
 only returns remark_cd (remark code) and result_va (result value). Expanded = \code{FALSE} will not give
 sufficient information for unbiased statistical analysis.}
 
-\item{reshape}{logical, reshape the expanded data. If \code{TRUE}, then return a wide data frame with all water-quality in a single row for each sample. 
+\item{reshape}{logical, reshape the expanded data. If \code{TRUE}, then return a wide data frame with all water-quality in a single row for each sample.
 If \code{FALSE} (default), then return a long data frame with each water-quality result in a single row. This
 argument is only applicable to expanded data. Data requested using \code{expanded=FALSE} is always returned in the wide format.}
 
-\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 for more information on time zones.}
 }
 \value{
@@ -49,15 +49,15 @@ A data frame with at least the following columns:
 Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
-sample_dt \tab Date \tab The date the sample was collected \cr 
+sample_dt \tab Date \tab The date the sample was collected \cr
 sample_tm \tab character \tab The reported sample collection time \cr
-startDateTime \tab POSIXct \tab Combining sample_dt and sample_tm, a date/time column is created, and converted into UTC 
+startDateTime \tab POSIXct \tab Combining sample_dt and sample_tm, a date/time column is created, and converted into UTC
 (unless the tz argument specifies a different time zone)\cr
 endDateTime \tab POSIXct \tab If any sample_end_dt and sample_end_dt exist, this column is created similar to startDateTime\cr
 }
 
 Further columns will be included depending on the requested output format (expanded = TRUE or FALSE).
-Columns that end in "_reported" are the originally reported timezones, 
+Columns that end in "_reported" are the originally reported timezones,
 but the "tz_cd" column defines the timezone of any POSIXct columns.
 
 There are also several useful attributes attached to the data frame:
@@ -102,7 +102,7 @@ ISO \tab  Stable Isotopes \cr
 If more than one parameter group is requested, only sites that data for all requested groups are returned.
 }
 \seealso{
-\code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
+\code{\link{readWQPdata}}, \code{\link{whatWQPsites}},
 \code{\link{readWQPqw}}, \code{\link{constructNWISURL}}
 }
 \keyword{USGS}

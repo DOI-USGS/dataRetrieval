@@ -28,6 +28,6 @@ Data pulled from Water Quality Portal on December 20, 2021. The data was pulled 
 \url{https://www.waterqualitydata.us/Codes/public_srsnames/?mimeType=csv}.
 }
 \examples{
-head(pCodeToName[,1:2])
+head(pCodeToName[, 1:2])
 }
 \keyword{internal}

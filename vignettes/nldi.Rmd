@@ -24,7 +24,7 @@ library(knitr)
 opts_chunk$set(warning = FALSE, 
                message = FALSE, 
                out.width = "75%",
-               fig.align = 'center',
+               fig.align = "center",
                comment  = "#>")
 ```
 
@@ -122,7 +122,7 @@ Any NLDI feature found with `get_nldi_source` can be requested by passing a `typ
 
 ```{r}
 # Water Data Exchange 2.0 Site CA_45206
-findNLDI(origin = list("wade" = 'CA_45206'))
+findNLDI(origin = list("wade" = "CA_45206"))
 ```
 
 ### Location (longitude/latitude)
@@ -178,7 +178,7 @@ ggplot() +
 One or more modes of navigation can be supplied to the `nav` argument. For example we can ask to navigate along the upper mainstem (UM) from COMID 101.
 
 ```{r}
-summarize.nldi = function(input){
+summarize.nldi <- function(input) {
   data.frame(name = names(input), 
              class = sapply(input, class)[1], 
              row.names = NULL) %>% 
@@ -278,7 +278,8 @@ summarize.nldi(fountainCreek)
 # Identify NLDI sites with daily values "dv"
 #     and record streamflow ("00060")
 #     and recorded flows in 2020
-find = whatNWISdata(sites = gsub("USGS-", "", fountainCreek$UM_nwissite$identifier)) %>% 
+find <- whatNWISdata(sites = gsub("USGS-", "",
+                                  fountainCreek$UM_nwissite$identifier)) %>% 
   filter(data_type_cd == "dv", 
          parm_cd == "00060",
          end_date > as.Date("2020-01-01")) %>% 

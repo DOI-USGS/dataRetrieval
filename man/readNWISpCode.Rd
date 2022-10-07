@@ -8,11 +8,11 @@ readNWISpCode(parameterCd)
 }
 \arguments{
 \item{parameterCd}{character of USGS parameter codes (or multiple parameter codes).  These are 5 digit number codes,
-more information can be found here: \url{https://help.waterdata.usgs.gov/}. To get a 
+more information can be found here: \url{https://help.waterdata.usgs.gov/}. To get a
 complete list of all current parameter codes in the USGS, use "all" as the input.}
 }
 \value{
-parameterData data frame with the following information: 
+parameterData data frame with the following information:
 \tabular{lll}{
   Name \tab Type \tab Description\cr
   parameter_cd \tab character \tab 5-digit USGS parameter code \cr
@@ -29,11 +29,10 @@ This function gets the data from here: \url{https://nwis.waterdata.usgs.gov/nwis
 }
 \examples{
 
-paramINFO <- readNWISpCode(c('01075','00060','00931'))
-paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
+paramINFO <- readNWISpCode(c("01075", "00060", "00931"))
+paramINFO <- readNWISpCode(c("01075", "00060", "00931", NA))
 \donttest{
 all_codes <- readNWISpCode("all")
-
 }
 }
 \seealso{

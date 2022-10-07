@@ -13,11 +13,13 @@ readNWISdv(
 )
 }
 \arguments{
-\item{siteNumbers}{character USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a character vector.}
+\item{siteNumbers}{character USGS site number.  This is usually an 8 digit number.
+Multiple sites can be requested with a character vector.}
 
 \item{parameterCd}{character of USGS parameter code(s).  This is usually an 5 digit number.}
 
-\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+\item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD.
+Default is "" which indicates
 retrieval for the earliest possible record. Date arguments are always specified in local time.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
@@ -31,14 +33,14 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency \tab character \tab The NWIS code for the agency reporting the data\cr
 site \tab character \tab The USGS site number \cr
-Date \tab Date \tab The date of the value \cr 
+Date \tab Date \tab The date of the value \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
 }
-Note that code and value are repeated for the parameters requested. The names are of the form 
-X_D_P_S, where X is literal, 
-D is an option description of the parameter, 
-P is the parameter code, 
+Note that code and value are repeated for the parameters requested. The names are of the form
+X_D_P_S, where X is literal,
+D is an option description of the parameter,
+P is the parameter code,
 and S is the statistic code (if applicable).
 
 There are also several useful attributes attached to the data frame:
@@ -56,17 +58,21 @@ Imports data from NWIS web service. This function gets the data from here: \url{
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-site_id <- '04085427'
-startDate <- '2012-01-01'
-endDate <- '2012-06-30'
-pCode <- '00060'
+site_id <- "04085427"
+startDate <- "2012-01-01"
+endDate <- "2012-06-30"
+pCode <- "00060"
 \donttest{
-rawDailyQ <- readNWISdv(site_id,pCode, startDate, endDate)
-rawDailyQAndTempMeanMax <- readNWISdv(site_id,c('00010','00060'),
-       startDate, endDate, statCd=c('00001','00003'))
+rawDailyQ <- readNWISdv(site_id, pCode, startDate, endDate)
+rawDailyQAndTempMeanMax <- readNWISdv(site_id, c("00010", "00060"),
+  startDate, endDate,
+  statCd = c("00001", "00003")
+)
 rawDailyQAndTempMeanMax <- renameNWISColumns(rawDailyQAndTempMeanMax)
-rawDailyMultiSites<- readNWISdv(c("01491000", "01645000"),c('00010','00060'),
-       startDate, endDate, statCd=c('00001','00003'))
+rawDailyMultiSites <- readNWISdv(c("01491000", "01645000"), c("00010", "00060"),
+  startDate, endDate,
+  statCd = c("00001", "00003")
+)
 # Site with no data:
 x <- readNWISdv("10258500", "00060", "2014-09-08", "2014-09-14")
 names(attributes(x))

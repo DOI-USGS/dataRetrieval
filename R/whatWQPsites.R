@@ -1,19 +1,19 @@
 #' Site Data Import from Water Quality Portal
 #'
 #' Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
-#' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}. The return from 
+#' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}. The return from
 #' this function returns the basic metadata on WQP sites. It is
 #' generally faster than the \code{\link{whatWQPdata}} function, but does
 #' not return information on what data was collected at the site.
 #'
-#' The \code{readWQPsummary} function has 
+#' The \code{readWQPsummary} function has
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
 #' @keywords data import WQP web service
 #' @rdname wqpSpecials
 #' @name whatWQPsites
 #' @return A data frame with at least the following columns:
-#' \tabular{lll}{ 
+#' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
 #' OrganizationIdentifier \tab character \tab  A designator used to uniquely identify a unique business establishment within a context. \cr
 #' OrganizationFormalName \tab character \tab	The legal designator (i.e. formal name) of an organization. \cr
@@ -53,45 +53,45 @@
 #' queryTime \tab POSIXct \tab Query time \cr
 #' }
 #' * element is only in NWIS
-#' 
+#'
 #' @export
 #' @seealso whatNWISdata
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' 
-#' site1 <- whatWQPsites(siteid="USGS-01594440")
-#' 
+#'
+#' site1 <- whatWQPsites(siteid = "USGS-01594440")
+#'
 #' type <- "Stream"
-#' sites <- whatWQPsites(countycode="US:55:025",
-#'                       characteristicName = "Phosphorus",
-#'                       siteType=type)
-#' 
+#' sites <- whatWQPsites(
+#'   countycode = "US:55:025",
+#'   characteristicName = "Phosphorus",
+#'   siteType = type
+#' )
 #' }
-whatWQPsites <- function(...){
-
+whatWQPsites <- function(...) {
   values <- readWQPdots(...)
-  
+
   values <- values$values
-  
-  if("tz" %in% names(values)){
+
+  if ("tz" %in% names(values)) {
     values <- values[!(names(values) %in% "tz")]
   }
-  
-  if("service" %in% names(values)){
+
+  if ("service" %in% names(values)) {
     values <- values[!(names(values) %in% "service")]
   }
-  
+
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
-    
+
   baseURL <- drURL("Station", arg.list = values)
 
   baseURL <- appendDrURL(baseURL, mimeType = "tsv")
 
-  retval <- importWQP(baseURL, zip=values["zip"] == "yes")
-  
+  retval <- importWQP(baseURL, zip = values["zip"] == "yes")
+
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- baseURL
-  
+
   return(retval)
 }
 
@@ -106,100 +106,109 @@ whatWQPsites <- function(...){
 #' available data at the WQP sites, and some metadata on the sites themselves.
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation}
-#'  for a complete list of options. A list of arguments can also be supplied. 
+#'  for a complete list of options. A list of arguments can also be supplied.
 
 #' @return A data frame with at least the following columns:
-#' \tabular{lll}{ 
+#' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
-#'  "Provider" \tab character \tab Providing database.  \cr            
-#'  "MonitoringLocationIdentifier" \tab character \tab	A designator used to 
-#' describe the unique name, number, or code assigned to identify 
+#'  "Provider" \tab character \tab Providing database.  \cr
+#'  "MonitoringLocationIdentifier" \tab character \tab	A designator used to
+#' describe the unique name, number, or code assigned to identify
 #' the monitoring location.\cr
 #'  "YearSummarized" \tab numeric \tab The year of the summary \cr
-#'  "CharacteristicType" \tab character \tab CharacteristicType  \cr  
-#'  "CharacteristicName" \tab character \tab	The object, property, or substance 
+#'  "CharacteristicType" \tab character \tab CharacteristicType  \cr
+#'  "CharacteristicName" \tab character \tab	The object, property, or substance
 #' which is evaluated or enumerated by either a direct field measurement,
 #' a direct field observation, or by laboratory analysis of material
-#' collected in the field.\cr 
+#' collected in the field.\cr
 #'  "ActivityCount" \tab numeric \tab The number of times the location was sampled \cr
 #'  "ResultCount" \tab numeric \tab The number of individual data results. \cr
 #'  "LastResultSubmittedDate" \tab Date \tab Date when data was last submitted. \cr
-#'  "OrganizationIdentifier" \tab character \tab  A designator used to uniquely 
+#'  "OrganizationIdentifier" \tab character \tab  A designator used to uniquely
 #' identify a unique business establishment within a context.\cr
 #'  "OrganizationFormalName" \tab character \tab  The legal designator
 #' (i.e. formal name) of an organization.\cr
-#'  "MonitoringLocationName \tab character \tab MonitoringLocationName \cr 
+#'  "MonitoringLocationName \tab character \tab MonitoringLocationName \cr
 #'  "MonitoringLocationTypeName" \tab character \tab MonitoringLocationTypeName \cr
 #'  "ResolvedMonitoringLocationTypeName" \tab character \tab  \cr
 #'  "HUCEightDigitCode" \tab character \tab 8-digit HUC id. \cr
 #'  "MonitoringLocationUrl" \tab character \tab URL to monitoring location. \cr
 #'  "CountyName" \tab character \tab County of sampling location. \cr
-#'  "StateName" \tab character \tab State of sampling location. \cr  
-#'  "MonitoringLocationLatitude"  \tab numeric \tab latitude of sampling 
+#'  "StateName" \tab character \tab State of sampling location. \cr
+#'  "MonitoringLocationLatitude"  \tab numeric \tab latitude of sampling
 #'  location. \cr
-#'  "MonitoringLocationLongitude" \tab numeric \tab longitude of sampling 
+#'  "MonitoringLocationLongitude" \tab numeric \tab longitude of sampling
 #'  location. \cr
 #' }
 #' @export
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' # Summary of a single site for the last 5 years:
-#' site_5 <- readWQPsummary(siteid="USGS-07144100",
-#'                         summaryYears=5)
-#'                         
+#' site_5 <- readWQPsummary(
+#'   siteid = "USGS-07144100",
+#'   summaryYears = 5
+#' )
+#'
 #' # Summary of a single site for the full period of record:
-#' site_all <- readWQPsummary(siteid="USGS-07144100",
-#'                            summaryYears="all")
-#' 
-#' # Summary of the data available from streams in a single county:       
-#' dane_county_data <- readWQPsummary(countycode = "US:55:025",
-#'                         summaryYears = 5,
-#'                         siteType = "Stream")
-#' 
+#' site_all <- readWQPsummary(
+#'   siteid = "USGS-07144100",
+#'   summaryYears = "all"
+#' )
+#'
+#' # Summary of the data available from streams in a single county:
+#' dane_county_data <- readWQPsummary(
+#'   countycode = "US:55:025",
+#'   summaryYears = 5,
+#'   siteType = "Stream"
+#' )
+#'
 #' # Summary of the data all available from lakes in a single county:
-#' lake_sites <- readWQPsummary(siteType = "Lake, Reservoir, Impoundment",
-#'                          countycode = "US:55:025")
-#' 
+#' lake_sites <- readWQPsummary(
+#'   siteType = "Lake, Reservoir, Impoundment",
+#'   countycode = "US:55:025"
+#' )
+#'
 #' # Summary of the data available for the last 5 years in New Jersey:
-#' state1 <- readWQPsummary(statecode="NJ",
-#'                          summaryYears = 5,
-#'                          siteType = "Stream")
+#' state1 <- readWQPsummary(
+#'   statecode = "NJ",
+#'   summaryYears = 5,
+#'   siteType = "Stream"
+#' )
 #' }
-readWQPsummary <- function(...){
-  
+readWQPsummary <- function(...) {
   values <- readWQPdots(...)
-  
+
   values <- values$values
-  
-  if("tz" %in% names(values)){
+
+  if ("tz" %in% names(values)) {
     values <- values[!(names(values) %in% "tz")]
   }
-  
-  if("service" %in% names(values)){
+
+  if ("service" %in% names(values)) {
     values <- values[!(names(values) %in% "service")]
   }
-  
-  if(!"dataProfile" %in% names(values)){
+
+  if (!"dataProfile" %in% names(values)) {
     values[["dataProfile"]] <- "periodOfRecord"
   }
-  
+
   values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
-  
+
   baseURL <- drURL("SiteSummary", arg.list = values)
   baseURL <- appendDrURL(baseURL, mimeType = "csv")
 
-  withCallingHandlers({
-    retval <- importWQP(baseURL, zip=values["zip"] == "yes", csv = TRUE)
-  }, warning=function(w) {
-    if (any( grepl( "Number of rows returned not matched in header", w)))
-      invokeRestart("muffleWarning")
-  })
+  withCallingHandlers(
+    {
+      retval <- importWQP(baseURL, zip = values["zip"] == "yes", csv = TRUE)
+    },
+    warning = function(w) {
+      if (any(grepl("Number of rows returned not matched in header", w))) {
+        invokeRestart("muffleWarning")
+      }
+    }
+  )
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- baseURL
-  
+
   return(retval)
-  
-  
 }
-
-

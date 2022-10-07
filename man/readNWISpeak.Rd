@@ -63,12 +63,12 @@ needed, set the `asDateTime` argument to FALSE. No dates will be converted to R 
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-site_ids <- c('01594440','040851325')
+site_ids <- c("01594440", "040851325")
 \donttest{
 data <- readNWISpeak(site_ids)
-data2 <- readNWISpeak(site_ids, asDateTime=FALSE)
-stations<-c("06011000")
-peakdata<-readNWISpeak(stations,convertType=FALSE)
+data2 <- readNWISpeak(site_ids, asDateTime = FALSE)
+stations <- c("06011000")
+peakdata <- readNWISpeak(stations, convertType = FALSE)
 }
 \dontshow{\}) # examplesIf}
 }

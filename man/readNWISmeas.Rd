@@ -22,11 +22,11 @@ retrieval for the earliest possible record.}
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record.}
 
-\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 for more information on time zones.}
 
 \item{expanded}{logical. Whether or not (TRUE or FALSE) to call the expanded data.}
@@ -45,8 +45,8 @@ with the tz parameter, this is converted to UTC. If the measurement_dt column is
 measurement_dt_time column are added to the returned data frame.   \cr
 tz_cd \tab character \tab The time zone code for the measurement_dt column \cr
 }
- 
-See \url{https://waterdata.usgs.gov/usa/nwis/sw} for details about surface water, and 
+
+See \url{https://waterdata.usgs.gov/usa/nwis/sw} for details about surface water, and
 \url{https://waterdata.usgs.gov/nwis/help?output_formats_help}
 for help on the columns and codes.
 
@@ -66,13 +66,13 @@ See \url{https://waterdata.usgs.gov/usa/nwis/sw} for details about surface water
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-site_ids <- c('01594440','040851325')
+site_ids <- c("01594440", "040851325")
 \donttest{
 data <- readNWISmeas(site_ids)
 Meas05316840 <- readNWISmeas("05316840")
-Meas05316840.ex <- readNWISmeas("05316840",expanded=TRUE)
-Meas07227500.ex <- readNWISmeas("07227500",expanded=TRUE)
-Meas07227500.exRaw <- readNWISmeas("07227500",expanded=TRUE, convertType = FALSE)
+Meas05316840.ex <- readNWISmeas("05316840", expanded = TRUE)
+Meas07227500.ex <- readNWISmeas("07227500", expanded = TRUE)
+Meas07227500.exRaw <- readNWISmeas("07227500", expanded = TRUE, convertType = FALSE)
 }
 \dontshow{\}) # examplesIf}
 }

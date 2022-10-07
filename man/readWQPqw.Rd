@@ -16,7 +16,7 @@ readWQPqw(
 \arguments{
 \item{siteNumbers}{character site number. This needs to include the full agency code prefix.}
 
-\item{parameterCd}{vector of USGS 5-digit parameter code or characteristicNames. 
+\item{parameterCd}{vector of USGS 5-digit parameter code or characteristicNames.
 Leaving this blank will return all of the measured values during the specified time period.}
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
@@ -25,18 +25,18 @@ retrieval for the earliest possible record. Date arguments are always specified 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record. Date arguments are always specified in local time.}
 
-\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 for more information on time zones.}
 
 \item{querySummary}{logical to look at number of records and unique sites that will be returned from this query.}
 }
 \value{
 A data frame with at least the following columns:
-\tabular{lll}{ 
+\tabular{lll}{
 Name \tab Type \tab Description \cr
 OrganizationIdentifier \tab character \tab  A designator used to uniquely identify a unique business establishment within a context.\cr
 OrganizationFormalName \tab character \tab  The legal designator (i.e. formal name) of an organization.\cr
@@ -116,27 +116,29 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 }
 \description{
-Imports data from the Water Quality Portal. 
+Imports data from the Water Quality Portal.
 This function gets the data from here: \url{https://www.waterqualitydata.us}. There
 are four required input arguments: siteNumbers, parameterCd, startDate, and endDate.
-parameterCd can either be a USGS 5-digit code, or a characteristic name. The sites can be 
+parameterCd can either be a USGS 5-digit code, or a characteristic name. The sites can be
 either USGS, or other Water Quality Portal offered sites. It is required to use the 'full'
 site name, such as 'USGS-01234567'.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
-rawPcode <- readWQPqw('USGS-01594440','01075', '', '')
-rawCharacteristicName <- readWQPqw('WIDNR_WQX-10032762','Specific conductance', '', '')
-rawPHsites <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 'pH','','')
-nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','2012-12-20')
-nwisEx.summary <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),
-    '','2012-12-20', querySummary=TRUE)
+rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
+rawCharacteristicName <- readWQPqw("WIDNR_WQX-10032762", "Specific conductance", "", "")
+rawPHsites <- readWQPqw(c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"), "pH", "", "")
+nwisEx <- readWQPqw("USGS-04024000", c("34247", "30234", "32104", "34220"), "", "2012-12-20")
+nwisEx.summary <- readWQPqw("USGS-04024000", c("34247", "30234", "32104", "34220"),
+  "", "2012-12-20",
+  querySummary = TRUE
+)
 }
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{readWQPdata}}, \code{\link{whatWQPsites}}, 
+\code{\link{readWQPdata}}, \code{\link{whatWQPsites}},
 \code{\link{readNWISqw}}, and \code{\link{importWQP}}
 }
 \keyword{USGS}
