@@ -7,7 +7,7 @@
 whatNWISsites(...)
 }
 \arguments{
-\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options. A 
+\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options. A
 list (or lists) can also be supplied.}
 }
 \value{
@@ -37,8 +37,7 @@ Mapper format is used
 \examples{
 \donttest{
 
-siteListPhos <- whatNWISsites(stateCd= "OH",parameterCd= "00665")
-oneSite <- whatNWISsites(sites= "05114000")
-
+siteListPhos <- whatNWISsites(stateCd = "OH", parameterCd = "00665")
+oneSite <- whatNWISsites(sites = "05114000")
 }
 }

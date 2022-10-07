@@ -18,7 +18,7 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
-station_nm \tab character \tab Site name \cr 
+station_nm \tab character \tab Site name \cr
 site_tp_cd \tab character \tab Site type \cr
 dec_lat_va \tab numeric \tab Decimal latitude\cr
 dec_long_va \tab numeric \tab Decimal longitude \cr
@@ -63,15 +63,16 @@ for more information.
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 
-availableData <- whatNWISdata(siteNumber = '05114000')
+availableData <- whatNWISdata(siteNumber = "05114000")
 # To find just unit value ('instantaneous') data:
-uvData <- whatNWISdata(siteNumber = '05114000',service= "uv")
-uvDataMulti <- whatNWISdata(siteNumber = c('05114000','09423350'),service=c("uv","dv"))
-flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", 
-                             parameterCd = c("00060","00010"),
-                             statCd = "00003")
+uvData <- whatNWISdata(siteNumber = "05114000", service = "uv")
+uvDataMulti <- whatNWISdata(siteNumber = c("05114000", "09423350"), service = c("uv", "dv"))
+flowAndTemp <- whatNWISdata(
+  stateCd = "WI", service = "uv",
+  parameterCd = c("00060", "00010"),
+  statCd = "00003"
+)
 sites <- whatNWISdata(stateCd = "WI", parameterCd = "00060", siteType = "ST", service = "site")
-
 }
 \dontshow{\}) # examplesIf}
 }

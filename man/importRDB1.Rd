@@ -11,13 +11,15 @@ importRDB1(obs_url, asDateTime = TRUE, convertType = TRUE, tz = "UTC")
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date}
 
-\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the
+function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
 
-\item{tz}{character to set timezone attribute of datetime. Default converts the datetimes to UTC 
+\item{tz}{character to set timezone attribute of datetime. Default converts the datetimes to UTC
 (properly accounting for daylight savings times based on the data's provided tz_cd column).
-Recommended US values include "UTC", "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
-"America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla".
+Recommended US values include "UTC", "America/New_York", "America/Chicago", "America/Denver",
+"America/Los_Angeles",  "America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua",
+"America/Phoenix", and "America/Metlakatla".
 For a complete list, see \url{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}}
 }
 \value{
@@ -26,19 +28,21 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
-datetime \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = \code{TRUE}), \cr 
+datetime \tab POSIXct \tab The date and time of the value converted to
+UTC (if asDateTime = \code{TRUE}), \cr
 \tab character \tab or raw character string (if asDateTime = FALSE) \cr
 tz_cd \tab character \tab The time zone code for datetime \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
 tz_cd_reported \tab The originally reported time zone \cr
 }
-Note that code and value are repeated for the parameters requested. The names are of the form 
-XD_P_S, where X is literal, 
-D is an option description of the parameter, 
-P is the parameter code, 
+Note that code and value are repeated for the parameters requested. The names are of the form
+XD_P_S, where X is literal,
+D is an option description of the parameter,
+P is the parameter code,
 and S is the statistic code (if applicable).
-If a date/time (dt) column contained incomplete date and times, a new column of dates and time was inserted. This could happen
+If a date/time (dt) column contained incomplete date and times, a new column
+of dates and time was inserted. This could happen
 when older data was reported as dates, and newer data was reported as a date/time.
 
 There are also several useful attributes attached to the data frame:
@@ -62,39 +66,46 @@ endDate <- "2012-10-01"
 offering <- "00003"
 property <- "00060"
 
-obs_url <- constructNWISURL(site_id,property,
-         startDate,endDate, "dv",format= "tsv")
+obs_url <- constructNWISURL(site_id, property,
+  startDate, endDate, "dv",
+  format = "tsv"
+)
 \donttest{
 data <- importRDB1(obs_url)
 
 
-urlMultiPcodes <- constructNWISURL("04085427",c("00060", "00010"),
-         startDate,endDate, "dv",statCd=c("00003", "00001"), "tsv")
+urlMultiPcodes <- constructNWISURL("04085427", c("00060", "00010"),
+  startDate, endDate, "dv",
+  statCd = c("00003", "00001"), "tsv"
+)
 
-  multiData <- importRDB1(urlMultiPcodes)
+multiData <- importRDB1(urlMultiPcodes)
 
-unitDataURL <- constructNWISURL(site_id,property,
-         "2020-10-30", "2020-11-01", "uv",format= "tsv") #includes timezone switch
+unitDataURL <- constructNWISURL(site_id, property,
+  "2020-10-30", "2020-11-01", "uv",
+  format = "tsv"
+) # includes timezone switch
 
-  unitData <- importRDB1(unitDataURL, asDateTime=TRUE)
+unitData <- importRDB1(unitDataURL, asDateTime = TRUE)
 
-qwURL <- constructNWISURL(c('04024430','04024000'),
-          c('34247','30234','32104','34220'),
-         "2010-11-03", "", "qw",format= "rdb")
+qwURL <- constructNWISURL(c("04024430", "04024000"),
+  c("34247", "30234", "32104", "34220"),
+  "2010-11-03", "", "qw",
+  format = "rdb"
+)
 
-qwData <- importRDB1(qwURL, asDateTime=TRUE, tz= "America/Chicago")
+qwData <- importRDB1(qwURL, asDateTime = TRUE, tz = "America/Chicago")
 
-iceSite <- '04024000'
+iceSite <- "04024000"
 start <- "2015-11-09"
 end <- "2015-11-24"
-urlIce <- constructNWISURL(iceSite, "00060",start, end, "uv",format= "tsv")
+urlIce <- constructNWISURL(iceSite, "00060", start, end, "uv", format = "tsv")
 
-  ice <- importRDB1(urlIce, asDateTime=TRUE)
-  iceNoConvert <- importRDB1(urlIce, convertType=FALSE)
-
+ice <- importRDB1(urlIce, asDateTime = TRUE)
+iceNoConvert <- importRDB1(urlIce, convertType = FALSE)
 }
 # User file:
-filePath <- system.file("extdata", package= "dataRetrieval")
+filePath <- system.file("extdata", package = "dataRetrieval")
 fileName <- "RDB1Example.txt"
 fullPath <- file.path(filePath, fileName)
 importUserRDB <- importRDB1(fullPath)

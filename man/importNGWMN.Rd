@@ -11,11 +11,11 @@ importNGWMN(input, asDateTime = FALSE, tz = "UTC")
 
 \item{asDateTime}{logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character}
 
-\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
 Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 for more information on time zones.}
 }
 \value{
@@ -28,13 +28,14 @@ but the general functionality is correct.
 \examples{
 \donttest{
 obs_url <- paste("https://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
-"service=SOS", "version=2.0.0",
-"observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
-"responseFormat=text/xml",
-"featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",sep= "&")
+  "service=SOS", "version=2.0.0",
+  "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
+  "responseFormat=text/xml",
+  "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",
+  sep = "&"
+)
 
- data_returned <- importNGWMN(obs_url)
-
+data_returned <- importNGWMN(obs_url)
 }
 
 }

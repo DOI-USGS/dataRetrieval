@@ -21,5 +21,5 @@ parameter_units \tab character \tab Parameter units\cr
 Complete list of USGS parameter codes as of Dec. 20, 2021.
 }
 \examples{
-head(parameterCdFile[,1:2])
+head(parameterCdFile[, 1:2])
 }

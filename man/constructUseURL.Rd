@@ -7,7 +7,7 @@
 constructUseURL(years, stateCd, countyCd, categories)
 }
 \arguments{
-\item{years}{integer Years for data retrieval. Must be years ending in 0 or 5, 
+\item{years}{integer Years for data retrieval. Must be years ending in 0 or 5,
 or "ALL", which retrieves all available years.}
 
 \item{stateCd}{could be character (full name, abbreviation, id), or numeric (id)}
@@ -23,9 +23,11 @@ url string
 Reconstructs URLs to retrieve data from here: \url{https://waterdata.usgs.gov/nwis/wu}
 }
 \examples{
-url <- constructUseURL(years = c(1990, 1995),
-                       stateCd = "Ohio",
-                       countyCd = c(1, 3),
-                       categories = "ALL")
+url <- constructUseURL(
+  years = c(1990, 1995),
+  stateCd = "Ohio",
+  countyCd = c(1, 3),
+  categories = "ALL"
+)
 
 }

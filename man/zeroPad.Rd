@@ -18,12 +18,12 @@ x character returned with leading zeros
 Function to pad a string with leading zeros. Useful for parameter codes and USGS site IDs.
 }
 \examples{
-pCode <- '10'
-correctPCode <- zeroPad(pCode,5)
-pCodes <- c('100','1000','0','12345','1565465465465465')
-correctPCodes <- zeroPad(pCodes,5)
-pCodeNA <- c(1,2,NA)
-padPCodeNA <- zeroPad(pCodeNA,4)
+pCode <- "10"
+correctPCode <- zeroPad(pCode, 5)
+pCodes <- c("100", "1000", "0", "12345", "1565465465465465")
+correctPCodes <- zeroPad(pCodes, 5)
+pCodeNA <- c(1, 2, NA)
+padPCodeNA <- zeroPad(pCodeNA, 4)
 }
 \keyword{USGS}
 \keyword{data}

@@ -55,7 +55,7 @@ function reads information from the header and the arguments in the call to
 to rename those columns.
 }
 \note{
-The following statistics codes are converted by \code{renameNWISColumns}. 
+The following statistics codes are converted by \code{renameNWISColumns}.
 \describe{
 \item{00000}{Instantaneous Value, suffix: Inst}
 \item{00001}{Maximum value, suffix: Max}
@@ -72,16 +72,16 @@ The following statistics codes are converted by \code{renameNWISColumns}.
 }
 }
 \examples{
-siteWithTwo <- '01480015'
+siteWithTwo <- "01480015"
 startDate <- "2012-09-01"
 endDate <- "2012-10-01"
 \donttest{
-twoResults <- readNWISdv(siteWithTwo, "00060",startDate,endDate)
+twoResults <- readNWISdv(siteWithTwo, "00060", startDate, endDate)
 names(twoResults)
 renamedCols <- renameNWISColumns(twoResults)
 names(renamedCols)
-#Custom names:
-newNames <- renameNWISColumns(twoResults, p00060= "Discharge")
+# Custom names:
+newNames <- renameNWISColumns(twoResults, p00060 = "Discharge")
 names(newNames)
 }
 }

@@ -19,8 +19,8 @@ library(knitr)
 library(dataRetrieval)
 library(dplyr)
 
-options(continue=" ")
-# options(width=60)
+options(continue = " ")
+
 knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       fig.height = 7,
@@ -40,8 +40,8 @@ Starting with version 2.7.9, users will notice a Warning message when using this
 
 ```{r eval=FALSE}
 
-site_ids <- c('04024430','04024000')
-parameterCd <- c('34247','30234','32104','34220')
+site_ids <- c("04024430", "04024000")
+parameterCd <- c("34247", "30234", "32104", "34220")
 nwisData <- readNWISqw(site_ids, parameterCd)
 
 ```
@@ -166,7 +166,7 @@ censored_text <- c("Not Detected",
                    "Below Quantification Limit")
 
 wqpData_USED <- wqpData %>% 
-  mutate(left_censored = grepl(paste(censored_text, collapse="|"), 
+  mutate(left_censored = grepl(paste(censored_text, collapse = "|"), 
                                ResultDetectionConditionText,
                                ignore.case = TRUE)) %>% 
   select(site_no = MonitoringLocationIdentifier,
@@ -197,7 +197,7 @@ wqpData_USED_codes <- wqpData %>%
                              DetectionQuantitationLimitMeasure.MeasureUnitCode,
                              ResultMeasure.MeasureUnitCode)) %>% 
   select(parm_cd = USGSPCode,
-         CharacteristicName,ResultSampleFractionText,
+         CharacteristicName, ResultSampleFractionText,
          units) %>% 
   distinct()
 
@@ -209,7 +209,7 @@ If there are USGS codes that you are using in your analysis, begin to move away 
 
 ```{r}
 wqpData_USED_codes <- wqpData %>% 
-  select(HydrologicCondition,HydrologicEvent,
+  select(HydrologicCondition, HydrologicEvent,
          ActivityTypeCode, ActivityMediaName) %>% 
   distinct()
 
@@ -224,18 +224,18 @@ df <- data.frame(NWIS = c("samp_type_cd = 9",
                           "hyd_cond_cd = 9",
                           "hyd_cond_cd = 5",
                           "hyd_cond_cd = 8",
-                          'medium_cd = "WS"',
-                          'hyd_event_cd = "B"',
-                          'hyd_event_cd = "A"',
-                          'hyd_event_cd = 9'),
-                 WQP = c('ActivityTypeCode = "Sample-Routine"',
-                         'HydrologicCondition = "Stable, normal stage"',
-                         'HydrologicCondition = "Falling stage"',
-                         'HydrologicCondition = "Rising stage"',
-                         'ActivityMediaName = "Water"',
-                         'HydrologicEvent = "Under ice cover"',
-                         'HydrologicEvent = "Spring breakup"',
-                         'HydrologicEvent = "Routine sample"'))
+                          "medium_cd = 'WS'",
+                          "hyd_event_cd = 'B'",
+                          "hyd_event_cd = 'A'",
+                          "hyd_event_cd = 9"),
+                 WQP = c("ActivityTypeCode = 'Sample-Routine'",
+                         "HydrologicCondition = 'Stable, normal stage'",
+                         "HydrologicCondition = 'Falling stage'",
+                         "HydrologicCondition = 'Rising stage'",
+                         "ActivityMediaName = 'Water'",
+                         "HydrologicEvent = 'Under ice cover'",
+                         "HydrologicEvent = 'Spring breakup'",
+                         "HydrologicEvent = 'Routine sample'"))
 knitr::kable(df)
 ```
 
@@ -249,7 +249,7 @@ The function to replace this functionality is `whatWQPdata`:
 
 ```{r whatdata, eval=FALSE}
 whatNWIS <- whatNWISdata(siteNumber = site_ids,
-                       service = "qw")
+                         service = "qw")
 ```
 
 ```
@@ -272,14 +272,13 @@ If you get your water quality data from the `readNWISdata` function, you will re
 ```{r eval=FALSE}
 qwData <- readNWISdata(state_cd = "WI",
                        startDate = "2000-01-01",
-                       drain_area_va_min = 50, qw_count_nu=50, 
-                       qw_attributes="expanded",
-                       qw_sample_wide="wide",
+                       drain_area_va_min = 50, qw_count_nu = 50, 
+                       qw_attributes = "expanded",
+                       qw_sample_wide = "wide",
                        list_of_search_criteria = c("state_cd",
                                                    "drain_area_va",
                                                    "obs_count_nu"),
-                       service="qw")
-
+                       service = "qw")
 ```
 
 ```

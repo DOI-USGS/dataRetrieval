@@ -17,7 +17,7 @@ whatWQPsites(...)
 }
 \value{
 A data frame with at least the following columns:
-\tabular{lll}{ 
+\tabular{lll}{
 Name \tab Type \tab Description \cr
 OrganizationIdentifier \tab character \tab  A designator used to uniquely identify a unique business establishment within a context. \cr
 OrganizationFormalName \tab character \tab	The legal designator (i.e. formal name) of an organization. \cr
@@ -60,7 +60,7 @@ queryTime \tab POSIXct \tab Query time \cr
 }
 \description{
 Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
-Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}. The return from 
+Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}. The return from
 this function returns the basic metadata on WQP sites. It is
 generally faster than the \code{\link{whatWQPdata}} function, but does
 not return information on what data was collected at the site.
@@ -71,28 +71,28 @@ The \code{readWQPsummary} function has
 \examples{
 \donttest{
 
-site1 <- whatWQPsamples(siteid="USGS-01594440")
+site1 <- whatWQPsamples(siteid = "USGS-01594440")
 
 type <- "Stream"
-sites <- whatWQPsamples(countycode="US:55:025",siteType=type)
-
+sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
 }
 \donttest{
 
 type <- "Stream"
-sites <- whatWQPmetrics(countycode="US:55:025",siteType=type)
+sites <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
 lakeSites <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 }
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 
-site1 <- whatWQPsites(siteid="USGS-01594440")
+site1 <- whatWQPsites(siteid = "USGS-01594440")
 
 type <- "Stream"
-sites <- whatWQPsites(countycode="US:55:025",
-                      characteristicName = "Phosphorus",
-                      siteType=type)
-
+sites <- whatWQPsites(
+  countycode = "US:55:025",
+  characteristicName = "Phosphorus",
+  siteType = type
+)
 }
 \dontshow{\}) # examplesIf}
 }

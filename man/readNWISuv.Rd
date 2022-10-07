@@ -19,11 +19,11 @@ See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.h
 retrieval for the latest possible record. Simple date arguments are specified in local time.
 See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html}.}
 
-\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 for more information on time zones.}
 }
 \value{
@@ -32,15 +32,15 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
-dateTime \tab POSIXct \tab The date and time of the value converted to UTC \cr 
+dateTime \tab POSIXct \tab The date and time of the value converted to UTC \cr
 tz_cd \tab character \tab The time zone code for dateTime \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
 }
-Note that code and value are repeated for the parameters requested. The names are of the form: 
-X_D_P_S, where X is literal, 
-D is an option description of the parameter, 
-P is the parameter code, 
+Note that code and value are repeated for the parameters requested. The names are of the form:
+X_D_P_S, where X is literal,
+D is an option description of the parameter,
+P is the parameter code,
 and S is the statistic code (if applicable).
 
 There are also several useful attributes attached to the data frame:
@@ -61,27 +61,31 @@ More information on the web service can be found here: \url{https://waterservice
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-site_id <- '05114000'
-parameterCd <- '00060'
+site_id <- "05114000"
+parameterCd <- "00060"
 startDate <- "2014-10-10"
 endDate <- "2014-10-10"
 \donttest{
 
-rawData <- readNWISuv(site_id,parameterCd,startDate,endDate)
+rawData <- readNWISuv(site_id, parameterCd, startDate, endDate)
 
-rawData_today <- readNWISuv(site_id, parameterCd, Sys.Date(),Sys.Date())
+rawData_today <- readNWISuv(site_id, parameterCd, Sys.Date(), Sys.Date())
 
-timeZoneChange <- readNWISuv(c('04024430','04024000'),parameterCd,
-         "2013-11-03", "2013-11-03")
- 
-centralTime <- readNWISuv(site_id,parameterCd,
-                           "2014-10-10T12:00", "2014-10-10T23:59",
-                           tz= "America/Chicago")
+timeZoneChange <- readNWISuv(
+  c("04024430", "04024000"), parameterCd,
+  "2013-11-03", "2013-11-03"
+)
+
+centralTime <- readNWISuv(site_id, parameterCd,
+  "2014-10-10T12:00", "2014-10-10T23:59",
+  tz = "America/Chicago"
+)
 
 # Adding 'Z' to the time indicates to the web service to call the data with UTC time:
-GMTdata <- readNWISuv(site_id,parameterCd,
-                           "2014-10-10T00:00Z", "2014-10-10T23:59Z")
-
+GMTdata <- readNWISuv(
+  site_id, parameterCd,
+  "2014-10-10T00:00Z", "2014-10-10T23:59Z"
+)
 }
 \dontshow{\}) # examplesIf}
 }
