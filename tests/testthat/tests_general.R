@@ -611,5 +611,25 @@ test_that("readWQPsummary", {
   expect_type(site1$ActivityCount, "double")
   expect_type(site1$MonitoringLocationIdentifier, "character")
 
-  expect_equal(attr(site1, "url"), "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&zip=yes&dataProfile=periodOfRecord&mimeType=csv")
+  expect_equal(attr(site1, "url"),
+               "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&zip=yes&dataProfile=periodOfRecord&mimeType=csv")
+})
+
+test_that("importWQP convertType", {
+  testthat::skip_on_cran()
+ 
+  rawSampleURL_NoZip <- constructWQPURL("USGS-01594440", "01075", "", "", zip = FALSE) 
+  rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip = FALSE, convertType = FALSE)
+  expect_is(rawSampleURL_NoZip_char$ResultMeasureValue, "character")
+  
+  pH <- readWQPdata(statecode = "WI", countycode = "Dane", characteristicName = "pH", convertType = FALSE)
+  expect_is(pH$ResultMeasureValue, "character")
+  
+  SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", convertType = FALSE)
+  expect_is(SC$ResultMeasureValue, "character")
+  
+  lakeSites_chars <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", 
+                                 statecode = "US:55", convertType = FALSE)
+  expect_is(lakeSites_chars$lat, "character")
+  
 })
