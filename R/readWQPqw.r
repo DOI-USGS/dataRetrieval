@@ -21,6 +21,8 @@
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
 #' @param querySummary logical to look at number of records and unique sites that will be returned from this query.
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import USGS web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -112,8 +114,11 @@
 #' nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','2012-12-20')
 #' nwisEx.summary <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),
 #'     '','2012-12-20', querySummary=TRUE)
+#'
+#' SC <- readWQPqw(siteNumbers="USGS-05288705", parameterCd="00300", convertType=FALSE)
 #' }
-readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="UTC", querySummary=FALSE){
+readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="UTC", 
+                      querySummary=FALSE, convertType=TRUE){
 
   url <- constructWQPURL(siteNumbers,parameterCd,startDate,endDate)
 
@@ -122,7 +127,7 @@ readWQPqw <- function(siteNumbers,parameterCd,startDate="",endDate="",tz="UTC", 
     return(retquery)
   } else {
     
-    retval <- importWQP(url, zip = TRUE, tz = tz)
+    retval <- importWQP(url, zip = TRUE, tz = tz, convertType=convertType)
     
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     

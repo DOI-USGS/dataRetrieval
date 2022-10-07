@@ -10,7 +10,8 @@ readWQPqw(
   startDate = "",
   endDate = "",
   tz = "UTC",
-  querySummary = FALSE
+  querySummary = FALSE,
+  convertType = TRUE
 )
 }
 \arguments{
@@ -33,6 +34,9 @@ Possible values to provide are "America/New_York","America/Chicago", "America/De
 for more information on time zones.}
 
 \item{querySummary}{logical to look at number of records and unique sites that will be returned from this query.}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character.}
 }
 \value{
 A data frame with at least the following columns:
@@ -132,6 +136,8 @@ rawPHsites <- readWQPqw(c('USGS-05406450', 'USGS-05427949','WIDNR_WQX-133040'), 
 nwisEx <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),'','2012-12-20')
 nwisEx.summary <- readWQPqw('USGS-04024000',c('34247','30234','32104','34220'),
     '','2012-12-20', querySummary=TRUE)
+
+SC <- readWQPqw(siteNumbers="USGS-05288705", parameterCd="00300", convertType=FALSE)
 }
 \dontshow{\}) # examplesIf}
 }

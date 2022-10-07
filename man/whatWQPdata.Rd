@@ -4,12 +4,15 @@
 \alias{whatWQPdata}
 \title{Data Available from Water Quality Portal}
 \usage{
-whatWQPdata(..., saveFile = tempfile())
+whatWQPdata(..., saveFile = tempfile(), convertType = TRUE)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
 
 \item{saveFile}{path to save the incoming geojson output.}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character.}
 }
 \value{
 A data frame with at least the following columns:
@@ -54,6 +57,8 @@ type <- "Stream"
 sites <- whatWQPdata(countycode="US:55:025",siteType=type)
 
 lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+lakeSites_chars <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", 
+                       statecode = "US:55", convertType=FALSE)
 }
 \dontshow{\}) # examplesIf}
 }

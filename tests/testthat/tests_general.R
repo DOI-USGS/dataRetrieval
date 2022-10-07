@@ -556,3 +556,21 @@ test_that("readWQPsummary", {
   
 })
 
+test_that("importWQP convertType", {
+  testthat::skip_on_cran()
+ 
+  rawSampleURL_NoZip <- constructWQPURL('USGS-01594440','01075', '', '', zip=FALSE) 
+  rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip=FALSE, convertType=FALSE)
+  expect_is(rawSampleURL_NoZip_char$ResultMeasureValue, "character")
+  
+  pH <- readWQPdata(statecode="WI", countycode="Dane", characteristicName="pH", convertType=FALSE)
+  expect_is(pH$ResultMeasureValue, "character")
+  
+  SC<-readWQPqw(siteNumbers="USGS-05288705", parameterCd="00300", convertType=FALSE)
+  expect_is(SC$ResultMeasureValue, "character")
+  
+  lakeSites_chars <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", 
+                                 statecode = "US:55", convertType=FALSE)
+  expect_is(lakeSites_chars$lat, "character")
+  
+})
