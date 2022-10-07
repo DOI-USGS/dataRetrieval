@@ -166,7 +166,7 @@ importRDB1 <- function(obs_url,
       args_list[["col_types"]] <- readr::cols(.default = "c")
     }
 
-    readr.data <- do.call(readr::read_delim, args = args_list)
+    readr.data <- suppressWarnings(do.call(readr::read_delim, args = args_list))
 
     readr.data <- as.data.frame(readr.data)
 
