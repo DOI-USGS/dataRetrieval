@@ -6,14 +6,17 @@
 \alias{whatWQPsites}
 \title{Site Data Import from Water Quality Portal}
 \usage{
-whatWQPsamples(...)
+whatWQPsamples(..., convertType = TRUE)
 
-whatWQPmetrics(...)
+whatWQPmetrics(..., convertType = TRUE)
 
 whatWQPsites(...)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character.}
 }
 \value{
 A data frame with at least the following columns:
@@ -74,13 +77,22 @@ The \code{readWQPsummary} function has
 site1 <- whatWQPsamples(siteid = "USGS-01594440")
 
 type <- "Stream"
-sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
+
+sites <- whatWQPsamples(countycode="US:55:025", siteType = type)
+
+lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+lakeSites_samples_chars <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
+                              statecode = "US:55", convertType = FALSE)
+
 }
 \donttest{
 
 type <- "Stream"
-sites <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
-lakeSites <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+
+sites <- whatWQPmetrics(countycode="US:55:025",siteType=type)
+lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+lakeSites_metrics_chars <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", 
+                       statecode = "US:55", convertType=FALSE)
 }
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
