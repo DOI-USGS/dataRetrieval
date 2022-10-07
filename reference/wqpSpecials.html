@@ -79,9 +79,9 @@ not return information on what data was collected at the site.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">whatWQPsamples</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">whatWQPsamples</span><span class="op">(</span><span class="va">...</span>, convertType <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">whatWQPmetrics</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">whatWQPmetrics</span><span class="op">(</span><span class="va">...</span>, convertType <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">whatWQPsites</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -90,6 +90,11 @@ not return information on what data was collected at the site.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>...</dt>
 <dd><p>see <a href="https://www.waterqualitydata.us/webservices_documentation" class="external-link">https://www.waterqualitydata.us/webservices_documentation</a> for a complete list of options. A list of arguments can also be supplied.</p></dd>
+
+
+<dt>convertType</dt>
+<dd><p>logical, defaults to <code>TRUE</code>. If <code>TRUE</code>, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -114,13 +119,22 @@ not return information on what data was collected at the site.</p>
 <span class="r-in"><span><span class="va">site1</span> <span class="op">&lt;-</span> <span class="fu">whatWQPsamples</span><span class="op">(</span>siteid <span class="op">=</span> <span class="st">"USGS-01594440"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">"Stream"</span></span></span>
-<span class="r-in"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">whatWQPsamples</span><span class="op">(</span>countycode <span class="op">=</span> <span class="st">"US:55:025"</span>, siteType <span class="op">=</span> <span class="va">type</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">whatWQPsamples</span><span class="op">(</span>countycode<span class="op">=</span><span class="st">"US:55:025"</span>, siteType <span class="op">=</span> <span class="va">type</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">lakeSites_samples</span> <span class="op">&lt;-</span> <span class="fu">whatWQPsamples</span><span class="op">(</span>siteType <span class="op">=</span> <span class="st">"Lake, Reservoir, Impoundment"</span>, statecode <span class="op">=</span> <span class="st">"US:55"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lakeSites_samples_chars</span> <span class="op">&lt;-</span> <span class="fu">whatWQPsamples</span><span class="op">(</span>siteType <span class="op">=</span> <span class="st">"Lake, Reservoir, Impoundment"</span>,</span></span>
+<span class="r-in"><span>                              statecode <span class="op">=</span> <span class="st">"US:55"</span>, convertType <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">"Stream"</span></span></span>
-<span class="r-in"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">whatWQPmetrics</span><span class="op">(</span>countycode <span class="op">=</span> <span class="st">"US:55:025"</span>, siteType <span class="op">=</span> <span class="va">type</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">lakeSites</span> <span class="op">&lt;-</span> <span class="fu">whatWQPmetrics</span><span class="op">(</span>siteType <span class="op">=</span> <span class="st">"Lake, Reservoir, Impoundment"</span>, statecode <span class="op">=</span> <span class="st">"US:55"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu">whatWQPmetrics</span><span class="op">(</span>countycode<span class="op">=</span><span class="st">"US:55:025"</span>,siteType<span class="op">=</span><span class="va">type</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lakeSites_metrics</span> <span class="op">&lt;-</span> <span class="fu">whatWQPmetrics</span><span class="op">(</span>siteType <span class="op">=</span> <span class="st">"Lake, Reservoir, Impoundment"</span>, statecode <span class="op">=</span> <span class="st">"US:55"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lakeSites_metrics_chars</span> <span class="op">&lt;-</span> <span class="fu">whatWQPmetrics</span><span class="op">(</span>siteType <span class="op">=</span> <span class="st">"Lake, Reservoir, Impoundment"</span>, </span></span>
+<span class="r-in"><span>                       statecode <span class="op">=</span> <span class="st">"US:55"</span>, convertType<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span></span></span>
