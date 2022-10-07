@@ -441,7 +441,7 @@ test_that("Construct WQP urls", {
   )
   
 # nolint end
-  
+
 })
 
 context("Construct WQP urls")

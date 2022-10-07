@@ -52,7 +52,8 @@
 #' ActivityDepthHeightMeasure.MeasureValue \tab character \tab	A measurement of the
 #' vertical location (measured from a reference point) at which an activity occurred.
 #' Measure value is given in the units stored in ActivityDepthHeightMeasure.MeasureUnitCode.\cr
-#' ActivityDepthHeightMeasure.MeasureUnitCode \tab character \tab	The code that represents the unit for measuring the item.\cr
+#' ActivityDepthHeightMeasure.MeasureUnitCode \tab character \tab	The code that
+#' represents the unit for measuring the item.\cr
 #' ActivityDepthAltitudeReferencePointText \tab character \tab	The reference used
 #' to indicate the datum or reference used to establish the depth/altitude of an activity.\cr
 #' ActivityTopDepthHeightMeasure.MeasureValue \tab character \tab	A measurement of
@@ -284,7 +285,7 @@ readWQPdata <- function(...,
 
     if(!all(is.na(retval)) && !ignore_attributes) {
 
-      siteInfo <- suppressWarnings(whatWQPsites(..., service = "Station")) #doesn't alway have a header count returned...which is probably going away soon anyway
+      siteInfo <- suppressWarnings(whatWQPsites(..., service = "Station"))
 
       if(all(c("MonitoringLocationName",
                "OrganizationIdentifier",

@@ -5,7 +5,6 @@ linters: linters_with_defaults(
     undesirable_function_linter("sapply"),
     spaces_left_parentheses_linter=NULL,
     paren_body_linter=NULL,
-    cyclocomp_linter=NULL,
-    commented_code_linter=NULL
+    cyclocomp_linter=NULL
    ) # see vignette("lintr")
 encoding: "UTF-8"

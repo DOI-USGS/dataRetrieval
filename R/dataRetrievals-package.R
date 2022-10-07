@@ -131,6 +131,7 @@ NULL
 #' head(countyCd)
 NULL
 
+# nolint start: commented_code_linter
 # Here's how to incorporate the state_county.json into the historic
 # sysdata.rda. The original data included some IDs that aren't in the json
 # We're leaving those in for now because maybe it's helpful,
@@ -173,3 +174,4 @@ NULL
 # stateCd <- state_df
 # save(countyCd, stateCd, parameterCdFile, pCodeToName,
 #      file = "R/sysdata.rda", compress = "xz")
+# nolint end
