@@ -35,7 +35,7 @@ A quick workflow for USGS `dataRetrieval` functions:
 ```{r workflow, echo=TRUE,eval=FALSE}
 library(dataRetrieval)
 # Choptank River near Greensboro, MD
-siteNumber <- "01491000" 
+siteNumber <- "01491000"
 ChoptankInfo <- readNWISsite(siteNumber)
 parameterCd <- "00060"
 
@@ -118,7 +118,7 @@ Description <- c("Data using user-specified queries", #readNWISdata
                  "Metric availability",
                  "Sample availability")
 Source <- c(rep("NWIS", 14), rep("WQP", 7))
-Site <- c("opt.", rep("req.", 7), "", 
+Site <- c("opt.", rep("req.", 7), "",
           rep("req.", 4), "opt.", "opt.", "req.", rep("opt.", 5))
 parameterCd <- c("opt.", rep("req.", 3),
                  rep("", 5), "req.", "req.",
@@ -129,12 +129,12 @@ start <- c("opt.", rep("req.", 3), "",
 data.df <- data.frame(Name = Functions,
                       `Data Returned` = Description,
                       siteNumbers = Site,
-                      parameterCd = parameterCd, 
+                      parameterCd = parameterCd,
                       `startDate \n endDate` = start,
                       Arguments,
                       Source, stringsAsFactors = FALSE)
 
-kable(data.df, 
+kable(data.df,
       caption = "Table 1: dataRetrieval functions")
 
 ```
@@ -155,7 +155,7 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 pCode <- c("00060", "00065", "00010", "00045", "00400")
-shortName <- c("Discharge [ft<sup>3</sup>/s]", 
+shortName <- c("Discharge [ft<sup>3</sup>/s]",
                "Gage height [ft]",
                "Temperature [C]",
                "Precipitation [in]",
@@ -163,7 +163,7 @@ shortName <- c("Discharge [ft<sup>3</sup>/s]",
 
 data.df <- data.frame(pCode, shortName, stringsAsFactors = FALSE)
 
-kable(data.df, 
+kable(data.df,
           caption = "Table 2: Common USGS Parameter Codes")
 
 
@@ -183,7 +183,7 @@ shortName <- c("Maximum", "Minimum", "Mean", "Median")
 
 data.df <- data.frame(StatCode, shortName, stringsAsFactors = FALSE)
 
-kable(data.df, 
+kable(data.df,
           caption = "Table 3: Commonly used USGS Stat Codes")
 ```
 
@@ -200,7 +200,7 @@ Use the `readNWISsite` function to obtain all of the information available for a
 
 
 ```{r getSite, echo=TRUE, eval=FALSE}
-siteNumbers <- c("01491000", "01645000") 
+siteNumbers <- c("01491000", "01645000")
 siteINFO <- readNWISsite(siteNumbers)
 ```
 
@@ -262,7 +262,7 @@ tableData <- data.frame(
   stringsAsFactors = FALSE)
 
 
-kable(tableData, 
+kable(tableData,
           caption = "Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]")
 ```
 
@@ -274,7 +274,7 @@ To obtain all of the available information concerning a measured parameter (or m
 
 ```{r label=getPCodeInfo, echo=TRUE, eval=FALSE}
 # Using defaults:
-parameterCd <- "00618" 
+parameterCd <- "00618"
 parameterINFO <- readNWISpCode(parameterCd)
 ```
 
@@ -290,8 +290,8 @@ The dates (start and end) must be in the format "YYYY-MM-DD" (note: the user mus
 # Choptank River near Greensboro, MD:
 siteNumber <- "01491000"
 parameterCd <- "00060"  # Discharge
-startDate <- "2009-10-01"  
-endDate <- "2012-09-30" 
+startDate <- "2009-10-01"
+endDate <- "2012-09-30"
 
 discharge <- readNWISdv(siteNumber, parameterCd, startDate, endDate)
 ```
@@ -307,7 +307,7 @@ statCd <- c("00001", "00003")  # Mean and maximum
 startDate <- "2012-01-01"
 endDate <- "2012-05-01"
 
-temperatureAndFlow <- readNWISdv(siteNumber, parameterCd, 
+temperatureAndFlow <- readNWISdv(siteNumber, parameterCd,
         startDate, endDate, statCd = statCd)
 
 ```
@@ -364,7 +364,7 @@ plot(temperatureAndFlow$Date,
 axis(4, col = "red", col.axis = "red")
 mtext(variableInfo$parameter_desc[2], side = 4, line = 3, col = "red")
 title(paste(siteInfo$station_nm, "2012"))
-legend("topleft", variableInfo$param_units, 
+legend("topleft", variableInfo$param_units,
        col = c("black", "red"), lty = c(NA, 1),
        pch = c(1, NA))
 ```
@@ -377,8 +377,8 @@ Any data collected at regular time intervals (such as 15-minute or hourly) are k
 ```{r label=readNWISuv, eval=FALSE}
 
 parameterCd <- "00060"  # Discharge
-startDate <- "2012-05-12" 
-endDate <- "2012-05-13" 
+startDate <- "2012-05-12"
+endDate <- "2012-05-13"
 dischargeUnit <- readNWISuv(siteNumber, parameterCd, startDate, endDate)
 dischargeUnit <- renameNWISColumns(dischargeUnit)
 ```
@@ -456,8 +456,8 @@ allegheny <- readNWISuse(stateCd = "Pennsylvania",
                          countyCd = "Allegheny")
 
 
-national <- readNWISuse(stateCd = NULL, 
-                        countyCd = NULL, 
+national <- readNWISuse(stateCd = NULL,
+                        countyCd = NULL,
                         transform = TRUE)
 
 ```
@@ -468,7 +468,7 @@ Retrieves site statistics from the USGS Statistics Web Service beta.
 ```{r eval=FALSE}
 discharge_stats <- readNWISstat(siteNumbers = c("02319394"),
                                 parameterCd = c("00060"),
-                                statReportType = "annual") 
+                                statReportType = "annual")
 ```
 
 
@@ -499,7 +499,7 @@ The function `whatNWISsites` can be used to discover NWIS sites based on any que
 The following `dataRetrieval` code can be used to get those sites:
 
 ```{r siteSearch, eval=FALSE}
-sites <- whatNWISsites(bBox = c(-83.0, 36.5, -81.0, 38.5), 
+sites <- whatNWISsites(bBox = c(-83.0, 36.5, -81.0, 38.5),
                       parameterCd = c("00010", "00060"),
                       hasDataTypeCd = "dv")
 ```
@@ -526,7 +526,7 @@ tableData <- data.frame(Service,
   stringsAsFactors = FALSE)
 
 
-kable(tableData, 
+kable(tableData,
           caption = "Table 5: NWIS general data calls")
 
 ```
@@ -567,7 +567,7 @@ sitesNJ <- whatWQPsites(statecode = "US:34",
 To get data from the WQP using generalized Web service calls, use the function `readWQPdata`. For example, to get all the pH data in Wisconsin:
 
 ```{r phData, eval=FALSE}
-dataPH <- readWQPdata(statecode = "US:55", 
+dataPH <- readWQPdata(statecode = "US:55",
                  characteristicName = "pH")
 ```
 

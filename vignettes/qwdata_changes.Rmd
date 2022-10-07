@@ -126,9 +126,9 @@ Let's use the `dplyr` package to pull out the columns are used in this example w
 ```{r}
 library(dplyr)
 
-nwisData_USED <- nwisData %>% 
+nwisData_USED <- nwisData %>%
   select(site_no, startDateTime, parm_cd,
-         hyd_cond_cd, remark_cd, result_va) %>% 
+         hyd_cond_cd, remark_cd, result_va) %>%
   arrange(startDateTime, parm_cd)
 
 knitr::kable(head(nwisData_USED))
@@ -136,13 +136,13 @@ knitr::kable(head(nwisData_USED))
 
 If we explore the output from WQP, we can try to find the columns that include the same information:
 ```{r}
-wqpData_USED <- wqpData %>% 
+wqpData_USED <- wqpData %>%
   select(site_no = MonitoringLocationIdentifier,
          startDateTime = ActivityStartDateTime,
          parm_cd = USGSPCode,
          hyd_cond_cd = HydrologicCondition,
          remark_cd = ResultDetectionConditionText,
-         result_va = ResultMeasureValue) %>% 
+         result_va = ResultMeasureValue) %>%
   arrange(startDateTime, parm_cd)
 knitr::kable(head(wqpData_USED))
 
@@ -165,17 +165,17 @@ censored_text <- c("Not Detected",
                    "Detected Not Quantified",
                    "Below Quantification Limit")
 
-wqpData_USED <- wqpData %>% 
-  mutate(left_censored = grepl(paste(censored_text, collapse = "|"), 
+wqpData_USED <- wqpData %>%
+  mutate(left_censored = grepl(paste(censored_text, collapse = "|"),
                                ResultDetectionConditionText,
-                               ignore.case = TRUE)) %>% 
+                               ignore.case = TRUE)) %>%
   select(site_no = MonitoringLocationIdentifier,
          startDateTime = ActivityStartDateTime,
          parm_cd = USGSPCode,
          left_censored,
          result_va = ResultMeasureValue,
          detection_level = DetectionQuantitationLimitMeasure.MeasureValue,
-         dl_units = DetectionQuantitationLimitMeasure.MeasureUnitCode) %>% 
+         dl_units = DetectionQuantitationLimitMeasure.MeasureUnitCode) %>%
   arrange(startDateTime, parm_cd)
 
 knitr::kable(head(wqpData_USED))
@@ -192,13 +192,13 @@ The measurement units are found in EITHER the "ResultMeasure.MeasureUnitCode" co
 
 
 ```{r}
-wqpData_USED_codes <- wqpData %>% 
+wqpData_USED_codes <- wqpData %>%
   mutate(units = ifelse(is.na(ResultMeasure.MeasureUnitCode),
                              DetectionQuantitationLimitMeasure.MeasureUnitCode,
-                             ResultMeasure.MeasureUnitCode)) %>% 
+                             ResultMeasure.MeasureUnitCode)) %>%
   select(parm_cd = USGSPCode,
          CharacteristicName, ResultSampleFractionText,
-         units) %>% 
+         units) %>%
   distinct()
 
 knitr::kable(wqpData_USED_codes)
@@ -208,9 +208,9 @@ knitr::kable(wqpData_USED_codes)
 If there are USGS codes that you are using in your analysis, begin to move away from those codes, and move to the text. In the data we are looking at here:
 
 ```{r}
-wqpData_USED_codes <- wqpData %>% 
+wqpData_USED_codes <- wqpData %>%
   select(HydrologicCondition, HydrologicEvent,
-         ActivityTypeCode, ActivityMediaName) %>% 
+         ActivityTypeCode, ActivityMediaName) %>%
   distinct()
 
 knitr::kable(head(wqpData_USED_codes))
@@ -272,7 +272,7 @@ If you get your water quality data from the `readNWISdata` function, you will re
 ```{r eval=FALSE}
 qwData <- readNWISdata(state_cd = "WI",
                        startDate = "2000-01-01",
-                       drain_area_va_min = 50, qw_count_nu = 50, 
+                       drain_area_va_min = 50, qw_count_nu = 50,
                        qw_attributes = "expanded",
                        qw_sample_wide = "wide",
                        list_of_search_criteria = c("state_cd",

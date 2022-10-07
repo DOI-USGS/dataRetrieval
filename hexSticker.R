@@ -1,7 +1,7 @@
 library(hexSticker)
 
-outline = "#003366"
-background = "#003366" 
+outline <- "#003366"
+background <- "#003366" 
 sticker("./man/figures/highrezlogo-01.png",
         package = "dataRetrieval",
         h_fill = background,

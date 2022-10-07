@@ -7,9 +7,11 @@
 whatNWISdata(..., convertType = TRUE)
 }
 \arguments{
-\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A list of arguments can also be supplied.}
+\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html}
+for a complete list of options.  A list of arguments can also be supplied.}
 
-\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will
+convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
 }
 \value{
@@ -56,7 +58,8 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 }
 \description{
-Imports a table of available parameters, period of record, and count. See \url{https://waterservices.usgs.gov/rest/Site-Service.html}
+Imports a table of available parameters, period of record, and count. See
+\url{https://waterservices.usgs.gov/rest/Site-Service.html}
 for more information.
 }
 \examples{

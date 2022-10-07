@@ -9,13 +9,13 @@
 #' site1 <- whatWQPsamples(siteid = "USGS-01594440")
 #'
 #' type <- "Stream"
-#' 
+#'
 #' sites <- whatWQPsamples(countycode="US:55:025", siteType = type)
-#' 
+#'
 #' lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
 #' lakeSites_samples_chars <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
 #'                               statecode = "US:55", convertType = FALSE)
-#' 
+#'
 #' }
 whatWQPsamples <- function(..., convertType = TRUE) {
 
@@ -60,10 +60,10 @@ whatWQPsamples <- function(..., convertType = TRUE) {
 #' \donttest{
 #'
 #' type <- "Stream"
-#' 
+#'
 #' sites <- whatWQPmetrics(countycode="US:55:025",siteType=type)
 #' lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
-#' lakeSites_metrics_chars <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", 
+#' lakeSites_metrics_chars <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment",
 #'                        statecode = "US:55", convertType=FALSE)
 #' }
 whatWQPmetrics <- function(..., convertType = TRUE) {
@@ -87,7 +87,7 @@ whatWQPmetrics <- function(..., convertType = TRUE) {
   baseURL <- appendDrURL(baseURL, mimeType = "tsv")
 
   withCallingHandlers({
-    retval <- importWQP(baseURL, zip = values["zip"] == "yes", 
+    retval <- importWQP(baseURL, zip = values["zip"] == "yes",
                         convertType = convertType)
   }, warning = function(w) {
     if (any(grepl("Number of rows returned not matched in header", w)))
@@ -103,13 +103,15 @@ whatWQPmetrics <- function(..., convertType = TRUE) {
 
 #' Data Available from Water Quality Portal
 #'
-#' Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
+#' Returns a list of sites from the Water Quality Portal web service. This function gets
+#' the data from: \url{https://www.waterqualitydata.us}.
 #' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}.
 #' The information returned from this function describes the
 #' available data at the WQP sites, and some metadata on the sites themselves.
 #'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.
-#' @param saveFile path to save the incoming geojson output. 
+#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for
+#' a complete list of options. A list of arguments can also be supplied.
+#' @param saveFile path to save the incoming geojson output.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service
@@ -150,7 +152,7 @@ whatWQPmetrics <- function(..., convertType = TRUE) {
 #' sites <- whatWQPdata(countycode = "US:55:025", siteType = type)
 #'
 #' lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
-#' lakeSites_chars <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", 
+#' lakeSites_chars <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment",
 #'                        statecode = "US:55", convertType=FALSE)
 #' }
 whatWQPdata <- function(..., saveFile = tempfile(),
@@ -223,7 +225,7 @@ whatWQPdata <- function(..., saveFile = tempfile(),
     if(convertType) {
       y[, grep("Count$", names(y))] <- sapply(y[, grep("Count$", names(y))], as.numeric)
     }
-    
+
     names(y)[names(y) == "type"] <- paste("type",
       letters[seq_along(names(y)[names(y) == "type"])],
       sep = "_"
@@ -242,7 +244,7 @@ whatWQPdata <- function(..., saveFile = tempfile(),
       y <- y[, c("total_type", "lat", "lon", names(y)[!(names(y) %in% c("total_type", "lat", "lon"))])]
     }
   }
-  
+
   if(!convertType) {
     y <- data.frame(lapply(y, as.character), stringsAsFactors = FALSE)
   }
