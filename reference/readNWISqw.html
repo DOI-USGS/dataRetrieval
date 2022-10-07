@@ -114,17 +114,17 @@ sufficient information for unbiased statistical analysis.</p></dd>
 
 
 <dt>reshape</dt>
-<dd><p>logical, reshape the expanded data. If <code>TRUE</code>, then return a wide data frame with all water-quality in a single row for each sample. 
+<dd><p>logical, reshape the expanded data. If <code>TRUE</code>, then return a wide data frame with all water-quality in a single row for each sample.
 If <code>FALSE</code> (default), then return a long data frame with each water-quality result in a single row. This
 argument is only applicable to expanded data. Data requested using <code>expanded=FALSE</code> is always returned in the wide format.</p></dd>
 
 
 <dt>tz</dt>
-<dd><p>character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+<dd><p>character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code> 
+"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code>
 for more information on time zones.</p></dd>
 
 </dl></div>
@@ -132,9 +132,9 @@ for more information on time zones.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data frame with at least the following columns:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>agency_cd</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr><tr><td>site_no</td><td>character</td><td>The USGS site number</td></tr><tr><td>sample_dt</td><td>Date</td><td>The date the sample was collected</td></tr><tr><td>sample_tm</td><td>character</td><td>The reported sample collection time</td></tr><tr><td>startDateTime</td><td>POSIXct</td><td>Combining sample_dt and sample_tm, a date/time column is created, and converted into UTC 
+<p>A data frame with at least the following columns:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>agency_cd</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr><tr><td>site_no</td><td>character</td><td>The USGS site number</td></tr><tr><td>sample_dt</td><td>Date</td><td>The date the sample was collected</td></tr><tr><td>sample_tm</td><td>character</td><td>The reported sample collection time</td></tr><tr><td>startDateTime</td><td>POSIXct</td><td>Combining sample_dt and sample_tm, a date/time column is created, and converted into UTC
 (unless the tz argument specifies a different time zone)</td></tr><tr><td>endDateTime</td><td>POSIXct</td><td>If any sample_end_dt and sample_end_dt exist, this column is created similar to startDateTime</td></tr></table><p>Further columns will be included depending on the requested output format (expanded = TRUE or FALSE).
-Columns that end in "_reported" are the originally reported timezones, 
+Columns that end in "_reported" are the originally reported timezones,
 but the "tz_cd" column defines the timezone of any POSIXct columns.</p>
 
 
@@ -145,7 +145,7 @@ but the "tz_cd" column defines the timezone of any POSIXct columns.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="readWQPdata.html">readWQPdata</a></code>, <code><a href="wqpSpecials.html">whatWQPsites</a></code>, 
+    <div class="dont-index"><p><code><a href="readWQPdata.html">readWQPdata</a></code>, <code><a href="wqpSpecials.html">whatWQPsites</a></code>,
 <code><a href="readWQPqw.html">readWQPqw</a></code>, <code><a href="constructNWISURL.html">constructNWISURL</a></code></p></div>
     </div>
 

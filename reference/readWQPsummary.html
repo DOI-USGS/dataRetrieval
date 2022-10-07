@@ -96,41 +96,51 @@ for a complete list of options. A list of arguments can also be supplied.</p></d
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data frame with at least the following columns:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>"Provider"</td><td>character</td><td>Providing database.</td></tr><tr><td>"MonitoringLocationIdentifier"</td><td>character</td><td>A designator used to 
-describe the unique name, number, or code assigned to identify 
-the monitoring location.</td></tr><tr><td>"YearSummarized"</td><td>numeric</td><td>The year of the summary</td></tr><tr><td>"CharacteristicType"</td><td>character</td><td>CharacteristicType</td></tr><tr><td>"CharacteristicName"</td><td>character</td><td>The object, property, or substance 
+<p>A data frame with at least the following columns:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>"Provider"</td><td>character</td><td>Providing database.</td></tr><tr><td>"MonitoringLocationIdentifier"</td><td>character</td><td>A designator used to
+describe the unique name, number, or code assigned to identify
+the monitoring location.</td></tr><tr><td>"YearSummarized"</td><td>numeric</td><td>The year of the summary</td></tr><tr><td>"CharacteristicType"</td><td>character</td><td>CharacteristicType</td></tr><tr><td>"CharacteristicName"</td><td>character</td><td>The object, property, or substance
 which is evaluated or enumerated by either a direct field measurement,
 a direct field observation, or by laboratory analysis of material
-collected in the field.</td></tr><tr><td>"ActivityCount"</td><td>numeric</td><td>The number of times the location was sampled</td></tr><tr><td>"ResultCount"</td><td>numeric</td><td>The number of individual data results.</td></tr><tr><td>"LastResultSubmittedDate"</td><td>Date</td><td>Date when data was last submitted.</td></tr><tr><td>"OrganizationIdentifier"</td><td>character</td><td>A designator used to uniquely 
+collected in the field.</td></tr><tr><td>"ActivityCount"</td><td>numeric</td><td>The number of times the location was sampled</td></tr><tr><td>"ResultCount"</td><td>numeric</td><td>The number of individual data results.</td></tr><tr><td>"LastResultSubmittedDate"</td><td>Date</td><td>Date when data was last submitted.</td></tr><tr><td>"OrganizationIdentifier"</td><td>character</td><td>A designator used to uniquely
 identify a unique business establishment within a context.</td></tr><tr><td>"OrganizationFormalName"</td><td>character</td><td>The legal designator
-(i.e. formal name) of an organization.</td></tr><tr><td>"MonitoringLocationName</td><td>character</td><td>MonitoringLocationName</td></tr><tr><td>"MonitoringLocationTypeName"</td><td>character</td><td>MonitoringLocationTypeName</td></tr><tr><td>"ResolvedMonitoringLocationTypeName"</td><td>character</td><td></td></tr><tr><td>"HUCEightDigitCode"</td><td>character</td><td>8-digit HUC id.</td></tr><tr><td>"MonitoringLocationUrl"</td><td>character</td><td>URL to monitoring location.</td></tr><tr><td>"CountyName"</td><td>character</td><td>County of sampling location.</td></tr><tr><td>"StateName"</td><td>character</td><td>State of sampling location.</td></tr><tr><td>"MonitoringLocationLatitude"</td><td>numeric</td><td>latitude of sampling 
- location.</td></tr><tr><td>"MonitoringLocationLongitude"</td><td>numeric</td><td>longitude of sampling 
+(i.e. formal name) of an organization.</td></tr><tr><td>"MonitoringLocationName</td><td>character</td><td>MonitoringLocationName</td></tr><tr><td>"MonitoringLocationTypeName"</td><td>character</td><td>MonitoringLocationTypeName</td></tr><tr><td>"ResolvedMonitoringLocationTypeName"</td><td>character</td><td></td></tr><tr><td>"HUCEightDigitCode"</td><td>character</td><td>8-digit HUC id.</td></tr><tr><td>"MonitoringLocationUrl"</td><td>character</td><td>URL to monitoring location.</td></tr><tr><td>"CountyName"</td><td>character</td><td>County of sampling location.</td></tr><tr><td>"StateName"</td><td>character</td><td>State of sampling location.</td></tr><tr><td>"MonitoringLocationLatitude"</td><td>numeric</td><td>latitude of sampling
+ location.</td></tr><tr><td>"MonitoringLocationLongitude"</td><td>numeric</td><td>longitude of sampling
  location.</td></tr></table></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># Summary of a single site for the last 5 years:</span></span></span>
-<span class="r-in"><span><span class="va">site_5</span> <span class="op">&lt;-</span> <span class="fu">readWQPsummary</span><span class="op">(</span>siteid<span class="op">=</span><span class="st">"USGS-07144100"</span>,</span></span>
-<span class="r-in"><span>                        summaryYears<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span>                        </span></span>
-<span class="r-in"><span><span class="co"># Summary of a single site for the full period of record:</span></span></span>
-<span class="r-in"><span><span class="va">site_all</span> <span class="op">&lt;-</span> <span class="fu">readWQPsummary</span><span class="op">(</span>siteid<span class="op">=</span><span class="st">"USGS-07144100"</span>,</span></span>
-<span class="r-in"><span>                           summaryYears<span class="op">=</span><span class="st">"all"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">site_5</span> <span class="op">&lt;-</span> <span class="fu">readWQPsummary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  siteid <span class="op">=</span> <span class="st">"USGS-07144100"</span>,</span></span>
+<span class="r-in"><span>  summaryYears <span class="op">=</span> <span class="fl">5</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Summary of the data available from streams in a single county:       </span></span></span>
-<span class="r-in"><span><span class="va">dane_county_data</span> <span class="op">&lt;-</span> <span class="fu">readWQPsummary</span><span class="op">(</span>countycode <span class="op">=</span> <span class="st">"US:55:025"</span>,</span></span>
-<span class="r-in"><span>                        summaryYears <span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span>                        siteType <span class="op">=</span> <span class="st">"Stream"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Summary of a single site for the full period of record:</span></span></span>
+<span class="r-in"><span><span class="va">site_all</span> <span class="op">&lt;-</span> <span class="fu">readWQPsummary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  siteid <span class="op">=</span> <span class="st">"USGS-07144100"</span>,</span></span>
+<span class="r-in"><span>  summaryYears <span class="op">=</span> <span class="st">"all"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Summary of the data available from streams in a single county:</span></span></span>
+<span class="r-in"><span><span class="va">dane_county_data</span> <span class="op">&lt;-</span> <span class="fu">readWQPsummary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  countycode <span class="op">=</span> <span class="st">"US:55:025"</span>,</span></span>
+<span class="r-in"><span>  summaryYears <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>  siteType <span class="op">=</span> <span class="st">"Stream"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Summary of the data all available from lakes in a single county:</span></span></span>
-<span class="r-in"><span><span class="va">lake_sites</span> <span class="op">&lt;-</span> <span class="fu">readWQPsummary</span><span class="op">(</span>siteType <span class="op">=</span> <span class="st">"Lake, Reservoir, Impoundment"</span>,</span></span>
-<span class="r-in"><span>                         countycode <span class="op">=</span> <span class="st">"US:55:025"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lake_sites</span> <span class="op">&lt;-</span> <span class="fu">readWQPsummary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  siteType <span class="op">=</span> <span class="st">"Lake, Reservoir, Impoundment"</span>,</span></span>
+<span class="r-in"><span>  countycode <span class="op">=</span> <span class="st">"US:55:025"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Summary of the data available for the last 5 years in New Jersey:</span></span></span>
-<span class="r-in"><span><span class="va">state1</span> <span class="op">&lt;-</span> <span class="fu">readWQPsummary</span><span class="op">(</span>statecode<span class="op">=</span><span class="st">"NJ"</span>,</span></span>
-<span class="r-in"><span>                         summaryYears <span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span>                         siteType <span class="op">=</span> <span class="st">"Stream"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">state1</span> <span class="op">&lt;-</span> <span class="fu">readWQPsummary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  statecode <span class="op">=</span> <span class="st">"NJ"</span>,</span></span>
+<span class="r-in"><span>  summaryYears <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>  siteType <span class="op">=</span> <span class="st">"Stream"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

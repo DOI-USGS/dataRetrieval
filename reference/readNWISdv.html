@@ -79,7 +79,8 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>siteNumbers</dt>
-<dd><p>character USGS site number.  This is usually an 8 digit number. Multiple sites can be requested with a character vector.</p></dd>
+<dd><p>character USGS site number.  This is usually an 8 digit number.
+Multiple sites can be requested with a character vector.</p></dd>
 
 
 <dt>parameterCd</dt>
@@ -87,7 +88,8 @@
 
 
 <dt>startDate</dt>
-<dd><p>character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+<dd><p>character starting date for data retrieval in the form YYYY-MM-DD.
+Default is "" which indicates
 retrieval for the earliest possible record. Date arguments are always specified in local time.</p></dd>
 
 
@@ -104,10 +106,10 @@ retrieval for the latest possible record. Date arguments are always specified in
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data frame with the following columns:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>agency</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr><tr><td>site</td><td>character</td><td>The USGS site number</td></tr><tr><td>Date</td><td>Date</td><td>The date of the value</td></tr><tr><td>code</td><td>character</td><td>Any codes that qualify the corresponding value</td></tr><tr><td>value</td><td>numeric</td><td>The numeric value for the parameter</td></tr></table><p>Note that code and value are repeated for the parameters requested. The names are of the form 
-X_D_P_S, where X is literal, 
-D is an option description of the parameter, 
-P is the parameter code, 
+<p>A data frame with the following columns:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>agency</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr><tr><td>site</td><td>character</td><td>The USGS site number</td></tr><tr><td>Date</td><td>Date</td><td>The date of the value</td></tr><tr><td>code</td><td>character</td><td>Any codes that qualify the corresponding value</td></tr><tr><td>value</td><td>numeric</td><td>The numeric value for the parameter</td></tr></table><p>Note that code and value are repeated for the parameters requested. The names are of the form
+X_D_P_S, where X is literal,
+D is an option description of the parameter,
+P is the parameter code,
 and S is the statistic code (if applicable).</p>
 
 
@@ -119,17 +121,21 @@ and S is the statistic code (if applicable).</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">site_id</span> <span class="op">&lt;-</span> <span class="st">'04085427'</span></span></span>
-<span class="r-in"><span><span class="va">startDate</span> <span class="op">&lt;-</span> <span class="st">'2012-01-01'</span></span></span>
-<span class="r-in"><span><span class="va">endDate</span> <span class="op">&lt;-</span> <span class="st">'2012-06-30'</span></span></span>
-<span class="r-in"><span><span class="va">pCode</span> <span class="op">&lt;-</span> <span class="st">'00060'</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">site_id</span> <span class="op">&lt;-</span> <span class="st">"04085427"</span></span></span>
+<span class="r-in"><span><span class="va">startDate</span> <span class="op">&lt;-</span> <span class="st">"2012-01-01"</span></span></span>
+<span class="r-in"><span><span class="va">endDate</span> <span class="op">&lt;-</span> <span class="st">"2012-06-30"</span></span></span>
+<span class="r-in"><span><span class="va">pCode</span> <span class="op">&lt;-</span> <span class="st">"00060"</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">rawDailyQ</span> <span class="op">&lt;-</span> <span class="fu">readNWISdv</span><span class="op">(</span><span class="va">site_id</span>,<span class="va">pCode</span>, <span class="va">startDate</span>, <span class="va">endDate</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">rawDailyQAndTempMeanMax</span> <span class="op">&lt;-</span> <span class="fu">readNWISdv</span><span class="op">(</span><span class="va">site_id</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'00010'</span>,<span class="st">'00060'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>       <span class="va">startDate</span>, <span class="va">endDate</span>, statCd<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'00001'</span>,<span class="st">'00003'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rawDailyQ</span> <span class="op">&lt;-</span> <span class="fu">readNWISdv</span><span class="op">(</span><span class="va">site_id</span>, <span class="va">pCode</span>, <span class="va">startDate</span>, <span class="va">endDate</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rawDailyQAndTempMeanMax</span> <span class="op">&lt;-</span> <span class="fu">readNWISdv</span><span class="op">(</span><span class="va">site_id</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00010"</span>, <span class="st">"00060"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="va">startDate</span>, <span class="va">endDate</span>,</span></span>
+<span class="r-in"><span>  statCd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00001"</span>, <span class="st">"00003"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">rawDailyQAndTempMeanMax</span> <span class="op">&lt;-</span> <span class="fu"><a href="renameNWISColumns.html">renameNWISColumns</a></span><span class="op">(</span><span class="va">rawDailyQAndTempMeanMax</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">rawDailyMultiSites</span><span class="op">&lt;-</span> <span class="fu">readNWISdv</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"01491000"</span>, <span class="st">"01645000"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'00010'</span>,<span class="st">'00060'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>       <span class="va">startDate</span>, <span class="va">endDate</span>, statCd<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'00001'</span>,<span class="st">'00003'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rawDailyMultiSites</span> <span class="op">&lt;-</span> <span class="fu">readNWISdv</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"01491000"</span>, <span class="st">"01645000"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00010"</span>, <span class="st">"00060"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="va">startDate</span>, <span class="va">endDate</span>,</span></span>
+<span class="r-in"><span>  statCd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00001"</span>, <span class="st">"00003"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Site with no data:</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">readNWISdv</span><span class="op">(</span><span class="st">"10258500"</span>, <span class="st">"00060"</span>, <span class="st">"2014-09-08"</span>, <span class="st">"2014-09-14"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -146,8 +152,8 @@ and S is the statistic code (if applicable).</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"variableInfo"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   variableCode           variableName              variableDescription</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        00060 Streamflow, ft&amp;#179;/s Discharge, cubic feet per second</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       valueType  unit options noDataValue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Derived Value ft3/s    Mean          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       valueType param_unit options noDataValue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Derived Value      ft3/s    Mean          NA</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">site</span> <span class="op">&lt;-</span> <span class="st">"05212700"</span></span></span>
 <span class="r-in"><span><span class="va">notActive</span> <span class="op">&lt;-</span> <span class="fu">readNWISdv</span><span class="op">(</span><span class="va">site</span>, <span class="st">"00060"</span>, <span class="st">"2014-01-01"</span>, <span class="st">"2014-01-07"</span><span class="op">)</span></span></span>

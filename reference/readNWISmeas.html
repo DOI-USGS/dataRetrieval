@@ -97,11 +97,11 @@ retrieval for the latest possible record.</p></dd>
 
 
 <dt>tz</dt>
-<dd><p>character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+<dd><p>character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code> 
+"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code>
 for more information on time zones.</p></dd>
 
 
@@ -120,7 +120,7 @@ numerics based on a standard algorithm. If false, everything is returned as a ch
 
 <p>A data frame with at least the following columns:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>agency_cd</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr><tr><td>site_no</td><td>character</td><td>The USGS site number</td></tr><tr><td>measurement_dt</td><td>POSIXct</td><td>The date and time (in POSIXct) of the measurement. Unless specified
 with the tz parameter, this is converted to UTC. If the measurement_dt column is an incomplete, a measurement_dt_date and
-measurement_dt_time column are added to the returned data frame.</td></tr><tr><td>tz_cd</td><td>character</td><td>The time zone code for the measurement_dt column</td></tr></table><p>See <a href="https://waterdata.usgs.gov/usa/nwis/sw" class="external-link">https://waterdata.usgs.gov/usa/nwis/sw</a> for details about surface water, and 
+measurement_dt_time column are added to the returned data frame.</td></tr><tr><td>tz_cd</td><td>character</td><td>The time zone code for the measurement_dt column</td></tr></table><p>See <a href="https://waterdata.usgs.gov/usa/nwis/sw" class="external-link">https://waterdata.usgs.gov/usa/nwis/sw</a> for details about surface water, and
 <a href="https://waterdata.usgs.gov/nwis/help?output_formats_help" class="external-link">https://waterdata.usgs.gov/nwis/help?output_formats_help</a></p>
 
 
@@ -135,13 +135,13 @@ measurement_dt_time column are added to the returned data frame.</td></tr><tr><t
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">site_ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'01594440'</span>,<span class="st">'040851325'</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">site_ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"01594440"</span>, <span class="st">"040851325"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">readNWISmeas</span><span class="op">(</span><span class="va">site_ids</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">Meas05316840</span> <span class="op">&lt;-</span> <span class="fu">readNWISmeas</span><span class="op">(</span><span class="st">"05316840"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">Meas05316840.ex</span> <span class="op">&lt;-</span> <span class="fu">readNWISmeas</span><span class="op">(</span><span class="st">"05316840"</span>,expanded<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">Meas07227500.ex</span> <span class="op">&lt;-</span> <span class="fu">readNWISmeas</span><span class="op">(</span><span class="st">"07227500"</span>,expanded<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">Meas07227500.exRaw</span> <span class="op">&lt;-</span> <span class="fu">readNWISmeas</span><span class="op">(</span><span class="st">"07227500"</span>,expanded<span class="op">=</span><span class="cn">TRUE</span>, convertType <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Meas05316840.ex</span> <span class="op">&lt;-</span> <span class="fu">readNWISmeas</span><span class="op">(</span><span class="st">"05316840"</span>, expanded <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Meas07227500.ex</span> <span class="op">&lt;-</span> <span class="fu">readNWISmeas</span><span class="op">(</span><span class="st">"07227500"</span>, expanded <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Meas07227500.exRaw</span> <span class="op">&lt;-</span> <span class="fu">readNWISmeas</span><span class="op">(</span><span class="st">"07227500"</span>, expanded <span class="op">=</span> <span class="cn">TRUE</span>, convertType <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

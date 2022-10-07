@@ -123,8 +123,8 @@ one or more of the abbreviations ("UM", "UT", DM", "DD").</p></dd>
 <dd><p>character vector. Define what resources to find along the
 navigation path(s) (see get_nldi_sources()$source). Can also include 'basin'
 or 'flowline', which will return the upstream basin of the starting feature
-or flowlines along the navigation respectively. The default is "flowlines". 
-If you provide any other resource, AND want flowlines, then flowlines must 
+or flowlines along the navigation respectively. The default is "flowlines".
+If you provide any other resource, AND want flowlines, then flowlines must
 be explicitly requested.</p></dd>
 
 
@@ -159,7 +159,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-in"><span><span class="co"># Find Features / Define origin features</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Find feature by COMID</span></span></span>
-<span class="r-in"><span> <span class="fu">findNLDI</span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">findNLDI</span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -169,9 +169,9 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sourceName    identifier comid                                        geometry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;LINESTRING [°]&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NHDPlus comid 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.6…</span>
-<span class="r-in"><span> </span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Find feature by NWIS ID</span></span></span>
-<span class="r-in"><span>  <span class="fu">findNLDI</span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">'11120000'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">findNLDI</span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 8 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -184,8 +184,8 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: geometry &lt;POINT [°]&gt;, and abbreviated variable name</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ¹​reachcode</span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Find feature by WQP ID </span></span></span>
-<span class="r-in"><span> <span class="fu">findNLDI</span><span class="op">(</span>wqp <span class="op">=</span> <span class="st">'USGS-04024315'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## Find feature by WQP ID</span></span></span>
+<span class="r-in"><span><span class="fu">findNLDI</span><span class="op">(</span>wqp <span class="op">=</span> <span class="st">"USGS-04024315"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 6 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -198,7 +198,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with abbreviated variable name ¹​identifier</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Find feature by LOCATION</span></span></span>
-<span class="r-in"><span> <span class="fu">findNLDI</span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">115</span>,<span class="fl">40</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">findNLDI</span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">115</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -210,7 +210,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NHDPlus comid 946060315  946060315 (-115.0182 40.05183, -115.0185 40.05176, -…</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## GENERAL ORIGIN: COMID</span></span></span>
-<span class="r-in"><span> <span class="fu">findNLDI</span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"comid"</span> <span class="op">=</span> <span class="fl">101</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">findNLDI</span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"comid"</span> <span class="op">=</span> <span class="fl">101</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -222,15 +222,15 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> NHDPlus comid 101        101   (-94.64845 31.09915, -94.64803 31.09871, -94.6…</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## GENERAL ORIGIN: WaDE</span></span></span>
-<span class="r-in"><span> <span class="fu">findNLDI</span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"wade"</span> <span class="op">=</span> <span class="st">'CA_45206'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">findNLDI</span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"wade"</span> <span class="op">=</span> <span class="st">"CA_45206"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Request failed [404]. Retrying in 1 seconds...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Request failed [404]. Retrying in 3.7 seconds...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Request failed [404]. Retrying in 1.1 seconds...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Error in: https://labs.waterdata.usgs.gov/api/nldi/linked-data/wade/CA_45206/</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> named list()</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Navigation (flowlines will be returned if find is unspecified)</span></span></span>
 <span class="r-in"><span><span class="co"># UPPER MAINSTEM of USGS-11120000</span></span></span>
-<span class="r-in"><span> <span class="fu">findNLDI</span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">'11120000'</span>, nav <span class="op">=</span> <span class="st">"UM"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">findNLDI</span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span>, nav <span class="op">=</span> <span class="st">"UM"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $origin</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 8 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
@@ -261,7 +261,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># MULTI-REQUEST</span></span></span>
 <span class="r-in"><span><span class="co"># UPPER MAINSTEM and TRIBUTARY of USGS-11120000</span></span></span>
-<span class="r-in"><span> <span class="fu">findNLDI</span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">'11120000'</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UT"</span>, <span class="st">"UM"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">findNLDI</span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span>, nav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UT"</span>, <span class="st">"UM"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $origin</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 8 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
@@ -314,7 +314,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-in"><span><span class="co"># Discover Features(flowlines will not be returned unless included in find)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Find feature(s) on the upper tributary of USGS-11120000</span></span></span>
-<span class="r-in"><span> <span class="fu">findNLDI</span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">'11120000'</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">findNLDI</span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span>, nav <span class="op">=</span> <span class="st">"UT"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>No data returned for: https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite/USGS-11120000/navigation/UT/WQP?f=json&amp;distance= 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $origin</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 8 fields</span>
@@ -346,7 +346,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Find upstream basin boundary and  of USGS-11120000</span></span></span>
-<span class="r-in"><span> <span class="fu">findNLDI</span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">'11120000'</span>,  find <span class="op">=</span> <span class="st">"basin"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">findNLDI</span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span>, find <span class="op">=</span> <span class="st">"basin"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $origin</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 8 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
@@ -374,7 +374,7 @@ arguments: comid, nwis, huc12, wqp, location, and start.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Control Distance</span></span></span>
 <span class="r-in"><span><span class="co">## Limit search to 50 km</span></span></span>
-<span class="r-in"><span> <span class="fu">findNLDI</span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span>, <span class="st">"flowlines"</span><span class="op">)</span>, distance_km <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">findNLDI</span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, nav <span class="op">=</span> <span class="st">"DM"</span>, find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nwis"</span>, <span class="st">"wqp"</span>, <span class="st">"flowlines"</span><span class="op">)</span>, distance_km <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $origin</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>

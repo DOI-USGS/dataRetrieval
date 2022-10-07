@@ -91,7 +91,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Network Linked Data Index: `dataRetrieval`</h1>
                         <h4 data-toc-skip class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
             
-            <h4 data-toc-skip class="date">2022-10-06</h4>
+            <h4 data-toc-skip class="date">2022-10-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/vignettes/nldi.Rmd" class="external-link"><code>vignettes/nldi.Rmd</code></a></small>
       <div class="d-none name"><code>nldi.Rmd</code></div>
@@ -138,7 +138,7 @@ Gas stations between UCSB and UCLA
 <div class="section level2">
 <h2 id="whats-available">What’s available?<a class="anchor" aria-label="anchor" href="#whats-available"></a>
 </h2>
-<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2022-10-06), 12 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
+<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2022-10-07), 12 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -268,7 +268,7 @@ Gas stations between UCSB and UCLA
 <p>Any NLDI feature found with <code>get_nldi_source</code> can be requested by passing a <code>type</code>/<code>ID</code> pair as a list to the <code>origin</code> argument. This will allow the networking capabilities offered in <code>dataRetrieval</code> to grow naturally with the NLDI itself. For example, we can use the origin argument to request features that don’t offer a specific parameter.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Water Data Exchange 2.0 Site CA_45206</span></span>
-<span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"wade"</span> <span class="op">=</span> <span class="st">'CA_45206'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"wade"</span> <span class="op">=</span> <span class="st">"CA_45206"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; named list()</span></span></code></pre>
 </div>
 <div class="section level4">
@@ -324,7 +324,7 @@ NLDI Navigation Options
 </div>
 <p>One or more modes of navigation can be supplied to the <code>nav</code> argument. For example we can ask to navigate along the upper mainstem (UM) from COMID 101.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarize.nldi</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span><span class="op">)</span><span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="va">summarize.nldi</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">input</span><span class="op">)</span>, </span>
 <span>             class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">input</span>, <span class="va">class</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, </span>
 <span>             row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -443,7 +443,8 @@ NLDI Navigation Options
 <code class="sourceCode R"><span><span class="co"># Identify NLDI sites with daily values "dv"</span></span>
 <span><span class="co">#     and record streamflow ("00060")</span></span>
 <span><span class="co">#     and recorded flows in 2020</span></span>
-<span><span class="va">find</span> <span class="op">=</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>sites <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="st">""</span>, <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span><span class="op">$</span><span class="va">identifier</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">find</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>sites <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="st">""</span>,</span>
+<span>                                  <span class="va">fountainCreek</span><span class="op">$</span><span class="va">UM_nwissite</span><span class="op">$</span><span class="va">identifier</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">data_type_cd</span> <span class="op">==</span> <span class="st">"dv"</span>, </span>
 <span>         <span class="va">parm_cd</span> <span class="op">==</span> <span class="st">"00060"</span>,</span>
 <span>         <span class="va">end_date</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2020-01-01"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>

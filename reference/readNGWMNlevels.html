@@ -73,22 +73,22 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>siteNumbers</dt>
-<dd><p>character Vector of feature IDs formatted with agency code and site number 
+<dd><p>character Vector of feature IDs formatted with agency code and site number
 separated by a period or semicolon, e.g. <code>USGS.404159100494601</code>.</p></dd>
 
 
 <dt>asDateTime</dt>
 <dd><p>logical Should dates and times be converted to date/time objects,
-or returned as character?  Defaults to <code>TRUE</code>.  Must be set to <code>FALSE</code> if a site 
+or returned as character?  Defaults to <code>TRUE</code>.  Must be set to <code>FALSE</code> if a site
 contains non-standard dates.</p></dd>
 
 
 <dt>tz</dt>
-<dd><p>character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+<dd><p>character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
 Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code> 
+"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code>
 for more information on time zones.</p></dd>
 
 </dl></div>
@@ -96,21 +96,21 @@ for more information on time zones.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co">#one site</span></span></span>
+<span class="r-in"><span><span class="co"># one site</span></span></span>
 <span class="r-in"><span><span class="va">site</span> <span class="op">&lt;-</span> <span class="st">"USGS.430427089284901"</span></span></span>
-<span class="r-in"><span><span class="co">#oneSite &lt;- readNGWMNlevels(siteNumbers = site)</span></span></span>
+<span class="r-in"><span><span class="co"># oneSite &lt;- readNGWMNlevels(siteNumbers = site)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#multiple sites</span></span></span>
+<span class="r-in"><span><span class="co"># multiple sites</span></span></span>
 <span class="r-in"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USGS:272838082142201"</span>, <span class="st">"USGS:404159100494601"</span>, <span class="st">"USGS:401216080362703"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">#multiSiteData &lt;- readNGWMNlevels(sites)</span></span></span>
+<span class="r-in"><span><span class="co"># multiSiteData &lt;- readNGWMNlevels(sites)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#non-USGS site</span></span></span>
+<span class="r-in"><span><span class="co"># non-USGS site</span></span></span>
 <span class="r-in"><span><span class="va">site</span> <span class="op">&lt;-</span> <span class="st">"MBMG.103306"</span></span></span>
-<span class="r-in"><span><span class="co">#data &lt;- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)</span></span></span>
+<span class="r-in"><span><span class="co"># data &lt;- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#site with no data returns empty data frame</span></span></span>
+<span class="r-in"><span><span class="co"># site with no data returns empty data frame</span></span></span>
 <span class="r-in"><span><span class="va">noDataSite</span> <span class="op">&lt;-</span> <span class="st">"UTGS.401544112060301"</span></span></span>
-<span class="r-in"><span><span class="co">#noDataSite &lt;- readNGWMNlevels(siteNumbers = noDataSite)</span></span></span>
+<span class="r-in"><span><span class="co"># noDataSite &lt;- readNGWMNlevels(siteNumbers = noDataSite)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

@@ -109,8 +109,8 @@
 </h3>
 <p>Starting with version 2.7.9, users will notice a Warning message when using this function:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">site_ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'04024430'</span>,<span class="st">'04024000'</span><span class="op">)</span></span>
-<span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'34247'</span>,<span class="st">'30234'</span>,<span class="st">'32104'</span>,<span class="st">'34220'</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">site_ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"04024430"</span>, <span class="st">"04024000"</span><span class="op">)</span></span>
+<span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"34247"</span>, <span class="st">"30234"</span>, <span class="st">"32104"</span>, <span class="st">"34220"</span><span class="op">)</span></span>
 <span><span class="va">nwisData</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISqw.html">readNWISqw</a></span><span class="op">(</span><span class="va">site_ids</span>, <span class="va">parameterCd</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Warning message:                                                                                               
 NWIS qw web services are being retired. Please see the vignette 
@@ -332,7 +332,7 @@ WQP
 <span>                   <span class="st">"Below Quantification Limit"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">wqpData_USED</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>left_censored <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">censored_text</span>, collapse<span class="op">=</span><span class="st">"|"</span><span class="op">)</span>, </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>left_censored <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">censored_text</span>, collapse <span class="op">=</span> <span class="st">"|"</span><span class="op">)</span>, </span>
 <span>                               <span class="va">ResultDetectionConditionText</span>,</span>
 <span>                               ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>site_no <span class="op">=</span> <span class="va">MonitoringLocationIdentifier</span>,</span>
@@ -425,7 +425,7 @@ WQP
 <span>                             <span class="va">DetectionQuantitationLimitMeasure.MeasureUnitCode</span>,</span>
 <span>                             <span class="va">ResultMeasure.MeasureUnitCode</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>parm_cd <span class="op">=</span> <span class="va">USGSPCode</span>,</span>
-<span>         <span class="va">CharacteristicName</span>,<span class="va">ResultSampleFractionText</span>,</span>
+<span>         <span class="va">CharacteristicName</span>, <span class="va">ResultSampleFractionText</span>,</span>
 <span>         <span class="va">units</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -467,7 +467,7 @@ WQP
 <p>If there are USGS codes that you are using in your analysis, begin to move away from those codes, and move to the text. In the data we are looking at here:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wqpData_USED_codes</span> <span class="op">&lt;-</span> <span class="va">wqpData</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">HydrologicCondition</span>,<span class="va">HydrologicEvent</span>,</span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">HydrologicCondition</span>, <span class="va">HydrologicEvent</span>,</span>
 <span>         <span class="va">ActivityTypeCode</span>, <span class="va">ActivityMediaName</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -527,35 +527,35 @@ WQP
 <tbody>
 <tr class="odd">
 <td align="left">samp_type_cd = 9</td>
-<td align="left">ActivityTypeCode = “Sample-Routine”</td>
+<td align="left">ActivityTypeCode = ‘Sample-Routine’</td>
 </tr>
 <tr class="even">
 <td align="left">hyd_cond_cd = 9</td>
-<td align="left">HydrologicCondition = “Stable, normal stage”</td>
+<td align="left">HydrologicCondition = ‘Stable, normal stage’</td>
 </tr>
 <tr class="odd">
 <td align="left">hyd_cond_cd = 5</td>
-<td align="left">HydrologicCondition = “Falling stage”</td>
+<td align="left">HydrologicCondition = ‘Falling stage’</td>
 </tr>
 <tr class="even">
 <td align="left">hyd_cond_cd = 8</td>
-<td align="left">HydrologicCondition = “Rising stage”</td>
+<td align="left">HydrologicCondition = ‘Rising stage’</td>
 </tr>
 <tr class="odd">
-<td align="left">medium_cd = “WS”</td>
-<td align="left">ActivityMediaName = “Water”</td>
+<td align="left">medium_cd = ‘WS’</td>
+<td align="left">ActivityMediaName = ‘Water’</td>
 </tr>
 <tr class="even">
-<td align="left">hyd_event_cd = “B”</td>
-<td align="left">HydrologicEvent = “Under ice cover”</td>
+<td align="left">hyd_event_cd = ‘B’</td>
+<td align="left">HydrologicEvent = ‘Under ice cover’</td>
 </tr>
 <tr class="odd">
-<td align="left">hyd_event_cd = “A”</td>
-<td align="left">HydrologicEvent = “Spring breakup”</td>
+<td align="left">hyd_event_cd = ‘A’</td>
+<td align="left">HydrologicEvent = ‘Spring breakup’</td>
 </tr>
 <tr class="even">
 <td align="left">hyd_event_cd = 9</td>
-<td align="left">HydrologicEvent = “Routine sample”</td>
+<td align="left">HydrologicEvent = ‘Routine sample’</td>
 </tr>
 </tbody>
 </table>
@@ -570,7 +570,7 @@ WQP
 <p>The function to replace this functionality is <code>whatWQPdata</code>:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">whatNWIS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatNWISdata.html">whatNWISdata</a></span><span class="op">(</span>siteNumber <span class="op">=</span> <span class="va">site_ids</span>,</span>
-<span>                       service <span class="op">=</span> <span class="st">"qw"</span><span class="op">)</span></span></code></pre></div>
+<span>                         service <span class="op">=</span> <span class="st">"qw"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Warning message:                                                                                               
 NWIS qw web services are being retired. Please see the vignette 
 'Changes to NWIS QW services' for more information.</code></pre>
@@ -585,13 +585,13 @@ NWIS qw web services are being retired. Please see the vignette
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">qwData</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdata.html">readNWISdata</a></span><span class="op">(</span>state_cd <span class="op">=</span> <span class="st">"WI"</span>,</span>
 <span>                       startDate <span class="op">=</span> <span class="st">"2000-01-01"</span>,</span>
-<span>                       drain_area_va_min <span class="op">=</span> <span class="fl">50</span>, qw_count_nu<span class="op">=</span><span class="fl">50</span>, </span>
-<span>                       qw_attributes<span class="op">=</span><span class="st">"expanded"</span>,</span>
-<span>                       qw_sample_wide<span class="op">=</span><span class="st">"wide"</span>,</span>
+<span>                       drain_area_va_min <span class="op">=</span> <span class="fl">50</span>, qw_count_nu <span class="op">=</span> <span class="fl">50</span>, </span>
+<span>                       qw_attributes <span class="op">=</span> <span class="st">"expanded"</span>,</span>
+<span>                       qw_sample_wide <span class="op">=</span> <span class="st">"wide"</span>,</span>
 <span>                       list_of_search_criteria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"state_cd"</span>,</span>
 <span>                                                   <span class="st">"drain_area_va"</span>,</span>
 <span>                                                   <span class="st">"obs_count_nu"</span><span class="op">)</span>,</span>
-<span>                       service<span class="op">=</span><span class="st">"qw"</span><span class="op">)</span></span></code></pre></div>
+<span>                       service <span class="op">=</span> <span class="st">"qw"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Warning message:
 NWIS qw web services are being retired. Please see the vignette 
 'Changes to NWIS QW services' for more information. </code></pre>

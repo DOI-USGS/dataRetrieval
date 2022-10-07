@@ -84,11 +84,11 @@ but the general functionality is correct.</p>
 
 
 <dt>tz</dt>
-<dd><p>character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+<dd><p>character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
 Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code> 
+"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code>
 for more information on time zones.</p></dd>
 
 </dl></div>
@@ -103,13 +103,14 @@ for more information on time zones.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">obs_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"https://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation"</span>,</span></span>
-<span class="r-in"><span><span class="st">"service=SOS"</span>, <span class="st">"version=2.0.0"</span>,</span></span>
-<span class="r-in"><span><span class="st">"observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel"</span>,</span></span>
-<span class="r-in"><span><span class="st">"responseFormat=text/xml"</span>,</span></span>
-<span class="r-in"><span><span class="st">"featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401"</span>,sep<span class="op">=</span> <span class="st">"&amp;"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="st">"service=SOS"</span>, <span class="st">"version=2.0.0"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"responseFormat=text/xml"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401"</span>,</span></span>
+<span class="r-in"><span>  sep <span class="op">=</span> <span class="st">"&amp;"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span> <span class="va">data_returned</span> <span class="op">&lt;-</span> <span class="fu">importNGWMN</span><span class="op">(</span><span class="va">obs_url</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">data_returned</span> <span class="op">&lt;-</span> <span class="fu">importNGWMN</span><span class="op">(</span><span class="va">obs_url</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -76,7 +76,8 @@ NWIS site, parameter code, statistic, startdate and enddate.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>obs_url</dt>
-<dd><p>character or raw, containing the url for the retrieval or a file path to the data file, or raw XML.</p></dd>
+<dd><p>character or raw, containing the url for the retrieval or a
+file path to the data file, or raw XML.</p></dd>
 
 
 <dt>asDateTime</dt>
@@ -84,10 +85,11 @@ NWIS site, parameter code, statistic, startdate and enddate.</p>
 
 
 <dt>tz</dt>
-<dd><p>character to set timezone attribute of datetime. Default converts the datetimes to UTC 
+<dd><p>character to set timezone attribute of datetime. Default converts the datetimes to UTC
 (properly accounting for daylight savings times based on the data's provided tz_cd column).
-Recommended US values include "UTC", "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
-"America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla".
+Recommended US values include "UTC", "America/New_York", "America/Chicago", "America/Denver",
+"America/Los_Angeles", "America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua",
+"America/Phoenix", and "America/Metlakatla".
 For a complete list, see <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" class="external-link">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></p></dd>
 
 </dl></div>
@@ -95,10 +97,10 @@ For a complete list, see <a href="https://en.wikipedia.org/wiki/List_of_tz_datab
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data frame with the following columns:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>agency_cd</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr><tr><td>site_no</td><td>character</td><td>The USGS site number</td></tr><tr><td></td><td>POSIXct</td><td>The date and time of the value converted to UTC (if asDateTime = TRUE),</td></tr><tr><td></td><td>character</td><td>or raw character string (if asDateTime = FALSE)</td></tr><tr><td>tz_cd</td><td>character</td><td>The time zone code for</td></tr><tr><td>code</td><td>character</td><td>Any codes that qualify the corresponding value</td></tr><tr><td>value</td><td>numeric</td><td>The numeric value for the parameter</td></tr></table><p>Note that code and value are repeated for the parameters requested. The names are of the form 
-X_D_P_S, where X is literal, 
-D is an option description of the parameter, 
-P is the parameter code, 
+<p>A data frame with the following columns:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>agency_cd</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr><tr><td>site_no</td><td>character</td><td>The USGS site number</td></tr><tr><td></td><td>POSIXct</td><td>The date and time of the value converted to UTC (if asDateTime = TRUE),</td></tr><tr><td></td><td>character</td><td>or raw character string (if asDateTime = FALSE)</td></tr><tr><td>tz_cd</td><td>character</td><td>The time zone code for</td></tr><tr><td>code</td><td>character</td><td>Any codes that qualify the corresponding value</td></tr><tr><td>value</td><td>numeric</td><td>The numeric value for the parameter</td></tr></table><p>Note that code and value are repeated for the parameters requested. The names are of the form
+X_D_P_S, where X is literal,
+D is an option description of the parameter,
+P is the parameter code,
 and S is the statistic code (if applicable).</p>
 
 
@@ -123,18 +125,24 @@ and S is the statistic code (if applicable).</p>
 <span class="r-in"><span><span class="va">startGW</span> <span class="op">&lt;-</span> <span class="st">"2013-10-01"</span></span></span>
 <span class="r-in"><span><span class="va">endGW</span> <span class="op">&lt;-</span> <span class="st">"2014-06-30"</span></span></span>
 <span class="r-in"><span><span class="va">groundwaterExampleURL</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="va">groundWaterSite</span>, <span class="cn">NA</span>,</span></span>
-<span class="r-in"><span>          <span class="va">startGW</span>, <span class="va">endGW</span>, service<span class="op">=</span> <span class="st">"gwlevels"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">startGW</span>, <span class="va">endGW</span>,</span></span>
+<span class="r-in"><span>  service <span class="op">=</span> <span class="st">"gwlevels"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">groundWater</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">groundwaterExampleURL</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">groundWater2</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">groundwaterExampleURL</span>, asDateTime <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">unitDataURL</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="va">site_id</span>,<span class="va">property</span>,</span></span>
-<span class="r-in"><span>         <span class="st">"2013-11-03"</span>, <span class="st">"2013-11-03"</span>, <span class="st">"uv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">unitDataURL</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">site_id</span>, <span class="va">property</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"2013-11-03"</span>, <span class="st">"2013-11-03"</span>, <span class="st">"uv"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">unitData</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">unitDataURL</span>, <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Two sites, two pcodes, one site has two data descriptors:</span></span></span>
 <span class="r-in"><span><span class="va">siteNumber</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"01480015"</span>, <span class="st">"04085427"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">obs_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="va">siteNumber</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00060"</span>, <span class="st">"00010"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                            <span class="va">startDate</span>, <span class="va">endDate</span>, <span class="st">"dv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">obs_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">siteNumber</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00060"</span>, <span class="st">"00010"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="va">startDate</span>, <span class="va">endDate</span>, <span class="st">"dv"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">obs_url</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">dateTime</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">dateTime</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="renameNWISColumns.html">renameNWISColumns</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
@@ -148,28 +156,31 @@ and S is the statistic code (if applicable).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Provisional data are subject to revision. Go to http://waterdata.usgs.gov/nwis/help/?provisional for more information."</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">inactiveSite</span> <span class="op">&lt;-</span> <span class="st">"05212700"</span></span></span>
-<span class="r-in"><span><span class="va">inactiveSite</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="va">inactiveSite</span>, <span class="st">"00060"</span>, <span class="st">"2014-01-01"</span>, <span class="st">"2014-01-10"</span>,<span class="st">'dv'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">inactiveSite</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="va">inactiveSite</span>, <span class="st">"00060"</span>, <span class="st">"2014-01-01"</span>, <span class="st">"2014-01-10"</span>, <span class="st">"dv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">inactiveSite</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">inactiveSite</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">inactiveAndAcitive</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"07334200"</span>, <span class="st">"05212700"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">inactiveAndAcitive</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="va">inactiveAndAcitive</span>, <span class="st">"00060"</span>, <span class="st">"2014-01-01"</span>, <span class="st">"2014-01-10"</span>,<span class="st">'dv'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">inactiveAndAcitive</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="va">inactiveAndAcitive</span>, <span class="st">"00060"</span>, <span class="st">"2014-01-01"</span>, <span class="st">"2014-01-10"</span>, <span class="st">"dv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">inactiveAndAcitive</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">inactiveAndAcitive</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Timezone change with specified local timezone:</span></span></span>
 <span class="r-in"><span><span class="va">tzURL</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="st">"04027000"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00300"</span>, <span class="st">"63680"</span><span class="op">)</span>, <span class="st">"2011-11-05"</span>, <span class="st">"2011-11-07"</span>, <span class="st">"uv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">tzIssue</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">tzURL</span>, </span></span>
-<span class="r-in"><span>                          asDateTime <span class="op">=</span> <span class="cn">TRUE</span>, tz <span class="op">=</span> <span class="st">"America/Chicago"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tzIssue</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">tzURL</span>,</span></span>
+<span class="r-in"><span>  asDateTime <span class="op">=</span> <span class="cn">TRUE</span>, tz <span class="op">=</span> <span class="st">"America/Chicago"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># raw XML</span></span></span>
-<span class="r-in"><span><span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span>service <span class="op">=</span> <span class="st">'dv'</span>, siteNumber <span class="op">=</span> <span class="st">'02319300'</span>, parameterCd <span class="op">=</span> <span class="st">"00060"</span>, </span></span>
-<span class="r-in"><span>                         startDate <span class="op">=</span> <span class="st">"2014-01-01"</span>, endDate <span class="op">=</span> <span class="st">"2014-01-01"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html" class="external-link">content</a></span><span class="op">(</span><span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/GET.html" class="external-link">GET</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>, as <span class="op">=</span> <span class="st">'raw'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  service <span class="op">=</span> <span class="st">"dv"</span>, siteNumber <span class="op">=</span> <span class="st">"02319300"</span>, parameterCd <span class="op">=</span> <span class="st">"00060"</span>,</span></span>
+<span class="r-in"><span>  startDate <span class="op">=</span> <span class="st">"2014-01-01"</span>, endDate <span class="op">=</span> <span class="st">"2014-01-01"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html" class="external-link">content</a></span><span class="op">(</span><span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/GET.html" class="external-link">GET</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>, as <span class="op">=</span> <span class="st">"raw"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">rawParsed</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">raw</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
-<span class="r-in"><span><span class="va">filePath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package<span class="op">=</span> <span class="st">"dataRetrieval"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">filePath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"dataRetrieval"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fileName</span> <span class="op">&lt;-</span> <span class="st">"WaterML1Example.xml"</span></span></span>
 <span class="r-in"><span><span class="va">fullPath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">filePath</span>, <span class="va">fileName</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">importFile</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">fullPath</span>,<span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">importFile</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">fullPath</span>, <span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
