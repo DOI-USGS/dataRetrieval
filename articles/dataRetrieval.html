@@ -105,7 +105,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span></span>
 <span><span class="co"># Choptank River near Greensboro, MD</span></span>
-<span><span class="va">siteNumber</span> <span class="op">&lt;-</span> <span class="st">"01491000"</span> </span>
+<span><span class="va">siteNumber</span> <span class="op">&lt;-</span> <span class="st">"01491000"</span></span>
 <span><span class="va">ChoptankInfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISsite.html">readNWISsite</a></span><span class="op">(</span><span class="va">siteNumber</span><span class="op">)</span></span>
 <span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"00060"</span></span>
 <span></span>
@@ -409,7 +409,7 @@
 </h4>
 <p>Use the <code>readNWISsite</code> function to obtain all of the information available for a particular USGS site (or sites) such as full station name, drainage area, latitude, and longitude. <code>readNWISsite</code> can also access information about multiple sites with a vector input.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">siteNumbers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"01491000"</span>, <span class="st">"01645000"</span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="va">siteNumbers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"01491000"</span>, <span class="st">"01645000"</span><span class="op">)</span></span>
 <span><span class="va">siteINFO</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISsite.html">readNWISsite</a></span><span class="op">(</span><span class="va">siteNumbers</span><span class="op">)</span></span></code></pre></div>
 <p>Site information is obtained from: <a href="https://waterservices.usgs.gov/rest/Site-Test-Tool.html" class="external-link">https://waterservices.usgs.gov/rest/Site-Test-Tool.html</a></p>
 <p>Information on the returned data can be found with the <code>comment</code> function as described in the <a href="#embedded-metadata">Metadata</a> section.</p>
@@ -507,7 +507,7 @@
 <p>To obtain all of the available information concerning a measured parameter (or multiple parameters), use the <code>readNWISpCode</code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Using defaults:</span></span>
-<span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"00618"</span> </span>
+<span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"00618"</span></span>
 <span><span class="va">parameterINFO</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISpCode.html">readNWISpCode</a></span><span class="op">(</span><span class="va">parameterCd</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -519,8 +519,8 @@
 <code class="sourceCode R"><span><span class="co"># Choptank River near Greensboro, MD:</span></span>
 <span><span class="va">siteNumber</span> <span class="op">&lt;-</span> <span class="st">"01491000"</span></span>
 <span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"00060"</span>  <span class="co"># Discharge</span></span>
-<span><span class="va">startDate</span> <span class="op">&lt;-</span> <span class="st">"2009-10-01"</span>  </span>
-<span><span class="va">endDate</span> <span class="op">&lt;-</span> <span class="st">"2012-09-30"</span> </span>
+<span><span class="va">startDate</span> <span class="op">&lt;-</span> <span class="st">"2009-10-01"</span></span>
+<span><span class="va">endDate</span> <span class="op">&lt;-</span> <span class="st">"2012-09-30"</span></span>
 <span></span>
 <span><span class="va">discharge</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">siteNumber</span>, <span class="va">parameterCd</span>, <span class="va">startDate</span>, <span class="va">endDate</span><span class="op">)</span></span></code></pre></div>
 <p>The column “datetime” in the returned data frame is automatically imported as a variable of class “Date” in R. Each requested parameter has a value and remark code column. The names of these columns depend on the requested parameter and stat code combinations. USGS daily value qualification codes are often “A” (approved for publication) or “P” (provisional data subject to revision).</p>
@@ -532,7 +532,7 @@
 <span><span class="va">startDate</span> <span class="op">&lt;-</span> <span class="st">"2012-01-01"</span></span>
 <span><span class="va">endDate</span> <span class="op">&lt;-</span> <span class="st">"2012-05-01"</span></span>
 <span></span>
-<span><span class="va">temperatureAndFlow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">siteNumber</span>, <span class="va">parameterCd</span>, </span>
+<span><span class="va">temperatureAndFlow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">siteNumber</span>, <span class="va">parameterCd</span>,</span>
 <span>        <span class="va">startDate</span>, <span class="va">endDate</span>, statCd <span class="op">=</span> <span class="va">statCd</span><span class="op">)</span></span></code></pre></div>
 <p>The column names can be shortened and simplified using the <code>renameNWISColumns</code> function. This is not necessary, but may streamline subsequent data analysis and presentation. Site information, daily statistic information, and measured parameter information is attached to the data frame as attributes. This is discussed further in the <a href="#embedded-metadata">metadata</a> section.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -576,7 +576,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">4</span>, col <span class="op">=</span> <span class="st">"red"</span>, col.axis <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="va">variableInfo</span><span class="op">$</span><span class="va">parameter_desc</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, side <span class="op">=</span> <span class="fl">4</span>, line <span class="op">=</span> <span class="fl">3</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">siteInfo</span><span class="op">$</span><span class="va">station_nm</span>, <span class="st">"2012"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, <span class="va">variableInfo</span><span class="op">$</span><span class="va">param_units</span>, </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, <span class="va">variableInfo</span><span class="op">$</span><span class="va">param_units</span>,</span>
 <span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>       pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dataRetrieval_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
@@ -587,8 +587,8 @@
 <p>Any data collected at regular time intervals (such as 15-minute or hourly) are known as “unit values”. Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function <code>readNWISuv</code>. Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days. Here is an example of a retrieval of such data.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"00060"</span>  <span class="co"># Discharge</span></span>
-<span><span class="va">startDate</span> <span class="op">&lt;-</span> <span class="st">"2012-05-12"</span> </span>
-<span><span class="va">endDate</span> <span class="op">&lt;-</span> <span class="st">"2012-05-13"</span> </span>
+<span><span class="va">startDate</span> <span class="op">&lt;-</span> <span class="st">"2012-05-12"</span></span>
+<span><span class="va">endDate</span> <span class="op">&lt;-</span> <span class="st">"2012-05-13"</span></span>
 <span><span class="va">dischargeUnit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISuv.html">readNWISuv</a></span><span class="op">(</span><span class="va">siteNumber</span>, <span class="va">parameterCd</span>, <span class="va">startDate</span>, <span class="va">endDate</span><span class="op">)</span></span>
 <span><span class="va">dischargeUnit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/renameNWISColumns.html">renameNWISColumns</a></span><span class="op">(</span><span class="va">dischargeUnit</span><span class="op">)</span></span></code></pre></div>
 <p>The retrieval produces a data frame that contains 96 rows (one for every 15 minute period in the day). They include all data collected from the <code>startDate</code> through the <code>endDate</code> (starting and ending with midnight locally-collected time). The dateTime column is converted to UTC (Coordinated Universal Time), so midnight EST will be 5 hours earlier in the dateTime column (the previous day, at 7pm).</p>
@@ -647,8 +647,8 @@
 <span>                         countyCd <span class="op">=</span> <span class="st">"Allegheny"</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="va">national</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISuse.html">readNWISuse</a></span><span class="op">(</span>stateCd <span class="op">=</span> <span class="cn">NULL</span>, </span>
-<span>                        countyCd <span class="op">=</span> <span class="cn">NULL</span>, </span>
+<span><span class="va">national</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISuse.html">readNWISuse</a></span><span class="op">(</span>stateCd <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                        countyCd <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                        transform <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -658,7 +658,7 @@
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">discharge_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISstat.html">readNWISstat</a></span><span class="op">(</span>siteNumbers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"02319394"</span><span class="op">)</span>,</span>
 <span>                                parameterCd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00060"</span><span class="op">)</span>,</span>
-<span>                                statReportType <span class="op">=</span> <span class="st">"annual"</span><span class="op">)</span> </span></code></pre></div>
+<span>                                statReportType <span class="op">=</span> <span class="st">"annual"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -684,7 +684,7 @@
 <p><a href="https://waterservices.usgs.gov/nwis/site/?format=rdb&amp;bBox=-83.0,36.5,-81.0,38.5&amp;parameterCd=00010,00060&amp;hasDataTypeCd=dv" class="external-link">https://waterservices.usgs.gov/nwis/site/?format=rdb&amp;bBox=-83.0,36.5,-81.0,38.5&amp;parameterCd=00010,00060&amp;hasDataTypeCd=dv</a></p>
 <p>The following <code>dataRetrieval</code> code can be used to get those sites:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatNWISsites.html">whatNWISsites</a></span><span class="op">(</span>bBox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">83.0</span>, <span class="fl">36.5</span>, <span class="op">-</span><span class="fl">81.0</span>, <span class="fl">38.5</span><span class="op">)</span>, </span>
+<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/whatNWISsites.html">whatNWISsites</a></span><span class="op">(</span>bBox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">83.0</span>, <span class="fl">36.5</span>, <span class="op">-</span><span class="fl">81.0</span>, <span class="fl">38.5</span><span class="op">)</span>,</span>
 <span>                      parameterCd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00010"</span>, <span class="st">"00060"</span><span class="op">)</span>,</span>
 <span>                      hasDataTypeCd <span class="op">=</span> <span class="st">"dv"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -784,7 +784,7 @@
 </h4>
 <p>To get data from the WQP using generalized Web service calls, use the function <code>readWQPdata</code>. For example, to get all the pH data in Wisconsin:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dataPH</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readWQPdata.html">readWQPdata</a></span><span class="op">(</span>statecode <span class="op">=</span> <span class="st">"US:55"</span>, </span>
+<code class="sourceCode R"><span><span class="va">dataPH</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readWQPdata.html">readWQPdata</a></span><span class="op">(</span>statecode <span class="op">=</span> <span class="st">"US:55"</span>,</span>
 <span>                 characteristicName <span class="op">=</span> <span class="st">"pH"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
