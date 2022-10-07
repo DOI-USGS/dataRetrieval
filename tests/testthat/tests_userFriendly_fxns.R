@@ -24,10 +24,14 @@ test_that("Unit value data returns correct types", {
     as.Date(Sys.Date() - 10),
     Sys.Date()
   )
-  expect_equal(grep(x = attr(recent_uv, "url"), pattern = "https://waterservices.usgs.gov/nwis/iv/"), 1)
-  expect_equal(grep(x = attr(spreadOver120, "url"), pattern = "https://nwis.waterservices.usgs.gov/nwis/iv/"), 1)
-  expect_equal(attr(rawData, "url"), "https://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
-
+  expect_equal(grep(x = attr(recent_uv, "url"),
+                    pattern = "https://waterservices.usgs.gov/nwis/iv/"), 1)
+  expect_equal(grep(x = attr(spreadOver120, "url"),
+                    pattern = "https://nwis.waterservices.usgs.gov/nwis/iv/"), 1)
+# nolint start: line_length_linter
+  expect_equal(attr(rawData, "url"),
+               "https://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
+# nolint end
   timeZoneChange <- readNWISuv(c("04024430", "04024000"), parameterCd,
     "2013-11-03", "2013-11-03",
     tz = "America/Chicago"
@@ -37,11 +41,9 @@ test_that("Unit value data returns correct types", {
   timeZoneChange <- renameNWISColumns(timeZoneChange)
   expect_is(rawData$dateTime, "POSIXct")
   expect_is(rawData$Flow_Inst, "numeric")
+  # nolint start: line_length_linter
   expect_equal(attr(rawData, "url"), "https://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
-  #   #First switchover to standard time:
-  #   expect_that(as.numeric(timeZoneChange[which(timeZoneChange$tz_cd == "America/Chicago")[1],"dateTime"]),
-  #               equals(as.numeric(as.POSIXct("2013-11-03 01:00:00", tz="UTC")+60*60*6)))
-
+  # nolint end
   site <- "04087170"
   pCode <- "63680"
   startDate <- "2012-07-10"
@@ -336,7 +338,7 @@ test_that("Construct NWIS urls", {
     startDate, endDate, "dv",
     statCd = c("00003", "00001")
   )
-
+  # nolint start: line_length_linter
   expect_equal(url_daily, "https://waterservices.usgs.gov/nwis/dv/?site=01594440&format=waterml,1.1&ParameterCd=00060,00010&StatCd=00003,00001&startDT=1985-01-01")
 
   url_unit <- constructNWISURL(siteNumber, pCode, "2012-06-28", "2012-06-30", "iv")
@@ -401,6 +403,7 @@ test_that("Construct NWIS urls", {
     categories = "ALL"
   )
   expect_equal(url_use, "https://waterdata.usgs.gov/OH/nwis/water_use?format=rdb&rdb_compression=value&wu_area=county&wu_county=1%2C3&wu_year=1990%2C1995&wu_category=ALL")
+  # nolint end
 })
 
 context("Construct WQP urls")
@@ -416,7 +419,7 @@ test_that("Construct WQP urls", {
     c("01075", "00029", "00453"),
     startDate, endDate
   )
-
+  # nolint start: line_length_linter
   expect_equal(
     url_wqp,
     "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes"
@@ -436,6 +439,7 @@ test_that("Construct WQP urls", {
     obs_url_orig,
     "https://www.waterqualitydata.us/data/Result/search?siteid=IIDFG-41WSSPAHS;USGS-02352560&characteristicName=Temperature;Temperature%2C%20sample;Temperature%2C%20water;Temperature%2C%20water%2C%20deg%20F&mimeType=tsv&zip=yes"
   )
+  # nolint: end
 })
 
 context("Construct WQP urls")
@@ -449,12 +453,12 @@ test_that("Construct WQP urls", {
     c("01075", "00029", "00453"),
     startDate, endDate
   )
-
+  # nolint start: line_length_linter
   expect_equal(
     url_wqp,
     "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes"
   )
-
+  # nolint end
   rawSampleURL_Zip <- constructWQPURL("USGS-01594440", "01075", "", "", TRUE)
   expect_equal(
     rawSampleURL_Zip,

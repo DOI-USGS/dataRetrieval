@@ -60,11 +60,12 @@ USGS data comes from the National Water Information System (NWIS). There are man
 
 ```{r}
 df <- data.frame(Type = c("Unit", "Daily", "Discrete"),
-                 Description = c("Regular frequency data reported from a sensor (e.g. 15 minute interval). This data can include 'real-time' data",
-                                   "Data aggregated to a daily statistic such as mean, min, or max.",
-                                   "Data collected at non-regular times."),
-                 service = c("uv", "dv", 
-                               "water quality (qw), groundwater (gwlevel), rating curves (rating), peak flow (peak), surfacewater (meas)"))
+                 Description = c(
+"Regular frequency data reported from a sensor (e.g. 15 minute interval). This data can include 'real-time' data",
+"Data aggregated to a daily statistic such as mean, min, or max.",
+"Data collected at non-regular times."),
+                 service = c("uv", "dv",
+"water quality (qw), groundwater (gwlevel), rating curves (rating), peak flow (peak), surfacewater (meas)"))
 
 knitr::kable(df)
 ```
@@ -148,11 +149,13 @@ Sometimes, you know exactly what you want. If you know:
 You can use the "user-friendly" functions. These functions take the same 4 inputs (sites, parameter codes, start date, end date), and deliver data from different NWIS services:
 
 ```{r echo=FALSE, eval=TRUE}
-df <- data.frame(functionName = c("readNWISuv", "readNWISdv",                              "readNWISgwl", "readNWISmeas", "readNWISpeak", 
-                    "readNWISqw", "readNWISrating", "readNWISuse",
-                    "readNWISstat"),
+
+df <- data.frame(functionName = c("readNWISuv", "readNWISdv",
+                                  "readNWISgwl", "readNWISmeas", "readNWISpeak",
+                                  "readNWISqw", "readNWISrating", "readNWISuse",
+                                  "readNWISstat"),
                  service = c("Unit", "Daily", "Groundwater Level",
-                             "Surface-water", "Peak Flow", 
+                             "Surface-water", "Peak Flow",
                              "Water Quality", "Rating Curves",
                              "Water Use", "Statistics"),
                  stringsAsFactors = FALSE)
@@ -224,7 +227,7 @@ Then use the attributes attached to the data frame to create better labels:
 ```{r echo=TRUE, eval=TRUE, fig.height=3.5}
 parameterInfo <- attr(pheasant, "variableInfo")
 siteInfo <- attr(pheasant, "siteInfo")
-  
+
 ts <- ts +
       xlab("") +
       ylab(parameterInfo$variableDescription) +
@@ -255,17 +258,17 @@ Here are a few examples:
 
 ```{r eval=FALSE}
 # Daily temperature in Ohio
-dataTemp <- readNWISdata(stateCd = "OH", 
+dataTemp <- readNWISdata(stateCd = "OH",
                          parameterCd = "00010",
-                         service = "dv") 
+                         service = "dv")
 
 # Real-time discharge at a site
 instFlow <- readNWISdata(sites = "05114000",
-                         service = "iv", 
-                         parameterCd = "00060", 
+                         service = "iv",
+                         parameterCd = "00060",
                          startDate = "2014-05-01T00:00Z",
                          endDate = "2014-05-01T12:00Z",
-                         tz = "America/Chicago") 
+                         tz = "America/Chicago")
 
 # Temperature within a bounding box:
 bBoxEx <- readNWISdata(bBox = c(-83, 36.5, -81, 38.5),
@@ -282,7 +285,7 @@ groundwaterHUC <- readNWISdata(huc = "02070010",
 For example, let's see which sites ever measured phosphorus in Arizona:
 
 ```{r az, echo=TRUE}
-AZ_sites <- whatNWISsites(stateCd = "AZ", 
+AZ_sites <- whatNWISsites(stateCd = "AZ",
                 parameterCd = "00665")
 nrow(AZ_sites)
 names(AZ_sites)
@@ -292,7 +295,7 @@ names(AZ_sites)
 ```{r echo=FALSE, eval=TRUE, fig.height=4}
 library(leaflet)
 
-leaflet(data = AZ_sites) %>% 
+leaflet(data = AZ_sites) %>%
   addProviderTiles("CartoDB.Positron") %>%
   addCircleMarkers(~dec_long_va, ~dec_lat_va,
                    color = "red", radius = 3, stroke = FALSE,
@@ -308,7 +311,7 @@ names(AZ_data)
 ```
 
 ```{r azdata, echo=TRUE, eval=FALSE}
-AZ_data <- whatNWISdata(stateCd = "AZ", 
+AZ_data <- whatNWISdata(stateCd = "AZ",
                          parameterCd = "00665")
 names(AZ_data)
 ```
@@ -317,7 +320,7 @@ We get many more columns returned. For discovering useful data, the last 3 colum
 
 ```{r echo=FALSE, eval=TRUE}
 library(dplyr)
-AZdata2 <- AZ_data %>% 
+AZdata2 <- AZ_data %>%
   select(station_nm, begin_date, end_date, count_nu)
 
 datatable(AZdata2, rownames = FALSE, options = list(pageLength = 8))
@@ -342,7 +345,7 @@ Let's do one more example, we'll look for long-term USGS phosphorous data in Wis
 phWI <- readRDS("phWI.rds")
 
 library(dplyr)
-phWI.1 <- phWI %>% 
+phWI.1 <- phWI %>%
   filter(count_nu > 300) %>%
   mutate(period = as.Date(end_date) - as.Date(begin_date)) %>%
   filter(period > 15 * 365)
@@ -350,11 +353,11 @@ phWI.1 <- phWI %>%
 
 ```{r echo=TRUE, eval=FALSE}
 pCode <- c("00665")
-phWI <- whatNWISdata(stateCd = "WI", 
+phWI <- whatNWISdata(stateCd = "WI",
                      parameterCd = pCode)
 
 library(dplyr)
-phWI.1 <- phWI %>% 
+phWI.1 <- phWI %>%
   filter(count_nu > 300) %>%
   mutate(period = as.Date(end_date) - as.Date(begin_date)) %>%
   filter(period > 15 * 365)
@@ -368,12 +371,12 @@ phos_WI_data <- readNWISqw(siteNumbers = phWI.1$site_no,
 Let's look at the maximum measured value, and number of samples:
 
 ```{r echo=TRUE}
-phos_summary <- phos_WI_data %>% 
-  group_by(site_no) %>% 
+phos_summary <- phos_WI_data %>%
+  group_by(site_no) %>%
   summarize(max = max(result_va, na.rm = TRUE),
-            count = n()) %>% 
-  ungroup() %>% 
-  left_join(attr(phos_WI_data, "siteInfo"), 
+            count = n()) %>%
+  ungroup() %>%
+  left_join(attr(phos_WI_data, "siteInfo"),
             by = "site_no")
 ```
 
@@ -388,15 +391,15 @@ col_types <- c("darkblue",
                "orange",
                "brown",
                "red")
-leg_vals <- unique(as.numeric(quantile(phos_summary$max, 
+leg_vals <- unique(as.numeric(quantile(phos_summary$max,
                   probs = c(0, 0.01, 0.1, 0.25, 0.5, 0.75, 0.9, .99, 1),
                                        na.rm = TRUE)))
 
 pal <- colorBin(col_types, phos_summary$max, bins = leg_vals)
 rad <- 3 * seq(1, 4, length.out = 16)
 phos_summary$sizes <- rad[as.numeric(cut(phos_summary$count, breaks = 16))]
-          
-leaflet(data = phos_summary) %>% 
+
+leaflet(data = phos_summary) %>%
   addProviderTiles("CartoDB.Positron") %>%
   addCircleMarkers(~dec_long_va, ~dec_lat_va,
                    fillColor = ~pal(max),
@@ -461,7 +464,7 @@ phos_data_available <- whatWQPdata(statecode = "WI",
 This function comes back with a few really useful columns such as "activityCount" and "resultCount". As with our NWIS query, let's filter down our data request to sites that have only had more than 300 measurements.
 
 ```{r echo=TRUE, eval=FALSE}
-phos_data_sites_to_get <- phos_data_available %>% 
+phos_data_sites_to_get <- phos_data_available %>%
   filter(resultCount >= 300)
 
 phosData <- readWQPdata(siteNumbers = phos_data_sites_to_get$MonitoringLocationIdentifier,
@@ -475,9 +478,9 @@ unique(phosData$ResultMeasure.MeasureUnitCode)
 ```
 
 ```{r eval=TRUE}
-phosData <- readRDS("phosData.rds") %>% 
+phosData <- readRDS("phosData.rds") %>%
   mutate(ResultMeasureValue = as.numeric(ResultMeasureValue))
-  
+
 ```
 
 
@@ -487,7 +490,7 @@ Let’s look at the maximum measured value, and number of samples:
 siteInfo <- attr(phosData, "siteInfo")
 
 wiSummary <- phosData %>%
-  filter(ResultMeasure.MeasureUnitCode %in% 
+  filter(ResultMeasure.MeasureUnitCode %in%
            c("mg/l", "mg/l as P")) %>%
   group_by(MonitoringLocationIdentifier) %>%
   summarise(count = n(),
@@ -505,15 +508,15 @@ col_types <- c("darkblue",
                "orange",
                "brown",
                "red")
-leg_vals <- unique(as.numeric(quantile(wiSummary$max, 
+leg_vals <- unique(as.numeric(quantile(wiSummary$max,
                                        probs =
-                     c(0, 0.01, 0.1, 0.25, 0.5, 0.75, 0.9, .99, 1), 
+                     c(0, 0.01, 0.1, 0.25, 0.5, 0.75, 0.9, .99, 1),
                                        na.rm = TRUE)))
 pal <- colorBin(col_types, wiSummary$max, bins = leg_vals)
 rad <- 3 * seq(1, 4, length.out = 16)
 wiSummary$sizes <- rad[as.numeric(cut(wiSummary$count, breaks = 16))]
-          
-leaflet(data = wiSummary) %>% 
+
+leaflet(data = wiSummary) %>%
   addProviderTiles("CartoDB.Positron") %>%
   addCircleMarkers(~dec_lon_va, ~dec_lat_va,
                    fillColor = ~pal(max),
@@ -525,7 +528,7 @@ leaflet(data = wiSummary) %>%
             pal = pal,
             values = ~max,
             opacity = 0.8,
-            labFormat = labelFormat(digits = 1), 
+            labFormat = labelFormat(digits = 1),
             title = "Max Value")
 ```
 
