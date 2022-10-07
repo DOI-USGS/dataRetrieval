@@ -1,10 +1,13 @@
 #' Raw Data Import for USGS NWIS QW Data
 #'
-#' Imports data from NWIS web service. This function gets the data from here: \url{https://nwis.waterdata.usgs.gov/nwis/qwdata}
-#' A list of parameter codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-#' A list of statistic codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+#' Imports data from NWIS web service. This function gets the data from here:
+#' \url{https://nwis.waterdata.usgs.gov/nwis/qwdata}
+#' A list of parameter codes can be found here:
+#' \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+#' A list of statistic codes can be found here:
+#' \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
-#' @details Valid parameter code groups are "All, " or group codes:
+#' @details Valid parameter code groups are "All" or group codes:
 #' \tabular{ll}{
 #' Code \tab Description\cr
 #' INF \tab Information \cr
@@ -32,24 +35,34 @@
 #' @param siteNumbers character of USGS site numbers.  This is usually an 8 digit number
 #' @param parameterCd character that contains the code for a parameter
 #' group, or a character vector of 5-digit parameter codes. See \bold{Details}.
-#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
+#' Default is "" which indicates
 #' retrieval for the earliest possible record. Date arguments are always specified in local time.
-#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
+#' Default is "" which indicates
 #' retrieval for the latest possible record. Date arguments are always specified in local time.
-#' @param expanded logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional information. Expanded data includes
-#' remark_cd (remark code), result_va (result value), val_qual_tx (result value qualifier code), meth_cd (method code),
-#' dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and rpt_lev_cd (reporting level type). If \code{FALSE},
-#' only returns remark_cd (remark code) and result_va (result value). Expanded = \code{FALSE} will not give
+#' @param expanded logical defaults to \code{TRUE}. If \code{TRUE}, retrieves
+#' additional information. Expanded data includes
+#' remark_cd (remark code), result_va (result value), val_qual_tx
+#' (result value qualifier code), meth_cd (method code),
+#' dqi_cd (data-quality indicator code), rpt_lev_va (reporting level), and
+#' rpt_lev_cd (reporting level type). If \code{FALSE},
+#' only returns remark_cd (remark code) and result_va (result value).
+#' Expanded = \code{FALSE} will not give
 #' sufficient information for unbiased statistical analysis.
 #' @param reshape logical, reshape the expanded data. If \code{TRUE}, then return
 #' a wide data frame with all water-quality in a single row for each sample.
 #' If \code{FALSE} (default), then return a long data frame with each water-quality result in a single row. This
-#' argument is only applicable to expanded data. Data requested using \code{expanded=FALSE} is always returned in the wide format.
+#' argument is only applicable to expanded data. Data requested using \code{expanded=FALSE}
+#' is always returned in the wide format.
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the
-#' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
-#' Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
-#' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
+#' date times to UTC, properly accounting for daylight savings times based on the
+#' data's provided tz_cd column.
+#' Possible values to provide are "America/New_York", "America/Chicago",
+#' "America/Denver", "America/Los_Angeles", "America/Anchorage", as well as the
+#' following which do not use daylight savings time: "America/Honolulu",
+#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla".
+#' See also  \code{OlsonNames()}
 #' for more information on time zones.
 #' @keywords data import USGS web service
 #' @return A data frame with at least the following columns:
@@ -59,12 +72,15 @@
 #' site_no \tab character \tab The USGS site number \cr
 #' sample_dt \tab Date \tab The date the sample was collected \cr
 #' sample_tm \tab character \tab The reported sample collection time \cr
-#' startDateTime \tab POSIXct \tab Combining sample_dt and sample_tm, a date/time column is created, and converted into UTC
+#' startDateTime \tab POSIXct \tab Combining sample_dt and sample_tm, a date/time
+#' column is created, and converted into UTC
 #' (unless the tz argument specifies a different time zone)\cr
-#' endDateTime \tab POSIXct \tab If any sample_end_dt and sample_end_dt exist, this column is created similar to startDateTime\cr
+#' endDateTime \tab POSIXct \tab If any sample_end_dt and sample_end_dt exist,
+#' this column is created similar to startDateTime\cr
 #' }
 #'
-#' Further columns will be included depending on the requested output format (expanded = TRUE or FALSE).
+#' Further columns will be included depending on the requested output format
+#' (expanded = TRUE or FALSE).
 #' Columns that end in "_reported" are the originally reported timezones,
 #' but the "tz_cd" column defines the timezone of any POSIXct columns.
 #'
@@ -75,7 +91,8 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' siteInfo \tab data frame \tab A data frame containing information on the requested sites \cr
-#' variableInfo \tab data frame \tab A data frame containing information on the requested parameters \cr
+#' variableInfo \tab data frame \tab A data frame containing information on the
+#' requested parameters \cr
 #' }
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}},

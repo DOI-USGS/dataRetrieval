@@ -1,9 +1,13 @@
 #' Instantaneous value data retrieval from USGS (NWIS)
 #'
-#' Imports data from NWIS web service. This function gets the data from here: \url{https://waterservices.usgs.gov/}
-#' A list of parameter codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-#' A list of statistic codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}.
-#' More information on the web service can be found here: \url{https://waterservices.usgs.gov/rest/IV-Service.html}.
+#' Imports data from NWIS web service. This function gets the data from here:
+#' \url{https://waterservices.usgs.gov/}
+#' A list of parameter codes can be found here:
+#' \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+#' A list of statistic codes can be found here:
+#' \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}.
+#' More information on the web service can be found here:
+#' \url{https://waterservices.usgs.gov/rest/IV-Service.html}.
 #'
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @param parameterCd character USGS parameter code.  This is usually an 5 digit number.
@@ -97,19 +101,28 @@ readNWISuv <- function(siteNumbers, parameterCd, startDate = "", endDate = "", t
 
 #' Peak flow data from USGS (NWIS)
 #'
-#' Reads peak flow from NWISweb. Data is retrieved from \url{https://waterdata.usgs.gov/nwis}.
-#' In some cases, the specific date of the peak data is not know. This function will default to
-#' converting complete dates to a "Date" object, and converting incomplete dates to "NA". If those incomplete dates are
-#' needed, set the `asDateTime` argument to FALSE. No dates will be converted to R Date objects.
+#' Reads peak flow from NWISweb. Data is retrieved from
+#' \url{https://waterdata.usgs.gov/nwis}.
+#' In some cases, the specific date of the peak data is not know. This function
+#' will default to
+#' converting complete dates to a "Date" object, and converting incomplete dates to
+#' "NA". If those incomplete dates are
+#' needed, set the `asDateTime` argument to FALSE. No dates will be converted to
+#' R Date objects.
 #'
-#' @param siteNumbers character USGS site number(or multiple sites).  This is usually an 8 digit number.
-#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' @param siteNumbers character USGS site number(or multiple sites).  This is usually
+#' an 8 digit number.
+#' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
+#' Default is "" which indicates
 #' retrieval for the earliest possible record.
-#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
+#' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
+#' Default is "" which indicates
 #' retrieval for the latest possible record.
 #' @param asDateTime logical default to \code{TRUE}. When \code{TRUE}, the peak_dt column is converted
-#' to a Date object, and incomplete dates are removed. When \code{FALSE}, no columns are removed, but no dates are converted.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' to a Date object, and incomplete dates are removed. When \code{FALSE}, no
+#' columns are removed, but no dates are converted.
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
@@ -119,13 +132,17 @@ readNWISuv <- function(siteNumbers, parameterCd, startDate = "", endDate = "", t
 #' peak_dt \tab Date \tab Date of peak streamflow \cr
 #' peak_tm \tab character \tab Time of peak streamflow as character \cr
 #' peak_va \tab numeric \tab Annual peak streamflow value in cfs \cr
-#' peak_cd \tab character \tab Peak Discharge-Qualification codes (see \code{comment} for more information) \cr
+#' peak_cd \tab character \tab Peak Discharge-Qualification codes (see \code{comment}
+#' for more information) \cr
 #' gage_ht \tab numeric \tab Gage height for the associated peak streamflow in feet \cr
 #' gage_ht_cd \tab character \tab Gage height qualification codes \cr
 #' year_last_pk \tab numeric \tab Peak streamflow reported is the highest since this year \cr
-#' ag_dt \tab Date \tab Date of maximum gage-height for water year (if not concurrent with peak) \cr
-#' ag_tm \tab character \tab Time of maximum gage-height for water year (if not concurrent with peak) \cr
-#' ag_gage_ht \tab numeric \tab maximum Gage height for water year in feet (if not concurrent with peak) \cr
+#' ag_dt \tab Date \tab Date of maximum gage-height for water year
+#' (if not concurrent with peak) \cr
+#' ag_tm \tab character \tab Time of maximum gage-height for water year
+#' (if not concurrent with peak) \cr
+#' ag_gage_ht \tab numeric \tab maximum Gage height for water year in feet
+#' (if not concurrent with peak) \cr
 #' ag_gage_ht_cd \tab character \tab maximum Gage height code \cr
 #' }
 #'
@@ -208,7 +225,8 @@ readNWISpeak <- function(siteNumbers,
 #'
 #' @param siteNumber character USGS site number.  This is usually an 8 digit number
 #' @param type character can be "base", "corr", or "exsa"
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @return A data frame. If \code{type} is "base, " then the columns are
 #' INDEP, typically the gage height, in feet; DEP, typically the streamflow,
@@ -288,7 +306,8 @@ readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
 #' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 #' for more information on time zones.
 #' @param expanded logical. Whether or not (TRUE or FALSE) to call the expanded data.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will
+#' convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{
@@ -296,7 +315,8 @@ readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
 #' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 #' site_no \tab character \tab The USGS site number \cr
 #' measurement_dt \tab POSIXct \tab The date and time (in POSIXct) of the measurement. Unless specified
-#' with the tz parameter, this is converted to UTC. If the measurement_dt column is an incomplete, a measurement_dt_date and
+#' with the tz parameter, this is converted to UTC. If the measurement_dt column is
+#' an incomplete, a measurement_dt_date and
 #' measurement_dt_time column are added to the returned data frame.   \cr
 #' tz_cd \tab character \tab The time zone code for the measurement_dt column \cr
 #' }
@@ -413,7 +433,8 @@ readNWISmeas <- function(siteNumbers,
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record.
 #' @param parameterCd character USGS parameter code.  This is usually an 5 digit number. Default is "".
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the
+#' function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
@@ -515,17 +536,21 @@ readNWISgwl <- function(siteNumbers,
 #' Default is "" which indicates retrieval for the earliest possible record.  For daily data, this indicates the
 #' start of the period the statistics will be computed over.
 #' @param endDate character ending date for data retrieval in the form YYYY, YYYY-MM, or YYYY-MM-DD. Default is ""
-#' which indicates retrieval for the latest possible record.  For daily data, this indicates the end of the period
+#' which indicates retrieval for the latest possible record.  For daily data, this
+#' indicates the end of the period
 #' the statistics will be computed over.  The same restrictions as startDate apply.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
 #' numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
 #' in separate columns.  If convertType is false, everything is returned as a character.
 #' @param statReportType character time division for statistics: daily, monthly, or annual.  Default is daily.
-#' Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 366
+#' Note that daily provides statistics for each calendar day over the specified range
+#' of water years, i.e. no more than 366
 #' data points will be returned for each site/parameter.  Use readNWISdata or readNWISdv for daily averages.
-#' Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years. Monthly and yearly
+#' Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata
+#' for water years. Monthly and yearly
 #' provide statistics for each month and year within the range indivually.
-#' @param statType character type(s) of statistics to output for daily values.  Default is mean, which is the only
+#' @param statType character type(s) of statistics to output for daily values.
+#' Default is mean, which is the only
 #' option for monthly and yearly report types. See the statistics service documentation
 #' at \url{https://waterservices.usgs.gov/rest/Statistics-Service.html} for a full list of codes.
 #' @return A data frame with the following columns:
@@ -610,24 +635,35 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 
 #' Water use data retrieval from USGS (NWIS)
 #'
-#' Retrieves water use data from USGS Water Use Data for the Nation.  See \url{https://waterdata.usgs.gov/nwis/wu} for
+#' Retrieves water use data from USGS Water Use Data for the Nation.  See
+#' \url{https://waterdata.usgs.gov/nwis/wu} for
 #' more information.  All available use categories for the supplied arguments are retrieved.
 #'
-#' @param stateCd could be character (full name, abbreviation, id), or numeric (id). Only one is accepted per query.
-#' @param countyCd could be character (name, with or without "County", or "ALL"), numeric (id), or code{NULL}, which will
-#' return state or national data depending on the stateCd argument.  \code{ALL} may also be supplied, which will return data
+#' @param stateCd could be character (full name, abbreviation, id), or numeric (id).
+#' Only one is accepted per query.
+#' @param countyCd could be character (name, with or without "County", or "ALL"),
+#' numeric (id), or code{NULL}, which will
+#' return state or national data depending on the stateCd argument.  "ALL" may
+#' also be supplied, which will return data
 #' for every county in a state. Can be a vector of counties in the same state.
-#' @param years integer Years for data retrieval. Must be years ending in 0 or 5. Default is all available years.
-#' @param categories character categories of water use.  Defaults to \code{ALL}.  Specific categories must be supplied as two-
+#' @param years integer Years for data retrieval. Must be years ending in 0 or 5.
+#' Default is all available years.
+#' @param categories character categories of water use.  Defaults to "ALL".
+#' Specific categories must be supplied as two-
 #' letter abbreviations as seen in the URL when using the NWIS water use web interface.  Note that
 #' there are different codes for national and state level data.
-#' @param convertType logical defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
-#' numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
+#' @param convertType logical defaults to \code{TRUE}. If \code{TRUE}, the function
+#' will convert the data to
+#' numerics based on a standard algorithm. Years, months, and days (if appliccable) are
+#' also returned as numerics
 #' in separate columns.  If convertType is false, everything is returned as a character.
-#' @param transform logical only intended for use with national data.  Defaults to \code{FALSE}, with data being returned as
-#' presented by the web service.  If \code{TRUE}, data will be transformed and returned with column names, which will reformat
+#' @param transform logical only intended for use with national data.  Defaults to
+#' \code{FALSE}, with data being returned as
+#' presented by the web service.  If \code{TRUE}, data will be transformed and
+#' returned with column names, which will reformat
 #' national data to be similar to state data.
-#' @return A data frame with at least the year of record, and all available statistics for the given geographic parameters.
+#' @return A data frame with at least the year of record, and all available
+#' statistics for the given geographic parameters.
 #' County and state fields will be included as appropriate.
 #'
 #' @export

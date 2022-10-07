@@ -1,6 +1,7 @@
 #' @name whatWQPsamples
 #' @rdname wqpSpecials
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the
+#' function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @export
 #' @examples
@@ -53,7 +54,8 @@ whatWQPsamples <- function(..., convertType = TRUE) {
 
 #' @name whatWQPmetrics
 #' @rdname wqpSpecials
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE},
+#' the function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @export
 #' @examples
@@ -105,14 +107,16 @@ whatWQPmetrics <- function(..., convertType = TRUE) {
 #'
 #' Returns a list of sites from the Water Quality Portal web service. This function gets
 #' the data from: \url{https://www.waterqualitydata.us}.
-#' Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}.
+#' Arguments to the function should be based on
+#' \url{https://www.waterqualitydata.us/webservices_documentation}.
 #' The information returned from this function describes the
 #' available data at the WQP sites, and some metadata on the sites themselves.
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for
 #' a complete list of options. A list of arguments can also be supplied.
 #' @param saveFile path to save the incoming geojson output.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:

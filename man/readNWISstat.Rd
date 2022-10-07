@@ -26,7 +26,8 @@ Default is "" which indicates retrieval for the earliest possible record.  For d
 start of the period the statistics will be computed over.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY, YYYY-MM, or YYYY-MM-DD. Default is ""
-which indicates retrieval for the latest possible record.  For daily data, this indicates the end of the period
+which indicates retrieval for the latest possible record.  For daily data, this
+indicates the end of the period
 the statistics will be computed over.  The same restrictions as startDate apply.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
@@ -34,12 +35,15 @@ numerics based on a standard algorithm. Years, months, and days (if appliccable)
 in separate columns.  If convertType is false, everything is returned as a character.}
 
 \item{statReportType}{character time division for statistics: daily, monthly, or annual.  Default is daily.
-Note that daily provides statistics for each calendar day over the specified range of water years, i.e. no more than 366
+Note that daily provides statistics for each calendar day over the specified range
+of water years, i.e. no more than 366
 data points will be returned for each site/parameter.  Use readNWISdata or readNWISdv for daily averages.
-Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata for water years. Monthly and yearly
+Also note that 'annual' returns statistics for the calendar year.  Use readNWISdata
+for water years. Monthly and yearly
 provide statistics for each month and year within the range indivually.}
 
-\item{statType}{character type(s) of statistics to output for daily values.  Default is mean, which is the only
+\item{statType}{character type(s) of statistics to output for daily values.
+Default is mean, which is the only
 option for monthly and yearly report types. See the statistics service documentation
 at \url{https://waterservices.usgs.gov/rest/Statistics-Service.html} for a full list of codes.}
 }

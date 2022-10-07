@@ -24,7 +24,8 @@ retrieval for the latest possible record.}
 
 \item{parameterCd}{character USGS parameter code.  This is usually an 5 digit number. Default is "".}
 
-\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the
+function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
 
 \item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the

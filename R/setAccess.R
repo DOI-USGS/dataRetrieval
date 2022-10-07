@@ -37,7 +37,7 @@ setAccess <- function(access = "public") {
     pkg.env$access <- NULL
     message("setting access to public")
   }
-
+  # nolint start: line_length_linter
   pkg.env$site <- "https://waterservices.usgs.gov/nwis/site/"
   pkg.env$iv <- "https://nwis.waterservices.usgs.gov/nwis/iv/"
   pkg.env$iv_recent <- "https://waterservices.usgs.gov/nwis/iv/"
@@ -65,6 +65,7 @@ setAccess <- function(access = "public") {
   pkg.env$Organization <- "https://www.waterqualitydata.us/data/Organization/search"
 
   pkg.env$NGWMN <- "https://cida.usgs.gov/ngwmn_cache/sos"
+  # nolint end
 }
 
 drURL <- function(base.name, ..., arg.list = NULL) {
