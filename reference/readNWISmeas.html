@@ -110,7 +110,8 @@ for more information on time zones.</p></dd>
 
 
 <dt>convertType</dt>
-<dd><p>logical, defaults to <code>TRUE</code>. If <code>TRUE</code>, the function will convert the data to dates, datetimes,
+<dd><p>logical, defaults to <code>TRUE</code>. If <code>TRUE</code>, the function will
+convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character</p></dd>
 
 </dl></div>
@@ -119,7 +120,8 @@ numerics based on a standard algorithm. If false, everything is returned as a ch
     
 
 <p>A data frame with at least the following columns:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>agency_cd</td><td>character</td><td>The NWIS code for the agency reporting the data</td></tr><tr><td>site_no</td><td>character</td><td>The USGS site number</td></tr><tr><td>measurement_dt</td><td>POSIXct</td><td>The date and time (in POSIXct) of the measurement. Unless specified
-with the tz parameter, this is converted to UTC. If the measurement_dt column is an incomplete, a measurement_dt_date and
+with the tz parameter, this is converted to UTC. If the measurement_dt column is
+an incomplete, a measurement_dt_date and
 measurement_dt_time column are added to the returned data frame.</td></tr><tr><td>tz_cd</td><td>character</td><td>The time zone code for the measurement_dt column</td></tr></table><p>See <a href="https://waterdata.usgs.gov/usa/nwis/sw" class="external-link">https://waterdata.usgs.gov/usa/nwis/sw</a> for details about surface water, and
 <a href="https://waterdata.usgs.gov/nwis/help?output_formats_help" class="external-link">https://waterdata.usgs.gov/nwis/help?output_formats_help</a></p>
 

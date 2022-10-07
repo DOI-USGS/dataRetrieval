@@ -84,16 +84,18 @@
 <dd><p>character to set timezone attribute of datetime. Default is UTC
 (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"</p></dd>
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
+"America/Phoenix", and "America/Metlakatla"</p></dd>
 
 
 <dt>csv</dt>
-<dd><p>logical. Is the data coming back with a csv or tsv format. Default is <code>FALSE</code>. Currently, the
-summary service does not support tsv, for other services tsv is the safer choice.</p></dd>
+<dd><p>logical. Is the data coming back with a csv or tsv format. Default is <code>FALSE</code>.
+Currently, the summary service does not support tsv, for other services tsv is the safer choice.</p></dd>
 
 
 <dt>convertType</dt>
-<dd><p>logical, defaults to <code>TRUE</code>. If <code>TRUE</code>, the function will convert the data to dates, datetimes,
+<dd><p>logical, defaults to <code>TRUE</code>. If <code>TRUE</code>, the function
+will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.</p></dd>
 
 </dl></div>
@@ -101,8 +103,10 @@ numerics based on a standard algorithm. If false, everything is returned as a ch
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for
-start and end times, and converted to UTC. See <a href="https://www.waterqualitydata.us/portal_userguide/" class="external-link">https://www.waterqualitydata.us/portal_userguide/</a> for more information.</p>
+<p>retval dataframe raw data returned from the Water Quality Portal. Additionally,
+a POSIXct dateTime column is supplied for
+start and end times, and converted to UTC. See
+<a href="https://www.waterqualitydata.us/portal_userguide/" class="external-link">https://www.waterqualitydata.us/portal_userguide/</a> for more information.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
