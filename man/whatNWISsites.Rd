@@ -7,7 +7,8 @@
 whatNWISsites(...)
 }
 \arguments{
-\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options. A
+\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html}
+for a complete list of options. A
 list (or lists) can also be supplied.}
 }
 \value{
@@ -31,7 +32,8 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 }
 \description{
-Returns a list of sites from the NWIS web service. This function gets the data from: \url{https://waterservices.usgs.gov/rest/Site-Test-Tool.html}.
+Returns a list of sites from the NWIS web service. This function gets the data from:
+\url{https://waterservices.usgs.gov/rest/Site-Test-Tool.html}.
 Mapper format is used
 }
 \examples{

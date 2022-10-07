@@ -12,7 +12,8 @@ a complete list of options. A list of arguments can also be supplied.}
 
 \item{saveFile}{path to save the incoming geojson output.}
 
-\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
 }
 \value{
@@ -46,7 +47,8 @@ hydrologic unit of the monitoring location to the cataloging unit level of preci
 \description{
 Returns a list of sites from the Water Quality Portal web service. This function gets
 the data from: \url{https://www.waterqualitydata.us}.
-Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}.
+Arguments to the function should be based on
+\url{https://www.waterqualitydata.us/webservices_documentation}.
 The information returned from this function describes the
 available data at the WQP sites, and some metadata on the sites themselves.
 }

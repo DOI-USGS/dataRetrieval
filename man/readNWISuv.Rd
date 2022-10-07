@@ -54,10 +54,14 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 }
 \description{
-Imports data from NWIS web service. This function gets the data from here: \url{https://waterservices.usgs.gov/}
-A list of parameter codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-A list of statistic codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}.
-More information on the web service can be found here: \url{https://waterservices.usgs.gov/rest/IV-Service.html}.
+Imports data from NWIS web service. This function gets the data from here:
+\url{https://waterservices.usgs.gov/}
+A list of parameter codes can be found here:
+\url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+A list of statistic codes can be found here:
+\url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}.
+More information on the web service can be found here:
+\url{https://waterservices.usgs.gov/rest/IV-Service.html}.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

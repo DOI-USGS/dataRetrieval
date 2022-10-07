@@ -14,32 +14,43 @@ readNWISuse(
 )
 }
 \arguments{
-\item{stateCd}{could be character (full name, abbreviation, id), or numeric (id). Only one is accepted per query.}
+\item{stateCd}{could be character (full name, abbreviation, id), or numeric (id).
+Only one is accepted per query.}
 
-\item{countyCd}{could be character (name, with or without "County", or "ALL"), numeric (id), or code{NULL}, which will
-return state or national data depending on the stateCd argument.  \code{ALL} may also be supplied, which will return data
+\item{countyCd}{could be character (name, with or without "County", or "ALL"),
+numeric (id), or code{NULL}, which will
+return state or national data depending on the stateCd argument.  "ALL" may
+also be supplied, which will return data
 for every county in a state. Can be a vector of counties in the same state.}
 
-\item{years}{integer Years for data retrieval. Must be years ending in 0 or 5. Default is all available years.}
+\item{years}{integer Years for data retrieval. Must be years ending in 0 or 5.
+Default is all available years.}
 
-\item{categories}{character categories of water use.  Defaults to \code{ALL}.  Specific categories must be supplied as two-
+\item{categories}{character categories of water use.  Defaults to "ALL".
+Specific categories must be supplied as two-
 letter abbreviations as seen in the URL when using the NWIS water use web interface.  Note that
 there are different codes for national and state level data.}
 
-\item{convertType}{logical defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to
-numerics based on a standard algorithm. Years, months, and days (if appliccable) are also returned as numerics
+\item{convertType}{logical defaults to \code{TRUE}. If \code{TRUE}, the function
+will convert the data to
+numerics based on a standard algorithm. Years, months, and days (if appliccable) are
+also returned as numerics
 in separate columns.  If convertType is false, everything is returned as a character.}
 
-\item{transform}{logical only intended for use with national data.  Defaults to \code{FALSE}, with data being returned as
-presented by the web service.  If \code{TRUE}, data will be transformed and returned with column names, which will reformat
+\item{transform}{logical only intended for use with national data.  Defaults to
+\code{FALSE}, with data being returned as
+presented by the web service.  If \code{TRUE}, data will be transformed and
+returned with column names, which will reformat
 national data to be similar to state data.}
 }
 \value{
-A data frame with at least the year of record, and all available statistics for the given geographic parameters.
+A data frame with at least the year of record, and all available
+statistics for the given geographic parameters.
 County and state fields will be included as appropriate.
 }
 \description{
-Retrieves water use data from USGS Water Use Data for the Nation.  See \url{https://waterdata.usgs.gov/nwis/wu} for
+Retrieves water use data from USGS Water Use Data for the Nation.  See
+\url{https://waterdata.usgs.gov/nwis/wu} for
 more information.  All available use categories for the supplied arguments are retrieved.
 }
 \examples{

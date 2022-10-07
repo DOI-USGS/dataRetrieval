@@ -11,7 +11,8 @@ readNWISrating(siteNumber, type = "base", convertType = TRUE)
 
 \item{type}{character can be "base", "corr", or "exsa"}
 
-\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
 }
 \value{
