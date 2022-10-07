@@ -21,8 +21,8 @@ editor_options:
 ```{r setup, include=FALSE}
 library(knitr)
 
-opts_chunk$set(warning = FALSE, 
-               message = FALSE, 
+opts_chunk$set(warning = FALSE,
+               message = FALSE,
                out.width = "75%",
                fig.align = "center",
                comment  = "#>")
@@ -152,56 +152,56 @@ A example view of these navigation types can be seen below for NWIS site [111090
 ```{r, echo = FALSE, fig.cap= "NLDI Navigation Options"}
 x <- findNLDI(nwis = 11109000,
               nav = c("UT", "DM", "UM", "DD"))
-              
+
 ggplot() +
   geom_sf(data = x$UT, aes(color = "UT")) +
   geom_sf(data = x$UM,  aes(color  = "UM")) +
   geom_sf(data = x$DD,  aes(color = "DD")) +
-  geom_sf(data = x$DM,   aes(color = "DM")) + 
-  geom_sf(data = x$origin, col = "green", size = 2) + 
-  geom_sf_label(data = x$origin, 
+  geom_sf(data = x$DM,   aes(color = "DM")) +
+  geom_sf(data = x$origin, col = "green", size = 2) +
+  geom_sf_label(data = x$origin,
                 aes(label = x$origin$identifier),
                 nudge_x = -.08,
-                nudge_y = .03) + 
-  theme_void() + 
+                nudge_y = .03) +
+  theme_void() +
   scale_color_manual(name = "Navigation Direction",
                      breaks = c("UT", "UM", "DD", "DM"),
-                     values = c("UT" = "blue", 
-                                "UM" = "red", 
-                                "DM" = "orange", 
-                                "DD" = "purple")) + 
-  theme(legend.position = c(.05, .7), 
+                     values = c("UT" = "blue",
+                                "UM" = "red",
+                                "DM" = "orange",
+                                "DD" = "purple")) +
+  theme(legend.position = c(.05, .7),
         legend.justification = c(0, 0))
-  
+
 ```
 
 One or more modes of navigation can be supplied to the `nav` argument. For example we can ask to navigate along the upper mainstem (UM) from COMID 101.
 
 ```{r}
 summarize.nldi <- function(input) {
-  data.frame(name = names(input), 
-             class = sapply(input, class)[1], 
-             row.names = NULL) %>% 
-    mutate(feature_count = ifelse(class == "sf", sapply(input, nrow), 
+  data.frame(name = names(input),
+             class = sapply(input, class)[1],
+             row.names = NULL) %>%
+    mutate(feature_count = ifelse(class == "sf", sapply(input, nrow),
                                   sapply(input, length)))
 }
 
 
-findNLDI(comid = 101, nav = "UM") %>% 
+findNLDI(comid = 101, nav = "UM") %>%
   summarize.nldi()
 ```
 
 Or along the upper mainstem (UM) _and_ upper tributary (UT) of COMID 101.
 
 ```{r}
-findNLDI(comid = 101, nav = c("UM", "UT")) %>% 
+findNLDI(comid = 101, nav = c("UM", "UT")) %>%
   summarize.nldi()
 ```
 
 In both cases the returned named list includes the origin and the flowlines along the requested navigation. If `sf` is not enabled, the returned object for a flowpath navigation is a vector of COMIDs.
 
 ```{r}
-findNLDI(comid = 101, nav = c("UM", "DM"), no_sf = TRUE) %>% 
+findNLDI(comid = 101, nav = c("UM", "DM"), no_sf = TRUE) %>%
   summarize.nldi()
 ```
 
@@ -211,21 +211,21 @@ findNLDI(comid = 101, nav = c("UM", "DM"), no_sf = TRUE) %>%
 Like the gas station example, any of the features listed in `get_nldi_sources` can be searched for along the network, for example, we can find all NWIS gauges, on the upper tributary, of COMID 101.
 
 ```{r}
-findNLDI(comid = 101, nav = "UT", find = "nwis") %>% 
+findNLDI(comid = 101, nav = "UT", find = "nwis") %>%
   summarize.nldi()
 ```
 
 Of course, more than one resource can be requested, for example, lets replicate the previous search, this time adding Water Quality Points to the returned list:
 
 ```{r}
-findNLDI(comid = 101, nav = "UT", find = c("nwis", "wqp")) %>% 
+findNLDI(comid = 101, nav = "UT", find = c("nwis", "wqp")) %>%
   summarize.nldi()
 ```
 
 Note that flowlines are no longer the default return for navigation once a new feature is requested. To retain flowlines, the must be explicitly requested.
 
 ```{r}
-findNLDI(comid = 101, nav = "UT", find = c("nwis", "flowlines")) %>% 
+findNLDI(comid = 101, nav = "UT", find = c("nwis", "flowlines")) %>%
   summarize.nldi()
 ```
 
@@ -235,13 +235,13 @@ The Upstream Basin Boundary is a unique object that can be found for any feature
 
 ```{r}
 # with sf
-findNLDI(comid = 101, find = "basin") %>% 
+findNLDI(comid = 101, find = "basin") %>%
   summarize.nldi()
 ```
 
 ```{r}
 # No sf
-findNLDI(comid = 101, find = "basin", no_sf = TRUE) %>% 
+findNLDI(comid = 101, find = "basin", no_sf = TRUE) %>%
   summarize.nldi()
 ```
 
@@ -251,11 +251,11 @@ In some cases, particularly for DM and DD navigation, the network can extend for
 
 ```{r}
 # Default 100 km
-findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp")) %>% 
+findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp")) %>%
   summarize.nldi()
 
 # Extended 200 km search
-findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp"), distance_km = 200) %>% 
+findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp"), distance_km = 200) %>%
   summarize.nldi()
 ```
 
@@ -267,8 +267,8 @@ In this example we will use that location as the origin, navigate upstream along
 
 ```{r, fig.cap = "Integrating NLDI and NWIS dataRetrieval tools"}
 # Upstream nwis, flowlines, and basin
-fountainCreek <- findNLDI(location = c(-104.780837, 38.786796), 
-                          nav = "UM", 
+fountainCreek <- findNLDI(location = c(-104.780837, 38.786796),
+                          nav = "UM",
                           find = c("nwis", "basin", "flowlines"))
 
 summarize.nldi(fountainCreek)
@@ -279,37 +279,37 @@ summarize.nldi(fountainCreek)
 #     and record streamflow ("00060")
 #     and recorded flows in 2020
 find <- whatNWISdata(sites = gsub("USGS-", "",
-                                  fountainCreek$UM_nwissite$identifier)) %>% 
-  filter(data_type_cd == "dv", 
+                                  fountainCreek$UM_nwissite$identifier)) %>%
+  filter(data_type_cd == "dv",
          parm_cd == "00060",
-         end_date > as.Date("2020-01-01")) %>% 
-  mutate(identifier  = paste0("USGS-", site_no)) %>% 
-  inner_join(fountainCreek$UM_nwissite, by = "identifier") %>% 
+         end_date > as.Date("2020-01-01")) %>%
+  mutate(identifier  = paste0("USGS-", site_no)) %>%
+  inner_join(fountainCreek$UM_nwissite, by = "identifier") %>%
   sf::st_as_sf()
 
 # Extract Streamflow for identified sites
-Q <- readNWISdv(find$site_no, 
-                parameterCd = "00060", 
-                startDate = "2020-01-01") %>% 
+Q <- readNWISdv(find$site_no,
+                parameterCd = "00060",
+                startDate = "2020-01-01") %>%
   renameNWISColumns()
 
-# Plot! 
-ggplot() + 
-  geom_line(data = Q, 
+# Plot!
+ggplot() +
+  geom_line(data = Q,
             aes(x = Date, y = Flow, col = site_no),
-            size = .5) + 
-  facet_wrap(~site_no, nrow = 4) + 
-  theme_minimal() + 
+            size = .5) +
+  facet_wrap(~site_no, nrow = 4) +
+  theme_minimal() +
   scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "none") + 
-ggplot() + 
-  geom_sf(data = fountainCreek$basin, col = NA) + 
-  geom_sf(data = fountainCreek$UM_flowlines, col = "blue", alpha = .5) + 
-  geom_sf(data = find, aes(col = site_no)) + 
+  theme(legend.position = "none") +
+ggplot() +
+  geom_sf(data = fountainCreek$basin, col = NA) +
+  geom_sf(data = fountainCreek$UM_flowlines, col = "blue", alpha = .5) +
+  geom_sf(data = find, aes(col = site_no)) +
   scale_color_brewer(palette = "Set1") +
   theme_void() +
   labs(title = "2020 Streamflow",
-       caption = "Fountain Creek, Colorado") + 
+       caption = "Fountain Creek, Colorado") +
   theme(legend.position = "none",
          plot.title = element_text(face = "bold", hjust = .5))
 ```

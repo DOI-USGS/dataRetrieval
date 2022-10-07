@@ -62,22 +62,22 @@ statData <- data.frame()
 for(i in reqBks) {
   getSites <- sites$site_no[i:(i + 9)]
   currentSites <- readNWISstat(siteNumbers = getSites,
-                               parameterCd = "00060", 
+                               parameterCd = "00060",
                     statReportType = "daily",
                     statType = c("p10", "p25", "p50", "p75", "p90", "mean"))
   statData <- rbind(statData, currentSites)
 }
 
-statData.storm <- statData[statData$month_nu == month(storm.date) & 
+statData.storm <- statData[statData$month_nu == month(storm.date) &
                             statData$day_nu == day(storm.date), ]
 
 finalJoin <- left_join(storm.data, statData.storm)
-finalJoin <- left_join(finalJoin, sites) 
+finalJoin <- left_join(finalJoin, sites)
 
 finalJoin[, grep("_va", names(finalJoin))] <- sapply(finalJoin[, grep("_va", names(finalJoin))], function(x) as.numeric(x))
 
-#remove sites without current data 
-finalJoin <- finalJoin[!is.na(finalJoin$Flow), ] 
+#remove sites without current data
+finalJoin <- finalJoin[!is.na(finalJoin$Flow), ]
 
 
 #classify current discharge values
@@ -86,14 +86,14 @@ finalJoin$class <- NA
 finalJoin$class[finalJoin$Flow > finalJoin$p75_va] <- "navy"
 finalJoin$class[finalJoin$Flow < finalJoin$p25_va] <- "red"
 
-finalJoin$class[finalJoin$Flow > finalJoin$p25_va & 
+finalJoin$class[finalJoin$Flow > finalJoin$p25_va &
                   finalJoin$Flow <= finalJoin$p50_va] <- "green"
 finalJoin$class[finalJoin$Flow > finalJoin$p50_va &
                   finalJoin$Flow <= finalJoin$p75_va] <- "blue"
 
-finalJoin$class[is.na(finalJoin$class) & 
+finalJoin$class[is.na(finalJoin$class) &
                   finalJoin$Flow > finalJoin$p50_va] <- "cyan"
-finalJoin$class[is.na(finalJoin$class) & 
+finalJoin$class[is.na(finalJoin$class) &
                   finalJoin$Flow < finalJoin$p50_va] <- "yellow"
 
 #take a look at the columns that we will plot later:
@@ -131,10 +131,10 @@ legend("bottomleft", inset = c(0.01, .01),
        col = legend.colors,
        ncol = 2)
 map.scale(ratio = FALSE, cex = 0.75,
-          grconvertX(.07, "npc"), 
+          grconvertX(.07, "npc"),
           grconvertY(.2, "npc"))
 text("*Other percentiles not available for these sites", cex = 0.75,
-     x = grconvertX(0.2, "npc"), 
+     x = grconvertX(0.2, "npc"),
      y = grconvertY(-0.08, "npc"))
 ```
 
@@ -145,9 +145,9 @@ Static maps are great for papers and presentations. When possible, interactive m
 ```{r leaflet, fig.height=5}
 library(leaflet)
 
-finalJoin$popup <- with(finalJoin, paste("<b>", station_nm, 
+finalJoin$popup <- with(finalJoin, paste("<b>", station_nm,
                                          "</b></br>",
-                                         "Measured Flow:", Flow, 
+                                         "Measured Flow:", Flow,
                                          "ft3/s</br>",
                                          "25% historical:", p25_va,
                                          "ft3/s</br>",
@@ -156,7 +156,7 @@ finalJoin$popup <- with(finalJoin, paste("<b>", station_nm,
                                          "75% historical:", p75_va,
                                          "ft3/s"))
 
-leafMapStat <- leaflet(data = finalJoin) %>% 
+leafMapStat <- leaflet(data = finalJoin) %>%
   addProviderTiles("CartoDB.Positron") %>%
   addCircleMarkers(~dec_lon_va, ~dec_lat_va,
                    color = ~class, radius = 3, stroke = FALSE,

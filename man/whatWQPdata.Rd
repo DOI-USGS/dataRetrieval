@@ -7,7 +7,8 @@
 whatWQPdata(..., saveFile = tempfile(), convertType = TRUE)
 }
 \arguments{
-\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options. A list of arguments can also be supplied.}
+\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for
+a complete list of options. A list of arguments can also be supplied.}
 
 \item{saveFile}{path to save the incoming geojson output.}
 
@@ -43,7 +44,8 @@ hydrologic unit of the monitoring location to the cataloging unit level of preci
 }
 }
 \description{
-Returns a list of sites from the Water Quality Portal web service. This function gets the data from: \url{https://www.waterqualitydata.us}.
+Returns a list of sites from the Water Quality Portal web service. This function gets
+the data from: \url{https://www.waterqualitydata.us}.
 Arguments to the function should be based on \url{https://www.waterqualitydata.us/webservices_documentation}.
 The information returned from this function describes the
 available data at the WQP sites, and some metadata on the sites themselves.
@@ -57,7 +59,7 @@ type <- "Stream"
 sites <- whatWQPdata(countycode = "US:55:025", siteType = type)
 
 lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
-lakeSites_chars <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", 
+lakeSites_chars <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment",
                        statecode = "US:55", convertType=FALSE)
 }
 \dontshow{\}) # examplesIf}

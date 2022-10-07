@@ -17,11 +17,11 @@ readWQPdata(
 
 \item{querySummary}{logical to ONLY return the number of records and unique sites that will be returned from this query. This argument is not supported via the combined list from the \dots argument}
 
-\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 for more information on time zones.}
 
 \item{ignore_attributes}{logical to choose to ignore fetching site and parameter attributes. Default is \code{FALSE}.}
@@ -31,7 +31,7 @@ numerics based on a standard algorithm. If false, everything is returned as a ch
 }
 \value{
 A data frame with at least the following columns:
-\tabular{lll}{ 
+\tabular{lll}{
 Name \tab Type \tab Description \cr
 OrganizationIdentifier \tab character \tab  A designator used to uniquely identify a unique business establishment within a context.\cr
 OrganizationFormalName \tab character \tab  The legal designator (i.e. formal name) of an organization.\cr
@@ -122,85 +122,85 @@ pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
 pHData_summary <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),
      characteristicName=nameToUse, querySummary=TRUE)
 startDate <- as.Date("2013-01-01")
-secchi.names = c("Depth, Secchi disk depth", 
-                 "Depth, Secchi disk depth (choice list)", 
-                 "Secchi Reading Condition (choice list)", 
+secchi.names = c("Depth, Secchi disk depth",
+                 "Depth, Secchi disk depth (choice list)",
+                 "Secchi Reading Condition (choice list)",
                  "Water transparency, Secchi disc")
-args <- list('startDateLo' = startDate, 
-             'startDateHi' = "2013-12-31", 
-              statecode="WI", 
+args <- list('startDateLo' = startDate,
+             'startDateHi' = "2013-12-31",
+              statecode="WI",
               characteristicName=secchi.names)
 
-wqp.data <- readWQPdata(args)   
+wqp.data <- readWQPdata(args)
 
-args_2 <- list('startDateLo' = startDate, 
-             'startDateHi' = "2013-12-31", 
-              statecode="WI", 
+args_2 <- list('startDateLo' = startDate,
+             'startDateHi' = "2013-12-31",
+              statecode="WI",
               characteristicName=secchi.names,
               querySummary=TRUE)
 
-wqp.summary <- readWQPdata(args_2) 
+wqp.summary <- readWQPdata(args_2)
 
-arg_3 <- list('startDateLo' = startDate, 
+arg_3 <- list('startDateLo' = startDate,
              'startDateHi' = "2013-12-31")
-arg_4 <- list(statecode="WI", 
+arg_4 <- list(statecode="WI",
               characteristicName=secchi.names)
 wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
-wqp.summary_WI <- readWQPdata(arg_3, statecode="WI", 
-                              characteristicName=secchi.names, 
+wqp.summary_WI <- readWQPdata(arg_3, statecode="WI",
+                              characteristicName=secchi.names,
                               querySummary=TRUE)
-                              
+
 # querying by county
-DeWitt <- readWQPdata(statecode = "Illinois", 
-                      countycode= "DeWitt", 
-                      characteristicName = "Nitrogen") 
-                                
+DeWitt <- readWQPdata(statecode = "Illinois",
+                      countycode= "DeWitt",
+                      characteristicName = "Nitrogen")
+
 # Data profiles: "Organization Data"
 org_data <- readWQPdata(statecode = "WI",
                         countycode = "Dane",
                         service = "Organization")
 
-# Data profiles: "Site Data Only" 
+# Data profiles: "Site Data Only"
 site_data <- readWQPdata(statecode = "WI",
                          countycode = "Dane",
                          service = "Station")
-                         
+
 # Data profiles: "Project Data"
 project_data <- readWQPdata(statecode = "WI",
                          countycode = "Dane",
                          service = "Project")
-                         
+
 # Data profiles: "Project Monitoring Location Weighting Data"
 proj_mlwd <- readWQPdata(statecode = "WI",
                          countycode = "Dane",
                          service = "ProjectMonitoringLocationWeighting")
-                         
+
 # Data profiles: "Sample Results (physical/chemical metadata)":
 samp_data <- readWQPdata(siteid = "USGS-04024315",
                          dataProfile = "resultPhysChem")
-                         
+
 # Data profiles: "Sample Results (biological metadata)"
 samp_bio <- readWQPdata(siteid="USGS-04024315",
                         dataProfile = "biological")
-                         
+
 # Data profiles: "Sample Results (narrow)"
 samp_narrow <- readWQPdata(siteid="USGS-04024315",
                            dataProfile = "narrowResult")
-                           
+
 # Data profiles: "Sampling Activity"
 samp_activity <- readWQPdata(siteid="USGS-04024315",
                              dataProfile = "activityAll")
-                             
+
 # Data profile: "Sampling Activity Metrics"
 act_metrics <- readWQPdata(statecode = "WI",
                            countycode = "Dane",
                            service = "ActivityMetric")
-                           
+
 # Data profile: "Result Detection Quantitation Limit Data"
 dl_data <- readWQPdata(siteid="USGS-04024315",
                        service = "ResultDetectionQuantitationLimit")
-                       
-pH <- readWQPdata(statecode="WI", countycode="Dane", characteristicName="pH", 
+
+pH <- readWQPdata(statecode="WI", countycode="Dane", characteristicName="pH",
                        convertType=FALSE)
 }
 \dontshow{\}) # examplesIf}

@@ -11,19 +11,19 @@ importWQP(obs_url, zip = TRUE, tz = "UTC", csv = FALSE, convertType = TRUE)
 
 \item{zip}{logical to request data via downloading zip file. Default set to TRUE.}
 
-\item{tz}{character to set timezone attribute of datetime. Default is UTC 
+\item{tz}{character to set timezone attribute of datetime. Default is UTC
 (properly accounting for daylight savings times based on the data's provided tz_cd column).
 Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"}
 
-\item{csv}{logical. Is the data coming back with a csv or tsv format. Default is \code{FALSE}. Currently, the 
+\item{csv}{logical. Is the data coming back with a csv or tsv format. Default is \code{FALSE}. Currently, the
 summary service does not support tsv, for other services tsv is the safer choice.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
 }
 \value{
-retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
+retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for
 start and end times, and converted to UTC. See \url{https://www.waterqualitydata.us/portal_userguide/} for more information.
 }
 \description{
@@ -48,7 +48,7 @@ rawSample2 <- importWQP(rawSampleURL_NoZip, zip=FALSE)
 STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
 
 STORETdata <- importWQP(STORETex)
- 
+
 STORETdata_char <- importWQP(STORETex, convertType=FALSE)
 }
 \dontshow{\}) # examplesIf}

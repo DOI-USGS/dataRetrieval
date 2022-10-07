@@ -31,7 +31,7 @@ library(dataRetrieval)
 #Retrieve daily Q
 siteNumber <- c("01538000")
 parameterCd <- "00060" #Discharge
-dailyQ <- readNWISdv(siteNumber, parameterCd) 
+dailyQ <- readNWISdv(siteNumber, parameterCd)
 dailyQ <- renameNWISColumns(dailyQ)
 stationInfo <- readNWISsite(siteNumber)
 
@@ -49,10 +49,10 @@ library(zoo)
 if(as.numeric(diff(range(dailyQ$Date))) != (nrow(dailyQ) + 1)) {
   fullDates <- seq(from = min(dailyQ$Date),
                    to = max(dailyQ$Date), by = "1 day")
-  fullDates <- data.frame(Date = fullDates, 
+  fullDates <- data.frame(Date = fullDates,
                           agency_cd = unique(dailyQ$agency_cd),
                           site_no = unique(dailyQ$site_no))
-  dailyQ <- fullDates %>% 
+  dailyQ <- fullDates %>%
     left_join(dailyQ,
               by = c("Date", "agency_cd", "site_no")) %>%
     arrange(Date)
@@ -60,7 +60,7 @@ if(as.numeric(diff(range(dailyQ$Date))) != (nrow(dailyQ) + 1)) {
 
 dailyQ <- dailyQ %>%
   mutate(rollMean = rollmean(Flow, 30, fill = NA, align = "center"),
-         day.of.year = as.numeric(strftime(Date, 
+         day.of.year = as.numeric(strftime(Date,
                                            format = "%j")))
 
 ```
@@ -76,23 +76,23 @@ summaryQ <- dailyQ %>%
             p25 = quantile(rollMean, probs = .25, na.rm = TRUE),
             p10 = quantile(rollMean, probs = 0.1, na.rm = TRUE),
             p05 = quantile(rollMean, probs = 0.05, na.rm = TRUE),
-            p00 = quantile(rollMean, probs = 0, na.rm = TRUE)) 
+            p00 = quantile(rollMean, probs = 0, na.rm = TRUE))
 
 current.year <- as.numeric(strftime(Sys.Date(), format = "%Y"))
 
 summary.0 <- summaryQ %>%
-  mutate(Date = as.Date(day.of.year - 1, 
+  mutate(Date = as.Date(day.of.year - 1,
                         origin = paste0(current.year - 2, "-01-01")),
          day.of.year = day.of.year - 365)
 summary.1 <- summaryQ %>%
-  mutate(Date = as.Date(day.of.year - 1, 
+  mutate(Date = as.Date(day.of.year - 1,
                         origin = paste0(current.year - 1, "-01-01")))
 summary.2 <- summaryQ %>%
-  mutate(Date = as.Date(day.of.year - 1, 
+  mutate(Date = as.Date(day.of.year - 1,
                         origin = paste0(current.year, "-01-01")),
          day.of.year = day.of.year + 365)
 
-summaryQ <- bind_rows(summary.0, summary.1, summary.2) 
+summaryQ <- bind_rows(summary.0, summary.1, summary.2)
 
 
 smooth.span <- 0.3
@@ -108,14 +108,14 @@ latest.years <- dailyQ %>%
   mutate(day.of.year = seq_len(nrow(.)))
 
 #Let's just take the middle chunk:
-summaryQ <- summaryQ %>% 
-  filter(day.of.year %in% 1:365)  
+summaryQ <- summaryQ %>%
+  filter(day.of.year %in% 1:365)
 
-summaryQ <- summaryQ %>% 
+summaryQ <- summaryQ %>%
   bind_rows(summaryQ,
-            summaryQ) %>% 
+            summaryQ) %>%
   mutate(day.of.year = seq_len(nrow(.)) - 365)
-  
+
 
 ```
 
@@ -129,7 +129,7 @@ title.text <- paste0(stationInfo$station_nm, "\n",
         "Provisional Data - Subject to change\n",
         "Record Start = ", min(dailyQ$Date),
         "  Number of years = ",
-        as.integer(as.numeric(difftime(time1 = max(dailyQ$Date), 
+        as.integer(as.numeric(difftime(time1 = max(dailyQ$Date),
         time2 = min(dailyQ$Date),
         units = "weeks")) / 52.25),
         "\nDate of plot = ", Sys.Date(),
@@ -140,36 +140,36 @@ month.letters <- c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
 start.month.days <- c(1, 32, 61, 92, 121, 152, 182, 214, 245, 274, 305, 335)
 label.text <- c("Normal", "Drought Watch", "Drought Warning", "Drought Emergency")
 
-plot(latest.years$day.of.year, latest.years$rollMean, 
+plot(latest.years$day.of.year, latest.years$rollMean,
      ylim = c(1, 1000), xlim = c(1, 733),
      log = "y", axes = FALSE, type = "n", xaxs = "i", yaxs = "i",
      ylab = "30-day moving ave",
      xlab = "")
 title(title.text, cex.main = 0.75)
 polygon(c(summaryQ$day.of.year, rev(summaryQ$day.of.year)),
-        c(summaryQ$sm.75, rev(summaryQ$sm.25)), 
+        c(summaryQ$sm.75, rev(summaryQ$sm.25)),
         col = "darkgreen", border = FALSE)
 polygon(c(summaryQ$day.of.year, rev(summaryQ$day.of.year)),
-        c(summaryQ$sm.25, rev(summaryQ$sm.10)), 
+        c(summaryQ$sm.25, rev(summaryQ$sm.10)),
         col = "yellow", border = FALSE)
 polygon(c(summaryQ$day.of.year, rev(summaryQ$day.of.year)),
-        c(summaryQ$sm.10, rev(summaryQ$sm.05)), 
+        c(summaryQ$sm.10, rev(summaryQ$sm.05)),
         col = "orange", border = FALSE)
 polygon(c(summaryQ$day.of.year, rev(summaryQ$day.of.year)),
-        c(summaryQ$sm.05, rev(summaryQ$sm.00)), 
+        c(summaryQ$sm.05, rev(summaryQ$sm.00)),
         col = "red", border = FALSE)
-lines(latest.years$day.of.year, latest.years$rollMean, 
+lines(latest.years$day.of.year, latest.years$rollMean,
       lwd = 2, col = "black")
 abline(v = 366)
 axis(2, las = 1, at = c(1, 100, 1000), tck = -0.02)
 axis(2, at = c(seq(1, 90, by = 10)), labels = NA, tck = -0.01)
 axis(2, at = c(seq(100, 1000, by = 100)), labels = NA, tck = -0.01)
-axis(1, at =  c(mid.month.days, 365 + mid.month.days), 
-     labels = rep(month.letters, 2), 
+axis(1, at =  c(mid.month.days, 365 + mid.month.days),
+     labels = rep(month.letters, 2),
      tick = FALSE, line = -0.5, cex.axis = 0.75)
 axis(1, at = c(start.month.days, 365 + start.month.days),
      labels = NA, tck = -0.02)
-axis(1, at = c(182, 547), labels = c(current.year - 1, current.year), 
+axis(1, at = c(182, 547), labels = c(current.year - 1, current.year),
      line = .5, tick = FALSE)
 legend("bottom", label.text, horiz = TRUE,
        fill = c("darkgreen", "yellow", "orange", "red"),
@@ -194,7 +194,7 @@ simple.plot <- ggplot(data = summaryQ, aes(x = day.of.year)) +
   geom_ribbon(aes(ymin = sm.00, ymax = sm.05, fill = "Drought Emergency")) +
   scale_y_log10(limits = c(1, 1000)) +
   geom_line(data = latest.years, aes(x = day.of.year, y = rollMean, color = "30-Day Mean"), size = 2) +
-  geom_vline(xintercept = 365) 
+  geom_vline(xintercept = 365)
 
 simple.plot
 ```
@@ -210,13 +210,13 @@ styled.plot <- simple.plot +
                    limits = c(0, 730)) +
   annotation_logticks(sides = "l") +
   expand_limits(x = 0) +
-  annotate(geom = "text", 
-           x = c(182, 547), 
-           y = 1, 
+  annotate(geom = "text",
+           x = c(182, 547),
+           y = 1,
            label = c(current.year - 1, current.year), size = 4) +
-  theme_bw() + 
+  theme_bw() +
   theme(axis.ticks.x = element_blank(),
-        panel.grid.major = element_blank(), 
+        panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) +
   labs(list(title = title.text,
             y = "30-day moving ave", x = "")) +

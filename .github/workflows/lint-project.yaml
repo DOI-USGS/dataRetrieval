@@ -24,6 +24,6 @@ jobs:
         run: install.packages("lintr")
         shell: Rscript {0}
 
-      - name: Lint root directory
-        run: lintr::lint_dir()
+      - name: Lint package
+        run: lintr::lint_package()
         shell: Rscript {0}
