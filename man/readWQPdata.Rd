@@ -66,7 +66,8 @@ of day is reported. Any of the longitudinal divisions of the earth's surface in 
 ActivityDepthHeightMeasure.MeasureValue \tab character \tab	A measurement of the
 vertical location (measured from a reference point) at which an activity occurred.
 Measure value is given in the units stored in ActivityDepthHeightMeasure.MeasureUnitCode.\cr
-ActivityDepthHeightMeasure.MeasureUnitCode \tab character \tab	The code that represents the unit for measuring the item.\cr
+ActivityDepthHeightMeasure.MeasureUnitCode \tab character \tab	The code that
+represents the unit for measuring the item.\cr
 ActivityDepthAltitudeReferencePointText \tab character \tab	The reference used
 to indicate the datum or reference used to establish the depth/altitude of an activity.\cr
 ActivityTopDepthHeightMeasure.MeasureValue \tab character \tab	A measurement of
