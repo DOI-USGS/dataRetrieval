@@ -12,6 +12,8 @@
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
 #' for more information on time zones.
 #' @param ignore_attributes logical to choose to ignore fetching site and parameter attributes. Default is \code{FALSE}.
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{ 
@@ -177,9 +179,12 @@
 #' # Data profile: "Result Detection Quantitation Limit Data"
 #' dl_data <- readWQPdata(siteid="USGS-04024315",
 #'                        service = "ResultDetectionQuantitationLimit")
+#'                        
+#' pH <- readWQPdata(statecode="WI", countycode="Dane", characteristicName="pH", 
+#'                        convertType=FALSE)
 #' }
 readWQPdata <- function(..., querySummary=FALSE, tz="UTC", 
-                        ignore_attributes = FALSE){
+                        ignore_attributes = FALSE, convertType=TRUE){
   
   tz <- match.arg(tz, OlsonNames())
   
@@ -198,7 +203,7 @@ readWQPdata <- function(..., querySummary=FALSE, tz="UTC",
     return(retquery)
   } else {
   
-    retval <- importWQP(baseURL, zip = values["zip"] == "yes", tz=tz)
+    retval <- importWQP(baseURL, zip = values["zip"] == "yes", tz=tz, convertType=convertType)
     
     if(!all(is.na(retval)) & !ignore_attributes){
       

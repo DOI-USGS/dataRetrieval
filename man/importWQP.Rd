@@ -4,7 +4,7 @@
 \alias{importWQP}
 \title{Basic Water Quality Portal Data parser}
 \usage{
-importWQP(obs_url, zip = TRUE, tz = "UTC", csv = FALSE)
+importWQP(obs_url, zip = TRUE, tz = "UTC", csv = FALSE, convertType = TRUE)
 }
 \arguments{
 \item{obs_url}{character URL to Water Quality Portal#' @keywords data import USGS web service}
@@ -17,6 +17,9 @@ Possible values include "America/New_York","America/Chicago", "America/Denver","
 
 \item{csv}{logical. Is the data coming back with a csv or tsv format. Default is \code{FALSE}. Currently, the 
 summary service does not support tsv, for other services tsv is the safer choice.}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character.}
 }
 \value{
 retval dataframe raw data returned from the Water Quality Portal. Additionally, a POSIXct dateTime column is supplied for 
@@ -37,11 +40,15 @@ rawSample <- importWQP(rawSampleURL)
 
 rawSampleURL_NoZip <- constructWQPURL('USGS-01594440','01075', '', '', zip=FALSE)
 
+rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip=FALSE, convertType=FALSE)
+
 rawSample2 <- importWQP(rawSampleURL_NoZip, zip=FALSE)
 
 STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
 
- STORETdata <- importWQP(STORETex)
+STORETdata <- importWQP(STORETex)
+ 
+STORETdata_char <- importWQP(STORETex, convertType=FALSE)
 }
 \dontshow{\}) # examplesIf}
 }
