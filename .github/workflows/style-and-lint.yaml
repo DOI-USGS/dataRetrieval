@@ -66,7 +66,7 @@ jobs:
           git add R/\*
           git commit -m "Style code" || echo "No changes to commit"
           git pull --ff-only
-          git push origin
+          git push origin main
   # Next run lintr to annotate the PR with anything caught by the linter that wasn't changed by styler
   lint:
     runs-on: ubuntu-latest

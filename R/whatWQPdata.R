@@ -11,15 +11,15 @@
 #'
 #' type <- "Stream"
 #'
-#' sites <- whatWQPsamples(countycode="US:55:025", siteType = type)
+#' sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
 #'
 #' lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
-#' lakeSites_samples_chars <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
-#'                               statecode = "US:55", convertType = FALSE)
-#'
+#' lakeSites_samples_chars <- whatWQPsamples(
+#'   siteType = "Lake, Reservoir, Impoundment",
+#'   statecode = "US:55", convertType = FALSE
+#' )
 #' }
 whatWQPsamples <- function(..., convertType = TRUE) {
-
   values <- readWQPdots(...)
 
   values <- values$values
@@ -38,13 +38,19 @@ whatWQPsamples <- function(..., convertType = TRUE) {
 
   baseURL <- appendDrURL(baseURL, mimeType = "tsv")
 
-  withCallingHandlers({
-    retval <- importWQP(baseURL, zip = values["zip"] == "yes",
-                        convertType = convertType)
-  }, warning = function(w) {
-    if (any(grepl("Number of rows returned not matched in header", w)))
-      invokeRestart("muffleWarning")
-  })
+  withCallingHandlers(
+    {
+      retval <- importWQP(baseURL,
+        zip = values["zip"] == "yes",
+        convertType = convertType
+      )
+    },
+    warning = function(w) {
+      if (any(grepl("Number of rows returned not matched in header", w))) {
+        invokeRestart("muffleWarning")
+      }
+    }
+  )
 
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- baseURL
@@ -63,13 +69,14 @@ whatWQPsamples <- function(..., convertType = TRUE) {
 #'
 #' type <- "Stream"
 #'
-#' sites <- whatWQPmetrics(countycode="US:55:025",siteType=type)
+#' sites <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
 #' lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
-#' lakeSites_metrics_chars <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment",
-#'                        statecode = "US:55", convertType=FALSE)
+#' lakeSites_metrics_chars <- whatWQPmetrics(
+#'   siteType = "Lake, Reservoir, Impoundment",
+#'   statecode = "US:55", convertType = FALSE
+#' )
 #' }
 whatWQPmetrics <- function(..., convertType = TRUE) {
-
   values <- readWQPdots(...)
 
   values <- values$values
@@ -88,13 +95,19 @@ whatWQPmetrics <- function(..., convertType = TRUE) {
 
   baseURL <- appendDrURL(baseURL, mimeType = "tsv")
 
-  withCallingHandlers({
-    retval <- importWQP(baseURL, zip = values["zip"] == "yes",
-                        convertType = convertType)
-  }, warning = function(w) {
-    if (any(grepl("Number of rows returned not matched in header", w)))
-      invokeRestart("muffleWarning")
-  })
+  withCallingHandlers(
+    {
+      retval <- importWQP(baseURL,
+        zip = values["zip"] == "yes",
+        convertType = convertType
+      )
+    },
+    warning = function(w) {
+      if (any(grepl("Number of rows returned not matched in header", w))) {
+        invokeRestart("muffleWarning")
+      }
+    }
+  )
 
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- baseURL
@@ -156,12 +169,13 @@ whatWQPmetrics <- function(..., convertType = TRUE) {
 #' sites <- whatWQPdata(countycode = "US:55:025", siteType = type)
 #'
 #' lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
-#' lakeSites_chars <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment",
-#'                        statecode = "US:55", convertType=FALSE)
+#' lakeSites_chars <- whatWQPdata(
+#'   siteType = "Lake, Reservoir, Impoundment",
+#'   statecode = "US:55", convertType = FALSE
+#' )
 #' }
 whatWQPdata <- function(..., saveFile = tempfile(),
                         convertType = TRUE) {
-
   values <- readWQPdots(...)
 
   values <- values$values
@@ -211,7 +225,7 @@ whatWQPdata <- function(..., saveFile = tempfile(),
       CountyName = character(),
       stringsAsFactors = FALSE
     )
-    if(!convertType) {
+    if (!convertType) {
       y <- data.frame(lapply(y, as.character), stringsAsFactors = FALSE)
     }
   } else {
@@ -226,7 +240,7 @@ whatWQPdata <- function(..., saveFile = tempfile(),
       y <- cbind(y, retval[[i]])
     }
 
-    if(convertType) {
+    if (convertType) {
       y[, grep("Count$", names(y))] <- sapply(y[, grep("Count$", names(y))], as.numeric)
     }
 
@@ -249,7 +263,7 @@ whatWQPdata <- function(..., saveFile = tempfile(),
     }
   }
 
-  if(!convertType) {
+  if (!convertType) {
     y <- data.frame(lapply(y, as.character), stringsAsFactors = FALSE)
   }
 

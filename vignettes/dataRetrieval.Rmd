@@ -19,11 +19,13 @@ library(dataRetrieval)
 
 options(continue = " ")
 options(width = 60)
-knitr::opts_chunk$set(echo = TRUE,
-                      warning = FALSE,
-                      message = FALSE,
-                      fig.height = 7,
-                      fig.width = 7)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.height = 7,
+  fig.width = 7
+)
 ```
 
 The `dataRetrieval` package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). 
@@ -39,17 +41,20 @@ siteNumber <- "01491000"
 ChoptankInfo <- readNWISsite(siteNumber)
 parameterCd <- "00060"
 
-#Raw daily data:
-rawDailyData <- readNWISdv(siteNumber, parameterCd,
-                           "1980-01-01", "2010-01-01")
+# Raw daily data:
+rawDailyData <- readNWISdv(
+  siteNumber, parameterCd,
+  "1980-01-01", "2010-01-01"
+)
 
 # Sample data Nitrate:
 parameterCd <- "00618"
-qwData <- readNWISqw(siteNumber, parameterCd,
-                      "1980-01-01", "2010-01-01")
+qwData <- readNWISqw(
+  siteNumber, parameterCd,
+  "1980-01-01", "2010-01-01"
+)
 
 pCode <- readNWISpCode(parameterCd)
-
 ```
 
 USGS data are made available through the National Water Information System (NWIS).
@@ -57,86 +62,100 @@ USGS data are made available through the National Water Information System (NWIS
 Table 1 describes the functions available in the `dataRetrieval` package.
 
 ```{r echo=FALSE}
-Functions <- c("readNWISdata",
-               "readNWISdv",
-               "readNWISqw",
-               "readNWISuv",
-               "readNWISrating",
-               "readNWISmeas",
-               "readNWISpeak",
-               "readNWISgwl",
-               "readNWISuse",
-               "readNWISstat",
-               "readNWISpCode",
-               "readNWISsite",
-               "whatNWISsites",
-               "whatNWISdata",
-               "readWQPdata",
-               "readWQPqw",
-               "whatWQPsites",
-               "whatWQPdata",
-               "readWQPsummary",
-               "whatWQPmetrics",
-               "whatWQPsamples")
-Arguments <- c("service, tz='UTC', ...", #readNWISdata
-               "statCd='00003'", #readNWISdv
-               "expanded=TRUE, tz='UTC'", #readNWISqw
-               "tz='UTC'", #readNWISuv
-               "type='base", #readNWISrating
-               "tz='UTC'", #readNWISmeas
-               "", #readNWISpeak
-               "tz='UTC'", #readNWISgwl
-               "stateCd, countyCd, years='ALL', categories='ALL'", #readNWISuse
-               "statReportType='daily', statType='mean'", #readNWISstat
-               "", #readNWISpCode
-               "", #readNWISsite
-               "...", #whatNWISsites
-               "service, ...", #whatNWISdata
-               "...",
-               "", #readWQPdata
-               "...",
-               "...", "...", "...", "...") #whatWQPsites
-Description <- c("Data using user-specified queries", #readNWISdata
-                 "Daily values", #readNWISdv
-                 "Water quality", #readNWISqw
-                 "Instantaneous values", #readNWISuv
-                 "Rating table for active streamgage", #readNWISrating
-                 "Surface-water measurements", #readNWISmeas
-                 "Peak flow", #readNWISpeak
-                 "Groundwater levels", #readNWISgwl
-                 "Water use", #readNWISuse
-                 "Statistical service", #readNWISstat
-                 "Parameter code information", #readNWISpCode
-                 "Site information", #readNWISsite
-                 "Site search using user-specified queries",
-                 "Data availability",
-                 "User-specified queries",
-                 "Water quality data",
-                 "Site search",
-                 "Data availability",
-                 "Summary data",
-                 "Metric availability",
-                 "Sample availability")
+Functions <- c(
+  "readNWISdata",
+  "readNWISdv",
+  "readNWISqw",
+  "readNWISuv",
+  "readNWISrating",
+  "readNWISmeas",
+  "readNWISpeak",
+  "readNWISgwl",
+  "readNWISuse",
+  "readNWISstat",
+  "readNWISpCode",
+  "readNWISsite",
+  "whatNWISsites",
+  "whatNWISdata",
+  "readWQPdata",
+  "readWQPqw",
+  "whatWQPsites",
+  "whatWQPdata",
+  "readWQPsummary",
+  "whatWQPmetrics",
+  "whatWQPsamples"
+)
+Arguments <- c(
+  "service, tz='UTC', ...", # readNWISdata
+  "statCd='00003'", # readNWISdv
+  "expanded=TRUE, tz='UTC'", # readNWISqw
+  "tz='UTC'", # readNWISuv
+  "type='base", # readNWISrating
+  "tz='UTC'", # readNWISmeas
+  "", # readNWISpeak
+  "tz='UTC'", # readNWISgwl
+  "stateCd, countyCd, years='ALL', categories='ALL'", # readNWISuse
+  "statReportType='daily', statType='mean'", # readNWISstat
+  "", # readNWISpCode
+  "", # readNWISsite
+  "...", # whatNWISsites
+  "service, ...", # whatNWISdata
+  "...",
+  "", # readWQPdata
+  "...",
+  "...", "...", "...", "..."
+) # whatWQPsites
+Description <- c(
+  "Data using user-specified queries", # readNWISdata
+  "Daily values", # readNWISdv
+  "Water quality", # readNWISqw
+  "Instantaneous values", # readNWISuv
+  "Rating table for active streamgage", # readNWISrating
+  "Surface-water measurements", # readNWISmeas
+  "Peak flow", # readNWISpeak
+  "Groundwater levels", # readNWISgwl
+  "Water use", # readNWISuse
+  "Statistical service", # readNWISstat
+  "Parameter code information", # readNWISpCode
+  "Site information", # readNWISsite
+  "Site search using user-specified queries",
+  "Data availability",
+  "User-specified queries",
+  "Water quality data",
+  "Site search",
+  "Data availability",
+  "Summary data",
+  "Metric availability",
+  "Sample availability"
+)
 Source <- c(rep("NWIS", 14), rep("WQP", 7))
-Site <- c("opt.", rep("req.", 7), "",
-          rep("req.", 4), "opt.", "opt.", "req.", rep("opt.", 5))
-parameterCd <- c("opt.", rep("req.", 3),
-                 rep("", 5), "req.", "req.",
-                 rep("", 2), rep("opt.", 2), "req.", rep("", 5))
-start <- c("opt.", rep("req.", 3), "",
-           rep("req.", 3), "", "req.", rep("", 5), "req.", rep("opt.", 5))
+Site <- c(
+  "opt.", rep("req.", 7), "",
+  rep("req.", 4), "opt.", "opt.", "req.", rep("opt.", 5)
+)
+parameterCd <- c(
+  "opt.", rep("req.", 3),
+  rep("", 5), "req.", "req.",
+  rep("", 2), rep("opt.", 2), "req.", rep("", 5)
+)
+start <- c(
+  "opt.", rep("req.", 3), "",
+  rep("req.", 3), "", "req.", rep("", 5), "req.", rep("opt.", 5)
+)
 
-data.df <- data.frame(Name = Functions,
-                      `Data Returned` = Description,
-                      siteNumbers = Site,
-                      parameterCd = parameterCd,
-                      `startDate \n endDate` = start,
-                      Arguments,
-                      Source, stringsAsFactors = FALSE)
+data.df <- data.frame(
+  Name = Functions,
+  `Data Returned` = Description,
+  siteNumbers = Site,
+  parameterCd = parameterCd,
+  `startDate \n endDate` = start,
+  Arguments,
+  Source, stringsAsFactors = FALSE
+)
 
 kable(data.df,
-      caption = "Table 1: dataRetrieval functions")
-
+  caption = "Table 1: dataRetrieval functions"
+)
 ```
 
 The arguments `startDate` and `endDate` have defaults to request the maximum data.
@@ -155,18 +174,19 @@ Not every station will measure all parameters. A short list of commonly measured
 
 
 pCode <- c("00060", "00065", "00010", "00045", "00400")
-shortName <- c("Discharge [ft<sup>3</sup>/s]",
-               "Gage height [ft]",
-               "Temperature [C]",
-               "Precipitation [in]",
-               "pH")
+shortName <- c(
+  "Discharge [ft<sup>3</sup>/s]",
+  "Gage height [ft]",
+  "Temperature [C]",
+  "Precipitation [in]",
+  "pH"
+)
 
 data.df <- data.frame(pCode, shortName, stringsAsFactors = FALSE)
 
 kable(data.df,
-          caption = "Table 2: Common USGS Parameter Codes")
-
-
+  caption = "Table 2: Common USGS Parameter Codes"
+)
 ```
 
 Two output columns that may not be obvious are "srsname" and "casrn". Srsname stands for "Substance Registry Services". More information on the srs name can be found [here](https://sor.epa.gov/sor_internet/registry/substreg/home/overview/home.do).
@@ -184,7 +204,8 @@ shortName <- c("Maximum", "Minimum", "Mean", "Median")
 data.df <- data.frame(StatCode, shortName, stringsAsFactors = FALSE)
 
 kable(data.df,
-          caption = "Table 3: Commonly used USGS Stat Codes")
+  caption = "Table 3: Commonly used USGS Stat Codes"
+)
 ```
 
 Examples for using these site numbers, parameter codes, and statistic codes will be presented in subsequent sections.
@@ -225,45 +246,57 @@ In the following example, we limit the retrieved data to only daily data. The de
 # Continuing from the previous example:
 # This pulls out just the daily, mean data:
 
-dailyDataAvailable <- whatNWISdata(siteNumber = siteNumbers,
-                                   service = "dv",
-                                   statCd = "00003")
+dailyDataAvailable <- whatNWISdata(
+  siteNumber = siteNumbers,
+  service = "dv",
+  statCd = "00003"
+)
 ```
 
 ```{r echo=FALSE}
 
 tableData <- data.frame(
-  siteNumbers = c("01491000",
-                  "01491000",
-                  "01645000",
-                  "01491000",
-                  "01491000",
-                  "01491000"),
-  srsname = c("Temperature, water",
-              "Stream flow, mean daily",
-              "Stream flow, mean daily",
-              "Specific conductance",
-              "Suspended sediment concentration (SSC)",
-              "Suspended sediment discharge"),
-  startDate = c("2010-10-01",
-                "1948-01-01",
-                "1930-09-26",
-                "2010-10-01",
-                "1980-10-01",
-                "1980-10-01"),
-  endDate = c("2012-05-09",
-              "2017-05-17",
-              "2017-05-17",
-              "2012-05-09",
-              "1991-09-30",
-              "1991-09-30"),
+  siteNumbers = c(
+    "01491000",
+    "01491000",
+    "01645000",
+    "01491000",
+    "01491000",
+    "01491000"
+  ),
+  srsname = c(
+    "Temperature, water",
+    "Stream flow, mean daily",
+    "Stream flow, mean daily",
+    "Specific conductance",
+    "Suspended sediment concentration (SSC)",
+    "Suspended sediment discharge"
+  ),
+  startDate = c(
+    "2010-10-01",
+    "1948-01-01",
+    "1930-09-26",
+    "2010-10-01",
+    "1980-10-01",
+    "1980-10-01"
+  ),
+  endDate = c(
+    "2012-05-09",
+    "2017-05-17",
+    "2017-05-17",
+    "2012-05-09",
+    "1991-09-30",
+    "1991-09-30"
+  ),
   count = c("529", "25340", "31646", "527", "4017", "4017"),
   units = c("deg C", "ft<sup>3</sup>/s", "ft<sup>3</sup>/s", "uS/cm @25C", "mg/l", "tons/day"),
-  stringsAsFactors = FALSE)
+  stringsAsFactors = FALSE
+)
 
 # nolint start
 kable(tableData,
-          caption = "Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]")
+  caption = "Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]"
+)
 # nolint end
 ```
 
@@ -290,7 +323,7 @@ The dates (start and end) must be in the format "YYYY-MM-DD" (note: the user mus
 
 # Choptank River near Greensboro, MD:
 siteNumber <- "01491000"
-parameterCd <- "00060"  # Discharge
+parameterCd <- "00060" # Discharge
 startDate <- "2009-10-01"
 endDate <- "2012-09-30"
 
@@ -303,14 +336,15 @@ Another example would be a request for mean and maximum daily temperature and di
 
 ```{r label=getNWIStemperature, echo=TRUE, eval=FALSE}
 siteNumber <- "01491000"
-parameterCd <- c("00010", "00060")  # Temperature and discharge
-statCd <- c("00001", "00003")  # Mean and maximum
+parameterCd <- c("00010", "00060") # Temperature and discharge
+statCd <- c("00001", "00003") # Mean and maximum
 startDate <- "2012-01-01"
 endDate <- "2012-05-01"
 
 temperatureAndFlow <- readNWISdv(siteNumber, parameterCd,
-        startDate, endDate, statCd = statCd)
-
+  startDate, endDate,
+  statCd = statCd
+)
 ```
 
 ```{r label=getNWIStemperature2, echo=FALSE, eval=TRUE}
@@ -318,7 +352,6 @@ filePath <- system.file("extdata", package = "dataRetrieval")
 fileName <- "temperatureAndFlow.RData"
 fullPath <- file.path(filePath, fileName)
 load(fullPath)
-
 ```
 
 The column names can be shortened and simplified using the `renameNWISColumns` function.  This is not necessary, but may streamline subsequent data analysis and presentation. Site information, daily statistic information, and measured parameter information is attached to the data frame as attributes. This is discussed further in the [metadata](#embedded-metadata) section.
@@ -329,17 +362,15 @@ names(temperatureAndFlow)
 
 temperatureAndFlow <- renameNWISColumns(temperatureAndFlow)
 names(temperatureAndFlow)
-
 ```
 
 ```{r label=attr1, echo=TRUE}
-#Information about the data frame attributes:
+# Information about the data frame attributes:
 names(attributes(temperatureAndFlow))
 
 statInfo <- attr(temperatureAndFlow, "statisticInfo")
 variableInfo <- attr(temperatureAndFlow, "variableInfo")
 siteInfo <- attr(temperatureAndFlow, "siteInfo")
-
 ```
 
 
@@ -350,24 +381,27 @@ An example of plotting the above data:
 variableInfo <- attr(temperatureAndFlow, "variableInfo")
 siteInfo <- attr(temperatureAndFlow, "siteInfo")
 
-par(mar = c(5, 5, 5, 5)) #sets the size of the plot window
+par(mar = c(5, 5, 5, 5)) # sets the size of the plot window
 
 plot(temperatureAndFlow$Date, temperatureAndFlow$Wtemp_Max,
-     ylab = variableInfo$parameter_desc[1],
-     xlab = "")
+  ylab = variableInfo$parameter_desc[1],
+  xlab = ""
+)
 par(new = TRUE)
 plot(temperatureAndFlow$Date,
-     temperatureAndFlow$Flow,
-     col = "red", type = "l",
-     xaxt = "n", yaxt = "n",
-     xlab = "", ylab = "",
-     axes = FALSE)
+  temperatureAndFlow$Flow,
+  col = "red", type = "l",
+  xaxt = "n", yaxt = "n",
+  xlab = "", ylab = "",
+  axes = FALSE
+)
 axis(4, col = "red", col.axis = "red")
 mtext(variableInfo$parameter_desc[2], side = 4, line = 3, col = "red")
 title(paste(siteInfo$station_nm, "2012"))
 legend("topleft", variableInfo$param_units,
-       col = c("black", "red"), lty = c(NA, 1),
-       pch = c(1, NA))
+  col = c("black", "red"), lty = c(NA, 1),
+  pch = c(1, NA)
+)
 ```
 
 
@@ -377,7 +411,7 @@ Any data collected at regular time intervals (such as 15-minute or hourly) are k
 
 ```{r label=readNWISuv, eval=FALSE}
 
-parameterCd <- "00060"  # Discharge
+parameterCd <- "00060" # Discharge
 startDate <- "2012-05-12"
 endDate <- "2012-05-13"
 dischargeUnit <- readNWISuv(siteNumber, parameterCd, startDate, endDate)
@@ -420,7 +454,6 @@ Peak flow data are instantaneous discharge or stage data that record the maximum
 ```{r peakexample, echo=TRUE, eval=FALSE}
 siteNumber <- "01594440"
 peakData <- readNWISpeak(siteNumber)
-
 ```
 
 
@@ -433,7 +466,6 @@ Rating curves can be obtained with the `readNWISrating` function.
 ```{r ratingexample, echo=TRUE, eval=FALSE}
 ratingData <- readNWISrating(siteNumber, "base")
 attr(ratingData, "RATING")
-
 ```
 
 
@@ -445,7 +477,6 @@ Surface-water measurement data can be obtained with the `readNWISmeas` function.
 
 ```{r surfexample, echo=TRUE, eval=FALSE}
 surfaceData <- readNWISmeas(siteNumber)
-
 ```
 
 
@@ -453,23 +484,28 @@ surfaceData <- readNWISmeas(siteNumber)
 Retrieves water use data from USGS Water Use Data for the Nation.  See [https://waterdata.usgs.gov/nwis/wu](https://waterdata.usgs.gov/nwis/wu) for more information.  All available use categories for the supplied arguments are retrieved. 
 
 ```{r eval=FALSE}
-allegheny <- readNWISuse(stateCd = "Pennsylvania",
-                         countyCd = "Allegheny")
+allegheny <- readNWISuse(
+  stateCd = "Pennsylvania",
+  countyCd = "Allegheny"
+)
 
 
-national <- readNWISuse(stateCd = NULL,
-                        countyCd = NULL,
-                        transform = TRUE)
-
+national <- readNWISuse(
+  stateCd = NULL,
+  countyCd = NULL,
+  transform = TRUE
+)
 ```
 
 ## Statistics Data
 Retrieves site statistics from the USGS Statistics Web Service beta.  
 
 ```{r eval=FALSE}
-discharge_stats <- readNWISstat(siteNumbers = c("02319394"),
-                                parameterCd = c("00060"),
-                                statReportType = "annual")
+discharge_stats <- readNWISstat(
+  siteNumbers = c("02319394"),
+  parameterCd = c("00060"),
+  statReportType = "annual"
+)
 ```
 
 
@@ -479,9 +515,11 @@ Water quality data sets available from the [Water Quality Data Portal](https://w
 
 
 ```{r label=getQWData, echo=TRUE, eval=FALSE}
-specificCond <- readWQPqw("WIDNR_WQX-10032762",
-                          "Specific conductance",
-                          "2011-05-01", "2011-09-30")
+specificCond <- readWQPqw(
+  "WIDNR_WQX-10032762",
+  "Specific conductance",
+  "2011-05-01", "2011-09-30"
+)
 ```
 
 
@@ -500,9 +538,11 @@ The function `whatNWISsites` can be used to discover NWIS sites based on any que
 The following `dataRetrieval` code can be used to get those sites:
 
 ```{r siteSearch, eval=FALSE}
-sites <- whatNWISsites(bBox = c(-83.0, 36.5, -81.0, 38.5),
-                      parameterCd = c("00010", "00060"),
-                      hasDataTypeCd = "dv")
+sites <- whatNWISsites(
+  bBox = c(-83.0, 36.5, -81.0, 38.5),
+  parameterCd = c("00010", "00060"),
+  hasDataTypeCd = "dv"
+)
 ```
 
 ### Data: readNWISdata
@@ -513,22 +553,26 @@ For NWIS data, the function `readNWISdata` can be used. The argument listed in t
 # nolint start
 Service <- c("dv", "iv", "gwlevels", "qwdata", "measurements", "peak", "stat")
 Description <- c("Daily", "Instantaneous", "Groundwater Levels", "Water Quality", "Surface Water Measurements", "Peak Flow", "Statistics Service")
-URL <- c("<a href='https://waterservices.usgs.gov/rest/DV-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/DV-Test-Tool.html<a>",
-"<a href='https://waterservices.usgs.gov/rest/IV-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/IV-Test-Tool.html<a>",
-"<a href='https://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html<a>",
-"<a href='https://nwis.waterdata.usgs.gov/nwis/qwdata' target='_blank'>https://nwis.waterdata.usgs.gov/nwis/qwdata<a>",
-"<a href='https://waterdata.usgs.gov/nwis/measurements/' target='_blank'>https://waterdata.usgs.gov/nwis/measurements/<a>",
-"<a href='https://nwis.waterdata.usgs.gov/usa/nwis/peak/' target='_blank'>https://nwis.waterdata.usgs.gov/usa/nwis/peak/<a>",
-"<a href='https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html<a>")
+URL <- c(
+  "<a href='https://waterservices.usgs.gov/rest/DV-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/DV-Test-Tool.html<a>",
+  "<a href='https://waterservices.usgs.gov/rest/IV-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/IV-Test-Tool.html<a>",
+  "<a href='https://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html<a>",
+  "<a href='https://nwis.waterdata.usgs.gov/nwis/qwdata' target='_blank'>https://nwis.waterdata.usgs.gov/nwis/qwdata<a>",
+  "<a href='https://waterdata.usgs.gov/nwis/measurements/' target='_blank'>https://waterdata.usgs.gov/nwis/measurements/<a>",
+  "<a href='https://nwis.waterdata.usgs.gov/usa/nwis/peak/' target='_blank'>https://nwis.waterdata.usgs.gov/usa/nwis/peak/<a>",
+  "<a href='https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html<a>"
+)
 
 tableData <- data.frame(Service,
-                        Description,
-                        URL,
-  stringsAsFactors = FALSE)
+  Description,
+  URL,
+  stringsAsFactors = FALSE
+)
 
 
 kable(tableData,
-          caption = "Table 5: NWIS general data calls")
+  caption = "Table 5: NWIS general data calls"
+)
 # nolint end
 ```
 
@@ -536,14 +580,15 @@ kable(tableData,
 The `...` argument allows the user to create their own queries based on the instructions found in the web links above. The links provide instructions on how to create a URL to request data. Perhaps you want sites only in Wisconsin, with a drainage area less than 50 mi<sup>2</sup>, and the most recent daily discharge data. That request would be done as follows:
 
 ```{r dataExample, eval=FALSE}
-dischargeWI <- readNWISdata(service = "dv",
-                           stateCd = "WI",
-                           parameterCd = "00060",
-                           drainAreaMin = "50",
-                           statCd = "00003")
+dischargeWI <- readNWISdata(
+  service = "dv",
+  stateCd = "WI",
+  parameterCd = "00060",
+  drainAreaMin = "50",
+  statCd = "00003"
+)
 
 siteInfo <- attr(dischargeWI, "siteInfo")
-
 ```
 
 
@@ -557,9 +602,10 @@ To discover available sites in the WQP in New Jersey that have measured Chloride
 
 ```{r NJChloride, eval=FALSE}
 
-sitesNJ <- whatWQPsites(statecode = "US:34",
-                       characteristicName = "Chloride")
-
+sitesNJ <- whatWQPsites(
+  statecode = "US:34",
+  characteristicName = "Chloride"
+)
 ```
 
 
@@ -568,8 +614,10 @@ sitesNJ <- whatWQPsites(statecode = "US:34",
 To get data from the WQP using generalized Web service calls, use the function `readWQPdata`. For example, to get all the pH data in Wisconsin:
 
 ```{r phData, eval=FALSE}
-dataPH <- readWQPdata(statecode = "US:55",
-                 characteristicName = "pH")
+dataPH <- readWQPdata(
+  statecode = "US:55",
+  characteristicName = "pH"
+)
 ```
 
 
@@ -637,7 +685,7 @@ Data obtained from `readNWISpeak`, `readNWISmeas`, and `readNWISrating`, the `co
 ```{r meta5, eval=FALSE}
 comment(peakData)
 
-#Which is equivalent to:
+# Which is equivalent to:
 attr(peakData, "comment")
 ```
 
