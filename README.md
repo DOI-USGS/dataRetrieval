@@ -24,18 +24,22 @@ For complete tutorial information, see:
 ``` r
 library(dataRetrieval)
 # Choptank River near Greensboro, MD
-siteNumber <- "01491000" 
+siteNumber <- "01491000"
 ChoptankInfo <- readNWISsite(siteNumber)
 parameterCd <- "00060"
 
-#Raw daily data:
-rawDailyData <- readNWISdv(siteNumber,parameterCd,
-                      "1980-01-01","2010-01-01")
+# Raw daily data:
+rawDailyData <- readNWISdv(
+  siteNumber, parameterCd,
+  "1980-01-01", "2010-01-01"
+)
 
 # Sample data Nitrate:
 parameterCd <- "00618"
-qwData <- readNWISqw(siteNumber,parameterCd,
-                      "1980-01-01","2010-01-01")
+qwData <- readNWISqw(
+  siteNumber, parameterCd,
+  "1980-01-01", "2010-01-01"
+)
 
 pCode <- readNWISpCode(parameterCd)
 ```
@@ -43,18 +47,22 @@ pCode <- readNWISpCode(parameterCd)
 ## Water Quality Portal
 
 ``` r
-specificCond <- readWQPqw(siteNumbers = 'WIDNR_WQX-10032762',
-                          parameterCd = 'Specific conductance',
-                          startDate = '2011-05-01',
-                          endDate = '2011-09-30')
+specificCond <- readWQPqw(
+  siteNumbers = "WIDNR_WQX-10032762",
+  parameterCd = "Specific conductance",
+  startDate = "2011-05-01",
+  endDate = "2011-09-30"
+)
 ```
 
 ## Network Linked Data Index
 
 ``` r
-features <- findNLDI(nwis = "01491000",
-                     nav = "UT",
-                     find = c('basin', 'wqp'))
+features <- findNLDI(
+  nwis = "01491000",
+  nav = "UT",
+  find = c("basin", "wqp")
+)
 ```
 
 # Reporting bugs
@@ -118,9 +126,10 @@ packages:
 
 ``` r
 library(remotes)
-install_github("USGS-R/dataRetrieval", 
-               build_opts = c("--no-resave-data", "--no-manual"),
-               build_vignettes = TRUE)
+install_github("USGS-R/dataRetrieval",
+  build_opts = c("--no-resave-data", "--no-manual"),
+  build_vignettes = TRUE
+)
 ```
 
 # Disclaimer

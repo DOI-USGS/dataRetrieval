@@ -11,11 +11,13 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE,
-                      message = FALSE,
-                      warning = FALSE,
-                      fig.height = 7,
-                      fig.width = 7)
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.height = 7,
+  fig.width = 7
+)
 ```
 
 R is an open-source programming language. It is known for extensive statistical capabilities, and also has powerful graphical capabilities. Another benefit of R is the large and generally helpful user-community. This includes R-package developers who create packages that can be easily installed to enhance the basic R capabilities. This article will describe the R-package "dataRetrieval" which simplifies the process of finding and retrieving water from the U.S. Geological Survey and other agencies.
@@ -59,13 +61,18 @@ Finally, if there are still questions that the vignette and help files don't ans
 USGS data comes from the National Water Information System (NWIS). There are many types of data served from NWIS. To understand how the services are separated, it's helpful to understand the terms here:
 
 ```{r}
-df <- data.frame(Type = c("Unit", "Daily", "Discrete"),
-                 Description = c(
-"Regular frequency data reported from a sensor (e.g. 15 minute interval). This data can include 'real-time' data",
-"Data aggregated to a daily statistic such as mean, min, or max.",
-"Data collected at non-regular times."),
-                 service = c("uv", "dv",
-"water quality (qw), groundwater (gwlevel), rating curves (rating), peak flow (peak), surfacewater (meas)"))
+df <- data.frame(
+  Type = c("Unit", "Daily", "Discrete"),
+  Description = c(
+    "Regular frequency data reported from a sensor (e.g. 15 minute interval). This data can include 'real-time' data",
+    "Data aggregated to a daily statistic such as mean, min, or max.",
+    "Data collected at non-regular times."
+  ),
+  service = c(
+    "uv", "dv",
+    "water quality (qw), groundwater (gwlevel), rating curves (rating), peak flow (peak), surfacewater (meas)"
+  )
+)
 
 knitr::kable(df)
 ```
@@ -92,13 +99,14 @@ Here are some examples of a few codes:
 ```{r echo=FALSE, eval=TRUE}
 library(knitr)
 
-df <- data.frame(pCode = c("00060", "00065", "00010", "00400"),
-                 shName = c("Discharge", "Gage Height", "Temperature", "pH"))
+df <- data.frame(
+  pCode = c("00060", "00065", "00010", "00400"),
+  shName = c("Discharge", "Gage Height", "Temperature", "pH")
+)
 
 names(df) <- c("Parameter Codes", "Short Name")
 
 knitr::kable(df)
-
 ```
 
 </div>
@@ -106,8 +114,10 @@ knitr::kable(df)
 <div style="float: right; width: 50%;">
 
 ```{r echo=FALSE, eval=TRUE}
-df <- data.frame(pCode = c("00001", "00002", "00003", "00008"),
-                 shName = c("Maximum", "Minimum", "Mean", "Median"))
+df <- data.frame(
+  pCode = c("00001", "00002", "00003", "00008"),
+  shName = c("Maximum", "Minimum", "Mean", "Median")
+)
 
 names(df) <- c("Statistic Codes", "Short Name")
 
@@ -122,8 +132,9 @@ Use the `readNWISpCode` function to get information on USGS parameter codes. You
 pcode <- readNWISpCode("all")
 
 phosCds <- pcode[grep("phosphorus",
-                      pcode$parameter_nm,
-                      ignore.case = TRUE), ]
+  pcode$parameter_nm,
+  ignore.case = TRUE
+), ]
 
 names(phosCds)
 unique(phosCds$parameter_units)
@@ -134,7 +145,8 @@ Explore the wide variety of parameters that contain "phosphorus" in the paramete
 ```{r echo=FALSE, eval=TRUE}
 library(DT)
 datatable(phosCds[, c("parameter_cd", "parameter_nm", "parameter_units")],
-          rownames = FALSE, options = list(pageLength = 4))
+  rownames = FALSE, options = list(pageLength = 4)
+)
 ```
 
 ### User-friendly retrievals: NWIS
@@ -150,15 +162,21 @@ You can use the "user-friendly" functions. These functions take the same 4 input
 
 ```{r echo=FALSE, eval=TRUE}
 
-df <- data.frame(functionName = c("readNWISuv", "readNWISdv",
-                                  "readNWISgwl", "readNWISmeas", "readNWISpeak",
-                                  "readNWISqw", "readNWISrating", "readNWISuse",
-                                  "readNWISstat"),
-                 service = c("Unit", "Daily", "Groundwater Level",
-                             "Surface-water", "Peak Flow",
-                             "Water Quality", "Rating Curves",
-                             "Water Use", "Statistics"),
-                 stringsAsFactors = FALSE)
+df <- data.frame(
+  functionName = c(
+    "readNWISuv", "readNWISdv",
+    "readNWISgwl", "readNWISmeas", "readNWISpeak",
+    "readNWISqw", "readNWISrating", "readNWISuse",
+    "readNWISstat"
+  ),
+  service = c(
+    "Unit", "Daily", "Groundwater Level",
+    "Surface-water", "Peak Flow",
+    "Water Quality", "Rating Curves",
+    "Water Use", "Statistics"
+  ),
+  stringsAsFactors = FALSE
+)
 
 names(df) <- c("Function Name", "Data")
 
@@ -173,10 +191,12 @@ pCode <- "00060"
 start.date <- "2017-10-01"
 end.date <- "2018-09-30"
 
-pheasant <- readNWISuv(siteNumbers = siteNo,
-                     parameterCd = pCode,
-                     startDate = start.date,
-                     endDate = end.date)
+pheasant <- readNWISuv(
+  siteNumbers = siteNo,
+  parameterCd = pCode,
+  startDate = start.date,
+  endDate = end.date
+)
 ```
 
 From the Pheasant Creek example, let's look at the data. The column names are:
@@ -197,7 +217,6 @@ The returned data also has several attributes attached to the data frame. To see
 
 ```{r echo=TRUE, eval=TRUE}
 names(attributes(pheasant))
-
 ```
 
 Each `dataRetrieval` return should have the attributes: url, siteInfo, and variableInfo. Additional attributes are available depending on the data.
@@ -215,9 +234,11 @@ Make a simple plot to see the data:
 
 ```{r echo=TRUE, eval=TRUE, fig.height=3.5}
 library(ggplot2)
-ts <- ggplot(data = pheasant,
-             aes(dateTime, Flow_Inst)) +
-      geom_line()
+ts <- ggplot(
+  data = pheasant,
+  aes(dateTime, Flow_Inst)
+) +
+  geom_line()
 ts
 ```
 
@@ -229,9 +250,9 @@ parameterInfo <- attr(pheasant, "variableInfo")
 siteInfo <- attr(pheasant, "siteInfo")
 
 ts <- ts +
-      xlab("") +
-      ylab(parameterInfo$variableDescription) +
-      ggtitle(siteInfo$station_nm)
+  xlab("") +
+  ylab(parameterInfo$variableDescription) +
+  ggtitle(siteInfo$station_nm)
 ts
 ```
 
@@ -258,25 +279,33 @@ Here are a few examples:
 
 ```{r eval=FALSE}
 # Daily temperature in Ohio
-dataTemp <- readNWISdata(stateCd = "OH",
-                         parameterCd = "00010",
-                         service = "dv")
+dataTemp <- readNWISdata(
+  stateCd = "OH",
+  parameterCd = "00010",
+  service = "dv"
+)
 
 # Real-time discharge at a site
-instFlow <- readNWISdata(sites = "05114000",
-                         service = "iv",
-                         parameterCd = "00060",
-                         startDate = "2014-05-01T00:00Z",
-                         endDate = "2014-05-01T12:00Z",
-                         tz = "America/Chicago")
+instFlow <- readNWISdata(
+  sites = "05114000",
+  service = "iv",
+  parameterCd = "00060",
+  startDate = "2014-05-01T00:00Z",
+  endDate = "2014-05-01T12:00Z",
+  tz = "America/Chicago"
+)
 
 # Temperature within a bounding box:
-bBoxEx <- readNWISdata(bBox = c(-83, 36.5, -81, 38.5),
-                       parameterCd = "00010")
+bBoxEx <- readNWISdata(
+  bBox = c(-83, 36.5, -81, 38.5),
+  parameterCd = "00010"
+)
 
 # Groundwater levels within a HUC:
-groundwaterHUC <- readNWISdata(huc = "02070010",
-                               service = "gwlevels")
+groundwaterHUC <- readNWISdata(
+  huc = "02070010",
+  service = "gwlevels"
+)
 ```
   
 
@@ -285,8 +314,10 @@ groundwaterHUC <- readNWISdata(huc = "02070010",
 For example, let's see which sites ever measured phosphorus in Arizona:
 
 ```{r az, echo=TRUE}
-AZ_sites <- whatNWISsites(stateCd = "AZ",
-                parameterCd = "00665")
+AZ_sites <- whatNWISsites(
+  stateCd = "AZ",
+  parameterCd = "00665"
+)
 nrow(AZ_sites)
 names(AZ_sites)
 ```
@@ -298,9 +329,10 @@ library(leaflet)
 leaflet(data = AZ_sites) %>%
   addProviderTiles("CartoDB.Positron") %>%
   addCircleMarkers(~dec_long_va, ~dec_lat_va,
-                   color = "red", radius = 3, stroke = FALSE,
-                   fillOpacity = 0.8, opacity = 0.8,
-                   popup = ~station_nm)
+    color = "red", radius = 3, stroke = FALSE,
+    fillOpacity = 0.8, opacity = 0.8,
+    popup = ~station_nm
+  )
 ```
 
 Now let's see what we get back from the `whatNWISdata` function:
@@ -311,8 +343,10 @@ names(AZ_data)
 ```
 
 ```{r azdata, echo=TRUE, eval=FALSE}
-AZ_data <- whatNWISdata(stateCd = "AZ",
-                         parameterCd = "00665")
+AZ_data <- whatNWISdata(
+  stateCd = "AZ",
+  parameterCd = "00665"
+)
 names(AZ_data)
 ```
 
@@ -353,8 +387,10 @@ phWI.1 <- phWI %>%
 
 ```{r echo=TRUE, eval=FALSE}
 pCode <- c("00665")
-phWI <- whatNWISdata(stateCd = "WI",
-                     parameterCd = pCode)
+phWI <- whatNWISdata(
+  stateCd = "WI",
+  parameterCd = pCode
+)
 
 library(dplyr)
 phWI.1 <- phWI %>%
@@ -364,8 +400,10 @@ phWI.1 <- phWI %>%
 ```
 
 ```{r }
-phos_WI_data <- readNWISqw(siteNumbers = phWI.1$site_no,
-                           parameterCd = pCode)
+phos_WI_data <- readNWISqw(
+  siteNumbers = phWI.1$site_no,
+  parameterCd = pCode
+)
 ```
 
 Let's look at the maximum measured value, and number of samples:
@@ -373,27 +411,33 @@ Let's look at the maximum measured value, and number of samples:
 ```{r echo=TRUE}
 phos_summary <- phos_WI_data %>%
   group_by(site_no) %>%
-  summarize(max = max(result_va, na.rm = TRUE),
-            count = n()) %>%
+  summarize(
+    max = max(result_va, na.rm = TRUE),
+    count = n()
+  ) %>%
   ungroup() %>%
   left_join(attr(phos_WI_data, "siteInfo"),
-            by = "site_no")
+    by = "site_no"
+  )
 ```
 
 Then map it:
 ```{r echo=FALSE, eval=TRUE, fig.height=4}
 library(leaflet)
 
-col_types <- c("darkblue",
-               "dodgerblue",
-               "green4",
-               "gold1",
-               "orange",
-               "brown",
-               "red")
+col_types <- c(
+  "darkblue",
+  "dodgerblue",
+  "green4",
+  "gold1",
+  "orange",
+  "brown",
+  "red"
+)
 leg_vals <- unique(as.numeric(quantile(phos_summary$max,
-                  probs = c(0, 0.01, 0.1, 0.25, 0.5, 0.75, 0.9, .99, 1),
-                                       na.rm = TRUE)))
+  probs = c(0, 0.01, 0.1, 0.25, 0.5, 0.75, 0.9, .99, 1),
+  na.rm = TRUE
+)))
 
 pal <- colorBin(col_types, phos_summary$max, bins = leg_vals)
 rad <- 3 * seq(1, 4, length.out = 16)
@@ -402,17 +446,20 @@ phos_summary$sizes <- rad[as.numeric(cut(phos_summary$count, breaks = 16))]
 leaflet(data = phos_summary) %>%
   addProviderTiles("CartoDB.Positron") %>%
   addCircleMarkers(~dec_long_va, ~dec_lat_va,
-                   fillColor = ~pal(max),
-                   radius = ~sizes,
-                   fillOpacity = 0.8, opacity = 0.8,
-                   stroke = FALSE,
-                   popup = ~station_nm) %>%
-  addLegend(position = "bottomleft",
-            pal = pal,
-            values = ~max,
-            opacity = 0.8,
-            labFormat = labelFormat(digits = 1),
-            title = "Max Value")
+    fillColor = ~ pal(max),
+    radius = ~sizes,
+    fillOpacity = 0.8, opacity = 0.8,
+    stroke = FALSE,
+    popup = ~station_nm
+  ) %>%
+  addLegend(
+    position = "bottomleft",
+    pal = pal,
+    values = ~max,
+    opacity = 0.8,
+    labFormat = labelFormat(digits = 1),
+    title = "Max Value"
+  )
 ```
 
  
@@ -428,7 +475,8 @@ Much like the convenience functions for NWIS, there's a simple function for retr
 <div style="float: left; width: 50%;">
 ```{r echo=TRUE, eval=TRUE}
 nwisQW <- readNWISqw(phWI.1$site_no[1],
-                     parameterCd = "00665")
+  parameterCd = "00665"
+)
 ncol(nwisQW)
 nrow(nwisQW)
 ```
@@ -437,7 +485,8 @@ nrow(nwisQW)
 <div style="float: right; width: 50%;">
 ```{r echo=TRUE, eval=TRUE}
 wqpQW <- readWQPqw(paste0("USGS-", phWI.1$site_no[1]),
-                   parameterCd = "00665")
+  parameterCd = "00665"
+)
 ncol(wqpQW)
 nrow(wqpQW)
 ```
@@ -450,15 +499,19 @@ The value of the Water Quality Portal is to explore water quality data from diff
 The following function returns sites that have collected phosphorus data in Wisconsin. There's no way to know if that site has collected one sample, or thousands. This function is pretty fast, but only reports which sites have data.
 
 ```{r echo=TRUE, eval=FALSE}
-phosSites <- whatWQPsites(statecode = "WI",
-                          characteristicName = "Phosphorus")
+phosSites <- whatWQPsites(
+  statecode = "WI",
+  characteristicName = "Phosphorus"
+)
 ```
 
 Similar to NWIS, to find out the scope of the available data, there is a `whatWQPdata` function:
 
 ```{r echo=TRUE, eval=TRUE}
-phos_data_available <- whatWQPdata(statecode = "WI",
-                                   characteristicName = "Phosphorus")
+phos_data_available <- whatWQPdata(
+  statecode = "WI",
+  characteristicName = "Phosphorus"
+)
 ```
 
 This function comes back with a few really useful columns such as "activityCount" and "resultCount". As with our NWIS query, let's filter down our data request to sites that have only had more than 300 measurements.
@@ -467,8 +520,10 @@ This function comes back with a few really useful columns such as "activityCount
 phos_data_sites_to_get <- phos_data_available %>%
   filter(resultCount >= 300)
 
-phosData <- readWQPdata(siteNumbers = phos_data_sites_to_get$MonitoringLocationIdentifier,
-                        characteristicName = "Phosphorus")
+phosData <- readWQPdata(
+  siteNumbers = phos_data_sites_to_get$MonitoringLocationIdentifier,
+  characteristicName = "Phosphorus"
+)
 ```
 
 With data coming from many different agencies, it will be important to carefully review the returned data. For instance, this "Phosphorus" data comes back with many different units. It will be important to make smart decisions on how and if the queried data can be used together.
@@ -480,7 +535,6 @@ unique(phosData$ResultMeasure.MeasureUnitCode)
 ```{r eval=TRUE}
 phosData <- readRDS("phosData.rds") %>%
   mutate(ResultMeasureValue = as.numeric(ResultMeasureValue))
-
 ```
 
 
@@ -491,27 +545,31 @@ siteInfo <- attr(phosData, "siteInfo")
 
 wiSummary <- phosData %>%
   filter(ResultMeasure.MeasureUnitCode %in%
-           c("mg/l", "mg/l as P")) %>%
+    c("mg/l", "mg/l as P")) %>%
   group_by(MonitoringLocationIdentifier) %>%
-  summarise(count = n(),
-            max = max(ResultMeasureValue, na.rm = TRUE)) %>%
+  summarise(
+    count = n(),
+    max = max(ResultMeasureValue, na.rm = TRUE)
+  ) %>%
   left_join(siteInfo, by = "MonitoringLocationIdentifier")
-
 ```
 
 
 ```{r echo=FALSE, eval=TRUE}
-col_types <- c("darkblue",
-               "dodgerblue",
-               "green4",
-               "gold1",
-               "orange",
-               "brown",
-               "red")
+col_types <- c(
+  "darkblue",
+  "dodgerblue",
+  "green4",
+  "gold1",
+  "orange",
+  "brown",
+  "red"
+)
 leg_vals <- unique(as.numeric(quantile(wiSummary$max,
-                                       probs =
-                     c(0, 0.01, 0.1, 0.25, 0.5, 0.75, 0.9, .99, 1),
-                                       na.rm = TRUE)))
+  probs =
+    c(0, 0.01, 0.1, 0.25, 0.5, 0.75, 0.9, .99, 1),
+  na.rm = TRUE
+)))
 pal <- colorBin(col_types, wiSummary$max, bins = leg_vals)
 rad <- 3 * seq(1, 4, length.out = 16)
 wiSummary$sizes <- rad[as.numeric(cut(wiSummary$count, breaks = 16))]
@@ -519,17 +577,20 @@ wiSummary$sizes <- rad[as.numeric(cut(wiSummary$count, breaks = 16))]
 leaflet(data = wiSummary) %>%
   addProviderTiles("CartoDB.Positron") %>%
   addCircleMarkers(~dec_lon_va, ~dec_lat_va,
-                   fillColor = ~pal(max),
-                   radius = ~sizes,
-                   fillOpacity = 0.8, opacity = 0.8,
-                   stroke = FALSE,
-                   popup = ~station_nm) %>%
-  addLegend(position = "bottomleft",
-            pal = pal,
-            values = ~max,
-            opacity = 0.8,
-            labFormat = labelFormat(digits = 1),
-            title = "Max Value")
+    fillColor = ~ pal(max),
+    radius = ~sizes,
+    fillOpacity = 0.8, opacity = 0.8,
+    stroke = FALSE,
+    popup = ~station_nm
+  ) %>%
+  addLegend(
+    position = "bottomleft",
+    pal = pal,
+    values = ~max,
+    opacity = 0.8,
+    labFormat = labelFormat(digits = 1),
+    title = "Max Value"
+  )
 ```
 
 

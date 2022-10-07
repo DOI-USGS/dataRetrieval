@@ -27,43 +27,42 @@
 #'
 #' ## Examples take longer than 5 seconds:
 #' \donttest{
-#' rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
+#' rawSampleURL <- constructWQPURL("USGS-01594440", "01075", "", "")
 #'
 #' rawSample <- importWQP(rawSampleURL)
 #'
-#' rawSampleURL_NoZip <- constructWQPURL('USGS-01594440','01075', '', '', zip=FALSE)
+#' rawSampleURL_NoZip <- constructWQPURL("USGS-01594440", "01075", "", "", zip = FALSE)
 #'
-#' rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip=FALSE, convertType=FALSE)
+#' rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip = FALSE, convertType = FALSE)
 #'
-#' rawSample2 <- importWQP(rawSampleURL_NoZip, zip=FALSE)
+#' rawSample2 <- importWQP(rawSampleURL_NoZip, zip = FALSE)
 #'
-#' STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
+#' STORETex <- constructWQPURL("WIDNR_WQX-10032762", "Specific conductance", "", "")
 #'
 #' STORETdata <- importWQP(STORETex)
 #'
-#' STORETdata_char <- importWQP(STORETex, convertType=FALSE)
+#' STORETdata_char <- importWQP(STORETex, convertType = FALSE)
 #' }
 #'
 importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
                       csv = FALSE, convertType = TRUE) {
-
-  if(tz != "") {
+  if (tz != "") {
     tz <- match.arg(tz, OlsonNames())
   } else {
     tz <- "UTC"
   }
 
-  if(!file.exists(obs_url)) {
-
-    if(zip) {
-
+  if (!file.exists(obs_url)) {
+    if (zip) {
       temp <- tempfile()
       temp <- paste0(temp, ".zip")
 
-      doc <- getWebServiceData(obs_url,
-                               httr::write_disk(temp),
-                               httr::accept("application/zip"))
-      if(is.null(doc)) {
+      doc <- getWebServiceData(
+        obs_url,
+        httr::write_disk(temp),
+        httr::accept("application/zip")
+      )
+      if (is.null(doc)) {
         return(invisible(NULL))
       }
       headerInfo <- httr::headers(doc)
@@ -71,9 +70,11 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
       unlink(temp)
       on.exit(unlink(doc))
     } else {
-      doc <- getWebServiceData(obs_url,
-                               httr::accept("text/tsv"))
-      if(is.null(doc)) {
+      doc <- getWebServiceData(
+        obs_url,
+        httr::accept("text/tsv")
+      )
+      if (is.null(doc)) {
         return(invisible(NULL))
       }
       headerInfo <- attr(doc, "headerInfo")
@@ -83,89 +84,90 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
 
     totalPossible <- sum(unlist(headerInfo[grep("-count", names(headerInfo))]), na.rm = TRUE)
 
-    if(is.na(totalPossible) || totalPossible == 0) {
-      for(i in grep("Warning", names(headerInfo))) {
+    if (is.na(totalPossible) || totalPossible == 0) {
+      for (i in grep("Warning", names(headerInfo))) {
         warning(headerInfo[i])
       }
-      emptyReturn <- data.frame(OrganizationIdentifier = character(),
-                                OrganizationFormalName = character(),
-                                ActivityIdentifier = character(),
-                                ActivityTypeCode = character(),
-                                ActivityMediaName = character(),
-                                ActivityMediaSubdivisionName = character(),
-                                ActivityStartDate = as.Date(x = integer(), origin = "1970-01-01"),
-                                ActivityStartTime.Time = character(),
-                                ActivityStartTime.TimeZoneCode = character(),
-                                ActivityEndDate = as.Date(x = integer(), origin = "1970-01-01"),
-                                ActivityEndTime.Time = character(),
-                                ActivityEndTime.TimeZoneCode = character(),
-                                ActivityDepthHeightMeasure.MeasureValue = numeric(),
-                                ActivityDepthHeightMeasure.MeasureUnitCode = character(),
-                                ActivityDepthAltitudeReferencePointText = character(),
-                                ActivityTopDepthHeightMeasure.MeasureValue = numeric(),
-                                ActivityTopDepthHeightMeasure.MeasureUnitCode = character(),
-                                ActivityBottomDepthHeightMeasure.MeasureValue = numeric(),
-                                ActivityBottomDepthHeightMeasure.MeasureUnitCode = character(),
-                                ProjectIdentifier = character(),
-                                ActivityConductingOrganizationText = character(),
-                                MonitoringLocationIdentifier = character(),
-                                ActivityCommentText = character(),
-                                SampleAquifer = character(),
-                                HydrologicCondition = character(),
-                                HydrologicEvent = character(),
-                                SampleCollectionMethod.MethodIdentifier = character(),
-                                SampleCollectionMethod.MethodIdentifierContext = character(),
-                                SampleCollectionMethod.MethodName = character(),
-                                SampleCollectionEquipmentName = character(),
-                                ResultDetectionConditionText = character(),
-                                CharacteristicName = character(),
-                                ResultSampleFractionText = character(),
-                                ResultMeasureValue = numeric(),
-                                ResultMeasure.MeasureUnitCode = character(),
-                                MeasureQualifierCode = character(),
-                                ResultStatusIdentifier = character(),
-                                StatisticalBaseCode = character(),
-                                ResultValueTypeName = character(),
-                                ResultWeightBasisText = character(),
-                                ResultTimeBasisText = character(),
-                                ResultTemperatureBasisText = character(),
-                                ResultParticleSizeBasisText = character(),
-                                PrecisionValue = numeric(),
-                                ResultCommentText = character(),
-                                USGSPCode = character(),
-                                ResultDepthHeightMeasure.MeasureValue = numeric(),
-                                ResultDepthHeightMeasure.MeasureUnitCode = character(),
-                                ResultDepthAltitudeReferencePointText = character(),
-                                SubjectTaxonomicName = character(),
-                                SampleTissueAnatomyName = character(),
-                                ResultAnalyticalMethod.MethodIdentifier = character(),
-                                ResultAnalyticalMethod.MethodIdentifierContext = character(),
-                                ResultAnalyticalMethod.MethodName = character(),
-                                MethodDescriptionText = character(),
-                                LaboratoryName = character(),
-                                AnalysisStartDate = as.Date(x = integer(), origin = "1970-01-01"),
-                                ResultLaboratoryCommentText = character(),
-                                DetectionQuantitationLimitTypeName = character(),
-                                DetectionQuantitationLimitMeasure.MeasureValue = numeric(),
-                                DetectionQuantitationLimitMeasure.MeasureUnitCode = character(),
-                                PreparationStartDate = as.Date(x = integer(), origin = "1970-01-01"),
-                                ProviderName = character(),
-                                ActivityStartDateTime = as.POSIXct(integer()),
-                                ActivityEndDateTime = as.POSIXct(integer()))
+      emptyReturn <- data.frame(
+        OrganizationIdentifier = character(),
+        OrganizationFormalName = character(),
+        ActivityIdentifier = character(),
+        ActivityTypeCode = character(),
+        ActivityMediaName = character(),
+        ActivityMediaSubdivisionName = character(),
+        ActivityStartDate = as.Date(x = integer(), origin = "1970-01-01"),
+        ActivityStartTime.Time = character(),
+        ActivityStartTime.TimeZoneCode = character(),
+        ActivityEndDate = as.Date(x = integer(), origin = "1970-01-01"),
+        ActivityEndTime.Time = character(),
+        ActivityEndTime.TimeZoneCode = character(),
+        ActivityDepthHeightMeasure.MeasureValue = numeric(),
+        ActivityDepthHeightMeasure.MeasureUnitCode = character(),
+        ActivityDepthAltitudeReferencePointText = character(),
+        ActivityTopDepthHeightMeasure.MeasureValue = numeric(),
+        ActivityTopDepthHeightMeasure.MeasureUnitCode = character(),
+        ActivityBottomDepthHeightMeasure.MeasureValue = numeric(),
+        ActivityBottomDepthHeightMeasure.MeasureUnitCode = character(),
+        ProjectIdentifier = character(),
+        ActivityConductingOrganizationText = character(),
+        MonitoringLocationIdentifier = character(),
+        ActivityCommentText = character(),
+        SampleAquifer = character(),
+        HydrologicCondition = character(),
+        HydrologicEvent = character(),
+        SampleCollectionMethod.MethodIdentifier = character(),
+        SampleCollectionMethod.MethodIdentifierContext = character(),
+        SampleCollectionMethod.MethodName = character(),
+        SampleCollectionEquipmentName = character(),
+        ResultDetectionConditionText = character(),
+        CharacteristicName = character(),
+        ResultSampleFractionText = character(),
+        ResultMeasureValue = numeric(),
+        ResultMeasure.MeasureUnitCode = character(),
+        MeasureQualifierCode = character(),
+        ResultStatusIdentifier = character(),
+        StatisticalBaseCode = character(),
+        ResultValueTypeName = character(),
+        ResultWeightBasisText = character(),
+        ResultTimeBasisText = character(),
+        ResultTemperatureBasisText = character(),
+        ResultParticleSizeBasisText = character(),
+        PrecisionValue = numeric(),
+        ResultCommentText = character(),
+        USGSPCode = character(),
+        ResultDepthHeightMeasure.MeasureValue = numeric(),
+        ResultDepthHeightMeasure.MeasureUnitCode = character(),
+        ResultDepthAltitudeReferencePointText = character(),
+        SubjectTaxonomicName = character(),
+        SampleTissueAnatomyName = character(),
+        ResultAnalyticalMethod.MethodIdentifier = character(),
+        ResultAnalyticalMethod.MethodIdentifierContext = character(),
+        ResultAnalyticalMethod.MethodName = character(),
+        MethodDescriptionText = character(),
+        LaboratoryName = character(),
+        AnalysisStartDate = as.Date(x = integer(), origin = "1970-01-01"),
+        ResultLaboratoryCommentText = character(),
+        DetectionQuantitationLimitTypeName = character(),
+        DetectionQuantitationLimitMeasure.MeasureValue = numeric(),
+        DetectionQuantitationLimitMeasure.MeasureUnitCode = character(),
+        PreparationStartDate = as.Date(x = integer(), origin = "1970-01-01"),
+        ProviderName = character(),
+        ActivityStartDateTime = as.POSIXct(integer()),
+        ActivityEndDateTime = as.POSIXct(integer())
+      )
 
       attr(emptyReturn$ActivityStartDateTime, "tzone") <- tz
       attr(emptyReturn$ActivityEndDateTime, "tzone") <- tz
 
-      if(!convertType) {
+      if (!convertType) {
         i <- sapply(emptyReturn, !is.character)
         emptyReturn[i] <- lapply(emptyReturn[i], as.character)
       }
       attr(emptyReturn, "headerInfo") <- headerInfo
       return(emptyReturn)
     }
-
   } else {
-    if(zip) {
+    if (zip) {
       doc <- unzip(obs_url)
     } else {
       doc <- obs_url
@@ -173,91 +175,105 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
   }
 
   retval <- suppressWarnings(readr::read_delim(doc,
-                                               col_types = readr::cols(.default = "c"),
-                                               quote = ifelse(csv, '\"', ""),
-                                               delim = ifelse(csv, ",", "\t"),
-                                               guess_max = totalPossible))
+    col_types = readr::cols(.default = "c"),
+    quote = ifelse(csv, '\"', ""),
+    delim = ifelse(csv, ",", "\t"),
+    guess_max = totalPossible
+  ))
 
-  if(!file.exists(obs_url)) {
+  if (!file.exists(obs_url)) {
     actualNumReturned <- nrow(retval)
 
-    if(!(actualNumReturned %in% unlist(headerInfo[grep("-count", names(headerInfo))]))) {
+    if (!(actualNumReturned %in% unlist(headerInfo[grep("-count", names(headerInfo))]))) {
       warning("Number of rows returned not matched in header")
     }
   }
-  if(convertType) {
+  if (convertType) {
     valueCols <- names(retval)[grep("MeasureValue", names(retval))]
     countCols <- names(retval)[grep("Count", names(retval))]
     yearCols <- names(retval)[grep("Year", names(retval))]
 
-    for(numberCol in unique(c(valueCols, countCols, yearCols))) {
+    for (numberCol in unique(c(valueCols, countCols, yearCols))) {
       suppressWarnings({
         val <- tryCatch(as.numeric(retval[[numberCol]]),
-                        warning = function(w) w)
+          warning = function(w) w
+        )
         # we don't want to convert it to numeric if there are non-numeric chars
         # If we leave it to the user, it will probably break a lot of code
-        if(!"warning" %in% class(val)) {
+        if (!"warning" %in% class(val)) {
           retval[[numberCol]] <- val
         }
       })
     }
 
-    if(length(grep("ActivityStartTime", names(retval))) > 0) {
+    if (length(grep("ActivityStartTime", names(retval))) > 0) {
 
-      #Time zones to characters:
-      if(length(grep("TimeZoneCode", names(retval))) > 0  &&
-         any(lapply(retval[, grep("TimeZoneCode", names(retval))], class) == "logical")) {
+      # Time zones to characters:
+      if (length(grep("TimeZoneCode", names(retval))) > 0 &&
+        any(lapply(retval[, grep("TimeZoneCode", names(retval))], class) == "logical")) {
         tzCols <- grep("TimeZoneCode", names(retval))
         retval[, tzCols] <- sapply(retval[, tzCols], as.character)
       }
 
-      offsetLibrary <- data.frame(offset = c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8,
-                                           10, 10, 0, NA, 0, 0),
-                                  code = c("EST", "EDT", "CST", "CDT", "MST", "MDT",
-                                         "PST", "PDT", "AKST", "AKDT", "HAST",
-                                         "HST", "", NA, "UTC", "GMT"),
-                                  stringsAsFactors = FALSE)
+      offsetLibrary <- data.frame(
+        offset = c(
+          5, 4, 6, 5, 7, 6, 8, 7, 9, 8,
+          10, 10, 0, NA, 0, 0
+        ),
+        code = c(
+          "EST", "EDT", "CST", "CDT", "MST", "MDT",
+          "PST", "PDT", "AKST", "AKDT", "HAST",
+          "HST", "", NA, "UTC", "GMT"
+        ),
+        stringsAsFactors = FALSE
+      )
       original_order <- names(retval)
-      if("ActivityStartTime/TimeZoneCode" %in% names(retval)) {
-        retval <- merge(x = retval,
-                        y = offsetLibrary,
-                        by.x = "ActivityStartTime/TimeZoneCode",
-                        by.y = "code",
-                        all.x = TRUE)
+      if ("ActivityStartTime/TimeZoneCode" %in% names(retval)) {
+        retval <- merge(
+          x = retval,
+          y = offsetLibrary,
+          by.x = "ActivityStartTime/TimeZoneCode",
+          by.y = "code",
+          all.x = TRUE
+        )
       }
 
       names(retval)[names(retval) == "offset"] <- "timeZoneStart"
       retval <- retval[, c(original_order, "timeZoneStart")]
 
-      if("ActivityEndTime/TimeZoneCode" %in% names(retval)) {
-        retval <- merge(x = retval,
-                        y = offsetLibrary,
-                        by.x = "ActivityEndTime/TimeZoneCode",
-                        by.y = "code",
-                        all.x = TRUE)
+      if ("ActivityEndTime/TimeZoneCode" %in% names(retval)) {
+        retval <- merge(
+          x = retval,
+          y = offsetLibrary,
+          by.x = "ActivityEndTime/TimeZoneCode",
+          by.y = "code",
+          all.x = TRUE
+        )
         names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
         retval <- retval[, c(original_order, "timeZoneStart", "timeZoneEnd")]
       }
 
       dateCols <- c("ActivityStartDate", "ActivityEndDate", "AnalysisStartDate", "PreparationStartDate")
 
-      for(i in dateCols){
-        if(i %in% names(retval)) {
+      for (i in dateCols) {
+        if (i %in% names(retval)) {
           retval[, i] <- suppressWarnings(as.Date(lubridate::parse_date_time(retval[[i]], c("Ymd", "mdY"))))
         }
       }
 
-      if(all(c("ActivityStartDate", "ActivityStartTime/Time") %in% names(retval))) {
+      if (all(c("ActivityStartDate", "ActivityStartTime/Time") %in% names(retval))) {
         retval$ActivityStartDateTime <- paste(retval$ActivityStartDate, retval$`ActivityStartTime/Time`)
         retval$ActivityStartDateTime <- lubridate::fast_strptime(retval$ActivityStartDateTime, "%Y-%m-%d %H:%M:%S") +
           60 * 60 * retval$timeZoneStart
         attr(retval$ActivityStartDateTime, "tzone") <- tz
       }
 
-      if(all(c("ActivityEndDate", "ActivityEndTime/Time") %in% names(retval))) {
+      if (all(c("ActivityEndDate", "ActivityEndTime/Time") %in% names(retval))) {
         retval$ActivityEndDateTime <- paste(retval$ActivityEndDate, retval$`ActivityEndTime/Time`)
-        retval$ActivityEndDateTime <- lubridate::fast_strptime(retval$ActivityEndDateTime,
-                                                               "%Y-%m-%d %H:%M:%S") + 60 * 60 * retval$timeZoneStart
+        retval$ActivityEndDateTime <- lubridate::fast_strptime(
+          retval$ActivityEndDateTime,
+          "%Y-%m-%d %H:%M:%S"
+        ) + 60 * 60 * retval$timeZoneStart
         attr(retval$ActivityEndDateTime, "tzone") <- tz
       }
     }
@@ -265,26 +281,24 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
   names(retval)[grep("/", names(retval))] <- gsub("/", ".", names(retval)[grep("/", names(retval))])
 
   return(retval)
-
 }
 
 
 post_url <- function(obs_url, zip, csv = FALSE) {
-
   split <- strsplit(obs_url, "?", fixed = TRUE)
 
   url <- split[[1]][1]
-  if(csv) {
+  if (csv) {
     url <- paste0(url, "?mimeType=csv")
   } else {
     url <- paste0(url, "?mimeType=tsv")
   }
 
-  if(grepl("sorted", split[[1]][2])) {
+  if (grepl("sorted", split[[1]][2])) {
     url <- paste0(url, "&sorted=", strsplit(split[[1]][2], "sorted=", fixed = TRUE)[[1]][2])
   }
 
-  if(zip) {
+  if (zip) {
     url <- paste0(url, "&zip=yes")
   }
 
