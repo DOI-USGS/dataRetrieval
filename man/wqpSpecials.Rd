@@ -122,21 +122,24 @@ site1 <- whatWQPsamples(siteid = "USGS-01594440")
 
 type <- "Stream"
 
-sites <- whatWQPsamples(countycode="US:55:025", siteType = type)
+sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
 
 lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
-lakeSites_samples_chars <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
-                              statecode = "US:55", convertType = FALSE)
-
+lakeSites_samples_chars <- whatWQPsamples(
+  siteType = "Lake, Reservoir, Impoundment",
+  statecode = "US:55", convertType = FALSE
+)
 }
 \donttest{
 
 type <- "Stream"
 
-sites <- whatWQPmetrics(countycode="US:55:025",siteType=type)
+sites <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
 lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
-lakeSites_metrics_chars <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment",
-                       statecode = "US:55", convertType=FALSE)
+lakeSites_metrics_chars <- whatWQPmetrics(
+  siteType = "Lake, Reservoir, Impoundment",
+  statecode = "US:55", convertType = FALSE
+)
 }
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{

@@ -39,21 +39,21 @@ Imports data from the Water Quality Portal based on a specified url.
 
 ## Examples take longer than 5 seconds:
 \donttest{
-rawSampleURL <- constructWQPURL('USGS-01594440','01075', '', '')
+rawSampleURL <- constructWQPURL("USGS-01594440", "01075", "", "")
 
 rawSample <- importWQP(rawSampleURL)
 
-rawSampleURL_NoZip <- constructWQPURL('USGS-01594440','01075', '', '', zip=FALSE)
+rawSampleURL_NoZip <- constructWQPURL("USGS-01594440", "01075", "", "", zip = FALSE)
 
-rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip=FALSE, convertType=FALSE)
+rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip = FALSE, convertType = FALSE)
 
-rawSample2 <- importWQP(rawSampleURL_NoZip, zip=FALSE)
+rawSample2 <- importWQP(rawSampleURL_NoZip, zip = FALSE)
 
-STORETex <- constructWQPURL('WIDNR_WQX-10032762','Specific conductance', '', '')
+STORETex <- constructWQPURL("WIDNR_WQX-10032762", "Specific conductance", "", "")
 
 STORETdata <- importWQP(STORETex)
 
-STORETdata_char <- importWQP(STORETex, convertType=FALSE)
+STORETdata_char <- importWQP(STORETex, convertType = FALSE)
 }
 \dontshow{\}) # examplesIf}
 }
