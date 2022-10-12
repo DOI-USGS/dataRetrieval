@@ -60,13 +60,10 @@ jobs:
         shell: Rscript {0}
 
       - name: Commit and push changes
-        run: |
-          git config --local user.name "$GITHUB_ACTOR"
-          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          git add R/\*
-          git commit -m "Style code" || echo "No changes to commit"
-          git pull --ff-only
-          git push origin
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Style Code
+
   # Next run lintr to annotate the PR with anything caught by the linter that wasn't changed by styler
   lint:
     runs-on: ubuntu-latest
