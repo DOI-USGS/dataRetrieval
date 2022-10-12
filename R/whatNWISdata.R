@@ -1,10 +1,13 @@
 #' USGS data availability
 #'
-#' Imports a table of available parameters, period of record, and count. See \url{https://waterservices.usgs.gov/rest/Site-Service.html}
+#' Imports a table of available parameters, period of record, and count. See
+#' \url{https://waterservices.usgs.gov/rest/Site-Service.html}
 #' for more information.
 #'
-#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for a complete list of options.  A list of arguments can also be supplied. 
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will convert the data to dates, datetimes,
+#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html}
+#' for a complete list of options.  A list of arguments can also be supplied.
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will
+#' convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @keywords data import USGS web service
 #' @return A data frame with the following columns:
@@ -12,7 +15,7 @@
 #' Name \tab Type \tab Description \cr
 #' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 #' site_no \tab character \tab The USGS site number \cr
-#' station_nm \tab character \tab Site name \cr 
+#' station_nm \tab character \tab Site name \cr
 #' site_tp_cd \tab character \tab Site type \cr
 #' dec_lat_va \tab numeric \tab Decimal latitude\cr
 #' dec_long_va \tab numeric \tab Decimal longitude \cr
@@ -51,82 +54,83 @@
 #' @export
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' 
-#' availableData <- whatNWISdata(siteNumber = '05114000')
+#'
+#' availableData <- whatNWISdata(siteNumber = "05114000")
 #' # To find just unit value ('instantaneous') data:
-#' uvData <- whatNWISdata(siteNumber = '05114000',service="uv")
-#' uvDataMulti <- whatNWISdata(siteNumber = c('05114000','09423350'),service=c("uv","dv"))
-#' flowAndTemp <- whatNWISdata(stateCd = "WI", service = "uv", 
-#'                              parameterCd = c("00060","00010"),
-#'                              statCd = "00003")
+#' uvData <- whatNWISdata(siteNumber = "05114000", service = "uv")
+#' uvDataMulti <- whatNWISdata(siteNumber = c("05114000", "09423350"), service = c("uv", "dv"))
+#' flowAndTemp <- whatNWISdata(
+#'   stateCd = "WI", service = "uv",
+#'   parameterCd = c("00060", "00010"),
+#'   statCd = "00003"
+#' )
 #' sites <- whatNWISdata(stateCd = "WI", parameterCd = "00060", siteType = "ST", service = "site")
-#' 
 #' }
-whatNWISdata <- function(..., convertType=TRUE){
-  
+whatNWISdata <- function(..., convertType = TRUE) {
   matchReturn <- convertLists(...)
-  
-  if("service" %in% names(matchReturn)){
+
+  if ("service" %in% names(matchReturn)) {
     service <- matchReturn$service
-    if(any(service %in% c("qw", "qwdata"))){
-      .Deprecated(old = "whatNWISdata", package = "dataRetrieval", 
-                  new = "whatWQPdata",
-                  msg = "NWIS qw web services are being retired. Please see the vignette 
-'Changes to NWIS QW services' for more information.")
+    if (any(service %in% c("qw", "qwdata"))) {
+      .Deprecated(
+        old = "whatNWISdata", package = "dataRetrieval",
+        new = "whatWQPdata",
+        msg = "NWIS qw web services are being retired. Please see the vignette
+'Changes to NWIS QW services' for more information."
+      )
     }
   } else {
     service <- "all"
   }
-  
-  if("statCd" %in% names(matchReturn)){
+
+  if ("statCd" %in% names(matchReturn)) {
     statCd <- matchReturn$statCd
     matchReturn <- matchReturn[names(matchReturn) != "statCd"]
   } else {
     statCd <- "all"
   }
-  
-  if("parameterCd" %in% names(matchReturn)){
+
+  if ("parameterCd" %in% names(matchReturn)) {
     parameterCd <- matchReturn$parameterCd
     matchReturn[["parameterCd"]] <- NULL
   } else {
     parameterCd <- "all"
   }
-  
+
   matchReturn$service <- "site"
-  
+
   valuesList <- readNWISdots(matchReturn)
-  
+
   values <- sapply(valuesList$values, function(x) URLencode(x))
 
-  if(any(service == "site")){
+  if (any(service == "site")) {
     service <- "all"
-  } else if(any(service == "iv")){
+  } else if (any(service == "iv")) {
     service[service == "iv"] <- "uv"
-  } else if(any(service == "peak")){
+  } else if (any(service == "peak")) {
     service[service == "peak"] <- "pk"
-  } else if(any(service == "measurements")){
+  } else if (any(service == "measurements")) {
     service[service == "measurements"] <- "sv"
   }
-  
-  urlSitefile <- drURL('site', Access=pkg.env$access, seriesCatalogOutput='true',arg.list=values)
- 
+
+  urlSitefile <- drURL("site", Access = pkg.env$access, seriesCatalogOutput = "true", arg.list = values)
+
   SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE, convertType = convertType)
 
-  if(!("all" %in% service)){
-    SiteFile <- SiteFile[SiteFile$data_type_cd %in% service,]
+  if (!("all" %in% service)) {
+    SiteFile <- SiteFile[SiteFile$data_type_cd %in% service, ]
   }
-  if(!("all" %in% statCd)){
-    SiteFile <- SiteFile[SiteFile$stat_cd %in% c(statCd,NA),]
+  if (!("all" %in% statCd)) {
+    SiteFile <- SiteFile[SiteFile$stat_cd %in% c(statCd, NA), ]
   }
-  if(!("all" %in% parameterCd)){
-    SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd,]
+  if (!("all" %in% parameterCd)) {
+    SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd, ]
   }
-  
-  if(nrow(SiteFile) > 0 & convertType){
+
+  if (nrow(SiteFile) > 0 && convertType) {
     SiteFile$begin_date <- as.Date(lubridate::parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
     SiteFile$end_date <- as.Date(lubridate::parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
   }
-  
-  return(SiteFile)
 
+  return(SiteFile)
 }

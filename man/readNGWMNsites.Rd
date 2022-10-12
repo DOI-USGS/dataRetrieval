@@ -7,11 +7,11 @@
 readNGWMNsites(siteNumbers)
 }
 \arguments{
-\item{siteNumbers}{character Vector of feature IDs formatted with agency code and site number 
+\item{siteNumbers}{character Vector of feature IDs formatted with agency code and site number
 separated by a period or semicolon, e.g. \code{USGS.404159100494601}.}
 }
 \value{
-A data frame the following columns: 
+A data frame the following columns:
 #' \tabular{lll}{
 Name \tab Type \tab Description \cr
 site \tab char \tab Site FID \cr
@@ -24,13 +24,12 @@ Retrieve site data from the National Ground Water Monitoring Network \url{https:
 }
 \examples{
 \donttest{
-#one site 
+# one site
 site <- "USGS.430427089284901"
-oneSite <- readNGWMNsites(siteNumbers = site)   
+oneSite <- readNGWMNsites(siteNumbers = site)
 
-#non-USGS site
+# non-USGS site
 site <- "MBMG.103306"
 siteInfo <- readNGWMNsites(siteNumbers = site)
-
 }
 }

@@ -8,7 +8,7 @@ setAccess(access = "public")
 }
 \arguments{
 \item{access}{code for data access. Options are: "public","internal","cooperator", or "USGS".
-\itemize{ 
+\itemize{
 \item{"internal" represents Access=3 ...for a single water science center}
 \item{"USGS" represents Access=2 ...for all water science centers}
 \item{"cooperator" represents Access=1}
@@ -20,12 +20,10 @@ access Indicate which dataRetrieval access code
 you want to use options: \code{c('public','internal')}
 }
 \examples{
-
 \donttest{
-setAccess('internal')
+setAccess("internal")
 
-setAccess('public')
-
+setAccess("public")
 }
 
 }

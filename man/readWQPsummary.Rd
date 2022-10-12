@@ -12,35 +12,35 @@ for a complete list of options. A list of arguments can also be supplied.}
 }
 \value{
 A data frame with at least the following columns:
-\tabular{lll}{ 
+\tabular{lll}{
 Name \tab Type \tab Description \cr
- "Provider" \tab character \tab Providing database.  \cr            
- "MonitoringLocationIdentifier" \tab character \tab	A designator used to 
-describe the unique name, number, or code assigned to identify 
+ "Provider" \tab character \tab Providing database.  \cr
+ "MonitoringLocationIdentifier" \tab character \tab	A designator used to
+describe the unique name, number, or code assigned to identify
 the monitoring location.\cr
  "YearSummarized" \tab numeric \tab The year of the summary \cr
- "CharacteristicType" \tab character \tab CharacteristicType  \cr  
- "CharacteristicName" \tab character \tab	The object, property, or substance 
+ "CharacteristicType" \tab character \tab CharacteristicType  \cr
+ "CharacteristicName" \tab character \tab	The object, property, or substance
 which is evaluated or enumerated by either a direct field measurement,
 a direct field observation, or by laboratory analysis of material
-collected in the field.\cr 
+collected in the field.\cr
  "ActivityCount" \tab numeric \tab The number of times the location was sampled \cr
  "ResultCount" \tab numeric \tab The number of individual data results. \cr
  "LastResultSubmittedDate" \tab Date \tab Date when data was last submitted. \cr
- "OrganizationIdentifier" \tab character \tab  A designator used to uniquely 
+ "OrganizationIdentifier" \tab character \tab  A designator used to uniquely
 identify a unique business establishment within a context.\cr
  "OrganizationFormalName" \tab character \tab  The legal designator
 (i.e. formal name) of an organization.\cr
- "MonitoringLocationName \tab character \tab MonitoringLocationName \cr 
+ "MonitoringLocationName \tab character \tab MonitoringLocationName \cr
  "MonitoringLocationTypeName" \tab character \tab MonitoringLocationTypeName \cr
  "ResolvedMonitoringLocationTypeName" \tab character \tab  \cr
  "HUCEightDigitCode" \tab character \tab 8-digit HUC id. \cr
  "MonitoringLocationUrl" \tab character \tab URL to monitoring location. \cr
  "CountyName" \tab character \tab County of sampling location. \cr
- "StateName" \tab character \tab State of sampling location. \cr  
- "MonitoringLocationLatitude"  \tab numeric \tab latitude of sampling 
+ "StateName" \tab character \tab State of sampling location. \cr
+ "MonitoringLocationLatitude"  \tab numeric \tab latitude of sampling
  location. \cr
- "MonitoringLocationLongitude" \tab numeric \tab longitude of sampling 
+ "MonitoringLocationLongitude" \tab numeric \tab longitude of sampling
  location. \cr
 }
 }
@@ -56,26 +56,36 @@ available data at the WQP sites, and some metadata on the sites themselves.
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Summary of a single site for the last 5 years:
-site_5 <- readWQPsummary(siteid="USGS-07144100",
-                        summaryYears=5)
-                        
-# Summary of a single site for the full period of record:
-site_all <- readWQPsummary(siteid="USGS-07144100",
-                           summaryYears="all")
+site_5 <- readWQPsummary(
+  siteid = "USGS-07144100",
+  summaryYears = 5
+)
 
-# Summary of the data available from streams in a single county:       
-dane_county_data <- readWQPsummary(countycode = "US:55:025",
-                        summaryYears = 5,
-                        siteType = "Stream")
+# Summary of a single site for the full period of record:
+site_all <- readWQPsummary(
+  siteid = "USGS-07144100",
+  summaryYears = "all"
+)
+
+# Summary of the data available from streams in a single county:
+dane_county_data <- readWQPsummary(
+  countycode = "US:55:025",
+  summaryYears = 5,
+  siteType = "Stream"
+)
 
 # Summary of the data all available from lakes in a single county:
-lake_sites <- readWQPsummary(siteType = "Lake, Reservoir, Impoundment",
-                         countycode = "US:55:025")
+lake_sites <- readWQPsummary(
+  siteType = "Lake, Reservoir, Impoundment",
+  countycode = "US:55:025"
+)
 
 # Summary of the data available for the last 5 years in New Jersey:
-state1 <- readWQPsummary(statecode="NJ",
-                         summaryYears = 5,
-                         siteType = "Stream")
+state1 <- readWQPsummary(
+  statecode = "NJ",
+  summaryYears = 5,
+  siteType = "Stream"
+)
 }
 \dontshow{\}) # examplesIf}
 }

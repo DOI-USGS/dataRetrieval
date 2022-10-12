@@ -1,0 +1,29 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+name: lint-project
+
+jobs:
+  lint-project:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install lintr
+        run: install.packages("lintr")
+        shell: Rscript {0}
+
+      - name: Lint package
+        run: lintr::lint_package()
+        shell: Rscript {0}

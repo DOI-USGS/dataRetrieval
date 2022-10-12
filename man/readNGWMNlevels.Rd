@@ -7,18 +7,18 @@
 readNGWMNlevels(siteNumbers, asDateTime = TRUE, tz = "UTC")
 }
 \arguments{
-\item{siteNumbers}{character Vector of feature IDs formatted with agency code and site number 
+\item{siteNumbers}{character Vector of feature IDs formatted with agency code and site number
 separated by a period or semicolon, e.g. \code{USGS.404159100494601}.}
 
 \item{asDateTime}{logical Should dates and times be converted to date/time objects,
-or returned as character?  Defaults to \code{TRUE}.  Must be set to \code{FALSE} if a site 
+or returned as character?  Defaults to \code{TRUE}.  Must be set to \code{FALSE} if a site
 contains non-standard dates.}
 
-\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
-Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 for more information on time zones.}
 }
 \description{
@@ -26,20 +26,20 @@ Retrieve groundwater levels from the National Ground Water Monitoring Network \u
 }
 \examples{
 \donttest{
-#one site
+# one site
 site <- "USGS.430427089284901"
-#oneSite <- readNGWMNlevels(siteNumbers = site)
+# oneSite <- readNGWMNlevels(siteNumbers = site)
 
-#multiple sites
-sites <- c("USGS:272838082142201","USGS:404159100494601", "USGS:401216080362703")
-#multiSiteData <- readNGWMNlevels(sites)
+# multiple sites
+sites <- c("USGS:272838082142201", "USGS:404159100494601", "USGS:401216080362703")
+# multiSiteData <- readNGWMNlevels(sites)
 
-#non-USGS site
+# non-USGS site
 site <- "MBMG.103306"
-#data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
+# data <- readNGWMNlevels(siteNumbers = site, asDateTime = FALSE)
 
-#site with no data returns empty data frame
+# site with no data returns empty data frame
 noDataSite <- "UTGS.401544112060301"
-#noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
+# noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
 }
 }
