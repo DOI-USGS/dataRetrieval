@@ -191,90 +191,128 @@ because it allows for other agencies rather than the USGS.
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 nameToUse <- "pH"
-pHData <- readWQPdata(siteid="USGS-04024315",characteristicName=nameToUse)
-pHData_summary <- readWQPdata(bBox=c(-90.10,42.67,-88.64,43.35),
-     characteristicName=nameToUse, querySummary=TRUE)
+pHData <- readWQPdata(siteid = "USGS-04024315", characteristicName = nameToUse)
+pHData_summary <- readWQPdata(
+  bBox = c(-90.10, 42.67, -88.64, 43.35),
+  characteristicName = nameToUse, querySummary = TRUE
+)
 startDate <- as.Date("2013-01-01")
-secchi.names = c("Depth, Secchi disk depth",
-                 "Depth, Secchi disk depth (choice list)",
-                 "Secchi Reading Condition (choice list)",
-                 "Water transparency, Secchi disc")
-args <- list('startDateLo' = startDate,
-             'startDateHi' = "2013-12-31",
-              statecode="WI",
-              characteristicName=secchi.names)
+secchi.names <- c(
+  "Depth, Secchi disk depth",
+  "Depth, Secchi disk depth (choice list)",
+  "Secchi Reading Condition (choice list)",
+  "Water transparency, Secchi disc"
+)
+args <- list(
+  "startDateLo" = startDate,
+  "startDateHi" = "2013-12-31",
+  statecode = "WI",
+  characteristicName = secchi.names
+)
 
 wqp.data <- readWQPdata(args)
 
-args_2 <- list('startDateLo' = startDate,
-             'startDateHi' = "2013-12-31",
-              statecode="WI",
-              characteristicName=secchi.names,
-              querySummary=TRUE)
+args_2 <- list(
+  "startDateLo" = startDate,
+  "startDateHi" = "2013-12-31",
+  statecode = "WI",
+  characteristicName = secchi.names,
+  querySummary = TRUE
+)
 
 wqp.summary <- readWQPdata(args_2)
 
-arg_3 <- list('startDateLo' = startDate,
-             'startDateHi' = "2013-12-31")
-arg_4 <- list(statecode="WI",
-              characteristicName=secchi.names)
-wqp.summary <- readWQPdata(arg_3, arg_4, querySummary=TRUE)
-wqp.summary_WI <- readWQPdata(arg_3, statecode="WI",
-                              characteristicName=secchi.names,
-                              querySummary=TRUE)
+arg_3 <- list(
+  "startDateLo" = startDate,
+  "startDateHi" = "2013-12-31"
+)
+arg_4 <- list(
+  statecode = "WI",
+  characteristicName = secchi.names
+)
+wqp.summary <- readWQPdata(arg_3, arg_4, querySummary = TRUE)
+wqp.summary_WI <- readWQPdata(arg_3,
+  statecode = "WI",
+  characteristicName = secchi.names,
+  querySummary = TRUE
+)
 
 # querying by county
-DeWitt <- readWQPdata(statecode = "Illinois",
-                      countycode= "DeWitt",
-                      characteristicName = "Nitrogen")
+DeWitt <- readWQPdata(
+  statecode = "Illinois",
+  countycode = "DeWitt",
+  characteristicName = "Nitrogen"
+)
 
 # Data profiles: "Organization Data"
-org_data <- readWQPdata(statecode = "WI",
-                        countycode = "Dane",
-                        service = "Organization")
+org_data <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "Organization"
+)
 
 # Data profiles: "Site Data Only"
-site_data <- readWQPdata(statecode = "WI",
-                         countycode = "Dane",
-                         service = "Station")
+site_data <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "Station"
+)
 
 # Data profiles: "Project Data"
-project_data <- readWQPdata(statecode = "WI",
-                         countycode = "Dane",
-                         service = "Project")
+project_data <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "Project"
+)
 
 # Data profiles: "Project Monitoring Location Weighting Data"
-proj_mlwd <- readWQPdata(statecode = "WI",
-                         countycode = "Dane",
-                         service = "ProjectMonitoringLocationWeighting")
+proj_mlwd <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "ProjectMonitoringLocationWeighting"
+)
 
 # Data profiles: "Sample Results (physical/chemical metadata)":
-samp_data <- readWQPdata(siteid = "USGS-04024315",
-                         dataProfile = "resultPhysChem")
+samp_data <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "resultPhysChem"
+)
 
 # Data profiles: "Sample Results (biological metadata)"
-samp_bio <- readWQPdata(siteid="USGS-04024315",
-                        dataProfile = "biological")
+samp_bio <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "biological"
+)
 
 # Data profiles: "Sample Results (narrow)"
-samp_narrow <- readWQPdata(siteid="USGS-04024315",
-                           dataProfile = "narrowResult")
+samp_narrow <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "narrowResult"
+)
 
 # Data profiles: "Sampling Activity"
-samp_activity <- readWQPdata(siteid="USGS-04024315",
-                             dataProfile = "activityAll")
+samp_activity <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "activityAll"
+)
 
 # Data profile: "Sampling Activity Metrics"
-act_metrics <- readWQPdata(statecode = "WI",
-                           countycode = "Dane",
-                           service = "ActivityMetric")
+act_metrics <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "ActivityMetric"
+)
 
 # Data profile: "Result Detection Quantitation Limit Data"
-dl_data <- readWQPdata(siteid="USGS-04024315",
-                       service = "ResultDetectionQuantitationLimit")
+dl_data <- readWQPdata(
+  siteid = "USGS-04024315",
+  service = "ResultDetectionQuantitationLimit"
+)
 
-pH <- readWQPdata(statecode="WI", countycode="Dane", characteristicName="pH",
-                       convertType=FALSE)
+pH <- readWQPdata(
+  statecode = "WI", countycode = "Dane", characteristicName = "pH",
+  convertType = FALSE
+)
 }
 \dontshow{\}) # examplesIf}
 }
