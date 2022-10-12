@@ -112,18 +112,22 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span></span>
 <span><span class="co"># Choptank River near Greensboro, MD</span></span>
-<span><span class="va">siteNumber</span> <span class="op">&lt;-</span> <span class="st">"01491000"</span> </span>
+<span><span class="va">siteNumber</span> <span class="op">&lt;-</span> <span class="st">"01491000"</span></span>
 <span><span class="va">ChoptankInfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readNWISsite.html">readNWISsite</a></span><span class="op">(</span><span class="va">siteNumber</span><span class="op">)</span></span>
 <span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"00060"</span></span>
 <span></span>
-<span><span class="co">#Raw daily data:</span></span>
-<span><span class="va">rawDailyData</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">siteNumber</span>,<span class="va">parameterCd</span>,</span>
-<span>                      <span class="st">"1980-01-01"</span>,<span class="st">"2010-01-01"</span><span class="op">)</span></span>
+<span><span class="co"># Raw daily data:</span></span>
+<span><span class="va">rawDailyData</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readNWISdv.html">readNWISdv</a></span><span class="op">(</span></span>
+<span>  <span class="va">siteNumber</span>, <span class="va">parameterCd</span>,</span>
+<span>  <span class="st">"1980-01-01"</span>, <span class="st">"2010-01-01"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Sample data Nitrate:</span></span>
 <span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"00618"</span></span>
-<span><span class="va">qwData</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readNWISqw.html">readNWISqw</a></span><span class="op">(</span><span class="va">siteNumber</span>,<span class="va">parameterCd</span>,</span>
-<span>                      <span class="st">"1980-01-01"</span>,<span class="st">"2010-01-01"</span><span class="op">)</span></span>
+<span><span class="va">qwData</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readNWISqw.html">readNWISqw</a></span><span class="op">(</span></span>
+<span>  <span class="va">siteNumber</span>, <span class="va">parameterCd</span>,</span>
+<span>  <span class="st">"1980-01-01"</span>, <span class="st">"2010-01-01"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pCode</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readNWISpCode.html">readNWISpCode</a></span><span class="op">(</span><span class="va">parameterCd</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -131,18 +135,22 @@
 <h2 id="water-quality-portal">Water Quality Portal<a class="anchor" aria-label="anchor" href="#water-quality-portal"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">specificCond</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readWQPqw.html">readWQPqw</a></span><span class="op">(</span>siteNumbers <span class="op">=</span> <span class="st">'WIDNR_WQX-10032762'</span>,</span>
-<span>                          parameterCd <span class="op">=</span> <span class="st">'Specific conductance'</span>,</span>
-<span>                          startDate <span class="op">=</span> <span class="st">'2011-05-01'</span>,</span>
-<span>                          endDate <span class="op">=</span> <span class="st">'2011-09-30'</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">specificCond</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readWQPqw.html">readWQPqw</a></span><span class="op">(</span></span>
+<span>  siteNumbers <span class="op">=</span> <span class="st">"WIDNR_WQX-10032762"</span>,</span>
+<span>  parameterCd <span class="op">=</span> <span class="st">"Specific conductance"</span>,</span>
+<span>  startDate <span class="op">=</span> <span class="st">"2011-05-01"</span>,</span>
+<span>  endDate <span class="op">=</span> <span class="st">"2011-09-30"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="network-linked-data-index">Network Linked Data Index<a class="anchor" aria-label="anchor" href="#network-linked-data-index"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">features</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"01491000"</span>,</span>
-<span>                     nav <span class="op">=</span> <span class="st">"UT"</span>,</span>
-<span>                     find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'basin'</span>, <span class="st">'wqp'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">features</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/findNLDI.html">findNLDI</a></span><span class="op">(</span></span>
+<span>  nwis <span class="op">=</span> <span class="st">"01491000"</span>,</span>
+<span>  nav <span class="op">=</span> <span class="st">"UT"</span>,</span>
+<span>  find <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"basin"</span>, <span class="st">"wqp"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
@@ -194,9 +202,10 @@
 <p>To get cutting-edge changes, install from GitHub using the <code>remotes</code> packages:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
-<span><span class="fu">install_github</span><span class="op">(</span><span class="st">"USGS-R/dataRetrieval"</span>, </span>
-<span>               build_opts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--no-resave-data"</span>, <span class="st">"--no-manual"</span><span class="op">)</span>,</span>
-<span>               build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">install_github</span><span class="op">(</span><span class="st">"USGS-R/dataRetrieval"</span>,</span>
+<span>  build_opts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--no-resave-data"</span>, <span class="st">"--no-manual"</span><span class="op">)</span>,</span>
+<span>  build_vignettes <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>

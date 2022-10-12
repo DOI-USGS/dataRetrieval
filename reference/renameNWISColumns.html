@@ -196,19 +196,19 @@ form of the name must be like pXXXXX, where XXXXX is the parameter code.</p></dd
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">siteWithTwo</span> <span class="op">&lt;-</span> <span class="st">'01480015'</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">siteWithTwo</span> <span class="op">&lt;-</span> <span class="st">"01480015"</span></span></span>
 <span class="r-in"><span><span class="va">startDate</span> <span class="op">&lt;-</span> <span class="st">"2012-09-01"</span></span></span>
 <span class="r-in"><span><span class="va">endDate</span> <span class="op">&lt;-</span> <span class="st">"2012-10-01"</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">twoResults</span> <span class="op">&lt;-</span> <span class="fu"><a href="readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">siteWithTwo</span>, <span class="st">"00060"</span>,<span class="va">startDate</span>,<span class="va">endDate</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">twoResults</span> <span class="op">&lt;-</span> <span class="fu"><a href="readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">siteWithTwo</span>, <span class="st">"00060"</span>, <span class="va">startDate</span>, <span class="va">endDate</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">twoResults</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "agency_cd"        "site_no"          "Date"             "X_00060_00003"   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "X_00060_00003_cd"</span>
 <span class="r-in"><span><span class="va">renamedCols</span> <span class="op">&lt;-</span> <span class="fu">renameNWISColumns</span><span class="op">(</span><span class="va">twoResults</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">renamedCols</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "agency_cd" "site_no"   "Date"      "Flow"      "Flow_cd"  </span>
-<span class="r-in"><span><span class="co">#Custom names:</span></span></span>
-<span class="r-in"><span><span class="va">newNames</span> <span class="op">&lt;-</span> <span class="fu">renameNWISColumns</span><span class="op">(</span><span class="va">twoResults</span>, p00060<span class="op">=</span><span class="st">"Discharge"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Custom names:</span></span></span>
+<span class="r-in"><span><span class="va">newNames</span> <span class="op">&lt;-</span> <span class="fu">renameNWISColumns</span><span class="op">(</span><span class="va">twoResults</span>, p00060 <span class="op">=</span> <span class="st">"Discharge"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">newNames</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "agency_cd"    "site_no"      "Date"         "Discharge"    "Discharge_cd"</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>

@@ -59,7 +59,7 @@ and readWQPdata."><meta property="og:image" content="/logo.png"><!-- mathjax -->
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>State code look up</h1>
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/R/readNWISdata.r" class="external-link"><code>R/readNWISdata.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/R/readNWISdata.R" class="external-link"><code>R/readNWISdata.R</code></a></small>
       <div class="d-none name"><code>stateCdLookup.Rd</code></div>
     </div>
 
@@ -80,7 +80,7 @@ and <code>readWQPdata</code>.</p>
 
 
 <dt>outputType</dt>
-<dd><p>character can be "postal","fullName","tableIndex", or "id".</p></dd>
+<dd><p>character can be "postal", "fullName", "tableIndex", or "id".</p></dd>
 
 </dl></div>
 
@@ -91,7 +91,7 @@ and <code>readWQPdata</code>.</p>
 <span class="r-in"><span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu">stateCdLookup</span><span class="op">(</span><span class="st">"WI"</span>, <span class="st">"id"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">name</span> <span class="op">&lt;-</span> <span class="fu">stateCdLookup</span><span class="op">(</span><span class="fl">55</span>, <span class="st">"fullName"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">index</span> <span class="op">&lt;-</span> <span class="fu">stateCdLookup</span><span class="op">(</span><span class="st">"WI"</span>, <span class="st">"tableIndex"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">stateCd</span><span class="op">[</span><span class="va">index</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">stateCd</span><span class="op">[</span><span class="va">index</span>, <span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    STATE STATE_NAME STUSAB  STATENS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 51    55  Wisconsin     WI 01779806</span>
 <span class="r-in"><span><span class="fu">stateCdLookup</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"West Virginia"</span>, <span class="st">"Wisconsin"</span>, <span class="fl">200</span>, <span class="fl">55</span>, <span class="st">"MN"</span><span class="op">)</span><span class="op">)</span></span></span>

@@ -84,10 +84,11 @@ Anything defined as a default, is returned as an attribute of that data frame.</
 
 
 <dt>tz</dt>
-<dd><p>character to set timezone attribute of datetime. Default is an empty quote, which converts the 
+<dd><p>character to set timezone attribute of datetime. Default is an empty quote, which converts the
 datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
-Possible values are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
-"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla"</p></dd>
+Possible values are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
+"America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua",
+"America/Phoenix", and "America/Metlakatla"</p></dd>
 
 </dl></div>
 
@@ -95,14 +96,15 @@ Possible values are "America/New_York","America/Chicago", "America/Denver","Amer
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">baseURL</span> <span class="op">&lt;-</span> <span class="st">"https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"</span></span></span>
 <span class="r-in"><span><span class="va">URL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">baseURL</span>, <span class="st">"sites=01646500"</span>,</span></span>
-<span class="r-in"><span>     <span class="st">"startDT=2014-09-01"</span>,</span></span>
-<span class="r-in"><span>     <span class="st">"endDT=2014-09-08"</span>,</span></span>
-<span class="r-in"><span>     <span class="st">"statCd=00003"</span>,</span></span>
-<span class="r-in"><span>     <span class="st">"parameterCd=00060"</span>,sep<span class="op">=</span><span class="st">"&amp;"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="st">"startDT=2014-09-01"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"endDT=2014-09-08"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"statCd=00003"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"parameterCd=00060"</span>,</span></span>
+<span class="r-in"><span>  sep <span class="op">=</span> <span class="st">"&amp;"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">timesereies</span> <span class="op">&lt;-</span> <span class="fu">importWaterML2</span><span class="op">(</span><span class="va">URL</span>, asDateTime<span class="op">=</span><span class="cn">TRUE</span>, tz<span class="op">=</span><span class="st">"UTC"</span><span class="op">)</span></span></span>
-<span class="r-in"><span> </span></span>
+<span class="r-in"><span><span class="va">timesereies</span> <span class="op">&lt;-</span> <span class="fu">importWaterML2</span><span class="op">(</span><span class="va">URL</span>, asDateTime <span class="op">=</span> <span class="cn">TRUE</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
