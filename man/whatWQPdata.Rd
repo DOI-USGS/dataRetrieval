@@ -60,11 +60,11 @@ site1 <- whatWQPdata(siteid = "USGS-01594440")
 type <- "Stream"
 sites <- whatWQPdata(countycode = "US:55:025", siteType = type)
 
-lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
+lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment",
+                         countycode = "US:55:025")
 lakeSites_chars <- whatWQPdata(
   siteType = "Lake, Reservoir, Impoundment",
-  statecode = "US:55", convertType = FALSE
-)
+  countycode = "US:55:025", convertType = FALSE)
 }
 \dontshow{\}) # examplesIf}
 }
