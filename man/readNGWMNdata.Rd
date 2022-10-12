@@ -11,14 +11,14 @@ readNGWMNdata(service, ..., asDateTime = TRUE, tz = "UTC")
 
 \item{\dots}{Other parameters to supply, namely \code{siteNumbers} or \code{bbox}}
 
-\item{asDateTime}{logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to 
+\item{asDateTime}{logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to
 \code{FALSE} since time zone information is not included.}
 
-\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the 
+\item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
-Possible values to provide are "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-"America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()} 
+"America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 for more information on time zones.}
 }
 \description{
@@ -27,31 +27,31 @@ Only water level data and site locations and names are currently available throu
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
-#one site
+# one site
 site <- "USGS.430427089284901"
 # oneSite <- readNGWMNdata(siteNumbers = site, service = "observation")
 
-#multiple sites
-sites <- c("USGS.272838082142201","USGS.404159100494601", "USGS.401216080362703")
+# multiple sites
+sites <- c("USGS.272838082142201", "USGS.404159100494601", "USGS.401216080362703")
 # Very slow:
 # multiSiteData <- readNGWMNdata(siteNumbers = sites, service = "observation")
 # attributes(multiSiteData)
 
-#non-USGS site
-#accepts colon or period between agency and ID
+# non-USGS site
+# accepts colon or period between agency and ID
 site <- "MBMG:702934"
 # data <- readNGWMNdata(siteNumbers = site, service = "featureOfInterest")
 
-#site with no data returns empty data frame
+# site with no data returns empty data frame
 noDataSite <- "UTGS.401544112060301"
 # noDataSite <- readNGWMNdata(siteNumbers = noDataSite, service = "observation")
 
-#bounding box
-#bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -102, 31, 99))
-#retrieve  sites.  Set asDateTime to false since one site has an invalid date
+# bounding box
+# bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -102, 31, 99))
+# retrieve  sites.  Set asDateTime to false since one site has an invalid date
 # Very slow:
-#bboxData <- readNGWMNdata(service = "observation", siteNumbers = bboxSites$site[1:3], 
-#asDateTime = FALSE)
+# bboxData <- readNGWMNdata(service = "observation", siteNumbers = bboxSites$site[1:3],
+# asDateTime = FALSE)
 }
 \dontshow{\}) # examplesIf}
 }

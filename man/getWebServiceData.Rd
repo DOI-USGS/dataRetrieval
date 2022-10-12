@@ -23,11 +23,11 @@ This function accepts a url parameter, and returns the raw data. The function en
 siteNumber <- "02177000"
 startDate <- "2012-09-01"
 endDate <- "2012-10-01"
-offering <- '00003'
-property <- '00060'
-obs_url <- constructNWISURL(siteNumber,property,startDate,endDate,'dv')
+offering <- "00003"
+property <- "00060"
+obs_url <- constructNWISURL(siteNumber, property, startDate, endDate, "dv")
 \donttest{
-  rawData <- getWebServiceData(obs_url)
+rawData <- getWebServiceData(obs_url)
 }
 \dontshow{\}) # examplesIf}
 }

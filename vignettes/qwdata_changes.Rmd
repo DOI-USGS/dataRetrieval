@@ -19,12 +19,14 @@ library(knitr)
 library(dataRetrieval)
 library(dplyr)
 
-options(continue=" ")
-# options(width=60)
-knitr::opts_chunk$set(echo = TRUE,
-                      message = FALSE,
-                      fig.height = 7,
-                      fig.width = 7)
+options(continue = " ")
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  fig.height = 7,
+  fig.width = 7
+)
 ```
 
 # Changes to water quality services
@@ -40,10 +42,9 @@ Starting with version 2.7.9, users will notice a Warning message when using this
 
 ```{r eval=FALSE}
 
-site_ids <- c('04024430','04024000')
-parameterCd <- c('34247','30234','32104','34220')
+site_ids <- c("04024430", "04024000")
+parameterCd <- c("34247", "30234", "32104", "34220")
 nwisData <- readNWISqw(site_ids, parameterCd)
-
 ```
 
 ```
@@ -63,7 +64,6 @@ wqpData <- readWQPqw(paste0("USGS-", site_ids), parameterCd)
 ```{r echo=FALSE}
 nwisData <- readRDS("nwisData.rds")
 wqpData <- readRDS("wqpData.rds")
-
 ```
 
 Let's compare the number of rows, number of columns, and attributes to each return:
@@ -116,7 +116,6 @@ site_WQP <- attr(wqpData, "siteInfo")
 
 param_NWIS <- attr(nwisData, "variableInfo")
 param_WQP <- attr(wqpData, "variableInfo")
-
 ```
 
 The next big task is figuring out which columns from the WQP output map to the original columns from the NWIS output. The vast majority of workflows will not need to completely re-engineer the WQP output back into the NWIS format. Instead, look at your workflow and determine what columns from the original NWIS output are needed to preserve the integrity of the workflow. 
@@ -126,9 +125,11 @@ Let's use the `dplyr` package to pull out the columns are used in this example w
 ```{r}
 library(dplyr)
 
-nwisData_USED <- nwisData %>% 
-  select(site_no, startDateTime, parm_cd,
-         hyd_cond_cd, remark_cd, result_va) %>% 
+nwisData_USED <- nwisData %>%
+  select(
+    site_no, startDateTime, parm_cd,
+    hyd_cond_cd, remark_cd, result_va
+  ) %>%
   arrange(startDateTime, parm_cd)
 
 knitr::kable(head(nwisData_USED))
@@ -136,16 +137,17 @@ knitr::kable(head(nwisData_USED))
 
 If we explore the output from WQP, we can try to find the columns that include the same information:
 ```{r}
-wqpData_USED <- wqpData %>% 
-  select(site_no = MonitoringLocationIdentifier,
-         startDateTime = ActivityStartDateTime,
-         parm_cd = USGSPCode,
-         hyd_cond_cd = HydrologicCondition,
-         remark_cd = ResultDetectionConditionText,
-         result_va = ResultMeasureValue) %>% 
+wqpData_USED <- wqpData %>%
+  select(
+    site_no = MonitoringLocationIdentifier,
+    startDateTime = ActivityStartDateTime,
+    parm_cd = USGSPCode,
+    hyd_cond_cd = HydrologicCondition,
+    remark_cd = ResultDetectionConditionText,
+    result_va = ResultMeasureValue
+  ) %>%
   arrange(startDateTime, parm_cd)
 knitr::kable(head(wqpData_USED))
-
 ```
 
 Now we can start looking at the results and trying to decide how future workflows should be setup. Here are some decisions for this example that we can consider:
@@ -159,27 +161,31 @@ For this theoretical workflow, let's think about what we are trying to find out.
 
 ```{r}
 
-censored_text <- c("Not Detected",
-                   "Non-Detect",
-                   "Non Detect",
-                   "Detected Not Quantified",
-                   "Below Quantification Limit")
+censored_text <- c(
+  "Not Detected",
+  "Non-Detect",
+  "Non Detect",
+  "Detected Not Quantified",
+  "Below Quantification Limit"
+)
 
-wqpData_USED <- wqpData %>% 
-  mutate(left_censored = grepl(paste(censored_text, collapse="|"), 
-                               ResultDetectionConditionText,
-                               ignore.case = TRUE)) %>% 
-  select(site_no = MonitoringLocationIdentifier,
-         startDateTime = ActivityStartDateTime,
-         parm_cd = USGSPCode,
-         left_censored,
-         result_va = ResultMeasureValue,
-         detection_level = DetectionQuantitationLimitMeasure.MeasureValue,
-         dl_units = DetectionQuantitationLimitMeasure.MeasureUnitCode) %>% 
+wqpData_USED <- wqpData %>%
+  mutate(left_censored = grepl(paste(censored_text, collapse = "|"),
+    ResultDetectionConditionText,
+    ignore.case = TRUE
+  )) %>%
+  select(
+    site_no = MonitoringLocationIdentifier,
+    startDateTime = ActivityStartDateTime,
+    parm_cd = USGSPCode,
+    left_censored,
+    result_va = ResultMeasureValue,
+    detection_level = DetectionQuantitationLimitMeasure.MeasureValue,
+    dl_units = DetectionQuantitationLimitMeasure.MeasureUnitCode
+  ) %>%
   arrange(startDateTime, parm_cd)
 
 knitr::kable(head(wqpData_USED))
-
 ```
 
 ### NWIS codes
@@ -192,50 +198,59 @@ The measurement units are found in EITHER the "ResultMeasure.MeasureUnitCode" co
 
 
 ```{r}
-wqpData_USED_codes <- wqpData %>% 
+wqpData_USED_codes <- wqpData %>%
   mutate(units = ifelse(is.na(ResultMeasure.MeasureUnitCode),
-                             DetectionQuantitationLimitMeasure.MeasureUnitCode,
-                             ResultMeasure.MeasureUnitCode)) %>% 
-  select(parm_cd = USGSPCode,
-         CharacteristicName,ResultSampleFractionText,
-         units) %>% 
+    DetectionQuantitationLimitMeasure.MeasureUnitCode,
+    ResultMeasure.MeasureUnitCode
+  )) %>%
+  select(
+    parm_cd = USGSPCode,
+    CharacteristicName, ResultSampleFractionText,
+    units
+  ) %>%
   distinct()
 
 knitr::kable(wqpData_USED_codes)
-
 ```
 
 If there are USGS codes that you are using in your analysis, begin to move away from those codes, and move to the text. In the data we are looking at here:
 
 ```{r}
-wqpData_USED_codes <- wqpData %>% 
-  select(HydrologicCondition,HydrologicEvent,
-         ActivityTypeCode, ActivityMediaName) %>% 
+wqpData_USED_codes <- wqpData %>%
+  select(
+    HydrologicCondition, HydrologicEvent,
+    ActivityTypeCode, ActivityMediaName
+  ) %>%
   distinct()
 
 knitr::kable(head(wqpData_USED_codes))
-
 ```
 
 To convert the codes found in this example:
 
 ```{r codes, echo=FALSE}
-df <- data.frame(NWIS = c("samp_type_cd = 9",
-                          "hyd_cond_cd = 9",
-                          "hyd_cond_cd = 5",
-                          "hyd_cond_cd = 8",
-                          'medium_cd = "WS"',
-                          'hyd_event_cd = "B"',
-                          'hyd_event_cd = "A"',
-                          'hyd_event_cd = 9'),
-                 WQP = c('ActivityTypeCode = "Sample-Routine"',
-                         'HydrologicCondition = "Stable, normal stage"',
-                         'HydrologicCondition = "Falling stage"',
-                         'HydrologicCondition = "Rising stage"',
-                         'ActivityMediaName = "Water"',
-                         'HydrologicEvent = "Under ice cover"',
-                         'HydrologicEvent = "Spring breakup"',
-                         'HydrologicEvent = "Routine sample"'))
+df <- data.frame(
+  NWIS = c(
+    "samp_type_cd = 9",
+    "hyd_cond_cd = 9",
+    "hyd_cond_cd = 5",
+    "hyd_cond_cd = 8",
+    "medium_cd = 'WS'",
+    "hyd_event_cd = 'B'",
+    "hyd_event_cd = 'A'",
+    "hyd_event_cd = 9"
+  ),
+  WQP = c(
+    "ActivityTypeCode = 'Sample-Routine'",
+    "HydrologicCondition = 'Stable, normal stage'",
+    "HydrologicCondition = 'Falling stage'",
+    "HydrologicCondition = 'Rising stage'",
+    "ActivityMediaName = 'Water'",
+    "HydrologicEvent = 'Under ice cover'",
+    "HydrologicEvent = 'Spring breakup'",
+    "HydrologicEvent = 'Routine sample'"
+  )
+)
 knitr::kable(df)
 ```
 
@@ -248,8 +263,10 @@ This function will continue to work for any service except "qw" (water quality d
 The function to replace this functionality is `whatWQPdata`:
 
 ```{r whatdata, eval=FALSE}
-whatNWIS <- whatNWISdata(siteNumber = site_ids,
-                       service = "qw")
+whatNWIS <- whatNWISdata(
+  siteNumber = site_ids,
+  service = "qw"
+)
 ```
 
 ```
@@ -260,7 +277,6 @@ NWIS qw web services are being retired. Please see the vignette
 
 ```{r whatdatanew, eval=FALSE}
 whatWQP <- whatWQPdata(siteNumber = paste0("USGS-", site_ids))
-
 ```
 
 There are some major differences in the output. The NWIS services offers back one row per site/parameter code to learn how many samples are available. This is not *currently* available from the Water Quality Portal, however there are new summary services being developed. When those become available, we will include new documentation on how to get this information.
@@ -270,16 +286,19 @@ There are some major differences in the output. The NWIS services offers back on
 If you get your water quality data from the `readNWISdata` function, you will receive a warning. Note, this is *only* for the "qwdata" service. All other web services are not being deprecated, and should receive no warning.
 
 ```{r eval=FALSE}
-qwData <- readNWISdata(state_cd = "WI",
-                       startDate = "2000-01-01",
-                       drain_area_va_min = 50, qw_count_nu=50, 
-                       qw_attributes="expanded",
-                       qw_sample_wide="wide",
-                       list_of_search_criteria = c("state_cd",
-                                                   "drain_area_va",
-                                                   "obs_count_nu"),
-                       service="qw")
-
+qwData <- readNWISdata(
+  state_cd = "WI",
+  startDate = "2000-01-01",
+  drain_area_va_min = 50, qw_count_nu = 50,
+  qw_attributes = "expanded",
+  qw_sample_wide = "wide",
+  list_of_search_criteria = c(
+    "state_cd",
+    "drain_area_va",
+    "obs_count_nu"
+  ),
+  service = "qw"
+)
 ```
 
 ```

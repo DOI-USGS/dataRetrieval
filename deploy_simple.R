@@ -2,7 +2,7 @@ library(connectapi)
 
 rsconnect::writeManifest(appDir = "./docs")
 
-file.copy(from = "./docs/articles/logo.png", 
+file.copy(from = "./docs/articles/logo.png",
           to = "./docs/reference/logo.png")
 
 client <- connect(server = Sys.getenv("CONNECT_SERVER"),
@@ -10,7 +10,6 @@ client <- connect(server = Sys.getenv("CONNECT_SERVER"),
 
 bundle <- bundle_dir("./docs")
 
-content <- client %>% 
-  deploy(bundle, name = "dataRetrieval") %>% 
+content <- client %>%
+  deploy(bundle, name = "dataRetrieval") %>%
   poll_task()
-

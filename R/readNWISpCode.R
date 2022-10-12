@@ -4,10 +4,10 @@
 #' This function gets the data from here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes}
 #'
 #' @param parameterCd character of USGS parameter codes (or multiple parameter codes).  These are 5 digit number codes,
-#' more information can be found here: \url{https://help.waterdata.usgs.gov/}. To get a 
+#' more information can be found here: \url{https://help.waterdata.usgs.gov/}. To get a
 #' complete list of all current parameter codes in the USGS, use "all" as the input.
 #' @keywords data import USGS web service
-#' @return parameterData data frame with the following information: 
+#' @return parameterData data frame with the following information:
 #' \tabular{lll}{
 #'   Name \tab Type \tab Description\cr
 #'   parameter_cd \tab character \tab 5-digit USGS parameter code \cr
@@ -17,32 +17,29 @@
 #'   srsname \tab character \tab Substance Registry Services Name\cr
 #'   parameter_units \tab character \tab Parameter units\cr
 #' }
-#' 
+#'
 #' @export
 #' @seealso \code{\link{importRDB1}}
 #' @examples
-#' 
-#' paramINFO <- readNWISpCode(c('01075','00060','00931'))
-#' paramINFO <- readNWISpCode(c('01075','00060','00931', NA))
+#'
+#' paramINFO <- readNWISpCode(c("01075", "00060", "00931"))
+#' paramINFO <- readNWISpCode(c("01075", "00060", "00931", NA))
 #' \donttest{
 #' all_codes <- readNWISpCode("all")
-#' 
 #' }
-readNWISpCode <- function(parameterCd){
- 
+readNWISpCode <- function(parameterCd) {
   parameterCd.orig <- parameterCd
   parameterCd <- parameterCd[!is.na(parameterCd)]
-  
-  baseURL <- drURL("pCode", Access=pkg.env$access)
-  fullURL <- paste0(baseURL, "fmt=rdb&group_cd=%")
-  
-  if(any(parameterCd == "all")){
 
+  baseURL <- drURL("pCode", Access = pkg.env$access)
+  fullURL <- paste0(baseURL, "fmt=rdb&group_cd=%")
+
+  if (any(parameterCd == "all")) {
     temp_df <- importRDB1(fullURL, asDateTime = FALSE)
     parameterData <- data.frame(
-      parameter_cd = temp_df$parm_cd, 
+      parameter_cd = temp_df$parm_cd,
       parameter_group_nm = temp_df$group,
-      parameter_nm = temp_df$parm_nm, 
+      parameter_nm = temp_df$parm_nm,
       casrn = temp_df$CASRN,
       srsname = temp_df$SRSName,
       parameter_units = temp_df$parm_unit,
@@ -50,62 +47,62 @@ readNWISpCode <- function(parameterCd){
     )
     attr(parameterData, "url") <- fullURL
   } else {
-    pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
-    parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd,]
-    
-    if(nrow(parameterData) != length(parameterCd)){
-      
-      if(nrow(parameterData) > 0){
+    parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd, ]
+
+    if (nrow(parameterData) != length(parameterCd)) {
+      if (nrow(parameterData) > 0) {
         parameterCd_lookup <- parameterCd[!parameterCd %in% unique(parameterData$parameter_cd)]
       }
-      if(length(parameterCd_lookup) == 1){
-        baseURL <- drURL("pCodeSingle", Access=pkg.env$access)
+      if (length(parameterCd_lookup) == 1) {
+        baseURL <- drURL("pCodeSingle", Access = pkg.env$access)
         subURL <- paste0(baseURL, "fmt=rdb&parm_nm_cd=", parameterCd_lookup)
         temp_df <- importRDB1(subURL, asDateTime = FALSE)
-        
+
         temp_df <- data.frame(
-          parameter_cd = temp_df$parameter_cd, 
+          parameter_cd = temp_df$parameter_cd,
           parameter_group_nm = temp_df$group,
-          parameter_nm = temp_df$parm_nm, 
+          parameter_nm = temp_df$parm_nm,
           casrn = temp_df$CASRN,
           srsname = temp_df$SRSName,
           parameter_units = temp_df$parm_unit,
           stringsAsFactors = FALSE
         )
-        
+
         parameterData <- rbind(parameterData, temp_df)
         attr(parameterData, "url") <- subURL
       } else {
         temp_df <- importRDB1(fullURL, asDateTime = FALSE)
         trim_df <- data.frame(
-          parameter_cd = temp_df$parm_cd, 
+          parameter_cd = temp_df$parm_cd,
           parameter_group_nm = temp_df$group,
-          parameter_nm = temp_df$parm_nm, 
+          parameter_nm = temp_df$parm_nm,
           casrn = temp_df$CASRN,
           srsname = temp_df$SRSName,
           parameter_units = temp_df$parm_unit,
           stringsAsFactors = FALSE
         )
-        parameterData <- trim_df[trim_df$parameter_cd %in% parameterCd,]
+        parameterData <- trim_df[trim_df$parameter_cd %in% parameterCd, ]
         attr(parameterData, "url") <- fullURL
       }
-      
-      if(nrow(parameterData) != length(parameterCd)){
+
+      if (nrow(parameterData) != length(parameterCd)) {
         badPcode <- parameterCd[!(parameterCd %in% parameterData$parameter_cd)]
-        warning("The following pCodes seem mistyped, and no information was returned: ",
-                paste(badPcode,collapse=","))
+        warning(
+          "The following pCodes seem mistyped, and no information was returned: ",
+          paste(badPcode, collapse = ", ")
+        )
       }
     }
   }
-  
-  if(nrow(parameterData) != sum(is.na(parameterCd.orig))){
+
+  if (nrow(parameterData) != sum(is.na(parameterCd.orig))) {
     na.params <- data.frame(matrix(ncol = ncol(parameterData), nrow = sum(is.na(parameterCd.orig))))
     names(na.params) <- names(parameterData)
     parameterData <- rbind(parameterData, na.params)
   }
   # order by parameterCd.orig
-  if(!isTRUE(parameterCd.orig == "all")){
-    parameterData <- parameterData[match(parameterCd.orig, parameterData$parameter_cd),]
+  if (!isTRUE(parameterCd.orig == "all")) {
+    parameterData <- parameterData[match(parameterCd.orig, parameterData$parameter_cd), ]
   }
   return(parameterData)
 }
