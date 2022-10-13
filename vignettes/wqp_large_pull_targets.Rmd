@@ -39,10 +39,9 @@ The workflow described here uses the [`targets`](https://books.ropensci.org/targ
 
 The basic ingredient of a `targets` workflow is a script file named `_targets.R`. This file is used to define and configure all of the steps in an analysis pipeline and their connections to each other. After connecting the individual analysis steps (also known as targets) in the `_targets` file, the `targets` package can then track the relationships between each connection. Analysis steps that precede any given step of interest are considered "upstream" while the analysis steps that follow are considered "downstream". Once these connections have been established, `targets` can also visualize the relationships in a network graph like the one shown below. The WQP pipeline is structured so that various inputs - including the date range, spatial extent, parameters of interest, and/or specific arguments to pass along to WQP queries - can all be modified within the [`_targets.R`](https://github.com/USGS-R/ds-pipelines-targets-example-wqp/blob/main/_targets.R) file.
 
-{{< figure src="/static/wqp-large-pull-targets/full_pipeline.png" width="375px" style="float:right; padding:10px" alt="A diagram that depicts the different components of a targets workflow. A targets workflow diagram tracks all portions of a data analysis workflow and their dependencies. In this workflow the targets in green are current and the targets in blue are out of date, needing to be re-run.">}}
 
-```{r echo=FALSE}
-knitr::include_graphics("waterservices.png")
+```{r echo=FALSE, out.width = "375px", fig.align = "center", fig.alt = "A screenshot of the R console output for the example pipeline. The console shows that temperature datadata has been retrieved from 228 sites. It also shows that the records downloaded match the records produced by the pipeline inventory. The output message reads: all good! the expected number of records from the WQP inventory matches the data pull for all characteristics."}
+knitr::include_graphics("full_pipeline.png")
 ```
 
 ## Pulling data from the Water Quality Portal
@@ -89,7 +88,10 @@ characteristic names from the configuration file are checked against a
 list of valid entries in WQP, and will notify the user if a
 characteristic name is not valid.
 
-{{< figure src="/static/wqp-large-pull-targets/pipeline_snap_char_names.png" width="850px" alt="A screenshot of the R console output for the example pipeline. The console output indicates that the wqp characteristic target named p1_char_names and all of the associated upstream targets are building. After building the console warns that the temp characteristic does not exist in the water quality portal. This warning message is one of the two pipeline features that can help the user determine whether or not they have specified a valid characteristic name.">}}
+```{r echo=FALSE, out.width = "850px", fig.alt = "A screenshot of the R console output for the example pipeline. The console output indicates that the wqp characteristic target named p1_char_names and all of the associated upstream targets are building. After building the console warns that the temp characteristic does not exist in the water quality portal. This warning message is one of the two pipeline features that can help the user determine whether or not they have specified a valid characteristic name."}
+knitr::include_graphics("pipeline_snap_char_names.png")
+```
+
 
 So we can see that our newly-added characteristic name “temp” is not a
 valid entry and can be omitted from the configuration file. Second,
@@ -170,7 +172,9 @@ size of each grid cell can be customized by the user, but using 1 degree
 cell sizes results in a set of five grid cells that overlap our
 example watershed:
 
-{{< figure src="/static/wqp-large-pull-targets/map_original_grid_cells.png" width="475px" alt="A screenshot of a map that includes the example watershed of interest, the grid cells used to chunk and query data from WQP, and a gray-scale background map on the northeastern United States. The map depicts the user-specified area of interest that is located near Philadephia Pennslyvania and defined in the p1_AOI_sf target and the five grid cells defined by the p1_global_grid_aoi target.">}}
+```{r echo=FALSE, out.width = "475px", fig.align = "center", fig.alt = "A screenshot of a map that includes the example watershed of interest, the grid cells used to chunk and query data from WQP, and a gray-scale background map on the northeastern United States. The map depicts the user-specified area of interest that is located near Philadephia Pennslyvania and defined in the p1_AOI_sf target and the five grid cells defined by the p1_global_grid_aoi target."}
+knitr::include_graphics("map_original_grid_cells.png")
+```
 
 ### Inventory the data before downloading
 
@@ -183,7 +187,9 @@ returned in the inventory by referencing a saved log file. If using the
 pipeline along with `git` for version control, this log file also allows
 a user to readily track changes to the data over the time. 
 
-{{< figure src="/static/wqp-large-pull-targets/log_file.png" width="300px" alt="A screenshot of the log file csv generated by the pipeline. The log file includes a table with the following columns: characteristic name, number of sites, and number of records. The record depcited is for water temperature. It includes 504 sites and 8773 records.">}}
+```{r echo=FALSE, out.width = "300px", fig.alt = "A screenshot of the log file csv generated by the pipeline. The log file includes a table with the following columns: characteristic name, number of sites, and number of records. The record depcited is for water temperature. It includes 504 sites and 8773 records."}
+knitr::include_graphics("log_file.png")
+```
 
 ### Little by little: break up the inventoried sites to prepare for download
 
@@ -212,7 +218,9 @@ expected number of sites and records from [`p1_wqp_inventory_summary_csv`](https
 against the number of sites and records that were actually downloaded,
 and inform the user of the result:
 
-{{< figure src="/static/wqp-large-pull-targets/pipeline_snap_check_inventory.png" width="850px" alt="A screenshot of the R console output for the example pipeline. The console shows that temperature datadata has been retrieved from 228 sites. It also shows that the records downloaded match the records produced by the pipeline inventory. The output message reads: all good! the expected number of records from the WQP inventory matches the data pull for all characteristics.">}}
+```{r echo=FALSE, out.width = "850px", fig.alt = "A screenshot of the R console output for the example pipeline. The console shows that temperature datadata has been retrieved from 228 sites. It also shows that the records downloaded match the records produced by the pipeline inventory. The output message reads: all good! the expected number of records from the WQP inventory matches the data pull for all characteristics."}
+knitr::include_graphics("pipeline_snap_check_inventory.png")
+```
 
 ### Updating the data pull
 
@@ -225,13 +233,19 @@ grid cells instead of five, but the five original grids are still
 included in our query. Using common scripting workflows we would usually
 just re-pull all of the data again even though that is time-consuming.
 
-{{< figure src="/static/wqp-large-pull-targets/map_updated_grid_cells.png" width="475px" alt="A screenshot of a map that includes the updated example watershed of interest, the grid cells used to chunk and query data from WQP, and a gray-scale background map on the northeastern United States. In this map the watershed of interest defined in p1_AOI_sf is bigger than in the first map and there are six grid cells in the p1_global_grid_aoi target.">}}
+```{r echo=FALSE, out.width = "475px", fig.align = "center", fig.alt = "A screenshot of a map that includes the updated example watershed of interest, the grid cells used to chunk and query data from WQP, and a gray-scale background map on the northeastern United States. In this map the watershed of interest defined in p1_AOI_sf is bigger than in the first map and there are six grid cells in the p1_global_grid_aoi target."}
+knitr::include_graphics("map_updated_grid_cells.png")
+```
 
 However, `targets` recognizes that data has already been inventoried for
 five of these grid cells and will only query data for the newly-added
 grid, `46902`:
 
 {{< figure src="/static/wqp-large-pull-targets/pipeline_snap_update_inventory.png" width="600px" alt="A screenshot of the R console output for the example pipeline that shows a partial rebuild of the p1_wqp_inventory target. After re-defining the area of interest, the pipeline rebuilds the inventory for the new grid cell in p1_global_grid_aoi target, but it doesn't need to rebuild the inventory from the other five grid cells because they have already been inventoried.">}}
+
+```{r echo=FALSE, out.width = "600px", fig.alt = "A screenshot of the R console output for the example pipeline that shows a partial rebuild of the p1_wqp_inventory target. After re-defining the area of interest, the pipeline rebuilds the inventory for the new grid cell in p1_global_grid_aoi target, but it doesn't need to rebuild the inventory from the other five grid cells because they have already been inventoried."}
+knitr::include_graphics("pipeline_snap_update_inventory.png")
+```
 
 ## Customizing the pipeline
 
