@@ -4,7 +4,7 @@ author: "Lauren Koenig (she/her), Lindsay Platt (she/her), Julie Padilla (she/he
 date: "2022-09-27"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Large Data Pulls from Water Quality Portal Using `dataRetrieval` - A Pipeline-Based Approach}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
