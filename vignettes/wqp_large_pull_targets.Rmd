@@ -241,8 +241,6 @@ However, `targets` recognizes that data has already been inventoried for
 five of these grid cells and will only query data for the newly-added
 grid, `46902`:
 
-{{< figure src="/static/wqp-large-pull-targets/pipeline_snap_update_inventory.png" width="600px" alt="A screenshot of the R console output for the example pipeline that shows a partial rebuild of the p1_wqp_inventory target. After re-defining the area of interest, the pipeline rebuilds the inventory for the new grid cell in p1_global_grid_aoi target, but it doesn't need to rebuild the inventory from the other five grid cells because they have already been inventoried.">}}
-
 ```{r echo=FALSE, out.width = "600px", fig.alt = "A screenshot of the R console output for the example pipeline that shows a partial rebuild of the p1_wqp_inventory target. After re-defining the area of interest, the pipeline rebuilds the inventory for the new grid cell in p1_global_grid_aoi target, but it doesn't need to rebuild the inventory from the other five grid cells because they have already been inventoried."}
 knitr::include_graphics("pipeline_snap_update_inventory.png")
 ```
