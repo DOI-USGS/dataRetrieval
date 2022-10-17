@@ -1,5 +1,8 @@
 image: artifactory.wma.chs.usgs.gov/docker-official-mirror/rocker/geospatial:latest
 
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
   _R_CHECK_FORCE_SUGGESTS_: "true"
