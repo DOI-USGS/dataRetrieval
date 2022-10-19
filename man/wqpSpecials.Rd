@@ -150,6 +150,8 @@ sites <- whatWQPsites(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+whatWQPdata readWQPsummary
+
 whatNWISdata
 }
 \keyword{WQP}
