@@ -2,13 +2,45 @@
 #'
 #' Imports data from Water Quality Portal web service. This function gets the data from here:
 #' \url{https://www.waterqualitydata.us}.
-#' because it allows for other agencies rather than the USGS.
+#' because it allows for other agencies rather than the USGS. 
+#' 
+#' This function uses \dots as a query input, which can be very flexible, but also 
+#' has a steeper learning curve. For a quick overview, scroll down to the Examples
+#' in this help file to see many query options. 
+#' 
+#' One way to figure out how to construct a WQP query is to go to the "Advanced" 
+#' form in the Water Quality Portal:
+#' \url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STEWARDS&providers=STORET}
+#' Use the form to discover what parameters are available. Once the query is 
+#' set in the form, scroll down to the "Query URL". You will see the parameters
+#' after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
+#' in the Characteristic Group dropdown, you will see characteristicType=Nutrient
+#' in the Query URL. The corresponding argument for dataRetrieval is
+#' characteristicType = "Nutrient". dataRetrieval users do not need to include
+#' mimeType, zip, and providers is optional (these arguments are picked automatically).
+#' 
+#' There are currently 10 "services" provided by the Water Quality Portal:
+#' \tabular{ll}{
+#' Name \tab Base URL \cr
+#' Result (default) \tab "https://www.waterqualitydata.us/data/Result/search" \cr
+#' Station \tab  "https://www.waterqualitydata.us/data/Station/search" \cr
+#' Activity \tab "https://www.waterqualitydata.us/data/Activity/search" \cr
+#' ActivityMetric \tab "https://www.waterqualitydata.us/data/ActivityMetric/search" \cr
+#' SiteSummary \tab "https://www.waterqualitydata.us/data/summary/monitoringLocation/search" \cr
+#' Project \tab "https://www.waterqualitydata.us/data/Project/search" \cr
+#' ProjectMonitoringLocationWeighting \tab "https://www.waterqualitydata.us/data/ProjectMonitoringLocationWeighting/search" \cr
+#' ResultDetectionQuantitationLimit \tab "https://www.waterqualitydata.us/data/ResultDetectionQuantitationLimit/search" \cr
+#' BiologicalMetric \tab "https://www.waterqualitydata.us/data/BiologicalMetric/search" \cr
+#' Organization \tab "https://www.waterqualitydata.us/data/Organization/search" \cr
+#' }
+#' 
 #'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options.
-#' A list of arguments can also be supplied.
-#' @param querySummary logical to ONLY return the number of records and unique sites that
-#' will be returned from this query. This argument is not supported via the
-#' combined list from the \dots argument
+#' A list of arguments can also be supplied. For more information see the above 
+#' description for this help file. If no "service" argument is supplied, it
+#' will default to "Result".
+#' @param querySummary logical to only return the number of records and unique sites that
+#' will be returned from this query. 
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the
 #' date times to UTC, properly accounting for daylight savings times based on the
 #' data's provided tz_cd column.
@@ -25,139 +57,7 @@
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service
-#' @return A data frame with at least the following columns:
-#' \tabular{lll}{
-#' Name \tab Type \tab Description \cr
-#' OrganizationIdentifier \tab character \tab  A designator used to uniquely
-#' identify a unique business establishment within a context.\cr
-#' OrganizationFormalName \tab character \tab  The legal designator (i.e. formal name) of an organization.\cr
-#' ActivityIdentifier \tab character \tab	Designator that uniquely identifies an
-#' activity within an organization.\cr
-#' ActivityTypeCode \tab character \tab	The text describing the type of activity.\cr
-#' ActivityMediaName \tab character \tab	Name or code indicating the environmental
-#' medium where the sample was taken.\cr
-#' ActivityMediaSubdivisionName \tab character \tab	Name or code indicating the
-#' environmental matrix as a subdivision of the sample media.\cr
-#' ActivityStartDate \tab character \tab	The calendar date on which the field activity is started.\cr
-#' ActivityStartTime.Time \tab character \tab	The time of day that is reported
-#' when the field activity began, based on a 24-hour timescale.\cr
-#' ActivityStartTime.TimeZoneCode \tab character \tab	The time zone for which the
-#' time of day is reported. Any of the longitudinal divisions of the earth's surface
-#' in which a standard time is kept.\cr
-#' ActivityEndDate \tab character \tab	The calendar date when the field activity is completed.\cr
-#' ActivityEndTime.Time \tab character \tab	The time of day that is reported when the
-#'  field activity ended, based on a 24-hour timescale.\cr
-#' ActivityEndTime.TimeZoneCode \tab character \tab	The time zone for which the time
-#' of day is reported. Any of the longitudinal divisions of the earth's surface in which a standard time is kept.\cr
-#' ActivityDepthHeightMeasure.MeasureValue \tab character \tab	A measurement of the
-#' vertical location (measured from a reference point) at which an activity occurred.
-#' Measure value is given in the units stored in ActivityDepthHeightMeasure.MeasureUnitCode.\cr
-#' ActivityDepthHeightMeasure.MeasureUnitCode \tab character \tab	The code that
-#' represents the unit for measuring the item.\cr
-#' ActivityDepthAltitudeReferencePointText \tab character \tab	The reference used
-#' to indicate the datum or reference used to establish the depth/altitude of an activity.\cr
-#' ActivityTopDepthHeightMeasure.MeasureValue \tab character \tab	A measurement of
-#' the upper vertical location of a vertical location range (measured from a reference point)
-#' at which an activity occurred. Measure value is given in the units stored in
-#' ActivityTopDepthHeightMeasure.MeasureUnitCode.\cr
-#' ActivityTopDepthHeightMeasure.MeasureUnitCode \tab character \tab	The code that
-#' represents the unit for measuring the item.\cr
-#' ActivityBottomDepthHeightMeasure.MeasureValue \tab character \tab	A measurement of
-#' the lower vertical location of a vertical location range (measured from a reference point)
-#' at which an activity occurred. Measure value is given in the units stored in
-#' ActivityBottomDepthHeightMeasure.MeasureUnitCode.\cr
-#' ActivityBottomDepthHeightMeasure.MeasureUnitCode \tab character \tab	The code that
-#' represents the unit for measuring the item.\cr
-#' ProjectIdentifier \tab character \tab 	A designator used to uniquely identify a data
-#' collection project within a context of an organization.\cr
-#' ActivityConductingOrganizationText \tab character \tab	A name of the Organization
-#' conducting an activity.\cr
-#' MonitoringLocationIdentifier \tab character \tab	A designator used to describe
-#' the unique name, number, or code assigned to identify the monitoring location.\cr
-#' ActivityCommentText \tab character \tab	General comments concerning the activity.\cr
-#' SampleAquifer * \tab character \tab 	A code that designates the aquifer associated
-#' with groundwater samples.\cr
-#' HydrologicCondition * \tab character \tab 	Hydrologic condition is the hydrologic
-#' condition that is represented by the sample collected (i.e. ? normal, falling, rising, peak stage).\cr
-#' HydrologicEvent * \tab character \tab 	A hydrologic event that is represented by
-#' the sample collected (i.e. - storm, drought, snowmelt).\cr
-#' SampleCollectionMethod.MethodIdentifier\tab character \tab 	The identification
-#' number or code assigned by the method publisher.\cr
-#' SampleCollectionMethod.MethodIdentifierContext \tab character \tab	Identifies the
-#' source or data system that created or defined the identifier.\cr
-#' SampleCollectionMethod.MethodName \tab character \tab	The title that appears on
-#' the method from the method publisher.\cr
-#' SampleCollectionEquipmentName \tab character \tab	The name for the equipment used in collecting the sample.\cr
-#' ResultDetectionConditionText \tab character \tab	The textual descriptor of a result.\cr
-#' CharacteristicName \tab character \tab	The object, property, or substance which is
-#' evaluated or enumerated by either a direct field measurement, a direct field observation,
-#' or by laboratory analysis of material collected in the field.\cr
-#' ResultSampleFractionText \tab character \tab	The text name of the portion of the
-#' sample associated with results obtained from a physically-partitioned sample.\cr
-#' ResultMeasureValue \tab numeric \tab	The reportable measure of the result for the
-#' chemical, microbiological or other characteristic being analyzed. Measure value is
-#' given in the units stored in ResultMeasure.MeasureUnitCode.\cr
-#' MeasureQualifierCode \tab character \tab	A code used to identify any qualifying
-#' issues that affect the results.\cr
-#' ResultMeasure.MeasureUnitCode \tab character \tab	The code that represents the unit
-#' for measuring the item.\cr
-#' ResultStatusIdentifier \tab character \tab	Indicates the acceptability of the result
-#' with respect to QA/QC criteria.\cr
-#' StatisticalBaseCode \tab character \tab	The code for the method used to calculate derived results.\cr
-#' ResultValueTypeName \tab character \tab	A name that qualifies the process which was
-#' used in the determination of the result value (e.g., actual, estimated, calculated).\cr
-#' ResultWeightBasisText \tab character \tab	The name that represents the form of the
-#' sample or portion of the sample which is associated with the result value (e.g.,
-#' wet weight, dry weight, ash-free dry weight).\cr
-#' ResultTimeBasisText \tab character \tab	The period of time (in days) over which
-#' a measurement was made. For example, BOD can be measured as 5 day or 20 day BOD.\cr
-#' ResultTemperatureBasisText \tab character \tab	The name that represents the controlled
-#' temperature at which the sample was maintained during analysis, e.g. 25 deg BOD analysis.\cr
-#' ResultParticleSizeBasisText \tab character \tab	User defined free text describing the
-#' particle size class for which the associated result is defined.\cr
-#' PrecisionValue \tab character \tab	A measure of mutual agreement among individual
-#' measurements of the same property usually under prescribed similar conditions.\cr
-#' ResultCommentText \tab character \tab	Free text with general comments concerning
-#' the result.\cr
-#' USGSPCode * \tab character \tab 	5-digit number used in the US Geological Survey
-#' computerized data system, National Water Information System (NWIS), to uniquely
-#' identify a specific constituent.\cr
-#' ResultDepthHeightMeasure.MeasureValue + \tab character \tab 	A measurement of the
-#' vertical location (measured from a reference point) at which a result occurred.\cr
-#' ResultDepthHeightMeasure.MeasureUnitCode + \tab character \tab	The code that
-#' represents the unit for measuring the item.\cr
-#' ResultDepthAltitudeReferencePointText + \tab character \tab 	The reference used
-#' to indicate the datum or reference used to establish the depth/altitude of a result.\cr
-#' SubjectTaxonomicName \tab character \tab	The name of the organism from which a tissue sample was taken.\cr
-#' SampleTissueAnatomyName  * \tab character \tab 	The name of the anatomy from which
-#' a tissue sample was taken.\cr
-#' ResultAnalyticalMethod.MethodIdentifier \tab character \tab	The identification number
-#' or code assigned by the method publisher.\cr
-#' ResultAnalyticalMethod.MethodIdentifierContext \tab character \tab	Identifies the
-#' source or data system that created or defined the identifier.\cr
-#' ResultAnalyticalMethod.MethodName \tab character \tab	The title that appears on
-#' the method from the method publisher.\cr
-#' MethodDescriptionText * \tab character \tab 	A brief summary that provides general
-#' information about the method.\cr
-#' LaboratoryName \tab character \tab	The name of Lab responsible for the result.\cr
-#' AnalysisStartDate \tab character \tab	The calendar date on which the analysis began.\cr
-#' ResultLaboratoryCommentText \tab character \tab	Remarks which further describe the
-#' laboratory procedures which produced the result.\cr
-#' DetectionQuantitationLimitTypeName \tab character \tab	Text describing the type of
-#' detection or quantitation level used in the analysis of a characteristic.\cr
-#' DetectionQuantitationLimitMeasure.MeasureValue \tab numeric \tab	Constituent
-#' concentration that, when processed through the complete method, produces a signal
-#' that is statistically different from a blank. Measure value is given in the units
-#' stored in DetectionQuantitationLimitMeasure.MeasureUnitCode.\cr
-#' DetectionQuantitationLimitMeasure.MeasureUnitCode \tab character \tab	The code that
-#' represents the unit for measuring the item.\cr
-#' PreparationStartDate \tab character \tab	The calendar date when the preparation/extraction
-#' of the sample for analysis began.\cr
-#' ActivityStartDateTime \tab POSIXct \tab Activity start date and time converted to POSIXct UTC.\cr
-#' ActivityEndDateTime \tab POSIXct \tab Activity end date and time converted to POSIXct UTC.\cr
-#' }
-#' * = elements only in NWIS
-#' + = elements only in STORET
+#' @return A data frame, the specific columns will depend on the "service" and/or "dataProfile".
 #'
 #' There are also several useful attributes attached to the data frame:
 #' \tabular{lll}{
@@ -289,8 +189,10 @@
 #'   service = "ResultDetectionQuantitationLimit"
 #' )
 #'
-#' pH <- readWQPdata(
-#'   statecode = "WI", countycode = "Dane", characteristicName = "pH",
+#' Phosphorus <- readWQPdata(
+#'   statecode = "WI", countycode = "Dane", 
+#'   characteristicName = "Phosphorus",
+#'   startDateLo = "2020-01-01",
 #'   convertType = FALSE
 #' )
 #' }
@@ -304,6 +206,13 @@ readWQPdata <- function(...,
   valuesList <- readWQPdots(...)
 
   service <- valuesList$service
+  
+  service <- match.arg(service, c("Result", "Station", "Activity",
+                                  "ActivityMetric", "SiteSummary",
+                                  "Project", "ProjectMonitoringLocationWeighting",
+                                  "ResultDetectionQuantitationLimit",
+                                  "BiologicalMetric", "Organization"),
+                       several.ok = FALSE)
 
   values <- sapply(valuesList$values, function(x) URLencode(x, reserved = TRUE))
 
