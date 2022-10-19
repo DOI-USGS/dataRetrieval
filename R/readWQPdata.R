@@ -8,16 +8,6 @@
 #' has a steeper learning curve. For a quick overview, scroll down to the Examples
 #' in this help file to see many query options. 
 #' 
-#' One way to figure out how to construct a WQP query is to go to the "Advanced" 
-#' form in the Water Quality Portal:
-#' \url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STEWARDS&providers=STORET}
-#' Use the form to discover what parameters are available. Once the query is 
-#' set in the form, scroll down to the "Query URL". You will see the parameters
-#' after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
-#' in the Characteristic Group dropdown, you will see characteristicType=Nutrient
-#' in the Query URL. The corresponding argument for dataRetrieval is
-#' characteristicType = "Nutrient". dataRetrieval users do not need to include
-#' mimeType, zip, and providers is optional (these arguments are picked automatically).
 #' 
 #' There are currently 10 "services" provided by the Water Quality Portal:
 #' \tabular{ll}{
@@ -38,7 +28,17 @@
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options.
 #' A list of arguments can also be supplied. For more information see the above 
 #' description for this help file. If no "service" argument is supplied, it
-#' will default to "Result".
+#' will default to "Result". One way to figure out how to construct a WQP query is to go to the "Advanced" 
+#' form in the Water Quality Portal:
+#' \url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STEWARDS&providers=STORET}
+#' Use the form to discover what parameters are available. Once the query is 
+#' set in the form, scroll down to the "Query URL". You will see the parameters
+#' after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
+#' in the Characteristic Group dropdown, you will see characteristicType=Nutrient
+#' in the Query URL. The corresponding argument for dataRetrieval is
+#' characteristicType = "Nutrient". dataRetrieval users do not need to include
+#' mimeType, zip, and providers is optional (these arguments are picked automatically).
+#' 
 #' @param querySummary logical to only return the number of records and unique sites that
 #' will be returned from this query. 
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the
