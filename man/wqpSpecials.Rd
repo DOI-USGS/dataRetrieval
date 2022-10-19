@@ -124,22 +124,16 @@ type <- "Stream"
 
 sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
 
-lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
-lakeSites_samples_chars <- whatWQPsamples(
-  siteType = "Lake, Reservoir, Impoundment",
-  statecode = "US:55", convertType = FALSE
-)
+lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
+                                    countycode = "US:55:025")
 }
 \donttest{
 
 type <- "Stream"
 
 sites <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
-lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment", statecode = "US:55")
-lakeSites_metrics_chars <- whatWQPmetrics(
-  siteType = "Lake, Reservoir, Impoundment",
-  statecode = "US:55", convertType = FALSE
-)
+lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment",
+                                    countycode = "US:55:025")
 }
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
@@ -156,6 +150,8 @@ sites <- whatWQPsites(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+whatWQPdata readWQPsummary
+
 whatNWISdata
 }
 \keyword{WQP}
