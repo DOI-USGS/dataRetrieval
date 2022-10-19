@@ -8,8 +8,17 @@ whatNWISsites(...)
 }
 \arguments{
 \item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html}
-for a complete list of options. A
-list (or lists) can also be supplied.}
+for a complete list of options. A list (or lists) can also be supplied.
+One way to figure out how to construct a WQP query is to go to the "Advanced" 
+form in the Water Quality Portal:
+\url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STEWARDS&providers=STORET}
+Use the form to discover what parameters are available. Once the query is 
+set in the form, scroll down to the "Query URL". You will see the parameters
+after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
+in the Characteristic Group dropdown, you will see characteristicType=Nutrient
+in the Query URL. The corresponding argument for dataRetrieval is
+characteristicType = "Nutrient". dataRetrieval users do not need to include
+mimeType, zip, and providers is optional (these arguments are picked automatically).}
 }
 \value{
 A data frame with at least the following columns:
