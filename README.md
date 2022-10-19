@@ -70,10 +70,10 @@ features <- findNLDI(
 Please consider reporting bugs and asking questions on the Issues page:
 <https://github.com/USGS-R/dataRetrieval/issues>
 
-Follow `@USGS_R` on Twitter for updates on USGS R packages:
+Follow `@USGS_DataSci` on Twitter for updates on USGS R packages:
 
 [![Twitter
-Follow](https://img.shields.io/twitter/follow/USGS_R.svg?style=social&label=Follow%20USGS_R)](https://twitter.com/USGS_R)
+Follow](https://img.shields.io/twitter/follow/USGS_DataSci.svg?style=social&label=Follow%20USGS_R)](https://twitter.com/USGS_DataSci)
 
 # Citing dataRetrieval
 
@@ -110,8 +110,6 @@ Resources are available primarily for maintenance and responding to user
 questions. Priorities on the development of new features are determined
 by the `dataRetrieval` development team.
 
-[![USGS](http://usgs-r.github.io/images/usgs.png)](https://www.usgs.gov/)
-
 # Installation
 
 To install the dataRetrieval package, you must be using R 3.0 or greater
@@ -119,17 +117,6 @@ and run the following command:
 
 ``` r
 install.packages("dataRetrieval")
-```
-
-To get cutting-edge changes, install from GitHub using the `remotes`
-packages:
-
-``` r
-library(remotes)
-install_github("USGS-R/dataRetrieval",
-  build_opts = c("--no-resave-data", "--no-manual"),
-  build_vignettes = TRUE
-)
 ```
 
 # Disclaimer
