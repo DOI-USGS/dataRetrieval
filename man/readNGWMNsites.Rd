@@ -26,10 +26,10 @@ Retrieve site data from the National Ground Water Monitoring Network \url{https:
 \donttest{
 # one site
 site <- "USGS.430427089284901"
-oneSite <- readNGWMNsites(siteNumbers = site)
+#oneSite <- readNGWMNsites(siteNumbers = site)
 
 # non-USGS site
 site <- "MBMG.103306"
-siteInfo <- readNGWMNsites(siteNumbers = site)
+#siteInfo <- readNGWMNsites(siteNumbers = site)
 }
 }
