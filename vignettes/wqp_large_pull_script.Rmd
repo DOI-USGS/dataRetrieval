@@ -26,7 +26,7 @@ opts_chunk$set(
 
 This article will walk through an example that uses the WQP summary service to limit the amount downloaded to only relevant data using a scripting approach. For large datasets, that can save a lot of time and ultimately reduce the complexity of subsequent data processing. 
 
-This article highlights a "scripting" approach, meaning it will only use basic R techniques. There is less of a learning curve in this approach, but also if something goes wrong, it is more challenging to re-run. The alternative is the pipeline approach, which is highlighted in the article [Large Data Pulls from Water Quality Portal - A Pipeline-Based Approach](articles/wqp_large_pull_targets.html).
+This article highlights a "scripting" approach, meaning it will only use basic R techniques. There is less of a learning curve in this approach, but also if something goes wrong, it is more challenging to re-run. The alternative is the pipeline approach, which is highlighted in the article [Large Data Pulls from Water Quality Portal - A Pipeline-Based Approach](wqp_large_pull_targets.html).
 
 See [https://waterdata.usgs.gov/blog/large_sample_pull/](https://waterdata.usgs.gov/blog/large_sample_pull/) for more detail, including analysis of the downloaded data.
 

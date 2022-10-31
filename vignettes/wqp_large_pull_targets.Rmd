@@ -34,7 +34,7 @@ across USGS data teams.
 
 In this post, we highlight an [example data
 pipeline](https://github.com/USGS-R/ds-pipelines-targets-example-wqp/) to increase the reusability, reproducibility, and efficiency of
-WQP data workflows. This post is an alternative method to the script-based workflow presented in [Large sample pulls using dataRetrieval](articles/wqp_large_pull_script.html). We've designed it with large-scale data pulls in mind, but this example pipeline will work at any spatial or temporal scale.
+WQP data workflows. This post is an alternative method to the script-based workflow presented in [Large Data Pulls from Water Quality Portal - A Script-Based Approach](wqp_large_pull_script.html). We've designed it with large-scale data pulls in mind, but this example pipeline will work at any spatial or temporal scale.
 
 ## Why targets?
 
