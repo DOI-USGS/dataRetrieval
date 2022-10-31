@@ -25,7 +25,7 @@ navbar:
   - text: Large Data Pull Examples
     menu:
     - text: Scripting Approach
-      href: articles/articles/wqp_large_pull_script.html
+      href: articles/wqp_large_pull_script.html
     - text: Pipeline Approach
       href: articles/wqp_large_pull_targets.html
   - text: Articles
