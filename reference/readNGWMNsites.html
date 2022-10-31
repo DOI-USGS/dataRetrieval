@@ -90,19 +90,11 @@ separated by a period or semicolon, e.g. <code>USGS.404159100494601</code>.</p><
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># one site</span></span></span>
 <span class="r-in"><span><span class="va">site</span> <span class="op">&lt;-</span> <span class="st">"USGS.430427089284901"</span></span></span>
-<span class="r-in"><span><span class="va">oneSite</span> <span class="op">&lt;-</span> <span class="fu">readNGWMNsites</span><span class="op">(</span>siteNumbers <span class="op">=</span> <span class="va">site</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> DISCLAIMER: NGWMN retrieval functions are still in flux,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>               and no future behavior or output is guaranteed</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Unknown content, returning NULL</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in attr(siteDF, "url") &lt;- url:</span> attempt to set an attribute on NULL</span>
+<span class="r-in"><span><span class="co">#oneSite &lt;- readNGWMNsites(siteNumbers = site)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># non-USGS site</span></span></span>
 <span class="r-in"><span><span class="va">site</span> <span class="op">&lt;-</span> <span class="st">"MBMG.103306"</span></span></span>
-<span class="r-in"><span><span class="va">siteInfo</span> <span class="op">&lt;-</span> <span class="fu">readNGWMNsites</span><span class="op">(</span>siteNumbers <span class="op">=</span> <span class="va">site</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> DISCLAIMER: NGWMN retrieval functions are still in flux,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>               and no future behavior or output is guaranteed</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Unknown content, returning NULL</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in attr(siteDF, "url") &lt;- url:</span> attempt to set an attribute on NULL</span>
+<span class="r-in"><span><span class="co">#siteInfo &lt;- readNGWMNsites(siteNumbers = site)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
