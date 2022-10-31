@@ -26,6 +26,9 @@
 #' paramINFO <- readNWISpCode(c("01075", "00060", "00931", NA))
 #' \donttest{
 #' all_codes <- readNWISpCode("all")
+#' 
+#' one_extra <- readNWISpCode(c("01075", "12345"))
+#' 
 #' }
 readNWISpCode <- function(parameterCd) {
   parameterCd.orig <- parameterCd
@@ -50,9 +53,10 @@ readNWISpCode <- function(parameterCd) {
     parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd, ]
 
     if (nrow(parameterData) != length(parameterCd)) {
-      if (nrow(parameterData) > 0) {
-        parameterCd_lookup <- parameterCd[!parameterCd %in% unique(parameterData$parameter_cd)]
-      }
+
+      parameterCd_lookup <- parameterCd[!parameterCd %in% unique(parameterData$parameter_cd)]
+      
+      
       if (length(parameterCd_lookup) == 1) {
         baseURL <- drURL("pCodeSingle", Access = pkg.env$access)
         subURL <- paste0(baseURL, "fmt=rdb&parm_nm_cd=", parameterCd_lookup)
@@ -67,8 +71,11 @@ readNWISpCode <- function(parameterCd) {
           parameter_units = temp_df$parm_unit,
           stringsAsFactors = FALSE
         )
-
-        parameterData <- rbind(parameterData, temp_df)
+        
+        if(nrow(temp_df) > 0){
+          parameterData <- rbind(parameterData, temp_df)
+        }
+        
         attr(parameterData, "url") <- subURL
       } else {
         temp_df <- importRDB1(fullURL, asDateTime = FALSE)
@@ -103,6 +110,7 @@ readNWISpCode <- function(parameterCd) {
   # order by parameterCd.orig
   if (!isTRUE(parameterCd.orig == "all")) {
     parameterData <- parameterData[match(parameterCd.orig, parameterData$parameter_cd), ]
+    parameterData$parameter_cd <- parameterCd.orig
   }
   return(parameterData)
 }
