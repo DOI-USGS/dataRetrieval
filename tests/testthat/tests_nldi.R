@@ -2,14 +2,8 @@ context("NLDI...")
 
 test_that("NLDI messageing NULL", {
   skip_on_cran()
-  xx <- findNLDI(
-    wqp = "TCEQMAIN-10016",
-    nav = "UM",
-    find = "nwissite",
-    distance_km = 2
-  )
-
-  expect_warning(findNLDI(
+  
+  expect_warning(xx <- findNLDI(
     wqp = "TCEQMAIN-10016",
     nav = "UM",
     find = "nwissite",
@@ -90,7 +84,9 @@ test_that("NLDI find sources...", {
   skip_on_cran()
 
   expect_equal(length(findNLDI(nwis = "11120000", nav = "UT", find = "wade")), 2)
-  expect_equal(length(findNLDI(nwis = "11120000", nav = c("UT", "UM"), find = c("nwis", "wade", "flowlines"))), 6)
+  expect_equal(length(suppressWarnings(findNLDI(nwis = "11120000", nav = c("UT", "UM"), 
+                               find = c("nwis", "wade", "flowlines")))), 
+               6)
 })
 
 test_that("sf not installed...", {
