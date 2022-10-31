@@ -58,7 +58,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-large-data-pull-examples">Large Data Pull Examples</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-large-data-pull-examples">
-    <a class="dropdown-item" href="../articles/articles/wqp_large_pull_script.html">Scripting Approach</a>
+    <a class="dropdown-item" href="../articles/wqp_large_pull_script.html">Scripting Approach</a>
     <a class="dropdown-item" href="../articles/wqp_large_pull_targets.html">Pipeline Approach</a>
   </div>
 </li>
@@ -112,7 +112,7 @@
 <h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
 </h2>
 <p>The Water Quality Portal (<a href="https://www.waterqualitydata.us/" class="external-link">WQP</a>) database aggregates and standardizes discrete water quality data from numerous federal, state, tribal, and other monitoring agencies. The WQP enables the access and retrieval of over 297,000,000 water quality records (Read et al. 2017) through web services and an application programming interface (API) that can be called programmatically using the <a href="https://cran.r-project.org/web/packages/dataRetrieval/vignettes/dataRetrieval.html" class="external-link"><code>dataRetrieval</code></a> package in R. Downloading data from the WQP represents a common pattern across USGS data teams.</p>
-<p>In this post, we highlight an <a href="https://github.com/USGS-R/ds-pipelines-targets-example-wqp/" class="external-link">example data pipeline</a> to increase the reusability, reproducibility, and efficiency of WQP data workflows. This post is an alternative method to the script-based workflow presented in <a href="articles/wqp_large_pull_script.html">Large sample pulls using dataRetrieval</a>. We’ve designed it with large-scale data pulls in mind, but this example pipeline will work at any spatial or temporal scale.</p>
+<p>In this post, we highlight an <a href="https://github.com/USGS-R/ds-pipelines-targets-example-wqp/" class="external-link">example data pipeline</a> to increase the reusability, reproducibility, and efficiency of WQP data workflows. This post is an alternative method to the script-based workflow presented in <a href="wqp_large_pull_script.html">Large Data Pulls from Water Quality Portal - A Script-Based Approach</a>. We’ve designed it with large-scale data pulls in mind, but this example pipeline will work at any spatial or temporal scale.</p>
 </div>
 <div class="section level2">
 <h2 id="why-targets">Why targets?<a class="anchor" aria-label="anchor" href="#why-targets"></a>
