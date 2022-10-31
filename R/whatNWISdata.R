@@ -128,8 +128,8 @@ whatNWISdata <- function(..., convertType = TRUE) {
   }
 
   if (nrow(SiteFile) > 0 && convertType) {
-    SiteFile$begin_date <- as.Date(lubridate::parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!")))
-    SiteFile$end_date <- as.Date(lubridate::parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!")))
+    SiteFile$begin_date <- as.Date(suppressWarnings(lubridate::parse_date_time(SiteFile$begin_date, c("Ymd", "mdY", "Y!"))))
+    SiteFile$end_date <- as.Date(suppressWarnings(lubridate::parse_date_time(SiteFile$end_date, c("Ymd", "mdY", "Y!"))))
   }
 
   return(SiteFile)
