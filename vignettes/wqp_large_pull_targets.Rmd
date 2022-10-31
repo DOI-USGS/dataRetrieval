@@ -1,10 +1,13 @@
 ---
-title: "Large Data Pulls from Water Quality Portal Using `dataRetrieval` - A Pipeline-Based Approach"
-author: "Lauren Koenig (she/her), Lindsay Platt (she/her), Julie Padilla (she/her)"
+title: "Large Data Pulls from Water Quality Portal - A Pipeline-Based Approach"
+author: 
+  - "Lauren Koenig (she/her)"
+  - "Lindsay Platt (she/her)"
+  - "Julie Padilla (she/her)"
 date: "2022-09-27"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Large Data Pulls from Water Quality Portal Using `dataRetrieval` - A Pipeline-Based Approach}
+  %\VignetteIndexEntry{Large Data Pulls from Water Quality Portal - A Pipeline-Based Approach}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -31,7 +34,7 @@ across USGS data teams.
 
 In this post, we highlight an [example data
 pipeline](https://github.com/USGS-R/ds-pipelines-targets-example-wqp/) to increase the reusability, reproducibility, and efficiency of
-WQP data workflows. This post is an alternative method to the script-based workflow presented in [Large sample pulls using dataRetrieval](https://waterdata.usgs.gov/blog/large_sample_pull/). We've designed it with large-scale data pulls in mind, but this example pipeline will work at any spatial or temporal scale.
+WQP data workflows. This post is an alternative method to the script-based workflow presented in [Large sample pulls using dataRetrieval](articles/wqp_large_pull_script.html). We've designed it with large-scale data pulls in mind, but this example pipeline will work at any spatial or temporal scale.
 
 ## Why targets?
 
