@@ -87,13 +87,23 @@ because it allows for other agencies rather than the USGS.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>...</dt>
 <dd><p>see <a href="https://www.waterqualitydata.us/webservices_documentation" class="external-link">https://www.waterqualitydata.us/webservices_documentation</a> for a complete list of options.
-A list of arguments can also be supplied.</p></dd>
+A list of arguments can also be supplied. For more information see the above 
+description for this help file. If no "service" argument is supplied, it
+will default to "Result". One way to figure out how to construct a WQP query is to go to the "Advanced" 
+form in the Water Quality Portal:
+<a href="https://www.waterqualitydata.us/#mimeType=csv&amp;providers=NWIS&amp;providers=STEWARDS&amp;providers=STORET" class="external-link">https://www.waterqualitydata.us/#mimeType=csv&amp;providers=NWIS&amp;providers=STEWARDS&amp;providers=STORET</a>
+Use the form to discover what parameters are available. Once the query is 
+set in the form, scroll down to the "Query URL". You will see the parameters
+after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
+in the Characteristic Group dropdown, you will see characteristicType=Nutrient
+in the Query URL. The corresponding argument for dataRetrieval is
+characteristicType = "Nutrient". dataRetrieval users do not need to include
+mimeType, zip, and providers is optional (these arguments are picked automatically).</p></dd>
 
 
 <dt>querySummary</dt>
-<dd><p>logical to ONLY return the number of records and unique sites that
-will be returned from this query. This argument is not supported via the
-combined list from the ... argument</p></dd>
+<dd><p>logical to only return the number of records and unique sites that
+will be returned from this query.</p></dd>
 
 
 <dt>tz</dt>
@@ -124,74 +134,17 @@ numerics based on a standard algorithm. If false, everything is returned as a ch
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data frame with at least the following columns:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>OrganizationIdentifier</td><td>character</td><td>A designator used to uniquely
-identify a unique business establishment within a context.</td></tr><tr><td>OrganizationFormalName</td><td>character</td><td>The legal designator (i.e. formal name) of an organization.</td></tr><tr><td>ActivityIdentifier</td><td>character</td><td>Designator that uniquely identifies an
-activity within an organization.</td></tr><tr><td>ActivityTypeCode</td><td>character</td><td>The text describing the type of activity.</td></tr><tr><td>ActivityMediaName</td><td>character</td><td>Name or code indicating the environmental
-medium where the sample was taken.</td></tr><tr><td>ActivityMediaSubdivisionName</td><td>character</td><td>Name or code indicating the
-environmental matrix as a subdivision of the sample media.</td></tr><tr><td>ActivityStartDate</td><td>character</td><td>The calendar date on which the field activity is started.</td></tr><tr><td>ActivityStartTime.Time</td><td>character</td><td>The time of day that is reported
-when the field activity began, based on a 24-hour timescale.</td></tr><tr><td>ActivityStartTime.TimeZoneCode</td><td>character</td><td>The time zone for which the
-time of day is reported. Any of the longitudinal divisions of the earth's surface
-in which a standard time is kept.</td></tr><tr><td>ActivityEndDate</td><td>character</td><td>The calendar date when the field activity is completed.</td></tr><tr><td>ActivityEndTime.Time</td><td>character</td><td>The time of day that is reported when the
- field activity ended, based on a 24-hour timescale.</td></tr><tr><td>ActivityEndTime.TimeZoneCode</td><td>character</td><td>The time zone for which the time
-of day is reported. Any of the longitudinal divisions of the earth's surface in which a standard time is kept.</td></tr><tr><td>ActivityDepthHeightMeasure.MeasureValue</td><td>character</td><td>A measurement of the
-vertical location (measured from a reference point) at which an activity occurred.
-Measure value is given in the units stored in ActivityDepthHeightMeasure.MeasureUnitCode.</td></tr><tr><td>ActivityDepthHeightMeasure.MeasureUnitCode</td><td>character</td><td>The code that
-represents the unit for measuring the item.</td></tr><tr><td>ActivityDepthAltitudeReferencePointText</td><td>character</td><td>The reference used
-to indicate the datum or reference used to establish the depth/altitude of an activity.</td></tr><tr><td>ActivityTopDepthHeightMeasure.MeasureValue</td><td>character</td><td>A measurement of
-the upper vertical location of a vertical location range (measured from a reference point)
-at which an activity occurred. Measure value is given in the units stored in
-ActivityTopDepthHeightMeasure.MeasureUnitCode.</td></tr><tr><td>ActivityTopDepthHeightMeasure.MeasureUnitCode</td><td>character</td><td>The code that
-represents the unit for measuring the item.</td></tr><tr><td>ActivityBottomDepthHeightMeasure.MeasureValue</td><td>character</td><td>A measurement of
-the lower vertical location of a vertical location range (measured from a reference point)
-at which an activity occurred. Measure value is given in the units stored in
-ActivityBottomDepthHeightMeasure.MeasureUnitCode.</td></tr><tr><td>ActivityBottomDepthHeightMeasure.MeasureUnitCode</td><td>character</td><td>The code that
-represents the unit for measuring the item.</td></tr><tr><td>ProjectIdentifier</td><td>character</td><td>A designator used to uniquely identify a data
-collection project within a context of an organization.</td></tr><tr><td>ActivityConductingOrganizationText</td><td>character</td><td>A name of the Organization
-conducting an activity.</td></tr><tr><td>MonitoringLocationIdentifier</td><td>character</td><td>A designator used to describe
-the unique name, number, or code assigned to identify the monitoring location.</td></tr><tr><td>ActivityCommentText</td><td>character</td><td>General comments concerning the activity.</td></tr><tr><td>SampleAquifer *</td><td>character</td><td>A code that designates the aquifer associated
-with groundwater samples.</td></tr><tr><td>HydrologicCondition *</td><td>character</td><td>Hydrologic condition is the hydrologic
-condition that is represented by the sample collected (i.e. ? normal, falling, rising, peak stage).</td></tr><tr><td>HydrologicEvent *</td><td>character</td><td>A hydrologic event that is represented by
-the sample collected (i.e. - storm, drought, snowmelt).</td></tr><tr><td>SampleCollectionMethod.MethodIdentifier</td><td>character</td><td>The identification
-number or code assigned by the method publisher.</td></tr><tr><td>SampleCollectionMethod.MethodIdentifierContext</td><td>character</td><td>Identifies the
-source or data system that created or defined the identifier.</td></tr><tr><td>SampleCollectionMethod.MethodName</td><td>character</td><td>The title that appears on
-the method from the method publisher.</td></tr><tr><td>SampleCollectionEquipmentName</td><td>character</td><td>The name for the equipment used in collecting the sample.</td></tr><tr><td>ResultDetectionConditionText</td><td>character</td><td>The textual descriptor of a result.</td></tr><tr><td>CharacteristicName</td><td>character</td><td>The object, property, or substance which is
-evaluated or enumerated by either a direct field measurement, a direct field observation,
-or by laboratory analysis of material collected in the field.</td></tr><tr><td>ResultSampleFractionText</td><td>character</td><td>The text name of the portion of the
-sample associated with results obtained from a physically-partitioned sample.</td></tr><tr><td>ResultMeasureValue</td><td>numeric</td><td>The reportable measure of the result for the
-chemical, microbiological or other characteristic being analyzed. Measure value is
-given in the units stored in ResultMeasure.MeasureUnitCode.</td></tr><tr><td>MeasureQualifierCode</td><td>character</td><td>A code used to identify any qualifying
-issues that affect the results.</td></tr><tr><td>ResultMeasure.MeasureUnitCode</td><td>character</td><td>The code that represents the unit
-for measuring the item.</td></tr><tr><td>ResultStatusIdentifier</td><td>character</td><td>Indicates the acceptability of the result
-with respect to QA/QC criteria.</td></tr><tr><td>StatisticalBaseCode</td><td>character</td><td>The code for the method used to calculate derived results.</td></tr><tr><td>ResultValueTypeName</td><td>character</td><td>A name that qualifies the process which was
-used in the determination of the result value (e.g., actual, estimated, calculated).</td></tr><tr><td>ResultWeightBasisText</td><td>character</td><td>The name that represents the form of the
-sample or portion of the sample which is associated with the result value (e.g.,
-wet weight, dry weight, ash-free dry weight).</td></tr><tr><td>ResultTimeBasisText</td><td>character</td><td>The period of time (in days) over which
-a measurement was made. For example, BOD can be measured as 5 day or 20 day BOD.</td></tr><tr><td>ResultTemperatureBasisText</td><td>character</td><td>The name that represents the controlled
-temperature at which the sample was maintained during analysis, e.g. 25 deg BOD analysis.</td></tr><tr><td>ResultParticleSizeBasisText</td><td>character</td><td>User defined free text describing the
-particle size class for which the associated result is defined.</td></tr><tr><td>PrecisionValue</td><td>character</td><td>A measure of mutual agreement among individual
-measurements of the same property usually under prescribed similar conditions.</td></tr><tr><td>ResultCommentText</td><td>character</td><td>Free text with general comments concerning
-the result.</td></tr><tr><td>USGSPCode *</td><td>character</td><td>5-digit number used in the US Geological Survey
-computerized data system, National Water Information System (NWIS), to uniquely
-identify a specific constituent.</td></tr><tr><td>ResultDepthHeightMeasure.MeasureValue +</td><td>character</td><td>A measurement of the
-vertical location (measured from a reference point) at which a result occurred.</td></tr><tr><td>ResultDepthHeightMeasure.MeasureUnitCode +</td><td>character</td><td>The code that
-represents the unit for measuring the item.</td></tr><tr><td>ResultDepthAltitudeReferencePointText +</td><td>character</td><td>The reference used
-to indicate the datum or reference used to establish the depth/altitude of a result.</td></tr><tr><td>SubjectTaxonomicName</td><td>character</td><td>The name of the organism from which a tissue sample was taken.</td></tr><tr><td>SampleTissueAnatomyName  *</td><td>character</td><td>The name of the anatomy from which
-a tissue sample was taken.</td></tr><tr><td>ResultAnalyticalMethod.MethodIdentifier</td><td>character</td><td>The identification number
-or code assigned by the method publisher.</td></tr><tr><td>ResultAnalyticalMethod.MethodIdentifierContext</td><td>character</td><td>Identifies the
-source or data system that created or defined the identifier.</td></tr><tr><td>ResultAnalyticalMethod.MethodName</td><td>character</td><td>The title that appears on
-the method from the method publisher.</td></tr><tr><td>MethodDescriptionText *</td><td>character</td><td>A brief summary that provides general
-information about the method.</td></tr><tr><td>LaboratoryName</td><td>character</td><td>The name of Lab responsible for the result.</td></tr><tr><td>AnalysisStartDate</td><td>character</td><td>The calendar date on which the analysis began.</td></tr><tr><td>ResultLaboratoryCommentText</td><td>character</td><td>Remarks which further describe the
-laboratory procedures which produced the result.</td></tr><tr><td>DetectionQuantitationLimitTypeName</td><td>character</td><td>Text describing the type of
-detection or quantitation level used in the analysis of a characteristic.</td></tr><tr><td>DetectionQuantitationLimitMeasure.MeasureValue</td><td>numeric</td><td>Constituent
-concentration that, when processed through the complete method, produces a signal
-that is statistically different from a blank. Measure value is given in the units
-stored in DetectionQuantitationLimitMeasure.MeasureUnitCode.</td></tr><tr><td>DetectionQuantitationLimitMeasure.MeasureUnitCode</td><td>character</td><td>The code that
-represents the unit for measuring the item.</td></tr><tr><td>PreparationStartDate</td><td>character</td><td>The calendar date when the preparation/extraction
-of the sample for analysis began.</td></tr><tr><td>ActivityStartDateTime</td><td>POSIXct</td><td>Activity start date and time converted to POSIXct UTC.</td></tr><tr><td>ActivityEndDateTime</td><td>POSIXct</td><td>Activity end date and time converted to POSIXct UTC.</td></tr></table><p>* = elements only in NWIS
-+ = elements only in STORET</p>
+<p>A data frame, the specific columns will depend on the "service" and/or "dataProfile".</p>
 
 
 <p>There are also several useful attributes attached to the data frame:</p><table class="table table"><tr><td>Name</td><td>Type</td><td>Description</td></tr><tr><td>url</td><td>character</td><td>The url used to generate the data</td></tr><tr><td>siteInfo</td><td>data.frame</td><td>A data frame containing information on the requested sites</td></tr><tr><td>variableInfo</td><td>data.frame</td><td>A data frame containing information on the requested parameters</td></tr><tr><td>queryTime</td><td>POSIXct</td><td>The time the data was returned</td></tr></table></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>This function uses ... as a query input, which can be very flexible, but also 
+has a steeper learning curve. For a quick overview, scroll down to the Examples
+in this help file to see many query options.</p>
+
+<p>There are currently 10 "services" provided by the Water Quality Portal:</p><table class="table table"><tr><td>Name</td><td>Base URL</td></tr><tr><td>Result (default)</td><td>"https://www.waterqualitydata.us/data/Result/search"</td></tr><tr><td>Station</td><td>"https://www.waterqualitydata.us/data/Station/search"</td></tr><tr><td>Activity</td><td>"https://www.waterqualitydata.us/data/Activity/search"</td></tr><tr><td>ActivityMetric</td><td>"https://www.waterqualitydata.us/data/ActivityMetric/search"</td></tr><tr><td>SiteSummary</td><td>"https://www.waterqualitydata.us/data/summary/monitoringLocation/search"</td></tr><tr><td>Project</td><td>"https://www.waterqualitydata.us/data/Project/search"</td></tr><tr><td>ProjectMonitoringLocationWeighting</td><td>"https://www.waterqualitydata.us/data/ProjectMonitoringLocationWeighting/search"</td></tr><tr><td>ResultDetectionQuantitationLimit</td><td>"https://www.waterqualitydata.us/data/ResultDetectionQuantitationLimit/search"</td></tr><tr><td>BiologicalMetric</td><td>"https://www.waterqualitydata.us/data/BiologicalMetric/search"</td></tr><tr><td>Organization</td><td>"https://www.waterqualitydata.us/data/Organization/search"</td></tr></table></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -318,12 +271,12 @@ of the sample for analysis began.</td></tr><tr><td>ActivityStartDateTime</td><td
 <span class="r-in"><span>  service <span class="op">=</span> <span class="st">"ResultDetectionQuantitationLimit"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">pH</span> <span class="op">&lt;-</span> <span class="fu">readWQPdata</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  statecode <span class="op">=</span> <span class="st">"WI"</span>, countycode <span class="op">=</span> <span class="st">"Dane"</span>, characteristicName <span class="op">=</span> <span class="st">"pH"</span>,</span></span>
+<span class="r-in"><span><span class="va">Phosphorus</span> <span class="op">&lt;-</span> <span class="fu">readWQPdata</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  statecode <span class="op">=</span> <span class="st">"WI"</span>, countycode <span class="op">=</span> <span class="st">"Dane"</span>, </span></span>
+<span class="r-in"><span>  characteristicName <span class="op">=</span> <span class="st">"Phosphorus"</span>,</span></span>
+<span class="r-in"><span>  startDateLo <span class="op">=</span> <span class="st">"2020-01-01"</span>,</span></span>
 <span class="r-in"><span>  convertType <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error 1 in extracting from zip file</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in enc2utf8(path):</span> argument is not a character vector</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
