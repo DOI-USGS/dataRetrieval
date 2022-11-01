@@ -67,7 +67,7 @@ covertests:
     - getready
     - buildcheck
   script:
-    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
+    - R -e 'x <- covr::package_coverage(line_exclusions = list("tests/testthat/test_nldi.R" = c(3:23))); covr::to_cobertura(x); x; '
   artifacts:
     reports:
       coverage_report:
