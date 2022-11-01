@@ -16,7 +16,8 @@ test_that("NLDI messageing NULL", {
     distance_km = 2
   ))
 
-  expect_true(nrow(xx) == 1)
+  expect_true(class(xx) == "list")
+  expect_true(nrow(xx[[1]]) == 1)
 })
 
 
@@ -39,29 +40,29 @@ test_that("NLDI starting sources...", {
   skip_on_cran()
 
   # LINESTRING GEOMETERY
-  expect_equal(sum(names(findNLDI(comid = 101)) %in%
+  expect_equal(sum(names(findNLDI(comid = 101)$origin) %in%
     c("sourceName", "identifier", "comid", "geometry")), 4)
   # POINT GEOMETERY
-  expect_true(all(names(findNLDI(nwis = "11120000")) %in%
+  expect_true(all(names(findNLDI(nwis = "11120000")$origin) %in%
     c(
       "sourceName", "identifier", "comid",
       "name", "reachcode", "measure",
       "X", "Y", "geometry"
     )))
   # COMID
-  expect_equal(findNLDI(comid = 101)$sourceName, "NHDPlus comid")
+  expect_equal(findNLDI(comid = 101)$origin$sourceName, "NHDPlus comid")
   # NWIS
-  expect_equal(findNLDI(nwis = "11120000")$sourceName, "NWIS Surface Water Sites")
+  expect_equal(findNLDI(nwis = "11120000")$origin$sourceName, "NWIS Surface Water Sites")
   # WQP
-  expect_equal(findNLDI(wqp = "USGS-04024315")$sourceName, "Water Quality Portal")
+  expect_equal(findNLDI(wqp = "USGS-04024315")$origin$sourceName, "Water Quality Portal")
   # LOCATION
-  expect_equal(findNLDI(location = c(-115, 40))$sourceName, "NHDPlus comid")
+  expect_equal(findNLDI(location = c(-115, 40))$origin$sourceName, "NHDPlus comid")
   # ERROR: LOCATION COORDINATES FLIPPED
   expect_error(findNLDI(location = c(40, -115)))
   # GENERAL START: STABLE
-  expect_equal(findNLDI(origin = list("comid" = 101))$sourceName, "NHDPlus comid")
+  expect_equal(findNLDI(origin = list("comid" = 101))$origin$sourceName, "NHDPlus comid")
   # GENERAL START: NON-STABLE
-  expect_equal(findNLDI(origin = list("wade" = "NMwr_S148023"))$sourceName, "Water Data Exchange 2.0 Sites")
+  expect_equal(findNLDI(origin = list("wade" = "NMwr_S148023"))$origin$sourceName, "Water Data Exchange 2.0 Sites")
   # ERROR: TWO STARTS
   expect_error(findNLDI(nwis = 1000, comid = 101))
   # NON EXISTING SITE
@@ -72,11 +73,11 @@ test_that("NLDI navigation sources...", {
   skip_on_cran()
 
   # UPPER TRIBUTARY
-  expect_equal(length(findNLDI(nwis = "11120000", nav = "UT")), 2)
+  expect_equal(length(findNLDI(nwis = "11120000", nav = "UT")$UT_flowlines), 2)
   # UPPER MAIN
-  expect_equal(length(findNLDI(nwis = "11120000", nav = "UM")), 2)
+  expect_equal(length(findNLDI(nwis = "11120000", nav = "UM")$UM_flowlines), 2)
   # DOWNSTREAM MAIN
-  expect_equal(length(findNLDI(nwis = "11120000", nav = "DM")), 2)
+  expect_equal(length(findNLDI(nwis = "11120000", nav = "DM")$DM_flowlines), 2)
   # MULTI-REQUEST
   expect_equal(length(findNLDI(nwis = "11120000", nav = c("UT", "UM"))), 3)
   # ERRORS: Bad NAV REQUEST
@@ -137,4 +138,27 @@ test_that("sf points", {
   p2 <- st_sfc(st_point(c(-119.8458, 34.4146)), crs = 4326)
   expect_equal(findNLDI(location = p2), findNLDI(location = sf::st_as_sf(p2)))
   expect_error(findNLDI(location = st_buffer(p2, .01)))
+})
+
+
+test_that("warn_flag", {
+  
+  expect_warning(
+    findNLDI(wqp = "TCEQMAIN-10016",
+             nav = "UM",
+             find = "nwissite",
+             distance_km = 2,
+             no_sf = TRUE,
+             warn = FALSE),
+    regexp = NA
+  )
+
+  expect_warning(
+  findNLDI(wqp = "TCEQMAIN-10016",
+           nav = "UM",
+           find = "nwissite",
+           distance_km = 2,
+           no_sf = TRUE,
+           warn = TRUE)
+  )
 })
