@@ -14,7 +14,8 @@ findNLDI(
   nav = NULL,
   find = c("flowlines"),
   distance_km = 100,
-  no_sf = FALSE
+  no_sf = FALSE,
+  warn = TRUE
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ kilometers (default = 100)}
 
 \item{no_sf}{if available, should `sf` be used for parsing,
 defaults to `TRUE` if `sf` is locally installed}
+
+\item{warn}{(default TRUE) should warnings be printed}
 }
 \value{
 a list of data.frames if sf is not installed, a list of sf objects if it is
