@@ -43,6 +43,7 @@ find_good_names <- function(input, type) {
 #' \donttest{
 #' get_nldi_sources()
 #' }
+
 get_nldi_sources <- function() {
   res <-
     httr::RETRY("GET",
@@ -84,10 +85,11 @@ get_nldi_sources <- function() {
 #' get_nldi(url = paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
 #' get_nldi(paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
 #' }
-#'
-get_nldi <- function(url, type = "", use_sf = FALSE) {
+
+get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
   # Query
-  res <- httr::RETRY("GET", url, times = 3, pause_cap = 60)
+
+  res <- httr::RETRY("GET", url = url, times = 3, pause_cap = 60, quiet = TRUE)
 
   # If successful ...
   if (res$status_code == 200) {
@@ -95,7 +97,11 @@ get_nldi <- function(url, type = "", use_sf = FALSE) {
     d <- httr::content(res, "text", encoding = "UTF8")
 
     if (d == "") {
-      warning("No data returned for: ", url, call. = FALSE)
+      
+      if(warn){
+        warning("No data returned for: ", url, call. = FALSE)
+      }
+      
       return(NULL)
     }
 
@@ -117,7 +123,9 @@ get_nldi <- function(url, type = "", use_sf = FALSE) {
       )
 
       if (nrow(tmp) == 0) {
-        warning("No data returned for: ", url, call. = FALSE)
+        if(warn){
+          warning("No data returned for: ", url, call. = FALSE)
+        }
         return(NULL)
       }
 
@@ -148,7 +156,9 @@ get_nldi <- function(url, type = "", use_sf = FALSE) {
       good_name <- find_good_names(input, type)
 
       if (is.null(input) && type != "basin") {
-        warning("No data returned for: ", url, call. = FALSE)
+        if(warn){
+          warning("No data returned for: ", url, call. = FALSE)
+        }
         tmp <- NULL
       } else {
         # if of type POINT at the X,Y coordinates as columns
@@ -179,6 +189,7 @@ get_nldi <- function(url, type = "", use_sf = FALSE) {
 #' @return the input object with potentially modified identifiers
 #' @keywords nldi internal
 #' @noRd
+
 clean_nwis_ids <- function(tmp) {
   # If data.frame, and of type NWIS, then strip "USGS-" from identifiers
   if (is.data.frame(tmp)) {
@@ -201,7 +212,7 @@ clean_nwis_ids <- function(tmp) {
 #' \donttest{
 #' valid_ask(all = get_nldi_sources(), "nwis")
 #' }
-#'
+
 valid_ask <- function(all, type) {
   # those where the requested pattern is included in a nldi_source ...
   # means we will catch nwis - not just nwissite ...
@@ -254,6 +265,7 @@ valid_ask <- function(all, type) {
 #' kilometers (default = 100)
 #' @param no_sf if available, should `sf` be used for parsing,
 #' defaults to `TRUE` if `sf` is locally installed
+#' @param warn (default TRUE) should warnings be printed
 #' @return a list of data.frames if sf is not installed, a list of sf objects if it is
 #' @export
 #' @keywords nldi
@@ -299,7 +311,7 @@ valid_ask <- function(all, type) {
 #' ## Limit search to 50 km
 #' findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
 #' }
-#'
+
 findNLDI <- function(comid = NULL,
                      nwis = NULL,
                      wqp = NULL,
@@ -309,7 +321,8 @@ findNLDI <- function(comid = NULL,
                      nav = NULL,
                      find = c("flowlines"),
                      distance_km = 100,
-                     no_sf = FALSE) {
+                     no_sf = FALSE,
+                     warn = TRUE) {
 
   # Should sf be used? Both no_sf and pkg.env must agree
   use_sf <- all(pkg.env$local_sf, !no_sf)
@@ -410,7 +423,7 @@ findNLDI <- function(comid = NULL,
       navigate,
       paste0,
       paste0("/", find),
-      paste0("?f=json&distance= ", distance_km)
+      paste0("?f=json&distance=", distance_km)
     )
   }
 
@@ -447,7 +460,8 @@ findNLDI <- function(comid = NULL,
     get_nldi(
       url = search$url[x],
       type = search$type[x],
-      use_sf = use_sf
+      use_sf = use_sf,
+      warn = warn
     )
   })
 
@@ -458,9 +472,11 @@ findNLDI <- function(comid = NULL,
   shp <- tc(lapply(shp, clean_nwis_ids))
 
   # dont return list for one length elements
-  if (length(shp) == 1) {
-    shp <- shp[[1]]
-  }
+  # Tue Nov  1 08:48:29 2022 ------------------------------
+  # Commented out
+  # if (length(shp) == 1) {
+  #   shp <- shp[[1]]
+  # }
 
   return(shp)
 }
