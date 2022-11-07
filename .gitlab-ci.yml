@@ -1,4 +1,4 @@
-image: artifactory.wma.chs.usgs.gov/docker-official-mirror/rocker/geospatial:latest
+image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/rocker/geospatial:latest
 
 include:
   - template: Code-Quality.gitlab-ci.yml
@@ -26,7 +26,7 @@ getready:
   stage: getready
   script:
     - mkdir -p $R_LIBS_USER
-    - Rscript -e "install.packages(c('devtools','pkgdown', 'kableExtra','covr', 'connectapi', 'patchwork', 'rsconnect'))"
+    - Rscript -e "install.packages(c('stringi', 'devtools','pkgdown', 'connectapi', 'patchwork'))"
     - Rscript -e "devtools::install_deps(dependencies = TRUE, quiet = TRUE)"
   cache:
     paths:
@@ -67,8 +67,7 @@ covertests:
     - getready
     - buildcheck
   script:
-    - R -e 'covr::package_coverage'
-    - R -e 'x <- covr::package_coverage(type = "none"); covr::to_cobertura(x); x; '
+    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
   artifacts:
     reports:
       coverage_report:
