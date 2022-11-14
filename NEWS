@@ -1,7 +1,7 @@
 dataRetrieval 2.7.12
 ===================
 * Updated documentation in readWQPdata
-* 
+* Updates to how NLDI functions handle no data
 
 dataRetrieval 2.7.11
 ==================
