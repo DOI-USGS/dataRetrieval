@@ -9,7 +9,7 @@ test_that("NLDI messageing NULL", {
     distance_km = 2,
     warn = FALSE
   )
-
+  
   expect_warning(findNLDI(
     wqp = "TCEQMAIN-10016",
     nav = "UM",
@@ -17,7 +17,7 @@ test_that("NLDI messageing NULL", {
     distance_km = 2, 
     warn = TRUE
   ))
-
+  
   expect_true(class(xx) == "list")
   expect_true(nrow(xx[[1]]) == 1)
 })
@@ -41,17 +41,17 @@ xx <- findNLDI(
 
 test_that("NLDI starting sources...", {
   skip_on_cran()
-
+  
   # LINESTRING GEOMETERY
   expect_equal(sum(names(findNLDI(comid = 101, warn = FALSE)$origin) %in%
-    c("sourceName", "identifier", "comid", "geometry")), 4)
+                     c("sourceName", "identifier", "comid", "geometry")), 4)
   # POINT GEOMETERY
   expect_true(all(names(findNLDI(nwis = "11120000", warn = FALSE)$origin) %in%
-    c(
-      "sourceName", "identifier", "comid",
-      "name", "reachcode", "measure",
-      "X", "Y", "geometry"
-    )))
+                    c(
+                      "sourceName", "identifier", "comid",
+                      "name", "reachcode", "measure",
+                      "X", "Y", "geometry"
+                    )))
   # COMID
   expect_equal(findNLDI(comid = 101, warn = FALSE)$origin$sourceName, "NHDPlus comid")
   # NWIS
@@ -74,7 +74,7 @@ test_that("NLDI starting sources...", {
 
 test_that("NLDI navigation sources...", {
   skip_on_cran()
-
+  
   # UPPER TRIBUTARY
   expect_equal(length(findNLDI(nwis = "11120000", nav = "UT", warn = FALSE)$UT_flowlines), 2)
   # UPPER MAIN
@@ -92,14 +92,14 @@ test_that("NLDI navigation sources...", {
 
 test_that("NLDI find sources...", {
   skip_on_cran()
-
+  
   expect_equal(length(findNLDI(nwis = "11120000", nav = "UT", find = "wade", warn = FALSE)), 2)
   expect_equal(length(findNLDI(nwis = "11120000", nav = c("UT", "UM"), find = c("nwis", "wade", "flowlines"), warn = FALSE)), 6)
 })
 
 test_that("sf not installed...", {
   skip_on_cran()
-
+  
   expect_true(!"geometry" %in% findNLDI(nwis = "11120000", no_sf = TRUE, warn = FALSE)[[1]])
   expect_equal(class(findNLDI(nwis = "11120000", nav = "UT", find = c("nwis"), no_sf = TRUE, warn = FALSE)[[2]]), "data.frame")
   expect_true(c("X") %in% names(findNLDI(nwis = "11120000", nav = "UT", find = c("nwis"), no_sf = TRUE, warn = FALSE)[[2]]))
@@ -108,7 +108,7 @@ test_that("sf not installed...", {
 
 test_that("Distance...", {
   skip_on_cran()
-
+  
   full <- findNLDI(comid = 101, nav = "UT", find = "nwis", distance_km = 9999, warn = FALSE)
   part <- findNLDI(comid = 101, nav = "UT", find = "nwis", warn = FALSE)
   expect_true(nrow(full$UT_nwissite) > nrow(part$UT_nwissite))
@@ -116,7 +116,7 @@ test_that("Distance...", {
 
 test_that("basin", {
   skip_on_cran()
-
+  
   xx <- findNLDI(comid = 101, nav = "UT", find = "basin", warn = FALSE)
   xx2 <- findNLDI(comid = 101, nav = "UT", find = "basin", no_sf = TRUE , warn = FALSE)
   expect_true(sf::st_geometry_type(xx$basin) == "POLYGON")
@@ -126,7 +126,7 @@ test_that("basin", {
 
 test_that("ignore flowlines", {
   skip_on_cran()
-
+  
   xx <- findNLDI(comid = 101, nav = "DM", find = c("nwis", "flowlines"), warn = FALSE)
   xx2 <- findNLDI(comid = 101, nav = "DM", find = "nwis", warn = FALSE)
   expect_gt(length(xx), length(xx2))
@@ -155,13 +155,13 @@ test_that("warn_flag", {
              warn = FALSE),
     regexp = NA
   )
-
+  
   expect_warning(
-  findNLDI(wqp = "TCEQMAIN-10016",
-           nav = "UM",
-           find = "nwissite",
-           distance_km = 2,
-           no_sf = TRUE,
-           warn = TRUE)
+    findNLDI(wqp = "TCEQMAIN-10016",
+             nav = "UM",
+             find = "nwissite",
+             distance_km = 2,
+             no_sf = TRUE,
+             warn = TRUE)
   )
 })

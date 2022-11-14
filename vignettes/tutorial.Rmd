@@ -637,7 +637,7 @@ Similar to WQP, the NGWMN brings groundwater data from multiple sources into a s
 
 ## Network Linked Data Index (NLDI)
 
-The NLDI provides a information backbone to navigate the NHDPlusV2 network and discover features indexed to the network. For an overview of the NLDI, see: [http://usgs-r.github.io/dataRetrieval/articles/nldi.html](http://usgs-r.github.io/dataRetrieval/articles/nldi.html)
+The NLDI provides a information backbone to navigate the NHDPlusV2 network and discover features indexed to the network. For an overview of the NLDI, see: [https://rconnect.usgs.gov/dataRetrieval/articles/nldi.html](https://rconnect.usgs.gov/dataRetrieval/articles/nldi.html)
 
 There is currently one function in dataRetrieval for NLDI: 
 

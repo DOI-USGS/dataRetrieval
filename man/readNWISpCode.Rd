@@ -33,6 +33,9 @@ paramINFO <- readNWISpCode(c("01075", "00060", "00931"))
 paramINFO <- readNWISpCode(c("01075", "00060", "00931", NA))
 \donttest{
 all_codes <- readNWISpCode("all")
+
+one_extra <- readNWISpCode(c("01075", "12345"))
+
 }
 }
 \seealso{

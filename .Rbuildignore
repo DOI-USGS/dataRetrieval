@@ -52,6 +52,7 @@ vignettes/tutorial.Rmd
 vignettes/phosData.rds
 vignettes/waterservices.png
 vignettes/wqp_large_pull_targets.Rmd
+vignettes/wqp_large_pull_script.Rmd
 vignettes/full_pipeline.png
 vignettes/pipeline_snap_char_names.png
 vignettes/map_original_grid_cells.png

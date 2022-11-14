@@ -26,6 +26,7 @@ This function accepts a url parameter for a WaterML2 getObservation. This functi
 but the general functionality is correct.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 obs_url <- paste("https://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
   "service=SOS", "version=2.0.0",
@@ -37,5 +38,5 @@ obs_url <- paste("https://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
 
 data_returned <- importNGWMN(obs_url)
 }
-
+\dontshow{\}) # examplesIf}
 }
