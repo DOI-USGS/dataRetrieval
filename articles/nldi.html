@@ -40,7 +40,7 @@
     <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
     <a class="navbar-brand me-2" href="../index.html">dataRetrieval</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.12</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,9 +98,9 @@
       <img src="../logo.png" class="logo" alt=""><h1>Network Linked Data Index: `dataRetrieval`</h1>
                         <h4 data-toc-skip class="author"><a href="mikecp11@gmail.com">Mike Johnson</a></h4>
             
-            <h4 data-toc-skip class="date">2022-10-31</h4>
+            <h4 data-toc-skip class="date">2022-11-14</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/vignettes/nldi.Rmd" class="external-link"><code>vignettes/nldi.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/DOI-USGS/dataRetrieval/blob/HEAD/vignettes/nldi.Rmd" class="external-link"><code>vignettes/nldi.Rmd</code></a></small>
       <div class="d-none name"><code>nldi.Rmd</code></div>
     </div>
 
@@ -145,7 +145,7 @@ Gas stations between UCSB and UCLA
 <div class="section level2">
 <h2 id="whats-available">What’s available?<a class="anchor" aria-label="anchor" href="#whats-available"></a>
 </h2>
-<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2022-10-31), 12 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
+<p>First, we need to know what features are indexed in the NLDI. The most current offerings can be found using <code>get_nldi_sources</code>, and new features are regularly added. At the time of writing (2022-11-14), 12 data sets have been indexed to the NHDPlus and cataloged in the NLDI.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_nldi_sources.html">get_nldi_sources</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -234,7 +234,8 @@ Gas stations between UCSB and UCLA
 <p>As an illustrative example, NHDPlus features can be requested by their COMID from the NHDPlusV2 data set.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
+<pre><code><span><span class="co">#&gt; $origin</span></span>
+<span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
 <span><span class="co">#&gt; Geometry type: LINESTRING</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -94.64845 ymin: 31.0838 xmax: -94.62997 ymax: 31.09915</span></span>
@@ -246,14 +247,16 @@ Gas stations between UCSB and UCLA
 <p>The returned simple features object contains the native data set identifier (“identifier”), sourceName of the native data set, and the indexed NHD COMID (in this case a duplicate since an NHD feature was requested). In the example above, we see the geometry column is of type <code>LINESTRING</code>. To keep <code>dataRetrieval</code> lightweight, the <a href="https://r-spatial.github.io/sf/articles/sf1.html" class="external-link"><code>sf</code></a> package is not a dependency. Instead, if <code>sf</code> is not installed - or <code>no_sf = TRUE</code> - only the <em>sourceName</em>, <em>comid</em>, and <em>identifier</em> will be returned.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>comid <span class="op">=</span> <span class="fl">101</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt;      sourceName identifier comid</span></span>
+<pre><code><span><span class="co">#&gt; $origin</span></span>
+<span><span class="co">#&gt;      sourceName identifier comid</span></span>
 <span><span class="co">#&gt; 1 NHDPlus comid        101   101</span></span></code></pre>
 <hr>
 <p>To provide another example, we can request the NLDI representation of USGS NWIS gauge <a href="https://waterdata.usgs.gov/monitoring-location/11120000" class="external-link">11120000</a> in both a <code>sf</code> and “non-sf” way. Features indexed to the NHDPlus are returned as <code>POINT</code> objects. If <code>sf</code> is enabled, the <em>sourceName</em>, <em>identifier</em>, <em>X</em>, <em>Y</em> and <em>geometry</em> (<code>sfc</code>) are returned. If <code>sf</code> is not available, the <em>geometry</em> is dropped but the <em>X</em> and <em>Y</em> values are retained.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># local sf installation</span></span>
 <span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Simple feature collection with 1 feature and 8 fields</span></span>
+<pre><code><span><span class="co">#&gt; $origin</span></span>
+<span><span class="co">#&gt; Simple feature collection with 1 feature and 8 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -119.8118 ymin: 34.42472 xmax: -119.8118 ymax: 34.42472</span></span>
@@ -267,7 +270,8 @@ Gas stations between UCSB and UCLA
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># No sf use/installation</span></span>
 <span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>nwis <span class="op">=</span> <span class="st">"11120000"</span>, no_sf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt;                 sourceName    identifier    comid  measure      reachcode</span></span>
+<pre><code><span><span class="co">#&gt; $origin</span></span>
+<span><span class="co">#&gt;                 sourceName    identifier    comid  measure      reachcode</span></span>
 <span><span class="co">#&gt; 1 NWIS Surface Water Sites USGS-11120000 17595429 92.50523 18060013000423</span></span>
 <span><span class="co">#&gt;                        name         X        Y</span></span>
 <span><span class="co">#&gt; 1 ATASCADERO C NR GOLETA CA -119.8118 34.42472</span></span></code></pre>
@@ -285,7 +289,8 @@ Gas stations between UCSB and UCLA
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Request by coordinates</span></span>
 <span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">115</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
+<pre><code><span><span class="co">#&gt; $origin</span></span>
+<span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
 <span><span class="co">#&gt; Geometry type: LINESTRING</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -115.0326 ymin: 40.04013 xmax: -115.0182 ymax: 40.05183</span></span>
@@ -298,7 +303,8 @@ Gas stations between UCSB and UCLA
 <code class="sourceCode R"><span><span class="co"># Request by sf/sfc POINT object</span></span>
 <span><span class="va">ucsb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">119.8458</span>, Y <span class="op">=</span> <span class="fl">34.4146</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/findNLDI.html">findNLDI</a></span><span class="op">(</span>location <span class="op">=</span> <span class="va">ucsb</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
+<pre><code><span><span class="co">#&gt; $origin</span></span>
+<span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
 <span><span class="co">#&gt; Geometry type: LINESTRING</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -119.8823 ymin: 34.40438 xmax: -119.8256 ymax: 34.4179</span></span>
