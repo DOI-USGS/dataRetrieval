@@ -9,8 +9,7 @@ Authors@R: c(
     person("Robert", "Hirsch", role = c("aut"),
             comment=c(ORCID="0000-0002-4534-075X")),
     person("David","Lorenz", role=c("aut")),
-    person("Jordan", "Read", role = c("ctb"),
-            email = "jread@usgs.gov"),
+    person("Jordan", "Read", role = c("ctb")),
     person("Jordan", "Walker", role = c("ctb")),
     person("Lindsay","Carr", role=c("ctb")),
     person("David","Watkins", role=c("aut"),
@@ -53,6 +52,6 @@ Suggests:
 Encoding: UTF-8
 BuildVignettes: true
 VignetteBuilder: knitr
-BugReports: https://github.com/USGS-R/dataRetrieval/issues
+BugReports: https://github.com/DOI-USGS/dataRetrieval/issues
 URL: https://pubs.usgs.gov/tm/04/a10/
 RoxygenNote: 7.2.1
