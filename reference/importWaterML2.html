@@ -18,7 +18,7 @@ Anything defined as a default, is returned as an attribute of that data frame.">
     <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
     <a class="navbar-brand me-2" href="../index.html">dataRetrieval</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.12</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,6 +33,13 @@ Anything defined as a default, is returned as an attribute of that data frame.">
   <a class="nav-link" href="../reference/index.html">Function Help</a>
 </li>
 <li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-large-data-pull-examples">Large Data Pull Examples</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-large-data-pull-examples">
+    <a class="dropdown-item" href="../articles/wqp_large_pull_script.html">Scripting Approach</a>
+    <a class="dropdown-item" href="../articles/wqp_large_pull_targets.html">Pipeline Approach</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/tutorial.html">Tutorial</a>
@@ -40,7 +47,6 @@ Anything defined as a default, is returned as an attribute of that data frame.">
     <a class="dropdown-item" href="../articles/movingAverages.html">Moving Averages</a>
     <a class="dropdown-item" href="../articles/statsServiceMap.html">Stat Service</a>
     <a class="dropdown-item" href="../articles/nldi.html">NLDI Interface</a>
-    <a class="dropdown-item" href="../articles/wqp_large_pull_targets.html">Large Data Pull Example</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -60,7 +66,7 @@ Anything defined as a default, is returned as an attribute of that data frame.">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Parse the WaterML2 timeseries portion of a waterML2 file</h1>
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/R/importNGWMN_wml2.R" class="external-link"><code>R/importNGWMN_wml2.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/DOI-USGS/dataRetrieval/blob/HEAD/R/importNGWMN_wml2.R" class="external-link"><code>R/importNGWMN_wml2.R</code></a></small>
       <div class="d-none name"><code>importWaterML2.Rd</code></div>
     </div>
 
@@ -103,10 +109,8 @@ Possible values are "America/New_York", "America/Chicago", "America/Denver", "Am
 <span class="r-in"><span>  <span class="st">"parameterCd=00060"</span>,</span></span>
 <span class="r-in"><span>  sep <span class="op">=</span> <span class="st">"&amp;"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">timesereies</span> <span class="op">&lt;-</span> <span class="fu">importWaterML2</span><span class="op">(</span><span class="va">URL</span>, asDateTime <span class="op">=</span> <span class="cn">TRUE</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="va">timesereies</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">importWaterML2</span><span class="op">(</span><span class="va">URL</span>, asDateTime <span class="op">=</span> <span class="cn">TRUE</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

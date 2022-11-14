@@ -18,7 +18,7 @@ but the general functionality is correct."><meta property="og:image" content="/l
     <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
     <a class="navbar-brand me-2" href="../index.html">dataRetrieval</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.12</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,6 +33,13 @@ but the general functionality is correct."><meta property="og:image" content="/l
   <a class="nav-link" href="../reference/index.html">Function Help</a>
 </li>
 <li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-large-data-pull-examples">Large Data Pull Examples</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-large-data-pull-examples">
+    <a class="dropdown-item" href="../articles/wqp_large_pull_script.html">Scripting Approach</a>
+    <a class="dropdown-item" href="../articles/wqp_large_pull_targets.html">Pipeline Approach</a>
+  </div>
+</li>
+<li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/tutorial.html">Tutorial</a>
@@ -40,7 +47,6 @@ but the general functionality is correct."><meta property="og:image" content="/l
     <a class="dropdown-item" href="../articles/movingAverages.html">Moving Averages</a>
     <a class="dropdown-item" href="../articles/statsServiceMap.html">Stat Service</a>
     <a class="dropdown-item" href="../articles/nldi.html">NLDI Interface</a>
-    <a class="dropdown-item" href="../articles/wqp_large_pull_targets.html">Large Data Pull Example</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -60,7 +66,7 @@ but the general functionality is correct."><meta property="og:image" content="/l
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Function to return data from the National Ground Water Monitoring Network waterML2 format</h1>
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/dataRetrieval/blob/HEAD/R/importNGWMN_wml2.R" class="external-link"><code>R/importNGWMN_wml2.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/DOI-USGS/dataRetrieval/blob/HEAD/R/importNGWMN_wml2.R" class="external-link"><code>R/importNGWMN_wml2.R</code></a></small>
       <div class="d-none name"><code>importNGWMN.Rd</code></div>
     </div>
 
@@ -114,7 +120,6 @@ for more information on time zones.</p></dd>
 <span class="r-in"><span><span class="va">data_returned</span> <span class="op">&lt;-</span> <span class="fu">importNGWMN</span><span class="op">(</span><span class="va">obs_url</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Unknown content, returning NULL</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
