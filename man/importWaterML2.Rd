@@ -31,9 +31,7 @@ URL <- paste(baseURL, "sites=01646500",
   "parameterCd=00060",
   sep = "&"
 )
-\donttest{
 
-timesereies <- importWaterML2(URL, asDateTime = TRUE, tz = "UTC")
-}
+timesereies <- try(importWaterML2(URL, asDateTime = TRUE, tz = "UTC"))
 \dontshow{\}) # examplesIf}
 }

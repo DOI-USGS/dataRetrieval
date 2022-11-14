@@ -25,6 +25,7 @@ for more information on time zones.}
 Retrieve groundwater levels from the National Ground Water Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # one site
 site <- "USGS.430427089284901"
@@ -42,4 +43,5 @@ site <- "MBMG.103306"
 noDataSite <- "UTGS.401544112060301"
 # noDataSite <- readNGWMNlevels(siteNumbers = noDataSite)
 }
+\dontshow{\}) # examplesIf}
 }
