@@ -114,7 +114,7 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC") {
 #' for more information on time zones.
 #' @export
 #'
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' # one site
 #' site <- "USGS.430427089284901"
@@ -153,7 +153,7 @@ readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC") {
 #' description \tab char \tab Site description \cr
 #' dec_lat_va, dec_lon_va \tab numeric \tab Site latitude and longitude \cr
 #' }
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' # one site
 #' site <- "USGS.430427089284901"
