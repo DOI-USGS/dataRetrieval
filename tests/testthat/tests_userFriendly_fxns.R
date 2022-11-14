@@ -482,6 +482,16 @@ test_that("pCode Stuff", {
   paramINFO <- readNWISpCode(c("00060", "01075", "00931", NA))
   expect_equal(nrow(paramINFO), 4)
   expect_equal(paramINFO$parameter_cd, c("00060", "01075", "00931", NA))
+  
+  # pcode 12345 isn't a valid code:
+  expect_warning(paramINFO <- readNWISpCode(c("12345")))
+  expect_warning(paramINFO <- readNWISpCode(c("00060", "01075",
+                                              "12345", NA_character_)))
+  expect_equal(nrow(paramINFO), 4)
+  expect_equal(paramINFO$parameter_cd, c("00060", "01075", 
+                                         "12345", NA_character_))
+  
+  expect_equal(paramINFO$parameter_group_nm[3:4], c(NA_character_, NA_character_))
 
   paramINFO <- readNWISpCode("all")
   expect_true(nrow(paramINFO) > 24000)

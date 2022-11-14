@@ -22,6 +22,12 @@ navbar:
     href: articles/dataRetrieval.html
   - text: Function Help
     href: reference/index.html
+  - text: Large Data Pull Examples
+    menu:
+    - text: Scripting Approach
+      href: articles/wqp_large_pull_script.html
+    - text: Pipeline Approach
+      href: articles/wqp_large_pull_targets.html
   - text: Articles
     menu:
     - text: Tutorial
@@ -34,8 +40,6 @@ navbar:
       href: articles/statsServiceMap.html
     - text: NLDI Interface
       href: articles/nldi.html
-    - text: Large Data Pull Example
-      href: articles/wqp_large_pull_targets.html
   right:
   - icon: fa-github fa-lg
     href: https://github.com/USGS-R/dataRetrieval

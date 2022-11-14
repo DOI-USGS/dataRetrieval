@@ -471,7 +471,7 @@ readNWISdots <- function(...) {
       values["range_selection"] <- "date_range"
     }
 
-    if (service == "qwdata") {
+    if (service == "qwdata" && !("qw_sample_wide" %in% names(values))) {
       values["qw_sample_wide"] <- "wide"
     }
   }

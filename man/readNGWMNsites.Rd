@@ -23,13 +23,15 @@ dec_lat_va, dec_lon_va \tab numeric \tab Site latitude and longitude \cr
 Retrieve site data from the National Ground Water Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # one site
 site <- "USGS.430427089284901"
-oneSite <- readNGWMNsites(siteNumbers = site)
+#oneSite <- readNGWMNsites(siteNumbers = site)
 
 # non-USGS site
 site <- "MBMG.103306"
-siteInfo <- readNGWMNsites(siteNumbers = site)
+#siteInfo <- readNGWMNsites(siteNumbers = site)
 }
+\dontshow{\}) # examplesIf}
 }

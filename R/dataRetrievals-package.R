@@ -1,3 +1,9 @@
+.onAttach <- function(libname, pkgname) {
+  if (!interactive()) return()
+  dataRetrieval_version = utils::packageVersion("dataRetrieval")
+  packageStartupMessage("dataRetrieval ", dataRetrieval_version,"
+Extended Documentation: https://rconnect.usgs.gov/dataRetrieval")
+}
 
 #' Retrieval functions for USGS and EPA data
 #'
