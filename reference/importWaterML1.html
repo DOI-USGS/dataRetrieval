@@ -127,6 +127,7 @@ and S is the statistic code (if applicable).</p>
 <span class="r-in"><span><span class="va">obs_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="va">site_id</span>, <span class="va">property</span>, <span class="va">startDate</span>, <span class="va">endDate</span>, <span class="st">"dv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">obs_url</span>, asDateTime <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in importWaterML1(obs_url, asDateTime = TRUE):</span> could not find function "importWaterML1"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">groundWaterSite</span> <span class="op">&lt;-</span> <span class="st">"431049071324301"</span></span></span>
 <span class="r-in"><span><span class="va">startGW</span> <span class="op">&lt;-</span> <span class="st">"2013-10-01"</span></span></span>
@@ -136,13 +137,16 @@ and S is the statistic code (if applicable).</p>
 <span class="r-in"><span>  service <span class="op">=</span> <span class="st">"gwlevels"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">groundWater</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">groundwaterExampleURL</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in importWaterML1(groundwaterExampleURL):</span> could not find function "importWaterML1"</span>
 <span class="r-in"><span><span class="va">groundWater2</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">groundwaterExampleURL</span>, asDateTime <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in importWaterML1(groundwaterExampleURL, asDateTime = TRUE):</span> could not find function "importWaterML1"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">unitDataURL</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">site_id</span>, <span class="va">property</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"2013-11-03"</span>, <span class="st">"2013-11-03"</span>, <span class="st">"uv"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">unitData</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">unitDataURL</span>, <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in importWaterML1(unitDataURL, TRUE):</span> could not find function "importWaterML1"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Two sites, two pcodes, one site has two data descriptors:</span></span></span>
 <span class="r-in"><span><span class="va">siteNumber</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"01480015"</span>, <span class="st">"04085427"</span><span class="op">)</span></span></span>
@@ -151,26 +155,28 @@ and S is the statistic code (if applicable).</p>
 <span class="r-in"><span>  <span class="va">startDate</span>, <span class="va">endDate</span>, <span class="st">"dv"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">obs_url</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in importWaterML1(obs_url):</span> could not find function "importWaterML1"</span>
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">dateTime</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">dateTime</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in data$dateTime:</span> object of type 'closure' is not subsettable</span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="renameNWISColumns.html">renameNWISColumns</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "names"         "row.names"     "url"           "siteInfo"     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "variableInfo"  "disclaimer"    "statisticInfo" "queryTime"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [9] "class"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"url"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "https://waterservices.usgs.gov/nwis/dv/?site=01480015,04085427&amp;format=waterml,1.1&amp;ParameterCd=00060,00010&amp;StatCd=00003&amp;startDT=2012-09-01&amp;endDT=2012-10-01"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"disclaimer"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Provisional data are subject to revision. Go to http://waterdata.usgs.gov/nwis/help/?provisional for more information."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">inactiveSite</span> <span class="op">&lt;-</span> <span class="st">"05212700"</span></span></span>
 <span class="r-in"><span><span class="va">inactiveSite</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="va">inactiveSite</span>, <span class="st">"00060"</span>, </span></span>
 <span class="r-in"><span>                                 <span class="st">"2014-01-01"</span>, <span class="st">"2014-01-10"</span>, <span class="st">"dv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">inactiveSite</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">inactiveSite</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in importWaterML1(inactiveSite):</span> could not find function "importWaterML1"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">inactiveAndAcitive</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"07334200"</span>, <span class="st">"05212700"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">inactiveAndAcitive</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="va">inactiveAndAcitive</span>, </span></span>
 <span class="r-in"><span>                         <span class="st">"00060"</span>, <span class="st">"2014-01-01"</span>, <span class="st">"2014-01-10"</span>, <span class="st">"dv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">inactiveAndAcitive</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">inactiveAndAcitive</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in importWaterML1(inactiveAndAcitive):</span> could not find function "importWaterML1"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Timezone change with specified local timezone:</span></span></span>
 <span class="r-in"><span><span class="va">tzURL</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span><span class="st">"04027000"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00300"</span>, <span class="st">"63680"</span><span class="op">)</span>, </span></span>
@@ -178,6 +184,7 @@ and S is the statistic code (if applicable).</p>
 <span class="r-in"><span><span class="va">tzIssue</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">tzURL</span>,</span></span>
 <span class="r-in"><span>  asDateTime <span class="op">=</span> <span class="cn">TRUE</span>, tz <span class="op">=</span> <span class="st">"America/Chicago"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in importWaterML1(tzURL, asDateTime = TRUE, tz = "America/Chicago"):</span> could not find function "importWaterML1"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># raw XML</span></span></span>
 <span class="r-in"><span><span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="constructNWISURL.html">constructNWISURL</a></span><span class="op">(</span></span></span>
@@ -186,11 +193,13 @@ and S is the statistic code (if applicable).</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html" class="external-link">content</a></span><span class="op">(</span><span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/GET.html" class="external-link">GET</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>, as <span class="op">=</span> <span class="st">"raw"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">rawParsed</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">raw</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in importWaterML1(raw):</span> could not find function "importWaterML1"</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="va">filePath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"dataRetrieval"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fileName</span> <span class="op">&lt;-</span> <span class="st">"WaterML1Example.xml"</span></span></span>
 <span class="r-in"><span><span class="va">fullPath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">filePath</span>, <span class="va">fileName</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">importFile</span> <span class="op">&lt;-</span> <span class="fu">importWaterML1</span><span class="op">(</span><span class="va">fullPath</span>, <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in importWaterML1(fullPath, TRUE):</span> could not find function "importWaterML1"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
