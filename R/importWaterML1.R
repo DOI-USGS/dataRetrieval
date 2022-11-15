@@ -40,7 +40,7 @@
 #' }
 #'
 #' @seealso \code{\link{renameNWISColumns}}
-#' @exports
+#' @export
 #' @examplesIf is_dataRetrieval_user()
 #' site_id <- "02177000"
 #' startDate <- "2012-09-01"
