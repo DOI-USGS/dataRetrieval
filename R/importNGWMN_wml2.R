@@ -44,10 +44,10 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
     if (is.null(returnedDoc)) {
       return(invisible(NULL))
     }
-    returnedDoc <- xml_root(returnedDoc)
+    returnedDoc <- xml2::xml_root(returnedDoc)
   }
 
-  response <- xml_name(returnedDoc)
+  response <- xml2::xml_name(returnedDoc)
   if (response == "GetObservationResponse") {
     timeSeries <- xml2::xml_find_all(returnedDoc, "//wml2:MeasurementTimeseries") # each parameter/site combo
 
@@ -211,13 +211,13 @@ importWaterML2 <- function(input, asDateTime = FALSE, tz = "UTC") {
     ),
     "title"
   )
-  comment <- xml2::xml_text(xml_find_all(
+  comment <- xml2::xml_text(xml2::xml_find_all(
     returnedDoc,
     "./wml2:point/wml2:MeasurementTVP/wml2:metadata/wml2:comment"
   ))
 
   defaultMeta <- xml2::xml_find_all(returnedDoc, ".//wml2:DefaultTVPMeasurementMetadata")
-  defaultQuals <- xml_text(xml2::xml_find_all(defaultMeta, ".//swe:description"))
+  defaultQuals <- xml2::xml_text(xml2::xml_find_all(defaultMeta, ".//swe:description"))
   defaultUOM <- xml2::xml_attr(xml2::xml_find_all(defaultMeta, ".//wml2:uom"), "title", default = NA)
 
   df_vars <- list(

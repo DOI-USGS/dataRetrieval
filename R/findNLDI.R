@@ -37,8 +37,7 @@ find_good_names <- function(input, type) {
 #' @return data.frame
 #' @export
 #' @keywords nldi
-#' @importFrom httr RETRY content
-#' @importFrom jsonlite fromJSON
+#' @importFrom httr content
 #' @examples
 #' \donttest{
 #' get_nldi_sources()
@@ -75,8 +74,7 @@ get_nldi_sources <- function() {
 #' @keywords nldi internal
 #' @noRd
 #' @return a data.frame
-#' @importFrom httr content RETRY
-#' @importFrom jsonlite fromJSON
+#' @importFrom httr content
 #' @examples
 #' \donttest{
 #' base <- "https://labs.waterdata.usgs.gov/api/nldi/linked-data/"

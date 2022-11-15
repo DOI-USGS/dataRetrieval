@@ -221,7 +221,7 @@ readWQPqw <- function(siteNumbers,
     } else {
       siteInfo <- whatWQPsites(
         siteid = paste0(siteNumbers, collapse = ";"),
-        characteristicName = URLencode(paste0(parameterCd,
+        characteristicName = utils::URLencode(paste0(parameterCd,
           collapse = ";"
         )),
         startDateLo = startDate, startDateHi = endDate

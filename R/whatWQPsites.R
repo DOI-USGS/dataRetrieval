@@ -125,7 +125,7 @@ whatWQPsites <- function(...) {
     values <- values[!(names(values) %in% "service")]
   }
 
-  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
 
   baseURL <- drURL("Station", arg.list = values)
 
@@ -247,7 +247,7 @@ readWQPsummary <- function(...) {
     values[["dataProfile"]] <- "periodOfRecord"
   }
 
-  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
 
   baseURL <- drURL("SiteSummary", arg.list = values)
   baseURL <- appendDrURL(baseURL, mimeType = "csv")

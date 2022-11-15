@@ -20,7 +20,6 @@ knitr::opts_chunk$set(
 
 # dataRetrieval <img src="man/figures/hex_logo.png" class="logo"  alt="dataRetrieval" style="width:90px;height:auto;" align="right" />
 
-[![R build status](https://code.usgs.gov/water/dataRetrieval/badges/main/pipeline.svg)](https://code.usgs.gov/water/dataRetrieval/pipelines)[![Coverage Status](https://code.usgs.gov/water/dataRetrieval/badges/main/coverage.svg)](https://code.usgs.gov/water/dataRetrieval/pipelines) [![status](https://img.shields.io/badge/USGS-Core-green.svg)](https://owi.usgs.gov/R/packages.html#core) [![CRAN version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval) [![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
 
 Retrieval functions for USGS and EPA hydrologic and water quality data. 
 

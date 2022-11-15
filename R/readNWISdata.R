@@ -199,7 +199,7 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
     )
   }
 
-  values <- sapply(valuesList$values, function(x) URLencode(x))
+  values <- sapply(valuesList$values, function(x)utils:: URLencode(x))
 
   baseURL <- drURL(service, arg.list = values)
 
@@ -217,7 +217,7 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
   }
 
   if ("dv" == service) {
-    tzLib <- setNames(
+    tzLib <- stats::setNames(
       c(
         "America/New_York", "America/New_York",
         "America/Chicago", "America/Chicago",
