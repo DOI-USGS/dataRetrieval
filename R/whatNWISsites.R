@@ -55,7 +55,7 @@ whatNWISsites <- function(...) {
   if (is.null(rawData)) {
     return(invisible(NULL))
   }
-  doc <- xml_root(rawData)
+  doc <- xml2::xml_root(rawData)
   siteCategories <- xml2::xml_children(doc)
   retVal <- NULL
   for (sc in siteCategories) {
