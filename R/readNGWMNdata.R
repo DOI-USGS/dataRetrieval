@@ -202,7 +202,7 @@ retrieveFeatureOfInterest <- function(..., asDateTime, srsName = "urn:ogc:def:cr
   dots <- convertLists(...)
 
   values <- sapply(dots, function(x) as.character(paste0(eval(x), collapse = ",")))
-  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
 
   url <- drURL(
     base.name = "NGWMN", access = pkg.env$access, request = "GetFeatureOfInterest",

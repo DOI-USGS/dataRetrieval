@@ -101,7 +101,7 @@ whatNWISdata <- function(..., convertType = TRUE) {
 
   valuesList <- readNWISdots(matchReturn)
 
-  values <- sapply(valuesList$values, function(x) URLencode(x))
+  values <- sapply(valuesList$values, function(x) utils::URLencode(x))
 
   if (any(service == "site")) {
     service <- "all"
