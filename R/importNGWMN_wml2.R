@@ -13,11 +13,6 @@
 #' for more information on time zones.
 #' @return mergedDF a data frame source, time, value, uom, uomTitle, comment, gmlID
 #' @export
-#' @importFrom xml2 read_xml
-#' @importFrom xml2 xml_find_all
-#' @importFrom xml2 xml_text
-#' @importFrom xml2 xml_attr
-#' @importFrom xml2 xml_find_first
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' obs_url <- paste("https://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
@@ -40,9 +35,9 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
 
   raw <- FALSE
   if (is.character(input) && file.exists(input)) {
-    returnedDoc <- read_xml(input)
+    returnedDoc <- xml2::read_xml(input)
   } else if (is.raw(input)) {
-    returnedDoc <- read_xml(input)
+    returnedDoc <- xml2::read_xml(input)
     raw <- TRUE
   } else {
     returnedDoc <- getWebServiceData(input, encoding = "gzip")
@@ -54,7 +49,7 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
 
   response <- xml_name(returnedDoc)
   if (response == "GetObservationResponse") {
-    timeSeries <- xml_find_all(returnedDoc, "//wml2:MeasurementTimeseries") # each parameter/site combo
+    timeSeries <- xml2::xml_find_all(returnedDoc, "//wml2:MeasurementTimeseries") # each parameter/site combo
 
     if (0 == length(timeSeries)) {
       df <- data.frame()
@@ -94,20 +89,20 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
     if (nrow(mergedDF) > 0) {
       mergedDF[nonDateCols][mergedDF[nonDateCols] == "" | mergedDF[nonDateCols] == -999999.0] <- NA
     }
-    attr(mergedDF, "gml:identifier") <- xml_text(xml_find_all(returnedDoc, ".//gml:identifier"))
-    attr(mergedDF, "generationDate") <- xml_text(xml_find_all(returnedDoc, ".//wml2:generationDate"))
-    meta <- xml_find_all(returnedDoc, ".//gmd:contact")
-    attr(mergedDF, "contact") <- xml_attr(meta, "href")
-    attr(mergedDF, "responsibleParty") <- xml_text(xml_find_all(meta, ".//gco:CharacterString"))
+    attr(mergedDF, "gml:identifier") <- xml2::xml_text(xml2::xml_find_all(returnedDoc, ".//gml:identifier"))
+    attr(mergedDF, "generationDate") <- xml2::xml_text(xml2::xml_find_all(returnedDoc, ".//wml2:generationDate"))
+    meta <- xml2::xml_find_all(returnedDoc, ".//gmd:contact")
+    attr(mergedDF, "contact") <- xml2::xml_attr(meta, "href")
+    attr(mergedDF, "responsibleParty") <- xml2::xml_text(xml2::xml_find_all(meta, ".//gco:CharacterString"))
   } else if (response == "GetFeatureOfInterestResponse") {
-    featureMembers <- xml_find_all(returnedDoc, ".//sos:featureMember")
-    site <- xml_text(xml_find_all(featureMembers, ".//gml:identifier"))
+    featureMembers <- xml2::xml_find_all(returnedDoc, ".//sos:featureMember")
+    site <- xml2::xml_text(xml2::xml_find_all(featureMembers, ".//gml:identifier"))
     site <- substring(site, 8)
 
     # some sites don't have a description
-    siteDesc <- xml_text(xml_find_first(featureMembers, ".//gml:description"))
+    siteDesc <- xml2::xml_text(xml2::xml_find_first(featureMembers, ".//gml:description"))
 
-    siteLocs <- strsplit(xml_text(xml_find_all(featureMembers, ".//gml:pos")), " ")
+    siteLocs <- strsplit(xml2::xml_text(xml2::xml_find_all(featureMembers, ".//gml:pos")), " ")
     siteLocs <- data.frame(matrix(unlist(siteLocs), nrow = length(siteLocs), byrow = TRUE), stringsAsFactors = FALSE)
     names(siteLocs) <- c("dec_lat_va", "dec_lon_va")
 
@@ -135,9 +130,9 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
 #' Possible values are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 #' "America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua",
 #' "America/Phoenix", and "America/Metlakatla"
-#' @importFrom xml2 xml_attr xml_find_all xml_text
 #' @export
 #' @examplesIf is_dataRetrieval_user()
+#' \donttest{
 #' baseURL <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
 #' URL <- paste(baseURL, "sites=01646500",
 #'   "startDT=2014-09-01",
@@ -148,12 +143,12 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
 #' )
 #' 
 #' timesereies <- importWaterML2(URL, asDateTime = TRUE, tz = "UTC")
-#' 
+#' }
 importWaterML2 <- function(input, asDateTime = FALSE, tz = "UTC") {
   returnedDoc <- check_if_xml(input)
 
-  gmlID <- xml_attr(returnedDoc, "id") # TODO: make this an attribute
-  TVP <- xml_find_all(returnedDoc, ".//wml2:MeasurementTVP") # time-value pairs
+  gmlID <- xml2::xml_attr(returnedDoc, "id") # TODO: make this an attribute
+  TVP <- xml2::xml_find_all(returnedDoc, ".//wml2:MeasurementTVP") # time-value pairs
   if (length(TVP) == 0) { # empty nodes on some sites
     return(data.frame(
       site = character(0), source = character(0), date = character(0),
@@ -161,11 +156,11 @@ importWaterML2 <- function(input, asDateTime = FALSE, tz = "UTC") {
       uom = character(0), comment = character(0), stringsAsFactors = FALSE
     ))
   }
-  rawTime <- xml_text(xml_find_all(returnedDoc, ".//wml2:MeasurementTVP/wml2:time"))
+  rawTime <- xml2::xml_text(xml2::xml_find_all(returnedDoc, ".//wml2:MeasurementTVP/wml2:time"))
 
-  valueNodes <- xml_find_all(returnedDoc, ".//wml2:MeasurementTVP/wml2:value")
-  charValues <- xml_text(valueNodes)
-  nilValues <- as.logical(xml_attr(valueNodes, "nil"))
+  valueNodes <- xml2::xml_find_all(returnedDoc, ".//wml2:MeasurementTVP/wml2:value")
+  charValues <- xml2::xml_text(valueNodes)
+  nilValues <- as.logical(xml2::xml_attr(valueNodes, "nil"))
   charValues[nilValues] <- NA
   values <- as.numeric(charValues)
   nVals <- length(values)
@@ -207,23 +202,23 @@ importWaterML2 <- function(input, asDateTime = FALSE, tz = "UTC") {
     attr(timeDF$dateTime, "tzone") <- tz
   }
 
-  uom <- xml_attr(valueNodes, "uom", default = NA)
+  uom <- xml2::xml_attr(valueNodes, "uom", default = NA)
 
-  source <- xml_attr(
-    xml_find_all(
+  source <- xml2::xml_attr(
+    xml2::xml_find_all(
       returnedDoc,
       "./wml2:point/wml2:MeasurementTVP/wml2:metadata/wml2:source"
     ),
     "title"
   )
-  comment <- xml_text(xml_find_all(
+  comment <- xml2::xml_text(xml_find_all(
     returnedDoc,
     "./wml2:point/wml2:MeasurementTVP/wml2:metadata/wml2:comment"
   ))
 
-  defaultMeta <- xml_find_all(returnedDoc, ".//wml2:DefaultTVPMeasurementMetadata")
-  defaultQuals <- xml_text(xml_find_all(defaultMeta, ".//swe:description"))
-  defaultUOM <- xml_attr(xml_find_all(defaultMeta, ".//wml2:uom"), "title", default = NA)
+  defaultMeta <- xml2::xml_find_all(returnedDoc, ".//wml2:DefaultTVPMeasurementMetadata")
+  defaultQuals <- xml_text(xml2::xml_find_all(defaultMeta, ".//swe:description"))
+  defaultUOM <- xml2::xml_attr(xml2::xml_find_all(defaultMeta, ".//wml2:uom"), "title", default = NA)
 
   df_vars <- list(
     source = source, timeDF, value = values,

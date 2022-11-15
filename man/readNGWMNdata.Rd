@@ -2,7 +2,7 @@
 % Please edit documentation in R/readNGWMNdata.R
 \name{readNGWMNdata}
 \alias{readNGWMNdata}
-\title{import data from the National Groundwater Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.}
+\title{Import data from the National Groundwater Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.}
 \usage{
 readNGWMNdata(service, ..., asDateTime = TRUE, tz = "UTC")
 }
@@ -29,7 +29,7 @@ Only water level data and site locations and names are currently available throu
 \donttest{
 # one site
 site <- "USGS.430427089284901"
-# oneSite <- readNGWMNdata(siteNumbers = site, service = "observation")
+#oneSite <- readNGWMNdata(siteNumbers = site, service = "observation")
 
 # multiple sites
 sites <- c("USGS.272838082142201", "USGS.404159100494601", "USGS.401216080362703")
@@ -51,7 +51,7 @@ noDataSite <- "UTGS.401544112060301"
 # retrieve  sites.  Set asDateTime to false since one site has an invalid date
 # Very slow:
 # bboxData <- readNGWMNdata(service = "observation", siteNumbers = bboxSites$site[1:3],
-# asDateTime = FALSE)
+#                           asDateTime = FALSE)
 }
 \dontshow{\}) # examplesIf}
 }
