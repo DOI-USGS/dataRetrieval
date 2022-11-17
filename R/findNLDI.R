@@ -37,7 +37,6 @@ find_good_names <- function(input, type) {
 #' @return data.frame
 #' @export
 #' @keywords nldi
-#' @importFrom httr content
 #' @examples
 #' \donttest{
 #' get_nldi_sources()
