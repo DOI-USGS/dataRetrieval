@@ -29,6 +29,7 @@ For complete tutorial information, see:
 
 [https://waterdata.usgs.gov/blog/dataretrieval/](https://waterdata.usgs.gov/blog/dataretrieval/)
 
+
 # Sample Workflow
 
 ## USGS
@@ -76,6 +77,25 @@ features <- findNLDI(
   find = c("basin", "wqp")
 )
 ```
+
+# Installation of dataRetrieval
+
+To install the toxEval package, you must be using R 3.0 or greater and run the following command:
+
+```{r eval=FALSE}
+install.packages("dataRetrieval")
+```
+
+To get cutting-edge changes, install from GitHub using the `remotes` packages:
+
+```{r eval=FALSE}
+library(remotes)
+install_github("DOI-USGS/dataRetrieval",
+               build_vignettes = TRUE, 
+               build_opts = c("--no-resave-data",
+                              "--no-manual"))
+```
+
 
 # Reporting bugs
 
