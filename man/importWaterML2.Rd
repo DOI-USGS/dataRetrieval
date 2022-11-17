@@ -23,6 +23,7 @@ Anything defined as a default, is returned as an attribute of that data frame.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 baseURL <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
 URL <- paste(baseURL, "sites=01646500",
   "startDT=2014-09-01",
@@ -32,6 +33,7 @@ URL <- paste(baseURL, "sites=01646500",
   sep = "&"
 )
 
-timesereies <- try(importWaterML2(URL, asDateTime = TRUE, tz = "UTC"))
+timesereies <- importWaterML2(URL, asDateTime = TRUE, tz = "UTC")
+}
 \dontshow{\}) # examplesIf}
 }

@@ -370,7 +370,7 @@ constructWQPURL <- function(siteNumbers,
     suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
   } else {
     pCodeLogic <- FALSE
-    parameterCd <- sapply(parameterCd, URLencode, USE.NAMES = FALSE, reserved = TRUE)
+    parameterCd <- sapply(parameterCd, utils::URLencode, USE.NAMES = FALSE, reserved = TRUE)
   }
 
   if (multiplePcodes) {

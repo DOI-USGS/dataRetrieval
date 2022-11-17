@@ -199,7 +199,7 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
     )
   }
 
-  values <- sapply(valuesList$values, function(x) URLencode(x))
+  values <- sapply(valuesList$values, function(x)utils:: URLencode(x))
 
   baseURL <- drURL(service, arg.list = values)
 
@@ -217,7 +217,7 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
   }
 
   if ("dv" == service) {
-    tzLib <- setNames(
+    tzLib <- stats::setNames(
       c(
         "America/New_York", "America/New_York",
         "America/Chicago", "America/Chicago",
@@ -422,7 +422,14 @@ readNWISdots <- function(...) {
 
   names(values)[names(values) == "statecode"] <- "stateCd"
   if ("stateCd" %in% names(values)) {
-    values["stateCd"] <- stateCdLookup(values["stateCd"], "postal")
+    
+    state <- stateCdLookup(values["stateCd"], "postal")
+    
+    if(length(state) > 1){
+      stop("Multiple states are not allowed in NWIS queries.")
+    }
+    
+    values["stateCd"] <- state
     values[["stateCd"]][values["stateCd"] == "AS"] <- "AQ" # Leaving the correct abb in stateCd
     if (values["stateCd"] == "UM") {
       stop("NWIS does not include U.S. Minor Outlying Islands")

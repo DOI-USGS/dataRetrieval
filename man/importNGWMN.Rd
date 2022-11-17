@@ -36,7 +36,7 @@ obs_url <- paste("https://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
   sep = "&"
 )
 
-data_returned <- importNGWMN(obs_url)
+#data_returned <- importNGWMN(obs_url)
 }
 \dontshow{\}) # examplesIf}
 }

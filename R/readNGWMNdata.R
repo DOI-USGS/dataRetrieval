@@ -1,4 +1,4 @@
-#' import data from the National Groundwater Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.
+#' Import data from the National Groundwater Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.
 #'
 #' Only water level data and site locations and names are currently available through the web service.
 #' @param service char Service for the request - "observation" and "featureOfInterest" are implemented.
@@ -16,7 +16,7 @@
 #' \donttest{
 #' # one site
 #' site <- "USGS.430427089284901"
-#' # oneSite <- readNGWMNdata(siteNumbers = site, service = "observation")
+#' #oneSite <- readNGWMNdata(siteNumbers = site, service = "observation")
 #'
 #' # multiple sites
 #' sites <- c("USGS.272838082142201", "USGS.404159100494601", "USGS.401216080362703")
@@ -38,7 +38,7 @@
 #' # retrieve  sites.  Set asDateTime to false since one site has an invalid date
 #' # Very slow:
 #' # bboxData <- readNGWMNdata(service = "observation", siteNumbers = bboxSites$site[1:3],
-#' # asDateTime = FALSE)
+#' #                           asDateTime = FALSE)
 #' }
 #'
 readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC") {
@@ -202,7 +202,7 @@ retrieveFeatureOfInterest <- function(..., asDateTime, srsName = "urn:ogc:def:cr
   dots <- convertLists(...)
 
   values <- sapply(dots, function(x) as.character(paste0(eval(x), collapse = ",")))
-  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
 
   url <- drURL(
     base.name = "NGWMN", access = pkg.env$access, request = "GetFeatureOfInterest",
