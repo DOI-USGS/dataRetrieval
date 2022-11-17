@@ -23,7 +23,7 @@
 #'   sep = "&"
 #' )
 #'
-#' data_returned <- importNGWMN(obs_url)
+#' #data_returned <- importNGWMN(obs_url)
 #' }
 #'
 importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
