@@ -40,6 +40,8 @@ navbar:
       href: articles/statsServiceMap.html
     - text: NLDI Interface
       href: articles/nldi.html
+    - text: How to Contribute
+      href: articles/Contributing.html
   right:
   - icon: fa-github fa-lg
     href: https://github.com/USGS-R/dataRetrieval
