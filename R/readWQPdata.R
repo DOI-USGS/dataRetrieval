@@ -214,7 +214,7 @@ readWQPdata <- function(...,
                                   "BiologicalMetric", "Organization"),
                        several.ok = FALSE)
 
-  values <- sapply(valuesList$values, function(x) URLencode(x, reserved = TRUE))
+  values <- sapply(valuesList$values, function(x) utils::URLencode(x, reserved = TRUE))
 
   baseURL <- drURL(service, arg.list = values)
 

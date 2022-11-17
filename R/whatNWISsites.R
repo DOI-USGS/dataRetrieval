@@ -36,9 +36,6 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @importFrom xml2 xml_root
-#' @importFrom xml2 xml_children
-#' @importFrom xml2 xml_attr
 #'
 #' @examples
 #' \donttest{
@@ -49,7 +46,7 @@
 whatNWISsites <- function(...) {
   valuesList <- readNWISdots(...)
 
-  values <- sapply(valuesList$values, function(x) URLencode(x))
+  values <- sapply(valuesList$values, function(x) utils::URLencode(x))
   values["format"] <- "mapper"
 
   urlCall <- drURL("site", Access = pkg.env$access, arg.list = values)
@@ -58,19 +55,19 @@ whatNWISsites <- function(...) {
   if (is.null(rawData)) {
     return(invisible(NULL))
   }
-  doc <- xml_root(rawData)
-  siteCategories <- xml_children(doc)
+  doc <- xml2::xml_root(rawData)
+  siteCategories <- xml2::xml_children(doc)
   retVal <- NULL
   for (sc in siteCategories) {
-    sites <- xml_children(sc)
-    site_no <- xml_attr(sites, "sno")
-    station_nm <- xml_attr(sites, "sna")
-    site_tp_cd <- xml_attr(sites, "cat")
-    dec_lat_va <- as.numeric(xml_attr(sites, "lat"))
-    dec_long_va <- as.numeric(xml_attr(sites, "lng"))
-    agency_cd <- xml_attr(sites, "agc")
+    sites <- xml2::xml_children(sc)
+    site_no <- xml2::xml_attr(sites, "sno")
+    station_nm <- xml2::xml_attr(sites, "sna")
+    site_tp_cd <- xml2::xml_attr(sites, "cat")
+    dec_lat_va <- as.numeric(xml2::xml_attr(sites, "lat"))
+    dec_long_va <- as.numeric(xml2::xml_attr(sites, "lng"))
+    agency_cd <- xml2::xml_attr(sites, "agc")
 
-    colocated <- isTRUE(xml_name(sc) == "colocated_sites")
+    colocated <- isTRUE(xml2::xml_name(sc) == "colocated_sites")
 
     df <- data.frame(agency_cd, site_no, station_nm, site_tp_cd,
       dec_lat_va, dec_long_va, colocated,

@@ -1,14 +1,5 @@
 # dataRetrieval <img src="man/figures/hex_logo.png" class="logo"  alt="dataRetrieval" style="width:90px;height:auto;" align="right" />
 
-[![R build
-status](https://code.usgs.gov/water/dataRetrieval/badges/main/pipeline.svg)](https://code.usgs.gov/water/dataRetrieval/pipelines)[![Coverage
-Status](https://code.usgs.gov/water/dataRetrieval/badges/main/coverage.svg)](https://code.usgs.gov/water/dataRetrieval/pipelines)
-[![status](https://img.shields.io/badge/USGS-Core-green.svg)](https://owi.usgs.gov/R/packages.html#core)
-[![CRAN
-version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
-[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
-
 Retrieval functions for USGS and EPA hydrologic and water quality data.
 
 For complete tutorial information, see:
@@ -65,6 +56,26 @@ features <- findNLDI(
 )
 ```
 
+# Installation of dataRetrieval
+
+To install the toxEval package, you must be using R 3.0 or greater and
+run the following command:
+
+``` r
+install.packages("dataRetrieval")
+```
+
+To get cutting-edge changes, install from GitHub using the `remotes`
+packages:
+
+``` r
+library(remotes)
+install_github("DOI-USGS/dataRetrieval",
+               build_vignettes = TRUE, 
+               build_opts = c("--no-resave-data",
+                              "--no-manual"))
+```
+
 # Reporting bugs
 
 Please consider reporting bugs and asking questions on the Issues page:
@@ -82,9 +93,9 @@ citation(package = "dataRetrieval")
 #> 
 #> To cite dataRetrieval in publications, please use:
 #> 
-#>   De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., 2022,
-#>   dataRetrieval: R packages for discovering and retrieving water data
-#>   available from Federal hydrologic web services, v.2.7.11,
+#>   De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., Johnson, M.,
+#>   2022, dataRetrieval: R packages for discovering and retrieving water
+#>   data available from Federal hydrologic web services, v.2.7.12,
 #>   doi:10.5066/P9X4L3GE
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -94,7 +105,7 @@ citation(package = "dataRetrieval")
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
-#>     version = {2.7.11},
+#>     version = {2.7.12},
 #>     institution = {U.S. Geological Survey},
 #>     year = {2022},
 #>     doi = {10.5066/P9X4L3GE},

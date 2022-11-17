@@ -41,14 +41,6 @@
 #'
 #' @seealso \code{\link{renameNWISColumns}}
 #' @export
-#' @importFrom xml2 read_xml
-#' @importFrom xml2 xml_find_all
-#' @importFrom xml2 xml_children
-#' @importFrom xml2 xml_name
-#' @importFrom xml2 xml_text
-#' @importFrom xml2 xml_attrs
-#' @importFrom xml2 xml_attr
-#' @importFrom xml2 xml_root
 #' @examplesIf is_dataRetrieval_user()
 #' site_id <- "02177000"
 #' startDate <- "2012-09-01"
@@ -129,13 +121,13 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
   }
   tz <- match.arg(tz, OlsonNames())
 
-  timeSeries <- xml_find_all(returnedDoc, ".//ns1:timeSeries") # each parameter/site combo
+  timeSeries <- xml2::xml_find_all(returnedDoc, ".//ns1:timeSeries") # each parameter/site combo
 
   # some initial attributes
-  queryNodes <- xml_children(xml_find_all(returnedDoc, ".//ns1:queryInfo"))
-  notes <- queryNodes[xml_name(queryNodes) == "note"]
-  noteTitles <- xml_attrs(notes)
-  noteText <- xml_text(notes)
+  queryNodes <- xml2::xml_children(xml2::xml_find_all(returnedDoc, ".//ns1:queryInfo"))
+  notes <- queryNodes[xml2::xml_name(queryNodes) == "note"]
+  noteTitles <- xml2::xml_attrs(notes)
+  noteText <- xml2::xml_text(notes)
   noteList <- as.list(noteText)
   names(noteList) <- noteTitles
 
@@ -158,49 +150,49 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
   for (t in timeSeries) {
     # check if there are multiple time series (ie with different descriptors)
     # descriptor will be appended to col name if so
-    valParents <- xml_find_all(t, ".//ns1:values")
+    valParents <- xml2::xml_find_all(t, ".//ns1:values")
     obsDF <- NULL
     useMethodDesc <- FALSE
     if (length(valParents) > 1) useMethodDesc <- TRUE # append the method description to colnames later
 
-    sourceInfo <- xml_children(xml_find_all(t, ".//ns1:sourceInfo"))
-    variable <- xml_children(xml_find_all(t, ".//ns1:variable"))
-    agency_cd <- xml_attr(sourceInfo[xml_name(sourceInfo) == "siteCode"], "agencyCode")
-    pCode <- xml_text(variable[xml_name(variable) == "variableCode"])
-    statCode <- xml_attr(xml_find_all(variable, ".//ns1:option"), "optionCode")
+    sourceInfo <- xml2::xml_children(xml2::xml_find_all(t, ".//ns1:sourceInfo"))
+    variable <- xml2::xml_children(xml2::xml_find_all(t, ".//ns1:variable"))
+    agency_cd <- xml2::xml_attr(sourceInfo[xml2::xml_name(sourceInfo) == "siteCode"], "agencyCode")
+    pCode <- xml2::xml_text(variable[xml2::xml_name(variable) == "variableCode"])
+    statCode <- xml2::xml_attr(xml2::xml_find_all(variable, ".//ns1:option"), "optionCode")
 
     # site info
-    srsNode <- xml_find_all(sourceInfo, ".//ns1:geogLocation")
-    srs <- xml_attr(srsNode, "srs")
-    locNodes <- xml_children(srsNode)
-    locNames <- xml_name(locNodes)
-    locText <- as.numeric(xml_text(locNodes))
+    srsNode <- xml2::xml_find_all(sourceInfo, ".//ns1:geogLocation")
+    srs <- xml2::xml_attr(srsNode, "srs")
+    locNodes <- xml2::xml_children(srsNode)
+    locNames <- xml2::xml_name(locNodes)
+    locText <- as.numeric(xml2::xml_text(locNodes))
     names(locText) <- sub("longitude", "dec_lon_va", sub("latitude", "dec_lat_va", locNames))
-    sitePropNodes <- sourceInfo[xml_name(sourceInfo) == "siteProperty"]
-    siteProp <- xml_text(sitePropNodes)
-    names(siteProp) <- xml_attr(sitePropNodes, "name")
-    tzInfo <- unlist(xml_attrs(xml_find_all(sourceInfo, "ns1:defaultTimeZone")))
-    siteName <- xml_text(sourceInfo[xml_name(sourceInfo) == "siteName"])
-    siteCodeNode <- sourceInfo[xml_name(sourceInfo) == "siteCode"]
-    site_no <- xml_text(siteCodeNode)
-    siteCodeAtt <- unlist(xml_attrs(siteCodeNode))
+    sitePropNodes <- sourceInfo[xml2::xml_name(sourceInfo) == "siteProperty"]
+    siteProp <- xml2::xml_text(sitePropNodes)
+    names(siteProp) <- xml2::xml_attr(sitePropNodes, "name")
+    tzInfo <- unlist(xml2::xml_attrs(xml2::xml_find_all(sourceInfo, "ns1:defaultTimeZone")))
+    siteName <- xml2::xml_text(sourceInfo[xml2::xml_name(sourceInfo) == "siteName"])
+    siteCodeNode <- sourceInfo[xml2::xml_name(sourceInfo) == "siteCode"]
+    site_no <- xml2::xml_text(siteCodeNode)
+    siteCodeAtt <- unlist(xml2::xml_attrs(siteCodeNode))
     siteDF <- cbind.data.frame(t(locText), t(tzInfo),
       station_nm = siteName,
       t(siteCodeAtt), srs, t(siteProp),
       site_no, stringsAsFactors = FALSE
     )
-    defaultTZ <- xml_attr(xml_find_all(sourceInfo, ".//ns1:defaultTimeZone"), "zoneAbbreviation")
+    defaultTZ <- xml2::xml_attr(xml2::xml_find_all(sourceInfo, ".//ns1:defaultTimeZone"), "zoneAbbreviation")
 
     for (v in valParents) {
       obsColName <- paste(pCode, statCode, sep = "_")
-      obs <- xml_find_all(v, ".//ns1:value")
-      values <- as.numeric(xml_text(obs)) # actual observations
+      obs <- xml2::xml_find_all(v, ".//ns1:value")
+      values <- as.numeric(xml2::xml_text(obs)) # actual observations
 
       nObs <- length(values)
-      qual <- xml_attr(obs, "qualifiers")
+      qual <- xml2::xml_attr(obs, "qualifiers")
 
 
-      dateTime <- xml_attr(obs, "dateTime")
+      dateTime <- xml2::xml_attr(obs, "dateTime")
       if (asDateTime) {
         numChar <- nchar(dateTime)
         dateTime <- lubridate::parse_date_time(dateTime, c(
@@ -233,7 +225,7 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
       }
       # create column names, addressing if methodDesc is needed
       if (useMethodDesc) {
-        methodDesc <- xml_text(xml_find_all(v, ".//ns1:methodDescription"))
+        methodDesc <- xml2::xml_text(xml2::xml_find_all(v, ".//ns1:methodDescription"))
         # this keeps column names consistent with old version
         methodDesc <- gsub("\\[|\\]| |\\(|\\)", ".", methodDesc)
 
@@ -285,10 +277,10 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
     nObs <- nrow(obsDF)
 
     # statistic info
-    options <- xml_find_all(variable, "ns1:option")
-    stat <- options[xml_attr(options, "name") == "Statistic"]
-    stat_nm <- xml_text(options[xml_attr(stat, "name") == "Statistic"])
-    statCd <- xml_attr(stat, "optionCode")
+    options <- xml2::xml_find_all(variable, "ns1:option")
+    stat <- options[xml2::xml_attr(options, "name") == "Statistic"]
+    stat_nm <- xml2::xml_text(options[xml2::xml_attr(stat, "name") == "Statistic"])
+    statCd <- xml2::xml_attr(stat, "optionCode")
     statDF <- cbind.data.frame(
       statisticCd = statCd,
       statisticName = stat_nm,
@@ -296,8 +288,8 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
     )
 
     # variable info
-    varText <- as.data.frame(t(xml_text(variable)), stringsAsFactors = FALSE)
-    varNames <- xml_name(variable)
+    varText <- as.data.frame(t(xml2::xml_text(variable)), stringsAsFactors = FALSE)
+    varNames <- xml2::xml_name(variable)
     varNames <- sub("unit", "param_unit", varNames) # rename to stay consistent with orig importWaterMl1
     names(varText) <- varNames
 
@@ -476,9 +468,9 @@ empty_col <- function(column_type) {
 
 check_if_xml <- function(obs_url) {
   if (is.character(obs_url) && file.exists(obs_url)) {
-    returnedDoc <- read_xml(obs_url)
+    returnedDoc <- xml2::read_xml(obs_url)
   } else if (is.raw(obs_url)) {
-    returnedDoc <- read_xml(obs_url)
+    returnedDoc <- xml2::read_xml(obs_url)
   } else if (inherits(obs_url, c("xml_node", "xml_nodeset"))) {
     returnedDoc <- obs_url
   } else {
@@ -486,7 +478,7 @@ check_if_xml <- function(obs_url) {
     if (is.null(doc)) {
       return(invisible(NULL))
     }
-    returnedDoc <- xml_root(doc)
+    returnedDoc <- xml2::xml_root(doc)
   }
   return(returnedDoc)
 }

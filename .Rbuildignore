@@ -64,3 +64,5 @@ vignettes/pipeline_snap_update_inventory.png
 sample_large_pull.R
 deploy_simple.R
 .lintr
+WQPUndocumentedServices.R
+data_type_cd.R

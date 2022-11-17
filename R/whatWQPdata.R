@@ -29,7 +29,7 @@ whatWQPsamples <- function(..., convertType = TRUE) {
     values <- values[!(names(values) %in% "service")]
   }
 
-  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
 
   baseURL <- drURL("Activity", arg.list = values)
 
@@ -83,7 +83,7 @@ whatWQPmetrics <- function(..., convertType = TRUE) {
     values <- values[!(names(values) %in% "service")]
   }
 
-  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
 
   baseURL <- drURL("ActivityMetric", arg.list = values)
 
@@ -198,7 +198,7 @@ whatWQPdata <- function(..., saveFile = tempfile(),
     values <- values[!(names(values) %in% "service")]
   }
 
-  values <- sapply(values, function(x) URLencode(x, reserved = TRUE))
+  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
 
   baseURL <- drURL("Station", arg.list = values)
 

@@ -168,7 +168,7 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
     }
   } else {
     if (zip) {
-      doc <- unzip(obs_url)
+      doc <- utils::unzip(obs_url)
     } else {
       doc <- obs_url
     }

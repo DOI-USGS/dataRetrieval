@@ -5,9 +5,6 @@
 #'
 #' @param obs_url character containing the url for the retrieval
 #' @param \dots information to pass to header request
-#' @importFrom xml2 xml_text
-#' @importFrom xml2 xml_child
-#' @importFrom xml2 read_xml
 #' @export
 #' @return raw data from web services
 #' @examplesIf is_dataRetrieval_user()
@@ -31,7 +28,7 @@ getWebServiceData <- function(obs_url, ...) {
   if (httr::status_code(returnedList) == 400) {
     if (httr::has_content(returnedList)) {
       response400 <- httr::content(returnedList, type = "text", encoding = "UTF-8")
-      statusReport <- xml_text(xml_child(read_xml(response400), 2)) # making assumption that - body is second node
+      statusReport <- xml2::xml_text(xml2::xml_child(xml2::read_xml(response400), 2)) # making assumption that - body is second node
       statusMsg <- gsub(pattern = ", server=.*", replacement = "", x = statusReport)
       message(statusMsg)
     } else {
@@ -80,9 +77,9 @@ getWebServiceData <- function(obs_url, ...) {
         message(returnedDoc)
       }
       if (headerInfo$`content-type` == "text/xml") {
-        if (xml_name(read_xml(returnedList)) == "ExceptionReport") {
+        if (xml2::xml_name(xml2::read_xml(returnedList)) == "ExceptionReport") {
           statusReport <- tryCatch({
-            xml_text(xml_child(read_xml(returnedList)))
+            xml2::xml_text(xml2::xml_child(xml2::read_xml(returnedList)))
           })
           if (grepl("No feature found", statusReport)) {
             message(statusReport)
@@ -103,8 +100,8 @@ getWebServiceData <- function(obs_url, ...) {
 default_ua <- function() {
   versions <- c(
     libcurl = curl::curl_version()$version,
-    httr = as.character(packageVersion("httr")),
-    dataRetrieval = as.character(packageVersion("dataRetrieval"))
+    httr = as.character(utils::packageVersion("httr")),
+    dataRetrieval = as.character(utils::packageVersion("dataRetrieval"))
   )
 
   ua <- paste0(names(versions), "/", versions, collapse = " ")
