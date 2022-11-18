@@ -37,7 +37,7 @@ find_good_names <- function(input, type) {
 #' @return data.frame
 #' @export
 #' @keywords nldi
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' get_nldi_sources()
 #' }
@@ -73,8 +73,7 @@ get_nldi_sources <- function() {
 #' @keywords nldi internal
 #' @noRd
 #' @return a data.frame
-#' @importFrom httr content
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' base <- "https://labs.waterdata.usgs.gov/api/nldi/linked-data/"
 #' get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = FALSE)
@@ -205,11 +204,10 @@ clean_nwis_ids <- function(tmp) {
 #' @return a list with good and bad entries
 #' @keywords nldi internal
 #' @noRd
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' valid_ask(all = get_nldi_sources(), "nwis")
 #' }
-
 valid_ask <- function(all, type) {
   # those where the requested pattern is included in a nldi_source ...
   # means we will catch nwis - not just nwissite ...
@@ -467,13 +465,6 @@ findNLDI <- function(comid = NULL,
 
   # Clean up NWIS ids, trim NULLs, and return ...
   shp <- tc(lapply(shp, clean_nwis_ids))
-
-  # dont return list for one length elements
-  # Tue Nov  1 08:48:29 2022 ------------------------------
-  # Commented out
-  # if (length(shp) == 1) {
-  #   shp <- shp[[1]]
-  # }
 
   return(shp)
 }

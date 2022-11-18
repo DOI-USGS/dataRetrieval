@@ -65,8 +65,8 @@ features <- findNLDI(
 
 # Installation of dataRetrieval
 
-To install the toxEval package, you must be using R 3.0 or greater and
-run the following command:
+To install the `dataRetrieval` package, you must be using R 3.0 or
+greater and run the following command:
 
 ``` r
 install.packages("dataRetrieval")
@@ -127,15 +127,6 @@ maintenance of `dataRetrieval`, and most likely further into the future.
 Resources are available primarily for maintenance and responding to user
 questions. Priorities on the development of new features are determined
 by the `dataRetrieval` development team.
-
-# Installation
-
-To install the dataRetrieval package, you must be using R 3.0 or greater
-and run the following command:
-
-``` r
-install.packages("dataRetrieval")
-```
 
 # Disclaimer
 
