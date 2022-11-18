@@ -54,7 +54,7 @@ install.packages(c("devtools", "rmarkdown"))
 dataRetrieval is a publicly available package. The public is urged to report issues and ask questions on our GitHub page: 
 [GitHub Issues](https://github.com/DOI-USGS/dataRetrieval/issues)
 
-The public is welcome to fork the [GitHub repository](https://github.com/DOI-USGS/dataRetrieval) and can submit pull requests. Since dataRetrieval is used by so many people, any proposed changes would be thoroughly reviewed before being considered. 
+The public is welcome to fork the [GitHub repository](https://github.com/DOI-USGS/dataRetrieval) and can submit pull requests. Since dataRetrieval is used by so many people, any proposed changes will be thoroughly reviewed before being considered. 
 
 The bulk of dataRetrieval development is on [code.usgs.gov/water/dataRetrieval](https://code.usgs.gov/water/dataRetrieval). This is the USGS GitLab system. Throughout this document, it will be referred to both as code.usgs.gov and GitLab. Once updates and bug fixes are tested on GitLab, they will be pushed up to the GitHub repository. The remaining instructions are assuming the developer is using GitLab.
 
@@ -339,7 +339,7 @@ knitr::include_graphics("back_to_main.png")
 
 ## Delete local feature branch
 
-The way code.usgs.gov is set up, the branch should be automatically deleted *ON* code.usgs.gov. You will still want to delete the feature branch locally. Go to the Terminal in the lower left corner in RStudio, and type `git branch -d my_fancy_branch` (or whatever you named your branch).
+The way code.usgs.gov is set up, the branch should be automatically deleted *ON* code.usgs.gov. You will still want to delete the feature branch locally. Go to the Terminal in the lower left corner in RStudio, and type `git branch -d my_fancy_function` (or whatever you named your branch).
 
 ```{r echo=FALSE, out.width="50%"}
 knitr::include_graphics("delete_branch.png")
