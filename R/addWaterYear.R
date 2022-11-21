@@ -65,8 +65,7 @@ addWaterYear <- function(rawData) {
 #' @details This function calculates a water year based on the USGS
 #' definition that a water year starts on October 1 of the year before,
 #' and ends on September 30. For example, water year 2015 started on
-#' 2014-10-01 and ended on 2015-09-30. See the USGS definition at
-#' \url{https://water.usgs.gov/nwc/explain_data.html}.
+#' 2014-10-01 and ended on 2015-09-30. 
 #'
 #' @return numeric vector indicating the water year
 #' @export

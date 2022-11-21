@@ -56,12 +56,14 @@ dataRetrieval is a publicly available package. The public is urged to report iss
 
 The public is welcome to fork the [GitHub repository](https://github.com/DOI-USGS/dataRetrieval) and can submit pull requests. Since dataRetrieval is used by so many people, any proposed changes will be thoroughly reviewed before being considered. 
 
-The bulk of dataRetrieval development is on [code.usgs.gov/water/dataRetrieval](https://code.usgs.gov/water/dataRetrieval). This is the USGS GitLab system. Throughout this document, it will be referred to both as code.usgs.gov and GitLab. Once updates and bug fixes are tested on GitLab, they will be pushed up to the GitHub repository. The remaining instructions are assuming the developer is using GitLab.
+dataRetrieval development done by USGS employees is done on [code.usgs.gov/water/dataRetrieval](https://code.usgs.gov/water/dataRetrieval). This is the USGS GitLab system. Throughout this document, it will be referred to both as code.usgs.gov and GitLab. Once updates and bug fixes are tested on GitLab, they will be pushed up to the GitHub repository. 
 
 
 ## code.usgs.gov (GitLab) setup
 
-We are walking through a project that is managed on code.usgs.gov. code.usgs.gov is the USGS enterprise GitLab home. Some people will either refer it as either code.usgs.gov or simply "GitLab". These instructions will generally refer to code.usgs.gov as GitLab unless it's specific to our USGS version of GitLab (for example, how to log in). If you have questions on how to use code.usgs.gov, general advice about GitLab will often suffice (so Googling for answers is a great first step!)
+USGS or DOI employees can use code.usgs.gov for dataRetrieval development. This section shows the steps to setup development work through the code.usgs.gov system.
+
+code.usgs.gov is the USGS enterprise GitLab home. Some people will either refer it as either code.usgs.gov or simply "GitLab". These instructions will generally refer to code.usgs.gov as GitLab unless it's specific to our USGS version of GitLab (for example, how to log in). If you have questions on how to use code.usgs.gov, general advice about GitLab will often suffice (so Googling for answers is a great first step!)
 
 The first step to collaborating via code.usgs.gov is to log in. For USGS/DOI employees, that means using:
 
@@ -69,7 +71,7 @@ The first step to collaborating via code.usgs.gov is to log in. For USGS/DOI emp
 knitr::include_graphics("login.png")
 ```
 
-## Personal Access Token
+### Personal Access Token
 
 This step only needs to be done once per computer setup. So if you've done it before you can skip this step.
 
@@ -86,9 +88,9 @@ knitr::include_graphics("save_pat.png")
 
 Save your token in a safe place (KeyPass for instance) so you don’t need to constantly regenerate tokens. You will need this token for authenticating when doing a git pull (in a few steps....).
 
-## Local project setup
+# Local project setup
 
-The easiest way to set up work on this package is to create a new Project within RStudio. These are the steps needed to get the files from GitLab (code.usgs.gov) to your computer.
+The easiest way to set up work on this package is to create a new Project within RStudio. These are the steps needed to get the files from GitLab (for USGS/DOI employees) or GitHub (external collaborators) to your computer.
 
 1. Create a new project -> Version Control -> Git
 
@@ -96,11 +98,20 @@ The easiest way to set up work on this package is to create a new Project within
 knitr::include_graphics("new_project.png")
 ```
 
-2. Navigate to the landing page for the repository, and copy the HTTPS URL from code.usgs.gov Clone button:
+2. Navigate to the landing page for the repository to find the Repository URL.
+
+From code.usgs.gov, use the "Clone" button and copy the HTTPS URL:
 
 ```{r echo=FALSE, out.width="50%"}
 knitr::include_graphics("https_clone.png")
 ```
+
+From GitHub, use the "Code" button and copy the SSH url:
+
+```{r echo=FALSE, out.width="50%"}
+knitr::include_graphics("github_code.png")
+```
+ 
 
 3. Paste the HTTPS git address in Repository URL:
 
@@ -108,7 +119,11 @@ knitr::include_graphics("https_clone.png")
 knitr::include_graphics("git_repository.png")
 ```
 
-4. You may need to log in (if you've logged in before, there will not be a log in prompt and you can skip this step). Use your full email for your user name, and the personal access token for your password. NOT your AD password!
+4. Logging in
+
+You may need to log in (if you've logged in before, there will not be a log in prompt and you can skip this step). 
+
+For code.usgs.gov, use your full email for your user name, and the personal access token for your password. NOT your AD password!
 
 ```{r echo=FALSE, out.width="60%"}
 knitr::include_graphics("git_login.png")
@@ -116,9 +131,11 @@ knitr::include_graphics("git_login.png")
 
 If you attempt to use HTTPS and are not even prompted for a password, but you receive a failed authentication error message, then you probably at one point in the past provided an incorrect username/password and Windows (or MacOS) chose to store that password in their built-in credential manager. On Windows, this is called Credential Manager. On Mac, this is called Keychain. Clear that credential and try again.
 
-## Setup local build
+For GitHub, see [Adding a New SSH Key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
 
-### Initial Installation
+# Setup Local Build
+
+## Initial Installation
 
 Click "Install and Restart" from Build tab in the upper right of your RStudio window. If there are packages that this package depends on and they are not installed on your computer, you will get a warning. Install those packages manually and try the "Install and Restart" again. If successful, you will see something like:
 
@@ -138,7 +155,7 @@ Read which package is missing from your computer and install, or you can use the
 remotes::install_deps()
 ```
 
-### Set up roxygen options
+## Set up roxygen options
 
 Turn on the option to use Roxygen to build help pages. Click on the More button in the "Build" tab, then choose "Configure Build Tools". 
 
@@ -167,7 +184,9 @@ We're now setup to start contributing to the R-package! This next section will w
 
 ## Project management
 
-It's a great idea to figure out from the start how you want to manage the work. Since you are already working in GitLab, consider using GitLab Issues. You can create custom labels, assign roles, set up specific templates, and provide due dates. Discussions of the issues can include screenshots, formatted code snippets, and general markdown formatting options. It's a great idea to spend some time defining specific tasks before beginning work. Issues can be referred to by number in git commits, which adds some nice feedback during the coding process.
+It's a great idea to figure out from the start how you want to manage the work. Since you are already working in GitLab, consider using GitLab Issues. You can create custom labels, assign roles, set up specific templates, and provide due dates. 
+
+Discussions of the issues can include screenshots, formatted code snippets, and general markdown formatting options. It's a great idea to spend some time defining specific tasks before beginning work. Issues can be referred to by number in git commits, which adds some nice feedback during the coding process.
 
 ## Set up a new git branch
 
@@ -186,9 +205,7 @@ knitr::include_graphics("new_branch.png")
 
 ## Building a new function
 
-You have all the details for a new function, great! Here are some steps to get it fully incorporated into the package so others can use it. See [R Packages](https://r-pkgs.org/) for complete details.
-
-Follow the style and guidelines agreed upon by the package development team. For example, I typically create Roxygen above the function definition, explicitly call dependent functions with the notation `package::function_I_need`, and prefer more whitespace and linebreaks than other developers. I would either discuss these style preferences with my collaborators or create a project-specific style guideline. 
+You have all the details for a new function, great! Here are some steps to get it fully incorporated into the package so others can use it. See [R Packages](https://r-pkgs.org/) for complete details. Follow the style and guidelines agreed upon by the package development team. 
 
 Here is an example of some of a new function which follows our package guidelines. Save this as an R file in the "R" folder of the package.
 
