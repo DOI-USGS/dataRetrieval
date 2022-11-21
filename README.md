@@ -2,12 +2,12 @@
 
 The `dataRetrieval` package was created to simplify the process of
 loading hydrologic data into the R environment. It is designed to
-retrieve the major data types of U.S. Geological Survey (USGS)
-hydrologic data that are available on the Web, as well as data from the
-Water Quality Portal (WQP), which currently houses water quality data
-from the Environmental Protection Agency (EPA), U.S. Department of
-Agriculture (USDA), and USGS. Direct USGS data is obtained from a
-service called the National Water Information System (NWIS).
+retrieve the major data types of U.S. Geological Survey (USGS) hydrology
+data that are available on the Web, as well as data from the Water
+Quality Portal (WQP), which currently houses water quality data from the
+Environmental Protection Agency (EPA), U.S. Department of Agriculture
+(USDA), and USGS. Direct USGS data is obtained from a service called the
+National Water Information System (NWIS).
 
 For complete tutorial information, see:
 
