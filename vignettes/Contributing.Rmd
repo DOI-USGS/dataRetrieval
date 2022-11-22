@@ -37,7 +37,7 @@ There are several programs that are needed before any work can begin. With admin
  
  * [RStudio](https://www.rstudio.com/products/rstudio/download/)
  
- * [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
+ * [Rtools](https://cran.r-project.org/bin/windows/Rtools/) - needed for Windows users.
  
  * [Git](https://git-scm.com/downloads)
  
@@ -184,9 +184,11 @@ We're now setup to start contributing to the R-package! This next section will w
 
 ## Project management
 
-It's a great idea to figure out from the start how you want to manage the work. Since you are already working in GitLab, consider using GitLab Issues. You can create custom labels, assign roles, set up specific templates, and provide due dates. 
+Planned dataRetrieval work will be done on GitLab. Public inquiries, bug reports, and enhancement requests are done on GitHub. Both environments have similar features. 
 
-Discussions of the issues can include screenshots, formatted code snippets, and general markdown formatting options. It's a great idea to spend some time defining specific tasks before beginning work. Issues can be referred to by number in git commits, which adds some nice feedback during the coding process.
+Each distinct set of work tasks should be described in a single issue. The issues should have enough detail to describe the required work and an example of how to test if the task is complete.  Discussions of the issues can include screenshots, formatted code snippets, and general markdown formatting options. Each task should be assigned to a developer. Appropriate labels should be assigned to the task. Issue templates are provided. Developers are encouraged to use git commands to reference issues. 
+
+A few developers have the authority to merge updates into the main branch of dataRetrieval. Each merge/pull request must be reviewed by an authorized approver. Approvers must check that the updates are functional and efficient. Since dataRetrieval is on CRAN, examples and tests that hit web services should be flagged to not run on CRAN. Approvers should try to consider unique use-cases that may not be addressed in the original Issue. Additional topics that approvers should be checking for increased test coverage, minimizing new package dependencies, consistent coding style, and consistent user experience. Ideally authorized approvers get another approver to check their merge requests, but it is not required.
 
 ## Set up a new git branch
 
@@ -222,7 +224,9 @@ Here is an example of some of a new function which follows our package guideline
 #' my_fancy_function(excited_flag = FALSE)
 my_fancy_function <- function(excited_flag){
   
-  checkmate::assert_logical(excited_flag)
+  if(!is.logical(excited_flag)){
+    stop("Input is not a length one logical vector")
+  }
   
   if(excited_flag){
     say <- "HI!"
@@ -231,7 +235,6 @@ my_fancy_function <- function(excited_flag){
   }
   return(say)
 }
-
 ```
 
 ## Local Package Check 
@@ -276,7 +279,7 @@ The function could be added to a section of a vignette, or an entirely new vigne
 
 In some packages, there is a report template that is in the "inst/templates" folder. Consider if function would make sense in a generalized report.
 
-## Push up to code.usgs.gov
+## Push up to code repository
 
 This can be done in stages. If you've done everything correctly, you should be ready to commit at least the R script, the generated Rd documentation file, the testthat changes, and the updates to the NAMESPACE. 
 
