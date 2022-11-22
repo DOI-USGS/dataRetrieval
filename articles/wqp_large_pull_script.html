@@ -70,6 +70,7 @@
     <a class="dropdown-item" href="../articles/movingAverages.html">Moving Averages</a>
     <a class="dropdown-item" href="../articles/statsServiceMap.html">Stat Service</a>
     <a class="dropdown-item" href="../articles/nldi.html">NLDI Interface</a>
+    <a class="dropdown-item" href="../articles/Contributing.html">How to Contribute</a>
   </div>
 </li>
       </ul>
@@ -124,7 +125,7 @@
 <p>The <code>readWQPdata</code> function is used to download the actual relevant data. This example saves the data using the <code>saveRDS</code> function for each individual state. This ensures higher likelihood of successful completion of the query. For example, if a failure occurs during the download and the loops don’t finish. In that case, the states that successfully downloaded the data are skipped, and only re-run the states that didn’t work. Saving as an “RDS” file also has the benefits of retaining all the attributes of the data. Notice another feature of this loop is using <code>tryCatch</code> for each of the <code>dataRetrieval</code> calls. This allows the loop to continue even if one of the states failed for some reason.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://code.usgs.gov/water/dataRetrieval" class="external-link">dataRetrieval</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># state code information for the 48 conterminous United States plus DC:</span></span>

@@ -2,6 +2,7 @@ pandoc: 2.7.3
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
+  Contributing: Contributing.html
   dataRetrieval: dataRetrieval.html
   movingAverages: movingAverages.html
   nldi: nldi.html
@@ -10,5 +11,5 @@ articles:
   tutorial: tutorial.html
   wqp_large_pull_script: wqp_large_pull_script.html
   wqp_large_pull_targets: wqp_large_pull_targets.html
-last_built: 2022-11-17T15:30Z
+last_built: 2022-11-22T22:49Z
 

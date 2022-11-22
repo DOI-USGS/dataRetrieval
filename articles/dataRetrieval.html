@@ -70,6 +70,7 @@
     <a class="dropdown-item" href="../articles/movingAverages.html">Moving Averages</a>
     <a class="dropdown-item" href="../articles/statsServiceMap.html">Stat Service</a>
     <a class="dropdown-item" href="../articles/nldi.html">NLDI Interface</a>
+    <a class="dropdown-item" href="../articles/Contributing.html">How to Contribute</a>
   </div>
 </li>
       </ul>
@@ -98,7 +99,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Introduction to the dataRetrieval package</h1>
                         <h4 data-toc-skip class="author">Laura A. DeCicco and Robert M. Hirsch</h4>
             
-            <h4 data-toc-skip class="date">17 November, 2022</h4>
+            <h4 data-toc-skip class="date">22 November, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DOI-USGS/dataRetrieval/blob/HEAD/vignettes/dataRetrieval.Rmd" class="external-link"><code>vignettes/dataRetrieval.Rmd</code></a></small>
       <div class="d-none name"><code>dataRetrieval.Rmd</code></div>
@@ -110,7 +111,7 @@
 <p>For information on getting started in R and installing the package, see <a href="#getting-started-in-r">Getting Started</a>. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.</p>
 <p>A quick workflow for USGS <code>dataRetrieval</code> functions:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://code.usgs.gov/water/dataRetrieval" class="external-link">dataRetrieval</a></span><span class="op">)</span></span>
 <span><span class="co"># Choptank River near Greensboro, MD</span></span>
 <span><span class="va">siteNumber</span> <span class="op">&lt;-</span> <span class="st">"01491000"</span></span>
 <span><span class="va">ChoptankInfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readNWISsite.html">readNWISsite</a></span><span class="op">(</span><span class="va">siteNumber</span><span class="op">)</span></span>
