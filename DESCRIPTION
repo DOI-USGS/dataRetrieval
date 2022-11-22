@@ -1,6 +1,6 @@
 Package: dataRetrieval
 Type: Package
-Title: Retrieval Functions for USGS and EPA Hydrologic and Water Quality Data
+Title: Retrieval Functions for USGS and EPA Hydrology and Water Quality Data
 Version: 2.7.12
 Authors@R: c(
     person("Laura", "DeCicco", role = c("aut","cre"),
@@ -23,10 +23,10 @@ Authors@R: c(
             email = "akrall@usgs.gov",
             comment=c(ORCID="0000-0003-2521-5043")))
 Description: Collection of functions to help retrieve U.S. Geological Survey
-    (USGS) and U.S. Environmental Protection Agency (EPA) water quality and
-    hydrology data from web services. USGS web services are discovered from 
-    National Water Information System (NWIS) <https://waterservices.usgs.gov/> and <https://waterdata.usgs.gov/nwis>. 
-    Both EPA and USGS water quality data are obtained from the Water Quality Portal <https://www.waterqualitydata.us/>.
+    and U.S. Environmental Protection Agency water quality and
+    hydrology data from web services. Data are discovered from 
+    National Water Information System <https://waterservices.usgs.gov/> and <https://waterdata.usgs.gov/nwis>. 
+    Water quality data are obtained from the Water Quality Portal <https://www.waterqualitydata.us/>.
 License: CC0
 Copyright: This software is in the public domain because it contains materials
     that originally came from the United States Geological Survey, an agency of
@@ -56,5 +56,5 @@ Encoding: UTF-8
 BuildVignettes: true
 VignetteBuilder: knitr
 BugReports: https://github.com/DOI-USGS/dataRetrieval/issues
-URL: https://pubs.usgs.gov/tm/04/a10/
+URL: https://code.usgs.gov/water/dataRetrieval
 RoxygenNote: 7.2.2

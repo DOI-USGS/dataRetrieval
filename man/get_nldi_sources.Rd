@@ -13,8 +13,10 @@ data.frame
 Used to query the current resources available through the NLDI
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 get_nldi_sources()
 }
+\dontshow{\}) # examplesIf}
 }
 \keyword{nldi}
