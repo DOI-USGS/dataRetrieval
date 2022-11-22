@@ -1,6 +1,13 @@
 # dataRetrieval <img src="man/figures/hex_logo.png" class="logo"  alt="dataRetrieval" style="width:90px;height:auto;" align="right" />
 
-Retrieval functions for USGS and EPA hydrologic and water quality data.
+The `dataRetrieval` package was created to simplify the process of
+loading hydrologic data into the R environment. It is designed to
+retrieve the major data types of U.S. Geological Survey (USGS) hydrology
+data that are available on the Web, as well as data from the Water
+Quality Portal (WQP), which currently houses water quality data from the
+Environmental Protection Agency (EPA), U.S. Department of Agriculture
+(USDA), and USGS. Direct USGS data is obtained from a service called the
+National Water Information System (NWIS).
 
 For complete tutorial information, see:
 
@@ -58,8 +65,8 @@ features <- findNLDI(
 
 # Installation of dataRetrieval
 
-To install the toxEval package, you must be using R 3.0 or greater and
-run the following command:
+To install the `dataRetrieval` package, you must be using R 3.0 or
+greater and run the following command:
 
 ``` r
 install.packages("dataRetrieval")
@@ -120,15 +127,6 @@ maintenance of `dataRetrieval`, and most likely further into the future.
 Resources are available primarily for maintenance and responding to user
 questions. Priorities on the development of new features are determined
 by the `dataRetrieval` development team.
-
-# Installation
-
-To install the dataRetrieval package, you must be using R 3.0 or greater
-and run the following command:
-
-``` r
-install.packages("dataRetrieval")
-```
 
 # Disclaimer
 
