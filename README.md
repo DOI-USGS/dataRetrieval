@@ -86,12 +86,7 @@ install_github("DOI-USGS/dataRetrieval",
 # Reporting bugs
 
 Please consider reporting bugs and asking questions on the Issues page:
-<https://github.com/USGS-R/dataRetrieval/issues>
-
-Follow `@USGS_DataSci` on Twitter for updates on USGS R packages:
-
-[![Twitter
-Follow](https://img.shields.io/twitter/follow/USGS_DataSci.svg?style=social&label=Follow%20USGS_R)](https://twitter.com/USGS_DataSci)
+<https://github.com/DOI-USGS/dataRetrieval/issues>
 
 # Citing dataRetrieval
 
