@@ -4,19 +4,16 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>/DISCLAIMER.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
+    <loc>/articles/Contributing.html</loc>
   </url>
   <url>
     <loc>/articles/dataRetrieval.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/large_queries.html</loc>
   </url>
   <url>
     <loc>/articles/movingAverages.html</loc>
@@ -31,7 +28,16 @@
     <loc>/articles/statsServiceMap.html</loc>
   </url>
   <url>
+    <loc>/articles/summary_service.html</loc>
+  </url>
+  <url>
+    <loc>/articles/troubleshooting.html</loc>
+  </url>
+  <url>
     <loc>/articles/tutorial.html</loc>
+  </url>
+  <url>
+    <loc>/articles/tutorial_slides.html</loc>
   </url>
   <url>
     <loc>/articles/wqp_large_pull_script.html</loc>
@@ -43,7 +49,16 @@
     <loc>/authors.html</loc>
   </url>
   <url>
+    <loc>/CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>/DISCLAIMER.html</loc>
+  </url>
+  <url>
     <loc>/index.html</loc>
+  </url>
+  <url>
+    <loc>/LICENSE.html</loc>
   </url>
   <url>
     <loc>/reference/addWaterYear.html</loc>
@@ -100,13 +115,13 @@
     <loc>/reference/importRDB1.html</loc>
   </url>
   <url>
-    <loc>/reference/importWQP.html</loc>
-  </url>
-  <url>
     <loc>/reference/importWaterML1.html</loc>
   </url>
   <url>
     <loc>/reference/importWaterML2.html</loc>
+  </url>
+  <url>
+    <loc>/reference/importWQP.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
@@ -115,10 +130,13 @@
     <loc>/reference/is_dataRetrieval_user.html</loc>
   </url>
   <url>
+    <loc>/reference/parameterCdFile.html</loc>
+  </url>
+  <url>
     <loc>/reference/pCodeToName.html</loc>
   </url>
   <url>
-    <loc>/reference/parameterCdFile.html</loc>
+    <loc>/reference/pcode_to_name.html</loc>
   </url>
   <url>
     <loc>/reference/readNGWMNdata.html</loc>
