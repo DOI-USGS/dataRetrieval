@@ -1,7 +1,3 @@
-dataRetrieval 2.7.13
-===================
-* Added pcode_to_name function to get WQP characteristics from USGS parameter codes.
-
 dataRetrieval 2.7.12
 ===================
 * Updated documentation in readWQPdata
