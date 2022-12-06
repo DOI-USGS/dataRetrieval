@@ -1,12 +1,14 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   dataRetrieval: dataRetrieval.html
-  earthquake: earthquake.html
   movingAverages: movingAverages.html
   nldi: nldi.html
+  qwdata_changes: qwdata_changes.html
   statsServiceMap: statsServiceMap.html
   tutorial: tutorial.html
-last_built: 2020-12-22T16:57Z
+  wqp_large_pull_script: wqp_large_pull_script.html
+  wqp_large_pull_targets: wqp_large_pull_targets.html
+last_built: 2022-11-17T15:54Z
 
