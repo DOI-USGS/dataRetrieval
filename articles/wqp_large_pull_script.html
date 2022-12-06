@@ -80,7 +80,11 @@
 
       <ul class="navbar-nav">
 <li class="nav-item">
+<<<<<<< HEAD
   <a class="external-link nav-link" href="https://github.com/DOI-USGS/dataRetrieval">
+=======
+  <a class="external-link nav-link" href="https://github.com/USGS-R/dataRetrieval">
+>>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -94,12 +98,19 @@
 
 
 
+<<<<<<< HEAD
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Large Data Pulls from Water Quality Portal - A Script-Based Approach</h1>
                         <h4 data-toc-skip class="author">Aliesha
 Krall</h4>
+=======
+<script src="wqp_large_pull_script_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
+      <img src="../logo.png" class="logo" alt=""><h1>Large Data Pulls from Water Quality Portal - A Script-Based Approach</h1>
+                        <h4 data-toc-skip class="author">Aliesha Krall</h4>
+>>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
             
             <h4 data-toc-skip class="date">2022-09-27</h4>
       
@@ -109,6 +120,7 @@ Krall</h4>
 
     
     
+<<<<<<< HEAD
 <p><code>dataRetrieval</code> is an R package that provides
 user-friendly access to water data from either the Water Quality Portal
 (WQP) or the National Water Information Service (NWIS).
@@ -169,6 +181,24 @@ has the benefits of retaining all the attributes of the data. Notice
 another feature of this loop is using <code>tryCatch</code> for each of
 the <code>dataRetrieval</code> calls. This allows the loop to continue
 even if one of the states failed for some reason.</p>
+=======
+<p><code>dataRetrieval</code> is an R package that provides user-friendly access to water data from either the Water Quality Portal (WQP) or the National Water Information Service (NWIS). <code>dataRetrival</code> makes it easier for a user to download data from the WQP or NWIS and convert it into usable formats.</p>
+<p>This article will walk through an example that uses the WQP summary service to limit the amount downloaded to only relevant data using a scripting approach. For large datasets, that can save a lot of time and ultimately reduce the complexity of subsequent data processing.</p>
+<p>This article highlights a “scripting” approach, meaning it will only use basic R techniques. There is less of a learning curve in this approach, but also if something goes wrong, it is more challenging to re-run. The alternative is the pipeline approach, which is highlighted in the article <a href="wqp_large_pull_targets.html">Large Data Pulls from Water Quality Portal - A Pipeline-Based Approach</a>.</p>
+<p>See <a href="https://waterdata.usgs.gov/blog/large_sample_pull/" class="external-link">https://waterdata.usgs.gov/blog/large_sample_pull/</a> for more detail, including analysis of the downloaded data.</p>
+<div class="section level2">
+<h2 id="large-data-example">Large data example<a class="anchor" aria-label="anchor" href="#large-data-example"></a>
+</h2>
+<p>This blog sets up a scenario to look at all the total nitrogen data measured in streams within the contiguous United States where sites have at least 40 measurements between 1995 and 2020.</p>
+<div class="section level4">
+<h4 id="data-download">Data download<a class="anchor" aria-label="anchor" href="#data-download"></a>
+</h4>
+<p>First, set up a loop to find out which sites have the required data, then get only the data that is relevant.</p>
+<p>There are several ways to break up the geographic part of the query, such as bounding box, state, county, or hydrologic unit code (HUC). Depending on the density of the data, it may be ideal to adjust how to loop through the geographic query. Sometimes running a single <code>dataRetrieval</code> call comes back with a “timeout” error. Other times, requests for data spans more than traditional geographic filters of HUC, state, or county. In these cases, it may be necessary to break up the <code>dataRetrieval</code> call into smaller subsets, and then bind those subsets together separately. This blog will discuss one strategy for breaking up a WQP request.</p>
+<p><code>dataRetrieval</code> includes a data frame “stateCd” that has all of the states and territories that could be queried by either NWIS or WQP. In this example, only the lower 48 states along with Washington, D.C.are considered.</p>
+<p>Use the <code>readWQPsummary</code> function, which is a very useful function that returns information about all the data that is available for a particular query. The initial query is asking what <em>nitrogen</em> data for <em>streams</em> is available in a particular state. The returned data shows how many nitrogen samples are available at each site for each year. Then, using filtering and summaries will figure out exactly which sites meet the set up scenairo’s needs.</p>
+<p>The <code>readWQPdata</code> function is used to download the actual relevant data. This example saves the data using the <code>saveRDS</code> function for each individual state. This ensures higher likelihood of successful completion of the query. For example, if a failure occurs during the download and the loops don’t finish. In that case, the states that successfully downloaded the data are skipped, and only re-run the states that didn’t work. Saving as an “RDS” file also has the benefits of retaining all the attributes of the data. Notice another feature of this loop is using <code>tryCatch</code> for each of the <code>dataRetrieval</code> calls. This allows the loop to continue even if one of the states failed for some reason.</p>
+>>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://code.usgs.gov/water/dataRetrieval" class="external-link">dataRetrieval</a></span><span class="op">)</span></span>
@@ -246,6 +276,7 @@ even if one of the states failed for some reason.</p>
 <span>  </span>
 <span>  </span>
 <span><span class="op">}</span></span></code></pre></div>
+<<<<<<< HEAD
 <p>The following can be included in the loop above, but saving it for
 later allows for more flexibility with the raw data (e.g., leaving data
 in or filtering data out).</p>
@@ -263,6 +294,11 @@ Sometimes however, that can’t be done because there are actual character
 values in the results. Therefore, to retain all of that information, be
 sure each state’s “ResultMeasureValue” column is a character (more
 information on this is below).</p>
+=======
+<p>The following can be included in the loop above, but saving it for later allows for more flexibility with the raw data (e.g., leaving data in or filtering data out).</p>
+<p>Although creating an empty data frame and filling the data in later would be the most efficient way to go, binding the rows is flexible and easy to conceptualize. For this data download scenario, there wasn’t a huge bottleneck by using the “dyplr::bind_rows”, but that could be a place to reconsider if the next section seems to be taking too long, in which creating the empty data frame may be the considered solution.</p>
+<p>The next loop shown below opens each file, pulls out the data we need for analysis, and binds up each state into one large data frame. Notice “ResultMeasureValue” changes into a character vector. By default, <code>dataRetrieval</code> will try to convert that column into numeric. Sometimes however, that can’t be done because there are actual character values in the results. Therefore, to retain all of that information, be sure each state’s “ResultMeasureValue” column is a character (more information on this is below).</p>
+>>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_nitrogen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># for(state in stateCd$STUSAB){</span></span>
@@ -295,8 +331,12 @@ information on this is below).</p>
 <div class="section level2">
 <h2 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
 </h2>
+<<<<<<< HEAD
 <p>Any use of trade, firm, or product names is for descriptive purposes
 only and does not imply endorsement by the U.S. Government.</p>
+=======
+<p>Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.</p>
+>>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

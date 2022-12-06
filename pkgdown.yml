@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 pandoc: 2.19.2
+=======
+pandoc: 2.7.3
+>>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
@@ -10,8 +14,14 @@ articles:
   statsServiceMap: statsServiceMap.html
   troubleshooting: troubleshooting.html
   tutorial: tutorial.html
+<<<<<<< HEAD
   tutorial_slides: tutorial_slides.html
   wqp_large_pull_script: wqp_large_pull_script.html
   wqp_large_pull_targets: wqp_large_pull_targets.html
 last_built: 2022-12-06T21:02Z
+=======
+  wqp_large_pull_script: wqp_large_pull_script.html
+  wqp_large_pull_targets: wqp_large_pull_targets.html
+last_built: 2022-11-30T16:04Z
+>>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
 
