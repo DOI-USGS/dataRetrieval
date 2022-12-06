@@ -4,7 +4,7 @@
 \alias{get_nldi_sources}
 \title{Get current NLDI offerings}
 \usage{
-get_nldi_sources()
+get_nldi_sources(url = pkg.env$nldi_base)
 }
 \value{
 data.frame

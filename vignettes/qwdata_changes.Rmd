@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 
 # Changes to water quality services
 
-There was a recent announcement that the NWIS discrete water quality web services will be shut down in spring of 2022  (continuous water quality data will continue to be made available via NWIS functions). What does this mean for `dataRetrieval` users? The water quality data will continue to be available, but it must be accessed from the [Water Quality Portal](https://www.waterqualitydata.us/) rather than the NWIS services. There are 3 major `dataRetrieval` functions that will be affected: `readNWISqw`, `whatNWISdata`, and `readNWISdata`. This vignette will describe the most common workflows conversions needed to update existing scripts. 
+There was a recent announcement that the NWIS discrete water quality web services will be shut down in fall of 2023  (continuous water quality data will continue to be made available via NWIS functions). What does this mean for `dataRetrieval` users? The water quality data will continue to be available, but it must be accessed from the [Water Quality Portal](https://www.waterqualitydata.us/) rather than the NWIS services. There are 3 major `dataRetrieval` functions that will be affected: `readNWISqw`, `whatNWISdata`, and `readNWISdata`. This vignette will describe the most common workflows conversions needed to update existing scripts. 
 
 This vignette is being provided well in advance of any breaking changes, and more information and guidance will be provided. If you need more help than is provided here, please reach out to gs-w-IOW_PO_team@usgs.gov
 
@@ -125,19 +125,19 @@ Let's use the `dplyr` package to pull out the columns are used in this example w
 ```{r}
 library(dplyr)
 
-nwisData_USED <- nwisData %>%
+nwisData_relavent <- nwisData %>%
   select(
     site_no, startDateTime, parm_cd,
     hyd_cond_cd, remark_cd, result_va
   ) %>%
   arrange(startDateTime, parm_cd)
 
-knitr::kable(head(nwisData_USED))
+knitr::kable(head(nwisData_relavent))
 ```
 
-If we explore the output from WQP, we can try to find the columns that include the same information:
+If we explore the output from WQP, we can try to find the columns that include the same relavent information:
 ```{r}
-wqpData_USED <- wqpData %>%
+wqpData_relavent <- wqpData %>%
   select(
     site_no = MonitoringLocationIdentifier,
     startDateTime = ActivityStartDateTime,
@@ -147,7 +147,7 @@ wqpData_USED <- wqpData %>%
     result_va = ResultMeasureValue
   ) %>%
   arrange(startDateTime, parm_cd)
-knitr::kable(head(wqpData_USED))
+knitr::kable(head(wqpData_relavent))
 ```
 
 Now we can start looking at the results and trying to decide how future workflows should be setup. Here are some decisions for this example that we can consider:
@@ -169,7 +169,7 @@ censored_text <- c(
   "Below Quantification Limit"
 )
 
-wqpData_USED <- wqpData %>%
+wqpData_relavent <- wqpData %>%
   mutate(left_censored = grepl(paste(censored_text, collapse = "|"),
     ResultDetectionConditionText,
     ignore.case = TRUE
@@ -185,7 +185,7 @@ wqpData_USED <- wqpData %>%
   ) %>%
   arrange(startDateTime, parm_cd)
 
-knitr::kable(head(wqpData_USED))
+knitr::kable(head(wqpData_relavent))
 ```
 
 ### NWIS codes
@@ -198,7 +198,7 @@ The measurement units are found in EITHER the "ResultMeasure.MeasureUnitCode" co
 
 
 ```{r}
-wqpData_USED_codes <- wqpData %>%
+wqpData_relavent_codes <- wqpData %>%
   mutate(units = ifelse(is.na(ResultMeasure.MeasureUnitCode),
     DetectionQuantitationLimitMeasure.MeasureUnitCode,
     ResultMeasure.MeasureUnitCode
@@ -210,20 +210,20 @@ wqpData_USED_codes <- wqpData %>%
   ) %>%
   distinct()
 
-knitr::kable(wqpData_USED_codes)
+knitr::kable(wqpData_relavent_codes)
 ```
 
 If there are USGS codes that you are using in your analysis, begin to move away from those codes, and move to the text. In the data we are looking at here:
 
 ```{r}
-wqpData_USED_codes <- wqpData %>%
+wqpData_with_codes <- wqpData %>%
   select(
     HydrologicCondition, HydrologicEvent,
     ActivityTypeCode, ActivityMediaName
   ) %>%
   distinct()
 
-knitr::kable(head(wqpData_USED_codes))
+knitr::kable(head(wqpData_with_codes))
 ```
 
 To convert the codes found in this example:

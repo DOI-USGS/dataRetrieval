@@ -86,3 +86,11 @@ deploy:
     paths:
       - $PKG_PATH
     expire_in: 1 week
+    
+Validate Inventory:
+    stage: end
+    image: ${INTERNAL_REGISTRY}ghsc/hazdev/inventory-validator:latest
+    script:
+        - validate.sh code.json
+    tags:
+        - chs-shared
