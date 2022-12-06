@@ -11,8 +11,17 @@ pcode_to_name(parameterCd = "all")
 of 5-digit parameter codes. Default is "all" which will return a complete
 list of parameter codes that have been mapped to a characteristic name.}
 }
+\value{
+a data frame with columns  "parm_cd", "description",            
+"characteristicname", "measureunitcode", "resultsamplefraction",
+"resulttemperaturebasis", "resultstatisticalbasis",  "resulttimebasis",
+"resultweightbasis", "resultparticlesizebasis", "last_rev_dt"
+}
 \description{
-Parameter code to characteristic name
+This function is useful to fine what characteristic name, result sample
+fraction, unit code, and other parameters are mapped with USGS parameter
+codes. This information is useful for converting workflows from a more
+traditional NWIS water quality retrieval to a Water Quality Portal retrieval.
 }
 \examples{
 pcodes <- c("00070", "00075", "00430", "52642")
