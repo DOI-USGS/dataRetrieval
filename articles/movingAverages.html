@@ -80,11 +80,7 @@
 
       <ul class="navbar-nav">
 <li class="nav-item">
-<<<<<<< HEAD
   <a class="external-link nav-link" href="https://github.com/DOI-USGS/dataRetrieval">
-=======
-  <a class="external-link nav-link" href="https://github.com/USGS-R/dataRetrieval">
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -98,19 +94,12 @@
 
 
 
-<<<<<<< HEAD
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Calculating Moving Averages and Historical Flow Quantiles</h1>
                         <h4 data-toc-skip class="author">Laura
 DeCicco</h4>
-=======
-<script src="movingAverages_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Calculating Moving Averages and Historical Flow Quantiles</h1>
-                        <h4 data-toc-skip class="author">Laura DeCicco</h4>
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
             
             <h4 data-toc-skip class="date">2016-10-25</h4>
       
@@ -120,7 +109,6 @@ DeCicco</h4>
 
     
     
-<<<<<<< HEAD
 <p>This post will show simple way to calculate moving averages,
 calculate historical-flow quantiles, and plot that information. The goal
 is to reproduce the graph at this link: <a href="http://pa.water.usgs.gov/drought/indicators/sw/images/f30_01538000.html" class="external-link">PA
@@ -134,11 +122,6 @@ sites or measured parameters. In this example, we are getting discharge
 (parameter code 00060) at a site in PA.</p>
 <p>It may be important to note that this script is a bit lazy in
 handling leap days.</p>
-=======
-<p>This post will show simple way to calculate moving averages, calculate historical-flow quantiles, and plot that information. The goal is to reproduce the graph at this link: <a href="http://pa.water.usgs.gov/drought/indicators/sw/images/f30_01538000.html" class="external-link">PA Graph</a>. The motivation for this post was inspired by a USGS colleague that that is considering creating these type of plots in R. We thought this plot provided an especially fun challenge - maybe you will, too!</p>
-<p>First we get the data using the <a href="https://CRAN.R-project.org/package=dataRetrieval" class="external-link">dataRetrieval</a> package. The siteNumber and parameterCd could be adjusted for other sites or measured parameters. In this example, we are getting discharge (parameter code 00060) at a site in PA.</p>
-<p>It may be important to note that this script is a bit lazy in handling leap days.</p>
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
 <div class="section level2">
 <h2 id="get-data-using-dataretrieval">Get data using dataRetrieval<a class="anchor" aria-label="anchor" href="#get-data-using-dataretrieval"></a>
 </h2>
@@ -155,12 +138,8 @@ handling leap days.</p>
 <div class="section level2">
 <h2 id="calculate-moving-average">Calculate moving average<a class="anchor" aria-label="anchor" href="#calculate-moving-average"></a>
 </h2>
-<<<<<<< HEAD
 <p>Next, we calculate a 30-day moving average on all of the flow
 data:</p>
-=======
-<p>Next, we calculate a 30-day moving average on all of the flow data:</p>
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://zoo.R-Forge.R-project.org/" class="external-link">zoo</a></span><span class="op">)</span></span>
@@ -194,16 +173,12 @@ data:</p>
 <div class="section level2">
 <h2 id="calculate-historical-percentiles">Calculate historical percentiles<a class="anchor" aria-label="anchor" href="#calculate-historical-percentiles"></a>
 </h2>
-<<<<<<< HEAD
 <p>We can use the <code>quantile</code> function to calculate historical
 percentile flows. Then use the <code>loess</code> function for
 smoothing. The argument <code>smooth.span</code> defines how much
 smoothing should be applied. To get a smooth transistion at the start of
 the graph, we can add include an earlier year which is not plotted at
 the end.</p>
-=======
-<p>We can use the <code>quantile</code> function to calculate historical percentile flows. Then use the <code>loess</code> function for smoothing. The argument <code>smooth.span</code> defines how much smoothing should be applied. To get a smooth transistion at the start of the graph, we can add include an earlier year which is not plotted at the end.</p>
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summaryQ</span> <span class="op">&lt;-</span> <span class="va">dailyQ</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">day.of.year</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -265,13 +240,9 @@ the end.</p>
 <div class="section level2">
 <h2 id="plot-using-base-r">Plot using base R<a class="anchor" aria-label="anchor" href="#plot-using-base-r"></a>
 </h2>
-<<<<<<< HEAD
 <p>Many of the graphical requirements defined by the USGS are difficult
 to achieve in <code>ggplot2</code>. Base R plotting can be used to
 obtain these types of graphs:</p>
-=======
-<p>Many of the graphical requirements defined by the USGS are difficult to achieve in <code>ggplot2</code>. Base R plotting can be used to obtain these types of graphs:</p>
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">title.text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
 <span>  <span class="va">stationInfo</span><span class="op">$</span><span class="va">station_nm</span>, <span class="st">"\n"</span>,</span>
@@ -350,14 +321,10 @@ Simple 30-day moving average daily flow plot using base R
 <div class="section level2">
 <h2 id="plot-using-ggplot2">Plot using ggplot2<a class="anchor" aria-label="anchor" href="#plot-using-ggplot2"></a>
 </h2>
-<<<<<<< HEAD
 <p>Finally, we can also try to create the graph using the
 <code>ggplot2</code> package. The following script shows a simple way to
 re-create the graph in <code>ggplot2</code> with no effort on imitating
 desired style:</p>
-=======
-<p>Finally, we can also try to create the graph using the <code>ggplot2</code> package. The following script shows a simple way to re-create the graph in <code>ggplot2</code> with no effort on imitating desired style:</p>
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>

@@ -4,18 +4,6 @@
     <loc>/404.html</loc>
   </url>
   <url>
-<<<<<<< HEAD
-=======
-    <loc>/CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>/DISCLAIMER.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
     <loc>/articles/Contributing.html</loc>
   </url>
   <url>
@@ -25,12 +13,6 @@
     <loc>/articles/index.html</loc>
   </url>
   <url>
-<<<<<<< HEAD
-    <loc>/articles/large_queries.html</loc>
-  </url>
-  <url>
-=======
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
     <loc>/articles/movingAverages.html</loc>
   </url>
   <url>
@@ -43,24 +25,9 @@
     <loc>/articles/statsServiceMap.html</loc>
   </url>
   <url>
-<<<<<<< HEAD
-    <loc>/articles/summary_service.html</loc>
-  </url>
-  <url>
-    <loc>/articles/troubleshooting.html</loc>
-  </url>
-  <url>
     <loc>/articles/tutorial.html</loc>
   </url>
   <url>
-    <loc>/articles/tutorial_slides.html</loc>
-  </url>
-  <url>
-=======
-    <loc>/articles/tutorial.html</loc>
-  </url>
-  <url>
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
     <loc>/articles/wqp_large_pull_script.html</loc>
   </url>
   <url>
@@ -70,7 +37,6 @@
     <loc>/authors.html</loc>
   </url>
   <url>
-<<<<<<< HEAD
     <loc>/CONDUCT.html</loc>
   </url>
   <url>
@@ -83,11 +49,6 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
-=======
-    <loc>/index.html</loc>
-  </url>
-  <url>
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
     <loc>/reference/addWaterYear.html</loc>
   </url>
   <url>
@@ -142,31 +103,21 @@
     <loc>/reference/importRDB1.html</loc>
   </url>
   <url>
-<<<<<<< HEAD
-=======
-    <loc>/reference/importWQP.html</loc>
-  </url>
-  <url>
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
     <loc>/reference/importWaterML1.html</loc>
   </url>
   <url>
     <loc>/reference/importWaterML2.html</loc>
   </url>
   <url>
-<<<<<<< HEAD
     <loc>/reference/importWQP.html</loc>
   </url>
   <url>
-=======
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
     <loc>/reference/index.html</loc>
   </url>
   <url>
     <loc>/reference/is_dataRetrieval_user.html</loc>
   </url>
   <url>
-<<<<<<< HEAD
     <loc>/reference/parameterCdFile.html</loc>
   </url>
   <url>
@@ -174,12 +125,6 @@
   </url>
   <url>
     <loc>/reference/pcode_to_name.html</loc>
-=======
-    <loc>/reference/pCodeToName.html</loc>
-  </url>
-  <url>
-    <loc>/reference/parameterCdFile.html</loc>
->>>>>>> c72c4f746608d7eeb2f990839c5ae587fe090dbf
   </url>
   <url>
     <loc>/reference/readNGWMNdata.html</loc>
