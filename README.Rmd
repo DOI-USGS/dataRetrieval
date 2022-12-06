@@ -110,7 +110,7 @@ citation(package = "dataRetrieval")
 
 # Package Support
 
-The Water Mission Area of the USGS supports the development and maintenance of `dataRetrieval`, and most likely further into the future. Resources are available primarily for maintenance and responding to user questions. Priorities on the development of new features are determined by the `dataRetrieval` development team.
+The Water Mission Area of the USGS supports the development and maintenance of `dataRetrieval`, and most likely further into the future. Resources are available primarily for maintenance and responding to user questions. Priorities on the development of new features are determined by the `dataRetrieval` development team. This software was last released with USGS record: IP-147158.
 
 ```{r disclaimer, child="DISCLAIMER.md", eval=TRUE}
 ```
