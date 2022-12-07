@@ -92,10 +92,8 @@ Validate Inventory:
     image: ${INTERNAL_REGISTRY}software/software-management:latest
     script:
       - software-management review
-        --project "${CI_PROJECT_DIR}"
+        --project "code.usgs.gov/water/dataRetrieval"
         --ref "${CI_COMMIT_BRANCH}"
         --type "provisional"
-
-
     tags:
         - chs-shared
