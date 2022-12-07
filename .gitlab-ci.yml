@@ -93,7 +93,7 @@ Validate Inventory:
     script:
       - software-management review
         --project "${CI_PROJECT_DIR}"
-        --ref "main"
+        --ref "${CI_COMMIT_BRANCH}"
         --type "provisional"
 
 
