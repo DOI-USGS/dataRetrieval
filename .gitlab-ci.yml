@@ -94,7 +94,7 @@ Validate Inventory:
       - software-management review
         --project "${CI_PROJECT_DIR}"
         --ref "main"
-        --type "Provisional"
+        --type "provisional"
 
 
     tags:
