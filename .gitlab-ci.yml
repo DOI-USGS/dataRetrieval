@@ -91,6 +91,10 @@ Validate Inventory:
     stage: end
     image: ${INTERNAL_REGISTRY}ghsc/hazdev/inventory-validator:latest
     script:
-        - validate.sh code.json
+      - validate.sh code.json
+          - software-management publish
+      --project "${CI_PROJECT_DIR}"
+      --visibility internal
+
     tags:
         - chs-shared
