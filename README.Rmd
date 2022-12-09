@@ -99,11 +99,8 @@ install_github("DOI-USGS/dataRetrieval",
 # Reporting bugs
 
 Please consider reporting bugs and asking questions on the Issues page:
-[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
+[https://github.com/DOI-USGS/dataRetrieval/issues](https://github.com/DOI-USGS/dataRetrieval/issues)
 
-Follow `@USGS_DataSci` on Twitter for updates on USGS R packages:
-
-[![Twitter Follow](https://img.shields.io/twitter/follow/USGS_DataSci.svg?style=social&label=Follow%20USGS_R)](https://twitter.com/USGS_DataSci)
 
 # Citing dataRetrieval
 
@@ -113,17 +110,9 @@ citation(package = "dataRetrieval")
 
 # Package Support
 
-The Water Mission Area of the USGS supports the development and maintenance of `dataRetrieval`, and most likely further into the future. Resources are available primarily for maintenance and responding to user questions. Priorities on the development of new features are determined by the `dataRetrieval` development team.
+The Water Mission Area of the USGS supports the development and maintenance of `dataRetrieval`, and most likely further into the future. Resources are available primarily for maintenance and responding to user questions. Priorities on the development of new features are determined by the `dataRetrieval` development team. This software was last released with USGS record: IP-147158.
 
-# Disclaimer
+```{r disclaimer, child="DISCLAIMER.md", eval=TRUE}
+```
 
-This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the [official USGS copyright policy](https://www2.usgs.gov/visual-id/credit_usgs.html#copyright)
-
-Although this software program has been used by the U.S. Geological Survey (USGS), no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.
-
-This software is provided "AS IS."
-
- [
-    ![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)
-  ](http://creativecommons.org/publicdomain/zero/1.0/)
 
