@@ -92,7 +92,7 @@ Validate Inventory:
     image: ${INTERNAL_REGISTRY}software/software-management:latest
     script:
       - software-management review
-        --project "${CI_PROJECT_PATH}"
+        --project "water/dataRetrieval"
         --ref "${CI_COMMIT_BRANCH}"
         --type "provisional"
         --token "${CI_JOB_TOKEN}"
