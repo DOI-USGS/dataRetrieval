@@ -95,6 +95,6 @@ Validate Inventory:
         --project "water/dataRetrieval"
         --ref "${CI_COMMIT_BRANCH}"
         --type "provisional"
-        --token "${CI_JOB_TOKEN}"
+        --token "${GIT_TOKEN_CUSTOM}"
     tags:
         - chs-shared
