@@ -1,5 +1,4 @@
-[
-  {
+[  {
     "name": "dataRetrieval",
     "organization": "U.S. Geological Survey",
     "description": "This R package is designed to obtain USGS or EPA water quality sample data, streamflow data, and metadata directly from web services",
@@ -42,7 +41,53 @@
     },
 
     "date": {
-      "metadataLastUpdated": "2022-11-14"
+      "metadataLastUpdated": "2022-12-06"
+    }
+  },
+  {
+    "name": "dataRetrieval",
+    "organization": "U.S. Geological Survey",
+    "description": "This R package is designed to obtain USGS or EPA water quality sample data, streamflow data, and metadata directly from web services",
+    "version": "2.7.12",
+    "status": "Production",
+
+    "permissions": {
+      "usageType": "openSource",
+      "licenses": [
+        {
+          "name": "Public Domain, CC0-1.0",
+          "URL": "https://code.usgs.gov/water/dataRetrieval/-/raw/2.7.12/LICENSE.md"
+        }
+      ]
+    },
+
+    "homepageURL": "https://code.usgs.gov/water/dataRetrieval/-/tags/2.7.12",
+    "downloadURL": "https://code.usgs.gov/water/dataRetrieval/-/archive/2.7.12/dataRetrieval-2.7.12.zip",
+    "disclaimerURL": "https://code.usgs.gov/water/dataRetrieval/-/raw/2.7.12/DISCLAIMER.md",
+    "repositoryURL": "https://code.usgs.gov/water/dataRetrieval.git",
+
+    "vcs": "git",
+
+    "laborHours": 500,
+
+    "tags": [
+      "R",
+      "rstats",
+	  "USGS",
+	  "water"
+    ],
+
+    "languages": [
+      "R"
+    ],
+
+    "contact": {
+      "name": "Laura De Cicco",
+      "email": "ldecicco@usgs.gov"
+    },
+
+    "date": {
+      "metadataLastUpdated": "2022-12-06"
     }
   }
 ]

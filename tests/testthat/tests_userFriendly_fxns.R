@@ -500,3 +500,30 @@ test_that("pCode Stuff", {
     "https://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&group_cd=%"
   )
 })
+
+context("pCode Name Stuff")
+test_that("pCode Stuff", {
+  testthat::skip_on_cran()
+  
+  paramINFO <- pcode_to_name(c("00060", "01075", "00931", NA))
+  expect_equal(nrow(paramINFO), 4)
+  expect_equal(paramINFO$parm_cd, c("00060", "01075", "00931", NA))
+  
+  # pcode 12345 isn't a valid code:
+  expect_warning(paramINFO <- pcode_to_name(c("12345")))
+  expect_warning(paramINFO <- pcode_to_name(c("00060", "01075",
+                                              "12345", NA_character_)))
+  expect_equal(nrow(paramINFO), 4)
+  expect_equal(paramINFO$parm_cd, c("00060", "01075", 
+                                    "12345", NA_character_))
+  
+  expect_equal(paramINFO$description[3:4], c(NA_character_, NA_character_))
+  
+  paramINFO <- pcode_to_name("all")
+  expect_true(nrow(paramINFO) > 19000)
+  expect_equal(
+    attr(paramINFO, "url"),
+    "https://www.waterqualitydata.us/Codes/public_srsnames/?mimeType=json"
+  )
+})
+

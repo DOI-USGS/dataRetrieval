@@ -42,10 +42,6 @@ sites <- c("USGS.272838082142201", "USGS.404159100494601", "USGS.401216080362703
 site <- "MBMG:702934"
 # data <- readNGWMNdata(siteNumbers = site, service = "featureOfInterest")
 
-# site with no data returns empty data frame
-noDataSite <- "UTGS.401544112060301"
-# noDataSite <- readNGWMNdata(siteNumbers = noDataSite, service = "observation")
-
 # bounding box
 # bboxSites <- readNGWMNdata(service = "featureOfInterest", bbox = c(30, -102, 31, 99))
 # retrieve  sites.  Set asDateTime to false since one site has an invalid date

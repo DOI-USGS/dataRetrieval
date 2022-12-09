@@ -42,10 +42,10 @@ find_good_names <- function(input, type) {
 #' get_nldi_sources()
 #' }
 
-get_nldi_sources <- function() {
+get_nldi_sources <- function(url = pkg.env$nldi_base) {
   res <-
     httr::RETRY("GET",
-      pkg.env$nldi_base,
+      url,
       times = 3,
       pause_cap = 60
     )
