@@ -34,6 +34,7 @@ find_good_names <- function(input, type) {
 
 #' @title Get current NLDI offerings
 #' @description Used to query the current resources available through the NLDI
+#' @param url URL for NLDI sources. Default is supplied by package environment.
 #' @return data.frame
 #' @export
 #' @keywords nldi
@@ -41,7 +42,6 @@ find_good_names <- function(input, type) {
 #' \donttest{
 #' get_nldi_sources()
 #' }
-
 get_nldi_sources <- function(url = pkg.env$nldi_base) {
   res <-
     httr::RETRY("GET",
