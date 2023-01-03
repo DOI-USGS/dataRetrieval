@@ -6,6 +6,9 @@
 \usage{
 get_nldi_sources(url = pkg.env$nldi_base)
 }
+\arguments{
+\item{url}{URL for NLDI sources. Default is supplied by package environment.}
+}
 \value{
 data.frame
 }
