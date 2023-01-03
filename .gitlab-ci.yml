@@ -89,8 +89,12 @@ deploy:
     
 Validate Inventory:
     stage: end
-    image: ${INTERNAL_REGISTRY}ghsc/hazdev/inventory-validator:latest
+    image: ${INTERNAL_REGISTRY}software/software-management:latest
     script:
-        - validate.sh code.json
+      - software-management review
+        --project "${CI_PROJECT_PATH}"
+        --ref "${CI_COMMIT_BRANCH}"
+        --type "provisional"
+        --token "${GIT_TOKEN_CUSTOM}"
     tags:
         - chs-shared
