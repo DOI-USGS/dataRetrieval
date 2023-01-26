@@ -14,7 +14,7 @@ variables:
   BUILD_LOGS_DIR: "$CI_PROJECT_DIR/ci/logs"
   CONNECT_API_KEY: $CONNECT_API_KEY
   CONNECT_SERVER: $CONNECT_SERVER
-  PAGES_OUTDIR: "$CI_PROJECT_DIR/docs"
+  PAGES_OUTDIR: "$CI_PROJECT_DIR/public"
 
 stages:
   - getready
@@ -81,7 +81,7 @@ pages:
   only: 
     - main
   script:
-    - Rscript -e 'pkgdown::build_site()'
+    - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'source("deploy_simple.R")'
   artifacts:
     paths:
