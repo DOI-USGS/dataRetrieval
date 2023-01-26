@@ -9,18 +9,19 @@ variables:
   _R_CHECK_DONTTEST_EXAMPLES_: "false"
   CRAN: "https://rpkg.chs.usgs.gov/prod-cran/latest"
   NOT_CRAN: "true"
-  PKG_PATH: "$CI_PROJECT_DIR/docs"
   R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
   R_LIBS: "$CI_PROJECT_DIR/ci/lib"
   BUILD_LOGS_DIR: "$CI_PROJECT_DIR/ci/logs"
   CONNECT_API_KEY: $CONNECT_API_KEY
   CONNECT_SERVER: $CONNECT_SERVER
+  PAGES_OUTDIR: "$CI_PROJECT_DIR/docs"
 
 stages:
   - getready
   - check
   - test
   - end
+  - deploy
 
 getready:
   stage: getready
@@ -75,7 +76,7 @@ covertests:
         path: cobertura.xml
   coverage: '/Coverage: \d+.\d+\%/'
 
-deploy:
+pages:
   stage: end
   only: 
     - main
@@ -84,9 +85,9 @@ deploy:
     - Rscript -e 'source("deploy_simple.R")'
   artifacts:
     paths:
-      - $PKG_PATH
+      - $PAGES_OUTDIR
     expire_in: 1 week
-    
+
 Validate Inventory:
     stage: end
     image: ${INTERNAL_REGISTRY}software/software-management:latest
