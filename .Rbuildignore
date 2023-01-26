@@ -89,3 +89,4 @@ vignettes/save_pat.png
 vignettes/more_tests.png
 vignettes/stylesSlides.css
 ^ci$
+^public$

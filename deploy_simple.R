@@ -1,14 +1,14 @@
 library(connectapi)
 
-rsconnect::writeManifest(appDir = "./docs")
+rsconnect::writeManifest(appDir = "./public")
 
-file.copy(from = "./docs/articles/logo.png",
-          to = "./docs/reference/logo.png")
+file.copy(from = "./public/articles/logo.png",
+          to = "./public/reference/logo.png")
 
 client <- connect(server = Sys.getenv("CONNECT_SERVER"),
                   api_key = Sys.getenv("CONNECT_API_KEY"))
 
-bundle <- bundle_dir("./docs")
+bundle <- bundle_dir("./public")
 
 content <- client %>%
   deploy(bundle, name = "dataRetrieval") %>%
