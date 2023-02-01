@@ -193,7 +193,10 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
     countCols <- names(retval)[grep("Count", names(retval))]
     yearCols <- names(retval)[grep("Year", names(retval))]
 
-    for (numberCol in unique(c(valueCols, countCols, yearCols))) {
+    numberColumns <- unique(c(valueCols, countCols, yearCols))
+    numberColumns <- numberColumns[!grepl("Code", numberColumns)]
+    
+    for (numberCol in numberColumns) {
       suppressWarnings({
         val <- tryCatch(as.numeric(retval[[numberCol]]),
           warning = function(w) w
