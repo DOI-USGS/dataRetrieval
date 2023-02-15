@@ -211,22 +211,11 @@ readWQPqw <- function(siteNumbers,
     if (nzchar(endDate)) {
       endDate <- format(as.Date(endDate), format = "%m-%d-%Y")
     }
-
-    if (pcodeCheck) {
-      siteInfo <- whatWQPsites(
-        siteid = paste0(siteNumbers, collapse = ";"),
-        pCode = paste0(parameterCd, collapse = ";"),
-        startDateLo = startDate, startDateHi = endDate
-      )
-    } else {
-      siteInfo <- whatWQPsites(
-        siteid = paste0(siteNumbers, collapse = ";"),
-        characteristicName = utils::URLencode(paste0(parameterCd,
-          collapse = ";"
-        )),
-        startDateLo = startDate, startDateHi = endDate
-      )
-    }
+    
+    sites <- unique(retval$MonitoringLocationIdentifier)
+    
+    siteInfo <- whatWQPsites(
+      siteid = paste0(sites, collapse = ";"))
 
     siteInfoCommon <- data.frame(
       station_nm = siteInfo$MonitoringLocationName,
