@@ -18,7 +18,7 @@
 #' rawData <- getWebServiceData(obs_url)
 #' }
 getWebServiceData <- function(obs_url, ...) {
-  if (!has_internet2()){
+  if (!has_internet2(obs_url)){
     message("No internet connection.")
     return(invisible(NULL))
   }
