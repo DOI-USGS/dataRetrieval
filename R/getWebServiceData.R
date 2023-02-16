@@ -18,7 +18,7 @@
 #' rawData <- getWebServiceData(obs_url)
 #' }
 getWebServiceData <- function(obs_url, ...) {
-  if (!curl::has_internet()){# !has_internet_2(obs_url)) {
+  if (!has_internet2()){
     message("No internet connection.")
     return(invisible(NULL))
   }
@@ -117,10 +117,22 @@ default_ua <- function() {
 #'
 #' Function to check for internet even if the user
 #' is behind a proxy
+#' 
+#' If this is giving you problems, override the false negative:
+#' Sys.setenv("OVERRIDE_INTERNET_TEST" = TRUE)
 #'
 #' @keywords internal
 #' @param obs_url character obs_url to check
 has_internet_2 <- function(obs_url) {
+  
+  if (nzchar(Sys.getenv("OVERRIDE_INTERNET_TEST"))) {
+    if(Sys.getenv("OVERRIDE_INTERNET_TEST") == "FALSE"){
+      return(FALSE)
+    } else {
+      return(TRUE)
+    }
+  }
+  
   host <- gsub("^https://(?:www[.])?([^/]*).*$", "\\1", obs_url)
 
   !is.null(curl::nslookup(host, error = FALSE))
