@@ -18,7 +18,7 @@
 #' rawData <- getWebServiceData(obs_url)
 #' }
 getWebServiceData <- function(obs_url, ...) {
-  if (!has_internet2(obs_url)){
+  if (!has_internet_2(obs_url)){
     message("No internet connection.")
     return(invisible(NULL))
   }
@@ -113,7 +113,7 @@ default_ua <- function() {
   return(ua)
 }
 
-#' has_internet2
+#' has_internet_2
 #'
 #' Function to check for internet even if the user
 #' is behind a proxy

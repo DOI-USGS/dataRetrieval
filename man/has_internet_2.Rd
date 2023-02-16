@@ -2,7 +2,7 @@
 % Please edit documentation in R/getWebServiceData.R
 \name{has_internet_2}
 \alias{has_internet_2}
-\title{has_internet2}
+\title{has_internet_2}
 \usage{
 has_internet_2(obs_url)
 }
