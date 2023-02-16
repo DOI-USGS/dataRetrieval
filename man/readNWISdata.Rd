@@ -72,7 +72,7 @@ See examples below for ideas of constructing queries.
 This function requires users to create their own arguments
 based on the NWIS web services. It is a more complicated function to use
 compared to other NWIS functions such as \code{\link{readNWISdv}}, \code{\link{readNWISuv}},
-\code{\link{readNWIS}}, etc. However, this function adds a lot of
+\code{\link{readNWISgwl}}, etc. However, this function adds a lot of
 flexibility to the possible queries. This function will also behave exactly 
 as NWIS when it comes to date queries. NWIS by default will only return the latest
 value for the daily and instantaneous services. So if you do not provide
