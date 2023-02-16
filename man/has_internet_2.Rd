@@ -13,4 +13,8 @@ has_internet_2(obs_url)
 Function to check for internet even if the user
 is behind a proxy
 }
+\details{
+If this is giving you problems, override the false negative:
+Sys.setenv("OVERRIDE_INTERNET_TEST" = TRUE)
+}
 \keyword{internal}

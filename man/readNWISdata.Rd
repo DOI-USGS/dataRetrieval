@@ -13,8 +13,8 @@ list of arguments can also be supplied. One important argument to include is
 "service". Possible values are "iv"
 (for instantaneous), 
 "dv" (for daily values), "gwlevels" (for groundwater levels),
-"site" (for site service), "qw" (water-quality), "measurement", and "stat" (for
-statistics service). Note: "qw" and "measurement" calls go to:
+"site" (for site service), "measurement", and "stat" (for
+statistics service). Note: "measurement" calls go to:
 \url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
 The statistics service has a limited selection of arguments
 (see \url{https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}).}
@@ -67,6 +67,22 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 Returns data from the NWIS web service.
 Arguments to the function should be based on \url{https://waterservices.usgs.gov} service calls.
 See examples below for ideas of constructing queries.
+}
+\details{
+This function requires users to create their own arguments
+based on the NWIS web services. It is a more complicated function to use
+compared to other NWIS functions such as \code{\link{readNWISdv}}, \code{\link{readNWISuv}},
+\code{\link{readNWIS}}, etc. However, this function adds a lot of
+flexibility to the possible queries. This function will also behave exactly 
+as NWIS when it comes to date queries. NWIS by default will only return the latest
+value for the daily and instantaneous services. So if you do not provide
+a starting date, you will only get back the latest value. If you want
+the full period of record, you can use "startDate = '1900-01-01'". Other options
+for dates are periods, such as "period = 'P7D'" which translates to a period
+of 7 days. For period, use only a positive ISO-8601 duration format, which should
+not be expressed in periods of less than a day, or in increments of months M or years Y. 
+period returns data for a site generally from now to a time in the past. 
+Note that when period is used all data up to the most recent value are returned.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
