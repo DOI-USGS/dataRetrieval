@@ -18,7 +18,7 @@
 #' a complete list of options.  A
 #' list of arguments can also be supplied. One important argument to include is
 #' "service". Possible values are "iv"
-#' (for instantaneous), "iv_recent" (for instantaneous values within the last 120 days),
+#' (for instantaneous), 
 #' "dv" (for daily values), "gwlevels" (for groundwater levels),
 #' "site" (for site service), "qw" (water-quality), "measurement", and "stat" (for
 #' statistics service). Note: "qw" and "measurement" calls go to:
