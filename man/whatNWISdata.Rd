@@ -66,7 +66,7 @@ for more information.
 This function requires users to create their own arguments
 based on the NWIS web services. It is a more complicated function to use
 compared to other NWIS functions such as \code{\link{readNWISdv}}, \code{\link{readNWISuv}},
-\code{\link{readNWIS}}, etc. However, this function adds a lot of
+etc. However, this function adds a lot of
 flexibility to the possible queries. If the "service" argument is included,
 the results will be filtered to the proper data_type_cd. This is a great
 function to use before a large data set, by filtering down the number
