@@ -9,19 +9,13 @@ readWQPdots <- function(...) {
 
   matchReturn <- convertLists(...)
 
-  values <- sapply(matchReturn, function(x) as.character(paste0(eval(x), collapse = ";")))
-
-  if ("bBox" %in% names(values)) {
-    values["bBox"] <- gsub(pattern = ";", replacement = ",", x = values["bBox"])
-  }
-
   if ("service" %in% names(matchReturn)) {
     service <- matchReturn$service
     matchReturn$service <- NULL
   } else {
     service <- "Result"
   }
-
+  
   if ("dataProfile" %in% names(matchReturn)) {
     profile <- matchReturn$dataProfile
     if (profile == "activityAll") {
@@ -36,7 +30,7 @@ readWQPdots <- function(...) {
       matchReturn$service <- NULL
     }
   }
-
+  
   match.arg(service, c(
     "Result", "Station", "Activity", "Organization",
     "ActivityMetric", "SiteSummary",
@@ -44,6 +38,12 @@ readWQPdots <- function(...) {
     "ResultDetectionQuantitationLimit", "BiologicalMetric"
   ))
 
+  values <- sapply(matchReturn, function(x) as.character(paste0(eval(x), collapse = ";")))
+  
+  if ("bBox" %in% names(values)) {
+    values["bBox"] <- gsub(pattern = ";", replacement = ",", x = values["bBox"])
+  }
+  
   values <- checkWQPdates(values)
 
   names(values)[names(values) == "siteNumber"] <- "siteid"

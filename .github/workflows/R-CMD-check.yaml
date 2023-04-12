@@ -2,11 +2,11 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: main
+    branches: [main]
   pull_request:
-    branches: main
+    branches: [main]
 
-name: R-CMD-check
+name: R-CMD-checka
 
 jobs:
   R-CMD-check:
@@ -20,7 +20,6 @@ jobs:
         config:
           - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
 
@@ -29,21 +28,21 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@c0a81a463886bb75afe234e07a9fd5bb79219196
 
-      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-pandoc@52330cc136b963487918a8867f948ddf954e9e63
 
-      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r@52330cc136b963487918a8867f948ddf954e9e63
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
+      - uses: r-lib/actions/setup-r-dependencies@52330cc136b963487918a8867f948ddf954e9e63
         with:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - uses: r-lib/actions/check-r-package@v2
+      - uses: r-lib/actions/check-r-package@52330cc136b963487918a8867f948ddf954e9e63
         with:
           upload-snapshots: true

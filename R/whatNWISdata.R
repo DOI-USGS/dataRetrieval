@@ -10,6 +10,17 @@
 #' convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @keywords data import USGS web service
+#' 
+#' @details This function requires users to create their own arguments
+#' based on the NWIS web services. It is a more complicated function to use
+#' compared to other NWIS functions such as \code{\link{readNWISdv}}, \code{\link{readNWISuv}},
+#' etc. However, this function adds a lot of
+#' flexibility to the possible queries. If the "service" argument is included,
+#' the results will be filtered to the proper data_type_cd. This is a great
+#' function to use before a large data set, by filtering down the number
+#' of sites that have useful data.
+#' 
+#' 
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -56,15 +67,21 @@
 #' \donttest{
 #'
 #' availableData <- whatNWISdata(siteNumber = "05114000")
+#' 
 #' # To find just unit value ('instantaneous') data:
-#' uvData <- whatNWISdata(siteNumber = "05114000", service = "uv")
-#' uvDataMulti <- whatNWISdata(siteNumber = c("05114000", "09423350"), service = c("uv", "dv"))
+#' uvData <- whatNWISdata(siteNumber = "05114000",
+#'                        service = "uv")
+#' uvDataMulti <- whatNWISdata(siteNumber = c("05114000", "09423350"),
+#'                             service = c("uv", "dv"))
 #' flowAndTemp <- whatNWISdata(
 #'   stateCd = "WI", service = "uv",
 #'   parameterCd = c("00060", "00010"),
 #'   statCd = "00003"
 #' )
-#' sites <- whatNWISdata(stateCd = "WI", parameterCd = "00060", siteType = "ST", service = "site")
+#' sites <- whatNWISdata(stateCd = "WI",
+#'                       parameterCd = "00060",
+#'                       siteType = "ST", 
+#'                       service = "site")
 #' }
 whatNWISdata <- function(..., convertType = TRUE) {
   matchReturn <- convertLists(...)
