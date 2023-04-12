@@ -170,7 +170,7 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
       measureCols <- names(data)[!(names(data) %in% columnsToMelt)]
       columnsToMelt <- names(data)[(names(data) %in% columnsToMelt)]
       dataWithPcodes <- data[data$parm_cd != "", ]
-      if (sum(data$parm_cd == "") > 0) {
+      if (sum(data$parm_cd == "", na.rm = TRUE)> 0) {
         warning("Some or all data returned without pCodes, those data will not be included in reshape")
       }
       original_start_dates <- dataWithPcodes$startDateTime

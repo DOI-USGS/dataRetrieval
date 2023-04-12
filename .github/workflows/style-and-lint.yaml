@@ -16,17 +16,17 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@c0a81a463886bb75afe234e07a9fd5bb79219196
         with:
           fetch-depth: 0
 
       - name: Setup R
-        uses: r-lib/actions/setup-r@v2
+        uses: r-lib/actions/setup-r@52330cc136b963487918a8867f948ddf954e9e63
         with:
           use-public-rspm: true
 
       - name: Install dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
+        uses: r-lib/actions/setup-r-dependencies@52330cc136b963487918a8867f948ddf954e9e63
         with:
           extra-packages: any::styler
           needs: styler
@@ -70,9 +70,9 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@c0a81a463886bb75afe234e07a9fd5bb79219196
 
-      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r@52330cc136b963487918a8867f948ddf954e9e63
         with:
           use-public-rspm: true
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/getWebServiceData.R
 \name{has_internet_2}
 \alias{has_internet_2}
-\title{has_internet2}
+\title{has_internet_2}
 \usage{
 has_internet_2(obs_url)
 }
@@ -12,5 +12,9 @@ has_internet_2(obs_url)
 \description{
 Function to check for internet even if the user
 is behind a proxy
+}
+\details{
+If this is giving you problems, override the false negative:
+Sys.setenv("OVERRIDE_INTERNET_TEST" = TRUE)
 }
 \keyword{internal}
