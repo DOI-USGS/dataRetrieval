@@ -1,5 +1,10 @@
 # dataRetrieval <img src="man/figures/hex_logo.png" class="logo"  alt="dataRetrieval" style="width:90px;height:auto;" align="right" />
 
+[![CRAN
+version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=EGRET)
+[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
+
 The `dataRetrieval` package was created to simplify the process of
 loading hydrologic data into the R environment. It is designed to
 retrieve the major data types of U.S. Geological Survey (USGS) hydrology
