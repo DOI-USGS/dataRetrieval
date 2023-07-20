@@ -30,19 +30,19 @@ jobs:
     steps:
       - uses: actions/checkout@c0a81a463886bb75afe234e07a9fd5bb79219196
 
-      - uses: r-lib/actions/setup-pandoc@52330cc136b963487918a8867f948ddf954e9e63
+      - uses: r-lib/actions/setup-pandoc@756399d909bf9c180bbdafe8025f794f51f2da02
 
-      - uses: r-lib/actions/setup-r@52330cc136b963487918a8867f948ddf954e9e63
+      - uses: r-lib/actions/setup-r@756399d909bf9c180bbdafe8025f794f51f2da02
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@52330cc136b963487918a8867f948ddf954e9e63
+      - uses: r-lib/actions/setup-r-dependencies@756399d909bf9c180bbdafe8025f794f51f2da02
         with:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - uses: r-lib/actions/check-r-package@52330cc136b963487918a8867f948ddf954e9e63
+      - uses: r-lib/actions/check-r-package@756399d909bf9c180bbdafe8025f794f51f2da02
         with:
           upload-snapshots: true
