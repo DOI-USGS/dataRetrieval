@@ -14,30 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@c0a81a463886bb75afe234e07a9fd5bb79219196
 
-      - uses: r-lib/actions/setup-r@52330cc136b963487918a8867f948ddf954e9e63
+      - uses: r-lib/actions/setup-r@756399d909bf9c180bbdafe8025f794f51f2da02
 
-      - uses: r-lib/actions/setup-pandoc@52330cc136b963487918a8867f948ddf954e9e63
+      - uses: r-lib/actions/setup-pandoc@756399d909bf9c180bbdafe8025f794f51f2da02
 
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-        shell: Rscript {0}
-
-      - name: Cache R packages
-        uses: actions/cache@v1
+      - uses: r-lib/actions/setup-r-dependencies@756399d909bf9c180bbdafe8025f794f51f2da02
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: macOS-r-4.0-2-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: macOS-r-4.0-2-
-
-      - name: Install dependencies
-        run: |
-          options(pkgType = "binary")
-          install.packages(c("remotes"))
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("covr")
-        shell: Rscript {0}
+          extra-packages: any::rcmdcheck
+          needs: check
 
       - name: Test coverage
         run: covr::codecov()
