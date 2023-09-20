@@ -32,6 +32,10 @@ For complete tutorial information, see:
 
 [https://waterdata.usgs.gov/blog/dataretrieval/](https://waterdata.usgs.gov/blog/dataretrieval/)
 
+[dataRetrieval Introduction 1](https://rconnect.usgs.gov/NMC_dataRetrieval_1)
+
+[dataRetrieval Introduction 2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
+
 
 # Sample Workflow
 

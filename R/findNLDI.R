@@ -232,7 +232,7 @@ valid_ask <- function(all, type) {
 
 #' @title R Client for the Network Linked Data Index
 #' @description Provides a formal client to the USGS
-#' \href{https://labs.waterdata.usgs.gov/about-nldi/index.html}{Network Linked Data Index}.
+#' Network Linked Data Index.
 #' @details The function is useful for topology and location based
 #' feature discovery. A user must specify an origin feature, optional navigation
 #' direction(s) along the network, as well as features to identify along the
