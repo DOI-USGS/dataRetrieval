@@ -58,7 +58,7 @@ a list of data.frames if sf is not installed, a list of sf objects if it is
 }
 \description{
 Provides a formal client to the USGS
-\href{https://labs.waterdata.usgs.gov/about-nldi/index.html}{Network Linked Data Index}.
+Network Linked Data Index.
 }
 \details{
 The function is useful for topology and location based

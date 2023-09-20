@@ -63,7 +63,7 @@ test_that("External importRDB1 tests", {
   ))
   site_data <- importRDB1(url)
 
-  expect_equal(site_data$station_nm, "\"G\" CANAL NEAR OLENE,OREG.")
+  expect_equal(site_data$station_nm, "G CANAL NEAR OLENE, OR")
 
   site <- "040854588204"
 
@@ -74,7 +74,7 @@ test_that("External importRDB1 tests", {
   ))
   site_data <- importRDB1(url)
 
-  expect_equal(site_data$station_nm, "\"FISHER CR AT 32 & HIGHLAND RD AT HOWARDS GROVE, W")
+  expect_equal(site_data$station_nm, "FISHER CR AT 32 & HIGHLAND RD AT HOWARDS GROVE, W")
 })
 
 context("importRDB")

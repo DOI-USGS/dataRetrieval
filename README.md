@@ -1,5 +1,10 @@
 # dataRetrieval <img src="man/figures/hex_logo.png" class="logo"  alt="dataRetrieval" style="width:90px;height:auto;" align="right" />
 
+[![CRAN
+version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=EGRET)
+[![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
+
 The `dataRetrieval` package was created to simplify the process of
 loading hydrologic data into the R environment. It is designed to
 retrieve the major data types of U.S. Geological Survey (USGS) hydrology
@@ -14,6 +19,12 @@ For complete tutorial information, see:
 <https://rconnect.usgs.gov/dataRetrieval/>
 
 <https://waterdata.usgs.gov/blog/dataretrieval/>
+
+[dataRetrieval Introduction
+1](https://rconnect.usgs.gov/NMC_dataRetrieval_1)
+
+[dataRetrieval Introduction
+2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
 
 # Sample Workflow
 
@@ -92,24 +103,23 @@ Please consider reporting bugs and asking questions on the Issues page:
 
 ``` r
 citation(package = "dataRetrieval")
-#> 
 #> To cite dataRetrieval in publications, please use:
 #> 
 #>   De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., Johnson, M.,
-#>   2022, dataRetrieval: R packages for discovering and retrieving water
-#>   data available from Federal hydrologic web services, v.2.7.12,
+#>   2023, dataRetrieval: R packages for discovering and retrieving water
+#>   data available from Federal hydrologic web services, v.2.7.13,
 #>   doi:10.5066/P9X4L3GE
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
-#>     author = {Laura A. {De Cicco} and David Lorenz and Robert M. Hirsch and William Watkins and Mike Johnson},
+#>     author = {Laura DeCicco and Robert Hirsch and David Lorenz and David Watkins and Mike Johnson},
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
-#>     version = {2.7.12},
+#>     version = {2.7.13},
 #>     institution = {U.S. Geological Survey},
-#>     year = {2022},
+#>     year = {2023},
 #>     doi = {10.5066/P9X4L3GE},
 #>     url = {https://code.usgs.gov/water/dataRetrieval},
 #>   }

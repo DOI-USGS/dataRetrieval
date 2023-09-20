@@ -1,20 +1,26 @@
 citHeader("To cite dataRetrieval in publications, please use:")
 
 bibentry(bibtype = "Manual",
- author = personList(
-              as.person("Laura A. De Cicco"),
-              as.person("David Lorenz"),
-              as.person("Robert M. Hirsch"),
-              as.person("William Watkins"),
-              as.person("Mike Johnson")
-              ),
+ author = c(
+    person("Laura", "DeCicco", role = c("aut","cre"),
+            email = "ldecicco@usgs.gov",
+            comment=c(ORCID="0000-0002-3915-9487")),
+    person("Robert", "Hirsch", role = c("aut"),
+            comment=c(ORCID="0000-0002-4534-075X")),
+    person("David","Lorenz", role=c("aut")),
+    person("David","Watkins", role=c("aut"),
+            email = "wwatkins@usgs.gov",
+            comment=c(ORCID="0000-0002-7544-0700")),
+    person("Mike", "Johnson", role=c("aut"),
+            email = "mikecp11@gmail.com",
+            comment=c(ORCID="0000-0002-5288-8350"))),
   title = "dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services",
   publisher = "U.S. Geological Survey",
   address="Reston, VA",
-  version = "2.7.12",
+  version = "2.7.13",
   institution = "U.S. Geological Survey",
-  year = 2022,
+  year = 2023,
   doi = "10.5066/P9X4L3GE",
   url = "https://code.usgs.gov/water/dataRetrieval",
-  textVersion = "De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., Johnson, M., 2022, dataRetrieval: R packages for discovering and retrieving water data available from Federal hydrologic web services, v.2.7.12, doi:10.5066/P9X4L3GE"
+  textVersion = "De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., Johnson, M., 2023, dataRetrieval: R packages for discovering and retrieving water data available from Federal hydrologic web services, v.2.7.13, doi:10.5066/P9X4L3GE"
 )
