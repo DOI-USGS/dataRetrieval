@@ -156,9 +156,9 @@ importRDB1 <- function(obs_url,
       skip = meta.rows + 2,
       col_names = FALSE
     )
-    if (utils::packageVersion("readr") > 1.4) {
-      args_list[["show_col_types"]] <- FALSE
-    }
+
+    args_list[["show_col_types"]] <- FALSE
+    
     if (convertType) {
       args_list[["guess_max"]] <- data.rows
       args_list[["col_types"]] <- readr::cols()
