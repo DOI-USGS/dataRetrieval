@@ -3,6 +3,7 @@
 \docType{package}
 \name{dataRetrieval}
 \alias{dataRetrieval}
+\alias{dataRetrieval-package}
 \title{Retrieval functions for USGS and EPA data}
 \description{
 \tabular{ll}{
