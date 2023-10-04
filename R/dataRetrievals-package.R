@@ -2,7 +2,7 @@
   if (!interactive()) return()
   dataRetrieval_version = utils::packageVersion("dataRetrieval")
   packageStartupMessage("dataRetrieval ", dataRetrieval_version,"
-Extended Documentation: https://rconnect.usgs.gov/dataRetrieval")
+Extended Documentation: https://doi-usgs.github.io/dataRetrieval")
 }
 
 #' Retrieval functions for USGS and EPA data
@@ -21,9 +21,10 @@ Extended Documentation: https://rconnect.usgs.gov/dataRetrieval")
 #'
 #' Retrieval functions for USGS and EPA hydrologic and water quality data.
 #'
-#' Please see \url{https://pubs.er.usgs.gov/publication/tm4A10} for more information.
+#' Please see \url{https://pubs.usgs.gov/publication/tm4A10} for more information.
 #'
 #' @name dataRetrieval
+#' @aliases dataRetrieval-package
 #' @docType package
 #' @author Laura De Cicco \email{ldecicco@@usgs.gov}
 NULL
