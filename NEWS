@@ -1,7 +1,13 @@
+dataRetrieval 2.7.14
+===================
+* Package documentation updated due to roxygen changes
+* Update in NLDI function to allow for sites with spaces in the site abbrievations.
+* Added an automatic endDate to whatNWISdata if a startDate is given, to make sure it behaves as expected.
+
 dataRetrieval 2.7.13
 ===================
 * Added pcode_to_name function to get WQP characteristics from USGS parameter codes.
-* Required readr version 1.4 or greater
+* Required readr version 1.4 or greater.
 
 dataRetrieval 2.7.12
 ===================

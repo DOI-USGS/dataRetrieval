@@ -88,6 +88,7 @@ whatNWISdata <- function(..., convertType = TRUE) {
 
   if ("service" %in% names(matchReturn)) {
     service <- matchReturn$service
+
     if (any(service %in% c("qw", "qwdata"))) {
       .Deprecated(
         old = "whatNWISdata", package = "dataRetrieval",
@@ -95,11 +96,21 @@ whatNWISdata <- function(..., convertType = TRUE) {
         msg = "NWIS qw web services are being retired. Please see the vignette
 'Changes to NWIS QW services' for more information."
       )
-    }
+    } 
   } else {
     service <- "all"
   }
-
+  
+  if (any(service == "site")) {
+    service <- "all"
+  } else if (any(service == "iv")) {
+    service[service == "iv"] <- "uv"
+  } else if (any(service == "peak")) {
+    service[service == "peak"] <- "pk"
+  } else if (any(service == "measurements")) {
+    service[service == "measurements"] <- "sv"
+  }
+  
   if ("statCd" %in% names(matchReturn)) {
     statCd <- matchReturn$statCd
     matchReturn <- matchReturn[names(matchReturn) != "statCd"]
@@ -113,22 +124,17 @@ whatNWISdata <- function(..., convertType = TRUE) {
   } else {
     parameterCd <- "all"
   }
+  
+  if("startDate" %in% names(matchReturn) &&
+     !"endDate" %in% names(matchReturn)){
+    matchReturn[["endDate"]] <- matchReturn[["startDate"]]
+  }
 
   matchReturn$service <- "site"
 
   valuesList <- readNWISdots(matchReturn)
 
   values <- sapply(valuesList$values, function(x) utils::URLencode(x))
-
-  if (any(service == "site")) {
-    service <- "all"
-  } else if (any(service == "iv")) {
-    service[service == "iv"] <- "uv"
-  } else if (any(service == "peak")) {
-    service[service == "peak"] <- "pk"
-  } else if (any(service == "measurements")) {
-    service[service == "measurements"] <- "sv"
-  }
 
   urlSitefile <- drURL("site", Access = pkg.env$access, seriesCatalogOutput = "true", arg.list = values)
 
