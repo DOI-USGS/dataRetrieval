@@ -395,7 +395,8 @@ findNLDI <- function(comid = NULL,
   start_url <- paste0(
     valid_ask(all = pkg.env$current_nldi, type = start_type)$good$features,
     "/",
-    ifelse(start_type == "nwis", paste0("USGS-", starter), starter),
+    utils::URLencode(as.character(ifelse(start_type == "nwis", 
+                                         paste0("USGS-", starter), starter))),
     "/"
   )
 

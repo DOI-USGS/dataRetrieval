@@ -58,6 +58,7 @@ test_that("NLDI starting sources...", {
   expect_equal(findNLDI(nwis = "11120000", warn = FALSE)$origin$sourceName, "NWIS Surface Water Sites")
   # WQP
   expect_equal(findNLDI(wqp = "USGS-04024315", warn = FALSE)$origin$sourceName, "Water Quality Portal")
+  expect_equal(findNLDI(wqp = "CCU_EQL-2 H9", warn = FALSE)$origin$sourceName, "Water Quality Portal")
   # LOCATION
   expect_equal(findNLDI(location = c(-115, 40), warn = FALSE)$origin$sourceName, "NHDPlus comid")
   # ERROR: LOCATION COORDINATES FLIPPED
