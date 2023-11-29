@@ -226,7 +226,7 @@ siteINFO <- readNWISsite(siteNumbers)
 ```
 
 Site information is obtained from:
-[https://waterservices.usgs.gov/rest/Site-Test-Tool.html](https://waterservices.usgs.gov/rest/Site-Test-Tool.html)
+[https://waterservices.usgs.gov/docs/site-service/](https://waterservices.usgs.gov/docs/site-service/)
 
 Information on the returned data can be found with the `comment` function as described in the [Metadata](#embedded-metadata) section.
 
@@ -315,7 +315,7 @@ parameterINFO <- readNWISpCode(parameterCd)
 
 ## Daily Data
 
-To obtain daily records of USGS data, use the `readNWISdv` function. The arguments for this function are `siteNumbers`, `parameterCd`, `startDate`, `endDate`, and `statCd` (defaults to "00003").  If you want to use the default values, you do not need to list them in the function call. Daily data is pulled from [https://waterservices.usgs.gov/rest/DV-Test-Tool.html](https://waterservices.usgs.gov/rest/DV-Test-Tool.html).
+To obtain daily records of USGS data, use the `readNWISdv` function. The arguments for this function are `siteNumbers`, `parameterCd`, `startDate`, `endDate`, and `statCd` (defaults to "00003").  If you want to use the default values, you do not need to list them in the function call. Daily data is pulled from [https://waterservices.usgs.gov/docs/dv-service/](https://waterservices.usgs.gov/docs/dv-service/).
 
 The dates (start and end) must be in the format "YYYY-MM-DD" (note: the user must include the quotes).  Setting the start date to "" (no space) will prompt the program to ask for the earliest date, and setting the end date to "" (no space) will prompt for the latest available date.
 
@@ -435,7 +435,7 @@ America/Phoenix
 America/Metlakatla
 ```
 
-Data are retrieved from [https://waterservices.usgs.gov/rest/IV-Test-Tool.html](https://waterservices.usgs.gov/rest/IV-Test-Tool.html). There are occasions where NWIS values are not reported as numbers, instead a common example is "Ice".  Any value that cannot be converted to a number will be reported as NA in this package. Site information and measured parameter information is attached to the data frame as attributes. This is discussed further in [metadata](#embedded-metadata) section.
+Data are retrieved from [https://waterservices.usgs.gov/docs/instantaneous-values/](https://waterservices.usgs.gov/docs/instantaneous-values/). There are occasions where NWIS values are not reported as numbers, instead a common example is "Ice".  Any value that cannot be converted to a number will be reported as NA in this package. Site information and measured parameter information is attached to the data frame as attributes. This is discussed further in [metadata](#embedded-metadata) section.
 
 ## Groundwater Level Data
 
@@ -531,7 +531,7 @@ The previous examples all took specific input arguments: `siteNumber`, `paramete
 
 ### Sites: whatNWISsites
 
-The function `whatNWISsites` can be used to discover NWIS sites based on any query that the NWIS Site Service offers. This is done by using the `...` argument, which allows the user to use any arbitrary input argument. We can then use the service [here](https://waterservices.usgs.gov/rest/Site-Test-Tool.html) to discover many options for searching for NWIS sites. For example, you may want to search for sites in a lat/lon bounding box, or only sites tidal streams, or sites with water quality samples, sites above a certain altitude, etc. The results of this site query generate a URL. For example, the tool provided a search within a specified bounding box, for sites that have daily discharge (parameter code = 00060) and temperature (parameter code = 00010). The generated URL is:
+The function `whatNWISsites` can be used to discover NWIS sites based on any query that the NWIS Site Service offers. This is done by using the `...` argument, which allows the user to use any arbitrary input argument. We can then use the service [here](https://waterservices.usgs.gov/docs/site-service) to discover many options for searching for NWIS sites. For example, you may want to search for sites in a lat/lon bounding box, or only sites tidal streams, or sites with water quality samples, sites above a certain altitude, etc. The results of this site query generate a URL. For example, the tool provided a search within a specified bounding box, for sites that have daily discharge (parameter code = 00060) and temperature (parameter code = 00010). The generated URL is:
 
 [https://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv](https://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv)
 
@@ -554,13 +554,13 @@ For NWIS data, the function `readNWISdata` can be used. The argument listed in t
 Service <- c("dv", "iv", "gwlevels", "qwdata", "measurements", "peak", "stat")
 Description <- c("Daily", "Instantaneous", "Groundwater Levels", "Water Quality", "Surface Water Measurements", "Peak Flow", "Statistics Service")
 URL <- c(
-  "<a href='https://waterservices.usgs.gov/rest/DV-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/DV-Test-Tool.html<a>",
-  "<a href='https://waterservices.usgs.gov/rest/IV-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/IV-Test-Tool.html<a>",
-  "<a href='https://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/GW-Levels-Test-Tool.html<a>",
+  "<a href='https://waterservices.usgs.gov/docs/dv-service/' target='_blank'>https://waterservices.usgs.gov/docs/dv-service/<a>",
+  "<a href='https://waterservices.usgs.gov/docs/instantaneous-values/' target='_blank'>https://waterservices.usgs.gov/docs/instantaneous-values/<a>",
+  "<a href='https://waterservices.usgs.gov/docs/groundwater-levels/' target='_blank'>https://waterservices.usgs.gov/docs/groundwater-levels/<a>",
   "<a href='https://nwis.waterdata.usgs.gov/nwis/qwdata' target='_blank'>https://nwis.waterdata.usgs.gov/nwis/qwdata<a>",
   "<a href='https://waterdata.usgs.gov/nwis/measurements/' target='_blank'>https://waterdata.usgs.gov/nwis/measurements/<a>",
   "<a href='https://nwis.waterdata.usgs.gov/usa/nwis/peak/' target='_blank'>https://nwis.waterdata.usgs.gov/usa/nwis/peak/<a>",
-  "<a href='https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html' target='_blank'>https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html<a>"
+  "<a href='https://waterservices.usgs.gov/docs/statistics/' target='_blank'>https://waterservices.usgs.gov/docs/statistics/<a>"
 )
 
 tableData <- data.frame(Service,

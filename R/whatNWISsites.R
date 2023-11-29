@@ -1,10 +1,10 @@
 #' Site Data Import from NWIS
 #'
 #' Returns a list of sites from the NWIS web service. This function gets the data from:
-#' \url{https://waterservices.usgs.gov/rest/Site-Test-Tool.html}.
+#' \url{https://waterservices.usgs.gov/docs/site-service/}.
 #' Mapper format is used
 #'
-#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html}
+#' @param \dots see \url{https://waterservices.usgs.gov/docs/site-service/}
 #' for a complete list of options. A list (or lists) can also be supplied.
 #' 
 #' @return A data frame with at least the following columns:
