@@ -7,7 +7,7 @@
 whatNWISdata(..., convertType = TRUE)
 }
 \arguments{
-\item{\dots}{see \url{https://waterservices.usgs.gov/rest/Site-Service.html}
+\item{\dots}{see \url{https://waterservices.usgs.gov/docs/site-service/}
 for a complete list of options.  A list of arguments can also be supplied.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will
@@ -59,7 +59,7 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 \description{
 Imports a table of available parameters, period of record, and count. See
-\url{https://waterservices.usgs.gov/rest/Site-Service.html}
+\url{https://waterservices.usgs.gov/docs/site-service/}
 for more information.
 }
 \details{
