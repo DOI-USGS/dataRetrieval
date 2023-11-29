@@ -65,7 +65,7 @@ Reads groundwater level measurements from NWISweb. Mixed date/times come back fr
 depending on the year that the data was collected. See \url{https://waterdata.usgs.gov/usa/nwis/gw}
 for details about groundwater. By default the returned dates are converted to date objects, unless convertType
 is specified as FALSE. Sites with non-standard date formats (i.e. lacking a day) can be affected (see examples).
-See \url{https://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more information.
+See \url{https://waterservices.usgs.gov/docs/groundwater-levels/} for more information.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

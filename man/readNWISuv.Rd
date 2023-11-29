@@ -13,11 +13,11 @@ readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "", tz = "UTC")
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the earliest possible record. Simple date arguments are specified in local time.
-See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html}.}
+See more information here: \url{https://waterservices.usgs.gov/docs/instantaneous-values/}.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record. Simple date arguments are specified in local time.
-See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html}.}
+See more information here: \url{https://waterservices.usgs.gov/docs/instantaneous-values/}.}
 
 \item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
@@ -61,7 +61,7 @@ A list of parameter codes can be found here:
 A list of statistic codes can be found here:
 \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}.
 More information on the web service can be found here:
-\url{https://waterservices.usgs.gov/rest/IV-Service.html}.
+\url{https://waterservices.usgs.gov/docs/instantaneous-values/}.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
