@@ -14,7 +14,7 @@
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 #' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 #' for more information on time zones.
-#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html} for
+#' @param \dots see \url{https://waterservices.usgs.gov/docs/site-service/} for
 #' a complete list of options.  A
 #' list of arguments can also be supplied. One important argument to include is
 #' "service". Possible values are "iv"
@@ -24,7 +24,7 @@
 #' statistics service). Note: "measurement" calls go to:
 #' \url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
 #' The statistics service has a limited selection of arguments
-#' (see \url{https://waterservices.usgs.gov/rest/Statistics-Service-Test-Tool.html}).
+#' (see \url{https://waterservices.usgs.gov/docs/site-service/}).
 #' 
 #' @details This function requires users to create their own arguments
 #' based on the NWIS web services. It is a more complicated function to use
