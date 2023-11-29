@@ -1,10 +1,10 @@
 #' USGS data availability
 #'
 #' Imports a table of available parameters, period of record, and count. See
-#' \url{https://waterservices.usgs.gov/rest/Site-Service.html}
+#' \url{https://waterservices.usgs.gov/docs/site-service/}
 #' for more information.
 #'
-#' @param \dots see \url{https://waterservices.usgs.gov/rest/Site-Service.html}
+#' @param \dots see \url{https://waterservices.usgs.gov/docs/site-service/}
 #' for a complete list of options.  A list of arguments can also be supplied.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will
 #' convert the data to dates, datetimes,

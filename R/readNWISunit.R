@@ -7,16 +7,16 @@
 #' A list of statistic codes can be found here:
 #' \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}.
 #' More information on the web service can be found here:
-#' \url{https://waterservices.usgs.gov/rest/IV-Service.html}.
+#' \url{https://waterservices.usgs.gov/docs/instantaneous-values/}.
 #'
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @param parameterCd character USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the earliest possible record. Simple date arguments are specified in local time.
-#' See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html}.
+#' See more information here: \url{https://waterservices.usgs.gov/docs/instantaneous-values/}.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record. Simple date arguments are specified in local time.
-#' See more information here: \url{https://waterservices.usgs.gov/rest/IV-Service.html}.
+#' See more information here: \url{https://waterservices.usgs.gov/docs/instantaneous-values/}.
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 #' Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
@@ -425,7 +425,7 @@ readNWISmeas <- function(siteNumbers,
 #' depending on the year that the data was collected. See \url{https://waterdata.usgs.gov/usa/nwis/gw}
 #' for details about groundwater. By default the returned dates are converted to date objects, unless convertType
 #' is specified as FALSE. Sites with non-standard date formats (i.e. lacking a day) can be affected (see examples).
-#' See \url{https://waterservices.usgs.gov/rest/GW-Levels-Service.html} for more information.
+#' See \url{https://waterservices.usgs.gov/docs/groundwater-levels/} for more information.
 #'
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
@@ -526,7 +526,7 @@ readNWISgwl <- function(siteNumbers,
 #' Site statistics retrieval from USGS (NWIS)
 #'
 #' Retrieves site statistics from the USGS Statistics Web Service beta.
-#' See \url{https://waterservices.usgs.gov/rest/Statistics-Service.html} for more information.
+#' See \url{https://waterservices.usgs.gov/docs/statistics/} for more information.
 #'
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number.
 #' @param parameterCd character USGS parameter code.  This is usually a 5 digit number.
@@ -552,7 +552,7 @@ readNWISgwl <- function(siteNumbers,
 #' @param statType character type(s) of statistics to output for daily values.
 #' Default is mean, which is the only
 #' option for monthly and yearly report types. See the statistics service documentation
-#' at \url{https://waterservices.usgs.gov/rest/Statistics-Service.html} for a full list of codes.
+#' at \url{https://waterservices.usgs.gov/docs/statistics/} for a full list of codes.
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
