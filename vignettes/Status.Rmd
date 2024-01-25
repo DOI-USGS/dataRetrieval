@@ -1,0 +1,57 @@
+---
+title: "dataRetrieval Status"
+date: Sys.Date()
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_caption: yes
+    fig_height: 7
+    fig_width: 7
+vignette: >
+  %\VignetteIndexEntry{dataRetrieval Status}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+This page will be updated frequently with information about the status of dataRetrieval services.
+
+# Current Status
+
+## readNWISqw
+
+Functions normally, includes new data. This function is deprecated, so consider switching to `readWQPqw`
+
+## WQP
+
+Functioning normally, includes new USGS data. See below for upcoming information.
+
+# Overview of changes
+
+## NWIS qw services
+
+Discrete water samples data are undergoing modernization, and NWIS services will no longer being updated with the latest data starting in February 2024, with a full decommission expected 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
+
+
+For updated information visit:
+[https://waterdata.usgs.gov/nwis/qwdata](https://waterdata.usgs.gov/nwis/qwdata)
+
+For additional details, see vignette:
+[https://doi-usgs.github.io/dataRetrieval/articles/qwdata_changes.html](https://doi-usgs.github.io/dataRetrieval/articles/qwdata_changes.html)
+
+If you have additional questions about the qw data service, email CompTools@usgs.gov.
+
+It is planned that when NWIS qw service will be shut down - the `readNWISqw` will be removed from dataRetrieval.
+
+
+See [Changes to NWIS QW services](articles/qwdata_changes.html) for information on how to convert your workflows from `readNWISqw` to `readWQPqw`.
+
+## WQP: USGS Data
+
+Limited availability of new USGS data: starting approximately February 12, 2024, there will be a period when new USGS data will not be accessible on the Water Quality Portal. Data will still be collected but will not be publicly available. This limited availability is expected to last a few weeks.
+
+Recent USGS data will be accessible again upon release of the new Data Profiles, which will be in the WQX 3.0 format. These profiles should be available in March, 2024.
+
+These profiles are not yet available to test. When the are, we will update this page with recommendations.
+ 
