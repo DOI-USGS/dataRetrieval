@@ -1,3 +1,7 @@
+dataRetrieval 2.7.15
+===================
+* Update warning about upcoming changes to USGS water quality data.
+
 dataRetrieval 2.7.14
 ===================
 * Package documentation updated due to roxygen changes
