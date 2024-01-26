@@ -3,6 +3,8 @@ title: "README"
 output:
   md_document:
     variant: gfm
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -145,7 +147,6 @@ This can be done using the `create_WQP_bib` function:
 SC <- readWQPqw(siteNumbers = "USGS-05288705",
                 parameterCd = "00300")
 
-# Use "queryTime" and "url" attributes:
 WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 print(WQPcitation, style = "Bibtex")

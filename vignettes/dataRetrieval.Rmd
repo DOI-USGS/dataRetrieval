@@ -7,9 +7,11 @@ output:
     toc: true
     number_sections: true
 vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Introduction to the dataRetrieval package}
   \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -708,6 +710,52 @@ vignette(package="dataRetrieval")
 #to open a specific vignette:
 vignette(topic = "qwdata_changes", package = "dataRetrieval")
 ```
+
+
+# Citations
+
+## Citing the dataRetrieval package
+
+```{r cite, eval=TRUE}
+citation(package = "dataRetrieval")
+```
+
+## Citing NWIS data
+
+U.S. Geological Survey, 2023, National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed [April 26, 2023], at http://waterdata.usgs.gov/nwis/. http://dx.doi.org/10.5066/F7P55KJN
+
+This can be done using the `create_NWIS_bib` function:
+
+
+```{r nwisCite, eval=FALSE}
+
+dv <- readNWISdv("09010500", "00060")
+
+NWIScitation <- create_NWIS_bib(dv)
+
+```
+
+## Citing WQP data
+
+Citations for specific datasets should use this format:
+
+National Water Quality Monitoring Council, YYYY, Water Quality Portal, accessed mm, dd, yyyy, hyperlink_for_query, https://doi.org/10.5066/P9QRKUVJ.
+
+This can be done using the `create_WQP_bib` function:
+
+```{r WQPcite, eval=FALSE}
+SC <- readWQPqw(siteNumbers = "USGS-05288705",
+                parameterCd = "00300")
+
+WQPcitation <- create_WQP_bib(SC)
+
+```
+
+## Citing Water Quality Portal itself
+
+General Water Quality Portal citations should use the following:
+
+Water Quality Portal. Washington (DC): National Water Quality Monitoring Council, United States Geological Survey (USGS), Environmental Protection Agency (EPA); 2021. https://doi.org/10.5066/P9QRKUVJ.
 
 
 # Disclaimer
