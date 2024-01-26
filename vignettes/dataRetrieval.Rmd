@@ -47,12 +47,6 @@ rawDailyData <- readNWISdv(
   "1980-01-01", "2010-01-01"
 )
 
-# Sample data Nitrate:
-parameterCd <- "00618"
-qwData <- readNWISqw(
-  siteNumber, parameterCd,
-  "1980-01-01", "2010-01-01"
-)
 
 pCode <- readNWISpCode(parameterCd)
 ```
@@ -65,7 +59,6 @@ Table 1 describes the functions available in the `dataRetrieval` package.
 Functions <- c(
   "readNWISdata",
   "readNWISdv",
-  "readNWISqw",
   "readNWISuv",
   "readNWISrating",
   "readNWISmeas",
@@ -88,7 +81,6 @@ Functions <- c(
 Arguments <- c(
   "service, tz='UTC', ...", # readNWISdata
   "statCd='00003'", # readNWISdv
-  "expanded=TRUE, tz='UTC'", # readNWISqw
   "tz='UTC'", # readNWISuv
   "type='base", # readNWISrating
   "tz='UTC'", # readNWISmeas
@@ -108,7 +100,6 @@ Arguments <- c(
 Description <- c(
   "Data using user-specified queries", # readNWISdata
   "Daily values", # readNWISdv
-  "Water quality", # readNWISqw
   "Instantaneous values", # readNWISuv
   "Rating table for active streamgage", # readNWISrating
   "Surface-water measurements", # readNWISmeas
@@ -128,18 +119,18 @@ Description <- c(
   "Metric availability",
   "Sample availability"
 )
-Source <- c(rep("NWIS", 14), rep("WQP", 7))
+Source <- c(rep("NWIS", 13), rep("WQP", 7))
 Site <- c(
-  "opt.", rep("req.", 7), "",
+  "opt.", rep("req.", 6), "",
   rep("req.", 4), "opt.", "opt.", "req.", rep("opt.", 5)
 )
 parameterCd <- c(
-  "opt.", rep("req.", 3),
+  "opt.", rep("req.", 2),
   rep("", 5), "req.", "req.",
   rep("", 2), rep("opt.", 2), "req.", rep("", 5)
 )
 start <- c(
-  "opt.", rep("req.", 3), "",
+  "opt.", rep("req.", 2), "",
   rep("req.", 3), "", "req.", rep("", 5), "req.", rep("opt.", 5)
 )
 
@@ -709,9 +700,13 @@ At any time, you can get information about any function in R by typing a questio
 ![A simple R help file](Rhelp.png)
 
 
-Additionally, many R packages have vignette files attached (such as this paper). To view the vignette:
+Additionally, many R packages have vignette files attached (such as this paper). To see the list of vignettes in a package:
 ```{r seeVignette,eval = FALSE}
-vignette(topic = "Introduction", package = "dataRetrieval")
+# to see all available vignettes:
+vignette(package="dataRetrieval")
+
+#to open a specific vignette:
+vignette(topic = "qwdata_changes", package = "dataRetrieval")
 ```
 
 
