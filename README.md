@@ -127,22 +127,29 @@ available on the World Wide Web (USGS Water Data for the Nation),
 accessed \[April 26, 2023\], at <http://waterdata.usgs.gov/nwis/>.
 <http://dx.doi.org/10.5066/F7P55KJN>
 
-This can be done programatically:
+This can be done using the `create_NWIS_bib` function:
 
 ``` r
 
 dv <- readNWISdv("09010500", "00060")
 
-NWIScitation <- paste0("U.S. Geological Survey, ",
-                       format(attr(dv, "queryTime"), "%Y"),
-                       ", National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed ",
-                       format(attr(dv, "queryTime"), "%b %d, %Y"),
-                       ", at ",
-                       attr(dv, "url"),
-                       ", http://dx.doi.org/10.5066/F7P55KJN")
+NWIScitation <- create_NWIS_bib(dv)
 
 NWIScitation
-#> [1] "U.S. Geological Survey, 2024, National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed Jan 26, 2024, at https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01, http://dx.doi.org/10.5066/F7P55KJN"
+#> U.S. Geological Survey (2024). _National Water Information System data
+#> available on the World Wide Web (USGS Water Data for the Nation)_.
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jan
+#> 26, 2024,
+#> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
+print(NWIScitation, style = "Bibtex")
+#> @Manual{,
+#>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
+#>   author = {{U.S. Geological Survey}},
+#>   doi = {10.5066/F7P55KJN},
+#>   note = {Accessed Jan 26, 2024},
+#>   year = {2024},
+#>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
+#> }
 ```
 
 ## Citing WQP data
@@ -153,22 +160,28 @@ National Water Quality Monitoring Council, YYYY, Water Quality Portal,
 accessed mm, dd, yyyy, hyperlink_for_query,
 <https://doi.org/10.5066/P9QRKUVJ>.
 
-This can be done programatically:
+This can be done using the `create_WQP_bib` function:
 
 ``` r
 SC <- readWQPqw(siteNumbers = "USGS-05288705",
                 parameterCd = "00300")
 
 # Use "queryTime" and "url" attributes:
-WQPcitation <- paste0("National Water Quality Monitoring Council, ",
-                      format(attr(SC, "queryTime"), "%Y"),
-                      ", Water Quality Portal, accessed ",
-                      format(attr(SC, "queryTime"), "%m, %d, %Y"),
-                      ", ",
-                      attr(SC, "url"), 
-                      ", https://doi.org/10.5066/P9QRKUVJ.")
+WQPcitation <- create_WQP_bib(SC)
 WQPcitation
-#> [1] "National Water Quality Monitoring Council, 2024, Water Quality Portal, accessed 01, 26, 2024, https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes, https://doi.org/10.5066/P9QRKUVJ."
+#> National Water Quality Monitoring Council (2024). _ Water Quality
+#> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
+#> Accessed Jan 26, 2024,
+#> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes>.
+print(WQPcitation, style = "Bibtex")
+#> @Manual{,
+#>   title = { Water Quality Portal},
+#>   author = {{National Water Quality Monitoring Council}},
+#>   doi = {10.5066/P9QRKUVJ},
+#>   note = {Accessed Jan 26, 2024},
+#>   year = {2024},
+#>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes},
+#> }
 ```
 
 ## Citing Water Quality Portal itself

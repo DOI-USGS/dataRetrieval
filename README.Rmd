@@ -118,21 +118,17 @@ citation(package = "dataRetrieval")
 
 U.S. Geological Survey, 2023, National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed [April 26, 2023], at http://waterdata.usgs.gov/nwis/. http://dx.doi.org/10.5066/F7P55KJN
 
-This can be done programatically:
+This can be done using the `create_NWIS_bib` function:
+
 
 ```{r}
 
 dv <- readNWISdv("09010500", "00060")
 
-NWIScitation <- paste0("U.S. Geological Survey, ",
-                       format(attr(dv, "queryTime"), "%Y"),
-                       ", National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed ",
-                       format(attr(dv, "queryTime"), "%b %d, %Y"),
-                       ", at ",
-                       attr(dv, "url"),
-                       ", http://dx.doi.org/10.5066/F7P55KJN")
+NWIScitation <- create_NWIS_bib(dv)
 
 NWIScitation
+print(NWIScitation, style = "Bibtex")
 
 
 ```
@@ -143,22 +139,16 @@ Citations for specific datasets should use this format:
 
 National Water Quality Monitoring Council, YYYY, Water Quality Portal, accessed mm, dd, yyyy, hyperlink_for_query, https://doi.org/10.5066/P9QRKUVJ.
 
-This can be done programatically:
+This can be done using the `create_WQP_bib` function:
 
 ```{r}
 SC <- readWQPqw(siteNumbers = "USGS-05288705",
                 parameterCd = "00300")
 
 # Use "queryTime" and "url" attributes:
-WQPcitation <- paste0("National Water Quality Monitoring Council, ",
-                      format(attr(SC, "queryTime"), "%Y"),
-                      ", Water Quality Portal, accessed ",
-                      format(attr(SC, "queryTime"), "%m, %d, %Y"),
-                      ", ",
-                      attr(SC, "url"), 
-                      ", https://doi.org/10.5066/P9QRKUVJ.")
+WQPcitation <- create_WQP_bib(SC)
 WQPcitation
-
+print(WQPcitation, style = "Bibtex")
 ```
 
 ## Citing Water Quality Portal itself
