@@ -166,7 +166,6 @@ This can be done using the `create_WQP_bib` function:
 SC <- readWQPqw(siteNumbers = "USGS-05288705",
                 parameterCd = "00300")
 
-# Use "queryTime" and "url" attributes:
 WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2024). _ Water Quality

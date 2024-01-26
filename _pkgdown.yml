@@ -100,6 +100,8 @@ reference:
       - importWQP
   - title: Helper functions
     contents:
+      - create_NWIS_bib
+      - create_WQP_bib
       - calcWaterYear
       - addWaterYear
       - renameNWISColumns
