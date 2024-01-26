@@ -106,10 +106,13 @@ readNWISqw <- function(siteNumbers,
                        tz = "UTC") {
   .Deprecated(
     new = "readWQPqw", package = "dataRetrieval",
-    msg = "NWIS qw web services are being retired.
-Please see vignette('qwdata_changes', package = 'dataRetrieval')
-for more information.
-https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.html"
+    msg = "WARNING: Beginning in February 2024 the NWIS qw data endpoint will not deliver new data or updates to existing data. 
+Eventually the endpoint will be retired. For updated information visit:
+https://waterdata.usgs.gov/nwis/qwdata
+For additional details, see vignettes:
+https://doi-usgs.github.io/dataRetrieval/articles/Status.html
+https://doi-usgs.github.io/dataRetrieval/articles/qwdata_changes.html
+If you have additional questions about the qw data service, email CompTools@usgs.gov."
   )
 
   pgrp <- c(

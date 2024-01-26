@@ -22,13 +22,19 @@ navbar:
     href: articles/dataRetrieval.html
   - text: Function Help
     href: reference/index.html
-  - text: Large Data Pull Examples
+  - text: Large Data Pulls
     menu:
     - text: Scripting Approach
       href: articles/wqp_large_pull_script.html
     - text: Pipeline Approach
       href: articles/wqp_large_pull_targets.html
-  - text: Articles
+  - text: Water Quality Changes
+    menu:
+    - text: Changes to QW
+      href: articles/qwdata_changes.html
+    - text: USGS QW Status
+      href: articles/Status.html
+  - text: Additional Articles
     menu:
     - text: Tutorial
       href: articles/tutorial.html
