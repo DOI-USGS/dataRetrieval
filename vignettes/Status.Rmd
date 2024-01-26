@@ -19,17 +19,17 @@ This page will be updated frequently with information about the status of dataRe
 
 # Current Status
 
-## readNWISqw
+### readNWISqw
 
-Functions normally, includes new data. This function is deprecated, so consider switching to `readWQPqw`
+Functioning normally, includes new data. This function is deprecated, so consider switching to `readWQPqw`
 
-## WQP
+### WQP
 
 Functioning normally, includes new USGS data. See below for upcoming information.
 
 # Overview of changes
 
-## NWIS qw services
+### NWIS qw services
 
 Discrete water samples data are undergoing modernization, and NWIS services will no longer be updated with the latest data starting in February 2024, with a full decommission expected 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
@@ -47,7 +47,7 @@ When NWIS qw service is shut down - the `readNWISqw` will be removed from dataRe
 
 See [Changes to NWIS QW services](articles/qwdata_changes.html) for information on how to convert your workflows from `readNWISqw` to `readWQPqw`.
 
-## WQP: USGS Data
+### WQP: USGS Data
 
 Limited availability of **new** USGS data: starting approximately February 12, 2024, there will be a period when new USGS data will not be accessible on the Water Quality Portal. Data will still be collected but will not be publicly available. This limited availability is expected to last a few weeks.
 
