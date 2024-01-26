@@ -1,6 +1,6 @@
 ---
 title: "dataRetrieval Status"
-date: Sys.Date()
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
   rmarkdown::html_vignette:
     toc: true
