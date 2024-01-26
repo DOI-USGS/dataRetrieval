@@ -42,16 +42,16 @@ For additional details, see vignette:
 
 If you have additional questions about the qw data service, email CompTools@usgs.gov.
 
-It is planned that when NWIS qw service will be shut down - the `readNWISqw` will be removed from dataRetrieval.
+When NWIS qw service is shut down - the `readNWISqw` will be removed from dataRetrieval.
 
 
 See [Changes to NWIS QW services](articles/qwdata_changes.html) for information on how to convert your workflows from `readNWISqw` to `readWQPqw`.
 
 ## WQP: USGS Data
 
-Limited availability of new USGS data: starting approximately February 12, 2024, there will be a period when new USGS data will not be accessible on the Water Quality Portal. Data will still be collected but will not be publicly available. This limited availability is expected to last a few weeks.
+Limited availability of **new** USGS data: starting approximately February 12, 2024, there will be a period when new USGS data will not be accessible on the Water Quality Portal. Data will still be collected but will not be publicly available. This limited availability is expected to last a few weeks.
 
-Recent USGS data will be accessible again upon release of the new Data Profiles, which will be in the WQX 3.0 format. These profiles should be available in March, 2024.
+Recent USGS data will be accessible again upon release of the new Data Profiles, which will be in the WQX 3.0 format. These profiles should be available starting in March, 2024.
 
-These profiles are not yet available to test. When the are, we will update this page with recommendations.
+These profiles are not yet available to test. When they are, we will update this page with recommendations.
  
