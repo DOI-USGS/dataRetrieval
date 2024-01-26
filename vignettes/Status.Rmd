@@ -31,7 +31,7 @@ Functioning normally, includes new USGS data. See below for upcoming information
 
 ## NWIS qw services
 
-Discrete water samples data are undergoing modernization, and NWIS services will no longer being updated with the latest data starting in February 2024, with a full decommission expected 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
+Discrete water samples data are undergoing modernization, and NWIS services will no longer be updated with the latest data starting in February 2024, with a full decommission expected 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
 
 For updated information visit:
