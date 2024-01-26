@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
   fig.height = 7,
   fig.width = 7
 )
+library(dataRetrieval)
 ```
 
 
@@ -28,7 +29,7 @@ The `dataRetrieval` package was created to simplify the process of loading hydro
 
 For complete tutorial information, see:
 
-[https://rconnect.usgs.gov/dataRetrieval/](https://rconnect.usgs.gov/dataRetrieval/)
+[https://doi-usgs.github.io/dataRetrieval/](https://doi-usgs.github.io/dataRetrieval/)
 
 [https://waterdata.usgs.gov/blog/dataretrieval/](https://waterdata.usgs.gov/blog/dataretrieval/)
 
@@ -50,13 +51,6 @@ parameterCd <- "00060"
 
 # Raw daily data:
 rawDailyData <- readNWISdv(
-  siteNumber, parameterCd,
-  "1980-01-01", "2010-01-01"
-)
-
-# Sample data Nitrate:
-parameterCd <- "00618"
-qwData <- readNWISqw(
   siteNumber, parameterCd,
   "1980-01-01", "2010-01-01"
 )
@@ -104,17 +98,74 @@ install_github("DOI-USGS/dataRetrieval",
 ```
 
 
+
+
+
 # Reporting bugs
 
 Please consider reporting bugs and asking questions on the Issues page:
 [https://github.com/DOI-USGS/dataRetrieval/issues](https://github.com/DOI-USGS/dataRetrieval/issues)
 
+# Citations
 
-# Citing dataRetrieval
+## Citing the dataRetrieval package
 
 ```{r cite, eval=TRUE}
 citation(package = "dataRetrieval")
 ```
+
+## Citing NWIS data
+
+U.S. Geological Survey, 2023, National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed [April 26, 2023], at http://waterdata.usgs.gov/nwis/. http://dx.doi.org/10.5066/F7P55KJN
+
+This can be done programatically:
+
+```{r}
+
+dv <- readNWISdv("09010500", "00060")
+
+NWIScitation <- paste0("U.S. Geological Survey, ",
+                       format(attr(dv, "queryTime"), "%Y"),
+                       ", National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed ",
+                       format(attr(dv, "queryTime"), "%b %d, %Y"),
+                       ", at ",
+                       attr(dv, "url"),
+                       ", http://dx.doi.org/10.5066/F7P55KJN")
+
+NWIScitation
+
+
+```
+
+## Citing WQP data
+
+Citations for specific datasets should use this format:
+
+National Water Quality Monitoring Council, YYYY, Water Quality Portal, accessed mm, dd, yyyy, hyperlink_for_query, https://doi.org/10.5066/P9QRKUVJ.
+
+This can be done programatically:
+
+```{r}
+SC <- readWQPqw(siteNumbers = "USGS-05288705",
+                parameterCd = "00300")
+
+# Use "queryTime" and "url" attributes:
+WQPcitation <- paste0("National Water Quality Monitoring Council, ",
+                      format(attr(SC, "queryTime"), "%Y"),
+                      ", Water Quality Portal, accessed ",
+                      format(attr(SC, "queryTime"), "%m, %d, %Y"),
+                      ", ",
+                      attr(SC, "url"), 
+                      ", https://doi.org/10.5066/P9QRKUVJ.")
+WQPcitation
+
+```
+
+## Citing Water Quality Portal itself
+
+General Water Quality Portal citations should use the following:
+
+Water Quality Portal. Washington (DC): National Water Quality Monitoring Council, United States Geological Survey (USGS), Environmental Protection Agency (EPA); 2021. https://doi.org/10.5066/P9QRKUVJ.
 
 # Package Support
 

@@ -9,3 +9,5 @@ dataRetrieval.Rproj
 vignettes/usMaps_cache
 docs
 .DS_Store
+/doc/
+/Meta/
