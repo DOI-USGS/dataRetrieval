@@ -23,6 +23,15 @@ Retrieval functions for USGS and EPA hydrologic and water quality data.
 
 Please see \url{https://pubs.usgs.gov/publication/tm4A10} for more information.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://code.usgs.gov/water/dataRetrieval}
+  \item Report bugs at \url{https://github.com/DOI-USGS/dataRetrieval/issues}
+}
+
+}
 \author{
 Laura De Cicco \email{ldecicco@usgs.gov}
 }
+\keyword{internal}

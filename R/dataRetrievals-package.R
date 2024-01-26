@@ -27,7 +27,8 @@ Extended Documentation: https://doi-usgs.github.io/dataRetrieval")
 #' @aliases dataRetrieval-package
 #' @docType package
 #' @author Laura De Cicco \email{ldecicco@@usgs.gov}
-NULL
+#' @keywords internal 
+"_PACKAGE"
 
 #' List of USGS parameter codes
 #'
