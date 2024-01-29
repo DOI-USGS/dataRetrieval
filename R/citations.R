@@ -30,11 +30,11 @@ create_NWIS_bib <- function(x){
                         attr(x, "url"),
                         ", http://dx.doi.org/10.5066/F7P55KJN")
   
-  ref <- bibentry(
+  ref <- utils::bibentry(
     bibtype = "Manual",
     textVersion = textVersion,
     title = "National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)",
-    author = person("U.S. Geological Survey"),
+    author = utils::person("U.S. Geological Survey"),
     doi = "10.5066/F7P55KJN",
     note = paste("Accessed", format(attr(x, "queryTime"), "%b %d, %Y")),
     year = format(attr(x, "queryTime"), "%Y"),
@@ -77,11 +77,11 @@ create_WQP_bib <- function(x){
                         attr(x, "url"), 
                         ", https://doi.org/10.5066/P9QRKUVJ.")
   
-  ref <- bibentry(
+  ref <- utils::bibentry(
     bibtype = "Manual",
     textVersion = textVersion,
     title = " Water Quality Portal",
-    author = person("National Water Quality Monitoring Council"),
+    author = utils::person("National Water Quality Monitoring Council"),
     doi = "10.5066/P9QRKUVJ",
     note = paste("Accessed", format(attr(x, "queryTime"), "%b %d, %Y")),
     year = format(attr(x, "queryTime"), "%Y"),
