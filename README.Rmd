@@ -3,6 +3,8 @@ title: "README"
 output:
   md_document:
     variant: gfm
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -15,6 +17,7 @@ knitr::opts_chunk$set(
   fig.height = 7,
   fig.width = 7
 )
+library(dataRetrieval)
 ```
 
 
@@ -28,7 +31,7 @@ The `dataRetrieval` package was created to simplify the process of loading hydro
 
 For complete tutorial information, see:
 
-[https://rconnect.usgs.gov/dataRetrieval/](https://rconnect.usgs.gov/dataRetrieval/)
+[https://doi-usgs.github.io/dataRetrieval/](https://doi-usgs.github.io/dataRetrieval/)
 
 [https://waterdata.usgs.gov/blog/dataretrieval/](https://waterdata.usgs.gov/blog/dataretrieval/)
 
@@ -36,6 +39,9 @@ For complete tutorial information, see:
 
 [dataRetrieval Introduction 2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
 
+:warning: USGS discrete water-quality data availability and format are changing. Beginning in February 2024 the data obtained from legacy profiles will not include new USGS data or recent updates to existing data. To view the status of changes in data availability and code functionality, visit: https://doi-usgs.github.io/dataRetrieval/articles/Status.html
+
+If you have additional questions about these changes, email CompTools@usgs.gov.
 
 # Sample Workflow
 
@@ -50,13 +56,6 @@ parameterCd <- "00060"
 
 # Raw daily data:
 rawDailyData <- readNWISdv(
-  siteNumber, parameterCd,
-  "1980-01-01", "2010-01-01"
-)
-
-# Sample data Nitrate:
-parameterCd <- "00618"
-qwData <- readNWISqw(
   siteNumber, parameterCd,
   "1980-01-01", "2010-01-01"
 )
@@ -104,17 +103,63 @@ install_github("DOI-USGS/dataRetrieval",
 ```
 
 
+
+
+
 # Reporting bugs
 
 Please consider reporting bugs and asking questions on the Issues page:
 [https://github.com/DOI-USGS/dataRetrieval/issues](https://github.com/DOI-USGS/dataRetrieval/issues)
 
+# Citations
 
-# Citing dataRetrieval
+## Citing the dataRetrieval package
 
 ```{r cite, eval=TRUE}
 citation(package = "dataRetrieval")
 ```
+
+## Citing NWIS data
+
+U.S. Geological Survey, 2023, National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed [April 26, 2023], at http://waterdata.usgs.gov/nwis/. http://dx.doi.org/10.5066/F7P55KJN
+
+This can be done using the `create_NWIS_bib` function:
+
+
+```{r}
+
+dv <- readNWISdv("09010500", "00060")
+
+NWIScitation <- create_NWIS_bib(dv)
+
+NWIScitation
+print(NWIScitation, style = "Bibtex")
+
+
+```
+
+## Citing WQP data
+
+Citations for specific datasets should use this format:
+
+National Water Quality Monitoring Council, YYYY, Water Quality Portal, accessed mm, dd, yyyy, hyperlink_for_query, https://doi.org/10.5066/P9QRKUVJ.
+
+This can be done using the `create_WQP_bib` function:
+
+```{r}
+SC <- readWQPqw(siteNumbers = "USGS-05288705",
+                parameterCd = "00300")
+
+WQPcitation <- create_WQP_bib(SC)
+WQPcitation
+print(WQPcitation, style = "Bibtex")
+```
+
+## Citing Water Quality Portal itself
+
+General Water Quality Portal citations should use the following:
+
+Water Quality Portal. Washington (DC): National Water Quality Monitoring Council, United States Geological Survey (USGS), Environmental Protection Agency (EPA); 2021. https://doi.org/10.5066/P9QRKUVJ.
 
 # Package Support
 

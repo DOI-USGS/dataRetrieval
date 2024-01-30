@@ -27,32 +27,7 @@ will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
 }
 \value{
-A data frame with at least the following columns:
-\tabular{lll}{
-Name \tab Type \tab Description \cr
-"type_a" \tab character \tab Geojson type \cr
-"features.type"  \tab character \tab Geojson feature type  \cr
-"type1"   \tab character \tab Geojson spatial type \cr
-"coordinates" \tab list \tab List of longitude/latitude \cr
-"ProviderName"  \tab character \tab 	The name of the database that provided the data to the Water Qaulity
-portal (E.G. STORET, NWIS, STEWARDS) \cr
-"OrganizationIdentifier" \tab character \tab A designator used to
-uniquely identify a unique business establishment within a context. \cr
-"OrganizationFormalName"  \tab character \tab The legal designator (i.e. formal name) of an organization. \cr
-"MonitoringLocationIdentifier"  \tab character \tab 	A designator used to
-describe the unique name, number, or code assigned to identify the monitoring location. \cr
-"MonitoringLocationName"  \tab character \tab 	The designator specified by the sampling organization
-for the site at which sampling or other activities are conducted. \cr
-"MonitoringLocationTypeName" \tab character \tab 	The descriptive name for a type of monitoring location. \cr
-"ResolvedMonitoringLocationTypeName" \tab character \tab  \cr
-"HUCEightDigitCode"  \tab character \tab The 8 digit federal code used to identify the
-hydrologic unit of the monitoring location to the cataloging unit level of precision. \cr
-"siteUrl"   \tab character \tab URL to site information \cr
-"activityCount" \tab numeric \tab  \cr
-"resultCount"  \tab numeric \tab  \cr
-"StateName" \tab character \tab  State name \cr
-"CountyName" \tab character \tab County name \cr
-}
+A data frame based on the Water Quality Portal results.
 }
 \description{
 Returns a list of sites from the Water Quality Portal web service. This function gets

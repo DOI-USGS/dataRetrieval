@@ -203,6 +203,8 @@ readWQPdata <- function(...,
                         convertType = TRUE) {
   tz <- match.arg(tz, OlsonNames())
 
+  wqp_message()
+  
   valuesList <- readWQPdots(...)
 
   service <- valuesList$service
