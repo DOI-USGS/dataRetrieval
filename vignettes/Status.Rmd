@@ -37,15 +37,12 @@ Discrete water samples data are undergoing modernization, and NWIS services will
 For updated information visit:
 [https://waterdata.usgs.gov/nwis/qwdata](https://waterdata.usgs.gov/nwis/qwdata)
 
-For additional details, see vignette:
-[https://doi-usgs.github.io/dataRetrieval/articles/qwdata_changes.html](https://doi-usgs.github.io/dataRetrieval/articles/qwdata_changes.html)
-
 If you have additional questions about the qw data service, email CompTools@usgs.gov.
 
 When NWIS qw service is shut down - the `readNWISqw` will be removed from dataRetrieval.
 
 
-See [Changes to NWIS QW services](articles/qwdata_changes.html) for information on how to convert your workflows from `readNWISqw` to `readWQPqw`.
+See `vignette("qwdata_changes", package = "dataRetrieval")` for information on how to convert your workflows from `readNWISqw` to `readWQPqw`.
 
 ### WQP: USGS Data
 

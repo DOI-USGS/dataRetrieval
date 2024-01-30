@@ -16,7 +16,7 @@ National Water Information System (NWIS).
 
 For complete tutorial information, see:
 
-<https://rconnect.usgs.gov/dataRetrieval/>
+<https://doi-usgs.github.io/dataRetrieval/>
 
 <https://waterdata.usgs.gov/blog/dataretrieval/>
 
@@ -25,6 +25,16 @@ For complete tutorial information, see:
 
 [dataRetrieval Introduction
 2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
+
+:warning: USGS discrete water-quality data availability and format are
+changing. Beginning in February 2024 the data obtained from legacy
+profiles will not include new USGS data or recent updates to existing
+data. To view the status of changes in data availability and code
+functionality, visit:
+<https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
+
+If you have additional questions about these changes, email
+<CompTools@usgs.gov>.
 
 # Sample Workflow
 
@@ -39,13 +49,6 @@ parameterCd <- "00060"
 
 # Raw daily data:
 rawDailyData <- readNWISdv(
-  siteNumber, parameterCd,
-  "1980-01-01", "2010-01-01"
-)
-
-# Sample data Nitrate:
-parameterCd <- "00618"
-qwData <- readNWISqw(
   siteNumber, parameterCd,
   "1980-01-01", "2010-01-01"
 )
@@ -99,7 +102,9 @@ install_github("DOI-USGS/dataRetrieval",
 Please consider reporting bugs and asking questions on the Issues page:
 <https://github.com/DOI-USGS/dataRetrieval/issues>
 
-# Citing dataRetrieval
+# Citations
+
+## Citing the dataRetrieval package
 
 ``` r
 citation(package = "dataRetrieval")
@@ -124,6 +129,77 @@ citation(package = "dataRetrieval")
 #>     url = {https://code.usgs.gov/water/dataRetrieval},
 #>   }
 ```
+
+## Citing NWIS data
+
+U.S. Geological Survey, 2023, National Water Information System data
+available on the World Wide Web (USGS Water Data for the Nation),
+accessed \[April 26, 2023\], at <http://waterdata.usgs.gov/nwis/>.
+<http://dx.doi.org/10.5066/F7P55KJN>
+
+This can be done using the `create_NWIS_bib` function:
+
+``` r
+
+dv <- readNWISdv("09010500", "00060")
+
+NWIScitation <- create_NWIS_bib(dv)
+
+NWIScitation
+#> U.S. Geological Survey (2024). _National Water Information System data
+#> available on the World Wide Web (USGS Water Data for the Nation)_.
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jan
+#> 29, 2024,
+#> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
+print(NWIScitation, style = "Bibtex")
+#> @Manual{,
+#>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
+#>   author = {{U.S. Geological Survey}},
+#>   doi = {10.5066/F7P55KJN},
+#>   note = {Accessed Jan 29, 2024},
+#>   year = {2024},
+#>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
+#> }
+```
+
+## Citing WQP data
+
+Citations for specific datasets should use this format:
+
+National Water Quality Monitoring Council, YYYY, Water Quality Portal,
+accessed mm, dd, yyyy, hyperlink_for_query,
+<https://doi.org/10.5066/P9QRKUVJ>.
+
+This can be done using the `create_WQP_bib` function:
+
+``` r
+SC <- readWQPqw(siteNumbers = "USGS-05288705",
+                parameterCd = "00300")
+
+WQPcitation <- create_WQP_bib(SC)
+WQPcitation
+#> National Water Quality Monitoring Council (2024). _ Water Quality
+#> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
+#> Accessed Jan 29, 2024,
+#> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes>.
+print(WQPcitation, style = "Bibtex")
+#> @Manual{,
+#>   title = { Water Quality Portal},
+#>   author = {{National Water Quality Monitoring Council}},
+#>   doi = {10.5066/P9QRKUVJ},
+#>   note = {Accessed Jan 29, 2024},
+#>   year = {2024},
+#>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes},
+#> }
+```
+
+## Citing Water Quality Portal itself
+
+General Water Quality Portal citations should use the following:
+
+Water Quality Portal. Washington (DC): National Water Quality Monitoring
+Council, United States Geological Survey (USGS), Environmental
+Protection Agency (EPA); 2021. <https://doi.org/10.5066/P9QRKUVJ>.
 
 # Package Support
 
