@@ -31,7 +31,7 @@ Functioning normally, includes new USGS data. See below for upcoming information
 
 ### NWIS qw services
 
-Discrete water samples data are undergoing modernization, and NWIS services will no longer be updated with the latest data starting in February 2024, with a full decommission expected 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
+Discrete water samples data are undergoing modernization, and NWIS services will no longer be updated with the latest data starting late February 2024, with a full decommission expected 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
 
 For updated information visit:
@@ -46,9 +46,9 @@ See `vignette("qwdata_changes", package = "dataRetrieval")` for information on h
 
 ### WQP: USGS Data
 
-Limited availability of **new** USGS data: starting approximately February 12, 2024, there will be a period when new USGS data will not be accessible on the Water Quality Portal. Data will still be collected but will not be publicly available. This limited availability is expected to last a few weeks.
+Limited availability of **new** USGS data: starting late February 2024, there will be a period when new USGS data will not be accessible on the Water Quality Portal. Data will still be collected but will not be publicly available. This limited availability is expected to last a few weeks.
 
-Recent USGS data will be accessible again upon release of the new Data Profiles, which will be in the WQX 3.0 format. These profiles should be available starting in March, 2024.
+Recent USGS data will be accessible again upon release of the new Data Profiles, which will be in the WQX 3.0 format. These profiles should be available starting late March 2024.
 
 These profiles are not yet available to test. When they are, we will update this page with recommendations.
  
