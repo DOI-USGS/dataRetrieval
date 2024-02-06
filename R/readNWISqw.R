@@ -106,7 +106,7 @@ readNWISqw <- function(siteNumbers,
                        tz = "UTC") {
   .Deprecated(
     new = "readWQPqw", package = "dataRetrieval",
-    msg = "WARNING: Beginning in February 2024 the NWIS qw data endpoint will not deliver new data or updates to existing data. 
+    msg = "WARNING: Beginning in late February 2024 the NWIS qw data endpoint will not deliver new data or updates to existing data. 
 Eventually the endpoint will be retired. For updated information visit:
 https://waterdata.usgs.gov/nwis/qwdata
 For additional details, see vignettes:
