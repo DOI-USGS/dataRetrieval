@@ -17,38 +17,67 @@ editor_options:
 
 This page will be updated frequently with information about the status of dataRetrieval services.
 
-# Current Status
-
-### readNWISqw
-
-Functioning normally, includes new data. This function is deprecated, so consider switching to `readWQPqw`
-
-### WQP
-
-Functioning normally, includes new USGS data. See below for upcoming information.
-
-# Overview of changes
+# Overview
 
 ### NWIS qw services
 
-Discrete water samples data are undergoing modernization, and NWIS services will no longer be updated with the latest data starting in February 2024, with a full decommission expected 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
+Discrete water samples data are undergoing modernization, and NWIS services will no longer be updated with the latest data starting late February 2024, with a full decommission expected 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
-
-For updated information visit:
-[https://waterdata.usgs.gov/nwis/qwdata](https://waterdata.usgs.gov/nwis/qwdata)
 
 If you have additional questions about the qw data service, email CompTools@usgs.gov.
 
-When NWIS qw service is shut down - the `readNWISqw` will be removed from dataRetrieval.
-
-
-See `vignette("qwdata_changes", package = "dataRetrieval")` for information on how to convert your workflows from `readNWISqw` to `readWQPqw`.
 
 ### WQP: USGS Data
 
-Limited availability of **new** USGS data: starting approximately February 12, 2024, there will be a period when new USGS data will not be accessible on the Water Quality Portal. Data will still be collected but will not be publicly available. This limited availability is expected to last a few weeks.
+Limited availability of **new** USGS data: starting late February 2024, there will be a period when new USGS data will not be accessible on the Water Quality Portal. Data will still be collected but will not be publicly available. This limited availability is expected to last a few weeks.
 
-Recent USGS data will be accessible again upon release of the new Data Profiles, which will be in the WQX 3.0 format. These profiles should be available starting in March, 2024.
+New USGS data will be accessible again upon release of the new Data Profiles, which will be in the WQX 3.0 format. These profiles should be available starting late March 2024.
 
 These profiles are not yet available to test. When they are, we will update this page with recommendations.
  
+
+
+# Current Status: dataRetrieval specific
+
+### readNWISqw
+
+Functioning normally, includes new data. This function will be going away soon, so consider switching to `readWQPqw` or `readWQPdata`. When the NWIS qw service is eventually shut down - the `readNWISqw` will be removed from dataRetrieval. 
+
+* What to expect:
+
+See `vignette("qwdata_changes", package = "dataRetrieval")` for information on how to convert your workflows from `readNWISqw` to `readWQPqw`. This function will be removed from the dataRetrieval package when the NWIS services are decommissioned . 
+
+
+### whatNWISdata
+
+Functioning normally, includes information on all available data. 
+
+*  What to expect: 
+
+When the USGS data is "frozen" (late Feburary), the returned data availablity will also be frozen ONLY for "qw" data_type_cd results. All other data types should not be affected. 
+
+When the NWIS services are decommissioned, there will no longer be any "qw" information provided in the output of `whatNWISdata`. Discrete water-quality availability will be available via WQP services. More information will be provided as we learn more.
+
+### readWQP...
+
+Functioning normally, includes all available USGS data. The Water Quality Portal does not yet include new "WQX 3.0" profiles. 
+
+*  What to expect: 
+
+USGS data will be "frozen" around late February, and no new USGS will be available. Late March/early April there will be new data profiles that will include ALL USGS data (legacy and new). Shortly after we plan to update dataRetrieval so that these new profiles are the default. 
+
+# Known Dependencies
+
+### EGRET
+
+The `readNWISSample` function will be deprecated or updated. Plan to switch to `readWQPSample`.
+
+### HASP
+
+The `data_available` function will need to be updated.
+
+If you know of additional R package dependencies that will be affected by these changes, please email CompTools@usgs.gov.
+
+
+
+
