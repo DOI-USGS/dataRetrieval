@@ -22,7 +22,7 @@ is_dataRetrieval_user <- function() {
 
 wqp_message <- function(){
   message("NEWS: USGS data availability and format are changing. 
-Beginning in February 2024 the data obtained from legacy profiles
+Beginning in late February 2024 the data obtained from legacy profiles
 will not include new USGS data or recent updates to existing data. 
 To view the status of changes in data availability and code functionality, visit:
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html
