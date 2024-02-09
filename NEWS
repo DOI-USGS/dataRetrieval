@@ -1,6 +1,8 @@
 dataRetrieval 2.7.15
 ===================
 * Update warning about upcoming changes to USGS water quality data.
+* Added date sorting to all WQP functions.
+
 
 dataRetrieval 2.7.14
 ===================

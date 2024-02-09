@@ -269,6 +269,8 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
         retval$ActivityStartDateTime <- lubridate::fast_strptime(retval$ActivityStartDateTime, "%Y-%m-%d %H:%M:%S") +
           60 * 60 * retval$timeZoneStart
         attr(retval$ActivityStartDateTime, "tzone") <- tz
+        # if we're going to sort, here's where we'd do it:
+        retval <- retval[order(retval$ActivityStartDateTime),]
       }
 
       if (all(c("ActivityEndDate", "ActivityEndTime/Time") %in% names(retval))) {

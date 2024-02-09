@@ -722,9 +722,11 @@ citation(package = "dataRetrieval")
 
 ## Citing NWIS data
 
-U.S. Geological Survey, 2023, National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed [April 26, 2023], at http://waterdata.usgs.gov/nwis/. http://dx.doi.org/10.5066/F7P55KJN
+The requested format is: 
 
-This can be done using the `create_NWIS_bib` function:
+U.S. Geological Survey, 2023, National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed [April 26, 2023], at https://waterdata.usgs.gov/nwis/. https://dx.doi.org/10.5066/F7P55KJN
+
+This can be created from the attributes of the data using the `create_NWIS_bib` function:
 
 
 ```{r nwisCite, eval=FALSE}
@@ -732,8 +734,57 @@ This can be done using the `create_NWIS_bib` function:
 dv <- readNWISdv("09010500", "00060")
 
 NWIScitation <- create_NWIS_bib(dv)
+NWIScitation
+```
 
 ```
+U.S. Geological Survey (2024). _National Water Information
+System data available on the World Wide Web (USGS Water Data
+for the Nation)_. doi:10.5066/F7P55KJN
+<https://doi.org/10.5066/F7P55KJN>, Accessed Feb 09, 2024,
+<https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
+```
+Alternative output is available:
+
+```{r show1, eval=FALSE}
+print(NWIScitation, style = "Bibtex")
+```
+
+```
+@Manual{,
+  title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
+  author = {{U.S. Geological Survey}},
+  doi = {10.5066/F7P55KJN},
+  note = {Accessed Feb 09, 2024},
+  year = {2024},
+  url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
+}
+```
+
+```{r show2, eval=FALSE}
+print(NWIScitation, style = "citation")
+```
+
+```
+U.S. Geological Survey, 2024, National Water Information System
+data available on the World Wide Web (USGS Water Data for the
+Nation), accessed Feb 09, 2024, at
+https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01,
+https://dx.doi.org/10.5066/F7P55KJN
+
+A BibTeX entry for LaTeX users is
+
+  @Manual{,
+    title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
+    author = {{U.S. Geological Survey}},
+    doi = {10.5066/F7P55KJN},
+    note = {Accessed Feb 09, 2024},
+    year = {2024},
+    url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
+  }
+```
+
+
 
 ## Citing WQP data
 
@@ -741,14 +792,58 @@ Citations for specific datasets should use this format:
 
 National Water Quality Monitoring Council, YYYY, Water Quality Portal, accessed mm, dd, yyyy, hyperlink_for_query, https://doi.org/10.5066/P9QRKUVJ.
 
-This can be done using the `create_WQP_bib` function:
+This can be obtained using the `create_WQP_bib` function:
 
 ```{r WQPcite, eval=FALSE}
 SC <- readWQPqw(siteNumbers = "USGS-05288705",
                 parameterCd = "00300")
 
 WQPcitation <- create_WQP_bib(SC)
+WQPcitation
+```
 
+```
+National Water Quality Monitoring Council (2024). _ Water
+Quality Portal_. doi:10.5066/P9QRKUVJ
+<https://doi.org/10.5066/P9QRKUVJ>, Accessed Feb 09, 2024,
+<https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes>.
+```
+
+```{r show3, eval=FALSE}
+print(WQPcitation, style = "Bibtex")
+```
+
+```
+@Manual{,
+  title = { Water Quality Portal},
+  author = {{National Water Quality Monitoring Council}},
+  doi = {10.5066/P9QRKUVJ},
+  note = {Accessed Feb 09, 2024},
+  year = {2024},
+  url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes},
+}
+```
+
+```{r show4, eval=FALSE}
+print(WQPcitation, style = "citation")
+```
+
+```
+National Water Quality Monitoring Council, 2024, Water Quality
+Portal, accessed 02, 09, 2024,
+https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes,
+https://doi.org/10.5066/P9QRKUVJ.
+
+A BibTeX entry for LaTeX users is
+
+  @Manual{,
+    title = { Water Quality Portal},
+    author = {{National Water Quality Monitoring Council}},
+    doi = {10.5066/P9QRKUVJ},
+    note = {Accessed Feb 09, 2024},
+    year = {2024},
+    url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes},
+  }
 ```
 
 ## Citing Water Quality Portal itself
