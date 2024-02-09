@@ -724,7 +724,7 @@ citation(package = "dataRetrieval")
 
 The requested format is: 
 
-U.S. Geological Survey, 2023, National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed [April 26, 2023], at http://waterdata.usgs.gov/nwis/. http://dx.doi.org/10.5066/F7P55KJN
+U.S. Geological Survey, 2023, National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed [April 26, 2023], at https://waterdata.usgs.gov/nwis/. https://dx.doi.org/10.5066/F7P55KJN
 
 This can be created from the attributes of the data using the `create_NWIS_bib` function:
 
@@ -770,7 +770,7 @@ U.S. Geological Survey, 2024, National Water Information System
 data available on the World Wide Web (USGS Water Data for the
 Nation), accessed Feb 09, 2024, at
 https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01,
-http://dx.doi.org/10.5066/F7P55KJN
+https://dx.doi.org/10.5066/F7P55KJN
 
 A BibTeX entry for LaTeX users is
 

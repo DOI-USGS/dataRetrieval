@@ -28,7 +28,7 @@ create_NWIS_bib <- function(x){
                         format(attr(x, "queryTime"), "%b %d, %Y"),
                         ", at ",
                         attr(x, "url"),
-                        ", http://dx.doi.org/10.5066/F7P55KJN")
+                        ", https://dx.doi.org/10.5066/F7P55KJN")
   
   ref <- utils::bibentry(
     bibtype = "Manual",
