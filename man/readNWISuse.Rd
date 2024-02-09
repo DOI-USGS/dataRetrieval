@@ -18,7 +18,7 @@ readNWISuse(
 Only one is accepted per query.}
 
 \item{countyCd}{could be character (name, with or without "County", or "ALL"),
-numeric (id), or code{NULL}, which will
+numeric (id), or \code{NULL}, which will
 return state or national data depending on the stateCd argument.  "ALL" may
 also be supplied, which will return data
 for every county in a state. Can be a vector of counties in the same state.}
