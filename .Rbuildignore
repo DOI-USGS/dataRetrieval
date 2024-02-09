@@ -89,5 +89,6 @@ vignettes/github_code.png
 vignettes/save_pat.png
 vignettes/more_tests.png
 vignettes/stylesSlides.css
+vignettes/Status.Rmd
 ^ci$
 ^public$
