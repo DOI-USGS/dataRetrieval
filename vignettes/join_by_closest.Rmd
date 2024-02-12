@@ -90,7 +90,7 @@ knitr::kable(head(qw_trim))
 
 Finally, we'll use the `data.table` package to do a join to the nearest date. The code to do that is here:
 
-```{r}
+```{r eval=FALSE}
 library(data.table)
 
 setDT(qw_trim)[, join_date := qw_date]
@@ -104,7 +104,7 @@ closest_dt <- uv_trim[qw_trim, on = .(join_date), roll = "nearest"]
 
 We can calculate "delta_time" - the difference in time between the uv and qw data. We'll probably want to add a threshold that we don't join values if they are too far apart in time. In this example, if the difference is greater than 24 hours, we'll substitute `NA`.
 
-```{r}
+```{r eval=FALSE}
 qw_closest <- data.frame(closest_dt) |> 
   mutate(delta_time = difftime(qw_date, uv_date, 
                                units = "hours"),
@@ -114,13 +114,13 @@ qw_closest <- data.frame(closest_dt) |>
 ```
 
 
-```{r showqwClosest, echo=FALSE}
+```{r showqwClosest, echo=FALSE, eval=FALSE}
 knitr::kable(head(qw_closest))
 ```
 
 Here are a few plots to show the applications of these joins:
 
-```{r}
+```{r eval=FALSE}
 library(ggplot2)
 
 ggplot(data = qw_closest) +
@@ -131,7 +131,7 @@ ggplot(data = qw_closest) +
 
 ```
 
-```{r}
+```{r eval=FALSE}
 ggplot(data = qw_closest) +
   geom_point(aes(x = flow, y = val_qw)) +
   theme_bw() +
@@ -142,7 +142,7 @@ ggplot(data = qw_closest) +
 
 ```
 
-```{r}
+```{r eval=FALSE}
 ggplot() +
   geom_line(data = uv_trim,
             aes(x = uv_date, val_uv),
