@@ -27,7 +27,7 @@ getready:
   stage: getready
   script:
     - mkdir -p $R_LIBS_USER
-    - Rscript -e "install.packages(c('rlang', 'stringi', 'devtools','pkgdown', 'connectapi', 'patchwork', 'tidyr'))"
+    - Rscript -e "install.packages(c('rlang', 'stringi', 'devtools','pkgdown', 'connectapi', 'patchwork', 'tidyr', 'data.table'))"
     - Rscript -e "devtools::install_deps(dependencies = TRUE, quiet = TRUE)"
   cache:
     paths:

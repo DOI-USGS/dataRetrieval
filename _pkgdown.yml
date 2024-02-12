@@ -42,6 +42,8 @@ navbar:
       href: articles/qwdata_changes.html
     - text: Long to Wide
       href: articles/long_to_wide.html
+    - text: Join by closest date
+      href: articles/join_by_closest.html
     - text: Stat Service
       href: articles/statsServiceMap.html
     - text: NLDI Interface
