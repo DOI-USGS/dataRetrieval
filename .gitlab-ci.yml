@@ -81,7 +81,7 @@ pages:
   only: 
     - main
   script:
-    - Rscript -e 'packageVersion("data.table")'
+    - Rscript -e 'update.packages(ask = FALSE, checkBuilt = TRUE)'
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'source("deploy_simple.R")'
   artifacts:
