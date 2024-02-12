@@ -1,0 +1,125 @@
+---
+title: "Long to Wide"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_caption: yes
+    fig_height: 7
+    fig_width: 7
+vignette: >
+  %\VignetteIndexEntry{Long to Wide}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE, message=FALSE}
+library(knitr)
+library(dataRetrieval)
+library(dplyr)
+
+options(continue = " ")
+options(width = 60)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.height = 7,
+  fig.width = 7
+)
+```
+
+This article will show an example of how to convert "long" Water Quality Portal results to a "wide" data frame. Generally "long" data frames are preferred for R analysis. However, there are a few situations where one needs to make a "wide" table. 
+
+First, what do we mean? Here is an example of a "long" table:
+
+```{r longEx, echo=FALSE}
+long <- tibble(site = c(rep("A", 4), rep("B", 4)),
+               day = c(rep(c(1, 1, 2, 2), 2)),
+               param = c(rep(c("Atrazine", "Metolachlor"), 4)),
+               value = c(0.1, 0.25, 0.13, 0.38,
+                         0.14, 0.38, 0.15, 0.40))
+knitr::kable(long)
+```
+
+Here is an example with the exact same data, but instead formatted in a "wide" table:
+
+```{r wideEx, echo=FALSE}
+wide <- tidyr::pivot_wider(long, 
+                           names_from = param,
+                           values_from = value)
+
+knitr::kable(wide)
+```
+
+The "long" table has one measurement per row, which means there is an additional column that defines the parameter. The "wide" table on the other hand has many measurements per row, but only 1 date/site.
+
+##  Water Quality Portal example
+
+Let's grab data from 2 sites that measured 2 nutrients.
+
+```{r twoSites}
+
+sites <- c("USGS-04027000", "USGS-04063700")
+chracterisitic_names <- c("Phosphorus",
+                          "Ammonia and ammonium")
+
+nutrient_data <- readWQPqw(siteNumbers = sites,
+                           chracterisitic_names)
+
+```
+
+The data comes back with 67 columns, let's pull out the ones we decide are important for our analysis. We'll rename the columns so they are easier to read on the screen, however the rename is not necessary. Your own pivots may need many more columns!
+
+```{r}
+
+nutrient_data_slim <- nutrient_data |> 
+  select(date = ActivityStartDateTime,
+         site = MonitoringLocationIdentifier,
+         param = CharacteristicName,
+         fraction = ResultSampleFractionText,
+         condition = ResultDetectionConditionText,
+         value = ResultMeasureValue,
+         det_va = DetectionQuantitationLimitMeasure.MeasureValue,
+         units = ResultMeasure.MeasureUnitCode,
+         det_units = DetectionQuantitationLimitMeasure.MeasureUnitCode
+         ) |> 
+  mutate(units = if_else(is.na(units), det_units, units)) |> 
+  select(-det_units) |> 
+  filter(!is.na(date))
+
+knitr::kable(head(nutrient_data_slim))
+
+```
+
+
+
+For this analysis, each parameter needs individual detection conditions, values, units, and detection limits. Using the `tidyr` package, we can run the `pivot_wider` function and get a table with all the required columns. 
+
+```{r}
+library(tidyr)
+
+nutrients_wide <- nutrient_data_slim |> 
+  pivot_wider(names_from = c(param, units),
+              values_from = c(condition, value, det_va))
+
+names(nutrients_wide)
+```
+
+Often users want a table that is sorted by parameter. Interleave columns can be done directly in the pivot using the `build_wider_spec` function. In this example, the columns will come back grouped by parameter and unit:
+
+```{r}
+spec <- nutrient_data_slim |> 
+  build_wider_spec(
+    names_from = c(param, units), 
+    values_from = c(condition, value, det_va), 
+    names_glue = "{param}_{units}_{.value}") |> 
+  arrange(param, units, .value) 
+
+nutrients_wide2 <- nutrient_data_slim |> 
+  pivot_wider_spec(spec)
+
+names(nutrients_wide2)
+
+```

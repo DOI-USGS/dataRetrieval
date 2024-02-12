@@ -90,5 +90,7 @@ vignettes/save_pat.png
 vignettes/more_tests.png
 vignettes/stylesSlides.css
 vignettes/Status.Rmd
+vignettes/long_to_wide.Rmd
+vignettes/join_by_closest.Rmd
 ^ci$
 ^public$

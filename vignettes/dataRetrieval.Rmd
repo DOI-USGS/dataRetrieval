@@ -504,7 +504,7 @@ discharge_stats <- readNWISstat(
 
 # Water Quality Portal Web Retrievals
 
-Water quality data sets available from the [Water Quality Data Portal](https://www.waterqualitydata.us/).  These data sets can be housed in either the STORET database (data from EPA), NWIS database (data from USGS), STEWARDS database (data from USDA), and additional databases are slated to be included in the future.  Because only USGS uses parameter codes, a "characteristic name" must be supplied.  The `readWQPqw` function can take either a USGS parameter code, or a more general characteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
+Water quality data sets available from the [Water Quality Data Portal](https://www.waterqualitydata.us/).  These data sets can be housed in either the STORET database (data from EPA) and NWIS database (data from USGS).  Because only USGS uses parameter codes, a "characteristic name" must be supplied.  The `readWQPqw` function can take either a USGS parameter code, or a more general characteristic name in the parameterCd input argument. The Water Quality Data Portal includes data discovery tools and information on characteristic names. The following example retrieves specific conductance from a DNR site in Wisconsin. 
 
 
 ```{r label=getQWData, echo=TRUE, eval=FALSE}
