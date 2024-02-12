@@ -21,6 +21,7 @@ library(knitr)
 library(dplyr)
 
 knitr::opts_chunk$set(echo = TRUE, 
+                      eval = FALSE,
                       warning = FALSE, 
                       message = FALSE,
                       fig.height=7,
