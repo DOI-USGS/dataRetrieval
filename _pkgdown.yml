@@ -40,12 +40,16 @@ navbar:
       href: articles/tutorial.html
     - text: Changes to QW
       href: articles/qwdata_changes.html
-    - text: Moving Averages
-      href: articles/movingAverages.html
+    - text: Long to Wide
+      href: articles/long_to_wide.html
+    - text: Join by closest date
+      href: articles/join_by_closest.html
     - text: Stat Service
       href: articles/statsServiceMap.html
     - text: NLDI Interface
       href: articles/nldi.html
+    - text: Moving Averages
+      href: articles/movingAverages.html
     - text: How to Contribute
       href: articles/Contributing.html
   right:

@@ -17,7 +17,7 @@ whatWQPsites(...)
 for a complete list of options. A list of arguments can also be supplied.
 One way to figure out how to construct a WQP query is to go to the "Advanced" 
 form in the Water Quality Portal:
-\url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STEWARDS&providers=STORET}
+\url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET}
 Use the form to discover what parameters are available. Once the query is 
 set in the form, scroll down to the "Query URL". You will see the parameters
 after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
