@@ -31,7 +31,14 @@ knitr::opts_chunk$set(
 
 # Changes to water quality services
 
-There was a recent announcement that the NWIS discrete water quality web services will be shut down around late spring of 2024  (continuous water quality data will continue to be made available via NWIS functions). What does this mean for `dataRetrieval` users? The water quality data will continue to be available, but it must be accessed from the [Water Quality Portal](https://www.waterqualitydata.us/) rather than the NWIS services. There are 3 major `dataRetrieval` functions that will be affected: `readNWISqw`, `whatNWISdata`, and `readNWISdata`. This vignette will describe the most common workflows conversions needed to update existing scripts. 
+USGS discrete water samples data are undergoing modernization, and NWIS services will no longer be updated with the latest data starting late February 2024, with a full decommission expected 6 months later.
+
+For the latest news on USGS water quality data, see:
+[https://doi-usgs.github.io/dataRetrieval/articles/Status.html](https://doi-usgs.github.io/dataRetrieval/articles/Status.html). Learn more about the changes and where to find the new samples data in the [WDFN blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
+
+**IMPORTANT** These recommendations will change as new WQP data profiles are released (expected late April 2024). The recommendations below assume WQP 3.0 profiles are not available. Once those are released, these recommendations will be updated.
+
+What does this mean for `dataRetrieval` users? Eventually water quality data will ONLY be available from the [Water Quality Portal](https://www.waterqualitydata.us/) rather than the NWIS services. There are 3 major `dataRetrieval` functions that will be affected: `readNWISqw`, `whatNWISdata`, and `readNWISdata`. This vignette will describe the most common workflows conversions needed to update existing scripts. 
 
 This vignette is being provided well in advance of any breaking changes, and more information and guidance will be provided. If you need more help than is provided here, please reach out to gs-w-IOW_PO_team@usgs.gov
 

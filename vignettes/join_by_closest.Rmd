@@ -35,7 +35,7 @@ This article will discuss how to do that using the `data.table` package.
 
 Let's look at site "01646500", and a nearby site with a real-time nitrate-plus-nitrite sensor. Our goal is to get the discharge and nitrate-plus-nitrite sensor data aligned with the discrete water quality samples.
 
-```{r getData, cache=TRUE}
+```{r getData}
 library(dataRetrieval)
 
 site_uv <- "01646500"
