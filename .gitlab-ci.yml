@@ -9,6 +9,7 @@ variables:
   _R_CHECK_DONTTEST_EXAMPLES_: "false"
   CRAN: "https://rpkg.chs.usgs.gov/prod-cran/latest"
   NOT_CRAN: "true"
+  R_REMOTES_UPGRADE: "always"
   R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
   R_LIBS: "$CI_PROJECT_DIR/ci/lib"
   BUILD_LOGS_DIR: "$CI_PROJECT_DIR/ci/logs"
