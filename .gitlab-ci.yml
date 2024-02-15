@@ -30,6 +30,7 @@ getready:
     - Rscript -e "install.packages(c('rlang', 'stringi', 'devtools','pkgdown', 'connectapi', 'patchwork', 'tidyr', 'data.table'))"
     - Rscript -e "devtools::install_deps(dependencies = TRUE, quiet = TRUE)"
     - Rscript -e "remotes::update_packages()"
+    - Rscript -e "devtools::install(build_vignettes = FALSE, args = '--no-manual', upgrade = 'always')"
   cache:
     paths:
      - $R_LIBS_USER
@@ -41,8 +42,7 @@ buildcheck:
   stage: check
   script:
     - mkdir -p $BUILD_LOGS_DIR
-    - Rscript -e "devtools::install(build_vignettes = FALSE, args = '--no-manual', upgrade = 'always')"
-    - R -e 'devtools::check(document = FALSE, args = "--no-tests", error_on = "error", check_dir = Sys.getenv("BUILD_LOGS_DIR"))'
+    - Rscript -e 'devtools::check(document = FALSE, args = "--no-tests", error_on = "error", check_dir = Sys.getenv("BUILD_LOGS_DIR"))'
   artifacts:
     paths:
       - $BUILD_LOGS_DIR
@@ -77,6 +77,9 @@ covertests:
 
 pages:
   stage: end
+  dependencies:
+    - getready
+    - buildcheck
   only: 
     - main
   script:
