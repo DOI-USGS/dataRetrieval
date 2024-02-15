@@ -28,8 +28,8 @@ getready:
   script:
     - mkdir -p $R_LIBS_USER
     - Rscript -e "install.packages(c('rlang', 'stringi', 'devtools','pkgdown', 'connectapi', 'patchwork', 'tidyr', 'data.table'))"
-    - Rscript -e "remotes::update_packages()"
     - Rscript -e "devtools::install_deps(dependencies = TRUE, quiet = TRUE)"
+    - Rscript -e "remotes::update_packages()"
   cache:
     paths:
      - $R_LIBS_USER
@@ -80,8 +80,7 @@ pages:
   only: 
     - main
   script:
-    - Rscript -e "library(data.table); library(dataRetrieval)"
-    - Rscript -e "devtools::session_info()"
+    - Rscript -e "library(data.table); library(dataRetrieval); devtools::session_info()"
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'source("deploy_simple.R")'
   artifacts:
