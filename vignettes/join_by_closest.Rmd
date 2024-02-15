@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       eval = TRUE,
                       warning = FALSE, 
                       message = FALSE,
-                      fig.height=7,
+                      fig.height=5,
                       fig.width=7)
 
 
@@ -43,7 +43,7 @@ site_uv <- "01646500"
 site_qw <- "USGS-01646580"
 pcode_uv <- "99133"
 pcode_qw <- "00631"
-start_date <- as.Date("2012-01-01")
+start_date <- as.Date("2018-01-01")
 end_date <- as.Date("2020-01-01")
 qw_data <- readWQPqw(site_qw, pcode_qw, 
                      startDate = start_date,
