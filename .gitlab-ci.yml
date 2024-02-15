@@ -30,10 +30,10 @@ getready:
   stage: getready
   script:
     - mkdir -p $R_LIBS_USER
-    - Rscript -e "install.packages(c('rlang', 'stringi', 'devtools','pkgdown', 'connectapi', 'patchwork', 'tidyr', 'data.table', 'maps', 'zoo'))"
-    - Rscript -e "devtools::install_deps(dependencies = TRUE, quiet = TRUE)"
+    - Rscript -e "withr::with_libpaths(new = Sys.getenv('R_LIBS_USER'), install.packages(c('patchwork', 'data.table', 'maps', 'zoo')))"
+    - Rscript -e "withr::with_libpaths(new = Sys.getenv('R_LIBS_USER'), devtools::install_deps(dependencies = TRUE, quiet = TRUE))"
     - Rscript -e "remotes::update_packages()"
-    - Rscript -e "devtools::install(build_vignettes = FALSE, args = '--no-manual', upgrade = 'always', force = TRUE)"
+    - Rscript -e "withr::with_libpaths(new = Sys.getenv('R_LIBS_USER'), devtools::install(build_vignettes = FALSE, args = '--no-manual', upgrade = 'always', force = TRUE))"
   cache:
     paths:
      - $R_LIBS_USER
