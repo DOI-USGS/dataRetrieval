@@ -4,6 +4,7 @@ variables:
   _R_CHECK_CRAN_INCOMING_: "false"
   _R_CHECK_FORCE_SUGGESTS_: "true"
   _R_CHECK_DONTTEST_EXAMPLES_: "false"
+  R_PROFILE: "$R_HOME/etc/Rprofile.site"
   CRAN: "https://rpkg.chs.usgs.gov/prod-cran/latest"
   NOT_CRAN: "true"
   R_REMOTES_UPGRADE: "always"
