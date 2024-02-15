@@ -1,8 +1,5 @@
 image: code.usgs.gov:5001/water/dockerr:latest
 
-include:
-  - template: Code-Quality.gitlab-ci.yml
-
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
   _R_CHECK_FORCE_SUGGESTS_: "true"
@@ -23,6 +20,11 @@ stages:
   - test
   - end
   - deploy
+
+cache:
+  key: ${CI_JOB_NAME}
+  paths:
+    - $R_LIBS_USER
 
 getready:
   stage: getready
