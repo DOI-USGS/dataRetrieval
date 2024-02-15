@@ -21,7 +21,7 @@ library(knitr)
 library(dplyr)
 
 knitr::opts_chunk$set(echo = TRUE, 
-                      eval = FALSE,
+                      eval = TRUE,
                       warning = FALSE, 
                       message = FALSE,
                       fig.height=7,
@@ -36,7 +36,7 @@ This article will discuss how to do that using the `data.table` package.
 
 Let's look at site "01646500", and a nearby site with a real-time nitrate-plus-nitrite sensor. Our goal is to get the discharge and nitrate-plus-nitrite sensor data aligned with the discrete water quality samples.
 
-```{r getData, eval=FALSE}
+```{r getData}
 library(dataRetrieval)
 
 site_uv <- "01646500"
@@ -57,7 +57,7 @@ uv_data <- readNWISuv(siteNumbers = site_uv,
 
 The sensor data ("uv" data) at this particular site has 2 columns of data that are important. The first task is to combine those columns. This is rather unique to this particular site and probably won't need to be done generally.
 
-```{r trimUVdata, eval=FALSE}
+```{r trimUVdata}
 library(dplyr)
 
 uv_trim <- uv_data |> 
@@ -70,13 +70,13 @@ uv_trim <- uv_data |>
 
 ```
 
-```{r showuvTrim, echo=FALSE, eval=FALSE}
+```{r showuvTrim, echo=FALSE}
 knitr::kable(head(uv_trim))
 ```
 
 Next we'll clean up the discrete water quality "qw" data to make it easy to follow in this tutorial. 
 
-```{r trimQWdata, eval=FALSE}
+```{r trimQWdata}
 qw_trim <- qw_data |> 
   filter(ActivityTypeCode == "Sample-Routine",
          !is.na(ActivityStartDateTime)) |> 
@@ -91,7 +91,7 @@ knitr::kable(head(qw_trim))
 
 Finally, we'll use the `data.table` package to do a join to the nearest date. The code to do that is here:
 
-```{r eval=FALSE}
+```{r}
 library(data.table)
 
 setDT(qw_trim)[, join_date := qw_date]
@@ -105,7 +105,7 @@ closest_dt <- uv_trim[qw_trim, on = .(join_date), roll = "nearest"]
 
 We can calculate "delta_time" - the difference in time between the uv and qw data. We'll probably want to add a threshold that we don't join values if they are too far apart in time. In this example, if the difference is greater than 24 hours, we'll substitute `NA`.
 
-```{r eval=FALSE}
+```{r}
 qw_closest <- data.frame(closest_dt) |> 
   mutate(delta_time = difftime(qw_date, uv_date, 
                                units = "hours"),
@@ -115,13 +115,13 @@ qw_closest <- data.frame(closest_dt) |>
 ```
 
 
-```{r showqwClosest, echo=FALSE, eval=FALSE}
+```{r showqwClosest, echo=FALSE}
 knitr::kable(head(qw_closest))
 ```
 
 Here are a few plots to show the applications of these joins:
 
-```{r eval=FALSE}
+```{r}
 library(ggplot2)
 
 ggplot(data = qw_closest) +
@@ -132,7 +132,7 @@ ggplot(data = qw_closest) +
 
 ```
 
-```{r eval=FALSE}
+```{r}
 ggplot(data = qw_closest) +
   geom_point(aes(x = flow, y = val_qw)) +
   theme_bw() +
@@ -143,7 +143,7 @@ ggplot(data = qw_closest) +
 
 ```
 
-```{r eval=FALSE}
+```{r}
 ggplot() +
   geom_line(data = uv_trim,
             aes(x = uv_date, val_uv),
