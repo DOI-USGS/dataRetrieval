@@ -1,4 +1,4 @@
-image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/rocker/geospatial:latest
+image: code.usgs.gov:5001/water/dockerr:latest
 
 include:
   - template: Code-Quality.gitlab-ci.yml
@@ -28,6 +28,8 @@ getready:
   script:
     - mkdir -p $R_LIBS_USER
     - Rscript -e "install.packages(c('rlang', 'stringi', 'devtools','pkgdown', 'connectapi', 'patchwork', 'tidyr', 'data.table'))"
+    - Rscript -e "remotes::update_packages()"
+    - Rscript -e "devtools::session_info()"
     - Rscript -e "devtools::install_deps(dependencies = TRUE, quiet = TRUE)"
   cache:
     paths:
