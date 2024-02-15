@@ -41,7 +41,7 @@ nrow(dailyQ)
 
 Next, we calculate a 30-day moving average on all of the flow data:
 
-```{r message=FALSE, eval=FALSE}
+```{r message=FALSE}
 library(dplyr)
 library(zoo)
 
@@ -76,7 +76,7 @@ dailyQ <- dailyQ %>%
 
 We can use the `quantile` function to calculate historical percentile flows. Then use the `loess` function for smoothing. The argument `smooth.span` defines how much smoothing should be applied. To get a smooth transistion at the start of the graph, we can add include an earlier year which is not plotted at the end. 
 
-```{r message=FALSE, eval=FALSE}
+```{r message=FALSE}
 summaryQ <- dailyQ %>%
   group_by(day.of.year) %>%
   summarize(
@@ -139,7 +139,7 @@ summaryQ <- summaryQ %>%
 
 Many of the graphical requirements defined by the USGS are difficult to achieve in `ggplot2`. Base R plotting can be used to obtain these types of graphs:
 
-```{r fig.cap="Simple 30-day moving average daily flow plot using base R", eval=FALSE}
+```{r fig.cap="Simple 30-day moving average daily flow plot using base R"}
 
 title.text <- paste0(
   stationInfo$station_nm, "\n",
@@ -217,7 +217,7 @@ box()
 Finally, we can also try to create the graph using the `ggplot2` package. The following script shows a simple way to re-create the graph in `ggplot2` with no effort on imitating desired style:
 
 
-```{r fig.cap="Simple 30-day moving average daily flow plot using ggplot2", alt.text = "30-day moving average daily flow plot, no effort on style", message=FALSE, warning=FALSE, fig.height=5, eval=FALSE}
+```{r fig.cap="Simple 30-day moving average daily flow plot using ggplot2", alt.text = "30-day moving average daily flow plot, no effort on style", message=FALSE, warning=FALSE, fig.height=5}
 library(ggplot2)
 
 simple.plot <- ggplot(data = summaryQ, aes(x = day.of.year)) +
@@ -234,7 +234,7 @@ simple.plot
 
 Next, we can play with various options to do a better job to imitate the style:
 
-```{r fig.cap="Detailed 30-day moving average daily flow plot", alt.text = "30-day moving average daily flow plot", message=FALSE, warning=FALSE, eval=FALSE}
+```{r fig.cap="Detailed 30-day moving average daily flow plot", alt.text = "30-day moving average daily flow plot", message=FALSE, warning=FALSE}
 
 styled.plot <- simple.plot +
   scale_x_continuous(
