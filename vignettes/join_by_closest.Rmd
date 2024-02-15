@@ -36,7 +36,7 @@ This article will discuss how to do that using the `data.table` package.
 
 Let's look at site "01646500", and a nearby site with a real-time nitrate-plus-nitrite sensor. Our goal is to get the discharge and nitrate-plus-nitrite sensor data aligned with the discrete water quality samples.
 
-```{r getData, eval=TRUE}
+```{r getData, eval=FALSE}
 library(dataRetrieval)
 
 site_uv <- "01646500"
@@ -57,7 +57,7 @@ uv_data <- readNWISuv(siteNumbers = site_uv,
 
 The sensor data ("uv" data) at this particular site has 2 columns of data that are important. The first task is to combine those columns. This is rather unique to this particular site and probably won't need to be done generally.
 
-```{r trimUVdata}
+```{r trimUVdata, eval=FALSE}
 library(dplyr)
 
 uv_trim <- uv_data |> 
@@ -70,13 +70,13 @@ uv_trim <- uv_data |>
 
 ```
 
-```{r showuvTrim, echo=FALSE}
+```{r showuvTrim, echo=FALSE, eval=FALSE}
 knitr::kable(head(uv_trim))
 ```
 
 Next we'll clean up the discrete water quality "qw" data to make it easy to follow in this tutorial. 
 
-```{r trimQWdata}
+```{r trimQWdata, eval=FALSE}
 qw_trim <- qw_data |> 
   filter(ActivityTypeCode == "Sample-Routine",
          !is.na(ActivityStartDateTime)) |> 
