@@ -29,7 +29,6 @@ getready:
     - mkdir -p $R_LIBS_USER
     - Rscript -e "install.packages(c('rlang', 'stringi', 'devtools','pkgdown', 'connectapi', 'patchwork', 'tidyr', 'data.table'))"
     - Rscript -e "remotes::update_packages()"
-    - Rscript -e "devtools::session_info()"
     - Rscript -e "devtools::install_deps(dependencies = TRUE, quiet = TRUE)"
   cache:
     paths:
@@ -42,9 +41,7 @@ buildcheck:
   stage: check
   script:
     - mkdir -p $BUILD_LOGS_DIR
-    - apt-get update
-    - apt-get -o dir::cache::archives=${APT_CACHE} install -y --no-install-recommends qpdf pandoc pandoc-citeproc
-    - R CMD build . --no-build-vignettes --no-manual
+    - Rscript -e "devtools::install(build_vignettes = FALSE, args = '--no-manual', upgrade = 'always')"
     - R -e 'devtools::check(document = FALSE, args = "--no-tests", error_on = "error", check_dir = Sys.getenv("BUILD_LOGS_DIR"))'
   artifacts:
     paths:
@@ -83,6 +80,8 @@ pages:
   only: 
     - main
   script:
+    - Rscript -e "library(data.table); library(dataRetrieval)"
+    - Rscript -e "devtools::session_info()"
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'source("deploy_simple.R")'
   artifacts:
