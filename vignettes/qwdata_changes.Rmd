@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Changes to water quality services
+# Changes to NWIS water quality services
 
 USGS discrete water samples data are undergoing modernization, and NWIS services will no longer be updated with the latest data starting late February 2024, with a full decommission expected 6 months later.
 
