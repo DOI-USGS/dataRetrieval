@@ -21,21 +21,19 @@ This page will be updated frequently with information about the status of dataRe
 
 ### NWIS qw services
 
-Discrete water samples data are undergoing modernization, and NWIS services will no longer be updated with the latest data starting mid-March 2024, with a full decommission expected 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
+Discrete water quality samples data are undergoing modernization, and NWIS services pulling that discrete water quality data ('qw') will no longer be updated with the latest data starting mid-March 2024, with a full decommission expected 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
 
-If you have additional questions about the qw data service, email CompTools@usgs.gov.
+If you have additional questions about the NWIS qw data service, email CompTools@usgs.gov.
 
 
 ### WQP: USGS Data
 
-Limited availability of **new** USGS data: starting mid-March accessible on the Water Quality Portal. Data will still be collected but will not be publicly available. This limited availability is expected to last a few weeks.
+Limited availability of **new** USGS data: starting mid-March new USGS data will not be accessible on the Water Quality Portal (WQP). Data will still be collected but will not be publicly available. This limited availability is expected to last a few weeks.
 
-New USGS data will be accessible again upon release of the new Data Profiles, which will be in the WQX 3.0 format. These profiles should be available starting April 2024.
-
-These profiles are not yet available to test. When they are, we will update this page with recommendations.
+New USGS data will be accessible again upon release of the new "Data Profiles" (how the data is formatted by the WQP), which will be in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)). These profiles should be available starting April 2024. These profiles are not yet available to test. When they are, we will update this page with recommendations.
  
-
+The current WQP data profiles that  are considered "WQX version 2.0 profiles". These will remain available after the rollout of version 3.0. Eventually they will be retired, but there is not yet an estimated time line.
 
 # What to expect: dataRetrieval specific
 
