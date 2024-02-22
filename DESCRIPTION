@@ -48,6 +48,8 @@ Suggests:
     covr,
     dplyr,
     ggplot2,
+    tidyr,
+    data.table,
     DT,
     gridExtra,
     knitr,
