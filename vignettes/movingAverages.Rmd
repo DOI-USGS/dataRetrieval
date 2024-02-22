@@ -34,6 +34,7 @@ parameterCd <- "00060" # Discharge
 dailyQ <- readNWISdv(siteNumber, parameterCd)
 dailyQ <- renameNWISColumns(dailyQ)
 stationInfo <- readNWISsite(siteNumber)
+nrow(dailyQ)
 ```
 
 ## Calculate moving average

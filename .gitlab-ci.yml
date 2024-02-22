@@ -1,14 +1,13 @@
-image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/rocker/geospatial:latest
-
-include:
-  - template: Code-Quality.gitlab-ci.yml
+image: code.usgs.gov:5001/water/dockerr:latest
 
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
   _R_CHECK_FORCE_SUGGESTS_: "true"
   _R_CHECK_DONTTEST_EXAMPLES_: "false"
+  R_PROFILE: "$R_HOME/etc/Rprofile.site"
   CRAN: "https://rpkg.chs.usgs.gov/prod-cran/latest"
   NOT_CRAN: "true"
+  R_REMOTES_UPGRADE: "always"
   R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
   R_LIBS: "$CI_PROJECT_DIR/ci/lib"
   BUILD_LOGS_DIR: "$CI_PROJECT_DIR/ci/logs"
@@ -23,12 +22,20 @@ stages:
   - end
   - deploy
 
+cache:
+  key: ${CI_JOB_NAME}
+  paths:
+    - $R_LIBS_USER
+
 getready:
   stage: getready
   script:
     - mkdir -p $R_LIBS_USER
-    - Rscript -e "install.packages(c('rlang', 'stringi', 'devtools','pkgdown', 'connectapi', 'patchwork', 'tidyr', 'data.table'))"
-    - Rscript -e "devtools::install_deps(dependencies = TRUE, quiet = TRUE)"
+    - echo "options(Ncpus=$(nproc --all), repos=c(CRAN='$CRAN'))" >> $R_PROFILE
+    - Rscript -e "withr::with_libpaths(new = Sys.getenv('R_LIBS_USER'), install.packages(c('patchwork', 'maps', 'zoo')))"
+    - Rscript -e "withr::with_libpaths(new = Sys.getenv('R_LIBS_USER'), devtools::install_deps(dependencies = TRUE, quiet = TRUE))"
+    - Rscript -e "remotes::update_packages()"
+    - Rscript -e "withr::with_libpaths(new = Sys.getenv('R_LIBS_USER'), devtools::install(build_vignettes = FALSE, args = '--no-manual', upgrade = 'always', force = TRUE))"
   cache:
     paths:
      - $R_LIBS_USER
@@ -40,10 +47,7 @@ buildcheck:
   stage: check
   script:
     - mkdir -p $BUILD_LOGS_DIR
-    - apt-get update
-    - apt-get -o dir::cache::archives=${APT_CACHE} install -y --no-install-recommends qpdf pandoc pandoc-citeproc
-    - R CMD build . --no-build-vignettes --no-manual
-    - R -e 'devtools::check(document = FALSE, args = "--no-tests", error_on = "error", check_dir = Sys.getenv("BUILD_LOGS_DIR"))'
+    - Rscript -e 'devtools::check(document = FALSE, args = "--no-tests", error_on = "error", check_dir = Sys.getenv("BUILD_LOGS_DIR"))'
   artifacts:
     paths:
       - $BUILD_LOGS_DIR
@@ -78,9 +82,13 @@ covertests:
 
 pages:
   stage: end
+  dependencies:
+    - getready
+    - buildcheck
   only: 
     - main
   script:
+    - Rscript -e "library(data.table); library(dataRetrieval); devtools::session_info()"
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'source("deploy_simple.R")'
   artifacts:

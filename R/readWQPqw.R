@@ -87,8 +87,7 @@ readWQPqw <- function(siteNumbers,
     
     sites <- unique(retval$MonitoringLocationIdentifier)
     
-    siteInfo <- whatWQPsites(
-      siteid = paste0(sites, collapse = ";"))
+    siteInfo <- suppressWarnings(whatWQPsites(siteid = paste0(sites, collapse = ";")))
 
     siteInfoCommon <- data.frame(
       station_nm = siteInfo$MonitoringLocationName,
