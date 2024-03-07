@@ -11,7 +11,8 @@ readWQPqw(
   endDate = "",
   tz = "UTC",
   querySummary = FALSE,
-  convertType = TRUE
+  convertType = TRUE,
+  checkHeader = FALSE
 )
 }
 \arguments{
@@ -45,6 +46,11 @@ will be returned from this query.}
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
+
+\item{checkHeader}{logical, defaults to \code{FALSE}. If \code{TRUE}, the code
+will check that the curl header response for number of rows matches the actual
+number of rows. During transition to WQX 3.0 profiles, it's unclear if
+the counts will be correct.}
 }
 \value{
 A data frame derived from the default data profile.

@@ -10,7 +10,7 @@ importWQP(
   tz = "UTC",
   csv = FALSE,
   convertType = TRUE,
-  checkHeader = TRUE
+  checkHeader = FALSE
 )
 }
 \arguments{
@@ -31,11 +31,10 @@ Currently, the summary service does not support tsv, for other services tsv is t
 will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
 
-\item{checkHeader}{logical, defaults to \code{TRUE}. If \code{TRUE}, the code
+\item{checkHeader}{logical, defaults to \code{FALSE}. If \code{TRUE}, the code
 will check that the curl header response for number of rows matches the actual
-number of rows. While \code{TRUE} is much more robust, \code{FALSE} is much faster,
-since the WQP database does not need to do as much pre-calculations to add to the 
-header.}
+number of rows. During transition to WQX 3.0 profiles, it's unclear if
+the counts will be correct.}
 }
 \value{
 retval dataframe raw data returned from the Water Quality Portal. Additionally,
