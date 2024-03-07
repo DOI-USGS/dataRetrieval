@@ -11,6 +11,7 @@ readWQPqw(
   endDate = "",
   tz = "UTC",
   querySummary = FALSE,
+  ignore_attributes = FALSE,
   convertType = TRUE,
   checkHeader = FALSE
 )
@@ -42,6 +43,9 @@ for more information on time zones.}
 
 \item{querySummary}{logical to look at number of records and unique sites that
 will be returned from this query.}
+
+\item{ignore_attributes}{logical to choose to ignore fetching site and parameter
+attributes. Default is \code{FALSE}.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates, datetimes,

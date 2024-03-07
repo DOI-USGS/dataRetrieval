@@ -239,61 +239,66 @@ readWQPdata <- function(...,
     )
 
     if (!all(is.na(retval)) && !ignore_attributes) {
-      siteInfo <- suppressWarnings(whatWQPsites(..., service = "Station"))
-
-      if (all(c(
-        "MonitoringLocationName",
-        "OrganizationIdentifier",
-        "MonitoringLocationIdentifier",
-        "LatitudeMeasure",
-        "LongitudeMeasure",
-        "HUCEightDigitCode"
-      ) %in% names(siteInfo))) {
-        siteInfoCommon <- data.frame(
-          station_nm = siteInfo$MonitoringLocationName,
-          agency_cd = siteInfo$OrganizationIdentifier,
-          site_no = siteInfo$MonitoringLocationIdentifier,
-          dec_lat_va = siteInfo$LatitudeMeasure,
-          dec_lon_va = siteInfo$LongitudeMeasure,
-          hucCd = siteInfo$HUCEightDigitCode,
-          stringsAsFactors = FALSE
-        )
-
-        siteInfo <- cbind(siteInfoCommon, siteInfo)
-      }
-
-      attr(retval, "siteInfo") <- siteInfo
-
-      if (all(c(
-        "CharacteristicName",
-        "ResultMeasure.MeasureUnitCode",
-        "ResultSampleFractionText"
-      ) %in% names(retval))) {
-        retvalVariableInfo <- retval[, c(
-          "CharacteristicName",
-          "ResultMeasure.MeasureUnitCode",
-          "ResultSampleFractionText"
-        )]
-        retvalVariableInfo <- unique(retvalVariableInfo)
-
-        variableInfo <- data.frame(
-          characteristicName = retval$CharacteristicName,
-          param_units = retval$ResultMeasure.MeasureUnitCode,
-          valueType = retval$ResultSampleFractionText,
-          stringsAsFactors = FALSE
-        )
-
-        attr(retval, "variableInfo") <- variableInfo
-      }
-    } else {
-      if (!ignore_attributes) {
-        message("The following url returned no data:\n")
-        message(baseURL)
-      }
-    }
+      retval <- create_WQP_attributes(retval, ...)
+    } 
+    
     attr(retval, "queryTime") <- Sys.time()
     attr(retval, "url") <- baseURL
 
     return(retval)
   }
+}
+
+
+create_WQP_attributes <- function(retval, ...){
+  
+
+  siteInfo <- suppressWarnings(whatWQPsites(...,
+                                            checkHeader = FALSE))
+  
+  if (all(c(
+    "MonitoringLocationName",
+    "OrganizationIdentifier",
+    "MonitoringLocationIdentifier",
+    "LatitudeMeasure",
+    "LongitudeMeasure",
+    "HUCEightDigitCode"
+  ) %in% names(siteInfo))) {
+    siteInfoCommon <- data.frame(
+      station_nm = siteInfo$MonitoringLocationName,
+      agency_cd = siteInfo$OrganizationIdentifier,
+      site_no = siteInfo$MonitoringLocationIdentifier,
+      dec_lat_va = siteInfo$LatitudeMeasure,
+      dec_lon_va = siteInfo$LongitudeMeasure,
+      hucCd = siteInfo$HUCEightDigitCode,
+      stringsAsFactors = FALSE
+    )
+    
+    siteInfo <- cbind(siteInfoCommon, siteInfo)
+  }
+  
+  attr(retval, "siteInfo") <- siteInfo
+  
+  if (all(c(
+    "CharacteristicName",
+    "ResultMeasure.MeasureUnitCode",
+    "ResultSampleFractionText"
+  ) %in% names(retval))) {
+    retvalVariableInfo <- retval[, c(
+      "CharacteristicName",
+      "ResultMeasure.MeasureUnitCode",
+      "ResultSampleFractionText"
+    )]
+    retvalVariableInfo <- unique(retvalVariableInfo)
+    
+    variableInfo <- data.frame(
+      characteristicName = retval$CharacteristicName,
+      param_units = retval$ResultMeasure.MeasureUnitCode,
+      valueType = retval$ResultSampleFractionText,
+      stringsAsFactors = FALSE
+    )
+    
+    attr(retval, "variableInfo") <- variableInfo
+  }
+  return(retval)
 }

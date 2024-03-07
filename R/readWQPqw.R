@@ -35,6 +35,8 @@
 #' will check that the curl header response for number of rows matches the actual
 #' number of rows. During transition to WQX 3.0 profiles, it's unclear if
 #' the counts will be correct.
+#' @param ignore_attributes logical to choose to ignore fetching site and parameter
+#' attributes. Default is \code{FALSE}.
 #' @keywords data import USGS web service
 #' @return A data frame derived from the default data profile.
 #'
@@ -68,6 +70,7 @@ readWQPqw <- function(siteNumbers,
                       endDate = "",
                       tz = "UTC",
                       querySummary = FALSE,
+                      ignore_attributes = FALSE,
                       convertType = TRUE,
                       checkHeader = FALSE) {
   url <- constructWQPURL(siteNumbers, parameterCd, startDate, endDate)
@@ -81,60 +84,12 @@ readWQPqw <- function(siteNumbers,
                         convertType = convertType,
                         checkHeader = checkHeader)
 
-    pcodeCheck <- all(nchar(parameterCd) == 5) &
-      all(!is.na(suppressWarnings(as.numeric(parameterCd))))
-
-    if (nzchar(startDate)) {
-      startDate <- format(as.Date(startDate), format = "%m-%d-%Y")
-    }
-
-    if (nzchar(endDate)) {
-      endDate <- format(as.Date(endDate), format = "%m-%d-%Y")
-    }
-    
     sites <- unique(retval$MonitoringLocationIdentifier)
     
-    siteInfo <- suppressWarnings(whatWQPsites(siteid = paste0(sites, collapse = ";")))
+    if (!all(is.na(retval)) && !ignore_attributes) {
+      retval <- create_WQP_attributes(retval, siteid = sites)
+    } 
 
-    siteInfoCommon <- data.frame(
-      station_nm = siteInfo$MonitoringLocationName,
-      agency_cd = siteInfo$OrganizationIdentifier,
-      site_no = siteInfo$MonitoringLocationIdentifier,
-      dec_lat_va = siteInfo$LatitudeMeasure,
-      dec_lon_va = siteInfo$LongitudeMeasure,
-      hucCd = siteInfo$HUCEightDigitCode,
-      stringsAsFactors = FALSE
-    )
-
-    siteInfo <- cbind(siteInfoCommon, siteInfo)
-
-
-    variableInfo <- data.frame(
-      characteristicName = retval$CharacteristicName,
-      parameterCd = retval$USGSPCode,
-      param_units = retval$ResultMeasure.MeasureUnitCode,
-      valueType = retval$ResultSampleFractionText,
-      stringsAsFactors = FALSE
-    )
-    variableInfo <- unique(variableInfo)
-
-    if (!anyNA(variableInfo$parameterCd)) {
-      pcodes <- unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)])
-      pcodes <- pcodes["" != pcodes]
-      paramINFO <- readNWISpCode(pcodes)
-      names(paramINFO)["parameter_cd" == names(paramINFO)] <- "parameterCd"
-
-      pCodeToName <- pCodeToName
-      varExtras <- pCodeToName[pCodeToName$parm_cd %in%
-        unique(variableInfo$parameterCd[!is.na(variableInfo$parameterCd)]), ]
-      names(varExtras)[names(varExtras) == "parm_cd"] <- "parameterCd"
-      variableInfo <- merge(variableInfo, varExtras, by = "parameterCd", all = TRUE)
-      variableInfo <- merge(variableInfo, paramINFO, by = "parameterCd", all = TRUE)
-      variableInfo <- unique(variableInfo)
-    }
-
-    attr(retval, "siteInfo") <- siteInfo
-    attr(retval, "variableInfo") <- variableInfo
     attr(retval, "url") <- url
     attr(retval, "queryTime") <- Sys.time()
 
