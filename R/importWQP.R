@@ -131,7 +131,7 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
 }
 
 
-parse_WQP <- function(retval, tz){
+parse_WQP <- function(retval, tz = "UTC"){
 
   valueCols <- names(retval)[grep("MeasureValue", names(retval))]
   countCols <- names(retval)[grep("Count", names(retval))]
