@@ -16,11 +16,10 @@
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
-#' @param checkHeader logical, defaults to \code{TRUE}. If \code{TRUE}, the code
+#' @param checkHeader logical, defaults to \code{FALSE}. If \code{TRUE}, the code
 #' will check that the curl header response for number of rows matches the actual
-#' number of rows. While \code{TRUE} is much more robust, \code{FALSE} is much faster,
-#' since the WQP database does not need to do as much pre-calculations to add to the 
-#' header.
+#' number of rows. During transition to WQX 3.0 profiles, it's unclear if
+#' the counts will be correct.
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally,
 #' a POSIXct dateTime column is supplied for
 #' start and end times, and converted to UTC. See
@@ -52,7 +51,7 @@
 importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
                       csv = FALSE, 
                       convertType = TRUE,
-                      checkHeader = TRUE) {
+                      checkHeader = FALSE) {
   if (tz != "") {
     tz <- match.arg(tz, OlsonNames())
   } else {

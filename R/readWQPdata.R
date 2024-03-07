@@ -53,6 +53,10 @@
 #' for more information on time zones.
 #' @param ignore_attributes logical to choose to ignore fetching site and parameter
 #' attributes. Default is \code{FALSE}.
+#' @param checkHeader logical, defaults to \code{FALSE}. If \code{TRUE}, the code
+#' will check that the curl header response for number of rows matches the actual
+#' number of rows. During transition to WQX 3.0 profiles, it's unclear if
+#' the counts will be correct.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
@@ -200,7 +204,8 @@ readWQPdata <- function(...,
                         querySummary = FALSE,
                         tz = "UTC",
                         ignore_attributes = FALSE,
-                        convertType = TRUE) {
+                        convertType = TRUE,
+                        checkHeader = FALSE) {
   tz <- match.arg(tz, OlsonNames())
 
   wqp_message()
@@ -229,7 +234,8 @@ readWQPdata <- function(...,
     retval <- importWQP(baseURL,
       zip = values["zip"] == "yes",
       tz = tz,
-      convertType = convertType
+      convertType = convertType,
+      checkHeader = checkHeader
     )
 
     if (!all(is.na(retval)) && !ignore_attributes) {
