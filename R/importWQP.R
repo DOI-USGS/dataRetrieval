@@ -120,17 +120,43 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
     }
   }
   
+  names(retval)[grep("/", names(retval))] <- gsub("/", ".", names(retval)[grep("/", names(retval))])
+  
   if(convertType){
     retval <- parse_WQP(retval, tz)
   } 
-  
-  names(retval)[grep("/", names(retval))] <- gsub("/", ".", names(retval)[grep("/", names(retval))])
   
   return(retval)
   
 }
 
-
+#' Convert WQP columns to correct types
+#' 
+#' Takes the character results and converts to numeric and dates.
+#' 
+#' @param retval Data frame from WQP
+#' @param tz character to set timezone attribute of datetime. Default is UTC
+#' (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
+#' "America/Phoenix", and "America/Metlakatla"
+#' 
+#' @export
+#' @return data frame retval with converted columns
+#' 
+#' @examples
+#' @examplesIf is_dataRetrieval_user()
+#' # These examples require an internet connection to run
+#'
+#' ## Examples take longer than 5 seconds:
+#' \donttest{
+#' rawSampleURL <- constructWQPURL("USGS-01594440", "01075", "", "")
+#'
+#' rawSample <- importWQP(rawSampleURL, convertType = FALSE)
+#' convertedSample <- parse_WQP(rawSample)
+#' 
+#' } 
+#' 
 parse_WQP <- function(retval, tz = "UTC"){
 
   valueCols <- names(retval)[grep("MeasureValue", names(retval))]
@@ -165,11 +191,11 @@ parse_WQP <- function(retval, tz = "UTC"){
     }
     
     original_order <- names(retval)
-    if ("ActivityStartTime/TimeZoneCode" %in% names(retval)) {
+    if ("ActivityStartTime.TimeZoneCode" %in% names(retval)) {
       retval <- merge(
         x = retval,
         y = offsetLibrary,
-        by.x = "ActivityStartTime/TimeZoneCode",
+        by.x = "ActivityStartTime.TimeZoneCode",
         by.y = "code",
         all.x = TRUE
       )
@@ -178,11 +204,11 @@ parse_WQP <- function(retval, tz = "UTC"){
     names(retval)[names(retval) == "offset"] <- "timeZoneStart"
     retval <- retval[, c(original_order, "timeZoneStart")]
     
-    if ("ActivityEndTime/TimeZoneCode" %in% names(retval)) {
+    if ("ActivityEndTime.TimeZoneCode" %in% names(retval)) {
       retval <- merge(
         x = retval,
         y = offsetLibrary,
-        by.x = "ActivityEndTime/TimeZoneCode",
+        by.x = "ActivityEndTime.TimeZoneCode",
         by.y = "code",
         all.x = TRUE
       )
@@ -198,7 +224,7 @@ parse_WQP <- function(retval, tz = "UTC"){
       }
     }
     
-    if (all(c("ActivityStartDate", "ActivityStartTime/Time") %in% names(retval))) {
+    if (all(c("ActivityStartDate", "ActivityStartTime.Time") %in% names(retval))) {
       retval$ActivityStartDateTime <- paste(retval$ActivityStartDate, retval$`ActivityStartTime/Time`)
       retval$ActivityStartDateTime <- lubridate::fast_strptime(retval$ActivityStartDateTime, "%Y-%m-%d %H:%M:%S") +
         60 * 60 * retval$timeZoneStart
@@ -207,8 +233,8 @@ parse_WQP <- function(retval, tz = "UTC"){
       retval <- retval[order(retval$ActivityStartDateTime),]
     }
     
-    if (all(c("ActivityEndDate", "ActivityEndTime/Time") %in% names(retval))) {
-      retval$ActivityEndDateTime <- paste(retval$ActivityEndDate, retval$`ActivityEndTime/Time`)
+    if (all(c("ActivityEndDate", "ActivityEndTime.Time") %in% names(retval))) {
+      retval$ActivityEndDateTime <- paste(retval$ActivityEndDate, retval$`ActivityEndTime.Time`)
       retval$ActivityEndDateTime <- lubridate::fast_strptime(
         retval$ActivityEndDateTime,
         "%Y-%m-%d %H:%M:%S"
@@ -218,6 +244,10 @@ parse_WQP <- function(retval, tz = "UTC"){
   }
   
   return(retval)
+}
+
+add_TZ_col <- function(){
+  
 }
 
 post_url <- function(obs_url, zip, csv = FALSE) {
