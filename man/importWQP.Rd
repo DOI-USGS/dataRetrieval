@@ -4,7 +4,14 @@
 \alias{importWQP}
 \title{Basic Water Quality Portal Data parser}
 \usage{
-importWQP(obs_url, zip = TRUE, tz = "UTC", csv = FALSE, convertType = TRUE)
+importWQP(
+  obs_url,
+  zip = TRUE,
+  tz = "UTC",
+  csv = FALSE,
+  convertType = TRUE,
+  checkHeader = TRUE
+)
 }
 \arguments{
 \item{obs_url}{character URL to Water Quality Portal#' @keywords data import USGS web service}
@@ -23,6 +30,12 @@ Currently, the summary service does not support tsv, for other services tsv is t
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
+
+\item{checkHeader}{logical, defaults to \code{TRUE}. If \code{TRUE}, the code
+will check that the curl header response for number of rows matches the actual
+number of rows. While \code{TRUE} is much more robust, \code{FALSE} is much faster,
+since the WQP database does not need to do as much pre-calculations to add to the 
+header.}
 }
 \value{
 retval dataframe raw data returned from the Water Quality Portal. Additionally,
