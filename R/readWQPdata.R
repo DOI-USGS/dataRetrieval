@@ -249,7 +249,7 @@ readWQPdata <- function(...,
   }
 }
 
-
+# USGS sites need a different lat/lon, can we be smarter?
 create_WQP_attributes <- function(retval, ...){
   
 
@@ -268,8 +268,8 @@ create_WQP_attributes <- function(retval, ...){
       station_nm = siteInfo$MonitoringLocationName,
       agency_cd = siteInfo$OrganizationIdentifier,
       site_no = siteInfo$MonitoringLocationIdentifier,
-      dec_lat_va = siteInfo$LatitudeMeasure,
-      dec_lon_va = siteInfo$LongitudeMeasure,
+      dec_lat_va = as.numeric(siteInfo$LatitudeMeasure),
+      dec_lon_va = as.numeric(siteInfo$LongitudeMeasure),
       hucCd = siteInfo$HUCEightDigitCode,
       stringsAsFactors = FALSE
     )
