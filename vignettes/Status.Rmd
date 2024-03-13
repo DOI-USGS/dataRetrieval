@@ -19,9 +19,11 @@ This page will be updated frequently with information about the status of dataRe
 
 # Overview
 
+As of March 11, 2024, NWIS services are "frozen": any public data retrieval will not include any new data. 
+
 ### NWIS qw services
 
-Discrete water quality samples data are undergoing modernization, and NWIS services pulling that discrete water quality data ('qw') will no longer be updated with the latest data starting mid-March 2024, with a full decommission expected 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
+Discrete water quality samples data are undergoing modernization, and NWIS services pulling that discrete water quality data ('qw') are no longer being updated as of March 11, 2024. A full decommission is expected approximately 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
 
 If you have additional questions about the NWIS qw data service, email CompTools@usgs.gov.
@@ -29,23 +31,21 @@ If you have additional questions about the NWIS qw data service, email CompTools
 
 ### WQP: USGS Data
 
-Limited availability of **new** USGS data: starting mid-March new USGS data will not be accessible on the Water Quality Portal (WQP). Data will still be collected but will not be publicly available. This limited availability is expected to last a few weeks.
+**New USGS data**: temporarily not accessible on the Water Quality Portal (WQP). Data are still being collected, but are not publicly available. This limited availability is expected to last a few weeks.
 
-New USGS data will be accessible again upon release of the new "Data Profiles" (how the data is formatted by the WQP), which will be in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)). These profiles should be available starting April 2024. These profiles are not yet available to test. When they are, we will update this page with recommendations.
- 
+**New USGS data** will be accessible again upon release of the new "Data Profiles" (how the data is formatted by the WQP), which will be in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)). These profiles should be available starting April 2024. These profiles are not yet available to test. When they are, we will update this page with recommendations.
+
 The current WQP data profiles that  are considered "WQX version 2.0 profiles". These will remain available after the rollout of version 3.0. Eventually they will be retired, but there is not yet an estimated time line.
 
 # What to expect: dataRetrieval specific
 
+
 ## readNWISqw
 
-### Current Status:
+Functioning normally but does not include any **new** data collected after March 11, 2024. This function will be going away soon, so consider switching to `readWQPqw` or `readWQPdata`. When the NWIS qw service is eventually shut down - the `readNWISqw` will be removed from dataRetrieval. 
 
-Functioning normally, includes new data. This function will be going away soon, so consider switching to `readWQPqw` or `readWQPdata`. When the NWIS qw service is eventually shut down - the `readNWISqw` will be removed from dataRetrieval. 
 
-### March 2024
 
-When the NWIS services are "frozen": the returned data will not include any new data. 
 
 ### Fall 2024
 
@@ -55,13 +55,8 @@ See `vignette("qwdata_changes", package = "dataRetrieval")` for information on h
 
 ## whatNWISdata
 
-### Current Status:
 
-Functioning normally, includes information on all available data. 
-
-### March 2024
-
-When the NWIS services are "frozen" (mid-March): the returned data availability will also be frozen ONLY for "qw" data_type_cd results. All other data types should not be affected. 
+NWIS services are "frozen": the returned data availability will also be frozen ONLY for "qw" data_type_cd results. All other data types should not be affected. 
 
 ### Fall 2024
 
@@ -101,15 +96,7 @@ You'll notice that there are fewer rows in the `what_WQP` data frame (203) than 
 
 ### Current Status:
 
-Functioning normally, includes all available USGS data. The Water Quality Portal does not yet include new "WQX 3.0" profiles. 
-
-### March 2024
-
-When the NWIS services are "frozen" (mid-March): no new USGS will be available via any Water Quality Portal query. 
-
-### Fall 2024
-
-When the NWIS services are decommissioned (possible September 2024): Should not affect WQP functions.
+NWIS services are "frozen": no new USGS will be available via any Water Quality Portal query. 
 
 ### April 2024
 
