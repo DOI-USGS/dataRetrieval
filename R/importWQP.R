@@ -144,13 +144,13 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
 #' @export
 #' @return data frame retval with converted columns
 #' 
-#' @examples
 #' @examplesIf is_dataRetrieval_user()
 #' # These examples require an internet connection to run
-#'
-#' ## Examples take longer than 5 seconds:
-#' \donttest{
 #' rawSampleURL <- constructWQPURL("USGS-01594440", "01075", "", "")
+#' 
+#' ## Examples take longer than 5 seconds:
+#' 
+#' \donttest{
 #'
 #' rawSample <- importWQP(rawSampleURL, convertType = FALSE)
 #' convertedSample <- parse_WQP(rawSample)
