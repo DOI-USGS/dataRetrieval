@@ -367,6 +367,27 @@ knitr::include_graphics("delete_branch.png")
 
 
 
+## Syncing up repositories
+
+USGS software must be provided on the code.usgs.gov to satisfy federal and USGS-specific source code policy. However, there is a rich history on the GitHub platform - and most external users prefer GitHub. To comply with policy, retain the history, and make public contributions and questions easier, we manually push updates to both repositories. Most development is done on GitHub. When that development is complete, an official `dataRetrieval` developer pushes those changes to code.usgs.gov. Development on features that are not-yet available to the public are done on code.usgs.gov. When those features are available, a developer pushes those changes to GitHub. Someday we might automate a mirroring system, but currently the process is manual.
+
+Only official dataRetrieval developers will have the access to do the following. Set up multiple git "remotes". One strategy would be the "origin" (default) is a personal fork of DOI-USGS/dataRetrieval, "upstream" is the DOI-USGS/dataRetrieval, and "codeusgs" is the code.usgs.gov/water/dataRetrieval.
+
+```bash
+git remote add upstream https://github.com/DOI-USGS/dataRetrieval.git
+
+git remote add codeusgs https://code.usgs.gov/water/dataRetrieval.git
+```
+
+To pull from the main branch of either repository:
+
+```bash
+git pull upstream main
+git pull codeusgs main
+```
+
+In general, create a pull request to push to the DOI-USGS/dataRetrieval main branch or a merge request to push to the main branch of code.usgs.gov/water/dataRetrieval. 
+
 
 # References
 
@@ -381,7 +402,5 @@ knitr::include_graphics("delete_branch.png")
 * [USGS Software Policy](https://www.usgs.gov/products/software/software-management)
 
 # Disclaimer
-
-This software is preliminary or provisional and is subject to revision. It is being provided to meet the need for timely best science. The software has not received final approval by the U.S. Geological Survey (USGS). No warranty, expressed or implied, is made by the USGS or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. The software is provided on the condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from the authorized or unauthorized use of the software.
 
 Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.

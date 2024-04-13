@@ -95,7 +95,7 @@ test_that("NLDI find sources...", {
   skip_on_cran()
   
   expect_equal(length(findNLDI(nwis = "11120000", nav = "UT", find = "wade", warn = FALSE)), 2)
-  expect_equal(length(findNLDI(nwis = "11120000", nav = c("UT", "UM"), find = c("nwis", "wade", "flowlines"), warn = FALSE)), 6)
+  expect_equal(length(findNLDI(nwis = "11120000", nav = c("UT", "UM"), find = c("nwis", "wade", "flowlines"), warn = FALSE)), 7)
 })
 
 test_that("sf not installed...", {
