@@ -74,7 +74,8 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
       if (is.null(doc)) {
         return(invisible(NULL))
       }
-      headerInfo <- httr::headers(doc)
+
+      headerInfo <- attr(doc, "headerInfo")
       doc <- utils::unzip(temp, exdir = tempdir())
       unlink(temp)
       on.exit(unlink(doc))
@@ -245,10 +246,6 @@ parse_WQP <- function(retval, tz = "UTC"){
   }
   
   return(retval)
-}
-
-add_TZ_col <- function(){
-  
 }
 
 post_url <- function(obs_url, zip, csv = FALSE) {
