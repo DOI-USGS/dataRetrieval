@@ -16,7 +16,9 @@
 #' lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
 #'                                     countycode = "US:55:025")
 #' }
-whatWQPsamples <- function(..., convertType = TRUE) {
+whatWQPsamples <- function(..., 
+                           convertType = TRUE,
+                           checkHeader = FALSE) {
   values <- readWQPdots(...)
 
   values <- values$values
@@ -39,7 +41,8 @@ whatWQPsamples <- function(..., convertType = TRUE) {
     {
       retval <- importWQP(baseURL,
         zip = values["zip"] == "yes",
-        convertType = convertType
+        convertType = convertType,
+        checkHeader = checkHeader
       )
     },
     warning = function(w) {
@@ -70,7 +73,9 @@ whatWQPsamples <- function(..., convertType = TRUE) {
 #' lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment",
 #'                                     countycode = "US:55:025")
 #' }
-whatWQPmetrics <- function(..., convertType = TRUE) {
+whatWQPmetrics <- function(..., 
+                           convertType = TRUE,
+                           checkHeader = FALSE) {
   values <- readWQPdots(...)
 
   values <- values$values
@@ -93,7 +98,8 @@ whatWQPmetrics <- function(..., convertType = TRUE) {
     {
       retval <- importWQP(baseURL,
         zip = values["zip"] == "yes",
-        convertType = convertType
+        convertType = convertType,
+        checkHeader = checkHeader
       )
     },
     warning = function(w) {

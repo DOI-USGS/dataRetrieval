@@ -11,7 +11,9 @@ readWQPqw(
   endDate = "",
   tz = "UTC",
   querySummary = FALSE,
-  convertType = TRUE
+  ignore_attributes = FALSE,
+  convertType = TRUE,
+  checkHeader = FALSE
 )
 }
 \arguments{
@@ -42,9 +44,17 @@ for more information on time zones.}
 \item{querySummary}{logical to look at number of records and unique sites that
 will be returned from this query.}
 
+\item{ignore_attributes}{logical to choose to ignore fetching site and parameter
+attributes. Default is \code{FALSE}.}
+
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
+
+\item{checkHeader}{logical, defaults to \code{FALSE}. If \code{TRUE}, the code
+will check that the curl header response for number of rows matches the actual
+number of rows. During transition to WQX 3.0 profiles, it's unclear if
+the counts will be correct.}
 }
 \value{
 A data frame derived from the default data profile.

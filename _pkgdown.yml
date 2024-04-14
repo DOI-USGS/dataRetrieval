@@ -118,6 +118,7 @@ reference:
       - zeroPad
       - dataRetrieval
       - pcode_to_name
+      - parse_WQP
   - title: Web query utilities
     desc: Functions to create web queries
     contents:
