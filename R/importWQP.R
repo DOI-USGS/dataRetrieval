@@ -179,6 +179,7 @@ parse_WQP <- function(retval, tz = "UTC"){
     })
   }
   
+  # Difference in behavior between NWIS and WQP
   offsetLibrary$offset[is.na(offsetLibrary$code)] <- NA
   
   if (length(grep("ActivityStartTime", names(retval))) > 0) {
