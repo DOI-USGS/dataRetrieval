@@ -16,6 +16,10 @@
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
+#' @param checkHeader logical, defaults to \code{FALSE}. If \code{TRUE}, the code
+#' will check that the curl header response for number of rows matches the actual
+#' number of rows. During transition to WQX 3.0 profiles, it's unclear if
+#' the counts will be correct.
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally,
 #' a POSIXct dateTime column is supplied for
 #' start and end times, and converted to UTC. See
@@ -45,7 +49,9 @@
 #' }
 #'
 importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
-                      csv = FALSE, convertType = TRUE) {
+                      csv = FALSE, 
+                      convertType = TRUE,
+                      checkHeader = FALSE) {
   if (tz != "") {
     tz <- match.arg(tz, OlsonNames())
   } else {
@@ -53,6 +59,9 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
   }
 
   if (!file.exists(obs_url)) {
+    if(!checkHeader){
+      obs_url <- paste0(obs_url, "&counts=no")
+    }
     if (zip) {
       temp <- tempfile()
       temp <- paste0(temp, ".zip")
@@ -65,7 +74,8 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
       if (is.null(doc)) {
         return(invisible(NULL))
       }
-      headerInfo <- httr::headers(doc)
+
+      headerInfo <- attr(doc, "headerInfo")
       doc <- utils::unzip(temp, exdir = tempdir())
       unlink(temp)
       on.exit(unlink(doc))
@@ -79,92 +89,14 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
       }
       headerInfo <- attr(doc, "headerInfo")
     }
+    
+    if(checkHeader){
+      headerInfo[grep("-count", names(headerInfo))] <- as.numeric(headerInfo[grep("-count", names(headerInfo))])
+  
+      totalPossible <- sum(unlist(headerInfo[grep("-count", names(headerInfo))]), na.rm = TRUE)
 
-    headerInfo[grep("-count", names(headerInfo))] <- as.numeric(headerInfo[grep("-count", names(headerInfo))])
-
-    totalPossible <- sum(unlist(headerInfo[grep("-count", names(headerInfo))]), na.rm = TRUE)
-
-    if (is.na(totalPossible) || totalPossible == 0) {
-      for (i in grep("Warning", names(headerInfo))) {
-        warning(headerInfo[i])
-      }
-      emptyReturn <- data.frame(
-        OrganizationIdentifier = character(),
-        OrganizationFormalName = character(),
-        ActivityIdentifier = character(),
-        ActivityTypeCode = character(),
-        ActivityMediaName = character(),
-        ActivityMediaSubdivisionName = character(),
-        ActivityStartDate = as.Date(x = integer(), origin = "1970-01-01"),
-        ActivityStartTime.Time = character(),
-        ActivityStartTime.TimeZoneCode = character(),
-        ActivityEndDate = as.Date(x = integer(), origin = "1970-01-01"),
-        ActivityEndTime.Time = character(),
-        ActivityEndTime.TimeZoneCode = character(),
-        ActivityDepthHeightMeasure.MeasureValue = numeric(),
-        ActivityDepthHeightMeasure.MeasureUnitCode = character(),
-        ActivityDepthAltitudeReferencePointText = character(),
-        ActivityTopDepthHeightMeasure.MeasureValue = numeric(),
-        ActivityTopDepthHeightMeasure.MeasureUnitCode = character(),
-        ActivityBottomDepthHeightMeasure.MeasureValue = numeric(),
-        ActivityBottomDepthHeightMeasure.MeasureUnitCode = character(),
-        ProjectIdentifier = character(),
-        ActivityConductingOrganizationText = character(),
-        MonitoringLocationIdentifier = character(),
-        ActivityCommentText = character(),
-        SampleAquifer = character(),
-        HydrologicCondition = character(),
-        HydrologicEvent = character(),
-        SampleCollectionMethod.MethodIdentifier = character(),
-        SampleCollectionMethod.MethodIdentifierContext = character(),
-        SampleCollectionMethod.MethodName = character(),
-        SampleCollectionEquipmentName = character(),
-        ResultDetectionConditionText = character(),
-        CharacteristicName = character(),
-        ResultSampleFractionText = character(),
-        ResultMeasureValue = numeric(),
-        ResultMeasure.MeasureUnitCode = character(),
-        MeasureQualifierCode = character(),
-        ResultStatusIdentifier = character(),
-        StatisticalBaseCode = character(),
-        ResultValueTypeName = character(),
-        ResultWeightBasisText = character(),
-        ResultTimeBasisText = character(),
-        ResultTemperatureBasisText = character(),
-        ResultParticleSizeBasisText = character(),
-        PrecisionValue = numeric(),
-        ResultCommentText = character(),
-        USGSPCode = character(),
-        ResultDepthHeightMeasure.MeasureValue = numeric(),
-        ResultDepthHeightMeasure.MeasureUnitCode = character(),
-        ResultDepthAltitudeReferencePointText = character(),
-        SubjectTaxonomicName = character(),
-        SampleTissueAnatomyName = character(),
-        ResultAnalyticalMethod.MethodIdentifier = character(),
-        ResultAnalyticalMethod.MethodIdentifierContext = character(),
-        ResultAnalyticalMethod.MethodName = character(),
-        MethodDescriptionText = character(),
-        LaboratoryName = character(),
-        AnalysisStartDate = as.Date(x = integer(), origin = "1970-01-01"),
-        ResultLaboratoryCommentText = character(),
-        DetectionQuantitationLimitTypeName = character(),
-        DetectionQuantitationLimitMeasure.MeasureValue = numeric(),
-        DetectionQuantitationLimitMeasure.MeasureUnitCode = character(),
-        PreparationStartDate = as.Date(x = integer(), origin = "1970-01-01"),
-        ProviderName = character(),
-        ActivityStartDateTime = as.POSIXct(integer()),
-        ActivityEndDateTime = as.POSIXct(integer())
-      )
-
-      attr(emptyReturn$ActivityStartDateTime, "tzone") <- tz
-      attr(emptyReturn$ActivityEndDateTime, "tzone") <- tz
-
-      if (!convertType) {
-        i <- sapply(emptyReturn, !is.character)
-        emptyReturn[i] <- lapply(emptyReturn[i], as.character)
-      }
-      attr(emptyReturn, "headerInfo") <- headerInfo
-      return(emptyReturn)
+    } else {
+      totalPossible <- Inf
     }
   } else {
     if (zip) {
@@ -173,121 +105,148 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
       doc <- obs_url
     }
   }
-
+  
   retval <- suppressWarnings(readr::read_delim(doc,
-    col_types = readr::cols(.default = "c"),
-    quote = ifelse(csv, '\"', ""),
-    delim = ifelse(csv, ",", "\t"),
-    guess_max = totalPossible
+                                               col_types = readr::cols(.default = "c"),
+                                               quote = ifelse(csv, '\"', ""),
+                                               delim = ifelse(csv, ",", "\t"),
+                                               guess_max = totalPossible
   ))
-
-  if (!file.exists(obs_url)) {
+  
+  if (checkHeader & !file.exists(obs_url)) {
     actualNumReturned <- nrow(retval)
-
+    
     if (!(actualNumReturned %in% unlist(headerInfo[grep("-count", names(headerInfo))]))) {
       warning("Number of rows returned not matched in header")
     }
   }
-  if (convertType) {
-    valueCols <- names(retval)[grep("MeasureValue", names(retval))]
-    countCols <- names(retval)[grep("Count", names(retval))]
-    yearCols <- names(retval)[grep("Year", names(retval))]
-
-    numberColumns <- unique(c(valueCols, countCols, yearCols))
-    numberColumns <- numberColumns[!grepl("Code", numberColumns)]
-    
-    for (numberCol in numberColumns) {
-      suppressWarnings({
-        val <- tryCatch(as.numeric(retval[[numberCol]]),
-          warning = function(w) w
-        )
-        # we don't want to convert it to numeric if there are non-numeric chars
-        # If we leave it to the user, it will probably break a lot of code
-        if (!"warning" %in% class(val)) {
-          retval[[numberCol]] <- val
-        }
-      })
-    }
-
-    if (length(grep("ActivityStartTime", names(retval))) > 0) {
-
-      # Time zones to characters:
-      if (length(grep("TimeZoneCode", names(retval))) > 0 &&
-        any(lapply(retval[, grep("TimeZoneCode", names(retval))], class) == "logical")) {
-        tzCols <- grep("TimeZoneCode", names(retval))
-        retval[, tzCols] <- sapply(retval[, tzCols], as.character)
-      }
-
-      offsetLibrary <- data.frame(
-        offset = c(
-          5, 4, 6, 5, 7, 6, 8, 7, 9, 8,
-          10, 10, 0, NA, 0, 0
-        ),
-        code = c(
-          "EST", "EDT", "CST", "CDT", "MST", "MDT",
-          "PST", "PDT", "AKST", "AKDT", "HAST",
-          "HST", "", NA, "UTC", "GMT"
-        ),
-        stringsAsFactors = FALSE
-      )
-      original_order <- names(retval)
-      if ("ActivityStartTime/TimeZoneCode" %in% names(retval)) {
-        retval <- merge(
-          x = retval,
-          y = offsetLibrary,
-          by.x = "ActivityStartTime/TimeZoneCode",
-          by.y = "code",
-          all.x = TRUE
-        )
-      }
-
-      names(retval)[names(retval) == "offset"] <- "timeZoneStart"
-      retval <- retval[, c(original_order, "timeZoneStart")]
-
-      if ("ActivityEndTime/TimeZoneCode" %in% names(retval)) {
-        retval <- merge(
-          x = retval,
-          y = offsetLibrary,
-          by.x = "ActivityEndTime/TimeZoneCode",
-          by.y = "code",
-          all.x = TRUE
-        )
-        names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
-        retval <- retval[, c(original_order, "timeZoneStart", "timeZoneEnd")]
-      }
-
-      dateCols <- c("ActivityStartDate", "ActivityEndDate", "AnalysisStartDate", "PreparationStartDate")
-
-      for (i in dateCols) {
-        if (i %in% names(retval)) {
-          retval[, i] <- suppressWarnings(as.Date(lubridate::parse_date_time(retval[[i]], c("Ymd", "mdY"))))
-        }
-      }
-
-      if (all(c("ActivityStartDate", "ActivityStartTime/Time") %in% names(retval))) {
-        retval$ActivityStartDateTime <- paste(retval$ActivityStartDate, retval$`ActivityStartTime/Time`)
-        retval$ActivityStartDateTime <- lubridate::fast_strptime(retval$ActivityStartDateTime, "%Y-%m-%d %H:%M:%S") +
-          60 * 60 * retval$timeZoneStart
-        attr(retval$ActivityStartDateTime, "tzone") <- tz
-        # if we're going to sort, here's where we'd do it:
-        retval <- retval[order(retval$ActivityStartDateTime),]
-      }
-
-      if (all(c("ActivityEndDate", "ActivityEndTime/Time") %in% names(retval))) {
-        retval$ActivityEndDateTime <- paste(retval$ActivityEndDate, retval$`ActivityEndTime/Time`)
-        retval$ActivityEndDateTime <- lubridate::fast_strptime(
-          retval$ActivityEndDateTime,
-          "%Y-%m-%d %H:%M:%S"
-        ) + 60 * 60 * retval$timeZoneStart
-        attr(retval$ActivityEndDateTime, "tzone") <- tz
-      }
-    }
-  }
+  
   names(retval)[grep("/", names(retval))] <- gsub("/", ".", names(retval)[grep("/", names(retval))])
-
+  
+  if(convertType){
+    retval <- parse_WQP(retval, tz)
+  } 
+  
   return(retval)
+  
 }
 
+#' Convert WQP columns to correct types
+#' 
+#' Takes the character results and converts to numeric and dates.
+#' 
+#' @param retval Data frame from WQP
+#' @param tz character to set timezone attribute of datetime. Default is UTC
+#' (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
+#' "America/Phoenix", and "America/Metlakatla"
+#' 
+#' @export
+#' @return data frame retval with converted columns
+#' 
+#' @examplesIf is_dataRetrieval_user()
+#' # These examples require an internet connection to run
+#' rawSampleURL <- constructWQPURL("USGS-01594440", "01075", "", "")
+#' 
+#' ## Examples take longer than 5 seconds:
+#' 
+#' \donttest{
+#'
+#' rawSample <- importWQP(rawSampleURL, convertType = FALSE)
+#' convertedSample <- parse_WQP(rawSample)
+#' 
+#' } 
+#' 
+parse_WQP <- function(retval, tz = "UTC"){
+
+  valueCols <- names(retval)[grep("Value", names(retval))]
+  countCols <- names(retval)[grep("Count", names(retval))]
+  yearCols <- names(retval)[grep("Year", names(retval))]
+  
+  numberColumns <- unique(c(valueCols, countCols, yearCols))
+  numberColumns <- numberColumns[!grepl("Code", numberColumns)]
+  
+  for (numberCol in numberColumns) {
+    suppressWarnings({
+      val <- tryCatch(as.numeric(retval[[numberCol]]),
+                      warning = function(w) w
+      )
+      # we don't want to convert it to numeric if there are non-numeric chars
+      # If we leave it to the user, it will probably break a lot of code
+      if (!"warning" %in% class(val)) {
+        retval[[numberCol]] <- val
+      }
+    })
+  }
+  
+  # Difference in behavior between NWIS and WQP
+  offsetLibrary$offset[is.na(offsetLibrary$code)] <- NA
+  
+  if (length(grep("ActivityStartTime", names(retval))) > 0) {
+    
+    # Time zones to characters:
+    if (length(grep("TimeZoneCode", names(retval))) > 0 &&
+        any(lapply(retval[, grep("TimeZoneCode", names(retval))], class) == "logical")) {
+      tzCols <- grep("TimeZoneCode", names(retval))
+      retval[, tzCols] <- sapply(retval[, tzCols], as.character)
+    }
+    
+    original_order <- names(retval)
+    if ("ActivityStartTime.TimeZoneCode" %in% names(retval)) {
+      retval <- merge(
+        x = retval,
+        y = offsetLibrary,
+        by.x = "ActivityStartTime.TimeZoneCode",
+        by.y = "code",
+        all.x = TRUE
+      )
+    }
+    
+    names(retval)[names(retval) == "offset"] <- "timeZoneStart"
+    retval <- retval[, c(original_order, "timeZoneStart")]
+    
+    if ("ActivityEndTime.TimeZoneCode" %in% names(retval)) {
+      retval <- merge(
+        x = retval,
+        y = offsetLibrary,
+        by.x = "ActivityEndTime.TimeZoneCode",
+        by.y = "code",
+        all.x = TRUE
+      )
+      names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
+      retval <- retval[, c(original_order, "timeZoneStart", "timeZoneEnd")]
+    }
+    
+    dateCols <- c("ActivityStartDate", "ActivityEndDate", "AnalysisStartDate", "PreparationStartDate")
+    
+    for (i in dateCols) {
+      if (i %in% names(retval)) {
+        retval[, i] <- suppressWarnings(as.Date(lubridate::parse_date_time(retval[[i]], c("Ymd", "mdY"))))
+      }
+    }
+    
+    if (all(c("ActivityStartDate", "ActivityStartTime.Time") %in% names(retval))) {
+      retval$ActivityStartDateTime <- paste(retval$ActivityStartDate, retval$`ActivityStartTime/Time`)
+      retval$ActivityStartDateTime <- lubridate::fast_strptime(retval$ActivityStartDateTime, "%Y-%m-%d %H:%M:%S") +
+        60 * 60 * retval$timeZoneStart
+      attr(retval$ActivityStartDateTime, "tzone") <- tz
+      # if we're going to sort, here's where we'd do it:
+      retval <- retval[order(retval$ActivityStartDateTime),]
+    }
+    
+    if (all(c("ActivityEndDate", "ActivityEndTime.Time") %in% names(retval))) {
+      retval$ActivityEndDateTime <- paste(retval$ActivityEndDate, retval$`ActivityEndTime.Time`)
+      retval$ActivityEndDateTime <- lubridate::fast_strptime(
+        retval$ActivityEndDateTime,
+        "%Y-%m-%d %H:%M:%S"
+      ) + 60 * 60 * retval$timeZoneStart
+      attr(retval$ActivityEndDateTime, "tzone") <- tz
+    }
+  }
+  
+  return(retval)
+}
 
 post_url <- function(obs_url, zip, csv = FALSE) {
   split <- strsplit(obs_url, "?", fixed = TRUE)
