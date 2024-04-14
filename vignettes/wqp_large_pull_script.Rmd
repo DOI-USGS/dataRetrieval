@@ -2,7 +2,8 @@
 title: "Large Data Pulls from Water Quality Portal - A Script-Based Approach"
 author: 
   - "Aliesha Krall"
-date: "2022-09-27"
+  - "Laura DeCicco"
+date: "2024-03-07"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Large Data Pulls from Water Quality Portal - A Script-Based Approach}
@@ -30,6 +31,7 @@ This article highlights a "scripting" approach, meaning it will only use basic R
 
 See [https://waterdata.usgs.gov/blog/large_sample_pull/](https://waterdata.usgs.gov/blog/large_sample_pull/) for more detail, including analysis of the downloaded data.
 
+This article was updated in March 2024 to use the `parse_WQP` function to convert columns after the full pull. This makes binding the data together more simple.
 
 # Large data example
 
@@ -47,8 +49,7 @@ Use the `readWQPsummary` function, which is a very useful function that returns 
 
 The `readWQPdata` function is used to download the actual relevant data. This example saves the data using the `saveRDS` function for each individual state. This ensures higher likelihood of successful completion of the query. For example, if a failure occurs during the download and the loops don't finish. In that case, the states that successfully downloaded the data are skipped, and only re-run the states that didn't work. Saving as an "RDS" file also has the benefits of retaining all the attributes of the data. Notice another feature of this loop is using `tryCatch` for each of the `dataRetrieval` calls. This allows the loop to continue even if one of the states failed for some reason. 
 
-```{r GetData, warning=FALSE, message=FALSE, eval=FALSE}
-
+```{r GetData, warning=FALSE, message=FALSE}
 # Load packages
 library(dataRetrieval)
 library(dplyr)
@@ -76,7 +77,7 @@ for(i in seq_len(nrow(state_cd_cont))){
   sites <- df_summary |> 
     filter(YearSummarized >= 1995,
            YearSummarized <= 2020) |> 
-    group_by(MonitoringLocationIdentifier, MonitoringLocationName) |> 
+    group_by(MonitoringLocationIdentifier, MonitoringLocationName, Provider) |> 
     summarise(start_year = min(YearSummarized, na.rm = TRUE),
               end_year = max(YearSummarized, na.rm = TRUE),
               count_activity = sum(ActivityCount, na.rm = TRUE),
@@ -89,41 +90,24 @@ for(i in seq_len(nrow(state_cd_cont))){
       readWQPdata(siteid = sites$MonitoringLocationIdentifier,
                   CharacteristicName = "Nitrogen",
                   startDateLo = "1995-01-01",
-                  startDateHi = "2020-12-31",
+                  startDateHi = "2023-12-31",
                   sampleMedia = "Water", 
-                  ignore_attributes = FALSE)
-      # turning off attributes speeds things
-      # up, but then you'll need to do the site info later.
-      # But...you'll have filtered the number of sites down.
-      # If you think that'll be a lot of sites filtered out, 
-      # set ignore_attributes to TRUE
+                  convertType = FALSE,
+                  ignore_attributes = TRUE)
     }, 
     error=function(cond) {
       message(paste("No data in:", state_nm))
     })
+    
+    if(nrow(df_state) > 0){
+      # I would write the data here, just in case:
+      saveRDS(df_state, file = paste(state_nm, "data.rds", 
+                                     sep = "_"))
+      
+    } else {
+      message("No data in:", state_nm)
+    }
   }
-  
-  if(nrow(df_state) > 0){
-    
-    # I would write the data here, just in case:
-    saveRDS(df_state, file = paste0(state_nm, "_raw_data.rds"))
-    # You could slim it down here,
-    # but if later you decide you wanted something you filtered
-    # out here, you'd need to remember to get the data again
-    # For example:
-    df_state2 <- df_state |> 
-      filter(ResultSampleFractionText == "Total") |> 
-      group_by(MonitoringLocationIdentifier) |> 
-      mutate(count = n()) |> 
-      filter(count > 40) |> 
-      ungroup()
-    
-    
-  } else {
-    message("No data in:", state_nm)
-  }
-  
-  
 }
 ```
 
@@ -133,38 +117,53 @@ Although creating an empty data frame and filling the data in later would be the
 
 The next loop shown below opens each file, pulls out the data we need for analysis, and binds up each state into one large data frame. Notice "ResultMeasureValue" changes into a character vector. By default, `dataRetrieval` will try to convert that column into numeric. Sometimes however, that can't be done because there are actual character values in the results. Therefore, to retain all of that information, be sure each state's "ResultMeasureValue" column is a character (more information on this is below).
 
-```{r X, eval=FALSE}
+```{r X}
 
 all_nitrogen <- data.frame()
 # for(state in stateCd$STUSAB){
 for(state in state_cd_cont$STUSAB){
+  
   state_df <- tryCatch({
-    readRDS(paste0(state, "_raw_data.rds"))
-  })
-  if(nrow(state_df) > 0){
+    readRDS(paste0(state, "_data.rds"))
+  }, error = function(e) e)
+    
+    
+  if(!inherits(state_df, "error") && nrow(state_df) > 0){
     df_slim <- state_df |>
-      mutate(ResultMeasureValue = as.character(ResultMeasureValue),
-             `DetectionQuantitationLimitMeasure.MeasureValue` = as.character(`DetectionQuantitationLimitMeasure.MeasureValue`)) |>
-      filter(ActivityMediaSubdivisionName %in%
-               c("Surface Water")|
+      filter(ActivityMediaSubdivisionName %in% c("Surface Water") |
                is.na(ActivityMediaSubdivisionName),
-             ResultSampleFractionText %in% c("Total")) |>
-      left_join(attr(state_df, "siteInfo") |>
-                  select(MonitoringLocationIdentifier,
-                         dec_lat_va, dec_lon_va,
-                         MonitoringLocationName,
-                         MonitoringLocationTypeName,
-                         HUCEightDigitCode),
-                by = "MonitoringLocationIdentifier")
+             ResultSampleFractionText %in% c("Total")) 
     
     all_nitrogen <- bind_rows(all_nitrogen, df_slim)
   }
-  
+
 }
+
+all_nitrogen <- parse_WQP(all_nitrogen)
+all_nitrogen <- dataRetrieval:::create_WQP_attributes(all_nitrogen,
+                        siteid = unique(all_nitrogen$MonitoringLocationIdentifier))
+
+
 
 ```
 
+```{r echo=FALSE, eval=TRUE, fig.height=4}
+library(leaflet)
 
+attr(all_nitrogen, "siteInfo") |> 
+  filter(!is.na(dec_lon_va)) |> 
+  leaflet() |> 
+  addProviderTiles("CartoDB.Positron") |> 
+  addCircleMarkers(~dec_lon_va, ~dec_lat_va,
+                   color = "red", radius = 3, stroke = FALSE,
+                   fillOpacity = 0.8, opacity = 0.8,
+                   popup = ~station_nm
+  )
+```
+
+For an extended discussion, see:
+
+<https://waterdata.usgs.gov/blog/large_sample_pull/>
 
 
 # Disclaimer

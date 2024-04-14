@@ -322,14 +322,6 @@ importRDB1 <- function(obs_url,
 }
 
 convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols = TRUE) {
-  offsetLibrary <- data.frame(
-    offset = c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0, 0, 0),
-    code = c(
-      "EST", "EDT", "CST", "CDT", "MST", "MDT",
-      "PST", "PDT", "AKST", "AKDT", "HAST", "HST", "UTC", "", NA, "GMT"
-    ),
-    stringsAsFactors = FALSE
-  )
 
   offset <- offsetLibrary$offset[match(df[, tz.name], offsetLibrary$code)]
 
