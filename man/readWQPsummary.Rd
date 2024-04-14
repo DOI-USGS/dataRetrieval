@@ -4,7 +4,7 @@
 \alias{readWQPsummary}
 \title{Summary of Data Available from Water Quality Portal}
 \usage{
-readWQPsummary(...)
+readWQPsummary(..., checkHeader = FALSE)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation}
@@ -19,40 +19,14 @@ in the Characteristic Group dropdown, you will see characteristicType=Nutrient
 in the Query URL. The corresponding argument for dataRetrieval is
 characteristicType = "Nutrient". dataRetrieval users do not need to include
 mimeType, zip, and providers is optional (these arguments are picked automatically).}
+
+\item{checkHeader}{logical, defaults to \code{FALSE}. If \code{TRUE}, the code
+will check that the curl header response for number of rows matches the actual
+number of rows. During transition to WQX 3.0 profiles, it's unclear if
+the counts will be correct.}
 }
 \value{
-A data frame with at least the following columns:
-\tabular{lll}{
-Name \tab Type \tab Description \cr
- "Provider" \tab character \tab Providing database.  \cr
- "MonitoringLocationIdentifier" \tab character \tab	A designator used to
-describe the unique name, number, or code assigned to identify
-the monitoring location.\cr
- "YearSummarized" \tab numeric \tab The year of the summary \cr
- "CharacteristicType" \tab character \tab CharacteristicType  \cr
- "CharacteristicName" \tab character \tab	The object, property, or substance
-which is evaluated or enumerated by either a direct field measurement,
-a direct field observation, or by laboratory analysis of material
-collected in the field.\cr
- "ActivityCount" \tab numeric \tab The number of times the location was sampled \cr
- "ResultCount" \tab numeric \tab The number of individual data results. \cr
- "LastResultSubmittedDate" \tab Date \tab Date when data was last submitted. \cr
- "OrganizationIdentifier" \tab character \tab  A designator used to uniquely
-identify a unique business establishment within a context.\cr
- "OrganizationFormalName" \tab character \tab  The legal designator
-(i.e. formal name) of an organization.\cr
- "MonitoringLocationName \tab character \tab MonitoringLocationName \cr
- "MonitoringLocationTypeName" \tab character \tab MonitoringLocationTypeName \cr
- "ResolvedMonitoringLocationTypeName" \tab character \tab  \cr
- "HUCEightDigitCode" \tab character \tab 8-digit HUC id. \cr
- "MonitoringLocationUrl" \tab character \tab URL to monitoring location. \cr
- "CountyName" \tab character \tab County of sampling location. \cr
- "StateName" \tab character \tab State of sampling location. \cr
- "MonitoringLocationLatitude"  \tab numeric \tab latitude of sampling
- location. \cr
- "MonitoringLocationLongitude" \tab numeric \tab longitude of sampling
- location. \cr
-}
+A data frame from the data returned from the Water Quality Portal
 }
 \description{
 Returns a list of sites with year-by-year information on what data is available.
