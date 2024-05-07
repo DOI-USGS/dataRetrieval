@@ -20,6 +20,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-covr \
   r-cran-sf \
   r-cran-zoo \
+  r-cran-patchwork \
   && rm -rf /var/lib/apt/lists/*
   
 
