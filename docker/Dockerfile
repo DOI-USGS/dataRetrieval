@@ -21,6 +21,8 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-sf \
   r-cran-zoo \
   r-cran-patchwork \
+  r-cran-maps \
+  r-cran-leaflet \
   && rm -rf /var/lib/apt/lists/*
   
 
