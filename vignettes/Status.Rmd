@@ -31,11 +31,19 @@ If you have additional questions about the NWIS qw data service, email CompTools
 
 ### WQP: USGS Data
 
-**New USGS data**: temporarily not accessible on the Water Quality Portal (WQP). Data are still being collected, but are not publicly available. This limited availability is expected to last a few weeks.
+**New USGS data**: temporarily not accessible on the main Water Quality Portal (WQP) page (www.waterqualitydata.us). Data are still being collected, but are not publicly available. This limited availability is expected to last a few months.
 
-**New USGS data** will be accessible again upon release of the new "Data Profiles" (how the data is formatted by the WQP), which will be in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)). These profiles should be available starting April 2024. These profiles are not yet available to test. When they are, we will update this page with recommendations.
+**New USGS data** _are_ accessible in a pre-release (*beta*) version of the [WQP web page](https://www.waterqualitydata.us/beta/) and new [wqx3 web services](https://waterqualitydata.us/wqx3/). Data are available in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)) for three new "Data Profiles" (how the data is formatted by the WQP):
 
-The current WQP data profiles that  are considered "WQX version 2.0 profiles". These will remain available after the rollout of version 3.0. Eventually they will be retired, but there is not yet an estimated time line.
+* Monitoring Location (a.k.a. 'Site' or 'Station')
+* Narrow results
+* Full Physical Chemical results
+
+Guidance on how to use the new web page and web services are available in the [User Guide](https://www.waterqualitydata.us/beta/portal_userguide/) and [Web Services Guide](https://www.waterqualitydata.us/beta/webservices_documentation/). Additional profiles will continue to be added to this beta release in the coming weeks. 
+
+During the beta period users may encounter bugs or identify issues with the implementation of the WQX 3.0 format: we welcome (and encourage!) your feedback to help improve these offerings, just send an email to WQX@epa.gov.
+
+The current WQP data profiles (available on the main Water Quality Portal web pages and from the current web services, https://www.waterqualitydata.us) deliver data in "WQX version 2.0" format. These will remain available for a period of time after the rollout of version 3.0. Eventually they will be retired, but there is not yet an estimated time line.
 
 # What to expect: dataRetrieval specific
 
