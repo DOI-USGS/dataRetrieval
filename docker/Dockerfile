@@ -11,7 +11,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-data.table \
   r-cran-gridextra \
   r-cran-tidyverse \
-  r-cran-jsonlite 
+  r-cran-jsonlite \
   r-cran-readr \
   r-cran-xml2 \
   r-cran-httr \
