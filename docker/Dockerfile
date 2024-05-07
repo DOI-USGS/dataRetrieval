@@ -19,6 +19,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-connectapi \
   r-cran-covr \
   r-cran-sf \
+  r-cran-zoo \
   && rm -rf /var/lib/apt/lists/*
   
 
