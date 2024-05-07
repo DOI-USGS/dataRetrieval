@@ -37,7 +37,7 @@ pcode_to_name <- function(parameterCd = "all"){
   attr(retval, "url") <- url_all
   
   if(any(parameterCd != "all")){
-    if (nrow(retval) != length(parameterCd)) {
+    if (nrow(retval) != length(unique(parameterCd))) {
       badPcode <- parameterCd[!(parameterCd %in% retval$parm_cd)]
       warning(
         "The following pCodes seem mistyped, and no information was returned: ",
