@@ -95,3 +95,4 @@ vignettes/join_by_closest.Rmd
 ^ci$
 ^public$
 ^docker$
+vignettes/WQX_3.Rmd
