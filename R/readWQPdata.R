@@ -37,7 +37,7 @@
 #' in the Characteristic Group dropdown, you will see characteristicType=Nutrient
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
-#' mimeType, zip, and providers is optional (these arguments are picked automatically).
+#' mimeType, and providers is optional (these arguments are picked automatically).
 #' 
 #' @param querySummary logical to only return the number of records and unique sites that
 #' will be returned from this query. 
@@ -232,7 +232,6 @@ readWQPdata <- function(...,
     return(retquery)
   } else {
     retval <- importWQP(baseURL,
-      zip = values["zip"] == "yes",
       tz = tz,
       convertType = convertType,
       checkHeader = checkHeader

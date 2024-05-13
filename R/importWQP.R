@@ -76,11 +76,7 @@ importWQP <- function(obs_url, tz = "UTC",
       totalPossible <- Inf
     }
   } else {
-    if (zip) {
-      doc <- utils::unzip(obs_url)
-    } else {
-      doc <- obs_url
-    }
+    doc <- obs_url
   }
   
   retval <- suppressWarnings(readr::read_delim(doc,
@@ -225,7 +221,7 @@ parse_WQP <- function(retval, tz = "UTC"){
   return(retval)
 }
 
-post_url <- function(obs_url, zip, csv = FALSE) {
+post_url <- function(obs_url, csv = FALSE) {
   split <- strsplit(obs_url, "?", fixed = TRUE)
 
   url <- split[[1]][1]
@@ -237,10 +233,6 @@ post_url <- function(obs_url, zip, csv = FALSE) {
 
   if (grepl("sorted", split[[1]][2])) {
     url <- paste0(url, "&sorted=", strsplit(split[[1]][2], "sorted=", fixed = TRUE)[[1]][2])
-  }
-
-  if (zip) {
-    url <- paste0(url, "&zip=yes")
   }
 
   return(url)

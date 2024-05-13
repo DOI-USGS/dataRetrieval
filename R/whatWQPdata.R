@@ -40,7 +40,6 @@ whatWQPsamples <- function(...,
   withCallingHandlers(
     {
       retval <- importWQP(baseURL,
-        zip = values["zip"] == "yes",
         convertType = convertType,
         checkHeader = checkHeader
       )
@@ -97,7 +96,6 @@ whatWQPmetrics <- function(...,
   withCallingHandlers(
     {
       retval <- importWQP(baseURL,
-        zip = values["zip"] == "yes",
         convertType = convertType,
         checkHeader = checkHeader
       )
@@ -142,7 +140,7 @@ whatWQPmetrics <- function(...,
 #' in the Characteristic Group dropdown, you will see characteristicType=Nutrient
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
-#' mimeType, zip, and providers is optional (these arguments are picked automatically).
+#' mimeType, and providers is optional (these arguments are picked automatically).
 #' @param saveFile path to save the incoming geojson output.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 #' will convert the data to dates, datetimes,
@@ -186,13 +184,8 @@ whatWQPdata <- function(..., saveFile = tempfile(),
   baseURL <- drURL("Station", arg.list = values)
 
   baseURL <- appendDrURL(baseURL, mimeType = "geojson")
-
-  saveFile_zip <- saveFile
-  if (tools::file_ext(saveFile) != ".zip") {
-    saveFile_zip <- paste0(saveFile, ".zip")
-  }
-
-  doc <- getWebServiceData(baseURL, httr::write_disk(saveFile_zip))
+  
+  doc <- getWebServiceData(baseURL, httr::write_disk(saveFile))
   if (is.null(doc)) {
     return(invisible(NULL))
   }
@@ -222,8 +215,6 @@ whatWQPdata <- function(..., saveFile = tempfile(),
       y <- data.frame(lapply(y, as.character), stringsAsFactors = FALSE)
     }
   } else {
-    doc <- utils::unzip(saveFile_zip, exdir = saveFile)
-    unlink(saveFile_zip)
 
     retval <- as.data.frame(jsonlite::fromJSON(doc), stringsAsFactors = FALSE)
     df_cols <- as.integer(which(sapply(retval, class) == "data.frame"))
