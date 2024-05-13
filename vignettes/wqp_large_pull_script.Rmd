@@ -16,6 +16,7 @@ library(knitr)
 
 opts_chunk$set(
   echo=TRUE,
+  eval=TRUE,
   fig.width = 7,
   fig.height = 5,
   warning = FALSE,
@@ -49,7 +50,7 @@ Use the `readWQPsummary` function, which is a very useful function that returns 
 
 The `readWQPdata` function is used to download the actual relevant data. This example saves the data using the `saveRDS` function for each individual state. This ensures higher likelihood of successful completion of the query. For example, if a failure occurs during the download and the loops don't finish. In that case, the states that successfully downloaded the data are skipped, and only re-run the states that didn't work. Saving as an "RDS" file also has the benefits of retaining all the attributes of the data. Notice another feature of this loop is using `tryCatch` for each of the `dataRetrieval` calls. This allows the loop to continue even if one of the states failed for some reason. 
 
-```{r GetData, warning=FALSE, message=FALSE, eval=FALSE}
+```{r GetData}
 # Load packages
 library(dataRetrieval)
 library(dplyr)
@@ -117,7 +118,7 @@ Although creating an empty data frame and filling the data in later would be the
 
 The next loop shown below opens each file, pulls out the data we need for analysis, and binds up each state into one large data frame. Notice "ResultMeasureValue" changes into a character vector. By default, `dataRetrieval` will try to convert that column into numeric. Sometimes however, that can't be done because there are actual character values in the results. Therefore, to retain all of that information, be sure each state's "ResultMeasureValue" column is a character (more information on this is below).
 
-```{r eval=FALSE}
+```{r}
 
 all_nitrogen <- data.frame()
 # for(state in stateCd$STUSAB){
@@ -147,7 +148,7 @@ all_nitrogen <- dataRetrieval:::create_WQP_attributes(all_nitrogen,
 
 ```
 
-```{r echo=FALSE, eval=TRUE, fig.height=4, eval=FALSE}
+```{r echo=FALSE, fig.height=4}
 library(leaflet)
 
 attr(all_nitrogen, "siteInfo") |> 
