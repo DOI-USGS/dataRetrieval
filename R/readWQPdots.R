@@ -73,13 +73,5 @@ readWQPdots <- function(...) {
     )
   }
 
-  if ("zip" %in% names(values)) {
-    if (is.logical(values["zip"])) {
-      values["zip"] <- ifelse(values["zip"], "yes", "no")
-    }
-  } else {
-    values["zip"] <- "yes"
-  }
-
   return(list(values = values, service = service))
 }
