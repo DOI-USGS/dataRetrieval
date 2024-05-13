@@ -18,6 +18,11 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-rsconnect \
   r-cran-connectapi \
   r-cran-covr \
+  r-cran-sf \
+  r-cran-zoo \
+  r-cran-patchwork \
+  r-cran-maps \
+  r-cran-leaflet \
   && rm -rf /var/lib/apt/lists/*
   
 
