@@ -4,7 +4,7 @@
 \alias{constructWQPURL}
 \title{Construct WQP url for data retrieval}
 \usage{
-constructWQPURL(siteNumbers, parameterCd, startDate, endDate, zip = TRUE)
+constructWQPURL(siteNumbers, parameterCd, startDate, endDate)
 }
 \arguments{
 \item{siteNumbers}{string or vector of strings USGS site number.  This is usually an 8 digit number}
@@ -16,8 +16,6 @@ retrieval for the earliest possible record.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record.}
-
-\item{zip}{logical to request data via downloading zip file. Default set to TRUE.}
 }
 \value{
 url string

@@ -5,7 +5,6 @@
 #' Imports data from the Water Quality Portal based on a specified url.
 #'
 #' @param obs_url character URL to Water Quality Portal#' @keywords data import USGS web service
-#' @param zip logical to request data via downloading zip file. Default set to TRUE.
 #' @param tz character to set timezone attribute of datetime. Default is UTC
 #' (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
@@ -35,11 +34,6 @@
 #'
 #' rawSample <- importWQP(rawSampleURL)
 #'
-#' rawSampleURL_NoZip <- constructWQPURL("USGS-01594440", "01075", "", "", zip = FALSE)
-#'
-#' rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip = FALSE, convertType = FALSE)
-#'
-#' rawSample2 <- importWQP(rawSampleURL_NoZip, zip = FALSE)
 #'
 #' STORETex <- constructWQPURL("WIDNR_WQX-10032762", "Specific conductance", "", "")
 #'
@@ -48,7 +42,7 @@
 #' STORETdata_char <- importWQP(STORETex, convertType = FALSE)
 #' }
 #'
-importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
+importWQP <- function(obs_url, tz = "UTC",
                       csv = FALSE, 
                       convertType = TRUE,
                       checkHeader = FALSE) {
@@ -62,33 +56,16 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
     if(!checkHeader){
       obs_url <- paste0(obs_url, "&counts=no")
     }
-    if (zip) {
-      temp <- tempfile()
-      temp <- paste0(temp, ".zip")
-
-      doc <- getWebServiceData(
-        obs_url,
-        httr::write_disk(temp),
-        httr::accept("application/zip")
-      )
-      if (is.null(doc)) {
-        return(invisible(NULL))
-      }
-
-      headerInfo <- attr(doc, "headerInfo")
-      doc <- utils::unzip(temp, exdir = tempdir())
-      unlink(temp)
-      on.exit(unlink(doc))
-    } else {
-      doc <- getWebServiceData(
-        obs_url,
-        httr::accept("text/tsv")
-      )
-      if (is.null(doc)) {
-        return(invisible(NULL))
-      }
-      headerInfo <- attr(doc, "headerInfo")
+    
+    doc <- getWebServiceData(
+      obs_url,
+      httr::accept("text/tsv")
+    )
+    if (is.null(doc)) {
+      return(invisible(NULL))
     }
+    headerInfo <- attr(doc, "headerInfo")
+    
     
     if(checkHeader){
       headerInfo[grep("-count", names(headerInfo))] <- as.numeric(headerInfo[grep("-count", names(headerInfo))])
@@ -99,11 +76,7 @@ importWQP <- function(obs_url, zip = TRUE, tz = "UTC",
       totalPossible <- Inf
     }
   } else {
-    if (zip) {
-      doc <- utils::unzip(obs_url)
-    } else {
-      doc <- obs_url
-    }
+    doc <- obs_url
   }
   
   retval <- suppressWarnings(readr::read_delim(doc,
@@ -248,7 +221,7 @@ parse_WQP <- function(retval, tz = "UTC"){
   return(retval)
 }
 
-post_url <- function(obs_url, zip, csv = FALSE) {
+post_url <- function(obs_url, csv = FALSE) {
   split <- strsplit(obs_url, "?", fixed = TRUE)
 
   url <- split[[1]][1]
@@ -260,10 +233,6 @@ post_url <- function(obs_url, zip, csv = FALSE) {
 
   if (grepl("sorted", split[[1]][2])) {
     url <- paste0(url, "&sorted=", strsplit(split[[1]][2], "sorted=", fixed = TRUE)[[1]][2])
-  }
-
-  if (zip) {
-    url <- paste0(url, "&zip=yes")
   }
 
   return(url)

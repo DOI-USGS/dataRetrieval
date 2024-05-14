@@ -80,7 +80,7 @@ readWQPqw <- function(siteNumbers,
     retquery <- getQuerySummary(url)
     return(retquery)
   } else {
-    retval <- importWQP(url, zip = TRUE, tz = tz, 
+    retval <- importWQP(url, tz = tz, 
                         convertType = convertType,
                         checkHeader = checkHeader)
 

@@ -358,7 +358,7 @@ test_that("readWQPdots working", {
 
   # NWIS names (stateCd) converted to WQP expected names (statecode)
   formArgs <- dataRetrieval:::readWQPdots(stateCd = "OH", parameterCd = "00665")
-  expect_true(length(formArgs$values) == 3)
+  expect_true(length(formArgs$values) == 2)
   expect_true("statecode" %in% names(formArgs$values))
   expect_false("stateCd" %in% names(formArgs$values))
 })
@@ -615,7 +615,7 @@ test_that("readWQPsummary", {
   # nolint start: line_length_linter
   expect_equal(
     attr(site1, "url"),
-    "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&zip=yes&dataProfile=periodOfRecord&mimeType=csv"
+    "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&dataProfile=periodOfRecord&mimeType=csv"
   )
   # nolint end
 })
@@ -623,8 +623,8 @@ test_that("readWQPsummary", {
 test_that("importWQP convertType", {
   testthat::skip_on_cran()
 
-  rawSampleURL_NoZip <- constructWQPURL("USGS-01594440", "01075", "", "", zip = FALSE)
-  rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip = FALSE, convertType = FALSE)
+  rawSampleURL_NoZip <- constructWQPURL("USGS-01594440", "01075", "", "")
+  rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, convertType = FALSE)
   expect_is(rawSampleURL_NoZip_char$ResultMeasureValue, "character")
 
   phos <- readWQPdata(statecode = "WI", countycode = "Dane",

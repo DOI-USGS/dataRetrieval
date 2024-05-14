@@ -66,7 +66,7 @@ whatWQPsites <- function(...,
 
   baseURL <- appendDrURL(baseURL, mimeType = "tsv")
 
-  retval <- importWQP(baseURL, zip = values["zip"] == "yes",
+  retval <- importWQP(baseURL, 
                       checkHeader = checkHeader)
 
   attr(retval, "queryTime") <- Sys.time()
@@ -96,7 +96,7 @@ whatWQPsites <- function(...,
 #' in the Characteristic Group dropdown, you will see characteristicType=Nutrient
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
-#' mimeType, zip, and providers is optional (these arguments are picked automatically).
+#' mimeType, and providers is optional (these arguments are picked automatically).
 #' @param checkHeader logical, defaults to \code{FALSE}. If \code{TRUE}, the code
 #' will check that the curl header response for number of rows matches the actual
 #' number of rows. During transition to WQX 3.0 profiles, it's unclear if
@@ -165,7 +165,6 @@ readWQPsummary <- function(..., checkHeader = FALSE) {
   withCallingHandlers(
     {
       retval <- importWQP(baseURL, 
-                          zip = values["zip"] == "yes", 
                           csv = TRUE, 
                           checkHeader = checkHeader)
     },
