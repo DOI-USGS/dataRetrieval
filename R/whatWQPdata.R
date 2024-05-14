@@ -17,8 +17,7 @@
 #'                                     countycode = "US:55:025")
 #' }
 whatWQPsamples <- function(..., 
-                           convertType = TRUE,
-                           checkHeader = FALSE) {
+                           convertType = TRUE) {
   values <- readWQPdots(...)
 
   values <- values$values
@@ -40,8 +39,7 @@ whatWQPsamples <- function(...,
   withCallingHandlers(
     {
       retval <- importWQP(baseURL,
-        convertType = convertType,
-        checkHeader = checkHeader
+        convertType = convertType
       )
     },
     warning = function(w) {
@@ -73,8 +71,7 @@ whatWQPsamples <- function(...,
 #'                                     countycode = "US:55:025")
 #' }
 whatWQPmetrics <- function(..., 
-                           convertType = TRUE,
-                           checkHeader = FALSE) {
+                           convertType = TRUE) {
   values <- readWQPdots(...)
 
   values <- values$values
@@ -96,8 +93,7 @@ whatWQPmetrics <- function(...,
   withCallingHandlers(
     {
       retval <- importWQP(baseURL,
-        convertType = convertType,
-        checkHeader = checkHeader
+        convertType = convertType
       )
     },
     warning = function(w) {

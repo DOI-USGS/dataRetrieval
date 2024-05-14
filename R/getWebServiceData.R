@@ -142,6 +142,8 @@ has_internet_2 <- function(obs_url) {
 #'
 #' @param url the query url
 getQuerySummary <- function(url) {
+  .Deprecated(new = "readWQPsummary", 
+              msg = "WQP summary has moved to readWQPsummary")
   queryHEAD <- httr::HEAD(url)
   retquery <- httr::headers(queryHEAD)
 
