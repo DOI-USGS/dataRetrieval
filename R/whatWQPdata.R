@@ -186,9 +186,11 @@ whatWQPdata <- function(..., saveFile = tempfile(),
   baseURL <- appendDrURL(baseURL, mimeType = "geojson")
   
   doc <- getWebServiceData(baseURL, httr::write_disk(saveFile))
+  
   if (is.null(doc)) {
     return(invisible(NULL))
   }
+  
   headerInfo <- attr(doc, "headerInfo")
 
   if (headerInfo$`total-site-count` == 0) {
@@ -216,7 +218,7 @@ whatWQPdata <- function(..., saveFile = tempfile(),
     }
   } else {
 
-    retval <- as.data.frame(jsonlite::fromJSON(doc), stringsAsFactors = FALSE)
+    retval <- as.data.frame(jsonlite::fromJSON(saveFile), stringsAsFactors = FALSE)
     df_cols <- as.integer(which(sapply(retval, class) == "data.frame"))
     y <- retval[, -df_cols]
 

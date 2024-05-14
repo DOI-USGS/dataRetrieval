@@ -255,7 +255,7 @@ test_that("External WQP tests", {
   rawSample <- importWQP(rawSampleURL)
   expect_is(rawSample$ActivityStartDateTime, "POSIXct")
 
-  url2 <- constructWQPURL("USGS-01594440", "01075", "", "", zip = FALSE)
+  url2 <- constructWQPURL("USGS-01594440", "01075", "", "")
   rawSample2 <- suppressWarnings(importWQP(url2, FALSE))
   expect_is(rawSample2$ActivityStartDateTime, "POSIXct")
 
