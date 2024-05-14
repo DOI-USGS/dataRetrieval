@@ -428,7 +428,7 @@ test_that("Construct WQP urls", {
   # nolint start: line_length_linter
   expect_equal(
     url_wqp,
-    "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes"
+    "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv"
   )
 
   # Multiple characteristicNames
@@ -443,7 +443,7 @@ test_that("Construct WQP urls", {
   )
   expect_equal(
     obs_url_orig,
-    "https://www.waterqualitydata.us/data/Result/search?siteid=IIDFG-41WSSPAHS;USGS-02352560&characteristicName=Temperature;Temperature%2C%20sample;Temperature%2C%20water;Temperature%2C%20water%2C%20deg%20F&mimeType=tsv&zip=yes"
+    "https://www.waterqualitydata.us/data/Result/search?siteid=IIDFG-41WSSPAHS;USGS-02352560&characteristicName=Temperature;Temperature%2C%20sample;Temperature%2C%20water;Temperature%2C%20water%2C%20deg%20F&mimeType=tsv"
   )
 
   # nolint end
@@ -463,13 +463,13 @@ test_that("Construct WQP urls", {
   # nolint start: line_length_linter
   expect_equal(
     url_wqp,
-    "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv&zip=yes"
+    "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=tsv"
   )
 
-  rawSampleURL_Zip <- constructWQPURL("USGS-01594440", "01075", "", "", TRUE)
+  rawSampleURL_Zip <- constructWQPURL("USGS-01594440", "01075", "", "")
   expect_equal(
     rawSampleURL_Zip,
-    "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&pCode=01075&mimeType=tsv&zip=yes"
+    "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&pCode=01075&mimeType=tsv"
   )
   # nolint end
 })

@@ -6,7 +6,6 @@
 \usage{
 importWQP(
   obs_url,
-  zip = TRUE,
   tz = "UTC",
   csv = FALSE,
   convertType = TRUE,
@@ -15,8 +14,6 @@ importWQP(
 }
 \arguments{
 \item{obs_url}{character URL to Water Quality Portal#' @keywords data import USGS web service}
-
-\item{zip}{logical to request data via downloading zip file. Default set to TRUE.}
 
 \item{tz}{character to set timezone attribute of datetime. Default is UTC
 (properly accounting for daylight savings times based on the data's provided tz_cd column).
@@ -55,11 +52,6 @@ rawSampleURL <- constructWQPURL("USGS-01594440", "01075", "", "")
 
 rawSample <- importWQP(rawSampleURL)
 
-rawSampleURL_NoZip <- constructWQPURL("USGS-01594440", "01075", "", "", zip = FALSE)
-
-rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, zip = FALSE, convertType = FALSE)
-
-rawSample2 <- importWQP(rawSampleURL_NoZip, zip = FALSE)
 
 STORETex <- constructWQPURL("WIDNR_WQX-10032762", "Specific conductance", "", "")
 
