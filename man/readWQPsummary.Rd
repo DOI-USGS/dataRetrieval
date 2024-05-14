@@ -4,7 +4,7 @@
 \alias{readWQPsummary}
 \title{Summary of Data Available from Water Quality Portal}
 \usage{
-readWQPsummary(..., checkHeader = FALSE)
+readWQPsummary(...)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation}
@@ -19,11 +19,6 @@ in the Characteristic Group dropdown, you will see characteristicType=Nutrient
 in the Query URL. The corresponding argument for dataRetrieval is
 characteristicType = "Nutrient". dataRetrieval users do not need to include
 mimeType, and providers is optional (these arguments are picked automatically).}
-
-\item{checkHeader}{logical, defaults to \code{FALSE}. If \code{TRUE}, the code
-will check that the curl header response for number of rows matches the actual
-number of rows. During transition to WQX 3.0 profiles, it's unclear if
-the counts will be correct.}
 }
 \value{
 A data frame from the data returned from the Water Quality Portal

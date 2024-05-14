@@ -31,10 +31,6 @@
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
-#' @param checkHeader logical, defaults to \code{FALSE}. If \code{TRUE}, the code
-#' will check that the curl header response for number of rows matches the actual
-#' number of rows. During transition to WQX 3.0 profiles, it's unclear if
-#' the counts will be correct.
 #' @param ignore_attributes logical to choose to ignore fetching site and parameter
 #' attributes. Default is \code{FALSE}.
 #' @keywords data import USGS web service
@@ -71,8 +67,7 @@ readWQPqw <- function(siteNumbers,
                       tz = "UTC",
                       querySummary = FALSE,
                       ignore_attributes = FALSE,
-                      convertType = TRUE,
-                      checkHeader = FALSE) {
+                      convertType = TRUE) {
   url <- constructWQPURL(siteNumbers, parameterCd, startDate, endDate)
   wqp_message()
   
@@ -81,8 +76,7 @@ readWQPqw <- function(siteNumbers,
     return(retquery)
   } else {
     retval <- importWQP(url, tz = tz, 
-                        convertType = convertType,
-                        checkHeader = checkHeader)
+                        convertType = convertType)
 
     sites <- unique(retval$MonitoringLocationIdentifier)
     

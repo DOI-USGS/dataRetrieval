@@ -15,10 +15,6 @@
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
-#' @param checkHeader logical, defaults to \code{FALSE}. If \code{TRUE}, the code
-#' will check that the curl header response for number of rows matches the actual
-#' number of rows. During transition to WQX 3.0 profiles, it's unclear if
-#' the counts will be correct.
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally,
 #' a POSIXct dateTime column is supplied for
 #' start and end times, and converted to UTC. See
@@ -44,8 +40,7 @@
 #'
 importWQP <- function(obs_url, tz = "UTC",
                       csv = FALSE, 
-                      convertType = TRUE,
-                      checkHeader = FALSE) {
+                      convertType = TRUE) {
   if (tz != "") {
     tz <- match.arg(tz, OlsonNames())
   } else {
@@ -53,9 +48,6 @@ importWQP <- function(obs_url, tz = "UTC",
   }
 
   if (!file.exists(obs_url)) {
-    if(!checkHeader){
-      obs_url <- paste0(obs_url, "&counts=no")
-    }
     
     doc <- getWebServiceData(
       obs_url,
@@ -66,15 +58,8 @@ importWQP <- function(obs_url, tz = "UTC",
     }
     headerInfo <- attr(doc, "headerInfo")
     
-    
-    if(checkHeader){
-      headerInfo[grep("-count", names(headerInfo))] <- as.numeric(headerInfo[grep("-count", names(headerInfo))])
-  
-      totalPossible <- sum(unlist(headerInfo[grep("-count", names(headerInfo))]), na.rm = TRUE)
+    totalPossible <- Inf
 
-    } else {
-      totalPossible <- Inf
-    }
   } else {
     doc <- obs_url
   }
@@ -85,14 +70,6 @@ importWQP <- function(obs_url, tz = "UTC",
                                                delim = ifelse(csv, ",", "\t"),
                                                guess_max = totalPossible
   ))
-  
-  if (checkHeader & !file.exists(obs_url)) {
-    actualNumReturned <- nrow(retval)
-    
-    if (!(actualNumReturned %in% unlist(headerInfo[grep("-count", names(headerInfo))]))) {
-      warning("Number of rows returned not matched in header")
-    }
-  }
   
   names(retval)[grep("/", names(retval))] <- gsub("/", ".", names(retval)[grep("/", names(retval))])
   
