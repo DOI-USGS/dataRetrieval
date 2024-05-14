@@ -22,10 +22,6 @@
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
 #' mimeType, zip, and providers is optional (these arguments are picked automatically).
-#' @param checkHeader logical, defaults to \code{FALSE}. If \code{TRUE}, the code
-#' will check that the curl header response for number of rows matches the actual
-#' number of rows. During transition to WQX 3.0 profiles, it's unclear if
-#' the counts will be correct.
 #' @keywords data import WQP web service
 #' @rdname wqpSpecials
 #' @name whatWQPsites
@@ -46,8 +42,7 @@
 #'   siteType = type
 #' )
 #' }
-whatWQPsites <- function(..., 
-                         checkHeader = FALSE) {
+whatWQPsites <- function(...) {
   values <- readWQPdots(...)
 
   values <- values$values
@@ -66,8 +61,7 @@ whatWQPsites <- function(...,
 
   baseURL <- appendDrURL(baseURL, mimeType = "tsv")
 
-  retval <- importWQP(baseURL, 
-                      checkHeader = checkHeader)
+  retval <- importWQP(baseURL)
 
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- baseURL
@@ -97,10 +91,6 @@ whatWQPsites <- function(...,
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
 #' mimeType, and providers is optional (these arguments are picked automatically).
-#' @param checkHeader logical, defaults to \code{FALSE}. If \code{TRUE}, the code
-#' will check that the curl header response for number of rows matches the actual
-#' number of rows. During transition to WQX 3.0 profiles, it's unclear if
-#' the counts will be correct.
 #' @return A data frame from the data returned from the Water Quality Portal
 #' @export
 #' @seealso whatWQPsites whatWQPdata
@@ -138,7 +128,7 @@ whatWQPsites <- function(...,
 #'   siteType = "Stream"
 #' )
 #' }
-readWQPsummary <- function(..., checkHeader = FALSE) {
+readWQPsummary <- function(...) {
   
   wqp_message()
   values <- readWQPdots(...)
@@ -165,8 +155,7 @@ readWQPsummary <- function(..., checkHeader = FALSE) {
   withCallingHandlers(
     {
       retval <- importWQP(baseURL, 
-                          csv = TRUE, 
-                          checkHeader = checkHeader)
+                          csv = TRUE)
     },
     warning = function(w) {
       if (any(grepl("Number of rows returned not matched in header", w))) {
