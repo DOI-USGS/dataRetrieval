@@ -63,7 +63,10 @@ setAccess <- function(access = "public") {
   pkg.env$ResultDetectionQuantitationLimit <- "https://www.waterqualitydata.us/data/ResultDetectionQuantitationLimit/search"
   pkg.env$BiologicalMetric <- "https://www.waterqualitydata.us/data/BiologicalMetric/search"
   pkg.env$Organization <- "https://www.waterqualitydata.us/data/Organization/search"
-
+  pkg.env$WQX <- "https://www.waterqualitydata.us/wqx3/Result/search"
+  pkg.env$StationWQX <- "https://www.waterqualitydata.us/wqx3/Station/search"
+  pkg.env$samplesData <- "https://api.waterdata.usgs.gov/samples-data/summary"
+  
   pkg.env$NGWMN <- "https://cida.usgs.gov/ngwmn_cache/sos"
   # nolint end
 }

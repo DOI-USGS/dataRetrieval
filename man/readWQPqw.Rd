@@ -10,6 +10,7 @@ readWQPqw(
   startDate = "",
   endDate = "",
   tz = "UTC",
+  legacy = FALSE,
   querySummary = FALSE,
   ignore_attributes = FALSE,
   convertType = TRUE
