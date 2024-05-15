@@ -18,7 +18,7 @@
 #' }
 whatWQPsamples <- function(..., 
                            convertType = TRUE) {
-  values <- readWQPdots(...)
+  values <- readWQPdots(..., legacy = TRUE)
 
   values <- values$values
 
@@ -34,7 +34,7 @@ whatWQPsamples <- function(...,
 
   baseURL <- drURL("Activity", arg.list = values)
 
-  baseURL <- appendDrURL(baseURL, mimeType = "tsv")
+  baseURL <- appendDrURL(baseURL, mimeType = "csv")
 
   withCallingHandlers(
     {
@@ -72,7 +72,7 @@ whatWQPsamples <- function(...,
 #' }
 whatWQPmetrics <- function(..., 
                            convertType = TRUE) {
-  values <- readWQPdots(...)
+  values <- readWQPdots(..., legacy = TRUE)
 
   values <- values$values
 
@@ -88,7 +88,7 @@ whatWQPmetrics <- function(...,
 
   baseURL <- drURL("ActivityMetric", arg.list = values)
 
-  baseURL <- appendDrURL(baseURL, mimeType = "tsv")
+  baseURL <- appendDrURL(baseURL, mimeType = "csv")
 
   withCallingHandlers(
     {
@@ -161,7 +161,7 @@ whatWQPmetrics <- function(...,
 #' }
 whatWQPdata <- function(..., saveFile = tempfile(),
                         convertType = TRUE) {
-  values <- readWQPdots(...)
+  values <- readWQPdots(..., legacy = TRUE)
 
   wqp_message()
   
