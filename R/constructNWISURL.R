@@ -328,6 +328,7 @@ constructNWISURL <- function(siteNumbers,
 #' retrieval for the earliest possible record.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record.
+#' @param legacy Logical. If TRUE, use legacy WQP services. Default is FALSE.
 #' @keywords data import WQP web service
 #' @return url string
 #' @export
@@ -360,7 +361,8 @@ constructNWISURL <- function(siteNumbers,
 constructWQPURL <- function(siteNumbers,
                             parameterCd,
                             startDate,
-                            endDate) {
+                            endDate,
+                            legacy = FALSE) {
   
   multiplePcodes <- length(parameterCd) > 1
   siteNumbers <- paste(siteNumbers, collapse = ";")
@@ -376,7 +378,12 @@ constructWQPURL <- function(siteNumbers,
     parameterCd <- paste(parameterCd, collapse = ";")
   }
 
-  baseURL <- drURL("Result", siteid = siteNumbers, Access = pkg.env$access)
+  if(legacy){
+    baseURL <- drURL("Result", siteid = siteNumbers, Access = pkg.env$access)
+  } else {
+    baseURL <- drURL("WQX", siteid = siteNumbers, Access = pkg.env$access)
+  }
+  
   url <- paste0(
     baseURL,
     ifelse(pCodeLogic, "&pCode=", "&characteristicName="),
@@ -393,8 +400,10 @@ constructWQPURL <- function(siteNumbers,
     url <- paste0(url, "&startDateHi=", endDate)
   }
 
-  url <- paste0(url, "&mimeType=tsv")
-
+  url <- paste0(url, "&mimeType=csv")
+  if(!legacy){
+    url <- paste0(url, "&dataProfile=narrow&providers=NWIS&providers=STORET")
+  }
   return(url)
 }
 

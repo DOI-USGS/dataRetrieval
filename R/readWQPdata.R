@@ -56,6 +56,7 @@
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
+#' @param legacy Logical. If TRUE, use legacy WQP services. Default is FALSE.
 #' @keywords data import WQP web service
 #' @return A data frame, the specific columns will depend on the "service" and/or "dataProfile".
 #'
@@ -200,12 +201,13 @@ readWQPdata <- function(...,
                         querySummary = FALSE,
                         tz = "UTC",
                         ignore_attributes = FALSE,
-                        convertType = TRUE) {
+                        convertType = TRUE,
+                        legacy = FALSE) {
   tz <- match.arg(tz, OlsonNames())
 
   wqp_message()
   
-  valuesList <- readWQPdots(...)
+  valuesList <- readWQPdots(..., legacy = legacy)
 
   service <- valuesList$service
   
@@ -213,14 +215,21 @@ readWQPdata <- function(...,
                                   "ActivityMetric", "SiteSummary",
                                   "Project", "ProjectMonitoringLocationWeighting",
                                   "ResultDetectionQuantitationLimit",
-                                  "BiologicalMetric", "Organization"),
+                                  "BiologicalMetric", "Organization",
+                                  "WQX", "StationWQX"),
                        several.ok = FALSE)
 
   values <- sapply(valuesList$values, function(x) utils::URLencode(x, reserved = TRUE))
 
   baseURL <- drURL(service, arg.list = values)
 
-  baseURL <- appendDrURL(baseURL, mimeType = "tsv")
+  baseURL <- appendDrURL(baseURL, mimeType = "csv")
+  
+  if(!legacy){
+    if(service != "StationWQX" & !"dataProfile" %in% names(values)){
+      baseURL <- appendDrURL(baseURL, dataProfile = "fullPhysChem")
+    }
+  }
 
   if (querySummary) {
     retquery <- getQuerySummary(baseURL)
@@ -242,55 +251,13 @@ readWQPdata <- function(...,
   }
 }
 
-# USGS sites need a different lat/lon, can we be smarter?
+
 create_WQP_attributes <- function(retval, ...){
-  
 
   siteInfo <- suppressWarnings(whatWQPsites(...))
   
-  if (all(c(
-    "MonitoringLocationName",
-    "OrganizationIdentifier",
-    "MonitoringLocationIdentifier",
-    "LatitudeMeasure",
-    "LongitudeMeasure",
-    "HUCEightDigitCode"
-  ) %in% names(siteInfo))) {
-    siteInfoCommon <- data.frame(
-      station_nm = siteInfo$MonitoringLocationName,
-      agency_cd = siteInfo$OrganizationIdentifier,
-      site_no = siteInfo$MonitoringLocationIdentifier,
-      dec_lat_va = as.numeric(siteInfo$LatitudeMeasure),
-      dec_lon_va = as.numeric(siteInfo$LongitudeMeasure),
-      hucCd = siteInfo$HUCEightDigitCode,
-      stringsAsFactors = FALSE
-    )
-    
-    siteInfo <- cbind(siteInfoCommon, siteInfo)
-  }
-  
   attr(retval, "siteInfo") <- siteInfo
   
-  if (all(c(
-    "CharacteristicName",
-    "ResultMeasure.MeasureUnitCode",
-    "ResultSampleFractionText"
-  ) %in% names(retval))) {
-    retvalVariableInfo <- retval[, c(
-      "CharacteristicName",
-      "ResultMeasure.MeasureUnitCode",
-      "ResultSampleFractionText"
-    )]
-    retvalVariableInfo <- unique(retvalVariableInfo)
-    
-    variableInfo <- data.frame(
-      characteristicName = retval$CharacteristicName,
-      param_units = retval$ResultMeasure.MeasureUnitCode,
-      valueType = retval$ResultSampleFractionText,
-      stringsAsFactors = FALSE
-    )
-    
-    attr(retval, "variableInfo") <- variableInfo
-  }
+  #If WQP adds a parameter metadata service/files, we could add that here.
   return(retval)
 }

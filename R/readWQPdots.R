@@ -2,7 +2,7 @@
 #' Format and organize WQP arguments that are passed in as \code{...}.
 #'
 #' @keywords internal
-readWQPdots <- function(...) {
+readWQPdots <- function(..., legacy = FALSE) {
   if (length(list(...)) == 0) {
     stop("No arguments supplied")
   }
@@ -13,7 +13,12 @@ readWQPdots <- function(...) {
     service <- matchReturn$service
     matchReturn$service <- NULL
   } else {
-    service <- "Result"
+    if(legacy){
+      service <- "Result"
+    } else {
+      service <- "WQX"
+    }
+    
   }
   
   if ("dataProfile" %in% names(matchReturn)) {
@@ -21,21 +26,21 @@ readWQPdots <- function(...) {
     if (profile == "activityAll") {
       service <- "Activity"
       matchReturn$service <- NULL
-    } else if (profile %in% c(
-      "resultPhysChem",
-      "biological",
-      "narrowResult"
-    )) {
+    } else if (profile %in% c("resultPhysChem","biological","narrowResult")) {
       service <- "Result"
       matchReturn$service <- NULL
-    }
-  }
+    } else if(profile %in% c("fullPhysChem", "narrow")){
+      service <- "WQX"
+      matchReturn$service <- NULL      
+    } 
+  } 
   
   match.arg(service, c(
     "Result", "Station", "Activity", "Organization",
     "ActivityMetric", "SiteSummary",
     "Project", "ProjectMonitoringLocationWeighting",
-    "ResultDetectionQuantitationLimit", "BiologicalMetric"
+    "ResultDetectionQuantitationLimit", "BiologicalMetric",
+    "WQX", "StationWQX"
   ))
 
   values <- sapply(matchReturn, function(x) as.character(paste0(eval(x), collapse = ";")))
@@ -64,7 +69,7 @@ readWQPdots <- function(...) {
   if (all(c("countycode", "statecode") %in% names(values))) {
     stCd <- gsub("US:", "", values["statecode"])
     # This will error if more than 1 state is requested
-    # It's possible that someone could requst more than one state
+    # It's possible that someone could request more than one state
     # in WQP, but if they also then request county codes,
     # it gets really confusing, and the WQP developers don't recommend.
     values["countycode"] <- paste(values["statecode"],

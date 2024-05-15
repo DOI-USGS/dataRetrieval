@@ -39,7 +39,7 @@
 #' }
 #'
 importWQP <- function(obs_url, tz = "UTC",
-                      csv = FALSE, 
+                      csv = TRUE, 
                       convertType = TRUE) {
   if (tz != "") {
     tz <- match.arg(tz, OlsonNames())
