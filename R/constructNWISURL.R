@@ -402,7 +402,7 @@ constructWQPURL <- function(siteNumbers,
 
   url <- paste0(url, "&mimeType=csv")
   if(!legacy){
-    url <- paste0(url, "&dataProfile=narrow&providers=NWIS&providers=STORET")
+    url <- paste0(url, "&dataProfile=narrow")
   }
   return(url)
 }
