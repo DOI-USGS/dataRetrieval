@@ -197,7 +197,7 @@ readWQPdata <- function(...,
                                   "BiologicalMetric", "Organization",
                                   "WQX", "StationWQX"),
                        several.ok = FALSE)
-
+  
   values <- sapply(valuesList$values, function(x) utils::URLencode(x, reserved = TRUE))
 
   baseURL <- drURL(service, arg.list = values)
@@ -220,9 +220,9 @@ readWQPdata <- function(...,
     )
 
     if (!all(is.na(retval)) && !ignore_attributes) {
-      params <- values[names(values) != "dataProfile"]
-      retval <- create_WQP_attributes(retval, split(unname(params),
-                                                    names(params)))
+      params <- list(...)
+      params <- params[!names(params) %in% c("dataProfile", "service")]
+      retval <- create_WQP_attributes(retval, params)
     } 
     
     attr(retval, "queryTime") <- Sys.time()
