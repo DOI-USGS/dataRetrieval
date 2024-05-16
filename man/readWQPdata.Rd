@@ -95,7 +95,7 @@ Organization \tab "https://www.waterqualitydata.us/data/Organization/search" \cr
 nameToUse <- "pH"
 pHData <- readWQPdata(siteid = "USGS-04024315", characteristicName = nameToUse)
 
-startDate <- as.Date("2013-01-01")
+startDate <- as.Date("2023-01-01")
 secchi.names <- c(
   "Depth, Secchi disk depth",
   "Depth, Secchi disk depth (choice list)",
@@ -104,23 +104,11 @@ secchi.names <- c(
 )
 args <- list(
   "startDateLo" = startDate,
-  "startDateHi" = "2013-12-31",
   statecode = "WI",
   characteristicName = secchi.names
 )
 
 wqp.data <- readWQPdata(args)
-
-
-arg_3 <- list(
-  "startDateLo" = startDate,
-  "startDateHi" = "2013-12-31"
-)
-arg_4 <- list(
-  statecode = "WI",
-  characteristicName = secchi.names
-)
-wqp.summary <- readWQPdata(arg_3, arg_4, querySummary = TRUE)
 
 # querying by county
 DeWitt <- readWQPdata(
@@ -133,7 +121,8 @@ DeWitt <- readWQPdata(
 org_data <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
-  service = "Organization"
+  service = "Organization",
+  legacy = TRUE
 )
 
 # Data profiles: "Site Data Only"
@@ -204,7 +193,7 @@ dl_data <- readWQPdata(
 Phosphorus <- readWQPdata(
   statecode = "WI", countycode = "Dane", 
   characteristicName = "Phosphorus",
-  startDateLo = "2020-01-01",
+  startDateLo = "2023-01-01",
   convertType = FALSE
 )
 }

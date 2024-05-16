@@ -24,7 +24,7 @@ of the data.
 }
 \examples{
 \donttest{
-nwisData <- readNWISdv("04085427", "00060", "2012-01-01", "2012-06-30")
+nwisData <- readNWISdv("04085427", "00060", "2022-01-01", "2022-06-30")
 nwisData <- addWaterYear(nwisData)
 
 wqpData <- readWQPqw("USGS-01594440", "01075", "", "")
