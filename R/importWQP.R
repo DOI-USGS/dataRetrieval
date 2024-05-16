@@ -58,8 +58,6 @@ importWQP <- function(obs_url, tz = "UTC",
     }
     headerInfo <- attr(doc, "headerInfo")
     
-    totalPossible <- Inf
-
   } else {
     doc <- obs_url
   }
@@ -67,9 +65,9 @@ importWQP <- function(obs_url, tz = "UTC",
   retval <- suppressWarnings(readr::read_delim(doc,
                                                col_types = readr::cols(.default = "c"),
                                                quote = ifelse(csv, '\"', ""),
-                                               delim = ifelse(csv, ",", "\t"),
-                                               guess_max = totalPossible
-  ))
+                                               delim = ifelse(csv, ",", "\t")))
+  
+  attr(retval, 'spec') <- NULL
   
   names(retval)[grep("/", names(retval))] <- gsub("/", ".", names(retval)[grep("/", names(retval))])
   
@@ -110,12 +108,27 @@ importWQP <- function(obs_url, tz = "UTC",
 #' 
 parse_WQP <- function(retval, tz = "UTC"){
 
+  # this is legacy:
   valueCols <- names(retval)[grep("Value", names(retval))]
   countCols <- names(retval)[grep("Count", names(retval))]
+  
+  # this is new:
+  latCols <- names(retval)[grep("Latitude", names(retval))]
+  lonCols <- names(retval)[grep("Longitude", names(retval))]
+  
+  countCols <- countCols[-grep("Country", countCols)]
+  countCols <- countCols[-grep("County", countCols)]
+  
+  measureCols <- names(retval)[grep("Measure", names(retval))]
+  measureCols <- measureCols[-grep("Unit", measureCols)]
+  measureCols <- measureCols[-grep("Code", measureCols)]
+  measureCols <- measureCols[-grep("Identifier", measureCols)]
+  measureCols <- measureCols[-grep("Type", measureCols)]
+
   yearCols <- names(retval)[grep("Year", names(retval))]
   dateCols <- names(retval)[grep("Date", names(retval))]
   
-  numberColumns <- unique(c(valueCols, countCols, yearCols))
+  numberColumns <- unique(c(valueCols, countCols, yearCols, latCols, lonCols, measureCols))
   numberColumns <- numberColumns[!grepl("Code", numberColumns)]
   
   for (numberCol in numberColumns) {
@@ -133,9 +146,10 @@ parse_WQP <- function(retval, tz = "UTC"){
   
   dateCols_to_convert <- NA
   for(date_col in dateCols){
-    
+
     time_col <- gsub("Date", "Time", date_col)
-    tz_col <- gsub("Date", "TimeZone", date_col)
+    tz_col <- gsub("Date", "TimeZone", date_col)      
+    
     if(all(c(date_col, time_col, tz_col) %in% names(retval))){
       if(!all(is.na(retval[[date_col]]))){
         retval <- create_dateTime(retval, 
@@ -145,7 +159,21 @@ parse_WQP <- function(retval, tz = "UTC"){
                                  tz = tz)
       }
     } else {
-      dateCols_to_convert <- c(dateCols_to_convert, date_col)
+      # This is the legacy pattern:
+      time_col <- gsub("Date", "Time.Time", date_col)
+      tz_col <- gsub("Date", "Time.TimeZoneCode", date_col)
+      
+      if(all(c(date_col, time_col, tz_col) %in% names(retval))){
+        if(!all(is.na(retval[[date_col]]))){
+          retval <- create_dateTime(retval, 
+                                    date_col = date_col,
+                                    time_col = time_col,
+                                    tz_col = tz_col,
+                                    tz = tz)
+        }
+      } else {
+        dateCols_to_convert <- c(dateCols_to_convert, date_col)
+      }
     }
   }
   
