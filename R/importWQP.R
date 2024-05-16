@@ -113,6 +113,7 @@ parse_WQP <- function(retval, tz = "UTC"){
   valueCols <- names(retval)[grep("Value", names(retval))]
   countCols <- names(retval)[grep("Count", names(retval))]
   yearCols <- names(retval)[grep("Year", names(retval))]
+  dateCols <- names(retval)[grep("Date", names(retval))]
   
   numberColumns <- unique(c(valueCols, countCols, yearCols))
   numberColumns <- numberColumns[!grepl("Code", numberColumns)]
@@ -130,72 +131,65 @@ parse_WQP <- function(retval, tz = "UTC"){
     })
   }
   
-  # Difference in behavior between NWIS and WQP
-  offsetLibrary$offset[is.na(offsetLibrary$code)] <- NA
+  dateCols_to_convert <- NA
+  for(date_col in dateCols){
+    
+    time_col <- gsub("Date", "Time", date_col)
+    tz_col <- gsub("Date", "TimeZone", date_col)
+    if(all(c(date_col, time_col, tz_col) %in% names(retval))){
+      if(!all(is.na(retval[[date_col]]))){
+        retval <- create_dateTime(retval, 
+                                 date_col = date_col,
+                                 time_col = time_col,
+                                 tz_col = tz_col,
+                                 tz = tz)
+      }
+    } else {
+      dateCols_to_convert <- c(dateCols_to_convert, date_col)
+    }
+  }
   
-  if (length(grep("ActivityStartTime", names(retval))) > 0) {
-    
-    # Time zones to characters:
-    if (length(grep("TimeZoneCode", names(retval))) > 0 &&
-        any(lapply(retval[, grep("TimeZoneCode", names(retval))], class) == "logical")) {
-      tzCols <- grep("TimeZoneCode", names(retval))
-      retval[, tzCols] <- sapply(retval[, tzCols], as.character)
-    }
-    
-    original_order <- names(retval)
-    if ("ActivityStartTime.TimeZoneCode" %in% names(retval)) {
-      retval <- merge(
-        x = retval,
-        y = offsetLibrary,
-        by.x = "ActivityStartTime.TimeZoneCode",
-        by.y = "code",
-        all.x = TRUE
-      )
-    }
-    
-    names(retval)[names(retval) == "offset"] <- "timeZoneStart"
-    retval <- retval[, c(original_order, "timeZoneStart")]
-    
-    if ("ActivityEndTime.TimeZoneCode" %in% names(retval)) {
-      retval <- merge(
-        x = retval,
-        y = offsetLibrary,
-        by.x = "ActivityEndTime.TimeZoneCode",
-        by.y = "code",
-        all.x = TRUE
-      )
-      names(retval)[names(retval) == "offset"] <- "timeZoneEnd"
-      retval <- retval[, c(original_order, "timeZoneStart", "timeZoneEnd")]
-    }
-    
-    dateCols <- c("ActivityStartDate", "ActivityEndDate", "AnalysisStartDate", "PreparationStartDate")
-    
-    for (i in dateCols) {
+  dateCols_to_convert <- dateCols_to_convert[!is.na(dateCols_to_convert)]
+  if(length(dateCols_to_convert) > 0){
+    for (i in dateCols_to_convert) {
       if (i %in% names(retval)) {
         retval[, i] <- suppressWarnings(as.Date(lubridate::parse_date_time(retval[[i]], c("Ymd", "mdY"))))
       }
     }
-    
-    if (all(c("ActivityStartDate", "ActivityStartTime.Time") %in% names(retval))) {
-      retval$ActivityStartDateTime <- paste(retval$ActivityStartDate, retval$`ActivityStartTime.Time`)
-      retval$ActivityStartDateTime <- lubridate::fast_strptime(retval$ActivityStartDateTime, "%Y-%m-%d %H:%M:%S") +
-        60 * 60 * retval$timeZoneStart
-      attr(retval$ActivityStartDateTime, "tzone") <- tz
-      # if we're going to sort, here's where we'd do it:
-      retval <- retval[order(retval$ActivityStartDateTime),]
-    }
-    
-    if (all(c("ActivityEndDate", "ActivityEndTime.Time") %in% names(retval))) {
-      retval$ActivityEndDateTime <- paste(retval$ActivityEndDate, retval$`ActivityEndTime.Time`)
-      retval$ActivityEndDateTime <- lubridate::fast_strptime(
-        retval$ActivityEndDateTime,
-        "%Y-%m-%d %H:%M:%S"
-      ) + 60 * 60 * retval$timeZoneStart
-      attr(retval$ActivityEndDateTime, "tzone") <- tz
-    }
   }
   
   return(retval)
+}
+
+create_dateTime <- function(df, date_col, time_col, tz_col, tz){
+  # Difference in behavior between NWIS and WQP
+  offsetLibrary$offset[is.na(offsetLibrary$code)] <- NA
+  original_order <- names(df)
+  
+  df <- merge(
+    x = df,
+    y = offsetLibrary,
+    by.x = tz_col,
+    by.y = "code",
+    all.x = TRUE
+  )
+  
+  df$dateTime <- paste(df[[date_col]], df[[time_col]])
+  df$dateTime <- lubridate::fast_strptime(
+    df$dateTime,
+    "%Y-%m-%d %H:%M:%S"
+  ) + 60 * 60 * df$offset
+  
+  attr(df$dateTime, "tzone") <- tz
+  
+  df[[date_col]] <- suppressWarnings(as.Date(lubridate::parse_date_time(df[[date_col]], c("Ymd", "mdY"))))
+  
+  df <- df[, c(original_order, "offset", "dateTime")]
+  
+  names(df)[names(df) == "offset"] <- paste0(tz_col, "_offset")
+  names(df)[names(df) == "dateTime"] <- paste0(date_col, "Time")
+  
+  return(df)
 }
 
 post_url <- function(obs_url, csv = FALSE) {
