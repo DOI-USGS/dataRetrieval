@@ -5,6 +5,8 @@ dataRetrieval 2.7.16
 * Took out zip option for WQP calls, they are not allowed on WQP anymore.
 * Deprecated getQuerySummary. Users should use readWQPsummary instead.
 * Added WQX 3.0 profiles
+* siteInfo attribute for WQP queries converted to a full station return.
+* Cleaned up date conversion in WQP
 
 dataRetrieval 2.7.15
 ===================

@@ -220,7 +220,9 @@ readWQPdata <- function(...,
     )
 
     if (!all(is.na(retval)) && !ignore_attributes) {
-      retval <- create_WQP_attributes(retval, ...)
+      params <- values[names(values) != "dataProfile"]
+      retval <- create_WQP_attributes(retval, split(unname(params),
+                                                    names(params)))
     } 
     
     attr(retval, "queryTime") <- Sys.time()
