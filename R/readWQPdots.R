@@ -42,7 +42,24 @@ readWQPdots <- function(..., legacy = FALSE) {
     "ResultDetectionQuantitationLimit", "BiologicalMetric",
     "WQX", "StationWQX"
   ))
+  
 
+    
+  if(!legacy){
+    new_list <- rep(list(NA),length(unlist(matchReturn)))
+    names_list <- c()
+    i <- 1
+    for(arg in names(matchReturn)){
+      for(val in matchReturn[[arg]]) {
+        new_list[[i]] <- val
+        names_list <- c(names_list, arg)
+        i <- i + 1
+      }
+    }
+    names(new_list) <- names_list
+    matchReturn <- new_list
+  }
+  
   values <- sapply(matchReturn, function(x) as.character(paste0(eval(x), collapse = ";")))
   
   if ("bBox" %in% names(values)) {

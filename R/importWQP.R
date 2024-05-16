@@ -51,7 +51,7 @@ importWQP <- function(obs_url, tz = "UTC",
     
     doc <- getWebServiceData(
       obs_url,
-      httr::accept("text/tsv")
+      httr::accept("text/csv")
     )
     if (is.null(doc)) {
       return(invisible(NULL))
@@ -116,20 +116,18 @@ parse_WQP <- function(retval, tz = "UTC"){
   latCols <- names(retval)[grep("Latitude", names(retval))]
   lonCols <- names(retval)[grep("Longitude", names(retval))]
   
-  countCols <- countCols[-grep("Country", countCols)]
-  countCols <- countCols[-grep("County", countCols)]
+  countCols <- countCols[!grepl("Country", countCols)]
+  countCols <- countCols[!grepl("County", countCols)]
   
   measureCols <- names(retval)[grep("Measure", names(retval))]
-  measureCols <- measureCols[-grep("Unit", measureCols)]
-  measureCols <- measureCols[-grep("Code", measureCols)]
-  measureCols <- measureCols[-grep("Identifier", measureCols)]
-  measureCols <- measureCols[-grep("Type", measureCols)]
-
   yearCols <- names(retval)[grep("Year", names(retval))]
-  dateCols <- names(retval)[grep("Date", names(retval))]
   
   numberColumns <- unique(c(valueCols, countCols, yearCols, latCols, lonCols, measureCols))
   numberColumns <- numberColumns[!grepl("Code", numberColumns)]
+  numberColumns <- numberColumns[!grepl("Unit", numberColumns)]
+  numberColumns <- numberColumns[!grepl("Code", numberColumns)]
+  numberColumns <- numberColumns[!grepl("Identifier", numberColumns)]
+  numberColumns <- numberColumns[!grepl("Type", numberColumns)]  
   
   for (numberCol in numberColumns) {
     suppressWarnings({
@@ -143,7 +141,8 @@ parse_WQP <- function(retval, tz = "UTC"){
       }
     })
   }
-  
+
+  dateCols <- names(retval)[grep("Date", names(retval))]  
   dateCols_to_convert <- NA
   for(date_col in dateCols){
 
