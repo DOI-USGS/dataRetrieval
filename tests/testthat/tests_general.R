@@ -601,16 +601,16 @@ test_that("importWQP convertType", {
 
   rawSampleURL_NoZip <- constructWQPURL("USGS-01594440", "01075", "", "")
   rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, convertType = FALSE)
-  expect_is(rawSampleURL_NoZip_char$ResultMeasureValue, "character")
+  expect_is(rawSampleURL_NoZip_char$Result_Measure, "character")
 
   phos <- readWQPdata(statecode = "WI", countycode = "Dane",
                     characteristicName = "Phosphorus",
                     startDateLo = "2022-01-01",
                     convertType = FALSE)
-  expect_is(phos$ResultMeasureValue, "character")
+  expect_is(phos$Result_Measure, "character")
 
   SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", convertType = FALSE)
-  expect_is(SC$ResultMeasureValue, "character")
+  expect_is(SC$Result_Measure, "character")
 
   lakeSites_chars <- whatWQPdata(
     siteType = "Lake, Reservoir, Impoundment",
