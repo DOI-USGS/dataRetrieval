@@ -186,6 +186,14 @@ parse_WQP <- function(retval, tz = "UTC"){
     }
   }
   
+  if("Activity_StartDateTime" %in% names(retval)){
+    retval <- retval[order(retval$Activity_StartDateTime),]
+  } else if ("ActivityStartDateTime" %in% names(retval)){
+    retval <- retval[order(retval$ActivityStartDateTime),]
+  } else {
+    retval <- retval[order(retval[[dateCols[1]]]),]
+  }
+  
   return(retval)
 }
 

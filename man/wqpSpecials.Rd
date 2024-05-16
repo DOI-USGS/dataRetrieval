@@ -24,7 +24,7 @@ after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
 in the Characteristic Group dropdown, you will see characteristicType=Nutrient
 in the Query URL. The corresponding argument for dataRetrieval is
 characteristicType = "Nutrient". dataRetrieval users do not need to include
-mimeType, zip, and providers is optional (these arguments are picked automatically).}
+mimeType,  and providers is optional (these arguments are picked automatically).}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE},
 the function will convert the data to dates, datetimes,
