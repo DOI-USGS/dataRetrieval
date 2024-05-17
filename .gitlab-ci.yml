@@ -71,6 +71,7 @@ unittests:
     - buildcheck
   script:
     - R -e 'library(testthat); options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml")); devtools::test(reporter = "junit")'
+    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
   artifacts:
     when: always
     expire_in: 1 week
@@ -78,23 +79,11 @@ unittests:
       - test-out.xml
     reports:
       junit: test-out.xml
-        
-covertests:
-  stage: test
-  image: ${CI_REGISTRY_IMAGE}:latest
-  dependencies:
-    - build-image
-    - buildcheck
-  script:
-    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
-  artifacts:
-    expire_in: 1 week
-    reports:
       coverage_report:
         coverage_format: cobertura
         path: cobertura.xml
-  coverage: '/Coverage: \d+.\d+\%/'
-
+    coverage: '/Coverage: \d+.\d+\%/'
+        
 pages:
   stage: end
   image: ${CI_REGISTRY_IMAGE}:latest
