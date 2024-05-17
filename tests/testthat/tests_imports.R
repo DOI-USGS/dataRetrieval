@@ -253,13 +253,13 @@ test_that("External WQP tests", {
 
   rawSampleURL <- constructWQPURL("USGS-01594440", "01075", "", "")
   rawSample <- importWQP(rawSampleURL)
-  expect_is(rawSample$ActivityStartDateTime, "POSIXct")
+  expect_is(rawSample$Activity_StartDateTime, "POSIXct")
 
   url2 <- constructWQPURL("USGS-01594440", "01075", "", "")
   rawSample2 <- suppressWarnings(importWQP(url2))
-  expect_is(rawSample2$ActivityStartDateTime, "POSIXct")
+  expect_is(rawSample2$Activity_StartDateTime, "POSIXct")
 
   STORETex <- constructWQPURL("WIDNR_WQX-10032762", "Specific conductance", "", "")
   STORETdata <- importWQP(STORETex)
-  expect_is(STORETdata$ActivityStartDateTime, "POSIXct")
+  expect_is(STORETdata$Activity_StartDateTime, "POSIXct")
 })

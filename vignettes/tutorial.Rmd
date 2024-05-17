@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
   fig.height = 7,
   fig.width = 7
 )
+library(dplyr)
 ```
 
 R is an open-source programming language. It is known for extensive statistical capabilities, and also has powerful graphical capabilities. Another benefit of R is the large and generally helpful user-community. This includes R-package developers who create packages that can be easily installed to enhance the basic R capabilities. This article will describe the R-package "dataRetrieval" which simplifies the process of finding and retrieving water from the U.S. Geological Survey and other agencies.
@@ -166,13 +167,13 @@ df <- data.frame(
   functionName = c(
     "readNWISuv", "readNWISdv",
     "readNWISgwl", "readNWISmeas", "readNWISpeak",
-    "readNWISqw", "readNWISrating", "readNWISuse",
+    "readNWISrating", "readNWISuse",
     "readNWISstat"
   ),
   service = c(
     "Unit", "Daily", "Groundwater Level",
     "Surface-water", "Peak Flow",
-    "Water Quality", "Rating Curves",
+    "Rating Curves",
     "Water Use", "Statistics"
   ),
   stringsAsFactors = FALSE
@@ -265,6 +266,8 @@ There are 2 `dataRetrieval` functions that help:
 
 *  `whatNWISsites` finds sites within a specified filter (quicker)
 *  `whatNWISdata` summarizes the data within the specified filter (more information)
+*  `reaWQPsummary` summarizes the data available within the WQP by year.
+*  `whatWQPdata` summarizes the data available within the WQP. 
 
 There are several ways to specify the requests. The best way to discover how flexible the USGS web services are is to click on the links and see all of the filtering options:
 [http://waterservices.usgs.gov/](http://waterservices.usgs.gov/)
@@ -311,51 +314,49 @@ groundwaterHUC <- readNWISdata(
 
 ### Arizona Example
 
-For example, let's see which sites ever measured phosphorus in Arizona:
+For example, let's see which sites ever measured phosphorus in Arizona. Water quality data is exclusively found in WQP functions. 
 
 ```{r az, echo=TRUE}
-AZ_sites <- whatNWISsites(
-  stateCd = "AZ",
-  parameterCd = "00665"
+AZ_sites <- readWQPsummary(
+  statecode = "AZ",
+  siteType = "Stream"
 )
-nrow(AZ_sites)
-names(AZ_sites)
+
+az_phos_summary <- AZ_sites |> 
+  mutate(ResultCount = as.numeric(ResultCount)) |> 
+  rename(Site = MonitoringLocationIdentifier,
+         Lat = MonitoringLocationLatitude,
+         Lon = MonitoringLocationLongitude) |> 
+  group_by(Site, Lat, Lon) |> 
+  summarise(min_year = min(YearSummarized),
+            max_year = max(YearSummarized),
+            count = sum(ResultCount)) |> 
+  mutate(POR = max_year - min_year) |> 
+  filter(count > 100,
+         POR >= 20) |> 
+  arrange(desc(count)) |> 
+  ungroup()
+
 ```
 
 
 ```{r echo=FALSE, eval=TRUE, fig.height=4}
 library(leaflet)
 
-leaflet(data = AZ_sites) %>%
+leaflet(data = az_phos_summary) %>%
   addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(~dec_long_va, ~dec_lat_va,
+  addCircleMarkers(~Lon, ~Lat,
     color = "red", radius = 3, stroke = FALSE,
     fillOpacity = 0.8, opacity = 0.8,
-    popup = ~station_nm
+    popup = ~Site
   )
 ```
 
-Now let's see what we get back from the `whatNWISdata` function:
-
-```{r echo=FALSE}
-AZ_data <- readRDS("az_data.rds")
-names(AZ_data)
-```
-
-```{r azdata, echo=TRUE, eval=FALSE}
-AZ_data <- whatNWISdata(
-  stateCd = "AZ",
-  parameterCd = "00665"
-)
-names(AZ_data)
-```
-
-We get many more columns returned. For discovering useful data, the last 3 columns of this return are especially helpful. "begin_date", "end_date", and "count_nu" give a good indication of how much data of a particular "parm_cd"/"stat_cd"/"data_type_cd" was collected.
 
 ```{r echo=FALSE, eval=TRUE}
 library(dplyr)
-AZdata2 <- AZ_data %>%
-  select(station_nm, begin_date, end_date, count_nu)
+AZdata2 <- az_phos_summary |> 
+  select(Site, min_year, max_year, count, POR)
 
 datatable(AZdata2, rownames = FALSE, options = list(pageLength = 8))
 ```
@@ -373,52 +374,52 @@ The National Water Dashboard:
 
 ### Wisconsin Example 
 
-Let's do one more example, we'll look for long-term USGS phosphorous data in Wisconsin. This time, we will take the information from the `whatNWISdata` function, filter down the sites to exactly our interest, and then get the data. Let's say we want data from sites that have been collecting data for at least 15 years and have at least 300 measurements:
+Let's do one more example, we'll look for long-term USGS phosphorous data in Wisconsin. This time, we will take the information from the `readWQPsummary` function, filter down the sites to exactly our interest, and then get the data. Let's say we want data from sites that have been collecting data for at least 15 years and have at least 300 measurements:
 
+
+```{r eval=FALSE}
+library(dplyr)
+
+phWI <- readWQPsummary(
+  statecode  = "WI",
+  summaryYears = "all",
+  siteType = "Stream"
+)
+
+wi_phos_summary <- phWI |> 
+  filter(CharacteristicName == "Phosphorus") |> 
+  rename(Site = MonitoringLocationIdentifier,
+         Lat = MonitoringLocationLatitude,
+         Lon = MonitoringLocationLongitude) |> 
+  group_by(Site, Lat, Lon) |> 
+  summarise(min_year = min(YearSummarized),
+            max_year = max(YearSummarized),
+            count = sum(ResultCount)) |> 
+  mutate(POR = max_year - min_year) |> 
+  filter(count > 100,
+         POR >= 20) |> 
+  arrange(desc(count)) |> 
+  ungroup()
+
+wi_phos_data <- readWQPdata(siteid = wi_phos_summary$Site,
+                            characteristicName = "Phosphorus",
+                            dataProfile = "narrow")
+
+```
 ```{r echo=FALSE}
-phWI <- readRDS("phWI.rds")
-
-library(dplyr)
-phWI.1 <- phWI %>%
-  filter(count_nu > 300) %>%
-  mutate(period = as.Date(end_date) - as.Date(begin_date)) %>%
-  filter(period > 15 * 365)
-```
-
-```{r echo=TRUE, eval=FALSE}
-pCode <- c("00665")
-phWI <- whatNWISdata(
-  stateCd = "WI",
-  parameterCd = pCode
-)
-
-library(dplyr)
-phWI.1 <- phWI %>%
-  filter(count_nu > 300) %>%
-  mutate(period = as.Date(end_date) - as.Date(begin_date)) %>%
-  filter(period > 15 * 365)
-```
-
-```{r }
-phos_WI_data <- readNWISqw(
-  siteNumbers = phWI.1$site_no,
-  parameterCd = pCode
-)
+wi_phos_data <- readRDS("wi_phos_data.rds")
 ```
 
 Let's look at the maximum measured value, and number of samples:
 
-```{r echo=TRUE}
-phos_summary <- phos_WI_data %>%
-  group_by(site_no) %>%
-  summarize(
-    max = max(result_va, na.rm = TRUE),
-    count = n()
-  ) %>%
-  ungroup() %>%
-  left_join(attr(phos_WI_data, "siteInfo"),
-    by = "site_no"
-  )
+```{r}
+siteInfo <- attr(wi_phos_data, "siteInfo")
+
+phos_summary <- wi_phos_data |> 
+  group_by(Location_Identifier, Location_Name, 
+           Location_Latitude, Location_Longitude) |> 
+  summarize(max = max(as.numeric(Result_Measure)),
+            count = n())
 ```
 
 Then map it:
@@ -445,12 +446,12 @@ phos_summary$sizes <- rad[as.numeric(cut(phos_summary$count, breaks = 16))]
 
 leaflet(data = phos_summary) %>%
   addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(~dec_long_va, ~dec_lat_va,
+  addCircleMarkers(~Location_Longitude, ~Location_Latitude,
     fillColor = ~ pal(max),
     radius = ~sizes,
     fillOpacity = 0.8, opacity = 0.8,
     stroke = FALSE,
-    popup = ~station_nm
+    popup = ~Location_Name
   ) %>%
   addLegend(
     position = "bottomleft",
@@ -467,131 +468,6 @@ leaflet(data = phos_summary) %>%
 
 `dataRetrieval` also allows users to access data from the [Water Quality Portal](http://www.waterqualitydata.us/). The WQP houses data from multiple agencies; while USGS data comes from the NWIS database, EPA data comes from the STORET database (this includes many state, tribal, NGO, and academic groups). The WQP brings data from all these organizations together and provides it in a single format that has a more verbose output than NWIS. To get non-NWIS data, need to use CharacteristicName instead of parameter code.
 
-
-## WQP Basic Retrievals
-
-Much like the convenience functions for NWIS, there's a simple function for retrievals if the site number and parameter code or characteristic name is known.
-
-<div style="float: left; width: 50%;">
-```{r echo=TRUE, eval=TRUE}
-nwisQW <- readNWISqw(phWI.1$site_no[1],
-  parameterCd = "00665"
-)
-ncol(nwisQW)
-nrow(nwisQW)
-```
-</div>
-
-<div style="float: right; width: 50%;">
-```{r echo=TRUE, eval=TRUE}
-wqpQW <- readWQPqw(paste0("USGS-", phWI.1$site_no[1]),
-  parameterCd = "00665"
-)
-ncol(wqpQW)
-nrow(wqpQW)
-```
-</div>
-
-## Data Discovery: WQP
-
-The value of the Water Quality Portal is to explore water quality data from different sources. 
-
-The following function returns sites that have collected phosphorus data in Wisconsin. There's no way to know if that site has collected one sample, or thousands. This function is pretty fast, but only reports which sites have data.
-
-```{r echo=TRUE, eval=FALSE}
-phosSites <- whatWQPsites(
-  statecode = "WI",
-  characteristicName = "Phosphorus"
-)
-```
-
-Similar to NWIS, to find out the scope of the available data, there is a `whatWQPdata` function:
-
-```{r echo=TRUE, eval=TRUE}
-phos_data_available <- whatWQPdata(
-  statecode = "WI",
-  characteristicName = "Phosphorus"
-)
-```
-
-This function comes back with a few really useful columns such as "activityCount" and "resultCount". As with our NWIS query, let's filter down our data request to sites that have only had more than 300 measurements.
-
-```{r echo=TRUE, eval=FALSE}
-phos_data_sites_to_get <- phos_data_available %>%
-  filter(resultCount >= 300)
-
-phosData <- readWQPdata(
-  siteNumbers = phos_data_sites_to_get$MonitoringLocationIdentifier,
-  characteristicName = "Phosphorus"
-)
-```
-
-With data coming from many different agencies, it will be important to carefully review the returned data. For instance, this "Phosphorus" data comes back with many different units. It will be important to make smart decisions on how and if the queried data can be used together.
-
-```{r echo=TRUE, eval=FALSE}
-unique(phosData$ResultMeasure.MeasureUnitCode)
-```
-
-```{r eval=TRUE}
-phosData <- readRDS("phosData.rds") %>%
-  mutate(ResultMeasureValue = as.numeric(ResultMeasureValue))
-```
-
-
-Let’s look at the maximum measured value, and number of samples:
-
-```{r eval=TRUE, echo=TRUE}
-siteInfo <- attr(phosData, "siteInfo")
-
-wiSummary <- phosData %>%
-  filter(ResultMeasure.MeasureUnitCode %in%
-    c("mg/l", "mg/l as P")) %>%
-  group_by(MonitoringLocationIdentifier) %>%
-  summarise(
-    count = n(),
-    max = max(ResultMeasureValue, na.rm = TRUE)
-  ) %>%
-  left_join(siteInfo, by = "MonitoringLocationIdentifier")
-```
-
-
-```{r echo=FALSE, eval=TRUE}
-col_types <- c(
-  "darkblue",
-  "dodgerblue",
-  "green4",
-  "gold1",
-  "orange",
-  "brown",
-  "red"
-)
-leg_vals <- unique(as.numeric(quantile(wiSummary$max,
-  probs =
-    c(0, 0.01, 0.1, 0.25, 0.5, 0.75, 0.9, .99, 1),
-  na.rm = TRUE
-)))
-pal <- colorBin(col_types, wiSummary$max, bins = leg_vals)
-rad <- 3 * seq(1, 4, length.out = 16)
-wiSummary$sizes <- rad[as.numeric(cut(wiSummary$count, breaks = 16))]
-
-leaflet(data = wiSummary) %>%
-  addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(~dec_lon_va, ~dec_lat_va,
-    fillColor = ~ pal(max),
-    radius = ~sizes,
-    fillOpacity = 0.8, opacity = 0.8,
-    stroke = FALSE,
-    popup = ~station_nm
-  ) %>%
-  addLegend(
-    position = "bottomleft",
-    pal = pal,
-    values = ~max,
-    opacity = 0.8,
-    labFormat = labelFormat(digits = 1),
-    title = "Max Value"
-  )
-```
 
 
 #  Time/Time zone discussion
