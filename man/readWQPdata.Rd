@@ -93,22 +93,9 @@ Organization \tab "https://www.waterqualitydata.us/data/Organization/search" \cr
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 nameToUse <- "pH"
-pHData <- readWQPdata(siteid = "USGS-04024315", characteristicName = nameToUse)
+pHData <- readWQPdata(siteid = "USGS-04024315", 
+                      characteristicName = nameToUse)
 
-startDate <- as.Date("2023-01-01")
-secchi.names <- c(
-  "Depth, Secchi disk depth",
-  "Depth, Secchi disk depth (choice list)",
-  "Secchi Reading Condition (choice list)",
-  "Water transparency, Secchi disc"
-)
-args <- list(
-  "startDateLo" = startDate,
-  statecode = "WI",
-  characteristicName = secchi.names
-)
-
-wqp.data <- readWQPdata(args)
 
 # querying by county
 DeWitt <- readWQPdata(
