@@ -10,6 +10,7 @@ vignette: >
   %\VignetteIndexEntry{Join by closest date}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{dplyr}
 editor_options: 
   chunk_output_type: console
 ---
