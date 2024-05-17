@@ -82,7 +82,7 @@ unittests:
       coverage_report:
         coverage_format: cobertura
         path: cobertura.xml
-    coverage: '/Coverage: \d+.\d+\%/'
+  coverage: '/Coverage: \d+.\d+\%/'
         
 pages:
   stage: end
