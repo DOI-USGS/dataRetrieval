@@ -43,8 +43,14 @@ readWQPdots <- function(..., legacy = FALSE) {
     "WQX", "StationWQX"
   ))
   
-
+  names(matchReturn)[names(matchReturn) == "bbox"] <- "bBox"
     
+  bbox <- "bBox" %in% names(matchReturn)
+  if(bbox){
+    values_bbox <- sapply(matchReturn["bBox"], function(x) as.character(paste0(eval(x), collapse = ";")))
+    matchReturn <- matchReturn[names(matchReturn) != "bBox"]
+  }
+  
   if(!legacy){
     new_list <- rep(list(NA),length(unlist(matchReturn)))
     names_list <- c()
@@ -62,8 +68,8 @@ readWQPdots <- function(..., legacy = FALSE) {
   
   values <- sapply(matchReturn, function(x) as.character(paste0(eval(x), collapse = ";")))
   
-  if ("bBox" %in% names(values)) {
-    values["bBox"] <- gsub(pattern = ";", replacement = ",", x = values["bBox"])
+  if (bbox) {
+    values <- c(values, values_bbox)
   }
   
   values <- checkWQPdates(values)
@@ -72,6 +78,7 @@ readWQPdots <- function(..., legacy = FALSE) {
   names(values)[names(values) == "siteNumbers"] <- "siteid"
   names(values)[names(values) == "parameterCd"] <- "pCode"
   names(values)[names(values) == "USGSPCode"] <- "pCode"
+  
 
   names(values)[names(values) == "stateCd"] <- "statecode"
   if ("statecode" %in% names(values)) {
