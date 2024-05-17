@@ -142,25 +142,14 @@ parse_WQP <- function(retval, tz = "UTC"){
     })
   }
 
-  dateCols <- names(retval)[grep("Date", names(retval))]  
-  dateCols_to_convert <- NA
-  for(date_col in dateCols){
-
-    time_col <- gsub("Date", "Time", date_col)
-    tz_col <- gsub("Date", "TimeZone", date_col)      
-    
-    if(all(c(date_col, time_col, tz_col) %in% names(retval))){
-      if(!all(is.na(retval[[date_col]]))){
-        retval <- create_dateTime(retval, 
-                                 date_col = date_col,
-                                 time_col = time_col,
-                                 tz_col = tz_col,
-                                 tz = tz)
-      }
-    } else {
-      # This is the legacy pattern:
-      time_col <- gsub("Date", "Time.Time", date_col)
-      tz_col <- gsub("Date", "Time.TimeZoneCode", date_col)
+  dateCols <- names(retval)[grep("Date", names(retval))] 
+  
+  if(length(dateCols) > 0){
+    dateCols_to_convert <- NA
+    for(date_col in dateCols){
+      
+      time_col <- gsub("Date", "Time", date_col)
+      tz_col <- gsub("Date", "TimeZone", date_col)      
       
       if(all(c(date_col, time_col, tz_col) %in% names(retval))){
         if(!all(is.na(retval[[date_col]]))){
@@ -171,26 +160,40 @@ parse_WQP <- function(retval, tz = "UTC"){
                                     tz = tz)
         }
       } else {
-        dateCols_to_convert <- c(dateCols_to_convert, date_col)
+        # This is the legacy pattern:
+        time_col <- gsub("Date", "Time.Time", date_col)
+        tz_col <- gsub("Date", "Time.TimeZoneCode", date_col)
+        
+        if(all(c(date_col, time_col, tz_col) %in% names(retval))){
+          if(!all(is.na(retval[[date_col]]))){
+            retval <- create_dateTime(retval, 
+                                      date_col = date_col,
+                                      time_col = time_col,
+                                      tz_col = tz_col,
+                                      tz = tz)
+          }
+        } else {
+          dateCols_to_convert <- c(dateCols_to_convert, date_col)
+        }
       }
     }
-  }
-  
-  dateCols_to_convert <- dateCols_to_convert[!is.na(dateCols_to_convert)]
-  if(length(dateCols_to_convert) > 0){
-    for (i in dateCols_to_convert) {
-      if (i %in% names(retval)) {
-        retval[, i] <- suppressWarnings(as.Date(lubridate::parse_date_time(retval[[i]], c("Ymd", "mdY"))))
+    
+    dateCols_to_convert <- dateCols_to_convert[!is.na(dateCols_to_convert)]
+    if(length(dateCols_to_convert) > 0){
+      for (i in dateCols_to_convert) {
+        if (i %in% names(retval)) {
+          retval[, i] <- suppressWarnings(as.Date(lubridate::parse_date_time(retval[[i]], c("Ymd", "mdY"))))
+        }
       }
     }
-  }
-  
-  if("Activity_StartDateTime" %in% names(retval)){
-    retval <- retval[order(retval$Activity_StartDateTime),]
-  } else if ("ActivityStartDateTime" %in% names(retval)){
-    retval <- retval[order(retval$ActivityStartDateTime),]
-  } else {
-    retval <- retval[order(retval[[dateCols[1]]]),]
+    
+    if("Activity_StartDateTime" %in% names(retval)){
+      retval <- retval[order(retval$Activity_StartDateTime),]
+    } else if ("ActivityStartDateTime" %in% names(retval)){
+      retval <- retval[order(retval$ActivityStartDateTime),]
+    } else {
+      retval <- retval[order(retval[[dateCols[1]]]),]
+    }  
   }
   
   return(retval)
