@@ -44,12 +44,8 @@ build-image:
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
     - cd docker
     - docker build
-        --cache-from ${CI_REGISTRY_IMAGE}:latest
-        -t ${CI_REGISTRY_IMAGE}:BUILD_${CI_COMMIT_SHORT_SHA}
         -t ${CI_REGISTRY_IMAGE}:latest
         .
-    # If this is building a git tag, create the corresponding docker tag
-    - if [ -n "${CI_COMMIT_TAG}" ]; then docker tag ${CI_REGISTRY_IMAGE}:BUILD_${CI_COMMIT_SHORT_SHA} ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}; fi
     - docker push --all-tags ${CI_REGISTRY_IMAGE}
 
 
