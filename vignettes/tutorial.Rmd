@@ -7,6 +7,7 @@ output:
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{dataRetrieval Tutorial}
+  %\VignetteDepends{dplyr}
   \usepackage[utf8]{inputenc}
 ---
 
