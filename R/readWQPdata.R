@@ -74,7 +74,10 @@
 #' nameToUse <- "pH"
 #' pHData <- readWQPdata(siteid = "USGS-04024315", 
 #'                       characteristicName = nameToUse)
-#' 
+#' attr(pHData, "url")
+#' attr(pHData, "siteInfo")
+#' attr(pHData, "headerInfo")[["dataProviders"]]
+#' attr(pHData, "queryTime")
 #'
 #' # querying by county
 #' DeWitt <- readWQPdata(
@@ -205,14 +208,19 @@ readWQPdata <- function(...,
       tz = tz,
       convertType = convertType
     )
+    attr(retval, "legacy") <- legacy
+    
+    if(!legacy){
+      attr(retval, "wqp-request-id") <- attr(retval, "headerInfo")$`wqp-request-id`
+    }
 
     if (!all(is.na(retval)) && !ignore_attributes) {
       params <- list(...)
       params <- params[!names(params) %in% c("dataProfile", "service")]
       retval <- create_WQP_attributes(retval, params)
+
     } 
-    
-    attr(retval, "queryTime") <- Sys.time()
+
     attr(retval, "url") <- baseURL
 
     return(retval)
@@ -226,6 +234,44 @@ create_WQP_attributes <- function(retval, ...){
   
   attr(retval, "siteInfo") <- siteInfo
   
+  if(!attr(retval, "legacy")){
+    attr(retval, "headerInfo") <- wqp_check_status(attr(retval, "headerInfo")$`wqp-request-id`)
+    attr(retval, "queryTime") <- as.POSIXct(attr(retval, "headerInfo")[["requestStartTime"]],
+                                            format = "%Y-%m-%dT%H:%M:%OS", tz = "GMT")
+  } else {
+    attr(retval, "queryTime") <- Sys.time()
+  }
+  
   #If WQP adds a parameter metadata service/files, we could add that here.
   return(retval)
 }
+
+#' Get WQP service metadata
+#' 
+#' The information from this request is only available for a 
+#' limited time after the original query from the WQP. In the 
+#' readWQPdata and readWQPqw functions, the results from this
+#' function will be attached as an attribute to the data.
+#' 
+#' @param wqp_request_id A character returned from the header
+#' of a WQP request.
+#' @return a list generated from the WQP describing what data
+#' was returned.
+#' @export
+#' 
+#' @examplesIf is_dataRetrieval_user()
+#' \donttest{
+#' rawPcode <- readWQPqw("USGS-01594440", "01075", ignore_attributes = TRUE)
+#' headerInfo <- attr(rawPcode, "headerInfo")
+#' wqp_request_id <- headerInfo$`wqp-request-id`
+#' count_info <- wqp_check_status(wqp_request_id)
+#' count_info[["dataProviders"]]
+#' }
+wqp_check_status <- function(wqp_request_id){
+  
+  id_url <- paste0(pkg.env[["status"]], wqp_request_id)
+  counts_list <- get_nldi_sources(id_url)
+  return(counts_list)
+  
+}
+
