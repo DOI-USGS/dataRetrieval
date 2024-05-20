@@ -255,14 +255,14 @@ test_that("General WQP retrievals working", {
   expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
                     names(attributes(rawPcode))))
   
-  # This means wqp_count_info was called:
+  # This means wqp_check_status was called:
   expect_true("dataProviders" %in% names(attr(rawPcode, "headerInfo")))
   
   rawPcode2 <- readWQPqw("USGS-01594440", "01075", "", "", ignore_attributes = TRUE)
   expect_true(all(!c( "queryTime", "siteInfo") %in%
                     names(attributes(rawPcode2))))
   
-  # This means wqp_count_info wasn't called:
+  # This means wqp_check_status wasn't called:
   expect_false("dataProviders" %in% names(attr(rawPcode2, "headerInfo")))
   
   pHData <- readWQPdata(siteid = "USGS-04024315",
@@ -270,7 +270,7 @@ test_that("General WQP retrievals working", {
   expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
                     names(attributes(pHData))))
   
-  # This means wqp_count_info was called:
+  # This means wqp_check_status was called:
   expect_true("dataProviders" %in% names(attr(pHData, "headerInfo")))
   
   pHData2 <- readWQPdata(siteid = "USGS-04024315",
@@ -279,13 +279,13 @@ test_that("General WQP retrievals working", {
   expect_true(all(!c("queryTime", "siteInfo") %in%
                     names(attributes(pHData2))))
   
-  # This means wqp_count_info was called:
+  # This means wqp_check_status was called:
   expect_false("dataProviders" %in% names(attr(pHData2, "headerInfo")))
   
   rawPcode <- readWQPqw("USGS-01594440", "01075", ignore_attributes = TRUE)
   headerInfo <- attr(rawPcode, "headerInfo")
   wqp_request_id <- headerInfo$`wqp-request-id`
-  count_info <- wqp_count_info(wqp_request_id)
+  count_info <- wqp_check_status(wqp_request_id)
   
   expect_true("dataProviders" %in% names(count_info))
   

@@ -235,7 +235,7 @@ create_WQP_attributes <- function(retval, ...){
   attr(retval, "siteInfo") <- siteInfo
   
   if(!attr(retval, "legacy")){
-    attr(retval, "headerInfo") <- wqp_count_info(attr(retval, "headerInfo")$`wqp-request-id`)
+    attr(retval, "headerInfo") <- wqp_check_status(attr(retval, "headerInfo")$`wqp-request-id`)
     attr(retval, "queryTime") <- as.POSIXct(attr(retval, "headerInfo")[["requestStartTime"]],
                                             format = "%Y-%m-%dT%H:%M:%OS", tz = "GMT")
   } else {
@@ -264,10 +264,10 @@ create_WQP_attributes <- function(retval, ...){
 #' rawPcode <- readWQPqw("USGS-01594440", "01075", ignore_attributes = TRUE)
 #' headerInfo <- attr(rawPcode, "headerInfo")
 #' wqp_request_id <- headerInfo$`wqp-request-id`
-#' count_info <- wqp_count_info(wqp_request_id)
+#' count_info <- wqp_check_status(wqp_request_id)
 #' count_info[["dataProviders"]]
 #' }
-wqp_count_info <- function(wqp_request_id){
+wqp_check_status <- function(wqp_request_id){
   
   id_url <- paste0(pkg.env[["status"]], wqp_request_id)
   counts_list <- get_nldi_sources(id_url)
