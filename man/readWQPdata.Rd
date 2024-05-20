@@ -95,7 +95,10 @@ Organization \tab "https://www.waterqualitydata.us/data/Organization/search" \cr
 nameToUse <- "pH"
 pHData <- readWQPdata(siteid = "USGS-04024315", 
                       characteristicName = nameToUse)
-
+attr(pHData, "url")
+attr(pHData, "siteInfo")
+attr(pHData, "headerInfo")[["dataProviders"]]
+attr(pHData, "queryTime")
 
 # querying by county
 DeWitt <- readWQPdata(

@@ -1,5 +1,3 @@
-
-
 #' Basic Water Quality Portal Data parser
 #'
 #' Imports data from the Water Quality Portal based on a specified url.
@@ -69,11 +67,14 @@ importWQP <- function(obs_url, tz = "UTC",
   
   attr(retval, 'spec') <- NULL
   
+  # this is only needed for legacy
   names(retval)[grep("/", names(retval))] <- gsub("/", ".", names(retval)[grep("/", names(retval))])
+  
   
   if(convertType){
     retval <- parse_WQP(retval, tz)
   } 
+  attr(retval, "headerInfo") <- headerInfo
   
   return(retval)
   
@@ -187,9 +188,9 @@ parse_WQP <- function(retval, tz = "UTC"){
       }
     }
     
-    if("Activity_StartDateTime" %in% names(retval)){
+    if("Activity_StartDateTime" %in% names(retval)){ #WQX 3
       retval <- retval[order(retval$Activity_StartDateTime),]
-    } else if ("ActivityStartDateTime" %in% names(retval)){
+    } else if ("ActivityStartDateTime" %in% names(retval)){ #legacy
       retval <- retval[order(retval$ActivityStartDateTime),]
     } else {
       retval <- retval[order(retval[[dateCols[1]]]),]
