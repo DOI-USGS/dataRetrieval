@@ -23,7 +23,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-patchwork \
   r-cran-maps \
   r-cran-leaflet \
+  && apt-get install -y pandoc \
   && rm -rf /var/lib/apt/lists/*
-  
 
 

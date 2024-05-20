@@ -77,6 +77,12 @@ site name, such as 'USGS-01234567'.
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
+
+attr(rawPcode, "url")
+attr(rawPcode, "siteInfo")
+attr(rawPcode, "queryTime")
+attr(rawPcode, "headerInfo")[["dataProviders"]]
+
 rawCharacteristicName <- readWQPqw("WIDNR_WQX-10032762", "Specific conductance", "", "")
 rawPHsites <- readWQPqw(c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"), "pH", "", "")
 nwisEx <- readWQPqw("USGS-04024000", c("34247", "30234", "32104", "34220"), "", "2022-12-20")
