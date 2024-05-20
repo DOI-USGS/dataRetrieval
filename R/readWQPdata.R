@@ -235,7 +235,7 @@ create_WQP_attributes <- function(retval, ...){
   attr(retval, "siteInfo") <- siteInfo
   
   if(!attr(retval, "legacy")){
-    attr(retval, "headerInfo") <- count_info(attr(retval, "headerInfo")$`wqp-request-id`)
+    attr(retval, "headerInfo") <- wqp_count_info(attr(retval, "headerInfo")$`wqp-request-id`)
     attr(retval, "queryTime") <- as.POSIXct(attr(retval, "headerInfo")[["requestStartTime"]],
                                             format = "%Y-%m-%dT%H:%M:%OS", tz = "GMT")
   } else {
@@ -246,7 +246,28 @@ create_WQP_attributes <- function(retval, ...){
   return(retval)
 }
 
-count_info <- function(wqp_request_id){
+#' Get WQP service metadata
+#' 
+#' The information from this request is only available for a 
+#' limited time after the original query from the WQP. In the 
+#' readWQPdata and readWQPqw functions, the results from this
+#' function will be attached as an attribute to the data.
+#' 
+#' @param wqp_request_id A character returned from the header
+#' of a WQP request.
+#' @return a list generated from the WQP describing what data
+#' was returned.
+#' @export
+#' 
+#' @examplesIf is_dataRetrieval_user()
+#' \donttest{
+#' rawPcode <- readWQPqw("USGS-01594440", "01075", ignore_attributes = TRUE)
+#' headerInfo <- attr(rawPcode, "headerInfo")
+#' wqp_request_id <- headerInfo$`wqp-request-id`
+#' count_info <- wqp_count_info(wqp_request_id)
+#' count_info[["dataProviders"]]
+#' }
+wqp_count_info <- function(wqp_request_id){
   
   id_url <- paste0(pkg.env[["status"]], wqp_request_id)
   counts_list <- get_nldi_sources(id_url)
