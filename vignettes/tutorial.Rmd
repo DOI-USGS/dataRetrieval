@@ -447,7 +447,7 @@ az_phos_summary <- AZ_sites |>
 ```
 
 
-```{r echo=FALSE, eval=TRUE, fig.height=4}
+```{r echo=TRUE, eval=TRUE, fig.height=4}
 library(leaflet)
 
 leaflet(data = az_phos_summary) %>%
