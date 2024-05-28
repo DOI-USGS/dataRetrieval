@@ -9,19 +9,30 @@
 #' in this help file to see many query options. 
 #' 
 #' 
-#' There are currently 10 "services" provided by the Water Quality Portal:
+#' There are currently 10 legacy and 3 modern "services"
+#' provided by the Water Quality Portal:
+#' 
+#' Modern:
+#' \tabular{ll}{
+#' Name \tab Base URL \cr 
+#' StationWQX \tab https://www.waterqualitydata.us/wqx3/Station/search \cr
+#' fullPhysChem \tab https://www.waterqualitydata.us/wqx3/Result/search?dataProfile=full \cr
+#' narrow \tab https://www.waterqualitydata.us/wqx3/Result/search?dataProfile=narrow \cr
+#' }
+#' 
+#' Legacy:
 #' \tabular{ll}{
 #' Name \tab Base URL \cr
-#' Result (default) \tab "https://www.waterqualitydata.us/data/Result/search" \cr
-#' Station \tab  "https://www.waterqualitydata.us/data/Station/search" \cr
-#' Activity \tab "https://www.waterqualitydata.us/data/Activity/search" \cr
-#' ActivityMetric \tab "https://www.waterqualitydata.us/data/ActivityMetric/search" \cr
-#' SiteSummary \tab "https://www.waterqualitydata.us/data/summary/monitoringLocation/search" \cr
-#' Project \tab "https://www.waterqualitydata.us/data/Project/search" \cr
-#' ProjectMonitoringLocationWeighting \tab "https://www.waterqualitydata.us/data/ProjectMonitoringLocationWeighting/search" \cr
-#' ResultDetectionQuantitationLimit \tab "https://www.waterqualitydata.us/data/ResultDetectionQuantitationLimit/search" \cr
-#' BiologicalMetric \tab "https://www.waterqualitydata.us/data/BiologicalMetric/search" \cr
-#' Organization \tab "https://www.waterqualitydata.us/data/Organization/search" \cr
+#' Result (legacy) \tab "https://www.waterqualitydata.us/data/Result/search" \cr
+#' Station (legacy) \tab  "https://www.waterqualitydata.us/data/Station/search" \cr
+#' Activity (legacy) \tab "https://www.waterqualitydata.us/data/Activity/search" \cr
+#' ActivityMetric (legacy) \tab "https://www.waterqualitydata.us/data/ActivityMetric/search" \cr
+#' SiteSummary (legacy) \tab "https://www.waterqualitydata.us/data/summary/monitoringLocation/search" \cr
+#' Project (legacy) \tab "https://www.waterqualitydata.us/data/Project/search" \cr
+#' ProjectMonitoringLocationWeighting (legacy) \tab "https://www.waterqualitydata.us/data/ProjectMonitoringLocationWeighting/search" \cr
+#' ResultDetectionQuantitationLimit (legacy) \tab "https://www.waterqualitydata.us/data/ResultDetectionQuantitationLimit/search" \cr
+#' BiologicalMetric (legacy) \tab "https://www.waterqualitydata.us/data/BiologicalMetric/search" \cr
+#' Organization (legacy) \tab "https://www.waterqualitydata.us/data/Organization/search" \cr
 #' }
 #' 
 #'
@@ -192,13 +203,13 @@ readWQPdata <- function(...,
 
   baseURL <- appendDrURL(baseURL, mimeType = "csv")
   
+  wqp_message_now(service)
+  
   if(!legacy){
     if(service != "StationWQX" & !"dataProfile" %in% names(values)){
       baseURL <- appendDrURL(baseURL, dataProfile = "fullPhysChem")
     }
-  } else {
-    wqp_message()
-  }
+  } 
 
   if (querySummary) {
     retquery <- getQuerySummary(baseURL)

@@ -19,9 +19,7 @@
 whatWQPsamples <- function(..., 
                            convertType = TRUE) {
   values <- readWQPdots(..., legacy = TRUE)
-  
-  wqp_message_no_legacy()
-  
+
   values <- values$values
 
   if ("tz" %in% names(values)) {
@@ -35,7 +33,7 @@ whatWQPsamples <- function(...,
   values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
 
   baseURL <- drURL("Activity", arg.list = values)
-
+  wqp_message_now("Activity")
   baseURL <- appendDrURL(baseURL, mimeType = "csv")
 
   withCallingHandlers(
@@ -75,7 +73,7 @@ whatWQPsamples <- function(...,
 whatWQPmetrics <- function(..., 
                            convertType = TRUE) {
   values <- readWQPdots(..., legacy = TRUE)
-  wqp_message_no_legacy()
+  
   values <- values$values
 
   if ("tz" %in% names(values)) {
@@ -92,6 +90,8 @@ whatWQPmetrics <- function(...,
 
   baseURL <- appendDrURL(baseURL, mimeType = "csv")
 
+  wqp_message_now("ActivityMetric")
+  
   withCallingHandlers(
     {
       retval <- importWQP(baseURL,
@@ -164,8 +164,6 @@ whatWQPmetrics <- function(...,
 whatWQPdata <- function(..., saveFile = tempfile(),
                         convertType = TRUE) {
   values <- readWQPdots(..., legacy = TRUE)
-
-  wqp_message_no_legacy()
   
   values <- values$values
 
@@ -182,6 +180,9 @@ whatWQPdata <- function(..., saveFile = tempfile(),
   baseURL <- drURL("Station", arg.list = values)
 
   baseURL <- appendDrURL(baseURL, mimeType = "geojson")
+  
+  # Not sure if there's a geojson option with WQX
+  wqp_message_no_legacy(service)
   
   doc <- getWebServiceData(baseURL, httr::write_disk(saveFile))
   

@@ -3,6 +3,7 @@
 #'
 #' @keywords internal
 readWQPdots <- function(..., legacy = FALSE) {
+  
   if (length(list(...)) == 0) {
     stop("No arguments supplied")
   }
@@ -104,3 +105,4 @@ readWQPdots <- function(..., legacy = FALSE) {
 
   return(list(values = values, service = service))
 }
+

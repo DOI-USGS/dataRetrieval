@@ -34,6 +34,17 @@ https://doi-usgs.github.io/dataRetrieval/articles/Status.html
 Contact CompTools@usgs.gov with questions")
 }
 
+wqp_message_now <- function(service){
+  if(service %in% c("Activity", "Organization",
+                    "ActivityMetric", "SiteSummary",
+                    "Project", "ProjectMonitoringLocationWeighting",
+                    "ResultDetectionQuantitationLimit", "BiologicalMetric")){
+    return(wqp_message_no_legacy())
+  } else if (service %in% c("Result", "Station")){
+    return(wqp_message())
+  }
+}
+
 nwis_message <- function(){
   return("WARNING: NWIS does not deliver
 new discrete water quality data or updates to existing data. 
