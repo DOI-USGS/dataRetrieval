@@ -57,7 +57,7 @@ readWQPdots <- function(..., legacy = FALSE) {
     names_list <- c()
     i <- 1
     for(arg in names(matchReturn)){
-      for(val in matchReturn[[arg]]) {
+      for(val in as.character(matchReturn[[arg]])) {
         new_list[[i]] <- val
         names_list <- c(names_list, arg)
         i <- i + 1
