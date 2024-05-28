@@ -21,7 +21,9 @@ is_dataRetrieval_user <- function() {
 
 
 wqp_message_no_legacy <- function(){
-  message("NEWS: data do not include newer USGS data. More details: 
+  message("NEWS: Legacy profile requested, and no WQX 
+profile currently exists. Legacy profiles do not include newer USGS data. 
+More details: 
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html.
 Contact CompTools@usgs.gov with questions")
 }
@@ -34,11 +36,25 @@ https://doi-usgs.github.io/dataRetrieval/articles/Status.html
 Contact CompTools@usgs.gov with questions")
 }
 
+only_legacy <- function(service){
+  legacy <- service %in% c("Activity", "Organization",
+                 "ActivityMetric", "SiteSummary",
+                 "Project", "ProjectMonitoringLocationWeighting",
+                 "ResultDetectionQuantitationLimit", "BiologicalMetric")
+  return(legacy)
+}
+
+is_legacy <- function(service){
+  legacy <- service %in% c("Result", "Station",
+                           "Activity", "Organization",
+                           "ActivityMetric", "SiteSummary",
+                           "Project", "ProjectMonitoringLocationWeighting",
+                           "ResultDetectionQuantitationLimit", "BiologicalMetric")
+  return(legacy)
+}
+
 wqp_message_now <- function(service){
-  if(service %in% c("Activity", "Organization",
-                    "ActivityMetric", "SiteSummary",
-                    "Project", "ProjectMonitoringLocationWeighting",
-                    "ResultDetectionQuantitationLimit", "BiologicalMetric")){
+  if(only_legacy(service)){
     return(wqp_message_no_legacy())
   } else if (service %in% c("Result", "Station")){
     return(wqp_message())
