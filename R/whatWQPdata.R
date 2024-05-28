@@ -182,7 +182,7 @@ whatWQPdata <- function(..., saveFile = tempfile(),
   baseURL <- appendDrURL(baseURL, mimeType = "geojson")
   
   # Not sure if there's a geojson option with WQX
-  wqp_message_no_legacy(service)
+  wqp_message_no_legacy()
   
   doc <- getWebServiceData(baseURL, httr::write_disk(saveFile))
   
