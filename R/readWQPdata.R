@@ -174,8 +174,6 @@ readWQPdata <- function(...,
                         legacy = FALSE) {
   tz <- match.arg(tz, OlsonNames())
 
-  wqp_message()
-  
   valuesList <- readWQPdots(..., legacy = legacy)
 
   service <- valuesList$service
@@ -198,6 +196,8 @@ readWQPdata <- function(...,
     if(service != "StationWQX" & !"dataProfile" %in% names(values)){
       baseURL <- appendDrURL(baseURL, dataProfile = "fullPhysChem")
     }
+  } else {
+    wqp_message()
   }
 
   if (querySummary) {
