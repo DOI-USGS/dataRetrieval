@@ -381,7 +381,7 @@ constructWQPURL <- function(siteNumbers,
   if(legacy){
     baseURL <- drURL("Result", siteid = siteNumbers, Access = pkg.env$access)
   } else {
-    baseURL <- drURL("WQX", siteid = siteNumbers, Access = pkg.env$access)
+    baseURL <- drURL("WQX3", siteid = siteNumbers, Access = pkg.env$access)
   }
   
   url <- paste0(
