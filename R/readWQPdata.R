@@ -8,21 +8,22 @@
 #' has a steeper learning curve. For a quick overview, scroll down to the Examples
 #' in this help file to see many query options. 
 #' 
-#' 
+#' @details
+#'  
 #' There are currently 10 legacy and 3 modern WQX "services"
 #' provided by the Water Quality Portal:
 #'  
 #' WQX:
-#' \tabular{lll}{
-#' WQX Radio Button \tab service argument \tab Base URL \cr 
-#' Monitoring Locations \tab StationWQX \tab /wqx3/Station/search \cr
-#' Full Physical Chemical \tab fullPhysChem \tab /wqx3/Result/search?dataProfile=fullPhysChem \cr
-#' Narrow \tab Narrow \tab /wqx3/Result/search?dataProfile=narrow \cr
+#' \tabular{llll}{
+#' WQP Radio Button \tab service argument \tab Base URL \tab dataProfile \cr 
+#' Monitoring Locations \tab StationWQX \tab /wqx3/Station/search \tab \cr
+#' Full Physical Chemical \tab WQX3 \tab /wqx3/Result/search \tab fullPhysChem \cr
+#' Narrow \tab WQX3 \tab /wqx3/Result/search \tab narrow \cr
 #' }
 #' 
 #' Legacy:
 #' \tabular{lll}{
-#' WQX Radio Button \tab service argument \tab Base URL  \cr
+#' WQP Radio Button \tab service argument \tab Base URL  \cr
 #' Sample Results \tab Result \tab /data/Result/search \cr
 #' Site Data Only \tab Station \tab /data/Station/search \cr
 #' Sampling Activity \tab Activity \tab /data/Activity/search \cr
@@ -47,7 +48,7 @@
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
 #' mimeType, and providers is optional (these arguments are picked automatically).
-#' 
+#' @param service character. See Details for more information.
 #' @param querySummary logical to only return the number of records and unique sites that
 #' will be returned from this query. Choosing TRUE is deprecated, readWQPsummary 
 #' is recommended instead.
@@ -217,6 +218,8 @@ readWQPdata <- function(...,
       tz = tz,
       convertType = convertType
     )
+    
+    attr(retval, "legacy") <- legacy
     
     if(!legacy){
       attr(retval, "wqp-request-id") <- attr(retval, "headerInfo")$`wqp-request-id`
