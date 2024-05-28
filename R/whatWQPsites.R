@@ -60,6 +60,7 @@ whatWQPsites <- function(..., legacy = FALSE) {
   
   if(legacy){
     baseURL <- drURL("Station", arg.list = values)
+    wqp_message()
   } else {
     baseURL <- drURL("StationWQX", arg.list = values)
   }
@@ -136,7 +137,8 @@ whatWQPsites <- function(..., legacy = FALSE) {
 #' }
 readWQPsummary <- function(...) {
   
-  wqp_message()
+  wqp_message_no_legacy()
+  
   values <- readWQPdots(...)
   
   values <- values$values

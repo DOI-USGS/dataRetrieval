@@ -19,7 +19,9 @@
 whatWQPsamples <- function(..., 
                            convertType = TRUE) {
   values <- readWQPdots(..., legacy = TRUE)
-
+  
+  wqp_message_no_legacy()
+  
   values <- values$values
 
   if ("tz" %in% names(values)) {
@@ -73,7 +75,7 @@ whatWQPsamples <- function(...,
 whatWQPmetrics <- function(..., 
                            convertType = TRUE) {
   values <- readWQPdots(..., legacy = TRUE)
-
+  wqp_message_no_legacy()
   values <- values$values
 
   if ("tz" %in% names(values)) {
@@ -163,7 +165,7 @@ whatWQPdata <- function(..., saveFile = tempfile(),
                         convertType = TRUE) {
   values <- readWQPdots(..., legacy = TRUE)
 
-  wqp_message()
+  wqp_message_no_legacy()
   
   values <- values$values
 

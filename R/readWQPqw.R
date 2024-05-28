@@ -74,7 +74,6 @@ readWQPqw <- function(siteNumbers,
                       convertType = TRUE) {
   
   url <- constructWQPURL(siteNumbers, parameterCd, startDate, endDate, legacy)
-  wqp_message()
   
   if (querySummary) {
     retquery <- getQuerySummary(url)
@@ -86,6 +85,7 @@ readWQPqw <- function(siteNumbers,
 
     if(legacy){
       sites <- unique(retval$MonitoringLocationIdentifier)
+      wqp_message()
     } else {
       sites <- unique(retval$Location_Identifier)
     }
