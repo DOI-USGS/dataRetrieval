@@ -6,21 +6,19 @@
 \usage{
 readWQPdata(
   ...,
+  service = "WQX",
   querySummary = FALSE,
   tz = "UTC",
   ignore_attributes = FALSE,
-  convertType = TRUE,
-  legacy = FALSE
+  convertType = TRUE
 )
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options.
 A list of arguments can also be supplied. For more information see the above 
 description for this help file. If no "service" argument is supplied, it
-will default to "Result". One way to figure out how to construct a WQP query is to go to the "Advanced" 
-form in the Water Quality Portal:
-\url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET}
-Use the form to discover what parameters are available. Once the query is 
+will default to "fullPhysChem". One way to figure out how to construct a WQP query is to go to the "Advanced" 
+form in the Water Quality Portal. Use the form to discover what parameters are available. Once the query is 
 set in the form, scroll down to the "Query URL". You will see the parameters
 after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
 in the Characteristic Group dropdown, you will see characteristicType=Nutrient
@@ -29,7 +27,8 @@ characteristicType = "Nutrient". dataRetrieval users do not need to include
 mimeType, and providers is optional (these arguments are picked automatically).}
 
 \item{querySummary}{logical to only return the number of records and unique sites that
-will be returned from this query.}
+will be returned from this query. Choosing TRUE is deprecated, readWQPsummary 
+is recommended instead.}
 
 \item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
 date times to UTC, properly accounting for daylight savings times based on the
@@ -42,14 +41,12 @@ time: "America/Honolulu",
 See also  \code{OlsonNames()}
 for more information on time zones.}
 
-\item{ignore_attributes}{logical to choose to ignore fetching site and parameter
+\item{ignore_attributes}{logical to choose to ignore fetching site and status
 attributes. Default is \code{FALSE}.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
-
-\item{legacy}{Logical. If TRUE, use legacy WQP services. Default is FALSE.}
 }
 \value{
 A data frame, the specific columns will depend on the "service" and/or "dataProfile".
@@ -59,7 +56,7 @@ There are also several useful attributes attached to the data frame:
 Name \tab Type \tab Description \cr
 url \tab character \tab The url used to generate the data \cr
 siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
-variableInfo \tab data.frame \tab A data frame containing information on the requested parameters \cr
+headerInfo \tab data.frame \tab A data frame returned from the WQP status service \cr
 queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 }
@@ -74,30 +71,30 @@ has a steeper learning curve. For a quick overview, scroll down to the Examples
 in this help file to see many query options. 
 
 
-There are currently 10 legacy and 3 modern "services"
+There are currently 10 legacy and 3 modern WQX "services"
 provided by the Water Quality Portal:
-
-Modern:
-\tabular{ll}{
-Name \tab Base URL \cr 
-StationWQX \tab https://www.waterqualitydata.us/wqx3/Station/search \cr
-fullPhysChem \tab https://www.waterqualitydata.us/wqx3/Result/search?dataProfile=full \cr
-narrow \tab https://www.waterqualitydata.us/wqx3/Result/search?dataProfile=narrow \cr
+ 
+WQX:
+\tabular{lll}{
+WQX Radio Button \tab service argument \tab Base URL \cr 
+Monitoring Locations \tab StationWQX \tab /wqx3/Station/search \cr
+Full Physical Chemical \tab fullPhysChem \tab /wqx3/Result/search?dataProfile=fullPhysChem \cr
+Narrow \tab Narrow \tab /wqx3/Result/search?dataProfile=narrow \cr
 }
 
 Legacy:
-\tabular{ll}{
-Name \tab Base URL \cr
-Result (legacy) \tab "https://www.waterqualitydata.us/data/Result/search" \cr
-Station (legacy) \tab  "https://www.waterqualitydata.us/data/Station/search" \cr
-Activity (legacy) \tab "https://www.waterqualitydata.us/data/Activity/search" \cr
-ActivityMetric (legacy) \tab "https://www.waterqualitydata.us/data/ActivityMetric/search" \cr
-SiteSummary (legacy) \tab "https://www.waterqualitydata.us/data/summary/monitoringLocation/search" \cr
-Project (legacy) \tab "https://www.waterqualitydata.us/data/Project/search" \cr
-ProjectMonitoringLocationWeighting (legacy) \tab "https://www.waterqualitydata.us/data/ProjectMonitoringLocationWeighting/search" \cr
-ResultDetectionQuantitationLimit (legacy) \tab "https://www.waterqualitydata.us/data/ResultDetectionQuantitationLimit/search" \cr
-BiologicalMetric (legacy) \tab "https://www.waterqualitydata.us/data/BiologicalMetric/search" \cr
-Organization (legacy) \tab "https://www.waterqualitydata.us/data/Organization/search" \cr
+\tabular{lll}{
+WQX Radio Button \tab service argument \tab Base URL  \cr
+Sample Results \tab Result \tab /data/Result/search \cr
+Site Data Only \tab Station \tab /data/Station/search \cr
+Sampling Activity \tab Activity \tab /data/Activity/search \cr
+Sampling Activity Metrics \tab ActivityMetric \tab /data/ActivityMetric/search \cr
+Site Summary (not advertised on WQP)  \tab SiteSummary \tab /data/summary/monitoringLocation/search \cr
+Project Data \tab Project \tab /data/Project/search \cr
+Project Monitoring Location Weighting Data \tab ProjectMonitoringLocationWeighting \tab /data/ProjectMonitoringLocationWeighting/search \cr
+Result Detection Quantitation Limit Data \tab ResultDetectionQuantitationLimit \tab /data/ResultDetectionQuantitationLimit/search \cr
+Biological Habitat Metrics \tab BiologicalMetric \tab /data/BiologicalMetric/search \cr
+Organization Data \tab Organization \tab /data/Organization/search \cr
 }
 }
 \examples{
@@ -111,6 +108,11 @@ attr(pHData, "siteInfo")
 attr(pHData, "headerInfo")[["dataProviders"]]
 attr(pHData, "queryTime")
 
+pHData <- readWQPdata(siteid = "USGS-04024315", 
+                      characteristicName = nameToUse,
+                      service = "Result",
+                      dataProfile = "narrowResult")
+
 # querying by county
 DeWitt <- readWQPdata(
   statecode = "Illinois",
@@ -122,8 +124,7 @@ DeWitt <- readWQPdata(
 org_data <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
-  service = "Organization",
-  legacy = TRUE
+  service = "Organization"
 )
 
 # Data profiles: "Site Data Only"
@@ -137,30 +138,28 @@ site_data <- readWQPdata(
 project_data <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
-  service = "Project",
-  legacy = TRUE
+  service = "Project"
 )
 
 # Data profiles: "Project Monitoring Location Weighting Data"
 proj_mlwd <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
-  service = "ProjectMonitoringLocationWeighting",
-  legacy = TRUE
+  service = "ProjectMonitoringLocationWeighting"
 )
 
 # Data profiles: "Sample Results (physical/chemical metadata)":
 samp_data <- readWQPdata(
   siteid = "USGS-04024315",
   dataProfile = "resultPhysChem",
-  legacy = TRUE
+  service = "Result"
 )
 
 # Data profiles: "Sample Results (biological metadata)"
 samp_bio <- readWQPdata(
   siteid = "USGS-04024315",
   dataProfile = "biological",
-  legacy = TRUE
+  service = "Result"
 )
 
 # Data profiles: "Sample Results (narrow)"
@@ -172,23 +171,20 @@ samp_narrow <- readWQPdata(
 # Data profiles: "Sampling Activity"
 samp_activity <- readWQPdata(
   siteid = "USGS-04024315",
-  dataProfile = "activityAll",
-  legacy = TRUE
+  dataProfile = "activityAll"
 )
 
 # Data profile: "Sampling Activity Metrics"
 act_metrics <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
-  service = "ActivityMetric",
-  legacy = TRUE
+  service = "ActivityMetric"
 )
 
 # Data profile: "Result Detection Quantitation Limit Data"
 dl_data <- readWQPdata(
   siteid = "USGS-04024315",
-  service = "ResultDetectionQuantitationLimit",
-  legacy = TRUE
+  service = "ResultDetectionQuantitationLimit"
 )
 
 Phosphorus <- readWQPdata(
