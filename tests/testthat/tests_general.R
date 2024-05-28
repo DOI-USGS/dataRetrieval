@@ -460,8 +460,7 @@ test_that("profiles", {
   org_data <- readWQPdata(
     statecode = "WI",
     countycode = "Dane",
-    service = "Organization",
-    legacy = TRUE
+    service = "Organization"
   )
 
   expect_true(all(c(
@@ -482,8 +481,7 @@ test_that("profiles", {
   project_data <- readWQPdata(
     statecode = "WI",
     countycode = "Dane",
-    service = "Project",
-    legacy = TRUE
+    service = "Project"
   )
 
   expect_true(all(c(
@@ -495,8 +493,7 @@ test_that("profiles", {
   proj_mlwd <- readWQPdata(
     statecode = "WI",
     countycode = "Dane",
-    service = "ProjectMonitoringLocationWeighting",
-    legacy = TRUE
+    service = "ProjectMonitoringLocationWeighting"
   )
 
   expect_true(all(c(
@@ -507,6 +504,7 @@ test_that("profiles", {
   # Data profiles: "narrow":
   samp_data <- readWQPdata(
     siteid = "USGS-04024315",
+    service = "WQX",
     dataProfile = "narrow"
   )
 
@@ -519,7 +517,7 @@ test_that("profiles", {
   samp_bio <- readWQPdata(
     siteid = "USGS-04024315",
     dataProfile = "biological",
-    legacy = TRUE
+    service = "Result"
   )
 
   expect_true(all(c(
@@ -531,7 +529,7 @@ test_that("profiles", {
   samp_narrow <- readWQPdata(
     siteid = "USGS-04024315",
     dataProfile = "narrowResult",
-    legacy = TRUE
+    service = "Result"
   )
 
   expect_true(all(c(
@@ -543,7 +541,7 @@ test_that("profiles", {
   samp_activity <- readWQPdata(
     siteid = "USGS-04024315",
     dataProfile = "activityAll",
-    legacy = TRUE
+    service = "Activity"
   )
 
   expect_true(all(c(
@@ -555,8 +553,7 @@ test_that("profiles", {
   act_metrics <- readWQPdata(
     statecode = "WI",
     countycode = "Dane",
-    service = "ActivityMetric",
-    legacy = TRUE
+    service = "ActivityMetric"
   )
 
   expect_true(all(c(
@@ -567,8 +564,7 @@ test_that("profiles", {
   # Data profile: "Result Detection Quantitation Limit Data"
   dl_data <- readWQPdata(
     siteid = "USGS-04024315",
-    service = "ResultDetectionQuantitationLimit",
-    legacy = TRUE
+    service = "ResultDetectionQuantitationLimit"
   )
 
   expect_true(all(c(

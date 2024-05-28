@@ -152,7 +152,8 @@
 #' # Data profiles: "Sampling Activity"
 #' samp_activity <- readWQPdata(
 #'   siteid = "USGS-04024315",
-#'   dataProfile = "activityAll"
+#'   dataProfile = "activityAll",
+#'   service = "Activity"
 #' )
 #'
 #' # Data profile: "Sampling Activity Metrics"

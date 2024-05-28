@@ -21,7 +21,7 @@ is_dataRetrieval_user <- function() {
 
 
 wqp_message_no_legacy <- function(){
-  message("NEWS: Legacy profile requested, and no WQX 3.0
+  message("NEWS: Legacy profile requested, and no equivalent/similar WQX 3.0
 profile currently exists. Legacy profiles do not include newer USGS data. 
 More details: 
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
