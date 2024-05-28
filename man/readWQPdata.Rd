@@ -6,7 +6,7 @@
 \usage{
 readWQPdata(
   ...,
-  service = "WQX",
+  service = "WQX3",
   querySummary = FALSE,
   tz = "UTC",
   ignore_attributes = FALSE,
@@ -80,7 +80,7 @@ provided by the Water Quality Portal:
 WQX:
 \tabular{llll}{
 WQP Radio Button \tab service argument \tab Base URL \tab dataProfile \cr 
-Monitoring Locations \tab StationWQX \tab /wqx3/Station/search \tab \cr
+Monitoring Locations \tab StationWQX3 \tab /wqx3/Station/search \tab \cr
 Full Physical Chemical \tab WQX3 \tab /wqx3/Result/search \tab fullPhysChem \cr
 Narrow \tab WQX3 \tab /wqx3/Result/search \tab narrow \cr
 }
@@ -134,7 +134,7 @@ org_data <- readWQPdata(
 site_data <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
-  service = "StationWQX"
+  service = "StationWQX3"
 )
 
 # Data profiles: "Project Data"

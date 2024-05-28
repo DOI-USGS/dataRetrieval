@@ -61,7 +61,7 @@ whatWQPsites <- function(..., legacy = FALSE) {
   if(legacy){
     baseURL <- drURL("Station", arg.list = values)
   } else {
-    baseURL <- drURL("StationWQX", arg.list = values)
+    baseURL <- drURL("StationWQX3", arg.list = values)
   }
   
   baseURL <- appendDrURL(baseURL, mimeType = "csv")
