@@ -19,7 +19,7 @@ This page will be updated frequently with information about the status of dataRe
 
 # Overview
 
-As of March 11, 2024, NWIS services are "frozen": any public data retrieval will not include any new data. 
+As of March 11, 2024, NWIS **discrete water quality** services are "frozen": any public data retrieval will not include any new data. 
 
 ### NWIS qw services
 
@@ -48,25 +48,34 @@ The current WQP data profiles (available on the main Water Quality Portal web pa
 # What to expect: dataRetrieval specific
 
 
-## readNWISqw
+```{r echo=FALSE}
+df <- data.frame(Function = c("readWQPdata",
+                              "readWQPqw",
+                              "whatWQPsites",
+                              "readWQPsummary",
+                              "whatWQPmetrics",
+                              "whatWQPsamples",
+                              "whatWQPdata",
+                              "readNWISqw",
+                              "whatNWISdata"),
+                 Status = c("Set to WQX3 full profile by default. 'legacy' option exists.",
+                            "Set to WQX3 narrow profile by default. 'legacy' option exists.", 
+                            "Set to WQX3 station profile by default. 'legacy' option exists.",
+                            rep("Currently only available via legacy services.", 4),
+                            "Deprecated: should not be continued to use.",
+                            "Does not have accurate information for qw data."))
 
-Functioning normally but does not include any **new** data collected after March 11, 2024. This function will be going away soon, so consider switching to `readWQPqw` or `readWQPdata`. When the NWIS qw service is eventually shut down - the `readNWISqw` will be removed from dataRetrieval. 
+knitr::kable(df)
+
+```
 
 
 
-
-### Fall 2024
-
-When the NWIS services are decommissioned (possible September 2024): the `readNWISqw` function will be removed from `dataRetrieval`.
-
-See `vignette("qwdata_changes", package = "dataRetrieval")` for information on how to convert your workflows from `readNWISqw` to `readWQPqw`. 
 
 ## whatNWISdata
 
 
 NWIS services are "frozen": the returned data availability will also be frozen ONLY for "qw" data_type_cd results. All other data types should not be affected. 
-
-### Fall 2024
 
 When the NWIS services are decommissioned (possible September 2024): there will no longer be any "qw" information provided in the output of `whatNWISdata`. Discrete water-quality availability will be available via WQP services. More information will be provided as we learn more.
 
@@ -82,33 +91,10 @@ nrow(what_NWIS[what_NWIS$data_type_cd == "qw",])
 
 So for site "05114000", there are 381 NWIS qw parameters that have been measured. Starting mid-March 2024, the data availability for those 381 parameters will be frozen...even if new data is collected. Eventually those 381 rows of data will not be returned, only 26 rows of data will be returned (407-381). 
 
-Once the full transition is completed, we will update with additional guidance. Water Quality Portal data availability can be obtained:
+New services/functions are being developed to replace the lost functionality so check back here for updated information.
 
-```{r eval=FALSE}
-what_WQP_full <- readWQPsummary(siteid = "USGS-05114000")
 
-library(dplyr)
-what_WQP <- what_WQP_full |> 
-  group_by(siteid = MonitoringLocationIdentifier, CharacteristicName) |> 
-  summarise(count = sum(ResultCount, na.rm = TRUE),
-            start_year = min(YearSummarized, na.rm = TRUE),
-            end_year = max(YearSummarized, na.rm = TRUE))
 
-nrow(what_WQP)
-[1] 203
-```
-
-You'll notice that there are fewer rows in the `what_WQP` data frame (203) than "qw" data in the `what_NWIS` (381). This is because there are sometimes more than one parameter code that are associated with a "CharacteristicName". 
-
-## readWQPqw and readWQPdata
-
-### Current Status:
-
-NWIS services are "frozen": no new USGS will be available via any Water Quality Portal query. 
-
-### April 2024
-
-When WQP gets new "data profiles" (April 2024): New data profiles will include ALL USGS data (legacy and new). Shortly after these profiles are released, we plan to update dataRetrieval so that these new profiles are the default. 
 
 # Known Dependencies
 
