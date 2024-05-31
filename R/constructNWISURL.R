@@ -333,13 +333,13 @@ constructNWISURL <- function(siteNumbers,
 #' @return url string
 #' @export
 #' @examples
-#' site_id <- "01594440"
-#' startDate <- "1985-01-01"
+#' site_ids <- c("USGS-02292010", "USGS-02276877")
+#' startDate <- "2020-01-01"
 #' endDate <- ""
-#' pCode <- c("00060", "00010")
+#' pCode <- c("80154", "00613")
 #' url_wqp <- constructWQPURL(
-#'   paste("USGS", site_id, sep = "-"),
-#'   c("01075", "00029", "00453"),
+#'   site_ids,
+#'   pCode,
 #'   startDate, endDate
 #' )
 #' url_wqp
@@ -365,30 +365,34 @@ constructWQPURL <- function(siteNumbers,
                             legacy = FALSE) {
   
   multiplePcodes <- length(parameterCd) > 1
-  siteNumbers <- paste(siteNumbers, collapse = ";")
-
+  
   if (all(nchar(parameterCd) == 5)) {
     suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
   } else {
     pCodeLogic <- FALSE
     parameterCd <- sapply(parameterCd, utils::URLencode, USE.NAMES = FALSE, reserved = TRUE)
   }
-
-  if (multiplePcodes) {
-    parameterCd <- paste(parameterCd, collapse = ";")
-  }
-
+  pcode_name <- ifelse(pCodeLogic, "pCode", "characteristicName")
+  parameterCd <- paste0(pcode_name, "=", parameterCd)
+  
   if(legacy){
+    if (multiplePcodes) {
+      parameterCd <- paste(parameterCd, collapse = ";")
+    }
+    
+    siteNumbers <- paste(siteNumbers, collapse = ";")
     baseURL <- drURL("Result", siteid = siteNumbers, Access = pkg.env$access)
   } else {
-    baseURL <- drURL("WQX3", siteid = siteNumbers, Access = pkg.env$access)
+    if (multiplePcodes) {
+      parameterCd <- paste0(parameterCd, collapse = "&")
+    } 
+    
+    siteNumbers <- paste(paste0("siteid=", siteNumbers), collapse = "&")
+    baseURL <- drURL("WQX3", Access = pkg.env$access)
+    baseURL <- paste0(baseURL, siteNumbers)
   }
   
-  url <- paste0(
-    baseURL,
-    ifelse(pCodeLogic, "&pCode=", "&characteristicName="),
-    parameterCd
-  )
+  url <- paste0(baseURL, "&", parameterCd)
 
   if (nzchar(startDate)) {
     startDate <- format(as.Date(startDate), format = "%m-%d-%Y")
