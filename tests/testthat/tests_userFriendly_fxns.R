@@ -463,7 +463,7 @@ test_that("Construct WQP urls", {
   # nolint start: line_length_linter
   expect_equal(
     url_wqp,
-    "https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-01594440&pCode=01075;00029;00453&startDateLo=01-01-1985&mimeType=csv&dataProfile=narrow"
+    "https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-01594440&pCode=01075&pCode=00029&pCode=00453&startDateLo=01-01-1985&mimeType=csv&dataProfile=narrow"
   )
 
   # nolint end
