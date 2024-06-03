@@ -241,17 +241,11 @@ constructNWISURL <- function(siteNumbers,
       }
     },
     gwlevels = {
-      format <- match.arg(format, c("tsv", "rdb"))
-      
-      formatURL <- switch(format,
-                          rdb = "rdb",
-                          tsv = "rdb"
-      )
-      
+
       url <- appendDrURL(baseURL,
                          site_no = siteNumbers,
                          agency_cd = "USGS",
-                         format = formatURL
+                         format = "rdb"
       )
     },
     { # this will be either dv, uv, groundwater
