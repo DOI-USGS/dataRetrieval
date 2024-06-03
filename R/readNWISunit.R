@@ -473,7 +473,7 @@ readNWISmeas <- function(siteNumbers,
 #' \donttest{
 #' data <- readNWISgwl(site_id)
 #' sites <- c("434400121275801", "375907091432201")
-#' data2 <- readNWISgwl(site_id, "", "")
+#' data2 <- readNWISgwl(sites, "", "")
 #' data3 <- readNWISgwl("420125073193001", "", "")
 #' # handling of data where date has no day
 #' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01")
@@ -493,7 +493,7 @@ readNWISgwl <- function(siteNumbers,
     service = "gwlevels",
     format = "rdb"
   )
-
+  
   data <- importRDB1(
     obs_url = url,
     asDateTime = TRUE,
