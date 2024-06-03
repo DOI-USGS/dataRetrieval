@@ -240,6 +240,20 @@ constructNWISURL <- function(siteNumbers,
         url <- appendDrURL(url, missingData = "off")
       }
     },
+    gwlevels = {
+      format <- match.arg(format, c("tsv", "rdb"))
+      
+      formatURL <- switch(format,
+                          rdb = "rdb",
+                          tsv = "rdb"
+      )
+      
+      url <- appendDrURL(baseURL,
+                         site_no = siteNumbers,
+                         agency_cd = "USGS",
+                         format = formatURL
+      )
+    },
     { # this will be either dv, uv, groundwater
       multiplePcodes <- length(parameterCd) > 1
       # Check for 5 digit parameter code:
@@ -250,35 +264,11 @@ constructNWISURL <- function(siteNumbers,
       format <- match.arg(format, c("xml", "tsv", "wml1", "wml2", "rdb"))
 
       formatURL <- switch(format,
-        xml = {
-          if ("gwlevels" == service) {
-            "waterml"
-          } else {
-            "waterml,1.1"
-          }
-        },
-        rdb = {
-          if ("gwlevels" == service) {
-            "rdb,3.0"
-          } else {
-            "rdb,1.0"
-          }
-        },
-        tsv = {
-          if ("gwlevels" == service) {
-            "rdb"
-          } else {
-            "rdb,1.0"
-          }
-        },
+        xml = "waterml,1.1",
+        rdb = "rdb,1.0",
+        tsv = "rdb,1.0",
         wml2 = "waterml,2.0",
-        wml1 = {
-          if ("gwlevels" == service) {
-            "waterml"
-          } else {
-            "waterml,1.1"
-          }
-        }
+        wml1 = "waterml,1.1"
       )
 
       url <- appendDrURL(baseURL,
