@@ -7,6 +7,7 @@ dataRetrieval 2.7.16
 * Added WQX 3.0 profiles
 * siteInfo attribute for WQP queries converted to a full station return.
 * Cleaned up date conversion in WQP
+* Updated source for groundwater level data from waterservices to waterdata. Note that waterdata services will ALSO need updating within the next year, but this change will allow for some time to make changes.
 
 dataRetrieval 2.7.15
 ===================

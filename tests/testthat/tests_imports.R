@@ -118,9 +118,9 @@ test_that("External importWaterML1 test", {
     startGW, endGW,
     service = "gwlevels"
   )
-  groundWater <- importWaterML1(groundwaterExampleURL)
+  groundWater <- importRDB1(groundwaterExampleURL)
 
-  expect_is(groundWater$dateTime, "character")
+  expect_is(groundWater$lev_dateTime, "POSIXct")
 
   unitDataURL <- constructNWISURL(
     siteNumber, property,
