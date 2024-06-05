@@ -29,7 +29,7 @@ https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 
 wqp_message <- function(){
   message("NEWS: Legacy data profiles will be retired. Please begin converting
-workflows to the WQX 3.0 profiles. ALso, data from legacy profiles do not
+workflows to the WQX 3.0 profiles. Also, data from legacy profiles do not
 include newer USGS data. More details:
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }
