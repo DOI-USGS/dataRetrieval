@@ -373,7 +373,7 @@ There are 2 `dataRetrieval` functions that help:
 
 *  `whatNWISsites` finds sites within a specified filter (quicker)
 *  `whatNWISdata` summarizes the data within the specified filter (more information)
-*  `reaWQPsummary` summarizes the data available within the WQP by year.
+*  `readWQPsummary` summarizes the data available within the WQP by year.
 *  `whatWQPdata` summarizes the data available within the WQP. 
 
 There are several ways to specify the requests. The best way to discover how flexible the USGS web services are is to click on the links and see all of the filtering options:
