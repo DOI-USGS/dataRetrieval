@@ -306,7 +306,7 @@ constructNWISURL <- function(siteNumbers,
 #'
 #' Construct WQP url for data retrieval. This function gets the data from here: \url{https://www.waterqualitydata.us}
 #'
-#' @param siteNumbers string or vector of strings USGS site number.  This is usually an 8 digit number
+#' @param siteNumbers string or vector of strings USGS site number.  
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the earliest possible record.
@@ -376,23 +376,23 @@ constructWQPURL <- function(siteNumbers,
     baseURL <- paste0(baseURL, siteNumbers)
   }
   
-  url <- paste0(baseURL, "&", parameterCd)
+  baseURL <- paste0(baseURL, "&", parameterCd)
 
   if (nzchar(startDate)) {
     startDate <- format(as.Date(startDate), format = "%m-%d-%Y")
-    url <- paste0(url, "&startDateLo=", startDate)
+    baseURL <- paste0(baseURL, "&startDateLo=", startDate)
   }
 
   if (nzchar(endDate)) {
     endDate <- format(as.Date(endDate), format = "%m-%d-%Y")
-    url <- paste0(url, "&startDateHi=", endDate)
+    baseURL <- paste0(baseURL, "&startDateHi=", endDate)
   }
 
-  url <- paste0(url, "&mimeType=csv")
+  baseURL <- paste0(baseURL, "&mimeType=csv")
   if(!legacy){
-    url <- paste0(url, "&dataProfile=narrow")
+    baseURL <- paste0(baseURL, "&dataProfile=narrow")
   }
-  return(url)
+  return(baseURL)
 }
 
 #' Construct URL for NWIS water use data service

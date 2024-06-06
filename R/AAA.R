@@ -20,9 +20,10 @@ is_dataRetrieval_user <- function() {
 }
 
 
-wqp_message_no_legacy <- function(){
+wqp_message_only_legacy <- function(){
   message("NEWS: Legacy profile requested, and no equivalent/similar WQX 3.0
-profile currently exists. Legacy profiles do not include newer USGS data. 
+profile currently exists. Legacy profiles do not include USGS data newer
+than March 11, 2024. 
 More details: 
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }
@@ -30,7 +31,7 @@ https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 wqp_message <- function(){
   message("NEWS: Legacy data profiles will be retired. Please begin converting
 workflows to the WQX 3.0 profiles. Also, data from legacy profiles do not
-include newer USGS data. More details:
+include USGS data newer than March 11, 2024. More details:
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }
 
@@ -53,7 +54,7 @@ is_legacy <- function(service){
 
 wqp_message_now <- function(service){
   if(only_legacy(service)){
-    return(wqp_message_no_legacy())
+    return(wqp_message_only_legacy())
   } else if (service %in% c("Result", "Station")){
     return(wqp_message())
   }
@@ -61,7 +62,7 @@ wqp_message_now <- function(service){
 
 nwis_message <- function(){
   return("WARNING: NWIS does not deliver
-new discrete water quality data or updates to existing data. 
-For additional details, see:
+discrete water quality data newer than March 11, 2024
+or updates to existing data. For additional details, see:
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }

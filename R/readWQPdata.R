@@ -19,6 +19,7 @@
 #' Monitoring Locations \tab StationWQX3 \tab /wqx3/Station/search \tab \cr
 #' Full Physical Chemical \tab WQX3 \tab /wqx3/Result/search \tab fullPhysChem \cr
 #' Narrow \tab WQX3 \tab /wqx3/Result/search \tab narrow \cr
+#' Basic Physical Chemical \tab WQX3 \tab /wqx3/Result/search \tab basicPhysChem \cr
 #' }
 #' 
 #' Legacy:
@@ -84,16 +85,41 @@
 #' nameToUse <- "pH"
 #' pHData <- readWQPdata(siteid = "USGS-04024315", 
 #'                       characteristicName = nameToUse)
+#' ncol(pHData)
 #' attr(pHData, "url")
 #' attr(pHData, "siteInfo")
 #' attr(pHData, "headerInfo")[["dataProviders"]]
 #' attr(pHData, "queryTime")
 #'
-#' pHData <- readWQPdata(siteid = "USGS-04024315", 
+#' # dataProfile = Basic Physical Chemical
+#' pHData_basic <- readWQPdata(siteid = "USGS-04024315", 
+#'                       characteristicName = nameToUse,
+#'                       dataProfile = "basicPhysChem")
+#' attr(pHData_basic, "url") 
+#' ncol(pHData_basic)
+#'
+#' # dataProfile = Narrow
+#' pHData_narrow <- readWQPdata(siteid = "USGS-04024315", 
+#'                       characteristicName = nameToUse,
+#'                       dataProfile = "narrow")
+#' attr(pHData_narrow, "url") 
+#' ncol(pHData_narrow)
+#'
+#' # vs legacy:
+#' pHData_legacy <- readWQPdata(siteid = "USGS-04024315", 
 #'                       characteristicName = nameToUse,
 #'                       service = "Result",
 #'                       dataProfile = "narrowResult")
-#'
+#' attr(pHData_legacy, "url")
+#' 
+#' # Data profiles: "Site Data Only"
+#' site_data <- readWQPdata(
+#'   statecode = "WI",
+#'   countycode = "Dane",
+#'   service = "StationWQX3"
+#' )
+#' 
+#' # More examples:
 #' # querying by county
 #' DeWitt <- readWQPdata(
 #'   statecode = "Illinois",
@@ -101,78 +127,75 @@
 #'   characteristicName = "Nitrogen"
 #' )
 #'
-#' # Data profiles: "Organization Data"
+#' # Legacy examples:
+#' 
+#' # Data profiles: "Organization Data" (legacy)
 #' org_data <- readWQPdata(
 #'   statecode = "WI",
 #'   countycode = "Dane",
 #'   service = "Organization"
 #' )
 #'
-#' # Data profiles: "Site Data Only"
-#' site_data <- readWQPdata(
-#'   statecode = "WI",
-#'   countycode = "Dane",
-#'   service = "StationWQX3"
-#' )
-#'
-#' # Data profiles: "Project Data"
+#' # Data profiles: "Project Data"  (legacy)
 #' project_data <- readWQPdata(
 #'   statecode = "WI",
 #'   countycode = "Dane",
 #'   service = "Project"
 #' )
 #'
-#' # Data profiles: "Project Monitoring Location Weighting Data"
+#' # Data profiles: "Project Monitoring Location Weighting Data"  (legacy)
 #' proj_mlwd <- readWQPdata(
 #'   statecode = "WI",
 #'   countycode = "Dane",
 #'   service = "ProjectMonitoringLocationWeighting"
 #' )
 #'
-#' # Data profiles: "Sample Results (physical/chemical metadata)":
+#' # Data profiles: "Sample Results (physical/chemical metadata)"  (legacy)
 #' samp_data <- readWQPdata(
 #'   siteid = "USGS-04024315",
 #'   dataProfile = "resultPhysChem",
 #'   service = "Result"
 #' )
 #'
-#' # Data profiles: "Sample Results (biological metadata)"
+#' # Data profiles: "Sample Results (biological metadata)"  (legacy)
 #' samp_bio <- readWQPdata(
 #'   siteid = "USGS-04024315",
 #'   dataProfile = "biological",
 #'   service = "Result"
 #' )
 #'
-#' # Data profiles: "Sample Results (narrow)"
+#' # Data profiles: "Sample Results (narrow)" (legacy)
 #' samp_narrow <- readWQPdata(
 #'   siteid = "USGS-04024315",
 #'   dataProfile = "narrow"
 #' )
 #'
-#' # Data profiles: "Sampling Activity"
+#' # Data profiles: "Sampling Activity"  (legacy)
 #' samp_activity <- readWQPdata(
 #'   siteid = "USGS-04024315",
 #'   dataProfile = "activityAll",
 #'   service = "Activity"
 #' )
 #'
-#' # Data profile: "Sampling Activity Metrics"
+#' # Data profile: "Sampling Activity Metrics"  (legacy)
 #' act_metrics <- readWQPdata(
 #'   statecode = "WI",
 #'   countycode = "Dane",
 #'   service = "ActivityMetric"
 #' )
 #'
-#' # Data profile: "Result Detection Quantitation Limit Data"
+#' # Data profile: "Result Detection Quantitation Limit Data"  (legacy)
 #' dl_data <- readWQPdata(
 #'   siteid = "USGS-04024315",
 #'   service = "ResultDetectionQuantitationLimit"
 #' )
 #'
+#' # other options:
 #' Phosphorus <- readWQPdata(
 #'   statecode = "WI", countycode = "Dane", 
 #'   characteristicName = "Phosphorus",
 #'   startDateLo = "2023-01-01",
+#'   ignore_attributes = TRUE,
 #'   convertType = FALSE
 #' )
 #' }

@@ -86,7 +86,7 @@ importWQP <- function(obs_url, tz = "UTC",
 #' 
 #' @param retval Data frame from WQP
 #' @param tz character to set timezone attribute of datetime. Default is UTC
-#' (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' (properly accounting for daylight savings times based on the associated "TimeZone" column).
 #' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
 #' "America/Phoenix", and "America/Metlakatla"
@@ -126,7 +126,6 @@ parse_WQP <- function(retval, tz = "UTC"){
   numberColumns <- unique(c(valueCols, countCols, yearCols, latCols, lonCols, measureCols))
   numberColumns <- numberColumns[!grepl("Code", numberColumns)]
   numberColumns <- numberColumns[!grepl("Unit", numberColumns)]
-  numberColumns <- numberColumns[!grepl("Code", numberColumns)]
   numberColumns <- numberColumns[!grepl("Identifier", numberColumns)]
   numberColumns <- numberColumns[!grepl("Type", numberColumns)]  
   
