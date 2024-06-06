@@ -83,6 +83,7 @@ reference:
       - whatWQPsamples
       - whatWQPmetrics
       - readWQPsummary
+      - wqp_check_status
   - title: National Ground-Water Monitoring Network
     desc: Functions to retrieve NGWMN data.
     contents:

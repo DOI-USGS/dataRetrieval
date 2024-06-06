@@ -21,11 +21,8 @@
 #' in the Characteristic Group dropdown, you will see characteristicType=Nutrient
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
-#' mimeType, zip, and providers is optional (these arguments are picked automatically).
-#' @param checkHeader logical, defaults to \code{FALSE}. If \code{TRUE}, the code
-#' will check that the curl header response for number of rows matches the actual
-#' number of rows. During transition to WQX 3.0 profiles, it's unclear if
-#' the counts will be correct.
+#' mimeType,  and providers is optional (these arguments are picked automatically).
+#' @param legacy Logical. If TRUE, use legacy WQP services. Default is FALSE.
 #' @keywords data import WQP web service
 #' @rdname wqpSpecials
 #' @name whatWQPsites
@@ -46,9 +43,8 @@
 #'   siteType = type
 #' )
 #' }
-whatWQPsites <- function(..., 
-                         checkHeader = FALSE) {
-  values <- readWQPdots(...)
+whatWQPsites <- function(..., legacy = FALSE) {
+  values <- readWQPdots(..., legacy = legacy)
 
   values <- values$values
 
@@ -61,13 +57,16 @@ whatWQPsites <- function(...,
   }
 
   values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
+  
+  if(legacy){
+    baseURL <- drURL("Station", arg.list = values)
+  } else {
+    baseURL <- drURL("StationWQX3", arg.list = values)
+  }
+  
+  baseURL <- appendDrURL(baseURL, mimeType = "csv")
 
-  baseURL <- drURL("Station", arg.list = values)
-
-  baseURL <- appendDrURL(baseURL, mimeType = "tsv")
-
-  retval <- importWQP(baseURL, zip = values["zip"] == "yes",
-                      checkHeader = checkHeader)
+  retval <- importWQP(baseURL)
 
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- baseURL
@@ -96,11 +95,7 @@ whatWQPsites <- function(...,
 #' in the Characteristic Group dropdown, you will see characteristicType=Nutrient
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
-#' mimeType, zip, and providers is optional (these arguments are picked automatically).
-#' @param checkHeader logical, defaults to \code{FALSE}. If \code{TRUE}, the code
-#' will check that the curl header response for number of rows matches the actual
-#' number of rows. During transition to WQX 3.0 profiles, it's unclear if
-#' the counts will be correct.
+#' mimeType, and providers is optional (these arguments are picked automatically).
 #' @return A data frame from the data returned from the Water Quality Portal
 #' @export
 #' @seealso whatWQPsites whatWQPdata
@@ -138,9 +133,10 @@ whatWQPsites <- function(...,
 #'   siteType = "Stream"
 #' )
 #' }
-readWQPsummary <- function(..., checkHeader = FALSE) {
+readWQPsummary <- function(...) {
+
+  wqp_message_only_legacy()
   
-  wqp_message()
   values <- readWQPdots(...)
   
   values <- values$values
@@ -160,14 +156,13 @@ readWQPsummary <- function(..., checkHeader = FALSE) {
   values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
 
   baseURL <- drURL("SiteSummary", arg.list = values)
+  wqp_message_now("SiteSummary")
   baseURL <- appendDrURL(baseURL, mimeType = "csv")
 
   withCallingHandlers(
     {
       retval <- importWQP(baseURL, 
-                          zip = values["zip"] == "yes", 
-                          csv = TRUE, 
-                          checkHeader = checkHeader)
+                          csv = TRUE)
     },
     warning = function(w) {
       if (any(grepl("Number of rows returned not matched in header", w))) {

@@ -31,6 +31,7 @@ variables:
 
 build-image:
   stage: build
+  cache: []
   image: ${DEVOPS_REGISTRY}usgs/docker:20
   services:
   - name: ${DEVOPS_REGISTRY}usgs/docker:20-dind
@@ -44,17 +45,13 @@ build-image:
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
     - cd docker
     - docker build
-        --cache-from ${CI_REGISTRY_IMAGE}:latest
-        -t ${CI_REGISTRY_IMAGE}:BUILD_${CI_COMMIT_SHORT_SHA}
         -t ${CI_REGISTRY_IMAGE}:latest
         .
-    # If this is building a git tag, create the corresponding docker tag
-    - if [ -n "${CI_COMMIT_TAG}" ]; then docker tag ${CI_REGISTRY_IMAGE}:BUILD_${CI_COMMIT_SHORT_SHA} ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}; fi
     - docker push --all-tags ${CI_REGISTRY_IMAGE}
-
 
 buildcheck:
   stage: check
+  cache: []
   dependencies:
     - build-image
   image: ${CI_REGISTRY_IMAGE}:latest
@@ -65,12 +62,14 @@ buildcheck:
 
 unittests:
   stage: test
+  cache: []
   image: ${CI_REGISTRY_IMAGE}:latest
   dependencies:
     - build-image
     - buildcheck
   script:
     - R -e 'library(testthat); options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml")); devtools::test(reporter = "junit")'
+    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
   artifacts:
     when: always
     expire_in: 1 week
@@ -78,25 +77,14 @@ unittests:
       - test-out.xml
     reports:
       junit: test-out.xml
-        
-covertests:
-  stage: test
-  image: ${CI_REGISTRY_IMAGE}:latest
-  dependencies:
-    - build-image
-    - buildcheck
-  script:
-    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
-  artifacts:
-    expire_in: 1 week
-    reports:
       coverage_report:
         coverage_format: cobertura
         path: cobertura.xml
   coverage: '/Coverage: \d+.\d+\%/'
-
+        
 pages:
   stage: end
+  cache: []
   image: ${CI_REGISTRY_IMAGE}:latest
   only: 
     - main

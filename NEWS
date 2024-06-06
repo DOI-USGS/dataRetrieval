@@ -2,6 +2,12 @@ dataRetrieval 2.7.16
 ===================
 * Removed the forced "empty returns" for WQP, since the WQP now has properly formatted empty returns.
 * Moved the column parsing to a dedicated function for WQP.
+* Took out zip option for WQP calls, they are not allowed on WQP anymore.
+* Deprecated getQuerySummary. Users should use readWQPsummary instead.
+* Added WQX 3.0 profiles
+* siteInfo attribute for WQP queries converted to a full station return.
+* Cleaned up date conversion in WQP
+* Updated source for groundwater level data from waterservices to waterdata. Note that waterdata services will ALSO need updating within the next year, but this change will allow for some time to make changes.
 
 dataRetrieval 2.7.15
 ===================

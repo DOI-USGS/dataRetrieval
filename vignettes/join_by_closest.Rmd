@@ -10,6 +10,7 @@ vignette: >
   %\VignetteIndexEntry{Join by closest date}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{dplyr}
 editor_options: 
   chunk_output_type: console
 ---
@@ -78,11 +79,11 @@ Next we'll clean up the discrete water quality "qw" data to make it easy to foll
 
 ```{r trimQWdata}
 qw_trim <- qw_data |> 
-  filter(ActivityTypeCode == "Sample-Routine",
-         !is.na(ActivityStartDateTime)) |> 
-  select(qw_date = ActivityStartDateTime,
-         val_qw = ResultMeasureValue,
-         det_txt = ResultDetectionConditionText)
+  filter(Activity_TypeCode == "Sample - Routine, regular",
+         !is.na(Activity_StartDateTime)) |> 
+  select(qw_date = Activity_StartDateTime,
+         val_qw = Result_Measure,
+         det_txt = Result_ResultDetectionCondition)
 ```
 
 ```{r showqwtrim, echo=FALSE}

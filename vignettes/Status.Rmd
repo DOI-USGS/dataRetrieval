@@ -17,9 +17,11 @@ editor_options:
 
 This page will be updated frequently with information about the status of dataRetrieval services.
 
+Contact CompTools@usgs.gov with additional questions!
+
 # Overview
 
-As of March 11, 2024, NWIS services are "frozen": any public data retrieval will not include any new data. 
+As of March 11, 2024, NWIS **discrete water quality** services are "frozen": any public data retrieval will not include any new data. 
 
 ### NWIS qw services
 
@@ -35,9 +37,10 @@ If you have additional questions about the NWIS qw data service, email CompTools
 
 **New USGS data** _are_ accessible in a pre-release (*beta*) version of the [WQP web page](https://www.waterqualitydata.us/beta/) and new [wqx3 web services](https://waterqualitydata.us/wqx3/). Data are available in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)) for three new "Data Profiles" (how the data is formatted by the WQP):
 
-* Monitoring Location (a.k.a. 'Site' or 'Station')
+* Monitoring Location
 * Narrow results
 * Full Physical Chemical results
+* Basic Physical Chemical
 
 Guidance on how to use the new web page and web services are available in the [User Guide](https://www.waterqualitydata.us/beta/portal_userguide/) and [Web Services Guide](https://www.waterqualitydata.us/beta/webservices_documentation/). Additional profiles will continue to be added to this beta release in the coming weeks. 
 
@@ -48,25 +51,189 @@ The current WQP data profiles (available on the main Water Quality Portal web pa
 # What to expect: dataRetrieval specific
 
 
-## readNWISqw
+```{r echo=FALSE}
+df <- data.frame(Function = c("readWQPdata",
+                              "readWQPqw",
+                              "whatWQPsites",
+                              "whatWQPmetrics",
+                              "whatWQPsamples",
+                              "whatWQPdata",
+                              "readNWISqw",
+                              "readWQPsummary",
+                              "whatNWISdata"),
+                 Status = c("Set to WQX3 full profile by default. 'legacy' option exists.",
+                            "Set to WQX3 narrow profile by default. 'legacy' option exists.", 
+                            "Set to WQX3 station profile by default. 'legacy' option exists.",
+                            rep("Currently only available via legacy services.", 3),
+                            "Deprecated: should not be continued to use.",
+                            "Does not have accurate information for USGS data.",
+                            "Does not have accurate information for qw data."))
 
-Functioning normally but does not include any **new** data collected after March 11, 2024. This function will be going away soon, so consider switching to `readWQPqw` or `readWQPdata`. When the NWIS qw service is eventually shut down - the `readNWISqw` will be removed from dataRetrieval. 
+knitr::kable(df)
+
+```
+
+## readWQPqw
+
+This function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characterisitic names, and start/end dates. 
+
+As of `dataRetrieval` 2.7.15.1, this function will use the WQX 3.0 "narrow" dataProfile. There is an argument "legacy" that allows the user to switch back to the WQX 2.0 profile. Keep in mind the 2.0 profiles will eventually be retired. For any more flexibility, users will need to use the "readWQPdata" function.
+
+An example of a WQX 3.0 return:
+
+```{r}
+library(dataRetrieval)
+rawPcode <- readWQPqw(siteNumbers = "USGS-01594440",
+                      parameterCd = "01075")
+attr(rawPcode, "url")
+```
+
+Compared to using the WQX 2.0 legacy results:
+
+```{r}
+rawPcode_legacy <- readWQPqw(siteNumbers = "USGS-01594440",
+                      parameterCd = "01075",
+                      legacy = TRUE)
+attr(rawPcode_legacy, "url")
+
+```
+
+## readWQPdata
+
+The "readWQPdata" function is the most flexible function to get WQP data. Currently there are 4 options that use the new WQX 3.0 profiles, and 11 legacy options.
+
+### WQX 3.0
+
+There are now 2 "services" available: StationWQX and ResultWQX. The "ResultWQX" service has multiple available "dataProfiles".  
+
+| Service        | dataProfile |
+| -------------- | ----------  |
+| StationWQX     |             |
+| ResultWQX      | fullPhysChem |
+| ResultWQX      | basicPhysChem |
+| ResultWQX      | narrow |
+
+Examples:
+
+```{r}
+data_full <- readWQPdata(siteid = "USGS-04024315",
+                         characteristicName = "pH",
+                         dataProfile = "fullPhysChem",
+                         service = "ResultWQX3")
+ncol(data_full)
+attr(data_full, "url")
+
+data_basic <- readWQPdata(siteid = "USGS-04024315",
+                          characteristicName = "pH",
+                          dataProfile = "basicPhysChem",
+                          service = "ResultWQX3")
+ncol(data_basic)
+attr(data_basic, "url")
+
+data_narrow <- readWQPdata(siteid = "USGS-04024315",
+                           characteristicName = "pH",
+                           dataProfile = "narrow",
+                           service = "ResultWQX3")
+ncol(data_narrow)
+attr(data_narrow, "url")
+
+data_sites <- readWQPdata(siteid = "USGS-04024315",
+                          characteristicName = "pH",
+                          service = "StationWQX3")
+ncol(data_sites)
+attr(data_sites, "url")
+
+```
+
+### WQX 2.0 - Legacy
+
+There are 8 services available from the legacy WQP. The Station and Result legacy services can still be accessed, but users should move to StationWQX and ResultWQX. As other former services become available in WQX 3.0, we will update these documents.
+
+| Service        | dataProfile | WQX 3.0 option? |
+| -------------- | ----------  | ----------  |
+| Station     |             | StationWQX |
+| Result      | resultPhysChem | ResultWQX |
+| Result      | biological |
+| Result      | narrowResult | ResultWQX |
+| Activity    | activityAll  |   |
+| ActivityMetric |           |   |
+| Project     |            |   |
+| ProjectMonitoringLocationWeighting |           |   |
+| ResultDetectionQuantitationLimit |         |   |
+| BiologicalMetric |     |   |
+
+Examples: 
+
+```{r eval=FALSE}
+# Data profiles: "Organization Data" (legacy)
+org_data <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "Organization"
+)
+
+# Data profiles: "Project Data"  (legacy)
+project_data <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "Project"
+)
+
+# Data profiles: "Project Monitoring Location Weighting Data"  (legacy)
+proj_mlwd <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "ProjectMonitoringLocationWeighting"
+)
+
+# Data profiles: "Sample Results (physical/chemical metadata)"  (legacy)
+samp_data <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "resultPhysChem",
+  service = "Result"
+)
+
+# Data profiles: "Sample Results (biological metadata)"  (legacy)
+samp_bio <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "biological",
+  service = "Result"
+)
+
+# Data profiles: "Sample Results (narrow)" (legacy)
+samp_narrow <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "narrowResult",
+  service = "Result"
+)
+
+# Data profiles: "Sampling Activity"  (legacy)
+samp_activity <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "activityAll",
+  service = "Activity"
+)
 
 
+# Data profile: "Sampling Activity Metrics"  (legacy)
+act_metrics <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "ActivityMetric"
+)
 
+# Data profile: "Result Detection Quantitation Limit Data"  (legacy)
+dl_data <- readWQPdata(
+  siteid = "USGS-04024315",
+  service = "ResultDetectionQuantitationLimit"
+)
 
-### Fall 2024
-
-When the NWIS services are decommissioned (possible September 2024): the `readNWISqw` function will be removed from `dataRetrieval`.
-
-See `vignette("qwdata_changes", package = "dataRetrieval")` for information on how to convert your workflows from `readNWISqw` to `readWQPqw`. 
+```
 
 ## whatNWISdata
 
 
 NWIS services are "frozen": the returned data availability will also be frozen ONLY for "qw" data_type_cd results. All other data types should not be affected. 
-
-### Fall 2024
 
 When the NWIS services are decommissioned (possible September 2024): there will no longer be any "qw" information provided in the output of `whatNWISdata`. Discrete water-quality availability will be available via WQP services. More information will be provided as we learn more.
 
@@ -82,33 +249,10 @@ nrow(what_NWIS[what_NWIS$data_type_cd == "qw",])
 
 So for site "05114000", there are 381 NWIS qw parameters that have been measured. Starting mid-March 2024, the data availability for those 381 parameters will be frozen...even if new data is collected. Eventually those 381 rows of data will not be returned, only 26 rows of data will be returned (407-381). 
 
-Once the full transition is completed, we will update with additional guidance. Water Quality Portal data availability can be obtained:
+New services/functions are being developed to replace the lost functionality so check back here for updated information.
 
-```{r eval=FALSE}
-what_WQP_full <- readWQPsummary(siteid = "USGS-05114000")
 
-library(dplyr)
-what_WQP <- what_WQP_full |> 
-  group_by(siteid = MonitoringLocationIdentifier, CharacteristicName) |> 
-  summarise(count = sum(ResultCount, na.rm = TRUE),
-            start_year = min(YearSummarized, na.rm = TRUE),
-            end_year = max(YearSummarized, na.rm = TRUE))
 
-nrow(what_WQP)
-[1] 203
-```
-
-You'll notice that there are fewer rows in the `what_WQP` data frame (203) than "qw" data in the `what_NWIS` (381). This is because there are sometimes more than one parameter code that are associated with a "CharacteristicName". 
-
-## readWQPqw and readWQPdata
-
-### Current Status:
-
-NWIS services are "frozen": no new USGS will be available via any Water Quality Portal query. 
-
-### April 2024
-
-When WQP gets new "data profiles" (April 2024): New data profiles will include ALL USGS data (legacy and new). Shortly after these profiles are released, we plan to update dataRetrieval so that these new profiles are the default. 
 
 # Known Dependencies
 

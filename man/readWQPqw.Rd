@@ -10,10 +10,10 @@ readWQPqw(
   startDate = "",
   endDate = "",
   tz = "UTC",
+  legacy = FALSE,
   querySummary = FALSE,
   ignore_attributes = FALSE,
-  convertType = TRUE,
-  checkHeader = FALSE
+  convertType = TRUE
 )
 }
 \arguments{
@@ -41,6 +41,8 @@ time: "America/Honolulu",
 See also  \code{OlsonNames()}
 for more information on time zones.}
 
+\item{legacy}{Logical. If TRUE, use legacy WQP services. Default is FALSE.}
+
 \item{querySummary}{logical to look at number of records and unique sites that
 will be returned from this query.}
 
@@ -50,11 +52,6 @@ attributes. Default is \code{FALSE}.}
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
-
-\item{checkHeader}{logical, defaults to \code{FALSE}. If \code{TRUE}, the code
-will check that the curl header response for number of rows matches the actual
-number of rows. During transition to WQX 3.0 profiles, it's unclear if
-the counts will be correct.}
 }
 \value{
 A data frame derived from the default data profile.
@@ -80,13 +77,15 @@ site name, such as 'USGS-01234567'.
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
+
+attr(rawPcode, "url")
+attr(rawPcode, "siteInfo")
+attr(rawPcode, "queryTime")
+attr(rawPcode, "headerInfo")[["dataProviders"]]
+
 rawCharacteristicName <- readWQPqw("WIDNR_WQX-10032762", "Specific conductance", "", "")
 rawPHsites <- readWQPqw(c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"), "pH", "", "")
-nwisEx <- readWQPqw("USGS-04024000", c("34247", "30234", "32104", "34220"), "", "2012-12-20")
-nwisEx.summary <- readWQPqw("USGS-04024000", c("34247", "30234", "32104", "34220"),
-  "", "2012-12-20",
-  querySummary = TRUE
-)
+nwisEx <- readWQPqw("USGS-04024000", c("34247", "30234", "32104", "34220"), "", "2022-12-20")
 
 SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", convertType = FALSE)
 }

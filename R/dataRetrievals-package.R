@@ -175,6 +175,13 @@ NULL
 #
 # countyCd <- county_df_full
 # stateCd <- state_df
+# 
+# offsetLibrary <- data.frame(
+#   offset = c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0, 0, 0),
+#   code = c("EST", "EDT", "CST", "CDT", "MST", "MDT", "PST", "PDT",
+#            "AKST", "AKDT", "HAST", "HST", "UTC", "", NA, "GMT")
+# )
+# 
 # save(countyCd, stateCd, parameterCdFile, pCodeToName,
 #      file = "R/sysdata.rda", compress = "xz")
 # nolint end
