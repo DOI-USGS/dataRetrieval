@@ -6,11 +6,11 @@
 \alias{whatWQPsites}
 \title{Site Data Import from Water Quality Portal}
 \usage{
-whatWQPsamples(..., convertType = TRUE, checkHeader = FALSE)
+whatWQPsamples(..., convertType = TRUE)
 
-whatWQPmetrics(..., convertType = TRUE, checkHeader = FALSE)
+whatWQPmetrics(..., convertType = TRUE)
 
-whatWQPsites(..., checkHeader = FALSE)
+whatWQPsites(..., legacy = FALSE)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation}
@@ -24,16 +24,13 @@ after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
 in the Characteristic Group dropdown, you will see characteristicType=Nutrient
 in the Query URL. The corresponding argument for dataRetrieval is
 characteristicType = "Nutrient". dataRetrieval users do not need to include
-mimeType, zip, and providers is optional (these arguments are picked automatically).}
+mimeType,  and providers is optional (these arguments are picked automatically).}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE},
 the function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
 
-\item{checkHeader}{logical, defaults to \code{FALSE}. If \code{TRUE}, the code
-will check that the curl header response for number of rows matches the actual
-number of rows. During transition to WQX 3.0 profiles, it's unclear if
-the counts will be correct.}
+\item{legacy}{Logical. If TRUE, use legacy WQP services. Default is FALSE.}
 }
 \value{
 data frame

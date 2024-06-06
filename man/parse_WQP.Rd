@@ -10,7 +10,7 @@ parse_WQP(retval, tz = "UTC")
 \item{retval}{Data frame from WQP}
 
 \item{tz}{character to set timezone attribute of datetime. Default is UTC
-(properly accounting for daylight savings times based on the data's provided tz_cd column).
+(properly accounting for daylight savings times based on the associated "TimeZone" column).
 Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
 "America/Phoenix", and "America/Metlakatla"}

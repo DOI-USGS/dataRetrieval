@@ -29,6 +29,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+**IMPORTANT** These recommendations have been updated using WQX3.0 profiles. 
+
 # Changes to NWIS water quality services
 
 USGS discrete water samples data are undergoing modernization, and NWIS services will no longer be updated with the latest data starting mid-March 2024, with a full decommission expected 6 months later.
@@ -36,33 +38,42 @@ USGS discrete water samples data are undergoing modernization, and NWIS services
 For the latest news on USGS water quality data, see:
 [https://doi-usgs.github.io/dataRetrieval/articles/Status.html](https://doi-usgs.github.io/dataRetrieval/articles/Status.html). Learn more about the changes and where to find the new samples data in the [WDFN blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
-**IMPORTANT** These recommendations will change as new WQP data profiles are released (expected late April 2024). The recommendations below assume WQP 3.0 profiles are not available. Once those are released, these recommendations will be updated.
-
 What does this mean for `dataRetrieval` users? Eventually water quality data will ONLY be available from the [Water Quality Portal](https://www.waterqualitydata.us/) rather than the NWIS services. There are 3 major `dataRetrieval` functions that will be affected: `readNWISqw`, `whatNWISdata`, and `readNWISdata`. This vignette will describe the most common workflows conversions needed to update existing scripts. 
 
-This vignette is being provided well in advance of any breaking changes, and more information and guidance will be provided. If you need more help than is provided here, please reach out to gs-w-IOW_PO_team@usgs.gov
+# How to find more help
 
+This vignette is being provided in advance of any breaking changes, and more information and guidance will be provided. These changes are big, and initially sound overwhelming. But in the end, they are thoughtful changes that will make understanding USGS water data more intuitive. Please reach out for questions and comments to: gs-w-IOW_PO_team@usgs.gov
+
+# WQX2 -> WQX3
+
+If you have already converted your workflow from NWIS to WQP, much of the hard work has been done! The final step of the process is to make sure workflows are using the most modern WQX3 formats. WQX stands for Water Quality Exchange. WQX2 is the format that has been historically available on the Water Quality Portal, WQX3 is the more modern format that all the data is being converted to.
+
+
+This is available as of `dataRetrieval` version 2.7.16. Starting with 2.7.16, all WQP functions default to the newer "WQX3" profiles if available. See  [WQX Conversions](#conversion) below to get a table of column names in WQX3 vs WQX2.
+
+# NWIS -> WQX3
 
 ## `readNWISqw`
 
-Starting with version 2.7.9, users will notice a Warning message when using this function:
+Users will notice a Warning message when using this function:
 
 ```{r eval=FALSE}
-
 site_ids <- c("04024430", "04024000")
 parameterCd <- c("34247", "30234", "32104", "34220")
 nwisData <- readNWISqw(site_ids, parameterCd)
 ```
 
 ```
-Warning message:                                                                                               
-NWIS qw web services are being retired. Please see the vignette 
-'Changes to NWIS QW services' for more information. 
+Warning message:                                                
+In readNWISqw(site_ids, parameterCd) : WARNING: NWIS does not deliver discrete water quality data newer than March 11, 2024 for updates to existing data. For additional details, see:
+https://doi-usgs.github.io/dataRetrieval/articles/Status.html
 ```
 
 Please don't ignore this warning, the function will eventually be *removed* from the `dataRetrieval` package.
 
-So...what do you do instead? The function you will need to move to is `readWQPqw`. First, you'll need to convert the USGS site ID's into something that the Water Quality Portal will accept. Luckily, that's a single line pasting a prefix "USGS-". Here's an example:
+So...what do you do instead? The function you will need to move to is `readWQPqw`. First, you'll need to convert the numeric USGS site ID's into something that the Water Quality Portal will accept, which requires the agency prefix. For most USGS sites this will mean pasting 'USGS-' before the site number, although it is important to note that there are some USGS sites that begin with a different prefix: it is up to users to determine the agency code..
+
+Here's an example:
 
 ```{r eval=FALSE}
 wqpData <- readWQPqw(paste0("USGS-", site_ids), parameterCd)
@@ -75,86 +86,63 @@ wqpData <- readRDS("wqpData.rds")
 
 Let's compare the number of rows, number of columns, and attributes to each return:
 
-<table class='table'>
-<tr> <th>NWIS</th> <th>WQP</th> <tr>
-<tr>
-<td>
+
 ```{r}
 nrow(nwisData)
-```
-</td>
-<td>
-```{r}
 nrow(wqpData)
 ```
-</td>
-</tr>
-<tr>
-<td>
+
+So, same number of rows returned. That's good, since it's the same data.
+
 ```{r}
 ncol(nwisData)
-```
-</td>
-<td>
-```{r}
 ncol(wqpData)
 ```
-</td>
-</tr>
-<tr>
-<td>
+
+Different columns!
+
 ```{r}
 names(attributes(nwisData))
-```
-</td>
-<td>
-```{r}
 names(attributes(wqpData))
 ```
-</td>
-</tr>
-</table>
 
-The same number of rows are returned (because at it's core, it IS the same data), more columns in the Water Quality Portal output, and slightly different attributes. You can explore the differences of those attributes:
+Slightly different attributes. You can explore the differences of those attributes:
 
 ```{r}
 site_NWIS <- attr(nwisData, "siteInfo")
 site_WQP <- attr(wqpData, "siteInfo")
-
-param_NWIS <- attr(nwisData, "variableInfo")
-param_WQP <- attr(wqpData, "variableInfo")
 ```
 
-The next big task is figuring out which columns from the WQP output map to the original columns from the NWIS output. The vast majority of workflows will not need to completely re-engineer the WQP output back into the NWIS format. Instead, look at your workflow and determine what columns from the original NWIS output are needed to preserve the integrity of the workflow. 
+The next big task is figuring out which columns from the WQP output map to the original columns from the NWIS output. Look at your workflow and determine what columns from the original NWIS output are needed to preserve the integrity of the workflow. 
 
 Let's use the `dplyr` package to pull out the columns are used in this example workflow, and make sure both NWIS and WQP are ordered in the same way.
 
 ```{r}
 library(dplyr)
 
-nwisData_relavent <- nwisData %>%
+nwisData_relevant <- nwisData |> 
   select(
     site_no, startDateTime, parm_cd,
-    hyd_cond_cd, remark_cd, result_va
-  ) %>%
+    remark_cd, result_va
+  ) |> 
   arrange(startDateTime, parm_cd)
 
-knitr::kable(head(nwisData_relavent))
+knitr::kable(head(nwisData_relevant))
 ```
 
-If we explore the output from WQP, we can try to find the columns that include the same relavent information:
+If we explore the output from WQP, we can try to find the columns that include the same relevant information:
 ```{r}
-wqpData_relavent <- wqpData %>%
+wqpData_relevant <- wqpData |> 
   select(
-    site_no = MonitoringLocationIdentifier,
-    startDateTime = ActivityStartDateTime,
-    parm_cd = USGSPCode,
-    hyd_cond_cd = HydrologicCondition,
-    remark_cd = ResultDetectionConditionText,
-    result_va = ResultMeasureValue
-  ) %>%
+    site_no = Location_Identifier,
+    startDateTime = Activity_StartDateTime,
+    parm_cd = USGSpcode,
+    remark_cd = Result_ResultDetectionCondition,
+    result_va = Result_Measure,
+    detection_level = DetectionLimit_MeasureA
+  ) |> 
   arrange(startDateTime, parm_cd)
-knitr::kable(head(wqpData_relavent))
+knitr::kable(head(wqpData_relevant))
 ```
 
 Now we can start looking at the results and trying to decide how future workflows should be setup. Here are some decisions for this example that we can consider:
@@ -176,98 +164,36 @@ censored_text <- c(
   "Below Quantification Limit"
 )
 
-wqpData_relavent <- wqpData %>%
+wqpData_relevant <- wqpData |> 
   mutate(left_censored = grepl(paste(censored_text, collapse = "|"),
-    ResultDetectionConditionText,
+    Result_ResultDetectionCondition,
     ignore.case = TRUE
-  )) %>%
+  )) |> 
   select(
-    site_no = MonitoringLocationIdentifier,
-    startDateTime = ActivityStartDateTime,
-    parm_cd = USGSPCode,
+    site_no = Location_Identifier,
+    startDateTime = Activity_StartDateTime,
+    parm_cd = USGSpcode,
     left_censored,
-    result_va = ResultMeasureValue,
-    detection_level = DetectionQuantitationLimitMeasure.MeasureValue,
-    dl_units = DetectionQuantitationLimitMeasure.MeasureUnitCode
-  ) %>%
+    result_va = Result_Measure,
+    detection_level = DetectionLimit_MeasureA,
+    dl_units = DetectionLimit_MeasureUnitA
+  ) |> 
   arrange(startDateTime, parm_cd)
 
-knitr::kable(head(wqpData_relavent))
+knitr::kable(head(wqpData_relevant))
 ```
 
 ### NWIS codes
 
-Another difference that is going to require some thoughtful decisions is how to interpret additional NWIS codes. They will now be descriptive text. Columns such as hyd_cond_cd, samp_type_cd, hyd_event_cd, medium_cd will now all be reported with descriptive words rather than single letters or numbers. It will be the responsibility of the user to consider the best way to deal with these changes. 
-
-To take full advantage of the Water Quality Portal, it would be a good idea to begin to move away from USGS parameter codes. While USGS data includes a parameter code, there are many other water quality data sources within the Water Quality Portal. To compare USGS and non-USGS data, you'll need to compare data that has at least the same characteristic name and measured units. There are many other fields that may be required to assure you are comparing apples-to-apples. For example, "ResultSampleFractionText" is important in many measured parameters.
-
-The measurement units are found in EITHER the "ResultMeasure.MeasureUnitCode" column, OR the "DetectionQuantitationLimitMeasure.MeasureUnitCode" column, depending on if the individual measurement is censored or not.
-
-
-```{r}
-wqpData_relavent_codes <- wqpData %>%
-  mutate(units = ifelse(is.na(ResultMeasure.MeasureUnitCode),
-    DetectionQuantitationLimitMeasure.MeasureUnitCode,
-    ResultMeasure.MeasureUnitCode
-  )) %>%
-  select(
-    parm_cd = USGSPCode,
-    CharacteristicName, ResultSampleFractionText,
-    units
-  ) %>%
-  distinct()
-
-knitr::kable(wqpData_relavent_codes)
-```
-
-If there are USGS codes that you are using in your analysis, begin to move away from those codes, and move to the text. In the data we are looking at here:
-
-```{r}
-wqpData_with_codes <- wqpData %>%
-  select(
-    HydrologicCondition, HydrologicEvent,
-    ActivityTypeCode, ActivityMediaName
-  ) %>%
-  distinct()
-
-knitr::kable(head(wqpData_with_codes))
-```
-
-To convert the codes found in this example:
-
-```{r codes, echo=FALSE}
-df <- data.frame(
-  NWIS = c(
-    "samp_type_cd = 9",
-    "hyd_cond_cd = 9",
-    "hyd_cond_cd = 5",
-    "hyd_cond_cd = 8",
-    "medium_cd = 'WS'",
-    "hyd_event_cd = 'B'",
-    "hyd_event_cd = 'A'",
-    "hyd_event_cd = 9"
-  ),
-  WQP = c(
-    "ActivityTypeCode = 'Sample-Routine'",
-    "HydrologicCondition = 'Stable, normal stage'",
-    "HydrologicCondition = 'Falling stage'",
-    "HydrologicCondition = 'Rising stage'",
-    "ActivityMediaName = 'Water'",
-    "HydrologicEvent = 'Under ice cover'",
-    "HydrologicEvent = 'Spring breakup'",
-    "HydrologicEvent = 'Routine sample'"
-  )
-)
-knitr::kable(df)
-```
+Another difference that is going to require some thoughtful decisions is how to interpret additional NWIS codes. They will now be descriptive text. Columns such as samp_type_cd and medium_cd will now all be reported with descriptive words rather than single letters or numbers. It will be the responsibility of the user to consider the best way to deal with these changes. 
 
 If you use the `readNWISqw` function, you WILL need to adjust your workflows, and you may find there are more codes you will need to account for. Hopefully this section helped get you started. It does not include every scenario, so you may find more columns or codes or other conditions you need to account for.  
 
 # whatNWISdata
 
-This function will continue to work for any service except "qw" (water quality discrete data). "qw" results will no longer be returned. This function is used to discover what water quality data is available.
+This function will continue to work for any service EXCEPT "qw" (water quality discrete data). "qw" results will eventually no longer be returned, and are currently showing values that were frozen in March 2024. 
 
-The function to replace this functionality is `whatWQPdata`:
+The function to replace this functionality for discrete water quality data is currently `whatWQPdata`:
 
 ```{r whatdata, eval=FALSE}
 whatNWIS <- whatNWISdata(
@@ -277,9 +203,10 @@ whatNWIS <- whatNWISdata(
 ```
 
 ```
-Warning message:                                                                                               
-NWIS qw web services are being retired. Please see the vignette 
-'Changes to NWIS QW services' for more information.
+WARNING: NWIS does not deliver
+new discrete water quality data or updates to existing data. 
+For additional details, see:
+https://doi-usgs.github.io/dataRetrieval/articles/Status.html
 ```
 
 ```{r whatdatanew, eval=FALSE}
@@ -290,36 +217,33 @@ There are some major differences in the output. The NWIS services offers back on
 
 # readNWISdata
 
-If you get your water quality data from the `readNWISdata` function, you will receive a warning. Note, this is *only* for the "qwdata" service. All other web services are not being deprecated, and should receive no warning.
-
-```{r eval=FALSE}
-qwData <- readNWISdata(
-  state_cd = "WI",
-  startDate = "2000-01-01",
-  drain_area_va_min = 50, qw_count_nu = 50,
-  qw_attributes = "expanded",
-  qw_sample_wide = "wide",
-  list_of_search_criteria = c(
-    "state_cd",
-    "drain_area_va",
-    "obs_count_nu"
-  ),
-  service = "qw"
-)
-```
-
-```
-Warning message:
-NWIS qw web services are being retired. Please see the vignette 
-'Changes to NWIS QW services' for more information. 
-```
-This is not an especially common `dataRetrieval` workflow, so there are not a lot of details here. Please reach out if more information is needed to update your workflows.
+If you get your water quality data from the `readNWISdata` function, no new data will be available and the function will generate a warning message. The other services are working as before. This is not an especially common `dataRetrieval` workflow, so there are not a lot of details here. Please reach out if more information is needed to update your workflows.
 
 See `?readWQPdata` to see all the ways to query data in the Water Quality Portal. Use the suggestions above to convert the output of the `readWQPdata` function to convert the WQP output to what is important for your workflow.
 
-# How to find more help
+# WQX Conversion {#conversion}
 
-These changes are big, and initially sound overwhelming. But in the end, they are thoughtful changes that will make understanding USGS water data more intuitive. Please reach out for questions and comments to: gs-w-IOW_PO_team@usgs.gov
+A table is provided on the EPA website that shows the conversions of WQX3 to the WQX2 mappings. This table may change periodically while WQP services are under active development, which is expected to last through Fall 2024.
+
+
+Here is an example for pulling the EPA table and comparing column names. 
+
+```{r echo=TRUE, eval=TRUE}
+schema <- readr::read_csv("https://www.epa.gov/system/files/other-files/2024-02/schema_outbound_wqx3.0_0.csv")
+```
+
+Within that schema table, the column "FieldName3.0" shows the column names for the new WQX3 profile. There are several "FieldName2.0.XXXX" columns that show how the older 2.0 profiles align with the newer columns.
+
+For example, the 2.0 "narrow" dataProfile match up with these new WQP3 columns:
+```{r echo=TRUE, eval=TRUE}
+sub_schema <- schema |> 
+  select(WQX3 = FieldName3.0,
+         WQX2 = FieldName2.0.Narrow) |> 
+  filter(!is.na(WQX2))
+
+knitr::kable(sub_schema)
+
+```
 
 # Disclaimer
 

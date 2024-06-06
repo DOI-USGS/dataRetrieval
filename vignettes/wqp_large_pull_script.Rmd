@@ -16,7 +16,7 @@ library(knitr)
 
 opts_chunk$set(
   echo=TRUE,
-  eval=TRUE,
+  eval=FALSE,
   fig.width = 7,
   fig.height = 5,
   warning = FALSE,
@@ -94,7 +94,8 @@ for(i in seq_len(nrow(state_cd_cont))){
                   startDateHi = "2023-12-31",
                   sampleMedia = "Water", 
                   convertType = FALSE,
-                  ignore_attributes = TRUE)
+                  ignore_attributes = TRUE,
+                  legacy = TRUE)
     }, 
     error=function(cond) {
       message(paste("No data in:", state_nm))

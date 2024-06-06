@@ -51,15 +51,6 @@
 #' \donttest{
 #' data <- importWaterML1(obs_url, asDateTime = TRUE)
 #'
-#' groundWaterSite <- "431049071324301"
-#' startGW <- "2013-10-01"
-#' endGW <- "2014-06-30"
-#' groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
-#'   startGW, endGW,
-#'   service = "gwlevels"
-#' )
-#' groundWater <- importWaterML1(groundwaterExampleURL)
-#' groundWater2 <- importWaterML1(groundwaterExampleURL, asDateTime = TRUE)
 #'
 #' unitDataURL <- constructNWISURL(
 #'   site_id, property,

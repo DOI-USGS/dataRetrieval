@@ -20,23 +20,49 @@ is_dataRetrieval_user <- function() {
 }
 
 
+wqp_message_only_legacy <- function(){
+  message("NEWS: Legacy profile requested, and no equivalent/similar WQX 3.0
+profile currently exists. Legacy profiles do not include USGS data newer
+than March 11, 2024. 
+More details: 
+https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
+}
+
 wqp_message <- function(){
-  message("NEWS: USGS data availability and format are changing. 
-Beginning in mid-March 2024 the data obtained from legacy profiles
-will not include new USGS data or recent updates to existing data. 
-To view the status of changes in data availability and code functionality, visit:
-https://doi-usgs.github.io/dataRetrieval/articles/Status.html
-If you have additional questions about these changes, 
-email CompTools@usgs.gov.")
+  message("NEWS: Legacy data profiles will be retired. Please begin converting
+workflows to the WQX 3.0 profiles. Also, data from legacy profiles do not
+include USGS data newer than March 11, 2024. More details:
+https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
+}
+
+only_legacy <- function(service){
+  legacy <- service %in% c("Activity", "Organization",
+                 "ActivityMetric", "SiteSummary",
+                 "Project", "ProjectMonitoringLocationWeighting",
+                 "ResultDetectionQuantitationLimit", "BiologicalMetric")
+  return(legacy)
+}
+
+is_legacy <- function(service){
+  legacy <- service %in% c("Result", "Station",
+                           "Activity", "Organization",
+                           "ActivityMetric", "SiteSummary",
+                           "Project", "ProjectMonitoringLocationWeighting",
+                           "ResultDetectionQuantitationLimit", "BiologicalMetric")
+  return(legacy)
+}
+
+wqp_message_now <- function(service){
+  if(only_legacy(service)){
+    return(wqp_message_only_legacy())
+  } else if (service %in% c("Result", "Station")){
+    return(wqp_message())
+  }
 }
 
 nwis_message <- function(){
-  return("WARNING: Beginning in mid-March 2024, NWIS will not deliver
-new discrete water quality data or updates to existing data. 
-For updated information visit: https://waterdata.usgs.gov/nwis/qwdata
-For additional details, see:
-https://doi-usgs.github.io/dataRetrieval/articles/Status.html
-https://doi-usgs.github.io/dataRetrieval/articles/qwdata_changes.html
-If you have additional questions about the qw data service,
-email CompTools@usgs.gov.")
+  return("WARNING: NWIS does not deliver
+discrete water quality data newer than March 11, 2024
+or updates to existing data. For additional details, see:
+https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }

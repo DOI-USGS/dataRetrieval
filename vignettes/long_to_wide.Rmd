@@ -75,16 +75,15 @@ The data comes back with 67 columns, let's pull out the ones we decide are impor
 ```{r}
 
 nutrient_data_slim <- nutrient_data |> 
-  select(date = ActivityStartDateTime,
-         site = MonitoringLocationIdentifier,
-         param = CharacteristicName,
-         fraction = ResultSampleFractionText,
-         condition = ResultDetectionConditionText,
-         value = ResultMeasureValue,
-         det_va = DetectionQuantitationLimitMeasure.MeasureValue,
-         units = ResultMeasure.MeasureUnitCode,
-         det_units = DetectionQuantitationLimitMeasure.MeasureUnitCode
-         ) |> 
+  select(date = Activity_StartDateTime,
+         site = Location_Identifier,
+         param = Result_Characteristic,
+         fraction = Result_SampleFraction,
+         condition = Result_ResultDetectionCondition,
+         value = Result_Measure,
+         det_va = DetectionLimit_MeasureA,
+         units = Result_MeasureUnit,
+         det_units = DetectionLimit_MeasureUnitA) |> 
   mutate(units = if_else(is.na(units), det_units, units)) |> 
   select(-det_units) |> 
   filter(!is.na(date))

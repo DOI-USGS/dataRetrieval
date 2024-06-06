@@ -16,15 +16,18 @@
 #'
 #' @examples
 #' \donttest{
-#' nwisData <- readNWISdv("04085427", "00060", "2012-01-01", "2012-06-30")
+#' nwisData <- readNWISdv("04085427", "00060", "2022-01-01", "2022-06-30")
 #' nwisData <- addWaterYear(nwisData)
 #'
 #' wqpData <- readWQPqw("USGS-01594440", "01075", "", "")
 #' wqpData <- addWaterYear(wqpData)
 #' }
 addWaterYear <- function(rawData) {
-  allowedDateColNames <- c("dateTime", "Date", "ActivityStartDate", "ActivityEndDate")
-  allowedWYColNames <- c("waterYear", "waterYear", "ActivityStartWaterYear", "ActivityEndWaterYear")
+  allowedDateColNames <- c("dateTime", "Date", "ActivityStartDate", 
+                           "ActivityEndDate", "Activity_StartDate", "Activity_EndDate")
+  allowedWYColNames <- c("waterYear", "waterYear", "ActivityStartWaterYear", 
+                         "ActivityEndWaterYear", "Activity_StartDateWaterYear",
+                         "Activity_EndDateWaterYear")
   names(allowedWYColNames) <- allowedDateColNames
   # only allow WY to be added if there is an appropriate date column
   if (all(!allowedDateColNames %in% names(rawData))) {
