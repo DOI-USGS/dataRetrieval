@@ -37,7 +37,7 @@ If you have additional questions about the NWIS qw data service, email CompTools
 
 **New USGS data** _are_ accessible in a pre-release (*beta*) version of the [WQP web page](https://www.waterqualitydata.us/beta/) and new [wqx3 web services](https://waterqualitydata.us/wqx3/). Data are available in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)) for three new "Data Profiles" (how the data is formatted by the WQP):
 
-* Monitoring Location (a.k.a. 'Site' or 'Station')
+* Monitoring Location
 * Narrow results
 * Full Physical Chemical results
 * Basic Physical Chemical
@@ -73,8 +73,162 @@ knitr::kable(df)
 
 ```
 
+## readWQPqw
+
+This function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characterisitic names, and start/end dates. 
+
+As of `dataRetrieval` 2.7.15.1, this function will use the WQX 3.0 "narrow" dataProfile. There is an argument "legacy" that allows the user to switch back to the WQX 2.0 profile. Keep in mind the 2.0 profiles will eventually be retired. For any more flexibility, users will need to use the "readWQPdata" function.
+
+An example of a WQX 3.0 return:
+
+```{r}
+library(dataRetrieval)
+rawPcode <- readWQPqw(siteNumbers = "USGS-01594440",
+                      parameterCd = "01075")
+attr(rawPcode, "url")
+```
+
+Compared to using the WQX 2.0 legacy results:
+
+```{r}
+rawPcode_legacy <- readWQPqw(siteNumbers = "USGS-01594440",
+                      parameterCd = "01075",
+                      legacy = TRUE)
+attr(rawPcode_legacy, "url")
+
+```
+
+## readWQPdata
+
+The "readWQPdata" function is the most flexible function to get WQP data. Currently there are 4 options that use the new WQX 3.0 profiles, and 11 legacy options.
+
+### WQX 3.0
+
+There are now 2 "services" available: StationWQX and ResultWQX. The "ResultWQX" service has multiple available "dataProfiles".  
+
+| Service        | dataProfile |
+| -------------- | ----------  |
+| StationWQX     |             |
+| ResultWQX      | fullPhysChem |
+| ResultWQX      | basicPhysChem |
+| ResultWQX      | narrow |
+
+Examples:
+
+```{r}
+data_full <- readWQPdata(siteid = "USGS-04024315",
+                         characteristicName = "pH",
+                         dataProfile = "fullPhysChem",
+                         service = "ResultWQX3")
+ncol(data_full)
+attr(data_full, "url")
+
+data_basic <- readWQPdata(siteid = "USGS-04024315",
+                          characteristicName = "pH",
+                          dataProfile = "basicPhysChem",
+                          service = "ResultWQX3")
+ncol(data_basic)
+attr(data_basic, "url")
+
+data_narrow <- readWQPdata(siteid = "USGS-04024315",
+                           characteristicName = "pH",
+                           dataProfile = "narrow",
+                           service = "ResultWQX3")
+ncol(data_narrow)
+attr(data_narrow, "url")
+
+data_sites <- readWQPdata(siteid = "USGS-04024315",
+                          characteristicName = "pH",
+                          service = "StationWQX3")
+ncol(data_sites)
+attr(data_sites, "url")
+
+```
+
+### WQX 2.0 - Legacy
+
+There are 8 services available from the legacy WQP. The Station and Result legacy services can still be accessed, but users should move to StationWQX and ResultWQX. As other former services become available in WQX 3.0, we will update these documents.
+
+| Service        | dataProfile | WQX 3.0 option? |
+| -------------- | ----------  | ----------  |
+| Station     |             | StationWQX |
+| Result      | resultPhysChem | ResultWQX |
+| Result      | biological |
+| Result      | narrowResult | ResultWQX |
+| Activity    | activityAll  |   |
+| ActivityMetric |           |   |
+| Project     |            |   |
+| ProjectMonitoringLocationWeighting |           |   |
+| ResultDetectionQuantitationLimit |         |   |
+| BiologicalMetric |     |   |
+
+Examples: 
+
+```{r eval=FALSE}
+# Data profiles: "Organization Data" (legacy)
+org_data <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "Organization"
+)
+
+# Data profiles: "Project Data"  (legacy)
+project_data <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "Project"
+)
+
+# Data profiles: "Project Monitoring Location Weighting Data"  (legacy)
+proj_mlwd <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "ProjectMonitoringLocationWeighting"
+)
+
+# Data profiles: "Sample Results (physical/chemical metadata)"  (legacy)
+samp_data <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "resultPhysChem",
+  service = "Result"
+)
+
+# Data profiles: "Sample Results (biological metadata)"  (legacy)
+samp_bio <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "biological",
+  service = "Result"
+)
+
+# Data profiles: "Sample Results (narrow)" (legacy)
+samp_narrow <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "narrowResult",
+  service = "Result"
+)
+
+# Data profiles: "Sampling Activity"  (legacy)
+samp_activity <- readWQPdata(
+  siteid = "USGS-04024315",
+  dataProfile = "activityAll",
+  service = "Activity"
+)
 
 
+# Data profile: "Sampling Activity Metrics"  (legacy)
+act_metrics <- readWQPdata(
+  statecode = "WI",
+  countycode = "Dane",
+  service = "ActivityMetric"
+)
+
+# Data profile: "Result Detection Quantitation Limit Data"  (legacy)
+dl_data <- readWQPdata(
+  siteid = "USGS-04024315",
+  service = "ResultDetectionQuantitationLimit"
+)
+
+```
 
 ## whatNWISdata
 

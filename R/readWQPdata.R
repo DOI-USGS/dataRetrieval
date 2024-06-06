@@ -10,16 +10,16 @@
 #' 
 #' @details
 #'  
-#' There are currently 10 legacy and 3 modern WQX "services"
+#' There are currently 10 legacy and 4 modern WQX "services"
 #' provided by the Water Quality Portal:
 #'  
 #' WQX:
 #' \tabular{llll}{
 #' WQP Radio Button \tab service argument \tab Base URL \tab dataProfile \cr 
 #' Monitoring Locations \tab StationWQX3 \tab /wqx3/Station/search \tab \cr
-#' Full Physical Chemical \tab WQX3 \tab /wqx3/Result/search \tab fullPhysChem \cr
-#' Narrow \tab WQX3 \tab /wqx3/Result/search \tab narrow \cr
-#' Basic Physical Chemical \tab WQX3 \tab /wqx3/Result/search \tab basicPhysChem \cr
+#' Full Physical Chemical \tab ResultWQX3 \tab /wqx3/Result/search \tab fullPhysChem \cr
+#' Narrow \tab ResultWQX3 \tab /wqx3/Result/search \tab narrow \cr
+#' Basic Physical Chemical \tab ResultWQX3 \tab /wqx3/Result/search \tab basicPhysChem \cr
 #' }
 #' 
 #' Legacy:
@@ -41,7 +41,7 @@
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options.
 #' A list of arguments can also be supplied. For more information see the above 
 #' description for this help file. If no "service" argument is supplied, it
-#' will default to "fullPhysChem". One way to figure out how to construct a WQP query is to go to the "Advanced" 
+#' will default to "ResultWQX3". One way to figure out how to construct a WQP query is to go to the "Advanced" 
 #' form in the Water Quality Portal. Use the form to discover what parameters are available. Once the query is 
 #' set in the form, scroll down to the "Query URL". You will see the parameters
 #' after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
@@ -167,7 +167,8 @@
 #' # Data profiles: "Sample Results (narrow)" (legacy)
 #' samp_narrow <- readWQPdata(
 #'   siteid = "USGS-04024315",
-#'   dataProfile = "narrow"
+#'   service = "Result",
+#'   dataProfile = "narrowResult"
 #' )
 #'
 #' # Data profiles: "Sampling Activity"  (legacy)
@@ -200,7 +201,7 @@
 #' )
 #' }
 readWQPdata <- function(...,
-                        service = "WQX3",
+                        service = "ResultWQX3",
                         querySummary = FALSE,
                         tz = "UTC",
                         ignore_attributes = FALSE,
@@ -213,7 +214,7 @@ readWQPdata <- function(...,
                                   "Project", "ProjectMonitoringLocationWeighting",
                                   "ResultDetectionQuantitationLimit",
                                   "BiologicalMetric", "Organization",
-                                  "WQX3", "StationWQX3"),
+                                  "ResultWQX3", "StationWQX3"),
                        several.ok = FALSE)
   
   legacy <- is_legacy(service)

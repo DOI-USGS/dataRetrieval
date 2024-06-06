@@ -504,7 +504,7 @@ test_that("profiles", {
   # Data profiles: "narrow":
   samp_data <- readWQPdata(
     siteid = "USGS-04024315",
-    service = "WQX3",
+    service = "ResultWQX3",
     dataProfile = "narrow"
   )
 
