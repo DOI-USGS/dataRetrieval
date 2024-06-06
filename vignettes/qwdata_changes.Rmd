@@ -51,7 +51,6 @@ If you have already converted your workflow from NWIS to WQP, much of the hard w
 
 This is available as of `dataRetrieval` version 2.7.16. Starting with 2.7.16, all WQP functions default to the newer "WQX3" profiles if available. See  [WQX Conversions](#conversion) below to get a table of column names in WQX3 vs WQX2.
 
-
 # NWIS -> WQX3
 
 ## `readNWISqw`
@@ -59,23 +58,22 @@ This is available as of `dataRetrieval` version 2.7.16. Starting with 2.7.16, al
 Users will notice a Warning message when using this function:
 
 ```{r eval=FALSE}
-
 site_ids <- c("04024430", "04024000")
 parameterCd <- c("34247", "30234", "32104", "34220")
 nwisData <- readNWISqw(site_ids, parameterCd)
 ```
 
 ```
-Warning message:                                                                                               
-WARNING: NWIS does not deliver
-new discrete water quality data or updates to existing data. 
-For additional details, see:
+Warning message:                                                
+In readNWISqw(site_ids, parameterCd) : WARNING: NWIS does not deliver discrete water quality data newer than March 11, 2024 for updates to existing data. For additional details, see:
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html
 ```
 
 Please don't ignore this warning, the function will eventually be *removed* from the `dataRetrieval` package.
 
-So...what do you do instead? The function you will need to move to is `readWQPqw`. First, you'll need to convert the USGS site ID's into something that the Water Quality Portal will accept. Usually that's a single line pasting a prefix "USGS-". Here's an example:
+So...what do you do instead? The function you will need to move to is `readWQPqw`. First, you'll need to convert the numeric USGS site ID's into something that the Water Quality Portal will accept, which requires the agency prefix. For most USGS sites this will mean pasting 'USGS-' before the site number, although it is important to note that there are some USGS sites that begin with a different prefix: it is up to users to determine the agency code..
+
+Here's an example:
 
 ```{r eval=FALSE}
 wqpData <- readWQPqw(paste0("USGS-", site_ids), parameterCd)
@@ -122,19 +120,19 @@ Let's use the `dplyr` package to pull out the columns are used in this example w
 ```{r}
 library(dplyr)
 
-nwisData_relavent <- nwisData |> 
+nwisData_relevant <- nwisData |> 
   select(
     site_no, startDateTime, parm_cd,
     remark_cd, result_va
   ) |> 
   arrange(startDateTime, parm_cd)
 
-knitr::kable(head(nwisData_relavent))
+knitr::kable(head(nwisData_relevant))
 ```
 
-If we explore the output from WQP, we can try to find the columns that include the same relavent information:
+If we explore the output from WQP, we can try to find the columns that include the same relevant information:
 ```{r}
-wqpData_relavent <- wqpData |> 
+wqpData_relevant <- wqpData |> 
   select(
     site_no = Location_Identifier,
     startDateTime = Activity_StartDateTime,
@@ -144,7 +142,7 @@ wqpData_relavent <- wqpData |>
     detection_level = DetectionLimit_MeasureA
   ) |> 
   arrange(startDateTime, parm_cd)
-knitr::kable(head(wqpData_relavent))
+knitr::kable(head(wqpData_relevant))
 ```
 
 Now we can start looking at the results and trying to decide how future workflows should be setup. Here are some decisions for this example that we can consider:
@@ -166,7 +164,7 @@ censored_text <- c(
   "Below Quantification Limit"
 )
 
-wqpData_relavent <- wqpData |> 
+wqpData_relevant <- wqpData |> 
   mutate(left_censored = grepl(paste(censored_text, collapse = "|"),
     Result_ResultDetectionCondition,
     ignore.case = TRUE
@@ -182,7 +180,7 @@ wqpData_relavent <- wqpData |>
   ) |> 
   arrange(startDateTime, parm_cd)
 
-knitr::kable(head(wqpData_relavent))
+knitr::kable(head(wqpData_relevant))
 ```
 
 ### NWIS codes
@@ -219,42 +217,25 @@ There are some major differences in the output. The NWIS services offers back on
 
 # readNWISdata
 
-If you get your water quality data from the `readNWISdata` function, you will receive a warning. Note, this is *only* for the "qwdata" service. All other web services are not being deprecated, and should receive no warning.
-
-```{r eval=FALSE}
-qwData <- readNWISdata(
-  state_cd = "WI",
-  startDate = "2000-01-01",
-  drain_area_va_min = 50, qw_count_nu = 50,
-  qw_attributes = "expanded",
-  qw_sample_wide = "wide",
-  list_of_search_criteria = c(
-    "state_cd",
-    "drain_area_va",
-    "obs_count_nu"
-  ),
-  service = "qw"
-)
-```
-
-```
-Warning: NWIS qw web services are being retired.
-Please see vignette('qwdata_changes', package = 'dataRetrieval')
-for more information.
-```
-This is not an especially common `dataRetrieval` workflow, so there are not a lot of details here. Please reach out if more information is needed to update your workflows.
+If you get your water quality data from the `readNWISdata` function, no new data will be available and the function will generate a warning message. The other services are working as before. This is not an especially common `dataRetrieval` workflow, so there are not a lot of details here. Please reach out if more information is needed to update your workflows.
 
 See `?readWQPdata` to see all the ways to query data in the Water Quality Portal. Use the suggestions above to convert the output of the `readWQPdata` function to convert the WQP output to what is important for your workflow.
 
 # WQX Conversion {#conversion}
 
-Generally speaking, a table is provided by the EPA website that shows the conversions of WQX3 to the original WQX2 mappings. 
+A table is provided on the EPA website that shows the conversions of WQX3 to the WQX2 mappings. This table may change periodically while WQP services are under active development, which is expected to last through Fall 2024.
 
-For the 2.0 "narrow" dataProfile, the new WQP3 columns are shown here:
+
+Here is an example for pulling the EPA table and comparing column names. 
 
 ```{r echo=TRUE, eval=TRUE}
 schema <- readr::read_csv("https://www.epa.gov/system/files/other-files/2024-02/schema_outbound_wqx3.0_0.csv")
+```
 
+Within that schema table, the column "FieldName3.0" shows the column names for the new WQX3 profile. There are several "FieldName2.0.XXXX" columns that show how the older 2.0 profiles align with the newer columns.
+
+For example, the 2.0 "narrow" dataProfile match up with these new WQP3 columns:
+```{r echo=TRUE, eval=TRUE}
 sub_schema <- schema |> 
   select(WQX3 = FieldName3.0,
          WQX2 = FieldName2.0.Narrow) |> 

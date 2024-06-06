@@ -372,7 +372,7 @@ constructWQPURL <- function(siteNumbers,
     } 
     
     siteNumbers <- paste(paste0("siteid=", siteNumbers), collapse = "&")
-    baseURL <- drURL("WQX3", Access = pkg.env$access)
+    baseURL <- drURL("ResultWQX3", Access = pkg.env$access)
     baseURL <- paste0(baseURL, siteNumbers)
   }
   
