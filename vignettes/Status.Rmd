@@ -40,6 +40,7 @@ If you have additional questions about the NWIS qw data service, email CompTools
 * Monitoring Location (a.k.a. 'Site' or 'Station')
 * Narrow results
 * Full Physical Chemical results
+* Basic Physical Chemical
 
 Guidance on how to use the new web page and web services are available in the [User Guide](https://www.waterqualitydata.us/beta/portal_userguide/) and [Web Services Guide](https://www.waterqualitydata.us/beta/webservices_documentation/). Additional profiles will continue to be added to this beta release in the coming weeks. 
 
@@ -54,17 +55,18 @@ The current WQP data profiles (available on the main Water Quality Portal web pa
 df <- data.frame(Function = c("readWQPdata",
                               "readWQPqw",
                               "whatWQPsites",
-                              "readWQPsummary",
                               "whatWQPmetrics",
                               "whatWQPsamples",
                               "whatWQPdata",
                               "readNWISqw",
+                              "readWQPsummary",
                               "whatNWISdata"),
                  Status = c("Set to WQX3 full profile by default. 'legacy' option exists.",
                             "Set to WQX3 narrow profile by default. 'legacy' option exists.", 
                             "Set to WQX3 station profile by default. 'legacy' option exists.",
-                            rep("Currently only available via legacy services.", 4),
+                            rep("Currently only available via legacy services.", 3),
                             "Deprecated: should not be continued to use.",
+                            "Does not have accurate information for USGS data.",
                             "Does not have accurate information for qw data."))
 
 knitr::kable(df)
