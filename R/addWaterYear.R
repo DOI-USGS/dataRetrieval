@@ -23,8 +23,11 @@
 #' wqpData <- addWaterYear(wqpData)
 #' }
 addWaterYear <- function(rawData) {
-  allowedDateColNames <- c("dateTime", "Date", "ActivityStartDate", "ActivityEndDate", "Activity_StartDate")
-  allowedWYColNames <- c("waterYear", "waterYear", "ActivityStartWaterYear", "ActivityEndWaterYear", "Activity_StartDateWaterYear")
+  allowedDateColNames <- c("dateTime", "Date", "ActivityStartDate", 
+                           "ActivityEndDate", "Activity_StartDate", "Activity_EndDate")
+  allowedWYColNames <- c("waterYear", "waterYear", "ActivityStartWaterYear", 
+                         "ActivityEndWaterYear", "Activity_StartDateWaterYear",
+                         "Activity_EndDateWaterYear")
   names(allowedWYColNames) <- allowedDateColNames
   # only allow WY to be added if there is an appropriate date column
   if (all(!allowedDateColNames %in% names(rawData))) {

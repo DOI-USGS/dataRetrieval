@@ -17,6 +17,8 @@ editor_options:
 
 This page will be updated frequently with information about the status of dataRetrieval services.
 
+Contact CompTools@usgs.gov with additional questions!
+
 # Overview
 
 As of March 11, 2024, NWIS **discrete water quality** services are "frozen": any public data retrieval will not include any new data. 

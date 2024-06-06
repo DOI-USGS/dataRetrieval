@@ -7,7 +7,7 @@
 constructWQPURL(siteNumbers, parameterCd, startDate, endDate, legacy = FALSE)
 }
 \arguments{
-\item{siteNumbers}{string or vector of strings USGS site number.  This is usually an 8 digit number}
+\item{siteNumbers}{string or vector of strings USGS site number.}
 
 \item{parameterCd}{string or vector of USGS parameter code.  This is usually an 5 digit number.}
 
@@ -17,7 +17,7 @@ retrieval for the earliest possible record.}
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record.}
 
-\item{legacy}{Logical. If TRUE, use legacy WQP services. Default is FALSE.}
+\item{legacy}{Logical. If TRUE, uses legacy WQP services. Default is FALSE.}
 }
 \value{
 url string

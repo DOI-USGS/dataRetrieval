@@ -135,6 +135,8 @@ whatWQPsites <- function(..., legacy = FALSE) {
 #' }
 readWQPsummary <- function(...) {
 
+  wqp_message_only_legacy()
+  
   values <- readWQPdots(...)
   
   values <- values$values
