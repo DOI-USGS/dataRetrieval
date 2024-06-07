@@ -10,8 +10,8 @@
 #' 
 #' @details
 #'  
-#' There are currently 10 legacy and 4 modern WQX "services"
-#' provided by the Water Quality Portal:
+#' There are currently 10 legacy and 4 modern WQX options
+#' for data provided by the Water Quality Portal:
 #'  
 #' WQX:
 #' \tabular{llll}{
