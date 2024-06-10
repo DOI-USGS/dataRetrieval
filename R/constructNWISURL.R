@@ -357,16 +357,18 @@ constructWQPURL <- function(siteNumbers,
     parameterCd <- sapply(parameterCd, utils::URLencode, USE.NAMES = FALSE, reserved = TRUE)
   }
   pcode_name <- ifelse(pCodeLogic, "pCode", "characteristicName")
-  parameterCd <- paste0(pcode_name, "=", parameterCd)
+  
   
   if(legacy){
     if (multiplePcodes) {
       parameterCd <- paste(parameterCd, collapse = ";")
     }
+    parameterCd <- paste0(pcode_name, "=", parameterCd)
     
     siteNumbers <- paste(siteNumbers, collapse = ";")
     baseURL <- drURL("Result", siteid = siteNumbers, Access = pkg.env$access)
   } else {
+    parameterCd <- paste0(pcode_name, "=", parameterCd)
     if (multiplePcodes) {
       parameterCd <- paste0(parameterCd, collapse = "&")
     } 

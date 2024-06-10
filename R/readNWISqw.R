@@ -1,36 +1,13 @@
 #' Raw Data Import for USGS NWIS QW Data
 #'
-#' Imports data from NWIS web service. This function gets the data from here:
-#' \url{https://nwis.waterdata.usgs.gov/nwis/qwdata}
-#' A list of parameter codes can be found here:
-#' \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-#' A list of statistic codes can be found here:
-#' \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
-#'
-#' @details Valid parameter code groups are "All" or group codes:
-#' \tabular{ll}{
-#' Code \tab Description\cr
-#' INF \tab Information \cr
-#' PHY \tab Physical \cr
-#' INM \tab Inorganics, Major, Metals \cr
-#' INN \tab Inorganics, Major, Non-metals \cr
-#' NUT \tab Nutrient \cr
-#' MBI \tab Microbiological \cr
-#' BIO \tab Biological \cr
-#' IMN \tab Inorganics, Minor, Non-metals \cr
-#' IMM \tab Inorganics, Minor, Metals \cr
-#' TOX \tab Toxicity \cr
-#' OPE \tab Organics, pesticide \cr
-#' OPC \tab Organics, PCBs \cr
-#' OOT \tab Organics, other \cr
-#' RAD \tab Radiochemistry \cr
-#' SED \tab Sediment \cr
-#' POP \tab Population/community \cr
-#' OTH \tab  Other \cr
-#' HAB \tab  Habitat \cr
-#' ISO \tab  Stable Isotopes \cr
-#' }
-#' If more than one parameter group is requested, only sites that data for all requested groups are returned.
+#' Deprecated function. USGS NWIS QW services will be discontinued, when that happens
+#' this function will be removed from dataRetrieval. Please use\code{\link{readWQPqw}} or 
+#' \code{\link{readWQPdata}} instead.
+#' 
+#' As of March 11, 2024, NWIS discrete water quality services are "frozen": 
+#' any public data retrieval will not include any new data. 
+#' 
+#' Contact CompTools@usgs.gov with additional questions!
 #'
 #' @param siteNumbers character of USGS site numbers.  This is usually an 8 digit number
 #' @param parameterCd character that contains the code for a parameter
@@ -65,35 +42,8 @@
 #' See also  \code{OlsonNames()}
 #' for more information on time zones.
 #' @keywords data import USGS web service
-#' @return A data frame with at least the following columns:
-#' \tabular{lll}{
-#' Name \tab Type \tab Description \cr
-#' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
-#' site_no \tab character \tab The USGS site number \cr
-#' sample_dt \tab Date \tab The date the sample was collected \cr
-#' sample_tm \tab character \tab The reported sample collection time \cr
-#' startDateTime \tab POSIXct \tab Combining sample_dt and sample_tm, a date/time
-#' column is created, and converted into UTC
-#' (unless the tz argument specifies a different time zone)\cr
-#' endDateTime \tab POSIXct \tab If any sample_end_dt and sample_end_dt exist,
-#' this column is created similar to startDateTime\cr
-#' }
+#' @return A data frame not including USGS data newer than March 11, 2024.
 #'
-#' Further columns will be included depending on the requested output format
-#' (expanded = TRUE or FALSE).
-#' Columns that end in "_reported" are the originally reported timezones,
-#' but the "tz_cd" column defines the timezone of any POSIXct columns.
-#'
-#' There are also several useful attributes attached to the data frame:
-#' \tabular{lll}{
-#' Name \tab Type \tab Description \cr
-#' url \tab character \tab The url used to generate the data \cr
-#' queryTime \tab POSIXct \tab The time the data was returned \cr
-#' comment \tab character \tab Header comments from the RDB file \cr
-#' siteInfo \tab data frame \tab A data frame containing information on the requested sites \cr
-#' variableInfo \tab data frame \tab A data frame containing information on the
-#' requested parameters \cr
-#' }
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}},
 #' \code{\link{readWQPqw}}, \code{\link{constructNWISURL}}
