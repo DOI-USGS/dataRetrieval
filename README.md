@@ -26,28 +26,23 @@ If you have additional questions about these changes, email
 
 # What would you like to do?
 
-1.  Get instantaneous USGS discharge data. [Start
-    here](reference/readNWISuv.html)
+1.  Get instantaneous USGS discharge data. Start here: `?readNWISuv`
 
-2.  Get daily USGS discharge data. [Start
-    here](reference/readNWISdv.html)
+2.  Get daily USGS discharge data. Start here: `?readNWISdv`
 
-3.  Get USGS groundwater data. [Start here](reference/readNWISgwl.html)
+3.  Get USGS groundwater data. Start here: `?readNWISgwl`
 
-4.  Get discrete water quality data. Start
-    here[`?readWQPdata`](reference/readWQPdata.html)
+4.  Get discrete water quality data. Start here: `?readWQPdata`
 
 5.  Discover USGS data (not including discrete water quality data).
-    [Start here](reference/whatNWISdata.html)
+    Start here: `?whatNWISdata`
 
-6.  Discover discrete water quality data. [Start
-    here](reference/readWQPsummary.html)
+6.  Discover discrete water quality data. Start here: `?readWQPsummary`
 
 For additional tutorials, see:
 
-<https://doi-usgs.github.io/dataRetrieval/>
-
-<https://waterdata.usgs.gov/blog/dataretrieval/>
+[Basic
+Tutorial](https://doi-usgs.github.io/dataRetrieval/articles/tutorial.html)
 
 [dataRetrieval Introduction
 1](https://rconnect.usgs.gov/NMC_dataRetrieval_1)
