@@ -34,8 +34,8 @@ If you have additional questions about these changes, email
 
 3.  Get USGS groundwater data. [Start here](reference/readNWISgwl.html)
 
-4.  Get discrete water quality data. [Start
-    here](reference/readWQPdata.html)
+4.  Get discrete water quality data. Start
+    here[`?readWQPdata`](reference/readWQPdata.html)
 
 5.  Discover USGS data (not including discrete water quality data).
     [Start here](reference/whatNWISdata.html)
