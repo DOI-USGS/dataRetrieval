@@ -29,19 +29,32 @@ library(dataRetrieval)
 
 The `dataRetrieval` package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrology data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). 
 
-For complete tutorial information, see:
+:warning: USGS discrete water-quality data availability and format are changing. Beginning March 11, 2024 USGS data obtained from legacy services will not include new USGS data or recent updates to existing data. To view the status of changes in data availability and code functionality, visit: https://doi-usgs.github.io/dataRetrieval/articles/Status.html
 
-[https://doi-usgs.github.io/dataRetrieval/](https://doi-usgs.github.io/dataRetrieval/)
+If you have additional questions about these changes, email CompTools@usgs.gov.
 
-[https://waterdata.usgs.gov/blog/dataretrieval/](https://waterdata.usgs.gov/blog/dataretrieval/)
+# What would you like to do?
+
+1. Get instantaneous USGS discharge data. Start here: `?readNWISuv`
+
+2. Get daily USGS discharge data. Start here: `?readNWISdv`
+
+3. Get USGS groundwater data. Start here: `?readNWISgwl`
+
+4. Get discrete water quality data. Start here: `?readWQPdata`
+
+4. Discover USGS data (not including discrete water quality data). Start here: `?whatNWISdata`
+
+6. Discover discrete water quality data. Start here: `?readWQPsummary`
+
+For additional tutorials, see:
+
+[Basic Tutorial](https://doi-usgs.github.io/dataRetrieval/articles/tutorial.html)
 
 [dataRetrieval Introduction 1](https://rconnect.usgs.gov/NMC_dataRetrieval_1)
 
 [dataRetrieval Introduction 2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
 
-:warning: USGS discrete water-quality data availability and format are changing. Beginning in mid-March 2024 the data obtained from legacy profiles will not include new USGS data or recent updates to existing data. To view the status of changes in data availability and code functionality, visit: https://doi-usgs.github.io/dataRetrieval/articles/Status.html
-
-If you have additional questions about these changes, email CompTools@usgs.gov.
 
 # Sample Workflow
 
