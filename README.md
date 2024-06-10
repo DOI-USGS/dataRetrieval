@@ -14,7 +14,36 @@ Environmental Protection Agency (EPA), U.S. Department of Agriculture
 (USDA), and USGS. Direct USGS data is obtained from a service called the
 National Water Information System (NWIS).
 
-For complete tutorial information, see:
+:warning: USGS discrete water-quality data availability and format are
+changing. Beginning March 11, 2024 USGS data obtained from legacy
+services will not include new USGS data or recent updates to existing
+data. To view the status of changes in data availability and code
+functionality, visit:
+<https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
+
+If you have additional questions about these changes, email
+<CompTools@usgs.gov>.
+
+# What would you like to do?
+
+1.  Get instantaneous USGS discharge data. [Start
+    here](reference/readNWISuv.html)
+
+2.  Get daily USGS discharge data. [Start
+    here](reference/readNWISdv.html)
+
+3.  Get USGS groundwater data. [Start here](reference/readNWISgwl.html)
+
+4.  Get discrete water quality data. [Start
+    here](reference/readWQPdata.html)
+
+5.  Discover USGS data (not including discrete water quality data).
+    [Start here](reference/whatNWISdata.html)
+
+6.  Discover discrete water quality data. [Start
+    here](reference/readWQPsummary.html)
+
+For additional tutorials, see:
 
 <https://doi-usgs.github.io/dataRetrieval/>
 
@@ -25,16 +54,6 @@ For complete tutorial information, see:
 
 [dataRetrieval Introduction
 2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
-
-:warning: USGS discrete water-quality data availability and format are
-changing. Beginning in mid-March 2024 the data obtained from legacy
-profiles will not include new USGS data or recent updates to existing
-data. To view the status of changes in data availability and code
-functionality, visit:
-<https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
-
-If you have additional questions about these changes, email
-<CompTools@usgs.gov>.
 
 # Sample Workflow
 
@@ -148,15 +167,18 @@ NWIScitation <- create_NWIS_bib(dv)
 NWIScitation
 #> U.S. Geological Survey (2024). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Feb
-#> 20, 2024,
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jun
+#> 10, 2024,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
+```
+
+``` r
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Feb 20, 2024},
+#>   note = {Accessed Jun 10, 2024},
 #>   year = {2024},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -178,18 +200,21 @@ SC <- readWQPqw(siteNumbers = "USGS-05288705",
 
 WQPcitation <- create_WQP_bib(SC)
 WQPcitation
-#> National Water Quality Monitoring Council (2024). _ Water Quality
+#> National Water Quality Monitoring Council (2024). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Feb 20, 2024,
-#> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes>.
+#> Accessed Jun 10, 2024,
+#> <https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=csv&dataProfile=narrow>.
+```
+
+``` r
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
-#>   title = { Water Quality Portal},
+#>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Feb 20, 2024},
+#>   note = {Accessed Jun 10, 2024},
 #>   year = {2024},
-#>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes},
+#>   url = {https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=csv&dataProfile=narrow},
 #> }
 ```
 
