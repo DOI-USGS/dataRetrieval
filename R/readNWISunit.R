@@ -1,13 +1,18 @@
 #' Instantaneous value data retrieval from USGS (NWIS)
 #'
 #' Imports data from NWIS web service. This function gets the data from here:
-#' \url{https://waterservices.usgs.gov/}
-#' A list of parameter codes can be found here:
-#' \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-#' A list of statistic codes can be found here:
-#' \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}.
+#' \url{https://waterservices.usgs.gov/docs/instantaneous-values/instantaneous-values-details/}
+#' Inputs to this function are just USGS site ids, USGS parameter codes,
+#' and start and end date. For a more complex query, use \code{\link{readNWISdata}},
+#' including an arguemnt service="uv".
+#' Not all parameter codes are available for all data.
+#' Use the function \code{\link{whatNWISdata}} to discover what data
+#' is available for a USGS site. The column data_type_cd with the values "uv"
+#' returned from \code{\link{whatNWISdata}}) are available from this service.
+#' 
 #' More information on the web service can be found here:
-#' \url{https://waterservices.usgs.gov/docs/instantaneous-values/}.
+#' \url{https://waterservices.usgs.gov/test-tools}, choosing the
+#' "Instantaneous Value Service".
 #'
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @param parameterCd character USGS parameter code.  This is usually an 5 digit number.
