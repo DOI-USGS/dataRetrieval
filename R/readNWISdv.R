@@ -1,6 +1,14 @@
 #' Daily Value USGS NWIS Data Retrieval
 #'
-#' Imports data from NWIS web service. This function gets the data from here: \url{https://waterservices.usgs.gov/}
+#' Imports data from NWIS daily web service. This function gets the data from here: 
+#' \url{https://waterservices.usgs.gov/docs/dv-service/daily-values-service-details/}
+#' Inputs to this function are just USGS site ids, USGS parameter codes,
+#' USGS statistic codes, and start and end date. For a more complex query, see \code{\link{readNWISdata}}.
+#' Data coming the daily web services are aggregates of the instantaneous
+#' (sensor) web services. Not all statistical codes are available for all data.
+#' Use the function \code{\link{whatNWISdata}} to discover what data
+#' is available for a USGS site. The returned data (from \code{\link{whatNWISdata}}) the column data_type_cd
+#' with the values "dv" are available from this service.
 #'
 #' @param siteNumbers character USGS site number.  This is usually an 8 digit number.
 #' Multiple sites can be requested with a character vector.
