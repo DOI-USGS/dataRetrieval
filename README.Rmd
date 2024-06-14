@@ -45,7 +45,7 @@ If you have additional questions about these changes, email CompTools@usgs.gov.
 
 4. Discover USGS data (not including discrete water quality data). Start here: `?whatNWISdata`
 
-6. Discover discrete water quality data. Start here: `?readWQPsummary`
+6. Find Hydro Network-Linked Data Index (NLDI) data. Start here: `?get_nldi`
 
 For additional tutorials, see:
 
