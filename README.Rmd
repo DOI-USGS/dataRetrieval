@@ -45,7 +45,7 @@ If you have additional questions about these changes, email CompTools@usgs.gov.
 
 4. Discover USGS data (not including discrete water quality data). Start here: `?whatNWISdata`
 
-6. Discover discrete water quality data. Start here: `?readWQPsummary`
+6. Find Hydro Network-Linked Data Index (NLDI) data. Start here: `?get_nldi`
 
 For additional tutorials, see:
 
@@ -55,47 +55,6 @@ For additional tutorials, see:
 
 [dataRetrieval Introduction 2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
 
-
-# Sample Workflow
-
-## USGS
-
-```{r workUSGS, eval=FALSE}
-library(dataRetrieval)
-# Choptank River near Greensboro, MD
-siteNumber <- "01491000"
-ChoptankInfo <- readNWISsite(siteNumber)
-parameterCd <- "00060"
-
-# Raw daily data:
-rawDailyData <- readNWISdv(
-  siteNumber, parameterCd,
-  "1980-01-01", "2010-01-01"
-)
-
-pCode <- readNWISpCode(parameterCd)
-```
-
-## Water Quality Portal
-
-```{r WQP, eval=FALSE}
-specificCond <- readWQPqw(
-  siteNumbers = "WIDNR_WQX-10032762",
-  parameterCd = "Specific conductance",
-  startDate = "2011-05-01",
-  endDate = "2011-09-30"
-)
-```
-
-## Network Linked Data Index
-
-```{r NLDI, eval=FALSE}
-features <- findNLDI(
-  nwis = "01491000",
-  nav = "UT",
-  find = c("basin", "wqp")
-)
-```
 
 # Installation of dataRetrieval
 

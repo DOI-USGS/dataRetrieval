@@ -65,7 +65,6 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 \description{
 Imports data from Water Quality Portal web service. This function gets the data from here:
 \url{https://www.waterqualitydata.us}.
-because it allows for other agencies rather than the USGS.
 }
 \details{
 This function uses \dots as a query input, which can be very flexible, but also 

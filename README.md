@@ -37,7 +37,8 @@ If you have additional questions about these changes, email
 5.  Discover USGS data (not including discrete water quality data).
     Start here: `?whatNWISdata`
 
-6.  Discover discrete water quality data. Start here: `?readWQPsummary`
+6.  Find Hydro Network-Linked Data Index (NLDI) data. Start here:
+    `?get_nldi`
 
 For additional tutorials, see:
 
@@ -49,47 +50,6 @@ Tutorial](https://doi-usgs.github.io/dataRetrieval/articles/tutorial.html)
 
 [dataRetrieval Introduction
 2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
-
-# Sample Workflow
-
-## USGS
-
-``` r
-library(dataRetrieval)
-# Choptank River near Greensboro, MD
-siteNumber <- "01491000"
-ChoptankInfo <- readNWISsite(siteNumber)
-parameterCd <- "00060"
-
-# Raw daily data:
-rawDailyData <- readNWISdv(
-  siteNumber, parameterCd,
-  "1980-01-01", "2010-01-01"
-)
-
-pCode <- readNWISpCode(parameterCd)
-```
-
-## Water Quality Portal
-
-``` r
-specificCond <- readWQPqw(
-  siteNumbers = "WIDNR_WQX-10032762",
-  parameterCd = "Specific conductance",
-  startDate = "2011-05-01",
-  endDate = "2011-09-30"
-)
-```
-
-## Network Linked Data Index
-
-``` r
-features <- findNLDI(
-  nwis = "01491000",
-  nav = "UT",
-  find = c("basin", "wqp")
-)
-```
 
 # Installation of dataRetrieval
 
@@ -163,7 +123,7 @@ NWIScitation
 #> U.S. Geological Survey (2024). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
 #> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jun
-#> 10, 2024,
+#> 14, 2024,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 ```
 
@@ -173,7 +133,7 @@ print(NWIScitation, style = "Bibtex")
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Jun 10, 2024},
+#>   note = {Accessed Jun 14, 2024},
 #>   year = {2024},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -197,7 +157,7 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2024). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Jun 10, 2024,
+#> Accessed Jun 15, 2024,
 #> <https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=csv&dataProfile=narrow>.
 ```
 
@@ -207,7 +167,7 @@ print(WQPcitation, style = "Bibtex")
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Jun 10, 2024},
+#>   note = {Accessed Jun 15, 2024},
 #>   year = {2024},
 #>   url = {https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=csv&dataProfile=narrow},
 #> }
