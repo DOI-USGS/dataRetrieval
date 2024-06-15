@@ -45,7 +45,7 @@ If you have additional questions about these changes, email CompTools@usgs.gov.
 
 4. Discover USGS data (not including discrete water quality data). Start here: `?whatNWISdata`
 
-6. Find Hydro Network-Linked Data Index (NLDI) data. Start here: `?get_nldi`
+6. Find Hydro Network-Linked Data Index (NLDI) data. Start here: `?findNLDI`
 
 For additional tutorials, see:
 
@@ -73,9 +73,6 @@ install_github("DOI-USGS/dataRetrieval",
                build_opts = c("--no-resave-data",
                               "--no-manual"))
 ```
-
-
-
 
 
 # Reporting bugs
