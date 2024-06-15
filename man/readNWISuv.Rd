@@ -58,7 +58,7 @@ Imports data from NWIS web service. This function gets the data from here:
 \url{https://waterservices.usgs.gov/docs/instantaneous-values/instantaneous-values-details/}
 Inputs to this function are just USGS site ids, USGS parameter codes,
 and start and end date. For a more complex query, use \code{\link{readNWISdata}},
-including an arguemnt service="uv".
+including an arguement service="uv".
 Not all parameter codes are available for all data.
 Use the function \code{\link{whatNWISdata}} to discover what data
 is available for a USGS site. The column data_type_cd with the values "uv"

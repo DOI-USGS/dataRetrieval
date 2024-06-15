@@ -61,7 +61,23 @@ siteInfo \tab data.frame \tab A data frame containing information on the request
 }
 }
 \description{
-Reads groundwater level measurements from NWISweb. Mixed date/times come back from the service
+Imports groundwater level data from NWIS web service. This function gets the data from here:
+\url{https://waterservices.usgs.gov/docs/groundwater-levels/groundwater-levels-details/}
+Inputs to this function are just USGS site ids, USGS parameter codes,
+and start and end date. For a more complex query, use \code{\link{readNWISdata}},
+including an argument service="gwlevels".
+Not all parameter codes are available for all data.
+Use the function \code{\link{whatNWISdata}} to discover what data
+is available for a USGS site. The column data_type_cd with the values "gw"
+returned from \code{\link{whatNWISdata}}) are available from this service.
+}
+\details{
+More information on the web service can be found here:
+\url{https://waterservices.usgs.gov/test-tools}, choosing the
+"Groundwater Levels Value Service".
+
+
+Mixed date/times come back from the service
 depending on the year that the data was collected. See \url{https://waterdata.usgs.gov/usa/nwis/gw}
 for details about groundwater. By default the returned dates are converted to date objects, unless convertType
 is specified as FALSE. Sites with non-standard date formats (i.e. lacking a day) can be affected (see examples).
