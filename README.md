@@ -51,47 +51,6 @@ Tutorial](https://doi-usgs.github.io/dataRetrieval/articles/tutorial.html)
 [dataRetrieval Introduction
 2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
 
-# Sample Workflow
-
-## USGS
-
-``` r
-library(dataRetrieval)
-# Choptank River near Greensboro, MD
-siteNumber <- "01491000"
-ChoptankInfo <- readNWISsite(siteNumber)
-parameterCd <- "00060"
-
-# Raw daily data:
-rawDailyData <- readNWISdv(
-  siteNumber, parameterCd,
-  "1980-01-01", "2010-01-01"
-)
-
-pCode <- readNWISpCode(parameterCd)
-```
-
-## Water Quality Portal
-
-``` r
-specificCond <- readWQPqw(
-  siteNumbers = "WIDNR_WQX-10032762",
-  parameterCd = "Specific conductance",
-  startDate = "2011-05-01",
-  endDate = "2011-09-30"
-)
-```
-
-## Network Linked Data Index
-
-``` r
-features <- findNLDI(
-  nwis = "01491000",
-  nav = "UT",
-  find = c("basin", "wqp")
-)
-```
-
 # Installation of dataRetrieval
 
 To install the `dataRetrieval` package, you must be using R 3.0 or
@@ -198,8 +157,8 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2024). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Jun 14, 2024,
-#> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes>.
+#> Accessed Jun 15, 2024,
+#> <https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=csv&dataProfile=narrow>.
 ```
 
 ``` r
@@ -208,9 +167,9 @@ print(WQPcitation, style = "Bibtex")
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Jun 14, 2024},
+#>   note = {Accessed Jun 15, 2024},
 #>   year = {2024},
-#>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes},
+#>   url = {https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=csv&dataProfile=narrow},
 #> }
 ```
 
