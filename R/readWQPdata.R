@@ -2,7 +2,6 @@
 #'
 #' Imports data from Water Quality Portal web service. This function gets the data from here:
 #' \url{https://www.waterqualitydata.us}.
-#' because it allows for other agencies rather than the USGS. 
 #' 
 #' This function uses \dots as a query input, which can be very flexible, but also 
 #' has a steeper learning curve. For a quick overview, scroll down to the Examples
