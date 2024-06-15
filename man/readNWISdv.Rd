@@ -58,7 +58,7 @@ Imports data from NWIS daily web service. This function gets the data from here:
 \url{https://waterservices.usgs.gov/docs/dv-service/daily-values-service-details/}
 Inputs to this function are just USGS site ids, USGS parameter codes,
 USGS statistic codes, and start and end date. For a more complex query, use \code{\link{readNWISdata}},
-with an argument servcie = "dv".
+with an argument service = "dv".
 Data coming the daily web services are aggregates of the instantaneous
 (sensor) web services. Not all statistical codes are available for all data.
 Use the function \code{\link{whatNWISdata}} to discover what data
