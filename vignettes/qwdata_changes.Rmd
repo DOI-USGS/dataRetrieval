@@ -229,7 +229,7 @@ A table is provided on the EPA website that shows the conversions of WQX3 to the
 Here is an example for pulling the EPA table and comparing column names. 
 
 ```{r echo=TRUE, eval=TRUE}
-schema <- readr::read_csv("https://www.epa.gov/system/files/other-files/2024-02/schema_outbound_wqx3.0_0.csv")
+schema <- readr::read_csv("https://www.epa.gov/system/files/other-files/2024-07/schema_outbound_wqx3.0.csv")
 ```
 
 Within that schema table, the column "FieldName3.0" shows the column names for the new WQX3 profile. There are several "FieldName2.0.XXXX" columns that show how the older 2.0 profiles align with the newer columns.
