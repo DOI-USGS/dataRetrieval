@@ -520,6 +520,10 @@ readNWISgwl <- function(siteNumbers,
     convertType = convertType,
     tz = tz
   )
+  
+  if(!is.na(parameterCd)){
+    data <- data[data$parameter_cd %in% parameterCd, ]
+  }
 
   if (nrow(data) > 0 && !all(is.na(data$lev_dt))) {
     if (convertType) {
