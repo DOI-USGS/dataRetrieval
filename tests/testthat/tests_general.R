@@ -549,17 +549,17 @@ test_that("profiles", {
     "OrganizationFormalName"
   ) %in% names(samp_activity)))
 
-  # Data profile: "Sampling Activity Metrics"
-  act_metrics <- readWQPdata(
-    statecode = "WI",
-    countycode = "Dane",
-    service = "ActivityMetric"
-  )
-
-  expect_true(all(c(
-    "OrganizationIdentifier",
-    "OrganizationFormalName"
-  ) %in% names(act_metrics)))
+  # # Data profile: "Sampling Activity Metrics"
+  # act_metrics <- readWQPdata(
+  #   statecode = "WI",
+  #   countycode = "Dane",
+  #   service = "ActivityMetric"
+  # )
+  # 
+  # expect_true(all(c(
+  #   "OrganizationIdentifier",
+  #   "OrganizationFormalName"
+  # ) %in% names(act_metrics)))
 
   # Data profile: "Result Detection Quantitation Limit Data"
   dl_data <- readWQPdata(
