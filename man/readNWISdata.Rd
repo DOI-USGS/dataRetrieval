@@ -103,16 +103,11 @@ instFlowCDT <- readNWISdata(
   tz = "America/Chicago"
 )
 
-# Empty:
-multiSite <- readNWISdata(
-  sites = c("04025000", "04072150"), service = "iv",
-  parameterCd = "00010"
-)
-# Not empty:
 multiSite <- readNWISdata(
   sites = c("04025500", "040263491"),
   service = "iv", parameterCd = "00060"
 )
+
 bBoxEx <- readNWISdata(bBox = c(-83, 36.5, -81, 38.5), parameterCd = "00010")
 
 startDate <- as.Date("2013-10-01")
