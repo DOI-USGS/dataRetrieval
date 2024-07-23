@@ -35,12 +35,12 @@
 #' }
 whatNWISsites <- function(...) {
   valuesList <- readNWISdots(...)
-
+  
   values <- sapply(valuesList$values, function(x) utils::URLencode(x))
   values["format"] <- "mapper"
-
+  
   urlCall <- drURL("site", Access = pkg.env$access, arg.list = values)
-
+  
   rawData <- getWebServiceData(urlCall, encoding = "gzip")
   if (is.null(rawData)) {
     return(invisible(NULL))
@@ -56,30 +56,30 @@ whatNWISsites <- function(...) {
     dec_lat_va <- as.numeric(xml2::xml_attr(sites, "lat"))
     dec_long_va <- as.numeric(xml2::xml_attr(sites, "lng"))
     agency_cd <- xml2::xml_attr(sites, "agc")
-
+    
     colocated <- isTRUE(xml2::xml_name(sc) == "colocated_sites")
-
+    
     df <- data.frame(agency_cd, site_no, station_nm, site_tp_cd,
-      dec_lat_va, dec_long_va, colocated,
-      stringsAsFactors = FALSE
+                     dec_lat_va, dec_long_va, colocated,
+                     stringsAsFactors = FALSE
     )
-
+    
     if (is.null(retVal)) {
       retVal <- df
     } else {
       retVal <- r_bind_dr(retVal, df)
     }
   }
-
+  
   retVal <- retVal[!duplicated(retVal), ]
-
+  
   attr(retVal, "url") <- urlCall
-
+  
   timenow <- Sys.time()
-
+  
   attr(retVal, "queryTime") <- timenow
   # Backwards compatible, might remove later:
   retVal$queryTime <- timenow
-
+  
   return(retVal)
 }

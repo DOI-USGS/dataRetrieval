@@ -133,7 +133,10 @@ temp <- readNWISdata(
   bBox = c(-83, 36.5, -82.5, 36.75), parameterCd = "00010", service = "site",
   seriesCatalogOutput = TRUE
 )
-wiGWL <- readNWISdata(stateCd = "WI", service = "gwlevels")
+GWL <- readNWISdata(site_no = c("392725077582401", 
+                                "375907091432201"),
+                    service = "gwlevels")
+                    
 meas <- readNWISdata(
   state_cd = "WI", service = "measurements",
   format = "rdb_expanded"
