@@ -1,3 +1,5 @@
+image: ${CI_REGISTRY_IMAGE}:latest
+
 workflow:
   rules:
     - if: $CI_COMMIT_TAG
@@ -54,16 +56,13 @@ buildcheck:
   cache: []
   dependencies:
     - build-image
-  image: ${CI_REGISTRY_IMAGE}:latest
   script:
     - R CMD build . --no-manual
     - Rscript -e 'devtools::check(document = FALSE, args = "--no-tests", check_dir = Sys.getenv("BUILD_LOGS_DIR"), vignettes = FALSE)'
 
-
 unittests:
   stage: test
   cache: []
-  image: ${CI_REGISTRY_IMAGE}:latest
   dependencies:
     - build-image
     - buildcheck
@@ -85,7 +84,6 @@ unittests:
 pages:
   stage: end
   cache: []
-  image: ${CI_REGISTRY_IMAGE}:latest
   only: 
     - main
   script:
@@ -96,4 +94,16 @@ pages:
       - $PAGES_OUTDIR
     expire_in: 1 week
     
+Validate Inventory:
+    stage: end
+    image: ${INTERNAL_REGISTRY}software/software-management:latest
+    script:
+      - software-management review
+        --project "${CI_PROJECT_PATH}"
+        --ref "${CI_COMMIT_BRANCH}"
+        --type "provisional"
+        --token "${GIT_TOKEN_CUSTOM}"
+    tags:
+        - chs-shared
+
 
