@@ -118,10 +118,18 @@
 #'   hasDataTypeCd = "iv", service = "site"
 #' )
 #' temp <- readNWISdata(
-#'   bBox = c(-83, 36.5, -82.5, 36.75), parameterCd = "00010", service = "site",
+#'   bBox = c(-83, 36.5, -82.5, 36.75), parameterCd = "00010", 
+#'   service = "site",
 #'   seriesCatalogOutput = TRUE
 #' )
-#' wiGWL <- readNWISdata(stateCd = "WI", service = "gwlevels")
+#' 
+#' levels <- readNWISdata(state_cd = "WI", 
+#'                        service = "gwlevels",
+#'                        begin_date = "2024-05-01",
+#'                        end_date = "2024-05-30",
+#'                        list_of_search_criteria = "state_cd") 
+#'
+#'
 #' meas <- readNWISdata(
 #'   state_cd = "WI", service = "measurements",
 #'   format = "rdb_expanded"
