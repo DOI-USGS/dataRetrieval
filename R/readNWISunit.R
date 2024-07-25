@@ -496,9 +496,10 @@ readNWISmeas <- function(siteNumbers,
 #' data2 <- readNWISgwl(sites, "", "")
 #' data3 <- readNWISgwl("420125073193001", "", "")
 #' # handling of data where date has no day
-#' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01")
+#' data4 <- readNWISgwl("263819081585801", startDate = "2000-01-01")
 #'
-#' data5 <- readNWISgwl("263819081585801", parameterCd = "72019")
+#' data5 <- readNWISgwl("263819081585801", parameterCd = "72019",
+#'                      startDate = "2000-01-01")
 #' }
 readNWISgwl <- function(siteNumbers,
                         startDate = "",

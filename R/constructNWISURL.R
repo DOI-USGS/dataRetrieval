@@ -247,6 +247,18 @@ constructNWISURL <- function(siteNumbers,
                               agency_cd = "USGS",
                               format = "rdb"
            )
+           if (nzchar(startDate)) {
+             url <- appendDrURL(url, begin_date = startDate)
+           }
+           if (nzchar(endDate)) {
+             url <- appendDrURL(url, end_date = endDate)
+           }
+           
+           url <- paste(url, "group_key=NONE",
+                         "date_format=YYYY-MM-DD",
+                         "rdb_compression=value", 
+                        sep = "&")
+           
          },
          { # this will be either dv, uv, groundwater
            multiplePcodes <- length(parameterCd) > 1

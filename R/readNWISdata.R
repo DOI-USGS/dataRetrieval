@@ -120,6 +120,12 @@
 #'                                 "375907091432201"),
 #'                     service = "gwlevels")
 #'                     
+#' levels <- readNWISdata(state_cd = "WI", 
+#'                        service = "gwlevels",
+#'                        begin_date = "2024-05-01",
+#'                        end_date = "2024-05-30",
+#'                        list_of_search_criteria = "state_cd") 
+#'                     
 #' meas <- readNWISdata(
 #'   state_cd = "WI", service = "measurements",
 #'   format = "rdb_expanded"
