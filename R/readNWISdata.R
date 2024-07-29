@@ -120,11 +120,10 @@
 #'                                 "375907091432201"),
 #'                     service = "gwlevels")
 #'                     
-#' levels <- readNWISdata(state_cd = "WI", 
+#' levels <- readNWISdata(stateCd = "WI", 
 #'                        service = "gwlevels",
-#'                        begin_date = "2024-05-01",
-#'                        end_date = "2024-05-30",
-#'                        list_of_search_criteria = "state_cd") 
+#'                        startDate = "2024-05-01",
+#'                        endDate = "2024-05-30") 
 #'                     
 #' meas <- readNWISdata(
 #'   state_cd = "WI", service = "measurements",
@@ -223,7 +222,7 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
   
   baseURL <- drURL(service, arg.list = values)
   
-  if (service %in% c("site", "dv", "iv", "gwlevels")) {
+  if (service %in% c("site", "dv", "iv")) {
     baseURL <- appendDrURL(baseURL, Access = pkg.env$access)
   }
   # actually get the data
@@ -475,11 +474,12 @@ readNWISdots <- function(...) {
     }
   }
   
-  if (service %in% c("peak", "qwdata", "measurements")) {
+  if (service %in% c("peak", "qwdata", "measurements", "gwlevels")) {
     format.default <- "rdb"
     
     names(values)[names(values) == "startDT"] <- "begin_date"
     names(values)[names(values) == "endDT"] <- "end_date"
+    names(values)[names(values) == "sites"] <- "site_no"
     
     if ("bBox" %in% names(values)) {
       values["nw_longitude_va"] <- as.character(matchReturn$bBox[1])
@@ -503,15 +503,19 @@ readNWISdots <- function(...) {
     }
   }
   
-  if (service == "peak" && "state_cd" %in% names(values)) {
+  if (service %in% c("peak", "gwlevels") && "state_cd" %in% names(values)) {
     values["list_of_search_criteria"] <- "state_cd"
   }
   
-  if (service == "peak" && "huc2_cd" %in% names(values)) {
+  if (service %in% c("peak", "gwlevels") && "huc2_cd" %in% names(values)) {
     values["list_of_search_criteria"] <- "huc2_cd"
   }
   
-  if (service == "peak" && "bBox" %in% names(values)) {
+  if(service == "gwlevels" && "aquiferCd" %in% names(values)){
+    values["aquiferCd"] <- "nat_aqfr_cd"
+  }
+  
+  if (service %in% c("peak", "gwlevels") && "bBox" %in% names(values)) {
     values["list_of_search_criteria"] <- "lat_long_bounding_box"
   }
   
