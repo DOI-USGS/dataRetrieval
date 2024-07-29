@@ -135,11 +135,10 @@ temp <- readNWISdata(
   seriesCatalogOutput = TRUE
 )
 
-levels <- readNWISdata(state_cd = "WI", 
+levels <- readNWISdata(stateCd = "WI", 
                        service = "gwlevels",
-                       begin_date = "2024-05-01",
-                       end_date = "2024-05-30",
-                       list_of_search_criteria = "state_cd") 
+                       startDate = "2024-05-01",
+                       endDate = "2024-05-30") 
 
 
 meas <- readNWISdata(
