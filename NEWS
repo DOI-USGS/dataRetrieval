@@ -1,7 +1,8 @@
 dataRetrieval 2.7.16
 ===================
-* Changed the base URL for groundwater level services. 
-* Updated parameterCdFile
+* Changed the base URL for groundwater level services since GW Levels RDB formats will be discontinued after August 5, 2024. 
+* Groundwater queries can no longer support siteStatus and siteType. Updates to the services are expected in the next year and those queries will return.
+* Updated parameterCdFile.
 
 dataRetrieval 2.7.15
 ===================
