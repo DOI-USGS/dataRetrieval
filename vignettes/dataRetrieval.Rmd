@@ -184,7 +184,7 @@ kable(data.df,
 
 Two output columns that may not be obvious are "srsname" and "casrn". Srsname stands for "Substance Registry Services". More information on the srs name can be found [here](https://sor.epa.gov/sor_internet/registry/substreg/home/overview/home.do).
 
-Casrn stands for "Chemical Abstracts Service (CAS) Registry Number". More information on CAS can be found [here](https://www.cas.org/support/documentation/chemical-substances/faqs).
+Casrn stands for "Chemical Abstracts Service (CAS) Registry Number". 
 
 For unit values data (sensor data measured at regular time intervals such as 15 minutes or hourly), knowing the parameter code and `siteNumber` is enough to make a request for data.  For most variables that are measured on a continuous basis, the USGS also stores the historical data as daily values.  These daily values are statistical summaries of the continuous data, e.g. maximum, minimum, mean, or median. The different statistics are specified by a 5-digit statistics code.  
 

@@ -42,7 +42,7 @@ setAccess <- function(access = "public") {
   pkg.env$iv <- "https://nwis.waterservices.usgs.gov/nwis/iv/"
   pkg.env$iv_recent <- "https://waterservices.usgs.gov/nwis/iv/"
   pkg.env$dv <- "https://waterservices.usgs.gov/nwis/dv/"
-  pkg.env$gwlevels <- "https://waterservices.usgs.gov/nwis/gwlevels/"
+  pkg.env$gwlevels <- "https://nwis.waterdata.usgs.gov/nwis/gwlevels"
   pkg.env$measurements <- "https://waterdata.usgs.gov/nwis/measurements/"
   pkg.env$peak <- "https://nwis.waterdata.usgs.gov/usa/nwis/peak/"
   pkg.env$rating <- "https://waterdata.usgs.gov/nwisweb/get_ratings/"
