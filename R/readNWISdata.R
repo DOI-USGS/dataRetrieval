@@ -118,6 +118,7 @@
 #' )
 #' GWL <- readNWISdata(site_no = c("392725077582401", 
 #'                                 "375907091432201"),
+#'                     parameterCd = "62610",
 #'                     service = "gwlevels")
 #'                     
 #' levels <- readNWISdata(stateCd = "WI", 
@@ -266,6 +267,8 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
     } else {
       retval$tz_cd <- rep(tz, nrow(retval))
     }
+  } else if("gwlevels" == service && "parameterCd" %in% names(values)){
+    retval <- retval[retval$parameter_cd %in% values[["parameterCd"]], ]
   }
   
   return(retval)

@@ -130,6 +130,7 @@ temp <- readNWISdata(
 )
 GWL <- readNWISdata(site_no = c("392725077582401", 
                                 "375907091432201"),
+                    parameterCd = "62610",
                     service = "gwlevels")
                     
 levels <- readNWISdata(stateCd = "WI", 
