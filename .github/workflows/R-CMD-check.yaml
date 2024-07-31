@@ -6,7 +6,9 @@ on:
   pull_request:
     branches: [main]
 
-name: R-CMD-checka
+name: R-CMD-check
+
+permissions: read-all
 
 jobs:
   R-CMD-check:
@@ -20,6 +22,7 @@ jobs:
         config:
           - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
+          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
 
@@ -28,21 +31,22 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@c0a81a463886bb75afe234e07a9fd5bb79219196
+      - uses: actions/checkout@9a9194f87191a7e9055e3e9b95b8cfb13023bb08
 
-      - uses: r-lib/actions/setup-pandoc@756399d909bf9c180bbdafe8025f794f51f2da02
+      - uses: r-lib/actions/setup-pandoc@6012817847b5f064d0882d67a7b5e2ca6639afb2
 
-      - uses: r-lib/actions/setup-r@756399d909bf9c180bbdafe8025f794f51f2da02
+      - uses: r-lib/actions/setup-r@15cf1013badbaf6d25f100593ad5d7d75e65d64b
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@756399d909bf9c180bbdafe8025f794f51f2da02
+      - uses: r-lib/actions/setup-r-dependencies@96b1dc658a45175f93ed5f33fda2b2cebbb12ee8
         with:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - uses: r-lib/actions/check-r-package@756399d909bf9c180bbdafe8025f794f51f2da02
+      - uses: r-lib/actions/check-r-package@3e56ca41aa267855f36891af7a495d24bfaa8373
         with:
           upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
