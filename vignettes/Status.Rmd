@@ -33,14 +33,15 @@ If you have additional questions about the NWIS qw data service, email CompTools
 
 ### WQP: USGS Data
 
-**New USGS data**: temporarily not accessible on the main Water Quality Portal (WQP) page (www.waterqualitydata.us). Data are still being collected, but are not publicly available. This limited availability is expected to last a few months.
+**New USGS data**: temporarily not accessible on the main Water Quality Portal (WQP) page (www.waterqualitydata.us). Data are still being collected, but are not available on this webpage. This limited availability is expected to last a few months.
 
-**New USGS data** _are_ accessible in a pre-release (*beta*) version of the [WQP web page](https://www.waterqualitydata.us/beta/) and new [wqx3 web services](https://waterqualitydata.us/wqx3/). Data are available in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)) for three new "Data Profiles" (how the data is formatted by the WQP):
+**New USGS data** _are_ accessible in a pre-release (*beta*) version of the [WQP web page](https://www.waterqualitydata.us/beta/) and new [wqx3 web services](https://waterqualitydata.us/wqx3/). Data are available in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)) for these new "Data Profiles" (how the data is formatted by the WQP):
 
 * Monitoring Location
-* Narrow results
-* Full Physical Chemical results
-* Basic Physical Chemical
+* Results - Narrow
+* Results - Full Physical Chemical
+* Results - Basic Physical Chemical
+* Sampling Activity
 
 Guidance on how to use the new web page and web services are available in the [User Guide](https://www.waterqualitydata.us/beta/portal_userguide/) and [Web Services Guide](https://www.waterqualitydata.us/beta/webservices_documentation/). Additional profiles will continue to be added to this beta release in the coming weeks. 
 

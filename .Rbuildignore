@@ -9,13 +9,10 @@ dataRetrieval-concordance.tex
 README.md
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.travis\.yml$
 ^\.Rproj\.gitignore
 ^\.Rproj\.RData
 ^\.Rproj\dataRetrieval.Rproj
 ^\.Rproj\.Rhistory
-^\.Rproj\.travis.yml
-^\.Rproj\appveyor.yml
 CONDUCT.md
 DISCLAIMER.md
 code.json
@@ -92,6 +89,8 @@ vignettes/stylesSlides.css
 vignettes/Status.Rmd
 vignettes/long_to_wide.Rmd
 vignettes/join_by_closest.Rmd
+vignettes/wqx3_development_plan.Rmd
+vignettes/dataretrieval_discrete_changes_images/*
 ^ci$
 ^public$
 ^docker$
