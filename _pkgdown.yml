@@ -34,6 +34,8 @@ navbar:
       href: articles/qwdata_changes.html
     - text: USGS QW Status
       href: articles/Status.html
+    - text: QW Development Plan
+      href: articles/wqx3_development_plan.html
   - text: Additional Articles
     menu:
     - text: Tutorial
