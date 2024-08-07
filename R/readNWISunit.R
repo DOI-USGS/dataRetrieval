@@ -521,7 +521,7 @@ readNWISgwl <- function(siteNumbers,
     tz = tz
   )
   
-  if(!is.na(parameterCd)){
+  if(!all(is.na(parameterCd))){
     data <- data[data$parameter_cd %in% parameterCd, ]
   }
 
