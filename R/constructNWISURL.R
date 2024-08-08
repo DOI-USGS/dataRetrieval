@@ -356,37 +356,44 @@ constructWQPURL <- function(siteNumbers,
                             endDate,
                             legacy = FALSE) {
   
-  multiplePcodes <- length(parameterCd) > 1
-  
-  if (all(nchar(parameterCd) == 5)) {
-    suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
-  } else {
-    pCodeLogic <- FALSE
-    parameterCd <- sapply(parameterCd, utils::URLencode, USE.NAMES = FALSE, reserved = TRUE)
+  allPCode <- any(toupper(parameterCd) == "ALL")
+  if(!allPCode){
+    multiplePcodes <- length(parameterCd) > 1
+    
+    if (all(nchar(parameterCd) == 5)) {
+      suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
+    } else {
+      pCodeLogic <- FALSE
+      parameterCd <- sapply(parameterCd, utils::URLencode, USE.NAMES = FALSE, reserved = TRUE)
+    }
+    pcode_name <- ifelse(pCodeLogic, "pCode", "characteristicName")
   }
-  pcode_name <- ifelse(pCodeLogic, "pCode", "characteristicName")
   
-  
-  if(legacy){
+  if(legacy & !allPCode){
     if (multiplePcodes) {
       parameterCd <- paste(parameterCd, collapse = ";")
     }
     parameterCd <- paste0(pcode_name, "=", parameterCd)
     
-    siteNumbers <- paste(siteNumbers, collapse = ";")
-    baseURL <- drURL("Result", siteid = siteNumbers, Access = pkg.env$access)
-  } else {
+  } else if(!legacy & !allPCode){
     parameterCd <- paste0(pcode_name, "=", parameterCd)
     if (multiplePcodes) {
       parameterCd <- paste0(parameterCd, collapse = "&")
     } 
-    
+  }
+  
+  if(legacy){
+    siteNumbers <- paste(siteNumbers, collapse = ";")
+    baseURL <- drURL("Result", siteid = siteNumbers, Access = pkg.env$access)
+  } else {
     siteNumbers <- paste(paste0("siteid=", siteNumbers), collapse = "&")
     baseURL <- drURL("ResultWQX3", Access = pkg.env$access)
     baseURL <- paste0(baseURL, siteNumbers)
   }
   
-  baseURL <- paste0(baseURL, "&", parameterCd)
+  if(!allPCode){
+    baseURL <- paste0(baseURL, "&", parameterCd)
+  }
   
   if (nzchar(startDate)) {
     startDate <- format(as.Date(startDate), format = "%m-%d-%Y")
