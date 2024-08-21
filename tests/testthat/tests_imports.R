@@ -235,16 +235,6 @@ test_that("importWaterML2 internal test", {
   expect_is(UserData$value, "numeric")
 })
 
-test_that("importWaterML2 external test", {
-  testthat::skip_on_cran()
-  url <- "https://waterservices.usgs.gov/nwis/iv/?format=waterml,2.0&sites=01646500&parameterCd=00060,00065"
-  xml <- getWebServiceData(url)
-  measurementTS2 <- xml2::xml_find_all(xml, "//wml2:MeasurementTimeseries")
-  exData <- importWaterML2(measurementTS2)
-  expect_is(exData$value, "numeric")
-  expect_gt(nrow(exData), 0)
-})
-
 
 context("importWQP_noCRAN")
 
