@@ -242,7 +242,6 @@ constructNWISURL <- function(siteNumbers,
            
            url <- appendDrURL(baseURL,
                               site_no = siteNumbers,
-                              agency_cd = "USGS",
                               format = "rdb"
            )
            if (nzchar(startDate)) {
