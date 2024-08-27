@@ -355,7 +355,7 @@ test_that("readWQPdots working", {
   # bbox vector turned into single string with coords separated by semicolons
   formArgs_bbox <- dataRetrieval:::readWQPdots(bbox = c(-92.5, 45.4, -87, 47))
   expect_true(length(formArgs_bbox) == 2)
-  expect_true(length(gregexpr(";", formArgs_bbox)[[1]]) == 3)
+  expect_true(length(gregexpr(",", formArgs_bbox)[[1]]) == 3)
 
   # NWIS names (siteNumber) converted to WQP expected names (siteid)
   formArgs_site <- dataRetrieval:::readWQPdots(siteNumber = "04010301")
@@ -368,6 +368,26 @@ test_that("readWQPdots working", {
   expect_true(length(formArgs$values) == 2)
   expect_true("statecode" %in% names(formArgs$values))
   expect_false("stateCd" %in% names(formArgs$values))
+  
+  bbox <- c(-86.97361, 34.48827, -86.61349,  34.65623)
+  what_bbox <- whatWQPdata(bBox = bbox)
+  expect_true(nrow(what_bbox) > 0)
+  x <- whatWQPsites(bBox = bbox)
+  expect_true(nrow(x) > 0)
+  df <- readWQPdata(bBox = bbox,
+                    characteristicName = "Total Coliform",
+                    startDateLo = "2023-01-01",
+                    startDateHi = "2023-12-31",
+                    service = "ResultWQX3",
+                    dataProfile = "narrow")
+  expect_true(nrow(df) > 0)
+  df_legacy <- readWQPdata(bBox = bbox,
+                           characteristicName = "Total Coliform",
+                           startDateLo = "2023-01-01",
+                           startDateHi = "2023-12-31",
+                           service = "Result",
+                           dataProfile = "narrowResult")
+  expect_true(nrow(df_legacy) > 0)
 })
 
 
