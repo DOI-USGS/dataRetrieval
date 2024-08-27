@@ -48,7 +48,7 @@ readWQPdots <- function(..., legacy = FALSE) {
     
   bbox <- "bBox" %in% names(matchReturn)
   if(bbox){
-    values_bbox <- sapply(matchReturn["bBox"], function(x) as.character(paste0(eval(x), collapse = ";")))
+    values_bbox <- sapply(matchReturn["bBox"], function(x) as.character(paste0(eval(x), collapse = ",")))
     matchReturn <- matchReturn[names(matchReturn) != "bBox"]
   }
   
