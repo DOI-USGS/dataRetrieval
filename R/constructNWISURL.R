@@ -406,7 +406,7 @@ constructWQPURL <- function(siteNumbers,
   
   baseURL <- paste0(baseURL, "&mimeType=csv")
   if(!legacy){
-    baseURL <- paste0(baseURL, "&dataProfile=narrow")
+    baseURL <- paste0(baseURL, "&dataProfile=basicPhysChem")
   }
   return(baseURL)
 }
