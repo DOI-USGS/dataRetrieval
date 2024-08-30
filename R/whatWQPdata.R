@@ -18,7 +18,7 @@
 #' }
 whatWQPsamples <- function(..., 
                            convertType = TRUE) {
-  values <- readWQPdots(..., legacy = TRUE)
+  values <- readWQPdots(..., legacy = FALSE)
 
   values <- values$values
 
@@ -32,23 +32,16 @@ whatWQPsamples <- function(...,
 
   values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
 
-  baseURL <- drURL("Activity", arg.list = values)
-  wqp_message_now("Activity")
+  baseURL <- drURL("ActivityWQX3", arg.list = values)
+  wqp_message_now("ActivityWQX3")
   baseURL <- appendDrURL(baseURL, mimeType = "csv")
 
-  withCallingHandlers(
-    {
-      retval <- importWQP(baseURL,
-        convertType = convertType
-      )
-    },
-    warning = function(w) {
-      if (any(grepl("Number of rows returned not matched in header", w))) {
-        invokeRestart("muffleWarning")
-      }
-    }
+  retval <- importWQP(baseURL,
+                      convertType = convertType
   )
-
+  attr(retval, "legacy") <- FALSE
+  attr(retval, "wqp-request-id") <- attr(retval, "headerInfo")$`wqp-request-id`
+  
   attr(retval, "queryTime") <- Sys.time()
   attr(retval, "url") <- baseURL
 
