@@ -21,6 +21,19 @@ data. To view the status of changes in data availability and code
 functionality, visit:
 <https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
 
+:warning: All documentation on
+<a href="https://doi-usgs.github.io/dataRetrieval/\"
+class="uri">https://doi-usgs.github.io/dataRetrieval/\</a> assume you
+have the development version of dataRetrieval installed. To do that:
+
+``` r
+library(remotes)
+install_github("DOI-USGS/dataRetrieval",
+               build_vignettes = TRUE, 
+               build_opts = c("--no-resave-data",
+                              "--no-manual"))
+```
+
 If you have additional questions about these changes, email
 <CompTools@usgs.gov>.
 
@@ -92,7 +105,7 @@ citation(package = "dataRetrieval")
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
-#>     author = {Laura DeCicco and Robert Hirsch and David Lorenz and David Watkins and Mike Johnson},
+#>     author = {Laura DeCicco and Robert Hirsch and David Lorenz and Jordan Read and Jordan Walker and Lindsay Platt and David Watkins and David Blodgett and Mike Johnson and Aliesha Krall},
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
@@ -122,18 +135,15 @@ NWIScitation <- create_NWIS_bib(dv)
 NWIScitation
 #> U.S. Geological Survey (2024). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jun
-#> 15, 2024,
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Aug
+#> 30, 2024,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
-```
-
-``` r
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Jun 15, 2024},
+#>   note = {Accessed Aug 30, 2024},
 #>   year = {2024},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -157,19 +167,16 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2024). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Jun 15, 2024,
-#> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes>.
-```
-
-``` r
+#> Accessed Aug 30, 2024,
+#> <https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=csv&dataProfile=basicPhysChem>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Jun 15, 2024},
+#>   note = {Accessed Aug 30, 2024},
 #>   year = {2024},
-#>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=tsv&zip=yes},
+#>   url = {https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=csv&dataProfile=basicPhysChem},
 #> }
 ```
 
