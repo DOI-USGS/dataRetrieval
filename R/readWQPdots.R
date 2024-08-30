@@ -25,12 +25,12 @@ readWQPdots <- function(..., legacy = FALSE) {
   if ("dataProfile" %in% names(matchReturn)) {
     profile <- matchReturn$dataProfile
     if (profile == "activityAll") {
-      service <- "Activity"
+      service <- "ActivityWQX3"
       matchReturn$service <- NULL
     } else if (profile %in% c("resultPhysChem","biological","narrowResult")) {
       service <- "Result"
       matchReturn$service <- NULL
-    } else if(profile %in% c("fullPhysChem", "narrow")){
+    } else if(profile %in% c("fullPhysChem", "narrow", "basicPhysChem")){
       service <- "ResultWQX3"
       matchReturn$service <- NULL      
     } 
@@ -41,7 +41,7 @@ readWQPdots <- function(..., legacy = FALSE) {
     "ActivityMetric", "SiteSummary",
     "Project", "ProjectMonitoringLocationWeighting",
     "ResultDetectionQuantitationLimit", "BiologicalMetric",
-    "ResultWQX3", "StationWQX3"
+    "ResultWQX3", "StationWQX3", "ActivityWQX3"
   ))
   
   names(matchReturn)[names(matchReturn) == "bbox"] <- "bBox"

@@ -65,6 +65,7 @@ setAccess <- function(access = "public") {
   pkg.env$Organization <- "https://www.waterqualitydata.us/data/Organization/search"
   pkg.env$ResultWQX3 <- "https://www.waterqualitydata.us/wqx3/Result/search"
   pkg.env$StationWQX3 <- "https://www.waterqualitydata.us/wqx3/Station/search"
+  pkg.env$ActivityWQX3 <- "https://www.waterqualitydata.us/wqx3/Activity/search"
   pkg.env$samplesData <- "https://api.waterdata.usgs.gov/samples-data/summary"
   pkg.env$status <- "https://www.waterqualitydata.us/wqx3/status/"
   
