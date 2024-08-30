@@ -36,7 +36,7 @@ https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }
 
 only_legacy <- function(service){
-  legacy <- service %in% c("Activity", "Organization",
+  legacy <- service %in% c("Organization",
                  "ActivityMetric", "SiteSummary",
                  "Project", "ProjectMonitoringLocationWeighting",
                  "ResultDetectionQuantitationLimit", "BiologicalMetric")
@@ -55,7 +55,7 @@ is_legacy <- function(service){
 wqp_message_now <- function(service){
   if(only_legacy(service)){
     return(wqp_message_only_legacy())
-  } else if (service %in% c("Result", "Station")){
+  } else if (service %in% c("Result", "Station", "Activity")){
     return(wqp_message())
   }
 }

@@ -213,7 +213,7 @@ readWQPdata <- function(...,
                                   "Project", "ProjectMonitoringLocationWeighting",
                                   "ResultDetectionQuantitationLimit",
                                   "BiologicalMetric", "Organization",
-                                  "ResultWQX3", "StationWQX3"),
+                                  "ResultWQX3", "StationWQX3", "ActivityWQX3"),
                        several.ok = FALSE)
   
   legacy <- is_legacy(service)
