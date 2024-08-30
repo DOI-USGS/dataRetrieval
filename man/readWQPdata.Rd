@@ -83,6 +83,7 @@ Monitoring Locations \tab StationWQX3 \tab /wqx3/Station/search \tab \cr
 Full Physical Chemical \tab ResultWQX3 \tab /wqx3/Result/search \tab fullPhysChem \cr
 Narrow \tab ResultWQX3 \tab /wqx3/Result/search \tab narrow \cr
 Basic Physical Chemical \tab ResultWQX3 \tab /wqx3/Result/search \tab basicPhysChem \cr
+Sampling Activity \tab ActivityWQX3 \tab /wqx3/Activity/search \cr
 }
 
 Legacy:
@@ -126,13 +127,6 @@ pHData_narrow <- readWQPdata(siteid = "USGS-04024315",
 attr(pHData_narrow, "url") 
 ncol(pHData_narrow)
 
-# vs legacy:
-pHData_legacy <- readWQPdata(siteid = "USGS-04024315", 
-                      characteristicName = nameToUse,
-                      service = "Result",
-                      dataProfile = "narrowResult")
-attr(pHData_legacy, "url")
-
 # Data profiles: "Site Data Only"
 site_data <- readWQPdata(
   statecode = "WI",
@@ -148,7 +142,28 @@ DeWitt <- readWQPdata(
   characteristicName = "Nitrogen"
 )
 
+# Data profile: "Sampling Activity"
+activity <- readWQPdata(
+  siteid = "USGS-04024315",
+  service = "ActivityWQX3"
+)
+
+Dane_activity <- readWQPdata(
+  statecode = "Wisconsin",
+  countycode = "Dane",
+  startDateLo = "2023-01-01",
+  startDateHi = "2023-12-31",
+  service = "ActivityWQX3"
+)
+
+########################################################
 # Legacy examples:
+
+pHData_legacy <- readWQPdata(siteid = "USGS-04024315", 
+                      characteristicName = nameToUse,
+                      service = "Result",
+                      dataProfile = "narrowResult")
+attr(pHData_legacy, "url")
 
 # Data profiles: "Organization Data" (legacy)
 org_data <- readWQPdata(
