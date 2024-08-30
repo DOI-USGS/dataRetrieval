@@ -428,7 +428,7 @@ test_that("Construct WQP urls", {
   # nolint start: line_length_linter
   expect_equal(
     url_wqp,
-    "https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-01594440&pCode=01075&pCode=00029&pCode=00453&startDateLo=01-01-1985&mimeType=csv&dataProfile=narrow"
+    "https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-01594440&pCode=01075&pCode=00029&pCode=00453&startDateLo=01-01-1985&mimeType=csv&dataProfile=basicPhysChem"
   )
 
   # Multiple characteristicNames
@@ -443,7 +443,7 @@ test_that("Construct WQP urls", {
   )
   expect_equal(
     obs_url_orig,
-    "https://www.waterqualitydata.us/wqx3/Result/search?siteid=IIDFG-41WSSPAHS&siteid=USGS-02352560&characteristicName=Temperature&characteristicName=Temperature%2C%20sample&characteristicName=Temperature%2C%20water&characteristicName=Temperature%2C%20water%2C%20deg%20F&mimeType=csv&dataProfile=narrow"
+    "https://www.waterqualitydata.us/wqx3/Result/search?siteid=IIDFG-41WSSPAHS&siteid=USGS-02352560&characteristicName=Temperature&characteristicName=Temperature%2C%20sample&characteristicName=Temperature%2C%20water&characteristicName=Temperature%2C%20water%2C%20deg%20F&mimeType=csv&dataProfile=basicPhysChem"
   )
 
   # nolint end
@@ -463,7 +463,7 @@ test_that("Construct WQP urls", {
   # nolint start: line_length_linter
   expect_equal(
     url_wqp,
-    "https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-01594440&pCode=01075&pCode=00029&pCode=00453&startDateLo=01-01-1985&mimeType=csv&dataProfile=narrow"
+    "https://www.waterqualitydata.us/wqx3/Result/search?siteid=USGS-01594440&pCode=01075&pCode=00029&pCode=00453&startDateLo=01-01-1985&mimeType=csv&dataProfile=basicPhysChem"
   )
 
   # nolint end
