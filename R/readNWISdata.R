@@ -506,7 +506,8 @@ readNWISdots <- function(...) {
     }
   }
   
-  if (service %in% c("peak", "gwlevels") && "state_cd" %in% names(values)) {
+  if (service %in% c("peak", "gwlevels") && "stateCd" %in% names(values)) {
+    names(values)[names(values) == "stateCd"] <- "state_cd"
     values["list_of_search_criteria"] <- "state_cd"
   }
   
