@@ -59,6 +59,24 @@ test_that("General NWIS retrievals working", {
   )
   expect_is(siteInfo$station_nm, "character")
 
+  gw_data <- readNWISdata(
+    stateCd = "AL",
+    service = "gwlevels",
+    startDate = "2024-05-01",
+    endDate = "2024-05-30") 
+  
+  expect_true(nrow(gw_data) > 0)
+  expect_equal(attr(gw_data, "url"),
+               "https://nwis.waterdata.usgs.gov/nwis/gwlevels?state_cd=AL&begin_date=2024-05-01&end_date=2024-05-30&date_format=YYYY-MM-DD&rdb_inventory_output=file&TZoutput=0&range_selection=date_range&list_of_search_criteria=state_cd&format=rdb")
+  
+  gw_data2 <- readNWISdata(
+    state_cd = "AL",
+    service = "gwlevels",
+    startDate = "2024-05-01",
+    endDate = "2024-05-30") 
+  
+  expect_equal(nrow(gw_data), nrow(gw_data2))
+  
   # nolint start: line_length_linter
   url <- "https://waterservices.usgs.gov/nwis/dv/?site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06"
   dv <- importRDB1(url, asDateTime = FALSE)
@@ -346,6 +364,11 @@ test_that("whatNWISsites working", {
   bboxSites <- whatNWISsites(bbox = c(-92.5, 45.4, -87, 47), parameterCd = "00060")
   expect_true(nrow(bboxSites) > 0)
   expect_true(is.numeric(bboxSites$dec_lat_va))
+  
+  #gwlevels:
+  info <- whatNWISsites(stateCd = "NY", service="gwlevels") 
+  expect_true(nrow(info) > 0)
+  expect_equal(attr(info, "url"), "https://waterservices.usgs.gov/nwis/site/?stateCd=NY&format=mapper&hasDataTypeCd=gw")
 })
 
 context("readWQPdots")
