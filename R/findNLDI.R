@@ -75,7 +75,7 @@ get_nldi_sources <- function(url = pkg.env$nldi_base) {
 #' @return a data.frame
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' base <- "https://labs.waterdata.usgs.gov/api/nldi/linked-data/"
+#' base <- ""https://api.water.usgs.gov/nldi/linked-data/"
 #' get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = FALSE)
 #' get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = TRUE)
 #' get_nldi(url = paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
