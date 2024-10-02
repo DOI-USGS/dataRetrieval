@@ -34,11 +34,32 @@
 #' oneSite <- whatNWISsites(sites = "05114000")
 #' }
 whatNWISsites <- function(...) {
+
+  matchReturn <- convertLists(...)
   valuesList <- readNWISdots(...)
 
   values <- sapply(valuesList$values, function(x) utils::URLencode(x))
   values["format"] <- "mapper"
+  
+  #################
+  # temporary gwlevels fixes
+  values <- values[!names(values) %in% c("date_format",
+                                        "TZoutput",
+                                        "rdb_inventory_output",
+                                        "list_of_search_criteria")]
+  
 
+  names(values)[names(values) == "state_cd"] <- "stateCd"
+  ##################
+  
+  if("service" %in% names(matchReturn)){
+    values["hasDataTypeCd"] <- switch(valuesList$service,
+                                      "gwlevels" = "gw",
+                                      "iv" = "iv",
+                                      "dv" = "dv",
+                                      "peak" = "pk")
+  }
+  
   urlCall <- drURL("site", Access = pkg.env$access, arg.list = values)
 
   rawData <- getWebServiceData(urlCall, encoding = "gzip")
