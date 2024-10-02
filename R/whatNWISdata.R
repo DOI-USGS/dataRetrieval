@@ -74,7 +74,7 @@
 #' uvDataMulti <- whatNWISdata(siteNumber = c("05114000", "09423350"),
 #'                             service = c("uv", "dv"))
 #' flowAndTemp <- whatNWISdata(
-#'   stateCd = "WI", service = "uv",
+#'   stateCd = "WI", service = "dv",
 #'   parameterCd = c("00060", "00010"),
 #'   statCd = "00003"
 #' )
@@ -82,6 +82,9 @@
 #'                       parameterCd = "00060",
 #'                       siteType = "ST", 
 #'                       service = "site")
+#'                       
+#' sites <- whatNWISdata(stateCd = "WI",
+#'                       service = "gwlevels")
 #' }
 whatNWISdata <- function(..., convertType = TRUE) {
   matchReturn <- convertLists(...)
@@ -110,6 +113,8 @@ whatNWISdata <- function(..., convertType = TRUE) {
     service[service == "peak"] <- "pk"
   } else if (any(service == "measurements")) {
     service[service == "measurements"] <- "sv"
+  } else if(any(service == "gwlevels")) {
+    service[service == "gwlevels"] <- "gw"
   }
   
   if ("statCd" %in% names(matchReturn)) {
@@ -163,3 +168,4 @@ whatNWISdata <- function(..., convertType = TRUE) {
   }
   return(SiteFile)
 }
+
