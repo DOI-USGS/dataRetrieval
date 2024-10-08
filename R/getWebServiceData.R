@@ -158,12 +158,13 @@ getQuerySummary <- function(url) {
 retryGetOrPost <- function(obs_url, ...) {
   resp <- NULL
   if (nchar(obs_url) < 2048 || grepl(pattern = "ngwmn", x = obs_url)) {
+    message("GET: ", obs_url)
     resp <- httr::RETRY("GET", obs_url, ..., httr::user_agent(default_ua()))
   } else {
     split <- strsplit(obs_url, "?", fixed = TRUE)
     obs_url <- split[[1]][1]
     query <- split[[1]][2]
-
+    message("POST: ", obs_url)
     resp <- httr::RETRY("POST", obs_url, ...,
       body = query,
       httr::content_type("application/x-www-form-urlencoded"),
