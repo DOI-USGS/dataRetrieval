@@ -32,21 +32,33 @@ getWebServiceData <- function(obs_url, ...) {
                   "application/zip;charset=UTF-8",
                   "application/vnd.geo+json;charset=UTF-8")
   return_content <- c("text/tab-separated-values;charset=UTF-8",
-                      "text/csv;charset=UTF-8" )
+                      "text/csv;charset=UTF-8",
+                      "text/plain")
   
   if(good){
     headerInfo <- httr::headers(returnedList)
 
     if (headerInfo$`content-type` %in% return_content) {
       returnedDoc <- httr::content(returnedList, type = "text", encoding = "UTF-8")
+      trys <- 1
       if (all(grepl("ERROR: INCOMPLETE DATA", returnedDoc))) {
-
-        returnedList <- retryGetOrPost(obs_url, ...)
-        good <- check_non_200s(returnedList)
-        if(good){
-          returnedDoc <- httr::content(returnedList, type = "text", encoding = "UTF-8")
-        }
+        
+        while(trys <= 3){
+          message("Trying again!")
+          Sys.sleep(5)
+          returnedList <- retryGetOrPost(obs_url, pause_base = 20)
+          good <- check_non_200s(returnedList)
+          if(good){
+            returnedDoc <- httr::content(returnedList, type = "text", encoding = "UTF-8")
+          }
+          if (all(grepl("ERROR: INCOMPLETE DATA", returnedDoc))) {
+            trys <- trys + 1
+          } else {
+            trys <- 100
+          }
+        } 
       }
+
     } else if (headerInfo$`content-type` %in% return_raw) {
       returnedDoc <- returnedList
     } else if (headerInfo$`content-type` %in% return_readLines) {
@@ -73,6 +85,8 @@ getWebServiceData <- function(obs_url, ...) {
     attr(returnedDoc, "headerInfo") <- headerInfo
 
     return(returnedDoc)
+  } else {
+    return(NULL)
   }
 }
 
@@ -95,7 +109,6 @@ check_non_200s <- function(returnedList){
     }
     return(FALSE)
   } else if (status != 200) {
-    message("For: ", obs_url, "\n")
     httr::message_for_status(returnedList)
     return(FALSE)
     
