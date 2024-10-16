@@ -81,6 +81,9 @@ readWQPqw <- function(siteNumbers,
   } else {
     retval <- importWQP(url, tz = tz, 
                         convertType = convertType)
+    if(is.null(retval)){
+      return(NULL)
+    }
     attr(retval, "legacy") <- legacy
 
     if(legacy){
