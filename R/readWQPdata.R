@@ -258,6 +258,10 @@ readWQPdata <- function(...,
       convertType = convertType
     )
     
+    if(is.null(retval)){
+      return(NULL)
+    }
+    
     attr(retval, "legacy") <- legacy
     
     if(!legacy){
