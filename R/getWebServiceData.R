@@ -43,10 +43,10 @@ getWebServiceData <- function(obs_url, ...) {
       trys <- 1
       if (all(grepl("ERROR: INCOMPLETE DATA", returnedDoc))) {
         
-        while(trys <= 3){
+        while(trys <= 5){
           message("Trying again!")
-          Sys.sleep(5)
-          returnedList <- retryGetOrPost(obs_url, pause_base = 20)
+          obs_url <- paste0(obs_url, "&try=", trys)
+          returnedList <- retryGetOrPost(obs_url)
           good <- check_non_200s(returnedList)
           if(good){
             returnedDoc <- httr::content(returnedList, type = "text", encoding = "UTF-8")
