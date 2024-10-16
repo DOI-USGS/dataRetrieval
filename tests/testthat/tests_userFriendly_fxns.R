@@ -146,6 +146,10 @@ test_that("WQP qw tests", {
 
   INFO2 <- readWQPqw("WIDNR_WQX-10032762", nameToUse, startDate = "", endDate = "")
   expect_is(INFO2$Activity_StartDateTime, "POSIXct")
+  
+  df <- readWQPqw("USGS-04193500", parameterCd = "00665")
+  expect_true(nrow(df) > 0)
+  
 })
 
 context("readNWISstat tests")
