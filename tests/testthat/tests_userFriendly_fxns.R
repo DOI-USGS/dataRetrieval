@@ -150,6 +150,8 @@ test_that("WQP qw tests", {
   df <- readWQPqw("USGS-04193500", parameterCd = "00665")
   expect_true(nrow(df) > 0)
   
+  df2 <- readWQPqw("USGS-05427718", parameterCd = "all")
+  expect_true(nrow(df2) > 0)
 })
 
 context("readNWISstat tests")

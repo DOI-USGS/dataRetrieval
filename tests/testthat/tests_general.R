@@ -502,6 +502,8 @@ test_that("internal functions", {
 })
 
 test_that("profiles", {
+  
+  testthat::skip_on_cran()
   # Data profiles: "Organization Data"
   org_data <- readWQPdata(
     statecode = "WI",
