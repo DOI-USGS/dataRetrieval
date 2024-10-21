@@ -235,16 +235,18 @@ test_that("General WQP retrievals working", {
   expect_is(pHData$Activity_StartDateTime, "POSIXct")
 
   # testing lists:
-  startDate <- as.Date("2023-01-01")
-  secchi.names <- c(
-    "Depth, Secchi disk depth",
-    "Depth, Secchi disk depth (choice list)",
-    "Secchi Reading Condition (choice list)",
-    "Water transparency, Secchi disc"
-  )
+  startDate <- as.Date("2022-01-01")
+  secchi.names <- c("Depth, Secchi disk depth",
+  "Secchi depth",
+  "Water transparency, Secchi disc",
+  "Depth, Secchi disk depth (choice list)")
+  # "Transparency, Secchi tube with disk",
+  # "Secchi Reading Condition (choice list)",
+  # "Depth, Secchi disk visible at bottom (Y/N) (choice list)")
+  
   args_2 <- list(
     "startDateLo" = startDate,
-    "startDateHi" = "2013-12-31",
+    "startDateHi" = "2024-01-01",
     statecode = "WI",
     characteristicName = secchi.names
   )
@@ -258,7 +260,8 @@ test_that("General WQP retrievals working", {
     statecode = "WI",
     characteristicName = secchi.names
   )
-
+  lakeData <- readWQPdata(args_2, ignore_attributes = TRUE)
+  expect_true(nrow(lakeData) > 0)
   lakeSites <- whatWQPsites(args_2)
   expect_type(lakeSites, "list")
 
@@ -499,6 +502,8 @@ test_that("internal functions", {
 })
 
 test_that("profiles", {
+  
+  testthat::skip_on_cran()
   # Data profiles: "Organization Data"
   org_data <- readWQPdata(
     statecode = "WI",
