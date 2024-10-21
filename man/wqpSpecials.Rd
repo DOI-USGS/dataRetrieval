@@ -10,7 +10,7 @@ whatWQPsamples(..., convertType = TRUE)
 
 whatWQPmetrics(..., convertType = TRUE)
 
-whatWQPsites(..., legacy = FALSE)
+whatWQPsites(..., legacy = TRUE)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation}
@@ -30,7 +30,7 @@ mimeType,  and providers is optional (these arguments are picked automatically).
 the function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
 
-\item{legacy}{Logical. If TRUE, use legacy WQP services. Default is FALSE.}
+\item{legacy}{Logical. If TRUE, use legacy WQP services. Default is TRUE}
 }
 \value{
 data frame
