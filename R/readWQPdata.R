@@ -190,7 +190,6 @@
 #'   siteid = "USGS-04024315",
 #'   service = "Result",
 #'   dataProfile = "narrowResult",
-#'   service = "Result"
 #' )
 #'
 #' # Data profiles: "Sampling Activity"  (legacy)
