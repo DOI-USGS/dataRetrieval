@@ -6,7 +6,7 @@
 \usage{
 readWQPdata(
   ...,
-  service = "ResultWQX3",
+  service = "Result",
   querySummary = FALSE,
   tz = "UTC",
   ignore_attributes = FALSE,
@@ -104,6 +104,7 @@ Organization Data \tab Organization \tab /data/Organization/search \cr
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
+# Current default output: "legacy"
 nameToUse <- "pH"
 pHData <- readWQPdata(siteid = "USGS-04024315", 
                       characteristicName = nameToUse)
@@ -113,20 +114,25 @@ attr(pHData, "siteInfo")
 attr(pHData, "headerInfo")[["dataProviders"]]
 attr(pHData, "queryTime")
 
+# New services:
 # dataProfile = Basic Physical Chemical
 pHData_basic <- readWQPdata(siteid = "USGS-04024315", 
                       characteristicName = nameToUse,
-                      dataProfile = "basicPhysChem")
+                      dataProfile = "basicPhysChem",
+                      service = "ResultWQX3")
 attr(pHData_basic, "url") 
 ncol(pHData_basic)
 
+# New services: 
 # dataProfile = Narrow
 pHData_narrow <- readWQPdata(siteid = "USGS-04024315", 
                       characteristicName = nameToUse,
-                      dataProfile = "narrow")
+                      dataProfile = "narrow",
+                      service = "ResultWQX3")
 attr(pHData_narrow, "url") 
 ncol(pHData_narrow)
 
+# New services: 
 # Data profiles: "Site Data Only"
 site_data <- readWQPdata(
   statecode = "WI",
@@ -204,7 +210,8 @@ samp_bio <- readWQPdata(
 samp_narrow <- readWQPdata(
   siteid = "USGS-04024315",
   service = "Result",
-  dataProfile = "narrowResult"
+  dataProfile = "narrowResult",
+  service = "Result"
 )
 
 # Data profiles: "Sampling Activity"  (legacy)
