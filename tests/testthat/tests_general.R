@@ -231,7 +231,9 @@ test_that("whatNWISdata", {
 test_that("General WQP retrievals working", {
   testthat::skip_on_cran()
   nameToUse <- "pH"
-  pHData <- readWQPdata(siteid = "USGS-04024315", characteristicName = nameToUse)
+  pHData <- readWQPdata(siteid = "USGS-04024315", 
+                        characteristicName = nameToUse,
+                        service = "ResultWQX3")
   expect_is(pHData$Activity_StartDateTime, "POSIXct")
 
   # testing lists:
@@ -287,7 +289,8 @@ test_that("General WQP retrievals working", {
   expect_false("dataProviders" %in% names(attr(rawPcode2, "headerInfo")))
   
   pHData <- readWQPdata(siteid = "USGS-04024315",
-                        characteristicName = "pH")
+                        characteristicName = "pH",
+                        service = "ResultWQX3")
   expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
                     names(attributes(pHData))))
   
@@ -689,7 +692,8 @@ test_that("importWQP convertType", {
   phos <- readWQPdata(statecode = "WI", countycode = "Dane",
                     characteristicName = "Phosphorus",
                     startDateLo = "2022-01-01",
-                    convertType = FALSE)
+                    convertType = FALSE,
+                    service = "ResultWQX")
   expect_is(phos$Result_Measure, "character")
 
   SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", convertType = FALSE)
