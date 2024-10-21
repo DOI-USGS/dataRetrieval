@@ -29,14 +29,7 @@ test_that("NLDI offerings...", {
 })
 
 
-xx <- findNLDI(
-  wqp = "TCEQMAIN-10016",
-  nav = "UM",
-  find = "nwissite",
-  distance_km = 2,
-  no_sf = FALSE,
-  warn = FALSE
-)
+
 
 
 test_that("NLDI starting sources...", {
