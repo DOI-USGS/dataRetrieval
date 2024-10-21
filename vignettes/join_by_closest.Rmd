@@ -48,7 +48,8 @@ start_date <- as.Date("2018-01-01")
 end_date <- as.Date("2020-01-01")
 qw_data <- readWQPqw(site_qw, pcode_qw, 
                      startDate = start_date,
-                     endDate = end_date)
+                     endDate = end_date, 
+                     legacy = FALSE)
 uv_data <- readNWISuv(siteNumbers = site_uv, 
                       parameterCd = c(pcode_uv, "00060"),
                       startDate = start_date,
