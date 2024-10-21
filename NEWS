@@ -1,3 +1,11 @@
+dataRetrieval 2.7.17
+===================
+* New WQX 3.0 servies available, NOT by default
+* To get new services, in readWQPqw, set legacy = FALSE
+* To get new services, in readWQPdata, service = "ResultWQX3" 
+or "ServiceWQX" or "ActivityWQX3"
+* More dataProfile examples for WQP queries.
+
 dataRetrieval 2.7.16.1
 ===================
 * Removed the forced "empty returns" for WQP, since the WQP now has properly formatted empty returns.

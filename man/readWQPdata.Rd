@@ -145,7 +145,8 @@ site_data <- readWQPdata(
 DeWitt <- readWQPdata(
   statecode = "Illinois",
   countycode = "DeWitt",
-  characteristicName = "Nitrogen"
+  characteristicName = "Nitrogen",
+  service = "StationWQX"
 )
 
 # Data profile: "Sampling Activity"
