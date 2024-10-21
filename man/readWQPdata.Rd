@@ -211,7 +211,7 @@ samp_bio <- readWQPdata(
 samp_narrow <- readWQPdata(
   siteid = "USGS-04024315",
   service = "Result",
-  dataProfile = "narrowResult",
+  dataProfile = "narrowResult"
 )
 
 # Data profiles: "Sampling Activity"  (legacy)
