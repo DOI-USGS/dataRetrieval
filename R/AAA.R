@@ -25,7 +25,7 @@ https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }
 
 wqp_message_beta <- function(){
-  message("WQX3 services are considered in-development, use with caution.")
+  message("WQX3 services are in-development, use with caution.")
 }
 
 only_legacy <- function(service){
