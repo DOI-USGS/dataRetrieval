@@ -319,7 +319,8 @@ constructNWISURL <- function(siteNumbers,
 #' retrieval for the earliest possible record.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record.
-#' @param legacy Logical. If TRUE, uses legacy WQP services. Default is FALSE.
+#' @param legacy Logical. If TRUE, use legacy WQP services. Default is TRUE.
+#' Setting legacy = FALSE uses WQX3 services, which are in-development, use with caution.
 #' @keywords data import WQP web service
 #' @return url string
 #' @export
