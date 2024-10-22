@@ -74,12 +74,6 @@ whatWQPsites <- function(..., legacy = TRUE) {
     attr(retval, "url") <- baseURL
   }
   
-  if(legacy){
-    wqp_message()
-  } else {
-    wqp_message_beta
-  }
-  
   return(retval)
 }
 

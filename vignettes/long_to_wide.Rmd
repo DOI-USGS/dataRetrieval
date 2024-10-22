@@ -70,20 +70,20 @@ nutrient_data <- readWQPqw(siteNumbers = sites,
 
 ```
 
-The data comes back with 67 columns, let's pull out the ones we decide are important for our analysis. We'll rename the columns so they are easier to read on the screen, however the rename is not necessary. Your own pivots may need many more columns!
+The data comes back with `r ncol(nutrient_data)` columns, let's pull out the ones we decide are important for our analysis. We'll rename the columns so they are easier to read on the screen, however the rename is not necessary. Your own pivots may need many more columns!
 
 ```{r}
 
 nutrient_data_slim <- nutrient_data |> 
-  select(date = Activity_StartDateTime,
-         site = Location_Identifier,
-         param = Result_Characteristic,
-         fraction = Result_SampleFraction,
-         condition = Result_ResultDetectionCondition,
-         value = Result_Measure,
-         det_va = DetectionLimit_MeasureA,
-         units = Result_MeasureUnit,
-         det_units = DetectionLimit_MeasureUnitA) |> 
+  select(date = ActivityStartDateTime,
+         site = MonitoringLocationIdentifier,
+         param = CharacteristicName,
+         fraction = ResultSampleFractionText,
+         condition = ResultDetectionConditionText,
+         value = ResultMeasureValue,
+         det_va = DetectionQuantitationLimitMeasure.MeasureValue,
+         units = ResultMeasure.MeasureUnitCode,
+         det_units = DetectionQuantitationLimitMeasure.MeasureUnitCode) |> 
   mutate(units = if_else(is.na(units), det_units, units)) |> 
   select(-det_units) |> 
   filter(!is.na(date))
