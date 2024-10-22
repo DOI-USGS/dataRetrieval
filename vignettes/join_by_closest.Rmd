@@ -48,8 +48,8 @@ start_date <- as.Date("2018-01-01")
 end_date <- as.Date("2020-01-01")
 qw_data <- readWQPqw(site_qw, pcode_qw, 
                      startDate = start_date,
-                     endDate = end_date, 
-                     legacy = FALSE)
+                     endDate = end_date)
+
 uv_data <- readNWISuv(siteNumbers = site_uv, 
                       parameterCd = c(pcode_uv, "00060"),
                       startDate = start_date,
@@ -80,11 +80,11 @@ Next we'll clean up the discrete water quality "qw" data to make it easy to foll
 
 ```{r trimQWdata}
 qw_trim <- qw_data |> 
-  filter(Activity_TypeCode == "Sample - Routine, regular",
-         !is.na(Activity_StartDateTime)) |> 
-  select(qw_date = Activity_StartDateTime,
-         val_qw = Result_Measure,
-         det_txt = Result_ResultDetectionCondition)
+  filter(ActivityTypeCode == "Sample-Routine",
+         !is.na(ActivityStartDateTime)) |> 
+  select(qw_date = ActivityStartDateTime,
+         val_qw = ResultMeasureValue,
+         det_txt = ResultDetectionConditionText)
 ```
 
 ```{r showqwtrim, echo=FALSE}
