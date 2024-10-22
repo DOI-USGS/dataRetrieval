@@ -42,7 +42,7 @@ See also  \code{OlsonNames()}
 for more information on time zones.}
 
 \item{legacy}{Logical. If TRUE, use legacy WQP services. Default is TRUE.
-Setting legacy = FALSE uses WQX3 services, which are considered in-development, use with caution.}
+Setting legacy = FALSE uses WQX3 services, which are in-development, use with caution.}
 
 \item{querySummary}{logical to look at number of records and unique sites that
 will be returned from this query.}

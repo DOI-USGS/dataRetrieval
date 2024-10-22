@@ -31,7 +31,7 @@ the function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
 
 \item{legacy}{Logical. If TRUE, use legacy WQP services. Default is TRUE.
-Setting legacy = FALSE uses WQX3 services, which are considered in-development, use with caution.}
+Setting legacy = FALSE uses WQX3 services, which are in-development, use with caution.}
 }
 \value{
 data frame
