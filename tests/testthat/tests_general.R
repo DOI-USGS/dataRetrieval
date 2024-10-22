@@ -700,7 +700,8 @@ test_that("importWQP convertType", {
                     service = "ResultWQX")
   expect_is(phos$Result_Measure, "character")
 
-  SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", convertType = FALSE)
+  SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", 
+                  convertType = FALSE, legacy = FALSE)
   expect_is(SC$Result_Measure, "character")
 
   lakeSites_chars <- whatWQPdata(
