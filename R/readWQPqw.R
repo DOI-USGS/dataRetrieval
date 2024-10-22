@@ -53,10 +53,9 @@
 #' \donttest{
 #' rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
 #' 
-#' attr(rawPcode, "url")
 #' attr(rawPcode, "siteInfo")
 #' attr(rawPcode, "queryTime")
-#' attr(rawPcode, "headerInfo")[["dataProviders"]]
+#' 
 #' 
 #' rawCharacteristicName <- readWQPqw("WIDNR_WQX-10032762", "Specific conductance", "", "")
 #' rawPHsites <- readWQPqw(c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"), "pH", "", "")
@@ -69,7 +68,7 @@ readWQPqw <- function(siteNumbers,
                       startDate = "",
                       endDate = "",
                       tz = "UTC",
-                      legacy = FALSE,
+                      legacy = TRUE,
                       querySummary = FALSE,
                       ignore_attributes = FALSE,
                       convertType = TRUE) {
