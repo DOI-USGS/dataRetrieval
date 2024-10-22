@@ -262,6 +262,7 @@ test_that("General WQP retrievals working", {
     statecode = "WI",
     characteristicName = secchi.names
   )
+  
   lakeData <- readWQPdata(args_2, ignore_attributes = TRUE)
   expect_true(nrow(lakeData) > 0)
   lakeSites <- whatWQPsites(args_2)
@@ -270,11 +271,12 @@ test_that("General WQP retrievals working", {
   wqp.summary_no_atts <- readWQPdata(
     siteid = "USGS-04024315",
     characteristicName = nameToUse,
-    ignore_attributes = TRUE
+    ignore_attributes = TRUE,
+    service = "ResultWQX3"
   )
   expect_true(!all(c("siteInfo", "variableInfo") %in% names(attributes(wqp.summary_no_atts))))
   
-  rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
+  rawPcode <- readWQPqw("USGS-01594440", "01075", "", "", legacy = FALSE)
   expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
                     names(attributes(rawPcode))))
   
@@ -299,14 +301,16 @@ test_that("General WQP retrievals working", {
   
   pHData2 <- readWQPdata(siteid = "USGS-04024315",
                         characteristicName = "pH",
-                        ignore_attributes = TRUE)
+                        ignore_attributes = TRUE,
+                        service = "ResultWQX3")
   expect_true(all(!c("queryTime", "siteInfo") %in%
                     names(attributes(pHData2))))
   
   # This means wqp_check_status was called:
   expect_false("dataProviders" %in% names(attr(pHData2, "headerInfo")))
   
-  rawPcode <- readWQPqw("USGS-01594440", "01075", ignore_attributes = TRUE)
+  rawPcode <- readWQPqw("USGS-01594440", "01075",
+                        ignore_attributes = TRUE, legacy = FALSE)
   headerInfo <- attr(rawPcode, "headerInfo")
   wqp_request_id <- headerInfo$`wqp-request-id`
   count_info <- wqp_check_status(wqp_request_id)
