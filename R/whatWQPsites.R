@@ -22,7 +22,8 @@
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
 #' mimeType,  and providers is optional (these arguments are picked automatically).
-#' @param legacy Logical. If TRUE, use legacy WQP services. Default is TRUE
+#' @param legacy Logical. If TRUE, use legacy WQP services. Default is TRUE.
+#' Setting legacy = FALSE uses WQX3 services, which are considered in-development, use with caution.
 #' @keywords data import WQP web service
 #' @rdname wqpSpecials
 #' @name whatWQPsites
@@ -72,7 +73,13 @@ whatWQPsites <- function(..., legacy = TRUE) {
     attr(retval, "queryTime") <- Sys.time()
     attr(retval, "url") <- baseURL
   }
-
+  
+  if(legacy){
+    wqp_message()
+  } else {
+    wqp_message_beta
+  }
+  
   return(retval)
 }
 
@@ -137,7 +144,7 @@ whatWQPsites <- function(..., legacy = TRUE) {
 #' }
 readWQPsummary <- function(...) {
 
-  wqp_message_only_legacy()
+  wqp_message()
   
   values <- readWQPdots(...)
   
@@ -158,7 +165,7 @@ readWQPsummary <- function(...) {
   values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
 
   baseURL <- drURL("SiteSummary", arg.list = values)
-  wqp_message_now("SiteSummary")
+
   baseURL <- appendDrURL(baseURL, mimeType = "csv")
 
   withCallingHandlers(

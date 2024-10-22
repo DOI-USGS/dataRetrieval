@@ -6,7 +6,7 @@
 \alias{whatWQPsites}
 \title{Site Data Import from Water Quality Portal}
 \usage{
-whatWQPsamples(..., convertType = TRUE)
+whatWQPsamples(..., convertType = TRUE, legacy = TRUE)
 
 whatWQPmetrics(..., convertType = TRUE)
 
@@ -30,7 +30,8 @@ mimeType,  and providers is optional (these arguments are picked automatically).
 the function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
 
-\item{legacy}{Logical. If TRUE, use legacy WQP services. Default is TRUE}
+\item{legacy}{Logical. If TRUE, use legacy WQP services. Default is TRUE.
+Setting legacy = FALSE uses WQX3 services, which are considered in-development, use with caution.}
 }
 \value{
 data frame

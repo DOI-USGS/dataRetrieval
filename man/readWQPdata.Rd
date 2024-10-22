@@ -73,18 +73,9 @@ in this help file to see many query options.
 
 
  
-There are currently 10 legacy and 4 modern WQX options
+There are currently 10 legacy options
 for data provided by the Water Quality Portal:
  
-WQX:
-\tabular{llll}{
-WQP Radio Button \tab service argument \tab Base URL \tab dataProfile \cr 
-Monitoring Locations \tab StationWQX3 \tab /wqx3/Station/search \tab \cr
-Full Physical Chemical \tab ResultWQX3 \tab /wqx3/Result/search \tab fullPhysChem \cr
-Narrow \tab ResultWQX3 \tab /wqx3/Result/search \tab narrow \cr
-Basic Physical Chemical \tab ResultWQX3 \tab /wqx3/Result/search \tab basicPhysChem \cr
-Sampling Activity \tab ActivityWQX3 \tab /wqx3/Activity/search \cr
-}
 
 Legacy:
 \tabular{lll}{
@@ -100,59 +91,42 @@ Result Detection Quantitation Limit Data \tab ResultDetectionQuantitationLimit \
 Biological Habitat Metrics \tab BiologicalMetric \tab /data/BiologicalMetric/search \cr
 Organization Data \tab Organization \tab /data/Organization/search \cr
 }
+
+There are 4 WQX3 options. These are still considered in-development,
+and should be used with caution.
+ 
+\tabular{llll}{
+WQP Radio Button \tab service argument \tab Base URL \tab dataProfile \cr 
+Monitoring Locations \tab StationWQX3 \tab /wqx3/Station/search \tab \cr
+Full Physical Chemical \tab ResultWQX3 \tab /wqx3/Result/search \tab fullPhysChem \cr
+Narrow \tab ResultWQX3 \tab /wqx3/Result/search \tab narrow \cr
+Basic Physical Chemical \tab ResultWQX3 \tab /wqx3/Result/search \tab basicPhysChem \cr
+Sampling Activity \tab ActivityWQX3 \tab /wqx3/Activity/search \cr
+}
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
-# Current default output: "legacy"
+
 nameToUse <- "pH"
 pHData <- readWQPdata(siteid = "USGS-04024315", 
                       characteristicName = nameToUse)
 ncol(pHData)
-attr(pHData, "url")
 attr(pHData, "siteInfo")
-attr(pHData, "headerInfo")[["dataProviders"]]
 attr(pHData, "queryTime")
-
-# New services:
-# dataProfile = Basic Physical Chemical
-pHData_basic <- readWQPdata(siteid = "USGS-04024315", 
-                      characteristicName = nameToUse,
-                      dataProfile = "basicPhysChem",
-                      service = "ResultWQX3")
-attr(pHData_basic, "url") 
-ncol(pHData_basic)
-
-# New services: 
-# dataProfile = Narrow
-pHData_narrow <- readWQPdata(siteid = "USGS-04024315", 
-                      characteristicName = nameToUse,
-                      dataProfile = "narrow",
-                      service = "ResultWQX3")
-attr(pHData_narrow, "url") 
-ncol(pHData_narrow)
-
-# New services: 
-# Data profiles: "Site Data Only"
-site_data <- readWQPdata(
-  statecode = "WI",
-  countycode = "Dane",
-  service = "StationWQX3"
-)
 
 # More examples:
 # querying by county
 DeWitt <- readWQPdata(
   statecode = "Illinois",
   countycode = "DeWitt",
-  characteristicName = "Nitrogen",
-  service = "StationWQX"
+  characteristicName = "Nitrogen"
 )
 
 # Data profile: "Sampling Activity"
 activity <- readWQPdata(
   siteid = "USGS-04024315",
-  service = "ActivityWQX3"
+  service = "Activity"
 )
 
 Dane_activity <- readWQPdata(
@@ -160,75 +134,74 @@ Dane_activity <- readWQPdata(
   countycode = "Dane",
   startDateLo = "2023-01-01",
   startDateHi = "2023-12-31",
-  service = "ActivityWQX3"
+  service = "Activity"
 )
 
 ########################################################
-# Legacy examples:
+# Additional examples:
 
 pHData_legacy <- readWQPdata(siteid = "USGS-04024315", 
                       characteristicName = nameToUse,
                       service = "Result",
                       dataProfile = "narrowResult")
-attr(pHData_legacy, "url")
-
-# Data profiles: "Organization Data" (legacy)
+ 
+# Data profiles: "Organization Data" 
 org_data <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
   service = "Organization"
 )
 
-# Data profiles: "Project Data"  (legacy)
+# Data profiles: "Project Data"  
 project_data <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
   service = "Project"
 )
 
-# Data profiles: "Project Monitoring Location Weighting Data"  (legacy)
+# Data profiles: "Project Monitoring Location Weighting Data"
 proj_mlwd <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
   service = "ProjectMonitoringLocationWeighting"
 )
 
-# Data profiles: "Sample Results (physical/chemical metadata)"  (legacy)
+# Data profiles: "Sample Results (physical/chemical metadata)" 
 samp_data <- readWQPdata(
   siteid = "USGS-04024315",
   dataProfile = "resultPhysChem",
   service = "Result"
 )
 
-# Data profiles: "Sample Results (biological metadata)"  (legacy)
+# Data profiles: "Sample Results (biological metadata)"
 samp_bio <- readWQPdata(
   siteid = "USGS-04024315",
   dataProfile = "biological",
   service = "Result"
 )
 
-# Data profiles: "Sample Results (narrow)" (legacy)
+# Data profiles: "Sample Results (narrow)" 
 samp_narrow <- readWQPdata(
   siteid = "USGS-04024315",
   service = "Result",
   dataProfile = "narrowResult"
 )
 
-# Data profiles: "Sampling Activity"  (legacy)
+# Data profiles: "Sampling Activity"  
 samp_activity <- readWQPdata(
   siteid = "USGS-04024315",
   dataProfile = "activityAll",
   service = "Activity"
 )
 
-# Data profile: "Sampling Activity Metrics"  (legacy)
+# Data profile: "Sampling Activity Metrics"
 act_metrics <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
   service = "ActivityMetric"
 )
 
-# Data profile: "Result Detection Quantitation Limit Data"  (legacy)
+# Data profile: "Result Detection Quantitation Limit Data"  
 dl_data <- readWQPdata(
   siteid = "USGS-04024315",
   service = "ResultDetectionQuantitationLimit"

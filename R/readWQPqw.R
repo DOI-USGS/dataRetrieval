@@ -33,8 +33,8 @@
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @param ignore_attributes logical to choose to ignore fetching site and parameter
 #' attributes. Default is \code{FALSE}.
-#' @param legacy Logical. If TRUE, use legacy WQP services. Default is TRUE,
-#' future updates will switch to default FALSE.
+#' @param legacy Logical. If TRUE, use legacy WQP services. Default is TRUE.
+#' Setting legacy = FALSE uses WQX3 services, which are considered in-development, use with caution.
 #' @keywords data import USGS web service
 #' @return A data frame derived from the default data profile.
 #'
@@ -88,7 +88,6 @@ readWQPqw <- function(siteNumbers,
 
     if(legacy){
       sites <- unique(retval$MonitoringLocationIdentifier)
-      wqp_message()
     } else {
       sites <- unique(retval$Location_Identifier)
     }
@@ -97,6 +96,11 @@ readWQPqw <- function(siteNumbers,
       retval <- create_WQP_attributes(retval, siteid = sites)
     } 
 
+    if(legacy){
+      wqp_message()
+    } else {
+      wqp_message_beta
+    }
     attr(retval, "url") <- url
 
     return(retval)
