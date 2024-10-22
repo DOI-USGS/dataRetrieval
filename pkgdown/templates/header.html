@@ -1,45 +1,82 @@
-<head>
-<meta charset="UTF-8">
-<title>Untitled Document</title>
-<link href="extra.css" rel="stylesheet" type="text/css" media="screen" />
-<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
- 
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TKQR8KP');</script>
-<!-- End Google Tag Manager -->
-   
-</head>
+<title>{{{pagetitle}}} • {{#site}}{{title}}{{/site}}</title>
 
-<body> <!-- opening div for body -->
-<!-- BEGIN USGS Applications Header Template -->
-<header id="navbar" class="header-nav"  role="banner">
-  <div class="tmp-container">
-      <!-- primary navigation bar -->
-  		<!-- search bar-->
-      <<div class="header-search"> 
-       <!-- <a class="logo-header" href="https://www.usgs.gov/" title="Home">
-          <img class="img"  src="logo.png"  alt="Home" />
-        </a>-->
-        <!-- <form action="https://www.usgs.gov/science-explorer-results" method="GET" id="search-box">
-         <div class="fa-wrapper"><label for="se_search" class="only">Search</label>
-          <input id="se_search" type="search" name="es" placeholder="Search">
-          <button class="fa fa-search" type="submit">
-            <span class="only">Search</span>
-			 </button></div>
-        </form> -->
-      </div> 
-      <!-- end search bar-->
-	</div> 
-	<!-- end header-container-->
-</header>
-<!-- END USGS Applications Header Template -->
-<div id="maincontent"> <!-- opening div for your main content -->
+{{#has_favicons}}
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="{{#site}}{{root}}{{/site}}favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="{{#site}}{{root}}{{/site}}favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="{{#site}}{{root}}{{/site}}apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="{{#site}}{{root}}{{/site}}apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="{{#site}}{{root}}{{/site}}apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="{{#site}}{{root}}{{/site}}apple-touch-icon-60x60.png" />
+{{/has_favicons}}
+
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<!-- Bootstrap -->
+
+<link href="{{#site}}{{root}}{{/site}}extra.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="{{#site}}{{root}}{{/site}}bootstrap-toc.css">
+<script src="{{#site}}{{root}}{{/site}}bootstrap-toc.js"></script>
+
+<!-- Font Awesome icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
+
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+
+<!-- pkgdown -->
+<link href="{{#site}}{{root}}{{/site}}pkgdown.css" rel="stylesheet">
+<script src="{{#site}}{{root}}{{/site}}pkgdown.js"></script>
+<link href="{{#site}}{{root}}{{/site}}tidyverse-2.css" rel="stylesheet">
+
+<!--optional theme-->
+<link href="{{#site}}{{root}}{{/site}}{{#yaml}}{{theme}}.css{{/yaml}}" rel="stylesheet">
+
+
+{{#yaml}}{{#docsearch}}
+<!-- docsearch -->
+<script src="{{#site}}{{root}}{{/site}}docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="{{#site}}{{root}}{{/site}}docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+{{/docsearch}}{{/yaml}}
+
+<meta property="og:title" content="{{{pagetitle}}}" />
+{{#opengraph}}
+{{#description}}
+<meta property="og:description" content="{{.}}" />
+{{/description}}
+{{#image}}
+<meta property="og:image" content="{{{.}}}" />
+{{/image}}
+<meta name="twitter:card" content="summary" />
+{{/opengraph}}
+
+{{#yaml}}{{#noindex}}<meta name="robots" content="noindex" />{{/noindex}}{{/yaml}}
+{{#development}}{{#in_dev}}<meta name="robots" content="noindex">{{/in_dev}}{{/development}}
+
+<!-- mathjax -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
+
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link href="deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
