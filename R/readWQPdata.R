@@ -28,7 +28,7 @@
 #' Organization Data \tab Organization \tab /data/Organization/search \cr
 #' }
 #' 
-#' There are 4 WQX3 options. These are still considered in-development,
+#' There are 4 WQX3 options. These are still in-development,
 #' and should be used with caution.
 #'  
 #' \tabular{llll}{

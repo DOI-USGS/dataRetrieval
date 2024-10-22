@@ -34,7 +34,7 @@
 #' @param ignore_attributes logical to choose to ignore fetching site and parameter
 #' attributes. Default is \code{FALSE}.
 #' @param legacy Logical. If TRUE, use legacy WQP services. Default is TRUE.
-#' Setting legacy = FALSE uses WQX3 services, which are considered in-development, use with caution.
+#' Setting legacy = FALSE uses WQX3 services, which are in-development, use with caution.
 #' @keywords data import USGS web service
 #' @return A data frame derived from the default data profile.
 #'
