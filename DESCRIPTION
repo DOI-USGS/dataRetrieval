@@ -1,29 +1,32 @@
 Package: dataRetrieval
 Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrology and Water Quality Data
-Version: 2.7.16.1
+Version: 2.7.17
 Authors@R: c(
     person("Laura", "DeCicco", role = c("aut","cre"),
             email = "ldecicco@usgs.gov",
             comment=c(ORCID="0000-0002-3915-9487")),
     person("Robert", "Hirsch", role = c("aut"),
-            comment=c(ORCID="0000-0002-4534-075X")),
+            comment=c(ORCID = "0000-0002-4534-075X")),
     person("David","Lorenz", role=c("aut")),
     person("Jordan", "Read", role = c("ctb")),
     person("Jordan", "Walker", role = c("ctb")),
     person("Lindsay","Platt", role=c("ctb")),
     person("David","Watkins", role=c("aut"),
             email = "wwatkins@usgs.gov",
-            comment=c(ORCID="0000-0002-7544-0700")),
+            comment=c(ORCID = "0000-0002-7544-0700")),
     person("David", "Blodgett", role="aut",
-            comment=c(ORCID="0000-0001-9489-1710"),
+            comment=c(ORCID = "0000-0001-9489-1710"),
             email = "dblodgett@usgs.gov"),
     person("Mike", "Johnson", role=c("aut"),
             email = "mikecp11@gmail.com",
-            comment=c(ORCID="0000-0002-5288-8350")),
+            comment=c(ORCID = "0000-0002-5288-8350")),
     person("Aliesha", "Krall", role="ctb",
             email = "akrall@usgs.gov",
-            comment=c(ORCID="0000-0003-2521-5043")))
+            comment=c(ORCID = "0000-0003-2521-5043")),
+    person("Lee", "Stanish", role="ctb",
+            email = "lstanish@usgs.gov",
+            comment=c(ORCID = "0000-0002-9775-6861")))
 Description: Collection of functions to help retrieve U.S. Geological Survey
     and U.S. Environmental Protection Agency water quality and
     hydrology data from web services. Data are discovered from 

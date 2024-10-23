@@ -354,12 +354,10 @@ Content: "\f082";
 
 .navbar-nav a:hover {
   text-decoration: underline;
+  color: white !important;
+}
 }
 
-#hexlogo {
-  height: 80px;
-  float: right;
-  margin: 5px;
-  margin-left: 15px;
-  margin-right: 5px;
+caption {
+  color: black !important
 }

@@ -19,20 +19,13 @@ is_dataRetrieval_user <- function() {
     identical(Sys.getenv("NOT_CRAN"), "true")
 }
 
-
-wqp_message_only_legacy <- function(){
-  message("NEWS: Legacy profile requested, and no equivalent/similar WQX 3.0
-profile currently exists. Legacy profiles do not include USGS data newer
-than March 11, 2024. 
-More details: 
+wqp_message <- function(){
+  message("NEWS: Data does not include USGS data newer than March 11, 2024. More details:
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }
 
-wqp_message <- function(){
-  message("NEWS: Legacy data profiles will be retired. Please begin converting
-workflows to the WQX 3.0 profiles. Also, data from legacy profiles do not
-include USGS data newer than March 11, 2024. More details:
-https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
+wqp_message_beta <- function(){
+  message("WQX3 services are in-development, use with caution.")
 }
 
 only_legacy <- function(service){
@@ -50,14 +43,6 @@ is_legacy <- function(service){
                            "Project", "ProjectMonitoringLocationWeighting",
                            "ResultDetectionQuantitationLimit", "BiologicalMetric")
   return(legacy)
-}
-
-wqp_message_now <- function(service){
-  if(only_legacy(service)){
-    return(wqp_message_only_legacy())
-  } else if (service %in% c("Result", "Station", "Activity")){
-    return(wqp_message())
-  }
 }
 
 nwis_message <- function(){

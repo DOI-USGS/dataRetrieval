@@ -17,8 +17,9 @@
 #'                                     countycode = "US:55:025")
 #' }
 whatWQPsamples <- function(..., 
-                           convertType = TRUE) {
-  values <- readWQPdots(..., legacy = FALSE)
+                           convertType = TRUE,
+                           legacy = TRUE) {
+  values <- readWQPdots(..., legacy = legacy)
 
   values <- values$values
 
@@ -31,19 +32,30 @@ whatWQPsamples <- function(...,
   }
 
   values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
-
-  baseURL <- drURL("ActivityWQX3", arg.list = values)
-  wqp_message_now("ActivityWQX3")
+  
+  if(legacy){
+    baseURL <- drURL("Activity", arg.list = values)
+  } else {
+    baseURL <- drURL("ActivityWQX3", arg.list = values)
+  }
+  
   baseURL <- appendDrURL(baseURL, mimeType = "csv")
 
   retval <- importWQP(baseURL,
-                      convertType = convertType
-  )
-  attr(retval, "legacy") <- FALSE
-  attr(retval, "wqp-request-id") <- attr(retval, "headerInfo")$`wqp-request-id`
-  
-  attr(retval, "queryTime") <- Sys.time()
-  attr(retval, "url") <- baseURL
+                      convertType = convertType)
+  if(!is.null(retval)){
+    
+    attr(retval, "legacy") <- legacy
+    attr(retval, "queryTime") <- Sys.time()
+    attr(retval, "url") <- baseURL
+    
+    if(legacy){
+      wqp_message()
+    } else {
+      wqp_message_beta()
+      attr(retval, "wqp-request-id") <- attr(retval, "headerInfo")$`wqp-request-id`
+    }
+  }
 
   return(retval)
 }
@@ -83,8 +95,6 @@ whatWQPmetrics <- function(...,
 
   baseURL <- appendDrURL(baseURL, mimeType = "csv")
 
-  wqp_message_now("ActivityMetric")
-  
   withCallingHandlers(
     {
       retval <- importWQP(baseURL,
@@ -97,11 +107,15 @@ whatWQPmetrics <- function(...,
       }
     }
   )
-
-  attr(retval, "queryTime") <- Sys.time()
-  attr(retval, "url") <- baseURL
-
-  return(retval)
+  if(is.null(retval)){
+    return(NULL)
+  } else {
+    wqp_message()
+    attr(retval, "queryTime") <- Sys.time()
+    attr(retval, "url") <- baseURL
+  
+    return(retval)
+  }
 }
 
 
@@ -179,7 +193,7 @@ whatWQPdata <- function(..., saveFile = tempfile(),
   baseURL <- appendDrURL(baseURL, mimeType = "geojson")
   
   # Not sure if there's a geojson option with WQX
-  wqp_message_only_legacy()
+  wqp_message()
   
   doc <- getWebServiceData(baseURL, httr::write_disk(saveFile))
   
