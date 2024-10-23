@@ -17,7 +17,8 @@ retrieval for the earliest possible record.}
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 retrieval for the latest possible record.}
 
-\item{legacy}{Logical. If TRUE, uses legacy WQP services. Default is FALSE.}
+\item{legacy}{Logical. If TRUE, uses legacy WQP services. Default is TRUE.
+Setting legacy = FALSE uses WQX3.0 WQP services, which are in-development, use with caution.}
 }
 \value{
 url string

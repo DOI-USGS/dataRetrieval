@@ -10,7 +10,7 @@ readWQPqw(
   startDate = "",
   endDate = "",
   tz = "UTC",
-  legacy = FALSE,
+  legacy = TRUE,
   querySummary = FALSE,
   ignore_attributes = FALSE,
   convertType = TRUE
@@ -41,7 +41,8 @@ time: "America/Honolulu",
 See also  \code{OlsonNames()}
 for more information on time zones.}
 
-\item{legacy}{Logical. If TRUE, use legacy WQP services. Default is FALSE.}
+\item{legacy}{Logical. If TRUE, uses legacy WQP services. Default is TRUE.
+Setting legacy = FALSE uses WQX3.0 WQP services, which are in-development, use with caution.}
 
 \item{querySummary}{logical to look at number of records and unique sites that
 will be returned from this query.}
@@ -78,10 +79,9 @@ site name, such as 'USGS-01234567'.
 \donttest{
 rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
 
-attr(rawPcode, "url")
 attr(rawPcode, "siteInfo")
 attr(rawPcode, "queryTime")
-attr(rawPcode, "headerInfo")[["dataProviders"]]
+
 
 rawCharacteristicName <- readWQPqw("WIDNR_WQX-10032762", "Specific conductance", "", "")
 rawPHsites <- readWQPqw(c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"), "pH", "", "")

@@ -231,7 +231,9 @@ test_that("whatNWISdata", {
 test_that("General WQP retrievals working", {
   testthat::skip_on_cran()
   nameToUse <- "pH"
-  pHData <- readWQPdata(siteid = "USGS-04024315", characteristicName = nameToUse)
+  pHData <- readWQPdata(siteid = "USGS-04024315", 
+                        characteristicName = nameToUse,
+                        service = "ResultWQX3")
   expect_is(pHData$Activity_StartDateTime, "POSIXct")
 
   # testing lists:
@@ -260,6 +262,7 @@ test_that("General WQP retrievals working", {
     statecode = "WI",
     characteristicName = secchi.names
   )
+  
   lakeData <- readWQPdata(args_2, ignore_attributes = TRUE)
   expect_true(nrow(lakeData) > 0)
   lakeSites <- whatWQPsites(args_2)
@@ -268,11 +271,12 @@ test_that("General WQP retrievals working", {
   wqp.summary_no_atts <- readWQPdata(
     siteid = "USGS-04024315",
     characteristicName = nameToUse,
-    ignore_attributes = TRUE
+    ignore_attributes = TRUE,
+    service = "ResultWQX3"
   )
   expect_true(!all(c("siteInfo", "variableInfo") %in% names(attributes(wqp.summary_no_atts))))
   
-  rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
+  rawPcode <- readWQPqw("USGS-01594440", "01075", "", "", legacy = FALSE)
   expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
                     names(attributes(rawPcode))))
   
@@ -287,7 +291,8 @@ test_that("General WQP retrievals working", {
   expect_false("dataProviders" %in% names(attr(rawPcode2, "headerInfo")))
   
   pHData <- readWQPdata(siteid = "USGS-04024315",
-                        characteristicName = "pH")
+                        characteristicName = "pH",
+                        service = "ResultWQX3")
   expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
                     names(attributes(pHData))))
   
@@ -296,14 +301,16 @@ test_that("General WQP retrievals working", {
   
   pHData2 <- readWQPdata(siteid = "USGS-04024315",
                         characteristicName = "pH",
-                        ignore_attributes = TRUE)
+                        ignore_attributes = TRUE,
+                        service = "ResultWQX3")
   expect_true(all(!c("queryTime", "siteInfo") %in%
                     names(attributes(pHData2))))
   
   # This means wqp_check_status was called:
   expect_false("dataProviders" %in% names(attr(pHData2, "headerInfo")))
   
-  rawPcode <- readWQPqw("USGS-01594440", "01075", ignore_attributes = TRUE)
+  rawPcode <- readWQPqw("USGS-01594440", "01075",
+                        ignore_attributes = TRUE, legacy = FALSE)
   headerInfo <- attr(rawPcode, "headerInfo")
   wqp_request_id <- headerInfo$`wqp-request-id`
   count_info <- wqp_check_status(wqp_request_id)
@@ -686,13 +693,17 @@ test_that("importWQP convertType", {
   rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, convertType = FALSE)
   expect_is(rawSampleURL_NoZip_char$Result_Measure, "character")
 
-  phos <- readWQPdata(statecode = "WI", countycode = "Dane",
-                    characteristicName = "Phosphorus",
-                    startDateLo = "2022-01-01",
-                    convertType = FALSE)
-  expect_is(phos$Result_Measure, "character")
+  # Put back in when services get more robust.
+  # phos <- readWQPdata(statecode = "WI", countycode = "Dane",
+  #                   characteristicName = "Phosphorus",
+  #                   startDateLo = "2022-06-01",
+  #                   startDateHi = "2022-09-01",
+  #                   convertType = FALSE,
+  #                   service = "ResultWQX")
+  # expect_is(phos$Result_Measure, "character")
 
-  SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", convertType = FALSE)
+  SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", 
+                  convertType = FALSE, legacy = FALSE)
   expect_is(SC$Result_Measure, "character")
 
   lakeSites_chars <- whatWQPdata(

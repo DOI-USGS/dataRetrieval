@@ -33,7 +33,8 @@
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @param ignore_attributes logical to choose to ignore fetching site and parameter
 #' attributes. Default is \code{FALSE}.
-#' @param legacy Logical. If TRUE, use legacy WQP services. Default is FALSE.
+#' @param legacy Logical. If TRUE, uses legacy WQP services. Default is TRUE.
+#' Setting legacy = FALSE uses WQX3.0 WQP services, which are in-development, use with caution.
 #' @keywords data import USGS web service
 #' @return A data frame derived from the default data profile.
 #'
@@ -52,10 +53,9 @@
 #' \donttest{
 #' rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
 #' 
-#' attr(rawPcode, "url")
 #' attr(rawPcode, "siteInfo")
 #' attr(rawPcode, "queryTime")
-#' attr(rawPcode, "headerInfo")[["dataProviders"]]
+#' 
 #' 
 #' rawCharacteristicName <- readWQPqw("WIDNR_WQX-10032762", "Specific conductance", "", "")
 #' rawPHsites <- readWQPqw(c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"), "pH", "", "")
@@ -68,7 +68,7 @@ readWQPqw <- function(siteNumbers,
                       startDate = "",
                       endDate = "",
                       tz = "UTC",
-                      legacy = FALSE,
+                      legacy = TRUE,
                       querySummary = FALSE,
                       ignore_attributes = FALSE,
                       convertType = TRUE) {
@@ -88,7 +88,6 @@ readWQPqw <- function(siteNumbers,
 
     if(legacy){
       sites <- unique(retval$MonitoringLocationIdentifier)
-      wqp_message()
     } else {
       sites <- unique(retval$Location_Identifier)
     }
@@ -97,6 +96,11 @@ readWQPqw <- function(siteNumbers,
       retval <- create_WQP_attributes(retval, siteid = sites)
     } 
 
+    if(legacy){
+      wqp_message()
+    } else {
+      wqp_message_beta
+    }
     attr(retval, "url") <- url
 
     return(retval)

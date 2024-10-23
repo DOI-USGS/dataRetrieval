@@ -3,6 +3,7 @@ template:
     ganalytics: UA-53797708-7
   includes:
     before_title: '<a href="https://www.usgs.gov/"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>'
+    in_header: header_tag.html
   bootstrap: 5
   theme: atom-one-light
   bslib:
@@ -13,7 +14,10 @@ template:
     nav-link-color: "white"
     nav-link-hover-color: "#a9a9a9"
     navbar-light-brand-hover-color: "white"
+    navbar-light-brand-color: "white"
     navbar-light-hover-color: "white"
+    nav-text-color: "white"
+    nav-text-light-color: "white"
     text-muted: "white"
     pkgdown-nav-height: 125px
 navbar:

@@ -173,7 +173,7 @@ has_internet_2 <- function(obs_url) {
 #'
 #' @param url the query url
 getQuerySummary <- function(url) {
-  wqp_message_only_legacy()
+  wqp_message()
   queryHEAD <- httr::HEAD(url)
   retquery <- httr::headers(queryHEAD)
 
