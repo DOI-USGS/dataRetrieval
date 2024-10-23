@@ -22,8 +22,8 @@
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
 #' mimeType,  and providers is optional (these arguments are picked automatically).
-#' @param legacy Logical. If TRUE, use legacy WQP services. Default is TRUE.
-#' Setting legacy = FALSE uses WQX3 services, which are in-development, use with caution.
+#' @param legacy Logical. If TRUE, uses legacy WQP services. Default is TRUE.
+#' Setting legacy = FALSE uses WQX3.0 WQP services, which are in-development, use with caution.
 #' @keywords data import WQP web service
 #' @rdname wqpSpecials
 #' @name whatWQPsites
