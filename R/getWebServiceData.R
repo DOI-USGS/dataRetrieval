@@ -18,38 +18,49 @@
 #' rawData <- getWebServiceData(obs_url)
 #' }
 getWebServiceData <- function(obs_url, ...) {
+  
   if (!has_internet_2(obs_url)){
     message("No internet connection.")
     return(invisible(NULL))
   }
-
-  returnedList <- retryGetOrPost(obs_url, ...)
+  
+  obs_url <- httr2::req_user_agent(obs_url, default_ua())
+  obs_url <- httr2::req_throttle(obs_url, rate = 30 / 60) 
+  obs_url <- httr2::req_retry(obs_url,
+                              backoff = ~ 5, max_tries = 3) 
+  
+  returnedList <- httr2::req_perform(obs_url)
 
   good <- check_non_200s(returnedList)
   
   return_readLines <- c("text/html", "text/html; charset=UTF-8")
+  
   return_raw <- c("application/zip",
                   "application/zip;charset=UTF-8",
                   "application/vnd.geo+json;charset=UTF-8")
+  
   return_content <- c("text/tab-separated-values;charset=UTF-8",
                       "text/csv;charset=UTF-8",
-                      "text/plain")
+                      "text/plain",
+                      "text/plain;charset=UTF-8")
   
   if(good){
-    headerInfo <- httr::headers(returnedList)
+    headerInfo <- httr2::resp_headers(returnedList)
 
     if (headerInfo$`content-type` %in% return_content) {
-      returnedDoc <- httr::content(returnedList, type = "text", encoding = "UTF-8")
+      returnedDoc <- httr2::resp_body_string(returnedList)
       trys <- 1
       if (all(grepl("ERROR: INCOMPLETE DATA", returnedDoc))) {
         
         while(trys <= 3){
           message("Trying again!")
-          obs_url <- paste0(obs_url, "&try=", trys)
-          returnedList <- retryGetOrPost(obs_url)
+          obs_url <- httr2::req_url_query(obs_url, 
+                                          try = trys)
+          returnedList <- httr2::req_perform(obs_url)
+          
           good <- check_non_200s(returnedList)
           if(good){
-            returnedDoc <- httr::content(returnedList, type = "text", encoding = "UTF-8")
+            returnedDoc <- httr2::resp_body_string(returnedList)
           }
           if (all(grepl("ERROR: INCOMPLETE DATA", returnedDoc))) {
             trys <- trys + 1
@@ -60,25 +71,16 @@ getWebServiceData <- function(obs_url, ...) {
       }
 
     } else if (headerInfo$`content-type` %in% return_raw) {
-      returnedDoc <- returnedList
+      returnedDoc <- httr2::resp_body_raw(returnedList)
     } else if (headerInfo$`content-type` %in% return_readLines) {
+      returnedList <- httr2::resp_body_string(returnedList)
       txt <- readLines(returnedList$content)
       message(txt)
       return(txt)
     } else {
-      returnedDoc <- httr::content(returnedList, encoding = "UTF-8")
+      returnedDoc <- httr2::resp_body_xml(returnedList, encoding = "UTF-8")
       if (all(grepl("No sites/data found using the selection criteria specified", returnedDoc))) {
         message(returnedDoc)
-      }
-      if (headerInfo$`content-type` == "text/xml") {
-        if (xml2::xml_name(xml2::read_xml(returnedList)) == "ExceptionReport") {
-          statusReport <- tryCatch({
-            xml2::xml_text(xml2::xml_child(xml2::read_xml(returnedList)))
-          })
-          if (grepl("No feature found", statusReport)) {
-            message(statusReport)
-          }
-        }
       }
     }
 
@@ -92,35 +94,9 @@ getWebServiceData <- function(obs_url, ...) {
 
 check_non_200s <- function(returnedList){
     
-  status <- httr::status_code(returnedList)
-  if (status == 400) {
-    if (httr::has_content(returnedList)) {
-      response400 <- httr::content(returnedList, type = "text", encoding = "UTF-8")
-      statusReport <- xml2::xml_text(xml2::xml_child(xml2::read_xml(response400), 2)) # making assumption that - body is second node
-      statusMsg <- gsub(pattern = ", server=.*", replacement = "", x = statusReport)
-      message(statusMsg)
-    } else {
-      httr::message_for_status(returnedList)
-      warning_message <- httr::headers(returnedList)
-      if ("warning" %in% names(warning_message)) {
-        warning_message <- warning_message$warning
-        message(warning_message)
-      }
-    }
-    return(FALSE)
-  } else if (status != 200) {
-    httr::message_for_status(returnedList)
-    return(FALSE)
-    
-  } else {
-    headerInfo <- httr::headers(returnedList)
-    
-    if (!"content-type" %in% names(headerInfo)) {
-      message("Unknown content, returning NULL")
-      return(FALSE)
-    }
-    return(TRUE)
-  }
+  status <- httr2::resp_status(returnedList)
+  
+  return(status == 200)
   
 
 }
@@ -164,7 +140,13 @@ has_internet_2 <- function(obs_url) {
     }
   }
   
-  host <- gsub("^https://(?:www[.])?([^/]*).*$", "\\1", obs_url)
+  if("url" %in% names(obs_url)){
+    url <- obs_url$url
+  } else {
+    url <- obs_url
+  }
+  
+  host <- gsub("^https://(?:www[.])?([^/]*).*$", "\\1", url)
 
   !is.null(curl::nslookup(host, error = FALSE))
 }
@@ -186,21 +168,4 @@ getQuerySummary <- function(url) {
   return(retquery)
 }
 
-retryGetOrPost <- function(obs_url, ...) {
-  resp <- NULL
-  if (nchar(obs_url) < 2048 || grepl(pattern = "ngwmn", x = obs_url)) {
-    message("GET: ", obs_url)
-    resp <- httr::RETRY("GET", obs_url, ..., httr::user_agent(default_ua()))
-  } else {
-    split <- strsplit(obs_url, "?", fixed = TRUE)
-    obs_url <- split[[1]][1]
-    query <- split[[1]][2]
-    message("POST: ", obs_url)
-    resp <- httr::RETRY("POST", obs_url, ...,
-      body = query,
-      httr::content_type("application/x-www-form-urlencoded"),
-      httr::user_agent(default_ua())
-    )
-  }
-  return(resp)
-}
+

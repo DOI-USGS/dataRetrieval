@@ -82,6 +82,7 @@ readNWISdv <- function(siteNumbers,
                        startDate = "",
                        endDate = "",
                        statCd = "00003") {
+  
   url <- constructNWISURL(
     siteNumbers = siteNumbers,
     parameterCd = parameterCd,

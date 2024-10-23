@@ -1,11 +1,6 @@
 #' Construct NWIS url for data retrieval
 #'
-#' Imports data from NWIS web service. This function gets the data from here:
-#' \url{https://nwis.waterdata.usgs.gov/nwis/qwdata}
-#' A list of parameter codes can be found here:
-#' \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-#' A list of statistic codes can be found here:
-#' \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+#' Using USGS water web services to construct urls.
 #'
 #' @param siteNumbers string or vector of strings USGS site number.  This is usually an 8 digit number
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
@@ -81,6 +76,7 @@ constructNWISURL <- function(siteNumbers,
                              ratingType = "base",
                              statReportType = "daily",
                              statType = "mean") {
+  
   service <- match.arg(service, c(
     "dv", "uv", "iv", "iv_recent", "qw", "gwlevels",
     "rating", "peak", "meas", "stat", "qwdata"
@@ -89,6 +85,8 @@ constructNWISURL <- function(siteNumbers,
   service[service == "qw"] <- "qwdata"
   service[service == "meas"] <- "measurements"
   service[service == "uv"] <- "iv"
+  
+  baseURL <- httr2::request(pkg.env[[service]])
   
   if (any(!is.na(parameterCd) & parameterCd != "all")) {
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
@@ -104,99 +102,106 @@ constructNWISURL <- function(siteNumbers,
   }
   
   multipleSites <- length(siteNumbers) > 1
-  
-  siteNumbers <- paste(siteNumbers, collapse = ",")
-  
-  baseURL <- drURL(service, Access = pkg.env$access)
+  multiplePcodes <- length(parameterCd) > 1
   
   switch(service,
          qwdata = {
            if (multipleSites) {
              searchCriteria <- "multiple_site_no"
-             url <- appendDrURL(baseURL, multiple_site_no = siteNumbers)
+             url <- httr2::req_url_query(baseURL, 
+                                         multiple_site_no = siteNumbers,
+                                         .multi = "comma")
            } else {
              searchCriteria <- "search_site_no"
-             url <- appendDrURL(baseURL,
-                                search_site_no = siteNumbers,
-                                search_site_no_match_type = "exact"
-             )
+             url <- httr2::req_url_query(baseURL,
+                                         search_site_no = siteNumbers,
+                                         .multi = "comma") 
+             url <- httr2::req_url_query(baseURL,
+                                         search_site_no_match_type = "exact")
            }
            
-           multiplePcodes <- length(parameterCd) > 1
-           
            if (multiplePcodes) {
-             pCodes <- paste(parameterCd, collapse = ",")
-             url <- appendDrURL(url,
-                                multiple_parameter_cds = pCodes,
-                                param_cd_operator = "OR"
-             )
+             url <- httr2::req_url_query(url,
+                                         multiple_parameter_cds = parameterCd,
+                                         .multi = "comma")
+             url <- httr2::req_url_query(url, param_cd_operator = "OR")
            } else {
-             url <- appendDrURL(url,
-                                multiple_parameter_cds = parameterCd,
-                                param_cd_operator = "AND"
-             )
+             url <- httr2::req_url_query(url,
+                                multiple_parameter_cds = parameterCd)
+             url <- httr2::req_url_query(url, param_cd_operator = "AND")
            }
            
            searchCriteria <- paste(searchCriteria, "multiple_parameter_cds", sep = ",")
-           url <- appendDrURL(url, list_of_search_criteria = searchCriteria)
+           url <- httr2::req_url_query(url, 
+                                       list_of_search_criteria = searchCriteria)
            
+           params <- list(group_key = "NONE",
+                          sitefile_output_format = "html_table",
+                          column_name = "agency_cd",
+                          column_name = "site_no",
+                          column_name = "station_nm",
+                          inventory_output = "0",
+                          rdb_inventory_output = "file",
+                          TZoutput = "0",
+                          pm_cd_compare = "Greater%20than",
+                          radio_parm_cds = "previous_parm_cds",
+                          qw_attributes = "0",
+                          format = "rdb",
+                          date_format = "YYYY-MM-DD",
+                          rdb_compression = "value")
+           url <- httr2::req_url_query(url, !!!params )
            
-           url <- paste(url, "group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd",
-                        "column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file",
-                        "TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0",
-                        "format=rdb&rdb_qw_attributes=0&date_format=YYYY-MM-DD",
-                        "rdb_compression=value",
-                        sep = "&"
-           )
            if (expanded) {
-             url <- appendDrURL(url, qw_sample_wide = "0")
-             url <- gsub("rdb_qw_attributes=0", "rdb_qw_attributes=expanded", url)
+             url <- httr2::req_url_query(url, qw_sample_wide = "0")
+             url <- httr2::req_url_query(url, rdb_qw_attributes= "expanded")
            } else {
-             url <- appendDrURL(url, qw_sample_wide = "separated_wide")
+             url <- httr2::req_url_query(url, rdb_qw_attributes = "0")
+             url <- httr2::req_url_query(url, qw_sample_wide = "separated_wide")
            }
            
            if (nzchar(startDate)) {
-             url <- appendDrURL(url, begin_date = startDate)
+             url <- httr2::req_url_query(url, begin_date = startDate)
            }
            
            if (nzchar(endDate)) {
-             url <- appendDrURL(url, end_date = endDate)
+             url <- httr2::req_url_query(url, end_date = endDate)
            }
          },
          rating = {
            ratingType <- match.arg(ratingType, c("base", "corr", "exsa"))
-           url <- appendDrURL(baseURL, site_no = siteNumbers, file_type = ratingType)
+           url <- httr2::req_url_query(baseURL, 
+                                       site_no = siteNumbers, 
+                                       file_type = ratingType)
          },
          peak = {
-           url <- appendDrURL(baseURL,
+           url <- httr2::req_url_query(baseURL,
                               site_no = siteNumbers,
                               range_selection = "date_range",
-                              format = "rdb"
-           )
+                              format = "rdb")
            if (nzchar(startDate)) {
-             url <- appendDrURL(url, begin_date = startDate)
+             url <- httr2::req_url_query(url, begin_date = startDate)
            }
            if (nzchar(endDate)) {
-             url <- appendDrURL(url, end_date = endDate)
+             url <- httr2::req_url_query(url, end_date = endDate)
            }
          },
          measurements = {
-           url <- appendDrURL(baseURL,
+           url <- httr2::req_url_query(baseURL,
                               site_no = siteNumbers,
                               range_selection = "date_range"
            )
            if (nzchar(startDate)) {
-             url <- appendDrURL(url,
+             url <- httr2::req_url_query(url,
                                 begin_date = startDate
              )
            }
            if (nzchar(endDate)) {
-             url <- appendDrURL(url, end_date = endDate)
+             url <- httr2::req_url_query(url, end_date = endDate)
            }
            if (expanded) {
-             url <- appendDrURL(url, format = "rdb_expanded")
+             url <- httr2::req_url_query(url, format = "rdb_expanded")
            } else {
-             url <- appendDrURL(url, format = "rdb")
+             url <- httr2::req_url_query(url, format = "rdb")
            }
          },
          stat = { # for statistics service
@@ -220,47 +225,42 @@ constructNWISURL <- function(siteNumbers,
            if (grepl("(?i)annual", statReportType) && (grepl("-", startDate) || grepl("-", endDate))) {
              stop("Start and end dates for annual statReportType can only include years")
            }
-           statType <- paste(statType, collapse = ",")
-           parameterCd <- paste(parameterCd, collapse = ",")
-           url <- appendDrURL(baseURL,
+
+           url <- httr2::req_url_query(baseURL,
                               sites = siteNumbers,
-                              statType = statType,
-                              statReportType = statReportType,
-                              parameterCd = parameterCd
-           )
+                              statReportType = statReportType)
+           url <- httr2::req_url_query(url, statType = statType,
+                                       .multi = "comma")
+           url <- httr2::req_url_query(url, parameterCd = parameterCd, 
+                                       .multi = "comma")
+                                       
            if (nzchar(startDate)) {
-             url <- appendDrURL(url, startDT = startDate)
+             url <- httr2::req_url_query(url, startDT = startDate)
            }
            if (nzchar(endDate)) {
-             url <- appendDrURL(url, endDT = endDate)
+             url <- httr2::req_url_query(url, endDT = endDate)
            }
            if (!grepl("(?i)daily", statReportType)) {
-             url <- appendDrURL(url, missingData = "off")
+             url <- httr2::req_url_query(url, missingData = "off")
            }
          },
          gwlevels = {
            
-           url <- appendDrURL(baseURL,
-                              site_no = siteNumbers,
-                              format = "rdb"
-           )
+           url <- httr2::req_url_query(baseURL,
+                              site_no = siteNumbers,.multi = "comma")
+           url <- httr2::req_url_query(url,format = "rdb")
            if (nzchar(startDate)) {
-             url <- appendDrURL(url, begin_date = startDate)
+             url <- httr2::req_url_query(url, begin_date = startDate)
            }
            if (nzchar(endDate)) {
-             url <- appendDrURL(url, end_date = endDate)
+             url <- httr2::req_url_query(url, end_date = endDate)
            }
-           url <- paste(url, "group_key=NONE",
-                        "date_format=YYYY-MM-DD",
-                        "rdb_compression=value", 
-                        sep = "&")
+           url <- httr2::req_url_query(url, 
+                                       group_key = "NONE",
+                                       date_format = "YYYY-MM-DD",
+                                       rdb_compression = "value")
          },
          { # this will be either dv, uv, groundwater
-           multiplePcodes <- length(parameterCd) > 1
-           # Check for 5 digit parameter code:
-           if (multiplePcodes) {
-             parameterCd <- paste(parameterCd, collapse = ",")
-           }
            
            format <- match.arg(format, c("xml", "tsv", "wml1", "wml2", "rdb"))
            
@@ -272,35 +272,40 @@ constructNWISURL <- function(siteNumbers,
                                wml1 = "waterml,1.1"
            )
            
-           url <- appendDrURL(baseURL,
-                              site = siteNumbers,
-                              format = formatURL
-           )
+           url <- httr2::req_url_query(baseURL,
+                                       site = siteNumbers,
+                                       .multi = "comma") 
+           url <- httr2::req_url_query(url, 
+                                       format = formatURL)
            
-           if (!is.na(parameterCd)) {
-             url <- appendDrURL(url, ParameterCd = parameterCd)
+           if (!all(is.na(parameterCd))) {
+             url <- httr2::req_url_query(url, 
+                                         ParameterCd = parameterCd,
+                                         .multi = "comma")
            }
            
            if ("dv" == service) {
-             if (length(statCd) > 1) {
-               statCd <- paste(statCd, collapse = ",")
-             }
-             url <- appendDrURL(url, StatCd = statCd)
+             url <- httr2::req_url_query(url, 
+                                         StatCd = statCd,
+                                         .multi = "comma")
            }
            
            if (nzchar(startDate)) {
-             url <- appendDrURL(url, startDT = startDate)
+             url <- httr2::req_url_query(url, startDT = startDate)
            } else {
              startorgin <- "1851-01-01"
              if ("iv" == service) startorgin <- "1900-01-01"
-             url <- appendDrURL(url, startDT = startorgin)
+             url <- httr2::req_url_query(url, startDT = startorgin)
            }
            
            if (nzchar(endDate)) {
-             url <- appendDrURL(url, endDT = endDate)
+             url <- httr2::req_url_query(url, endDT = endDate)
            }
          }
   )
+  
+  url <- httr2::req_headers(url,
+                     `Accept-Encoding` = c("compress", "gzip", "deflate")) 
   
   return(url)
 }
@@ -357,6 +362,7 @@ constructWQPURL <- function(siteNumbers,
                             legacy = FALSE) {
   
   allPCode <- any(toupper(parameterCd) == "ALL")
+  
   if(!allPCode){
     multiplePcodes <- length(parameterCd) > 1
     
@@ -364,51 +370,65 @@ constructWQPURL <- function(siteNumbers,
       suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
     } else {
       pCodeLogic <- FALSE
-      parameterCd <- sapply(parameterCd, utils::URLencode, USE.NAMES = FALSE, reserved = TRUE)
     }
-    pcode_name <- ifelse(pCodeLogic, "pCode", "characteristicName")
-  }
-  
-  if(legacy & !allPCode){
-    if (multiplePcodes) {
-      parameterCd <- paste(parameterCd, collapse = ";")
-    }
-    parameterCd <- paste0(pcode_name, "=", parameterCd)
-    
-  } else if(!legacy & !allPCode){
-    parameterCd <- paste0(pcode_name, "=", parameterCd)
-    if (multiplePcodes) {
-      parameterCd <- paste0(parameterCd, collapse = "&")
-    } 
   }
   
   if(legacy){
+    baseURL <- httr2::request(pkg.env[["Result"]])
     siteNumbers <- paste(siteNumbers, collapse = ";")
-    baseURL <- drURL("Result", siteid = siteNumbers, Access = pkg.env$access)
+    baseURL <- httr2::req_url_query(baseURL,
+                                    siteids = siteNumbers)
   } else {
-    siteNumbers <- paste(paste0("siteid=", siteNumbers), collapse = "&")
-    baseURL <- drURL("ResultWQX3", Access = pkg.env$access)
-    baseURL <- paste0(baseURL, siteNumbers)
+    baseURL <- httr2::request(pkg.env[["ResultWQX3"]])
+    baseURL <- httr2::req_url_query(baseURL,
+                                    siteids = siteNumbers,
+                                    .multi = "explode" )
   }
   
   if(!allPCode){
-    baseURL <- paste0(baseURL, "&", parameterCd)
+    if(legacy){
+      if (multiplePcodes) {
+        parameterCd <- paste(parameterCd, collapse = ";")
+        if(pCodeLogic){
+          baseURL <- httr2::req_url_query(baseURL, pCode = parameterCd)
+        } else {
+          baseURL <- httr2::req_url_query(baseURL, characteristicName = parameterCd)
+        }
+      }
+    } else {
+      if(pCodeLogic){
+        baseURL <- httr2::req_url_query(baseURL, 
+                                        pCode = parameterCd, 
+                                        .multi = "explode")
+      } else {
+        baseURL <- httr2::req_url_query(baseURL,
+                                        characteristicName = parameterCd, 
+                                        .multi = "explode")
+      }
+    }    
   }
   
   if (nzchar(startDate)) {
     startDate <- format(as.Date(startDate), format = "%m-%d-%Y")
-    baseURL <- paste0(baseURL, "&startDateLo=", startDate)
+    baseURL <- httr2::req_url_query(baseURL, 
+                                    startDateLo = startDate)
   }
   
   if (nzchar(endDate)) {
     endDate <- format(as.Date(endDate), format = "%m-%d-%Y")
-    baseURL <- paste0(baseURL, "&startDateHi=", endDate)
+    baseURL <- httr2::req_url_query(baseURL,
+                                    startDateHi = endDate)
   }
   
-  baseURL <- paste0(baseURL, "&mimeType=csv")
+  baseURL <- httr2::req_url_query(baseURL, mimeType = "csv")
   if(!legacy){
-    baseURL <- paste0(baseURL, "&dataProfile=basicPhysChem")
+    baseURL <- httr2::req_url_query(baseURL, 
+                                    dataProfile = "basicPhysChem")
   }
+  
+  baseURL <- httr2::req_headers(baseURL,
+                                `Accept-Encoding` = c("compress", "gzip", "deflate")) 
+  
   return(baseURL)
 }
 

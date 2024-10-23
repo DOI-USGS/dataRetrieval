@@ -110,6 +110,7 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
   if (tz == "") { # check tz is valid if supplied
     tz <- "UTC"
   }
+  
   tz <- match.arg(tz, OlsonNames())
 
   timeSeries <- xml2::xml_find_all(returnedDoc, ".//ns1:timeSeries") # each parameter/site combo
