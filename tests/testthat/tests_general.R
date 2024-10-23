@@ -693,12 +693,14 @@ test_that("importWQP convertType", {
   rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, convertType = FALSE)
   expect_is(rawSampleURL_NoZip_char$Result_Measure, "character")
 
-  phos <- readWQPdata(statecode = "WI", countycode = "Dane",
-                    characteristicName = "Phosphorus",
-                    startDateLo = "2022-01-01",
-                    convertType = FALSE,
-                    service = "ResultWQX")
-  expect_is(phos$Result_Measure, "character")
+  # Put back in when services get more robust.
+  # phos <- readWQPdata(statecode = "WI", countycode = "Dane",
+  #                   characteristicName = "Phosphorus",
+  #                   startDateLo = "2022-06-01",
+  #                   startDateHi = "2022-09-01",
+  #                   convertType = FALSE,
+  #                   service = "ResultWQX")
+  # expect_is(phos$Result_Measure, "character")
 
   SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", 
                   convertType = FALSE, legacy = FALSE)
