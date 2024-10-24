@@ -294,7 +294,7 @@ constructWQPURL <- function(siteNumbers,
                             parameterCd,
                             startDate,
                             endDate,
-                            legacy = FALSE) {
+                            legacy = TRUE) {
   
   allPCode <- any(toupper(parameterCd) == "ALL")
   if(!allPCode){
