@@ -2,7 +2,7 @@
 % Please edit documentation in R/readNGWMNdata.R
 \name{readNGWMNsites}
 \alias{readNGWMNsites}
-\title{Retrieve site data from the National Ground Water Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.}
+\title{Retrieve site data from the National Ground Water Monitoring Network.}
 \usage{
 readNGWMNsites(siteNumbers)
 }
@@ -20,7 +20,7 @@ dec_lat_va, dec_lon_va \tab numeric \tab Site latitude and longitude \cr
 }
 }
 \description{
-Retrieve site data from the National Ground Water Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.
+Retrieve site data from the National Ground Water Monitoring Network.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
