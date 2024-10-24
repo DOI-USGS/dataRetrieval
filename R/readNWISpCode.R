@@ -33,9 +33,10 @@
 readNWISpCode <- function(parameterCd) {
   parameterCd.orig <- parameterCd
   parameterCd <- parameterCd[!is.na(parameterCd)]
-
-  baseURL <- drURL("pCode", Access = pkg.env$access)
-  fullURL <- paste0(baseURL, "fmt=rdb&group_cd=%")
+  baseURL <- httr2::request(pkg.env[["pCode"]])
+  fullURL <- httr2::req_url_query(baseURL,
+                                  fmt = "rdb",
+                                  group_cd ="%")
 
   if (any(parameterCd == "all")) {
     temp_df <- importRDB1(fullURL, asDateTime = FALSE)

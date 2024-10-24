@@ -29,6 +29,7 @@ getWebServiceData <- function(obs_url, ...) {
   obs_url <- httr2::req_retry(obs_url,
                               backoff = ~ 5, max_tries = 3) 
   
+  print(obs_url)
   returnedList <- httr2::req_perform(obs_url)
 
   good <- check_non_200s(returnedList)
@@ -42,7 +43,8 @@ getWebServiceData <- function(obs_url, ...) {
   return_content <- c("text/tab-separated-values;charset=UTF-8",
                       "text/csv;charset=UTF-8",
                       "text/plain",
-                      "text/plain;charset=UTF-8")
+                      "text/plain;charset=UTF-8",
+                      "text/plain; charset=UTF-8")
   
   if(good){
     headerInfo <- httr2::resp_headers(returnedList)
