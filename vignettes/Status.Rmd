@@ -21,12 +21,7 @@ Contact CompTools@usgs.gov with additional questions!
 
 # Overview
 
-As of March 11, 2024, NWIS **discrete water quality** services are "frozen": any public data retrieval will not include any new data. 
-
-### NWIS qw services
-
-Discrete water quality samples data are undergoing modernization, and NWIS services pulling that discrete water quality data ('qw') are no longer being updated as of March 11, 2024. A full decommission is expected approximately 6 months later. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
-
+As of March 11, 2024, NWIS **discrete water quality** services are "frozen": any public data retrieval will not include any new data. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
 If you have additional questions about the NWIS qw data service, email CompTools@usgs.gov.
 
@@ -66,7 +61,7 @@ df <- data.frame(Function = c("readWQPdata",
                             "Set to legacy options by default. WQX3 options available.", 
                             "Set to legacy options by default. WQX3 options available.",
                             rep("Currently only available via legacy services.", 3),
-                            "Deprecated: should not be continued to use.",
+                            "Retired.",
                             "Does not have accurate information for USGS data.",
                             "Does not have accurate information for qw data."))
 
@@ -85,7 +80,8 @@ An example of a WQX 3.0 return:
 ```{r}
 library(dataRetrieval)
 rawPcode <- readWQPqw(siteNumbers = "USGS-01594440",
-                      parameterCd = "01075")
+                      parameterCd = "01075",
+                      legacy = FALSE)
 attr(rawPcode, "url")
 ```
 
@@ -105,7 +101,7 @@ The "readWQPdata" function is the most flexible function to get WQP data. Curren
 
 ### WQX 3.0
 
-There are now 2 "services" available: StationWQX and ResultWQX. The "ResultWQX" service has multiple available "dataProfiles".  
+There are now 3 "services" available: ResultWQX, StationWQX and ActivityWQX. The "ResultWQX" service has multiple available "dataProfiles".  
 
 | Service        | dataProfile |
 | -------------- | ----------  |
@@ -113,6 +109,7 @@ There are now 2 "services" available: StationWQX and ResultWQX. The "ResultWQX" 
 | ResultWQX      | fullPhysChem |
 | ResultWQX      | basicPhysChem |
 | ResultWQX      | narrow |
+| ActivityWQX    |         |
 
 Examples:
 
@@ -148,7 +145,7 @@ attr(data_sites, "url")
 
 ### WQX 2.0 - Legacy
 
-There are 8 services available from the legacy WQP. The Station and Result legacy services can still be accessed, but users should move to StationWQX and ResultWQX. As other former services become available in WQX 3.0, we will update these documents.
+There are 8 services available from the legacy WQP. The Station and Result legacy services can still be accessed, but users should move to StationWQX, ResultWQX, and ActivityWQX. As other former services become available in WQX 3.0, we will update these documents.
 
 | Service        | dataProfile | WQX 3.0 option? |
 | -------------- | ----------  | ----------  |
@@ -156,7 +153,7 @@ There are 8 services available from the legacy WQP. The Station and Result legac
 | Result      | resultPhysChem | ResultWQX |
 | Result      | biological |
 | Result      | narrowResult | ResultWQX |
-| Activity    | activityAll  |   |
+| Activity    | activityAll  | ActivityWQX |
 | ActivityMetric |           |   |
 | Project     |            |   |
 | ProjectMonitoringLocationWeighting |           |   |
@@ -251,8 +248,6 @@ nrow(what_NWIS[what_NWIS$data_type_cd == "qw",])
 So for site "05114000", there are 381 NWIS qw parameters that have been measured. Starting mid-March 2024, the data availability for those 381 parameters will be frozen...even if new data is collected. Eventually those 381 rows of data will not be returned, only 26 rows of data will be returned (407-381). 
 
 New services/functions are being developed to replace the lost functionality so check back here for updated information.
-
-
 
 
 # Known Dependencies
