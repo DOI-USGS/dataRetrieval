@@ -1,6 +1,7 @@
 dataRetrieval 2.7.17
 ===================
 * Fixed bug with server problems causing errors.
+* Removed the function "readNWISqw" since the underlying data was removed.
 * Added message of service URL.
 * Removed the forced "empty returns" for WQP, since the WQP now has properly formatted empty returns.
 * Moved the column parsing to a dedicated function for WQP.
