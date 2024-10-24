@@ -46,7 +46,6 @@ setAccess <- function(access = "public") {
   pkg.env$measurements <- "https://waterdata.usgs.gov/nwis/measurements/"
   pkg.env$peak <- "https://nwis.waterdata.usgs.gov/usa/nwis/peak/"
   pkg.env$rating <- "https://waterdata.usgs.gov/nwisweb/get_ratings/"
-  pkg.env$qwdata <- "https://nwis.waterdata.usgs.gov/nwis/qwdata"
   pkg.env$stat <- "https://waterservices.usgs.gov/nwis/stat/"
   pkg.env$useNat <- "https://waterdata.usgs.gov/nwis/water_use"
   pkg.env$pCode <- "https://help.waterdata.usgs.gov/code/parameter_cd_query"

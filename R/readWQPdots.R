@@ -2,7 +2,7 @@
 #' Format and organize WQP arguments that are passed in as \code{...}.
 #'
 #' @keywords internal
-readWQPdots <- function(..., legacy = FALSE) {
+readWQPdots <- function(..., legacy = TRUE) {
   
   if (length(list(...)) == 0) {
     stop("No arguments supplied")
