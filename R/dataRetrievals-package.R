@@ -32,7 +32,7 @@ Extended Documentation: https://doi-usgs.github.io/dataRetrieval")
 
 #' List of USGS parameter codes
 #'
-#' Complete list of USGS parameter codes as of Dec. 20, 2021.
+#' Complete list of USGS parameter codes as of Oct. 24, 2024.
 #'
 #' @name parameterCdFile
 #' @return parameterData data frame with information about USGS parameters.

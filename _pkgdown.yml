@@ -68,7 +68,6 @@ reference:
       - readNWISdv
       - readNWISuv
       - readNWISsite
-      - readNWISqw
       - readNWISstat
       - readNWISmeas
       - readNWISpCode

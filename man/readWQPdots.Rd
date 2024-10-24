@@ -4,7 +4,7 @@
 \alias{readWQPdots}
 \title{Format and organize WQP arguments that are passed in as \code{...}.}
 \usage{
-readWQPdots(..., legacy = FALSE)
+readWQPdots(..., legacy = TRUE)
 }
 \description{
 Format and organize WQP arguments that are passed in as \code{...}.

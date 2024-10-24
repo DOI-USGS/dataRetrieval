@@ -75,14 +75,6 @@
 #'
 #' unitData <- importRDB1(unitDataURL, asDateTime = TRUE)
 #'
-#' qwURL <- constructNWISURL(c("04024430", "04024000"),
-#'   c("34247", "30234", "32104", "34220"),
-#'   "2010-11-03", "", "qw",
-#'   format = "rdb"
-#' )
-#'
-#' qwData <- importRDB1(qwURL, asDateTime = TRUE, tz = "America/Chicago")
-#'
 #' iceSite <- "04024000"
 #' start <- "2015-11-09"
 #' end <- "2015-11-24"

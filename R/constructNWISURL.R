@@ -12,7 +12,7 @@
 #' This is usually 5 digits.  Daily mean (00003) is the default.
 #' @param service string USGS service to call. Possible values are "dv" (daily values),
 #' "uv" (unit/instantaneous values),
-#' "qw" (water quality data), "gwlevels" (groundwater),and "rating" (rating curve),
+#' "gwlevels" (groundwater),and "rating" (rating curve),
 #' "peak", "meas" (discrete streamflow measurements),
 #' "stat" (statistics web service BETA).
 #' @param format string, can be "tsv" or "xml", and is only applicable for daily
@@ -79,10 +79,8 @@ constructNWISURL <- function(siteNumbers,
   
   service <- match.arg(service, c(
     "dv", "uv", "iv", "iv_recent", "qw", "gwlevels",
-    "rating", "peak", "meas", "stat", "qwdata"
-  ))
+    "rating", "peak", "meas", "stat"))
   
-  service[service == "qw"] <- "qwdata"
   service[service == "meas"] <- "measurements"
   service[service == "uv"] <- "iv"
   
@@ -100,73 +98,8 @@ constructNWISURL <- function(siteNumbers,
       stop("Maximum parameter codes allowed is 200, please adjust data request.")
     }
   }
-  
-  multipleSites <- length(siteNumbers) > 1
-  multiplePcodes <- length(parameterCd) > 1
-  
+
   switch(service,
-         qwdata = {
-           if (multipleSites) {
-             searchCriteria <- "multiple_site_no"
-             url <- httr2::req_url_query(baseURL, 
-                                         multiple_site_no = siteNumbers,
-                                         .multi = "comma")
-           } else {
-             searchCriteria <- "search_site_no"
-             url <- httr2::req_url_query(baseURL,
-                                         search_site_no = siteNumbers,
-                                         .multi = "comma") 
-             url <- httr2::req_url_query(baseURL,
-                                         search_site_no_match_type = "exact")
-           }
-           
-           if (multiplePcodes) {
-             url <- httr2::req_url_query(url,
-                                         multiple_parameter_cds = parameterCd,
-                                         .multi = "comma")
-             url <- httr2::req_url_query(url, param_cd_operator = "OR")
-           } else {
-             url <- httr2::req_url_query(url,
-                                multiple_parameter_cds = parameterCd)
-             url <- httr2::req_url_query(url, param_cd_operator = "AND")
-           }
-           
-           searchCriteria <- paste(searchCriteria, "multiple_parameter_cds", sep = ",")
-           url <- httr2::req_url_query(url, 
-                                       list_of_search_criteria = searchCriteria)
-           
-           params <- list(group_key = "NONE",
-                          sitefile_output_format = "html_table",
-                          column_name = "agency_cd",
-                          column_name = "site_no",
-                          column_name = "station_nm",
-                          inventory_output = "0",
-                          rdb_inventory_output = "file",
-                          TZoutput = "0",
-                          pm_cd_compare = "Greater%20than",
-                          radio_parm_cds = "previous_parm_cds",
-                          qw_attributes = "0",
-                          format = "rdb",
-                          date_format = "YYYY-MM-DD",
-                          rdb_compression = "value")
-           url <- httr2::req_url_query(url, !!!params )
-           
-           if (expanded) {
-             url <- httr2::req_url_query(url, qw_sample_wide = "0")
-             url <- httr2::req_url_query(url, rdb_qw_attributes= "expanded")
-           } else {
-             url <- httr2::req_url_query(url, rdb_qw_attributes = "0")
-             url <- httr2::req_url_query(url, qw_sample_wide = "separated_wide")
-           }
-           
-           if (nzchar(startDate)) {
-             url <- httr2::req_url_query(url, begin_date = startDate)
-           }
-           
-           if (nzchar(endDate)) {
-             url <- httr2::req_url_query(url, end_date = endDate)
-           }
-         },
          rating = {
            ratingType <- match.arg(ratingType, c("base", "corr", "exsa"))
            url <- httr2::req_url_query(baseURL, 
@@ -218,7 +151,7 @@ constructNWISURL <- function(siteNumbers,
              stop("Monthly and annual report types can only provide means")
            }
            
-           # make sure dates aren"t too specific for statReportType
+           # make sure dates aren't too specific for statReportType
            if (grepl("(?i)monthly", statReportType) &&
                (length(unlist(gregexpr("-", startDate))) > 1 ||
                 length(unlist(gregexpr("-", endDate))) > 1)) {
@@ -361,7 +294,7 @@ constructWQPURL <- function(siteNumbers,
                             parameterCd,
                             startDate,
                             endDate,
-                            legacy = FALSE) {
+                            legacy = TRUE) {
   
   allPCode <- any(toupper(parameterCd) == "ALL")
   

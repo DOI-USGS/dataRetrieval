@@ -4,7 +4,7 @@
 \alias{constructWQPURL}
 \title{Construct WQP url for data retrieval}
 \usage{
-constructWQPURL(siteNumbers, parameterCd, startDate, endDate, legacy = FALSE)
+constructWQPURL(siteNumbers, parameterCd, startDate, endDate, legacy = TRUE)
 }
 \arguments{
 \item{siteNumbers}{string or vector of strings USGS site number.}
