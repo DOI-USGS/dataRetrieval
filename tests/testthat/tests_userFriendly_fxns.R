@@ -393,11 +393,11 @@ test_that("Construct WQP urls", {
   startDate <- "1985-01-01"
   endDate <- ""
   pCode <- c("00060", "00010")
+  
   url_wqp <- constructWQPURL(
     paste("USGS", site_id, sep = "-"),
     c("01075", "00029", "00453"),
-    startDate, endDate
-  )
+    startDate, endDate, legacy = FALSE)
   # nolint start: line_length_linter
   expect_equal(
     url_wqp,
@@ -409,6 +409,7 @@ test_that("Construct WQP urls", {
     "Temperature", "Temperature, sample", "Temperature, water",
     "Temperature, water, deg F"
   )
+  
   obs_url_orig <- constructWQPURL(
     siteNumbers = c("IIDFG-41WSSPAHS", "USGS-02352560"),
     parameterCd = charNames,
