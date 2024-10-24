@@ -45,12 +45,8 @@ importWQP <- function(obs_url, tz = "UTC",
     tz <- "UTC"
   }
 
-  if (!file.exists(obs_url)) {
-    
-    doc <- getWebServiceData(
-      obs_url,
-      httr::accept("text/csv")
-    )
+  if (class(obs_url) == "httr2_request") {
+    doc <- getWebServiceData(obs_url)
     if (is.null(doc)) {
       return(invisible(NULL))
     }
