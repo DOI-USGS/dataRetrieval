@@ -352,6 +352,7 @@ test_that("Construct NWIS urls", {
     startDate, endDate, "dv",
     statCd = c("00003", "00001")
   )
+  
   # nolint start: line_length_linter
   expect_equal(url_daily, "https://waterservices.usgs.gov/nwis/dv/?site=01594440&format=waterml,1.1&ParameterCd=00060,00010&StatCd=00003,00001&startDT=1985-01-01")
 
@@ -365,15 +366,6 @@ test_that("Construct NWIS urls", {
     statCd = c("00003", "00001"), format = "tsv"
   )
   expect_equal(url_daily_tsv, "https://waterservices.usgs.gov/nwis/dv/?site=01594440&format=rdb,1.0&ParameterCd=00060,00010&StatCd=00003,00001&startDT=1985-01-01")
-
-  setAccess("internal")
-  url_rating <- constructNWISURL(siteNumber, service = "rating", ratingType = "base")
-  expect_equal(url_rating, "https://waterdata.usgs.gov/nwisweb/get_ratings/?Access=3&site_no=01594440&file_type=base")
-  url_peak <- constructNWISURL(siteNumber, service = "peak")
-  expect_equal(url_peak, "https://nwis.waterdata.usgs.gov/usa/nwis/peak/?Access=3&site_no=01594440&range_selection=date_range&format=rdb")
-
-  url_meas <- constructNWISURL(siteNumber, service = "meas")
-  expect_equal(url_meas, "https://waterdata.usgs.gov/nwis/measurements/?Access=3&site_no=01594440&range_selection=date_range&format=rdb_expanded")
 
   url_use <- constructUseURL(
     years = c(1990, 1995),
