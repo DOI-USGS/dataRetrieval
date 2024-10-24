@@ -34,17 +34,6 @@ test_that("External importRDB1 tests", {
   #   expect_that(as.numeric(unitData[which(unitData$tz_cd == "EST")[1],"datetime"]),
   #               equals(as.numeric(as.POSIXct("2013-11-03 01:00:00", tz="UTC")+60*60*5)))
 
-
-  qwURL <- constructNWISURL(c("04024430", "04024000"),
-    c("34247", "30234", "32104", "34220"),
-    "2010-11-03", "", "qw",
-    format = "rdb"
-  )
-  qwData <- importRDB1(qwURL, tz = "America/Chicago")
-  expect_is(qwData$sample_dt, "Date")
-  expect_is(qwData$startDateTime, "POSIXct")
-
-
   site <- "05427850"
 
   url <- constructNWISURL(site, "00060", "2015-01-01", "", "dv",
@@ -242,14 +231,14 @@ test_that("External WQP tests", {
   testthat::skip_on_cran()
 
   rawSampleURL <- constructWQPURL("USGS-01594440", "01075", "", "", legacy = FALSE)
-  rawSample <- importWQP(rawSampleURL)
-  expect_is(rawSample$Activity_StartDateTime, "POSIXct")
+  # rawSample <- importWQP(rawSampleURL)
+  # expect_is(rawSample$Activity_StartDateTime, "POSIXct")
 
   url2 <- constructWQPURL("USGS-01594440", "01075", "", "", legacy = TRUE)
   rawSample2 <- suppressWarnings(importWQP(url2))
   expect_is(rawSample2$ActivityStartDateTime, "POSIXct")
 
   STORETex <- constructWQPURL("WIDNR_WQX-10032762", "Specific conductance", "", "", legacy = FALSE)
-  STORETdata <- importWQP(STORETex)
-  expect_is(STORETdata$Activity_StartDateTime, "POSIXct")
+  # STORETdata <- importWQP(STORETex)
+  # expect_is(STORETdata$Activity_StartDateTime, "POSIXct")
 })

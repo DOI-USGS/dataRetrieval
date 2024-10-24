@@ -93,7 +93,7 @@ SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", convertTyp
 }
 \seealso{
 \code{\link{readWQPdata}}, \code{\link{whatWQPsites}},
-\code{\link{readNWISqw}}, and \code{\link{importWQP}}
+and \code{\link{importWQP}}
 }
 \keyword{USGS}
 \keyword{data}

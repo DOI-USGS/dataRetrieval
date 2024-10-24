@@ -55,23 +55,9 @@ This is available as of `dataRetrieval` version 2.7.16. Starting with 2.7.16, al
 
 ## `readNWISqw`
 
-Users will notice a Warning message when using this function:
+This function was retired as of Oct. 24, 2024.
 
-```{r eval=FALSE}
-site_ids <- c("04024430", "04024000")
-parameterCd <- c("34247", "30234", "32104", "34220")
-nwisData <- readNWISqw(site_ids, parameterCd)
-```
-
-```
-Warning message:                                                
-In readNWISqw(site_ids, parameterCd) : WARNING: NWIS does not deliver discrete water quality data newer than March 11, 2024 for updates to existing data. For additional details, see:
-https://doi-usgs.github.io/dataRetrieval/articles/Status.html
-```
-
-Please don't ignore this warning, the function will eventually be *removed* from the `dataRetrieval` package.
-
-So...what do you do instead? The function you will need to move to is `readWQPqw`. First, you'll need to convert the numeric USGS site ID's into something that the Water Quality Portal will accept, which requires the agency prefix. For most USGS sites this will mean pasting 'USGS-' before the site number, although it is important to note that there are some USGS sites that begin with a different prefix: it is up to users to determine the agency code..
+So...what do you use instead? The function you will need to move to is `readWQPqw`. First, you'll need to convert the numeric USGS site ID's into something that the Water Quality Portal will accept, which requires the agency prefix. For most USGS sites this will mean pasting 'USGS-' before the site number, although it is important to note that there are some USGS sites that begin with a different prefix: it is up to users to determine the agency code..
 
 Here's an example:
 
@@ -79,12 +65,13 @@ Here's an example:
 wqpData <- readWQPqw(paste0("USGS-", site_ids), parameterCd)
 ```
 
+Let's say we have a data frame that we got from the retired `readNWISqw` function and we saved it as `nwisData`.
 ```{r echo=FALSE}
 nwisData <- readRDS("nwisData.rds")
 wqpData <- readRDS("wqpData.rds")
 ```
 
-Let's compare the number of rows, number of columns, and attributes to each return:
+First we compare the number of rows, number of columns, and attributes to each return:
 
 
 ```{r}

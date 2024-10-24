@@ -48,7 +48,7 @@
 #' }
 #' @export
 #' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}},
-#' \code{\link{readNWISqw}}, and \code{\link{importWQP}}
+#' and \code{\link{importWQP}}
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
