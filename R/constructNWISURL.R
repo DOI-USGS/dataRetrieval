@@ -175,9 +175,11 @@ constructNWISURL <- function(siteNumbers,
          },
          peak = {
            url <- httr2::req_url_query(baseURL,
-                              site_no = siteNumbers,
                               range_selection = "date_range",
                               format = "rdb")
+           url <- httr2::req_url_query(url, 
+                                       site_no = siteNumbers,
+                                       .multi = "comma")
            if (nzchar(startDate)) {
              url <- httr2::req_url_query(url, begin_date = startDate)
            }
