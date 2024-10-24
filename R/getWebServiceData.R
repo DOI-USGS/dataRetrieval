@@ -109,7 +109,7 @@ check_non_200s <- function(returnedList){
 default_ua <- function() {
   versions <- c(
     libcurl = curl::curl_version()$version,
-    httr = as.character(utils::packageVersion("httr")),
+    httr2 = as.character(utils::packageVersion("httr2")),
     dataRetrieval = as.character(utils::packageVersion("dataRetrieval"))
   )
 
