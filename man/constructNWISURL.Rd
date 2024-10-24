@@ -31,7 +31,7 @@ retrieval for the latest possible record.}
 
 \item{service}{string USGS service to call. Possible values are "dv" (daily values),
 "uv" (unit/instantaneous values),
-"qw" (water quality data), "gwlevels" (groundwater),and "rating" (rating curve),
+"gwlevels" (groundwater),and "rating" (rating curve),
 "peak", "meas" (discrete streamflow measurements),
 "stat" (statistics web service BETA).}
 

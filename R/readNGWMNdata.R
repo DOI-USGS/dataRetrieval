@@ -1,4 +1,4 @@
-#' Import data from the National Groundwater Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.
+#' Import data from the National Groundwater Monitoring Network.
 #'
 #' Only water level data and site locations and names are currently available through the web service.
 #' @param service char Service for the request - "observation" and "featureOfInterest" are implemented.
@@ -95,7 +95,7 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC") {
   return(returnData)
 }
 
-#' Retrieve groundwater levels from the National Ground Water Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.
+#' Retrieve groundwater levels from the National Ground Water Monitoring Network.
 #'
 #' @param siteNumbers character Vector of feature IDs formatted with agency code and site number
 #' separated by a period or semicolon, e.g. \code{USGS.404159100494601}.
@@ -136,7 +136,7 @@ readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC") {
   return(data)
 }
 
-#' Retrieve site data from the National Ground Water Monitoring Network \url{https://cida.usgs.gov/ngwmn/}.
+#' Retrieve site data from the National Ground Water Monitoring Network.
 #'
 #' @param siteNumbers character Vector of feature IDs formatted with agency code and site number
 #' separated by a period or semicolon, e.g. \code{USGS.404159100494601}.
