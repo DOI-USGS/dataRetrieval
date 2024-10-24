@@ -384,32 +384,6 @@ test_that("Construct NWIS urls", {
   url_meas <- constructNWISURL(siteNumber, service = "meas")
   expect_equal(url_meas, "https://waterdata.usgs.gov/nwis/measurements/?Access=3&site_no=01594440&range_selection=date_range&format=rdb_expanded")
 
-  urlQW <- constructNWISURL("450456092225801", "70300",
-    startDate = "", endDate = "",
-    "qw", expanded = TRUE
-  )
-  expect_equal(urlQW, "https://nwis.waterdata.usgs.gov/nwis/qwdata?Access=3&search_site_no=450456092225801&search_site_no_match_type=exact&multiple_parameter_cds=70300&param_cd_operator=AND&list_of_search_criteria=search_site_no,multiple_parameter_cds&group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd&column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file&TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0&format=rdb&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&qw_sample_wide=0")
-
-  setAccess("cooperator")
-  urlQW <- constructNWISURL("450456092225801", "70300",
-    startDate = "", endDate = "", "qw", expanded = TRUE
-  )
-  expect_equal(urlQW, "https://nwis.waterdata.usgs.gov/nwis/qwdata?Access=1&search_site_no=450456092225801&search_site_no_match_type=exact&multiple_parameter_cds=70300&param_cd_operator=AND&list_of_search_criteria=search_site_no,multiple_parameter_cds&group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd&column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file&TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0&format=rdb&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&qw_sample_wide=0")
-
-  setAccess("USGS")
-  urlQW <- constructNWISURL("450456092225801", "70300",
-    startDate = "",
-    endDate = "", "qw", expanded = TRUE
-  )
-  expect_equal(urlQW, "https://nwis.waterdata.usgs.gov/nwis/qwdata?Access=2&search_site_no=450456092225801&search_site_no_match_type=exact&multiple_parameter_cds=70300&param_cd_operator=AND&list_of_search_criteria=search_site_no,multiple_parameter_cds&group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd&column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file&TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0&format=rdb&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&qw_sample_wide=0")
-
-  setAccess("public")
-  urlQW <- constructNWISURL("450456092225801", "70300",
-    startDate = "",
-    endDate = "", "qw", expanded = TRUE
-  )
-  expect_equal(urlQW, "https://nwis.waterdata.usgs.gov/nwis/qwdata?search_site_no=450456092225801&search_site_no_match_type=exact&multiple_parameter_cds=70300&param_cd_operator=AND&list_of_search_criteria=search_site_no,multiple_parameter_cds&group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd&column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file&TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0&format=rdb&rdb_qw_attributes=expanded&date_format=YYYY-MM-DD&rdb_compression=value&qw_sample_wide=0")
-
   url_use <- constructUseURL(
     years = c(1990, 1995),
     stateCd = "Ohio",

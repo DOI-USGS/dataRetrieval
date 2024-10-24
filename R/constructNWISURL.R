@@ -1,11 +1,6 @@
 #' Construct NWIS url for data retrieval
 #'
-#' Imports data from NWIS web service. This function gets the data from here:
-#' \url{https://nwis.waterdata.usgs.gov/nwis/qwdata}
-#' A list of parameter codes can be found here:
-#' \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-#' A list of statistic codes can be found here:
-#' \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+#' Imports data from NWIS web service. 
 #'
 #' @param siteNumbers string or vector of strings USGS site number.  This is usually an 8 digit number
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
@@ -17,7 +12,7 @@
 #' This is usually 5 digits.  Daily mean (00003) is the default.
 #' @param service string USGS service to call. Possible values are "dv" (daily values),
 #' "uv" (unit/instantaneous values),
-#' "qw" (water quality data), "gwlevels" (groundwater),and "rating" (rating curve),
+#' "gwlevels" (groundwater),and "rating" (rating curve),
 #' "peak", "meas" (discrete streamflow measurements),
 #' "stat" (statistics web service BETA).
 #' @param format string, can be "tsv" or "xml", and is only applicable for daily
@@ -83,10 +78,8 @@ constructNWISURL <- function(siteNumbers,
                              statType = "mean") {
   service <- match.arg(service, c(
     "dv", "uv", "iv", "iv_recent", "qw", "gwlevels",
-    "rating", "peak", "meas", "stat", "qwdata"
-  ))
+    "rating", "peak", "meas", "stat"))
   
-  service[service == "qw"] <- "qwdata"
   service[service == "meas"] <- "measurements"
   service[service == "uv"] <- "iv"
   
@@ -110,59 +103,6 @@ constructNWISURL <- function(siteNumbers,
   baseURL <- drURL(service, Access = pkg.env$access)
   
   switch(service,
-         qwdata = {
-           if (multipleSites) {
-             searchCriteria <- "multiple_site_no"
-             url <- appendDrURL(baseURL, multiple_site_no = siteNumbers)
-           } else {
-             searchCriteria <- "search_site_no"
-             url <- appendDrURL(baseURL,
-                                search_site_no = siteNumbers,
-                                search_site_no_match_type = "exact"
-             )
-           }
-           
-           multiplePcodes <- length(parameterCd) > 1
-           
-           if (multiplePcodes) {
-             pCodes <- paste(parameterCd, collapse = ",")
-             url <- appendDrURL(url,
-                                multiple_parameter_cds = pCodes,
-                                param_cd_operator = "OR"
-             )
-           } else {
-             url <- appendDrURL(url,
-                                multiple_parameter_cds = parameterCd,
-                                param_cd_operator = "AND"
-             )
-           }
-           
-           searchCriteria <- paste(searchCriteria, "multiple_parameter_cds", sep = ",")
-           url <- appendDrURL(url, list_of_search_criteria = searchCriteria)
-           
-           
-           url <- paste(url, "group_key=NONE&sitefile_output_format=html_table&column_name=agency_cd",
-                        "column_name=site_no&column_name=station_nm&inventory_output=0&rdb_inventory_output=file",
-                        "TZoutput=0&pm_cd_compare=Greater%20than&radio_parm_cds=previous_parm_cds&qw_attributes=0",
-                        "format=rdb&rdb_qw_attributes=0&date_format=YYYY-MM-DD",
-                        "rdb_compression=value",
-                        sep = "&"
-           )
-           if (expanded) {
-             url <- appendDrURL(url, qw_sample_wide = "0")
-             url <- gsub("rdb_qw_attributes=0", "rdb_qw_attributes=expanded", url)
-           } else {
-             url <- appendDrURL(url, qw_sample_wide = "separated_wide")
-           }
-           
-           if (nzchar(startDate)) {
-             url <- appendDrURL(url, begin_date = startDate)
-           }
-           
-           if (nzchar(endDate)) {
-             url <- appendDrURL(url, end_date = endDate)
-           }
-         },
          rating = {
            ratingType <- match.arg(ratingType, c("base", "corr", "exsa"))
            url <- appendDrURL(baseURL, site_no = siteNumbers, file_type = ratingType)
@@ -211,7 +151,7 @@ constructNWISURL <- function(siteNumbers,
              stop("Monthly and annual report types can only provide means")
            }
            
-           # make sure dates aren"t too specific for statReportType
+           # make sure dates aren't too specific for statReportType
            if (grepl("(?i)monthly", statReportType) &&
                (length(unlist(gregexpr("-", startDate))) > 1 ||
                 length(unlist(gregexpr("-", endDate))) > 1)) {
