@@ -73,7 +73,7 @@ knitr::kable(df)
 
 This function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characterisitic names, and start/end dates. 
 
-As of `dataRetrieval` 2.7.11, this function will use the default WQX version 2 dataProfile, specified by the `legacy = TRUE` argument. Setting `legacy = FALSE` will return the WQX 3.0 "narrow" dataProfile. Keep in mind the 2.0 profiles will eventually be retired. For any more flexibility, users will need to use the `readWQPdata()` function.
+As of `dataRetrieval` 2.7.17, this function will use the default WQX version 2 dataProfile, specified by the `legacy = TRUE` argument. Setting `legacy = FALSE` will return the WQX 3.0 "narrow" dataProfile. Keep in mind the 2.0 profiles will eventually be retired. For any more flexibility, users will need to use the `readWQPdata()` function.
 
 An example of a WQX 3.0 return:
 
