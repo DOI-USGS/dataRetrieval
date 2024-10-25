@@ -264,17 +264,19 @@ readWQPdata <- function(...,
 
 create_WQP_attributes <- function(retval, ...){
 
-  siteInfo <- suppressWarnings(whatWQPsites(...))
   
+  siteInfo <- suppressWarnings(whatWQPsites(..., legacy = attr(retval, "legacy")))
   attr(retval, "siteInfo") <- siteInfo
   
   if(!attr(retval, "legacy")){
     attr(retval, "headerInfo") <- wqp_check_status(attr(retval, "headerInfo")$`wqp-request-id`)
     attr(retval, "queryTime") <- as.POSIXct(attr(retval, "headerInfo")[["requestStartTime"]],
-                                            format = "%Y-%m-%dT%H:%M:%OS", tz = "GMT")
+                                            format = "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
   } else {
     attr(retval, "queryTime") <- Sys.time()
   }
+  
+  
   
   return(retval)
 }
