@@ -154,6 +154,12 @@ test_that("WQP qw tests", {
   
   df2 <- readWQPqw("USGS-05427718", parameterCd = "all")
   expect_true(nrow(df2) > 0)
+  
+  #Empty legacy:
+  df3 <- readWQPqw(siteNumbers = "USGS-385032115220501",
+                   parameterCd = "all", legacy = TRUE)
+  expect_true(nrow(df3) == 0)
+  
 })
 
 context("readNWISstat tests")
