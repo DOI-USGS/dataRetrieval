@@ -71,7 +71,7 @@ knitr::kable(df)
 
 ## readWQPqw
 
-This function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characterisitic names, and start/end dates. 
+The `readWQPqw()` function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characterisitic names, and start/end dates. 
 
 As of `dataRetrieval` 2.7.17, this function will use the default WQX version 2 dataProfile, specified by the `legacy = TRUE` argument. Setting `legacy = FALSE` will return the WQX 3.0 "narrow" dataProfile. Keep in mind the 2.0 profiles will eventually be retired. For any more flexibility, users will need to use the `readWQPdata()` function.
 
@@ -97,7 +97,7 @@ attr(rawPcode_legacy, "url")
 
 ## readWQPdata
 
-The `readWQPdata()` function is the most flexible function to get WQP data. Currently there are 11 legacy options and 4 options that use the new WQX 3.0 profiles. Note that `readWQPdata()` does not leverage a `legacy` argument to specify which profile version the user would like returned, but instead relies on the user's specification of `service` and `dataProfile` arguments.
+The `readWQPdata()` function is the most flexible function to get WQP data. Currently there are 11 legacy options and 5 options that use the new WQX 3.0 profiles. Note that `readWQPdata()` does not leverage a `legacy` argument to specify which profile version the user would like returned, but instead relies on the user's specification of `service` and `dataProfile` arguments.
 
 ### WQX 3.0
 
