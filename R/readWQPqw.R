@@ -99,7 +99,7 @@ readWQPqw <- function(siteNumbers,
     if(legacy){
       wqp_message()
     } else {
-      wqp_message_beta
+      wqp_message_beta()
     }
     attr(retval, "url") <- url
 
