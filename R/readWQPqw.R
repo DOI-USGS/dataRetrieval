@@ -93,7 +93,7 @@ readWQPqw <- function(siteNumbers,
     }
     
     if (!all(is.na(retval)) && !ignore_attributes) {
-      retval <- create_WQP_attributes(retval, siteid = sites)
+      retval <- suppressMessages(create_WQP_attributes(retval, siteid = sites))
     } 
 
     if(legacy){
