@@ -21,7 +21,7 @@ Contact CompTools@usgs.gov with additional questions.
 
 # Overview
 
-On March 11, 2024, NWIS **discrete water quality** services were "frozen": any public data retrieval using `readNWISqw()` did not include any new data. As of dataRetrieval v2.7.17, `readNWISqw()` has been removed and replaced by `readWQPqw()`. Learn more about the change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
+On March 11, 2024, NWIS **discrete water quality** services were "frozen": any public data retrieval using `readNWISqw()` did not include any new data. As of dataRetrieval v2.7.17, `readNWISqw()` has been retired and replaced by `readWQPqw()`. Learn more about the change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
 If you have additional questions about the NWIS qw data service, email CompTools@usgs.gov.
 
