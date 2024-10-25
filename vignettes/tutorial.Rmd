@@ -369,12 +369,15 @@ qw_data_sp <- readWQPqw(siteNumbers = paste0("USGS-", site),
 
 This is all great when you know your site numbers. What do you do when you don't?
 
-There are 2 `dataRetrieval` functions that help:
+There are 2 `dataRetrieval` functions that help with discover in NWIS:
 
 *  `whatNWISsites` finds sites within a specified filter (quicker)
 *  `whatNWISdata` summarizes the data within the specified filter (more information)
+
+And 2 functions that help with discover in WQP:
+
 *  `readWQPsummary` summarizes the data available within the WQP by year.
-*  `whatWQPdata` summarizes the data available within the WQP. 
+*  `whatWQPdata` summarizes the data available within the WQP.
 
 There are several ways to specify the requests. The best way to discover how flexible the USGS web services are is to click on the links and see all of the filtering options:
 [http://waterservices.usgs.gov/](http://waterservices.usgs.gov/)
