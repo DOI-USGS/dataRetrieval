@@ -71,7 +71,7 @@ knitr::kable(df)
 
 ## readWQPqw
 
-The `readWQPqw()` function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characterisitic names, and start/end dates. 
+The `readWQPqw()` function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characteristic names, and start/end dates. 
 
 As of `dataRetrieval` 2.7.17, this function will use the default WQX version 2 dataProfile, specified by the `legacy = TRUE` argument. Setting `legacy = FALSE` will return the WQX 3.0 "narrow" dataProfile. Keep in mind the 2.0 profiles will eventually be retired. For any more flexibility, users will need to use the `readWQPdata()` function.
 
@@ -82,7 +82,6 @@ library(dataRetrieval)
 rawPcode <- readWQPqw(siteNumbers = "USGS-01594440",
                       parameterCd = "01075",
                       legacy = FALSE)
-attr(rawPcode, "url")
 ```
 
 Compared to using the WQX 2.0 legacy results:
@@ -91,7 +90,6 @@ Compared to using the WQX 2.0 legacy results:
 rawPcode_legacy <- readWQPqw(siteNumbers = "USGS-01594440",
                       parameterCd = "01075",
                       legacy = TRUE)
-attr(rawPcode_legacy, "url")
 
 ```
 
@@ -119,27 +117,23 @@ data_full <- readWQPdata(siteid = "USGS-04024315",
                          dataProfile = "fullPhysChem",
                          service = "ResultWQX3")
 ncol(data_full)
-attr(data_full, "url")
 
 data_basic <- readWQPdata(siteid = "USGS-04024315",
                           characteristicName = "pH",
                           dataProfile = "basicPhysChem",
                           service = "ResultWQX3")
 ncol(data_basic)
-attr(data_basic, "url")
 
 data_narrow <- readWQPdata(siteid = "USGS-04024315",
                            characteristicName = "pH",
                            dataProfile = "narrow",
                            service = "ResultWQX3")
 ncol(data_narrow)
-attr(data_narrow, "url")
 
 data_sites <- readWQPdata(siteid = "USGS-04024315",
                           characteristicName = "pH",
                           service = "StationWQX3")
 ncol(data_sites)
-attr(data_sites, "url")
 
 ```
 
