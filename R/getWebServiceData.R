@@ -137,7 +137,7 @@ default_ua <- function() {
 
   ua <- paste0(names(versions), "/", versions, collapse = " ")
 
-  if ("UA.dataRetrieval" %in% names(options)) {
+  if ("UA.dataRetrieval" %in% names(options())) {
     ua <- paste0(ua, "/", options()[["UA.dataRetrieval"]])
   }
 
