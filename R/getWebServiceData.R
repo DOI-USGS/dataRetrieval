@@ -137,8 +137,8 @@ default_ua <- function() {
 
   ua <- paste0(names(versions), "/", versions, collapse = " ")
 
-  if ("UA.dataRetrieval" %in% names(options())) {
-    ua <- paste0(ua, "/", options()[["UA.dataRetrieval"]])
+  if (Sys.getenv("GitHub_CI") != "") {
+    ua <- paste0(ua, "/", Sys.getenv("GitHub_CI"))
   }
 
   return(ua)
