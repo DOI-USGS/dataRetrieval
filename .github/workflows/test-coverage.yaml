@@ -12,7 +12,10 @@ jobs:
   test-coverage:
     runs-on: macOS-latest
     
-    env: CUSTOM_DR_UA: 'GitHub_CI'
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      CUSTOM_DR_UA: 'GitHub_CI'
       
     steps:
       - uses: actions/checkout@c0a81a463886bb75afe234e07a9fd5bb79219196

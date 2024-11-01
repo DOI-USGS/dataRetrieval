@@ -137,8 +137,8 @@ default_ua <- function() {
 
   ua <- paste0(names(versions), "/", versions, collapse = " ")
 
-  if (Sys.getenv("GitHub_CI") != "") {
-    ua <- paste0(ua, "/", Sys.getenv("GitHub_CI"))
+  if (Sys.getenv("CUSTOM_DR_UA") != "") {
+    ua <- paste0(ua, "/", Sys.getenv("CUSTOM_DR_UA"))
   }
 
   return(ua)
