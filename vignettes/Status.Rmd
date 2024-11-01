@@ -17,20 +17,20 @@ editor_options:
 
 This page will be updated frequently with information about the status of dataRetrieval services.
 
-Contact CompTools@usgs.gov with additional questions!
+Contact CompTools@usgs.gov with additional questions.
 
 # Overview
 
-As of March 11, 2024, NWIS **discrete water quality** services are "frozen": any public data retrieval will not include any new data. Learn more about the upcoming change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
+On March 11, 2024, NWIS **discrete water quality** services were "frozen": any public data retrieval using `readNWISqw()` did not include any new data. As of dataRetrieval v2.7.17, `readNWISqw()` has been retired and replaced by `readWQPqw()`. Learn more about the change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
 If you have additional questions about the NWIS qw data service, email CompTools@usgs.gov.
 
 
-### WQP: USGS Data
+## Locating USGS data using the Water Quality Portal
 
-**New USGS data**: temporarily not accessible on the main Water Quality Portal (WQP) page (www.waterqualitydata.us). Data are still being collected, but are not available on this webpage. This limited availability is expected to last a few months.
+New USGS data (post March 11, 2024) **are temporarily not accessible** on the **main** Water Quality Portal (WQP) page (www.waterqualitydata.us). Data are still being collected, but are not available on this webpage. This limited availability is expected to last a few months.
 
-**New USGS data** _are_ accessible in a pre-release (*beta*) version of the [WQP web page](https://www.waterqualitydata.us/beta/) and new [wqx3 web services](https://waterqualitydata.us/wqx3/). Data are available in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)) for these new "Data Profiles" (how the data is formatted by the WQP):
+However, new USGS data **are accessible** in a pre-release (*beta*) version of the [WQP web page](https://www.waterqualitydata.us/beta/) and new [wqx3 web services](https://waterqualitydata.us/wqx3/). Data are available in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)) for these new "Data Profiles" (how the data is formatted by the WQP):
 
 * Monitoring Location
 * Results - Narrow
@@ -38,11 +38,11 @@ If you have additional questions about the NWIS qw data service, email CompTools
 * Results - Basic Physical Chemical
 * Sampling Activity
 
-Guidance on how to use the new web page and web services are available in the [User Guide](https://www.waterqualitydata.us/beta/portal_userguide/) and [Web Services Guide](https://www.waterqualitydata.us/beta/webservices_documentation/). Additional profiles will continue to be added to this beta release in the coming weeks. 
+Guidance on how to use the new web page and web services are available in the [User Guide](https://www.waterqualitydata.us/beta/portal_userguide/) and [Web Services Guide](https://www.waterqualitydata.us/beta/webservices_documentation/). Additional profiles will continue to be added over time. 
 
-During the beta period users may encounter bugs or identify issues with the implementation of the WQX 3.0 format: we welcome (and encourage!) your feedback to help improve these offerings, just send an email to WQX@epa.gov.
+**Disclaimer:** During the beta period, users may encounter bugs or identify issues with the implementation of the WQX 3.0 format: we welcome (and encourage!) your feedback to help improve these offerings, just send an email to WQX@epa.gov.
 
-The current WQP data profiles (available on the main Water Quality Portal web pages and from the current web services, https://www.waterqualitydata.us) deliver data in "WQX version 2.0" format. These will remain available for a period of time after the rollout of version 3.0. Eventually they will be retired, but there is not yet an estimated time line.
+The current WQP data profiles (available on the main Water Quality Portal web pages and from the current web services, https://www.waterqualitydata.us) deliver data in "WQX version 2.0" (what we're referring to as the "legacy") format. These will remain available for a period of time after the rollout of version 3.0. Eventually they will be retired, but there is not yet an estimated time line.
 
 # What to expect: dataRetrieval specific
 
@@ -71,9 +71,9 @@ knitr::kable(df)
 
 ## readWQPqw
 
-This function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characterisitic names, and start/end dates. 
+The `readWQPqw()` function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characteristic names, and start/end dates. 
 
-As of `dataRetrieval` 2.7.15.1, this function will use the WQX 3.0 "narrow" dataProfile. There is an argument "legacy" that allows the user to switch back to the WQX 2.0 profile. Keep in mind the 2.0 profiles will eventually be retired. For any more flexibility, users will need to use the "readWQPdata" function.
+As of `dataRetrieval` 2.7.17, this function will use the default WQX version 2 dataProfile, specified by the `legacy = TRUE` argument. Setting `legacy = FALSE` will return the WQX 3.0 "narrow" dataProfile. Keep in mind the 2.0 profiles will eventually be retired. For any more flexibility, users will need to use the `readWQPdata()` function.
 
 An example of a WQX 3.0 return:
 
@@ -82,7 +82,6 @@ library(dataRetrieval)
 rawPcode <- readWQPqw(siteNumbers = "USGS-01594440",
                       parameterCd = "01075",
                       legacy = FALSE)
-attr(rawPcode, "url")
 ```
 
 Compared to using the WQX 2.0 legacy results:
@@ -91,17 +90,16 @@ Compared to using the WQX 2.0 legacy results:
 rawPcode_legacy <- readWQPqw(siteNumbers = "USGS-01594440",
                       parameterCd = "01075",
                       legacy = TRUE)
-attr(rawPcode_legacy, "url")
 
 ```
 
 ## readWQPdata
 
-The "readWQPdata" function is the most flexible function to get WQP data. Currently there are 4 options that use the new WQX 3.0 profiles, and 11 legacy options.
+The `readWQPdata()` function is the most flexible function to get WQP data. Currently there are 11 legacy options and 5 options that use the new WQX 3.0 profiles. Note that `readWQPdata()` does not leverage a `legacy` argument to specify which profile version the user would like returned, but instead relies on the user's specification of `service` and `dataProfile` arguments.
 
 ### WQX 3.0
 
-There are now 3 "services" available: ResultWQX, StationWQX and ActivityWQX. The "ResultWQX" service has multiple available "dataProfiles".  
+There are currently three WQX 3.0 "services" available: ResultWQX, StationWQX and ActivityWQX. The "ResultWQX" service has multiple available "dataProfiles".  
 
 | Service        | dataProfile |
 | -------------- | ----------  |
@@ -119,27 +117,23 @@ data_full <- readWQPdata(siteid = "USGS-04024315",
                          dataProfile = "fullPhysChem",
                          service = "ResultWQX3")
 ncol(data_full)
-attr(data_full, "url")
 
 data_basic <- readWQPdata(siteid = "USGS-04024315",
                           characteristicName = "pH",
                           dataProfile = "basicPhysChem",
                           service = "ResultWQX3")
 ncol(data_basic)
-attr(data_basic, "url")
 
 data_narrow <- readWQPdata(siteid = "USGS-04024315",
                            characteristicName = "pH",
                            dataProfile = "narrow",
                            service = "ResultWQX3")
 ncol(data_narrow)
-attr(data_narrow, "url")
 
 data_sites <- readWQPdata(siteid = "USGS-04024315",
                           characteristicName = "pH",
                           service = "StationWQX3")
 ncol(data_sites)
-attr(data_sites, "url")
 
 ```
 
@@ -147,7 +141,7 @@ attr(data_sites, "url")
 
 There are 8 services available from the legacy WQP. The Station and Result legacy services can still be accessed, but users should move to StationWQX, ResultWQX, and ActivityWQX. As other former services become available in WQX 3.0, we will update these documents.
 
-| Service        | dataProfile | WQX 3.0 option? |
+| Service        | dataProfile | WQX 3.0 service "analog" |
 | -------------- | ----------  | ----------  |
 | Station     |             | StationWQX |
 | Result      | resultPhysChem | ResultWQX |
@@ -231,9 +225,9 @@ dl_data <- readWQPdata(
 ## whatNWISdata
 
 
-NWIS services are "frozen": the returned data availability will also be frozen ONLY for "qw" data_type_cd results. All other data types should not be affected. 
+NWIS discrete water quality services are "frozen": the returned data availability will also be frozen ONLY for "qw" data_type_cd results. All other data types should not be affected. 
 
-When the NWIS services are decommissioned (possible September 2024): there will no longer be any "qw" information provided in the output of `whatNWISdata`. Discrete water-quality availability will be available via WQP services. More information will be provided as we learn more.
+When the NWIS services are decommissioned (likely in 2025): there will no longer be any "qw" information provided in the output of `whatNWISdata`. Discrete water-quality availability will be available via WQP services. More information will be provided as we learn more.
 
 Here's an example of what will change:
 
@@ -245,7 +239,7 @@ nrow(what_NWIS[what_NWIS$data_type_cd == "qw",])
 [1] 381
 ```
 
-So for site "05114000", there are 381 NWIS qw parameters that have been measured. Starting mid-March 2024, the data availability for those 381 parameters will be frozen...even if new data is collected. Eventually those 381 rows of data will not be returned, only 26 rows of data will be returned (407-381). 
+So for site "05114000", there are 381 NWIS qw parameters that have been measured. Since mid-March 2024, the data availability for those 381 parameters are frozen...even if new data are collected. Eventually those 381 rows of data will not be returned, only 26 rows of data will be returned (407-381). 
 
 New services/functions are being developed to replace the lost functionality so check back here for updated information.
 
