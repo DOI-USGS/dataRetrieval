@@ -26,6 +26,7 @@ jobs:
     # Only restrict concurrency for non-PR jobs
     env: 
       CUSTOM_DR_UA: 'GitHub_CI'
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     concurrency:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
