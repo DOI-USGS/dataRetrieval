@@ -74,8 +74,9 @@ importWQP <- function(obs_url, tz = "UTC",
   if(convertType){
     retval <- parse_WQP(retval, tz)
   } 
-  attr(retval, "headerInfo") <- headerInfo
-  
+  if (class(obs_url) == "httr2_request") {
+    attr(retval, "headerInfo") <- headerInfo
+  }
   return(retval)
   
 }

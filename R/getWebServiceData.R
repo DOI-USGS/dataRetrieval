@@ -1,8 +1,7 @@
 #' Function to return data from web services
 #'
-#' This function accepts a url parameter, and returns the raw data. The function enhances
-#' \code{\link[httr]{GET}} with more informative error messages.
-#'
+#' This function accepts a url parameter, and returns the raw data. 
+#' 
 #' @param obs_url character containing the url for the retrieval
 #' @param \dots information to pass to header request
 #' @export
@@ -29,7 +28,7 @@ getWebServiceData <- function(obs_url, ...) {
   obs_url <- httr2::req_retry(obs_url,
                               backoff = ~ 5, max_tries = 3) 
   
-  print(obs_url)
+  print(obs_url) #when happy with httr2, maybe only print url
   returnedList <- httr2::req_perform(obs_url)
 
   good <- check_non_200s(returnedList)
