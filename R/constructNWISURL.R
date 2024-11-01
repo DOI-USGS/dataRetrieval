@@ -300,7 +300,6 @@ constructWQPURL <- function(siteNumbers,
   
   if(!allPCode){
     multiplePcodes <- length(parameterCd) > 1
-    
     if (all(nchar(parameterCd) == 5)) {
       suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
     } else {
@@ -312,35 +311,46 @@ constructWQPURL <- function(siteNumbers,
     baseURL <- httr2::request(pkg.env[["Result"]])
     siteNumbers <- paste(siteNumbers, collapse = ";")
     baseURL <- httr2::req_url_query(baseURL,
-                                    siteids = siteNumbers)
+                                    siteid = siteNumbers)
   } else {
     baseURL <- httr2::request(pkg.env[["ResultWQX3"]])
     baseURL <- httr2::req_url_query(baseURL,
-                                    siteids = siteNumbers,
+                                    siteid = siteNumbers,
                                     .multi = "explode" )
   }
-  
+
   if(!allPCode){
-    if(legacy){
-      if (multiplePcodes) {
-        parameterCd <- paste(parameterCd, collapse = ";")
-        if(pCodeLogic){
-          baseURL <- httr2::req_url_query(baseURL, pCode = parameterCd)
-        } else {
-          baseURL <- httr2::req_url_query(baseURL, characteristicName = parameterCd)
-        }
-      }
+    multiplePcodes <- length(parameterCd) > 1
+    
+    if (all(nchar(parameterCd) == 5)) {
+      suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
     } else {
-      if(pCodeLogic){
-        baseURL <- httr2::req_url_query(baseURL, 
-                                        pCode = parameterCd, 
-                                        .multi = "explode")
-      } else {
-        baseURL <- httr2::req_url_query(baseURL,
-                                        characteristicName = parameterCd, 
-                                        .multi = "explode")
-      }
-    }    
+      pCodeLogic <- FALSE
+    }
+  }
+  
+  if(legacy & !allPCode){
+    if (multiplePcodes) {
+      parameterCd <- paste(parameterCd, collapse = ";")
+    }
+    if(pCodeLogic){
+      baseURL <- httr2::req_url_query(baseURL, pCode = parameterCd)
+    } else {
+      baseURL <- httr2::req_url_query(baseURL, characteristicName = parameterCd)
+    }
+    
+    
+  } else if(!legacy & !allPCode){
+    parameterCd <- paste0(pcode_name, "=", parameterCd)
+ 
+    if(pcode_name){
+      baseURL <- httr2::req_url_query(baseURL, pCode = parameterCd,
+                                      .multi = "explode")
+    } else {
+      baseURL <- httr2::req_url_query(baseURL, 
+                                      characteristicName = parameterCd,
+                                      .multi = "explode")
+    }
   }
   
   if (nzchar(startDate)) {
