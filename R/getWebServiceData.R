@@ -36,14 +36,15 @@ getWebServiceData <- function(obs_url, ...) {
   return_readLines <- c("text/html", "text/html; charset=UTF-8")
   
   return_raw <- c("application/zip",
-                  "application/zip;charset=UTF-8",
-                  "application/vnd.geo+json;charset=UTF-8")
+                  "application/zip;charset=UTF-8")
   
   return_content <- c("text/tab-separated-values;charset=UTF-8",
                       "text/csv;charset=UTF-8",
                       "text/plain",
                       "text/plain;charset=UTF-8",
                       "text/plain; charset=UTF-8")
+  
+  return_json <- c("application/vnd.geo+json;charset=UTF-8")
   
   if(good){
     headerInfo <- httr2::resp_headers(returnedList)
@@ -78,6 +79,8 @@ getWebServiceData <- function(obs_url, ...) {
       txt <- readLines(returnedList$content)
       message(txt)
       return(txt)
+    } else if (headerInfo$`content-type` %in% return_json){
+      returnedDoc <- httr2::resp_body_json(returnedList)
     } else {
       returnedDoc <- httr2::resp_body_xml(returnedList, encoding = "UTF-8")
       if (all(grepl("No sites/data found using the selection criteria specified", returnedDoc))) {
@@ -157,10 +160,14 @@ has_internet_2 <- function(obs_url) {
 #' @param url the query url
 getQuerySummary <- function(url) {
   wqp_message()
-  queryHEAD <- httr::HEAD(url)
-  retquery <- httr::headers(queryHEAD)
-
-  retquery[grep("-count", names(retquery))] <- as.numeric(retquery[grep("-count", names(retquery))])
+  
+  queryHEAD <- httr2::req_method(req = url ,
+                                 method =  "HEAD")
+  queryHEAD <- httr2::req_perform(queryHEAD)
+  headerInfo <- httr2::resp_headers(queryHEAD)
+  retquery <- data.frame(t(unlist(headerInfo)))
+  names(retquery) <- gsub("\\.", "-", names(retquery))
+  retquery[,grep("-count", names(retquery))] <- as.numeric(retquery[grep("-count", names(retquery))])
 
   if ("date" %in% names(retquery)) {
     retquery$date <- as.Date(retquery$date, format = "%a, %d %b %Y %H:%M:%S")

@@ -47,26 +47,30 @@
 whatWQPsites <- function(..., legacy = TRUE) {
   values <- readWQPdots(..., legacy = legacy)
 
-  values <- values$values
+  values <- values[["values"]]
 
-  if ("tz" %in% names(values)) {
-    values <- values[!(names(values) %in% "tz")]
+  if (any(c("tz", "service") %in% names(values))){
+    values <- values[!(names(values) %in% c("tz", "service"))]
   }
 
-  if ("service" %in% names(values)) {
-    values <- values[!(names(values) %in% "service")]
-  }
-
-  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
-  
   if(legacy){
-    baseURL <- drURL("Station", arg.list = values)
+    baseURL <- httr2::request(pkg.env[["Station"]])
+    if("siteid" %in% names(values)){
+      if(length(values[["siteid"]]) > 1){
+        sites <- values[["siteid"]]
+        sites <- paste0(sites, collapse = ";")
+        baseURL <- httr2::req_url_query(baseURL, 
+                                        siteid = sites)
+        values <- values[names(values) != "siteid"]
+      }
+    }
   } else {
-    baseURL <- drURL("StationWQX3", arg.list = values)
+    baseURL <- httr2::request(pkg.env[["StationWQX3"]])
   }
+  baseURL <- httr2::req_url_query(baseURL,
+                                  !!!values,
+                                  .multi = "explode")
   
-  baseURL <- appendDrURL(baseURL, mimeType = "csv")
-
   retval <- importWQP(baseURL)
   
   if(!is.null(retval)){
@@ -142,26 +146,30 @@ readWQPsummary <- function(...) {
   
   values <- readWQPdots(...)
   
-  values <- values$values
+  values <- values[["values"]]
 
-  if ("tz" %in% names(values)) {
-    values <- values[!(names(values) %in% "tz")]
-  }
-
-  if ("service" %in% names(values)) {
-    values <- values[!(names(values) %in% "service")]
+  if (any(c("tz", "service") %in% names(values))){
+    values <- values[!(names(values) %in% c("tz", "service"))]
   }
 
   if (!"dataProfile" %in% names(values)) {
     values[["dataProfile"]] <- "periodOfRecord"
   }
+  
+  baseURL <- httr2::request(pkg.env[["SiteSummary"]])
 
-  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
-
-  baseURL <- drURL("SiteSummary", arg.list = values)
-
-  baseURL <- appendDrURL(baseURL, mimeType = "csv")
-
+  if(length(values[["siteid"]]) > 1){
+    sites <- values[["siteid"]]
+    sites <- paste0(sites, collapse = ";")
+    baseURL <- httr2::req_url_query(baseURL, 
+                                    siteid = sites)
+    values <- values[names(values) != "siteid"]
+  }
+  
+  baseURL <- httr2::req_url_query(baseURL,
+                                  !!!values,
+                                  .multi = "explode")
+  
   withCallingHandlers(
     {
       retval <- importWQP(baseURL, 

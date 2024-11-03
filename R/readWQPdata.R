@@ -193,6 +193,17 @@
 #'   ignore_attributes = TRUE,
 #'   convertType = FALSE
 #' )
+#' 
+#' rawPHsites_legacy <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+#'                         characteristicName = "pH",
+#'                         service = "Result",
+#'                         dataProfile = "narrowResult" )
+#' 
+#' rawPHsites <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+#'                         characteristicName = "pH",
+#'                         service = "ResultWQX3",
+#'                         dataProfile = "narrow" )
+#' 
 #' }
 readWQPdata <- function(...,
                         service = "Result",
@@ -214,18 +225,30 @@ readWQPdata <- function(...,
   legacy <- is_legacy(service)
   
   valuesList <- readWQPdots(..., legacy = legacy)
+  values <- valuesList[["values"]]
+
+  baseURL <- httr2::request(pkg.env[[service]])
   
-  values <- sapply(valuesList$values, function(x) utils::URLencode(x, reserved = TRUE))
-
-  baseURL <- drURL(service, arg.list = values)
-
-  baseURL <- appendDrURL(baseURL, mimeType = "csv")
-
   if(!legacy){
     if(service == "ResultWQX3" & !"dataProfile" %in% names(values)){
-      baseURL <- appendDrURL(baseURL, dataProfile = "fullPhysChem")
+      baseURL <- httr2::req_url_query(baseURL, 
+                                      dataProfile = "fullPhysChem")
     }
-  } 
+    baseURL <- httr2::req_url_query(baseURL, !!!values, 
+                                    .multi = "explode")
+  } else {
+    if("siteid" %in% names(values)){
+      if(length(values[["siteid"]]) > 1){
+        sites <- values[["siteid"]]
+        sites <- paste0(sites, collapse = ";")
+        baseURL <- httr2::req_url_query(baseURL, 
+                                        siteid = sites)
+        values <- values[names(values) != "siteid"]
+      }
+    }
+    baseURL <- httr2::req_url_query(baseURL, !!!values, 
+                                    .multi = "explode")
+  }
 
   if (querySummary) {
     retquery <- getQuerySummary(baseURL)

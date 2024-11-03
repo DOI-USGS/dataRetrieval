@@ -4,7 +4,7 @@
 \alias{whatWQPdata}
 \title{Data Available from Water Quality Portal}
 \usage{
-whatWQPdata(..., saveFile = tempfile(), convertType = TRUE)
+whatWQPdata(..., convertType = TRUE)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for
@@ -19,8 +19,6 @@ in the Characteristic Group dropdown, you will see characteristicType=Nutrient
 in the Query URL. The corresponding argument for dataRetrieval is
 characteristicType = "Nutrient". dataRetrieval users do not need to include
 mimeType, and providers is optional (these arguments are picked automatically).}
-
-\item{saveFile}{path to save the incoming geojson output.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates, datetimes,

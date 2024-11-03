@@ -15,8 +15,7 @@ getWebServiceData(obs_url, ...)
 raw data from web services
 }
 \description{
-This function accepts a url parameter, and returns the raw data. The function enhances
-\code{\link[httr]{GET}} with more informative error messages.
+This function accepts a url parameter, and returns the raw data.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
