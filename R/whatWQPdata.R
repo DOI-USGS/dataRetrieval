@@ -21,7 +21,7 @@ whatWQPsamples <- function(...,
                            legacy = TRUE) {
   values <- readWQPdots(..., legacy = legacy)
 
-  values <- values$values
+  values <- values[["values"]]
 
   if ("tz" %in% names(values)) {
     values <- values[!(names(values) %in% "tz")]
@@ -31,16 +31,29 @@ whatWQPsamples <- function(...,
     values <- values[!(names(values) %in% "service")]
   }
 
-  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
-  
   if(legacy){
-    baseURL <- drURL("Activity", arg.list = values)
+    baseURL <- httr2::request(pkg.env[["Activity"]])
   } else {
-    baseURL <- drURL("ActivityWQX3", arg.list = values)
+    baseURL <- httr2::request(pkg.env[["ActivityWQX3"]])
+  }
+
+  if(!legacy){
+    baseURL <- httr2::req_url_query(baseURL, !!!values, 
+                                    .multi = "explode")
+  } else {
+    if("siteid" %in% names(values)){
+      if(length(values[["siteid"]]) > 1){
+        sites <- values[["siteid"]]
+        sites <- paste0(sites, collapse = ";")
+        baseURL <- httr2::req_url_query(baseURL, 
+                                        siteid = sites)
+        values <- values[names(values) != "siteid"]
+      }
+    }
+    baseURL <- httr2::req_url_query(baseURL, !!!values, 
+                                    .multi = "explode")
   }
   
-  baseURL <- appendDrURL(baseURL, mimeType = "csv")
-
   retval <- importWQP(baseURL,
                       convertType = convertType)
   if(!is.null(retval)){
@@ -79,7 +92,7 @@ whatWQPmetrics <- function(...,
                            convertType = TRUE) {
   values <- readWQPdots(..., legacy = TRUE)
   
-  values <- values$values
+  values <- values[["values"]]
 
   if ("tz" %in% names(values)) {
     values <- values[!(names(values) %in% "tz")]
@@ -89,11 +102,19 @@ whatWQPmetrics <- function(...,
     values <- values[!(names(values) %in% "service")]
   }
 
-  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
-
-  baseURL <- drURL("ActivityMetric", arg.list = values)
-
-  baseURL <- appendDrURL(baseURL, mimeType = "csv")
+  baseURL <- httr2::request(pkg.env[["ActivityMetric"]])
+  
+  if("siteid" %in% names(values)){
+    if(length(values[["siteid"]]) > 1){
+      sites <- values[["siteid"]]
+      sites <- paste0(sites, collapse = ";")
+      baseURL <- httr2::req_url_query(baseURL, 
+                                      siteid = sites)
+      values <- values[names(values) != "siteid"]
+    }
+  }
+  baseURL <- httr2::req_url_query(baseURL, !!!values, 
+                                  .multi = "explode")
 
   withCallingHandlers(
     {
@@ -146,7 +167,6 @@ whatWQPmetrics <- function(...,
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
 #' mimeType, and providers is optional (these arguments are picked automatically).
-#' @param saveFile path to save the incoming geojson output.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
@@ -172,30 +192,39 @@ whatWQPmetrics <- function(...,
 #' bbox <- c(-86.9736, 34.4883, -86.6135, 34.6562)
 #' what_bb <- whatWQPdata(bBox = bbox)
 #' 
-whatWQPdata <- function(..., saveFile = tempfile(),
+whatWQPdata <- function(..., 
                         convertType = TRUE) {
   values <- readWQPdots(..., legacy = TRUE)
   
-  values <- values$values
+  values <- values[["values"]]
 
-  if ("tz" %in% names(values)) {
-    values <- values[!(names(values) %in% "tz")]
+  if (any(c("tz", "service", "mimeType") %in% names(values))){
+    values <- values[!(names(values) %in% c("tz", "service", "mimeType"))]
   }
 
-  if ("service" %in% names(values)) {
-    values <- values[!(names(values) %in% "service")]
+  if("siteid" %in% names(values)){
+    if(length(values[["siteid"]]) > 1){
+      sites <- values[["siteid"]]
+      sites <- paste0(sites, collapse = ";")
+      baseURL <- httr2::req_url_query(baseURL, 
+                                      siteid = sites)
+      values <- values[names(values) != "siteid"]
+    }
   }
-
-  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
-
-  baseURL <- drURL("Station", arg.list = values)
-
-  baseURL <- appendDrURL(baseURL, mimeType = "geojson")
   
-  # Not sure if there's a geojson option with WQX
+  baseURL <- httr2::request(pkg.env[["Station"]])
+  
+  baseURL <- httr2::req_url_query(baseURL,
+                                  !!!values,
+                                  .multi = "explode")
+
+  baseURL <- httr2::req_url_query(baseURL, 
+                                  mimeType = "geojson")
+  
+  # Not sure if there's a geojson option with WQX3
   wqp_message()
   
-  doc <- getWebServiceData(baseURL, httr::write_disk(saveFile))
+  doc <- getWebServiceData(baseURL)
   
   if (is.null(doc)) {
     return(invisible(NULL))
@@ -227,13 +256,16 @@ whatWQPdata <- function(..., saveFile = tempfile(),
       y <- data.frame(lapply(y, as.character), stringsAsFactors = FALSE)
     }
   } else {
-
-    retval <- as.data.frame(jsonlite::fromJSON(saveFile), stringsAsFactors = FALSE)
-    df_cols <- as.integer(which(sapply(retval, class) == "data.frame"))
-    y <- retval[, -df_cols]
-
-    for (i in df_cols) {
-      y <- cbind(y, retval[[i]])
+    
+    features <- doc[["features"]]
+    y <- data.frame(matrix(NA, nrow = length(features), ncol = 15))
+    names(y) <- c(names(features[[1]][["properties"]]),
+                  "lat", "lon")
+    for(i in seq_along(features)){
+      single_feature <- features[[i]][["properties"]]
+      single_feature[["lat"]] <- unlist(features[[i]][["geometry"]][["coordinates"]][2])
+      single_feature[["lon"]] <- unlist(features[[i]][["geometry"]][["coordinates"]][1])
+      y[i,] <- single_feature
     }
 
     if (convertType) {
@@ -265,6 +297,5 @@ whatWQPdata <- function(..., saveFile = tempfile(),
 
   attr(y, "queryTime") <- Sys.time()
   attr(y, "url") <- baseURL
-  attr(y, "file") <- saveFile
   return(y)
 }

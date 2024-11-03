@@ -215,6 +215,17 @@ Phosphorus <- readWQPdata(
   ignore_attributes = TRUE,
   convertType = FALSE
 )
+
+rawPHsites_legacy <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+                        characteristicName = "pH",
+                        service = "Result",
+                        dataProfile = "narrowResult" )
+
+rawPHsites <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+                        characteristicName = "pH",
+                        service = "ResultWQX3",
+                        dataProfile = "narrow" )
+
 }
 \dontshow{\}) # examplesIf}
 }
