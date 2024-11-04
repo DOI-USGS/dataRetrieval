@@ -101,7 +101,7 @@ readWQPqw <- function(siteNumbers,
     } else {
       wqp_message_beta()
     }
-    attr(retval, "url") <- url
+    attr(retval, "url") <- url$url
 
     return(retval)
   }

@@ -60,7 +60,7 @@ whatWQPsamples <- function(...,
     
     attr(retval, "legacy") <- legacy
     attr(retval, "queryTime") <- Sys.time()
-    attr(retval, "url") <- baseURL
+    attr(retval, "url") <- baseURL$url
     
     if(legacy){
       wqp_message()
@@ -133,7 +133,7 @@ whatWQPmetrics <- function(...,
   } else {
     wqp_message()
     attr(retval, "queryTime") <- Sys.time()
-    attr(retval, "url") <- baseURL
+    attr(retval, "url") <- baseURL$url
   
     return(retval)
   }

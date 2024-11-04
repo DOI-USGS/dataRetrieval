@@ -99,13 +99,6 @@ tzIssue <- importWaterML1(tzURL,
   asDateTime = TRUE, tz = "America/Chicago"
 )
 
-# raw XML
-url <- constructNWISURL(
-  service = "dv", siteNumber = "02319300", parameterCd = "00060",
-  startDate = "2014-01-01", endDate = "2014-01-01"
-)
-raw <- httr::content(httr::GET(url), as = "raw")
-rawParsed <- importWaterML1(raw)
 }
 filePath <- system.file("extdata", package = "dataRetrieval")
 fileName <- "WaterML1Example.xml"
