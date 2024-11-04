@@ -43,17 +43,15 @@ find_good_names <- function(input, type) {
 #' get_nldi_sources()
 #' }
 get_nldi_sources <- function(url = pkg.env$nldi_base) {
-  res <-
-    httr::RETRY("GET",
-      url,
-      times = 3,
-      pause_cap = 60
-    )
+  res <- httr2::request(url)
+  res <- httr2::req_user_agent(res, default_ua())
+  res <- httr2::req_throttle(res, rate = 30 / 60) 
+  res <- httr2::req_retry(res, 
+                          backoff = ~ 5, max_tries = 3) 
+  res <- httr2::req_perform(res)
 
   if (res$status_code == 200) {
-    jsonlite::fromJSON(httr::content(res, "text",
-      encoding = "UTF8"
-    ),
+    jsonlite::fromJSON(httr2::resp_body_string(res),
     simplifyDataFrame = TRUE
     )
   } else {
@@ -84,13 +82,17 @@ get_nldi_sources <- function(url = pkg.env$nldi_base) {
 
 get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
   # Query
-
-  res <- httr::RETRY("GET", url = url, times = 3, pause_cap = 60, quiet = TRUE)
+  res <- httr2::request(url)
+  res <- httr2::req_user_agent(res, default_ua())
+  res <- httr2::req_throttle(res, rate = 30 / 60) 
+  res <- httr2::req_retry(res, 
+                          backoff = ~ 5, max_tries = 3) 
+  res <- httr2::req_perform(res)
 
   # If successful ...
   if (res$status_code == 200) {
     # Interpret as text
-    d <- httr::content(res, "text", encoding = "UTF8")
+    d <- httr2::resp_body_string(res)
 
     if (d == "") {
       

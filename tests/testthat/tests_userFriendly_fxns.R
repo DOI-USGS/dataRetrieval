@@ -35,7 +35,7 @@ test_that("Unit value data returns correct types", {
   # nolint start: line_length_linter
   expect_equal(
     attr(rawData, "url"),
-    "https://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10"
+    "https://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml%2C1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10"
   )
   # nolint end
   timeZoneChange <- readNWISuv(c("04024430", "04024000"), parameterCd,
@@ -48,7 +48,7 @@ test_that("Unit value data returns correct types", {
   expect_is(rawData$dateTime, "POSIXct")
   expect_is(rawData$Flow_Inst, "numeric")
   # nolint start: line_length_linter
-  expect_equal(attr(rawData, "url"), "https://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml,1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
+  expect_equal(attr(rawData, "url"), "https://nwis.waterservices.usgs.gov/nwis/iv/?site=05114000&format=waterml%2C1.1&ParameterCd=00060&startDT=2014-10-10&endDT=2014-10-10")
   # nolint end
   site <- "04087170"
   pCode <- "63680"

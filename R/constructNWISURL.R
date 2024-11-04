@@ -123,7 +123,9 @@ constructNWISURL <- function(siteNumbers,
          measurements = {
            url <- httr2::req_url_query(baseURL,
                               site_no = siteNumbers,
-                              range_selection = "date_range"
+                              .multi = "comma")
+           url <- httr2::req_url_query(url,
+                                       range_selection = "date_range"
            )
            if (nzchar(startDate)) {
              url <- httr2::req_url_query(url,

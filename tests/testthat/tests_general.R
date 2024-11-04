@@ -398,7 +398,7 @@ test_that("readWQPdots working", {
 
   # NWIS names (stateCd) converted to WQP expected names (statecode)
   formArgs <- dataRetrieval:::readWQPdots(stateCd = "OH", parameterCd = "00665")
-  expect_true(length(formArgs$values) == 2)
+  expect_true(length(formArgs$values) == 3)
   expect_true("statecode" %in% names(formArgs$values))
   expect_false("stateCd" %in% names(formArgs$values))
   
