@@ -151,7 +151,8 @@ test_that("External importWaterML1 test", {
     service = "dv", siteNumber = "02319300", parameterCd = "00060",
     startDate = "2014-01-01", endDate = "2014-01-01"
   )
-  raw <- httr::content(httr::GET(url), as = "raw")
+  raw <- httr2::req_perform(url)
+  raw <- httr2::resp_body_xml(raw)
   rawParsed <- importWaterML1(raw)
   expect_true(nrow(rawParsed) > 0)
   expect_true(data.class(rawParsed$X_00060_00003) == "numeric")
