@@ -298,6 +298,8 @@ constructWQPURL <- function(siteNumbers,
   
   allPCode <- any(toupper(parameterCd) == "ALL")
   
+  pCodeLogic <- TRUE
+  
   if(!allPCode){
     multiplePcodes <- length(parameterCd) > 1
     if (all(nchar(parameterCd) == 5)) {
@@ -319,16 +321,6 @@ constructWQPURL <- function(siteNumbers,
                                     .multi = "explode" )
   }
 
-  if(!allPCode){
-    multiplePcodes <- length(parameterCd) > 1
-    
-    if (all(nchar(parameterCd) == 5)) {
-      suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
-    } else {
-      pCodeLogic <- FALSE
-    }
-  }
-  
   if(legacy & !allPCode){
     if (multiplePcodes) {
       parameterCd <- paste(parameterCd, collapse = ";")
@@ -339,11 +331,9 @@ constructWQPURL <- function(siteNumbers,
       baseURL <- httr2::req_url_query(baseURL, characteristicName = parameterCd)
     }
     
-    
   } else if(!legacy & !allPCode){
-    parameterCd <- paste0(pcode_name, "=", parameterCd)
- 
-    if(pcode_name){
+
+    if(pCodeLogic){
       baseURL <- httr2::req_url_query(baseURL, pCode = parameterCd,
                                       .multi = "explode")
     } else {
