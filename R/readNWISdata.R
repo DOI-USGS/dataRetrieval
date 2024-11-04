@@ -501,6 +501,10 @@ readNWISdots <- function(...) {
     
   }
   
+  if("bbox" %in% names(values)){
+    values[["bbox"]] <- paste0(values[["bbox"]], collapse = ",")
+  }
+  
   if (service %in% c("peak", "gwlevels") && "stateCd" %in% names(values)) {
     names(values)[names(values) == "stateCd"] <- "state_cd"
     values["list_of_search_criteria"] <- "state_cd"

@@ -100,26 +100,22 @@ importRDB1 <- function(obs_url,
   tz <- match.arg(tz, OlsonNames())
 
   if(class(obs_url) == "httr2_request"){
-    temp_file <- tempfile()
-    on.exit(unlink(temp_file))
-    
+
     doc <- getWebServiceData(obs_url)
-    write(doc, file = temp_file)
-    if (is.null(temp_file)) {
+
+    if (is.null(doc)) {
       return(invisible(NULL))
     }
     
   } else {
-    if (file.exists(obs_url)){
-      temp_file <- obs_url
-    } else {
+    if (!file.exists(obs_url)){
       warning("Unknown Input")
       return(NULL)
     }
     
   } 
 
-  readr.total <- readLines(temp_file)
+  readr.total <- readr::read_lines(doc)
   if(readr.total[length(readr.total)] == ""){
     readr.total <- readr.total[-length(readr.total)]
   }
@@ -142,7 +138,7 @@ importRDB1 <- function(obs_url,
 
   if (data.rows > 0) {
     args_list <- list(
-      file = readr.total, #temp_file,
+      file = doc, 
       delim = "\t",
       quote = "",
       skip = meta.rows + 2,
@@ -159,10 +155,8 @@ importRDB1 <- function(obs_url,
     }
 
     readr.data <- suppressWarnings(do.call(readr::read_delim, args = args_list))
-    # 
-    # readr.data <- as.data.frame(readr.data)
-    readr.data <- as.data.frame(readr.total[seq(from = meta.rows + 3,
-                                                to = total.rows)])
+     
+    readr.data <- as.data.frame(readr.data)
 
     if (nrow(readr.data) > 0) {
       names(readr.data) <- header.names

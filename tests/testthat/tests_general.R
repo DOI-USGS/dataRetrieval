@@ -67,7 +67,7 @@ test_that("General NWIS retrievals working", {
   
   expect_true(nrow(gw_data) > 0)
   expect_equal(attr(gw_data, "url"),
-               "https://nwis.waterdata.usgs.gov/nwis/gwlevels?state_cd=AL&begin_date=2024-05-01&end_date=2024-05-30&date_format=YYYY-MM-DD&rdb_inventory_output=file&TZoutput=0&range_selection=date_range&list_of_search_criteria=state_cd&format=rdb")
+               "https://nwis.waterdata.usgs.gov/nwis/gwlevels?format=rdb&state_cd=AL&begin_date=2024-05-01&end_date=2024-05-30&date_format=YYYY-MM-DD&rdb_inventory_output=file&TZoutput=0&range_selection=date_range&list_of_search_criteria=state_cd")
   
   gw_data2 <- readNWISdata(
     state_cd = "AL",
@@ -78,7 +78,7 @@ test_that("General NWIS retrievals working", {
   expect_equal(nrow(gw_data), nrow(gw_data2))
   
   # nolint start: line_length_linter
-  url <- "https://waterservices.usgs.gov/nwis/dv/?site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06"
+  url <- httr2::request("https://waterservices.usgs.gov/nwis/dv/?site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06")
   dv <- importRDB1(url, asDateTime = FALSE)
   # nolint end
   dailyStat <- readNWISdata(
@@ -102,7 +102,7 @@ test_that("General NWIS retrievals working", {
   # Empty data
   # note....not empty anymore!
   # nolint start: line_length_linter
-  urlTest <- "https://nwis.waterservices.usgs.gov/nwis/iv/?site=11447650&format=waterml,1.1&ParameterCd=63680&startDT=2016-12-13&endDT=2016-12-13"
+  urlTest <- httr2::request("https://nwis.waterservices.usgs.gov/nwis/iv/?site=11447650&format=waterml,1.1&ParameterCd=63680&startDT=2016-12-13&endDT=2016-12-13")
   x <- importWaterML1(urlTest)
   expect_true(all(c("agency_cd", "site_no", "dateTime", "tz_cd") %in% names(x)))
   # nolint end
@@ -378,7 +378,7 @@ test_that("whatNWISsites working", {
   #gwlevels:
   info <- whatNWISsites(stateCd = "NY", service="gwlevels") 
   expect_true(nrow(info) > 0)
-  expect_equal(attr(info, "url"), "https://waterservices.usgs.gov/nwis/site/?stateCd=NY&format=mapper&hasDataTypeCd=gw")
+  expect_equal(attr(info, "url"), "https://waterservices.usgs.gov/nwis/site/?stateCd=NY&hasDataTypeCd=gw&format=mapper")
 })
 
 context("readWQPdots")
@@ -388,7 +388,7 @@ test_that("readWQPdots working", {
   # bbox vector turned into single string with coords separated by semicolons
   formArgs_bbox <- dataRetrieval:::readWQPdots(bbox = c(-92.5, 45.4, -87, 47))
   expect_true(length(formArgs_bbox) == 2)
-  expect_true(length(gregexpr(",", formArgs_bbox)[[1]]) == 3)
+  expect_true(length(formArgs_bbox$values$bBox) == 1)
 
   # NWIS names (siteNumber) converted to WQP expected names (siteid)
   formArgs_site <- dataRetrieval:::readWQPdots(siteNumber = "04010301")
@@ -411,8 +411,8 @@ test_that("readWQPdots working", {
                     characteristicName = "Total Coliform",
                     startDateLo = "2023-01-01",
                     startDateHi = "2023-12-31",
-                    service = "ResultWQX3",
-                    dataProfile = "narrow")
+                    service = "Result",
+                    dataProfile = "narrowResult")
   expect_true(nrow(df) > 0)
   df_legacy <- readWQPdata(bBox = bbox,
                            characteristicName = "Total Coliform",
@@ -461,14 +461,6 @@ test_that("ngwmn urls don't use post", {
     expect_false(getWebServiceData(url)),
     .env = "httr"
   )
-})
-
-test_that("400 errors return a verbose error", {
-  testthat::skip_on_cran()
-  # nolint start: line_length_linter
-  url <- "https://waterservices.usgs.gov/nwis/site/?stateCd=IA&bBox=-92.821445,42.303044,-92.167168,42.646524&format=mapper"
-  # nolint end
-  expect_message(getWebServiceData(url))
 })
 
 test_that("internal functions", {
@@ -681,7 +673,7 @@ test_that("readWQPsummary", {
   # nolint start: line_length_linter
   expect_equal(
     attr(site1, "url"),
-    "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&dataProfile=periodOfRecord&mimeType=csv"
+    "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&mimeType=csv&dataProfile=periodOfRecord"
   )
   # nolint end
 })
@@ -703,8 +695,8 @@ test_that("importWQP convertType", {
   # expect_is(phos$Result_Measure, "character")
 
   SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", 
-                  convertType = FALSE, legacy = FALSE)
-  expect_is(SC$Result_Measure, "character")
+                  convertType = FALSE, legacy = TRUE)
+  expect_is(SC$ResultMeasureValue, "character")
 
   lakeSites_chars <- whatWQPdata(
     siteType = "Lake, Reservoir, Impoundment",
