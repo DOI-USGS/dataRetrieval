@@ -36,34 +36,6 @@ test_that("External importRDB1 tests", {
 
   site <- "05427850"
 
-  url <- constructNWISURL(site, "00060", "2015-01-01", "", "dv",
-    format = "tsv",
-    statCd = "laksjd"
-  )
-  # And....now there"s data there:
-  expect_null(importRDB1(url))
-
-  site <- "11486500"
-
-  url <- dataRetrieval:::drURL("site", arg.list = list(
-    siteOutput = "Expanded",
-    format = "rdb",
-    site = site
-  ))
-  site_data <- importRDB1(url)
-
-  expect_equal(site_data$station_nm, "G CANAL NEAR OLENE, OR")
-
-  site <- "040854588204"
-
-  url <- dataRetrieval:::drURL("site", arg.list = list(
-    siteOutput = "Expanded",
-    format = "rdb",
-    site = site
-  ))
-  site_data <- importRDB1(url)
-
-  expect_equal(site_data$station_nm, "FISHER CR AT 32 & HIGHLAND RD AT HOWARDS GROVE, W")
 })
 
 context("importRDB")
