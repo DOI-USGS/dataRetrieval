@@ -120,8 +120,11 @@ importRDB1 <- function(obs_url,
   } 
 
   readr.total <- readLines(temp_file)
-
+  if(readr.total[length(readr.total)] == ""){
+    readr.total <- readr.total[-length(readr.total)]
+  }
   total.rows <- length(readr.total)
+  
   readr.meta <- readr.total[grep("^#", readr.total)]
   meta.rows <- length(readr.meta)
   header.names <- strsplit(readr.total[meta.rows + 1], "\t")[[1]]
@@ -139,7 +142,7 @@ importRDB1 <- function(obs_url,
 
   if (data.rows > 0) {
     args_list <- list(
-      file = temp_file,
+      file = readr.total, #temp_file,
       delim = "\t",
       quote = "",
       skip = meta.rows + 2,
@@ -156,8 +159,10 @@ importRDB1 <- function(obs_url,
     }
 
     readr.data <- suppressWarnings(do.call(readr::read_delim, args = args_list))
-
-    readr.data <- as.data.frame(readr.data)
+    # 
+    # readr.data <- as.data.frame(readr.data)
+    readr.data <- as.data.frame(readr.total[seq(from = meta.rows + 3,
+                                                to = total.rows)])
 
     if (nrow(readr.data) > 0) {
       names(readr.data) <- header.names

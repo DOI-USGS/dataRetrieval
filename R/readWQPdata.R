@@ -271,7 +271,7 @@ readWQPdata <- function(...,
       retval <- create_WQP_attributes(retval, params)
     } 
 
-    attr(retval, "url") <- baseURL
+    attr(retval, "url") <- baseURL$url
     
     if(legacy){
       wqp_message()

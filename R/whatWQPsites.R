@@ -75,7 +75,7 @@ whatWQPsites <- function(..., legacy = TRUE) {
   
   if(!is.null(retval)){
     attr(retval, "queryTime") <- Sys.time()
-    attr(retval, "url") <- baseURL
+    attr(retval, "url") <- baseURL$url
   }
   
   return(retval)
@@ -184,7 +184,7 @@ readWQPsummary <- function(...) {
   
   if(!is.null(retval)){
     attr(retval, "queryTime") <- Sys.time()
-    attr(retval, "url") <- baseURL
+    attr(retval, "url") <- baseURL$url
   }
   
   return(retval)
