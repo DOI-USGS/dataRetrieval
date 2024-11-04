@@ -112,7 +112,7 @@ importRDB1 <- function(obs_url,
       warning("Unknown Input")
       return(NULL)
     }
-    
+    doc <- obs_url
   } 
 
   readr.total <- readr::read_lines(doc)
