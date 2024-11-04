@@ -73,7 +73,7 @@ readNWISsite <- function(siteNumbers) {
                                       format = "rdb")
 
   urlSitefile <- httr2::req_url_query(urlSitefile, 
-                                      site = siteNumber, 
+                                      site = siteNumbers, 
                                       .multi = "comma")
 
   data <- importRDB1(urlSitefile, asDateTime = FALSE)
