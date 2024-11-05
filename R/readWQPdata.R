@@ -319,7 +319,8 @@ create_WQP_attributes <- function(retval, ...){
 #' 
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' rawPcode <- readWQPqw("USGS-01594440", "01075", ignore_attributes = TRUE)
+#' rawPcode <- readWQPqw("USGS-01594440", "01075", 
+#'                       ignore_attributes = TRUE, legacy = FALSE)
 #' headerInfo <- attr(rawPcode, "headerInfo")
 #' wqp_request_id <- headerInfo$`wqp-request-id`
 #' count_info <- wqp_check_status(wqp_request_id)
