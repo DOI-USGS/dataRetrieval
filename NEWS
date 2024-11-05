@@ -1,6 +1,7 @@
 dataRetrieval 2.7.18
 ===================
 * Switched from httr to httr2
+* Added a way to include a custom user-agent suffix via an enviornmental variable "CUSTOM_DR_UA"
 
 dataRetrieval 2.7.17
 ===================
