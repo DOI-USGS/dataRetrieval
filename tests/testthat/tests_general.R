@@ -398,7 +398,7 @@ test_that("readWQPdots working", {
 
   # NWIS names (stateCd) converted to WQP expected names (statecode)
   formArgs <- dataRetrieval:::readWQPdots(stateCd = "OH", parameterCd = "00665")
-  expect_true(length(formArgs$values) == 3)
+  expect_true(length(formArgs$values) == 4)
   expect_true("statecode" %in% names(formArgs$values))
   expect_false("stateCd" %in% names(formArgs$values))
   
@@ -557,18 +557,6 @@ test_that("profiles", {
     "OrganizationFormalName"
   ) %in% names(samp_activity)))
 
-  # # Data profile: "Sampling Activity Metrics"
-  # act_metrics <- readWQPdata(
-  #   statecode = "WI",
-  #   countycode = "Dane",
-  #   service = "ActivityMetric"
-  # )
-  # 
-  # expect_true(all(c(
-  #   "OrganizationIdentifier",
-  #   "OrganizationFormalName"
-  # ) %in% names(act_metrics)))
-
   # Data profile: "Result Detection Quantitation Limit Data"
   dl_data <- readWQPdata(
     siteid = "USGS-04024315",
@@ -634,26 +622,13 @@ test_that("readWQPsummary", {
   # nolint start: line_length_linter
   expect_equal(
     attr(site1, "url"),
-    "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&mimeType=csv&dataProfile=periodOfRecord"
+    "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&mimeType=csv&count=no&dataProfile=periodOfRecord"
   )
   # nolint end
 })
 
 test_that("importWQP convertType", {
   testthat::skip_on_cran()
-
-  # rawSampleURL_NoZip <- constructWQPURL("USGS-01594440", "01075", "", "")
-  # rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, convertType = FALSE)
-  # expect_is(rawSampleURL_NoZip_char$Result_Measure, "character")
-  # 
-  # Put back in when services get more robust.
-  # phos <- readWQPdata(statecode = "WI", countycode = "Dane",
-  #                   characteristicName = "Phosphorus",
-  #                   startDateLo = "2022-06-01",
-  #                   startDateHi = "2022-09-01",
-  #                   convertType = FALSE,
-  #                   service = "ResultWQX")
-  # expect_is(phos$Result_Measure, "character")
 
   SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", 
                   convertType = FALSE, legacy = TRUE)
