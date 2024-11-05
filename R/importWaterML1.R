@@ -383,7 +383,7 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
   names(mergedDF) <- make.names(names(mergedDF))
 
   # attach other site info etc as attributes of mergedDF
-  if (!raw) {
+  if ("httr2_request" %in% class(obs_url)) {
     attr(mergedDF, "url") <- obs_url$url
   }
   attr(mergedDF, "siteInfo") <- mergedSite

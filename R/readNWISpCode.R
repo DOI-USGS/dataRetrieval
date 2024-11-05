@@ -49,7 +49,7 @@ readNWISpCode <- function(parameterCd) {
       parameter_units = temp_df$parm_unit,
       stringsAsFactors = FALSE
     )
-    attr(parameterData, "url") <- fullURL
+    attr(parameterData, "url") <- fullURL$url
   } else {
     parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd, ]
 
@@ -59,9 +59,13 @@ readNWISpCode <- function(parameterCd) {
       
       
       if (length(parameterCd_lookup) == 1) {
-        baseURL <- drURL("pCodeSingle", Access = pkg.env$access)
-        subURL <- paste0(baseURL, "fmt=rdb&parm_nm_cd=", parameterCd_lookup)
-        temp_df <- importRDB1(subURL, asDateTime = FALSE)
+        baseURL <- httr2::request(pkg.env[["pCodeSingle"]])
+        baseURL <- httr2::req_url_query(baseURL,
+                                        fmt = "rdb")
+        baseURL <- httr2::req_url_query(baseURL,
+                                        parm_nm_cd = parameterCd_lookup)
+
+        temp_df <- importRDB1(baseURL, asDateTime = FALSE)
 
         temp_df <- data.frame(
           parameter_cd = temp_df$parameter_cd,
@@ -77,7 +81,7 @@ readNWISpCode <- function(parameterCd) {
           parameterData <- rbind(parameterData, temp_df)
         }
         
-        attr(parameterData, "url") <- subURL
+        attr(parameterData, "url") <- baseURL$url
       } else {
         temp_df <- importRDB1(fullURL, asDateTime = FALSE)
         trim_df <- data.frame(
@@ -90,7 +94,7 @@ readNWISpCode <- function(parameterCd) {
           stringsAsFactors = FALSE
         )
         parameterData <- trim_df[trim_df$parameter_cd %in% parameterCd, ]
-        attr(parameterData, "url") <- fullURL
+        attr(parameterData, "url") <- fullURL$url
       }
 
       if (nrow(parameterData) != length(parameterCd)) {

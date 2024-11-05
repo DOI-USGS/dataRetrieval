@@ -34,7 +34,7 @@ pcode_to_name <- function(parameterCd = "all"){
     retval <- retval[retval$parm_cd %in% parameterCd, ]
   }
   
-  attr(retval, "url") <- url_all$url
+  attr(retval, "url") <- url_all
   
   if(any(parameterCd != "all")){
     if (nrow(retval) != length(unique(parameterCd))) {

@@ -389,30 +389,41 @@ constructWQPURL <- function(siteNumbers,
 #' )
 #'
 constructUseURL <- function(years, stateCd, countyCd, categories) {
+  
+
   if (is.null(stateCd)) {
-    baseURL <- drURL("useNat",
-                     format = "rdb",
-                     rdb_compression = "value",
-                     Access = pkg.env$access
-    )
+    baseURL <- httr2::request(pkg.env[["useNat"]])
+    baseURL <- httr2::req_url_query(baseURL,
+                                    format = "rdb",
+                                    rdb_compression = "value")
   } else {
+
     stateCd <- stateCdLookup(input = stateCd, outputType = "postal")
-    baseURL <- "https://waterdata.usgs.gov/"
-    base2 <- "nwis/water_use?format=rdb&rdb_compression=value"
-    baseURL <- paste0(baseURL, paste0(stateCd, "/"), base2)
+    baseURL <- httr2::request("https://waterdata.usgs.gov/")
+    baseURL <- httr2::req_url_path_append(baseURL, stateCd) 
+    baseURL <- httr2::req_url_path_append(baseURL, 
+                                          "nwis", "water_use") 
+    baseURL <- httr2::req_url_query(baseURL,
+                                    format = "rdb",
+                                    rdb_compression = "value")
     
-    if (!is.null(countyCd)) {
+    if (!(is.null(countyCd) )) {
       if (length(countyCd) > 1) {
         countyCd <- paste(countyCd, collapse = "%2C")
       }
-      baseURL <- paste0(baseURL, "&wu_area=county&wu_county=", countyCd)
+      baseURL <- httr2::req_url_query(baseURL, 
+                                      wu_area = "county",
+                                      wu_county = countyCd)
     } else {
-      baseURL <- paste0(baseURL, "&wu_area=State%20Total")
+      baseURL <- httr2::req_url_query(baseURL,
+                                      wu_area = "State Total")
     }
   }
-  years <- paste(years, collapse = "%2C")
-  categories <- paste(categories, collapse = "%2C")
-  retURL <- paste0(baseURL, "&wu_year=", years, "&wu_category=", categories)
+
+  baseURL <- httr2::req_url_query(baseURL, 
+                                  wu_year = years, 
+                                  .multi = "comma")
+  baseURL <- httr2::req_url_query(baseURL, wu_category = categories)
   
-  return(retURL)
+  return(baseURL)
 }
