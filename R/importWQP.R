@@ -45,7 +45,7 @@ importWQP <- function(obs_url, tz = "UTC",
     tz <- "UTC"
   }
 
-  if (class(obs_url) == "httr2_request") {
+  if (inherits(obs_url, "httr2_request")) {
     doc <- getWebServiceData(obs_url)
     if (is.null(doc)) {
       return(invisible(NULL))
@@ -74,7 +74,7 @@ importWQP <- function(obs_url, tz = "UTC",
   if(convertType){
     retval <- parse_WQP(retval, tz)
   } 
-  if (class(obs_url) == "httr2_request") {
+  if (inherits(obs_url, "httr2_request")) {
     attr(retval, "headerInfo") <- headerInfo
   }
   return(retval)

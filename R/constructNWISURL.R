@@ -52,11 +52,6 @@
 #' )
 #' url_unit <- constructNWISURL(site_id, pCode, "2012-06-28", "2012-06-30", "iv")
 #'
-#' url_qw_single <- constructNWISURL(site_id, "01075", startDate, endDate, "qw")
-#' url_qw <- constructNWISURL(
-#'   site_id, c("01075", "00029", "00453"),
-#'   startDate, endDate, "qw"
-#' )
 #' url_daily_tsv <- constructNWISURL(site_id, pCode, startDate, endDate, "dv",
 #'   statCd = c("00003", "00001"), format = "tsv"
 #' )
@@ -78,7 +73,7 @@ constructNWISURL <- function(siteNumbers,
                              statType = "mean") {
   
   service <- match.arg(service, c(
-    "dv", "uv", "iv", "iv_recent", "qw", "gwlevels",
+    "dv", "uv", "iv", "iv_recent", "gwlevels",
     "rating", "peak", "meas", "stat"))
   
   service[service == "meas"] <- "measurements"
