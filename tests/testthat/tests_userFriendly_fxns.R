@@ -97,7 +97,7 @@ test_that("peak, rating curves, surface-water measurements", {
   expect_equal(nrow(whatNWISdata(siteNumber = "10312000", parameterCd = "50286")), 0)
   expect_equal(ncol(whatNWISdata(siteNumber = "10312000", parameterCd = "50286")), 24)
 
-  url <- "https://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000"
+  url <- httr2::request("https://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000")
   x <- importRDB1(url)
 
   siteID <- "263819081585801"
