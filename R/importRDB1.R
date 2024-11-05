@@ -99,7 +99,7 @@ importRDB1 <- function(obs_url,
 
   tz <- match.arg(tz, OlsonNames())
 
-  if(class(obs_url) == "httr2_request"){
+  if(inherits(obs_url, "httr2_request")){
 
     doc <- getWebServiceData(obs_url)
 
@@ -295,7 +295,7 @@ importRDB1 <- function(obs_url,
   }
 
   attr(readr.data, "queryTime") <- Sys.time()
-  if (class(obs_url) == "httr2_request") {
+  if (inherits(obs_url, "httr2_request")) {
     attr(readr.data, "url") <- obs_url$url
     attr(readr.data, "headerInfo") <- attr(doc, "headerInfo")
   }
