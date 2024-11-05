@@ -311,6 +311,8 @@ constructWQPURL <- function(siteNumbers,
     siteNumbers <- paste(siteNumbers, collapse = ";")
     baseURL <- httr2::req_url_query(baseURL,
                                     siteid = siteNumbers)
+    baseURL <- httr2::req_url_query(baseURL, 
+                                    count = "no")
   } else {
     baseURL <- httr2::request(pkg.env[["ResultWQX3"]])
     baseURL <- httr2::req_url_query(baseURL,

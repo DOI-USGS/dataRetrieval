@@ -86,6 +86,10 @@ readWQPdots <- function(..., legacy = TRUE) {
     values["mimeType"] <- "csv"
   }
   
+  if(legacy & !("count" %in% names(values))){
+    values["count"] <- "no"
+  }
+  
   return_list <- list()
   return_list["values"] <- list(values)
   return_list["service"] <- service
