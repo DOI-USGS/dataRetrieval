@@ -74,10 +74,10 @@ get_nldi_sources <- function(url = pkg.env$nldi_base) {
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' base <- "https://api.water.usgs.gov/nldi/linked-data/"
-#' get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = FALSE)
-#' get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = TRUE)
-#' get_nldi(url = paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
-#' get_nldi(paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
+#' dataRetrieval:::get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = FALSE)
+#' dataRetrieval:::get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = TRUE)
+#' dataRetrieval:::get_nldi(url = paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
+#' dataRetrieval:::get_nldi(paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
 #' }
 
 get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
@@ -208,7 +208,7 @@ clean_nwis_ids <- function(tmp) {
 #' @noRd
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' valid_ask(all = get_nldi_sources(), "nwis")
+#' dataRetrieval:::valid_ask(all = get_nldi_sources(), "nwis")
 #' }
 valid_ask <- function(all, type) {
   # those where the requested pattern is included in a nldi_source ...
@@ -284,9 +284,6 @@ valid_ask <- function(all, type) {
 #'
 #' ## GENERAL ORIGIN: COMID
 #' findNLDI(origin = list("comid" = 101))
-#'
-#' ## GENERAL ORIGIN: WaDE
-#' findNLDI(origin = list("wade" = "CA_45206"))
 #'
 #' # Navigation (flowlines will be returned if find is unspecified)
 #' # UPPER MAINSTEM of USGS-11120000
