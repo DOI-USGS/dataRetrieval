@@ -27,6 +27,8 @@ getWebServiceData <- function(obs_url, ...) {
   obs_url <- httr2::req_throttle(obs_url, rate = 30 / 60) 
   obs_url <- httr2::req_retry(obs_url,
                               backoff = ~ 5, max_tries = 3) 
+  obs_url <- httr2::req_headers(obs_url,
+                                `Accept-Encoding` = c("compress", "gzip")) 
   
   print(obs_url) #when happy with httr2, maybe only print url
   returnedList <- httr2::req_perform(obs_url)

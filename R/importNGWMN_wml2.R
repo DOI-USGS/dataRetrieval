@@ -34,18 +34,19 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
   }
 
   raw <- FALSE
-  if (is.character(input) && file.exists(input)) {
-    returnedDoc <- xml2::read_xml(input)
-  } else if (is.raw(input)) {
-    returnedDoc <- xml2::read_xml(input)
-    raw <- TRUE
-  } else {
-    returnedDoc <- getWebServiceData(input, encoding = "gzip")
+  
+  if(inherits(input, "httr2_request")){
+    returnedDoc <- getWebServiceData(input)
     if (is.null(returnedDoc)) {
       return(invisible(NULL))
     }
     returnedDoc <- xml2::xml_root(returnedDoc)
-  }
+  } else if (is.character(input) && file.exists(input)) {
+    returnedDoc <- xml2::read_xml(input)
+  } else if (is.raw(input)) {
+    returnedDoc <- xml2::read_xml(input)
+    raw <- TRUE
+  } 
 
   response <- xml2::xml_name(returnedDoc)
   if (response == "GetObservationResponse") {
