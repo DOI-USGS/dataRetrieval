@@ -14,7 +14,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-jsonlite \
   r-cran-readr \
   r-cran-xml2 \
-  r-cran-httr \
+  r-cran-httr2 \
   r-cran-rsconnect \
   r-cran-connectapi \
   r-cran-covr \
