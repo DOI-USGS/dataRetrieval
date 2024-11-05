@@ -63,7 +63,7 @@ test_that("NLDI starting sources...", {
   # ERROR: TWO STARTS
   expect_error(findNLDI(nwis = 1000, comid = 101, warn = FALSE))
   # NON EXISTING SITE
-  expect_message(findNLDI(comid = 1, warn = FALSE))
+  expect_error(findNLDI(comid = 1, warn = FALSE))
 })
 
 test_that("NLDI navigation sources...", {
@@ -81,7 +81,7 @@ test_that("NLDI navigation sources...", {
   expect_error(findNLDI(nwis = "11120000", nav = c("DT"), warn = FALSE))
   expect_error(findNLDI(nwis = "11120000", nav = c("DT", "UM"), warn = FALSE))
   # WARNING: Data not found
-  expect_warning(findNLDI(comid = 101, nav = "UM", find = "nwis", warn = TRUE))
+  expect_error(findNLDI(comid = 101, nav = "UM", find = "nwis", warn = TRUE))
 })
 
 test_that("NLDI find sources...", {
