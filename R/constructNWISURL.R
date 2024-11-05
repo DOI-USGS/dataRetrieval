@@ -408,12 +408,12 @@ constructUseURL <- function(years, stateCd, countyCd, categories) {
                                     rdb_compression = "value")
     
     if (!(is.null(countyCd) )) {
-      if (length(countyCd) > 1) {
-        countyCd <- paste(countyCd, collapse = "%2C")
-      }
+
       baseURL <- httr2::req_url_query(baseURL, 
-                                      wu_area = "county",
-                                      wu_county = countyCd)
+                                      wu_area = "county")
+      baseURL <- httr2::req_url_query(baseURL,
+                                      wu_county = countyCd, 
+                                      .multi = "comma")
     } else {
       baseURL <- httr2::req_url_query(baseURL,
                                       wu_area = "State Total")
