@@ -354,6 +354,7 @@ test_that("Construct NWIS urls", {
   startDate <- "1985-01-01"
   endDate <- ""
   pCode <- c("00060", "00010")
+  
   url_daily <- constructNWISURL(siteNumber, pCode,
     startDate, endDate, "dv",
     statCd = c("00003", "00001")
@@ -364,6 +365,7 @@ test_that("Construct NWIS urls", {
                "https://waterservices.usgs.gov/nwis/dv/?site=01594440&format=waterml%2C1.1&ParameterCd=00060%2C00010&StatCd=00003%2C00001&startDT=1985-01-01")
 
   url_unit <- constructNWISURL(siteNumber, pCode, "2012-06-28", "2012-06-30", "iv")
+  
   expect_equal(
     url_unit$url,
     "https://nwis.waterservices.usgs.gov/nwis/iv/?site=01594440&format=waterml%2C1.1&ParameterCd=00060%2C00010&startDT=2012-06-28&endDT=2012-06-30"
@@ -372,7 +374,8 @@ test_that("Construct NWIS urls", {
   url_daily_tsv <- constructNWISURL(siteNumber, pCode, startDate, endDate, "dv",
     statCd = c("00003", "00001"), format = "tsv"
   )
-  expect_equal(url_daily_tsv$url, "https://waterservices.usgs.gov/nwis/dv/?site=05114000&format=rdb%2C1.0&ParameterCd=63680&StatCd=00003%2C00001&startDT=2012-07-10&endDT=2012-07-17")
+  
+  expect_equal(url_daily_tsv$url, "https://waterservices.usgs.gov/nwis/dv/?site=01594440&format=rdb%2C1.0&ParameterCd=00060%2C00010&StatCd=00003%2C00001&startDT=1985-01-01")
 
   url_use <- constructUseURL(
     years = c(1990, 1995),
@@ -380,7 +383,7 @@ test_that("Construct NWIS urls", {
     countyCd = c(1, 3),
     categories = "ALL"
   )
-  expect_equal(url_use$url, "https://waterdata.usgs.gov/OH/nwis/water_use?format=rdb&rdb_compression=value&wu_area=county&wu_county=1%252C3&wu_year=1990%252C1995&wu_category=ALL")
+  expect_equal(url_use$url, "https://waterdata.usgs.gov/OH/nwis/water_use?format=rdb&rdb_compression=value&wu_area=county&wu_county=1%2C3&wu_year=1990%2C1995&wu_category=ALL")
   # nolint end
 })
 
