@@ -160,7 +160,10 @@ constructNWISURL <- function(siteNumbers,
 
            url <- httr2::req_url_query(baseURL,
                               sites = siteNumbers,
-                              statReportType = statReportType)
+                              .multi = "comma")
+           url <- httr2::req_url_query(url,
+                                       statReportType = statReportType,
+                                       .multi = "comma")
            url <- httr2::req_url_query(url, statType = statType,
                                        .multi = "comma")
            url <- httr2::req_url_query(url, parameterCd = parameterCd, 
@@ -420,7 +423,9 @@ constructUseURL <- function(years, stateCd, countyCd, categories) {
   baseURL <- httr2::req_url_query(baseURL, 
                                   wu_year = years, 
                                   .multi = "comma")
-  baseURL <- httr2::req_url_query(baseURL, wu_category = categories)
+  baseURL <- httr2::req_url_query(baseURL, 
+                                  wu_category = categories,
+                                  .multi = "comma")
   
   return(baseURL)
 }
