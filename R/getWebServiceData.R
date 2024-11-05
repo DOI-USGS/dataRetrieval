@@ -1,7 +1,8 @@
 #' Function to return data from web services
 #'
 #' This function accepts a url parameter, and returns the raw data. The function enhances
-#' \code{\link[httr]{GET}} with more informative error messages.
+#' \code{\link[httr]{GET}} with more informative error messages. To add a 
+#' custom user agent, create an environmental variable: CUSTOM_DR_UA
 #'
 #' @param obs_url character containing the url for the retrieval
 #' @param \dots information to pass to header request
@@ -137,8 +138,8 @@ default_ua <- function() {
 
   ua <- paste0(names(versions), "/", versions, collapse = " ")
 
-  if ("UA.dataRetrieval" %in% names(options)) {
-    ua <- paste0(ua, "/", options()[["UA.dataRetrieval"]])
+  if (Sys.getenv("CUSTOM_DR_UA") != "") {
+    ua <- paste0(ua, "/", Sys.getenv("CUSTOM_DR_UA"))
   }
 
   return(ua)

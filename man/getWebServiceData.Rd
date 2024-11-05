@@ -16,7 +16,8 @@ raw data from web services
 }
 \description{
 This function accepts a url parameter, and returns the raw data. The function enhances
-\code{\link[httr]{GET}} with more informative error messages.
+\code{\link[httr]{GET}} with more informative error messages. To add a 
+custom user agent, create an environmental variable: CUSTOM_DR_UA
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

@@ -30,6 +30,7 @@ variables:
   BUILD_LOGS_DIR: "$CI_PROJECT_DIR/ci/logs"
   NOT_CRAN: "true"
   PAGES_OUTDIR: "$CI_PROJECT_DIR/public"
+  CUSTOM_DR_UA: "GitLab_CI"
 
 build-image:
   stage: build
