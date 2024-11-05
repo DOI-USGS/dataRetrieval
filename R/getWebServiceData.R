@@ -32,7 +32,7 @@ getWebServiceData <- function(obs_url, ...) {
   obs_url <- httr2::req_headers(obs_url,
                                 `Accept-Encoding` = c("compress", "gzip")) 
   
-  print(obs_url) #when happy with httr2, maybe only print url
+  message("GET:", obs_url$url) 
   returnedList <- httr2::req_perform(obs_url)
 
   good <- check_non_200s(returnedList)
