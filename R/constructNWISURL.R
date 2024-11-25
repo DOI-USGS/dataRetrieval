@@ -311,9 +311,9 @@ constructWQPURL <- function(siteNumbers,
   
   if(legacy){
     baseURL <- httr2::request(pkg.env[["Result"]])
-    siteNumbers <- paste(siteNumbers, collapse = ";")
     baseURL <- httr2::req_url_query(baseURL,
-                                    siteid = siteNumbers)
+                                    siteid = siteNumbers,
+                                    .multi = function(x) paste0(x, collapse = ";"))
     baseURL <- httr2::req_url_query(baseURL, 
                                     count = "no")
   } else {
@@ -324,13 +324,14 @@ constructWQPURL <- function(siteNumbers,
   }
 
   if(legacy & !allPCode){
-    if (multiplePcodes) {
-      parameterCd <- paste(parameterCd, collapse = ";")
-    }
     if(pCodeLogic){
-      baseURL <- httr2::req_url_query(baseURL, pCode = parameterCd)
+      baseURL <- httr2::req_url_query(baseURL, 
+                                      pCode = parameterCd,
+                                      .multi = function(x) paste0(x, collapse = ";"))
     } else {
-      baseURL <- httr2::req_url_query(baseURL, characteristicName = parameterCd)
+      baseURL <- httr2::req_url_query(baseURL, 
+                                      characteristicName = parameterCd,
+                                      .multi = function(x) paste0(x, collapse = ";"))
     }
     
   } else if(!legacy & !allPCode){

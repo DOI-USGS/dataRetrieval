@@ -43,9 +43,9 @@ whatWQPsamples <- function(...,
     if("siteid" %in% names(values)){
       if(length(values[["siteid"]]) > 1){
         sites <- values[["siteid"]]
-        sites <- paste0(sites, collapse = ";")
         baseURL <- httr2::req_url_query(baseURL, 
-                                        siteid = sites)
+                                        siteid = sites,
+                                        .multi = function(x) paste0(x, collapse = ";"))
         values <- values[names(values) != "siteid"]
       }
     }
@@ -103,9 +103,9 @@ whatWQPmetrics <- function(...,
   if("siteid" %in% names(values)){
     if(length(values[["siteid"]]) > 1){
       sites <- values[["siteid"]]
-      sites <- paste0(sites, collapse = ";")
       baseURL <- httr2::req_url_query(baseURL, 
-                                      siteid = sites)
+                                      siteid = sites,
+                                      .multi = function(x) paste0(x, collapse = ";"))
       values <- values[names(values) != "siteid"]
     }
   }
@@ -203,9 +203,9 @@ whatWQPdata <- function(...,
   if("siteid" %in% names(values)){
     if(length(values[["siteid"]]) > 1){
       sites <- values[["siteid"]]
-      sites <- paste0(sites, collapse = ";")
       baseURL <- httr2::req_url_query(baseURL, 
-                                      siteid = sites)
+                                      siteid = sites,
+                                      .multi = function(x) paste0(x, collapse = ";"))
       values <- values[names(values) != "siteid"]
     }
   }
