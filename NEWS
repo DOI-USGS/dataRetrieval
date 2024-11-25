@@ -2,6 +2,7 @@ dataRetrieval 2.7.18
 ===================
 * Switched from httr to httr2
 * Added a way to include a custom user-agent suffix via an enviornmental variable "CUSTOM_DR_UA"
+* Added function for USGS discrete data samples_data service.
 
 dataRetrieval 2.7.17
 ===================

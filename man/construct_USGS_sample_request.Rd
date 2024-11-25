@@ -63,6 +63,7 @@ service described at \url{https://waterdata.usgs.gov/download-samples}.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 \donttest{
 req <- construct_USGS_sample_request(
                monitoringLocationIdentifier = "USGS-04074950",
@@ -73,9 +74,9 @@ df <- readr::read_delim(rawData)
 req_site <- construct_USGS_sample_request(
                state_abb = "Wisconsin",
                characteristicUserSupplied = "pH, water, unfiltered, field",
-               dataType = "Monitoring locations")
-rawData_sites <- getWebServiceData(req_site)
-df_site <- readr::read_delim(rawData_sites)
+               dataType = "Monitoring locations",
+               activityStartDateUpper = "2000-01-01")
+rawData_sites <- importWQP(req_site)
 }
 \dontshow{\}) # examplesIf}
 }
