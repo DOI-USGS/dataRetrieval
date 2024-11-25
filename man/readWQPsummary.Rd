@@ -22,6 +22,7 @@ mimeType, and providers is optional (these arguments are picked automatically).}
 }
 \value{
 A data frame from the data returned from the Water Quality Portal
+about the data available for the query parameters.
 }
 \description{
 Returns a list of sites with year-by-year information on what data is available.

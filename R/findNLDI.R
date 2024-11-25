@@ -71,15 +71,6 @@ get_nldi_sources <- function(url = pkg.env$nldi_base) {
 #' @keywords nldi internal
 #' @noRd
 #' @return a data.frame
-#' @examplesIf is_dataRetrieval_user()
-#' \donttest{
-#' base <- "https://api.water.usgs.gov/nldi/linked-data/"
-#' dataRetrieval:::get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = FALSE)
-#' dataRetrieval:::get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = TRUE)
-#' dataRetrieval:::get_nldi(url = paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
-#' dataRetrieval:::get_nldi(paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
-#' }
-
 get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
   # Query
   res <- httr2::request(url)
@@ -187,7 +178,6 @@ get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
 #' @return the input object with potentially modified identifiers
 #' @keywords nldi internal
 #' @noRd
-
 clean_nwis_ids <- function(tmp) {
   # If data.frame, and of type NWIS, then strip "USGS-" from identifiers
   if (is.data.frame(tmp)) {
@@ -206,10 +196,6 @@ clean_nwis_ids <- function(tmp) {
 #' @return a list with good and bad entries
 #' @keywords nldi internal
 #' @noRd
-#' @examplesIf is_dataRetrieval_user()
-#' \donttest{
-#' dataRetrieval:::valid_ask(all = get_nldi_sources(), "nwis")
-#' }
 valid_ask <- function(all, type) {
   # those where the requested pattern is included in a nldi_source ...
   # means we will catch nwis - not just nwissite ...

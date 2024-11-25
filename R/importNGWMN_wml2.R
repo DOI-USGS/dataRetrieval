@@ -148,7 +148,7 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
 #'                                 statCd = "00003",
 #'                                 parameterCd = "00060" )
 #' 
-#' timesereies <- importWaterML2(baseURL, asDateTime = TRUE, tz = "UTC")
+#' timeseries <- importWaterML2(baseURL, asDateTime = TRUE, tz = "UTC")
 #' }
 importWaterML2 <- function(input, asDateTime = FALSE, tz = "UTC") {
   returnedDoc <- check_if_xml(input)

@@ -8,8 +8,6 @@
 #' generally faster than the \code{\link{whatWQPdata}} function, but does
 #' not return information on what data was collected at the site.
 #'
-#' The \code{readWQPsummary} function has
-#'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation}
 #' for a complete list of options. A list of arguments can also be supplied.
 #' One way to figure out how to construct a WQP query is to go to the "Advanced" 
@@ -24,11 +22,14 @@
 #' mimeType,  and providers is optional (these arguments are picked automatically).
 #' @param legacy Logical. If TRUE, uses legacy WQP services. Default is TRUE.
 #' Setting legacy = FALSE uses WQX3.0 WQP services, which are in-development, use with caution.
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the
+#' function will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service
 #' @rdname wqpSpecials
 #' @name whatWQPsites
 #' @seealso whatWQPdata readWQPsummary
-#' @return data frame 
+#' @return data frame that includes information on site metadata.
 #'
 #' @export
 #' @seealso whatNWISdata
@@ -44,7 +45,7 @@
 #'   siteType = type
 #' )
 #' }
-whatWQPsites <- function(..., legacy = TRUE) {
+whatWQPsites <- function(..., legacy = TRUE, convertType = TRUE) {
   values <- readWQPdots(..., legacy = legacy)
 
   values <- values[["values"]]
@@ -71,7 +72,7 @@ whatWQPsites <- function(..., legacy = TRUE) {
                                   !!!values,
                                   .multi = "explode")
   
-  retval <- importWQP(baseURL)
+  retval <- importWQP(baseURL, convertType = convertType)
   
   if(!is.null(retval)){
     attr(retval, "queryTime") <- Sys.time()
@@ -104,6 +105,7 @@ whatWQPsites <- function(..., legacy = TRUE) {
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
 #' mimeType, and providers is optional (these arguments are picked automatically).
 #' @return A data frame from the data returned from the Water Quality Portal
+#' about the data available for the query parameters.
 #' @export
 #' @seealso whatWQPsites whatWQPdata
 #' @examplesIf is_dataRetrieval_user()
