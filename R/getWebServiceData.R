@@ -37,23 +37,20 @@ getWebServiceData <- function(obs_url, ...) {
 
   good <- check_non_200s(returnedList)
   
-  return_readLines <- c("text/html", "text/html; charset=UTF-8")
-  
-  # return_raw <- c("application/zip",
-  #                 "application/zip;charset=UTF-8")
-  
-  return_content <- c("text/tab-separated-values;charset=UTF-8",
-                      "text/csv;charset=UTF-8",
+  return_readLines <- c("text/html", "text/html;charset=utf-8")
+
+  return_content <- c("text/tab-separated-values;charset=utf-8",
+                      "text/csv;charset=utf-8",
+                      "text/csv",
                       "text/plain",
-                      "text/plain;charset=UTF-8",
-                      "text/plain; charset=UTF-8")
+                      "text/plain;charset=utf-8")
   
-  return_json <- c("application/vnd.geo+json;charset=UTF-8")
+  return_json <- c("application/vnd.geo+json;charset=utf-8")
   
   if(good){
     headerInfo <- httr2::resp_headers(returnedList)
-
-    if (headerInfo$`content-type` %in% return_content) {
+    content <- gsub(" ", "", tolower(headerInfo$`content-type`))
+    if (content %in% return_content) {
       returnedDoc <- httr2::resp_body_string(returnedList)
       trys <- 1
       if (all(grepl("ERROR: INCOMPLETE DATA", returnedDoc))) {
@@ -78,12 +75,12 @@ getWebServiceData <- function(obs_url, ...) {
 
     # } else if (headerInfo$`content-type` %in% return_raw) {
     #   returnedDoc <- httr2::resp_body_raw(returnedList)
-    } else if (headerInfo$`content-type` %in% return_readLines) {
+    } else if (content %in% return_readLines) {
       returnedList <- httr2::resp_body_string(returnedList)
       txt <- readLines(returnedList$content)
       message(txt)
       return(txt)
-    } else if (headerInfo$`content-type` %in% return_json){
+    } else if (content %in% return_json){
       returnedDoc <- httr2::resp_body_json(returnedList)
     } else {
       returnedDoc <- httr2::resp_body_xml(returnedList, encoding = "UTF-8")
