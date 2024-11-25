@@ -182,7 +182,7 @@ constructNWISURL <- function(siteNumbers,
          gwlevels = {
            
            url <- httr2::req_url_query(baseURL,
-                              site_no = siteNumbers,.multi = "comma")
+                              site_no = siteNumbers, .multi = "comma")
            url <- httr2::req_url_query(url,format = "rdb")
            if (nzchar(startDate)) {
              url <- httr2::req_url_query(url, begin_date = startDate)
