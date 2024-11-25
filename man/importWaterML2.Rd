@@ -33,7 +33,7 @@ baseURL <- httr2::req_url_query(baseURL,
                                 statCd = "00003",
                                 parameterCd = "00060" )
 
-timesereies <- importWaterML2(baseURL, asDateTime = TRUE, tz = "UTC")
+timeseries <- importWaterML2(baseURL, asDateTime = TRUE, tz = "UTC")
 }
 \dontshow{\}) # examplesIf}
 }

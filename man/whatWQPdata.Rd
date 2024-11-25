@@ -25,7 +25,9 @@ will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
 }
 \value{
-A data frame based on the Water Quality Portal results.
+A data frame that returns basic data availability such as 
+sites, number of results, and number of sampling activities from the 
+query parameters for the Water Quality Portal.
 }
 \description{
 Returns a list of sites from the Water Quality Portal web service. This function gets

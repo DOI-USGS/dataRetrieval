@@ -1,9 +1,8 @@
 #' @name whatWQPsamples
 #' @rdname wqpSpecials
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the
-#' function will convert the data to dates, datetimes,
-#' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @export
+#' @return A data frame with information on the sampling activity
+#' available from the Water Quality Portal for the query parameters.
 #' @examples
 #' \donttest{
 #'
@@ -75,9 +74,6 @@ whatWQPsamples <- function(...,
 
 #' @name whatWQPmetrics
 #' @rdname wqpSpecials
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE},
-#' the function will convert the data to dates, datetimes,
-#' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @export
 #' @examples
 #' \donttest{
@@ -171,7 +167,9 @@ whatWQPmetrics <- function(...,
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service
-#' @return A data frame based on the Water Quality Portal results.
+#' @return A data frame that returns basic data availability such as 
+#' sites, number of results, and number of sampling activities from the 
+#' query parameters for the Water Quality Portal. 
 #'
 #' @export
 #' @seealso whatWQPsites readWQPsummary readWQPdata
