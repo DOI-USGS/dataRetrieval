@@ -44,7 +44,8 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@96b1dc658a45175f93ed5f33fda2b2cebbb12ee8
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: |
+            any::rcmdcheck
           needs: check
 
       - uses: r-lib/actions/check-r-package@3e56ca41aa267855f36891af7a495d24bfaa8373

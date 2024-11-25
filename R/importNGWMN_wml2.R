@@ -15,13 +15,18 @@
 #' @export
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' obs_url <- paste("https://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
-#'   "service=SOS", "version=2.0.0",
-#'   "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
-#'   "responseFormat=text/xml",
-#'   "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",
-#'   sep = "&"
-#' )
+#' 
+#' params <- list(request = "GetObservation",
+#'                service = "SOS",
+#'                version = "2.0.0",
+#'                observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
+#'                responseFormat = "text/xml",
+#'                featureOfInterest = "VW_GWDP_GEOSERVER.USGS.403836085374401")
+#' 
+#' obs_url <- httr2::request("https://cida.usgs.gov") |>
+#'  httr2::req_url_path_append("ngwmn_cache") |> 
+#'  httr2::req_url_path_append("sos") |>
+#'  httr2::req_url_query(!!!params)
 #'
 #' #data_returned <- importNGWMN(obs_url)
 #' }
