@@ -202,6 +202,10 @@ readNWISdata <- function(..., asDateTime = TRUE, convertType = TRUE, tz = "UTC")
   
   valuesList <- readNWISdots(...)
   
+  values <- valuesList[["values"]]
+  values <- values[names(values) != "format"]
+  format <- valuesList[["values"]][["format"]]
+  
   service <- valuesList$service
   if (length(service) > 1) {
     warning("Only one service value is allowed. Service: ", service[1], " will be used.")
@@ -219,18 +223,14 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
     )
   }
   
-  values <- sapply(valuesList$values, function(x)utils:: URLencode(x))
-  
-  baseURL <- drURL(service, arg.list = values)
-  
-  if (service %in% c("site", "dv", "iv")) {
-    baseURL <- appendDrURL(baseURL, Access = pkg.env$access)
+  baseURL <- httr2::request(pkg.env[[service]])
+  if (service != "rating") {
+    baseURL <- httr2::req_url_query(baseURL, format = format)
   }
-  # actually get the data
-  if (length(grep("rdb", values["format"])) > 0) {
-    if (service == "rating") {
-      baseURL <- gsub(pattern = "&format=rdb", replacement = "", baseURL)
-    }
+
+  baseURL <- httr2::req_url_query(baseURL, !!!values, .multi = "comma")
+
+  if (length(grep("rdb",  format)) > 0) {
     retval <- importRDB1(baseURL, tz = tz, asDateTime = asDateTime, convertType = convertType)
   } else {
     retval <- importWaterML1(baseURL, tz = tz, asDateTime = asDateTime)
@@ -256,7 +256,7 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
       )
     )
     # TODO: Think about dates that cross a time zone boundary.
-    if (values["format"] == "waterml,1.1" && nrow(retval) > 0) {
+    if (format == "waterml,1.1" && nrow(retval) > 0) {
       retval$dateTime <- as.POSIXct(retval$dateTime, tzLib[tz = retval$tz_cd[1]])
     }
   }
@@ -413,21 +413,19 @@ readNWISdots <- function(...) {
   
   match.arg(service, c(
     "dv", "iv", "iv_recent", "gwlevels",
-    "site", "uv", "qw", "measurements",
+    "site", "uv", "measurements",
     "qwdata", "stat", "rating", "peak"
   ))
   
   if (service == "uv") {
     service <- "iv"
-  } else if (service == "qw") {
-    service <- "qwdata"
-  }
+  } 
   
   if (length(service) > 1) {
     stop("Only one service call allowed.")
   }
   
-  values <- sapply(matchReturn, function(x) as.character(paste0(eval(x), collapse = ",")))
+  values <- matchReturn
   
   names(values)[names(values) == "startDate"] <- "startDT"
   names(values)[names(values) == "endDate"] <- "endDT"
@@ -477,7 +475,7 @@ readNWISdots <- function(...) {
     }
   }
   
-  if (service %in% c("peak", "qwdata", "measurements", "gwlevels")) {
+  if (service %in% c("peak", "measurements", "gwlevels")) {
     format.default <- "rdb"
     
     names(values)[names(values) == "startDT"] <- "begin_date"
@@ -501,9 +499,10 @@ readNWISdots <- function(...) {
       values["range_selection"] <- "date_range"
     }
     
-    if (service == "qwdata" && !("qw_sample_wide" %in% names(values))) {
-      values["qw_sample_wide"] <- "wide"
-    }
+  }
+  
+  if("bbox" %in% names(values)){
+    values[["bbox"]] <- paste0(values[["bbox"]], collapse = ",")
   }
   
   if (service %in% c("peak", "gwlevels") && "stateCd" %in% names(values)) {
@@ -535,8 +534,10 @@ readNWISdots <- function(...) {
   if (!("format" %in% names(values))) {
     values["format"] <- format.default
   }
-  
-  return(list(values = values, service = service))
+  return_list <- list()
+  return_list["values"] <- list(values)
+  return_list["service"] <- service
+  return(return_list)
 }
 
 #' convert variables in dots to usable format

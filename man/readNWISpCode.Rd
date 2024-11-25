@@ -24,7 +24,7 @@ parameterData data frame with the following information:
 }
 }
 \description{
-Imports data from NWIS about meaured parameter based on user-supplied parameter code or codes.
+Imports data from NWIS about measured parameter based on user-supplied parameter code or codes.
 This function gets the data from here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes}
 }
 \examples{

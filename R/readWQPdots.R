@@ -48,31 +48,10 @@ readWQPdots <- function(..., legacy = TRUE) {
     
   bbox <- "bBox" %in% names(matchReturn)
   if(bbox){
-    values_bbox <- sapply(matchReturn["bBox"], function(x) as.character(paste0(eval(x), collapse = ",")))
-    matchReturn <- matchReturn[names(matchReturn) != "bBox"]
+    matchReturn["bBox"] <- sapply(matchReturn["bBox"], function(x) as.character(paste0(eval(x), collapse = ",")))
   }
-  
-  if(!legacy){
-    new_list <- rep(list(NA),length(unlist(matchReturn)))
-    names_list <- c()
-    i <- 1
-    for(arg in names(matchReturn)){
-      for(val in as.character(matchReturn[[arg]])) {
-        new_list[[i]] <- val
-        names_list <- c(names_list, arg)
-        i <- i + 1
-      }
-    }
-    names(new_list) <- names_list
-    matchReturn <- new_list
-  }
-  
-  values <- sapply(matchReturn, function(x) as.character(paste0(eval(x), collapse = ";")))
-  
-  if (bbox) {
-    values <- c(values, values_bbox)
-  }
-  
+
+  values <- matchReturn
   values <- checkWQPdates(values)
 
   names(values)[names(values) == "siteNumber"] <- "siteid"
@@ -102,7 +81,18 @@ readWQPdots <- function(..., legacy = TRUE) {
       sep = ":"
     )
   }
-
-  return(list(values = values, service = service))
+  
+  if(!"mimeType" %in% names(values)){
+    values["mimeType"] <- "csv"
+  }
+  
+  if(legacy & !("count" %in% names(values))){
+    values["count"] <- "no"
+  }
+  
+  return_list <- list()
+  return_list["values"] <- list(values)
+  return_list["service"] <- service
+  return(return_list)
 }
 

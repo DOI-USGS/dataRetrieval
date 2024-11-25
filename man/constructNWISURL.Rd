@@ -70,7 +70,7 @@ full list of codes.}
 url string
 }
 \description{
-Imports data from NWIS web service.
+Using USGS water web services to construct urls.
 }
 \examples{
 site_id <- "01594440"
@@ -83,11 +83,6 @@ url_daily <- constructNWISURL(site_id, pCode,
 )
 url_unit <- constructNWISURL(site_id, pCode, "2012-06-28", "2012-06-30", "iv")
 
-url_qw_single <- constructNWISURL(site_id, "01075", startDate, endDate, "qw")
-url_qw <- constructNWISURL(
-  site_id, c("01075", "00029", "00453"),
-  startDate, endDate, "qw"
-)
 url_daily_tsv <- constructNWISURL(site_id, pCode, startDate, endDate, "dv",
   statCd = c("00003", "00001"), format = "tsv"
 )
