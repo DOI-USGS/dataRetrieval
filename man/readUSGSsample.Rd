@@ -59,12 +59,23 @@ This function creates the call and gets the data for discrete water quality samp
 service described at \url{https://waterdata.usgs.gov/download-samples}.
 }
 \examples{
+# example code
+
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 ph_data <- readUSGSsample(
                monitoringLocationIdentifier = "USGS-04074950",
                characteristicUserSupplied = "pH, water, unfiltered, field",
+               activityStartDateUpper = "2000-01-01",
                dataProfile = "Narrow")
+               
+nameToUse <- "pH"
+pHData <- readUSGSsample(monitoringLocationIdentifier = "USGS-04024315", 
+                      characteristicName = nameToUse)
+ncol(pHData)
+attr(pHData, "siteInfo")
+attr(pHData, "queryTime")
+               
 }
 \dontshow{\}) # examplesIf}
 }

@@ -30,8 +30,8 @@
 #' @export
 #' @return data frame returned from web service call.
 #' 
-#' @examples
 #' @examplesIf is_dataRetrieval_user()
+#' 
 #' \donttest{
 #' req <- construct_USGS_sample_request(
 #'                monitoringLocationIdentifier = "USGS-04074950",
@@ -44,8 +44,7 @@
 #'                characteristicUserSupplied = "pH, water, unfiltered, field",
 #'                dataType = "Monitoring locations",
 #'                activityStartDateUpper = "2000-01-01")
-#' rawData_sites <- getWebServiceData(req_site)
-#' df_site <- readr::read_delim(rawData_sites)
+#' rawData_sites <- importWQP(req_site)
 #' }
 construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                            state_abb = NA,
@@ -83,7 +82,9 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   names(profile_convert) <- available_profiles
   
   # When RMLS comes out...spring 2025ish,
-  # we can verify these values before sending them out
+  # we can verify these values before sending them out:
+  # We could via this:
+  # https://api.waterdata.usgs.gov/samples-data/codeservice/docs#/
   baseURL <- httr2::request("https://api.waterdata.usgs.gov") |> 
     httr2::req_url_path_append("samples-data") |>
     httr2::req_url_query(mimeType = "text/csv")
@@ -112,14 +113,21 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                                     .multi = "explode")
   }
   if(all(!is.na(siteTypeCode))){
-    baseURL <- httr2::req_url_query(baseURL,
-                                    siteTypeCode = siteTypeCode,
-                                    .multi = "explode")
+
+    if(all(siteTypeCode %in% check_param("sitetype")$typeCode)){
+      baseURL <- httr2::req_url_query(baseURL,
+                                      siteTypeCode = siteTypeCode,
+                                      .multi = "explode")      
+    }
   }
   if(all(!is.na(activityMediaName))){
-    baseURL <- httr2::req_url_query(baseURL,
-                                    activityMediaName = activityMediaName,
-                                    .multi = "explode")
+
+    if(all(activityMediaName %in% check_param("samplemedia")$activityMedia)){
+      baseURL <- httr2::req_url_query(baseURL,
+                                      activityMediaName = activityMediaName,
+                                      .multi = "explode")      
+    }
+
   }
   if(all(!is.na(activityStartDateLower))){
     start <- as.character(as.Date(activityStartDateLower))
@@ -131,10 +139,14 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
     baseURL <- httr2::req_url_query(baseURL,
                                     activityStartDateUpper = end)
   }
-  if(all(!is.na(characteristicUserSupplied))){
-    baseURL <- httr2::req_url_query(baseURL,
-                                    characteristicUserSupplied = characteristicUserSupplied,
-                                    .multi = "explode")
+  if(all(!is.na(characteristicGroup))){
+ 
+    if(all(characteristicGroup %in% check_param("characteristicgroup")$characteristicGroup)){
+      baseURL <- httr2::req_url_query(baseURL,
+                                      characteristicGroup = characteristicGroup,
+                                      .multi = "explode")      
+    }
+
   }
   if(!is.na(characteristicUserSupplied)){
     baseURL <- httr2::req_url_query(baseURL,
@@ -154,6 +166,21 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   return(baseURL)
 }
 
+check_param <- function(service = "characteristicgroup"){
+  
+  check_group <- httr2::request("https://api.waterdata.usgs.gov") |> 
+    httr2::req_url_path_append("samples-data",
+                               "codeservice",
+                               service) |> 
+    httr2::req_url_query(mimeType = "application/json") |> 
+    httr2::req_perform() |> 
+    httr2::resp_body_string() |> 
+    jsonlite::fromJSON()
+    
+    return(check_group$data)
+  
+}
+
 #' USGS Samples Data
 #' 
 #' This function creates the call and gets the data for discrete water quality samples data
@@ -161,6 +188,9 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
 #'
 #' @inheritParams construct_USGS_sample_request
 #' @export
+#' @examples
+#' # example code
+#' 
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' ph_data <- readUSGSsample(
@@ -168,6 +198,14 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
 #'                characteristicUserSupplied = "pH, water, unfiltered, field",
 #'                activityStartDateUpper = "2000-01-01",
 #'                dataProfile = "Narrow")
+#'                
+#' nameToUse <- "pH"
+#' pHData <- readUSGSsample(monitoringLocationIdentifier = "USGS-04024315", 
+#'                       characteristicName = nameToUse)
+#' ncol(pHData)
+#' attr(pHData, "siteInfo")
+#' attr(pHData, "queryTime")
+#'                
 #' }
 readUSGSsample <- function(monitoringLocationIdentifier = NA,
                            state_abb = NA,
