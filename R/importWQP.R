@@ -45,12 +45,8 @@ importWQP <- function(obs_url, tz = "UTC",
     tz <- "UTC"
   }
 
-  if (!file.exists(obs_url)) {
-    
-    doc <- getWebServiceData(
-      obs_url,
-      httr::accept("text/csv")
-    )
+  if (inherits(obs_url, "httr2_request")) {
+    doc <- getWebServiceData(obs_url)
     if (is.null(doc)) {
       return(invisible(NULL))
     }
@@ -78,8 +74,9 @@ importWQP <- function(obs_url, tz = "UTC",
   if(convertType){
     retval <- parse_WQP(retval, tz)
   } 
-  attr(retval, "headerInfo") <- headerInfo
-  
+  if (inherits(obs_url, "httr2_request")) {
+    attr(retval, "headerInfo") <- headerInfo
+  }
   return(retval)
   
 }

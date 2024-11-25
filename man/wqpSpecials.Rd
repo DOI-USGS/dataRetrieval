@@ -10,7 +10,7 @@ whatWQPsamples(..., convertType = TRUE, legacy = TRUE)
 
 whatWQPmetrics(..., convertType = TRUE)
 
-whatWQPsites(..., legacy = TRUE)
+whatWQPsites(..., legacy = TRUE, convertType = TRUE)
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation}
@@ -26,15 +26,18 @@ in the Query URL. The corresponding argument for dataRetrieval is
 characteristicType = "Nutrient". dataRetrieval users do not need to include
 mimeType,  and providers is optional (these arguments are picked automatically).}
 
-\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE},
-the function will convert the data to dates, datetimes,
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the
+function will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character.}
 
 \item{legacy}{Logical. If TRUE, uses legacy WQP services. Default is TRUE.
 Setting legacy = FALSE uses WQX3.0 WQP services, which are in-development, use with caution.}
 }
 \value{
-data frame
+A data frame with information on the sampling activity
+available from the Water Quality Portal for the query parameters.
+
+data frame that includes information on site metadata.
 }
 \description{
 Returns a list of sites from the Water Quality Portal web service. This function
@@ -44,9 +47,6 @@ Arguments to the function should be based on
 this function returns the basic metadata on WQP sites. It is
 generally faster than the \code{\link{whatWQPdata}} function, but does
 not return information on what data was collected at the site.
-}
-\details{
-The \code{readWQPsummary} function has
 }
 \examples{
 \donttest{

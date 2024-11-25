@@ -15,13 +15,18 @@
 #' @export
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' obs_url <- paste("https://cida.usgs.gov/ngwmn_cache/sos?request=GetObservation",
-#'   "service=SOS", "version=2.0.0",
-#'   "observedProperty=urn:ogc:def:property:OGC:GroundWaterLevel",
-#'   "responseFormat=text/xml",
-#'   "featureOfInterest=VW_GWDP_GEOSERVER.USGS.403836085374401",
-#'   sep = "&"
-#' )
+#' 
+#' params <- list(request = "GetObservation",
+#'                service = "SOS",
+#'                version = "2.0.0",
+#'                observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
+#'                responseFormat = "text/xml",
+#'                featureOfInterest = "VW_GWDP_GEOSERVER.USGS.403836085374401")
+#' 
+#' obs_url <- httr2::request("https://cida.usgs.gov") |>
+#'  httr2::req_url_path_append("ngwmn_cache") |> 
+#'  httr2::req_url_path_append("sos") |>
+#'  httr2::req_url_query(!!!params)
 #'
 #' #data_returned <- importNGWMN(obs_url)
 #' }
@@ -34,18 +39,19 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
   }
 
   raw <- FALSE
-  if (is.character(input) && file.exists(input)) {
-    returnedDoc <- xml2::read_xml(input)
-  } else if (is.raw(input)) {
-    returnedDoc <- xml2::read_xml(input)
-    raw <- TRUE
-  } else {
-    returnedDoc <- getWebServiceData(input, encoding = "gzip")
+  
+  if(inherits(input, "httr2_request")){
+    returnedDoc <- getWebServiceData(input)
     if (is.null(returnedDoc)) {
       return(invisible(NULL))
     }
     returnedDoc <- xml2::xml_root(returnedDoc)
-  }
+  } else if (is.character(input) && file.exists(input)) {
+    returnedDoc <- xml2::read_xml(input)
+  } else if (is.raw(input)) {
+    returnedDoc <- xml2::read_xml(input)
+    raw <- TRUE
+  } 
 
   response <- xml2::xml_name(returnedDoc)
   if (response == "GetObservationResponse") {
@@ -133,16 +139,16 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
 #' @export
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' baseURL <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
-#' URL <- paste(baseURL, "sites=01646500",
-#'   "startDT=2014-09-01",
-#'   "endDT=2014-09-08",
-#'   "statCd=00003",
-#'   "parameterCd=00060",
-#'   sep = "&"
-#' )
+#' baseURL <- httr2::request("https://waterservices.usgs.gov/nwis/dv")
+#' baseURL <- httr2::req_url_query(baseURL,
+#'                                 format = "waterml,2.0",
+#'                                 sites = "01646500",
+#'                                 startDT = "2014-09-01",
+#'                                 endDT = "2014-09-08",
+#'                                 statCd = "00003",
+#'                                 parameterCd = "00060" )
 #' 
-#' timesereies <- importWaterML2(URL, asDateTime = TRUE, tz = "UTC")
+#' timeseries <- importWaterML2(baseURL, asDateTime = TRUE, tz = "UTC")
 #' }
 importWaterML2 <- function(input, asDateTime = FALSE, tz = "UTC") {
   returnedDoc <- check_if_xml(input)

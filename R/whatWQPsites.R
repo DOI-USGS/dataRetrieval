@@ -8,8 +8,6 @@
 #' generally faster than the \code{\link{whatWQPdata}} function, but does
 #' not return information on what data was collected at the site.
 #'
-#' The \code{readWQPsummary} function has
-#'
 #' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation}
 #' for a complete list of options. A list of arguments can also be supplied.
 #' One way to figure out how to construct a WQP query is to go to the "Advanced" 
@@ -24,11 +22,14 @@
 #' mimeType,  and providers is optional (these arguments are picked automatically).
 #' @param legacy Logical. If TRUE, uses legacy WQP services. Default is TRUE.
 #' Setting legacy = FALSE uses WQX3.0 WQP services, which are in-development, use with caution.
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the
+#' function will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service
 #' @rdname wqpSpecials
 #' @name whatWQPsites
 #' @seealso whatWQPdata readWQPsummary
-#' @return data frame 
+#' @return data frame that includes information on site metadata.
 #'
 #' @export
 #' @seealso whatNWISdata
@@ -44,34 +45,38 @@
 #'   siteType = type
 #' )
 #' }
-whatWQPsites <- function(..., legacy = TRUE) {
+whatWQPsites <- function(..., legacy = TRUE, convertType = TRUE) {
   values <- readWQPdots(..., legacy = legacy)
 
-  values <- values$values
+  values <- values[["values"]]
 
-  if ("tz" %in% names(values)) {
-    values <- values[!(names(values) %in% "tz")]
+  if (any(c("tz", "service") %in% names(values))){
+    values <- values[!(names(values) %in% c("tz", "service"))]
   }
 
-  if ("service" %in% names(values)) {
-    values <- values[!(names(values) %in% "service")]
-  }
-
-  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
-  
   if(legacy){
-    baseURL <- drURL("Station", arg.list = values)
+    baseURL <- httr2::request(pkg.env[["Station"]])
+    if("siteid" %in% names(values)){
+      if(length(values[["siteid"]]) > 1){
+        sites <- values[["siteid"]]
+        baseURL <- httr2::req_url_query(baseURL, 
+                                        siteid = sites,
+                                        .multi = function(x) paste0(x, collapse = ";"))
+        values <- values[names(values) != "siteid"]
+      }
+    }
   } else {
-    baseURL <- drURL("StationWQX3", arg.list = values)
+    baseURL <- httr2::request(pkg.env[["StationWQX3"]])
   }
+  baseURL <- httr2::req_url_query(baseURL,
+                                  !!!values,
+                                  .multi = "explode")
   
-  baseURL <- appendDrURL(baseURL, mimeType = "csv")
-
-  retval <- importWQP(baseURL)
+  retval <- importWQP(baseURL, convertType = convertType)
   
   if(!is.null(retval)){
     attr(retval, "queryTime") <- Sys.time()
-    attr(retval, "url") <- baseURL
+    attr(retval, "url") <- baseURL$url
   }
   
   return(retval)
@@ -100,6 +105,7 @@ whatWQPsites <- function(..., legacy = TRUE) {
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
 #' mimeType, and providers is optional (these arguments are picked automatically).
 #' @return A data frame from the data returned from the Water Quality Portal
+#' about the data available for the query parameters.
 #' @export
 #' @seealso whatWQPsites whatWQPdata
 #' @examplesIf is_dataRetrieval_user()
@@ -142,26 +148,30 @@ readWQPsummary <- function(...) {
   
   values <- readWQPdots(...)
   
-  values <- values$values
+  values <- values[["values"]]
 
-  if ("tz" %in% names(values)) {
-    values <- values[!(names(values) %in% "tz")]
-  }
-
-  if ("service" %in% names(values)) {
-    values <- values[!(names(values) %in% "service")]
+  if (any(c("tz", "service") %in% names(values))){
+    values <- values[!(names(values) %in% c("tz", "service"))]
   }
 
   if (!"dataProfile" %in% names(values)) {
     values[["dataProfile"]] <- "periodOfRecord"
   }
+  
+  baseURL <- httr2::request(pkg.env[["SiteSummary"]])
 
-  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
-
-  baseURL <- drURL("SiteSummary", arg.list = values)
-
-  baseURL <- appendDrURL(baseURL, mimeType = "csv")
-
+  if(length(values[["siteid"]]) > 1){
+    sites <- values[["siteid"]]
+    baseURL <- httr2::req_url_query(baseURL, 
+                                    siteid = sites,
+                                    .multi = function(x) paste0(x, collapse = ";"))
+    values <- values[names(values) != "siteid"]
+  }
+  
+  baseURL <- httr2::req_url_query(baseURL,
+                                  !!!values,
+                                  .multi = "explode")
+  
   withCallingHandlers(
     {
       retval <- importWQP(baseURL, 
@@ -176,7 +186,7 @@ readWQPsummary <- function(...) {
   
   if(!is.null(retval)){
     attr(retval, "queryTime") <- Sys.time()
-    attr(retval, "url") <- baseURL
+    attr(retval, "url") <- baseURL$url
   }
   
   return(retval)

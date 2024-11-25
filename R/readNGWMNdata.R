@@ -165,13 +165,18 @@ readNGWMNsites <- function(siteNumbers) {
 }
 
 retrieveObservation <- function(featureID, asDateTime, attrs, tz) {
-  url <- drURL(
-    base.name = "NGWMN", access = pkg.env$access, request = "GetObservation",
-    service = "SOS", version = "2.0.0", observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
-    responseFormat = "text/xml", featureOfInterest = paste("VW_GWDP_GEOSERVER", featureID, sep = ".")
-  )
+  
+  baseURL <- httr2::request(pkg.env[["NGWMN"]])
+  baseURL <- httr2::req_url_query(baseURL,
+                                  request = "GetObservation",
+                                  service = "SOS",
+                                  version = "2.0.0",
+                                  observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
+                                  responseFormat = "text/xml",
+                                  featureOfInterest = paste("VW_GWDP_GEOSERVER", featureID, sep = "."))
 
-  returnData <- importNGWMN(url, asDateTime = asDateTime, tz = tz)
+
+  returnData <- importNGWMN(baseURL, asDateTime = asDateTime, tz = tz)
   if (nrow(returnData) == 0) {
     # need to add NA attributes, so they aren't messed up when stored as DFs
     attr(returnData, "gml:identifier") <- NA
@@ -195,23 +200,27 @@ retrieveObservation <- function(featureID, asDateTime, attrs, tz) {
 # retrieve feature of interest
 # could allow pass through srsName - needs to be worked in higher-up in dots
 retrieveFeatureOfInterest <- function(..., asDateTime, srsName = "urn:ogc:def:crs:EPSG::4269") {
-  dots <- convertLists(...)
+  values <- convertLists(...)
 
-  values <- sapply(dots, function(x) as.character(paste0(eval(x), collapse = ",")))
-  values <- sapply(values, function(x) utils::URLencode(x, reserved = TRUE))
-
-  url <- drURL(
-    base.name = "NGWMN", access = pkg.env$access, request = "GetFeatureOfInterest",
-    service = "SOS", version = "2.0.0", responseFormat = "text/xml"
-  )
-
+  baseURL <- httr2::request(pkg.env[["NGWMN"]])
+  baseURL <- httr2::req_url_query(baseURL,
+                                  request = "GetFeatureOfInterest",
+                                  service = "SOS",
+                                  version = "2.0.0",
+                                  responseFormat = "text/xml")
+  
   if ("featureID" %in% names(values)) {
-    url <- appendDrURL(url, featureOfInterest = paste("VW_GWDP_GEOSERVER",
-      values[["featureID"]],
-      sep = "."
-    ))
+    
+    features <- paste("VW_GWDP_GEOSERVER",
+                      values[["featureID"]],
+                      sep = ".")
+    
+    baseURL <- httr2::req_url_query(baseURL,
+                                    featureOfInterest = features,
+                                    .multi = "comma")
+    
   } else if ("bbox" %in% names(values)) {
-    url <- appendDrURL(url,
+    baseURL <- httr2::req_url_query(baseURL,
       bbox = paste(values[["bbox"]], collapse = ","),
       srsName = srsName
     )
@@ -219,8 +228,8 @@ retrieveFeatureOfInterest <- function(..., asDateTime, srsName = "urn:ogc:def:cr
     stop("Geographical filter not specified. Please use siteNumbers or bbox")
   }
 
-  siteDF <- importNGWMN(url, asDateTime, tz = "")
-  attr(siteDF, "url") <- url
+  siteDF <- importNGWMN(baseURL, asDateTime, tz = "")
+  attr(siteDF, "url") <- baseURL$url
   attr(siteDF, "queryTime") <- Sys.time()
   return(siteDF)
 }

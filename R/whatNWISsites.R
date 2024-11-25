@@ -38,9 +38,11 @@ whatNWISsites <- function(...) {
   matchReturn <- convertLists(...)
   valuesList <- readNWISdots(...)
 
-  values <- sapply(valuesList$values, function(x) utils::URLencode(x))
-  values["format"] <- "mapper"
+  values <- valuesList[["values"]]
+  values <- values[names(values) != "format"]
   
+  values <- sapply(valuesList$values, function(x) utils::URLencode(x))
+
   #################
   # temporary gwlevels fixes
   values <- values[!names(values) %in% c("date_format",
@@ -60,8 +62,11 @@ whatNWISsites <- function(...) {
                                       "peak" = "pk")
   }
   
-  urlCall <- drURL("site", Access = pkg.env$access, arg.list = values)
-
+  urlCall <- httr2::request(pkg.env[["site"]])
+  urlCall <- httr2::req_url_query(urlCall, !!!values,
+                                  .multi = "comma")
+  urlCall <- httr2::req_url_query(urlCall, format = "mapper")
+  
   rawData <- getWebServiceData(urlCall, encoding = "gzip")
   if (is.null(rawData)) {
     return(invisible(NULL))
@@ -94,7 +99,7 @@ whatNWISsites <- function(...) {
 
   retVal <- retVal[!duplicated(retVal), ]
 
-  attr(retVal, "url") <- urlCall
+  attr(retVal, "url") <- urlCall$url
 
   timenow <- Sys.time()
 
