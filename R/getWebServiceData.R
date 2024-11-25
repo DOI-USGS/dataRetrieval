@@ -7,7 +7,7 @@
 #' @param obs_url character containing the url for the retrieval
 #' @param \dots information to pass to header request
 #' @export
-#' @return raw data from web services
+#' @return Returns xml, json, or text depending on the requested data.
 #' @examplesIf is_dataRetrieval_user()
 #' siteNumber <- "02177000"
 #' startDate <- "2012-09-01"
@@ -39,8 +39,8 @@ getWebServiceData <- function(obs_url, ...) {
   
   return_readLines <- c("text/html", "text/html; charset=UTF-8")
   
-  return_raw <- c("application/zip",
-                  "application/zip;charset=UTF-8")
+  # return_raw <- c("application/zip",
+  #                 "application/zip;charset=UTF-8")
   
   return_content <- c("text/tab-separated-values;charset=UTF-8",
                       "text/csv;charset=UTF-8",
@@ -76,8 +76,8 @@ getWebServiceData <- function(obs_url, ...) {
         } 
       }
 
-    } else if (headerInfo$`content-type` %in% return_raw) {
-      returnedDoc <- httr2::resp_body_raw(returnedList)
+    # } else if (headerInfo$`content-type` %in% return_raw) {
+    #   returnedDoc <- httr2::resp_body_raw(returnedList)
     } else if (headerInfo$`content-type` %in% return_readLines) {
       returnedList <- httr2::resp_body_string(returnedList)
       txt <- readLines(returnedList$content)

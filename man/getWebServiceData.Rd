@@ -12,7 +12,7 @@ getWebServiceData(obs_url, ...)
 \item{\dots}{information to pass to header request}
 }
 \value{
-raw data from web services
+Returns xml, json, or text depending on the requested data.
 }
 \description{
 This function accepts a url parameter, and returns the raw data.
