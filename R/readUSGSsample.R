@@ -55,7 +55,7 @@
 #' rawData <- importWQP(req)
 #'
 #' req_site <- construct_USGS_sample_request(
-#'                state_abb = "Wisconsin",
+#'                USstate = "Wisconsin",
 #'                characteristicUserSupplied = "pH, water, unfiltered, field",
 #'                dataType = "Monitoring locations",
 #'                activityStartDateUpper = "2000-01-01")
@@ -158,6 +158,24 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
               several.ok = TRUE)
   }
   
+  if(all(!is.na(stateFips))){
+    states <- check_param("states")
+    states <- setNames(states$fipsCode[states$stateAbbrev %in% counties$stateAbbrev],
+                       states$stateAbbrev[states$stateAbbrev %in% counties$stateAbbrev])
+    state_codes <- paste(states$countryCode, 
+                         states$fipsCode, sep = ":")
+    match.arg(stateFips, state_codes, 
+              several.ok = TRUE)
+  }
+  
+  if(all(!is.na(characteristic))){
+    #check?    
+  }
+  
+  if(!is.na(characteristicUserSupplied)){
+    #check? 
+  }
+  
   baseURL <- explode_query(baseURL,
                            list(hydrologicUnit = hydrologicUnit,
                                 projectIdentifier = projectIdentifier,
@@ -170,7 +188,9 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                                 characteristicUserSupplied = characteristicUserSupplied,
                                 countryFips = countryFips,
                                 siteTypeName = siteTypeName,
-                                usgsPCode = usgsPCode
+                                usgsPCode = usgsPCode,
+                                stateFips = stateFips,
+                                countryFips = countryFips
                            ))
 
   if(all(!is.na(activityStartDateLower))){
@@ -187,18 +207,11 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                                     activityStartDateUpper = end)
   }
   
-  if(all(!is.na(characteristic))){
-    #check?    
-  }
 
   if(all(!is.na(boundingBox))){
     baseURL <- httr2::req_url_query(baseURL,
                                     boundingBox = boundingBox,
                                     .multi = "comma")      
-  }
-  
-  if(!is.na(characteristicUserSupplied)){
-    #check? 
   }
   
   if(all(!is.na(USstate))){
@@ -208,35 +221,6 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
     } 
     baseURL <- httr2::req_url_query(baseURL,
                                     stateFips = USstate,
-                                    .multi = "explode")
-  }
-  
-
-  if(all(!is.na(countyFips))){
-    counties <- check_param("counties")
-    states <- check_param("states")
-    states <- setNames(states$fipsCode[states$stateAbbrev %in% counties$stateAbbrev],
-                       states$stateAbbrev[states$stateAbbrev %in% counties$stateAbbrev])
-    county_codes <- paste(counties$countryCode, 
-                          states[counties$stateAbbrev],
-                          counties$countyCode,sep = ":")
-    match.arg(countyFips, county_codes, 
-              several.ok = TRUE)
-    baseURL <- httr2::req_url_query(baseURL,
-                                    countryFips = countryFips,
-                                    .multi = "explode")
-  }
-  
-  if(all(!is.na(stateFips))){
-    states <- check_param("states")
-    states <- setNames(states$fipsCode[states$stateAbbrev %in% counties$stateAbbrev],
-                       states$stateAbbrev[states$stateAbbrev %in% counties$stateAbbrev])
-    state_codes <- paste(states$countryCode, 
-                          states$fipsCode, sep = ":")
-    match.arg(stateFips, state_codes, 
-              several.ok = TRUE)
-    baseURL <- httr2::req_url_query(baseURL,
-                                    stateFips = stateFips,
                                     .multi = "explode")
   }
   
@@ -322,6 +306,11 @@ check_param <- function(service = "characteristicgroup",
 #' service described at \url{https://waterdata.usgs.gov/download-samples}.
 #'
 #' @inheritParams construct_USGS_sample_request
+#' @param tz character to set timezone attribute of datetime. Default is UTC
+#' (properly accounting for daylight savings times based on the data's provided tz_cd column).
+#' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+#' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
+#' "America/Phoenix", and "America/Metlakatla"
 #' @export
 #' @examples
 #' # example code
