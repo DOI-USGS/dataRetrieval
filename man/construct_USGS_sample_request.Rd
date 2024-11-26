@@ -27,7 +27,7 @@ construct_USGS_sample_request(
   pointLocationLongitude = NA,
   pointLocationWithinMiles = NA,
   dataType = "Results",
-  dataProfile = "Full physical chemical"
+  dataProfile = NA
 )
 }
 \arguments{
@@ -117,7 +117,8 @@ req_site <- construct_USGS_sample_request(
                USstate = "Wisconsin",
                characteristicUserSupplied = "pH, water, unfiltered, field",
                dataType = "Monitoring locations",
-               activityStartDateUpper = "2000-01-01")
+               activityStartDateUpper = "2000-01-01",
+               dataProfile = "Site")
 rawData_sites <- importWQP(req_site)
 }
 \dontshow{\}) # examplesIf}

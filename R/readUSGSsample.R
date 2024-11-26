@@ -62,7 +62,8 @@
 #'                USstate = "Wisconsin",
 #'                characteristicUserSupplied = "pH, water, unfiltered, field",
 #'                dataType = "Monitoring locations",
-#'                activityStartDateUpper = "2000-01-01")
+#'                activityStartDateUpper = "2000-01-01",
+#'                dataProfile = "Site")
 #' rawData_sites <- importWQP(req_site)
 #' }
 construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
@@ -87,39 +88,17 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                            pointLocationLongitude = NA,
                            pointLocationWithinMiles = NA,
                            dataType = "Results",
-                           dataProfile = "Full physical chemical"){
+                           dataProfile = NA){
   
   message("Function in development, use at your own risk.")
   
-  match.arg(dataType, c("Results",
+  dataType <- match.arg(dataType, c("Results",
                         "Monitoring locations",
                         "Activities",
                         "Projects",
-                        "Organizations",
-                        "Summary"), 
+                        "Organizations"), 
             several.ok = FALSE)
-  
-  available_profiles <- c("Full physical chemical",
-                          "Basic physical chemical",
-                          "Full biological",
-                          "Basic biological",
-                          "Narrow",
-                          "Count",
-                          "Lab Sample Prep",
-                          "Result Detection Quantitation Limit")
-  match.arg(dataProfile, available_profiles, 
-            several.ok = FALSE)
-  
-  profile_convert <- c("fullphyschem",
-                       "basicphyschem",
-                       "fullbio",
-                       "basicbio",
-                       "narrow",
-                       "count",
-                       "labsampleprep",
-                       "resultdetectionquantitationlimit")
-  names(profile_convert) <- available_profiles
-  
+
   # When RMLS comes out...spring 2025ish,
   # we can verify these values hopefully easier:
   baseURL <- httr2::request("https://api.waterdata.usgs.gov") |> 
@@ -128,63 +107,90 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   
   switch(dataType,
          Results = {
+           available_profiles <- c("Full physical chemical",
+                                   "Basic physical chemical",
+                                   "Full biological",
+                                   "Basic biological",
+                                   "Narrow",
+                                   "Count",
+                                   "Lab Sample Prep",
+                                   "Result Detection Quantitation Limit")
+           profile_convert <- stats::setNames(c("fullphyschem",
+                                "basicphyschem",
+                                "fullbio",
+                                "basicbio",
+                                "narrow",
+                                "count",
+                                "labsampleprep",
+                                "resultdetectionquantitationlimit"),
+                                available_profiles)
            baseURL <- httr2::req_url_path_append(baseURL, 
-                                                 "results") |> 
-             httr2::req_url_path_append(profile_convert[[dataProfile]])
+                                                 "results")
          },
          `Monitoring locations` = {
+           profile_convert <- stats::setNames(c("site", "count"),
+                                              c("Site", "Count"))
+
            baseURL <- httr2::req_url_path_append(baseURL, 
-                                                 "locations",
-                                                 "site") # could also be count
-           
+                                                 "locations")
          },
          Activities = {
+           profile_convert <- stats::setNames(c("sampact", "actmetric", "actgroup", "count"),
+                                              c("Sample Activities", "Activiey Metrics", "Activity Groups", "Count"))
+
            baseURL <- httr2::req_url_path_append(baseURL,
-                                                 "activities",
-                                                 "sampact") # could also be sampact, actmetric, actgroup, count
+                                                 "activities")
          },
          Projects = {
+           profile_convert <- stats::setNames(c("project", "projectmonitoringlocationweight"),
+                                              c("Project", "Project Monitoring Location Weight"))
+           
            baseURL <- httr2::req_url_path_append(baseURL,
-                                                 "projects",
-                                                 "project") # <- could also be projectmonitoringlocationweight       
+                                                 "projects") 
          },
          Organizations = {
-           baseURL <- httr2::req_url_path_append(baseURL,
-                                                 "organizations",
-                                                 "organization") # <- could also be count       
-         },
-         Summary = {
-           baseURL <- httr2::req_url_path_append(baseURL,
-                                                 "summary")        
-         }
-         )
+           profile_convert <- stats::setNames(c("organization", "Count"),
+                                              c("Organization", "Count"))
 
+           baseURL <- httr2::req_url_path_append(baseURL,
+                                                 "organizations")
+         })
+
+  dataProfile <- check_profile(dataProfile, profile_convert)
+  dataProfile <- match.arg(dataProfile, 
+                           names(profile_convert),
+                           several.ok = FALSE)  
+  
+  baseURL <- httr2::req_url_path_append(baseURL,
+                                        profile_convert[[dataProfile]]) 
+    
+  
   if(all(!is.na(siteTypeCode))){
-    match.arg(siteTypeCode, 
+    siteTypeCode <- match.arg(siteTypeCode, 
               check_param("sitetype")$typeCode, 
               several.ok = TRUE)
   }
     
   if(all(!is.na(activityMediaName))){
-    match.arg(activityMediaName, 
+    activityMediaName <- match.arg(activityMediaName, 
               check_param("samplemedia")$activityMedia, 
               several.ok = TRUE)
   }
   
   if(all(!is.na(characteristicGroup))){
-    match.arg(characteristicGroup, 
+    characteristicGroup <- match.arg(characteristicGroup, 
               check_param("characteristicgroup")$characteristicGroup, 
               several.ok = TRUE)
   }
   
   if(all(!is.na(countryFips))){
-    match.arg(countryFips, 
+    countryFips <- match.arg(countryFips, 
               check_param("countries")$countryCode, 
               several.ok = TRUE)
   }
   
   if(all(!is.na(siteTypeName))){
-    match.arg(siteTypeName, 
+    siteTypeName <- match.arg(siteTypeName, 
               check_param("sitetype")$typeName, 
               several.ok = TRUE)
   }
@@ -193,16 +199,23 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
     states <- check_param("states")
     state_codes <- paste(states$countryCode, 
                          states$fipsCode, sep = ":")
-    match.arg(stateFips, state_codes, 
+    stateFips <- match.arg(stateFips, state_codes, 
               several.ok = TRUE)
   }
   
-  if(all(!is.na(characteristic))){
-    #check?    
-  }
-  
-  if(!is.na(characteristicUserSupplied)){
-    #check? 
+  if(all(!is.na(countyFips))){
+    states <- check_param("states")
+    state_codes <- paste(states$countryCode, 
+                         states$fipsCode, sep = ":")
+    counties <- check_param("counties")
+    state_cd <- stats::setNames(states$fipsCode,
+                                states$stateAbbrev)
+    county_codes <- paste(counties$countryCode, 
+                          state_cd[counties$stateAbbrev],
+                          counties$countyCode, sep = ":")
+    
+    countyFips <- match.arg(countyFips, county_codes, 
+              several.ok = TRUE)
   }
   
   if(!sum(is.na(c(pointLocationLatitude, 
@@ -230,7 +243,7 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                                 siteTypeName = siteTypeName,
                                 usgsPCode = usgsPCode,
                                 stateFips = stateFips,
-                                countryFips = countryFips,
+                                countyFips = countyFips,
                                 pointLocationLatitude = pointLocationLatitude,
                                 pointLocationLongitude = pointLocationLongitude,
                                 pointLocationWithinMiles = pointLocationWithinMiles
@@ -268,6 +281,19 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   }
   
   return(baseURL)
+}
+
+check_profile <- function(dataProfile, profile_convert){
+  if(is.na(dataProfile)){
+    message(paste0("No profile specified, defaulting to '",
+                   names(profile_convert)[1], "'\n",
+                   "Possible values are: \n",
+                   paste0(names(profile_convert), collapse = ", ")))
+    dataProfile <- names(profile_convert)[1]
+  } else {
+    dataProfile <- match.arg(dataProfile, names(profile_convert), several.ok = FALSE)
+  }
+  return(dataProfile)
 }
 
 explode_query <- function(baseURL, x){
@@ -355,26 +381,28 @@ check_param <- function(service = "characteristicgroup",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
 #' "America/Phoenix", and "America/Metlakatla"
 #' @export
-#' @examples
-#' # example code
 #' 
 #' @examplesIf is_dataRetrieval_user()
+#' 
 #' \donttest{
-#' ph_data <- readUSGSsample(
+#' ph_data <- read_USGS_sample(
 #'                monitoringLocationIdentifier = "USGS-04074950",
 #'                characteristicUserSupplied = "pH, water, unfiltered, field",
 #'                activityStartDateUpper = "2000-01-01",
 #'                dataProfile = "Narrow")
 #'                
 #' nameToUse <- "pH"
-#' pHData <- readUSGSsample(monitoringLocationIdentifier = "USGS-04024315", 
+#' pHData <- read_USGS_samples(monitoringLocationIdentifier = "USGS-04024315", 
 #'                          characteristic = nameToUse)
 #' ncol(pHData)
 #' attr(pHData, "url")
 #' attr(pHData, "queryTime")
-#'                
+#' 
+#' summary_data <- read_USGS_samples(monitoringLocationIdentifier = "USGS-04024315", 
+#'                                dataType = "Projects")
+#' 
 #' }
-readUSGSsample <- function(monitoringLocationIdentifier = NA,
+read_USGS_samples <- function(monitoringLocationIdentifier = NA,
                            USstate = NA,
                            siteTypeCode = NA,
                            boundingBox = NA,
@@ -396,7 +424,7 @@ readUSGSsample <- function(monitoringLocationIdentifier = NA,
                            pointLocationLongitude = NA,
                            pointLocationWithinMiles = NA,
                            dataType = "Results",
-                           dataProfile = "Full physical chemical",
+                           dataProfile = NA,
                            tz = "UTC"){
   
   request_url <- construct_USGS_sample_request(monitoringLocationIdentifier = monitoringLocationIdentifier,
@@ -413,6 +441,13 @@ readUSGSsample <- function(monitoringLocationIdentifier = NA,
                                                countryFips = countryFips,
                                                stateFips = stateFips,
                                                countyFips = countyFips,
+                                               projectIdentifier = projectIdentifier,
+                                               recordIdentifierUserSupplied = recordIdentifierUserSupplied,
+                                               siteTypeName = siteTypeName,
+                                               usgsPCode = usgsPCode,
+                                               pointLocationLatitude = pointLocationLatitude,
+                                               pointLocationLongitude = pointLocationLongitude,
+                                               pointLocationWithinMiles = pointLocationWithinMiles,
                                                dataType = dataType,
                                                dataProfile = dataProfile)
 
@@ -422,3 +457,49 @@ readUSGSsample <- function(monitoringLocationIdentifier = NA,
   return(df)
 }
 
+
+#' USGS Samples Summary Data
+#' 
+#' This function creates the call and gets the data for discrete water quality samples summary data
+#' service described at \url{https://waterdata.usgs.gov/download-samples}.
+#'
+#' @param monitoringLocationIdentifier A monitoring location identifier has two parts: the agency code
+#' and the location number. Location identifiers should be separated with commas,
+#' for example: AZ014-320821110580701, CAX01-15304600, USGS-040851385. Location
+#' numbers without an agency prefix are assumed to have the prefix USGS.
+#' @export
+#' @return data frame with summary of data available based on the monitoringLocationIdentifier
+#' 
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' monitoringLocationIdentifier <- "USGS-04074950"
+#' 
+#' what_data <- summary_USGS_samples(monitoringLocationIdentifier)
+#' 
+#' }
+summary_USGS_samples <- function(monitoringLocationIdentifier){
+  message("Function in development, use at your own risk.")
+  
+  if(length(monitoringLocationIdentifier) > 1){
+    stop("Summary service only available for one site at a time.")
+  }
+  
+  baseURL <- httr2::request("https://api.waterdata.usgs.gov") |> 
+    httr2::req_url_path_append("samples-data") |> 
+    httr2::req_url_path_append("summary",
+                               monitoringLocationIdentifier) |>
+    httr2::req_url_query(mimeType = "text/csv")
+  
+  df <- importWQP(baseURL)
+  
+  if(all(c("firstActivity", "mostRecentActivity") %in% names(df))){
+    df$firstActivity <- as.Date(df$firstActivity)
+    df$mostRecentActivity <- as.Date(df$mostRecentActivity)
+  }
+  
+  attr(df, "url") <- baseURL$url
+  attr(df, "queryTime") <- Sys.time()
+  
+  return(df)
+}
