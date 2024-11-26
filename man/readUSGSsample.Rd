@@ -6,17 +6,26 @@
 \usage{
 readUSGSsample(
   monitoringLocationIdentifier = NA,
-  state_abb = NA,
+  USstate = NA,
   siteTypeCode = NA,
   boundingBox = NA,
   hydrologicUnit = NA,
   activityMediaName = NA,
   characteristicGroup = NA,
+  characteristic = NA,
   characteristicUserSupplied = NA,
   activityStartDateLower = NA,
   activityStartDateUpper = NA,
+  countryFips = NA,
+  stateFips = NA,
+  countyFips = NA,
+  projectIdentifier = NA,
+  recordIdentifierUserSupplied = NA,
+  siteTypeName = NA,
+  usgsPCode = NA,
   dataType = "Results",
-  dataProfile = "Full physical chemical"
+  dataProfile = "Full physical chemical",
+  tz = "UTC"
 )
 }
 \arguments{
@@ -25,14 +34,17 @@ and the location number. Location identifiers should be separated with commas,
 for example: AZ014-320821110580701, CAX01-15304600, USGS-040851385. Location
 numbers without an agency prefix are assumed to have the prefix USGS.}
 
-\item{state_abb}{description}
+\item{USstate}{US state. Could be full names, postal abbreviations, or fips codes.}
 
 \item{siteTypeCode}{Site type code query parameter.}
 
-\item{boundingBox}{North and South are latitude values; East and West are longitude values.}
+\item{boundingBox}{North and South are latitude values; East and West are longitude values.
+A vector of 4 (west, south, east, north) is expected.
+An example would be: c(-92.8, 44.2, -88.9, 46.0).}
 
 \item{hydrologicUnit}{Hydrologic Unit Codes (HUCs) identify physical areas
-within the US that drain to a certain portion of the stream network.}
+within the US that drain to a certain portion of the stream network. 
+This filter accepts values containing 2, 4, 6, 8, 10 or 12 digits.}
 
 \item{activityMediaName}{Sample media refers to the environmental medium that
 was sampled or analyzed.}
@@ -48,6 +60,20 @@ Observed Properties and Parameter Codes section of the Code Dictionary.}
 \item{activityStartDateLower}{Start date.}
 
 \item{activityStartDateUpper}{End date.}
+
+\item{countryFips}{description}
+
+\item{stateFips}{description}
+
+\item{countyFips}{description}
+
+\item{projectIdentifier}{description}
+
+\item{recordIdentifierUserSupplied}{description}
+
+\item{siteTypeName}{description}
+
+\item{usgsPCode}{description}
 
 \item{dataType}{Options include: "Results", "Monitoring locations", "Activities"}
 
@@ -71,9 +97,9 @@ ph_data <- readUSGSsample(
                
 nameToUse <- "pH"
 pHData <- readUSGSsample(monitoringLocationIdentifier = "USGS-04024315", 
-                      characteristicName = nameToUse)
+                         characteristic = nameToUse)
 ncol(pHData)
-attr(pHData, "siteInfo")
+attr(pHData, "url")
 attr(pHData, "queryTime")
                
 }
