@@ -2,19 +2,27 @@
 % Please edit documentation in R/readUSGSsample.R
 \name{construct_USGS_sample_request}
 \alias{construct_USGS_sample_request}
-\title{Custruct request for USGS Samples Data}
+\title{Construct request for USGS Samples Data}
 \usage{
 construct_USGS_sample_request(
   monitoringLocationIdentifier = NA,
-  state_abb = NA,
+  USstate = NA,
   siteTypeCode = NA,
   boundingBox = NA,
   hydrologicUnit = NA,
   activityMediaName = NA,
   characteristicGroup = NA,
+  characteristic = NA,
   characteristicUserSupplied = NA,
   activityStartDateLower = NA,
   activityStartDateUpper = NA,
+  countryFips = NA,
+  stateFips = NA,
+  countyFips = NA,
+  projectIdentifier = NA,
+  recordIdentifierUserSupplied = NA,
+  siteTypeName = NA,
+  usgsPCode = NA,
   dataType = "Results",
   dataProfile = "Full physical chemical"
 )
@@ -25,14 +33,17 @@ and the location number. Location identifiers should be separated with commas,
 for example: AZ014-320821110580701, CAX01-15304600, USGS-040851385. Location
 numbers without an agency prefix are assumed to have the prefix USGS.}
 
-\item{state_abb}{description}
+\item{USstate}{US state. Could be full names, postal abbreviations, or fips codes.}
 
 \item{siteTypeCode}{Site type code query parameter.}
 
-\item{boundingBox}{North and South are latitude values; East and West are longitude values.}
+\item{boundingBox}{North and South are latitude values; East and West are longitude values.
+A vector of 4 (west, south, east, north) is expected.
+An example would be: c(-92.8, 44.2, -88.9, 46.0).}
 
 \item{hydrologicUnit}{Hydrologic Unit Codes (HUCs) identify physical areas
-within the US that drain to a certain portion of the stream network.}
+within the US that drain to a certain portion of the stream network. 
+This filter accepts values containing 2, 4, 6, 8, 10 or 12 digits.}
 
 \item{activityMediaName}{Sample media refers to the environmental medium that
 was sampled or analyzed.}
@@ -49,10 +60,26 @@ Observed Properties and Parameter Codes section of the Code Dictionary.}
 
 \item{activityStartDateUpper}{End date.}
 
+\item{countryFips}{description}
+
+\item{stateFips}{description}
+
+\item{countyFips}{description}
+
+\item{projectIdentifier}{description}
+
+\item{recordIdentifierUserSupplied}{description}
+
+\item{siteTypeName}{description}
+
+\item{usgsPCode}{description}
+
 \item{dataType}{Options include: "Results", "Monitoring locations", "Activities"}
 
 \item{dataProfile}{Options include: "Full physical chemical", "Basic physical chemical",
 "Full biological", "Basic biological", "Narrow"}
+
+\item{UScounty}{US county. Could be full name or fips code.}
 }
 \value{
 data frame returned from web service call.
@@ -60,6 +87,12 @@ data frame returned from web service call.
 \description{
 This function creates the call for discrete water quality samples data
 service described at \url{https://waterdata.usgs.gov/download-samples}.
+Note: all possible arguments are included, but it is strongly recommended
+to only use the NECESSARY arguments. Leave unnecessary arguments as the default
+NA.
+}
+\details{
+See also: \url{https://api.waterdata.usgs.gov/samples-data/docs}.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -68,8 +101,7 @@ service described at \url{https://waterdata.usgs.gov/download-samples}.
 req <- construct_USGS_sample_request(
                monitoringLocationIdentifier = "USGS-04074950",
                characteristicUserSupplied = "pH, water, unfiltered, field")
-rawData <- getWebServiceData(req)
-df <- readr::read_delim(rawData)
+rawData <- importWQP(req)
 
 req_site <- construct_USGS_sample_request(
                state_abb = "Wisconsin",

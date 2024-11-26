@@ -294,7 +294,7 @@ create_WQP_attributes <- function(retval, ...){
   if(!attr(retval, "legacy")){
     attr(retval, "headerInfo") <- wqp_check_status(attr(retval, "headerInfo")$`wqp-request-id`)
     attr(retval, "queryTime") <- as.POSIXct(attr(retval, "headerInfo")[["requestStartTime"]],
-                                            format = "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
+                                            format = "%Y-%m-%dT%H:%M:%OS", tz = tz)
   } else {
     attr(retval, "queryTime") <- Sys.time()
   }
