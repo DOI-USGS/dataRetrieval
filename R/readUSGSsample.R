@@ -43,7 +43,8 @@
 #' @param pointLocationLatitude description
 #' @param pointLocationLongitude description
 #' @param pointLocationWithinMiles description
-#' @param dataType Options include: "Results", "Monitoring locations", "Activities"
+#' @param dataType Options include: "Results", "Monitoring locations", "Activities",
+#' "Projects", "Organizations", and "Summary"
 #' @param dataProfile Options include: "Full physical chemical", "Basic physical chemical",
 #' "Full biological", "Basic biological", "Narrow"
 #' @export
@@ -92,14 +93,20 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   
   match.arg(dataType, c("Results",
                         "Monitoring locations",
-                        "Activities"), 
+                        "Activities",
+                        "Projects",
+                        "Organizations",
+                        "Summary"), 
             several.ok = FALSE)
   
   available_profiles <- c("Full physical chemical",
                           "Basic physical chemical",
                           "Full biological",
                           "Basic biological",
-                          "Narrow")
+                          "Narrow",
+                          "Count",
+                          "Lab Sample Prep",
+                          "Result Detection Quantitation Limit")
   match.arg(dataProfile, available_profiles, 
             several.ok = FALSE)
   
@@ -107,11 +114,14 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                        "basicphyschem",
                        "fullbio",
                        "basicbio",
-                       "narrow")
+                       "narrow",
+                       "count",
+                       "labsampleprep",
+                       "resultdetectionquantitationlimit")
   names(profile_convert) <- available_profiles
   
   # When RMLS comes out...spring 2025ish,
-  # we can verify these values easier, perhaps:
+  # we can verify these values hopefully easier:
   baseURL <- httr2::request("https://api.waterdata.usgs.gov") |> 
     httr2::req_url_path_append("samples-data") |>
     httr2::req_url_query(mimeType = "text/csv")
@@ -125,14 +135,29 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
          `Monitoring locations` = {
            baseURL <- httr2::req_url_path_append(baseURL, 
                                                  "locations",
-                                                 "site") 
+                                                 "site") # could also be count
            
          },
          Activities = {
            baseURL <- httr2::req_url_path_append(baseURL,
                                                  "activities",
-                                                 "sampact")
-         })
+                                                 "sampact") # could also be sampact, actmetric, actgroup, count
+         },
+         Projects = {
+           baseURL <- httr2::req_url_path_append(baseURL,
+                                                 "projects",
+                                                 "project") # <- could also be projectmonitoringlocationweight       
+         },
+         Organizations = {
+           baseURL <- httr2::req_url_path_append(baseURL,
+                                                 "organizations",
+                                                 "organization") # <- could also be count       
+         },
+         Summary = {
+           baseURL <- httr2::req_url_path_append(baseURL,
+                                                 "summary")        
+         }
+         )
 
   if(all(!is.na(siteTypeCode))){
     match.arg(siteTypeCode, 

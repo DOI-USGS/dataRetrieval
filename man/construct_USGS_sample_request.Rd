@@ -85,7 +85,8 @@ Observed Properties and Parameter Codes section of the Code Dictionary.}
 
 \item{pointLocationWithinMiles}{description}
 
-\item{dataType}{Options include: "Results", "Monitoring locations", "Activities"}
+\item{dataType}{Options include: "Results", "Monitoring locations", "Activities",
+"Projects", "Organizations", and "Summary"}
 
 \item{dataProfile}{Options include: "Full physical chemical", "Basic physical chemical",
 "Full biological", "Basic biological", "Narrow"}
