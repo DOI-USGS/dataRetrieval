@@ -79,6 +79,12 @@ Observed Properties and Parameter Codes section of the Code Dictionary.}
 
 \item{dataProfile}{Options include: "Full physical chemical", "Basic physical chemical",
 "Full biological", "Basic biological", "Narrow"}
+
+\item{tz}{character to set timezone attribute of datetime. Default is UTC
+(properly accounting for daylight savings times based on the data's provided tz_cd column).
+Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
+"America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
+"America/Phoenix", and "America/Metlakatla"}
 }
 \description{
 This function creates the call and gets the data for discrete water quality samples data

@@ -104,7 +104,7 @@ req <- construct_USGS_sample_request(
 rawData <- importWQP(req)
 
 req_site <- construct_USGS_sample_request(
-               state_abb = "Wisconsin",
+               USstate = "Wisconsin",
                characteristicUserSupplied = "pH, water, unfiltered, field",
                dataType = "Monitoring locations",
                activityStartDateUpper = "2000-01-01")
