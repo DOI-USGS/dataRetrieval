@@ -23,6 +23,9 @@ construct_USGS_sample_request(
   recordIdentifierUserSupplied = NA,
   siteTypeName = NA,
   usgsPCode = NA,
+  pointLocationLatitude = NA,
+  pointLocationLongitude = NA,
+  pointLocationWithinMiles = NA,
   dataType = "Results",
   dataProfile = "Full physical chemical"
 )
@@ -50,6 +53,8 @@ was sampled or analyzed.}
 
 \item{characteristicGroup}{Characteristic Group is a broad category describing the sample.}
 
+\item{characteristic}{description}
+
 \item{characteristicUserSupplied}{Observed Property is the USGS term for the
 constituent sampled and the property name gives a detailed description of what
 was sampled. Observed Property replaces the parameter name and pcode USGS
@@ -74,12 +79,16 @@ Observed Properties and Parameter Codes section of the Code Dictionary.}
 
 \item{usgsPCode}{description}
 
+\item{pointLocationLatitude}{description}
+
+\item{pointLocationLongitude}{description}
+
+\item{pointLocationWithinMiles}{description}
+
 \item{dataType}{Options include: "Results", "Monitoring locations", "Activities"}
 
 \item{dataProfile}{Options include: "Full physical chemical", "Basic physical chemical",
 "Full biological", "Basic biological", "Narrow"}
-
-\item{UScounty}{US county. Could be full name or fips code.}
 }
 \value{
 data frame returned from web service call.
