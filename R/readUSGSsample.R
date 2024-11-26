@@ -13,7 +13,6 @@
 #' for example: AZ014-320821110580701, CAX01-15304600, USGS-040851385. Location
 #' numbers without an agency prefix are assumed to have the prefix USGS.
 #' @param USstate US state. Could be full names, postal abbreviations, or fips codes.
-#' @param UScounty US county. Could be full name or fips code.
 #' @param activityMediaName Sample media refers to the environmental medium that
 #' was sampled or analyzed.
 #' @param siteTypeCode Site type code query parameter.
@@ -33,6 +32,7 @@
 #' was sampled. Observed Property replaces the parameter name and pcode USGS
 #' previously used to describe discrete sample data. Find more information in the
 #' Observed Properties and Parameter Codes section of the Code Dictionary.
+#' @param characteristic description
 #' @param stateFips description
 #' @param countyFips description
 #' @param countryFips description
@@ -40,6 +40,9 @@
 #' @param recordIdentifierUserSupplied description
 #' @param siteTypeName description
 #' @param usgsPCode description
+#' @param pointLocationLatitude description
+#' @param pointLocationLongitude description
+#' @param pointLocationWithinMiles description
 #' @param dataType Options include: "Results", "Monitoring locations", "Activities"
 #' @param dataProfile Options include: "Full physical chemical", "Basic physical chemical",
 #' "Full biological", "Basic biological", "Narrow"
@@ -79,6 +82,9 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                            recordIdentifierUserSupplied = NA,
                            siteTypeName = NA,
                            usgsPCode = NA,
+                           pointLocationLatitude = NA,
+                           pointLocationLongitude = NA,
+                           pointLocationWithinMiles = NA,
                            dataType = "Results",
                            dataProfile = "Full physical chemical"){
   
@@ -160,8 +166,6 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   
   if(all(!is.na(stateFips))){
     states <- check_param("states")
-    states <- setNames(states$fipsCode[states$stateAbbrev %in% counties$stateAbbrev],
-                       states$stateAbbrev[states$stateAbbrev %in% counties$stateAbbrev])
     state_codes <- paste(states$countryCode, 
                          states$fipsCode, sep = ":")
     match.arg(stateFips, state_codes, 
@@ -174,6 +178,17 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   
   if(!is.na(characteristicUserSupplied)){
     #check? 
+  }
+  
+  if(!sum(is.na(c(pointLocationLatitude, 
+                 pointLocationLongitude,
+                 pointLocationWithinMiles))) == 3){
+    if(!sum(!is.na(c(pointLocationLatitude, 
+                    pointLocationLongitude,
+                    pointLocationWithinMiles))) == 3 ){
+      stop("pointLocationLatitude, pointLocationLongitude, and pointLocationWithinMiles
+           must all be defined, or none defined.")
+    }
   }
   
   baseURL <- explode_query(baseURL,
@@ -190,7 +205,10 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                                 siteTypeName = siteTypeName,
                                 usgsPCode = usgsPCode,
                                 stateFips = stateFips,
-                                countryFips = countryFips
+                                countryFips = countryFips,
+                                pointLocationLatitude = pointLocationLatitude,
+                                pointLocationLongitude = pointLocationLongitude,
+                                pointLocationWithinMiles = pointLocationWithinMiles
                            ))
 
   if(all(!is.na(activityStartDateLower))){
@@ -349,6 +367,9 @@ readUSGSsample <- function(monitoringLocationIdentifier = NA,
                            recordIdentifierUserSupplied = NA,
                            siteTypeName = NA,
                            usgsPCode = NA,
+                           pointLocationLatitude = NA,
+                           pointLocationLongitude = NA,
+                           pointLocationWithinMiles = NA,
                            dataType = "Results",
                            dataProfile = "Full physical chemical",
                            tz = "UTC"){
