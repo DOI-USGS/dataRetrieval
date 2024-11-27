@@ -32,8 +32,10 @@ navbar:
       href: articles/wqp_large_pull_script.html
     - text: Pipeline Approach
       href: articles/wqp_large_pull_targets.html
-  - text: Water Quality Changes
+  - text: Water Quality Data
     menu:
+    - text: Samples Data
+      href: articles/samples_data.html
     - text: Changes to QW
       href: articles/qwdata_changes.html
     - text: USGS QW Status
@@ -89,6 +91,12 @@ reference:
       - whatWQPmetrics
       - readWQPsummary
       - wqp_check_status
+  - title: USGS new data services
+    desc: Functions to retrieve USGS data.
+    contents:
+      - read_USGS_samples
+      - construct_USGS_sample_request
+      - check_param
   - title: National Ground-Water Monitoring Network
     desc: Functions to retrieve NGWMN data.
     contents:
