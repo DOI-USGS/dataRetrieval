@@ -385,12 +385,12 @@ countyCdLookup <- function(state, county, outputType = "fips") {
   if (is.numeric(county) || !is.na(suppressWarnings(as.numeric(county)))) {
     county_i <- which(as.numeric(county) == as.numeric(state_counties$countyCode))
   } else {
-    county_i <- grep(tolower(county),
-                     tolower(state_counties$countyName))
+    county_i <- grep(tolower(gsub(" ", "", county)),
+                     tolower(gsub(" ", "", state_counties$countyName))) # takes care of questionable spaces...DeWitt vs De Witt
     if(length(county_i) == 0){
       county <- gsub(" county", "", county, ignore.case = TRUE)
-      county_i <- grep(tolower(county),
-                       tolower(state_counties$countyName))
+      county_i <- grep(tolower(gsub(" ", "", county)),
+                       tolower(gsub(" ", "", state_counties$countyName)))
     }
   }
   

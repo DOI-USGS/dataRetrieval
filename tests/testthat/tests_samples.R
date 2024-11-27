@@ -10,8 +10,6 @@ test_that("General samples-data retrievals work using WQP tests", {
 
   # testing lists:
   startDate <- as.Date("2022-01-01")
-
-
   secchi_ops <- check_param("observedproperty",
                             text = "secchi")
   
@@ -75,8 +73,6 @@ test_that("summary_USGS_samples working", {
 
 })
 
-
-
 test_that("profiles", {
   
   testthat::skip_on_cran()
@@ -101,8 +97,8 @@ test_that("profiles", {
   )
  
   expect_true(all(c(
-    "OrganizationIdentifier",
-    "OrganizationFormalName"
+    "Org_Identifier",
+    "Org_FormalName"
   ) %in% names(project_data)))
   
   # Data profiles: "Project Monitoring Location Weighting Data"
@@ -113,11 +109,9 @@ test_that("profiles", {
   )
   
   expect_true(all(c(
-    "OrganizationIdentifier",
-    "OrganizationFormalName"
+    "Org_Identifier",
+    "Org_FormalName"
   ) %in% names(proj_mlwd)))
-  
-  
   
   # Data profiles: "Sample Results (biological metadata)"
   samp_bio <- read_USGS_samples(
