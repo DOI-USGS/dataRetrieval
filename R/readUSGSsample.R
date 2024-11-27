@@ -28,13 +28,17 @@
 #' was sampled or analyzed.
 #' @param activityStartDateLower Start date.
 #' @param activityStartDateUpper End date.
-#' @param characteristicGroup Characteristic Group is a broad category describing the sample.
+#' @param characteristicGroup Characteristic group is a broad category describing the sample.
+#' See available options by running 
+#' \code{check_param("characteristicgroup")$characteristicGroup}.
 #' @param characteristicUserSupplied Observed Property is the USGS term for the
 #' constituent sampled and the property name gives a detailed description of what
 #' was sampled. Observed Property replaces the parameter name and pcode USGS
 #' previously used to describe discrete sample data. Find more information in the
 #' Observed Properties and Parameter Codes section of the Code Dictionary.
-#' @param characteristic description
+#' @param characteristic Characteristic is a specific category describing the sample.
+#' See available options by running 
+#' \code{check_param("characteristics")$characteristicName}.
 #' @param stateFips State query parameter. To get a list of available state fips, 
 #' run \code{check_param("states")}. The "fips" can be created using the function
 #' \code{stateCdLookup}.
@@ -45,14 +49,20 @@
 #' If another query parameter contains the country information, leave this parameter
 #' set to the default NA. See available options by running \code{check_param("countries")},
 #' the value needed is "id" from that result.
-#' @param projectIdentifier description
-#' @param recordIdentifierUserSupplied description
+#' @param projectIdentifier Project identifier query parameter. This information
+#' would be needed from prior project information. 
+#' @param recordIdentifierUserSupplied Record identifier, user supplied identifier. This
+#' information would be needed from the data supplier.
 #' @param siteTypeName Site name query parameter. See available
 #' options by running \code{check_param("sitetype")$typeName}.
-#' @param usgsPCode description
-#' @param pointLocationLatitude description
-#' @param pointLocationLongitude description
-#' @param pointLocationWithinMiles description
+#' @param usgsPCode USGS parameter code. See available options by running 
+#' \code{check_param("characteristics")$parameterCode}.
+#' @param pointLocationLatitude Latitude for a point/radius query. Must be used
+#' with pointLocationLongitude and pointLocationWithinMiles.
+#' @param pointLocationLongitude Longitude for a point/radius query. Must be used
+#' with pointLocationLatitude and pointLocationWithinMiles.
+#' @param pointLocationWithinMiles Radius for a point/radius query. Must be used
+#' with pointLocationLatitude and pointLocationLongitude
 #' @param dataType Options include: "Results", "Monitoring locations", "Activities",
 #' "Projects", and "Organizations".
 #' @param dataProfile Profile depends on type. Options for "Results" dataType are: 
