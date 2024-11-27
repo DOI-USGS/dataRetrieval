@@ -3,6 +3,8 @@ dataRetrieval 2.7.18
 * Switched from httr to httr2
 * Added a way to include a custom user-agent suffix via an enviornmental variable "CUSTOM_DR_UA"
 * Added function for USGS discrete data samples_data service: read_USGS_samples
+* Restructured stateCdLookup and countyCdLookup to use web services that only
+list states and counties that have water quality data.
 
 dataRetrieval 2.7.17
 ===================
