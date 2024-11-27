@@ -52,9 +52,13 @@ This filter accepts values containing 2, 4, 6, 8, 10 or 12 digits.}
 \item{activityMediaName}{Sample media refers to the environmental medium that
 was sampled or analyzed.}
 
-\item{characteristicGroup}{Characteristic Group is a broad category describing the sample.}
+\item{characteristicGroup}{Characteristic group is a broad category describing the sample.
+See available options by running 
+\code{check_param("characteristicgroup")$characteristicGroup}.}
 
-\item{characteristic}{description}
+\item{characteristic}{Characteristic is a specific category describing the sample.
+See available options by running 
+\code{check_param("characteristics")$characteristicName}.}
 
 \item{characteristicUserSupplied}{Observed Property is the USGS term for the
 constituent sampled and the property name gives a detailed description of what
@@ -79,20 +83,26 @@ run \code{check_param("states")}. The "fips" can be created using the function
 run \code{check_param("counties")}. The "Fips" can be created using the function
 \code{countyCdLookup}.}
 
-\item{projectIdentifier}{description}
+\item{projectIdentifier}{Project identifier query parameter. This information
+would be needed from prior project information.}
 
-\item{recordIdentifierUserSupplied}{description}
+\item{recordIdentifierUserSupplied}{Record identifier, user supplied identifier. This
+information would be needed from the data supplier.}
 
 \item{siteTypeName}{Site name query parameter. See available
 options by running \code{check_param("sitetype")$typeName}.}
 
-\item{usgsPCode}{description}
+\item{usgsPCode}{USGS parameter code. See available options by running 
+\code{check_param("characteristics")$parameterCode}.}
 
-\item{pointLocationLatitude}{description}
+\item{pointLocationLatitude}{Latitude for a point/radius query. Must be used
+with pointLocationLongitude and pointLocationWithinMiles.}
 
-\item{pointLocationLongitude}{description}
+\item{pointLocationLongitude}{Longitude for a point/radius query. Must be used
+with pointLocationLatitude and pointLocationWithinMiles.}
 
-\item{pointLocationWithinMiles}{description}
+\item{pointLocationWithinMiles}{Radius for a point/radius query. Must be used
+with pointLocationLatitude and pointLocationLongitude}
 
 \item{dataType}{Options include: "Results", "Monitoring locations", "Activities",
 "Projects", and "Organizations".}
