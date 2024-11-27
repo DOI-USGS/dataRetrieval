@@ -1,0 +1,108 @@
+---
+title: "Introducing read_USGS_sample"
+author: Laura A. DeCicco
+editor_options: 
+  chunk_output_type: console
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Introducing read_USGS_sample}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+
+```{r setup, include=FALSE, message=FALSE}
+library(knitr)
+library(dataRetrieval)
+library(dplyr)
+library(ggplot2)
+
+options(continue = " ")
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  fig.height = 4,
+  fig.width = 7
+)
+```
+
+As we bid adieu to the NWIS discrete water quality services, we welcome a new web service offering, the U.S. Geological Survey (USGS) Water Data for the Nation samples data service.
+
+In this tutorial, we'll walk through how to use the new services in the following ways:
+
+* Retrieving data from a known USGS site with a classic USGS parameter code.
+
+* Retrieving data using different geographical filters.
+
+* Discovering available data.
+
+For more information on the new data formats, see:
+
+<https://waterdata.usgs.gov/blog/qw-to-wqx3-mapping>
+
+# Retrieving known data
+
+Let's say we have a USGS site. We can check the data available at that site using `summary_USGS_samples` like this:
+
+```{r}
+library(dataRetrieval)
+site <- "USGS-04074950"
+
+data_at_site <- summary_USGS_samples(monitoringLocationIdentifier = site)
+
+```
+
+Explore the results:
+
+```{r echo=FALSE}
+DT::datatable(data_at_site |> 
+                    select(-monitoringLocationIdentifier))
+```
+
+We see there's 91 specific conductance values available. To get that data:
+
+```{r}
+user_sp <- data_at_site$characteristicUserSupplied[data_at_site$resultCount == 91]
+sp <- read_USGS_samples(monitoringLocationIdentifier = site,
+                        characteristicUserSupplied = user_sp)
+```
+
+Inspecting sp, there are `r ncol(sp)` columns (!). Instead of using the "Full physical chemical" profile, we could instead ask for the "Narrow" profile:
+
+```{r}
+sp_narrow <- read_USGS_samples(monitoringLocationIdentifier = site,
+                        characteristicUserSupplied = user_sp,
+                        dataProfile = "Narrow")
+```
+
+We can do a simple plot:
+
+```{r}
+wrap_text <- function(x, width = 40, collapse = "\n"){
+  new_text <- paste(strwrap(x, 
+                width = width),
+                collapse = collapse)
+  return(new_text)
+}
+
+
+ggplot(data = sp_narrow) +
+  geom_point(aes(x = Activity_StartDateTime,
+                 y = Result_Measure)) +
+  theme_bw() +
+  ggtitle(unique(sp_narrow$Location_Name)) +
+  xlab("Date") +
+  ylab(wrap_text(unique(sp$Result_CharacteristicUserSupplied)))
+
+```
+
+
+# Geographical filters
+
+Let's say we don't know a USGS site number, but we do have an area of interest. 
+
+
