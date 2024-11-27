@@ -14,8 +14,10 @@
 #' numbers without an agency prefix are assumed to have the prefix USGS.
 #' @param USstate US state. Could be full names, postal abbreviations, or fips codes.
 #' @param activityMediaName Sample media refers to the environmental medium that
-#' was sampled or analyzed.
-#' @param siteTypeCode Site type code query parameter.
+#' was sampled or analyzed. See available options by running 
+#' \code{check_param("samplemedia")$activityMedia}.
+#' @param siteTypeCode Site type code query parameter. See available
+#' options by running \code{check_param("sitetype")$typeCode}.
 #' @param boundingBox North and South are latitude values; East and West are longitude values.
 #' A vector of 4 (west, south, east, north) is expected.
 #' An example would be: c(-92.8, 44.2, -88.9, 46.0).
@@ -33,20 +35,33 @@
 #' previously used to describe discrete sample data. Find more information in the
 #' Observed Properties and Parameter Codes section of the Code Dictionary.
 #' @param characteristic description
-#' @param stateFips description
-#' @param countyFips description
-#' @param countryFips description
+#' @param stateFips State query parameter. To get a list of available state fips, 
+#' run \code{check_param("states")}. The "fips" can be created using the function
+#' \code{stateCdLookup}.
+#' @param countyFips County query parameter. To get a list of available counties,
+#' run \code{check_param("counties")}. The "Fips" can be created using the function
+#' \code{countyCdLookup}.
+#' @param countryFips Country query parameter. Do not set redundant parameters. 
+#' If another query parameter contains the country information, leave this parameter
+#' set to the default NA. See available options by running \code{check_param("countries")},
+#' the value needed is "id" from that result.
 #' @param projectIdentifier description
 #' @param recordIdentifierUserSupplied description
-#' @param siteTypeName description
+#' @param siteTypeName Site name query parameter. See available
+#' options by running \code{check_param("sitetype")$typeName}.
 #' @param usgsPCode description
 #' @param pointLocationLatitude description
 #' @param pointLocationLongitude description
 #' @param pointLocationWithinMiles description
 #' @param dataType Options include: "Results", "Monitoring locations", "Activities",
-#' "Projects", "Organizations", and "Summary"
-#' @param dataProfile Options include: "Full physical chemical", "Basic physical chemical",
-#' "Full biological", "Basic biological", "Narrow"
+#' "Projects", and "Organizations".
+#' @param dataProfile Profile depends on type. Options for "Results" dataType are: 
+#' "Full physical chemical", "Basic physical chemical", "Full biological", 
+#' "Basic biological", "Narrow". Options for "Monitoring location" are: 
+#' "Site" and "Count". Options for "Activities" are "Sample Activities", 
+#' "Activity Metrics", "Activity Groups", "Count". Options for "Projects" are:
+#' "Project" and "Project Monitoring Location Weight". Options for "Organizations" are:
+#' "Organization" and "Count".
 #' @export
 #' @return data frame returned from web service call.
 #' 
@@ -136,7 +151,7 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
          },
          Activities = {
            profile_convert <- stats::setNames(c("sampact", "actmetric", "actgroup", "count"),
-                                              c("Sample Activities", "Activiey Metrics", "Activity Groups", "Count"))
+                                              c("Sample Activities", "Activity Metrics", "Activity Groups", "Count"))
 
            baseURL <- httr2::req_url_path_append(baseURL,
                                                  "activities")
@@ -149,7 +164,7 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                                                  "projects") 
          },
          Organizations = {
-           profile_convert <- stats::setNames(c("organization", "Count"),
+           profile_convert <- stats::setNames(c("organization", "count"),
                                               c("Organization", "Count"))
 
            baseURL <- httr2::req_url_path_append(baseURL,
@@ -311,6 +326,7 @@ explode_query <- function(baseURL, x){
   return(baseURL)
 }
 
+
 #' Check values from codeservice
 #' 
 #' Call a service to check on values from:
@@ -385,7 +401,7 @@ check_param <- function(service = "characteristicgroup",
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
-#' ph_data <- read_USGS_sample(
+#' ph_data <- read_USGS_samples(
 #'                monitoringLocationIdentifier = "USGS-04074950",
 #'                characteristicUserSupplied = "pH, water, unfiltered, field",
 #'                activityStartDateUpper = "2000-01-01",

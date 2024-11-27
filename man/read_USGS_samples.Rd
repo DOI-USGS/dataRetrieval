@@ -39,7 +39,8 @@ numbers without an agency prefix are assumed to have the prefix USGS.}
 
 \item{USstate}{US state. Could be full names, postal abbreviations, or fips codes.}
 
-\item{siteTypeCode}{Site type code query parameter.}
+\item{siteTypeCode}{Site type code query parameter. See available
+options by running \code{check_param("sitetype")$typeCode}.}
 
 \item{boundingBox}{North and South are latitude values; East and West are longitude values.
 A vector of 4 (west, south, east, north) is expected.
@@ -66,17 +67,25 @@ Observed Properties and Parameter Codes section of the Code Dictionary.}
 
 \item{activityStartDateUpper}{End date.}
 
-\item{countryFips}{description}
+\item{countryFips}{Country query parameter. Do not set redundant parameters. 
+If another query parameter contains the country information, leave this parameter
+set to the default NA. See available options by running \code{check_param("countries")},
+the value needed is "id" from that result.}
 
-\item{stateFips}{description}
+\item{stateFips}{State query parameter. To get a list of available state fips, 
+run \code{check_param("states")}. The "fips" can be created using the function
+\code{stateCdLookup}.}
 
-\item{countyFips}{description}
+\item{countyFips}{County query parameter. To get a list of available counties,
+run \code{check_param("counties")}. The "Fips" can be created using the function
+\code{countyCdLookup}.}
 
 \item{projectIdentifier}{description}
 
 \item{recordIdentifierUserSupplied}{description}
 
-\item{siteTypeName}{description}
+\item{siteTypeName}{Site name query parameter. See available
+options by running \code{check_param("sitetype")$typeName}.}
 
 \item{usgsPCode}{description}
 
@@ -87,10 +96,15 @@ Observed Properties and Parameter Codes section of the Code Dictionary.}
 \item{pointLocationWithinMiles}{description}
 
 \item{dataType}{Options include: "Results", "Monitoring locations", "Activities",
-"Projects", "Organizations", and "Summary"}
+"Projects", and "Organizations".}
 
-\item{dataProfile}{Options include: "Full physical chemical", "Basic physical chemical",
-"Full biological", "Basic biological", "Narrow"}
+\item{dataProfile}{Profile depends on type. Options for "Results" dataType are: 
+"Full physical chemical", "Basic physical chemical", "Full biological", 
+"Basic biological", "Narrow". Options for "Monitoring location" are: 
+"Site" and "Count". Options for "Activities" are "Sample Activities", 
+"Activity Metrics", "Activity Groups", "Count". Options for "Projects" are:
+"Project" and "Project Monitoring Location Weight". Options for "Organizations" are:
+"Organization" and "Count".}
 
 \item{tz}{character to set timezone attribute of datetime. Default is UTC
 (properly accounting for daylight savings times based on the data's provided tz_cd column).
@@ -106,7 +120,7 @@ service described at \url{https://waterdata.usgs.gov/download-samples}.
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 \donttest{
-ph_data <- read_USGS_sample(
+ph_data <- read_USGS_samples(
                monitoringLocationIdentifier = "USGS-04074950",
                characteristicUserSupplied = "pH, water, unfiltered, field",
                activityStartDateUpper = "2000-01-01",
