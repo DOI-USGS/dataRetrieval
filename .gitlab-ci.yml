@@ -85,11 +85,8 @@ unittests:
 pages:
   stage: end
   cache: []
-  only: 
-    - main
   script:
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
-    - Rscript -e 'source("deploy_simple.R")'
   artifacts:
     paths:
       - $PAGES_OUTDIR
@@ -97,6 +94,8 @@ pages:
     
 Validate Inventory:
     stage: end
+    only: 
+      - main
     image: ${INTERNAL_REGISTRY}software/software-management:latest
     script:
       - software-management review
