@@ -95,6 +95,7 @@ reference:
     desc: Functions to retrieve USGS data.
     contents:
       - read_USGS_samples
+      - summary_USGS_samples
       - construct_USGS_sample_request
       - check_param
   - title: National Ground-Water Monitoring Network
