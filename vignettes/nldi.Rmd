@@ -122,11 +122,6 @@ findNLDI(nwis = "11120000", no_sf = TRUE)
 
 Any NLDI feature found with `get_nldi_source` can be requested by passing a `type`/`ID` pair as a list to the `origin` argument. This will allow the networking capabilities offered in `dataRetrieval` to grow naturally with the NLDI itself. For example, we can use the origin argument to request features that don't offer a specific parameter.
 
-```{r}
-# Water Data Exchange 2.0 Site CA_45206
-findNLDI(origin = list("wade" = "CA_45206"))
-```
-
 ### Location (longitude/latitude)
 
 If you don't know a feature ID, a `longitude`/`latitude` (X,Y) pair or a sf/sfc POINT object can be passed to the `location` argument. Doing so will identify the NHDPlus catchment the location fall within and will return the associated NHDPlusV2 flowline.
