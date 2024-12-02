@@ -17,7 +17,7 @@ data frame with summary of data available based on the monitoringLocationIdentif
 }
 \description{
 This function creates the call and gets the data for discrete water quality samples summary data
-service described at \url{https://waterdata.usgs.gov/download-samples}.
+service described at \url{https://api.waterdata.usgs.gov/samples-data/docs}.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

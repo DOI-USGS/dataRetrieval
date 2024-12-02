@@ -480,10 +480,10 @@ test_that("profiles", {
   site_data <- readWQPdata(
     statecode = "WI",
     countycode = "Dane",
-    service = "StationWQX"
+    service = "Station"
   )
 
-  expect_true(all(c("ProviderName", "Location_Identifier") %in% names(site_data)))
+  expect_true(all(c("OrganizationIdentifier", "OrganizationFormalName") %in% names(site_data)))
 
   # Data profiles: "Project Data"
   project_data <- readWQPdata(
