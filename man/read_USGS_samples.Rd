@@ -6,7 +6,6 @@
 \usage{
 read_USGS_samples(
   monitoringLocationIdentifier = NA,
-  USstate = NA,
   siteTypeCode = NA,
   boundingBox = NA,
   hydrologicUnit = NA,
@@ -37,8 +36,6 @@ and the location number. Location identifiers should be separated with commas,
 for example: AZ014-320821110580701, CAX01-15304600, USGS-040851385. Location
 numbers without an agency prefix are assumed to have the prefix USGS.}
 
-\item{USstate}{US state. Could be full names, postal abbreviations, or fips codes.}
-
 \item{siteTypeCode}{Site type code query parameter. See available
 options by running \code{check_param("sitetype")$typeCode}.}
 
@@ -61,9 +58,9 @@ See available options by running
 See available options by running 
 \code{check_param("characteristics")$characteristicName}.}
 
-\item{characteristicUserSupplied}{Observed Property is the USGS term for the
+\item{characteristicUserSupplied}{Observed property is the USGS term for the
 constituent sampled and the property name gives a detailed description of what
-was sampled. Observed Property replaces the parameter name and pcode USGS
+was sampled. Observed property is mapped to characteristicUserSupplied and replaces the parameter name and pcode USGS
 previously used to describe discrete sample data. Find more information in the
 Observed Properties and Parameter Codes section of the Code Dictionary.}
 
@@ -90,7 +87,7 @@ would be needed from prior project information.}
 \item{recordIdentifierUserSupplied}{Record identifier, user supplied identifier. This
 information would be needed from the data supplier.}
 
-\item{siteTypeName}{Site name query parameter. See available
+\item{siteTypeName}{Site type name query parameter. See available
 options by running \code{check_param("sitetype")$typeName}.}
 
 \item{usgsPCode}{USGS parameter code. See available options by running 

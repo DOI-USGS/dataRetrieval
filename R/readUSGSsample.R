@@ -12,7 +12,6 @@
 #' and the location number. Location identifiers should be separated with commas,
 #' for example: AZ014-320821110580701, CAX01-15304600, USGS-040851385. Location
 #' numbers without an agency prefix are assumed to have the prefix USGS.
-#' @param USstate US state. Could be full names, postal abbreviations, or fips codes.
 #' @param activityMediaName Sample media refers to the environmental medium that
 #' was sampled or analyzed. See available options by running 
 #' \code{check_param("samplemedia")$activityMedia}.
@@ -31,9 +30,9 @@
 #' @param characteristicGroup Characteristic group is a broad category describing the sample.
 #' See available options by running 
 #' \code{check_param("characteristicgroup")$characteristicGroup}.
-#' @param characteristicUserSupplied Observed Property is the USGS term for the
+#' @param characteristicUserSupplied Observed property is the USGS term for the
 #' constituent sampled and the property name gives a detailed description of what
-#' was sampled. Observed Property replaces the parameter name and pcode USGS
+#' was sampled. Observed property is mapped to characteristicUserSupplied and replaces the parameter name and pcode USGS
 #' previously used to describe discrete sample data. Find more information in the
 #' Observed Properties and Parameter Codes section of the Code Dictionary.
 #' @param characteristic Characteristic is a specific category describing the sample.
@@ -53,7 +52,7 @@
 #' would be needed from prior project information. 
 #' @param recordIdentifierUserSupplied Record identifier, user supplied identifier. This
 #' information would be needed from the data supplier.
-#' @param siteTypeName Site name query parameter. See available
+#' @param siteTypeName Site type name query parameter. See available
 #' options by running \code{check_param("sitetype")$typeName}.
 #' @param usgsPCode USGS parameter code. See available options by running 
 #' \code{check_param("characteristics")$parameterCode}.
@@ -83,16 +82,8 @@
 #'                characteristicUserSupplied = "pH, water, unfiltered, field")
 #' rawData <- importWQP(req)
 #'
-#' req_site <- construct_USGS_sample_request(
-#'                USstate = "Wisconsin",
-#'                characteristicUserSupplied = "pH, water, unfiltered, field",
-#'                dataType = "Monitoring locations",
-#'                activityStartDateUpper = "2000-01-01",
-#'                dataProfile = "Site")
-#' rawData_sites <- importWQP(req_site)
 #' }
 construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
-                           USstate = NA,
                            siteTypeCode = NA,
                            boundingBox = NA,
                            hydrologicUnit = NA,
@@ -216,7 +207,7 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   
   if(all(!is.na(siteTypeName))){
     siteTypeName <- match.arg(siteTypeName, 
-              check_param("sitetype")$typeName, 
+              check_param("sitetype")$typeLongName, 
               several.ok = TRUE)
   }
   
@@ -293,16 +284,6 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
     baseURL <- httr2::req_url_query(baseURL,
                                     boundingBox = boundingBox,
                                     .multi = "comma")      
-  }
-  
-  if(all(!is.na(USstate))){
-    stCdPrefix <- "US:"
-    if (!grepl(stCdPrefix, USstate)) {
-      USstate <- paste0(stCdPrefix, zeroPad(stateCdLookup(USstate, "id"), 2))
-    } 
-    baseURL <- httr2::req_url_query(baseURL,
-                                    stateFips = USstate,
-                                    .multi = "explode")
   }
   
   return(baseURL)
@@ -429,7 +410,6 @@ check_param <- function(service = "characteristicgroup",
 #' 
 #' }
 read_USGS_samples <- function(monitoringLocationIdentifier = NA,
-                           USstate = NA,
                            siteTypeCode = NA,
                            boundingBox = NA,
                            hydrologicUnit = NA,
@@ -454,7 +434,6 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
                            tz = "UTC"){
   
   request_url <- construct_USGS_sample_request(monitoringLocationIdentifier = monitoringLocationIdentifier,
-                                               USstate = USstate,
                                                siteTypeCode = siteTypeCode,
                                                boundingBox = boundingBox,
                                                hydrologicUnit = hydrologicUnit,
@@ -487,7 +466,7 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
 #' USGS Samples Summary Data
 #' 
 #' This function creates the call and gets the data for discrete water quality samples summary data
-#' service described at \url{https://waterdata.usgs.gov/download-samples}.
+#' service described at \url{https://api.waterdata.usgs.gov/samples-data/docs}.
 #'
 #' @param monitoringLocationIdentifier A monitoring location identifier has two parts: the agency code
 #' and the location number. Location identifiers should be separated with commas,

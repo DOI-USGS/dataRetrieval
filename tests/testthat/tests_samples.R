@@ -13,9 +13,10 @@ test_that("General samples-data retrievals work using WQP tests", {
   secchi_ops <- check_param("observedproperty",
                             text = "secchi")
   
+  state_fips <- paste0("US:", stateCdLookup("WI", "id"))
   lakeData <- read_USGS_samples(activityStartDateLower = startDate,
                                 activityStartDateUpper  = "2024-01-01",
-                                USstate = "WI",
+                                stateFips = "US:55",
                                 characteristicUserSupplied = secchi_ops$observedProperty, 
                                 dataProfile = "Narrow")
   
@@ -58,7 +59,8 @@ context("samples-data project")
 test_that("samples-data project working", {
   testthat::skip_on_cran()
   type <- "Stream"
-  projectInfo <- read_USGS_samples(countyFips = "US:55:025",
+  
+  projectInfo <- read_USGS_samples(countyFips = countyCdLookup("WI", "Dane"),
                                 siteTypeName = type,
                                 dataType = "Projects")
   expect_true(ncol(projectInfo) >= 0)
@@ -78,13 +80,13 @@ test_that("profiles", {
   testthat::skip_on_cran()
   # Data profiles: "Organization Data"
   org_data <- read_USGS_samples(
-    countyFips = "US:55:025",
+    countyFips =  countyCdLookup("WI", "Dane"),
     dataType = "Organizations"
   )
   
   # Data profiles: "Site Data Only"
   site_data <- read_USGS_samples(
-    countyFips = "US:55:025",
+    countyFips =  countyCdLookup("WI", "Dane"),
     dataType = "Monitoring locations"
   )
   
@@ -92,7 +94,7 @@ test_that("profiles", {
   
   # Data profiles: "Project Data"
   project_data <- read_USGS_samples(
-    countyFips = "US:55:025",
+    countyFips =  countyCdLookup("WI", "Dane"),
     dataType = "Projects"
   )
  
@@ -103,7 +105,7 @@ test_that("profiles", {
   
   # Data profiles: "Project Monitoring Location Weighting Data"
   proj_mlwd <- read_USGS_samples(
-    countyFips = "US:55:025",
+    countyFips =  countyCdLookup("WI", "Dane"),
     dataType = "Projects",
     dataProfile = "Project Monitoring Location Weight"
   )
