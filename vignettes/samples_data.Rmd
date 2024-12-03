@@ -43,29 +43,34 @@ As we bid adieu to the NWIS discrete water quality services, we welcome a new we
 
 In this tutorial, we'll walk through how to use the new services in the following ways:
 
-* Retrieving data from a known USGS site with a classic USGS parameter code.
+* Retrieving data from a known USGS site.
 
 * Retrieving data using different geographical filters.
 
 * Discovering available data.
 
 For more information on the new data formats, see:
-
 <https://waterdata.usgs.gov/blog/qw-to-wqx3-mapping>
 
 # New USGS data access
 
-This is a modern access point for USGS discrete water quality data. The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services.
+This is a modern access point for USGS discrete water quality data. The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. To access these services on a web browser, go to <https://waterdata.usgs.gov/download-samples/>.
 
 ## New Features
 
-* **Style**: New functions will use a "snake case", such as "read_USGS_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
+### Style
 
-* **Structure**: Historically, we used allowed users to customize their queries via the `...` argument structure. With `...`, users needed to know the exact names of query parameters before using the function. Now, the new functions will include **ALL** possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other IDEs). **Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters.** We expect this will be easier for users, but it might take some time to smooth out the documentation and test usability. There may be additional consequences, such as users won't be able to build up argument lists to pass into the function.  
+New functions will use a "snake case", such as "read_USGS_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
 
-* **Dependencies**: Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. 
+### Structure
 
-## Developmental flow
+Historically, we used allowed users to customize their queries via the `...` argument structure. With `...`, users needed to know the exact names of query parameters before using the function. Now, the new functions will include **ALL** possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other IDEs). **Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters.** We expect this will be easier for users, but it might take some time to smooth out the documentation and test usability. There may be additional consequences, such as users won't be able to build up argument lists to pass into the function.  
+
+### Dependencies
+
+Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. 
+
+### Developmental workflow
 
 CRAN-stable documentation will be available on the GitHub pages:
 <https://doi-usgs.github.io/dataRetrieval/>
@@ -73,7 +78,7 @@ CRAN-stable documentation will be available on the GitHub pages:
 Development documentation will be available on GitLab pages:
 <https://water.code-pages.usgs.gov/dataRetrieval>
 
-Development will happen on a git branch called "develop" on GitHub. The "develop" branch will only move to the "main" branch when we submit to CRAN, unless there are bug fixes that pertain to the CRAN release. The "develop" branch WILL change frequently, and there are no promises of future behavior. Users must accept that they are using those functions at their own risk. If you willing to accept this risk, the installation instructions are:
+Development of `dataRetrieval` will happen on a git branch called "develop" on GitHub. The "develop" branch will only move to the "main" branch when we submit to CRAN, unless there are bug fixes that pertain to the CRAN release. The "develop" branch WILL change frequently, and there are no promises of future behavior. Users must accept that they are using those functions at their own risk. If you willing to accept this risk, the installation instructions are:
 
 ```{r eval=FALSE}
 library(remotes)
@@ -87,7 +92,7 @@ install_gitlab("water/dataRetrieval@samples_data",
 
 Alright, let's test out this new service!
 
-## Retrieving known data
+## Retrieving data from a known site
 
 Let's say we have a USGS site. We can check the data available at that site using `summarize_USGS_samples` like this:
 
@@ -136,7 +141,7 @@ We can do a simple plot to check the data:
 
 ```{r}
 library(ggplot2)
-wrap_text <- function(x, width = 40, collapse = "\n"){
+wrap_text <- function(x, width = 30, collapse = "\n"){
   new_text <- paste(strwrap(x, 
                 width = width),
                 collapse = collapse)
@@ -186,6 +191,8 @@ Let's say we don't know a USGS site number, but we do have an area of interest. 
 
 ### Bounding Box
 
+North and south are latitude values; east and west are longitude values. A vector of 4 (west, south, east, north) is expected. 
+
 ```{r}
 bbox <- c(-90.8, 44.2, -89.9, 45.0)
 user_char <- "Phosphorus as phosphorus, water, unfiltered"
@@ -219,7 +226,9 @@ leaflet() %>%
 
 ```
 
-### HUC
+### Hydrologic Unit Codes (HUCs)
+
+Hydrologic Unit Codes (HUCs) identify physical areas within the US that drain to a certain portion of the stream network. This filter accepts values containing 2, 4, 6, 8, 10 or 12 digits. 
 
 ```{r}
 
@@ -250,6 +259,8 @@ leaflet() %>%
 
 ### Distance from a point
 
+Location latitude (pointLocationLatitude) and longitude (pointLocationLongitude), and the radius (pointLocationWithinMiles) are required for this geographic filter:
+
 ```{r}
 point_sites <- read_USGS_samples(pointLocationLatitude = 43.074680,
                                  pointLocationLongitude = -89.428054,
@@ -277,10 +288,14 @@ leaflet() %>%
 
 ```
 
-### countryFips 
+### countyFips 
+
+County query parameter. To get a list of available counties,
+run `check_param("counties")`. The "Fips" can be created using the function `countyCdLookup`.
 
 ```{r}
-dane_county <- countyCdLookup("WI", "Dane")
+dane_county <- countyCdLookup("WI", "Dane", 
+                              outputType = "fips")
 
 county_sites <- read_USGS_samples(countyFips = dane_county,
                                 characteristicUserSupplied = user_char,
@@ -308,10 +323,12 @@ leaflet() %>%
 
 ### stateFips 
 
+State query parameter. To get a list of available state fips, 
+run `check_param("states")`. The "fips" can be created using the function
+`stateCdLookup`.
+
 ```{r}
-state_fip <- paste("US",
-                   stateCdLookup("WI", outputType = "id"),
-                   sep = ":")
+state_fip <- stateCdLookup("WI", outputType = "fips")
 
 state_sites <- read_USGS_samples(stateFips = state_fip,
                                 characteristicUserSupplied = user_char,
@@ -339,6 +356,8 @@ leaflet() %>%
 ```
 
 ## Additional Query Parameters
+
+Additional parameters can be included to limit the results coming back from a request.
 
 ### siteTypeCode
 
@@ -368,7 +387,7 @@ media_info$activityMedia
 
 ### characteristicGroup
 
-Characteristic group is a broad category describing the sample.
+Characteristic group is a broad category describing the sample. The options for this parameter generally follow the values described in the Water Quality Portal [User Guide](https://www.waterqualitydata.us/portal_userguide), but not always.
 
 ```{r}
 group_info <- check_param("characteristicgroup")
@@ -471,8 +490,6 @@ for(i in county_lake_sites$Location_Identifier){
     filter(characteristicUserSupplied == user_char) |> 
     bind_rows(all_data)
 }
-
-  
 
 ```
 

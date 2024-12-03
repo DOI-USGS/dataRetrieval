@@ -65,7 +65,7 @@ navbar:
     href: https://github.com/DOI-USGS/dataRetrieval
 reference:
   - title: National Water Information System (NWIS)
-    desc:  Functions to retrieve (USGS) NWIS data.
+    desc:  Functions to retrieve (USGS) NWIS data. These will be slowly phased out and replaced with the read_USGS family of functions.
     contents:
       - readNWISdv
       - readNWISuv
@@ -92,7 +92,7 @@ reference:
       - readWQPsummary
       - wqp_check_status
   - title: USGS new data services
-    desc: Functions to retrieve USGS data.
+    desc: Functions to retrieve USGS data from new services.
     contents:
       - read_USGS_samples
       - summary_USGS_samples
