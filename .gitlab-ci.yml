@@ -90,8 +90,8 @@ longtest:
     - Rscript -e 'testthat::test_local(path = "tests/manual")'
   rules:
     - if: $RUN_LONG_TESTS == "FALSE"
-      when: never
-    - when: on_success
+      when: always
+    - when: never
   
 pages:
   stage: end
