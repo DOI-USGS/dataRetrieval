@@ -24,6 +24,7 @@ library(knitr)
 opts_chunk$set(
   warning = FALSE,
   message = FALSE,
+  eval = FALSE,
   out.width = "75%",
   fig.align = "center",
   comment = "#>"
@@ -76,7 +77,7 @@ library(dataRetrieval) # The star of the show!
 
 # What's available? 
 
-First, we need to know what features are indexed in the NLDI. The most current offerings can be found using `get_nldi_sources`, and new features are regularly added. At the time of writing (`r Sys.Date()`), `r nrow(get_nldi_sources())` data sets have been indexed to the NHDPlus and cataloged in the NLDI. 
+First, we need to know what features are indexed in the NLDI. The most current offerings can be found using `get_nldi_sources`, and new features are regularly added. At the time of writing (`r Sys.Date()`), `r #nrow(get_nldi_sources())` data sets have been indexed to the NHDPlus and cataloged in the NLDI. 
 
 ```{r, eval = FALSE}
 get_nldi_sources()
