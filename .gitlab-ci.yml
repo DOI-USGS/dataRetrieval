@@ -80,7 +80,19 @@ unittests:
         coverage_format: cobertura
         path: cobertura.xml
   coverage: '/Coverage: \d+.\d+\%/'
-        
+
+longtest:
+  stage: test
+  dependencies:
+    - build-image
+    - buildcheck
+  script:
+    - Rscript -e 'testthat::test_local(path = "tests/manual")'
+  rules:
+    - if: $RUN_LONG_TESTS == "FALSE"
+      when: never
+    - when: on_success
+  
 pages:
   stage: end
   cache: []
