@@ -51,7 +51,7 @@ This filter accepts values containing 2, 4, 6, 8, 10 or 12 digits.}
 was sampled or analyzed.}
 
 \item{characteristicGroup}{Characteristic group is a broad category describing the sample.
-See available options by running 
+See available options by running
 \code{check_param("characteristicgroup")$characteristicGroup}.}
 
 \item{characteristic}{Characteristic is a specific category describing the sample.
@@ -60,13 +60,21 @@ See available options by running
 
 \item{characteristicUserSupplied}{Observed property is the USGS term for the
 constituent sampled and the property name gives a detailed description of what
-was sampled. Observed property is mapped to characteristicUserSupplied and replaces the parameter name and pcode USGS
+was sampled. Observed property is mapped to characteristicUserSupplied and replaces
+the parameter name and pcode USGS
 previously used to describe discrete sample data. Find more information in the
-Observed Properties and Parameter Codes section of the Code Dictionary.}
+Observed Properties and Parameter Codes section of the Code Dictionary found here:
+\url{https://waterdata.usgs.gov/code-dictionary/}.}
 
-\item{activityStartDateLower}{Start date.}
+\item{activityStartDateLower}{The service will return records with dates earlier
+than the value entered for activityStartDateUpper. Can be an R Date object, or
+a string with format YYYY-MM-DD. The logic is inclusive, i.e. it will also return
+records that match the date.}
 
-\item{activityStartDateUpper}{End date.}
+\item{activityStartDateUpper}{The service will return records with dates later
+than the value entered for activityStartDateLower. Can be an R Date object, or
+a string with format YYYY-MM-DD. The logic is inclusive, i.e. it will also return
+records that match the date.}
 
 \item{countryFips}{Country query parameter. Do not set redundant parameters. 
 If another query parameter contains the country information, leave this parameter

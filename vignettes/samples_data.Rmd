@@ -60,7 +60,7 @@ This is a modern access point for USGS discrete water quality data. The USGS is 
 
 New functions will use a "snake case", such as "read_USGS_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
 
-At this point, the plan is that new functions will include ALL possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other R IDEs). Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters. This is opposed to the classic way we used `...` as a query parameter - forcing the user to understand the required argument names. We expect this will be easier for users. 
+At this point, the plan is that new functions will include ALL possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other IDEs). **Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters.** This is opposed to the classic way we used `...` as a query parameter - forcing the user to understand the required argument names. We expect this will be easier for users. Another consequence of moving to the full set of named arguments in the functions is that users can not build up argument lists. 
 
 Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. 
 
@@ -370,7 +370,7 @@ group_info$characteristicGroup
 
 ### characteristic
 
-Characteristic is a specific category describing the sample. 
+Characteristic is a specific category describing the sample. See `check_param("characteristics")` for a full list, below is a small sample:
 
 ```{r}
 characteristic_info <- check_param("characteristics")
@@ -379,7 +379,7 @@ head(unique(characteristic_info$characteristicName))
 
 ### characteristicUserSupplied
 
-Observed property is the USGS term for the constituent sampled and the property name gives a detailed description of what was sampled. Observed Property is mapped to characteristicUserSupplied, and replaces the parameter name and pcode USGS previously used to describe discrete sample data. 
+Observed property is the USGS term for the constituent sampled and the property name gives a detailed description of what was sampled. Observed Property is mapped to characteristicUserSupplied, and replaces the parameter name and pcode USGS previously used to describe discrete sample data. See `check_param("observedproperty")` for a full list, below is a small sample:
 
 ```{r}
 char_us <- check_param("observedproperty")
@@ -388,7 +388,7 @@ head(char_us$observedProperty)
 
 ### usgsPCode
 
-USGS parameter code. 
+USGS parameter code. See `check_param("characteristics")` for a full list, below is a small sample:
 
 ```{r}
 characteristic_info <- check_param("characteristics")
@@ -402,6 +402,41 @@ Project identifier query parameter. This information would be needed from prior 
 ### recordIdentifierUserSupplied:
 
 Record identifier, user supplied identifier. This information would be needed from the data supplier.
+
+### activityStartDate: Lower and Upper
+
+Specify one or both of these fields to filter on the activity start date. The service will return records with dates earlier than the value entered for activityStartDateUpper and/or later than the value entered for activityStartDateLower. The logic is inclusive, i.e. it will also return records that match either date. Can be an R Date object, or a string with format YYYY-MM-DD. 
+
+For instance, let's grab Wisconsin sites that measured phosphorus in October or November of 2024:
+ 
+```{r}
+state_sites_recent <- read_USGS_samples(stateFips = state_fip,
+                                characteristicUserSupplied = user_char,
+                                dataType = "Monitoring locations",
+                                activityStartDateLower = "2024-10-01",
+                                activityStartDateUpper = "2024-12-01",
+                                dataProfile = "Site")
+
+```
+
+Many fewer sites than the original Wisconsin map:
+
+```{r echo=FALSE}
+state_sites_recent_sf <- state_sites_recent |> 
+  sf::st_as_sf(coords = c("Location_Longitude","Location_Latitude"))
+
+sf::st_crs(state_sites_recent_sf) <- 4269 #NAD83
+
+
+leaflet() %>%
+  addProviderTiles("CartoDB.Positron") %>%
+  addCircleMarkers(data = state_sites_recent_sf |> 
+                sf::st_transform(crs = leaflet_crs), 
+              color = "red",
+              radius = 2, 
+              opacity = 1)
+
+```
 
 ## Data Discovery
 

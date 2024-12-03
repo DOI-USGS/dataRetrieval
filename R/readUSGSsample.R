@@ -25,16 +25,24 @@
 #' This filter accepts values containing 2, 4, 6, 8, 10 or 12 digits. 
 #' @param activityMediaName Sample media refers to the environmental medium that
 #' was sampled or analyzed.
-#' @param activityStartDateLower Start date.
-#' @param activityStartDateUpper End date.
+#' @param activityStartDateLower The service will return records with dates earlier
+#' than the value entered for activityStartDateUpper. Can be an R Date object, or
+#' a string with format YYYY-MM-DD. The logic is inclusive, i.e. it will also return
+#' records that match the date.
+#' @param activityStartDateUpper The service will return records with dates later
+#' than the value entered for activityStartDateLower. Can be an R Date object, or
+#' a string with format YYYY-MM-DD. The logic is inclusive, i.e. it will also return
+#' records that match the date.
 #' @param characteristicGroup Characteristic group is a broad category describing the sample.
-#' See available options by running 
+#' See available options by running
 #' \code{check_param("characteristicgroup")$characteristicGroup}.
 #' @param characteristicUserSupplied Observed property is the USGS term for the
 #' constituent sampled and the property name gives a detailed description of what
-#' was sampled. Observed property is mapped to characteristicUserSupplied and replaces the parameter name and pcode USGS
+#' was sampled. Observed property is mapped to characteristicUserSupplied and replaces
+#' the parameter name and pcode USGS
 #' previously used to describe discrete sample data. Find more information in the
-#' Observed Properties and Parameter Codes section of the Code Dictionary.
+#' Observed Properties and Parameter Codes section of the Code Dictionary found here:
+#' \url{https://waterdata.usgs.gov/code-dictionary/}.
 #' @param characteristic Characteristic is a specific category describing the sample.
 #' See available options by running 
 #' \code{check_param("characteristics")$characteristicName}.
@@ -357,6 +365,7 @@ check_param <- function(service = "characteristicgroup",
     httr2::req_url_path_append("samples-data",
                                "codeservice",
                                service) |> 
+    httr2::req_user_agent(default_ua()) |> 
     httr2::req_url_query(mimeType = "application/json") 
 
   if (length(list(...)) > 0) {
