@@ -149,10 +149,17 @@ parse_WQP <- function(retval, tz = "UTC"){
     dateCols_to_convert <- NA
     for(date_col in dateCols){
       
+      # Legacy:
       time_col <- gsub("Date", "Time", date_col)
-      tz_col <- gsub("Date", "TimeZone", date_col)      
+      tz_col <- paste0(time_col, ".TimeZoneCode")  
+      time_col <- paste0(time_col, ".Time") 
+      
+      # WQX3:
+      time_col_wqx3 <- gsub("Date", "Time", date_col)
+      tz_col_wqx3 <- gsub("Date", "TimeZone", date_col) 
       
       if(all(c(date_col, time_col, tz_col) %in% names(retval))){
+        # Legacy
         if(!all(is.na(retval[[date_col]]))){
           retval <- create_dateTime(retval, 
                                     date_col = date_col,
@@ -160,6 +167,16 @@ parse_WQP <- function(retval, tz = "UTC"){
                                     tz_col = tz_col,
                                     tz = tz)
         }
+        
+      } else if(all(c(date_col, time_col_wqx3, tz_col_wqx3) %in% names(retval))){
+        # WQX3
+        if(!all(is.na(retval[[date_col]]))){
+          retval <- create_dateTime(retval, 
+                                    date_col = date_col,
+                                    time_col = time_col_wqx3,
+                                    tz_col = tz_col_wqx3,
+                                    tz = tz)
+        }        
       } else {
         # This is the legacy pattern:
         time_col <- gsub("Date", "Time.Time", date_col)
