@@ -20,11 +20,12 @@ library(dataRetrieval)
 library(dplyr)
 library(ggplot2)
 
-options(continue = " ")
+options(continue = " ",
+        width = 50)
 
 knitr::opts_chunk$set(
   echo = TRUE,
-  message = FALSE,
+  message = TRUE,
   fig.height = 4,
   fig.width = 7
 )
@@ -56,19 +57,15 @@ For more information on the new data formats, see:
 
 This is a modern access point for USGS discrete water quality data. The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services.
 
-## New style
+## New Features
 
-New functions will use a "snake case", such as "read_USGS_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
+* **Style**: New functions will use a "snake case", such as "read_USGS_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
 
-At this point, the plan is that new functions will include ALL possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other IDEs). **Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters.** This is opposed to the classic way we used `...` as a query parameter - forcing the user to understand the required argument names. We expect this will be easier for users. Another consequence of moving to the full set of named arguments in the functions is that users can not build up argument lists. 
+* **Structure**: Historically, we used allowed users to customize their queries via the `...` argument structure. With `...`, users needed to know the exact names of query parameters before using the function. Now, the new functions will include **ALL** possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other IDEs). **Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters.** We expect this will be easier for users, but it might take some time to smooth out the documentation and test usability. There may be additional consequences, such as users won't be able to build up argument lists to pass into the function.  
 
-Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. 
+* **Dependencies**: Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. 
 
-## New deployment
-
-Development will happen on a branch called "develop" on GitHub. The "develop" branch will only move to the "main" branch when we submit to CRAN, unless there are bug fixes that pertain to the CRAN release. 
-
-The "develop" branch WILL change frequently, and there are no promises of future behavior. Users must accept that they are using those functions at their own risk. 
+## Developmental flow
 
 CRAN-stable documentation will be available on the GitHub pages:
 <https://doi-usgs.github.io/dataRetrieval/>
@@ -76,19 +73,29 @@ CRAN-stable documentation will be available on the GitHub pages:
 Development documentation will be available on GitLab pages:
 <https://water.code-pages.usgs.gov/dataRetrieval>
 
+Development will happen on a git branch called "develop" on GitHub. The "develop" branch will only move to the "main" branch when we submit to CRAN, unless there are bug fixes that pertain to the CRAN release. The "develop" branch WILL change frequently, and there are no promises of future behavior. Users must accept that they are using those functions at their own risk. If you willing to accept this risk, the installation instructions are:
+
+```{r eval=FALSE}
+library(remotes)
+
+install_gitlab("water/dataRetrieval@samples_data", 
+               host = "code.usgs.gov")
+
+```
+
 # Discrete USGS data workflow
 
 Alright, let's test out this new service!
 
 ## Retrieving known data
 
-Let's say we have a USGS site. We can check the data available at that site using `summary_USGS_samples` like this:
+Let's say we have a USGS site. We can check the data available at that site using `summarize_USGS_samples` like this:
 
 ```{r}
 library(dataRetrieval)
 site <- "USGS-04183500"
 
-data_at_site <- summary_USGS_samples(monitoringLocationIdentifier = site)
+data_at_site <- summarize_USGS_samples(monitoringLocationIdentifier = site)
 
 ```
 
@@ -128,7 +135,7 @@ phos_narrow <- read_USGS_samples(monitoringLocationIdentifier = site,
 We can do a simple plot to check the data:
 
 ```{r}
-
+library(ggplot2)
 wrap_text <- function(x, width = 40, collapse = "\n"){
   new_text <- paste(strwrap(x, 
                 width = width),
@@ -191,7 +198,7 @@ bbox_sites <- read_USGS_samples(boundingBox = bbox,
 ```
 
 
-```{r echo=FALSE}
+```{r echo=FALSE, message=FALSE}
 library(leaflet)
 library(sf)
 
@@ -453,13 +460,13 @@ county_lake_sites <- read_USGS_samples(countyFips = dane_county,
 
 ```
 
-There are only `r nrow(county_lake_sites)` lake sites measuring phosphorus in Dane County, WI. We can get a summary of the data at each site using the `summary_USGS_samples` function. This function only accepts 1 site at a time:
+There are only `r nrow(county_lake_sites)` lake sites measuring phosphorus in Dane County, WI. We can get a summary of the data at each site using the `summarize_USGS_samples` function. This function only accepts 1 site at a time:
 
-```{r}
+```{r message=FALSE}
 all_data <- data.frame()
 
 for(i in county_lake_sites$Location_Identifier){
-  avail_i <- summary_USGS_samples(monitoringLocationIdentifier = i)
+  avail_i <- summarize_USGS_samples(monitoringLocationIdentifier = i)
   all_data <- avail_i |> 
     filter(characteristicUserSupplied == user_char) |> 
     bind_rows(all_data)
