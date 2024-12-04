@@ -37,6 +37,37 @@ wrap_text <- function(x, width = 40, collapse = "\n"){
   return(new_text)
 }
 
+library(leaflet)
+library(sf)
+
+
+
+map_it <- function(df){
+  
+  df_sf <- df |> 
+    sf::st_as_sf(coords = c("Location_Longitude",
+                          "Location_Latitude"))
+
+  sf::st_crs(df_sf) <- 4269 #NAD83
+
+  leaflet_crs <- "+proj=longlat +datum=WGS84"
+
+  leaf_map <- leaflet::leaflet() |> 
+    leaflet::addProviderTiles("CartoDB.Positron") |> 
+    leaflet::addCircleMarkers(data = df_sf |> 
+                  sf::st_transform(crs = leaflet_crs), 
+                color = "red",
+                radius = 2, 
+                opacity = 1,
+                popup = paste0('<b>', df_sf$Location_Name, "</b><br/><table>",
+             "<tr><td><b>Type:</b></td><td>", df_sf$Location_Type, "</td></tr>",
+             "<tr><td><b>HUC 12:</b></td><td>", df_sf$Location_HUCTwelveDigitCode,'</td></tr>',
+             '</table>'))
+  
+  return(leaf_map)
+
+}
+
 ```
 
 As we bid adieu to the NWIS discrete water quality services, we welcome a new web service offering, the U.S. Geological Survey (USGS) Water Data for the Nation samples data service.
@@ -166,23 +197,14 @@ There are 2 arguments that dictate what kind of data is returned: dataType and d
 The possibilities are:
 
 * dataType = "Results"
-
   - dataProfile:  "Full physical chemical", "Basic physical chemical", "Full biological", "Basic biological", and "Narrow"
-
 * dataType = "Monitoring locations"
-
   - dataProfile: "Site" and "Count"
-
 * dataType = "Activities"
-
   - dataProfile: "Sample Activities", "Activity Metrics", "Activity Groups", and "Count"
-
 * dataType = "Projects"
-
   - dataProfile: "Project" and "Project Monitoring Location Weight"
-
 * dataType = "Organizations"
-
   - dataProfile: "Organization" and "Count"
 
 ## Geographical filters
@@ -206,24 +228,7 @@ bbox_sites <- read_USGS_samples(boundingBox = bbox,
 
 
 ```{r echo=FALSE, message=FALSE}
-library(leaflet)
-library(sf)
-
-leaflet_crs <- "+proj=longlat +datum=WGS84"
-
-bbox_sf <- bbox_sites |> 
-  sf::st_as_sf(coords = c("Location_Longitude","Location_Latitude"))
-
-sf::st_crs(bbox_sf) <- 4269 #NAD83
-
-leaflet() %>%
-  addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(data = bbox_sf |> 
-                sf::st_transform(crs = leaflet_crs), 
-              color = "red",
-              radius = 2, 
-              opacity = 1)
-
+map_it(bbox_sites)
 ```
 
 ### Hydrologic Unit Codes (HUCs)
@@ -241,19 +246,7 @@ huc_sites <- read_USGS_samples(hydrologicUnit = "070700",
 
 
 ```{r echo=FALSE}
-huc_sf <- huc_sites |> 
-  sf::st_as_sf(coords = c("Location_Longitude","Location_Latitude"))
-
-sf::st_crs(huc_sf) <- 4269 #NAD83
-
-leaflet() %>%
-  addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(data = huc_sf |> 
-                sf::st_transform(crs = leaflet_crs), 
-              color = "red",
-              radius = 2, 
-              opacity = 1)
-
+map_it(huc_sites)
 ```
 
 
@@ -273,19 +266,7 @@ point_sites <- read_USGS_samples(pointLocationLatitude = 43.074680,
 
 
 ```{r echo=FALSE}
-point_sf <- point_sites |> 
-  sf::st_as_sf(coords = c("Location_Longitude","Location_Latitude"))
-
-sf::st_crs(point_sf) <- 4269 #NAD83
-
-leaflet() %>%
-  addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(data = point_sf |> 
-                sf::st_transform(crs = leaflet_crs), 
-              color = "red",
-              radius = 2, 
-              opacity = 1)
-
+map_it(point_sites)
 ```
 
 ### countyFips 
@@ -306,19 +287,7 @@ county_sites <- read_USGS_samples(countyFips = dane_county,
 
 
 ```{r echo=FALSE}
-county_sf <- county_sites |> 
-  sf::st_as_sf(coords = c("Location_Longitude","Location_Latitude"))
-
-sf::st_crs(county_sf) <- 4269 #NAD83
-
-leaflet() %>%
-  addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(data = county_sf |> 
-                sf::st_transform(crs = leaflet_crs), 
-              color = "red",
-              radius = 2, 
-              opacity = 1)
-
+map_it(county_sites)
 ```
 
 ### stateFips 
@@ -339,20 +308,7 @@ state_sites <- read_USGS_samples(stateFips = state_fip,
 
 
 ```{r echo=FALSE}
-state_sf <- state_sites |> 
-  sf::st_as_sf(coords = c("Location_Longitude","Location_Latitude"))
-
-sf::st_crs(state_sf) <- 4269 #NAD83
-
-
-leaflet() %>%
-  addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(data = state_sf |> 
-                sf::st_transform(crs = leaflet_crs), 
-              color = "red",
-              radius = 2, 
-              opacity = 1)
-
+map_it(state_sites)
 ```
 
 ## Additional Query Parameters
@@ -448,20 +404,7 @@ state_sites_recent <- read_USGS_samples(stateFips = state_fip,
 Many fewer sites than the original Wisconsin map:
 
 ```{r echo=FALSE}
-state_sites_recent_sf <- state_sites_recent |> 
-  sf::st_as_sf(coords = c("Location_Longitude","Location_Latitude"))
-
-sf::st_crs(state_sites_recent_sf) <- 4269 #NAD83
-
-
-leaflet() %>%
-  addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(data = state_sites_recent_sf |> 
-                sf::st_transform(crs = leaflet_crs), 
-              color = "red",
-              radius = 2, 
-              opacity = 1)
-
+map_it(state_sites_recent)
 ```
 
 ## Data Discovery
