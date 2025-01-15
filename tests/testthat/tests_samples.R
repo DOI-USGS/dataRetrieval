@@ -47,7 +47,7 @@ test_that("General samples-data retrievals work using WQP tests", {
 
 
 context("samples-data samples")
-test_that("samples-data samples working", {
+test_that("samples-data activities working", {
   testthat::skip_on_cran()
 
   activityInfo <- read_USGS_samples(monitoringLocationIdentifier = "USGS-01594440",
