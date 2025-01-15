@@ -160,7 +160,7 @@ phos_data <- read_USGS_samples(monitoringLocationIdentifier = site,
 
 Inspecting phos_data, there are `r ncol(phos_data)` columns (!). That is all of the possible fields because the default dataProfile is "Full physical chemical". 
 
-Instead of using the "Full physical chemical" profile, we could instead ask for the "Narrow" profile:
+Instead of using the "Full physical chemical" profile, we could ask for the "Narrow" profile:
 
 ```{r}
 phos_narrow <- read_USGS_samples(monitoringLocationIdentifier = site,
@@ -191,7 +191,7 @@ ggplot(data = phos_narrow) +
 
 ## Return data types
 
-There are 2 arguments that dictate what kind of data is returned: dataType and dataProfile. The "dataType" argument define what kind of data comes back, and the "dataProfile" define what columns from that type come back.
+There are 2 arguments that dictate what kind of data is returned: dataType and dataProfile. The "dataType" argument defines what kind of data comes back, and the "dataProfile" defines what columns from that type come back.
 
 
 The possibilities are:

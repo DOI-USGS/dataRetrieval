@@ -9,7 +9,7 @@
 #' See also: \url{https://api.waterdata.usgs.gov/samples-data/docs}.
 #'  
 #' @param monitoringLocationIdentifier A monitoring location identifier has two parts: the agency code
-#' and the location number. Location identifiers should be separated with commas,
+#' and the location number, separated by a dash (-). Location identifiers should be separated with commas,
 #' for example: AZ014-320821110580701, CAX01-15304600, USGS-040851385. Location
 #' numbers without an agency prefix are assumed to have the prefix USGS.
 #' @param activityMediaName Sample media refers to the environmental medium that
@@ -48,14 +48,19 @@
 #' \code{check_param("characteristics")$characteristicName}.
 #' @param stateFips State query parameter. To get a list of available state fips, 
 #' run \code{check_param("states")}. The "fips" can be created using the function
-#' \code{stateCdLookup}.
+#' \code{stateCdLookup} - for example: \code{stateCdLookup("WI", "fips")}. 
+#' FIPs codes for states take the format: 
+#' CountryAbbrev:StateNumber, like US:55 for Wisconsin.
 #' @param countyFips County query parameter. To get a list of available counties,
 #' run \code{check_param("counties")}. The "Fips" can be created using the function
-#' \code{countyCdLookup}.
+#' \code{countyCdLookup} - for example: \code{countyCdLookup("WI", "Dane", "fips")} 
+#' for Dane County, WI.
+#' FIPs codes for counties take the format: 
+#' CountryAbbrev:StateNumber:CountyNumber, like US:55:025 for Dane County, WI.
 #' @param countryFips Country query parameter. Do not set redundant parameters. 
 #' If another query parameter contains the country information, leave this parameter
 #' set to the default NA. See available options by running \code{check_param("countries")},
-#' the value needed is "id" from that result.
+#' where the "id" field contains the value to use in the countryFips input.
 #' @param projectIdentifier Project identifier query parameter. This information
 #' would be needed from prior project information. 
 #' @param recordIdentifierUserSupplied Record identifier, user supplied identifier. This
@@ -64,9 +69,9 @@
 #' options by running \code{check_param("sitetype")$typeName}.
 #' @param usgsPCode USGS parameter code. See available options by running 
 #' \code{check_param("characteristics")$parameterCode}.
-#' @param pointLocationLatitude Latitude for a point/radius query. Must be used
+#' @param pointLocationLatitude Latitude for a point/radius query (decimal degrees). Must be used
 #' with pointLocationLongitude and pointLocationWithinMiles.
-#' @param pointLocationLongitude Longitude for a point/radius query. Must be used
+#' @param pointLocationLongitude Longitude for a point/radius query (decimal degrees). Must be used
 #' with pointLocationLatitude and pointLocationWithinMiles.
 #' @param pointLocationWithinMiles Radius for a point/radius query. Must be used
 #' with pointLocationLatitude and pointLocationLongitude
@@ -242,15 +247,13 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
               several.ok = TRUE)
   }
   
-  if(!sum(is.na(c(pointLocationLatitude, 
-                 pointLocationLongitude,
-                 pointLocationWithinMiles))) == 3){
-    if(!sum(!is.na(c(pointLocationLatitude, 
-                    pointLocationLongitude,
-                    pointLocationWithinMiles))) == 3 ){
+  check_radius <- sum(is.na(c(pointLocationLatitude, 
+                              pointLocationLongitude,
+                              pointLocationWithinMiles)))
+  
+  if(!check_radius %in% c(3, 0)){
       stop("pointLocationLatitude, pointLocationLongitude, and pointLocationWithinMiles
            must all be defined, or none defined.")
-    }
   }
   
   baseURL <- explode_query(baseURL,
@@ -477,8 +480,8 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
 #' This function creates the call and gets the data for discrete water quality samples summary data
 #' service described at \url{https://api.waterdata.usgs.gov/samples-data/docs}.
 #'
-#' @param monitoringLocationIdentifier A monitoring location identifier has two parts: the agency code
-#' and the location number. Location identifiers should be separated with commas,
+#' @param monitoringLocationIdentifier A monitoring location identifier has two parts,
+#' separated by a dash (-): the agency code and the location number. Location identifiers should be separated with commas,
 #' for example: AZ014-320821110580701, CAX01-15304600, USGS-040851385. Location
 #' numbers without an agency prefix are assumed to have the prefix USGS.
 #' @export
