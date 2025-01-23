@@ -1,5 +1,5 @@
 ---
-title: "Introducing read_USGS_sample"
+title: "Introducing read_USGS_samples"
 author: Laura A. DeCicco
 editor_options: 
   chunk_output_type: console
@@ -8,7 +8,7 @@ output:
     toc: true
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Introducing read_USGS_sample}
+  %\VignetteIndexEntry{Introducing read_USGS_samples}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 ---
