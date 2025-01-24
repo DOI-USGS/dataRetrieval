@@ -39,7 +39,7 @@ We are looking for R users at any experience level with dataRetrieval - from beg
 
 Participation in user testing will take about an hour. We will ask a set of questions to better understand how you use dataRetrieval and why, and we will ask users to walk us through a pre-determined coding example with dataRetrieval. Interviews will take place in February. There are no right or wrong answers - think of it as you’re testing us! We'll use your feedback to improve the usability and functionality of dataRetrieval and its user resources. 
 
-Please email CompTools@usgs.gov by January 28, 2025 if you are interested in participating, and please share this invitation with others who might also be interested. We will start contacting people in early February to schedule interviews.  
+Please email CompTools@usgs.gov by January 30, 2025 if you are interested in participating, and please share this invitation with others who might also be interested. We will start contacting people in early February to schedule interviews.  
 
 # Introduction
 
