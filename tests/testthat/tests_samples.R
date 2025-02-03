@@ -18,13 +18,13 @@ test_that("General samples-data retrievals work using WQP tests", {
                                 activityStartDateUpper  = "2024-01-01",
                                 stateFips = "US:55",
                                 characteristicUserSupplied = secchi_ops$observedProperty, 
-                                dataProfile = "Narrow")
+                                dataProfile = "narrow")
   
   expect_true(nrow(lakeData) > 0)
   
   lakeSites <- read_USGS_samples(monitoringLocationIdentifier = unique(lakeData$Location_Identifier),
-                                 dataType = "Monitoring locations", 
-                                 dataProfile = "Site")
+                                 dataType = "locations", 
+                                 dataProfile = "site")
   expect_type(lakeSites, "list")
 
 
@@ -37,7 +37,7 @@ test_that("General samples-data retrievals work using WQP tests", {
   
   pHData <- read_USGS_samples(monitoringLocationIdentifier = "USGS-04024315",
                               characteristic = "pH",
-                              dataProfile = "Narrow")
+                              dataProfile = "narrow")
   
   expect_true(all(c("url", "queryTime", "headerInfo") %in%
                     names(attributes(pHData))))
@@ -51,7 +51,7 @@ test_that("samples-data activities working", {
   testthat::skip_on_cran()
 
   activityInfo <- read_USGS_samples(monitoringLocationIdentifier = "USGS-01594440",
-                                dataType = "Activities")
+                                dataType = "activities")
   expect_true(nrow(activityInfo) > 0)
 })
 
@@ -62,7 +62,7 @@ test_that("samples-data project working", {
   
   projectInfo <- read_USGS_samples(countyFips = countyCdLookup("WI", "Dane"),
                                 siteTypeName = type,
-                                dataType = "Projects")
+                                dataType = "projects")
   expect_true(ncol(projectInfo) >= 0)
 })
 
@@ -81,13 +81,13 @@ test_that("profiles", {
   # Data profiles: "Organization Data"
   org_data <- read_USGS_samples(
     countyFips =  countyCdLookup("WI", "Dane"),
-    dataType = "Organizations"
+    dataType = "organizations"
   )
   
   # Data profiles: "Site Data Only"
   site_data <- read_USGS_samples(
     countyFips =  countyCdLookup("WI", "Dane"),
-    dataType = "Monitoring locations"
+    dataType = "locations"
   )
   
   expect_true(all(c("ProviderName", "Location_Identifier") %in% names(site_data)))
@@ -95,7 +95,7 @@ test_that("profiles", {
   # Data profiles: "Project Data"
   project_data <- read_USGS_samples(
     countyFips =  countyCdLookup("WI", "Dane"),
-    dataType = "Projects"
+    dataType = "projects"
   )
  
   expect_true(all(c(
@@ -106,8 +106,8 @@ test_that("profiles", {
   # Data profiles: "Project Monitoring Location Weighting Data"
   proj_mlwd <- read_USGS_samples(
     countyFips =  countyCdLookup("WI", "Dane"),
-    dataType = "Projects",
-    dataProfile = "Project Monitoring Location Weight"
+    dataType = "projects",
+    dataProfile = "projectmonitoringlocationweight"
   )
   
   expect_true(all(c(
@@ -118,8 +118,8 @@ test_that("profiles", {
   # Data profiles: "Sample Results (biological metadata)"
   samp_bio <- read_USGS_samples(
     monitoringLocationIdentifier = "USGS-04024315",
-    dataProfile = "Basic biological",
-    dataType = "Results"
+    dataProfile = "basicbio",
+    dataType = "results"
   )
   
   expect_true(all(c(
@@ -130,8 +130,8 @@ test_that("profiles", {
   # Data profiles: "Sample Results (narrow)"
   samp_narrow <- read_USGS_samples(
     monitoringLocationIdentifier = "USGS-04024315",
-    dataProfile = "Narrow",
-    dataType = "Results"
+    dataProfile = "narrow",
+    dataType = "results"
   )
   
   expect_true(all(c(
@@ -142,8 +142,8 @@ test_that("profiles", {
   # Data profiles: "Sampling Activity"
   samp_activity <- read_USGS_samples(
     monitoringLocationIdentifier = "USGS-04024315",
-    dataProfile = "Sample Activities",
-    dataType = "Activities"
+    dataProfile = "sampact", # Sampling Activities
+    dataType = "activities"
   )
   
   expect_true(all(c(
@@ -154,8 +154,8 @@ test_that("profiles", {
   # Data profile: "Result Detection Quantitation Limit Data"
   dl_data <- read_USGS_samples(
     monitoringLocationIdentifier = "USGS-04024315",
-    dataType = "Results",
-    dataProfile = "Result Detection Quantitation Limit"
+    dataType = "results",
+    dataProfile = "resultdetectionquantitationlimit"
   )
   
   expect_true(all(c(
