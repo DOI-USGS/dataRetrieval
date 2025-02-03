@@ -50,7 +50,7 @@ jobs:
           file.copy(from = "./public/articles/logo.png",to = "./public/reference/logo.png")
         shell: Rscript {0}
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@64bcae551a7b18bcb9a09042ddf1960979799187
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
           path: ./public
   # Deployment job
