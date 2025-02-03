@@ -77,13 +77,13 @@
 #' with pointLocationLatitude and pointLocationLongitude
 #' @param dataType Options include: "Results", "Monitoring locations", "Activities",
 #' "Projects", and "Organizations".
-#' @param dataProfile Profile depends on type. Options for "Results" dataType are: 
-#' "Full physical chemical", "Basic physical chemical", "Full biological", 
-#' "Basic biological", "Narrow". Options for "Monitoring location" are: 
-#' "Site" and "Count". Options for "Activities" are "Sample Activities", 
-#' "Activity Metrics", "Activity Groups", "Count". Options for "Projects" are:
-#' "Project" and "Project Monitoring Location Weight". Options for "Organizations" are:
-#' "Organization" and "Count".
+#' @param dataProfile Profile depends on type. Options for "results" dataType are: 
+#' "fullphyschem", "basicphyschem", "fullbio", "basicbio", "narrow",
+#' "resultdetectionquantitationlimit", "labsampleprep", "count". Options for "locations" are: 
+#' "site" and "count". Options for "activities" are "sampact", "actmetric", "actgroup", 
+#' and "count". Options for "projects" are:
+#' "project" and "projectmonitoringlocationweight". Options for "organizations" are:
+#' "organization" and "count".
 #' @export
 #' @return data frame returned from web service call.
 #' 
@@ -116,16 +116,16 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                            pointLocationLatitude = NA,
                            pointLocationLongitude = NA,
                            pointLocationWithinMiles = NA,
-                           dataType = "Results",
+                           dataType = "results",
                            dataProfile = NA){
   
   message("Function in development, use at your own risk.")
   
-  dataType <- match.arg(dataType, c("Results",
-                        "Monitoring locations",
-                        "Activities",
-                        "Projects",
-                        "Organizations"), 
+  dataType <- match.arg(dataType, c("results",
+                        "locations",
+                        "activities",
+                        "projects",
+                        "organizations"), 
             several.ok = FALSE)
 
   # When RMLS comes out...spring 2025ish,
@@ -135,63 +135,46 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
     httr2::req_url_query(mimeType = "text/csv")
   
   switch(dataType,
-         Results = {
-           available_profiles <- c("Full physical chemical",
-                                   "Basic physical chemical",
-                                   "Full biological",
-                                   "Basic biological",
-                                   "Narrow",
-                                   "Count",
-                                   "Lab Sample Prep",
-                                   "Result Detection Quantitation Limit")
-           profile_convert <- stats::setNames(c("fullphyschem",
-                                "basicphyschem",
-                                "fullbio",
-                                "basicbio",
-                                "narrow",
-                                "count",
-                                "labsampleprep",
-                                "resultdetectionquantitationlimit"),
-                                available_profiles)
+         results = {
+           available_profiles <- c("fullphyschem", "basicphyschem",
+                                   "fullbio", "basicbio", "narrow", 
+                                   "resultdetectionquantitationlimit", 
+                                   "labsampleprep", "count")
            baseURL <- httr2::req_url_path_append(baseURL, 
                                                  "results")
          },
-         `Monitoring locations` = {
-           profile_convert <- stats::setNames(c("site", "count"),
-                                              c("Site", "Count"))
+         locations = {
+           available_profiles <- c("site", "count")
 
            baseURL <- httr2::req_url_path_append(baseURL, 
                                                  "locations")
          },
-         Activities = {
-           profile_convert <- stats::setNames(c("sampact", "actmetric", "actgroup", "count"),
-                                              c("Sample Activities", "Activity Metrics", "Activity Groups", "Count"))
+         activities = {
+           available_profiles <- c("sampact", "actmetric", "actgroup", "count")
 
            baseURL <- httr2::req_url_path_append(baseURL,
                                                  "activities")
          },
-         Projects = {
-           profile_convert <- stats::setNames(c("project", "projectmonitoringlocationweight"),
-                                              c("Project", "Project Monitoring Location Weight"))
+         projects = {
+           available_profiles <- c("project", "projectmonitoringlocationweight")
            
            baseURL <- httr2::req_url_path_append(baseURL,
                                                  "projects") 
          },
-         Organizations = {
-           profile_convert <- stats::setNames(c("organization", "count"),
-                                              c("Organization", "Count"))
+         organizations = {
+           available_profiles <- c("organization", "count")
 
            baseURL <- httr2::req_url_path_append(baseURL,
                                                  "organizations")
          })
 
-  dataProfile <- check_profile(dataProfile, profile_convert)
+  dataProfile <- check_profile(dataProfile, available_profiles)
   dataProfile <- match.arg(dataProfile, 
-                           names(profile_convert),
+                           available_profiles,
                            several.ok = FALSE)  
   
   baseURL <- httr2::req_url_path_append(baseURL,
-                                        profile_convert[[dataProfile]]) 
+                                        dataProfile) 
     
   
   if(all(!is.na(siteTypeCode))){
@@ -303,12 +286,12 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
 check_profile <- function(dataProfile, profile_convert){
   if(is.na(dataProfile)){
     message(paste0("No profile specified, defaulting to '",
-                   names(profile_convert)[1], "'\n",
+                   profile_convert[1], "'\n",
                    "Possible values are: \n",
-                   paste0(names(profile_convert), collapse = ", ")))
-    dataProfile <- names(profile_convert)[1]
+                   paste0(profile_convert, collapse = ", ")))
+    dataProfile <- profile_convert[1]
   } else {
-    dataProfile <- match.arg(dataProfile, names(profile_convert), several.ok = FALSE)
+    dataProfile <- match.arg(dataProfile, profile_convert, several.ok = FALSE)
   }
   return(dataProfile)
 }
@@ -408,7 +391,7 @@ check_param <- function(service = "characteristicgroup",
 #'                monitoringLocationIdentifier = "USGS-04074950",
 #'                characteristicUserSupplied = "pH, water, unfiltered, field",
 #'                activityStartDateUpper = "2000-01-01",
-#'                dataProfile = "Narrow")
+#'                dataProfile = "narrow")
 #'                
 #' nameToUse <- "pH"
 #' pHData <- read_USGS_samples(monitoringLocationIdentifier = "USGS-04024315", 
@@ -418,7 +401,7 @@ check_param <- function(service = "characteristicgroup",
 #' attr(pHData, "queryTime")
 #' 
 #' summary_data <- read_USGS_samples(monitoringLocationIdentifier = "USGS-04024315", 
-#'                                dataType = "Projects")
+#'                                dataType = "projects")
 #' 
 #' }
 read_USGS_samples <- function(monitoringLocationIdentifier = NA,
@@ -441,7 +424,7 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
                            pointLocationLatitude = NA,
                            pointLocationLongitude = NA,
                            pointLocationWithinMiles = NA,
-                           dataType = "Results",
+                           dataType = "results",
                            dataProfile = NA,
                            tz = "UTC"){
   
