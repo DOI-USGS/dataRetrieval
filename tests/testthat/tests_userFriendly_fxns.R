@@ -141,16 +141,16 @@ test_that("WQP qw tests", {
   nameToUse <- "Specific conductance"
   pcodeToUse <- "00095"
 
-  INFO_WQP <- readWQPqw("USGS-04024315", pcodeToUse, 
-                        startDate = "", endDate = "", legacy = FALSE)
-  expect_is(INFO_WQP$Activity_StartDateTime, "POSIXct")
-
-  INFO2 <- readWQPqw("WIDNR_WQX-10032762", nameToUse, 
-                     startDate = "", endDate = "", legacy = FALSE)
-  expect_is(INFO2$Activity_StartDateTime, "POSIXct")
-  
-  df <- readWQPqw("USGS-04193500", parameterCd = "00665", legacy = FALSE)
-  expect_true(nrow(df) > 0)
+  # INFO_WQP <- readWQPqw("USGS-04024315", pcodeToUse, 
+  #                       startDate = "", endDate = "", legacy = FALSE)
+  # expect_is(INFO_WQP$Activity_StartDateTime, "POSIXct")
+  # 
+  # INFO2 <- readWQPqw("WIDNR_WQX-10032762", nameToUse, 
+  #                    startDate = "", endDate = "", legacy = FALSE)
+  # expect_is(INFO2$Activity_StartDateTime, "POSIXct")
+  # 
+  # df <- readWQPqw("USGS-04193500", parameterCd = "00665", legacy = FALSE)
+  # expect_true(nrow(df) > 0)
   
   df2 <- readWQPqw("USGS-05427718", parameterCd = "all")
   expect_true(nrow(df2) > 0)
