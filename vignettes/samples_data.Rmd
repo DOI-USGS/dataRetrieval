@@ -169,7 +169,7 @@ Instead of using the "Full physical chemical" profile, we could ask for the "Nar
 ```{r}
 phos_narrow <- read_USGS_samples(monitoringLocationIdentifier = site,
                         characteristicUserSupplied = user_char,
-                        dataProfile = "Narrow")
+                        dataProfile = "narrow")
 ```
 
 We can do a simple plot to check the data:
