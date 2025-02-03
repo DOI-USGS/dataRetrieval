@@ -14,40 +14,6 @@ Environmental Protection Agency (EPA), U.S. Department of Agriculture
 (USDA), and USGS. Direct USGS data is obtained from a service called the
 National Water Information System (NWIS).
 
-# Call for volunteers
-
-We are recruiting volunteers to participate in user testing of
-dataRetrieval, the goal being to ensure that we continue to meet users’
-needs and find areas for improvement.
-
-For over ten years, the USGS has developed and maintained the R package
-dataRetrieval, which is designed to provide easy programmatic access to
-USGS water data. Over the next year we will be implementing updates to
-the package functionality as part of a larger effort to modernize USGS
-APIs and web services. Part of successfully ensuring these functionality
-updates meet the needs of our users involves user-centered design, which
-is why we’re reaching out to you.
-
-We are looking for R users at any experience level with dataRetrieval -
-from beginner to seasoned expert - and using dataRetrieval with any size
-data sets - from small, targeted data pulls to large and complex
-automated workflows. We are particularly interested in hearing from
-users who are pulling data using NWIS functions, such as readNWISdata,
-whatNWISdata, etc.
-
-Participation in user testing will take about an hour. We will ask a set
-of questions to better understand how you use dataRetrieval and why, and
-we will ask users to walk us through a pre-determined coding example
-with dataRetrieval. Interviews will take place in February. There are no
-right or wrong answers - think of it as you’re testing us! We’ll use
-your feedback to improve the usability and functionality of
-dataRetrieval and its user resources.
-
-Please email <CompTools@usgs.gov> by January 30, 2025 if you are
-interested in participating, and please share this invitation with
-others who might also be interested. We will start contacting people in
-early February to schedule interviews.
-
 # Introduction
 
 :warning: USGS discrete water-quality data availability and format are
@@ -170,15 +136,15 @@ NWIScitation <- create_NWIS_bib(dv)
 NWIScitation
 #> U.S. Geological Survey (2025). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jan
-#> 24, 2025,
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Feb
+#> 03, 2025,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Jan 24, 2025},
+#>   note = {Accessed Feb 03, 2025},
 #>   year = {2025},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -202,14 +168,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2025). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Jan 24, 2025,
+#> Accessed Feb 03, 2025,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Jan 24, 2025},
+#>   note = {Accessed Feb 03, 2025},
 #>   year = {2025},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }
