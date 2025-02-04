@@ -42,7 +42,6 @@ build-image:
   rules:
     - changes:
       - docker/Dockerfile
-      - .gitlab-ci.yml
   script:
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
@@ -81,15 +80,24 @@ unittests:
         coverage_format: cobertura
         path: cobertura.xml
   coverage: '/Coverage: \d+.\d+\%/'
-        
+
+longtest:
+  stage: test
+  dependencies:
+    - build-image
+    - buildcheck
+  script:
+    - Rscript -e 'testthat::test_local(path = "tests/manual")'
+  rules:
+    - if: $RUN_LONG_TESTS == "FALSE"
+      when: always
+    - when: never
+  
 pages:
   stage: end
   cache: []
-  only: 
-    - main
   script:
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
-    - Rscript -e 'source("deploy_simple.R")'
   artifacts:
     paths:
       - $PAGES_OUTDIR
@@ -97,6 +105,8 @@ pages:
     
 Validate Inventory:
     stage: end
+    only: 
+      - main
     image: ${INTERNAL_REGISTRY}software/software-management:latest
     script:
       - software-management review

@@ -65,7 +65,7 @@ readWQPdots <- function(..., legacy = TRUE) {
     stCd <- values["statecode"]
     stCdPrefix <- "US:"
     if (!grepl(stCdPrefix, stCd)) {
-      values["statecode"] <- paste0(stCdPrefix, zeroPad(stateCdLookup(stCd, "id"), 2))
+      values["statecode"] <- stateCdLookup(stCd, "fips")
     }
   }
 
@@ -76,10 +76,7 @@ readWQPdots <- function(..., legacy = TRUE) {
     # It's possible that someone could request more than one state
     # in WQP, but if they also then request county codes,
     # it gets really confusing, and the WQP developers don't recommend.
-    values["countycode"] <- paste(values["statecode"],
-      countyCdLookup(stCd, values["countycode"], "id"),
-      sep = ":"
-    )
+    values["countycode"] <- countyCdLookup(stCd, values["countycode"], "fips")
   }
   
   if(!"mimeType" %in% names(values)){

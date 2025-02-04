@@ -265,8 +265,10 @@ readWQPdata <- function(...,
     
     attr(retval, "legacy") <- legacy
     
-    if (!all(is.na(retval)) && !ignore_attributes) {
-      params <- list(...)
+    if (!all(is.na(retval)) && 
+        !ignore_attributes && 
+        !service %in% c("Station", "StationWQX")) {
+      params <- convertLists(...)
       params <- params[!names(params) %in% c("dataProfile", "service")]
       retval <- create_WQP_attributes(retval, params)
     } 

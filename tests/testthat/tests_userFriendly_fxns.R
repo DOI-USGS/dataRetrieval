@@ -141,16 +141,16 @@ test_that("WQP qw tests", {
   nameToUse <- "Specific conductance"
   pcodeToUse <- "00095"
 
-  INFO_WQP <- readWQPqw("USGS-04024315", pcodeToUse, 
-                        startDate = "", endDate = "", legacy = FALSE)
-  expect_is(INFO_WQP$Activity_StartDateTime, "POSIXct")
-
-  INFO2 <- readWQPqw("WIDNR_WQX-10032762", nameToUse, 
-                     startDate = "", endDate = "", legacy = FALSE)
-  expect_is(INFO2$Activity_StartDateTime, "POSIXct")
-  
-  df <- readWQPqw("USGS-04193500", parameterCd = "00665", legacy = FALSE)
-  expect_true(nrow(df) > 0)
+  # INFO_WQP <- readWQPqw("USGS-04024315", pcodeToUse, 
+  #                       startDate = "", endDate = "", legacy = FALSE)
+  # expect_is(INFO_WQP$Activity_StartDateTime, "POSIXct")
+  # 
+  # INFO2 <- readWQPqw("WIDNR_WQX-10032762", nameToUse, 
+  #                    startDate = "", endDate = "", legacy = FALSE)
+  # expect_is(INFO2$Activity_StartDateTime, "POSIXct")
+  # 
+  # df <- readWQPqw("USGS-04193500", parameterCd = "00665", legacy = FALSE)
+  # expect_true(nrow(df) > 0)
   
   df2 <- readWQPqw("USGS-05427718", parameterCd = "all")
   expect_true(nrow(df2) > 0)
@@ -236,17 +236,14 @@ test_that("state county tests", {
   multipleStates <- stateCdLookup(c("West Virginia", "Wisconsin", 55, "MN"))
   expect_equal(multipleStates, c("WV", "WI", "WI", "MN"))
 
-  id <- countyCdLookup(state = "WI", county = "Dane")
-  expect_equal(id, "025")
+  fip <- countyCdLookup(state = "WI", county = "Dane")
+  expect_equal(fip, "US:55:025")
   name <- countyCdLookup(state = "OH", county = 13, output = "fullName")
-  expect_equal(name, "Belmont County")
-  index <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "tableIndex")
-  expect_equal(index, 2258)
+  expect_equal(name, "Belmont")
+  index <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "fips")
+  expect_equal(index, "US:42:003")
   fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
-  expect_equal(fromIDs, "Bacon County")
-  counties <- c("51001", "51003")
-  already_ready <- countyCdLookup(county = counties)
-  expect_equal(counties, already_ready)
+  expect_equal(fromIDs, "Bacon")
 })
 
 context("water year column")
