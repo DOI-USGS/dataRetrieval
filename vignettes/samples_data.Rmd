@@ -1,0 +1,456 @@
+---
+title: "Introducing read_USGS_samples"
+author: Laura A. DeCicco
+editor_options: 
+  chunk_output_type: console
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Introducing read_USGS_samples}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+
+```{r setup, include=FALSE, message=FALSE}
+library(knitr)
+library(dataRetrieval)
+library(dplyr)
+library(ggplot2)
+
+options(continue = " ",
+        width = 50)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = TRUE,
+  fig.height = 4,
+  fig.width = 7
+)
+
+wrap_text <- function(x, width = 40, collapse = "\n"){
+  new_text <- paste(strwrap(x, 
+                width = width),
+                collapse = collapse)
+  return(new_text)
+}
+
+library(leaflet)
+library(sf)
+
+
+
+map_it <- function(df){
+  
+  df_sf <- df |> 
+    sf::st_as_sf(coords = c("Location_Longitude",
+                          "Location_Latitude"))
+
+  sf::st_crs(df_sf) <- 4269 #NAD83
+
+  leaflet_crs <- "+proj=longlat +datum=WGS84"
+
+  leaf_map <- leaflet::leaflet() |> 
+    leaflet::addProviderTiles("CartoDB.Positron") |> 
+    leaflet::addCircleMarkers(data = df_sf |> 
+                  sf::st_transform(crs = leaflet_crs), 
+                color = "red",
+                radius = 2, 
+                opacity = 1,
+                popup = paste0('<b>', df_sf$Location_Name, "</b><br/><table>",
+             "<tr><td><b>Type:</b></td><td>", df_sf$Location_Type, "</td></tr>",
+             "<tr><td><b>HUC 12:</b></td><td>", df_sf$Location_HUCTwelveDigitCode,'</td></tr>',
+             '</table>'))
+  
+  return(leaf_map)
+
+}
+
+```
+
+As we bid adieu to the NWIS discrete water quality services, we welcome a new web service offering, the U.S. Geological Survey (USGS) Water Data for the Nation samples data service.
+
+In this tutorial, we'll walk through how to use the new services in the following ways:
+
+* Retrieving data from a known USGS site.
+
+* Retrieving data using different geographical filters.
+
+* Discovering available data.
+
+For more information on the new data formats, see:
+<https://waterdata.usgs.gov/blog/qw-to-wqx3-mapping>
+
+# New USGS data access
+
+This is a modern access point for USGS discrete water quality data. The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. To access these services on a web browser, go to <https://waterdata.usgs.gov/download-samples/>.
+
+## New Features
+
+### Style
+
+New functions will use a "snake case", such as "read_USGS_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
+
+### Structure
+
+Historically, we used allowed users to customize their queries via the `...` argument structure. With `...`, users needed to know the exact names of query parameters before using the function. Now, the new functions will include **ALL** possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other IDEs). **Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters.** We expect this will be easier for users, but it might take some time to smooth out the documentation and test usability. There may be additional consequences, such as users won't be able to build up argument lists to pass into the function.  
+
+### Dependencies
+
+Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. 
+
+### Developmental workflow
+
+CRAN-stable documentation will be available on the GitHub pages:
+<https://doi-usgs.github.io/dataRetrieval/>
+
+Development documentation will be available on GitLab pages:
+<https://water.code-pages.usgs.gov/dataRetrieval>
+
+Development of `dataRetrieval` will happen on a git branch called "develop" on GitHub. The "develop" branch will only move to the "main" branch when we submit to CRAN, unless there are bug fixes that pertain to the CRAN release. The "develop" branch WILL change frequently, and there are no promises of future behavior. Users must accept that they are using those functions at their own risk. If you willing to accept this risk, the installation instructions are:
+
+```{r eval=FALSE}
+library(remotes)
+
+install_github("DOI-USGS/dataRetrieval",
+               ref = "develop")
+
+```
+
+# Discrete USGS data workflow
+
+Alright, let's test out this new service! Here is a link to the user interface:
+<https://waterdata.usgs.gov/download-samples/>.
+
+And here is a link to the web service documentation:
+<https://api.waterdata.usgs.gov/samples-data/docs\>
+
+## Retrieving data from a known site
+
+Let's say we have a USGS site. We can check the data available at that site using `summarize_USGS_samples` like this:
+
+```{r}
+library(dataRetrieval)
+site <- "USGS-04183500"
+
+data_at_site <- summarize_USGS_samples(monitoringLocationIdentifier = site)
+
+```
+
+Explore the results:
+
+```{r echo=FALSE}
+formatted_data_at_site <- data_at_site |> 
+                    select(-monitoringLocationIdentifier) |> 
+                arrange(desc(resultCount))
+
+names(formatted_data_at_site) <- gsub("([[:upper:]])", " \\1", names(formatted_data_at_site))
+
+
+DT::datatable(formatted_data_at_site, rownames = FALSE)
+```
+
+We see there's `r data_at_site$resultCount[data_at_site$characteristicUserSupplied == "Phosphorus as phosphorus, water, unfiltered"]` filtered phosphorus values available. Note that if we ask for a simple characteristic = "Phosphorus", we'd get back both filtered and unfiltered, which might not be appropriate to mix together in an analysis. "characteristicUserSupplied" allows us to query by a very specific set of data. It is similar to a long-form USGS parameter code.
+
+To get that data, use the `read_USGS_samples` function:
+
+```{r}
+user_char <- "Phosphorus as phosphorus, water, unfiltered"
+phos_data <- read_USGS_samples(monitoringLocationIdentifier = site,
+                        characteristicUserSupplied = user_char)
+```
+
+Inspecting phos_data, there are `r ncol(phos_data)` columns (!). That is all of the possible fields because the default dataProfile is "Full physical chemical". 
+
+Instead of using the "Full physical chemical" profile, we could ask for the "Narrow" profile:
+
+```{r}
+phos_narrow <- read_USGS_samples(monitoringLocationIdentifier = site,
+                        characteristicUserSupplied = user_char,
+                        dataProfile = "narrow")
+```
+
+We can do a simple plot to check the data:
+
+```{r}
+library(ggplot2)
+wrap_text <- function(x, width = 30, collapse = "\n"){
+  new_text <- paste(strwrap(x, 
+                width = width),
+                collapse = collapse)
+  return(new_text)
+}
+
+ggplot(data = phos_narrow) +
+  geom_point(aes(x = Activity_StartDateTime,
+                 y = Result_Measure)) +
+  theme_bw() +
+  ggtitle(unique(phos_narrow$Location_Name)) +
+  xlab("Date") +
+  ylab(wrap_text(unique(phos_narrow$Result_CharacteristicUserSupplied)))
+
+```
+
+## Return data types
+
+There are 2 arguments that dictate what kind of data is returned: dataType and dataProfile. The "dataType" argument defines what kind of data comes back, and the "dataProfile" defines what columns from that type come back.
+
+
+The possibilities are (which match the documentation [here](https://api.waterdata.usgs.gov/samples-data/docs)):
+
+* dataType = "results"
+  - dataProfile: "fullphyschem", "basicphyschem", "fullbio", "basicbio", "narrow", "resultdetectionquantitationlimit", "labsampleprep", "count"
+* dataType = "locations"
+  - dataProfile: "site", "count"
+* dataType = "activities"
+  - dataProfile: "sampact", "actmetric", "actgroup", "count"
+* dataType = "Projects"
+  - dataProfile: "project", "projectmonitoringlocationweight"
+* dataType = "organizations"
+  - dataProfile: "organization" and "count"
+
+## Geographical filters
+
+Let's say we don't know a USGS site number, but we do have an area of interest. Here are the different geographic filters available. We'll use characteristicUserSupplied == "Phosphorus as phosphorus, water, unfiltered" to limit the sites returned, and dataType = "locations" to limit the data returned. That means we'll just be asking for what sites measured "Phosphorus as phosphorus, water, unfiltered", but not actually getting those result values.
+
+### Bounding Box
+
+North and south are latitude values; east and west are longitude values. A vector of 4 (west, south, east, north) is expected. 
+
+```{r}
+bbox <- c(-90.8, 44.2, -89.9, 45.0)
+user_char <- "Phosphorus as phosphorus, water, unfiltered"
+
+bbox_sites <- read_USGS_samples(boundingBox = bbox,
+                                characteristicUserSupplied = user_char,
+                                dataType = "locations",
+                                dataProfile = "site")
+
+```
+
+
+```{r echo=FALSE, message=FALSE}
+map_it(bbox_sites)
+```
+
+### Hydrologic Unit Codes (HUCs)
+
+Hydrologic Unit Codes (HUCs) identify physical areas within the US that drain to a certain portion of the stream network. This filter accepts values containing 2, 4, 6, 8, 10 or 12 digits. 
+
+```{r}
+
+huc_sites <- read_USGS_samples(hydrologicUnit = "070700",
+                                characteristicUserSupplied = user_char,
+                                dataType = "locations",
+                                dataProfile = "site")
+
+```
+
+
+```{r echo=FALSE}
+map_it(huc_sites)
+```
+
+
+### Distance from a point
+
+Location latitude (pointLocationLatitude) and longitude (pointLocationLongitude), and the radius (pointLocationWithinMiles) are required for this geographic filter:
+
+```{r}
+point_sites <- read_USGS_samples(pointLocationLatitude = 43.074680,
+                                 pointLocationLongitude = -89.428054,
+                                 pointLocationWithinMiles = 20,
+                                characteristicUserSupplied = user_char,
+                                dataType = "locations",
+                                dataProfile = "site")
+
+```
+
+
+```{r echo=FALSE}
+map_it(point_sites)
+```
+
+### countyFips 
+
+County query parameter. To get a list of available counties,
+run `check_param("counties")`. The "Fips" can be created using the function `countyCdLookup`.
+
+```{r}
+dane_county <- countyCdLookup("WI", "Dane", 
+                              outputType = "fips")
+
+county_sites <- read_USGS_samples(countyFips = dane_county,
+                                characteristicUserSupplied = user_char,
+                                dataType = "locations",
+                                dataProfile = "site")
+
+```
+
+
+```{r echo=FALSE}
+map_it(county_sites)
+```
+
+### stateFips 
+
+State query parameter. To get a list of available state fips, 
+run `check_param("states")`. The "fips" can be created using the function
+`stateCdLookup`.
+
+```{r}
+state_fip <- stateCdLookup("WI", outputType = "fips")
+
+state_sites <- read_USGS_samples(stateFips = state_fip,
+                                characteristicUserSupplied = user_char,
+                                dataType = "locations",
+                                dataProfile = "site")
+
+```
+
+
+```{r echo=FALSE}
+map_it(state_sites)
+```
+
+## Additional Query Parameters
+
+Additional parameters can be included to limit the results coming back from a request.
+
+### siteTypeCode
+
+Site type code query parameter.
+
+```{r}
+site_type_info <- check_param("sitetype")
+site_type_info$typeCode
+```
+
+### siteTypeName
+
+Site type name query parameter. 
+
+```{r}
+site_type_info$typeLongName
+```
+
+### activityMediaName
+
+Sample media refers to the environmental medium that was sampled or analyzed.
+
+```{r}
+media_info <- check_param("samplemedia")
+media_info$activityMedia
+```
+
+### characteristicGroup
+
+Characteristic group is a broad category describing the sample. The options for this parameter generally follow the values described in the Water Quality Portal [User Guide](https://www.waterqualitydata.us/portal_userguide), but not always.
+
+```{r}
+group_info <- check_param("characteristicgroup")
+group_info$characteristicGroup
+```
+
+### characteristic
+
+Characteristic is a specific category describing the sample. See `check_param("characteristics")` for a full list, below is a small sample:
+
+```{r}
+characteristic_info <- check_param("characteristics")
+head(unique(characteristic_info$characteristicName))
+```
+
+### characteristicUserSupplied
+
+Observed property is the USGS term for the constituent sampled and the property name gives a detailed description of what was sampled. Observed Property is mapped to characteristicUserSupplied, and replaces the parameter name and pcode USGS previously used to describe discrete sample data. See `check_param("observedproperty")` for a full list, below is a small sample:
+
+```{r}
+char_us <- check_param("observedproperty")
+head(char_us$observedProperty)
+```
+
+### usgsPCode
+
+USGS parameter code. See `check_param("characteristics")` for a full list, below is a small sample:
+
+```{r}
+characteristic_info <- check_param("characteristics")
+head(unique(characteristic_info$parameterCode))
+```
+
+### projectIdentifier:
+
+Project identifier query parameter. This information would be needed from prior project information.
+
+### recordIdentifierUserSupplied:
+
+Record identifier, user supplied identifier. This information would be needed from the data supplier.
+
+### activityStartDate: Lower and Upper
+
+Specify one or both of these fields to filter on the activity start date. The service will return records with dates earlier than the value entered for activityStartDateUpper and/or later than the value entered for activityStartDateLower. The logic is inclusive, i.e. it will also return records that match either date. Can be an R Date object, or a string with format YYYY-MM-DD. 
+
+For instance, let's grab Wisconsin sites that measured phosphorus in October or November of 2024:
+ 
+```{r}
+state_sites_recent <- read_USGS_samples(stateFips = state_fip,
+                                characteristicUserSupplied = user_char,
+                                dataType = "locations",
+                                activityStartDateLower = "2024-10-01",
+                                activityStartDateUpper = "2024-12-01",
+                                dataProfile = "site")
+
+```
+
+Many fewer sites than the original Wisconsin map:
+
+```{r echo=FALSE}
+map_it(state_sites_recent)
+```
+
+## Data Discovery
+
+The above examples showed how to find sites within a geographic filter. We can use a few additional query parameters. As an example, let's look for the same phosphorus, in Dane County, WI, but limited to streams:
+
+```{r}
+dane_county <- countyCdLookup("WI", "Dane")
+
+county_lake_sites <- read_USGS_samples(countyFips = dane_county,
+                                characteristicUserSupplied = user_char,
+                                siteTypeName = "Lake, Reservoir, Impoundment",
+                                dataType = "locations",
+                                dataProfile = "site")
+
+```
+
+There are only `r nrow(county_lake_sites)` lake sites measuring phosphorus in Dane County, WI. We can get a summary of the data at each site using the `summarize_USGS_samples` function. This function only accepts 1 site at a time:
+
+```{r message=FALSE}
+all_data <- data.frame()
+
+for(i in county_lake_sites$Location_Identifier){
+  avail_i <- summarize_USGS_samples(monitoringLocationIdentifier = i)
+  all_data <- avail_i |> 
+    filter(characteristicUserSupplied == user_char) |> 
+    bind_rows(all_data)
+}
+
+```
+
+Let's see what's available:
+
+```{r echo=FALSE}
+all_data_formatted <- all_data |> 
+  select(-characteristicGroup, -characteristic)
+
+names(all_data_formatted) <- gsub("([[:upper:]])", " \\1", names(all_data_formatted))
+
+
+DT::datatable(all_data_formatted, rownames = FALSE)
+```
+
+This table can help narrow down which specific sites to ask for the data. Maybe you need sites with recent data, maybe you need sites with lots of data, maybe 1 measurement is enough. 
+

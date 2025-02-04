@@ -32,8 +32,10 @@ navbar:
       href: articles/wqp_large_pull_script.html
     - text: Pipeline Approach
       href: articles/wqp_large_pull_targets.html
-  - text: Water Quality Changes
+  - text: Water Quality Data
     menu:
+    - text: Samples Data
+      href: articles/samples_data.html
     - text: Changes to QW
       href: articles/qwdata_changes.html
     - text: USGS QW Status
@@ -63,7 +65,7 @@ navbar:
     href: https://github.com/DOI-USGS/dataRetrieval
 reference:
   - title: National Water Information System (NWIS)
-    desc:  Functions to retrieve (USGS) NWIS data.
+    desc:  Functions to retrieve (USGS) NWIS data. These will be slowly phased out and replaced with the read_USGS family of functions.
     contents:
       - readNWISdv
       - readNWISuv
@@ -89,6 +91,13 @@ reference:
       - whatWQPmetrics
       - readWQPsummary
       - wqp_check_status
+  - title: USGS new data services
+    desc: Functions to retrieve USGS data from new services.
+    contents:
+      - read_USGS_samples
+      - summarize_USGS_samples
+      - construct_USGS_sample_request
+      - check_param
   - title: National Ground-Water Monitoring Network
     desc: Functions to retrieve NGWMN data.
     contents:
