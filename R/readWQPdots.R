@@ -77,6 +77,8 @@ readWQPdots <- function(..., legacy = TRUE) {
     # in WQP, but if they also then request county codes,
     # it gets really confusing, and the WQP developers don't recommend.
     values["countycode"] <- countyCdLookup(stCd, values["countycode"], "fips")
+    # WQP doesn't need or want both state and county code:
+    values["statecode"] <- NULL
   }
   
   if(!"mimeType" %in% names(values)){
