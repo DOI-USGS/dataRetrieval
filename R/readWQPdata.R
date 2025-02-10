@@ -289,6 +289,29 @@ readWQPdata <- function(...,
 
 create_WQP_attributes <- function(retval, ...){
 
+  col_legacy <- c("CharacteristicName", #legacy
+                  "ResultMeasure.MeasureUnitCode", 
+                  "ResultSampleFractionText")
+  col_wqx3 <- c("Result_Characteristic", #wqx3
+                "Result_MeasureUnit", 
+                "Result_SampleFraction")
+  if (all(col_legacy %in% names(retval))) {
+    retvalVariableInfo <- retval[, col_legacy]
+    retvalVariableInfo <- unique(retvalVariableInfo)
+    names(retvalVariableInfo) <- c("characteristicName",
+                                   "param_units",
+                                   "valueType")
+
+    attr(retval, "variableInfo") <- retvalVariableInfo
+  } else if(all(col_wqx3 %in% names(retval))){
+    retvalVariableInfo <- retval[, col_wqx3]
+    retvalVariableInfo <- unique(retvalVariableInfo)
+    names(retvalVariableInfo) <- c("characteristicName",
+                                   "param_units",
+                                   "valueType")
+    
+    attr(retval, "variableInfo") <- retvalVariableInfo
+  }
   
   siteInfo <- suppressWarnings(whatWQPsites(..., legacy = attr(retval, "legacy")))
   attr(retval, "siteInfo") <- siteInfo
@@ -300,8 +323,6 @@ create_WQP_attributes <- function(retval, ...){
   } else {
     attr(retval, "queryTime") <- Sys.time()
   }
-  
-  
   
   return(retval)
 }
