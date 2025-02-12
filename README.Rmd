@@ -33,16 +33,6 @@ The `dataRetrieval` package was created to simplify the process of loading hydro
 
 :warning: USGS discrete water-quality data availability and format are changing. Beginning March 11, 2024 USGS data obtained from legacy services will not include new USGS data or recent updates to existing data. To view the status of changes in data availability and code functionality, visit: <https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
 
-:warning: All documentation on <https://doi-usgs.github.io/dataRetrieval> assume you have the development version of dataRetrieval installed. To do that:
-
-```{r eval=FALSE}
-library(remotes)
-install_github("DOI-USGS/dataRetrieval",
-               build_vignettes = TRUE, 
-               build_opts = c("--no-resave-data",
-                              "--no-manual"))
-```
-
 If you have additional questions about these changes, email CompTools@usgs.gov.
 
 # What would you like to do?
