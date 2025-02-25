@@ -67,6 +67,10 @@ importWQP <- function(obs_url, tz = "UTC",
   
   attr(retval, 'spec') <- NULL
   
+  if(any(grepl("ERROR: INCOMPLETE DATA", retval[1,]))){
+    stop(retval[[1]])
+  }
+  
   # this is only needed for legacy
   names(retval)[grep("/", names(retval))] <- gsub("/", ".", names(retval)[grep("/", names(retval))])
   
