@@ -1,4 +1,4 @@
-# dataRetrieval
+# dataRetrieval <img src="man/figures/hex_logo.png" class="logo"  alt="dataRetrieval" style="width:90px;height:auto;" align="right" />
 
 [![CRAN
 version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=EGRET)
@@ -14,24 +14,14 @@ Environmental Protection Agency (EPA), U.S. Department of Agriculture
 (USDA), and USGS. Direct USGS data is obtained from a service called the
 National Water Information System (NWIS).
 
+# Introduction
+
 :warning: USGS discrete water-quality data availability and format are
 changing. Beginning March 11, 2024 USGS data obtained from legacy
 services will not include new USGS data or recent updates to existing
 data. To view the status of changes in data availability and code
 functionality, visit:
 <https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
-
-:warning: All documentation on
-<https://doi-usgs.github.io/dataRetrieval> assume you have the
-development version of dataRetrieval installed. To do that:
-
-``` r
-library(remotes)
-install_github("DOI-USGS/dataRetrieval",
-               build_vignettes = TRUE, 
-               build_opts = c("--no-resave-data",
-                              "--no-manual"))
-```
 
 If you have additional questions about these changes, email
 <CompTools@usgs.gov>.
@@ -132,19 +122,19 @@ dv <- readNWISdv("09010500", "00060")
 NWIScitation <- create_NWIS_bib(dv)
 
 NWIScitation
-#> U.S. Geological Survey (2024). _National Water Information System data
+#> U.S. Geological Survey (2025). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Oct
-#> 23, 2024,
-#> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Feb
+#> 10, 2025,
+#> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Oct 23, 2024},
-#>   year = {2024},
-#>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
+#>   note = {Accessed Feb 10, 2025},
+#>   year = {2025},
+#>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
 ```
 
@@ -164,18 +154,18 @@ SC <- readWQPqw(siteNumbers = "USGS-05288705",
 
 WQPcitation <- create_WQP_bib(SC)
 WQPcitation
-#> National Water Quality Monitoring Council (2024). _Water Quality
+#> National Water Quality Monitoring Council (2025). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Oct 23, 2024,
-#> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=csv>.
+#> Accessed Feb 10, 2025,
+#> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Oct 23, 2024},
-#>   year = {2024},
-#>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&pCode=00300&mimeType=csv},
+#>   note = {Accessed Feb 10, 2025},
+#>   year = {2025},
+#>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }
 ```
 

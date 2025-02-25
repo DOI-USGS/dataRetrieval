@@ -30,15 +30,15 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       CUSTOM_DR_UA: 'GitHub_CI'
     steps:
-      - uses: actions/checkout@c0a81a463886bb75afe234e07a9fd5bb79219196
+      - uses: actions/checkout@581d62f320f2a4043a1ea6ac77290c60d27485cc
 
-      - uses: r-lib/actions/setup-pandoc@52330cc136b963487918a8867f948ddf954e9e63
+      - uses: r-lib/actions/setup-pandoc@473c68190595b311a74f208fba61a8d8c0d4c247
 
-      - uses: r-lib/actions/setup-r@52330cc136b963487918a8867f948ddf954e9e63
+      - uses: r-lib/actions/setup-r@473c68190595b311a74f208fba61a8d8c0d4c247
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@52330cc136b963487918a8867f948ddf954e9e63
+      - uses: r-lib/actions/setup-r-dependencies@473c68190595b311a74f208fba61a8d8c0d4c247
         with:
           extra-packages: |
             any::pkgdown
@@ -58,7 +58,7 @@ jobs:
           file.copy(from = "./public/articles/logo.png",to = "./public/reference/logo.png")
         shell: Rscript {0}
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@64bcae551a7b18bcb9a09042ddf1960979799187
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
           path: ./public
   # Deployment job
@@ -71,5 +71,5 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@73e62e651178eeba977de2dc9f4c7645b3d01015
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e
 
