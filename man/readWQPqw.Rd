@@ -81,13 +81,24 @@ rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
 
 attr(rawPcode, "siteInfo")
 attr(rawPcode, "queryTime")
-
+attr(rawPcode, "url") 
 
 rawCharacteristicName <- readWQPqw("WIDNR_WQX-10032762", "Specific conductance", "", "")
-rawPHsites <- readWQPqw(c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"), "pH", "", "")
+pHsites_legacy <- readWQPqw(c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+                        "pH", "", "")
+ncol(pHsites_legacy)
+attr(pHsites_legacy, "url")
+ 
+pHsites_modern <- readWQPqw(c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+                        "pH", "", "", legacy = FALSE)
+ncol(pHsites_modern)
+attr(pHsites_modern, "url")
+          
 nwisEx <- readWQPqw("USGS-04024000", c("34247", "30234", "32104", "34220"), "", "2022-12-20")
 
-DO <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", convertType = FALSE)
+DO <- readWQPqw(siteNumbers = "USGS-05288705", 
+                parameterCd = "00300",
+                convertType = FALSE)
 }
 \dontshow{\}) # examplesIf}
 }
