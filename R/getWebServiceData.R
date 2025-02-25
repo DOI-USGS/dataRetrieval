@@ -52,29 +52,6 @@ getWebServiceData <- function(obs_url, ...) {
     content <- gsub(" ", "", tolower(headerInfo$`content-type`))
     if (content %in% return_content) {
       returnedDoc <- httr2::resp_body_string(returnedList)
-      trys <- 1
-      if (all(grepl("ERROR: INCOMPLETE DATA", returnedDoc))) {
-        
-        while(trys <= 3){
-          message("Trying again!")
-          obs_url <- httr2::req_url_query(obs_url, 
-                                          try = trys)
-          returnedList <- httr2::req_perform(obs_url)
-          
-          good <- check_non_200s(returnedList)
-          if(good){
-            returnedDoc <- httr2::resp_body_string(returnedList)
-          }
-          if (all(grepl("ERROR: INCOMPLETE DATA", returnedDoc))) {
-            trys <- trys + 1
-          } else {
-            trys <- 100
-          }
-        } 
-      }
-
-    # } else if (headerInfo$`content-type` %in% return_raw) {
-    #   returnedDoc <- httr2::resp_body_raw(returnedList)
     } else if (content %in% return_readLines) {
       returnedList <- httr2::resp_body_string(returnedList)
       txt <- readLines(returnedList$content)

@@ -29,17 +29,9 @@ library(dataRetrieval)
 
 The `dataRetrieval` package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrology data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). 
 
+# Introduction
+
 :warning: USGS discrete water-quality data availability and format are changing. Beginning March 11, 2024 USGS data obtained from legacy services will not include new USGS data or recent updates to existing data. To view the status of changes in data availability and code functionality, visit: <https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
-
-:warning: All documentation on <https://doi-usgs.github.io/dataRetrieval> assume you have the development version of dataRetrieval installed. To do that:
-
-```{r eval=FALSE}
-library(remotes)
-install_github("DOI-USGS/dataRetrieval",
-               build_vignettes = TRUE, 
-               build_opts = c("--no-resave-data",
-                              "--no-manual"))
-```
 
 If you have additional questions about these changes, email CompTools@usgs.gov.
 
