@@ -2,9 +2,9 @@
 % Please edit documentation in R/readNWISdata.R
 \name{countyCdLookup}
 \alias{countyCdLookup}
-\title{County code look up}
+\title{US county code look up}
 \usage{
-countyCdLookup(state, county, outputType = "id")
+countyCdLookup(state, county, outputType = "fips")
 }
 \arguments{
 \item{state}{could be character (full name, abbreviation, id), or numeric (id)}
@@ -15,12 +15,17 @@ countyCdLookup(state, county, outputType = "id")
 }
 \description{
 Function to simplify finding county and county code definitions. Used in \code{readNWISdata}
-and \code{readNWISuse}.
+and \code{readNWISuse}. Currently only has US counties.
 }
 \examples{
-id <- countyCdLookup(state = "WI", county = "Dane")
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
+
+fips <- countyCdLookup(state = "WI", county = "Dane")
+id <- countyCdLookup(state = "WI", county = "Dane", outputType = "id")
 name <- countyCdLookup(state = "OH", county = 13, output = "fullName")
-index <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "tableIndex")
+entry <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "fullEntry")
 fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
-already_correct <- countyCdLookup(county = "51001")
+}
+\dontshow{\}) # examplesIf}
 }

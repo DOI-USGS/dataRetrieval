@@ -72,29 +72,3 @@ setAccess <- function(access = "public") {
   # nolint end
 }
 
-drURL <- function(base.name, ..., arg.list = NULL) {
-  queryString <- drQueryArgs(..., arg.list = arg.list)
-  # to do: add something to check for redundant params
-
-  return(paste0(pkg.env[[base.name]], "?", queryString))
-}
-
-drQueryArgs <- function(..., arg.list) {
-  dots <- list(...)
-  dots <- dots[!vapply(X = dots, FUN = is.null, FUN.VALUE = TRUE)]
-
-  args <- append(expand.grid(dots, stringsAsFactors = FALSE), arg.list)
-  # get the args into name=value strings
-  keyValues <- paste0(names(args), unname(lapply(args, function(x) paste0("=", x[[1]]))))
-  return(paste(keyValues, collapse = "&"))
-}
-
-appendDrURL <- function(url, ..., arg.list = NULL) {
-  queryString <- drQueryArgs(..., arg.list = arg.list)
-  if (length(strsplit(url, "\\?")[[1]]) > 1) {
-    return_url <- paste0(url, "&", queryString)
-  } else {
-    return_url <- paste0(url, queryString)
-  }
-  return(return_url)
-}

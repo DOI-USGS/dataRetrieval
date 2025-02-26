@@ -16,8 +16,7 @@ readWQPdata(
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options.
 A list of arguments can also be supplied. For more information see the above 
-description for this help file. If no "service" argument is supplied, it
-will default to "ResultWQX3". One way to figure out how to construct a WQP query is to go to the "Advanced" 
+description for this help file. One way to figure out how to construct a WQP query is to go to the "Advanced" 
 form in the Water Quality Portal. Use the form to discover what parameters are available. Once the query is 
 set in the form, scroll down to the "Query URL". You will see the parameters
 after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
@@ -108,12 +107,21 @@ Sampling Activity \tab ActivityWQX3 \tab /wqx3/Activity/search \cr
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 
+# Legacy:
 nameToUse <- "pH"
 pHData <- readWQPdata(siteid = "USGS-04024315", 
                       characteristicName = nameToUse)
 ncol(pHData)
 attr(pHData, "siteInfo")
 attr(pHData, "queryTime")
+attr(pHData, "url")
+
+# WQX3:
+pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315", 
+                      characteristicName = nameToUse,
+                      service = "ResultWQX3",
+                      dataProfile = "basicPhysChem")
+attr(pHData_wqx3, "url")
 
 # More examples:
 # querying by county
@@ -123,11 +131,30 @@ DeWitt <- readWQPdata(
   characteristicName = "Nitrogen"
 )
 
+attr(DeWitt, "url")
+
+DeWitt_wqx3 <- readWQPdata(
+  statecode = "Illinois",
+  countycode = "DeWitt",
+  characteristicName = "Nitrogen",
+  service = "ResultWQX3",
+  dataProfile = "basicPhysChem",  
+  ignore_attributes = TRUE)
+
+attr(DeWitt_wqx3, "url")
+
 # Data profile: "Sampling Activity"
 activity <- readWQPdata(
   siteid = "USGS-04024315",
   service = "Activity"
 )
+attr(activity, "url")
+
+activity_wqx3 <- readWQPdata(
+  siteid = "USGS-04024315",
+  service = "ActivityWQX3"
+)
+attr(activity_wqx3, "url")
 
 Dane_activity <- readWQPdata(
   statecode = "Wisconsin",
@@ -136,14 +163,20 @@ Dane_activity <- readWQPdata(
   startDateHi = "2023-12-31",
   service = "Activity"
 )
+attr(Dane_activity, "url")
+
+Dane_activity_wqx3 <- readWQPdata(
+  statecode = "Wisconsin",
+  countycode = "Dane",
+  startDateLo = "2023-01-01",
+  startDateHi = "2023-12-31",
+  service = "ActivityWQX3"
+)
+attr(Dane_activity_wqx3, "url")
 
 ########################################################
 # Additional examples:
 
-pHData_legacy <- readWQPdata(siteid = "USGS-04024315", 
-                      characteristicName = nameToUse,
-                      service = "Result",
-                      dataProfile = "narrowResult")
  
 # Data profiles: "Organization Data" 
 org_data <- readWQPdata(
@@ -180,12 +213,20 @@ samp_bio <- readWQPdata(
   service = "Result"
 )
 
+
 # Data profiles: "Sample Results (narrow)" 
 samp_narrow <- readWQPdata(
   siteid = "USGS-04024315",
   service = "Result",
   dataProfile = "narrowResult"
 )
+
+samp_narrow_wqx3 <- readWQPdata(
+  siteid = "USGS-04024315",
+  service = "ResultWQX3",
+  dataProfile = "narrow"
+)
+
 
 # Data profiles: "Sampling Activity"  
 samp_activity <- readWQPdata(
@@ -215,6 +256,17 @@ Phosphorus <- readWQPdata(
   ignore_attributes = TRUE,
   convertType = FALSE
 )
+
+rawPHsites_legacy <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+                        characteristicName = "pH",
+                        service = "Result",
+                        dataProfile = "narrowResult" )
+
+rawPHsites <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+                        characteristicName = "pH",
+                        service = "ResultWQX3",
+                        dataProfile = "narrow" )
+
 }
 \dontshow{\}) # examplesIf}
 }

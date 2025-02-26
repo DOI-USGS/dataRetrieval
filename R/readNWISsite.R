@@ -66,13 +66,15 @@
 #' siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
 #' }
 readNWISsite <- function(siteNumbers) {
-  siteNumber <- paste(siteNumbers, collapse = ",")
-  names(siteNumber) <- "site"
-  urlSitefile <- drURL("site",
-    Access = pkg.env$access,
-    siteOutput = "Expanded", format = "rdb"
-  )
-  urlSitefile <- appendDrURL(urlSitefile, arg.list = siteNumber)
+
+  baseURL <- httr2::request(pkg.env[["site"]])
+  urlSitefile <- httr2::req_url_query(baseURL,
+                                      siteOutput = "Expanded", 
+                                      format = "rdb")
+
+  urlSitefile <- httr2::req_url_query(urlSitefile, 
+                                      site = siteNumbers, 
+                                      .multi = "comma")
 
   data <- importRDB1(urlSitefile, asDateTime = FALSE)
   # readr needs multiple lines to convert to anything but characters:
