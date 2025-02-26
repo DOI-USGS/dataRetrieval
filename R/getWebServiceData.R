@@ -25,6 +25,10 @@ getWebServiceData <- function(obs_url, ...) {
     return(invisible(NULL))
   }
   
+  if(is.character(obs_url)){
+    obs_url <- httr2::request(obs_url)
+  }
+  
   obs_url <- httr2::req_user_agent(obs_url, default_ua())
   obs_url <- httr2::req_throttle(obs_url, rate = 30 / 60) 
   obs_url <- httr2::req_retry(obs_url,
