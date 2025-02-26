@@ -95,7 +95,7 @@ New functions will use a "snake case", such as "read_USGS_samples". Older functi
 
 ### Structure
 
-Historically, we used allowed users to customize their queries via the `...` argument structure. With `...`, users needed to know the exact names of query parameters before using the function. Now, the new functions will include **ALL** possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other IDEs). **Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters.** We expect this will be easier for users, but it might take some time to smooth out the documentation and test usability. There may be additional consequences, such as users won't be able to build up argument lists to pass into the function.  
+Historically, we allowed users to customize their queries via the `...` argument structure. With `...`, users needed to know the exact names of query parameters before using the function. Now, the new functions will include **ALL** possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other IDEs). **Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters.** We expect this will be easier for users, but it might take some time to smooth out the documentation and test usability. There may be additional consequences, such as users won't be able to build up argument lists to pass into the function.  
 
 ### Dependencies
 
@@ -162,9 +162,9 @@ phos_data <- read_USGS_samples(monitoringLocationIdentifier = site,
                         characteristicUserSupplied = user_char)
 ```
 
-Inspecting phos_data, there are `r ncol(phos_data)` columns (!). That is all of the possible fields because the default dataProfile is "Full physical chemical". 
+Inspecting phos_data, there are `r ncol(phos_data)` columns (!). That is because the default dataProfile is "Full physical chemical", which is designed to be comprehensive. 
 
-Instead of using the "Full physical chemical" profile, we could ask for the "Narrow" profile:
+Instead of using the "Full physical chemical" profile, we could ask for the "Narrow" profile, which contains fewer columns:
 
 ```{r}
 phos_narrow <- read_USGS_samples(monitoringLocationIdentifier = site,
@@ -213,7 +213,7 @@ The possibilities are (which match the documentation [here](https://api.waterdat
 
 ## Geographical filters
 
-Let's say we don't know a USGS site number, but we do have an area of interest. Here are the different geographic filters available. We'll use characteristicUserSupplied == "Phosphorus as phosphorus, water, unfiltered" to limit the sites returned, and dataType = "locations" to limit the data returned. That means we'll just be asking for what sites measured "Phosphorus as phosphorus, water, unfiltered", but not actually getting those result values.
+Let's say we don't know a USGS site number, but we do have an area of interest. Here are the different geographic filters available. We'll use characteristicUserSupplied = "Phosphorus as phosphorus, water, unfiltered" to limit the sites returned, and dataType = "locations" to limit the data returned. That means we'll just be asking for what sites measured "Phosphorus as phosphorus, water, unfiltered", but not actually getting those result values.
 
 ### Bounding Box
 
@@ -276,7 +276,7 @@ map_it(point_sites)
 ### countyFips 
 
 County query parameter. To get a list of available counties,
-run `check_param("counties")`. The "Fips" can be created using the function `countyCdLookup`.
+run `check_param("counties")`. The "Fips" values can be created using the function `countyCdLookup`.
 
 ```{r}
 dane_county <- countyCdLookup("WI", "Dane", 
@@ -296,8 +296,8 @@ map_it(county_sites)
 
 ### stateFips 
 
-State query parameter. To get a list of available state fips, 
-run `check_param("states")`. The "fips" can be created using the function
+State query parameter. To get a list of available state fips values, 
+run `check_param("states")`. The "fips" values can be created using the function
 `stateCdLookup`.
 
 ```{r}
@@ -347,7 +347,7 @@ media_info$activityMedia
 
 ### characteristicGroup
 
-Characteristic group is a broad category describing the sample. The options for this parameter generally follow the values described in the Water Quality Portal [User Guide](https://www.waterqualitydata.us/portal_userguide), but not always.
+Characteristic group is a broad category describing the sample measurement. The options for this parameter generally follow the values described in the Water Quality Portal [User Guide](https://www.waterqualitydata.us/portal_userguide), but not always.
 
 ```{r}
 group_info <- check_param("characteristicgroup")
@@ -391,7 +391,7 @@ Record identifier, user supplied identifier. This information would be needed fr
 
 ### activityStartDate: Lower and Upper
 
-Specify one or both of these fields to filter on the activity start date. The service will return records with dates earlier than the value entered for activityStartDateUpper and/or later than the value entered for activityStartDateLower. The logic is inclusive, i.e. it will also return records that match either date. Can be an R Date object, or a string with format YYYY-MM-DD. 
+Specify one or both of these fields to filter on the activity start date. The service will return records with dates earlier than and including the value entered for activityStartDateUpper and later than and including the value entered for activityStartDateLower. Can be an R Date object, or a string with format YYYY-MM-DD. 
 
 For instance, let's grab Wisconsin sites that measured phosphorus in October or November of 2024:
  
@@ -400,7 +400,7 @@ state_sites_recent <- read_USGS_samples(stateFips = state_fip,
                                 characteristicUserSupplied = user_char,
                                 dataType = "locations",
                                 activityStartDateLower = "2024-10-01",
-                                activityStartDateUpper = "2024-12-01",
+                                activityStartDateUpper = "2024-11-30",
                                 dataProfile = "site")
 
 ```
