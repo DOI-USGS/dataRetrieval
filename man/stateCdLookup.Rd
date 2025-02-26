@@ -4,23 +4,31 @@
 \alias{stateCdLookup}
 \title{State code look up}
 \usage{
-stateCdLookup(input, outputType = "postal")
+stateCdLookup(input, outputType = "postal", country = "US")
 }
 \arguments{
 \item{input}{could be character (full name, abbreviation, id), or numeric (id)}
 
 \item{outputType}{character can be "postal", "fullName", "tableIndex", or "id".}
+
+\item{country}{description}
 }
 \description{
 Function to simplify finding state and state code definitions. Used in \code{readNWISdata}
 and \code{readWQPdata}.
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+\donttest{
 fullName <- stateCdLookup("wi", "fullName")
 abbriev <- stateCdLookup("Wisconsin", "postal")
 id <- stateCdLookup("WI", "id")
 name <- stateCdLookup(55, "fullName")
-index <- stateCdLookup("WI", "tableIndex")
-stateCd[index, ]
+fips <- stateCdLookup("WI", "fips")
+canada_st <- stateCdLookup(13, "fullName", country = "CA")
+mexico_st <- stateCdLookup(13, "fullName", country = "MX")
 stateCdLookup(c("West Virginia", "Wisconsin", 200, 55, "MN"))
+}
+\dontshow{\}) # examplesIf}
 }

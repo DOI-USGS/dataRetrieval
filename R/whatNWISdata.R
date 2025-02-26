@@ -140,10 +140,15 @@ whatNWISdata <- function(..., convertType = TRUE) {
 
   valuesList <- readNWISdots(matchReturn)
 
-  values <- sapply(valuesList$values, function(x) utils::URLencode(x))
-
-  urlSitefile <- drURL("site", Access = pkg.env$access, seriesCatalogOutput = "true", arg.list = values)
-
+  values <- valuesList[["values"]]
+  values <- values[names(values) != "format"]
+  
+  urlSitefile <- httr2::request(pkg.env[["site"]])
+  urlSitefile <-  httr2::req_url_query(urlSitefile,
+                                       seriesCatalogOutput = "true")
+  urlSitefile <- httr2::req_url_query(urlSitefile, !!!values,
+                                      .multi = "comma")
+  
   SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE, convertType = convertType)
 
   if (!("all" %in% service)) {

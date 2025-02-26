@@ -202,6 +202,10 @@ readNWISdata <- function(..., asDateTime = TRUE, convertType = TRUE, tz = "UTC")
   
   valuesList <- readNWISdots(...)
   
+  values <- valuesList[["values"]]
+  values <- values[names(values) != "format"]
+  format <- valuesList[["values"]][["format"]]
+  
   service <- valuesList$service
   if (length(service) > 1) {
     warning("Only one service value is allowed. Service: ", service[1], " will be used.")
@@ -219,18 +223,14 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
     )
   }
   
-  values <- sapply(valuesList$values, function(x)utils:: URLencode(x))
-  
-  baseURL <- drURL(service, arg.list = values)
-  
-  if (service %in% c("site", "dv", "iv")) {
-    baseURL <- appendDrURL(baseURL, Access = pkg.env$access)
+  baseURL <- httr2::request(pkg.env[[service]])
+  if (service != "rating") {
+    baseURL <- httr2::req_url_query(baseURL, format = format)
   }
-  # actually get the data
-  if (length(grep("rdb", values["format"])) > 0) {
-    if (service == "rating") {
-      baseURL <- gsub(pattern = "&format=rdb", replacement = "", baseURL)
-    }
+
+  baseURL <- httr2::req_url_query(baseURL, !!!values, .multi = "comma")
+
+  if (length(grep("rdb",  format)) > 0) {
     retval <- importRDB1(baseURL, tz = tz, asDateTime = asDateTime, convertType = convertType)
   } else {
     retval <- importWaterML1(baseURL, tz = tz, asDateTime = asDateTime)
@@ -256,7 +256,7 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
       )
     )
     # TODO: Think about dates that cross a time zone boundary.
-    if (values["format"] == "waterml,1.1" && nrow(retval) > 0) {
+    if (format == "waterml,1.1" && nrow(retval) > 0) {
       retval$dateTime <- as.POSIXct(retval$dateTime, tzLib[tz = retval$tz_cd[1]])
     }
   }
@@ -280,37 +280,51 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
 #' and \code{readWQPdata}.
 #'
 #' @param input could be character (full name, abbreviation, id), or numeric (id)
+#' @param country description
 #' @param outputType character can be "postal", "fullName", "tableIndex", or "id".
 #' @export
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
 #' fullName <- stateCdLookup("wi", "fullName")
 #' abbriev <- stateCdLookup("Wisconsin", "postal")
 #' id <- stateCdLookup("WI", "id")
 #' name <- stateCdLookup(55, "fullName")
-#' index <- stateCdLookup("WI", "tableIndex")
-#' stateCd[index, ]
+#' fips <- stateCdLookup("WI", "fips")
+#' canada_st <- stateCdLookup(13, "fullName", country = "CA")
+#' mexico_st <- stateCdLookup(13, "fullName", country = "MX")
 #' stateCdLookup(c("West Virginia", "Wisconsin", 200, 55, "MN"))
-stateCdLookup <- function(input, outputType = "postal") {
-  outputType <- match.arg(outputType, c("postal", "fullName", "tableIndex", "id"))
+#' }
+stateCdLookup <- function(input,
+                          outputType = "postal",
+                          country = "US") {
   
+  outputType <- match.arg(outputType, c("postal", "fullName",
+                                        "id", "fips"))
+  
+  states <- check_param("states")
+  country <- match.arg(country, choices = unique(states$countryCode), 
+                       several.ok = FALSE)
+  states <- states[states$countryCode == country,]
   retVal <- rep(NA, length(input))
   index <- 1
   for (i in input) {
     if (is.numeric(i) || !is.na(suppressWarnings(as.numeric(i)))) {
-      i <- which(as.numeric(i) == as.numeric(stateCd$STATE))
+      out_i <- which(as.numeric(i) == as.numeric(states$fipsCode))
     } else if (nchar(i) == 2) {
-      i <- which(tolower(i) == tolower(stateCd$STUSAB))
+      out_i <- which(tolower(i) == tolower(states$stateAbbrev))
     } else {
-      i <- which(tolower(i) == tolower(stateCd$STATE_NAME))
+      out_i <- which(tolower(i) == tolower(states$stateName))
     }
     
-    if (length(i) > 0) {
+
+    if (length(out_i) > 0) {
       output <- switch(outputType,
-                       postal = stateCd$STUSAB[i],
-                       fullName = stateCd$STATE_NAME[i],
-                       tableIndex = i,
-                       id = as.integer(stateCd$STATE[i])
-      )
+                       postal = states$stateAbbrev[out_i],
+                       fullName = states$stateName[out_i],
+                       id = as.integer(states$fipsCode[out_i]),
+                       fips = paste(states$countryCode[out_i], states$fipsCode[out_i], sep = ":"))
+
       retVal[index] <- output
     }
     
@@ -324,26 +338,32 @@ stateCdLookup <- function(input, outputType = "postal") {
   return(retVal)
 }
 
-#' County code look up
+#' US county code look up
 #'
 #' Function to simplify finding county and county code definitions. Used in \code{readNWISdata}
-#' and \code{readNWISuse}.
+#' and \code{readNWISuse}. Currently only has US counties.
 #'
 #' @param state could be character (full name, abbreviation, id), or numeric (id)
 #' @param county could be character (name, with or without "County") or numeric (id)
 #' @param outputType character can be "fullName", "tableIndex", "id", or "fullEntry".
 #' @export
-#' @examples
-#' id <- countyCdLookup(state = "WI", county = "Dane")
+#' @examplesIf is_dataRetrieval_user()
+#' \donttest{
+#' 
+#' fips <- countyCdLookup(state = "WI", county = "Dane")
+#' id <- countyCdLookup(state = "WI", county = "Dane", outputType = "id")
 #' name <- countyCdLookup(state = "OH", county = 13, output = "fullName")
-#' index <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "tableIndex")
+#' entry <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "fullEntry")
 #' fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
-#' already_correct <- countyCdLookup(county = "51001")
-countyCdLookup <- function(state, county, outputType = "id") {
-  outputType <- match.arg(outputType, c("fullName", "tableIndex", "id", "fullEntry"))
+#' }
+countyCdLookup <- function(state, county, outputType = "fips") {
+  outputType <- match.arg(outputType, c("fullName", 
+                                        "fullEntry",
+                                        "fips",
+                                        "id"))
   
   if (missing(state)) {
-    return(county)
+    stop("No state code provided")
   }
   
   if (missing(county)) {
@@ -354,37 +374,47 @@ countyCdLookup <- function(state, county, outputType = "id") {
     stop("Only one state allowed in countyCdLookup.")
   }
   
+  counties <- check_param("counties")
+  
   # first turn state into stateCd postal name
-  stateCd <- stateCdLookup(state, outputType = "postal")
-  state_counties <- countyCd[countyCd$STUSAB == stateCd, ]
+  state_postal <- stateCdLookup(state, 
+                                country = unique(counties$countryCode),
+                                outputType = "postal")
+  state_counties <- counties[counties$stateAbbrev == state_postal, ]
   
   if (is.numeric(county) || !is.na(suppressWarnings(as.numeric(county)))) {
-    county_i <- which(as.numeric(county) == as.numeric(countyCd$COUNTY) & stateCd == countyCd$STUSAB)
+    county_i <- which(as.numeric(county) == as.numeric(state_counties$countyCode))
   } else {
-    county_in_state <- grep(tolower(county), tolower(state_counties$COUNTY_NAME))
-    
-    county_i <- which(countyCd$STUSAB == stateCd &
-                        countyCd$COUNTY_NAME == state_counties$COUNTY_NAME[county_in_state])
-    
-    if (length(county_i) == 0) {
-      stop(paste(
-        "Could not find", county, "(county), ", stateCd,
-        "(state) in the county lookup table. See `countyCd` for complete list."
-      ))
-    } else if (length(county_i) > 1) {
-      stop(paste(
-        county, "(county), ", stateCd,
-        "(state) matched more than one county. See `countyCd` for complete list."
-      ))
+    county_i <- grep(tolower(gsub(" ", "", county)),
+                     tolower(gsub(" ", "", state_counties$countyName))) # takes care of questionable spaces...DeWitt vs De Witt
+    if(length(county_i) == 0){
+      county <- gsub(" county", "", county, ignore.case = TRUE)
+      county_i <- grep(tolower(gsub(" ", "", county)),
+                       tolower(gsub(" ", "", state_counties$countyName)))
     }
   }
   
+  if (length(county_i) == 0) {
+    stop(paste(
+      "Could not find", county, "(county), ", state_postal,
+      "(state) in the county lookup table. See `countyCd` for complete list."
+    ))
+  } else if (length(county_i) > 1) {
+    stop(paste(
+      county, "(county), ", state_postal,
+      "(state) matched more than one county. See `countyCd` for complete list."
+    ))
+  }
+  
+  fips_val <- paste(stateCdLookup(state_counties$stateAbbrev[county_i], 
+                                  outputType = "fips"), 
+                    state_counties$countyCode[county_i],
+                    sep = ":")
   retVal <- switch(outputType,
-                   fullName = countyCd$COUNTY_NAME[county_i],
-                   tableIndex = county_i,
-                   id = countyCd$COUNTY[county_i],
-                   fullEntry = countyCd[county_i, ]
-  )
+                   fullName = state_counties$countyName[county_i],
+                   fullEntry = state_counties[county_i, ],
+                   fips = fips_val,
+                   id = state_counties$countyCode[county_i])
   
   return(retVal)
 }
@@ -413,21 +443,19 @@ readNWISdots <- function(...) {
   
   match.arg(service, c(
     "dv", "iv", "iv_recent", "gwlevels",
-    "site", "uv", "qw", "measurements",
+    "site", "uv", "measurements",
     "qwdata", "stat", "rating", "peak"
   ))
   
   if (service == "uv") {
     service <- "iv"
-  } else if (service == "qw") {
-    service <- "qwdata"
-  }
+  } 
   
   if (length(service) > 1) {
     stop("Only one service call allowed.")
   }
   
-  values <- sapply(matchReturn, function(x) as.character(paste0(eval(x), collapse = ",")))
+  values <- matchReturn
   
   names(values)[names(values) == "startDate"] <- "startDT"
   names(values)[names(values) == "endDate"] <- "endDT"
@@ -477,7 +505,7 @@ readNWISdots <- function(...) {
     }
   }
   
-  if (service %in% c("peak", "qwdata", "measurements", "gwlevels")) {
+  if (service %in% c("peak", "measurements", "gwlevels")) {
     format.default <- "rdb"
     
     names(values)[names(values) == "startDT"] <- "begin_date"
@@ -501,9 +529,10 @@ readNWISdots <- function(...) {
       values["range_selection"] <- "date_range"
     }
     
-    if (service == "qwdata" && !("qw_sample_wide" %in% names(values))) {
-      values["qw_sample_wide"] <- "wide"
-    }
+  }
+  
+  if("bbox" %in% names(values)){
+    values[["bbox"]] <- paste0(values[["bbox"]], collapse = ",")
   }
   
   if (service %in% c("peak", "gwlevels") && "stateCd" %in% names(values)) {
@@ -535,8 +564,10 @@ readNWISdots <- function(...) {
   if (!("format" %in% names(values))) {
     values["format"] <- format.default
   }
-  
-  return(list(values = values, service = service))
+  return_list <- list()
+  return_list["values"] <- list(values)
+  return_list["service"] <- service
+  return(return_list)
 }
 
 #' convert variables in dots to usable format

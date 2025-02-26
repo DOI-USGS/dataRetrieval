@@ -95,3 +95,4 @@ vignettes/dataretrieval_discrete_changes_images/*
 ^public$
 ^docker$
 vignettes/WQX_3.Rmd
+vignettes/samples_data.Rmd

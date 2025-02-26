@@ -24,16 +24,16 @@ Anything defined as a default, is returned as an attribute of that data frame.
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
-baseURL <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,2.0"
-URL <- paste(baseURL, "sites=01646500",
-  "startDT=2014-09-01",
-  "endDT=2014-09-08",
-  "statCd=00003",
-  "parameterCd=00060",
-  sep = "&"
-)
+baseURL <- httr2::request("https://waterservices.usgs.gov/nwis/dv")
+baseURL <- httr2::req_url_query(baseURL,
+                                format = "waterml,2.0",
+                                sites = "01646500",
+                                startDT = "2014-09-01",
+                                endDT = "2014-09-08",
+                                statCd = "00003",
+                                parameterCd = "00060" )
 
-timesereies <- importWaterML2(URL, asDateTime = TRUE, tz = "UTC")
+timeseries <- importWaterML2(baseURL, asDateTime = TRUE, tz = "UTC")
 }
 \dontshow{\}) # examplesIf}
 }

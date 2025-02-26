@@ -284,7 +284,7 @@ readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
       attr(data, "RATING") <- Rat
     }
 
-    siteInfo <- suppressMessages(readNWISsite(siteNumber))
+    siteInfo <- suppressMessages(readNWISsite(siteNumbers = siteNumber))
 
     attr(data, "siteInfo") <- siteInfo
     attr(data, "variableInfo") <- NULL

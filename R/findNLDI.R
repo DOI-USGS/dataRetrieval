@@ -43,17 +43,15 @@ find_good_names <- function(input, type) {
 #' get_nldi_sources()
 #' }
 get_nldi_sources <- function(url = pkg.env$nldi_base) {
-  res <-
-    httr::RETRY("GET",
-      url,
-      times = 3,
-      pause_cap = 60
-    )
+  res <- httr2::request(url)
+  res <- httr2::req_user_agent(res, default_ua())
+  res <- httr2::req_throttle(res, rate = 30 / 60) 
+  res <- httr2::req_retry(res, 
+                          backoff = ~ 5, max_tries = 3) 
+  res <- httr2::req_perform(res)
 
   if (res$status_code == 200) {
-    jsonlite::fromJSON(httr::content(res, "text",
-      encoding = "UTF8"
-    ),
+    jsonlite::fromJSON(httr2::resp_body_string(res),
     simplifyDataFrame = TRUE
     )
   } else {
@@ -73,24 +71,19 @@ get_nldi_sources <- function(url = pkg.env$nldi_base) {
 #' @keywords nldi internal
 #' @noRd
 #' @return a data.frame
-#' @examplesIf is_dataRetrieval_user()
-#' \donttest{
-#' base <- "https://api.water.usgs.gov/nldi/linked-data/"
-#' get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = FALSE)
-#' get_nldi(paste0(base, "comid/101"), type = "feature", use_sf = TRUE)
-#' get_nldi(url = paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
-#' get_nldi(paste0(base, "nwissite/USGS-11120000"), type = "feature", use_sf = TRUE)
-#' }
-
 get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
   # Query
-
-  res <- httr::RETRY("GET", url = url, times = 3, pause_cap = 60, quiet = TRUE)
+  res <- httr2::request(url)
+  res <- httr2::req_user_agent(res, default_ua())
+  res <- httr2::req_throttle(res, rate = 30 / 60) 
+  res <- httr2::req_retry(res, 
+                          backoff = ~ 5, max_tries = 3) 
+  res <- httr2::req_perform(res)
 
   # If successful ...
   if (res$status_code == 200) {
     # Interpret as text
-    d <- httr::content(res, "text", encoding = "UTF8")
+    d <- httr2::resp_body_string(res)
 
     if (d == "") {
       
@@ -185,7 +178,6 @@ get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
 #' @return the input object with potentially modified identifiers
 #' @keywords nldi internal
 #' @noRd
-
 clean_nwis_ids <- function(tmp) {
   # If data.frame, and of type NWIS, then strip "USGS-" from identifiers
   if (is.data.frame(tmp)) {
@@ -204,10 +196,6 @@ clean_nwis_ids <- function(tmp) {
 #' @return a list with good and bad entries
 #' @keywords nldi internal
 #' @noRd
-#' @examplesIf is_dataRetrieval_user()
-#' \donttest{
-#' valid_ask(all = get_nldi_sources(), "nwis")
-#' }
 valid_ask <- function(all, type) {
   # those where the requested pattern is included in a nldi_source ...
   # means we will catch nwis - not just nwissite ...
@@ -282,9 +270,6 @@ valid_ask <- function(all, type) {
 #'
 #' ## GENERAL ORIGIN: COMID
 #' findNLDI(origin = list("comid" = 101))
-#'
-#' ## GENERAL ORIGIN: WaDE
-#' findNLDI(origin = list("wade" = "CA_45206"))
 #'
 #' # Navigation (flowlines will be returned if find is unspecified)
 #' # UPPER MAINSTEM of USGS-11120000

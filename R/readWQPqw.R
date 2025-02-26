@@ -70,7 +70,7 @@
 #'           
 #' nwisEx <- readWQPqw("USGS-04024000", c("34247", "30234", "32104", "34220"), "", "2022-12-20")
 #'
-#' SC <- readWQPqw(siteNumbers = "USGS-05288705", 
+#' DO <- readWQPqw(siteNumbers = "USGS-05288705", 
 #'                 parameterCd = "00300",
 #'                 convertType = FALSE)
 #' }
@@ -112,7 +112,7 @@ readWQPqw <- function(siteNumbers,
     } else {
       wqp_message_beta()
     }
-    attr(retval, "url") <- url
+    attr(retval, "url") <- url$url
 
     return(retval)
   }

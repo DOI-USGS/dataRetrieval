@@ -16,7 +16,9 @@
 checkWQPdates <- function(values) {
   dateNames <- c(
     "startDateLo", "startDateHi",
-    "startDate", "endDate"
+    "startDate", "endDate",
+    "activityStartDateLower",
+    "activityStartDateUpper"
   )
 
   if (any(names(values) %in% dateNames)) {

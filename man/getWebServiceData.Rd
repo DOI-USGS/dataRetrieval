@@ -12,12 +12,13 @@ getWebServiceData(obs_url, ...)
 \item{\dots}{information to pass to header request}
 }
 \value{
-raw data from web services
+Returns xml, json, or text depending on the requested data.
 }
 \description{
-This function accepts a url parameter, and returns the raw data. The function enhances
-\code{\link[httr]{GET}} with more informative error messages. To add a 
-custom user agent, create an environmental variable: CUSTOM_DR_UA
+This function accepts a url parameter, and returns the raw data.
+}
+\details{
+To add a custom user agent, create an environmental variable: CUSTOM_DR_UA
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
