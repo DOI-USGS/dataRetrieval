@@ -26,7 +26,6 @@ Please see \url{https://doi-usgs.github.io/dataRetrieval/} for more information.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://code.usgs.gov/water/dataRetrieval}
   \item Report bugs at \url{https://github.com/DOI-USGS/dataRetrieval/issues}
 }
 
