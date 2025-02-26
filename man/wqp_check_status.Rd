@@ -23,7 +23,8 @@ function will be attached as an attribute to the data.
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
-rawPcode <- readWQPqw("USGS-01594440", "01075", ignore_attributes = TRUE)
+rawPcode <- readWQPqw("USGS-01594440", "01075", 
+                      ignore_attributes = TRUE, legacy = FALSE)
 headerInfo <- attr(rawPcode, "headerInfo")
 wqp_request_id <- headerInfo$`wqp-request-id`
 count_info <- wqp_check_status(wqp_request_id)

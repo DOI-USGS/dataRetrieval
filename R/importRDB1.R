@@ -99,32 +99,28 @@ importRDB1 <- function(obs_url,
 
   tz <- match.arg(tz, OlsonNames())
 
-  if (file.exists(obs_url)) {
-    f <- obs_url
-  } else {
-    f <- tempfile()
-    on.exit(unlink(f))
+  if(inherits(obs_url, "httr2_request")){
 
-    doc <- getWebServiceData(obs_url,
-      httr::write_disk(f),
-      encoding = "gzip"
-    )
+    doc <- getWebServiceData(obs_url)
+
     if (is.null(doc)) {
       return(invisible(NULL))
     }
-    if ("warn" %in% names(attr(doc, "headerInfo"))) {
-      data <- data.frame()
-      attr(data, "headerInfo") <- attr(doc, "headerInfo")
-      attr(data, "url") <- obs_url
-      attr(data, "queryTime") <- Sys.time()
-
-      return(data)
+    
+  } else {
+    if (!file.exists(obs_url)){
+      warning("Unknown Input")
+      return(NULL)
     }
+    doc <- obs_url
+  } 
+
+  readr.total <- readr::read_lines(doc)
+  if(readr.total[length(readr.total)] == ""){
+    readr.total <- readr.total[-length(readr.total)]
   }
-
-  readr.total <- readLines(f)
-
   total.rows <- length(readr.total)
+  
   readr.meta <- readr.total[grep("^#", readr.total)]
   meta.rows <- length(readr.meta)
   header.names <- strsplit(readr.total[meta.rows + 1], "\t")[[1]]
@@ -142,7 +138,7 @@ importRDB1 <- function(obs_url,
 
   if (data.rows > 0) {
     args_list <- list(
-      file = f,
+      file = doc, 
       delim = "\t",
       quote = "",
       skip = meta.rows + 2,
@@ -159,7 +155,7 @@ importRDB1 <- function(obs_url,
     }
 
     readr.data <- suppressWarnings(do.call(readr::read_delim, args = args_list))
-
+     
     readr.data <- as.data.frame(readr.data)
 
     if (nrow(readr.data) > 0) {
@@ -299,8 +295,8 @@ importRDB1 <- function(obs_url,
   }
 
   attr(readr.data, "queryTime") <- Sys.time()
-  if (!file.exists(obs_url)) {
-    attr(readr.data, "url") <- obs_url
+  if (inherits(obs_url, "httr2_request")) {
+    attr(readr.data, "url") <- obs_url$url
     attr(readr.data, "headerInfo") <- attr(doc, "headerInfo")
   }
 

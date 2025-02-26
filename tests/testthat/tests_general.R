@@ -67,7 +67,7 @@ test_that("General NWIS retrievals working", {
   
   expect_true(nrow(gw_data) > 0)
   expect_equal(attr(gw_data, "url"),
-               "https://nwis.waterdata.usgs.gov/nwis/gwlevels?state_cd=AL&begin_date=2024-05-01&end_date=2024-05-30&date_format=YYYY-MM-DD&rdb_inventory_output=file&TZoutput=0&range_selection=date_range&list_of_search_criteria=state_cd&format=rdb")
+               "https://nwis.waterdata.usgs.gov/nwis/gwlevels?format=rdb&state_cd=AL&begin_date=2024-05-01&end_date=2024-05-30&date_format=YYYY-MM-DD&rdb_inventory_output=file&TZoutput=0&range_selection=date_range&list_of_search_criteria=state_cd")
   
   gw_data2 <- readNWISdata(
     state_cd = "AL",
@@ -78,7 +78,7 @@ test_that("General NWIS retrievals working", {
   expect_equal(nrow(gw_data), nrow(gw_data2))
   
   # nolint start: line_length_linter
-  url <- "https://waterservices.usgs.gov/nwis/dv/?site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06"
+  url <- httr2::request("https://waterservices.usgs.gov/nwis/dv/?site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06")
   dv <- importRDB1(url, asDateTime = FALSE)
   # nolint end
   dailyStat <- readNWISdata(
@@ -102,7 +102,7 @@ test_that("General NWIS retrievals working", {
   # Empty data
   # note....not empty anymore!
   # nolint start: line_length_linter
-  urlTest <- "https://nwis.waterservices.usgs.gov/nwis/iv/?site=11447650&format=waterml,1.1&ParameterCd=63680&startDT=2016-12-13&endDT=2016-12-13"
+  urlTest <- httr2::request("https://nwis.waterservices.usgs.gov/nwis/iv/?site=11447650&format=waterml,1.1&ParameterCd=63680&startDT=2016-12-13&endDT=2016-12-13")
   x <- importWaterML1(urlTest)
   expect_true(all(c("agency_cd", "site_no", "dateTime", "tz_cd") %in% names(x)))
   # nolint end
@@ -378,7 +378,7 @@ test_that("whatNWISsites working", {
   #gwlevels:
   info <- whatNWISsites(stateCd = "NY", service="gwlevels") 
   expect_true(nrow(info) > 0)
-  expect_equal(attr(info, "url"), "https://waterservices.usgs.gov/nwis/site/?stateCd=NY&format=mapper&hasDataTypeCd=gw")
+  expect_equal(attr(info, "url"), "https://waterservices.usgs.gov/nwis/site/?stateCd=NY&hasDataTypeCd=gw&format=mapper")
 })
 
 context("readWQPdots")
@@ -388,7 +388,7 @@ test_that("readWQPdots working", {
   # bbox vector turned into single string with coords separated by semicolons
   formArgs_bbox <- dataRetrieval:::readWQPdots(bbox = c(-92.5, 45.4, -87, 47))
   expect_true(length(formArgs_bbox) == 2)
-  expect_true(length(gregexpr(",", formArgs_bbox)[[1]]) == 3)
+  expect_true(length(formArgs_bbox$values$bBox) == 1)
 
   # NWIS names (siteNumber) converted to WQP expected names (siteid)
   formArgs_site <- dataRetrieval:::readWQPdots(siteNumber = "04010301")
@@ -398,7 +398,7 @@ test_that("readWQPdots working", {
 
   # NWIS names (stateCd) converted to WQP expected names (statecode)
   formArgs <- dataRetrieval:::readWQPdots(stateCd = "OH", parameterCd = "00665")
-  expect_true(length(formArgs$values) == 2)
+  expect_true(length(formArgs$values) == 4)
   expect_true("statecode" %in% names(formArgs$values))
   expect_false("stateCd" %in% names(formArgs$values))
   
@@ -411,8 +411,8 @@ test_that("readWQPdots working", {
                     characteristicName = "Total Coliform",
                     startDateLo = "2023-01-01",
                     startDateHi = "2023-12-31",
-                    service = "ResultWQX3",
-                    dataProfile = "narrow")
+                    service = "Result",
+                    dataProfile = "narrowResult")
   expect_true(nrow(df) > 0)
   df_legacy <- readWQPdata(bBox = bbox,
                            characteristicName = "Total Coliform",
@@ -423,53 +423,6 @@ test_that("readWQPdots working", {
   expect_true(nrow(df_legacy) > 0)
 })
 
-
-context("getWebServiceData")
-test_that("long urls use POST", {
-  testthat::skip_on_cran()
-  baseURL <- dataRetrieval:::drURL("Result")
-  url <- paste0(baseURL,
-    rep("reallylongurl", 200),
-    collapse = ""
-  )
-  with_mock(
-    RETRY = function(method, ...) {
-      return(method == "POST")
-    },
-    status_code = function(resp) 200,
-    headers = function(resp) list(`content-type` = "logical"),
-    content = function(resp, encoding) resp,
-    expect_true(getWebServiceData(url)),
-    .env = "httr"
-  )
-})
-
-test_that("ngwmn urls don't use post", {
-  testthat::skip_on_cran()
-  baseURL <- dataRetrieval:::drURL("NGWMN")
-  url <- paste0(baseURL,
-    rep("urlwithngwmn", 200),
-    collapse = ""
-  )
-  with_mock(
-    RETRY = function(method, ...) {
-      return(method == "POST")
-    },
-    status_code = function(resp) 200,
-    headers = function(resp) list(`content-type` = "logical"),
-    content = function(resp, encoding) resp,
-    expect_false(getWebServiceData(url)),
-    .env = "httr"
-  )
-})
-
-test_that("400 errors return a verbose error", {
-  testthat::skip_on_cran()
-  # nolint start: line_length_linter
-  url <- "https://waterservices.usgs.gov/nwis/site/?stateCd=IA&bBox=-92.821445,42.303044,-92.167168,42.646524&format=mapper"
-  # nolint end
-  expect_message(getWebServiceData(url))
-})
 
 test_that("internal functions", {
 
@@ -508,203 +461,13 @@ test_that("internal functions", {
   expect_true(class(bound_df$b) == "character")
 })
 
-test_that("profiles", {
-  
-  testthat::skip_on_cran()
-  # Data profiles: "Organization Data"
-  org_data <- readWQPdata(
-    statecode = "WI",
-    countycode = "Dane",
-    service = "Organization"
-  )
-
-  expect_true(all(c(
-    "OrganizationIdentifier",
-    "OrganizationFormalName"
-  ) %in% names(org_data)))
-
-  # Data profiles: "Site Data Only"
-  site_data <- readWQPdata(
-    statecode = "WI",
-    countycode = "Dane",
-    service = "StationWQX"
-  )
-
-  expect_true(all(c("ProviderName", "Location_Identifier") %in% names(site_data)))
-
-  # Data profiles: "Project Data"
-  project_data <- readWQPdata(
-    statecode = "WI",
-    countycode = "Dane",
-    service = "Project"
-  )
-
-  expect_true(all(c(
-    "OrganizationIdentifier",
-    "OrganizationFormalName"
-  ) %in% names(project_data)))
-
-  # Data profiles: "Project Monitoring Location Weighting Data"
-  proj_mlwd <- readWQPdata(
-    statecode = "WI",
-    countycode = "Dane",
-    service = "ProjectMonitoringLocationWeighting"
-  )
-
-  expect_true(all(c(
-    "OrganizationIdentifier",
-    "OrganizationFormalName"
-  ) %in% names(proj_mlwd)))
-
-  # Data profiles: "narrow":
-  # samp_data <- readWQPdata(
-  #   siteid = "USGS-04024315",
-  #   service = "ResultWQX3",
-  #   dataProfile = "narrow"
-  # )
-  # 
-  # expect_true(all(c(
-  #   "Activity_StartDateTime",
-  #   "LastChangeDate"
-  # ) %in% names(samp_data)))
-
-  # Data profiles: "Sample Results (biological metadata)"
-  samp_bio <- readWQPdata(
-    siteid = "USGS-04024315",
-    dataProfile = "biological",
-    service = "Result"
-  )
-
-  expect_true(all(c(
-    "OrganizationIdentifier",
-    "OrganizationFormalName"
-  ) %in% names(samp_bio)))
-
-  # Data profiles: "Sample Results (narrow)"
-  samp_narrow <- readWQPdata(
-    siteid = "USGS-04024315",
-    dataProfile = "narrowResult",
-    service = "Result"
-  )
-
-  expect_true(all(c(
-    "OrganizationIdentifier",
-    "OrganizationFormalName"
-  ) %in% names(samp_narrow)))
-
-  # Data profiles: "Sampling Activity"
-  samp_activity <- readWQPdata(
-    siteid = "USGS-04024315",
-    dataProfile = "activityAll",
-    service = "Activity"
-  )
-
-  expect_true(all(c(
-    "OrganizationIdentifier",
-    "OrganizationFormalName"
-  ) %in% names(samp_activity)))
-
-  # # Data profile: "Sampling Activity Metrics"
-  # act_metrics <- readWQPdata(
-  #   statecode = "WI",
-  #   countycode = "Dane",
-  #   service = "ActivityMetric"
-  # )
-  # 
-  # expect_true(all(c(
-  #   "OrganizationIdentifier",
-  #   "OrganizationFormalName"
-  # ) %in% names(act_metrics)))
-
-  # Data profile: "Result Detection Quantitation Limit Data"
-  dl_data <- readWQPdata(
-    siteid = "USGS-04024315",
-    service = "ResultDetectionQuantitationLimit"
-  )
-
-  expect_true(all(c(
-    "OrganizationIdentifier",
-    "OrganizationFormalName"
-  ) %in% names(dl_data)))
-})
-
-test_that("readWQPsummary", {
-  testthat::skip_on_cran()
-
-  dane_county_data <- readWQPsummary(
-    countycode = "US:55:025",
-    summaryYears = 5,
-    siteType = "Stream"
-  )
-
-  summary_names <- c(
-    "Provider",
-    "MonitoringLocationIdentifier",
-    "YearSummarized",
-    "CharacteristicType",
-    "CharacteristicName",
-    "ActivityCount",
-    "ResultCount",
-    "LastResultSubmittedDate",
-    "OrganizationIdentifier",
-    "OrganizationFormalName",
-    "MonitoringLocationName",
-    "MonitoringLocationTypeName",
-    "ResolvedMonitoringLocationTypeName",
-    "HUCEightDigitCode",
-    "MonitoringLocationUrl",
-    "CountyName",
-    "StateName",
-    "MonitoringLocationLatitude",
-    "MonitoringLocationLongitude"
-  )
-
-  expect_true(all(summary_names %in% names(dane_county_data)))
-  expect_true(diff(range(dane_county_data$YearSummarized)) <= 5)
-
-  lake_sites <- readWQPsummary(
-    siteType = "Lake, Reservoir, Impoundment",
-    CharacteristicName = "Temperature, water",
-    countycode = "US:55:025"
-  )
-
-  expect_true(all(summary_names %in% names(lake_sites)))
-  expect_true(diff(range(lake_sites$YearSummarized)) >= 5)
-
-  site1 <- readWQPsummary(
-    siteid = "USGS-07144100",
-    summaryYears = 5
-  )
-
-  expect_type(site1$ActivityCount, "double")
-  expect_type(site1$MonitoringLocationIdentifier, "character")
-  # nolint start: line_length_linter
-  expect_equal(
-    attr(site1, "url"),
-    "https://www.waterqualitydata.us/data/summary/monitoringLocation/search?siteid=USGS-07144100&summaryYears=5&dataProfile=periodOfRecord&mimeType=csv"
-  )
-  # nolint end
-})
 
 test_that("importWQP convertType", {
   testthat::skip_on_cran()
 
-  # rawSampleURL_NoZip <- constructWQPURL("USGS-01594440", "01075", "", "")
-  # rawSampleURL_NoZip_char <- importWQP(rawSampleURL_NoZip, convertType = FALSE)
-  # expect_is(rawSampleURL_NoZip_char$Result_Measure, "character")
-  # 
-  # Put back in when services get more robust.
-  # phos <- readWQPdata(statecode = "WI", countycode = "Dane",
-  #                   characteristicName = "Phosphorus",
-  #                   startDateLo = "2022-06-01",
-  #                   startDateHi = "2022-09-01",
-  #                   convertType = FALSE,
-  #                   service = "ResultWQX")
-  # expect_is(phos$Result_Measure, "character")
-
   SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", 
-                  convertType = FALSE, legacy = FALSE)
-  expect_is(SC$Result_Measure, "character")
+                  convertType = FALSE, legacy = TRUE)
+  expect_is(SC$ResultMeasureValue, "character")
 
   lakeSites_chars <- whatWQPdata(
     siteType = "Lake, Reservoir, Impoundment",

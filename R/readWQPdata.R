@@ -234,6 +234,17 @@
 #'   ignore_attributes = TRUE,
 #'   convertType = FALSE
 #' )
+#' 
+#' rawPHsites_legacy <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+#'                         characteristicName = "pH",
+#'                         service = "Result",
+#'                         dataProfile = "narrowResult" )
+#' 
+#' rawPHsites <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+#'                         characteristicName = "pH",
+#'                         service = "ResultWQX3",
+#'                         dataProfile = "narrow" )
+#' 
 #' }
 readWQPdata <- function(...,
                         service = "Result",
@@ -255,18 +266,30 @@ readWQPdata <- function(...,
   legacy <- is_legacy(service)
   
   valuesList <- readWQPdots(..., legacy = legacy)
+  values <- valuesList[["values"]]
+
+  baseURL <- httr2::request(pkg.env[[service]])
   
-  values <- sapply(valuesList$values, function(x) utils::URLencode(x, reserved = TRUE))
-
-  baseURL <- drURL(service, arg.list = values)
-
-  baseURL <- appendDrURL(baseURL, mimeType = "csv")
-
   if(!legacy){
     if(service == "ResultWQX3" & !"dataProfile" %in% names(values)){
-      baseURL <- appendDrURL(baseURL, dataProfile = "fullPhysChem")
+      baseURL <- httr2::req_url_query(baseURL, 
+                                      dataProfile = "fullPhysChem")
     }
-  } 
+    baseURL <- httr2::req_url_query(baseURL, !!!values, 
+                                    .multi = "explode")
+  } else {
+    if("siteid" %in% names(values)){
+      if(length(values[["siteid"]]) > 1){
+        sites <- values[["siteid"]]
+        baseURL <- httr2::req_url_query(baseURL, 
+                                        siteid = sites,
+                                        .multi = function(x) paste0(x, collapse = ";"))
+        values <- values[names(values) != "siteid"]
+      }
+    }
+    baseURL <- httr2::req_url_query(baseURL, !!!values, 
+                                    .multi = "explode")
+  }
 
   if (querySummary) {
     retquery <- getQuerySummary(baseURL)
@@ -291,7 +314,7 @@ readWQPdata <- function(...,
       retval <- create_WQP_attributes(retval, params)
     } 
 
-    attr(retval, "url") <- baseURL
+    attr(retval, "url") <- baseURL$url
     
     if(legacy){
       wqp_message()
@@ -307,6 +330,29 @@ readWQPdata <- function(...,
 
 create_WQP_attributes <- function(retval, ...){
 
+  col_legacy <- c("CharacteristicName", #legacy
+                  "ResultMeasure.MeasureUnitCode", 
+                  "ResultSampleFractionText")
+  col_wqx3 <- c("Result_Characteristic", #wqx3
+                "Result_MeasureUnit", 
+                "Result_SampleFraction")
+  if (all(col_legacy %in% names(retval))) {
+    retvalVariableInfo <- retval[, col_legacy]
+    retvalVariableInfo <- unique(retvalVariableInfo)
+    names(retvalVariableInfo) <- c("characteristicName",
+                                   "param_units",
+                                   "valueType")
+
+    attr(retval, "variableInfo") <- retvalVariableInfo
+  } else if(all(col_wqx3 %in% names(retval))){
+    retvalVariableInfo <- retval[, col_wqx3]
+    retvalVariableInfo <- unique(retvalVariableInfo)
+    names(retvalVariableInfo) <- c("characteristicName",
+                                   "param_units",
+                                   "valueType")
+    
+    attr(retval, "variableInfo") <- retvalVariableInfo
+  }
   
   siteInfo <- suppressWarnings(whatWQPsites(..., legacy = attr(retval, "legacy")))
   attr(retval, "siteInfo") <- siteInfo
@@ -318,8 +364,6 @@ create_WQP_attributes <- function(retval, ...){
   } else {
     attr(retval, "queryTime") <- Sys.time()
   }
-  
-  
   
   return(retval)
 }
@@ -339,7 +383,8 @@ create_WQP_attributes <- function(retval, ...){
 #' 
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' rawPcode <- readWQPqw("USGS-01594440", "01075", ignore_attributes = TRUE)
+#' rawPcode <- readWQPqw("USGS-01594440", "01075", 
+#'                       ignore_attributes = TRUE, legacy = FALSE)
 #' headerInfo <- attr(rawPcode, "headerInfo")
 #' wqp_request_id <- headerInfo$`wqp-request-id`
 #' count_info <- wqp_check_status(wqp_request_id)

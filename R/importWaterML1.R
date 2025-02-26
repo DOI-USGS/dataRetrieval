@@ -88,13 +88,6 @@
 #'   asDateTime = TRUE, tz = "America/Chicago"
 #' )
 #'
-#' # raw XML
-#' url <- constructNWISURL(
-#'   service = "dv", siteNumber = "02319300", parameterCd = "00060",
-#'   startDate = "2014-01-01", endDate = "2014-01-01"
-#' )
-#' raw <- httr::content(httr::GET(url), as = "raw")
-#' rawParsed <- importWaterML1(raw)
 #' }
 #' filePath <- system.file("extdata", package = "dataRetrieval")
 #' fileName <- "WaterML1Example.xml"
@@ -105,11 +98,12 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
   # note: obs_url is a dated name, does not have to be a url/path
 
   returnedDoc <- check_if_xml(obs_url)
-  raw <- !is.character(obs_url)
+  raw <- !is.character(obs_url) & !("httr2_request" %in% class(obs_url))
 
   if (tz == "") { # check tz is valid if supplied
     tz <- "UTC"
   }
+  
   tz <- match.arg(tz, OlsonNames())
 
   timeSeries <- xml2::xml_find_all(returnedDoc, ".//ns1:timeSeries") # each parameter/site combo
@@ -131,7 +125,7 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
     )
     attr(df, "queryInfo") <- noteList
     if (!raw) {
-      attr(df, "url") <- obs_url
+      attr(df, "url") <- obs_url$url
     }
     return(df)
   }
@@ -389,8 +383,8 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
   names(mergedDF) <- make.names(names(mergedDF))
 
   # attach other site info etc as attributes of mergedDF
-  if (!raw) {
-    attr(mergedDF, "url") <- obs_url
+  if ("httr2_request" %in% class(obs_url)) {
+    attr(mergedDF, "url") <- obs_url$url
   }
   attr(mergedDF, "siteInfo") <- mergedSite
   attr(mergedDF, "variableInfo") <- mergedVar

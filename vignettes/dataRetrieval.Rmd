@@ -542,13 +542,12 @@ For NWIS data, the function `readNWISdata` can be used. The argument listed in t
 
 ```{r echo=FALSE}
 # nolint start
-Service <- c("dv", "iv", "gwlevels", "qwdata", "measurements", "peak", "stat")
-Description <- c("Daily", "Instantaneous", "Groundwater Levels", "Water Quality", "Surface Water Measurements", "Peak Flow", "Statistics Service")
+Service <- c("dv", "iv", "gwlevels", "measurements", "peak", "stat")
+Description <- c("Daily", "Instantaneous", "Groundwater Levels", "Surface Water Measurements", "Peak Flow", "Statistics Service")
 URL <- c(
   "<a href='https://waterservices.usgs.gov/docs/dv-service/' target='_blank'>https://waterservices.usgs.gov/docs/dv-service/<a>",
   "<a href='https://waterservices.usgs.gov/docs/instantaneous-values/' target='_blank'>https://waterservices.usgs.gov/docs/instantaneous-values/<a>",
   "<a href='https://waterservices.usgs.gov/docs/groundwater-levels/' target='_blank'>https://waterservices.usgs.gov/docs/groundwater-levels/<a>",
-  "<a href='https://nwis.waterdata.usgs.gov/nwis/qwdata' target='_blank'>https://nwis.waterdata.usgs.gov/nwis/qwdata<a>",
   "<a href='https://waterdata.usgs.gov/nwis/measurements/' target='_blank'>https://waterdata.usgs.gov/nwis/measurements/<a>",
   "<a href='https://nwis.waterdata.usgs.gov/usa/nwis/peak/' target='_blank'>https://nwis.waterdata.usgs.gov/usa/nwis/peak/<a>",
   "<a href='https://waterservices.usgs.gov/docs/statistics/' target='_blank'>https://waterservices.usgs.gov/docs/statistics/<a>"

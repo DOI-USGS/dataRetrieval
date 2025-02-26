@@ -40,7 +40,15 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@473c68190595b311a74f208fba61a8d8c0d4c247
         with:
-          extra-packages: any::pkgdown, local::.
+          extra-packages: |
+            any::pkgdown
+            any::rcmdcheck
+            any::DT
+            any::data.table
+            any::dplyr
+            any::tidyr
+            any::gridExtra
+            local::.
           needs: website
 
       - name: Build site

@@ -87,9 +87,6 @@ findNLDI(location = c(-115, 40))
 ## GENERAL ORIGIN: COMID
 findNLDI(origin = list("comid" = 101))
 
-## GENERAL ORIGIN: WaDE
-findNLDI(origin = list("wade" = "CA_45206"))
-
 # Navigation (flowlines will be returned if find is unspecified)
 # UPPER MAINSTEM of USGS-11120000
 findNLDI(nwis = "11120000", nav = "UM")

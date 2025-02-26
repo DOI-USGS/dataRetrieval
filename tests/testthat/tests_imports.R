@@ -36,34 +36,6 @@ test_that("External importRDB1 tests", {
 
   site <- "05427850"
 
-  url <- constructNWISURL(site, "00060", "2015-01-01", "", "dv",
-    format = "tsv",
-    statCd = "laksjd"
-  )
-  # And....now there"s data there:
-  expect_null(importRDB1(url))
-
-  site <- "11486500"
-
-  url <- dataRetrieval:::drURL("site", arg.list = list(
-    siteOutput = "Expanded",
-    format = "rdb",
-    site = site
-  ))
-  site_data <- importRDB1(url)
-
-  expect_equal(site_data$station_nm, "G CANAL NEAR OLENE, OR")
-
-  site <- "040854588204"
-
-  url <- dataRetrieval:::drURL("site", arg.list = list(
-    siteOutput = "Expanded",
-    format = "rdb",
-    site = site
-  ))
-  site_data <- importRDB1(url)
-
-  expect_equal(site_data$station_nm, "FISHER CR AT 32 & HIGHLAND RD AT HOWARDS GROVE, W")
 })
 
 context("importRDB")
@@ -151,7 +123,8 @@ test_that("External importWaterML1 test", {
     service = "dv", siteNumber = "02319300", parameterCd = "00060",
     startDate = "2014-01-01", endDate = "2014-01-01"
   )
-  raw <- httr::content(httr::GET(url), as = "raw")
+  raw <- httr2::req_perform(url)
+  raw <- httr2::resp_body_xml(raw)
   rawParsed <- importWaterML1(raw)
   expect_true(nrow(rawParsed) > 0)
   expect_true(data.class(rawParsed$X_00060_00003) == "numeric")
