@@ -119,8 +119,6 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                            dataType = "results",
                            dataProfile = NA){
   
-  message("Function in development, use at your own risk.")
-  
   dataType <- match.arg(dataType, c("results",
                         "locations",
                         "activities",
@@ -128,8 +126,6 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                         "organizations"), 
             several.ok = FALSE)
 
-  # When RMLS comes out...spring 2025ish,
-  # we can verify these values hopefully easier:
   baseURL <- httr2::request("https://api.waterdata.usgs.gov") |> 
     httr2::req_url_path_append("samples-data") |>
     httr2::req_url_query(mimeType = "text/csv")
