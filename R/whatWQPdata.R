@@ -199,25 +199,41 @@ whatWQPdata <- function(...,
   if (any(c("tz", "service", "mimeType") %in% names(values))){
     values <- values[!(names(values) %in% c("tz", "service", "mimeType"))]
   }
-
+  POST = FALSE
+  baseURL <- httr2::request(pkg.env[["Station"]])
+  
   if("siteid" %in% names(values)){
     if(length(values[["siteid"]]) > 1){
       sites <- values[["siteid"]]
-      baseURL <- httr2::req_url_query(baseURL, 
-                                      siteid = sites,
-                                      .multi = function(x) paste0(x, collapse = ";"))
+      if(nchar(paste0(sites, collapse = "")) > 2048){
+        POST = TRUE
+        baseURL <- httr2::req_body_form(baseURL, 
+                                        siteid = sites,
+                                        .multi = function(x) paste0(x, collapse = ";"))  
+      } else {
+        baseURL <- httr2::req_url_query(baseURL, 
+                                        siteid = sites,
+                                        .multi = function(x) paste0(x, collapse = ";"))          
+      }
       values <- values[names(values) != "siteid"]
     }
   }
   
-  baseURL <- httr2::request(pkg.env[["Station"]])
   
-  baseURL <- httr2::req_url_query(baseURL,
-                                  !!!values,
-                                  .multi = "explode")
-
-  baseURL <- httr2::req_url_query(baseURL, 
-                                  mimeType = "geojson")
+  
+  if(POST){
+    baseURL <- httr2::req_body_form(baseURL,
+                                    !!!values,
+                                    .multi = "explode")
+    baseURL <- httr2::req_body_form(baseURL, 
+                                    mimeType = "geojson")
+  } else {
+    baseURL <- httr2::req_url_query(baseURL,
+                                    !!!values,
+                                    .multi = "explode")
+    baseURL <- httr2::req_url_query(baseURL, 
+                                    mimeType = "geojson")
+  }
   
   # Not sure if there's a geojson option with WQX3
   wqp_message()
