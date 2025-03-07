@@ -25,6 +25,10 @@ getWebServiceData <- function(obs_url, ...) {
     return(invisible(NULL))
   }
   
+  if(is.character(obs_url)){
+    obs_url <- httr2::request(obs_url)
+  }
+  
   obs_url <- httr2::req_user_agent(obs_url, default_ua())
   obs_url <- httr2::req_throttle(obs_url, rate = 30 / 60) 
   obs_url <- httr2::req_retry(obs_url,
@@ -32,7 +36,11 @@ getWebServiceData <- function(obs_url, ...) {
   obs_url <- httr2::req_headers(obs_url,
                                 `Accept-Encoding` = c("compress", "gzip")) 
   
-  message("GET:", obs_url$url) 
+  url_method <- "GET"
+  if(!is.null(obs_url$body)){
+    url_method <- "POST"
+  }
+  message(url_method, ": ", obs_url$url) 
   returnedList <- httr2::req_perform(obs_url)
 
   good <- check_non_200s(returnedList)
