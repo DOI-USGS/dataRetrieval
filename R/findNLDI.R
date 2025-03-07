@@ -262,8 +262,6 @@ valid_ask <- function(all, type) {
 #' ## Find feature by NWIS ID
 #' findNLDI(nwis = "11120000")
 #'
-#' ## Find feature by WQP ID
-#' findNLDI(wqp = "USGS-04024315")
 #'
 #' ## Find feature by LOCATION
 #' findNLDI(location = c(-115, 40))
@@ -282,7 +280,7 @@ valid_ask <- function(all, type) {
 #' # Discover Features(flowlines will not be returned unless included in find)
 #'
 #' ## Find feature(s) on the upper tributary of USGS-11120000
-#' findNLDI(nwis = "11120000", nav = "UT", find = c("nwis", "wqp"))
+#' findNLDI(nwis = "11120000", nav = "UT", find = c("nwis"))
 #'
 #' ## Find upstream basin boundary and  of USGS-11120000
 #' findNLDI(nwis = "11120000", find = "basin")
