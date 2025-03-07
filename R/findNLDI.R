@@ -287,7 +287,7 @@ valid_ask <- function(all, type) {
 #'
 #' # Control Distance
 #' ## Limit search to 50 km
-#' findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
+#' findNLDI(comid = 101, nav = "DM", find = c("nwis", "flowlines"), distance_km = 50)
 #' }
 
 findNLDI <- function(comid = NULL,

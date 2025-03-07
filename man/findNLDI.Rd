@@ -103,7 +103,7 @@ findNLDI(nwis = "11120000", find = "basin")
 
 # Control Distance
 ## Limit search to 50 km
-findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
+findNLDI(comid = 101, nav = "DM", find = c("nwis", "flowlines"), distance_km = 50)
 }
 \dontshow{\}) # examplesIf}
 }
