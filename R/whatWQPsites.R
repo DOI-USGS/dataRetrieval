@@ -57,19 +57,16 @@ whatWQPsites <- function(..., legacy = TRUE, convertType = TRUE) {
   
   if(legacy){
     baseURL <- httr2::request(pkg.env[["Station"]])
+    
     if("siteid" %in% names(values)){
       if(length(values[["siteid"]]) > 1){
         sites <- values[["siteid"]]
-        if(nchar(paste0(sites, collapse = "")) > 2048){
-          POST = TRUE
-          baseURL <- httr2::req_body_form(baseURL, 
-                                          siteid = sites,
-                                          .multi = function(x) paste0(x, collapse = ";"))  
-        } else {
-          baseURL <- httr2::req_url_query(baseURL, 
-                                          siteid = sites,
-                                          .multi = function(x) paste0(x, collapse = ";"))          
-        }
+        POST = nchar(paste0(sites, collapse = "")) > 2048
+
+        baseURL <- get_or_post(baseURL, 
+                               POST = POST,         
+                               siteid = sites,
+                               .multi = function(x) paste0(x, collapse = ";"))  
 
         values <- values[names(values) != "siteid"]
       }
@@ -78,16 +75,12 @@ whatWQPsites <- function(..., legacy = TRUE, convertType = TRUE) {
   } else {
     baseURL <- httr2::request(pkg.env[["StationWQX3"]])
   }
-  
-  if(POST){
-    baseURL <- httr2::req_body_form(baseURL,
-                                    !!!values,
-                                    .multi = "explode")    
-  } else {
-    baseURL <- httr2::req_url_query(baseURL,
-                                    !!!values,
-                                    .multi = "explode")    
-  }
+
+  baseURL <- get_or_post(baseURL, 
+                         POST = POST,
+                         !!!values,
+                         .multi = "explode")    
+
 
   retval <- importWQP(baseURL, convertType = convertType)
   
