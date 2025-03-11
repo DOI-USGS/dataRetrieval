@@ -54,49 +54,64 @@ Each function's help file has working examples to demonstrate the usage. The exa
 
 Finally, if there are still questions that the vignette and help files don't answer, please post an issue on the `dataRetrieval` GitHub page:
 
-[https://github.com/USGS-R/dataRetrieval/issues](https://github.com/USGS-R/dataRetrieval/issues)
+<https://github.com/DOI-USGS/dataRetrieval/issues>
+
+For a longer introduction to the `dataRetrieval` package, see:
+
+<https://rconnect.usgs.gov/dataRetrieval_workshop>
 
 # Orientation
 
-`dataRetrieval` provides US water data via 2 sources: National Water Information System (NWIS) and Water Quality Portal (WQP). WQP is the service for all discrete water quality data (USGS and other). NWIS is the service for all other hydrologic data in `dataRetrieval`.
+`dataRetrieval` provides US water data mainly via 3 sources: National Water Information System (NWIS), Water Quality Portal (WQP), and new or in-development USGS APIs (USGS). WQP is the service for discrete water quality data when you want USGS and other other sources. 
 
 Functions in `dataRetrieval` look like `readNWISdv`, `readNWISuv`, `readWQPqw`, `whatNWISdata`, etc. What does that mean? The functions are generally structured with a prefix, middle, and suffix:
 
-* Prefix: "read" or "what"
-    + Functions that start with "read" will get full data sets
-    + Functions that start with "what" will get data availability
-* Middle: "NWIS" or "WQP":
-    + NWIS functions get data from NWIS web services.
-    + WQP functions are for all discrete water-quality data
-* Suffix: "data" or other:
+* _Prefix_: "read" or "what"
+    + Functions that start with "read" will access full data sets
+    + Functions that start with "what" will access data availability
+* _Middle_: "NWIS", "USGS", "WQP":
+    + NWIS functions get data from NWIS web services. All of these service
+    + USGS functions are the functions that will eventually replace the NWIS functions. These pull from modern USGS API services.
+    + WQP functions are for discrete water-quality data from the Water Quality Portal.
+* _Suffix_: "data" or other:
     + Functions that end in "data": These are flexible, powerful functions that allow complex user queries.
     + Functions that don't end with "data" are user-friendly functions that assume site, code, and start/end dates are known.
 
-USGS water data comes from the National Water Information System (NWIS). As of March 2024, all discrete water quality USGS data should be obtained from the [Water Quality Portal](https://www.waterqualitydata.us/) (WQP). WQP retrievals will be covered below. Lots of changes are happening with USGS water quality data and Water Quality Portal data formatting. For current information, see the status page:
+USGS water data comes from the National Water Information System (NWIS). 
 
-[Water Quality Status Page](https://doi-usgs.github.io/dataRetrieval/articles/Status.html)
 
-# National Water Information System (NWIS) 
+# Data Overview
 
-There are many types of data served from NWIS. To understand how the services are separated, it's helpful to understand the terms here:
+There are many types of data served from NWIS. To understand how the services are separated, it's helpful to understand that each data type is retrieved from a completely different web service or API.
 
-```{r}
-df <- data.frame(
-  Type = c("Unit", "Daily", "Discrete"),
-  Description = c(
-    "Regular frequency data reported from a sensor (e.g. 15 minute interval). This data can include 'real-time' data",
-    "Data aggregated to a daily statistic such as mean, min, or max.",
-    "Data collected at non-regular times."
-  ),
-  service = c(
-    "uv (or iv)", "dv",
-    "groundwater (gwlevel), rating curves (rating), peak flow (peak), surfacewater (meas)"
-  )
-)
+* NWIS has traditionally been the source for all USGS water data
 
-knitr::kable(df)
-```
+* NWIS will be retired (scheduled late 2026):
+  * <https://waterdata.usgs.gov/blog/nwisweb-decommission-summary/>
+  
+* USGS functions will slowly replace NWIS functions
+  * `read_USGS_samples` is the first replacement
+  
+* Discrete water quality data:
+  * WQP functions should be used when accessing non-USGS discrete water quality data
+  * `read_USGS_samples` should be used for USGS data
+  
 
+# NWIS Data: Current NWIS offerings
+  
+| data_type_cd |Function| Data description |
+|--------|:-------|------:|-------:|
+|uv|[readNWISuv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuv.html)|Continuous data|
+|dv|[readNWISdv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdv.html)|Daily aggregated |
+|gwlevels|[readNWISgwl](https://doi-usgs.github.io/dataRetrieval/reference/readNWISgwl.html)|Groundwater levels |
+|site|[readNWISsite](https://doi-usgs.github.io/dataRetrieval/reference/readNWISsite.html)|Site metadata|
+|pcode|[readNWISpCode](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpCode.html)|Parameter code metadata |
+|stat|[readNWISstat](https://doi-usgs.github.io/dataRetrieval/reference/readNWISstat.html)| Site statistics |
+|rating|[readNWISrating](https://doi-usgs.github.io/dataRetrieval/reference/readNWISrating.html)| Rating curves|
+|peak|[readNWISpeak](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpeak.html)|Peak flow|
+|use|[readNWISuse](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuse.html)|Water Use|
+|meas|[readNWISmeas](https://doi-usgs.github.io/dataRetrieval/reference/readNWISmeas.html)|Discrete surface water|
+| | [readNWISdata](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdata.html) | General data import for NWIS|
 
 
 ## USGS Basic Retrievals
@@ -172,38 +187,17 @@ Sometimes, you know exactly what you want. If you know:
 3. USGS parameter code(s)
 4. Time frame (start and end date)
 
-You can use the "user-friendly" functions. These functions take the same 4 inputs (sites, parameter codes, start date, end date), and deliver data from the different NWIS services:
+You can use the "user-friendly" functions. These functions take the same 4 inputs (sites, parameter codes, start date, end date), and deliver data from the different NWIS services.
 
-```{r echo=FALSE, eval=TRUE}
-
-df <- data.frame(
-  functionName = c(
-    "readNWISuv", "readNWISdv",
-    "readNWISgwl", "readNWISmeas", "readNWISpeak",
-    "readNWISrating", "readNWISuse",
-    "readNWISstat"
-  ),
-  service = c(
-    "Unit", "Daily", "Groundwater Level",
-    "Surface-water", "Peak Flow",
-    "Rating Curves",
-    "Water Use", "Statistics"
-  ),
-  stringsAsFactors = FALSE
-)
-
-names(df) <- c("Function Name", "Data")
-
-knitr::kable(df)
-```
+# Pheasant Branch Creek Example
 
 Let's start by asking for discharge (parameter code = 00060) at a site right next to the old USGS office in Wisconsin (Pheasant Branch Creek). 
 
 ```{r echo=TRUE, eval=TRUE}
 siteNo <- "05427948"
 pCode <- "00060"
-start.date <- "2017-10-01"
-end.date <- "2018-09-30"
+start.date <- "2023-10-01"
+end.date <- "2024-09-30"
 
 pheasant <- readNWISuv(
   siteNumbers = siteNo,
