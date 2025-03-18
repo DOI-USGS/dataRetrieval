@@ -62,22 +62,25 @@ For a longer introduction to the `dataRetrieval` package, see:
 
 # Orientation
 
-`dataRetrieval` provides US water data mainly via 3 sources: National Water Information System (NWIS), Water Quality Portal (WQP), and new or in-development USGS APIs (USGS). WQP is the service for discrete water quality data when you want USGS and other other sources. 
+`dataRetrieval` provides US water data mainly via 3 sources:
+
+* National Water Information System (NWIS)
+* Water Quality Portal (WQP)
+* USGS APIs (USGS), which are new or in-development . 
 
 Functions in `dataRetrieval` look like `readNWISdv`, `readNWISuv`, `readWQPqw`, `whatNWISdata`, etc. What does that mean? The functions are generally structured with a prefix, middle, and suffix:
 
 * _Prefix_: "read" or "what"
-    + Functions that start with "read" will access full data sets
-    + Functions that start with "what" will access data availability
+    + "read" will access full data sets
+    + "what" will access data availability
 * _Middle_: "NWIS", "USGS", "WQP":
-    + NWIS functions get data from NWIS web services. All of these service
+    + NWIS functions get data from NWIS web services. 
     + USGS functions are the functions that will eventually replace the NWIS functions. These pull from modern USGS API services.
     + WQP functions are for discrete water-quality data from the Water Quality Portal.
 * _Suffix_: "data" or other:
     + Functions that end in "data": These are flexible, powerful functions that allow complex user queries.
     + Functions that don't end with "data" are user-friendly functions that assume site, code, and start/end dates are known.
 
-USGS water data comes from the National Water Information System (NWIS). 
 
 
 # Data Overview
@@ -199,7 +202,7 @@ pCode <- "00060"
 start.date <- "2023-10-01"
 end.date <- "2024-09-30"
 
-pheasant <- readNWISuv(
+pheasant <- readNWISdv(
   siteNumbers = siteNo,
   parameterCd = pCode,
   startDate = start.date,
@@ -244,7 +247,7 @@ Make a simple plot to see the data:
 library(ggplot2)
 ts <- ggplot(
   data = pheasant,
-  aes(dateTime, Flow_Inst)
+  aes(Date, Flow)
 ) +
   geom_line()
 ts
@@ -289,10 +292,10 @@ This is the only available data from NWIS for site `r site`.
 
 ```{r echo=FALSE}
 datatable(data_available_NWIS,
-  rownames = FALSE, options = list(pageLength = 20,
-                                   lengthChange = FALSE,
-                                   searching = FALSE,
-                                   paging = FALSE)
+          rownames = FALSE,
+          options = list(pageLength = 7,
+                         lengthChange = FALSE,
+                         searching = FALSE)
 )
 
 ```
