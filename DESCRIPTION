@@ -58,5 +58,4 @@ Encoding: UTF-8
 BuildVignettes: true
 VignetteBuilder: knitr
 BugReports: https://github.com/DOI-USGS/dataRetrieval/issues
-URL: https://code.usgs.gov/water/dataRetrieval
 RoxygenNote: 7.3.2
