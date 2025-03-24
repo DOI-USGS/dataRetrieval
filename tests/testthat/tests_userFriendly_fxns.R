@@ -103,6 +103,12 @@ test_that("peak, rating curves, surface-water measurements", {
   siteID <- "263819081585801"
   gwl_1 <- readNWISgwl(siteID)
   expect_equal(unique(gwl_1$site_no), siteID)
+  
+  # No data:
+  expect_message(readNWISpeak(stations, 
+                            startDate = "2024-08-01",
+                            endDate = "2024-08-31",
+                            convertType = FALSE))
 })
 
 test_that("NWIS dv tests", {
