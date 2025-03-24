@@ -48,7 +48,7 @@ For additional tutorials, see:
 Tutorial](https://doi-usgs.github.io/dataRetrieval/articles/tutorial.html)
 
 [dataRetrieval Introduction
-1](https://rconnect.usgs.gov/NMC_dataRetrieval_1)
+1](https://rconnect.usgs.gov/dataRetrieval_workshop)
 
 [dataRetrieval Introduction
 2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
@@ -62,15 +62,66 @@ greater and run the following command:
 install.packages("dataRetrieval")
 ```
 
-To get cutting-edge changes, install from GitHub using the `remotes`
-packages:
+# New USGS data access
+
+The USGS is planning to modernize all web services in the near future.
+For each of these updates, `dataRetrieval` will create a new function to
+access the new services. To access these services on a web browser, go
+to <https://waterdata.usgs.gov/download-samples/>.
+
+## New Features
+
+### Style
+
+New functions will use a “snake case”, such as “read_USGS_samples”.
+Older functions use camel case, such as “readNWISdv”. The difference is
+the underscore between words. This should be a handy way to tell the
+difference between newer modern data access, and the older traditional
+functions.
+
+### Structure
+
+Historically, we allowed users to customize their queries via the `...`
+argument structure. With `...`, users needed to know the exact names of
+query parameters before using the function. Now, the new functions will
+include **ALL** possible arguments that the web service APIs support.
+This will allow users to use tab-autocompletes (available in RStudio and
+other IDEs). **Users will need to understand that it is not advisable to
+specify all of these parameters. The systems can get bogged down with
+redundant query parameters.** We expect this will be easier for users,
+but it might take some time to smooth out the documentation and test
+usability. There may be additional consequences, such as users won’t be
+able to build up argument lists to pass into the function.
+
+### Dependencies
+
+Under the hood, `dataRetrieval` changed the dependency from `httr` to
+`httr2`. `httr2` is the modern R package for web requests that is
+actively developed/maintained. As we develop functions for the modern
+USGS web services, we’ll continue to explore updating package
+dependencies.
+
+### Developmental workflow
+
+CRAN-stable documentation will be available on the GitHub pages:
+<https://doi-usgs.github.io/dataRetrieval/>
+
+In-development documentation will be available on the USGS GitLab pages:
+<https://water.code-pages.usgs.gov/dataRetrieval>
+
+Development of `dataRetrieval` will happen on a git branch called
+“develop”. The “develop” branch will only move to the “main” branch when
+we submit to CRAN, unless there are bug fixes that pertain to the CRAN
+release. The “develop” branch WILL change frequently, and there are no
+promises of future behavior. Users must accept that they are using those
+functions at their own risk. If you willing to accept this risk, the
+installation instructions are:
 
 ``` r
 library(remotes)
+
 install_github("DOI-USGS/dataRetrieval",
-               build_vignettes = TRUE, 
-               build_opts = c("--no-resave-data",
-                              "--no-manual"))
+               ref = "develop")
 ```
 
 # Reporting bugs
@@ -123,15 +174,15 @@ NWIScitation <- create_NWIS_bib(dv)
 NWIScitation
 #> U.S. Geological Survey (2025). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Feb
-#> 25, 2025,
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Mar
+#> 24, 2025,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Feb 25, 2025},
+#>   note = {Accessed Mar 24, 2025},
 #>   year = {2025},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -155,14 +206,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2025). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Feb 25, 2025,
+#> Accessed Mar 24, 2025,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Feb 25, 2025},
+#>   note = {Accessed Mar 24, 2025},
 #>   year = {2025},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }
