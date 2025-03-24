@@ -34,6 +34,7 @@ If you have additional questions about the NWIS qw data service, email CompTools
 * The output of the "constructURL..." functions are now `httr2` requests instead of a character string. 
 
 * The update to `httr2` will give us more flexibility to set up the eventual replacements to the NWIS web services. Over the next year, expect to see some new and major updates to USGS data access. dataRetrieval WILL stay on the cutting edge for accessing new USGS APIs. 
+
 * WQP continues to default to the legacy system (that does not include recent USGS discrete sample data). To access the most recent USGS data from the new "WQX3" services use the function `readWQPqw` and set the argument `legacy=FALSE` or use the function `readWQPdata` and set the argument `service = "ResultWQX3"`. Why aren't the new services set as default? This is because the WQP itself still considers those services "beta", and therefore performance is not guaranteed.  
 
 * Finally, saving the best for last! There's a new set of functions that access the new USGS "samples-data" services. This is a USGS-specific service for discrete sample data. If you are only interested in USGS discrete water quality data (as opposed to USGS AND non-USGS discrete water quality data available from Water Quality Portal), you can use the `read_USGS_samples` function.  
