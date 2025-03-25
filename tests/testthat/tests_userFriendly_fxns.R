@@ -105,6 +105,7 @@ test_that("peak, rating curves, surface-water measurements", {
   expect_equal(unique(gwl_1$site_no), siteID)
   
   # No data:
+  stations <- "06011000"
   expect_message(readNWISpeak(stations, 
                             startDate = "2024-08-01",
                             endDate = "2024-08-31",
