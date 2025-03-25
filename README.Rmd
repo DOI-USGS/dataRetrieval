@@ -68,7 +68,7 @@ install.packages("dataRetrieval")
 
 # New USGS data access
 
-The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. To access these services on a web browser, go to <https://waterdata.usgs.gov/download-samples/>.
+The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. 
 
 ## New Features
 
@@ -82,7 +82,7 @@ Historically, we allowed users to customize their queries via the `...` argument
 
 ### Dependencies
 
-Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. 
+As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies.  
 
 ### Developmental workflow
 

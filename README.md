@@ -66,8 +66,7 @@ install.packages("dataRetrieval")
 
 The USGS is planning to modernize all web services in the near future.
 For each of these updates, `dataRetrieval` will create a new function to
-access the new services. To access these services on a web browser, go
-to <https://waterdata.usgs.gov/download-samples/>.
+access the new services.
 
 ## New Features
 
@@ -95,11 +94,8 @@ able to build up argument lists to pass into the function.
 
 ### Dependencies
 
-Under the hood, `dataRetrieval` changed the dependency from `httr` to
-`httr2`. `httr2` is the modern R package for web requests that is
-actively developed/maintained. As we develop functions for the modern
-USGS web services, we’ll continue to explore updating package
-dependencies.
+As we develop functions for the modern USGS web services, we’ll continue
+to explore updating package dependencies.
 
 ### Developmental workflow
 
@@ -175,14 +171,14 @@ NWIScitation
 #> U.S. Geological Survey (2025). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
 #> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Mar
-#> 24, 2025,
+#> 25, 2025,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Mar 24, 2025},
+#>   note = {Accessed Mar 25, 2025},
 #>   year = {2025},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -206,14 +202,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2025). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Mar 24, 2025,
+#> Accessed Mar 25, 2025,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Mar 24, 2025},
+#>   note = {Accessed Mar 25, 2025},
 #>   year = {2025},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }
