@@ -296,7 +296,7 @@ First, let's just get the data with no column names:
 
 ```{r basicData}
 library(readxl)
-data_no_header <- read_xlsx("Wide data example.xlsx",
+data_no_header <- read_xlsx("Wide_data_example.xlsx",
                             sheet = "data_from_lab",
                             skip = 4, col_names = FALSE)
 
@@ -311,7 +311,7 @@ names(data_no_header)[1:2] <- c("SiteID", "Sample Date")
 Now we need to get the CAS values for the column names:
 
 ```{r secondPart}
-headers <- read_xlsx("Wide data example.xlsx",
+headers <- read_xlsx("Wide_data_example.xlsx",
                      sheet = "data_from_lab",
                      n_max = 1)
 # Get rid or first 2 columns:
