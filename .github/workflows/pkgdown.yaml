@@ -48,6 +48,11 @@ jobs:
             any::dplyr
             any::tidyr
             any::ggplot2
+            any::zoo
+            any::sf
+            any::patchwork
+            any::maps
+            any::leaflet
             any::readxl
             any::gridExtra
             local::.
