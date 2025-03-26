@@ -47,6 +47,7 @@ jobs:
             any::data.table
             any::dplyr
             any::tidyr
+            any::readxl
             any::gridExtra
             local::.
           needs: website
