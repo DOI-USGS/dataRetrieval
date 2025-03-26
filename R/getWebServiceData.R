@@ -54,9 +54,8 @@ getWebServiceData <- function(obs_url, ...) {
       returnedDoc <- httr2::resp_body_string(returnedList)
     } else if (content %in% return_readLines) {
       returnedList <- httr2::resp_body_string(returnedList)
-      txt <- readLines(returnedList$content)
-      message(txt)
-      return(txt)
+      message(returnedList)
+      returnedDoc <- returnedList
     } else if (content %in% return_json){
       returnedDoc <- httr2::resp_body_json(returnedList)
     } else {
