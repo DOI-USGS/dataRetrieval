@@ -92,7 +92,7 @@ As of `dataRetrieval` 2.7.17, this function will use the default WQX version 2 d
 
 An example of a WQX 3.0 return:
 
-```{r}
+```{r eval=FALSE}
 library(dataRetrieval)
 rawPcode <- readWQPqw(siteNumbers = "USGS-01594440",
                       parameterCd = "01075",
@@ -101,7 +101,7 @@ rawPcode <- readWQPqw(siteNumbers = "USGS-01594440",
 
 Compared to using the WQX 2.0 legacy results:
 
-```{r}
+```{r eval=FALSE}
 rawPcode_legacy <- readWQPqw(siteNumbers = "USGS-01594440",
                       parameterCd = "01075",
                       legacy = TRUE)
@@ -126,29 +126,25 @@ There are currently three WQX 3.0 "services" available: ResultWQX, StationWQX an
 
 Examples:
 
-```{r}
+```{r eval=FALSE}
 data_full <- readWQPdata(siteid = "USGS-04024315",
                          characteristicName = "pH",
                          dataProfile = "fullPhysChem",
                          service = "ResultWQX3")
-ncol(data_full)
 
 data_basic <- readWQPdata(siteid = "USGS-04024315",
                           characteristicName = "pH",
                           dataProfile = "basicPhysChem",
                           service = "ResultWQX3")
-ncol(data_basic)
 
 data_narrow <- readWQPdata(siteid = "USGS-04024315",
                            characteristicName = "pH",
                            dataProfile = "narrow",
                            service = "ResultWQX3")
-ncol(data_narrow)
 
 data_sites <- readWQPdata(siteid = "USGS-04024315",
                           characteristicName = "pH",
                           service = "StationWQX3")
-ncol(data_sites)
 
 ```
 
