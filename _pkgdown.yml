@@ -48,7 +48,7 @@ navbar:
       href: articles/tutorial.html
     - text: Changes to QW
       href: articles/qwdata_changes.html
-    - text: Long to Wide
+    - text: Pivot Data
       href: articles/long_to_wide.html
     - text: Join by closest date
       href: articles/join_by_closest.html
