@@ -101,31 +101,14 @@ Historically, we allowed users to customize their queries via the `...` argument
 
 Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. 
 
-### Developmental workflow
-
-CRAN-stable documentation will be available on the GitHub pages:
-<https://doi-usgs.github.io/dataRetrieval/>
-
-Development documentation will be available on GitLab pages:
-<https://water.code-pages.usgs.gov/dataRetrieval>
-
-Development of `dataRetrieval` will happen on a git branch called "develop" on GitHub. The "develop" branch will only move to the "main" branch when we submit to CRAN, unless there are bug fixes that pertain to the CRAN release. The "develop" branch WILL change frequently, and there are no promises of future behavior. Users must accept that they are using those functions at their own risk. If you willing to accept this risk, the installation instructions are:
-
-```{r eval=FALSE}
-library(remotes)
-
-install_github("DOI-USGS/dataRetrieval",
-               ref = "develop")
-
-```
 
 # Discrete USGS data workflow
 
 Alright, let's test out this new service! Here is a link to the user interface:
-<https://waterdata.usgs.gov/download-samples/>.
+<https://waterdata.usgs.gov/download-samples>.
 
 And here is a link to the web service documentation:
-<https://api.waterdata.usgs.gov/samples-data/docs\>
+<https://api.waterdata.usgs.gov/samples-data/docs>
 
 ## Retrieving data from a known site
 

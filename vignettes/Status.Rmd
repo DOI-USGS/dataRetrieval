@@ -25,6 +25,21 @@ On March 11, 2024, NWIS **discrete water quality** services were "frozen": any p
 
 If you have additional questions about the NWIS qw data service, email CompTools@usgs.gov.
 
+## Latest CRAN update
+
+* dataRetrieval now uses `httr2` instead of `httr` under the hood for constructing web service calls. The `httr2` package is considered the modern replacement for `httr`, and has support going forward (unlike `httr`). Depending on how you perform the package updates, you may need to install `httr2`. 
+
+* dataRetrieval will give a message with the requested URL each time a web service call is made. These can be hidden by wrapping dataRetrieval calls with `suppressMessages`. That being said, it is very informative to see exactly where the data is coming from. 
+
+* The output of the "constructURL..." functions are now `httr2` requests instead of a character string. 
+
+* The update to `httr2` will give us more flexibility to set up the eventual replacements to the NWIS web services. Over the next year, expect to see some new and major updates to USGS data access. dataRetrieval WILL stay on the cutting edge for accessing new USGS APIs. 
+
+* WQP continues to default to the legacy system (that does not include recent USGS discrete sample data). To access the most recent USGS data from the new "WQX3" services use the function `readWQPqw` and set the argument `legacy=FALSE` or use the function `readWQPdata` and set the argument `service = "ResultWQX3"`. Why aren't the new services set as default? This is because the WQP itself still considers those services "beta", and therefore performance is not guaranteed.  
+
+* Finally, saving the best for last! There's a new set of functions that access the new USGS "samples-data" services. This is a USGS-specific service for discrete sample data. If you are only interested in USGS discrete water quality data (as opposed to USGS AND non-USGS discrete water quality data available from Water Quality Portal), you can use the `read_USGS_samples` function.  
+
+Read more about it here: <https://doi-usgs.github.io/dataRetrieval/articles/samples_data.html>
 
 ## Locating USGS data using the Water Quality Portal
 
@@ -77,7 +92,7 @@ As of `dataRetrieval` 2.7.17, this function will use the default WQX version 2 d
 
 An example of a WQX 3.0 return:
 
-```{r}
+```{r eval=FALSE}
 library(dataRetrieval)
 rawPcode <- readWQPqw(siteNumbers = "USGS-01594440",
                       parameterCd = "01075",
@@ -86,7 +101,7 @@ rawPcode <- readWQPqw(siteNumbers = "USGS-01594440",
 
 Compared to using the WQX 2.0 legacy results:
 
-```{r}
+```{r eval=FALSE}
 rawPcode_legacy <- readWQPqw(siteNumbers = "USGS-01594440",
                       parameterCd = "01075",
                       legacy = TRUE)
@@ -111,29 +126,25 @@ There are currently three WQX 3.0 "services" available: ResultWQX, StationWQX an
 
 Examples:
 
-```{r}
+```{r eval=FALSE}
 data_full <- readWQPdata(siteid = "USGS-04024315",
                          characteristicName = "pH",
                          dataProfile = "fullPhysChem",
                          service = "ResultWQX3")
-ncol(data_full)
 
 data_basic <- readWQPdata(siteid = "USGS-04024315",
                           characteristicName = "pH",
                           dataProfile = "basicPhysChem",
                           service = "ResultWQX3")
-ncol(data_basic)
 
 data_narrow <- readWQPdata(siteid = "USGS-04024315",
                            characteristicName = "pH",
                            dataProfile = "narrow",
                            service = "ResultWQX3")
-ncol(data_narrow)
 
 data_sites <- readWQPdata(siteid = "USGS-04024315",
                           characteristicName = "pH",
                           service = "StationWQX3")
-ncol(data_sites)
 
 ```
 
@@ -242,20 +253,5 @@ nrow(what_NWIS[what_NWIS$data_type_cd == "qw",])
 So for site "05114000", there are 381 NWIS qw parameters that have been measured. Since mid-March 2024, the data availability for those 381 parameters are frozen...even if new data are collected. Eventually those 381 rows of data will not be returned, only 26 rows of data will be returned (407-381). 
 
 New services/functions are being developed to replace the lost functionality so check back here for updated information.
-
-
-# Known Dependencies
-
-### EGRET
-
-The `readNWISSample` function will be deprecated or updated. Plan to switch to `readWQPSample`.
-
-### HASP
-
-The `data_available` function will need to be updated.
-
-If you know of additional R package dependencies that will be affected by these changes, please email CompTools@usgs.gov.
-
-
 
 
