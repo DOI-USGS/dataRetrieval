@@ -91,6 +91,8 @@ vignettes/long_to_wide.Rmd
 vignettes/join_by_closest.Rmd
 vignettes/wqx3_development_plan.Rmd
 vignettes/dataretrieval_discrete_changes_images/*
+vignettes/Wide data example.xlsx
+vignettes/messyData.png
 ^ci$
 ^public$
 ^docker$
