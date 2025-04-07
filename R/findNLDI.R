@@ -45,9 +45,7 @@ find_good_names <- function(input, type) {
 get_nldi_sources <- function(url = pkg.env$nldi_base) {
   res <- httr2::request(url)
   res <- httr2::req_user_agent(res, default_ua())
-  res <- httr2::req_throttle(res, rate = 30 / 60) 
-  res <- httr2::req_retry(res, 
-                          backoff = ~ 5, max_tries = 3) 
+  res <- httr2::req_error(res, is_error = \(x) FALSE)
   res <- httr2::req_perform(res)
 
   if (res$status_code == 200) {
@@ -72,14 +70,24 @@ get_nldi_sources <- function(url = pkg.env$nldi_base) {
 #' @noRd
 #' @return a data.frame
 get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
+  
   # Query
   res <- httr2::request(url)
   res <- httr2::req_user_agent(res, default_ua())
-  res <- httr2::req_throttle(res, rate = 30 / 60) 
-  res <- httr2::req_retry(res, 
-                          backoff = ~ 5, max_tries = 3) 
+  res <- httr2::req_error(res, is_error = \(x) FALSE)
   res <- httr2::req_perform(res)
 
+  if(!is.null(res$headers$`X-Ratelimit-Remaining`)) {
+    if((as.numeric(res$headers$`X-Ratelimit-Limit`) - as.numeric(res$headers$`X-Ratelimit-Remaining`)) / 
+       as.numeric(res$headers$`X-Ratelimit-Limit`) > 0.9) {
+      message("Approaching NLDI rate limit. ", res$headers$`X-Ratelimit-Remaining`, " of ", res$headers$`X-Ratelimit-Limit`, " remaining")
+      if(as.numeric(res$headers$`X-Ratelimit-Remaining`) < 20) {
+        message("Sleeping to try to avoid going over rate limit.")
+        Sys.sleep(3600 / ((as.numeric(res$headers$`X-Ratelimit-Limit`) / 3)))
+      }
+    }
+  }
+  
   # If successful ...
   if (res$status_code == 200) {
     # Interpret as text
