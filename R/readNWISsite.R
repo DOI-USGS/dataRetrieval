@@ -77,10 +77,6 @@ readNWISsite <- function(siteNumbers) {
   urlSitefile <- get_or_post(urlSitefile, POST = POST,
               site = siteNumbers, 
               .multi = "comma")
-  # urlSitefile <- httr2::req_url_query(urlSitefile, 
-  #                                     site = siteNumbers, 
-  #                                     .multi = "comma")    
-  
 
   data <- importRDB1(urlSitefile, asDateTime = FALSE)
   # readr needs multiple lines to convert to anything but characters:
