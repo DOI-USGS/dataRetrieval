@@ -62,10 +62,18 @@ whatNWISsites <- function(...) {
                                       "peak" = "pk")
   }
   
+  POST = nchar(paste0(unlist(values), collapse = "")) > 2048
+  
   urlCall <- httr2::request(pkg.env[["site"]])
-  urlCall <- httr2::req_url_query(urlCall, !!!values,
-                                  .multi = "comma")
-  urlCall <- httr2::req_url_query(urlCall, format = "mapper")
+ 
+  urlCall <- get_or_post(urlCall,
+                         POST = POST,
+                         !!!values,
+                         .multi = "comma")
+  
+  urlCall <- get_or_post(urlCall,
+                         POST = POST, 
+                         format = "mapper")
   
   rawData <- getWebServiceData(urlCall, encoding = "gzip")
   if (is.null(rawData)) {
