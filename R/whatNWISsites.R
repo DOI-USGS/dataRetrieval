@@ -36,12 +36,17 @@
 whatNWISsites <- function(...) {
 
   matchReturn <- convertLists(...)
-  valuesList <- readNWISdots(...)
+  if ("service" %in% names(matchReturn)) {
+    service <- matchReturn$service
+    matchReturn$service <- NULL
+  } else {
+    service <- NULL
+  }
+  
+  valuesList <- readNWISdots(matchReturn)
 
   values <- valuesList[["values"]]
   values <- values[names(values) != "format"]
-  
-  values <- sapply(valuesList$values, function(x) utils::URLencode(x))
 
   #################
   # temporary gwlevels fixes
@@ -53,13 +58,14 @@ whatNWISsites <- function(...) {
 
   names(values)[names(values) == "state_cd"] <- "stateCd"
   ##################
-  
-  if("service" %in% names(matchReturn)){
-    values["hasDataTypeCd"] <- switch(valuesList$service,
-                                      "gwlevels" = "gw",
-                                      "iv" = "iv",
-                                      "dv" = "dv",
-                                      "peak" = "pk")
+
+  if(!is.null(service)){
+    service[service == "gwlevels"] <- "gw"
+    service[service == "meas"] <- "sv"
+    service[service == "peak"] <- "pk"
+    service[service == "uv"] <- "id"
+    
+    values[["hasDataTypeCd"]] <- service
   }
   
   POST = nchar(paste0(unlist(values), collapse = "")) > 2048
