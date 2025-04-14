@@ -83,6 +83,10 @@ constructNWISURL <- function(siteNumbers,
   
   baseURL <- httr2::request(pkg.env[[service]])
   
+  if(!is.null(pkg.env$access)){
+    baseURL <-  httr2::req_url_query(baseURL, Access = pkg.env$access)
+  }
+
   if (any(!is.na(parameterCd) & parameterCd != "all")) {
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     
