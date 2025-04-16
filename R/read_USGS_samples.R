@@ -292,7 +292,7 @@ check_profile <- function(dataProfile, profile_convert){
   return(dataProfile)
 }
 
-explode_query <- function(baseURL, x){
+explode_query <- function(baseURL, POST = FALSE, x){
   
   if(!is.list(x)){
     return(baseURL)
@@ -300,9 +300,15 @@ explode_query <- function(baseURL, x){
   
   if(any(!is.na(x))){
     x <- Filter(Negate(anyNA), x)
-    baseURL <- httr2::req_url_query(baseURL,
-                                    !!!x,
-                                    .multi = "explode")      
+    if(POST){
+      baseURL <- httr2::req_body_json(req = baseURL,
+                                      data = x)
+    } else {
+      baseURL <- httr2::req_url_query(baseURL,
+                                      !!!x,
+                                      .multi = "explode")   
+    }
+      
   }
   return(baseURL)
 }
@@ -359,6 +365,8 @@ check_param <- function(service = "characteristicgroup",
                                             !!!params)
   }
 
+  message("GET: ", check_group_req$url) 
+  
   check_group <- httr2::req_perform(check_group_req) |> 
     httr2::resp_body_string() |> 
     jsonlite::fromJSON()
