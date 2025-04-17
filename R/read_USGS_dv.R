@@ -16,14 +16,18 @@
 #' site <- "USGS-02238500"
 #' pcode <- "00060"
 #' dv_data_sf <- read_USGS_dv(monitoring_location_id = site,
-#'                         parameter_code = "00060", limit = 1000)
+#'                         parameter_code = "00060", 
+#'                         datetime = c("2021-01-01", "2022-01-01"))
 #'                         
 #' dv_data <- read_USGS_dv(monitoring_location_id = site,
 #'                         parameter_code = "00060",  no_sf = TRUE)
 #' 
 #' sites <- c("USGS-01491000", "USGS-01645000")
-#' multi_site <- read_USGS_dv(monitoring_location_id = sites,
-#'                            parameter_code = c("00060", "00065"))
+#' start_date <- "2021-01-01"
+#' end_date <- "2022-01-01"
+#' req_dv <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000", "USGS-01645000"),
+#'                        parameter_code = c("00060", "00065"),
+#'                        datetime = c("2021-01-01", "2022-01-01"))
 #' 
 #' bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -81, 38.5),
 #'                           parameter_code = "00060")
@@ -56,6 +60,8 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          datetime = NA_character_,
                          filter = NA_character_,
                          no_sf = FALSE){
+  
+  message("Function in development, use at your own risk.")
   
   use_sf <- all(pkg.env$local_sf, !no_sf)
   page <- 1
@@ -127,13 +133,13 @@ walk_pages_recursive <- function(req, page, contents, use_sf) {
   
   if(httr2::resp_status(returned_contents) != 200){
     if(httr2::resp_status(returned_contents) == 429){
-      stop("You hit your daily limit for requests. To increase the limit, 
+      stop("You hit your hourly limit for requests. To increase the limit, 
            see: https://api.waterdata.usgs.gov/docs/ogcapi/keys/")
     } 
   }
   
   header_info <- httr2::resp_headers(returned_contents)
-  message("Remaining requests for the day:", header_info$`x-ratelimit-remaining`)
+  message("Remaining requests this hour:", header_info$`x-ratelimit-remaining`)
   
   contents[[page]] <- returned_contents |> 
     httr2::resp_body_string() 
@@ -164,12 +170,21 @@ walk_pages_recursive <- function(req, page, contents, use_sf) {
     
   } else {
     
+    make_request <- httr2::request(json_content$links[, "href", drop = TRUE][next_page]) |> 
+      httr2::req_user_agent(default_ua())
+    
+    if( Sys.getenv("API_USGS_PAT") != ""){
+      make_request <- make_request |> 
+        httr2::req_headers(`Accept-Encoding` = c("compress", "gzip"),
+                           `X-Api-Key` = Sys.getenv("API_USGS_PAT"))
+    } else {
+      make_request <- make_request |> 
+        httr2::req_headers(`Accept-Encoding` = c("compress", "gzip"))     
+    }
+    
     Tailcall(
       walk_pages_recursive,
-      httr2::request(json_content$links[, "href", drop = TRUE][next_page]) |> 
-        httr2::req_user_agent(default_ua()) |> 
-        httr2::req_headers(`Accept-Encoding` = c("compress", "gzip"),
-                           `X-Api-Key` = Sys.getenv("API_USGS_PAT")) ,
+      make_request,
       page + 1,
       contents,
       use_sf
@@ -194,8 +209,11 @@ walk_pages_recursive <- function(req, page, contents, use_sf) {
 #'                                 parameter_code = c("00060", "00065"))
 #' 
 #' sites <- c("USGS-01491000", "USGS-01645000")
+#' start_date <- "2018-01-01"
+#' end_date <- "2022-01-01"
 #' req_dv <- construct_dv_requests(monitoring_location_id = sites,
-#'                                 parameter_code = c("00060", "00065"))
+#'                                 parameter_code = c("00060", "00065"),
+#'                                 datetime = c(start_date, end_date))
 #' 
 construct_dv_requests <- function(monitoring_location_id = NA_character_,
                                   parameter_code = NA_character_,
@@ -245,6 +263,8 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
   
   token <- Sys.getenv("API_USGS_PAT")
   
+  ###########################################################
+  # This is all going to be done eventually with a POST CQL request:
   if(isTRUE(length(monitoring_location_id) > 1)){
     filter <- c(filter[!is.na(filter)], 
                 paste0("monitoring_location_id IN ('", 
@@ -259,6 +279,22 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
                      paste0(parameter_code, 
                             collapse = "', '"), "')"))
     parameter_code <- NA_character_
+  }
+  ###########################################################
+  
+  if(!any(is.na(datetime))){
+    if(length(datetime) == 1){
+      datetime <- format(datetime, format = "%Y-%m-%dT%H:%M:%SZ")
+    } else if (length(datetime) == 2) {
+      datetime <- as.POSIXct(datetime)
+      datetime <- paste0(vapply(datetime, FUN =  function(x) {
+        format(x, format = "%Y-%m-%dT%H:%M:%SZ")},
+        FUN.VALUE =  c(NA_character_)
+      ), collapse = "/")
+      datetime <- gsub("NA", "..", datetime)
+    } else {
+      stop("datetime should only include 1-2 values")
+    }
   }
   
   POST <- FALSE
@@ -286,15 +322,14 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
                                 lang = "en-US"))
 
   if(all(!is.na(bbox))){
-    browser()
-    baseURL <- httr2::req_body_json_modify(baseURL,
+    baseURL <- httr2::req_url_query(baseURL,
                                     bbox = bbox,
                                     .multi = "comma")      
   }
   
   if(POST){
-    baseURL <- httr2::req_body_json_modify(baseURL,
-                                           properties = properties)    
+    baseURL <- httr2::req_body_json(baseURL,
+                                    properties = properties)    
   } else {
     baseURL <- httr2::req_url_query(baseURL,
                                     properties = properties,

@@ -25,6 +25,7 @@ read_USGS_dv(
   sortby = NA_character_,
   offset = NA,
   datetime = NA_character_,
+  filter = NA_character_,
   no_sf = FALSE
 )
 }
@@ -44,10 +45,18 @@ or "DV".
 site <- "USGS-02238500"
 pcode <- "00060"
 dv_data_sf <- read_USGS_dv(monitoring_location_id = site,
-                        parameter_code = "00060", limit = 1000)
+                        parameter_code = "00060", 
+                        datetime = c("2021-01-01", "2022-01-01"))
                         
 dv_data <- read_USGS_dv(monitoring_location_id = site,
                         parameter_code = "00060",  no_sf = TRUE)
+
+sites <- c("USGS-01491000", "USGS-01645000")
+start_date <- "2021-01-01"
+end_date <- "2022-01-01"
+req_dv <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000", "USGS-01645000"),
+                       parameter_code = c("00060", "00065"),
+                       datetime = c("2021-01-01", "2022-01-01"))
 
 bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -81, 38.5),
                           parameter_code = "00060")

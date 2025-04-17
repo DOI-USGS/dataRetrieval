@@ -8,9 +8,8 @@ construct_dv_requests(
   monitoring_location_id = NA_character_,
   parameter_code = NA_character_,
   statistic_id = NA_character_,
-  properties = c("id", "timeseries_id", "monitoring_location_id", "parameter_code",
-    "statistic_id", "time", "value", "unit_of_measure", "approval_status", "qualifier",
-    "last_modified"),
+  properties = c("monitoring_location_id", "parameter_code", "statistic_id", "time",
+    "value", "unit_of_measure", "approval_status", "qualifier"),
   bbox = NA,
   timeseries_id = NA_character_,
   id = NA_character_,
@@ -23,9 +22,10 @@ construct_dv_requests(
   crs = NA_character_,
   bbox_crs = NA_character_,
   skipGeometry = FALSE,
-  sortby = NA_character_,
+  sortby = "time",
   offset = NA,
-  datetime = NA_character_
+  datetime = NA_character_,
+  filter = NA_character_
 )
 }
 \arguments{
@@ -40,5 +40,15 @@ site <- "USGS-02238500"
 pcode <- "00060"
 req_dv <- construct_dv_requests(monitoring_location_id = site,
                                 parameter_code = "00060")
+
+req_dv <- construct_dv_requests(monitoring_location_id = site,
+                                parameter_code = c("00060", "00065"))
+
+sites <- c("USGS-01491000", "USGS-01645000")
+start_date <- "2018-01-01"
+end_date <- "2022-01-01"
+req_dv <- construct_dv_requests(monitoring_location_id = sites,
+                                parameter_code = c("00060", "00065"),
+                                datetime = c(start_date, end_date))
 
 }
