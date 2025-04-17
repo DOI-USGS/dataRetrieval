@@ -12,7 +12,12 @@
 #' or "DV".
 #' 
 #' @export
-#' @examples
+#' @inheritParams construct_dv_requests
+#' @param no_sf Boolean, whether or not to return an "sf" object. TRUE returns
+#' a basic data frame, FALSE returns a "sf" object.
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
 #' site <- "USGS-02238500"
 #' pcode <- "00060"
 #' dv_data_sf <- read_USGS_dv(monitoring_location_id = site,
@@ -20,18 +25,19 @@
 #'                         datetime = c("2021-01-01", "2022-01-01"))
 #'                         
 #' dv_data <- read_USGS_dv(monitoring_location_id = site,
-#'                         parameter_code = "00060",  no_sf = TRUE)
+#'                         parameter_code = "00060",
+#'                         no_sf = TRUE)
 #' 
 #' sites <- c("USGS-01491000", "USGS-01645000")
 #' start_date <- "2021-01-01"
 #' end_date <- "2022-01-01"
-#' req_dv <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000", "USGS-01645000"),
-#'                        parameter_code = c("00060", "00065"),
-#'                        datetime = c("2021-01-01", "2022-01-01"))
+#' #req_dv <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000", "USGS-01645000"),
+#' #                        parameter_code = c("00060", "00065"),
+#' #                        datetime = c("2021-01-01", "2022-01-01"))
 #' 
-#' bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -81, 38.5),
-#'                           parameter_code = "00060")
-#' 
+#' # bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -81, 38.5),
+#' #                           parameter_code = "00060")
+#' }
 read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          parameter_code = NA_character_,
                          statistic_id = NA_character_,
@@ -55,7 +61,6 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          crs = NA_character_,
                          bbox_crs = NA_character_,
                          skipGeometry = NA,
-                         sortby = NA_character_,
                          offset = NA,
                          datetime = NA_character_,
                          filter = NA_character_,
@@ -86,12 +91,13 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                                   crs = crs,
                                   bbox_crs = bbox_crs,
                                   skipGeometry = skipGeometry,
-                                  sortby = sortby,
                                   offset = offset,
                                   datetime = datetime,
                                   filter = filter)
   
   return_list <- walk_pages(dv_req, use_sf)
+  
+  return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
   
   return(return_list)
 }
@@ -198,7 +204,63 @@ walk_pages_recursive <- function(req, page, contents, use_sf) {
 #' Swagger docs: \url{https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html}.
 #' 
 #' @export
-#' @param monitoring_location_id description
+#' @param monitoring_location_id A unique identifier representing a single monitoring
+#' location. This corresponds to the id field in the sites endpoint. Monitoring
+#' location IDs are created by combining the agency code of the agency responsible
+#' for the monitoring location (e.g. USGS) with the ID number of the monitoring
+#' location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).
+#' @param bbox Only features that have a geometry that intersects the bounding
+#' box are selected.The bounding box is provided as four or six numbers, depending
+#' on whether the coordinate reference system includes a vertical axis (height or
+#' depth).
+#' @param crs Indicates the coordinate reference system for the results.
+#' @param bbox-crs Indicates the coordinate reference system for the given bbox
+#' coordinates.
+#' @param properties The properties that should be included for each feature. The
+#' parameter value is a comma-separated list of property names. Available values:
+#' id, timeseries_id, monitoring_location_id, parameter_code, statistic_id, time,
+#' value, unit_of_measure, approval_status, qualifier, last_modified.
+#' @param skipGeometry This option can be used to skip response geometries for
+#' each feature.
+#' @param offset The optional offset parameter indicates the index within the
+#' result set from which the server shall begin presenting results in the response
+#' document. The first element has an index of 0 (default).
+#' @param datetime Either a date-time or an interval. Only features that have a
+#' temporal property that intersects the value of datetime are selected. If a 
+#' feature has multiple temporal properties, it is the decision of the server
+#' whether only a single temporal property is used to determine the extent or
+#' all relevant temporal properties.
+#' @param id A universally unique identifier (UUID) representing a single version
+#' of a record. It is not stable over time. Every time the record is refreshed in
+#' our database (which may happen as part of normal operations and does not imply
+#' any change to the data itself) a new ID will be generated. To uniquely identify
+#' a single observation over time, compare the time and timeseries_id fields; each
+#' timeseries will only have a single observation at a given time.
+#' @param timeseries_id A unique identifier representing a single timeseries.
+#' This corresponds to the id field in the timeseries-metadata endpoint.
+#' @param parameter_code Parameter codes are 5-digit codes used to identify the
+#' constituent measured and the units of measure. 
+#' @param statistic_id A code corresponding to the statistic an observation represents.
+#' Example codes include 00001 (max), 00002 (min), and 00003 (mean). 
+#' @param time The date an observation represents. 
+#' @param value The value of the observation. Values are transmitted as strings
+#' in the JSON response format in order to preserve precision.
+#' @param unit_of_measure A human-readable description of the units of measurement
+#' associated with an observation.
+#' @param approval_status Some of the data that you have obtained from this U.S.
+#' Geological Survey database may not have received Director's approval. Any such
+#' data values are qualified as provisional and are subject to revision. Provisional
+#' data are released on the condition that neither the USGS nor the United States
+#' Government may be held liable for any damages resulting from its use. This field
+#' reflects the approval status of each record, and is either "Approved", meaning
+#' processing review has been completed and the data is approved for publication,
+#' or "Provisional" and subject to revision. 
+#' @param qualifier This field indicates any qualifiers associated with an observation,
+#' for instance if a sensor may have been impacted by ice or if values were estimated.
+#' @param last_modified The last time a record was refreshed in our database. This
+#' may happen due to regular operational processes and does not necessarily indicate
+#' anything about the measurement has changed. You can query this field using
+#' date-times or intervals.
 #' @examples
 #' site <- "USGS-02238500"
 #' pcode <- "00060"
@@ -238,7 +300,6 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
                                   crs = NA_character_,
                                   bbox_crs = NA_character_,
                                   skipGeometry = FALSE,
-                                  sortby = "time",
                                   offset = NA,
                                   datetime = NA_character_,
                                   filter = NA_character_
@@ -314,7 +375,6 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
                                 crs = crs,
                                 bbox_crs = bbox_crs,
                                 skipGeometry = skipGeometry,
-                                sortby = sortby,
                                 offset = offset,
                                 datetime = datetime,
                                 filter = filter,
@@ -356,7 +416,9 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
 #' @param type Character, can be "queryables", "schema"
 #' @export
 #' @return list
-#' @examples
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
 #' 
 #' dv_queryables <- check_OGC_requests(endpoint = "daily",
 #'                                 type = "queryables")
@@ -366,7 +428,7 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
 #'                                 type = "queryables")
 #' ts_meta_schema <- check_OGC_requests(endpoint = "timeseries-metadata",
 #'                                 type = "schema")
-#' 
+#' }
 check_OGC_requests <- function(endpoint = "daily",
                            type = "queryables"){
   
@@ -383,8 +445,7 @@ check_OGC_requests <- function(endpoint = "daily",
   message("GET: ", check_req$url) 
   
   query_ret <- httr2::req_perform(check_req) |> 
-    httr2::resp_body_string() |> 
-    jsonlite::fromJSON()
+    httr2::resp_body_json() 
   
   return(query_ret)
   
