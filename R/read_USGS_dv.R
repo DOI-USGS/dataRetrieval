@@ -63,7 +63,6 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          skipGeometry = NA,
                          offset = NA,
                          datetime = NA_character_,
-                         filter = NA_character_,
                          no_sf = FALSE){
   
   message("Function in development, use at your own risk.")
@@ -92,8 +91,7 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                                   bbox_crs = bbox_crs,
                                   skipGeometry = skipGeometry,
                                   offset = offset,
-                                  datetime = datetime,
-                                  filter = filter)
+                                  datetime = datetime)
   
   return_list <- walk_pages(dv_req, use_sf)
   
