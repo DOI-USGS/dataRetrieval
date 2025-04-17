@@ -18,6 +18,9 @@ list
 Check OGC requests
 }
 \examples{
+\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+\donttest{
 
 dv_queryables <- check_OGC_requests(endpoint = "daily",
                                 type = "queryables")
@@ -27,5 +30,6 @@ ts_meta_queryables <- check_OGC_requests(endpoint = "timeseries-metadata",
                                 type = "queryables")
 ts_meta_schema <- check_OGC_requests(endpoint = "timeseries-metadata",
                                 type = "schema")
-
+}
+\dontshow{\}) # examplesIf}
 }

@@ -235,7 +235,7 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
            must all be defined, or none defined.")
   }
   
-  baseURL <- explode_query(baseURL,
+  baseURL <- explode_query(baseURL, POST = FALSE,
                            list(hydrologicUnit = hydrologicUnit,
                                 projectIdentifier = projectIdentifier,
                                 recordIdentifierUserSupplied = recordIdentifierUserSupplied,
