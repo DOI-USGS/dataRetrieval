@@ -23,8 +23,7 @@ construct_dv_requests(
   bbox_crs = NA_character_,
   skipGeometry = FALSE,
   offset = NA,
-  datetime = NA_character_,
-  filter = NA_character_
+  datetime = NA_character_
 )
 }
 \arguments{
@@ -83,7 +82,15 @@ may happen due to regular operational processes and does not necessarily indicat
 anything about the measurement has changed. You can query this field using
 date-times or intervals.}
 
+\item{limit}{The optional limit parameter limits the number of items that are
+presented in the response document. Only items are counted that are on the
+first level of the collection in the response document. Nested objects
+contained within the explicitly requested items shall not be counted.}
+
 \item{crs}{Indicates the coordinate reference system for the results.}
+
+\item{bbox_crs}{Indicates the coordinate reference system for the given bbox
+coordinates.}
 
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature.}
@@ -97,9 +104,6 @@ temporal property that intersects the value of datetime are selected. If a
 feature has multiple temporal properties, it is the decision of the server
 whether only a single temporal property is used to determine the extent or
 all relevant temporal properties.}
-
-\item{bbox-crs}{Indicates the coordinate reference system for the given bbox
-coordinates.}
 
 \item{time}{The date an observation represents.}
 }
