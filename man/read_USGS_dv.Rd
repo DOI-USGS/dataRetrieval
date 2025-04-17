@@ -84,7 +84,15 @@ may happen due to regular operational processes and does not necessarily indicat
 anything about the measurement has changed. You can query this field using
 date-times or intervals.}
 
+\item{limit}{The optional limit parameter limits the number of items that are
+presented in the response document. Only items are counted that are on the
+first level of the collection in the response document. Nested objects
+contained within the explicitly requested items shall not be counted.}
+
 \item{crs}{Indicates the coordinate reference system for the results.}
+
+\item{bbox_crs}{Indicates the coordinate reference system for the given bbox
+coordinates.}
 
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature.}

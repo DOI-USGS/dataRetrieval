@@ -214,7 +214,7 @@ walk_pages_recursive <- function(req, page, contents, use_sf) {
 #' on whether the coordinate reference system includes a vertical axis (height or
 #' depth).
 #' @param crs Indicates the coordinate reference system for the results.
-#' @param bbox-crs Indicates the coordinate reference system for the given bbox
+#' @param bbox_crs Indicates the coordinate reference system for the given bbox
 #' coordinates.
 #' @param properties The properties that should be included for each feature. The
 #' parameter value is a comma-separated list of property names. Available values:
@@ -261,6 +261,10 @@ walk_pages_recursive <- function(req, page, contents, use_sf) {
 #' may happen due to regular operational processes and does not necessarily indicate
 #' anything about the measurement has changed. You can query this field using
 #' date-times or intervals.
+#' @param limit The optional limit parameter limits the number of items that are
+#' presented in the response document. Only items are counted that are on the
+#' first level of the collection in the response document. Nested objects
+#' contained within the explicitly requested items shall not be counted.
 #' @examples
 #' site <- "USGS-02238500"
 #' pcode <- "00060"
@@ -301,8 +305,7 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
                                   bbox_crs = NA_character_,
                                   skipGeometry = FALSE,
                                   offset = NA,
-                                  datetime = NA_character_,
-                                  filter = NA_character_
+                                  datetime = NA_character_
                                   ){
   
   match.arg(properties, choices = c("id",
@@ -323,6 +326,7 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
     httr2::req_user_agent(default_ua())
   
   token <- Sys.getenv("API_USGS_PAT")
+  filter <- NA_character_
   
   ###########################################################
   # This is all going to be done eventually with a POST CQL request:

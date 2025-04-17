@@ -117,11 +117,11 @@ attr(pHData, "queryTime")
 attr(pHData, "url")
 
 # WQX3:
-pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315", 
-                      characteristicName = nameToUse,
-                      service = "ResultWQX3",
-                      dataProfile = "basicPhysChem")
-attr(pHData_wqx3, "url")
+#pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315", 
+#                           characteristicName = nameToUse,
+#                           service = "ResultWQX3",
+#                           dataProfile = "basicPhysChem")
+#attr(pHData_wqx3, "url")
 
 # More examples:
 # querying by county
@@ -133,15 +133,15 @@ DeWitt <- readWQPdata(
 
 attr(DeWitt, "url")
 
-DeWitt_wqx3 <- readWQPdata(
-  statecode = "Illinois",
-  countycode = "DeWitt",
-  characteristicName = "Nitrogen",
-  service = "ResultWQX3",
-  dataProfile = "basicPhysChem",  
-  ignore_attributes = TRUE)
-
-attr(DeWitt_wqx3, "url")
+#DeWitt_wqx3 <- readWQPdata(
+#   statecode = "Illinois",
+#   countycode = "DeWitt",
+#   characteristicName = "Nitrogen",
+#   service = "ResultWQX3",
+#   dataProfile = "basicPhysChem",  
+#   ignore_attributes = TRUE)
+#
+#attr(DeWitt_wqx3, "url")
 
 # Data profile: "Sampling Activity"
 activity <- readWQPdata(
@@ -150,11 +150,11 @@ activity <- readWQPdata(
 )
 attr(activity, "url")
 
-activity_wqx3 <- readWQPdata(
-  siteid = "USGS-04024315",
-  service = "ActivityWQX3"
-)
-attr(activity_wqx3, "url")
+# activity_wqx3 <- readWQPdata(
+#   siteid = "USGS-04024315",
+#   service = "ActivityWQX3"
+# )
+# attr(activity_wqx3, "url")
 
 Dane_activity <- readWQPdata(
   statecode = "Wisconsin",
@@ -165,14 +165,14 @@ Dane_activity <- readWQPdata(
 )
 attr(Dane_activity, "url")
 
-Dane_activity_wqx3 <- readWQPdata(
-  statecode = "Wisconsin",
-  countycode = "Dane",
-  startDateLo = "2023-01-01",
-  startDateHi = "2023-12-31",
-  service = "ActivityWQX3"
-)
-attr(Dane_activity_wqx3, "url")
+# Dane_activity_wqx3 <- readWQPdata(
+#   statecode = "Wisconsin",
+#   countycode = "Dane",
+#   startDateLo = "2023-01-01",
+#   startDateHi = "2023-12-31",
+#   service = "ActivityWQX3"
+# )
+# attr(Dane_activity_wqx3, "url")
 
 ########################################################
 # Additional examples:
@@ -221,11 +221,11 @@ samp_narrow <- readWQPdata(
   dataProfile = "narrowResult"
 )
 
-samp_narrow_wqx3 <- readWQPdata(
-  siteid = "USGS-04024315",
-  service = "ResultWQX3",
-  dataProfile = "narrow"
-)
+# samp_narrow_wqx3 <- readWQPdata(
+#   siteid = "USGS-04024315",
+#   service = "ResultWQX3",
+#   dataProfile = "narrow"
+# )
 
 
 # Data profiles: "Sampling Activity"  
@@ -262,10 +262,10 @@ rawPHsites_legacy <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "W
                         service = "Result",
                         dataProfile = "narrowResult" )
 
-rawPHsites <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
-                        characteristicName = "pH",
-                        service = "ResultWQX3",
-                        dataProfile = "narrow" )
+# rawPHsites <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+#                           characteristicName = "pH",
+#                           service = "ResultWQX3",
+#                           dataProfile = "narrow" )
 
 }
 \dontshow{\}) # examplesIf}
