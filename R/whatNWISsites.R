@@ -36,17 +36,12 @@
 whatNWISsites <- function(...) {
 
   matchReturn <- convertLists(...)
-  if ("service" %in% names(matchReturn)) {
-    service <- matchReturn$service
-    matchReturn$service <- NULL
-  } else {
-    service <- NULL
-  }
-  
-  valuesList <- readNWISdots(matchReturn)
+  valuesList <- readNWISdots(...)
 
   values <- valuesList[["values"]]
   values <- values[names(values) != "format"]
+  
+  values <- sapply(valuesList$values, function(x) utils::URLencode(x))
 
   #################
   # temporary gwlevels fixes
@@ -58,28 +53,19 @@ whatNWISsites <- function(...) {
 
   names(values)[names(values) == "state_cd"] <- "stateCd"
   ##################
-
-  if(!is.null(service)){
-    service[service == "gwlevels"] <- "gw"
-    service[service == "meas"] <- "sv"
-    service[service == "peak"] <- "pk"
-    service[service == "uv"] <- "id"
-    
-    values[["hasDataTypeCd"]] <- service
+  
+  if("service" %in% names(matchReturn)){
+    values["hasDataTypeCd"] <- switch(valuesList$service,
+                                      "gwlevels" = "gw",
+                                      "iv" = "iv",
+                                      "dv" = "dv",
+                                      "peak" = "pk")
   }
   
-  POST = nchar(paste0(unlist(values), collapse = "")) > 2048
-  
   urlCall <- httr2::request(pkg.env[["site"]])
- 
-  urlCall <- get_or_post(urlCall,
-                         POST = POST,
-                         !!!values,
-                         .multi = "comma")
-  
-  urlCall <- get_or_post(urlCall,
-                         POST = POST, 
-                         format = "mapper")
+  urlCall <- httr2::req_url_query(urlCall, !!!values,
+                                  .multi = "comma")
+  urlCall <- httr2::req_url_query(urlCall, format = "mapper")
   
   rawData <- getWebServiceData(urlCall, encoding = "gzip")
   if (is.null(rawData)) {

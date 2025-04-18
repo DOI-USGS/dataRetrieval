@@ -89,8 +89,9 @@ NULL
 
 #' US State Code Lookup Table
 #'
-#' Classic lookup table for states. Has been replaced in functions with
-#' \code{check_param("states")}.
+#' Data originally pulled from \url{https://www2.census.gov/geo/docs/reference/state.txt}
+#' on April 1, 2015. On Feb. 11, 2022, the fields were updated with the
+#' file found in inst/extdata, which is used internally with NWIS retrievals.
 #'
 #' @name stateCd
 #' @return stateCd data frame.
@@ -111,8 +112,9 @@ NULL
 
 #' US County Code Lookup Table
 #'
-#' Classic lookup table for counties. Has been replaced in functions with
-#' \code{check_param("counties")}.
+#' Data originally pulled from \url{https://www2.census.gov/geo/docs/reference/codes/files/national_county.txt}
+#' on April 1, 2015. On Feb. 11, 2022, the fields were updated with the
+#' file found in inst/extdata, which is used internally with NWIS retrievals.
 #'
 #' @name countyCd
 #' @return countyCd data frame.

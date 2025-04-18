@@ -46,8 +46,8 @@ is_legacy <- function(service){
 }
 
 nwis_message <- function(){
-  return("WARNING: whatNWISdata does not include
-discrete water quality data newer than March 11, 2024.
-For additional details, see:
+  return("WARNING: NWIS does not deliver
+discrete water quality data newer than March 11, 2024
+or updates to existing data. For additional details, see:
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }

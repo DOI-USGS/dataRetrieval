@@ -35,7 +35,7 @@ whatWQPsamples <- function(...,
   } else {
     baseURL <- httr2::request(pkg.env[["ActivityWQX3"]])
   }
-  POST = FALSE
+
   if(!legacy){
     baseURL <- httr2::req_url_query(baseURL, !!!values, 
                                     .multi = "explode")
@@ -43,19 +43,14 @@ whatWQPsamples <- function(...,
     if("siteid" %in% names(values)){
       if(length(values[["siteid"]]) > 1){
         sites <- values[["siteid"]]
-        POST = nchar(paste0(sites, collapse = "")) > 2048
-        
-        baseURL <- get_or_post(baseURL, POST = POST,
-                               siteid = sites,
-                               .multi = function(x) paste0(x, collapse = ";"))
-        
+        baseURL <- httr2::req_url_query(baseURL, 
+                                        siteid = sites,
+                                        .multi = function(x) paste0(x, collapse = ";"))
         values <- values[names(values) != "siteid"]
       }
     }
-    baseURL <- get_or_post(baseURL, 
-                           POST = POST,
-                           !!!values, 
-                           .multi = "explode")
+    baseURL <- httr2::req_url_query(baseURL, !!!values, 
+                                    .multi = "explode")
   }
   
   retval <- importWQP(baseURL,
@@ -102,27 +97,21 @@ whatWQPmetrics <- function(...,
   if ("service" %in% names(values)) {
     values <- values[!(names(values) %in% "service")]
   }
-  POST = FALSE
+
   baseURL <- httr2::request(pkg.env[["ActivityMetric"]])
   
   if("siteid" %in% names(values)){
     if(length(values[["siteid"]]) > 1){
       sites <- values[["siteid"]]
-      POST = nchar(paste0(sites, collapse = "")) > 2048
-      
-      baseURL <- get_or_post(baseURL, POST = POST,
-                             siteid = sites, 
-                             .multi = function(x) paste0(x, collapse = ";"))
-      
+      baseURL <- httr2::req_url_query(baseURL, 
+                                      siteid = sites,
+                                      .multi = function(x) paste0(x, collapse = ";"))
       values <- values[names(values) != "siteid"]
     }
   }
+  baseURL <- httr2::req_url_query(baseURL, !!!values, 
+                                  .multi = "explode")
 
-  baseURL <- get_or_post(baseURL,
-                         POST = POST,
-                         !!!values,
-                         .multi = "explode")
-  
   withCallingHandlers(
     {
       retval <- importWQP(baseURL,
@@ -135,7 +124,6 @@ whatWQPmetrics <- function(...,
       }
     }
   )
-  
   if(is.null(retval)){
     return(NULL)
   } else {
@@ -211,32 +199,25 @@ whatWQPdata <- function(...,
   if (any(c("tz", "service", "mimeType") %in% names(values))){
     values <- values[!(names(values) %in% c("tz", "service", "mimeType"))]
   }
-  POST = FALSE
-  
-  baseURL <- httr2::request(pkg.env[["Station"]])
-  
+
   if("siteid" %in% names(values)){
     if(length(values[["siteid"]]) > 1){
       sites <- values[["siteid"]]
-
-      POST = nchar(paste0(sites, collapse = "")) > 2048
-        
-      baseURL <- get_or_post(baseURL, POST = POST,
-                             siteid = sites, 
-                             .multi = function(x) paste0(x, collapse = ";"))
-      
+      baseURL <- httr2::req_url_query(baseURL, 
+                                      siteid = sites,
+                                      .multi = function(x) paste0(x, collapse = ";"))
       values <- values[names(values) != "siteid"]
     }
   }
-
-  baseURL <- get_or_post(req = baseURL, 
-                         POST = POST,
-                         !!!values,
-                         .multi = "explode")
   
-  baseURL <- get_or_post(baseURL, 
-                         POST = POST,
-                         mimeType = "geojson")
+  baseURL <- httr2::request(pkg.env[["Station"]])
+  
+  baseURL <- httr2::req_url_query(baseURL,
+                                  !!!values,
+                                  .multi = "explode")
+
+  baseURL <- httr2::req_url_query(baseURL, 
+                                  mimeType = "geojson")
   
   # Not sure if there's a geojson option with WQX3
   wqp_message()
@@ -316,15 +297,3 @@ whatWQPdata <- function(...,
   attr(y, "url") <- baseURL
   return(y)
 }
-
-get_or_post <- function(req, POST = FALSE, ...){
-  
-  if(POST){
-    req <- httr2::req_body_form(req, ...)
-
-  } else {
-    req <- httr2::req_url_query(req, ...)
-  }
-  return(req)
-}
-
