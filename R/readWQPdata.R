@@ -254,7 +254,7 @@ readWQPdata <- function(...,
                         convertType = TRUE) {
   
   tz <- match.arg(tz, OlsonNames())
-  
+
   service <- match.arg(service, c("Result", "Station", "Activity",
                                   "ActivityMetric", "SiteSummary",
                                   "Project", "ProjectMonitoringLocationWeighting",
@@ -267,9 +267,8 @@ readWQPdata <- function(...,
   
   valuesList <- readWQPdots(..., legacy = legacy)
   values <- valuesList[["values"]]
-  
+
   baseURL <- httr2::request(pkg.env[[service]])
-  POST = FALSE
   
   if(!legacy){
     if(service == "ResultWQX3" & !"dataProfile" %in% names(values)){
@@ -282,28 +281,23 @@ readWQPdata <- function(...,
     if("siteid" %in% names(values)){
       if(length(values[["siteid"]]) > 1){
         sites <- values[["siteid"]]
-        POST = nchar(paste0(sites, collapse = "")) > 2048
-        
-        baseURL <- get_or_post(baseURL, 
-                               POST = POST,
-                               siteid = sites,
-                               .multi = function(x) paste0(x, collapse = ";"))
+        baseURL <- httr2::req_url_query(baseURL, 
+                                        siteid = sites,
+                                        .multi = function(x) paste0(x, collapse = ";"))
         values <- values[names(values) != "siteid"]
       }
     }
-    baseURL <- get_or_post(baseURL, 
-                           POST = POST,
-                           !!!values, 
-                           .multi = "explode")
+    baseURL <- httr2::req_url_query(baseURL, !!!values, 
+                                    .multi = "explode")
   }
-  
+
   if (querySummary) {
     retquery <- getQuerySummary(baseURL)
     return(retquery)
   } else {
     retval <- importWQP(baseURL,
-                        tz = tz,
-                        convertType = convertType
+      tz = tz,
+      convertType = convertType
     )
     
     if(is.null(retval)){
@@ -319,7 +313,7 @@ readWQPdata <- function(...,
       params <- params[!names(params) %in% c("dataProfile", "service")]
       retval <- create_WQP_attributes(retval, params)
     } 
-    
+
     attr(retval, "url") <- baseURL$url
     
     if(legacy){
@@ -335,7 +329,7 @@ readWQPdata <- function(...,
 
 
 create_WQP_attributes <- function(retval, ...){
-  
+
   col_legacy <- c("CharacteristicName", #legacy
                   "ResultMeasure.MeasureUnitCode", 
                   "ResultSampleFractionText")
@@ -348,7 +342,7 @@ create_WQP_attributes <- function(retval, ...){
     names(retvalVariableInfo) <- c("characteristicName",
                                    "param_units",
                                    "valueType")
-    
+
     attr(retval, "variableInfo") <- retvalVariableInfo
   } else if(all(col_wqx3 %in% names(retval))){
     retvalVariableInfo <- retval[, col_wqx3]

@@ -32,7 +32,6 @@
 #' }
 #'
 importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
-  
   if (tz != "") {
     tz <- match.arg(tz, OlsonNames())
   } else {
@@ -49,13 +48,6 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
     returnedDoc <- xml2::xml_root(returnedDoc)
   } else if (is.character(input) && file.exists(input)) {
     returnedDoc <- xml2::read_xml(input)
-  } else if (is.character(input) && 
-             grepl("(https)://[^ /$.?#].[^\\s]*", input)) {
-    input <- httr2::request(input)
-    returnedDoc <- getWebServiceData(input)
-    if (is.null(returnedDoc)) {
-      return(invisible(NULL))
-    }
   } else if (is.raw(input)) {
     returnedDoc <- xml2::read_xml(input)
     raw <- TRUE
