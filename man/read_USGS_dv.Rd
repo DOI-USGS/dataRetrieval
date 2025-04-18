@@ -24,7 +24,6 @@ read_USGS_dv(
   skipGeometry = NA,
   offset = NA,
   datetime = NA_character_,
-  filter = NA_character_,
   no_sf = FALSE
 )
 }

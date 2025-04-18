@@ -117,11 +117,11 @@ attr(pHData, "queryTime")
 attr(pHData, "url")
 
 # WQX3:
-#pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315", 
-#                           characteristicName = nameToUse,
-#                           service = "ResultWQX3",
-#                           dataProfile = "basicPhysChem")
-#attr(pHData_wqx3, "url")
+pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315", 
+                           characteristicName = nameToUse,
+                           service = "ResultWQX3",
+                           dataProfile = "basicPhysChem")
+attr(pHData_wqx3, "url")
 
 # More examples:
 # querying by county
@@ -133,15 +133,15 @@ DeWitt <- readWQPdata(
 
 attr(DeWitt, "url")
 
-#DeWitt_wqx3 <- readWQPdata(
-#   statecode = "Illinois",
-#   countycode = "DeWitt",
-#   characteristicName = "Nitrogen",
-#   service = "ResultWQX3",
-#   dataProfile = "basicPhysChem",  
-#   ignore_attributes = TRUE)
-#
-#attr(DeWitt_wqx3, "url")
+DeWitt_wqx3 <- readWQPdata(
+   statecode = "Illinois",
+   countycode = "DeWitt",
+   characteristicName = "Nitrogen",
+   service = "ResultWQX3",
+   dataProfile = "basicPhysChem",  
+   ignore_attributes = TRUE)
+
+attr(DeWitt_wqx3, "url")
 
 # Data profile: "Sampling Activity"
 activity <- readWQPdata(
