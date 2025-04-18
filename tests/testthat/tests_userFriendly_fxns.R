@@ -469,7 +469,7 @@ test_that("pCode Stuff", {
   expect_equal(paramINFO$parameter_group_nm[3:4], c(NA_character_, NA_character_))
 
   paramINFO <- readNWISpCode("all")
-  expect_true(nrow(paramINFO) > 10000)
+  expect_true(nrow(paramINFO) > 20000)
   expect_equal(
     attr(paramINFO, "url"),
     "https://help.waterdata.usgs.gov/code/parameter_cd_query?fmt=rdb&group_cd=%25"
