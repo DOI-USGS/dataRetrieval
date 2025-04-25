@@ -487,8 +487,7 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
 #' 
 #' }
 summarize_USGS_samples <- function(monitoringLocationIdentifier){
-  message("Function in development, use at your own risk.")
-  
+
   if(length(monitoringLocationIdentifier) > 1){
     stop("Summary service only available for one site at a time.")
   }
