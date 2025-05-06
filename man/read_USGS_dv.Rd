@@ -24,7 +24,8 @@ read_USGS_dv(
   skipGeometry = NA,
   offset = NA,
   datetime = NA_character_,
-  no_sf = FALSE
+  no_sf = FALSE,
+  convertType = TRUE
 )
 }
 \arguments{
@@ -108,6 +109,9 @@ all relevant temporal properties.}
 
 \item{no_sf}{Boolean, whether or not to return an "sf" object. TRUE returns
 a basic data frame, FALSE returns a "sf" object.}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+will convert the data to dates, datetimes,}
 }
 \description{
 Daily data provide one data value to represent water conditions for the day.
@@ -140,7 +144,7 @@ multi_site <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000",
                         parameter_code = c("00060", "00010"),
                         datetime = c("2023-01-01", "2024-01-01"))
 
-bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -81, 38.5),
+bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -82.5, 37.5),
                           parameter_code = "00060")
 }
 \dontshow{\}) # examplesIf}
