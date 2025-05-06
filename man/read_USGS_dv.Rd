@@ -135,15 +135,13 @@ dv_data <- read_USGS_dv(monitoring_location_id = site,
                         parameter_code = "00060",
                         no_sf = TRUE)
 
-sites <- c("USGS-01491000", "USGS-01645000")
-start_date <- "2021-01-01"
-end_date <- "2022-01-01"
-#req_dv <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000", "USGS-01645000"),
-#                        parameter_code = c("00060", "00065"),
-#                        datetime = c("2021-01-01", "2022-01-01"))
+multi_site <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000", 
+                                                       "USGS-01645000"),
+                        parameter_code = c("00060", "00010"),
+                        datetime = c("2023-01-01", "2024-01-01"))
 
-# bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -81, 38.5),
-#                           parameter_code = "00060")
+bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -81, 38.5),
+                          parameter_code = "00060")
 }
 \dontshow{\}) # examplesIf}
 }

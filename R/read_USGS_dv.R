@@ -28,15 +28,13 @@
 #'                         parameter_code = "00060",
 #'                         no_sf = TRUE)
 #' 
-#' sites <- c("USGS-01491000", "USGS-01645000")
-#' start_date <- "2021-01-01"
-#' end_date <- "2022-01-01"
-#' #req_dv <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000", "USGS-01645000"),
-#' #                        parameter_code = c("00060", "00065"),
-#' #                        datetime = c("2021-01-01", "2022-01-01"))
+#' multi_site <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000", 
+#'                                                        "USGS-01645000"),
+#'                         parameter_code = c("00060", "00010"),
+#'                         datetime = c("2023-01-01", "2024-01-01"))
 #' 
-#' # bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -81, 38.5),
-#' #                           parameter_code = "00060")
+#' bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -81, 38.5),
+#'                           parameter_code = "00060")
 #' }
 read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          parameter_code = NA_character_,
@@ -68,8 +66,7 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
   message("Function in development, use at your own risk.")
   
   use_sf <- all(pkg.env$local_sf, !no_sf)
-  page <- 1
-  
+
   if(!use_sf){
     skipGeometry <- TRUE
   }
@@ -130,8 +127,13 @@ walk_pages <- function(req, use_sf) {
 
 # Change to https://httr2.r-lib.org/reference/req_perform_iterative.html
 walk_pages_recursive <- function(req, page, contents, use_sf) {
-  
-  message("GET: ", req$url) 
+
+  url_method <- "GET"
+  if(!is.null(req$body)){
+    url_method <- "POST"
+    body <- req$body
+  }
+  message(url_method, ": ", req$url) 
 
   returned_contents <- httr2::req_perform(req)
   
@@ -174,17 +176,8 @@ walk_pages_recursive <- function(req, page, contents, use_sf) {
     
   } else {
     
-    make_request <- httr2::request(json_content$links[, "href", drop = TRUE][next_page]) |> 
-      httr2::req_user_agent(default_ua())
-    
-    if( Sys.getenv("API_USGS_PAT") != ""){
-      make_request <- make_request |> 
-        httr2::req_headers(`Accept-Encoding` = c("compress", "gzip"),
-                           `X-Api-Key` = Sys.getenv("API_USGS_PAT"))
-    } else {
-      make_request <- make_request |> 
-        httr2::req_headers(`Accept-Encoding` = c("compress", "gzip"))     
-    }
+    make_request <- httr2::req_url(req = req, 
+                                   url = json_content$links[, "href", drop = TRUE][next_page])
     
     Tailcall(
       walk_pages_recursive,
@@ -306,44 +299,102 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
                                   datetime = NA_character_
                                   ){
   
-  match.arg(properties, choices = c("id",
-                                    "timeseries_id",
-                                    "monitoring_location_id",
-                                    "parameter_code",
-                                    "statistic_id",
-                                    "time",
-                                    "value",
-                                    "unit_of_measure",
-                                    "approval_status",
-                                    "qualifier",
-                                    "last_modified", NA_character_),
+  schema <- check_OGC_requests(endpoint = "daily",
+                                       type = "schema")
+  all_properties <- names(schema$properties)
+  
+  match.arg(properties, choices = c(all_properties, NA_character_),
             several.ok = TRUE)
 
+  if(all(properties %in% all_properties[!all_properties %in% c("id", "geometry")])) {
+    # Cleans up URL if we're asking for everything
+    properties <- NA_character_
+  }
+  
   baseURL <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
     httr2::req_url_path_append("daily", "items") |> 
-    httr2::req_user_agent(default_ua())
+    httr2::req_user_agent(default_ua()) |>
+    httr2::req_headers(`Accept-Encoding` = c("compress", "gzip")) 
   
   token <- Sys.getenv("API_USGS_PAT")
-  filter <- NA_character_
   
-  ###########################################################
-  # This is all going to be done eventually with a POST CQL request:
-  if(isTRUE(length(monitoring_location_id) > 1)){
-    filter <- c(filter[!is.na(filter)], 
-                paste0("monitoring_location_id IN ('", 
-                     paste0(monitoring_location_id, 
-                            collapse = "', '"), "')"))
-    monitoring_location_id <- NA_character_
+  if(token != ""){
+    baseURL <- baseURL |>
+      httr2::req_headers_redacted(`X-Api-Key` = token)
   }
   
-  if(isTRUE(length(parameter_code) > 1)){
-    filter <- c(filter[!is.na(filter)], 
-                paste0("parameter_code IN ('", 
-                     paste0(parameter_code, 
-                            collapse = "', '"), "')"))
-    parameter_code <- NA_character_
+  POST <- FALSE
+  
+  template_path_post <- system.file("templates/post.CQL2", package = "dataRetrieval")
+  template_post <- readChar(template_path_post, file.info(template_path_post)$size)
+  
+  post_params <- explode_post(list(monitoring_location_id = monitoring_location_id,
+                                   parameter_code = parameter_code,
+                                   statistic_id = statistic_id,
+                                   timeseries_id = timeseries_id,
+                                   id = id,
+                                   approval_status = approval_status,
+                                   unit_of_measure = unit_of_measure,
+                                   qualifier = qualifier,
+                                   value = value))
+
+  if(length(post_params) > 0){
+    POST = TRUE
   }
-  ###########################################################
+  
+  datetime <- format_api_dates(datetime)
+
+  baseURL <- explode_query(baseURL, POST = FALSE,
+                           list(last_modified = last_modified,
+                                limit = limit,
+                                crs = crs,
+                                bbox_crs = bbox_crs,
+                                skipGeometry = skipGeometry,
+                                offset = offset,
+                                datetime = datetime,
+                                f = "json",
+                                lang = "en-US"))
+  
+  if(all(!is.na(bbox))){
+    baseURL <- httr2::req_url_query(baseURL,
+                                    bbox = bbox,
+                                    .multi = "comma")      
+  }
+  
+  if(!all(is.na(properties))){
+    baseURL <- httr2::req_url_query(baseURL,
+                                    properties = properties,
+                                    .multi = "comma")    
+  }
+
+  if(POST){  
+    baseURL <- baseURL |>
+      httr2::req_headers(`Content-Type` = "application/query-cql-json") 
+    
+    post_params <- list(
+      "params" = unname(post_params)
+    )
+
+    x <- whisker::whisker.render(template_post, post_params)
+    baseURL <- httr2::req_body_raw(baseURL, x) 
+    
+  } else {
+    baseURL <- explode_query(baseURL, POST = FALSE,
+                             list(monitoring_location_id = monitoring_location_id,
+                                  parameter_code = parameter_code,
+                                  statistic_id = statistic_id,
+                                  timeseries_id = timeseries_id,
+                                  id = id,
+                                  approval_status = approval_status,
+                                  unit_of_measure = unit_of_measure,
+                                  qualifier = qualifier,
+                                  value = value))
+  }
+
+  return(baseURL)
+}
+
+format_api_dates <- function(datetime){
   
   if(!any(is.na(datetime))){
     if(length(datetime) == 1){
@@ -359,58 +410,37 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
       stop("datetime should only include 1-2 values")
     }
   }
-  
-  POST <- FALSE
-  
-  baseURL <- explode_query(baseURL, POST = POST,
-                           list(monitoring_location_id = monitoring_location_id,
-                                parameter_code = parameter_code,
-                                statistic_id = statistic_id,
-                                timeseries_id = timeseries_id,
-                                id = id,
-                                approval_status = approval_status,
-                                unit_of_measure = unit_of_measure,
-                                qualifier = qualifier,
-                                value = value,
-                                last_modified = last_modified,
-                                limit = limit,
-                                crs = crs,
-                                bbox_crs = bbox_crs,
-                                skipGeometry = skipGeometry,
-                                offset = offset,
-                                datetime = datetime,
-                                filter = filter,
-                                f = "json",
-                                lang = "en-US"))
-
-  if(all(!is.na(bbox))){
-    baseURL <- httr2::req_url_query(baseURL,
-                                    bbox = bbox,
-                                    .multi = "comma")      
-  }
-  
-  if(POST){
-    baseURL <- httr2::req_body_json(baseURL,
-                                    properties = properties)    
-  } else {
-    baseURL <- httr2::req_url_query(baseURL,
-                                    properties = properties,
-                                    .multi = "comma")
-  }
-
-  
-  if(token != ""){
-    baseURL <- baseURL |>
-      httr2::req_headers(`X-Api-Key` = token,
-                         `Accept-Encoding` = c("compress", "gzip"))
-  } else {
-    baseURL <- baseURL |>
-      httr2::req_headers(`Accept-Encoding` = c("compress", "gzip"))    
-  }
-
-  return(baseURL)
+  return(datetime)
 }
 
+explode_post <- function(ls){
+  
+  ls <- Filter(Negate(anyNA), ls)
+  params <- NULL
+  
+  if(max(lengths(ls)) > 1) {
+    
+    for(i in seq_along(ls)){
+      params[names(ls[i])] <- cql2_param(ls[i])
+    }
+    
+    if(length(params) > 1){
+      params[seq_along(1:(length(params)-1))] <- paste0(params[seq_along(1:(length(params)-1))], ",")
+    }
+  }
+  return(params)  
+}
+
+cql2_param <- function(parameter){
+  template_path <- system.file("templates/param.CQL2", package = "dataRetrieval")
+  template <- readChar(template_path, file.info(template_path)$size)
+  
+  parameters <- paste0(unlist(parameter), collapse = '", "')
+  parameters <- paste0('"', parameters, '"')
+  parameter_list <- list("property" = names(parameter),
+                         "parameter" = parameters)
+  return(whisker::whisker.render(template, parameter_list))
+} 
 
 #' Check OGC requests
 #' 
@@ -443,9 +473,7 @@ check_OGC_requests <- function(endpoint = "daily",
     httr2::req_user_agent(default_ua()) |> 
     httr2::req_url_query(f = "json",
                          lang = "en-US") 
-  
-  message("GET: ", check_req$url) 
-  
+
   query_ret <- httr2::req_perform(check_req) |> 
     httr2::resp_body_json() 
   
