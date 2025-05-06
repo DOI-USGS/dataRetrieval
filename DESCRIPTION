@@ -44,7 +44,8 @@ Imports:
     xml2,
     readr (>= 1.4.0),
     jsonlite,
-    httr2
+    httr2,
+    whisker
 Suggests:
     covr,
     dplyr,
