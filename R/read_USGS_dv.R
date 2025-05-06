@@ -15,6 +15,8 @@
 #' @inheritParams construct_dv_requests
 #' @param no_sf Boolean, whether or not to return an "sf" object. TRUE returns
 #' a basic data frame, FALSE returns a "sf" object.
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' will convert the data to dates, datetimes,
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -33,7 +35,7 @@
 #'                         parameter_code = c("00060", "00010"),
 #'                         datetime = c("2023-01-01", "2024-01-01"))
 #' 
-#' bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -81, 38.5),
+#' bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -82.5, 37.5),
 #'                           parameter_code = "00060")
 #' }
 read_USGS_dv <- function(monitoring_location_id = NA_character_,
@@ -61,7 +63,8 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          skipGeometry = NA,
                          offset = NA,
                          datetime = NA_character_,
-                         no_sf = FALSE){
+                         no_sf = FALSE, 
+                         convertType = TRUE){
   
   message("Function in development, use at your own risk.")
   
@@ -92,7 +95,13 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
   
   return_list <- walk_pages(dv_req, use_sf)
   
+  if(convertType) return_list <- cleanup_cols(return_list)
+  
   return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
+  
+  if(!"id" %in% properties){
+    return_list <- return_list[, names(return_list)[!names(return_list) %in% "id"]]
+  }
   
   return(return_list)
 }
@@ -100,9 +109,11 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
 cleanup_cols <- function(df){
   
   if("qualifier" %in% names(df)){
-    df$qualifier <- vapply(X = df$qualifier, 
-                           FUN = function(x) paste(x, collapse = ","),
-                           FUN.VALUE =  c(NA_character_))
+    if(!all(is.na(df$qualifier))){
+      df$qualifier <- vapply(X = df$qualifier,
+                             FUN = function(x) paste(x, collapse = ", "),
+                             FUN.VALUE =  c(NA_character_)) 
+    }
   }
   
   if("time" %in% names(df)){
@@ -158,16 +169,12 @@ walk_pages_recursive <- function(req, page, contents, use_sf) {
     
     if(use_sf){
       return_df <- lapply(contents, function(x) {
-          df_i <- sf::read_sf(x) |> 
-            cleanup_cols()
-          df_i
+          df_i <- sf::read_sf(x) 
         }) |> 
         do.call(what = rbind)
     } else {
       return_df <- lapply(contents, function(x) {
-          df_i <- jsonlite::fromJSON(x)[["features"]][["properties"]] |> 
-            cleanup_cols()
-          df_i
+          df_i <- jsonlite::fromJSON(x)[["features"]][["properties"]] 
         }) |> 
         do.call(what = rbind)
     }
@@ -306,7 +313,7 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
   match.arg(properties, choices = c(all_properties, NA_character_),
             several.ok = TRUE)
 
-  if(all(properties %in% all_properties[!all_properties %in% c("id", "geometry")])) {
+  if(all(all_properties[!all_properties %in% c("id", "geometry")] %in% properties)) {
     # Cleans up URL if we're asking for everything
     properties <- NA_character_
   }
@@ -346,6 +353,7 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
 
   baseURL <- explode_query(baseURL, POST = FALSE,
                            list(last_modified = last_modified,
+                                properties = properties,
                                 limit = limit,
                                 crs = crs,
                                 bbox_crs = bbox_crs,
