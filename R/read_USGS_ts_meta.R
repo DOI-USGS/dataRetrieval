@@ -8,9 +8,21 @@
 #' occurred.
 #' 
 #' @export
+#' @param monitoring_location_id A unique identifier representing a single monitoring
+#' location. This corresponds to the id field in the sites endpoint. Monitoring
+#' location IDs are created by combining the agency code of the agency responsible
+#' for the monitoring location (e.g. USGS) with the ID number of the monitoring
+#' location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).
+#' @param properties The properties that should be included for each feature. The
+#' parameter value is a comma-separated list of property names. Available values:
+#' geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id,
+#' last_modified, begin, end, computation_period_identifier, computation_identifier,
+#' thresholds, sublocation_identifier, primary, monitoring_location_id, web_description.
 #' @param parameter_code Parameter codes are 5-digit codes used to identify the
 #' constituent measured and the units of measure. 
 #' @param parameter_name A human-understandable name corresponding to parameter_code.
+#' @param unit_of_measure A human-readable description of the units of measurement
+#' associated with an observation.
 #' @param statistic_id A code corresponding to the statistic an observation represents.
 #' Example codes include 00001 (max), 00002 (min), and 00003 (mean). 
 #' @param last_modified The last time a record was refreshed in our database. This
@@ -53,22 +65,30 @@
 #' contained within the explicitly requested items shall not be counted.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 #' will convert the data to dates and qualifier to string vector.
+#' @param skipGeometry This option can be used to skip response geometries for
+#' each feature.
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
 #' site <- "USGS-02238500"
 #' meta_1 <- read_NWIS_ts_meta(monitoring_location_id = site)
+#' 
+#' meta_multi <- read_NWIS_ts_meta(monitoring_location_id =  c("USGS-01491000", 
+#'                                                        "USGS-01645000"),
+#'                             parameter_code = c("00060", "00010"))
 #' }
 read_NWIS_ts_meta <- function(monitoring_location_id = NA_character_,
                               parameter_code = NA_character_,
                               parameter_name = NA_character_,
                               properties = c("monitoring_location_id",
                                              "unit_of_measure",
+                                             "parameter_code",
                                              "parameter_name",
+                                             "statistic_id",
+                                             "computation_identifier",
                                              "begin",
                                              "end",
                                              "primary",
-                                             "computation_identifier",
                                              "sublocation_identifier",
                                              "id",
                                              "last_modified",
@@ -86,10 +106,16 @@ read_NWIS_ts_meta <- function(monitoring_location_id = NA_character_,
                               primary = NA_character_,
                               id = NA_character_,
                               web_description = NA_character_,
-                              use_sf = TRUE,
+                              skipGeometry = NA,
                               convertType = FALSE){
   
   message("Function in development, use at your own risk.")
+  
+  use_sf <- all(pkg.env$local_sf)
+  
+  if(!use_sf){
+    skipGeometry <- TRUE
+  }
   
   req_ts_meta <- construct_api_requests("timeseries-metadata",
                                         monitoring_location_id = monitoring_location_id,
@@ -108,7 +134,8 @@ read_NWIS_ts_meta <- function(monitoring_location_id = NA_character_,
                                         sublocation_identifier = sublocation_identifier,
                                         primary = primary,
                                         id = id,
-                                        web_description = web_description)
+                                        web_description = web_description,
+                                        skipGeometry = skipGeometry)
         
   return_list <- walk_pages(req_ts_meta, use_sf)
   

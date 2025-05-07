@@ -8,9 +8,9 @@ read_NWIS_ts_meta(
   monitoring_location_id = NA_character_,
   parameter_code = NA_character_,
   parameter_name = NA_character_,
-  properties = c("monitoring_location_id", "unit_of_measure", "parameter_name", "begin",
-    "end", "primary", "computation_identifier", "sublocation_identifier", "id",
-    "last_modified", "web_description"),
+  properties = c("monitoring_location_id", "unit_of_measure", "parameter_code",
+    "parameter_name", "statistic_id", "computation_identifier", "begin", "end",
+    "primary", "sublocation_identifier", "id", "last_modified", "web_description"),
   limit = 10000,
   statistic_id = NA_character_,
   last_modified = NA_character_,
@@ -24,15 +24,27 @@ read_NWIS_ts_meta(
   primary = NA_character_,
   id = NA_character_,
   web_description = NA_character_,
-  use_sf = TRUE,
+  skipGeometry = NA,
   convertType = FALSE
 )
 }
 \arguments{
+\item{monitoring_location_id}{A unique identifier representing a single monitoring
+location. This corresponds to the id field in the sites endpoint. Monitoring
+location IDs are created by combining the agency code of the agency responsible
+for the monitoring location (e.g. USGS) with the ID number of the monitoring
+location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).}
+
 \item{parameter_code}{Parameter codes are 5-digit codes used to identify the
 constituent measured and the units of measure.}
 
 \item{parameter_name}{A human-understandable name corresponding to parameter_code.}
+
+\item{properties}{The properties that should be included for each feature. The
+parameter value is a comma-separated list of property names. Available values:
+geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id,
+last_modified, begin, end, computation_period_identifier, computation_identifier,
+thresholds, sublocation_identifier, primary, monitoring_location_id, web_description.}
 
 \item{limit}{The optional limit parameter limits the number of items that are
 presented in the response document. Only items are counted that are on the
@@ -57,6 +69,9 @@ less frequently than that, and as such there may be more recent observations
 within a timeseries than the timeseries end value reflects. Together with begin,
 this field represents the period of record of a timeseries. It is additionally
 used to determine whether a timeseries is "active".}
+
+\item{unit_of_measure}{A human-readable description of the units of measurement
+associated with an observation.}
 
 \item{computation_period_identifier}{Indicates the period of data used for
 any statistical computations.}
@@ -84,6 +99,9 @@ by this system for 120 days. See the USGS Provisional Data Statement for more in
 \item{web_description}{A description of what this timeseries represents, as
 used by WDFN and other USGS data dissemination products.}
 
+\item{skipGeometry}{This option can be used to skip response geometries for
+each feature.}
+
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
 
@@ -103,6 +121,10 @@ occurred.
 \donttest{
 site <- "USGS-02238500"
 meta_1 <- read_NWIS_ts_meta(monitoring_location_id = site)
+
+meta_multi <- read_NWIS_ts_meta(monitoring_location_id =  c("USGS-01491000", 
+                                                       "USGS-01645000"),
+                            parameter_code = c("00060", "00010"))
 }
 \dontshow{\}) # examplesIf}
 }

@@ -22,9 +22,6 @@
 #' value, unit_of_measure, approval_status, qualifier, last_modified.
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature.
-#' @param offset The optional offset parameter indicates the index within the
-#' result set from which the server shall begin presenting results in the response
-#' document. The first element has an index of 0 (default).
 #' @param datetime Either a date-time or an interval. Only features that have a
 #' temporal property that intersects the value of datetime are selected. If a 
 #' feature has multiple temporal properties, it is the decision of the server
