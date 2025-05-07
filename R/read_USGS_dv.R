@@ -16,7 +16,7 @@
 #' @param no_sf Boolean, whether or not to return an "sf" object. TRUE returns
 #' a basic data frame, FALSE returns a "sf" object.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
-#' will convert the data to dates, datetimes,
+#' will convert the data to dates and qualifier to string vector.
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -35,8 +35,6 @@
 #'                         parameter_code = c("00060", "00010"),
 #'                         datetime = c("2023-01-01", "2024-01-01"))
 #' 
-#' bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -82.5, 37.5),
-#'                           parameter_code = "00060")
 #' }
 read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          parameter_code = NA_character_,
@@ -61,7 +59,6 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          crs = NA_character_,
                          bbox_crs = NA_character_,
                          skipGeometry = NA,
-                         offset = NA,
                          datetime = NA_character_,
                          no_sf = FALSE, 
                          convertType = TRUE){
@@ -90,7 +87,6 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                                   crs = crs,
                                   bbox_crs = bbox_crs,
                                   skipGeometry = skipGeometry,
-                                  offset = offset,
                                   datetime = datetime)
   
   return_list <- walk_pages(dv_req, use_sf)
@@ -136,7 +132,6 @@ walk_pages <- function(req, use_sf) {
   )
 }
 
-# Change to https://httr2.r-lib.org/reference/req_perform_iterative.html
 walk_pages_recursive <- function(req, page, contents, use_sf) {
 
   url_method <- "GET"
@@ -302,7 +297,6 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
                                   crs = NA_character_,
                                   bbox_crs = NA_character_,
                                   skipGeometry = FALSE,
-                                  offset = NA,
                                   datetime = NA_character_
                                   ){
   
@@ -318,17 +312,7 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
     properties <- NA_character_
   }
   
-  baseURL <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
-    httr2::req_url_path_append("daily", "items") |> 
-    httr2::req_user_agent(default_ua()) |>
-    httr2::req_headers(`Accept-Encoding` = c("compress", "gzip")) 
-  
-  token <- Sys.getenv("API_USGS_PAT")
-  
-  if(token != ""){
-    baseURL <- baseURL |>
-      httr2::req_headers_redacted(`X-Api-Key` = token)
-  }
+  baseURL <- setup_api("daily")
   
   POST <- FALSE
   
@@ -358,10 +342,7 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
                                 crs = crs,
                                 bbox_crs = bbox_crs,
                                 skipGeometry = skipGeometry,
-                                offset = offset,
-                                datetime = datetime,
-                                f = "json",
-                                lang = "en-US"))
+                                datetime = datetime))
   
   if(all(!is.na(bbox))){
     baseURL <- httr2::req_url_query(baseURL,
@@ -400,6 +381,25 @@ construct_dv_requests <- function(monitoring_location_id = NA_character_,
   }
 
   return(baseURL)
+}
+
+setup_api <- function(service){
+  baseURL <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
+    httr2::req_url_path_append(service, "items") |> 
+    httr2::req_user_agent(default_ua()) |>
+    httr2::req_headers(`Accept-Encoding` = c("compress", "gzip")) 
+  
+  token <- Sys.getenv("API_USGS_PAT")
+  
+  if(token != ""){
+    baseURL <- baseURL |>
+      httr2::req_headers_redacted(`X-Api-Key` = token)
+  }
+  
+  baseURL <- explode_query(baseURL, POST = FALSE,
+                           list(f = "json",
+                                lang = "en-US"))
+  
 }
 
 format_api_dates <- function(datetime){
