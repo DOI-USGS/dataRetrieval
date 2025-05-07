@@ -24,6 +24,7 @@ read_NWIS_ts_meta(
   primary = NA_character_,
   id = NA_character_,
   web_description = NA_character_,
+  crs = NA_character_,
   skipGeometry = NA,
   convertType = FALSE
 )
@@ -96,16 +97,19 @@ to meet the need for timely best science and to assist with daily operations
 which need real-time information. Non-primary timeseries data are only retained
 by this system for 120 days. See the USGS Provisional Data Statement for more information.}
 
+\item{id}{A unique identifier representing a single timeseries. This corresponds
+to the id field in the timeseries-metadata endpoint.}
+
 \item{web_description}{A description of what this timeseries represents, as
 used by WDFN and other USGS data dissemination products.}
+
+\item{crs}{Indicates the coordinate reference system for the results.}
 
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
-
-\item{crs}{Indicates the coordinate reference system for the results.}
 }
 \description{
 Daily data and continuous measurements are grouped into timeseries, which

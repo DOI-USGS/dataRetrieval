@@ -38,6 +38,8 @@
 #' within a timeseries than the timeseries end value reflects. Together with begin,
 #' this field represents the period of record of a timeseries. It is additionally
 #' used to determine whether a timeseries is "active".
+#' @param id A unique identifier representing a single timeseries. This corresponds
+#' to the id field in the timeseries-metadata endpoint.
 #' @param computation_period_identifier Indicates the period of data used for
 #' any statistical computations.
 #' @param computation_identifier Indicates whether the data from this timeseries
@@ -106,6 +108,7 @@ read_NWIS_ts_meta <- function(monitoring_location_id = NA_character_,
                               primary = NA_character_,
                               id = NA_character_,
                               web_description = NA_character_,
+                              crs = NA_character_,
                               skipGeometry = NA,
                               convertType = FALSE){
   
@@ -134,6 +137,7 @@ read_NWIS_ts_meta <- function(monitoring_location_id = NA_character_,
                                         sublocation_identifier = sublocation_identifier,
                                         primary = primary,
                                         id = id,
+                                        crs = crs,
                                         web_description = web_description,
                                         skipGeometry = skipGeometry)
         

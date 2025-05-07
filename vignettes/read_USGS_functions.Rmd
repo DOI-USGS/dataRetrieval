@@ -62,6 +62,7 @@ dv_modern <- read_USGS_dv(monitoring_location_id = "USGS-01491000",
 
 nrow(dv_modern)
 ```
+
 The first thing you might notice is that the legacy service serves data in a "wide" format, which means there are multiple observations in a single row of the data frame. The new services return the data in a "long" format, so that only one observation is returned per row. This follows tidy principles and is often preferred in scripting languages. We'll look at the returned data with a `ggplot2` plot to show a very simple example of the power of a long format:
 
 ```{r}
@@ -93,11 +94,63 @@ head(dv_2)
 
 * When you look at the help file for the new function `?read_USGS_dv`, you'll also notice there are many more arguments. These are mostly set by default to NA. You DO NOT need to specify all of these parameters.
 
+* Flexible data/last_modified
 
 
+
+# Time Series Metadata
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/timeseries-metadata>.
+
+The `read_USGS_ts_meta` function will eventually replace the `whatNWISdata` function. Generally, both functions look pretty similar:
+
+```{r}
+library(dataRetrieval)
+
+data_legacy <- whatNWISdata(siteNumbers = "01491000",
+                        parameterCd =  c("00060", "00010"))
+```
+
+```{r echo=FALSE}
+
+knitr::kable(data_legacy[,c("parm_cd",
+                           "stat_cd",
+                           "begin_date",
+                           "end_date",
+                           "count_nu")])
+
+```
+
+```{r}
+data_modern <- read_NWIS_ts_meta(monitoring_location_id = "USGS-01491000",
+                          parameter_code = c("00060", "00010"))
+
+```
+
+```{r echo=FALSE}
+
+knitr::kable(data_modern[,c("parameter_code",
+                           "parameter_name",
+                           "statistic_id",
+                           "computation_identifier",
+                           "begin",
+                           "end")])
+
+```
+
+## Additional new features
 
 # API Tokens
 
+If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
+
+Then save your token in your .Renviron file like this:
+
+```
+API_USGS_PAT = "my_super_secret_token"
+```
+
+You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. 
 
 
 # Notes on dataRetrieval development
