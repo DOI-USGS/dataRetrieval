@@ -22,7 +22,6 @@ read_USGS_dv(
   crs = NA_character_,
   bbox_crs = NA_character_,
   skipGeometry = NA,
-  offset = NA,
   datetime = NA_character_,
   no_sf = FALSE,
   convertType = TRUE
@@ -97,10 +96,6 @@ coordinates.}
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature.}
 
-\item{offset}{The optional offset parameter indicates the index within the
-result set from which the server shall begin presenting results in the response
-document. The first element has an index of 0 (default).}
-
 \item{datetime}{Either a date-time or an interval. Only features that have a
 temporal property that intersects the value of datetime are selected. If a 
 feature has multiple temporal properties, it is the decision of the server
@@ -111,7 +106,13 @@ all relevant temporal properties.}
 a basic data frame, FALSE returns a "sf" object.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
-will convert the data to dates, datetimes,}
+will convert the data to dates and qualifier to string vector.}
+
+\item{offset}{The optional offset parameter indicates the index within the
+result set from which the server shall begin presenting results in the response
+document. The first element has an index of 0 (default).}
+
+\item{time}{The date an observation represents.}
 }
 \description{
 Daily data provide one data value to represent water conditions for the day.
@@ -134,7 +135,14 @@ pcode <- "00060"
 dv_data_sf <- read_USGS_dv(monitoring_location_id = site,
                         parameter_code = "00060", 
                         datetime = c("2021-01-01", "2022-01-01"))
-                        
+
+dv_data_sf <- read_USGS_dv(monitoring_location_id = site,
+                          parameter_code = "00060", 
+                          properties = c("monitoring_location_id",
+                                         "value",
+                                         "time"),
+                          datetime = c("2021-01-01", "2022-01-01"))
+
 dv_data <- read_USGS_dv(monitoring_location_id = site,
                         parameter_code = "00060",
                         no_sf = TRUE)
@@ -144,8 +152,6 @@ multi_site <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000",
                         parameter_code = c("00060", "00010"),
                         datetime = c("2023-01-01", "2024-01-01"))
 
-bbox_data <- read_USGS_dv(bbox = c(-83, 36.5, -82.5, 37.5),
-                          parameter_code = "00060")
 }
 \dontshow{\}) # examplesIf}
 }
