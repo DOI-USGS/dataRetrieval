@@ -30,9 +30,6 @@
 #' value, unit_of_measure, approval_status, qualifier, last_modified.
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature.
-#' @param offset The optional offset parameter indicates the index within the
-#' result set from which the server shall begin presenting results in the response
-#' document. The first element has an index of 0 (default).
 #' @param datetime Either a date-time or an interval. Only features that have a
 #' temporal property that intersects the value of datetime are selected. If a 
 #' feature has multiple temporal properties, it is the decision of the server
@@ -74,8 +71,6 @@
 #' presented in the response document. Only items are counted that are on the
 #' first level of the collection in the response document. Nested objects
 #' contained within the explicitly requested items shall not be counted.
-#' @param no_sf Boolean, whether or not to return an "sf" object. TRUE returns
-#' a basic data frame, FALSE returns a "sf" object.
 #' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 #' will convert the data to dates and qualifier to string vector.
 #' @examplesIf is_dataRetrieval_user()
@@ -128,12 +123,11 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          bbox_crs = NA_character_,
                          skipGeometry = NA,
                          datetime = NA_character_,
-                         no_sf = FALSE, 
                          convertType = TRUE){
   
   message("Function in development, use at your own risk.")
   
-  use_sf <- all(pkg.env$local_sf, !no_sf)
+  use_sf <- all(pkg.env$local_sf)
 
   if(!use_sf){
     skipGeometry <- TRUE

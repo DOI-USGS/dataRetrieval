@@ -149,10 +149,6 @@ represent a specific statistical computation.}
 \item{web_description}{A description of what this timeseries represents, as
 used by WDFN and other USGS data dissemination products.}
 
-\item{offset}{The optional offset parameter indicates the index within the
-result set from which the server shall begin presenting results in the response
-document. The first element has an index of 0 (default).}
-
 \item{time}{The date an observation represents.}
 }
 \description{

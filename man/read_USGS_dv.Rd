@@ -23,7 +23,6 @@ read_USGS_dv(
   bbox_crs = NA_character_,
   skipGeometry = NA,
   datetime = NA_character_,
-  no_sf = FALSE,
   convertType = TRUE
 )
 }
@@ -102,15 +101,8 @@ feature has multiple temporal properties, it is the decision of the server
 whether only a single temporal property is used to determine the extent or
 all relevant temporal properties.}
 
-\item{no_sf}{Boolean, whether or not to return an "sf" object. TRUE returns
-a basic data frame, FALSE returns a "sf" object.}
-
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
-
-\item{offset}{The optional offset parameter indicates the index within the
-result set from which the server shall begin presenting results in the response
-document. The first element has an index of 0 (default).}
 
 \item{time}{The date an observation represents.}
 }
