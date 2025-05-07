@@ -1,0 +1,118 @@
+---
+title: "Introducing read_USGS_dv"
+author: Laura A. DeCicco
+editor_options: 
+  chunk_output_type: console
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Introducing read_USGS_dv}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+
+```{r setup, include=FALSE, message=FALSE}
+library(knitr)
+library(dataRetrieval)
+library(dplyr)
+library(ggplot2)
+
+options(continue = " ",
+        width = 50)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = TRUE,
+  fig.height = 4,
+  fig.width = 7
+)
+```
+
+
+As we bid adieu to the NWIS web services, we welcome a new web service offering, the USGS Water Data OGC APIs.
+
+# New USGS data access
+
+This is a modern access point for USGS data. The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. 
+
+# Daily Values
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily>.
+
+The `read_USGS_dv` function will eventually replace the `readNWISdv` function. Generally, both functions look pretty similar:
+
+```{r}
+library(dataRetrieval)
+
+dv_legacy <- readNWISdv(siteNumbers = "01491000",
+                        parameterCd =  c("00060", "00010"),
+                        statCd = "00003", 
+                        startDate = "2023-01-01",
+                        endDate =  "2025-05-06")
+
+nrow(dv_legacy)
+
+dv_modern <- read_USGS_dv(monitoring_location_id = "USGS-01491000",
+                          parameter_code = c("00060", "00010"),
+                          statistic_id = "00003",
+                          datetime = c("2023-01-01", "2025-05-06"))
+
+nrow(dv_modern)
+```
+The first thing you might notice is that the legacy service serves data in a "wide" format, which means there are multiple observations in a single row of the data frame. The new services return the data in a "long" format, so that only one observation is returned per row. This follows tidy principles and is often preferred in scripting languages. We'll look at the returned data with a `ggplot2` plot to show a very simple example of the power of a long format:
+
+```{r}
+library(ggplot2)
+ggplot(data = dv_modern) +
+  geom_point(aes(x = time, y = value, 
+                 color = approval_status)) +
+  facet_grid(parameter_code ~ ., scale = "free") +
+  theme_bw()
+
+```
+
+## Additional new features
+
+* Another feature of the modern returned data frame is that it has a "geometry" column which is an `sf` class and can therefore be used in `sf` processes.
+
+* Flexible column selection:
+
+```{r}
+dv_2 <- read_USGS_dv(monitoring_location_id = "USGS-01491000",
+                     parameter_code = c("00060"),
+                     properties = c("monitoring_location_id",
+                                    "value",
+                                    "time"),
+                     statistic_id = "00003",
+                     datetime = c("2022-10-01", "2023-10-01"))
+head(dv_2)
+```
+
+* When you look at the help file for the new function `?read_USGS_dv`, you'll also notice there are many more arguments. These are mostly set by default to NA. You DO NOT need to specify all of these parameters.
+
+
+
+
+# API Tokens
+
+
+
+# Notes on dataRetrieval development
+
+## New Features
+
+### Style
+
+New functions will use a "snake case", such as "read_USGS_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
+
+### Structure
+
+Historically, we allowed users to customize their queries via the `...` argument structure. With `...`, users needed to know the exact names of query parameters before using the function. Now, the new functions will include **ALL** possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other IDEs). **Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters.** We expect this will be easier for users, but it might take some time to smooth out the documentation and test usability. There may be additional consequences, such as users won't be able to build up argument lists to pass into the function.  
+
+### Dependencies
+
+Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. Since the new services offer geospatial output, we have recommend using the `sf` package. The `whisker` package was also included to help create POST CQL2 queries. 
+
