@@ -73,13 +73,13 @@
 #' 
 #' \donttest{
 #' site <- "USGS-02238500"
-#' meta_1 <- read_NWIS_ts_meta(monitoring_location_id = site)
+#' meta_1 <- read_USGS_ts_meta(monitoring_location_id = site)
 #' 
-#' meta_multi <- read_NWIS_ts_meta(monitoring_location_id =  c("USGS-01491000", 
+#' meta_multi <- read_USGS_ts_meta(monitoring_location_id =  c("USGS-01491000", 
 #'                                                        "USGS-01645000"),
 #'                             parameter_code = c("00060", "00010"))
 #' }
-read_NWIS_ts_meta <- function(monitoring_location_id = NA_character_,
+read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                               parameter_code = NA_character_,
                               parameter_name = NA_character_,
                               properties = c("monitoring_location_id",
