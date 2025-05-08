@@ -1,3 +1,9 @@
+dataRetrieval 2.7.19
+===================
+* Added read_USGS_dv, read_USGS_sites, read_USGS_ts_meta to access
+new USGS web services.
+* Added whisker and sf as dependencies.
+
 dataRetrieval 2.7.18
 ===================
 * Switched from httr to httr2
