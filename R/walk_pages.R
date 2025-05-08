@@ -83,8 +83,7 @@ walk_pages_recursive <- function(req, page, contents) {
       walk_pages_recursive,
       make_request,
       page + 1,
-      contents,
-      use_sf
+      contents
     )
   }
 }
