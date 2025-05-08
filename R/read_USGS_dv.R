@@ -1,77 +1,36 @@
 #' Get USGS Daily Data
 #' 
-#' Daily data provide one data value to represent water conditions for the day.
-#' Throughout much of the history of the USGS, the primary water data available
-#' was daily data collected manually at the monitoring location once each day.
-#' With improved availability of computer storage and automated transmission of
-#' data, the daily data published today are generally a statistical summary or
-#' metric of the continuous data collected each day, such as the daily mean,
-#' minimum, or maximum value. Daily data are automatically calculated from the
-#' continuous data of the same parameter code and are described by parameter code
-#' and a statistic code. These data have also been referred to as "daily values"
-#' or "DV".
+#' Description `r get_description("daily")`
 #' 
 #' @export
-#' @param monitoring_location_id A unique identifier representing a single monitoring
-#' location. This corresponds to the id field in the sites endpoint. Monitoring
-#' location IDs are created by combining the agency code of the agency responsible
-#' for the monitoring location (e.g. USGS) with the ID number of the monitoring
-#' location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).
+#' @param monitoring_location_id `r get_params("daily")$monitoring_location_id`
+#' @param parameter_code `r get_params("daily")$parameter_code`
+#' @param datetime `r get_params("daily")$datetime`
+#' @param statistic_id `r get_params("daily")$statistic_id`
+#' @param time `r get_params("daily")$time`
+#' @param value `r get_params("daily")$value`
+#' @param unit_of_measure `r get_params("daily")$unit_of_measure`
+#' @param approval_status `r get_params("daily")$approval_status`
+#' @param last_modified `r get_params("daily")$last_modified`
+#' @param time_series_id `r get_params("daily")$time_series_id`
+#' @param qualifier `r get_params("daily")$qualifier`
+#' @param id `r get_params("daily")$id`
+#' @param properties The properties that should be included for each feature.
+#' The parameter value is a comma-separated list of property names. Available options are
+#' `r schema <- check_OGC_requests(endpoint = "daily", type = "schema"); paste(names(schema$properties), collapse = ", ")`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
-#' depth).
-#' @param crs Indicates the coordinate reference system for the results.
-#' @param bbox_crs Indicates the coordinate reference system for the given bbox
-#' coordinates.
-#' @param properties The properties that should be included for each feature. The
-#' parameter value is a comma-separated list of property names. Available values:
-#' id, timeseries_id, monitoring_location_id, parameter_code, statistic_id, time,
-#' value, unit_of_measure, approval_status, qualifier, last_modified.
-#' @param skipGeometry This option can be used to skip response geometries for
-#' each feature.
-#' @param datetime Either a date-time or an interval. Only features that have a
-#' temporal property that intersects the value of datetime are selected. If a 
-#' feature has multiple temporal properties, it is the decision of the server
-#' whether only a single temporal property is used to determine the extent or
-#' all relevant temporal properties.
-#' @param id A universally unique identifier (UUID) representing a single version
-#' of a record. It is not stable over time. Every time the record is refreshed in
-#' our database (which may happen as part of normal operations and does not imply
-#' any change to the data itself) a new ID will be generated. To uniquely identify
-#' a single observation over time, compare the time and timeseries_id fields; each
-#' timeseries will only have a single observation at a given time.
-#' @param time_series_id A unique identifier representing a single timeseries.
-#' This corresponds to the id field in the timeseries-metadata endpoint.
-#' @param parameter_code Parameter codes are 5-digit codes used to identify the
-#' constituent measured and the units of measure. 
-#' @param statistic_id A code corresponding to the statistic an observation represents.
-#' Example codes include 00001 (max), 00002 (min), and 00003 (mean). 
-#' @param time The date an observation represents. 
-#' @param value The value of the observation. Values are transmitted as strings
-#' in the JSON response format in order to preserve precision.
-#' @param unit_of_measure A human-readable description of the units of measurement
-#' associated with an observation.
-#' @param approval_status Some of the data that you have obtained from this U.S.
-#' Geological Survey database may not have received Director's approval. Any such
-#' data values are qualified as provisional and are subject to revision. Provisional
-#' data are released on the condition that neither the USGS nor the United States
-#' Government may be held liable for any damages resulting from its use. This field
-#' reflects the approval status of each record, and is either "Approved", meaning
-#' processing review has been completed and the data is approved for publication,
-#' or "Provisional" and subject to revision. 
-#' @param qualifier This field indicates any qualifiers associated with an observation,
-#' for instance if a sensor may have been impacted by ice or if values were estimated.
-#' @param last_modified The last time a record was refreshed in our database. This
-#' may happen due to regular operational processes and does not necessarily indicate
-#' anything about the measurement has changed. You can query this field using
-#' date-times or intervals.
+#' depth). Coordinates are assumed to be in crs 4326.
 #' @param crs Indicates the coordinate reference system for the results.
 #' @param limit The optional limit parameter limits the number of items that are
 #' presented in the response document. Only items are counted that are on the
 #' first level of the collection in the response document. Nested objects
 #' contained within the explicitly requested items shall not be counted.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' @param skipGeometry This option can be used to skip response geometries for
+#' each feature. The returning object will be a data frame with no spatial
+#' information.
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector.
 #' @examplesIf is_dataRetrieval_user()
 #' 
@@ -82,7 +41,7 @@
 #'                         parameter_code = "00060", 
 #'                         datetime = c("2021-01-01", "2022-01-01"))
 #'
-#' dv_data_sf <- read_USGS_dv(monitoring_location_id = site,
+#' dv_data_trim <- read_USGS_dv(monitoring_location_id = site,
 #'                           parameter_code = "00060", 
 #'                           properties = c("monitoring_location_id",
 #'                                          "value",
@@ -91,7 +50,7 @@
 #'
 #' dv_data <- read_USGS_dv(monitoring_location_id = site,
 #'                         parameter_code = "00060",
-#'                         no_sf = TRUE)
+#'                         skipGeometry = TRUE)
 #' 
 #' multi_site <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000", 
 #'                                                        "USGS-01645000"),
@@ -120,18 +79,11 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          last_modified = NA_character_,
                          limit = 10000,
                          crs = NA_character_,
-                         bbox_crs = NA_character_,
                          skipGeometry = NA,
                          datetime = NA_character_,
                          convertType = TRUE){
   
   message("Function in development, use at your own risk.")
-  
-  use_sf <- all(pkg.env$local_sf)
-
-  if(!use_sf){
-    skipGeometry <- TRUE
-  }
   
   dv_req <- construct_api_requests(service = "daily",
                                    monitoring_location_id = monitoring_location_id,
@@ -148,11 +100,10 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                                    last_modified = last_modified,
                                    limit = limit,
                                    crs = crs,
-                                   bbox_crs = bbox_crs,
                                    skipGeometry = skipGeometry,
                                    datetime = datetime)
   
-  return_list <- walk_pages(dv_req, use_sf)
+  return_list <- walk_pages(dv_req)
   
   if(convertType) return_list <- cleanup_cols(return_list)
   

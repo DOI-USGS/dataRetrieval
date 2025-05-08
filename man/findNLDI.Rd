@@ -48,8 +48,8 @@ be explicitly requested.}
 \item{distance_km}{numeric. Define how far to look along the navigation path in
 kilometers (default = 100)}
 
-\item{no_sf}{if available, should `sf` be used for parsing,
-defaults to `TRUE` if `sf` is locally installed}
+\item{no_sf}{if available, should \code{sf} be used for parsing,
+defaults to \code{TRUE} if \code{sf} is locally installed}
 
 \item{warn}{(default TRUE) should warnings be printed}
 }

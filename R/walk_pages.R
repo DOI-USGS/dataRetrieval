@@ -18,23 +18,25 @@ cleanup_cols <- function(df){
   df
 }
 
-walk_pages <- function(req, use_sf) {
+walk_pages <- function(req) {
   
   walk_pages_recursive(
     req = req,
     page = 1,
-    contents = list(),
-    use_sf
+    contents = list()
   )
 }
 
-walk_pages_recursive <- function(req, page, contents, use_sf) {
+walk_pages_recursive <- function(req, page, contents) {
   
   url_method <- "GET"
   if(!is.null(req$body)){
     url_method <- "POST"
     body <- req$body
   }
+  
+  use_sf <- !grepl("skipGeometry=true", req$url, ignore.case = TRUE)
+  
   message(url_method, ": ", req$url) 
   
   returned_contents <- httr2::req_perform(req)

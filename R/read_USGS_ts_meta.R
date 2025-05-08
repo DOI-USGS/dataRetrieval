@@ -1,74 +1,40 @@
 #' Get USGS Timeseries metadata
 #' 
-#' Daily data and continuous measurements are grouped into timeseries, which
-#' represent a collection of observations of a single parameter, potentially
-#' aggregated using a standard statistic, at a single site. This endpoint provides
-#' metadata about those timeseries, including their operational thresholds, units
-#' of measurement, and when the earliest and most recent observations in a timeseries
-#' occurred.
+#' Description `r get_description("time-series-metadata")`
 #' 
 #' @export
-#' @param monitoring_location_id A unique identifier representing a single monitoring
-#' location. This corresponds to the id field in the sites endpoint. Monitoring
-#' location IDs are created by combining the agency code of the agency responsible
-#' for the monitoring location (e.g. USGS) with the ID number of the monitoring
-#' location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).
-#' @param properties The properties that should be included for each feature. The
-#' parameter value is a comma-separated list of property names. Available values:
-#' geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id,
-#' last_modified, begin, end, computation_period_identifier, computation_identifier,
-#' thresholds, sublocation_identifier, primary, monitoring_location_id, web_description.
-#' @param parameter_code Parameter codes are 5-digit codes used to identify the
-#' constituent measured and the units of measure. 
-#' @param parameter_name A human-understandable name corresponding to parameter_code.
-#' @param unit_of_measure A human-readable description of the units of measurement
-#' associated with an observation.
-#' @param statistic_id A code corresponding to the statistic an observation represents.
-#' Example codes include 00001 (max), 00002 (min), and 00003 (mean). 
-#' @param last_modified The last time a record was refreshed in our database. This
-#' may happen due to regular operational processes and does not necessarily indicate
-#' anything about the measurement has changed. You can query this field using
-#' date-times or intervals.
-#' @param begin The datetime of the earliest observation in the timeseries.
-#' Together with end, this field represents the period of record of a timeseries.
-#' Note that some timeseries may have large gaps in their collection record.
-#' @param end The datetime of the most recent observation in the timeseries.
-#' Data returned by this endpoint updates at most once per day, and potentially
-#' less frequently than that, and as such there may be more recent observations
-#' within a timeseries than the timeseries end value reflects. Together with begin,
-#' this field represents the period of record of a timeseries. It is additionally
-#' used to determine whether a timeseries is "active".
-#' @param id A unique identifier representing a single timeseries. This corresponds
-#' to the id field in the timeseries-metadata endpoint.
-#' @param computation_period_identifier Indicates the period of data used for
-#' any statistical computations.
-#' @param computation_identifier Indicates whether the data from this timeseries
-#' represent a specific statistical computation.
-#' @param thresholds Thresholds represent known numeric limits for a timeseries,
-#' for example the historic maximum value for a parameter or a level below which
-#' a sensor is non-operative. These thresholds are sometimes used to automatically
-#' determine if an observation is erroneous due to sensor error, and therefore
-#' shouldn't be included in the timeseries.
-#' @param sublocation_identifier An optional human-readable identifier used to
-#' specify where measurements are recorded at a monitoring location.
-#' @param primary A flag identifying if the timeseries is a "primary" timeseries.
-#' "Primary" timeseries (which have this flag) are standard observations which
-#' undergo Bureau review and approval processes. Non-primary timeseries, which
-#' will have missing values for "primary", are provisional datasets made available
-#' to meet the need for timely best science and to assist with daily operations
-#' which need real-time information. Non-primary timeseries data are only retained
-#' by this system for 120 days. See the USGS Provisional Data Statement for more information.
-#' @param web_description A description of what this timeseries represents, as
-#' used by WDFN and other USGS data dissemination products.
+#' @param monitoring_location_id `r get_params("time-series-metadata")$monitoring_location_id`
+#' @param parameter_code `r get_params("time-series-metadata")$parameter_code`
+#' @param parameter_name `r get_params("time-series-metadata")$parameter_name`
+#' @param statistic_id `r get_params("time-series-metadata")$statistic_id`
+#' @param computation_identifier `r get_params("time-series-metadata")$computation_identifier`
+#' @param computation_period_identifier `r get_params("time-series-metadata")$computation_period_identifier`
+#' @param sublocation_identifier `r get_params("time-series-metadata")$sublocation_identifier`
+#' @param last_modified `r get_params("time-series-metadata")$last_modified`
+#' @param begin `r get_params("time-series-metadata")$begin`
+#' @param end `r get_params("time-series-metadata")$end`
+#' @param thresholds `r get_params("time-series-metadata")$thresholds`
+#' @param unit_of_measure `r get_params("time-series-metadata")$unit_of_measure`
+#' @param primary `r get_params("time-series-metadata")$primary`
+#' @param web_description `r get_params("time-series-metadata")$web_description`
+#' @param properties The properties that should be included for each feature.
+#' The parameter value is a comma-separated list of property names. Available options are
+#' `r schema <- check_OGC_requests(endpoint = "time-series-metadata", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' @param id `r get_params("time-series-metadata")$id`
+#' @param bbox Only features that have a geometry that intersects the bounding
+#' box are selected.The bounding box is provided as four or six numbers, depending
+#' on whether the coordinate reference system includes a vertical axis (height or
+#' depth). Coordinates are assumed to be in crs 4326.
 #' @param crs Indicates the coordinate reference system for the results.
 #' @param limit The optional limit parameter limits the number of items that are
 #' presented in the response document. Only items are counted that are on the
 #' first level of the collection in the response document. Nested objects
 #' contained within the explicitly requested items shall not be counted.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector.
 #' @param skipGeometry This option can be used to skip response geometries for
-#' each feature.
+#' each feature. The returning object will be a data frame with no spatial
+#' information.
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -96,6 +62,7 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                                              "last_modified",
                                              "web_description"),
                               limit = 10000,
+                              bbox = NA,
                               statistic_id = NA_character_,
                               last_modified = NA_character_,
                               begin = NA_character_,
@@ -140,8 +107,8 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                                         crs = crs,
                                         web_description = web_description,
                                         skipGeometry = skipGeometry)
-        
-  return_list <- walk_pages(req_ts_meta, use_sf)
+  
+  return_list <- walk_pages(req_ts_meta)
   
   return_list <- return_list[, properties]
   

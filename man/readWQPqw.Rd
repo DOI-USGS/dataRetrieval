@@ -103,8 +103,8 @@ DO <- readWQPqw(siteNumbers = "USGS-05288705",
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{readWQPdata}}, \code{\link{whatWQPsites}},
-and \code{\link{importWQP}}
+\code{\link[=readWQPdata]{readWQPdata()}}, \code{\link[=whatWQPsites]{whatWQPsites()}},
+and \code{\link[=importWQP]{importWQP()}}
 }
 \keyword{USGS}
 \keyword{data}

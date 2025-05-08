@@ -15,9 +15,9 @@ readWQPdata(
 }
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options.
-A list of arguments can also be supplied. For more information see the above 
-description for this help file. One way to figure out how to construct a WQP query is to go to the "Advanced" 
-form in the Water Quality Portal. Use the form to discover what parameters are available. Once the query is 
+A list of arguments can also be supplied. For more information see the above
+description for this help file. One way to figure out how to construct a WQP query is to go to the "Advanced"
+form in the Water Quality Portal. Use the form to discover what parameters are available. Once the query is
 set in the form, scroll down to the "Query URL". You will see the parameters
 after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
 in the Characteristic Group dropdown, you will see characteristicType=Nutrient
@@ -28,7 +28,7 @@ mimeType, and providers is optional (these arguments are picked automatically).}
 \item{service}{character. See Details for more information.}
 
 \item{querySummary}{logical to only return the number of records and unique sites that
-will be returned from this query. Choosing TRUE is deprecated, readWQPsummary 
+will be returned from this query. Choosing TRUE is deprecated, readWQPsummary
 is recommended instead.}
 
 \item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
@@ -66,15 +66,12 @@ Imports data from Water Quality Portal web service. This function gets the data 
 \url{https://www.waterqualitydata.us}.
 }
 \details{
-This function uses \dots as a query input, which can be very flexible, but also 
+This function uses \dots as a query input, which can be very flexible, but also
 has a steeper learning curve. For a quick overview, scroll down to the Examples
 in this help file to see many query options.
 
-
- 
 There are currently 10 legacy options
 for data provided by the Water Quality Portal:
- 
 
 Legacy:
 \tabular{lll}{
@@ -93,9 +90,9 @@ Organization Data \tab Organization \tab /data/Organization/search \cr
 
 There are 4 WQX3 options. These are still in-development,
 and should be used with caution.
- 
+
 \tabular{llll}{
-WQP Radio Button \tab service argument \tab Base URL \tab dataProfile \cr 
+WQP Radio Button \tab service argument \tab Base URL \tab dataProfile \cr
 Monitoring Locations \tab StationWQX3 \tab /wqx3/Station/search \tab \cr
 Full Physical Chemical \tab ResultWQX3 \tab /wqx3/Result/search \tab fullPhysChem \cr
 Narrow \tab ResultWQX3 \tab /wqx3/Result/search \tab narrow \cr

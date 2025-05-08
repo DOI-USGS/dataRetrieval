@@ -15,13 +15,13 @@ Extended Documentation: https://doi-usgs.github.io/dataRetrieval")
 #' that originally came from the United States Geological Survey, an agency of
 #' the United States Department of Interior. For more information, see the
 #' official USGS copyright policy at
-#' \url{https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits}\cr
+#' <https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits>\cr
 #' LazyLoad: \tab yes\cr
 #' }
 #'
 #' Retrieval functions for USGS and EPA hydrologic and water quality data.
 #'
-#' Please see \url{https://doi-usgs.github.io/dataRetrieval/} for more information.
+#' Please see <https://doi-usgs.github.io/dataRetrieval/> for more information.
 #'
 #' @name dataRetrieval
 #' @aliases dataRetrieval-package
@@ -60,7 +60,7 @@ NULL
 #' Data to convert USGS parameter code to characteristic names
 #'
 #' Data pulled from Water Quality Portal on December 20, 2021. The data was pulled from
-#' \url{https://www.waterqualitydata.us/Codes/public_srsnames/?mimeType=csv}.
+#' <https://www.waterqualitydata.us/Codes/public_srsnames/?mimeType=csv>.
 #'
 #' @name pCodeToName
 #' @return pCodeToName data frame with information about USGS parameters and how they
@@ -90,7 +90,7 @@ NULL
 #' US State Code Lookup Table
 #'
 #' Classic lookup table for states. Has been replaced in functions with
-#' \code{check_USGS_sample_params("states")}.
+#' `check_USGS_sample_params("states")`.
 #'
 #' @name stateCd
 #' @return stateCd data frame.
@@ -112,7 +112,7 @@ NULL
 #' US County Code Lookup Table
 #'
 #' Classic lookup table for counties. Has been replaced in functions with
-#' \code{check_USGS_sample_params("counties")}.
+#' `check_USGS_sample_params("counties")`.
 #'
 #' @name countyCd
 #' @return countyCd data frame.
