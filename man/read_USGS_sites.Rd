@@ -45,6 +45,7 @@ read_USGS_sites(
   well_constructed_depth = NA_character_,
   hole_constructed_depth = NA_character_,
   depth_source_code = NA_character_,
+  properties = NA_character_,
   bbox = NA,
   limit = 10000,
   crs = NA_character_,
@@ -70,6 +71,12 @@ read_USGS_sites(
 \item{country_name}{The name of the country in which the site is located.}
 
 \item{state_code}{State code. A \href{https://www2.census.gov/geo/docs/reference/state.txt}{two-digit ANSI code} (formerly FIPS code) as defined by the American National Standards Institute, to define States and equivalents. A three-digit ANSI code is used to define counties and county equivalents. \href{https://www.census.gov/library/reference/code-lists/ansi.html#states}{A lookup table is available.} The only countries with political subdivisions other than the US are Mexico and Canada. The Mexican states have US state codes ranging from 81-86 and Canadian provinces have state codes ranging from 90-98.}
+
+\item{state_name}{The name of the state or state equivalent in which the site is located.}
+
+\item{county_code}{The code for the county or county equivalent (parish, borough, etc.) in which the site is located. \href{https://help.waterdata.usgs.gov/code/county_query?fmt=html}{A list of codes is available.}}
+
+\item{county_name}{The name of the county or county equivalent (parish, borough, etc.) in which the site is located. \href{https://help.waterdata.usgs.gov/code/county_query?fmt=html}{A list of codes is available.}}
 
 \item{minor_civil_division_code}{Codes for primary governmental or administrative divisions of the county or county equivalent in which the site is located.}
 
@@ -127,6 +134,10 @@ read_USGS_sites(
 
 \item{depth_source_code}{A code indicating the source of water-level data. \href{https://help.waterdata.usgs.gov/code/water_level_src_cd_query?fmt=html}{A list of codes is available.}}
 
+\item{properties}{The properties that should be included for each feature.
+The parameter value is a comma-separated list of property names. Available options are
+geometry, id, agency_code, agency_name, monitoring_location_number, monitoring_location_name, district_code, country_code, country_name, state_code, state_name, county_code, county_name, minor_civil_division_code, site_type_code, site_type, hydrologic_unit_code, basin_code, altitude, altitude_accuracy, altitude_method_code, altitude_method_name, vertical_datum, vertical_datum_name, horizontal_positional_accuracy_code, horizontal_positional_accuracy, horizontal_position_method_code, horizontal_position_method_name, original_horizontal_datum, original_horizontal_datum_name, drainage_area, contributing_drainage_area, time_zone_abbreviation, uses_daylight_savings, construction_date, aquifer_code, national_aquifer_code, aquifer_type_code, well_constructed_depth, hole_constructed_depth, depth_source_code}
+
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
@@ -145,10 +156,6 @@ information.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
-
-\item{properties}{The properties that should be included for each feature.
-The parameter value is a comma-separated list of property names. Available options are
-geometry, id, agency_code, agency_name, monitoring_location_number, monitoring_location_name, district_code, country_code, country_name, state_code, state_name, county_code, county_name, minor_civil_division_code, site_type_code, site_type, hydrologic_unit_code, basin_code, altitude, altitude_accuracy, altitude_method_code, altitude_method_name, vertical_datum, vertical_datum_name, horizontal_positional_accuracy_code, horizontal_positional_accuracy, horizontal_position_method_code, horizontal_position_method_name, original_horizontal_datum, original_horizontal_datum_name, drainage_area, contributing_drainage_area, time_zone_abbreviation, uses_daylight_savings, construction_date, aquifer_code, national_aquifer_code, aquifer_type_code, well_constructed_depth, hole_constructed_depth, depth_source_code}
 }
 \description{
 Description Daily data provide one data value to represent water conditions for the day. Throughout much of the history of the USGS, the primary water data available was daily data collected manually at the monitoring location once each day. With improved availability of computer storage and automated transmission of data, the daily data published today are generally a statistical summary or metric of the continuous data collected each day, such as the daily mean, minimum, or maximum value. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. These data have also been referred to as “daily values” or “DV”.
