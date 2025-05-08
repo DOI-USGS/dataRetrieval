@@ -122,7 +122,7 @@ knitr::kable(data_legacy[,c("parm_cd",
 ```
 
 ```{r}
-data_modern <- read_NWIS_ts_meta(monitoring_location_id = "USGS-01491000",
+data_modern <- read_USGS_ts_meta(monitoring_location_id = "USGS-01491000",
                           parameter_code = c("00060", "00010"))
 
 ```
