@@ -11,7 +11,7 @@ read_USGS_dv(
   properties = c("monitoring_location_id", "parameter_code", "statistic_id", "time",
     "value", "unit_of_measure", "approval_status", "qualifier"),
   bbox = NA,
-  timeseries_id = NA_character_,
+  time_series_id = NA_character_,
   id = NA_character_,
   approval_status = NA_character_,
   unit_of_measure = NA_character_,
@@ -49,7 +49,7 @@ box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
 depth).}
 
-\item{timeseries_id}{A unique identifier representing a single timeseries.
+\item{time_series_id}{A unique identifier representing a single timeseries.
 This corresponds to the id field in the timeseries-metadata endpoint.}
 
 \item{id}{A universally unique identifier (UUID) representing a single version

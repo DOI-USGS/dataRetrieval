@@ -41,7 +41,7 @@
 #' any change to the data itself) a new ID will be generated. To uniquely identify
 #' a single observation over time, compare the time and timeseries_id fields; each
 #' timeseries will only have a single observation at a given time.
-#' @param timeseries_id A unique identifier representing a single timeseries.
+#' @param time_series_id A unique identifier representing a single timeseries.
 #' This corresponds to the id field in the timeseries-metadata endpoint.
 #' @param parameter_code Parameter codes are 5-digit codes used to identify the
 #' constituent measured and the units of measure. 
@@ -111,7 +111,7 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                                         "approval_status",
                                         "qualifier"),
                          bbox = NA,
-                         timeseries_id = NA_character_,
+                         time_series_id = NA_character_,
                          id = NA_character_,
                          approval_status = NA_character_,
                          unit_of_measure = NA_character_,
@@ -139,7 +139,7 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                                    statistic_id = statistic_id,
                                    properties = properties,
                                    bbox = bbox,
-                                   timeseries_id = timeseries_id,
+                                   time_series_id = time_series_id,
                                    id = id,
                                    approval_status = approval_status,
                                    unit_of_measure = unit_of_measure,
