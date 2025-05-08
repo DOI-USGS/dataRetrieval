@@ -76,7 +76,16 @@ contained within the explicitly requested items shall not be counted.}
 each feature. The returning object will be a data frame with no spatial
 information.}
 
-\item{datetime}{}
+\item{datetime}{The date an observation represents. You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
+Examples:
+\itemize{
+\item A date-time: "2018-02-12T23:20:50Z"
+\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
+\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
+\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
+}
+
+Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}

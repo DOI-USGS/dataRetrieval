@@ -5,7 +5,7 @@
 #' @export
 #' @param monitoring_location_id `r get_params("daily")$monitoring_location_id`
 #' @param parameter_code `r get_params("daily")$parameter_code`
-#' @param datetime `r get_params("daily")$datetime`
+#' @param datetime `r get_params("daily")$time`
 #' @param statistic_id `r get_params("daily")$statistic_id`
 #' @param time `r get_params("daily")$time`
 #' @param value `r get_params("daily")$value`

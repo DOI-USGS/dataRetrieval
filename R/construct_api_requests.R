@@ -4,26 +4,8 @@
 #' Swagger docs: <https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html>.
 #' 
 #' @export
-#' @param monitoring_location_id `r get_params("daily")$monitoring_location_id`
-#' @param parameter_code `r get_params("daily")$parameter_code`
-#' @param statistic_id `r get_params("daily")$statistic_id`
-#' @param time `r get_params("daily")$time`
-#' @param value `r get_params("daily")$value`
-#' @param unit_of_measure `r get_params("daily")$unit_of_measure`
-#' @param approval_status `r get_params("daily")$approval_status`
-#' @param last_modified `r get_params("daily")$last_modified`
-#' @param time_series_id `r get_params("daily")$time_series_id`
-#' @param qualifier `r get_params("daily")$qualifier`
-#' @param id `r get_params("daily")$id`
-#' @param parameter_name `r get_params("time-series-metadata")$parameter_name`
-#' @param computation_identifier `r get_params("time-series-metadata")$computation_identifier`
-#' @param computation_period_identifier `r get_params("time-series-metadata")$computation_period_identifier`
-#' @param sublocation_identifier `r get_params("time-series-metadata")$sublocation_identifier`
-#' @param begin `r get_params("time-series-metadata")$begin`
-#' @param end `r get_params("time-series-metadata")$end`
-#' @param thresholds `r get_params("time-series-metadata")$thresholds`
-#' @param primary `r get_params("time-series-metadata")$primary`
-#' @param web_description `r get_params("time-series-metadata")$web_description`
+#' @param service Which service
+#' @param ... Extra parameters from the specific services.
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -61,39 +43,12 @@
 #'                                 datetime = c(start_date, end_date))
 #' 
 construct_api_requests <- function(service,
-                                  monitoring_location_id = NA_character_,
-                                  parameter_code = NA_character_,
-                                  statistic_id = NA_character_,
-                                  properties = c("monitoring_location_id",
-                                                 "parameter_code",
-                                                 "statistic_id",
-                                                 "time",
-                                                 "value",
-                                                 "unit_of_measure",
-                                                 "approval_status",
-                                                 "qualifier"),
-                                  bbox = NA,
-                                  time_series_id = NA_character_,
-                                  id = NA_character_,
-                                  approval_status = NA_character_,
-                                  unit_of_measure = NA_character_,
-                                  qualifier = NA_character_,
-                                  value = NA,
-                                  last_modified = NA_character_,
-                                  limit = 10000,
-                                  crs = NA_character_,
-                                  bbox_crs = NA_character_,
-                                  skipGeometry = FALSE,
-                                  datetime = NA_character_,
-                                  begin = NA_character_,
-                                  end = NA_character_,
-                                  primary = NA_character_,
-                                  parameter_name = NA_character_,
-                                  thresholds = NA,
-                                  sublocation_identifier = NA_character_,
-                                  computation_period_identifier = NA_character_,
-                                  computation_identifier = NA_character_,
-                                  web_description = NA_character_){
+                                   properties = NA_character_,
+                                   bbox = NA,
+                                   crs = NA_character_,
+                                   limit = 10000,
+                                   skipGeometry = FALSE,
+                                   ...){
   
   schema <- check_OGC_requests(endpoint = service,
                                type = "schema")
@@ -120,37 +75,32 @@ construct_api_requests <- function(service,
   template_path_post <- system.file("templates/post.CQL2", package = "dataRetrieval")
   template_post <- readChar(template_path_post, file.info(template_path_post)$size)
   
-  post_params <- explode_post(list(monitoring_location_id = monitoring_location_id,
-                                   parameter_code = parameter_code,
-                                   statistic_id = statistic_id,
-                                   time_series_id = time_series_id,
-                                   id = id,
-                                   approval_status = approval_status,
-                                   unit_of_measure = unit_of_measure,
-                                   qualifier = qualifier,
-                                   value = value,
-                                   parameter_name = parameter_name))
+  single_params <- c("datetime", "last_modified", "begin", "end", "time")
+  
+  full_list <- list(...)
+  get_list <- full_list[names(full_list) %in% single_params]
+  
+  get_list[["crs"]] <- crs
+  get_list[["skipGeometry"]] <- skipGeometry
+  get_list[["limit"]] <- limit
+  
+  post_list <- full_list[!names(full_list) %in% single_params]
+  
+  post_params <- explode_post(post_list)
   
   if(length(post_params) > 0){
     POST = TRUE
   }
   
-  datetime <- format_api_dates(datetime)
+  time_periods <- c("last_modified", "datetime", "time")
+  if(any(time_periods %in% names(get_list))){
+    for(i in time_periods){
+      get_list[[i]] <- format_api_dates(get_list[[i]])
+      full_list[[i]] <- format_api_dates(full_list[[i]]) 
+    }
+  }
   
-  baseURL <- explode_query(baseURL, POST = FALSE,
-                           list(last_modified = last_modified,
-                                begin = begin,
-                                end = end,
-                                primary = primary,
-                                computation_period_identifier = computation_period_identifier,
-                                computation_identifier = computation_identifier,
-                                web_description = web_description,
-                                properties = properties,
-                                limit = limit,
-                                crs = crs,
-                                `bbox-crs` = bbox_crs,
-                                skipGeometry = skipGeometry,
-                                datetime = datetime))
+  baseURL <- explode_query(baseURL, POST = FALSE, get_list)
   
   if(all(!is.na(bbox))){
     baseURL <- httr2::req_url_query(baseURL,
@@ -176,17 +126,7 @@ construct_api_requests <- function(service,
     baseURL <- httr2::req_body_raw(baseURL, x) 
     
   } else {
-    baseURL <- explode_query(baseURL, POST = FALSE,
-                             list(monitoring_location_id = monitoring_location_id,
-                                  parameter_code = parameter_code,
-                                  statistic_id = statistic_id,
-                                  time_series_id = time_series_id,
-                                  id = id,
-                                  approval_status = approval_status,
-                                  unit_of_measure = unit_of_measure,
-                                  qualifier = qualifier,
-                                  value = value,
-                                  parameter_name = parameter_name))
+    baseURL <- explode_query(baseURL, POST = FALSE, full_list)
   }
   
   return(baseURL)
@@ -213,7 +153,7 @@ setup_api <- function(service){
 
 format_api_dates <- function(datetime){
   
-  if(!any(is.na(datetime))){
+  if(!any(isTRUE(is.na(datetime)) | isTRUE(is.null(datetime)))){
     if(length(datetime) == 1){
       datetime <- format(datetime, format = "%Y-%m-%dT%H:%M:%SZ")
     } else if (length(datetime) == 2) {

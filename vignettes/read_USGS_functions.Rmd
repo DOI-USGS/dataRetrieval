@@ -1,5 +1,5 @@
 ---
-title: "Introducing read_USGS_dv"
+title: "Introduction to New USGS Services"
 author: Laura A. DeCicco
 editor_options: 
   chunk_output_type: console
@@ -8,7 +8,7 @@ output:
     toc: true
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Introducing read_USGS_dv}
+  %\VignetteIndexEntry{Introduction to New USGS Services}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -105,8 +105,6 @@ To access these services on a web browser, go to <https://api.waterdata.usgs.gov
 The `read_USGS_ts_meta` function will eventually replace the `whatNWISdata` function. Generally, both functions look pretty similar:
 
 ```{r}
-library(dataRetrieval)
-
 data_legacy <- whatNWISdata(siteNumbers = "01491000",
                         parameterCd =  c("00060", "00010"))
 ```
@@ -139,6 +137,22 @@ knitr::kable(data_modern[,c("parameter_code",
 ```
 
 ## Additional new features
+
+# Site Information
+
+The `read_USGS_sites` function will eventually replace the `readNWISsite` function. Generally, both functions look pretty similar:
+
+```{r}
+sites_legacy <- readNWISsite(siteNumbers = "01491000")
+names(sites_legacy)
+```
+
+```{r}
+sites_modern <- read_USGS_sites(monitoring_location_id = "USGS-01491000")
+names(sites_modern)
+
+```
+
 
 # API Tokens
 

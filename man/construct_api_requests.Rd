@@ -6,41 +6,16 @@
 \usage{
 construct_api_requests(
   service,
-  monitoring_location_id = NA_character_,
-  parameter_code = NA_character_,
-  statistic_id = NA_character_,
-  properties = c("monitoring_location_id", "parameter_code", "statistic_id", "time",
-    "value", "unit_of_measure", "approval_status", "qualifier"),
+  properties = NA_character_,
   bbox = NA,
-  time_series_id = NA_character_,
-  id = NA_character_,
-  approval_status = NA_character_,
-  unit_of_measure = NA_character_,
-  qualifier = NA_character_,
-  value = NA,
-  last_modified = NA_character_,
-  limit = 10000,
   crs = NA_character_,
-  bbox_crs = NA_character_,
+  limit = 10000,
   skipGeometry = FALSE,
-  datetime = NA_character_,
-  begin = NA_character_,
-  end = NA_character_,
-  primary = NA_character_,
-  parameter_name = NA_character_,
-  thresholds = NA,
-  sublocation_identifier = NA_character_,
-  computation_period_identifier = NA_character_,
-  computation_identifier = NA_character_,
-  web_description = NA_character_
+  ...
 )
 }
 \arguments{
-\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{sites} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).}
-
-\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}.}
-
-\item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.}
+\item{service}{Which service}
 
 \item{properties}{The properties that should be included for each feature. The
 parameter value is a comma-separated list of property names. Available values:
@@ -52,69 +27,18 @@ box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
 depth).}
 
-\item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
-
-\item{id}{A universally unique identifier (UUID) representing a single version of a record. It is not stable over time. Every time the record is refreshed in our database (which may happen as part of normal operations and does not imply any change to the data itself) a new ID will be generated. To uniquely identify a single observation over time, compare the \code{time} and \code{time_series_id} fields; each time series will only have a single observation at a given \code{time}.}
-
-\item{approval_status}{Some of the data that you have obtained from this U.S. Geological Survey database may not have received Director's approval.  Any such data values are qualified as provisional and are subject to revision.  Provisional data are released on the condition that neither the USGS nor the United States Government may be held liable for any damages resulting from its use. This field reflects the approval status of each record, and is either "Approved", meaining processing review has been completed and the data is approved for publication, or "Provisional" and subject to revision. For more information about provisional data, go to \url{https://waterdata.usgs.gov/provisional-data-statement/}.}
-
-\item{unit_of_measure}{A human-readable description of the units of measurement associated with an observation.}
-
-\item{qualifier}{This field indicates any qualifiers associated with an observation, for instance if a sensor may have been impacted by ice or if values were estimated.}
-
-\item{value}{The value of the observation. Values are transmitted as strings in the JSON response format in order to preserve precision.}
-
-\item{last_modified}{The last time a record was refreshed in our database. This may happen due to regular operational processes and does not necessarily indicate anything about the measurement has changed.
-You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
-Examples:
-\itemize{
-\item A date-time: "2018-02-12T23:20:50Z"
-\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
-\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
-\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
-}
-
-Only features that have a \code{last_modified} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.}
+\item{crs}{Indicates the coordinate reference system for the results.}
 
 \item{limit}{The optional limit parameter limits the number of items that are
 presented in the response document. Only items are counted that are on the
 first level of the collection in the response document. Nested objects
 contained within the explicitly requested items shall not be counted.}
 
-\item{crs}{Indicates the coordinate reference system for the results.}
-
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
 information.}
 
-\item{begin}{The datetime of the earliest observation in the time series. Together with \code{end}, this field represents the period of record of a time series. Note that some time series may have large gaps in their collection record. This field is currently in the local time of the monitoring location. We intend to update this \strong{in version v0} to use UTC with a time zone.}
-
-\item{end}{The datetime of the most recent observation in the time series. Data returned by this endpoint updates at most once per day, and potentially less frequently than that, and as such there may be more recent observations within a time series than the time series \code{end} value reflects. Together with \code{begin}, this field represents the period of record of a time series. It is additionally used to determine whether a time series is "active". We intend to update this \strong{in version v0} to use UTC with a time zone.}
-
-\item{primary}{A flag identifying if the time series is a "primary" time series. "Primary" time series (which have this flag) are standard observations which undergo \href{https://www.usgs.gov/survey-manual/5028-fundamental-science-practices-review-and-approval-scientific-data-release}{Bureau review and approval processes}. Non-primary time series, which will have missing values for "primary", are provisional datasets made available to meet the need for timely best science and to assist with daily operations which need real-time information. Non-primary time series data are only retained by this system for 120 days. See the \href{https://waterdata.usgs.gov/provisional-data-statement/}{USGS Provisional Data Statement} for more information.}
-
-\item{parameter_name}{A human-understandable name corresponding to \code{parameter_code}.}
-
-\item{thresholds}{Thresholds represent known numeric limits for a time series, for example the historic maximum value for a parameter or a level below which a sensor is non-operative. These thresholds are sometimes used to automatically determine if an observation is erroneous due to sensor error, and therefore shouldn't be included in the time series.}
-
-\item{sublocation_identifier}{An optional human-readable identifier used to specify where measurements are recorded at a monitoring location.}
-
-\item{computation_period_identifier}{Indicates the period of data used for any statistical computations.}
-
-\item{computation_identifier}{Indicates whether the data from this time series represent a specific statistical computation.}
-
-\item{web_description}{A description of what this time series represents, as used by WDFN and other USGS data dissemination products.}
-
-\item{time}{The date an observation represents. You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
-Examples:
-\itemize{
-\item A date-time: "2018-02-12T23:20:50Z"
-\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
-\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
-\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
-}
-
-Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.}
+\item{...}{Extra parameters from the specific services.}
 }
 \description{
 Main documentation: \url{https://api.waterdata.usgs.gov/ogcapi/v0/},
