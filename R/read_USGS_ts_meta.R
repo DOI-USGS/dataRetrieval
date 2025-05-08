@@ -120,7 +120,7 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
     skipGeometry <- TRUE
   }
   
-  req_ts_meta <- construct_api_requests("timeseries-metadata",
+  req_ts_meta <- construct_api_requests("time-series-metadata",
                                         monitoring_location_id = monitoring_location_id,
                                         parameter_code = parameter_code,
                                         parameter_name = parameter_name,
