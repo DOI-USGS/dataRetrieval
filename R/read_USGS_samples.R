@@ -14,9 +14,9 @@
 #' numbers without an agency prefix are assumed to have the prefix USGS.
 #' @param activityMediaName Sample media refers to the environmental medium that
 #' was sampled or analyzed. See available options by running 
-#' \code{check_param("samplemedia")$activityMedia}.
+#' \code{check_USGS_sample_params("samplemedia")$activityMedia}.
 #' @param siteTypeCode Site type code query parameter. See available
-#' options by running \code{check_param("sitetype")$typeCode}.
+#' options by running \code{check_USGS_sample_params("sitetype")$typeCode}.
 #' @param boundingBox North and South are latitude values; East and West are longitude values.
 #' A vector of 4 (west, south, east, north) is expected.
 #' An example would be: c(-92.8, 44.2, -88.9, 46.0).
@@ -35,7 +35,7 @@
 #' records that match the date.
 #' @param characteristicGroup Characteristic group is a broad category describing the sample.
 #' See available options by running
-#' \code{check_param("characteristicgroup")$characteristicGroup}.
+#' \code{check_USGS_sample_params("characteristicgroup")$characteristicGroup}.
 #' @param characteristicUserSupplied Observed property is the USGS term for the
 #' constituent sampled and the property name gives a detailed description of what
 #' was sampled. Observed property is mapped to characteristicUserSupplied and replaces
@@ -45,21 +45,21 @@
 #' \url{https://waterdata.usgs.gov/code-dictionary/}.
 #' @param characteristic Characteristic is a specific category describing the sample.
 #' See available options by running 
-#' \code{check_param("characteristics")$characteristicName}.
+#' \code{check_USGS_sample_params("characteristics")$characteristicName}.
 #' @param stateFips State query parameter. To get a list of available state fips, 
-#' run \code{check_param("states")}. The "fips" can be created using the function
+#' run \code{check_USGS_sample_params("states")}. The "fips" can be created using the function
 #' \code{stateCdLookup} - for example: \code{stateCdLookup("WI", "fips")}. 
 #' FIPs codes for states take the format: 
 #' CountryAbbrev:StateNumber, like US:55 for Wisconsin.
 #' @param countyFips County query parameter. To get a list of available counties,
-#' run \code{check_param("counties")}. The "Fips" can be created using the function
+#' run \code{check_USGS_sample_params("counties")}. The "Fips" can be created using the function
 #' \code{countyCdLookup} - for example: \code{countyCdLookup("WI", "Dane", "fips")} 
 #' for Dane County, WI.
 #' FIPs codes for counties take the format: 
 #' CountryAbbrev:StateNumber:CountyNumber, like US:55:025 for Dane County, WI.
 #' @param countryFips Country query parameter. Do not set redundant parameters. 
 #' If another query parameter contains the country information, leave this parameter
-#' set to the default NA. See available options by running \code{check_param("countries")},
+#' set to the default NA. See available options by running \code{check_USGS_sample_params("countries")},
 #' where the "id" field contains the value to use in the countryFips input.
 #' @param projectIdentifier Project identifier query parameter. This information
 #' would be needed from prior project information. 
@@ -68,7 +68,7 @@
 #' @param siteTypeName Site type name query parameter. See available
 #' options by running \code{check_param("sitetype")$typeName}.
 #' @param usgsPCode USGS parameter code. See available options by running 
-#' \code{check_param("characteristics")$parameterCode}.
+#' \code{check_USGS_sample_params("characteristics")$parameterCode}.
 #' @param pointLocationLatitude Latitude for a point/radius query (decimal degrees). Must be used
 #' with pointLocationLongitude and pointLocationWithinMiles.
 #' @param pointLocationLongitude Longitude for a point/radius query (decimal degrees). Must be used
@@ -85,6 +85,7 @@
 #' "project" and "projectmonitoringlocationweight". Options for "organizations" are:
 #' "organization" and "count".
 #' @export
+#' @keywords internal
 #' @return data frame returned from web service call.
 #' 
 #' @examplesIf is_dataRetrieval_user()
@@ -175,36 +176,36 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   
   if(all(!is.na(siteTypeCode))){
     siteTypeCode <- match.arg(siteTypeCode, 
-              check_param("sitetype")$typeCode, 
+                              check_USGS_sample_params("sitetype")$typeCode, 
               several.ok = TRUE)
   }
     
   if(all(!is.na(activityMediaName))){
     activityMediaName <- match.arg(activityMediaName, 
-              check_param("samplemedia")$activityMedia, 
+                                   check_USGS_sample_params("samplemedia")$activityMedia, 
               several.ok = TRUE)
   }
   
   if(all(!is.na(characteristicGroup))){
     characteristicGroup <- match.arg(characteristicGroup, 
-              check_param("characteristicgroup")$characteristicGroup, 
+                                     check_USGS_sample_params("characteristicgroup")$characteristicGroup, 
               several.ok = TRUE)
   }
   
   if(all(!is.na(countryFips))){
     countryFips <- match.arg(countryFips, 
-              check_param("countries")$countryCode, 
+                             check_USGS_sample_params("countries")$countryCode, 
               several.ok = TRUE)
   }
   
   if(all(!is.na(siteTypeName))){
     siteTypeName <- match.arg(siteTypeName, 
-              check_param("sitetype")$typeLongName, 
+                              check_USGS_sample_params("sitetype")$typeLongName, 
               several.ok = TRUE)
   }
   
   if(all(!is.na(stateFips))){
-    states <- check_param("states")
+    states <- check_USGS_sample_params("states")
     state_codes <- paste(states$countryCode, 
                          states$fipsCode, sep = ":")
     stateFips <- match.arg(stateFips, state_codes, 
@@ -212,10 +213,10 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   }
   
   if(all(!is.na(countyFips))){
-    states <- check_param("states")
+    states <- check_USGS_sample_params("states")
     state_codes <- paste(states$countryCode, 
                          states$fipsCode, sep = ":")
-    counties <- check_param("counties")
+    counties <- check_USGS_sample_params("counties")
     state_cd <- stats::setNames(states$fipsCode,
                                 states$stateAbbrev)
     county_codes <- paste(counties$countryCode, 
@@ -328,19 +329,19 @@ explode_query <- function(baseURL, POST = FALSE, x){
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
-#' groups <- check_param("characteristicgroup")
-#' states <- check_param("states")
-#' countries <- check_param("countries")
-#' counties <- check_param("counties")
-#' sitetypes <- check_param("sitetype")
-#' samplemedia <- check_param("samplemedia")
-#' characteristics <- check_param("characteristics",
+#' groups <- check_USGS_sample_params("characteristicgroup")
+#' states <- check_USGS_sample_params("states")
+#' countries <- check_USGS_sample_params("countries")
+#' counties <- check_USGS_sample_params("counties")
+#' sitetypes <- check_USGS_sample_params("sitetype")
+#' samplemedia <- check_USGS_sample_params("samplemedia")
+#' characteristics <- check_USGS_sample_params("characteristics",
 #'                                group = "Biological")
-#' observedProperties <- check_param("observedproperty",
+#' observedProperties <- check_USGS_sample_params("observedproperty",
 #'                                   text = "phosphorus")
 #' 
 #' }
-check_param <- function(service = "characteristicgroup",
+check_USGS_sample_params <- function(service = "characteristicgroup",
                         ...){
   
   service_options <- c("characteristicgroup", "states", "counties",

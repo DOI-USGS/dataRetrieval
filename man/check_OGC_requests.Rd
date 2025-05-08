@@ -26,10 +26,11 @@ dv_queryables <- check_OGC_requests(endpoint = "daily",
                                 type = "queryables")
 dv_schema <- check_OGC_requests(endpoint = "daily",
                             type = "schema")
-ts_meta_queryables <- check_OGC_requests(endpoint = "timeseries-metadata",
+ts_meta_queryables <- check_OGC_requests(endpoint = "time-series-metadata",
                                 type = "queryables")
-ts_meta_schema <- check_OGC_requests(endpoint = "timeseries-metadata",
+ts_meta_schema <- check_OGC_requests(endpoint = "time-series-metadata",
                                 type = "schema")
 }
 \dontshow{\}) # examplesIf}
 }
+\keyword{internal}

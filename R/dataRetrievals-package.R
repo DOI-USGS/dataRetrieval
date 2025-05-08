@@ -90,7 +90,7 @@ NULL
 #' US State Code Lookup Table
 #'
 #' Classic lookup table for states. Has been replaced in functions with
-#' \code{check_param("states")}.
+#' \code{check_USGS_sample_params("states")}.
 #'
 #' @name stateCd
 #' @return stateCd data frame.
@@ -112,7 +112,7 @@ NULL
 #' US County Code Lookup Table
 #'
 #' Classic lookup table for counties. Has been replaced in functions with
-#' \code{check_param("counties")}.
+#' \code{check_USGS_sample_params("counties")}.
 #'
 #' @name countyCd
 #' @return countyCd data frame.
