@@ -310,6 +310,7 @@ cql2_param <- function(parameter){
 #' @param endpoint Character, can be "daily", "timeseries-metadata"
 #' @param type Character, can be "queryables", "schema"
 #' @export
+#' @keywords internal
 #' @return list
 #' @examplesIf is_dataRetrieval_user()
 #' 
@@ -319,29 +320,41 @@ cql2_param <- function(parameter){
 #'                                 type = "queryables")
 #' dv_schema <- check_OGC_requests(endpoint = "daily",
 #'                             type = "schema")
-#' ts_meta_queryables <- check_OGC_requests(endpoint = "timeseries-metadata",
+#' ts_meta_queryables <- check_OGC_requests(endpoint = "time-series-metadata",
 #'                                 type = "queryables")
-#' ts_meta_schema <- check_OGC_requests(endpoint = "timeseries-metadata",
+#' ts_meta_schema <- check_OGC_requests(endpoint = "time-series-metadata",
 #'                                 type = "schema")
 #' }
 check_OGC_requests <- function(endpoint = "daily",
                                type = "queryables"){
   
-  #https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html#/server/getCollections
-  
-  match.arg(endpoint, c("daily", "time-series-metadata", "sites"))
   match.arg(type, c("queryables", "schema"))
   
-  check_req <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
+  check_collections <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html#/server/getCollections")
+  
+  check_endpoints <- basic_request(check_collections)
+  services <- sapply(check_endpoints$tags, function(x) x[["name"]])
+  
+  match.arg(endpoint, services)
+  
+  url_base <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
     httr2::req_url_path_append(endpoint) |> 
-    httr2::req_url_path_append(type) |> 
+    httr2::req_url_path_append(type) 
+  
+  query_ret <- basic_request(url_base)
+  
+  return(query_ret)
+  
+}
+
+basic_request <- function(url_base){
+  
+  check_req <- url_base |> 
     httr2::req_user_agent(default_ua()) |> 
     httr2::req_url_query(f = "json",
                          lang = "en-US") 
   
   query_ret <- httr2::req_perform(check_req) |> 
     httr2::resp_body_json() 
-  
-  return(query_ret)
   
 }

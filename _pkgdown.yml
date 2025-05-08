@@ -71,8 +71,7 @@ reference:
       - read_USGS_dv
       - read_USGS_ts_meta
       - summarize_USGS_samples
-      - construct_USGS_sample_request
-      - check_param
+      - check_USGS_sample_params
   - title: National Water Information System (NWIS)
     desc:  Functions to retrieve (USGS) NWIS data. These will be slowly phased out and replaced with the read_USGS family of functions.
     contents:
