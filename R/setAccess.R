@@ -1,7 +1,7 @@
 #' Set data endpoint
 #'
 #' access Indicate which dataRetrieval access code
-#' you want to use options: \code{c('public','internal')}
+#' you want to use options: `c('public','internal')`
 #'
 #' @param access code for data access. Options are: "public","internal","cooperator", or "USGS".
 #' \itemize{

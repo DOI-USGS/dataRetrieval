@@ -14,13 +14,13 @@ complete list of all current parameter codes in the USGS, use "all" as the input
 \value{
 parameterData data frame with the following information:
 \tabular{lll}{
-  Name \tab Type \tab Description\cr
-  parameter_cd \tab character \tab 5-digit USGS parameter code \cr
-  parameter_group_nm \tab character \tab USGS parameter group name\cr
-  parameter_nm \tab character \tab USGS parameter name\cr
-  casrn \tab character \tab Chemical Abstracts Service (CAS) Registry Number\cr
-  srsname \tab character \tab Substance Registry Services Name\cr
-  parameter_units \tab character \tab Parameter units\cr
+Name \tab Type \tab Description\cr
+parameter_cd \tab character \tab 5-digit USGS parameter code \cr
+parameter_group_nm \tab character \tab USGS parameter group name\cr
+parameter_nm \tab character \tab USGS parameter name\cr
+casrn \tab character \tab Chemical Abstracts Service (CAS) Registry Number\cr
+srsname \tab character \tab Substance Registry Services Name\cr
+parameter_units \tab character \tab Parameter units\cr
 }
 }
 \description{
@@ -39,7 +39,7 @@ one_extra <- readNWISpCode(c("01075", "12345"))
 }
 }
 \seealso{
-\code{\link{importRDB1}}
+\code{\link[=importRDB1]{importRDB1()}}
 }
 \keyword{USGS}
 \keyword{data}

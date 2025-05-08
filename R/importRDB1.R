@@ -6,14 +6,14 @@
 #' recommended to use the RDB format for importing multi-site data.
 #'
 #' @param obs_url character containing the url for the retrieval or a file path to the data file.
-#' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
+#' @param asDateTime logical, if `TRUE` returns date and time as POSIXct, if `FALSE`, Date
 #' @param tz character to set timezone attribute of datetime. Default converts the datetimes to UTC
 #' (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Recommended US values include "UTC", "America/New_York", "America/Chicago", "America/Denver",
 #' "America/Los_Angeles",  "America/Anchorage", "America/Honolulu", "America/Jamaica", "America/Managua",
 #' "America/Phoenix", and "America/Metlakatla".
-#' For a complete list, see \url{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the
+#' For a complete list, see <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the
 #' function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @return A data frame with the following columns:
@@ -22,7 +22,7 @@
 #' agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 #' site_no \tab character \tab The USGS site number \cr
 #' datetime \tab POSIXct \tab The date and time of the value converted to
-#' UTC (if asDateTime = \code{TRUE}), \cr
+#' UTC (if asDateTime = `TRUE`), \cr
 #' \tab character \tab or raw character string (if asDateTime = FALSE) \cr
 #' tz_cd \tab character \tab The time zone code for datetime \cr
 #' code \tab character \tab Any codes that qualify the corresponding value\cr

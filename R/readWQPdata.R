@@ -1,7 +1,7 @@
 #' General Data Import from Water Quality Portal
 #'
 #' Imports data from Water Quality Portal web service. This function gets the data from here:
-#' \url{https://www.waterqualitydata.us}.
+#' <https://www.waterqualitydata.us>.
 #' 
 #' This function uses \dots as a query input, which can be very flexible, but also 
 #' has a steeper learning curve. For a quick overview, scroll down to the Examples
@@ -41,7 +41,7 @@
 #' }
 #' 
 #'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options.
+#' @param \dots see <https://www.waterqualitydata.us/webservices_documentation> for a complete list of options.
 #' A list of arguments can also be supplied. For more information see the above 
 #' description for this help file. One way to figure out how to construct a WQP query is to go to the "Advanced" 
 #' form in the Water Quality Portal. Use the form to discover what parameters are available. Once the query is 
@@ -63,11 +63,11 @@
 #' "America/Anchorage", as well as the following which do not use daylight savings
 #' time: "America/Honolulu",
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla".
-#' See also  \code{OlsonNames()}
+#' See also  `OlsonNames()`
 #' for more information on time zones.
 #' @param ignore_attributes logical to choose to ignore fetching site and status
-#' attributes. Default is \code{FALSE}.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' attributes. Default is `FALSE`.
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service

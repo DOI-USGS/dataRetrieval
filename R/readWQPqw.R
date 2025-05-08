@@ -1,7 +1,7 @@
 #' Raw Data Import for Water Quality Portal
 #'
 #' Imports data from the Water Quality Portal.
-#' This function gets the data from here: \url{https://www.waterqualitydata.us}. There
+#' This function gets the data from here: <https://www.waterqualitydata.us>. There
 #' are four required input arguments: siteNumbers, parameterCd, startDate, and endDate.
 #' parameterCd can either be a USGS 5-digit code, or a characteristic name. The sites can be
 #' either USGS, or other Water Quality Portal offered sites. It is required to use the 'full'
@@ -24,15 +24,15 @@
 #' "America/Anchorage", as well as the following which do not use daylight savings
 #' time: "America/Honolulu",
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla".
-#' See also  \code{OlsonNames()}
+#' See also  `OlsonNames()`
 #' for more information on time zones.
 #' @param querySummary logical to look at number of records and unique sites that
 #' will be returned from this query.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @param ignore_attributes logical to choose to ignore fetching site and parameter
-#' attributes. Default is \code{FALSE}.
+#' attributes. Default is `FALSE`.
 #' @param legacy Logical. If TRUE, uses legacy WQP services. Default is TRUE.
 #' Setting legacy = FALSE uses WQX3.0 WQP services, which are in-development, use with caution.
 #' @keywords data import USGS web service
@@ -47,8 +47,8 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @seealso \code{\link{readWQPdata}}, \code{\link{whatWQPsites}},
-#' and \code{\link{importWQP}}
+#' @seealso [readWQPdata()], [whatWQPsites()],
+#' and [importWQP()]
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
