@@ -47,7 +47,8 @@
 #'                             properties = c("monitoring_location_id",
 #'                                            "parameter_code",
 #'                                            "begin",
-#'                                            "end"))
+#'                                            "end"),
+#'                             skipGeometry = TRUE)
 #' }
 read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                               parameter_code = NA_character_,

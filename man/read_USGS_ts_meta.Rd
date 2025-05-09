@@ -108,7 +108,8 @@ meta_multi <- read_USGS_ts_meta(monitoring_location_id =  c("USGS-01491000",
                             properties = c("monitoring_location_id",
                                            "parameter_code",
                                            "begin",
-                                           "end"))
+                                           "end"),
+                            skipGeometry = TRUE)
 }
 \dontshow{\}) # examplesIf}
 }
