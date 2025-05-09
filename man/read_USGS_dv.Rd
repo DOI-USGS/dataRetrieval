@@ -20,7 +20,7 @@ read_USGS_dv(
   limit = 10000,
   crs = NA_character_,
   skipGeometry = NA,
-  datetime = NA_character_,
+  time = NA_character_,
   convertType = TRUE
 )
 }
@@ -75,7 +75,7 @@ contained within the explicitly requested items shall not be counted.}
 each feature. The returning object will be a data frame with no spatial
 information.}
 
-\item{datetime}{The date an observation represents. You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
+\item{time}{The date an observation represents. You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
 Examples:
 \itemize{
 \item A date-time: "2018-02-12T23:20:50Z"
@@ -88,17 +88,6 @@ Only features that have a \code{time} that intersects the value of datetime are 
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
-
-\item{time}{The date an observation represents. You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
-Examples:
-\itemize{
-\item A date-time: "2018-02-12T23:20:50Z"
-\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
-\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
-\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
-}
-
-Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.}
 }
 \description{
 Description Daily data provide one data value to represent water conditions for the day. Throughout much of the history of the USGS, the primary water data available was daily data collected manually at the monitoring location once each day. With improved availability of computer storage and automated transmission of data, the daily data published today are generally a statistical summary or metric of the continuous data collected each day, such as the daily mean, minimum, or maximum value. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. These data have also been referred to as “daily values” or “DV”.
@@ -111,14 +100,14 @@ site <- "USGS-02238500"
 pcode <- "00060"
 dv_data_sf <- read_USGS_dv(monitoring_location_id = site,
                         parameter_code = "00060", 
-                        datetime = c("2021-01-01", "2022-01-01"))
+                        time = c("2021-01-01", "2022-01-01"))
 
 dv_data_trim <- read_USGS_dv(monitoring_location_id = site,
                           parameter_code = "00060", 
                           properties = c("monitoring_location_id",
                                          "value",
                                          "time"),
-                          datetime = c("2021-01-01", "2022-01-01"))
+                          time = c("2021-01-01", "2022-01-01"))
 
 dv_data <- read_USGS_dv(monitoring_location_id = site,
                         parameter_code = "00060",
@@ -127,7 +116,7 @@ dv_data <- read_USGS_dv(monitoring_location_id = site,
 multi_site <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000", 
                                                        "USGS-01645000"),
                         parameter_code = c("00060", "00010"),
-                        datetime = c("2023-01-01", "2024-01-01"))
+                        time = c("2023-01-01", "2024-01-01"))
 
 }
 \dontshow{\}) # examplesIf}
