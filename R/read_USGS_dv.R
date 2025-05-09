@@ -5,7 +5,6 @@
 #' @export
 #' @param monitoring_location_id `r get_params("daily")$monitoring_location_id`
 #' @param parameter_code `r get_params("daily")$parameter_code`
-#' @param datetime `r get_params("daily")$time`
 #' @param statistic_id `r get_params("daily")$statistic_id`
 #' @param time `r get_params("daily")$time`
 #' @param value `r get_params("daily")$value`
@@ -39,14 +38,14 @@
 #' pcode <- "00060"
 #' dv_data_sf <- read_USGS_dv(monitoring_location_id = site,
 #'                         parameter_code = "00060", 
-#'                         datetime = c("2021-01-01", "2022-01-01"))
+#'                         time = c("2021-01-01", "2022-01-01"))
 #'
 #' dv_data_trim <- read_USGS_dv(monitoring_location_id = site,
 #'                           parameter_code = "00060", 
 #'                           properties = c("monitoring_location_id",
 #'                                          "value",
 #'                                          "time"),
-#'                           datetime = c("2021-01-01", "2022-01-01"))
+#'                           time = c("2021-01-01", "2022-01-01"))
 #'
 #' dv_data <- read_USGS_dv(monitoring_location_id = site,
 #'                         parameter_code = "00060",
@@ -55,7 +54,7 @@
 #' multi_site <- read_USGS_dv(monitoring_location_id =  c("USGS-01491000", 
 #'                                                        "USGS-01645000"),
 #'                         parameter_code = c("00060", "00010"),
-#'                         datetime = c("2023-01-01", "2024-01-01"))
+#'                         time = c("2023-01-01", "2024-01-01"))
 #' 
 #' }
 read_USGS_dv <- function(monitoring_location_id = NA_character_,
@@ -73,7 +72,7 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          limit = 10000,
                          crs = NA_character_,
                          skipGeometry = NA,
-                         datetime = NA_character_,
+                         time = NA_character_,
                          convertType = TRUE){
   
   message("Function in development, use at your own risk.")
@@ -92,11 +91,11 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
                                    unit_of_measure = unit_of_measure,
                                    qualifier = qualifier,
                                    value = value,
+                                   time = time,
                                    last_modified = last_modified,
                                    limit = limit,
                                    crs = crs,
-                                   skipGeometry = skipGeometry,
-                                   datetime = datetime)
+                                   skipGeometry = skipGeometry)
   
   return_list <- walk_pages(dv_req)
   
