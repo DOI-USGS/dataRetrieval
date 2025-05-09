@@ -98,7 +98,7 @@ pages:
   cache: []
   script:
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
-    - Rscript -e 'file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")
+    - Rscript -e 'file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
   artifacts:
     paths:
       - $PAGES_OUTDIR
