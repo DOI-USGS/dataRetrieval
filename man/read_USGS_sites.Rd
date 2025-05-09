@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_USGS_sites.R
 \name{read_USGS_sites}
 \alias{read_USGS_sites}
-\title{Get USGS Daily Data}
+\title{Get USGS Site Data}
 \usage{
 read_USGS_sites(
   monitoring_location_id = NA_character_,

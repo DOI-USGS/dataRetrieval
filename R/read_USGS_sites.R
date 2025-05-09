@@ -1,4 +1,4 @@
-#' Get USGS Daily Data
+#' Get USGS Site Data
 #' 
 #' Description `r get_description("monitoring-locations")`
 #' 
