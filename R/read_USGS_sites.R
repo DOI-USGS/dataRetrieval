@@ -1,51 +1,51 @@
 #' Get USGS Daily Data
 #' 
-#' Description `r get_description("daily")`
+#' Description `r get_description("monitoring-locations")`
 #' 
 #' @export
-#' @param monitoring_location_id `r get_params("sites")$id`
-#' @param agency_code `r get_params("sites")$agency_code`
-#' @param agency_name `r get_params("sites")$agency_name`
-#' @param monitoring_location_number `r get_params("sites")$monitoring_location_number`
-#' @param monitoring_location_name `r get_params("sites")$monitoring_location_name`
-#' @param district_code `r get_params("sites")$district_code`
-#' @param state_name `r get_params("sites")$state_name`
-#' @param county_code `r get_params("sites")$county_code`
-#' @param county_name `r get_params("sites")$county_name`
-#' @param country_code `r get_params("sites")$country_code`
-#' @param country_name `r get_params("sites")$country_name`
-#' @param state_code `r get_params("sites")$state_code`
-#' @param minor_civil_division_code `r get_params("sites")$minor_civil_division_code`
-#' @param site_type_code `r get_params("sites")$site_type_code`
-#' @param site_type `r get_params("sites")$site_type`
-#' @param hydrologic_unit_code `r get_params("sites")$hydrologic_unit_code`
-#' @param basin_code `r get_params("sites")$basin_code`
-#' @param altitude `r get_params("sites")$altitude`
-#' @param altitude_accuracy `r get_params("sites")$altitude_accuracy`
-#' @param altitude_method_code `r get_params("sites")$altitude_method_code`
-#' @param altitude_method_name `r get_params("sites")$altitude_method_name`
-#' @param vertical_datum `r get_params("sites")$vertical_datum`
-#' @param vertical_datum_name `r get_params("sites")$vertical_datum_name`
-#' @param horizontal_positional_accuracy_code `r get_params("sites")$horizontal_positional_accuracy_code`
-#' @param horizontal_positional_accuracy `r get_params("sites")$horizontal_positional_accuracy`
-#' @param horizontal_position_method_code `r get_params("sites")$horizontal_position_method_code`
-#' @param horizontal_position_method_name `r get_params("sites")$horizontal_position_method_name`
-#' @param original_horizontal_datum `r get_params("sites")$original_horizontal_datum`
-#' @param original_horizontal_datum_name `r get_params("sites")$original_horizontal_datum_name`
-#' @param drainage_area `r get_params("sites")$drainage_area`
-#' @param contributing_drainage_area `r get_params("sites")$contributing_drainage_area`
-#' @param time_zone_abbreviation `r get_params("sites")$time_zone_abbreviation`
-#' @param uses_daylight_savings `r get_params("sites")$uses_daylight_savings`
-#' @param construction_date `r get_params("sites")$construction_date`
-#' @param aquifer_code `r get_params("sites")$aquifer_code`
-#' @param national_aquifer_code `r get_params("sites")$national_aquifer_code`
-#' @param aquifer_type_code `r get_params("sites")$aquifer_type_code`
-#' @param well_constructed_depth `r get_params("sites")$well_constructed_depth`
-#' @param hole_constructed_depth `r get_params("sites")$hole_constructed_depth`
-#' @param depth_source_code `r get_params("sites")$depth_source_code`
+#' @param monitoring_location_id `r get_params("monitoring-locations")$id`
+#' @param agency_code `r get_params("monitoring-locations")$agency_code`
+#' @param agency_name `r get_params("monitoring-locations")$agency_name`
+#' @param monitoring_location_number `r get_params("monitoring-locations")$monitoring_location_number`
+#' @param monitoring_location_name `r get_params("monitoring-locations")$monitoring_location_name`
+#' @param district_code `r get_params("monitoring-locations")$district_code`
+#' @param state_name `r get_params("monitoring-locations")$state_name`
+#' @param county_code `r get_params("monitoring-locations")$county_code`
+#' @param county_name `r get_params("monitoring-locations")$county_name`
+#' @param country_code `r get_params("monitoring-locations")$country_code`
+#' @param country_name `r get_params("monitoring-locations")$country_name`
+#' @param state_code `r get_params("monitoring-locations")$state_code`
+#' @param minor_civil_division_code `r get_params("monitoring-locations")$minor_civil_division_code`
+#' @param site_type_code `r get_params("monitoring-locations")$site_type_code`
+#' @param site_type `r get_params("monitoring-locations")$site_type`
+#' @param hydrologic_unit_code `r get_params("monitoring-locations")$hydrologic_unit_code`
+#' @param basin_code `r get_params("monitoring-locations")$basin_code`
+#' @param altitude `r get_params("monitoring-locations")$altitude`
+#' @param altitude_accuracy `r get_params("monitoring-locations")$altitude_accuracy`
+#' @param altitude_method_code `r get_params("monitoring-locations")$altitude_method_code`
+#' @param altitude_method_name `r get_params("monitoring-locations")$altitude_method_name`
+#' @param vertical_datum `r get_params("monitoring-locations")$vertical_datum`
+#' @param vertical_datum_name `r get_params("monitoring-locations")$vertical_datum_name`
+#' @param horizontal_positional_accuracy_code `r get_params("monitoring-locations")$horizontal_positional_accuracy_code`
+#' @param horizontal_positional_accuracy `r get_params("monitoring-locations")$horizontal_positional_accuracy`
+#' @param horizontal_position_method_code `r get_params("monitoring-locations")$horizontal_position_method_code`
+#' @param horizontal_position_method_name `r get_params("monitoring-locations")$horizontal_position_method_name`
+#' @param original_horizontal_datum `r get_params("monitoring-locations")$original_horizontal_datum`
+#' @param original_horizontal_datum_name `r get_params("monitoring-locations")$original_horizontal_datum_name`
+#' @param drainage_area `r get_params("monitoring-locations")$drainage_area`
+#' @param contributing_drainage_area `r get_params("monitoring-locations")$contributing_drainage_area`
+#' @param time_zone_abbreviation `r get_params("monitoring-locations")$time_zone_abbreviation`
+#' @param uses_daylight_savings `r get_params("monitoring-locations")$uses_daylight_savings`
+#' @param construction_date `r get_params("monitoring-locations")$construction_date`
+#' @param aquifer_code `r get_params("monitoring-locations")$aquifer_code`
+#' @param national_aquifer_code `r get_params("monitoring-locations")$national_aquifer_code`
+#' @param aquifer_type_code `r get_params("monitoring-locations")$aquifer_type_code`
+#' @param well_constructed_depth `r get_params("monitoring-locations")$well_constructed_depth`
+#' @param hole_constructed_depth `r get_params("monitoring-locations")$hole_constructed_depth`
+#' @param depth_source_code `r get_params("monitoring-locations")$depth_source_code`
 #' @param properties The properties that should be included for each feature.
 #' The parameter value is a comma-separated list of property names. Available options are
-#' `r schema <- check_OGC_requests(endpoint = "sites", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' `r schema <- check_OGC_requests(endpoint = "monitoring-locations", type = "schema"); paste(names(schema$properties), collapse = ", ")`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -58,13 +58,16 @@
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
-#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
-#' will convert the data to dates and qualifier to string vector.
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
 #' site <- "USGS-02238500"
 #' site_info <- read_USGS_sites(monitoring_location_id = site)
+#' 
+#' site_slim <- read_USGS_sites(monitoring_location_id = site,
+#'                              properties = c("monitoring_locations_id",
+#'                                             "state_name",
+#'                                             "country_name"))
 #'
 #' site_info_no_sf <- read_USGS_sites(monitoring_location_id = site,
 #'                                    skipGeometry = TRUE)
@@ -116,12 +119,13 @@ read_USGS_sites <- function(monitoring_location_id = NA_character_,
                             bbox = NA,
                             limit = 10000,
                             crs = NA_character_,
-                            skipGeometry = NA,
-                            convertType = TRUE){
+                            skipGeometry = NA){
   
   message("Function in development, use at your own risk.")
   
-  site_req <- construct_api_requests(service = "sites",
+  service <- "monitoring-locations"
+  
+  site_req <- construct_api_requests(service = service,
                                      id = monitoring_location_id,
                                      agency_code = agency_code,
                                      agency_name = agency_name,
@@ -170,7 +174,7 @@ read_USGS_sites <- function(monitoring_location_id = NA_character_,
   
   return_list <- walk_pages(site_req)
   
-  if(convertType) return_list <- cleanup_cols(return_list)
+  return_list <- rejigger_cols(return_list, properties, service)
   
   return(return_list)
 }

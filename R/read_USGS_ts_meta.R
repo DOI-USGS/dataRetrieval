@@ -20,7 +20,7 @@
 #' @param properties The properties that should be included for each feature.
 #' The parameter value is a comma-separated list of property names. Available options are
 #' `r schema <- check_OGC_requests(endpoint = "time-series-metadata", type = "schema"); paste(names(schema$properties), collapse = ", ")`
-#' @param id `r get_params("time-series-metadata")$id`
+#' @param time_series_id `r get_params("time-series-metadata")$id`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -43,24 +43,16 @@
 #' 
 #' meta_multi <- read_USGS_ts_meta(monitoring_location_id =  c("USGS-01491000", 
 #'                                                        "USGS-01645000"),
-#'                             parameter_code = c("00060", "00010"))
+#'                             parameter_code = c("00060", "00010"),
+#'                             properties = c("monitoring_location_id",
+#'                                            "parameter_code",
+#'                                            "begin",
+#'                                            "end"))
 #' }
 read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                               parameter_code = NA_character_,
                               parameter_name = NA_character_,
-                              properties = c("monitoring_location_id",
-                                             "unit_of_measure",
-                                             "parameter_code",
-                                             "parameter_name",
-                                             "statistic_id",
-                                             "computation_identifier",
-                                             "begin",
-                                             "end",
-                                             "primary",
-                                             "sublocation_identifier",
-                                             "id",
-                                             "last_modified",
-                                             "web_description"),
+                              properties = NA_character_,
                               limit = 10000,
                               bbox = NA,
                               statistic_id = NA_character_,
@@ -73,7 +65,7 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                               thresholds = NA,
                               sublocation_identifier = NA_character_,
                               primary = NA_character_,
-                              id = NA_character_,
+                              time_series_id = NA_character_,
                               web_description = NA_character_,
                               crs = NA_character_,
                               skipGeometry = NA,
@@ -81,13 +73,9 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
   
   message("Function in development, use at your own risk.")
   
-  use_sf <- all(pkg.env$local_sf)
+  service = "time-series-metadata"
   
-  if(!use_sf){
-    skipGeometry <- TRUE
-  }
-  
-  req_ts_meta <- construct_api_requests("time-series-metadata",
+  req_ts_meta <- construct_api_requests(service,
                                         monitoring_location_id = monitoring_location_id,
                                         parameter_code = parameter_code,
                                         parameter_name = parameter_name,
@@ -103,20 +91,16 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                                         thresholds = thresholds,
                                         sublocation_identifier = sublocation_identifier,
                                         primary = primary,
-                                        id = id,
+                                        id = time_series_id,
                                         crs = crs,
                                         web_description = web_description,
                                         skipGeometry = skipGeometry)
   
   return_list <- walk_pages(req_ts_meta)
-  
-  return_list <- return_list[, properties]
-  
+
   if(convertType) return_list <- cleanup_cols(return_list)
   
-  if(!"id" %in% properties){
-    return_list <- return_list[, names(return_list)[!names(return_list) %in% "id"]]
-  }
+  return_list <- rejigger_cols(return_list, properties, service)
   
   return(return_list)
   

@@ -66,6 +66,13 @@ construct_api_requests <- function(service,
   if(all(all_properties[!all_properties %in% c("id", "geometry")] %in% properties)) {
     # Cleans up URL if we're asking for everything
     properties <- NA_character_
+  } else {
+    if(all(!is.na(properties))){
+      properties <- gsub("-", "_", properties)
+      properties <- properties[!properties %in% c("id", 
+                                                  "geometry",
+                                                  paste0(gsub("-", "_", service), "_id"))]
+    }
   }
   
   baseURL <- setup_api(service)

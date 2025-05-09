@@ -14,7 +14,7 @@
 #' @param last_modified `r get_params("daily")$last_modified`
 #' @param time_series_id `r get_params("daily")$time_series_id`
 #' @param qualifier `r get_params("daily")$qualifier`
-#' @param id `r get_params("daily")$id`
+#' @param daily_id `r get_params("daily")$id`
 #' @param properties The properties that should be included for each feature.
 #' The parameter value is a comma-separated list of property names. Available options are
 #' `r schema <- check_OGC_requests(endpoint = "daily", type = "schema"); paste(names(schema$properties), collapse = ", ")`
@@ -61,17 +61,10 @@
 read_USGS_dv <- function(monitoring_location_id = NA_character_,
                          parameter_code = NA_character_,
                          statistic_id = NA_character_,
-                         properties = c("monitoring_location_id",
-                                        "parameter_code",
-                                        "statistic_id",
-                                        "time",
-                                        "value",
-                                        "unit_of_measure",
-                                        "approval_status",
-                                        "qualifier"),
+                         properties = NA_character_,
                          bbox = NA,
                          time_series_id = NA_character_,
-                         id = NA_character_,
+                         daily_id = NA_character_,
                          approval_status = NA_character_,
                          unit_of_measure = NA_character_,
                          qualifier = NA_character_,
@@ -85,14 +78,16 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
   
   message("Function in development, use at your own risk.")
   
-  dv_req <- construct_api_requests(service = "daily",
+  service <- "daily"
+  
+  dv_req <- construct_api_requests(service = service,
                                    monitoring_location_id = monitoring_location_id,
                                    parameter_code = parameter_code,
                                    statistic_id = statistic_id,
                                    properties = properties,
                                    bbox = bbox,
                                    time_series_id = time_series_id,
-                                   id = id,
+                                   id = daily_id,
                                    approval_status = approval_status,
                                    unit_of_measure = unit_of_measure,
                                    qualifier = qualifier,
@@ -109,9 +104,7 @@ read_USGS_dv <- function(monitoring_location_id = NA_character_,
   
   return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
   
-  if(!"id" %in% properties){
-    return_list <- return_list[, names(return_list)[!names(return_list) %in% "id"]]
-  }
+  return_list <- rejigger_cols(return_list, properties, service)
   
   return(return_list)
 }
