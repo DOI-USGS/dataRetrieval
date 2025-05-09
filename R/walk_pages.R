@@ -1,3 +1,14 @@
+rejigger_cols <- function(df, properties, service){
+  new_id <- paste0(gsub("-", "_", service), "_id")
+  names(df)[names(df) == "id"] <- new_id
+  
+  if(!all(is.na(properties))){
+    properties[properties == "id"] <- new_id
+    df <- df[, properties]
+  }
+  df
+}
+
 cleanup_cols <- function(df){
   
   if("qualifier" %in% names(df)){

@@ -8,11 +8,10 @@ read_USGS_dv(
   monitoring_location_id = NA_character_,
   parameter_code = NA_character_,
   statistic_id = NA_character_,
-  properties = c("monitoring_location_id", "parameter_code", "statistic_id", "time",
-    "value", "unit_of_measure", "approval_status", "qualifier"),
+  properties = NA_character_,
   bbox = NA,
   time_series_id = NA_character_,
-  id = NA_character_,
+  daily_id = NA_character_,
   approval_status = NA_character_,
   unit_of_measure = NA_character_,
   qualifier = NA_character_,
@@ -26,7 +25,7 @@ read_USGS_dv(
 )
 }
 \arguments{
-\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{sites} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).}
+\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{monitoring-locations} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).}
 
 \item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}.}
 
@@ -43,7 +42,7 @@ depth). Coordinates are assumed to be in crs 4326.}
 
 \item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
 
-\item{id}{A universally unique identifier (UUID) representing a single version of a record. It is not stable over time. Every time the record is refreshed in our database (which may happen as part of normal operations and does not imply any change to the data itself) a new ID will be generated. To uniquely identify a single observation over time, compare the \code{time} and \code{time_series_id} fields; each time series will only have a single observation at a given \code{time}.}
+\item{daily_id}{A universally unique identifier (UUID) representing a single version of a record. It is not stable over time. Every time the record is refreshed in our database (which may happen as part of normal operations and does not imply any change to the data itself) a new ID will be generated. To uniquely identify a single observation over time, compare the \code{time} and \code{time_series_id} fields; each time series will only have a single observation at a given \code{time}.}
 
 \item{approval_status}{Some of the data that you have obtained from this U.S. Geological Survey database may not have received Director's approval.  Any such data values are qualified as provisional and are subject to revision.  Provisional data are released on the condition that neither the USGS nor the United States Government may be held liable for any damages resulting from its use. This field reflects the approval status of each record, and is either "Approved", meaining processing review has been completed and the data is approved for publication, or "Provisional" and subject to revision. For more information about provisional data, go to \url{https://waterdata.usgs.gov/provisional-data-statement/}.}
 

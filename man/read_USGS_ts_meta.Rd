@@ -8,9 +8,7 @@ read_USGS_ts_meta(
   monitoring_location_id = NA_character_,
   parameter_code = NA_character_,
   parameter_name = NA_character_,
-  properties = c("monitoring_location_id", "unit_of_measure", "parameter_code",
-    "parameter_name", "statistic_id", "computation_identifier", "begin", "end",
-    "primary", "sublocation_identifier", "id", "last_modified", "web_description"),
+  properties = NA_character_,
   limit = 10000,
   bbox = NA,
   statistic_id = NA_character_,
@@ -23,7 +21,7 @@ read_USGS_ts_meta(
   thresholds = NA,
   sublocation_identifier = NA_character_,
   primary = NA_character_,
-  id = NA_character_,
+  time_series_id = NA_character_,
   web_description = NA_character_,
   crs = NA_character_,
   skipGeometry = NA,
@@ -31,7 +29,7 @@ read_USGS_ts_meta(
 )
 }
 \arguments{
-\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{sites} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).}
+\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{monitoring-locations} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).}
 
 \item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}.}
 
@@ -81,7 +79,7 @@ Only features that have a \code{last_modified} that intersects the value of date
 
 \item{primary}{A flag identifying if the time series is a "primary" time series. "Primary" time series (which have this flag) are standard observations which undergo \href{https://www.usgs.gov/survey-manual/5028-fundamental-science-practices-review-and-approval-scientific-data-release}{Bureau review and approval processes}. Non-primary time series, which will have missing values for "primary", are provisional datasets made available to meet the need for timely best science and to assist with daily operations which need real-time information. Non-primary time series data are only retained by this system for 120 days. See the \href{https://waterdata.usgs.gov/provisional-data-statement/}{USGS Provisional Data Statement} for more information.}
 
-\item{id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
+\item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
 
 \item{web_description}{A description of what this time series represents, as used by WDFN and other USGS data dissemination products.}
 
@@ -95,7 +93,7 @@ information.}
 will convert the data to dates and qualifier to string vector.}
 }
 \description{
-Description Daily data and continuous measurements are grouped into time series, which represent a collection of observations of a single parameter, potentially aggregated using a standard statistic, at a single site. This endpoint provides metadata about those time series, including their operational thresholds, units of measurement, and when the earliest and most recent observations in a time series occurred.
+Description Daily data and continuous measurements are grouped into time series, which represent a collection of observations of a single parameter, potentially aggregated using a standard statistic, at a single monitoring location. This endpoint provides metadata about those time series, including their operational thresholds, units of measurement, and when the earliest and most recent observations in a time series occurred.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -106,7 +104,11 @@ meta_1 <- read_USGS_ts_meta(monitoring_location_id = site)
 
 meta_multi <- read_USGS_ts_meta(monitoring_location_id =  c("USGS-01491000", 
                                                        "USGS-01645000"),
-                            parameter_code = c("00060", "00010"))
+                            parameter_code = c("00060", "00010"),
+                            properties = c("monitoring_location_id",
+                                           "parameter_code",
+                                           "begin",
+                                           "end"))
 }
 \dontshow{\}) # examplesIf}
 }
