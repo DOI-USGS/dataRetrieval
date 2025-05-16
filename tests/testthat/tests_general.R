@@ -67,7 +67,7 @@ test_that("General NWIS retrievals working", {
   
   expect_true(nrow(gw_data) > 0)
   expect_equal(attr(gw_data, "url"),
-               "https://nwis.waterdata.usgs.gov/nwis/gwlevels?format=rdb&state_cd=AL&begin_date=2024-05-01&end_date=2024-05-30&date_format=YYYY-MM-DD&rdb_inventory_output=file&TZoutput=0&range_selection=date_range&list_of_search_criteria=state_cd")
+               "https://nwis.waterdata.usgs.gov/nwis/gwlevels?state_cd=AL&begin_date=2024-05-01&end_date=2024-05-30&date_format=YYYY-MM-DD&rdb_inventory_output=file&TZoutput=0&range_selection=date_range&list_of_search_criteria=state_cd&format=rdb")
   
   gw_data2 <- readNWISdata(
     state_cd = "AL",
