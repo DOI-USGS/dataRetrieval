@@ -17,7 +17,7 @@ STATENS \tab character \tab  Geographic Names Information System Identifier (GNI
 }
 \description{
 Classic lookup table for states. Has been replaced in functions with
-\code{check_param("states")}.
+\code{check_USGS_sample_params("states")}.
 }
 \examples{
 head(stateCd)

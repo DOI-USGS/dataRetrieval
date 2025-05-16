@@ -86,7 +86,7 @@ names(newNames)
 }
 }
 \seealso{
-\code{\link{readNWISdv}}, \code{\link{readNWISuv}}
+\code{\link[=readNWISdv]{readNWISdv()}}, \code{\link[=readNWISuv]{readNWISuv()}}
 }
 \keyword{IO}
 \keyword{manip}

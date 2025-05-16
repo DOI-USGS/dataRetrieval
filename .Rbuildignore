@@ -90,6 +90,7 @@ vignettes/Status.Rmd
 vignettes/long_to_wide.Rmd
 vignettes/join_by_closest.Rmd
 vignettes/wqx3_development_plan.Rmd
+vignettes/read_USGS_functions.Rmd
 vignettes/dataretrieval_discrete_changes_images/*
 ^ci$
 ^public$

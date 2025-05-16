@@ -51,5 +51,5 @@ STORETdata_char <- importWQP(STORETex, convertType = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
+\code{\link[=readWQPdata]{readWQPdata()}}, \code{\link[=readWQPqw]{readWQPqw()}}, \code{\link[=whatWQPsites]{whatWQPsites()}}
 }

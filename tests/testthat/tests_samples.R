@@ -10,7 +10,7 @@ test_that("General samples-data retrievals work using WQP tests", {
 
   # testing lists:
   startDate <- as.Date("2022-01-01")
-  secchi_ops <- check_param("observedproperty",
+  secchi_ops <- check_USGS_sample_params("observedproperty",
                             text = "secchi")
   
   state_fips <- paste0("US:", stateCdLookup("WI", "id"))

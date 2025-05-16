@@ -29,9 +29,7 @@ Authors@R: c(
             comment=c(ORCID = "0000-0002-9775-6861")))
 Description: Collection of functions to help retrieve U.S. Geological Survey
     and U.S. Environmental Protection Agency water quality and
-    hydrology data from web services. Data are discovered from 
-    National Water Information System <https://waterservices.usgs.gov/> and <https://waterdata.usgs.gov/nwis>. 
-    Water quality data are obtained from the Water Quality Portal <https://www.waterqualitydata.us/>.
+    hydrology data from web services. 
 License: CC0
 Copyright: This software is in the public domain because it contains materials
     that originally came from the United States Geological Survey, an agency of
@@ -39,23 +37,25 @@ Copyright: This software is in the public domain because it contains materials
 Depends:
     R (>= 4.1.0)
 Imports:
-    curl,
+    curl (>= 6.0.0),
     lubridate (>= 1.5.0),
     stats,
     utils,
     xml2,
     readr (>= 1.4.0),
     jsonlite,
-    httr2
+    httr2,
+    whisker,
+    sf
 Suggests:
     covr,
     dplyr,
     knitr,
     rmarkdown,
-    sf,
     testthat
 Encoding: UTF-8
 BuildVignettes: true
 VignetteBuilder: knitr
 BugReports: https://github.com/DOI-USGS/dataRetrieval/issues
 RoxygenNote: 7.3.2
+Roxygen: list(markdown = TRUE)
