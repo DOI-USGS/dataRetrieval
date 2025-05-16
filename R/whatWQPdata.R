@@ -43,7 +43,7 @@ whatWQPsamples <- function(...,
     if("siteid" %in% names(values)){
       if(length(values[["siteid"]]) > 1){
         sites <- values[["siteid"]]
-        POST = nchar(paste0(sites, collapse = "")) > 2048
+        POST <- nchar(paste0(sites, collapse = "")) > 2048
         
         baseURL <- get_or_post(baseURL, POST = POST,
                                siteid = sites,
@@ -102,13 +102,13 @@ whatWQPmetrics <- function(...,
   if ("service" %in% names(values)) {
     values <- values[!(names(values) %in% "service")]
   }
-  POST = FALSE
+  POST <- FALSE
   baseURL <- httr2::request(pkg.env[["ActivityMetric"]])
   
   if("siteid" %in% names(values)){
     if(length(values[["siteid"]]) > 1){
       sites <- values[["siteid"]]
-      POST = nchar(paste0(sites, collapse = "")) > 2048
+      POST <- nchar(paste0(sites, collapse = "")) > 2048
       
       baseURL <- get_or_post(baseURL, POST = POST,
                              siteid = sites, 
@@ -211,7 +211,7 @@ whatWQPdata <- function(...,
   if (any(c("tz", "service", "mimeType") %in% names(values))){
     values <- values[!(names(values) %in% c("tz", "service", "mimeType"))]
   }
-  POST = FALSE
+  POST <- FALSE
   
   baseURL <- httr2::request(pkg.env[["Station"]])
   
@@ -219,7 +219,7 @@ whatWQPdata <- function(...,
     if(length(values[["siteid"]]) > 1){
       sites <- values[["siteid"]]
 
-      POST = nchar(paste0(sites, collapse = "")) > 2048
+      POST <- nchar(paste0(sites, collapse = "")) > 2048
         
       baseURL <- get_or_post(baseURL, POST = POST,
                              siteid = sites, 

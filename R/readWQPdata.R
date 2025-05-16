@@ -269,7 +269,7 @@ readWQPdata <- function(...,
   values <- valuesList[["values"]]
   
   baseURL <- httr2::request(pkg.env[[service]])
-  POST = FALSE
+  POST <- FALSE
   
   if(!legacy){
     if(service == "ResultWQX3" & !"dataProfile" %in% names(values)){
@@ -282,7 +282,7 @@ readWQPdata <- function(...,
     if("siteid" %in% names(values)){
       if(length(values[["siteid"]]) > 1){
         sites <- values[["siteid"]]
-        POST = nchar(paste0(sites, collapse = "")) > 2048
+        POST <- nchar(paste0(sites, collapse = "")) > 2048
         
         baseURL <- get_or_post(baseURL, 
                                POST = POST,
