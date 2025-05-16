@@ -68,7 +68,7 @@ whatNWISsites <- function(...) {
     values[["hasDataTypeCd"]] <- service
   }
   
-  POST = nchar(paste0(unlist(values), collapse = "")) > 2048
+  POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
   
   urlCall <- httr2::request(pkg.env[["site"]])
  

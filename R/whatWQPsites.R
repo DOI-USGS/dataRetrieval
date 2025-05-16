@@ -61,7 +61,7 @@ whatWQPsites <- function(..., legacy = TRUE, convertType = TRUE) {
     if("siteid" %in% names(values)){
       if(length(values[["siteid"]]) > 1){
         sites <- values[["siteid"]]
-        POST = nchar(paste0(sites, collapse = "")) > 2048
+        POST <- nchar(paste0(sites, collapse = "")) > 2048
 
         baseURL <- get_or_post(baseURL, 
                                POST = POST,         
