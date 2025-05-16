@@ -98,35 +98,35 @@
 #'
 #' }
 construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
-                           siteTypeCode = NA,
-                           boundingBox = NA,
-                           hydrologicUnit = NA,
-                           activityMediaName = NA,
-                           characteristicGroup = NA,
-                           characteristic = NA,
-                           characteristicUserSupplied = NA,
-                           activityStartDateLower = NA,
-                           activityStartDateUpper = NA,
-                           countryFips = NA,
-                           stateFips = NA,
-                           countyFips = NA,
-                           projectIdentifier = NA,
-                           recordIdentifierUserSupplied = NA,
-                           siteTypeName = NA,
-                           usgsPCode = NA,
-                           pointLocationLatitude = NA,
-                           pointLocationLongitude = NA,
-                           pointLocationWithinMiles = NA,
-                           dataType = "results",
-                           dataProfile = NA){
+                                          siteTypeCode = NA,
+                                          boundingBox = NA,
+                                          hydrologicUnit = NA,
+                                          activityMediaName = NA,
+                                          characteristicGroup = NA,
+                                          characteristic = NA,
+                                          characteristicUserSupplied = NA,
+                                          activityStartDateLower = NA,
+                                          activityStartDateUpper = NA,
+                                          countryFips = NA,
+                                          stateFips = NA,
+                                          countyFips = NA,
+                                          projectIdentifier = NA,
+                                          recordIdentifierUserSupplied = NA,
+                                          siteTypeName = NA,
+                                          usgsPCode = NA,
+                                          pointLocationLatitude = NA,
+                                          pointLocationLongitude = NA,
+                                          pointLocationWithinMiles = NA,
+                                          dataType = "results",
+                                          dataProfile = NA){
   
   dataType <- match.arg(dataType, c("results",
-                        "locations",
-                        "activities",
-                        "projects",
-                        "organizations"), 
-            several.ok = FALSE)
-
+                                    "locations",
+                                    "activities",
+                                    "projects",
+                                    "organizations"), 
+                        several.ok = FALSE)
+  
   baseURL <- httr2::request("https://api.waterdata.usgs.gov") |> 
     httr2::req_url_path_append("samples-data") |>
     httr2::req_url_query(mimeType = "text/csv")
@@ -142,13 +142,13 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
          },
          locations = {
            available_profiles <- c("site", "count")
-
+           
            baseURL <- httr2::req_url_path_append(baseURL, 
                                                  "locations")
          },
          activities = {
            available_profiles <- c("sampact", "actmetric", "actgroup", "count")
-
+           
            baseURL <- httr2::req_url_path_append(baseURL,
                                                  "activities")
          },
@@ -160,11 +160,11 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
          },
          organizations = {
            available_profiles <- c("organization", "count")
-
+           
            baseURL <- httr2::req_url_path_append(baseURL,
                                                  "organizations")
          })
-
+  
   dataProfile <- check_profile(dataProfile, available_profiles)
   dataProfile <- match.arg(dataProfile, 
                            available_profiles,
@@ -172,36 +172,36 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   
   baseURL <- httr2::req_url_path_append(baseURL,
                                         dataProfile) 
-    
+  
   
   if(all(!is.na(siteTypeCode))){
     siteTypeCode <- match.arg(siteTypeCode, 
                               check_USGS_sample_params("sitetype")$typeCode, 
-              several.ok = TRUE)
+                              several.ok = TRUE)
   }
-    
+  
   if(all(!is.na(activityMediaName))){
     activityMediaName <- match.arg(activityMediaName, 
                                    check_USGS_sample_params("samplemedia")$activityMedia, 
-              several.ok = TRUE)
+                                   several.ok = TRUE)
   }
   
   if(all(!is.na(characteristicGroup))){
     characteristicGroup <- match.arg(characteristicGroup, 
                                      check_USGS_sample_params("characteristicgroup")$characteristicGroup, 
-              several.ok = TRUE)
+                                     several.ok = TRUE)
   }
   
   if(all(!is.na(countryFips))){
     countryFips <- match.arg(countryFips, 
                              check_USGS_sample_params("countries")$countryCode, 
-              several.ok = TRUE)
+                             several.ok = TRUE)
   }
   
   if(all(!is.na(siteTypeName))){
     siteTypeName <- match.arg(siteTypeName, 
                               check_USGS_sample_params("sitetype")$typeLongName, 
-              several.ok = TRUE)
+                              several.ok = TRUE)
   }
   
   if(all(!is.na(stateFips))){
@@ -209,7 +209,7 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
     state_codes <- paste(states$countryCode, 
                          states$fipsCode, sep = ":")
     stateFips <- match.arg(stateFips, state_codes, 
-              several.ok = TRUE)
+                           several.ok = TRUE)
   }
   
   if(all(!is.na(countyFips))){
@@ -224,7 +224,7 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                           counties$countyCode, sep = ":")
     
     countyFips <- match.arg(countyFips, county_codes, 
-              several.ok = TRUE)
+                            several.ok = TRUE)
   }
   
   check_radius <- sum(is.na(c(pointLocationLatitude, 
@@ -232,7 +232,7 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                               pointLocationWithinMiles)))
   
   if(!check_radius %in% c(3, 0)){
-      stop("pointLocationLatitude, pointLocationLongitude, and pointLocationWithinMiles
+    stop("pointLocationLatitude, pointLocationLongitude, and pointLocationWithinMiles
            must all be defined, or none defined.")
   }
   
@@ -255,7 +255,7 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                                 pointLocationLongitude = pointLocationLongitude,
                                 pointLocationWithinMiles = pointLocationWithinMiles
                            ))
-
+  
   if(all(!is.na(activityStartDateLower))){
     start <- checkWQPdates(list(activityStartDateLower = activityStartDateLower))
     start <- as.character(as.Date(start$activityStartDateLower, format = "%m-%d-%Y"))
@@ -270,7 +270,7 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
                                     activityStartDateUpper = end)
   }
   
-
+  
   if(all(!is.na(boundingBox))){
     baseURL <- httr2::req_url_query(baseURL,
                                     boundingBox = boundingBox,
@@ -309,7 +309,7 @@ explode_query <- function(baseURL, POST = FALSE, x){
                                       !!!x,
                                       .multi = "explode")   
     }
-      
+    
   }
   return(baseURL)
 }
@@ -342,7 +342,7 @@ explode_query <- function(baseURL, POST = FALSE, x){
 #' 
 #' }
 check_USGS_sample_params <- function(service = "characteristicgroup",
-                        ...){
+                                     ...){
   
   service_options <- c("characteristicgroup", "states", "counties",
                        "countries", "sitetype", "samplemedia",
@@ -356,7 +356,7 @@ check_USGS_sample_params <- function(service = "characteristicgroup",
                                service) |> 
     httr2::req_user_agent(default_ua()) |> 
     httr2::req_url_query(mimeType = "application/json") 
-
+  
   if (length(list(...)) > 0) {
     params <- list(...)
     extra_params <- c("group", "pageNumber", "pageSize",
@@ -365,13 +365,13 @@ check_USGS_sample_params <- function(service = "characteristicgroup",
     check_group_req <- httr2::req_url_query(check_group_req,
                                             !!!params)
   }
-
+  
   message("GET: ", check_group_req$url) 
   
   check_group <- httr2::req_perform(check_group_req) |> 
     httr2::resp_body_string() |> 
     jsonlite::fromJSON()
-    
+  
   return(check_group$data)
   
 }
@@ -410,28 +410,28 @@ check_USGS_sample_params <- function(service = "characteristicgroup",
 #' 
 #' }
 read_USGS_samples <- function(monitoringLocationIdentifier = NA,
-                           siteTypeCode = NA,
-                           boundingBox = NA,
-                           hydrologicUnit = NA,
-                           activityMediaName = NA,
-                           characteristicGroup = NA,
-                           characteristic = NA,
-                           characteristicUserSupplied = NA,
-                           activityStartDateLower = NA,
-                           activityStartDateUpper = NA,
-                           countryFips = NA,
-                           stateFips = NA,
-                           countyFips = NA,
-                           projectIdentifier = NA,
-                           recordIdentifierUserSupplied = NA,
-                           siteTypeName = NA,
-                           usgsPCode = NA,
-                           pointLocationLatitude = NA,
-                           pointLocationLongitude = NA,
-                           pointLocationWithinMiles = NA,
-                           dataType = "results",
-                           dataProfile = NA,
-                           tz = "UTC"){
+                              siteTypeCode = NA,
+                              boundingBox = NA,
+                              hydrologicUnit = NA,
+                              activityMediaName = NA,
+                              characteristicGroup = NA,
+                              characteristic = NA,
+                              characteristicUserSupplied = NA,
+                              activityStartDateLower = NA,
+                              activityStartDateUpper = NA,
+                              countryFips = NA,
+                              stateFips = NA,
+                              countyFips = NA,
+                              projectIdentifier = NA,
+                              recordIdentifierUserSupplied = NA,
+                              siteTypeName = NA,
+                              usgsPCode = NA,
+                              pointLocationLatitude = NA,
+                              pointLocationLongitude = NA,
+                              pointLocationWithinMiles = NA,
+                              dataType = "results",
+                              dataProfile = NA,
+                              tz = "UTC"){
   
   request_url <- construct_USGS_sample_request(monitoringLocationIdentifier = monitoringLocationIdentifier,
                                                siteTypeCode = siteTypeCode,
@@ -455,7 +455,7 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
                                                pointLocationWithinMiles = pointLocationWithinMiles,
                                                dataType = dataType,
                                                dataProfile = dataProfile)
-
+  
   df <- importWQP(request_url, tz = tz)
   attr(df, "url") <- request_url$url
   attr(df, "queryTime") <- Sys.time()

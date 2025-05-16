@@ -143,7 +143,7 @@ whatNWISdata <- function(..., convertType = TRUE) {
   values <- valuesList[["values"]]
   values <- values[names(values) != "format"]
   
-  POST = nchar(paste0(unlist(values), collapse = "")) > 2048
+  POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
   
   urlSitefile <- httr2::request(pkg.env[["site"]])
   urlSitefile <- get_or_post(urlSitefile,
