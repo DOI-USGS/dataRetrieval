@@ -143,11 +143,16 @@ whatNWISdata <- function(..., convertType = TRUE) {
   values <- valuesList[["values"]]
   values <- values[names(values) != "format"]
   
+  POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
+  
   urlSitefile <- httr2::request(pkg.env[["site"]])
-  urlSitefile <-  httr2::req_url_query(urlSitefile,
-                                       seriesCatalogOutput = "true")
-  urlSitefile <- httr2::req_url_query(urlSitefile, !!!values,
-                                      .multi = "comma")
+  urlSitefile <- get_or_post(urlSitefile,
+                             POST = POST,
+                             seriesCatalogOutput = "true")
+  urlSitefile <- get_or_post(urlSitefile,
+                             POST = POST,
+                             !!!values,
+                             .multi = "comma")
   
   SiteFile <- importRDB1(urlSitefile, asDateTime = FALSE, convertType = convertType)
 

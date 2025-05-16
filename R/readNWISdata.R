@@ -224,12 +224,20 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
   }
   
   baseURL <- httr2::request(pkg.env[[service]])
+
+  POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
+  
+  baseURL <- get_or_post(baseURL,
+                         POST = POST,  
+                         !!!values, 
+                         .multi = "comma")
+
   if (service != "rating") {
-    baseURL <- httr2::req_url_query(baseURL, format = format)
+    baseURL <- get_or_post(baseURL, 
+                           POST = POST,  
+                           format = format)
   }
-
-  baseURL <- httr2::req_url_query(baseURL, !!!values, .multi = "comma")
-
+  
   if (length(grep("rdb",  format)) > 0) {
     retval <- importRDB1(baseURL, tz = tz, asDateTime = asDateTime, convertType = convertType)
   } else {
