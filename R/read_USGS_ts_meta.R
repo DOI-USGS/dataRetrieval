@@ -1,4 +1,4 @@
-#' Get USGS Timeseries metadata
+#' Get USGS Time Series Metadata
 #' 
 #' Description `r get_description("time-series-metadata")`
 #' 

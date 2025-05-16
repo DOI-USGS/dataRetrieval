@@ -1,6 +1,6 @@
 dataRetrieval 2.7.19
 ===================
-* Added read_USGS_dv, read_USGS_sites, read_USGS_ts_meta to access
+* Added read_USGS_daily, read_USGS_monitoring_location, read_USGS_ts_meta to access
 new USGS web services.
 * Added whisker and sf as dependencies.
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_USGS_ts_meta.R
 \name{read_USGS_ts_meta}
 \alias{read_USGS_ts_meta}
-\title{Get USGS Timeseries metadata}
+\title{Get USGS Time Series Metadata}
 \usage{
 read_USGS_ts_meta(
   monitoring_location_id = NA_character_,

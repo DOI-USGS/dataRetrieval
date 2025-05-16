@@ -62,20 +62,20 @@
 #' 
 #' \donttest{
 #' site <- "USGS-02238500"
-#' site_info <- read_USGS_sites(monitoring_location_id = site)
+#' site_info <- read_USGS_monitoring_location(monitoring_location_id = site)
 #' 
-#' site_slim <- read_USGS_sites(monitoring_location_id = site,
+#' site_slim <- read_USGS_monitoring_location(monitoring_location_id = site,
 #'                              properties = c("monitoring_locations_id",
 #'                                             "state_name",
 #'                                             "country_name"))
 #'
-#' site_info_no_sf <- read_USGS_sites(monitoring_location_id = site,
+#' site_info_no_sf <- read_USGS_monitoring_location(monitoring_location_id = site,
 #'                                    skipGeometry = TRUE)
 #' 
-#' multi_site <- read_USGS_sites(state_name = "Wisconsin")
+#' multi_site <- read_USGS_monitoring_location(state_name = "Wisconsin")
 #' 
 #' }
-read_USGS_sites <- function(monitoring_location_id = NA_character_,
+read_USGS_monitoring_location <- function(monitoring_location_id = NA_character_,
                             agency_code = NA_character_,
                             agency_name = NA_character_,
                             monitoring_location_number = NA_character_,
