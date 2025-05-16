@@ -276,7 +276,7 @@ get_description <- function(service){
   
 }
 
-# Create descriptions dynamically
+# Create parameter descriptions dynamically
 get_params <- function(service){
   
   check_queryables_req <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 

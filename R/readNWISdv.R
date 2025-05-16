@@ -83,6 +83,10 @@ readNWISdv <- function(siteNumbers,
                        endDate = "",
                        statCd = "00003") {
   
+  .Deprecated(new = "read_USGS_daily",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_daily.")
+  
   url <- constructNWISURL(
     siteNumbers = siteNumbers,
     parameterCd = parameterCd,
