@@ -79,7 +79,7 @@ constructNWISURL <- function(siteNumbers,
   service[service == "meas"] <- "measurements"
   service[service == "uv"] <- "iv"
   
-  POST = nchar(paste0(siteNumbers, parameterCd, collapse = "")) > 2048
+  POST <- nchar(paste0(siteNumbers, parameterCd, collapse = "")) > 2048
   
   baseURL <- httr2::request(pkg.env[[service]])
   
