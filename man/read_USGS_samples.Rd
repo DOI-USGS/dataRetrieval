@@ -27,7 +27,8 @@ read_USGS_samples(
   pointLocationWithinMiles = NA,
   dataType = "results",
   dataProfile = NA,
-  tz = "UTC"
+  tz = "UTC",
+  convertType = TRUE
 )
 }
 \arguments{
@@ -131,6 +132,10 @@ and "count". Options for "projects" are:
 Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
 "America/Phoenix", and "America/Metlakatla"}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+will convert the data to dates, datetimes,
+numerics based on a standard algorithm. If false, everything is returned as a character.}
 }
 \description{
 This function creates the call and gets the data for discrete water quality samples data
