@@ -70,7 +70,7 @@ reference:
       - read_USGS_samples
       - read_USGS_dv
       - read_USGS_ts_meta
-      - read_USGS_sites
+      - read_USGS_monitoring_location
       - summarize_USGS_samples
       - check_USGS_sample_params
   - title: National Water Information System (NWIS)
