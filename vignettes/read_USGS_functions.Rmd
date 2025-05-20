@@ -100,7 +100,7 @@ head(dv_2)
 
 # Time Series Metadata
 
-To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/timeseries-metadata>.
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata>.
 
 The `read_USGS_ts_meta` function will eventually replace the `whatNWISdata` function. Generally, both functions look pretty similar:
 
