@@ -140,21 +140,10 @@ construct_api_requests <- function(service,
 }
 
 setup_api <- function(service){
+  
   baseURL <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
     httr2::req_url_path_append(service, "items") |> 
-    httr2::req_user_agent(default_ua()) |>
-    httr2::req_headers(`Accept-Encoding` = c("compress", "gzip")) 
-  
-  token <- Sys.getenv("API_USGS_PAT")
-  
-  if(token != ""){
-    baseURL <- baseURL |>
-      httr2::req_headers_redacted(`X-Api-Key` = token)
-  }
-  
-  baseURL <- explode_query(baseURL, POST = FALSE,
-                           list(f = "json",
-                                lang = "en-US"))
+    basic_request() 
   
 }
 
@@ -233,8 +222,11 @@ check_OGC_requests <- function(endpoint = "daily",
   
   check_collections <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html#/server/getCollections")
   
-  check_endpoints <- basic_request(check_collections)
-  services <- sapply(check_endpoints$tags, function(x) x[["name"]])
+  check_endpoints_req <- basic_request(check_collections)
+  query_ret <- httr2::req_perform(check_endpoints_req) |> 
+    httr2::resp_body_json() 
+  
+  services <- sapply(query_ret$tags, function(x) x[["name"]])
   
   match.arg(endpoint, services)
   
@@ -242,7 +234,10 @@ check_OGC_requests <- function(endpoint = "daily",
     httr2::req_url_path_append(endpoint) |> 
     httr2::req_url_path_append(type) 
   
-  query_ret <- basic_request(url_base)
+  req <- basic_request(url_base)
+  
+  query_ret <- httr2::req_perform(req) |> 
+    httr2::resp_body_json() 
   
   return(query_ret)
   
@@ -250,13 +245,20 @@ check_OGC_requests <- function(endpoint = "daily",
 
 basic_request <- function(url_base){
   
-  check_req <- url_base |> 
+  req <- url_base |> 
     httr2::req_user_agent(default_ua()) |> 
+    httr2::req_headers(`Accept-Encoding` = c("compress", "gzip")) |> 
     httr2::req_url_query(f = "json",
                          lang = "en-US") 
   
-  query_ret <- httr2::req_perform(check_req) |> 
-    httr2::resp_body_json() 
+  token <- Sys.getenv("API_USGS_PAT")
+  
+  if(token != ""){
+    req <- req |>
+      httr2::req_headers_redacted(`X-Api-Key` = token)
+  }
+  
+  return(req)
   
 }
 
@@ -265,8 +267,10 @@ get_description <- function(service){
   
   check_collections <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html#/server/getCollections")
   
-  check_endpoints <- basic_request(check_collections)
-  tags <- check_endpoints[["tags"]]
+  check_endpoints_req <- basic_request(check_collections)
+  query_ret <- httr2::req_perform(check_endpoints_req) |> 
+    httr2::resp_body_json() 
+  tags <- query_ret[["tags"]]
   
   service_index <- which(sapply(tags, function(x){
     x$name == service
@@ -283,8 +287,10 @@ get_params <- function(service){
     httr2::req_url_path_append(service) |> 
     httr2::req_url_path_append("schema")
   
-  check_queryables <- basic_request(check_queryables_req)
-  params <- sapply(check_queryables$properties, function(x) x[["description"]]) 
+  check_queryables_req <- basic_request(check_queryables_req)
+  query_ret <- httr2::req_perform(check_queryables_req) |> 
+    httr2::resp_body_json() 
+  params <- sapply(query_ret$properties, function(x) x[["description"]]) 
 
 }
 
