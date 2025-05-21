@@ -211,7 +211,8 @@ valid_ask <- function(all, type) {
 
   ### WOW! This is hacky and will hopefully be unneeded latter on....
   type <- ifelse(type == "nwis", "nwissite", type)
-  all <- rbind(all, c("flowlines", "NHDPlus comid", NA))
+  all <- rbind(all, 
+               data.frame(source = "flowlines", sourceName = "NHDPlus comid", features = NA))
 
   good <- grepl(
     paste0(tolower(type), collapse = "|"),
