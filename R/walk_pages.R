@@ -60,7 +60,9 @@ walk_pages_recursive <- function(req, page, contents) {
   }
   
   header_info <- httr2::resp_headers(returned_contents)
-  message("Remaining requests this hour:", header_info$`x-ratelimit-remaining`)
+  if(Sys.getenv("API_USGS_PAT") != ""){
+    message("Remaining requests this hour:", header_info$`x-ratelimit-remaining`)
+  }
   
   contents[[page]] <- returned_contents |> 
     httr2::resp_body_string() 
