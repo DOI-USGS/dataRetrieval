@@ -91,12 +91,12 @@ walk_pages_recursive <- function(req, page, contents) {
     
     make_request <- httr2::req_url(req = req, 
                                    url = json_content$links[, "href", drop = TRUE][next_page])
-    
-    Tailcall(
-      walk_pages_recursive,
-      make_request,
-      page + 1,
-      contents
-    )
+    page <- page + 1
+    while (TRUE){
+      return(walk_pages_recursive(req = make_request,
+                                  page = page,
+                                  contents = contents))
+    }
+
   }
 }

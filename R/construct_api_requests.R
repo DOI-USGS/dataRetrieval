@@ -4,7 +4,7 @@
 #' Swagger docs: <https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html>.
 #' 
 #' @export
-#' @param service Which service
+#' @param service Which service available on <https://api.waterdata.usgs.gov/ogcapi/v0/>.
 #' @param ... Extra parameters from the specific services.
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending

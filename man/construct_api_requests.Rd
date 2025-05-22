@@ -14,7 +14,7 @@ construct_api_requests(
 )
 }
 \arguments{
-\item{service}{Which service}
+\item{service}{Which service available on \url{https://api.waterdata.usgs.gov/ogcapi/v0/}.}
 
 \item{properties}{The properties that should be included for each feature. The
 parameter value is a comma-separated list of property names which depend on the

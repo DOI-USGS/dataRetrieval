@@ -1,8 +1,14 @@
 .onAttach <- function(libname, pkgname) {
   if (!interactive()) return()
-  dataRetrieval_version = utils::packageVersion("dataRetrieval")
+  dataRetrieval_version <- utils::packageVersion("dataRetrieval")
+  token_message <- ""
+  if(Sys.getenv("API_USGS_PAT") == ""){
+    token_message <- "Consider adding an API_USGS_PAT for new USGS functions.
+See: https://api.waterdata.usgs.gov/signup"
+  }
   packageStartupMessage("dataRetrieval ", dataRetrieval_version,"
-Extended Documentation: https://doi-usgs.github.io/dataRetrieval")
+Extended Documentation: https://doi-usgs.github.io/dataRetrieval",
+                        token_message)
 }
 
 #' Retrieval functions for USGS and EPA data

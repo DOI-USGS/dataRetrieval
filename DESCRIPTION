@@ -26,7 +26,17 @@ Authors@R: c(
             comment=c(ORCID = "0000-0003-2521-5043")),
     person("Lee", "Stanish", role="ctb",
             email = "lstanish@usgs.gov",
-            comment=c(ORCID = "0000-0002-9775-6861")))
+            comment=c(ORCID = "0000-0002-9775-6861")),
+    person("Joeseph", "Zemmels", role="ctb",
+            email = "jzemmels@usgs.gov",
+            comment=c(ORCID = "0009-0008-1463-6313")),
+    person("Elise", "Hinman", role="ctb",
+            email = "ehinman@usgs.gov",
+            comment=c(ORCID = "0000-0001-5396-1583")),  
+    person("Michael", "Mahoney", role="ctb",
+            email = "mjmahoney@usgs.gov",
+            comment=c(ORCID = "0000-0003-2402-304X"))  
+            )
 Description: Collection of functions to help retrieve U.S. Geological Survey
     and U.S. Environmental Protection Agency water quality and
     hydrology data from web services. 
