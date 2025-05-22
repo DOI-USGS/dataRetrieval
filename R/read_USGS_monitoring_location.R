@@ -50,7 +50,6 @@
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
 #' depth). Coordinates are assumed to be in crs 4326.
-#' @param crs Indicates the coordinate reference system for the results.
 #' @param limit The optional limit parameter limits the number of items that are
 #' presented in the response document. Only items are counted that are on the
 #' first level of the collection in the response document. Nested objects
@@ -118,60 +117,18 @@ read_USGS_monitoring_location <- function(monitoring_location_id = NA_character_
                             properties = NA_character_,
                             bbox = NA,
                             limit = 10000,
-                            crs = NA_character_,
                             skipGeometry = NA){
   
   message("Function in development, use at your own risk.")
   
   service <- "monitoring-locations"
   
-  site_req <- construct_api_requests(service = service,
-                                     id = monitoring_location_id,
-                                     agency_code = agency_code,
-                                     agency_name = agency_name,
-                                     monitoring_location_number = monitoring_location_number,
-                                     monitoring_location_name = monitoring_location_name,
-                                     district_code = district_code,
-                                     country_code = country_code,
-                                     country_name = country_name,
-                                     state_code = state_code,
-                                     state_name = state_name,
-                                     county_code = county_code,
-                                     county_name = county_name,
-                                     minor_civil_division_code = minor_civil_division_code,
-                                     site_type_code = site_type_code,
-                                     site_type = site_type,
-                                     hydrologic_unit_code = hydrologic_unit_code,
-                                     basin_code = basin_code,
-                                     altitude = altitude,
-                                     altitude_accuracy = altitude_accuracy,
-                                     altitude_method_code = altitude_method_code,
-                                     altitude_method_name = altitude_method_name,              
-                                     vertical_datum = vertical_datum,
-                                     vertical_datum_name = vertical_datum_name,
-                                     horizontal_positional_accuracy_code = horizontal_positional_accuracy_code,
-                                     horizontal_positional_accuracy = horizontal_positional_accuracy,
-                                     horizontal_position_method_code = horizontal_position_method_code,
-                                     horizontal_position_method_name = horizontal_position_method_name,
-                                     original_horizontal_datum = original_horizontal_datum,
-                                     original_horizontal_datum_name = original_horizontal_datum_name,
-                                     drainage_area = drainage_area,
-                                     contributing_drainage_area = contributing_drainage_area,    
-                                     time_zone_abbreviation = time_zone_abbreviation,
-                                     uses_daylight_savings = uses_daylight_savings,
-                                     construction_date = construction_date,
-                                     aquifer_code = aquifer_code,
-                                     national_aquifer_code = national_aquifer_code,
-                                     aquifer_type_code = aquifer_type_code,
-                                     well_constructed_depth = well_constructed_depth,
-                                     hole_constructed_depth = hole_constructed_depth,
-                                     depth_source_code = depth_source_code,
-                                     limit = limit,
-                                     bbox = bbox,
-                                     crs = crs,
-                                     skipGeometry = skipGeometry,
-                                     properties = properties)
-  
+  args <- mget(names(formals()))
+  args[["service"]] <-  service
+  args[["id"]] <- args[["monitoring_location_id"]]
+  args[["monitoring_location_id"]] <- NULL
+  site_req <- do.call(construct_api_requests, args)
+
   return_list <- walk_pages(site_req)
   
   return_list <- rejigger_cols(return_list, properties, service)

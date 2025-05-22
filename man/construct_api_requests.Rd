@@ -8,7 +8,6 @@ construct_api_requests(
   service,
   properties = NA_character_,
   bbox = NA,
-  crs = NA_character_,
   limit = 10000,
   skipGeometry = FALSE,
   ...
@@ -18,16 +17,13 @@ construct_api_requests(
 \item{service}{Which service}
 
 \item{properties}{The properties that should be included for each feature. The
-parameter value is a comma-separated list of property names. Available values:
-id, timeseries_id, monitoring_location_id, parameter_code, statistic_id, time,
-value, unit_of_measure, approval_status, qualifier, last_modified.}
+parameter value is a comma-separated list of property names which depend on the
+service being called.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
 depth).}
-
-\item{crs}{Indicates the coordinate reference system for the results.}
 
 \item{limit}{The optional limit parameter limits the number of items that are
 presented in the response document. Only items are counted that are on the

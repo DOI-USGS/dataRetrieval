@@ -48,7 +48,6 @@ read_USGS_monitoring_location(
   properties = NA_character_,
   bbox = NA,
   limit = 10000,
-  crs = NA_character_,
   skipGeometry = NA
 )
 }
@@ -146,8 +145,6 @@ depth). Coordinates are assumed to be in crs 4326.}
 presented in the response document. Only items are counted that are on the
 first level of the collection in the response document. Nested objects
 contained within the explicitly requested items shall not be counted.}
-
-\item{crs}{Indicates the coordinate reference system for the results.}
 
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial

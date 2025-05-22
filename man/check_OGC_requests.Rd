@@ -7,7 +7,7 @@
 check_OGC_requests(endpoint = "daily", type = "queryables")
 }
 \arguments{
-\item{endpoint}{Character, can be "daily", "timeseries-metadata"}
+\item{endpoint}{Character, can be any existing collection}
 
 \item{type}{Character, can be "queryables", "schema"}
 }

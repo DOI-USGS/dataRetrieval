@@ -20,12 +20,11 @@
 #' @param properties The properties that should be included for each feature.
 #' The parameter value is a comma-separated list of property names. Available options are
 #' `r schema <- check_OGC_requests(endpoint = "time-series-metadata", type = "schema"); paste(names(schema$properties), collapse = ", ")`
-#' @param time_series_id `r get_params("time-series-metadata")$id`
+#' @param time_series_metadata_id `r get_params("time-series-metadata")$id`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
 #' depth). Coordinates are assumed to be in crs 4326.
-#' @param crs Indicates the coordinate reference system for the results.
 #' @param limit The optional limit parameter limits the number of items that are
 #' presented in the response document. Only items are counted that are on the
 #' first level of the collection in the response document. Nested objects
@@ -66,9 +65,8 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                               thresholds = NA,
                               sublocation_identifier = NA_character_,
                               primary = NA_character_,
-                              time_series_id = NA_character_,
+                              time_series_metadata_id = NA_character_,
                               web_description = NA_character_,
-                              crs = NA_character_,
                               skipGeometry = NA,
                               convertType = FALSE){
   
@@ -76,27 +74,14 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
   
   service = "time-series-metadata"
   
-  req_ts_meta <- construct_api_requests(service,
-                                        monitoring_location_id = monitoring_location_id,
-                                        parameter_code = parameter_code,
-                                        parameter_name = parameter_name,
-                                        properties = properties,
-                                        statistic_id = statistic_id,
-                                        last_modified = last_modified,
-                                        begin = begin,
-                                        end = end,
-                                        limit = limit,
-                                        unit_of_measure = unit_of_measure,
-                                        computation_period_identifier = computation_period_identifier,
-                                        computation_identifier = computation_identifier,
-                                        thresholds = thresholds,
-                                        sublocation_identifier = sublocation_identifier,
-                                        primary = primary,
-                                        id = time_series_id,
-                                        crs = crs,
-                                        web_description = web_description,
-                                        skipGeometry = skipGeometry)
+  args <- mget(names(formals()))
   
+  args[["service"]] <-  service
+  args[["id"]] <- args[["time_series_id"]]
+  args[["time_series_metadata_id"]] <- NULL
+  args[["convertType"]] <- NULL
+  req_ts_meta <- do.call(construct_api_requests, args)
+
   return_list <- walk_pages(req_ts_meta)
 
   if(convertType) return_list <- cleanup_cols(return_list)

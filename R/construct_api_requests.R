@@ -10,11 +10,9 @@
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
 #' depth).
-#' @param crs Indicates the coordinate reference system for the results.
 #' @param properties The properties that should be included for each feature. The
-#' parameter value is a comma-separated list of property names. Available values:
-#' id, timeseries_id, monitoring_location_id, parameter_code, statistic_id, time,
-#' value, unit_of_measure, approval_status, qualifier, last_modified.
+#' parameter value is a comma-separated list of property names which depend on the
+#' service being called.
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
@@ -45,7 +43,6 @@
 construct_api_requests <- function(service,
                                    properties = NA_character_,
                                    bbox = NA,
-                                   crs = NA_character_,
                                    limit = 10000,
                                    skipGeometry = FALSE,
                                    ...){
@@ -85,9 +82,13 @@ construct_api_requests <- function(service,
   single_params <- c("datetime", "last_modified", "begin", "end", "time")
   
   full_list <- list(...)
-  get_list <- full_list[names(full_list) %in% single_params]
   
-  get_list[["crs"]] <- crs
+  if(all(is.na(full_list)) & is.na(bbox)){
+    warning("No filtering arguments specified.")
+  }
+  
+  get_list <- full_list[names(full_list) %in% single_params]
+
   get_list[["skipGeometry"]] <- skipGeometry
   get_list[["limit"]] <- limit
   
@@ -99,7 +100,7 @@ construct_api_requests <- function(service,
     POST = TRUE
   }
   
-  time_periods <- c("last_modified", "datetime", "time")
+  time_periods <- c("last_modified", "datetime", "time", "begin", "end")
   if(any(time_periods %in% names(get_list))){
     for(i in time_periods){
       get_list[[i]] <- format_api_dates(get_list[[i]])
@@ -151,7 +152,11 @@ format_api_dates <- function(datetime){
   
   if(!any(isTRUE(is.na(datetime)) | isTRUE(is.null(datetime)))){
     if(length(datetime) == 1){
-      datetime <- format(datetime, format = "%Y-%m-%dT%H:%M:%SZ")
+      if(grepl("P", datetime, ignore.case = TRUE)){
+        return(datetime)
+      } else {
+        datetime <- format(datetime, format = "%Y-%m-%dT%H:%M:%SZ")
+      }
     } else if (length(datetime) == 2) {
       datetime <- as.POSIXct(datetime)
       datetime <- paste0(vapply(datetime, FUN =  function(x) {
@@ -197,7 +202,7 @@ cql2_param <- function(parameter){
 
 #' Check OGC requests
 #' 
-#' @param endpoint Character, can be "daily", "timeseries-metadata"
+#' @param endpoint Character, can be any existing collection
 #' @param type Character, can be "queryables", "schema"
 #' @export
 #' @keywords internal
