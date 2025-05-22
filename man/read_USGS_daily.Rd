@@ -114,9 +114,10 @@ dv_data_period <- read_USGS_daily(monitoring_location_id = site,
                         parameter_code = "00060",
                         time = "P7D")
 
-multi_site <- read_USGS_daily(monitoring_location_id =  c("USGS-01491000", 
+multi_site <- read_USGS_daily(monitoring_location_id =  c("USGS-01491000",
                                                        "USGS-01645000"),
                         parameter_code = c("00060", "00010"),
+                        limit = 500,
                         time = c("2023-01-01", "2024-01-01"))
 
 }
