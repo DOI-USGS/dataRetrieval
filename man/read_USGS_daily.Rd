@@ -18,7 +18,6 @@ read_USGS_daily(
   value = NA,
   last_modified = NA_character_,
   limit = 10000,
-  crs = NA_character_,
   skipGeometry = NA,
   time = NA_character_,
   convertType = TRUE
@@ -69,8 +68,6 @@ presented in the response document. Only items are counted that are on the
 first level of the collection in the response document. Nested objects
 contained within the explicitly requested items shall not be counted.}
 
-\item{crs}{Indicates the coordinate reference system for the results.}
-
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
 information.}
@@ -112,6 +109,10 @@ dv_data_trim <- read_USGS_daily(monitoring_location_id = site,
 dv_data <- read_USGS_daily(monitoring_location_id = site,
                         parameter_code = "00060",
                         skipGeometry = TRUE)
+                        
+dv_data_period <- read_USGS_daily(monitoring_location_id = site,
+                        parameter_code = "00060",
+                        time = "P7D")
 
 multi_site <- read_USGS_daily(monitoring_location_id =  c("USGS-01491000", 
                                                        "USGS-01645000"),

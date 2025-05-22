@@ -21,7 +21,6 @@
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
 #' depth). Coordinates are assumed to be in crs 4326.
-#' @param crs Indicates the coordinate reference system for the results.
 #' @param limit The optional limit parameter limits the number of items that are
 #' presented in the response document. Only items are counted that are on the
 #' first level of the collection in the response document. Nested objects
@@ -50,6 +49,10 @@
 #' dv_data <- read_USGS_daily(monitoring_location_id = site,
 #'                         parameter_code = "00060",
 #'                         skipGeometry = TRUE)
+#'                         
+#' dv_data_period <- read_USGS_daily(monitoring_location_id = site,
+#'                         parameter_code = "00060",
+#'                         time = "P7D")
 #' 
 #' multi_site <- read_USGS_daily(monitoring_location_id =  c("USGS-01491000", 
 #'                                                        "USGS-01645000"),
@@ -70,33 +73,20 @@ read_USGS_daily <- function(monitoring_location_id = NA_character_,
                          value = NA,
                          last_modified = NA_character_,
                          limit = 10000,
-                         crs = NA_character_,
                          skipGeometry = NA,
                          time = NA_character_,
                          convertType = TRUE){
   
   message("Function in development, use at your own risk.")
-  
+
   service <- "daily"
-  
-  dv_req <- construct_api_requests(service = service,
-                                   monitoring_location_id = monitoring_location_id,
-                                   parameter_code = parameter_code,
-                                   statistic_id = statistic_id,
-                                   properties = properties,
-                                   bbox = bbox,
-                                   time_series_id = time_series_id,
-                                   id = daily_id,
-                                   approval_status = approval_status,
-                                   unit_of_measure = unit_of_measure,
-                                   qualifier = qualifier,
-                                   value = value,
-                                   time = time,
-                                   last_modified = last_modified,
-                                   limit = limit,
-                                   crs = crs,
-                                   skipGeometry = skipGeometry)
-  
+  args <- mget(names(formals()))
+  args[["id"]] <- args[["daily_id"]]
+  args[["daily_id"]] <- NULL
+  args[["convertType"]] <- NULL
+  args[["service"]] <-  service
+  dv_req <- do.call(construct_api_requests, args)
+
   return_list <- walk_pages(dv_req)
   
   if(convertType) return_list <- cleanup_cols(return_list)
