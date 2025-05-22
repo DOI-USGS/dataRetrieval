@@ -40,9 +40,11 @@ This is a modern access point for USGS data. The USGS is planning to modernize a
 
 # Daily Values
 
+`r dataRetrieval:::get_description("daily")`
+
 To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily>.
 
-The `read_USGS_daily` function will eventually replace the `readNWISdv` function. Generally, both functions look pretty similar:
+The `read_USGS_daily` function will eventually replace the `readNWISdv` function. Generally, both functions look pretty similar, though we've updated argument names to align with new Water Mission Area conventions::
 
 ```{r}
 library(dataRetrieval)
@@ -55,19 +57,19 @@ dv_legacy <- readNWISdv(siteNumbers = "01491000",
 
 nrow(dv_legacy)
 
-dv_modern <- read_USGS_daily(monitoring_location_id = "USGS-01491000",
+daily_modern <- read_USGS_daily(monitoring_location_id = "USGS-01491000",
                           parameter_code = c("00060", "00010"),
                           statistic_id = "00003",
                           time = c("2023-01-01", "2025-05-06"))
 
-nrow(dv_modern)
+nrow(daily_modern)
 ```
 
-The first thing you might notice is that the legacy service serves data in a "wide" format, which means there are multiple observations in a single row of the data frame. The new services return the data in a "long" format, so that only one observation is returned per row. This follows tidy principles and is often preferred in scripting languages. We'll look at the returned data with a `ggplot2` plot to show a very simple example of the power of a long format:
+The first thing you might notice is that the legacy service serves data in a "wide" format, which means there are multiple observations in a single row of the data frame (see: [Pivot Data](articles/long_to_wide.html)). The new services return the data in a "long" format, so that only one observation is returned per row. This follows tidy principles and is often preferred in scripting languages. We'll look at the returned data with a `ggplot2` plot to show a very simple example of the power of a long format:
 
 ```{r}
 library(ggplot2)
-ggplot(data = dv_modern) +
+ggplot(data = daily_modern) +
   geom_point(aes(x = time, y = value, 
                  color = approval_status)) +
   facet_grid(parameter_code ~ ., scale = "free") +
@@ -99,6 +101,8 @@ head(dv_2)
 
 
 # Time Series Metadata
+
+`r dataRetrieval:::get_description("time-series-metadata")`
 
 To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata>.
 
@@ -136,9 +140,9 @@ knitr::kable(data_modern[,c("parameter_code",
 
 ```
 
-## Additional new features
-
 # Site Information
+
+`r dataRetrieval:::get_description("monitoring-locations")`
 
 The `read_USGS_monitoring_location` function will eventually replace the `readNWISsite` function. Generally, both functions look pretty similar:
 
