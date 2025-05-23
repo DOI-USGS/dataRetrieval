@@ -84,6 +84,8 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
 
   return_list <- walk_pages(req_ts_meta)
 
+  return_list <- deal_with_empty(return_list, properties, service)
+  
   if(convertType) return_list <- cleanup_cols(return_list)
   
   return_list <- rejigger_cols(return_list, properties, service)

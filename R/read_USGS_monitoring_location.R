@@ -131,6 +131,8 @@ read_USGS_monitoring_location <- function(monitoring_location_id = NA_character_
 
   return_list <- walk_pages(site_req)
   
+  return_list <- deal_with_empty(return_list, properties, service)
+  
   return_list <- rejigger_cols(return_list, properties, service)
   
   return(return_list)
