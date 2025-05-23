@@ -170,6 +170,8 @@ site_info_no_sf <- read_USGS_monitoring_location(monitoring_location_id = site,
 
 multi_site <- read_USGS_monitoring_location(state_name = "Wisconsin")
 
+bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
+multi_site <- read_USGS_monitoring_location(bbox = bbox_vals)
 }
 \dontshow{\}) # examplesIf}
 }

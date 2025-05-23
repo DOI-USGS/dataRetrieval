@@ -177,14 +177,16 @@ explode_post <- function(ls){
   ls <- Filter(Negate(anyNA), ls)
   params <- NULL
   
-  if(max(lengths(ls)) > 1) {
-    
-    for(i in seq_along(ls)){
-      params[names(ls[i])] <- cql2_param(ls[i])
-    }
-    
-    if(length(params) > 1){
-      params[seq_along(1:(length(params)-1))] <- paste0(params[seq_along(1:(length(params)-1))], ",")
+  if(length(ls) > 0){
+    if(max(lengths(ls)) > 1) {
+      
+      for(i in seq_along(ls)){
+        params[names(ls[i])] <- cql2_param(ls[i])
+      }
+      
+      if(length(params) > 1){
+        params[seq_along(1:(length(params)-1))] <- paste0(params[seq_along(1:(length(params)-1))], ",")
+      }
     }
   }
   return(params)  
