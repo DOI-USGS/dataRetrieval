@@ -229,7 +229,9 @@ check_OGC_requests <- function(endpoint = "daily",
   check_collections <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html#/server/getCollections")
   
   check_endpoints_req <- basic_request(check_collections)
-  query_ret <- httr2::req_perform(check_endpoints_req) |> 
+  
+  query_ret <- check_endpoints_req |>
+    httr2::req_perform() |>
     httr2::resp_body_json() 
   
   services <- sapply(query_ret$tags, function(x) x[["name"]])
@@ -242,11 +244,22 @@ check_OGC_requests <- function(endpoint = "daily",
   
   req <- basic_request(url_base)
   
-  query_ret <- httr2::req_perform(req) |> 
+  query_ret <- req |> 
+    httr2::req_perform() |> 
     httr2::resp_body_json() 
   
   return(query_ret)
   
+}
+
+error_body <- function(resp) {
+  status <- httr2::resp_status(resp)
+  if(status == 429){
+    x <- httr2::resp_body_json(resp)$error
+    return(x[["message"]])
+  } else if (status == 403){
+    return("Query request denied. Possible reasons include query being exceeding server limits.")
+  }
 }
 
 basic_request <- function(url_base){
@@ -255,7 +268,8 @@ basic_request <- function(url_base){
     httr2::req_user_agent(default_ua()) |> 
     httr2::req_headers(`Accept-Encoding` = c("compress", "gzip")) |> 
     httr2::req_url_query(f = "json",
-                         lang = "en-US") 
+                         lang = "en-US") |> 
+    httr2::req_error(body = error_body) 
   
   token <- Sys.getenv("API_USGS_PAT")
   
