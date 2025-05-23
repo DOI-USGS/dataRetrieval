@@ -52,7 +52,7 @@ next_req_url <- function(resp, req) {
   body <- httr2::resp_body_json(resp)
   
   if(isTRUE(body[["numberReturned"]] == 0)){
-    return(data.frame())
+    return(NULL)
   }
   
   header_info <- httr2::resp_headers(resp)
@@ -73,6 +73,12 @@ next_req_url <- function(resp, req) {
 
 get_resp_data <- function(resp) {
   
+  body <- httr2::resp_body_json(resp)
+  
+  if(isTRUE(body[["numberReturned"]] == 0)){
+    return(data.frame())
+  }
+  
   use_sf <- !grepl("skipGeometry=true", resp$url, ignore.case = TRUE)
   
   if(use_sf){
@@ -86,13 +92,25 @@ get_resp_data <- function(resp) {
 }
 
 walk_pages <- function(req){
-  resps <- httr2::req_perform_iterative(req, next_req = next_req_url)
+  
+  resps <- httr2::req_perform_iterative(req, next_req = next_req_url) 
 
+  failures <- resps |>
+    httr2::resps_failures() |>
+    httr2::resps_requests()
+  
+  if(length(failures) > 0){
+    message("There were", length(failures), "failed requests.")
+  }
+  
   return_list <- data.frame()
   for(resp in resps){
     df1 <- get_resp_data(resp)
     return_list <- rbind(return_list, df1)
   }
 
+  attr(return_list, "request") <- req
+  attr(return_list, "queryTime") <- Sys.time()
+  
   return(return_list)
 }
