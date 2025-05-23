@@ -73,6 +73,8 @@
 #' 
 #' multi_site <- read_USGS_monitoring_location(state_name = "Wisconsin")
 #' 
+#' bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
+#' multi_site <- read_USGS_monitoring_location(bbox = bbox_vals)
 #' }
 read_USGS_monitoring_location <- function(monitoring_location_id = NA_character_,
                             agency_code = NA_character_,
