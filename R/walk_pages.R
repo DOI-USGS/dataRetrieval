@@ -39,75 +39,60 @@ cleanup_cols <- function(df){
   if("value" %in% names(df)){
     df$value <- as.numeric(df$value)
   }
+  
+  if("contributing_drainage_area" %in% names(df)){
+    df$contributing_drainage_area <- as.numeric(df$contributing_drainage_area)
+  }  
+  
   df
 }
 
-walk_pages <- function(req) {
-  
-  walk_pages_recursive(
-    req = req,
-    page = 1,
-    contents = list()
-  )
-}
+next_req_url <- function(resp, req) {
 
-walk_pages_recursive <- function(req, page, contents) {
+  body <- httr2::resp_body_json(resp)
   
-  url_method <- "GET"
-  if(!is.null(req$body)){
-    url_method <- "POST"
-    body <- req$body
+  if(isTRUE(body[["numberReturned"]] == 0)){
+    return(data.frame())
   }
   
-  use_sf <- !grepl("skipGeometry=true", req$url, ignore.case = TRUE)
-  
-  message(url_method, ": ", req$url) 
-  
-  returned_contents <- req |> 
-    httr2::req_perform()
-
-  header_info <- httr2::resp_headers(returned_contents)
+  header_info <- httr2::resp_headers(resp)
   if(Sys.getenv("API_USGS_PAT") != ""){
     message("Remaining requests this hour:", header_info$`x-ratelimit-remaining`)
   }
   
-  contents[[page]] <- returned_contents |> 
-    httr2::resp_body_string() 
-  
-  json_content <- jsonlite::fromJSON(contents[[page]] )
-  
-  if(isTRUE(json_content[["numberReturned"]] == 0)){
-    return(data.frame())
-  }
-  
-  next_page <- json_content$links[, "rel", drop = TRUE] == "next"
-  
-  if (!any(next_page)) {
+  links <- body$links
+  if(any(sapply(links, function(x) x$rel) == "next")){
+    next_index <- which(sapply(links, function(x) x$rel) == "next")
     
-    if(use_sf){
-      return_df <- lapply(contents, function(x) {
-        df_i <- sf::read_sf(x) 
-      }) |> 
-        do.call(what = rbind)
-    } else {
-      return_df <- lapply(contents, function(x) {
-        df_i <- jsonlite::fromJSON(x)[["features"]][["properties"]] 
-      }) |> 
-        do.call(what = rbind)
-    }
-    
-    return(return_df)
-    
+    next_url <- links[[next_index]][["href"]]
+    return(httr2::req_url(req = req, url = next_url))
   } else {
-    
-    make_request <- httr2::req_url(req = req, 
-                                   url = json_content$links[, "href", drop = TRUE][next_page])
-    page <- page + 1
-    while (TRUE){
-      return(walk_pages_recursive(req = make_request,
-                                  page = page,
-                                  contents = contents))
-    }
-
+    return(NULL)
   }
+}
+
+get_resp_data <- function(resp) {
+  
+  use_sf <- !grepl("skipGeometry=true", resp$url, ignore.case = TRUE)
+  
+  if(use_sf){
+    return_df <- sf::read_sf(httr2::resp_body_string(resp))
+  } else {
+    return_df <- jsonlite::fromJSON(httr2::resp_body_string(resp))[["features"]][["properties"]] 
+  }
+
+  return(return_df)
+  
+}
+
+walk_pages <- function(req){
+  resps <- httr2::req_perform_iterative(req, next_req = next_req_url)
+
+  return_list <- data.frame()
+  for(resp in resps){
+    df1 <- get_resp_data(resp)
+    return_list <- rbind(return_list, df1)
+  }
+
+  return(return_list)
 }

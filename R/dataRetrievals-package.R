@@ -3,7 +3,7 @@
   dataRetrieval_version <- utils::packageVersion("dataRetrieval")
   token_message <- ""
   if(Sys.getenv("API_USGS_PAT") == ""){
-    token_message <- "Consider adding an API_USGS_PAT for new USGS functions.
+    token_message <- "\nConsider adding an API_USGS_PAT for new USGS functions.
 See: https://api.waterdata.usgs.gov/signup"
   }
   packageStartupMessage("dataRetrieval ", dataRetrieval_version,"
