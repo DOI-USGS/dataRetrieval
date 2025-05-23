@@ -30,8 +30,8 @@ read_USGS_daily(
 
 \item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.}
 
-\item{properties}{The properties that should be included for each feature.
-The parameter value is a comma-separated list of property names. Available options are
+\item{properties}{A vector of requested columns to be returned from the query.
+Available options are:
 geometry, id, time_series_id, monitoring_location_id, parameter_code, statistic_id, time, value, unit_of_measure, approval_status, qualifier, last_modified}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding

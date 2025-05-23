@@ -83,7 +83,7 @@ construct_api_requests <- function(service,
   
   full_list <- list(...)
   
-  if(all(is.na(full_list)) & is.na(bbox)){
+  if(all(is.na(full_list)) & all(is.na(bbox))){
     warning("No filtering arguments specified.")
   }
   

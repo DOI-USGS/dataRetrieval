@@ -17,8 +17,8 @@
 #' @param unit_of_measure `r get_params("time-series-metadata")$unit_of_measure`
 #' @param primary `r get_params("time-series-metadata")$primary`
 #' @param web_description `r get_params("time-series-metadata")$web_description`
-#' @param properties The properties that should be included for each feature.
-#' The parameter value is a comma-separated list of property names. Available options are
+#' @param properties A vector of requested columns to be returned from the query.
+#' Available options are: 
 #' `r schema <- check_OGC_requests(endpoint = "time-series-metadata", type = "schema"); paste(names(schema$properties), collapse = ", ")`
 #' @param time_series_metadata_id `r get_params("time-series-metadata")$id`
 #' @param bbox Only features that have a geometry that intersects the bounding

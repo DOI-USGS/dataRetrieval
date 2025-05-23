@@ -43,9 +43,9 @@
 #' @param well_constructed_depth `r get_params("monitoring-locations")$well_constructed_depth`
 #' @param hole_constructed_depth `r get_params("monitoring-locations")$hole_constructed_depth`
 #' @param depth_source_code `r get_params("monitoring-locations")$depth_source_code`
-#' @param properties The properties that should be included for each feature.
-#' The parameter value is a comma-separated list of property names. Available options are
-#' `r schema <- check_OGC_requests(endpoint = "monitoring-locations", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' @param properties A vector of requested columns to be returned from the query.
+#' Available options are: 
+#' `r schema <- check_OGC_requests(endpoint = "monitoring-locations", type = "schema"); paste(names(schema$properties), collapse = ", ")`.
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
