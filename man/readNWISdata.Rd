@@ -11,7 +11,7 @@ readNWISdata(..., asDateTime = TRUE, convertType = TRUE, tz = "UTC")
 a complete list of options.  A
 list of arguments can also be supplied. One important argument to include is
 "service". Possible values are "iv"
-(for instantaneous), 
+(for instantaneous),
 "dv" (for daily values), "gwlevels" (for groundwater levels),
 "site" (for site service), "measurement", and "stat" (for
 statistics service). Note: "measurement" calls go to:
@@ -39,10 +39,10 @@ Name \tab Type \tab Description \cr
 agency \tab character \tab The NWIS code for the agency reporting the data\cr
 site \tab character \tab The USGS site number \cr
 dateTime \tab POSIXct \tab The date and time (if applicable) of the measurement,
-          converted to UTC for unit value data. R only allows one time zone attribute per column. For unit data
-          spanning a time zone change, converting the data to UTC solves this problem. For daily data,
-          the time zone attribute is the time zone of the first returned measurement.
-           \cr
+converted to UTC for unit value data. R only allows one time zone attribute per column. For unit data
+spanning a time zone change, converting the data to UTC solves this problem. For daily data,
+the time zone attribute is the time zone of the first returned measurement.
+\cr
 tz_cd \tab character \tab The time zone code for dateTime column\cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
@@ -71,17 +71,17 @@ See examples below for ideas of constructing queries.
 \details{
 This function requires users to create their own arguments
 based on the NWIS web services. It is a more complicated function to use
-compared to other NWIS functions such as \code{\link{readNWISdv}}, \code{\link{readNWISuv}},
-\code{\link{readNWISgwl}}, etc. However, this function adds a lot of
-flexibility to the possible queries. This function will also behave exactly 
+compared to other NWIS functions such as \code{\link[=readNWISdv]{readNWISdv()}}, \code{\link[=readNWISuv]{readNWISuv()}},
+\code{\link[=readNWISgwl]{readNWISgwl()}}, etc. However, this function adds a lot of
+flexibility to the possible queries. This function will also behave exactly
 as NWIS when it comes to date queries. NWIS by default will only return the latest
 value for the daily and instantaneous services. So if you do not provide
 a starting date, you will only get back the latest value. If you want
 the full period of record, you can use "startDate = '1900-01-01'". Other options
 for dates are periods, such as "period = 'P7D'" which translates to a period
 of 7 days. For period, use only a positive ISO-8601 duration format, which should
-not be expressed in periods of less than a day, or in increments of months M or years Y. 
-period returns data for a site generally from now to a time in the past. 
+not be expressed in periods of less than a day, or in increments of months M or years Y.
+period returns data for a site generally from now to a time in the past.
 Note that when period is used all data up to the most recent value are returned.
 }
 \examples{
@@ -212,5 +212,5 @@ peak_data <- readNWISdata(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{renameNWISColumns}},  \code{\link{importWaterML1}}, \code{\link{importRDB1}}
+\code{\link[=renameNWISColumns]{renameNWISColumns()}},  \code{\link[=importWaterML1]{importWaterML1()}}, \code{\link[=importRDB1]{importRDB1()}}
 }

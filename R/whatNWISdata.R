@@ -1,19 +1,19 @@
 #' USGS data availability
 #'
 #' Imports a table of available parameters, period of record, and count. See
-#' \url{https://waterservices.usgs.gov/docs/site-service/}
+#' <https://waterservices.usgs.gov/docs/site-service/>
 #' for more information.
 #'
-#' @param \dots see \url{https://waterservices.usgs.gov/docs/site-service/}
+#' @param \dots see <https://waterservices.usgs.gov/docs/site-service/>
 #' for a complete list of options.  A list of arguments can also be supplied.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function will
 #' convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @keywords data import USGS web service
 #' 
 #' @details This function requires users to create their own arguments
 #' based on the NWIS web services. It is a more complicated function to use
-#' compared to other NWIS functions such as \code{\link{readNWISdv}}, \code{\link{readNWISuv}},
+#' compared to other NWIS functions such as [readNWISdv()], [readNWISuv()],
 #' etc. However, this function adds a lot of
 #' flexibility to the possible queries. If the "service" argument is included,
 #' the results will be filtered to the proper data_type_cd. This is a great

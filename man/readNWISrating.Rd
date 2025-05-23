@@ -55,5 +55,5 @@ attr(data, "RATING")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{constructNWISURL}}, \code{\link{importRDB1}}
+\code{\link[=constructNWISURL]{constructNWISURL()}}, \code{\link[=importRDB1]{importRDB1()}}
 }

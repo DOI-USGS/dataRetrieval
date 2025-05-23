@@ -1,6 +1,6 @@
 #' USGS Site File Data Retrieval
 #'
-#' Imports data from USGS site file site. This function gets data from here: \url{https://waterservices.usgs.gov/}
+#' Imports data from USGS site file site. This function gets data from here: <https://waterservices.usgs.gov/>
 #'
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @keywords data import USGS web service
@@ -67,6 +67,11 @@
 #' }
 readNWISsite <- function(siteNumbers) {
 
+  .Deprecated(new = "read_USGS_monitoring_location",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_monitoring_location")
+  
+  
   baseURL <- httr2::request(pkg.env[["site"]])
   urlSitefile <- httr2::req_url_query(baseURL,
                                       siteOutput = "Expanded", 

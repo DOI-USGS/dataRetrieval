@@ -71,7 +71,7 @@ In some cases, the specific date of the peak data is not know. This function
 will default to
 converting complete dates to a "Date" object, and converting incomplete dates to
 "NA". If those incomplete dates are
-needed, set the `asDateTime` argument to FALSE. No dates will be converted to
+needed, set the \code{asDateTime} argument to FALSE. No dates will be converted to
 R Date objects.
 }
 \examples{
@@ -86,5 +86,5 @@ peakdata <- readNWISpeak(stations, convertType = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{constructNWISURL}}, \code{\link{importRDB1}}
+\code{\link[=constructNWISURL]{constructNWISURL()}}, \code{\link[=importRDB1]{importRDB1()}}
 }

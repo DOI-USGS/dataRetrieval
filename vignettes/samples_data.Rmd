@@ -259,7 +259,7 @@ map_it(point_sites)
 ### countyFips 
 
 County query parameter. To get a list of available counties,
-run `check_param("counties")`. The "Fips" values can be created using the function `countyCdLookup`.
+run `check_USGS_sample_params("counties")`. The "Fips" values can be created using the function `countyCdLookup`.
 
 ```{r}
 dane_county <- countyCdLookup("WI", "Dane", 
@@ -280,7 +280,7 @@ map_it(county_sites)
 ### stateFips 
 
 State query parameter. To get a list of available state fips values, 
-run `check_param("states")`. The "fips" values can be created using the function
+run `check_USGS_sample_params("states")`. The "fips" values can be created using the function
 `stateCdLookup`.
 
 ```{r}
@@ -307,7 +307,7 @@ Additional parameters can be included to limit the results coming back from a re
 Site type code query parameter.
 
 ```{r}
-site_type_info <- check_param("sitetype")
+site_type_info <- check_USGS_sample_params("sitetype")
 site_type_info$typeCode
 ```
 
@@ -324,7 +324,7 @@ site_type_info$typeLongName
 Sample media refers to the environmental medium that was sampled or analyzed.
 
 ```{r}
-media_info <- check_param("samplemedia")
+media_info <- check_USGS_sample_params("samplemedia")
 media_info$activityMedia
 ```
 
@@ -333,34 +333,34 @@ media_info$activityMedia
 Characteristic group is a broad category describing the sample measurement. The options for this parameter generally follow the values described in the Water Quality Portal [User Guide](https://www.waterqualitydata.us/portal_userguide), but not always.
 
 ```{r}
-group_info <- check_param("characteristicgroup")
+group_info <- check_USGS_sample_params("characteristicgroup")
 group_info$characteristicGroup
 ```
 
 ### characteristic
 
-Characteristic is a specific category describing the sample. See `check_param("characteristics")` for a full list, below is a small sample:
+Characteristic is a specific category describing the sample. See `check_USGS_sample_params("characteristics")` for a full list, below is a small sample:
 
 ```{r}
-characteristic_info <- check_param("characteristics")
+characteristic_info <- check_USGS_sample_params("characteristics")
 head(unique(characteristic_info$characteristicName))
 ```
 
 ### characteristicUserSupplied
 
-Observed property is the USGS term for the constituent sampled and the property name gives a detailed description of what was sampled. Observed Property is mapped to characteristicUserSupplied, and replaces the parameter name and pcode USGS previously used to describe discrete sample data. See `check_param("observedproperty")` for a full list, below is a small sample:
+Observed property is the USGS term for the constituent sampled and the property name gives a detailed description of what was sampled. Observed Property is mapped to characteristicUserSupplied, and replaces the parameter name and pcode USGS previously used to describe discrete sample data. See `check_USGS_sample_params("observedproperty")` for a full list, below is a small sample:
 
 ```{r}
-char_us <- check_param("observedproperty")
+char_us <- check_USGS_sample_params("observedproperty")
 head(char_us$observedProperty)
 ```
 
 ### usgsPCode
 
-USGS parameter code. See `check_param("characteristics")` for a full list, below is a small sample:
+USGS parameter code. See `check_USGS_sample_params("characteristics")` for a full list, below is a small sample:
 
 ```{r}
-characteristic_info <- check_param("characteristics")
+characteristic_info <- check_USGS_sample_params("characteristics")
 head(unique(characteristic_info$parameterCode))
 ```
 

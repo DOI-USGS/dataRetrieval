@@ -4,12 +4,12 @@
 #' but the general functionality is correct.
 #'
 #' @param input character or raw, containing the url for the retrieval or a path to the data file, or raw XML.
-#' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character
+#' @param asDateTime logical, if `TRUE` returns date and time as POSIXct, if `FALSE`, character
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
 #' Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
+#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  `OlsonNames()`
 #' for more information on time zones.
 #' @return mergedDF a data frame source, time, value, uom, uomTitle, comment, gmlID
 #' @export
@@ -138,7 +138,7 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
 #' Anything defined as a default, is returned as an attribute of that data frame.
 #'
 #' @param input XML with only the wml2:MeasurementTimeseries node and children
-#' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, character
+#' @param asDateTime logical, if `TRUE` returns date and time as POSIXct, if `FALSE`, character
 #' @param tz character to set timezone attribute of datetime. Default is an empty quote, which converts the
 #' datetimes to UTC (properly accounting for daylight savings times based on the data's provided time zone offset).
 #' Possible values are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
