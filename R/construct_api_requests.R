@@ -152,7 +152,8 @@ format_api_dates <- function(datetime){
   
   if(!any(isTRUE(is.na(datetime)) | isTRUE(is.null(datetime)))){
     if(length(datetime) == 1){
-      if(grepl("P", datetime, ignore.case = TRUE)){
+      if(grepl("P", datetime, ignore.case = TRUE) |
+         grepl("/", datetime)){
         return(datetime)
       } else {
         datetime <- format(datetime, format = "%Y-%m-%dT%H:%M:%SZ")
