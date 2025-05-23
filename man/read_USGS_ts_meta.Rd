@@ -34,8 +34,8 @@ read_USGS_ts_meta(
 
 \item{parameter_name}{A human-understandable name corresponding to \code{parameter_code}.}
 
-\item{properties}{The properties that should be included for each feature.
-The parameter value is a comma-separated list of property names. Available options are
+\item{properties}{A vector of requested columns to be returned from the query.
+Available options are:
 geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id, last_modified, begin, end, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description}
 
 \item{limit}{The optional limit parameter limits the number of items that are
