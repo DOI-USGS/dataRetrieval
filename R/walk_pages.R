@@ -1,3 +1,16 @@
+deal_with_empty <- function(return_list, properties, service){
+  if(nrow(return_list) == 0){
+    if(is.na(properties)){
+      schema <- check_OGC_requests(endpoint = service, type = "schema")
+      properties <- names(schema$properties)
+    }
+    return_list <- data.frame(matrix(nrow = 0, ncol = length(properties)))
+    names(return_list) <- properties
+  }
+  
+  return(return_list)
+}
+
 rejigger_cols <- function(df, properties, service){
   new_id <- paste0(gsub("-", "_", service), "_id")
   names(df)[names(df) == "id"] <- new_id
@@ -50,15 +63,9 @@ walk_pages_recursive <- function(req, page, contents) {
   
   message(url_method, ": ", req$url) 
   
-  returned_contents <- httr2::req_perform(req)
-  
-  if(httr2::resp_status(returned_contents) != 200){
-    if(httr2::resp_status(returned_contents) == 429){
-      stop("You hit your hourly limit for requests. To increase the limit, 
-           see: https://api.waterdata.usgs.gov/docs/ogcapi/keys/")
-    } 
-  }
-  
+  returned_contents <- req |> 
+    httr2::req_perform()
+
   header_info <- httr2::resp_headers(returned_contents)
   if(Sys.getenv("API_USGS_PAT") != ""){
     message("Remaining requests this hour:", header_info$`x-ratelimit-remaining`)
@@ -68,6 +75,10 @@ walk_pages_recursive <- function(req, page, contents) {
     httr2::resp_body_string() 
   
   json_content <- jsonlite::fromJSON(contents[[page]] )
+  
+  if(isTRUE(json_content[["numberReturned"]] == 0)){
+    return(data.frame())
+  }
   
   next_page <- json_content$links[, "rel", drop = TRUE] == "next"
   
