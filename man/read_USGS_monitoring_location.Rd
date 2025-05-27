@@ -139,7 +139,9 @@ geometry, id, agency_code, agency_name, monitoring_location_number, monitoring_l
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
-depth). Coordinates are assumed to be in crs 4326.}
+depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
+vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
+Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{limit}{The optional limit parameter limits the number of items that are
 presented in the response document. Only items are counted that are on the

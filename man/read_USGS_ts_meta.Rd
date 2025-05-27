@@ -46,7 +46,9 @@ contained within the explicitly requested items shall not be counted.}
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
-depth). Coordinates are assumed to be in crs 4326.}
+depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
+vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
+Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.}
 
