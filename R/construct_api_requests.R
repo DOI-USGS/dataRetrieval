@@ -51,9 +51,11 @@ construct_api_requests <- function(service,
                                type = "schema")
   all_properties <- names(schema$properties)
   
-  match.arg(properties, choices = c(all_properties, NA_character_),
-            several.ok = TRUE)
-  
+  if(!is.na(properties)){
+    match.arg(properties, choices = all_properties,
+              several.ok = TRUE)    
+  }
+
   use_sf <- all(pkg.env$local_sf)
   
   if(!use_sf){

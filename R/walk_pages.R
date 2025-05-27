@@ -65,6 +65,13 @@ next_req_url <- function(resp, req) {
     next_index <- which(sapply(links, function(x) x$rel) == "next")
     
     next_url <- links[[next_index]][["href"]]
+    
+    offset <- as.integer(sub("(?i).*?\\boffset=?\\s*(\\d+).*", "\\1", next_url))
+    if(isTRUE(offset > 40000)){
+      warning("Not all data was returned! Split up the query for best results.")
+      return(NULL)
+    }
+    
     return(httr2::req_url(req = req, url = next_url))
   } else {
     return(NULL)
