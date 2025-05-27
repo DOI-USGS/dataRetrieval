@@ -260,7 +260,7 @@ error_body <- function(resp) {
     x <- httr2::resp_body_json(resp)$error
     return(x[["message"]])
   } else if (status == 403){
-    return("Query request denied. Possible reasons include query being exceeding server limits.")
+    return("Query request denied. Possible reasons include query exceeding server limits.")
   }
 }
 
