@@ -100,7 +100,9 @@ get_resp_data <- function(resp) {
 
 walk_pages <- function(req){
   
-  resps <- httr2::req_perform_iterative(req, next_req = next_req_url) 
+  resps <- httr2::req_perform_iterative(req, 
+                                        next_req = next_req_url, 
+                                        max_reqs = Inf) 
 
   failures <- resps |>
     httr2::resps_failures() |>
