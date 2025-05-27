@@ -51,7 +51,7 @@ construct_api_requests <- function(service,
                                type = "schema")
   all_properties <- names(schema$properties)
   
-  if(!is.na(properties)){
+  if(!all(is.na(properties))){
     match.arg(properties, choices = all_properties,
               several.ok = TRUE)    
   }
