@@ -1,5 +1,5 @@
 #'
-#' Format and organize WQP arguments that are passed in as \code{...}.
+#' Format and organize WQP arguments that are passed in as `...`.
 #'
 #' @keywords internal
 readWQPdots <- function(..., legacy = TRUE) {
