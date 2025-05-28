@@ -1,0 +1,107 @@
+#' Get USGS Daily Data
+#' 
+#' Description `r get_description("daily")`
+#' 
+#' @export
+#' @param monitoring_location_id `r get_params("daily")$monitoring_location_id`
+#' @param parameter_code `r get_params("daily")$parameter_code`
+#' @param statistic_id `r get_params("daily")$statistic_id`
+#' @param time `r get_params("daily")$time`
+#' @param value `r get_params("daily")$value`
+#' @param unit_of_measure `r get_params("daily")$unit_of_measure`
+#' @param approval_status `r get_params("daily")$approval_status`
+#' @param last_modified `r get_params("daily")$last_modified`
+#' @param time_series_id `r get_params("daily")$time_series_id`
+#' @param qualifier `r get_params("daily")$qualifier`
+#' @param daily_id `r get_params("daily")$id`
+#' @param properties A vector of requested columns to be returned from the query.
+#' Available options are: 
+#' `r schema <- check_OGC_requests(endpoint = "daily", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' @param bbox Only features that have a geometry that intersects the bounding
+#' box are selected.The bounding box is provided as four or six numbers, depending
+#' on whether the coordinate reference system includes a vertical axis (height or
+#' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric 
+#' vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
+#' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
+#' @param limit The optional limit parameter limits the number of items that are
+#' presented in the response document. Only items are counted that are on the
+#' first level of the collection in the response document. Nested objects
+#' contained within the explicitly requested items shall not be counted.
+#' @param skipGeometry This option can be used to skip response geometries for
+#' each feature. The returning object will be a data frame with no spatial
+#' information.
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
+#' will convert the data to dates and qualifier to string vector.
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' site <- "USGS-02238500"
+#' pcode <- "00060"
+#' dv_data_sf <- read_USGS_daily(monitoring_location_id = site,
+#'                         parameter_code = "00060", 
+#'                         time = c("2021-01-01", "2022-01-01"))
+#'
+#' dv_data_trim <- read_USGS_daily(monitoring_location_id = site,
+#'                           parameter_code = "00060", 
+#'                           properties = c("monitoring_location_id",
+#'                                          "value",
+#'                                          "time"),
+#'                           time = c("2021-01-01", "2022-01-01"))
+#'
+#' dv_data <- read_USGS_daily(monitoring_location_id = site,
+#'                         parameter_code = "00060",
+#'                         skipGeometry = TRUE)
+#'                         
+#' dv_data_period <- read_USGS_daily(monitoring_location_id = site,
+#'                         parameter_code = "00060",
+#'                         time = "P7D")
+#' 
+#' multi_site <- read_USGS_daily(monitoring_location_id =  c("USGS-01491000",
+#'                                                        "USGS-01645000"),
+#'                         parameter_code = c("00060", "00010"),
+#'                         limit = 500,
+#'                         time = c("2023-01-01", "2024-01-01"))
+#' 
+#' }
+read_USGS_daily <- function(monitoring_location_id = NA_character_,
+                         parameter_code = NA_character_,
+                         statistic_id = NA_character_,
+                         properties = NA_character_,
+                         bbox = NA,
+                         time_series_id = NA_character_,
+                         daily_id = NA_character_,
+                         approval_status = NA_character_,
+                         unit_of_measure = NA_character_,
+                         qualifier = NA_character_,
+                         value = NA,
+                         last_modified = NA_character_,
+                         limit = 10000,
+                         skipGeometry = NA,
+                         time = NA_character_,
+                         convertType = TRUE){
+  
+  message("Function in development, use at your own risk.")
+
+  service <- "daily"
+  args <- mget(names(formals()))
+  args[["id"]] <- args[["daily_id"]]
+  args[["daily_id"]] <- NULL
+  args[["convertType"]] <- NULL
+  args[["service"]] <-  service
+  dv_req <- do.call(construct_api_requests, args)
+
+  return_list <- walk_pages(dv_req)
+  
+  return_list <- deal_with_empty(return_list, properties, service)
+    
+  if(convertType) return_list <- cleanup_cols(return_list)
+
+  return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
+  
+  return_list <- rejigger_cols(return_list, properties, service)
+  
+  return(return_list)
+}
+
+
+

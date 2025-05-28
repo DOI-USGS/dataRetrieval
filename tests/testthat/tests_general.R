@@ -126,6 +126,17 @@ test_that("General NWIS retrievals working", {
 
   dailyData <- readNWISdata(args)
   expect_lt(nrow(dailyData), nrow(instData))
+  
+  args2 <- list(
+    monitoring_location_id = "USGS-05114000", 
+    parameter_code = "00060",
+    time = c("2014-05-01", endDate = "2014-05-01")
+  )
+  
+  daily_USGS <- do.call(read_USGS_daily, args2)
+  expect_lt(nrow(daily_USGS), nrow(instData))
+  
+  
   args <- list(stateCd = "OH", parameterCd = "00665")
   sites <- whatNWISsites(args)
   expect_type(sites, "list")
@@ -182,6 +193,11 @@ test_that("General NWIS retrievals working", {
   )
   expect_equal(2, nrow(multi_huc))
 
+  multi_hucs <- c("07130007", "07130011")
+  multi_huc_new <- read_USGS_monitoring_location(
+    hydrologic_unit_code = multi_hucs
+  )
+  expect_equal(2, length(unique(multi_huc_new$hydrologic_unit_code)))
 
   peak_data <- readNWISdata(
     service = "peak",

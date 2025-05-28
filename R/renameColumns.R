@@ -18,8 +18,8 @@
 #' @param p72019 the base name for parameter code 72019.
 #' @param \dots named arguments for the base name for any other parameter code. The
 #' form of the name must be like pXXXXX, where XXXXX is the parameter code.
-#' @return A dataset like \code{data} with selected columns renamed.
-#' @note The following statistics codes are converted by \code{renameNWISColumns}.
+#' @return A dataset like `data` with selected columns renamed.
+#' @note The following statistics codes are converted by `renameNWISColumns`.
 #' \describe{
 #' \item{00000}{Instantaneous Value, suffix: Inst}
 #' \item{00001}{Maximum value, suffix: Max}
@@ -34,7 +34,7 @@
 #' \item{00023}{Tidal high-low value, suffix: HiLoTide}
 #' \item{00024}{Tidal low-low value, suffix: LoLoTide}
 #' }
-#' @seealso \code{\link{readNWISdv}}, \code{\link{readNWISuv}}
+#' @seealso [readNWISdv()], [readNWISuv()]
 #' @keywords manip IO
 #' @export
 #' @examples

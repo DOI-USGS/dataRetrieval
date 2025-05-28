@@ -7,12 +7,12 @@
 pcode_to_name(parameterCd = "all")
 }
 \arguments{
-\item{parameterCd}{character that contains the code for a character vector 
+\item{parameterCd}{character that contains the code for a character vector
 of 5-digit parameter codes. Default is "all" which will return a complete
 list of parameter codes that have been mapped to a characteristic name.}
 }
 \value{
-a data frame with columns  "parm_cd", "description",            
+a data frame with columns  "parm_cd", "description",
 "characteristicname", "measureunitcode", "resultsamplefraction",
 "resulttemperaturebasis", "resultstatisticalbasis",  "resulttimebasis",
 "resultweightbasis", "resultparticlesizebasis", "last_rev_dt"

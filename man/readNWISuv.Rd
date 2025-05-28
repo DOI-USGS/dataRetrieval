@@ -57,12 +57,12 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 Imports data from NWIS web service. This function gets the data from here:
 \url{https://waterservices.usgs.gov/docs/instantaneous-values/instantaneous-values-details/}
 Inputs to this function are just USGS site ids, USGS parameter codes,
-and start and end date. For a more complex query, use \code{\link{readNWISdata}},
+and start and end date. For a more complex query, use \code{\link[=readNWISdata]{readNWISdata()}},
 including an arguement service="uv".
 Not all parameter codes are available for all data.
-Use the function \code{\link{whatNWISdata}} to discover what data
+Use the function \code{\link[=whatNWISdata]{whatNWISdata()}} to discover what data
 is available for a USGS site. The column data_type_cd with the values "uv"
-returned from \code{\link{whatNWISdata}}) are available from this service.
+returned from \code{\link[=whatNWISdata]{whatNWISdata()}}) are available from this service.
 }
 \details{
 More information on the web service can be found here:
@@ -100,7 +100,7 @@ GMTdata <- readNWISuv(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
+\code{\link[=renameNWISColumns]{renameNWISColumns()}}, \code{\link[=importWaterML1]{importWaterML1()}}
 }
 \keyword{USGS}
 \keyword{data}
