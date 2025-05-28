@@ -86,9 +86,16 @@ test_that("peak, rating curves, surface-water measurements", {
   siteINFO <- readNWISsite("05114000")
   expect_is(siteINFO$agency_cd, "character")
   expect_equal(siteINFO$site_no, "05114000")
+  
+  siteINFO_USGS <- read_USGS_monitoring_location("USGS-05114000")
+  expect_is(siteINFO_USGS$agency_code, "character")
+  expect_equal(siteINFO_USGS$monitoring_locations_id, "USGS-05114000")
 
-  siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
-  expect_true(nrow(siteINFOMulti) == 2)
+  # siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
+  # expect_true(nrow(siteINFOMulti) == 2)
+  
+  siteINFOMulti_USGS <- read_USGS_monitoring_location(c("USGS-05114000", "USGS-09423350"))
+  expect_true(nrow(siteINFOMulti_USGS) == 2)
 
   Meas07227500.ex <- readNWISmeas("07227500", expanded = TRUE)
   expect_is(Meas07227500.ex$measurement_dt, "Date")
@@ -120,8 +127,8 @@ test_that("NWIS dv tests", {
   endDate <- "2012-06-30"
   pCode <- "00060"
 
-  rawDailyQ <- readNWISdv(siteNumber, pCode, startDate, endDate)
-  expect_is(rawDailyQ$Date, "Date")
+  # rawDailyQ <- readNWISdv(siteNumber, pCode, startDate, endDate)
+  # expect_is(rawDailyQ$Date, "Date")
   
   raw_USGS_daily <- read_USGS_daily(monitoring_location_id = paste0("USGS-", siteNumber), 
                                     parameter_code = pCode, 
@@ -129,12 +136,12 @@ test_that("NWIS dv tests", {
   expect_is(raw_USGS_daily$time, "Date")
   
 
-  rawDailyQAndTempMeanMax <- readNWISdv(siteNumber, c("00010", "00060"),
-    startDate, endDate,
-    statCd = c("00001", "00003")
-  )
-  expect_true(length(grep("00060", names(rawDailyQAndTempMeanMax))) >= 2 &
-    length(grep("00010", names(rawDailyQAndTempMeanMax))) >= 2)
+  # rawDailyQAndTempMeanMax <- readNWISdv(siteNumber, c("00010", "00060"),
+  #   startDate, endDate,
+  #   statCd = c("00001", "00003")
+  # )
+  # expect_true(length(grep("00060", names(rawDailyQAndTempMeanMax))) >= 2 &
+  #   length(grep("00010", names(rawDailyQAndTempMeanMax))) >= 2)
 
   raw_USGS_TempMeanMax <- read_USGS_daily(monitoring_location_id = paste0("USGS-", siteNumber), 
                                           parameter_code = c("00010", "00060"),
@@ -145,12 +152,12 @@ test_that("NWIS dv tests", {
   expect_true(length(unique(raw_USGS_TempMeanMax$statistic_id)) == 2)
   expect_true(length(unique(raw_USGS_TempMeanMax$monitoring_location_id)) == 1)
 
-  rawDailyMultiSites <- readNWISdv(c("01491000", "01645000"),
-    c("00010", "00060"),
-    startDate, endDate,
-    statCd = c("00001", "00003")
-  )
-  expect_true(length(unique(rawDailyMultiSites$site_no)) > 1)
+  # rawDailyMultiSites <- readNWISdv(c("01491000", "01645000"),
+  #   c("00010", "00060"),
+  #   startDate, endDate,
+  #   statCd = c("00001", "00003")
+  # )
+  # expect_true(length(unique(rawDailyMultiSites$site_no)) > 1)
 
   raw_USGS_MultiSites <- read_USGS_daily(monitoring_location_id = paste0("USGS-", 
                                                                          c("01491000", "01645000")),
@@ -161,8 +168,8 @@ test_that("NWIS dv tests", {
   expect_true(length(unique(raw_USGS_MultiSites$monitoring_location_id)) == 2)
   
   site <- "05212700"
-  notActive <- readNWISdv(site, "00060", "2014-01-01", "2014-01-07")
-  expect_true(nrow(notActive) == 0)
+  # notActive <- readNWISdv(site, "00060", "2014-01-01", "2014-01-07")
+  # expect_true(nrow(notActive) == 0)
   
   notActiveUSGS <- read_USGS_daily(monitoring_location_id = paste0("USGS-", site),
                                    parameter_code =  "00060",

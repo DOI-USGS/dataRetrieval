@@ -26,12 +26,6 @@ navbar:
     href: articles/dataRetrieval.html
   - text: Function Help
     href: reference/index.html
-  - text: Large Data Pulls
-    menu:
-    - text: Scripting Approach
-      href: articles/wqp_large_pull_script.html
-    - text: Pipeline Approach
-      href: articles/wqp_large_pull_targets.html
   - text: Water Quality Data
     menu:
     - text: Samples Data
@@ -46,12 +40,14 @@ navbar:
     menu:
     - text: Tutorial
       href: articles/tutorial.html
-    - text: Changes to QW
-      href: articles/qwdata_changes.html
     - text: Pivot Data
       href: articles/long_to_wide.html
     - text: Join by closest date
       href: articles/join_by_closest.html
+    - text: Large Request Scripting Approach
+      href: articles/wqp_large_pull_script.html
+    - text: Large Request Pipeline Approach
+      href: articles/wqp_large_pull_targets.html
     - text: Stat Service
       href: articles/statsServiceMap.html
     - text: NLDI Interface
@@ -71,6 +67,7 @@ reference:
       - read_USGS_daily
       - read_USGS_ts_meta
       - read_USGS_monitoring_location
+      - read_USGS_data
       - summarize_USGS_samples
       - check_USGS_sample_params
   - title: National Water Information System (NWIS)

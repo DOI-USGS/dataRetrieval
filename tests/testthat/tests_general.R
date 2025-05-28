@@ -42,14 +42,21 @@ test_that("General NWIS retrievals working", {
 
   startDate <- as.Date("2013-10-01")
   endDate <- as.Date("2014-09-30")
-  waterYear <- readNWISdata(
-    bBox = c(-83, 36.5, -81, 38.5),
-    parameterCd = "00010",
-    service = "dv",
-    startDate = startDate,
-    endDate = endDate
+  # waterYear <- readNWISdata(
+  #   bBox = c(-83, 36.5, -81, 38.5),
+  #   parameterCd = "00010",
+  #   service = "dv",
+  #   startDate = startDate,
+  #   endDate = endDate
+  # )
+  # expect_is(waterYear$dateTime, "POSIXct")
+  
+  waterYear <- read_USGS_daily(
+    bbox = c(-83, 36.5, -81, 38.5),
+    parameter_code = "00010",
+    time = c(startDate, endDate)
   )
-  expect_is(waterYear$dateTime, "POSIXct")
+  expect_is(waterYear$time, "Date")
 
   siteInfo <- readNWISdata(
     stateCd = "WI",
@@ -117,15 +124,15 @@ test_that("General NWIS retrievals working", {
 
   instData <- readNWISdata(args)
 
-  args <- list(
-    sites = "05114000", service = "dv",
-    parameterCd = "00060",
-    startDate = "2014-05-01",
-    endDate = "2014-05-01"
-  )
-
-  dailyData <- readNWISdata(args)
-  expect_lt(nrow(dailyData), nrow(instData))
+  # args <- list(
+  #   sites = "05114000", service = "dv",
+  #   parameterCd = "00060",
+  #   startDate = "2014-05-01",
+  #   endDate = "2014-05-01"
+  # )
+  # 
+  # dailyData <- readNWISdata(args)
+  # expect_lt(nrow(dailyData), nrow(instData))
   
   args2 <- list(
     monitoring_location_id = "USGS-05114000", 
@@ -183,16 +190,17 @@ test_that("General NWIS retrievals working", {
     "url"
   )))
 
-  multi_hucs <- c("07130007", "07130011")
-  multi_huc <- dataRetrieval::readNWISdata(
-    huc = multi_hucs,
-    parameterCd = "63680",
-    startDate = "2015-06-18",
-    endDate = "2015-06-18",
-    service = "dv"
-  )
-  expect_equal(2, nrow(multi_huc))
+  # multi_hucs <- c("07130007", "07130011")
+  # multi_huc <- dataRetrieval::readNWISdata(
+  #   huc = multi_hucs,
+  #   parameterCd = "63680",
+  #   startDate = "2015-06-18",
+  #   endDate = "2015-06-18",
+  #   service = "dv"
+  # )
+  # expect_equal(2, nrow(multi_huc))
 
+  # HUC isn't available in the "daily" service:
   multi_hucs <- c("07130007", "07130011")
   multi_huc_new <- read_USGS_monitoring_location(
     hydrologic_unit_code = multi_hucs
