@@ -8,6 +8,8 @@
 #' @param service character, can be any existing collection such
 #' as "daily", "monitoring-locations", "time-series-metadata"
 #' @param CQL A string in a Common Query Language format.
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
+#' will convert the data to dates and qualifier to string vector.
 #' @param \dots Additional arguments to send to the request. 
 #' @examplesIf is_dataRetrieval_user()
 #' 
@@ -57,6 +59,10 @@ read_USGS_data <- function(service,
   args <- list(...)
   args[["service"]] <-  service
   
+  if(!"properties" %in% names(args)){
+    args[["properties"]] <- NA_character_
+  }
+  
   data_req <- suppressWarnings(do.call(construct_api_requests, args))
   
   data_req <- data_req |>
@@ -65,7 +71,7 @@ read_USGS_data <- function(service,
   
   return_list <- walk_pages(data_req)
   
-  return_list <- deal_with_empty(return_list, properties, service)
+  return_list <- deal_with_empty(return_list, args[["properties"]], service)
   
   if(convertType) return_list <- cleanup_cols(return_list)
   

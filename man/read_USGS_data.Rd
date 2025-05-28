@@ -13,6 +13,9 @@ as "daily", "monitoring-locations", "time-series-metadata"}
 \item{CQL}{A string in a Common Query Language format.}
 
 \item{\dots}{Additional arguments to send to the request.}
+
+\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+will convert the data to dates and qualifier to string vector.}
 }
 \description{
 Function that allows complex CQL queries.

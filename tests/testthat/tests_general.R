@@ -30,6 +30,32 @@ test_that("General USGS retrievals working", {
                range(dv_data$time))
   expect_true(all(unique(dv_data$monitoring_location_id) %in%
                     c("USGS-07367300", "USGS-03277200")))
+  
+  
+  cql_not_active <- '{
+  "op": "and",
+  "args": [
+    {
+      "op": "in",
+      "args": [
+        { "property": "parameter_code" },
+        [ "00060", "00065" ]
+      ]
+    },
+   {
+      "op": "in",
+      "args": [
+        { "property": "monitoring_location_id" },
+        [ "USGS-05212700"]
+      ]
+    }
+  ]
+  }'
+  
+  notActiveUSGS <- read_USGS_data(CQL = cql_not_active,
+                                  service = "daily",
+                                  time =  c("2014-01-01", "2014-01-07"))
+  
 
 })
 
