@@ -194,6 +194,19 @@ explode_post <- function(ls){
   return(params)  
 }
 
+#' Create CQL parameters
+#' 
+#' Helps to give more informative messages on some errors.
+#' 
+#' @param parameter named vector
+#' @noRd
+#' @return list
+#' @examples
+#' 
+#' parameter <- list("monitoring_location_id" = c("USGS-02238500",
+#'                                                "USGS-01491000"))
+#' dataRetrieval:::cql2_param(parameter)
+#' 
 cql2_param <- function(parameter){
   template_path <- system.file("templates/param.CQL2", package = "dataRetrieval")
   template <- readChar(template_path, file.info(template_path)$size)
@@ -256,6 +269,22 @@ check_OGC_requests <- function(endpoint = "daily",
   
 }
 
+#' Custom Error Messages
+#' 
+#' Helps to give more informative messages on some errors.
+#' 
+#' @param resp httr2 response
+#' @return list
+#' @noRd
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' check_collections <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html#/server/getCollections")
+#' collect_request <- dataRetrieval:::basic_request(check_collections)
+#' query_ret <- httr2::req_perform(collect_request) 
+#' dataRetrieval:::error_body(query_ret)
+#' }
+#' 
 error_body <- function(resp) {
   status <- httr2::resp_status(resp)
   if(status == 429){
@@ -266,6 +295,23 @@ error_body <- function(resp) {
   }
 }
 
+
+#' Basic request to API services
+#' 
+#' Automatically includes json format, gzip encoding, dataRetrieval
+#' user agents, and the X-Api-Key token if available.
+#' 
+#' @param url_base httr2 request
+#' @return list
+#' @noRd
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' check_collections <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html#/server/getCollections")
+#' collect_request <- dataRetrieval:::basic_request(check_collections)
+#' collect_request
+#' }
+#' 
 basic_request <- function(url_base){
   
   req <- url_base |> 
@@ -286,7 +332,20 @@ basic_request <- function(url_base){
   
 }
 
-# Create descriptions dynamically
+#' Create service descriptions dynamically
+#' 
+#' This function populates the parameter descriptions.
+#' 
+#' @param service Character, can be any of the endpoints
+#' @return list
+#' @noRd
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' ml_desc <- dataRetrieval:::get_description("monitoring-locations")
+#' ml_desc
+#' }
+#' 
 get_description <- function(service){
   
   check_collections <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html#/server/getCollections")
@@ -304,7 +363,20 @@ get_description <- function(service){
   
 }
 
-# Create parameter descriptions dynamically
+#' Create parameter descriptions dynamically
+#' 
+#' This function populates the parameter descriptions.
+#' 
+#' @param service Character, can be any of the endpoints
+#' @return list
+#' @noRd
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' ml <- dataRetrieval:::get_params("monitoring-locations")
+#' ml$national_aquifer_code
+#' }
+#' 
 get_params <- function(service){
   
   check_queryables_req <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
