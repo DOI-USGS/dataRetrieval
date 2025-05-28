@@ -1,5 +1,38 @@
 context("General functions")
 
+test_that("General USGS retrievals working", {
+  testthat::skip_on_cran()
+  
+  cql <- '{
+  "op": "and",
+  "args": [
+    {
+      "op": "in",
+      "args": [
+        { "property": "parameter_code" },
+        [ "00060", "00065" ]
+      ]
+    },
+   {
+      "op": "in",
+      "args": [
+        { "property": "monitoring_location_id" },
+        [ "USGS-07367300", "USGS-03277200" ]
+      ]
+    }
+  ]
+  }'
+  
+  dv_data <- read_USGS_data(service = "daily",
+                            CQL = cql,
+                            time = c("2023-01-01", "2024-01-01"))
+  expect_equal(as.Date(c("2023-01-01", "2024-01-01")), 
+               range(dv_data$time))
+  expect_true(all(unique(dv_data$monitoring_location_id) %in%
+                    c("USGS-07367300", "USGS-03277200")))
+
+})
+
 test_that("General NWIS retrievals working", {
   testthat::skip_on_cran()
 

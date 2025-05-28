@@ -242,11 +242,10 @@ check_OGC_requests <- function(endpoint = "daily",
   
   match.arg(endpoint, services)
   
-  url_base <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
+  req <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
     httr2::req_url_path_append(endpoint) |> 
-    httr2::req_url_path_append(type) 
-  
-  req <- basic_request(url_base)
+    httr2::req_url_path_append(type) |> 
+    basic_request()
   
   query_ret <- req |> 
     httr2::req_perform() |> 
@@ -309,11 +308,12 @@ get_params <- function(service){
   
   check_queryables_req <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
     httr2::req_url_path_append(service) |> 
-    httr2::req_url_path_append("schema")
+    httr2::req_url_path_append("schema") |> 
+    basic_request()
   
-  check_queryables_req <- basic_request(check_queryables_req)
   query_ret <- httr2::req_perform(check_queryables_req) |> 
     httr2::resp_body_json() 
+  
   params <- sapply(query_ret$properties, function(x) x[["description"]]) 
 
 }
