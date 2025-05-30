@@ -57,7 +57,7 @@ next_req_url <- function(resp, req) {
   
   header_info <- httr2::resp_headers(resp)
   if(Sys.getenv("API_USGS_PAT") != ""){
-    message("Remaining requests this hour:", header_info$`x-ratelimit-remaining`)
+    message("Remaining requests this hour:", header_info$`x-ratelimit-remaining`, " ")
   }
   
   links <- body$links
