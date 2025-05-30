@@ -142,9 +142,16 @@ construct_api_requests <- function(service,
   return(baseURL)
 }
 
+base_url <- function(){
+  
+  httr2::request("https://api.waterdata.usgs.gov/ogcapi/") |> 
+    httr2::req_url_path_append(getOption("dataRetrieval")$api_version) 
+}
+
 setup_api <- function(service){
   
-  baseURL <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
+  baseURL <- base_url() |> 
+    httr2::req_url_path_append("collections") |> 
     httr2::req_url_path_append(service, "items") |> 
     basic_request() 
   
@@ -230,19 +237,14 @@ check_OGC_requests <- function(endpoint = "daily",
   
   match.arg(type, c("queryables", "schema"))
   
-  check_collections <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html#/server/getCollections")
-  
-  check_endpoints_req <- basic_request(check_collections)
-  
-  query_ret <- check_endpoints_req |>
-    httr2::req_perform() |>
-    httr2::resp_body_json() 
+  query_ret <- get_collection() 
   
   services <- sapply(query_ret$tags, function(x) x[["name"]])
   
   match.arg(endpoint, services)
   
-  req <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
+  req <- base_url() |> 
+    httr2::req_url_path_append("collections") |> 
     httr2::req_url_path_append(endpoint) |> 
     httr2::req_url_path_append(type) |> 
     basic_request()
@@ -287,12 +289,9 @@ basic_request <- function(url_base){
 
 # Create descriptions dynamically
 get_description <- function(service){
+
+  query_ret <- get_collection() 
   
-  check_collections <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html#/server/getCollections")
-  
-  check_endpoints_req <- basic_request(check_collections)
-  query_ret <- httr2::req_perform(check_endpoints_req) |> 
-    httr2::resp_body_json() 
   tags <- query_ret[["tags"]]
   
   service_index <- which(sapply(tags, function(x){
@@ -303,10 +302,24 @@ get_description <- function(service){
   
 }
 
+get_collection <- function(){
+  
+  check_collections <- base_url() |> 
+    httr2::req_url_path_append("openapi?f=html#/server/getCollections") 
+  
+  check_endpoints_req <- basic_request(check_collections)
+  
+  query_ret <- httr2::req_perform(check_endpoints_req) |> 
+    httr2::resp_body_json()
+  
+  return(query_ret)
+}
+
 # Create parameter descriptions dynamically
 get_params <- function(service){
   
-  check_queryables_req <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/collections") |> 
+  check_queryables_req <- base_url() |> 
+    httr2::req_url_path_append("collections") |> 
     httr2::req_url_path_append(service) |> 
     httr2::req_url_path_append("schema") |> 
     basic_request()

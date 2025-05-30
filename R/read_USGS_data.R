@@ -45,14 +45,10 @@ read_USGS_data <- function(service,
                            convertType = TRUE){
   
   message("Function in development, use at your own risk.")
+
+  query_req <- get_collection()
   
-  check_collections <- httr2::request("https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html#/server/getCollections")
-  
-  check_endpoints_req <- basic_request(check_collections) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json() 
-  
-  endpoints <- sapply(check_endpoints_req$tags, function(x) x[["name"]])
+  endpoints <- sapply(query_req$tags, function(x) x[["name"]])
   
   match.arg(service, endpoints)
   
