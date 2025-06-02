@@ -1,6 +1,21 @@
+#' Return a data frame if there's an empty response
+#' 
+#' 
+#' @return data.frame
+#' @noRd
+#' @examples
+#' 
+#' df <- dataRetrieval:::deal_with_empty(data.frame(NULL), 
+#'                                       properties = c("time", "value"),
+#'                                       service = "daily")
+#'                                       
+#' df2 <- dataRetrieval:::deal_with_empty(data.frame(NULL), 
+#'                                       properties = NA,
+#'                                       service = "daily")
+#' 
 deal_with_empty <- function(return_list, properties, service){
   if(nrow(return_list) == 0){
-    if(is.na(properties)){
+    if(all(is.na(properties))){
       schema <- check_OGC_requests(endpoint = service, type = "schema")
       properties <- names(schema$properties)
     }
