@@ -52,3 +52,10 @@ discrete water quality data newer than March 11, 2024.
 For additional details, see:
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }
+
+new_nwis_message <- function(){
+  return("ALERT: All NWIS services are slated for decommission.
+For up-to-date information, see: 
+https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
+}
+

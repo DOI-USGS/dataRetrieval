@@ -35,6 +35,11 @@
 #' }
 whatNWISsites <- function(...) {
 
+  .Deprecated(new = "read_USGS_monitoring_location",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_monitoring_location")
+  
+  
   matchReturn <- convertLists(...)
   if ("service" %in% names(matchReturn)) {
     service <- matchReturn$service
