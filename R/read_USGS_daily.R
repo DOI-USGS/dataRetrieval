@@ -94,7 +94,8 @@ read_USGS_daily <- function(monitoring_location_id = NA_character_,
   
   return_list <- deal_with_empty(return_list, properties, service)
     
-  if(convertType) return_list <- cleanup_cols(return_list)
+  if(convertType) return_list <- cleanup_cols(return_list,
+                                              service = "daily")
 
   return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
   
