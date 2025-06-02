@@ -59,12 +59,11 @@
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' }
 #' @export
-#' @examplesIf is_dataRetrieval_user()
-#' \donttest{
-#'
-#' siteINFO <- readNWISsite("05114000")
-#' siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
-#' }
+#' @seealso [read_USGS_monitoring_location()]
+#' @examples
+#' 
+#' # see ?read_USGS_monitoring_location
+#' 
 readNWISsite <- function(siteNumbers) {
 
   .Deprecated(new = "read_USGS_monitoring_location",

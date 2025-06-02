@@ -99,24 +99,6 @@ test_that("General NWIS retrievals working", {
   bBoxEx <- readNWISdata(bBox = c(-83, 36.5, -81, 38.5), parameterCd = "00010")
   expect_true(length(unique(bBoxEx$site_no)) > 1)
 
-  startDate <- as.Date("2013-10-01")
-  endDate <- as.Date("2014-09-30")
-  # waterYear <- readNWISdata(
-  #   bBox = c(-83, 36.5, -81, 38.5),
-  #   parameterCd = "00010",
-  #   service = "dv",
-  #   startDate = startDate,
-  #   endDate = endDate
-  # )
-  # expect_is(waterYear$dateTime, "POSIXct")
-  
-  waterYear <- read_USGS_daily(
-    bbox = c(-83, 36.5, -81, 38.5),
-    parameter_code = "00010",
-    time = c(startDate, endDate)
-  )
-  expect_is(waterYear$time, "Date")
-
   siteInfo <- readNWISdata(
     stateCd = "WI",
     parameterCd = "00010",
@@ -183,16 +165,6 @@ test_that("General NWIS retrievals working", {
 
   instData <- readNWISdata(args)
 
-  # args <- list(
-  #   sites = "05114000", service = "dv",
-  #   parameterCd = "00060",
-  #   startDate = "2014-05-01",
-  #   endDate = "2014-05-01"
-  # )
-  # 
-  # dailyData <- readNWISdata(args)
-  # expect_lt(nrow(dailyData), nrow(instData))
-  
   args2 <- list(
     monitoring_location_id = "USGS-05114000", 
     parameter_code = "00060",
@@ -201,23 +173,34 @@ test_that("General NWIS retrievals working", {
   
   daily_USGS <- do.call(read_USGS_daily, args2)
   expect_lt(nrow(daily_USGS), nrow(instData))
+
+  ohio <- read_USGS_monitoring_location(state_name = "Ohio", 
+                                        site_type_code = "ST")
+  bbox <- sf::st_bbox(ohio)
+  what_sites <- read_USGS_ts_meta(parameter_code = "00665",
+                                  bbox = as.numeric(bbox))
+  expect_true(all(c("monitoring_location_id",
+                "begin", "end", "parameter_name") %in% names(what_sites)))
   
-  
-  args <- list(stateCd = "OH", parameterCd = "00665")
-  sites <- whatNWISsites(args)
-  expect_type(sites, "list")
+  huc <- read_USGS_monitoring_location(hydrologic_unit_code = "02080202")
+  expect_true(nrow(huc) > 0)
 
   # Test counties:
-  dailyStaffordVA <- readNWISdata(
-    stateCd = "Virginia",
-    countyCd = "Stafford",
-    parameterCd = "00060",
-    startDate = "2015-01-01",
-    endDate = "2015-01-30"
+  
+  county_code <- countyCdLookup(state = "Virginia", county = "Stafford")
+  stafford <- read_USGS_monitoring_location(county_code = "179", 
+                                            state_code = "51")
+  stafford_bbox <- sf::st_bbox(stafford)
+  
+  dailyStaffordVA <- read_USGS_daily(
+    bbox = as.numeric(stafford_bbox),
+    parameter_code = "00060",
+    time = c("2015-01-01", "2015-01-30")
   )
   expect_gt(nrow(dailyStaffordVA), 1)
 
-  AS <- readNWISdata(stateCd = "AS", service = "site")
+  # America Samoa?
+  AS <- read_USGS_monitoring_location(state_name = "American Samoa")
   expect_gt(nrow(AS), 0)
 
   site_id <- "01594440"
@@ -249,22 +232,15 @@ test_that("General NWIS retrievals working", {
     "url"
   )))
 
-  # multi_hucs <- c("07130007", "07130011")
-  # multi_huc <- dataRetrieval::readNWISdata(
-  #   huc = multi_hucs,
-  #   parameterCd = "63680",
-  #   startDate = "2015-06-18",
-  #   endDate = "2015-06-18",
-  #   service = "dv"
-  # )
-  # expect_equal(2, nrow(multi_huc))
-
-  # HUC isn't available in the "daily" service:
   multi_hucs <- c("07130007", "07130011")
-  multi_huc_new <- read_USGS_monitoring_location(
-    hydrologic_unit_code = multi_hucs
+  multi_huc_sites <- read_USGS_monitoring_location(hydrologic_unit_code = multi_hucs)
+  
+  multi_huc <- read_USGS_daily(bbox = as.numeric(sf::st_bbox(multi_huc_sites)),
+                               parameter_code = "63680",
+                               statistic_id = "00003",
+                               time = c("2015-06-18", "2015-06-18")
   )
-  expect_equal(2, length(unique(multi_huc_new$hydrologic_unit_code)))
+  expect_equal(4, length(unique(multi_huc$monitoring_location_id)))
 
   peak_data <- readNWISdata(
     service = "peak",

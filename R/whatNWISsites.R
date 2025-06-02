@@ -26,13 +26,12 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
+#' @seealso [read_USGS_monitoring_location()]
 #'
 #' @examples
-#' \donttest{
-#'
-#' siteListPhos <- whatNWISsites(stateCd = "OH", parameterCd = "00665")
-#' oneSite <- whatNWISsites(sites = "05114000")
-#' }
+#' 
+#' # see ?read_USGS_monitoring_location
+#' 
 whatNWISsites <- function(...) {
 
   .Deprecated(new = "read_USGS_monitoring_location",
