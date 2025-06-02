@@ -221,6 +221,17 @@ Please see vignette('qwdata_changes', package = 'dataRetrieval')
 for more information.
 https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.html"
     )
+  } else if (service == "dv"){
+    .Deprecated(new = "read_USGS_daily",
+                package = "dataRetrieval", 
+                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_daily.")
+    
+  } else if (service == "site"){
+    .Deprecated(new = "read_USGS_monitoring_location",
+                package = "dataRetrieval", 
+                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_monitoring_location")    
+  } else {
+    message(new_nwis_message())
   }
   
   baseURL <- httr2::request(pkg.env[[service]])

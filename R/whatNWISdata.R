@@ -90,6 +90,11 @@ whatNWISdata <- function(..., convertType = TRUE) {
   matchReturn <- convertLists(...)
 
   prewarned <- FALSE
+  
+  .Deprecated(new = "read_USGS_ts_meta",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_ts_meta")
+  
   if ("service" %in% names(matchReturn)) {
     service <- matchReturn$service
 

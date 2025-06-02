@@ -175,6 +175,8 @@ readNWISpeak <- function(siteNumbers,
                          asDateTime = TRUE,
                          convertType = TRUE) {
 
+  message(new_nwis_message())
+  
   # Doesn't seem to be a peak xml service
   url <- constructNWISURL(
     siteNumbers = siteNumbers,
@@ -266,6 +268,7 @@ readNWISpeak <- function(siteNumbers,
 #' }
 readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
 
+  message(new_nwis_message())
   # No rating xml service
   url <- constructNWISURL(siteNumber, service = "rating", ratingType = type)
 
@@ -357,6 +360,7 @@ readNWISmeas <- function(siteNumbers,
                          expanded = FALSE,
                          convertType = TRUE) {
 
+  message(new_nwis_message())
   # Doesn't seem to be a WaterML1 format option
   url <- constructNWISURL(
     siteNumbers = siteNumbers,
@@ -505,6 +509,9 @@ readNWISgwl <- function(siteNumbers,
                         endDate = "",
                         parameterCd = NA,
                         convertType = TRUE, tz = "UTC") {
+  
+  message(new_nwis_message())
+  
   url <- constructNWISURL(
     siteNumbers = siteNumbers,
     parameterCd = parameterCd,
@@ -616,6 +623,7 @@ readNWISgwl <- function(siteNumbers,
 readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE,
                          statReportType = "daily", statType = "mean") {
 
+  message(new_nwis_message())
   # check for NAs in site numbers
   if (any(is.na(siteNumbers))) {
     siteNumbers <- siteNumbers[!is.na(siteNumbers)]
@@ -720,6 +728,7 @@ readNWISuse <- function(stateCd,
                         categories = "ALL",
                         convertType = TRUE,
                         transform = FALSE) {
+  message(new_nwis_message())
   countyID <- NULL
   countyCd <- countyCd[countyCd != ""]
 
