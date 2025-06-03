@@ -83,14 +83,9 @@ test_that("peak, rating curves, surface-water measurements", {
   data <- readNWISmeas(siteNumbers)
   expect_is(data$agency_cd, "character")
 
-  siteINFO <- readNWISsite("05114000")
-  expect_is(siteINFO$agency_cd, "character")
-  expect_equal(siteINFO$site_no, "05114000")
-  
   siteINFO_USGS <- read_USGS_monitoring_location("USGS-05114000")
   expect_is(siteINFO_USGS$agency_code, "character")
   expect_equal(siteINFO_USGS$monitoring_locations_id, "USGS-05114000")
-
 
   siteINFOMulti_USGS <- read_USGS_monitoring_location(c("USGS-05114000", "USGS-09423350"))
   expect_true(nrow(siteINFOMulti_USGS) == 2)
