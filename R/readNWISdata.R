@@ -71,13 +71,12 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #'
-#' @seealso [renameNWISColumns()],  [importWaterML1()], [importRDB1()]
+#' @seealso [read_USGS_data()]
 #' @export
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' # Examples not run for time considerations
 #'
-#' dataTemp <- readNWISdata(stateCd = "OH", parameterCd = "00010", service = "dv")
 #' instFlow <- readNWISdata(
 #'   sites = "05114000", service = "iv",
 #'   parameterCd = "00060",
@@ -96,26 +95,7 @@
 #'   service = "iv", parameterCd = "00060"
 #' )
 #' 
-#' bBoxEx <- readNWISdata(bBox = c(-83, 36.5, -81, 38.5), parameterCd = "00010")
 #'
-#' startDate <- as.Date("2013-10-01")
-#' endDate <- as.Date("2014-09-30")
-#' waterYear <- readNWISdata(
-#'   bBox = c(-83, 36.5, -82.5, 36.75),
-#'   parameterCd = "00010",
-#'   service = "dv",
-#'   startDate = startDate,
-#'   endDate = endDate
-#' )
-#'
-#' siteInfo <- readNWISdata(
-#'   stateCd = "WI", parameterCd = "00010",
-#'   hasDataTypeCd = "iv", service = "site"
-#' )
-#' temp <- readNWISdata(
-#'   bBox = c(-83, 36.5, -82.5, 36.75), parameterCd = "00010", service = "site",
-#'   seriesCatalogOutput = TRUE
-#' )
 #' GWL <- readNWISdata(site_no = c("392725077582401", 
 #'                                 "375907091432201"),
 #'                     parameterCd = "62610",
@@ -160,19 +140,6 @@
 #' )
 #' allDailyStats_2 <- readNWISdata(arg.list, service = "stat")
 #'
-#' # use county names to get data
-#' dailyStaffordVA <- readNWISdata(
-#'   stateCd = "Virginia",
-#'   countyCd = "Stafford",
-#'   parameterCd = "00060",
-#'   startDate = "2015-01-01",
-#'   endDate = "2015-01-30"
-#' )
-#' va_counties <- c("51001", "51003", "51005", "51007", "51009", "51011", "51013", "51015")
-#' va_counties_data <- readNWISdata(
-#'   startDate = "2015-01-01", endDate = "2015-12-31",
-#'   parameterCd = "00060", countycode = va_counties
-#' )
 #'
 #' site_id <- "01594440"
 #' rating_curve <- readNWISdata(service = "rating", site_no = site_id, file_type = "base")
@@ -221,6 +188,17 @@ Please see vignette('qwdata_changes', package = 'dataRetrieval')
 for more information.
 https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.html"
     )
+  } else if (service == "dv"){
+    .Deprecated(new = "read_USGS_daily",
+                package = "dataRetrieval", 
+                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_daily.")
+    
+  } else if (service == "site"){
+    .Deprecated(new = "read_USGS_monitoring_location",
+                package = "dataRetrieval", 
+                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_monitoring_location")    
+  } else {
+    message(new_nwis_message())
   }
   
   baseURL <- httr2::request(pkg.env[[service]])

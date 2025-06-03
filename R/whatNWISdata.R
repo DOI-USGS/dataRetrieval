@@ -63,33 +63,20 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @examplesIf is_dataRetrieval_user()
-#' \donttest{
-#'
-#' availableData <- whatNWISdata(siteNumber = "05114000")
+#' @seealso [read_USGS_ts_meta()]
+#' @examples
 #' 
-#' # To find just unit value ('instantaneous') data:
-#' uvData <- whatNWISdata(siteNumber = "05114000",
-#'                        service = "uv")
-#' uvDataMulti <- whatNWISdata(siteNumber = c("05114000", "09423350"),
-#'                             service = c("uv", "dv"))
-#' flowAndTemp <- whatNWISdata(
-#'   stateCd = "WI", service = "dv",
-#'   parameterCd = c("00060", "00010"),
-#'   statCd = "00003"
-#' )
-#' sites <- whatNWISdata(stateCd = "WI",
-#'                       parameterCd = "00060",
-#'                       siteType = "ST", 
-#'                       service = "site")
-#'                       
-#' sites <- whatNWISdata(stateCd = "WI",
-#'                       service = "gwlevels")
-#' }
+#' # see ?read_USGS_ts_meta
+#' 
 whatNWISdata <- function(..., convertType = TRUE) {
   matchReturn <- convertLists(...)
 
   prewarned <- FALSE
+  
+  .Deprecated(new = "read_USGS_ts_meta",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_ts_meta")
+  
   if ("service" %in% names(matchReturn)) {
     service <- matchReturn$service
 

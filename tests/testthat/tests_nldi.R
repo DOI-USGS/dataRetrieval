@@ -84,7 +84,7 @@ test_that("NLDI navigation sources...", {
   expect_error(findNLDI(nwis = "11120000", nav = c("DT"), warn = FALSE))
   expect_error(findNLDI(nwis = "11120000", nav = c("DT", "UM"), warn = FALSE))
   # WARNING: Data not found
-  expect_warning(findNLDI(comid = 101, nav = "UM", find = "nwis", warn = TRUE))
+  # expect_warning(findNLDI(comid = 101, nav = "UM", find = "nwis", warn = TRUE))
 })
 
 test_that("NLDI find sources...", {

@@ -71,35 +71,12 @@ More information on the web service can be found here:
 "Daily Value Service".
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-site_id <- "04085427"
-startDate <- "2012-01-01"
-endDate <- "2012-06-30"
-pCode <- "00060"
-\donttest{
-rawDailyQ <- readNWISdv(site_id, pCode, startDate, endDate)
-rawDailyQAndTempMeanMax <- readNWISdv(site_id, c("00010", "00060"),
-  startDate, endDate,
-  statCd = c("00001", "00003")
-)
-rawDailyQAndTempMeanMax <- renameNWISColumns(rawDailyQAndTempMeanMax)
-rawDailyMultiSites <- readNWISdv(c("01491000", "01645000"), c("00010", "00060"),
-  startDate, endDate,
-  statCd = c("00001", "00003")
-)
-# Site with no data:
-x <- readNWISdv("10258500", "00060", "2014-09-08", "2014-09-14")
-names(attributes(x))
-attr(x, "siteInfo")
-attr(x, "variableInfo")
 
-site <- "05212700"
-notActive <- readNWISdv(site, "00060", "2014-01-01", "2014-01-07")
-}
-\dontshow{\}) # examplesIf}
+# see ?read_USGS_daily
+
 }
 \seealso{
-\code{\link[=renameNWISColumns]{renameNWISColumns()}}, \code{\link[=importWaterML1]{importWaterML1()}}
+\code{\link[=read_USGS_daily]{read_USGS_daily()}}
 }
 \keyword{USGS}
 \keyword{data}
