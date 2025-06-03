@@ -15,9 +15,82 @@ editor_options:
   chunk_output_type: console
 ---
 
-This page will be updated frequently with information about the status of dataRetrieval services.
+# Overview
 
-Contact CompTools@usgs.gov with additional questions.
+Welcome to the `dataRetrieval` status page. This page will be updated frequently with information about the status of `dataRetrieval` services.
+
+Please contact the Computational Tools team at CompTools@usgs.gov with questions.
+
+# New Water Data APIs
+
+<details>
+  <summary>What is an application programming interface (API)?</summary>
+  When you run a `dataRetrieval` function like `read_USGS_samples()` or `readNWISdv()`, you are actually generating a URL that contains within it specifications of the dataset in which you are interested (e.g. which monitoring locations, characteristics, pcodes, start and end dates, etc.). The format of that URL is special: it is parsed by a USGS-specific API web service, which translates the request into a database call. It then packages the response object from the database (with the data) into a format that can be sent to and then unpacked by the user. `dataRetrieval` takes a lot of the guesswork out of this process by generating the URL, sending it to the API, and wrangling the response object into a tabular dataset.   
+</details>
+<br>
+The USGS is in the process of creating new, [publicly available APIs](https://api.waterdata.usgs.gov/) (a.k.a. "web services") to replace the existing [WaterServices](https://waterservices.usgs.gov/). `dataRetrieval` relies upon these web services to provide monitoring location information and water quantity/quality datasets. As new web services come online, `dataRetrieval` will be furnished with new functions to accommodate these changes. 
+
+The table below shows the **existing** NWIS functions and, if applicable, their slated replacements. Note that several functions do not have direct replacements because the new services to support them do not yet exist. We will update this table as new services and functions come online. Also note that some new functions may only be available on the "develop" branch of `dataRetrieval` (`remotes::install_github("DOI-USGS/dataRetrieval", ref = "develop")`).
+               
+```{r echo=FALSE}
+df <- data.frame(
+  Legacy = c(
+    "readNWISdv",
+    "readNWISsite",
+    "whatNWISsites",
+    "",
+    "readNWISuv",
+    "readNWISrating",
+    "readNWISstat",
+    "readNWISmeas",
+    "readNWISpeak",
+    "readNWISgwl",
+    "readNWISuse",
+    "readNWISdata",
+    "whatNWISdata",
+    "readNWISpCode",
+    "readNWISqw"
+  ),
+  New = c(
+    "read_USGS_daily",
+    "read_USGS_monitoring_location",
+    "read_USGS_ts_meta",
+    "read_USGS_data",
+    rep("", 10),
+    "read_USGS_samples"
+  ),
+  "Available on (branch)" = c("develop", "develop", "develop", "develop", rep("", 10), "main (CRAN)")
+)
+
+knitr::kable(df, col.names = c("WaterServices (legacy) function", "Water Data (new) function", "Available on (branch name)"))
+
+```
+
+If you want to learn more about the new water data APIs, check out the ["What's new with WDFN APIs?" blog post](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/), as well as the [documentation](https://api.waterdata.usgs.gov/docs/) available on api.waterdata.usgs.gov. 
+
+## API Keys
+
+Do you make *a lot* of `dataRetrieval` requests per day? ...On the order of more than 50 function calls per hour? As you switch your workflows over to the new Water Data API functions, consider grabbing yourself an API key, which will bump your limit up to 1,000 requests per hour. Head to the [sign up page](https://api.waterdata.usgs.gov/signup) to get a token.
+
+One you have your API key, add it to your `.Renviron` file like this:
+
+```{r}
+API_USGS_PAT = "[your api key]"
+```
+
+Replace [your api key] with the alphanumeric code provided by the sign-up page.
+
+# Discrete Data
+
+Beyond the Water Services to Water Data transition, discrete water quality datasets have had some recent updates as well.
+
+## Samples Data
+
+## WQP
+
+
+
+
 
 # Overview
 
@@ -46,12 +119,6 @@ Read more about it here: <https://doi-usgs.github.io/dataRetrieval/articles/samp
 New USGS data (post March 11, 2024) **are temporarily not accessible** on the **main** Water Quality Portal (WQP) page (www.waterqualitydata.us). Data are still being collected, but are not available on this webpage. This limited availability is expected to last a few months.
 
 However, new USGS data **are accessible** in a pre-release (*beta*) version of the [WQP web page](https://www.waterqualitydata.us/beta/) and new [wqx3 web services](https://waterqualitydata.us/wqx3/). Data are available in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)) for these new "Data Profiles" (how the data is formatted by the WQP):
-
-* Monitoring Location
-* Results - Narrow
-* Results - Full Physical Chemical
-* Results - Basic Physical Chemical
-* Sampling Activity
 
 Guidance on how to use the new web page and web services are available in the [User Guide](https://www.waterqualitydata.us/beta/portal_userguide/) and [Web Services Guide](https://www.waterqualitydata.us/beta/webservices_documentation/). Additional profiles will continue to be added over time. 
 
