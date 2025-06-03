@@ -72,6 +72,18 @@ install.packages("dataRetrieval")
 
 The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. 
 
+## API Token
+
+You can register an API key for use with USGS water data APIs. There are now limits on how many queries can be requested per IP address per hour. If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
+
+Then save your token in your .Renviron file like this:
+
+```
+API_USGS_PAT = "my_super_secret_token"
+```
+
+You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. 
+
 ## New Features
 
 ### Style
