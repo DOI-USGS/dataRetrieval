@@ -91,15 +91,14 @@ get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
   # If successful ...
   if (res$status_code == 200) {
     # Interpret as text
-    d <- httr2::resp_body_string(res)
-
-    if (d == "") {
-      
+    if(length(res$body) > 0){
+      d <- httr2::resp_body_string(res)
+    } else {
       if(warn){
         warning("No data returned for: ", url, call. = FALSE)
       }
       
-      return(NULL)
+      return(NULL)      
     }
 
     if (use_sf) {
