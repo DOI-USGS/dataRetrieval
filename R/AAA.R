@@ -55,7 +55,7 @@ https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 
 new_nwis_message <- function(){
   return("ALERT: All NWIS services are slated for decommission
-and dataRetrieval functions will be updated to use new API endpoints.
+and new dataRetrieval functions will be added.
 For up-to-date information, see: 
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }
