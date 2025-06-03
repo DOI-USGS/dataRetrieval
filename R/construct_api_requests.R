@@ -78,9 +78,6 @@ construct_api_requests <- function(service,
   
   POST <- FALSE
   
-  template_path_post <- system.file("templates/post.CQL2", package = "dataRetrieval")
-  template_post <- readChar(template_path_post, file.info(template_path_post)$size)
-  
   single_params <- c("datetime", "last_modified", "begin", "end", "time")
   
   full_list <- list(...)
@@ -114,7 +111,7 @@ construct_api_requests <- function(service,
   
   if(all(!is.na(bbox))){
     baseURL <- httr2::req_url_query(baseURL,
-                                    bbox = bbox,
+                                    bbox = as.numeric(bbox),
                                     .multi = "comma")      
   }
   
@@ -132,6 +129,9 @@ construct_api_requests <- function(service,
       "params" = unname(post_params)
     )
     
+    template_path_post <- system.file("templates/post.CQL2", package = "dataRetrieval")
+    template_post <- readChar(template_path_post, file.info(template_path_post)$size)
+    
     x <- whisker::whisker.render(template_post, post_params)
     baseURL <- httr2::req_body_raw(baseURL, x) 
     
@@ -142,12 +142,32 @@ construct_api_requests <- function(service,
   return(baseURL)
 }
 
+#' Setup the request for the OGC API requests
+#' 
+#' @noRd
+#' @return httr2 request
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' request <- dataRetrieval:::base_url()
+#' request
+#' }
 base_url <- function(){
   
   httr2::request("https://api.waterdata.usgs.gov/ogcapi/") |> 
     httr2::req_url_path_append(getOption("dataRetrieval")$api_version) 
 }
 
+#' Setup the request for a particular endpoint collection
+#' 
+#' @noRd
+#' @return httr2 request
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' request <- dataRetrieval:::setup_api("daily")
+#' request
+#' }
 setup_api <- function(service){
   
   baseURL <- base_url() |> 
@@ -157,7 +177,39 @@ setup_api <- function(service){
   
 }
 
+#' Format the date request
+#' 
+#' Users will want to give either start/end dates or 
+#' period requests. 
+#' 
+#' 
+#' @noRd
+#' @return character vector with a length of either 1 or 2.
+#' @examples
+#' 
+#' start_end <- c("2021-01-01", "2022-01-01")
+#' dataRetrieval:::format_api_dates(start_end)
+#' 
+#' period <- "P7D"
+#' dataRetrieval:::format_api_dates(period)
+#' 
+#' start <- c("2021-01-01", NA)
+#' dataRetrieval:::format_api_dates(start)
+#' 
+#' end <- c(NA, "2021-01-01")
+#' dataRetrieval:::format_api_dates(end)
+#' 
+#' start_end <- as.POSIXct(c("2021-01-01 12:15:00", "2022-01-01 16:45"))
+#' dataRetrieval:::format_api_dates(start_end)
+#' 
+#' start_end2 <- c("2021-01-01 12:15:00", "")
+#' dataRetrieval:::format_api_dates(start_end2)
+#' 
 format_api_dates <- function(datetime){
+  
+  if(is.character(datetime)){
+    datetime[datetime == ""] <- NA
+  }
   
   if(!any(isTRUE(is.na(datetime)) | isTRUE(is.null(datetime)))){
     if(length(datetime) == 1){
@@ -181,6 +233,21 @@ format_api_dates <- function(datetime){
   return(datetime)
 }
 
+#' Turn request list into POST body cql
+#' 
+#' @noRd
+#' @return character vector of CQL filters
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' 
+#' query_list <- list(monitoring_location_id = c("USGS-01491000",
+#'                                               "USGS-01645000"),
+#'                    parameter_code = c("00060", "00010"))
+#' 
+#' dataRetrieval:::explode_post(query_list)
+#' 
+#' }
 explode_post <- function(ls){
   
   ls <- Filter(Negate(anyNA), ls)
@@ -201,6 +268,19 @@ explode_post <- function(ls){
   return(params)  
 }
 
+#' Create CQL parameters
+#' 
+#' Helps to give more informative messages on some errors.
+#' 
+#' @param parameter named vector
+#' @noRd
+#' @return list
+#' @examples
+#' 
+#' parameter <- list("monitoring_location_id" = c("USGS-02238500",
+#'                                                "USGS-01491000"))
+#' dataRetrieval:::cql2_param(parameter)
+#' 
 cql2_param <- function(parameter){
   template_path <- system.file("templates/param.CQL2", package = "dataRetrieval")
   template <- readChar(template_path, file.info(template_path)$size)
@@ -257,6 +337,24 @@ check_OGC_requests <- function(endpoint = "daily",
   
 }
 
+#' Custom Error Messages
+#' 
+#' Helps to give more informative messages on some errors.
+#' 
+#' @param resp httr2 response
+#' @return list
+#' @noRd
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' check_collections <- dataRetrieval:::base_url() |> 
+#'   httr2::req_url_path_append("openapi?f=html#/server/getCollections") 
+#'   
+#' collect_request <- dataRetrieval:::basic_request(check_collections)
+#' query_ret <- httr2::req_perform(collect_request) 
+#' dataRetrieval:::error_body(query_ret)
+#' }
+#' 
 error_body <- function(resp) {
   status <- httr2::resp_status(resp)
   if(status == 429){
@@ -267,6 +365,24 @@ error_body <- function(resp) {
   }
 }
 
+
+#' Basic request to API services
+#' 
+#' Automatically includes json format, gzip encoding, dataRetrieval
+#' user agents, and the X-Api-Key token if available.
+#' 
+#' @param url_base httr2 request
+#' @return list
+#' @noRd
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' check_collections <- dataRetrieval:::base_url() |> 
+#'   httr2::req_url_path_append("openapi?f=html#/server/getCollections") 
+#' collect_request <- dataRetrieval:::basic_request(check_collections)
+#' collect_request
+#' }
+#' 
 basic_request <- function(url_base){
   
   req <- url_base |> 
@@ -287,7 +403,20 @@ basic_request <- function(url_base){
   
 }
 
-# Create descriptions dynamically
+#' Create service descriptions dynamically
+#' 
+#' This function populates the parameter descriptions.
+#' 
+#' @param service Character, can be any of the endpoints
+#' @return list
+#' @noRd
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' ml_desc <- dataRetrieval:::get_description("monitoring-locations")
+#' ml_desc
+#' }
+#' 
 get_description <- function(service){
 
   query_ret <- get_collection() 
@@ -302,6 +431,18 @@ get_description <- function(service){
   
 }
 
+#' Get collection response
+#' 
+#' 
+#' @return httr2 response
+#' @noRd
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' collection <- dataRetrieval:::get_collection()
+#' collection
+#' }
+#' 
 get_collection <- function(){
   
   check_collections <- base_url() |> 
@@ -315,7 +456,20 @@ get_collection <- function(){
   return(query_ret)
 }
 
-# Create parameter descriptions dynamically
+#' Create parameter descriptions dynamically
+#' 
+#' This function populates the parameter descriptions.
+#' 
+#' @param service Character, can be any of the endpoints
+#' @return list
+#' @noRd
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' ml <- dataRetrieval:::get_params("monitoring-locations")
+#' ml$national_aquifer_code
+#' }
+#' 
 get_params <- function(service){
   
   check_queryables_req <- base_url() |> 
