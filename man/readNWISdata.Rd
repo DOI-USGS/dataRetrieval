@@ -89,7 +89,6 @@ Note that when period is used all data up to the most recent value are returned.
 \donttest{
 # Examples not run for time considerations
 
-dataTemp <- readNWISdata(stateCd = "OH", parameterCd = "00010", service = "dv")
 instFlow <- readNWISdata(
   sites = "05114000", service = "iv",
   parameterCd = "00060",
@@ -108,26 +107,7 @@ multiSite <- readNWISdata(
   service = "iv", parameterCd = "00060"
 )
 
-bBoxEx <- readNWISdata(bBox = c(-83, 36.5, -81, 38.5), parameterCd = "00010")
 
-startDate <- as.Date("2013-10-01")
-endDate <- as.Date("2014-09-30")
-waterYear <- readNWISdata(
-  bBox = c(-83, 36.5, -82.5, 36.75),
-  parameterCd = "00010",
-  service = "dv",
-  startDate = startDate,
-  endDate = endDate
-)
-
-siteInfo <- readNWISdata(
-  stateCd = "WI", parameterCd = "00010",
-  hasDataTypeCd = "iv", service = "site"
-)
-temp <- readNWISdata(
-  bBox = c(-83, 36.5, -82.5, 36.75), parameterCd = "00010", service = "site",
-  seriesCatalogOutput = TRUE
-)
 GWL <- readNWISdata(site_no = c("392725077582401", 
                                 "375907091432201"),
                     parameterCd = "62610",
@@ -172,19 +152,6 @@ arg.list <- list(
 )
 allDailyStats_2 <- readNWISdata(arg.list, service = "stat")
 
-# use county names to get data
-dailyStaffordVA <- readNWISdata(
-  stateCd = "Virginia",
-  countyCd = "Stafford",
-  parameterCd = "00060",
-  startDate = "2015-01-01",
-  endDate = "2015-01-30"
-)
-va_counties <- c("51001", "51003", "51005", "51007", "51009", "51011", "51013", "51015")
-va_counties_data <- readNWISdata(
-  startDate = "2015-01-01", endDate = "2015-12-31",
-  parameterCd = "00060", countycode = va_counties
-)
 
 site_id <- "01594440"
 rating_curve <- readNWISdata(service = "rating", site_no = site_id, file_type = "base")
@@ -212,5 +179,5 @@ peak_data <- readNWISdata(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=renameNWISColumns]{renameNWISColumns()}},  \code{\link[=importWaterML1]{importWaterML1()}}, \code{\link[=importRDB1]{importRDB1()}}
+\code{\link[=read_USGS_data]{read_USGS_data()}}
 }
