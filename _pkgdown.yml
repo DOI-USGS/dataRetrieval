@@ -68,6 +68,7 @@ reference:
       - read_USGS_samples
       - read_USGS_daily
       - read_USGS_ts_meta
+      - read_USGS_data
       - read_USGS_monitoring_location
       - read_USGS_data
       - summarize_USGS_samples
