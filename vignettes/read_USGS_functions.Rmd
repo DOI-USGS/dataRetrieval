@@ -33,11 +33,37 @@ knitr::opts_chunk$set(
 ```
 
 
-As we bid adieu to the NWIS web services, we welcome a host of new web service offering, the [USGS Water Data OGC APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS is planning to modernize **all** web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. 
+As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data OGC APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS is planning to modernize **all** web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. 
 
-This document will introduce each new function (note as time goes on, we'll update this document to include additional functions). Scroll down for tips on what you'll need to do to convert your legacy scripts to use these modern functions. 
+This document will introduce each new function (note as time goes on, we'll update this document to include additional functions). Scroll down for tips on what you'll need to do to convert your legacy scripts to use these modern functions. Note the timeline for the NWIS servers being shut down is currently very uncertain. We'd recommend incorporating these new functions as soon as possible to avoid future headaches.
 
-Note the timeline for the NWIS servers being shut down is currently very uncertain. We'd recommend incorporating these new functions as soon as possible to avoid future headaches.
+# New Features
+
+Each new "API endpoint" will deliver a new type of USGS data. Currently the available endpoints are "monitoring-locations", "time-series-metadata", and "daily". All of these new endpoints offer some new features that the NWIS services did not have:
+
+* Users can pick which columns are returned with the "properties" argument. Available properties can be discovered with the `check_OGC_requests` function:
+
+```{r}
+daily_schema <- check_OGC_requests(endpoint = "daily", type = "schema")
+names(daily_schema$properties)
+
+```
+
+* Any column that is returned can also be queried on! The main `dataRetrieval` functions will take vector inputs. Each query is appended as a boolean AND. For instance, if you ask for a vector of monitoring location ids and a vector of parameter codes, you will get data back for just those monitoring locations AND the specified parameter codes. Towards the bottom of this document, we'll discuss ways to make more specific queries using "Common Query Language" or CQL.
+
+* Data is returned with a "geometry" column, which is a simple feature object, allowing the data to be integrated with the `sf` package and associated geospatial workflows.
+
+* When you look at the help file for the new functions, you’ll also notice there are many more arguments. These are mostly set by default to NA. You **DO NOT** need to (and most like should not!) specify all of these parameters. 
+
+* You can register an API key for use with USGS water data APIs. There are now limits on how many queries can be requested per IP address per hour. If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
+
+Then save your token in your .Renviron file like this:
+
+```
+API_USGS_PAT = "my_super_secret_token"
+```
+
+You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. 
 
 # Monitoring Location
 
@@ -116,6 +142,17 @@ ts_available <- read_USGS_ts_meta(monitoring_location_id = "USGS-01491000",
 
 ```
 
+The returning tables gives information on all available time series. For instance, we can pull a few columns out and see when each time series started, ended, or was last modified.
+
+```{r echo=FALSE}
+ts_available1 <- ts_available[,c("parameter_name", "statistic_id", "begin", "end", "last_modified")]
+ts_available1 <- sf::st_drop_geometry(ts_available1)
+ts_available1$begin <- as.Date(ts_available1$begin)
+ts_available1$end <- as.Date(ts_available1$end)
+ts_available1$last_modified <- as.Date(ts_available1$last_modified)
+knitr::kable(ts_available1)
+
+```
 
 # Daily Values
 
@@ -150,43 +187,7 @@ ggplot(data = daily_modern) +
 
 ```
 
-## Additional new features
 
-* Another feature of the modern returned data frame is that it has a "geometry" column which is an `sf` class and can therefore be used in `sf` processes.
-
-* Flexible column selection:
-
-```{r}
-dv_2 <- read_USGS_daily(monitoring_location_id = "USGS-01491000",
-                     parameter_code = c("00060"),
-                     properties = c("monitoring_location_id",
-                                    "value",
-                                    "time"),
-                     statistic_id = "00003",
-                     time = c("2022-10-01", "2023-10-01"))
-head(dv_2)
-```
-
-* When you look at the help file for the new function `?read_USGS_daily`, you'll also notice there are many more arguments. These are mostly set by default to NA. You DO NOT need to specify all of these parameters.
-
-* Flexible data/last_modified
-
-
-
-
-
-
-# API Tokens
-
-If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
-
-Then save your token in your .Renviron file like this:
-
-```
-API_USGS_PAT = "my_super_secret_token"
-```
-
-You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. 
 
 
 # Notes on dataRetrieval development
@@ -204,4 +205,22 @@ Historically, we allowed users to customize their queries via the `...` argument
 ### Dependencies
 
 Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. Since the new services offer geospatial output, we have recommend using the `sf` package. The `whisker` package was also included to help create POST CQL2 queries. 
+
+## Developmental workflow
+
+CRAN-stable documentation will be available on the GitHub pages:
+<https://doi-usgs.github.io/dataRetrieval/>
+
+In-development documentation will be available on the USGS GitLab pages:
+<https://water.code-pages.usgs.gov/dataRetrieval>
+
+Development of `dataRetrieval` will happen on a git branch called "develop". The "develop" branch will only move to the "main" branch when we submit to CRAN, unless there are bug fixes that pertain to the CRAN release. The "develop" branch WILL change frequently, and there are no promises of future behavior. Users must accept that they are using those functions at their own risk. If you willing to accept this risk, the installation instructions are:
+
+```{r eval=FALSE}
+library(remotes)
+
+install_github("DOI-USGS/dataRetrieval",
+               ref = "develop")
+
+```
 
