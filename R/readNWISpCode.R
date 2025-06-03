@@ -31,6 +31,9 @@
 #' 
 #' }
 readNWISpCode <- function(parameterCd) {
+  
+  message(new_nwis_message())
+  
   parameterCd.orig <- parameterCd
   parameterCd <- parameterCd[!is.na(parameterCd)]
   baseURL <- httr2::request(pkg.env[["pCode"]])

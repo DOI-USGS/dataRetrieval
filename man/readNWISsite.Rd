@@ -69,13 +69,12 @@ comment \tab character \tab Header comments from the RDB file \cr
 Imports data from USGS site file site. This function gets data from here: \url{https://waterservices.usgs.gov/}
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
 
-siteINFO <- readNWISsite("05114000")
-siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
+# see ?read_USGS_monitoring_location
+
 }
-\dontshow{\}) # examplesIf}
+\seealso{
+\code{\link[=read_USGS_monitoring_location]{read_USGS_monitoring_location()}}
 }
 \keyword{USGS}
 \keyword{data}
