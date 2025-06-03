@@ -261,7 +261,7 @@ test_that("General NWIS retrievals working", {
   expect_lt(nrow(peak_data), 100000)
 })
 
-test_that("whatNWISdata", {
+test_that("read_USGS_ts_meta", {
 
   # no service specified:
   availableData <- read_USGS_ts_meta(monitoring_location_id = "USGS-05114000")
@@ -426,14 +426,14 @@ test_that("whatWQPdata working", {
   expect_is(lakeSites$activityCount, "numeric")
 })
 
-context("whatNWISsites")
-test_that("whatNWISsites working", {
+context("read_USGS_ts_meta")
+test_that("read_USGS_ts_meta working", {
   testthat::skip_on_cran()
   siteListOhio <- read_USGS_monitoring_location(state_name = "Ohio")
   siteListPhos <- read_USGS_ts_meta(bbox = sf::st_bbox(siteListOhio),
                                     parameter_code = "00665")
   expect_true(nrow(siteListPhos) > 0)
-  expect_true(is.numeric(siteListPhos$dec_lat_va))
+  expect_is(siteListPhos$begin, "POSIXct")
 
   bboxSites <- read_USGS_ts_meta(bbox = c(-92.5, 45.4, -87, 47),
                                  parameter_code = "00060")

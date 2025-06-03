@@ -202,7 +202,14 @@ setup_api <- function(service){
 #' start_end <- as.POSIXct(c("2021-01-01 12:15:00", "2022-01-01 16:45"))
 #' dataRetrieval:::format_api_dates(start_end)
 #' 
+#' start_end2 <- c("2021-01-01 12:15:00", "")
+#' dataRetrieval:::format_api_dates(start_end2)
+#' 
 format_api_dates <- function(datetime){
+  
+  if(is.character(datetime)){
+    datetime[datetime == ""] <- NA
+  }
   
   if(!any(isTRUE(is.na(datetime)) | isTRUE(is.null(datetime)))){
     if(length(datetime) == 1){
