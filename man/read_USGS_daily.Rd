@@ -9,7 +9,6 @@ read_USGS_daily(
   parameter_code = NA_character_,
   statistic_id = NA_character_,
   properties = NA_character_,
-  bbox = NA,
   time_series_id = NA_character_,
   daily_id = NA_character_,
   approval_status = NA_character_,
@@ -33,13 +32,6 @@ read_USGS_daily(
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
 geometry, id, time_series_id, monitoring_location_id, parameter_code, statistic_id, time, value, unit_of_measure, approval_status, qualifier, last_modified}
-
-\item{bbox}{Only features that have a geometry that intersects the bounding
-box are selected.The bounding box is provided as four or six numbers, depending
-on whether the coordinate reference system includes a vertical axis (height or
-depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
-vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
-Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
 

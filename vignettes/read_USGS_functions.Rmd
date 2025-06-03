@@ -187,8 +187,9 @@ ggplot(data = daily_modern) +
 
 ```
 
+# Discrete Samples
 
-
+Discrete USGS water quality can be accessed via the `read_USGS_samples` function. While this is a new, modern USGS endpoint, it is not served in the same infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html)) for information on accessing USGS discrete water quality data.
 
 # Notes on dataRetrieval development
 
