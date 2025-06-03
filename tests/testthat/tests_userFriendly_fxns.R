@@ -83,19 +83,24 @@ test_that("peak, rating curves, surface-water measurements", {
   data <- readNWISmeas(siteNumbers)
   expect_is(data$agency_cd, "character")
 
-  siteINFO <- readNWISsite("05114000")
-  expect_is(siteINFO$agency_cd, "character")
-  expect_equal(siteINFO$site_no, "05114000")
+  siteINFO_USGS <- read_USGS_monitoring_location("USGS-05114000")
+  expect_is(siteINFO_USGS$agency_code, "character")
+  expect_equal(siteINFO_USGS$monitoring_locations_id, "USGS-05114000")
 
-  siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
-  expect_true(nrow(siteINFOMulti) == 2)
+  siteINFOMulti_USGS <- read_USGS_monitoring_location(c("USGS-05114000", "USGS-09423350"))
+  expect_true(nrow(siteINFOMulti_USGS) == 2)
 
   Meas07227500.ex <- readNWISmeas("07227500", expanded = TRUE)
   expect_is(Meas07227500.ex$measurement_dt, "Date")
   expect_is(Meas07227500.ex$measurement_dateTime, "POSIXct")
 
-  expect_equal(nrow(whatNWISdata(siteNumber = "10312000", parameterCd = "50286")), 0)
-  expect_equal(ncol(whatNWISdata(siteNumber = "10312000", parameterCd = "50286")), 24)
+  expect_equal(nrow(read_USGS_ts_meta(monitoring_location_id = "USGS-10312000",
+                                      parameter_code = "50286")), 0)
+  expect_equal(ncol(read_USGS_ts_meta(monitoring_location_id = "USGS-10312000", 
+                                 parameter_code = "50286",
+                                 properties = c("geometry", "id",
+                                                "unit_of_measure",
+                                                "parameter_name"))), 4)
 
   url <- httr2::request("https://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000")
   x <- importRDB1(url)
@@ -112,31 +117,20 @@ test_that("peak, rating curves, surface-water measurements", {
                             convertType = FALSE))
 })
 
-test_that("NWIS dv tests", {
+test_that("read_USGS_daily", {
   testthat::skip_on_cran()
 
-  siteNumber <- "04085427"
+  siteNumber <- "USGS-04085427"
   startDate <- "2012-01-01"
   endDate <- "2012-06-30"
   pCode <- "00060"
 
-  rawDailyQ <- readNWISdv(siteNumber, pCode, startDate, endDate)
-  expect_is(rawDailyQ$Date, "Date")
-  
-  raw_USGS_daily <- read_USGS_daily(monitoring_location_id = paste0("USGS-", siteNumber), 
+  raw_USGS_daily <- read_USGS_daily(monitoring_location_id = siteNumber, 
                                     parameter_code = pCode, 
                                     time = c(startDate, endDate))
   expect_is(raw_USGS_daily$time, "Date")
   
-
-  rawDailyQAndTempMeanMax <- readNWISdv(siteNumber, c("00010", "00060"),
-    startDate, endDate,
-    statCd = c("00001", "00003")
-  )
-  expect_true(length(grep("00060", names(rawDailyQAndTempMeanMax))) >= 2 &
-    length(grep("00010", names(rawDailyQAndTempMeanMax))) >= 2)
-
-  raw_USGS_TempMeanMax <- read_USGS_daily(monitoring_location_id = paste0("USGS-", siteNumber), 
+  raw_USGS_TempMeanMax <- read_USGS_daily(monitoring_location_id = siteNumber, 
                                           parameter_code = c("00010", "00060"),
                                           time = c(startDate, endDate),
                                           statistic_id = c("00001", "00003"))
@@ -145,15 +139,7 @@ test_that("NWIS dv tests", {
   expect_true(length(unique(raw_USGS_TempMeanMax$statistic_id)) == 2)
   expect_true(length(unique(raw_USGS_TempMeanMax$monitoring_location_id)) == 1)
 
-  rawDailyMultiSites <- readNWISdv(c("01491000", "01645000"),
-    c("00010", "00060"),
-    startDate, endDate,
-    statCd = c("00001", "00003")
-  )
-  expect_true(length(unique(rawDailyMultiSites$site_no)) > 1)
-
-  raw_USGS_MultiSites <- read_USGS_daily(monitoring_location_id = paste0("USGS-", 
-                                                                         c("01491000", "01645000")),
+  raw_USGS_MultiSites <- read_USGS_daily(monitoring_location_id = c("USGS-01491000", "USGS-01645000"),
                                          parameter_code = c("00010", "00060"),
                                          time = c(startDate, endDate),
                                          statistic_id = c("00001", "00003"))
@@ -161,9 +147,7 @@ test_that("NWIS dv tests", {
   expect_true(length(unique(raw_USGS_MultiSites$monitoring_location_id)) == 2)
   
   site <- "05212700"
-  notActive <- readNWISdv(site, "00060", "2014-01-01", "2014-01-07")
-  expect_true(nrow(notActive) == 0)
-  
+
   notActiveUSGS <- read_USGS_daily(monitoring_location_id = paste0("USGS-", site),
                                    parameter_code =  "00060",
                                    time =  c("2014-01-01", "2014-01-07"))
@@ -378,37 +362,48 @@ test_that("calcWaterYear can handle missing values", {
 })
 
 
-context("Construct NWIS urls")
-test_that("Construct NWIS urls", {
+context("construct_api_requests")
+test_that("Construct USGS urls", {
   testthat::skip_on_cran()
 
-  siteNumber <- "01594440"
-  startDate <- "1985-01-01"
+  siteNumber <- "USGS-01594440"
+  startDate <- "2024-01-01"
   endDate <- ""
   pCode <- c("00060", "00010")
   
-  url_daily <- constructNWISURL(siteNumber, pCode,
-    startDate, endDate, "dv",
-    statCd = c("00003", "00001")
-  )
+  url_daily <- construct_api_requests(service = "daily",
+                                      monitoring_location_id = siteNumber, 
+                                      parameter_code = pCode,
+                                      time = c(startDate, endDate),
+                                      statistic_id = c("00003", "00001"))
   
   # nolint start: line_length_linter
   expect_equal(url_daily$url,
-               "https://waterservices.usgs.gov/nwis/dv/?site=01594440&format=waterml%2C1.1&ParameterCd=00060%2C00010&StatCd=00003%2C00001&startDT=1985-01-01")
+               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&time=2024-01-01T00%3A00%3A00Z%2F..&skipGeometry=FALSE&limit=10000")
 
-  url_unit <- constructNWISURL(siteNumber, pCode, "2012-06-28", "2012-06-30", "iv")
+  url_works <- dataRetrieval:::walk_pages(url_daily)
+  expect_true(nrow(url_works) > 0)
+  
+  url_ts_meta <- construct_api_requests(monitoring_location_id = siteNumber,
+                                     parameter_code = pCode,
+                                     service = "time-series-metadata")
   
   expect_equal(
-    url_unit$url,
-    "https://nwis.waterservices.usgs.gov/nwis/iv/?site=01594440&format=waterml%2C1.1&ParameterCd=00060%2C00010&startDT=2012-06-28&endDT=2012-06-30"
-  )
-
-  url_daily_tsv <- constructNWISURL(siteNumber, pCode, startDate, endDate, "dv",
-    statCd = c("00003", "00001"), format = "tsv"
+    url_ts_meta$url,
+    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&lang=en-US&skipGeometry=FALSE&limit=10000"
   )
   
-  expect_equal(url_daily_tsv$url, "https://waterservices.usgs.gov/nwis/dv/?site=01594440&format=rdb%2C1.0&ParameterCd=00060%2C00010&StatCd=00003%2C00001&startDT=1985-01-01")
+  url_works_ts <- dataRetrieval:::walk_pages(url_ts_meta)
+  expect_true(nrow(url_works_ts) > 0)
 
+  url_ml <- construct_api_requests(id = siteNumber,
+                                   service = "monitoring-locations")
+  
+  expect_equal(url_ml$url, "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations/items?f=json&lang=en-US&skipGeometry=FALSE&limit=10000&id=USGS-01594440")
+
+  url_works_ml <- dataRetrieval:::walk_pages(url_ml)
+  expect_true(nrow(url_works_ml) > 0)
+  
   url_use <- constructUseURL(
     years = c(1990, 1995),
     stateCd = "Ohio",
