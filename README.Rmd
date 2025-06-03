@@ -27,7 +27,7 @@ library(dataRetrieval)
 [![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
 
-The `dataRetrieval` package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrology data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). 
+The `dataRetrieval` package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrology data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. 
 
 # Introduction
 
@@ -37,17 +37,19 @@ If you have additional questions about these changes, email CompTools@usgs.gov.
 
 # What would you like to do?
 
-1. Get instantaneous USGS discharge data. Start here: `?readNWISuv`
+1. Get instantaneous USGS data (for example, discharge sensor data). Start here: `?readNWISuv`
 
-2. Get daily USGS discharge data. Start here: `?readNWISdv`
+2. Get daily USGS data (for example, mean daily discharge). Start here: `?read_USGS_daily`
 
 3. Get USGS groundwater data. Start here: `?readNWISgwl`
 
-4. Get discrete water quality data. Start here: `?readWQPdata`
+4. Get discrete water quality data from a cooperative service that integrates publicly available water-quality data from the USGS, EPA, and over 400 state, federal, tribal, and local agencies. Start here: `?readWQPdata`
 
-4. Discover USGS data (not including discrete water quality data). Start here: `?whatNWISdata`
+5. Get USGS discrete water quality data. Start here: `?read_USGS_samples`
 
-6. Find Hydro Network-Linked Data Index (NLDI) data. Start here: `?findNLDI`
+6. Discover USGS time series data. Start here: `?read_USGS_ts_meta`
+
+7. Find Hydro Network-Linked Data Index (NLDI) data. Start here: `?findNLDI`
 
 For additional tutorials, see:
 
@@ -160,7 +162,7 @@ Water Quality Portal. Washington (DC): National Water Quality Monitoring Council
 
 # Package Support
 
-The Water Mission Area of the USGS supports the development and maintenance of `dataRetrieval`, and most likely further into the future. Resources are available primarily for maintenance and responding to user questions. Priorities on the development of new features are determined by the `dataRetrieval` development team. This software was last released with USGS record: IP-147158.
+The Water Mission Area of the USGS supports the development and maintenance of `dataRetrieval`, and most likely further into the future. Resources are available primarily for maintenance and responding to user questions. Priorities on the development of new features are determined by the `dataRetrieval` development team.
 
 ```{r disclaimer, child="DISCLAIMER.md", eval=TRUE}
 ```
