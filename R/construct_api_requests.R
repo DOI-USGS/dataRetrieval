@@ -111,7 +111,7 @@ construct_api_requests <- function(service,
   
   if(all(!is.na(bbox))){
     baseURL <- httr2::req_url_query(baseURL,
-                                    bbox = bbox,
+                                    bbox = as.numeric(bbox),
                                     .multi = "comma")      
   }
   

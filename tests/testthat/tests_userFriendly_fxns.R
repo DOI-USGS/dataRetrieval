@@ -120,17 +120,17 @@ test_that("peak, rating curves, surface-water measurements", {
 test_that("NWIS dv tests", {
   testthat::skip_on_cran()
 
-  siteNumber <- "04085427"
+  siteNumber <- "USGS-04085427"
   startDate <- "2012-01-01"
   endDate <- "2012-06-30"
   pCode <- "00060"
 
-  raw_USGS_daily <- read_USGS_daily(monitoring_location_id = paste0("USGS-", siteNumber), 
+  raw_USGS_daily <- read_USGS_daily(monitoring_location_id = siteNumber, 
                                     parameter_code = pCode, 
                                     time = c(startDate, endDate))
   expect_is(raw_USGS_daily$time, "Date")
   
-  raw_USGS_TempMeanMax <- read_USGS_daily(monitoring_location_id = paste0("USGS-", siteNumber), 
+  raw_USGS_TempMeanMax <- read_USGS_daily(monitoring_location_id = siteNumber, 
                                           parameter_code = c("00010", "00060"),
                                           time = c(startDate, endDate),
                                           statistic_id = c("00001", "00003"))

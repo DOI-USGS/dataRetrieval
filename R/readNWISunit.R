@@ -209,7 +209,7 @@ readNWISpeak <- function(siteNumbers,
     }
 
 
-    siteInfo <- suppressMessages(readNWISsite(siteNumbers))
+    siteInfo <- suppressWarnings(readNWISsite(siteNumbers))
     siteInfo <- merge(
       x = unique(data[, c("agency_cd", "site_no")]),
       y = siteInfo,
@@ -287,7 +287,7 @@ readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
       attr(data, "RATING") <- Rat
     }
 
-    siteInfo <- suppressMessages(readNWISsite(siteNumbers = siteNumber))
+    siteInfo <- suppressWarnings(readNWISsite(siteNumbers = siteNumber))
 
     attr(data, "siteInfo") <- siteInfo
     attr(data, "variableInfo") <- NULL
@@ -408,7 +408,7 @@ readNWISmeas <- function(siteNumbers,
     }
 
 
-    siteInfo <- suppressMessages(readNWISsite(siteNumbers))
+    siteInfo <- suppressWarnings(readNWISsite(siteNumbers))
     siteInfo <- merge(
       x = unique(data[, c("agency_cd", "site_no")]),
       y = siteInfo,
@@ -541,7 +541,7 @@ readNWISgwl <- function(siteNumbers,
         data$lev_dt <- as.Date(data$lev_dt)
       }
     }
-    siteInfo <- suppressMessages(readNWISsite(siteNumbers))
+    siteInfo <- suppressWarnings(readNWISsite(siteNumbers))
     siteInfo <- merge(
       x = unique(data[, c("agency_cd", "site_no")]),
       y = siteInfo,
@@ -649,7 +649,7 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
     convertType = convertType
   )
 
-  siteInfo <- suppressMessages(readNWISsite(siteNumbers))
+  siteInfo <- suppressWarnings(readNWISsite(siteNumbers))
 
   if (nrow(data) > 0) {
     siteInfo <- merge(
