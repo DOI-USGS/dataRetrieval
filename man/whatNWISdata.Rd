@@ -73,30 +73,12 @@ function to use before a large data set, by filtering down the number
 of sites that have useful data.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
 
-availableData <- whatNWISdata(siteNumber = "05114000")
+# see ?read_USGS_ts_meta
 
-# To find just unit value ('instantaneous') data:
-uvData <- whatNWISdata(siteNumber = "05114000",
-                       service = "uv")
-uvDataMulti <- whatNWISdata(siteNumber = c("05114000", "09423350"),
-                            service = c("uv", "dv"))
-flowAndTemp <- whatNWISdata(
-  stateCd = "WI", service = "dv",
-  parameterCd = c("00060", "00010"),
-  statCd = "00003"
-)
-sites <- whatNWISdata(stateCd = "WI",
-                      parameterCd = "00060",
-                      siteType = "ST", 
-                      service = "site")
-                      
-sites <- whatNWISdata(stateCd = "WI",
-                      service = "gwlevels")
 }
-\dontshow{\}) # examplesIf}
+\seealso{
+\code{\link[=read_USGS_ts_meta]{read_USGS_ts_meta()}}
 }
 \keyword{USGS}
 \keyword{data}
