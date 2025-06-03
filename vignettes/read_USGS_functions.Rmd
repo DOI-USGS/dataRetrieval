@@ -25,37 +25,110 @@ options(continue = " ",
 
 knitr::opts_chunk$set(
   echo = TRUE,
-  message = TRUE,
+  message = FALSE,
+  warning = FALSE,
   fig.height = 4,
   fig.width = 7
 )
 ```
 
 
-As we bid adieu to the NWIS web services, we welcome a new web service offering, the USGS Water Data OGC APIs.
+As we bid adieu to the NWIS web services, we welcome a host of new web service offering, the [USGS Water Data OGC APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS is planning to modernize **all** web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. 
 
-# New USGS data access
+This document will introduce each new function (note as time goes on, we'll update this document to include additional functions). Scroll down for tips on what you'll need to do to convert your legacy scripts to use these modern functions. 
 
-This is a modern access point for USGS data. The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. 
+Note the timeline for the NWIS servers being shut down is currently very uncertain. We'd recommend incorporating these new functions as soon as possible to avoid future headaches.
+
+# Monitoring Location
+
+The `read_USGS_monitoring_location` function replaces the `readNWISsite` function.
+
+`r dataRetrieval:::get_description("monitoring-locations")`
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations>.
+
+Here is a simple example of requesting one known USGS site:
+
+```{r}
+sites_information <- read_USGS_monitoring_location(monitoring_location_id = "USGS-01491000")
+```
+
+The output includes the following information:
+
+```{r echo=FALSE}
+knitr::kable(t(sites_information))
+```
+
+Maybe that is more information than you need. You can specify which columns get returned with the "properties" argument:
+
+```{r}
+site_info <- read_USGS_monitoring_location(monitoring_location_id = "USGS-01491000",
+                                           properties = c("monitoring_locations_id",
+                                                          "site_type",
+                                                          "drainage_area",
+                                                          "monitoring_location_name"))
+
+knitr::kable(site_info)
+
+```
+
+Any of those original outputs can also be inputs to the function! So let's say we want to find all the stream sites in Wisconsin:
+
+```{r}
+sites_wi <- read_USGS_monitoring_location(state_name = "Wisconsin", 
+                                          site_type = "Stream")
+```
+
+The returned data includes a column "geometry" which is a collection of simple feature (sf) points. This allows for seamless integration with the `sf` package. Here are 2 quick examples of using the `sf` object in ggplot2 and leaflet:
+
+```{r}
+library(ggplot2)
+
+ggplot(data = sites_wi) +
+  geom_sf() +
+  theme_minimal()
+```
+
+```{r}
+library(leaflet)
+leaflet_crs <- "+proj=longlat +datum=WGS84" #default leaflet crs
+leaflet(data = sites_wi |> 
+                sf::st_transform(crs = leaflet_crs)) |> 
+    addProviderTiles("CartoDB.Positron") |> 
+    addCircleMarkers(popup = ~monitoring_location_name, 
+                   radius = 0.1,
+                   opacity = 1)
+
+```
+
+# Time Series Metadata
+
+The `read_USGS_ts_meta` function replaces the `whatNWISdata` function.
+
+`r dataRetrieval:::get_description("time-series-metadata")`
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata>.
+
+
+```{r}
+ts_available <- read_USGS_ts_meta(monitoring_location_id = "USGS-01491000",
+                                  parameter_code = c("00060", "00010"))
+
+```
+
 
 # Daily Values
+
+The `read_USGS_daily` function replaces the `readNWISdv` function.
 
 `r dataRetrieval:::get_description("daily")`
 
 To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily>.
 
-The `read_USGS_daily` function will eventually replace the `readNWISdv` function. Generally, both functions look pretty similar, though we've updated argument names to align with new Water Mission Area conventions::
+
 
 ```{r}
 library(dataRetrieval)
-
-dv_legacy <- readNWISdv(siteNumbers = "01491000",
-                        parameterCd =  c("00060", "00010"),
-                        statCd = "00003", 
-                        startDate = "2023-01-01",
-                        endDate =  "2025-05-06")
-
-nrow(dv_legacy)
 
 daily_modern <- read_USGS_daily(monitoring_location_id = "USGS-01491000",
                           parameter_code = c("00060", "00010"),
@@ -65,7 +138,7 @@ daily_modern <- read_USGS_daily(monitoring_location_id = "USGS-01491000",
 nrow(daily_modern)
 ```
 
-The first thing you might notice is that the legacy service serves data in a "wide" format, which means there are multiple observations in a single row of the data frame (see: [Pivot Data](articles/long_to_wide.html)). The new services return the data in a "long" format, so that only one observation is returned per row. This follows tidy principles and is often preferred in scripting languages. We'll look at the returned data with a `ggplot2` plot to show a very simple example of the power of a long format:
+The first thing you might notice is that the new service serves data in a "long" format, which means there is just a single observations per row of the data frame (see: [Pivot Data](articles/long_to_wide.html)). 
 
 ```{r}
 library(ggplot2)
@@ -100,62 +173,7 @@ head(dv_2)
 
 
 
-# Time Series Metadata
 
-`r dataRetrieval:::get_description("time-series-metadata")`
-
-To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata>.
-
-The `read_USGS_ts_meta` function will eventually replace the `whatNWISdata` function. Generally, both functions look pretty similar:
-
-```{r}
-data_legacy <- whatNWISdata(siteNumbers = "01491000",
-                        parameterCd =  c("00060", "00010"))
-```
-
-```{r echo=FALSE}
-
-knitr::kable(data_legacy[,c("parm_cd",
-                           "stat_cd",
-                           "begin_date",
-                           "end_date",
-                           "count_nu")])
-
-```
-
-```{r}
-data_modern <- read_USGS_ts_meta(monitoring_location_id = "USGS-01491000",
-                          parameter_code = c("00060", "00010"))
-
-```
-
-```{r echo=FALSE}
-
-knitr::kable(data_modern[,c("parameter_code",
-                           "parameter_name",
-                           "statistic_id",
-                           "computation_identifier",
-                           "begin",
-                           "end")])
-
-```
-
-# Site Information
-
-`r dataRetrieval:::get_description("monitoring-locations")`
-
-The `read_USGS_monitoring_location` function will eventually replace the `readNWISsite` function. Generally, both functions look pretty similar:
-
-```{r}
-sites_legacy <- readNWISsite(siteNumbers = "01491000")
-names(sites_legacy)
-```
-
-```{r}
-sites_modern <- read_USGS_monitoring_location(monitoring_location_id = "USGS-01491000")
-names(sites_modern)
-
-```
 
 
 # API Tokens
