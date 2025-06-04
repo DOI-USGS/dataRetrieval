@@ -193,7 +193,7 @@ ggplot(data = daily_modern) +
 
 ## General Retrieval
 
-The `read_USGS_data` function replaces the `readNWISdata` function.
+The `read_USGS_data` function replaces the `readNWISdata` function. This is a lower-level, generalized function for querying any of the API endpoints.
 
 The new APIs can handle complex requests. For those queries, users will need to construct their own request using Common Query Language. There's an excellent article <https://api.waterdata.usgs.gov/docs/ogcapi/complex-queries/>.
 
