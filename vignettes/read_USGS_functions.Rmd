@@ -44,7 +44,7 @@ Each new "API endpoint" will deliver a new type of USGS data. Currently the avai
 
 * **Provides [Simple Features](https://en.wikipedia.org/wiki/Simple_Features) functionality**: data is returned with a "geometry" column, which is a simple feature object, allowing the data to be integrated with the [`sf`](https://r-spatial.github.io/sf/) package and associated geospatial workflows.
 
-* When you look at the help file for the new functions, you’ll also notice there are many more arguments. These are mostly set by default to NA. You **DO NOT** need to (and most likely should not!) specify all of these parameters. 
+* **Enables more flexible queries**: when you look at the help file for the new functions, you’ll also notice there are many more arguments. These are mostly set by default to NA. You **DO NOT** need to (and most likely should not!) specify all of these parameters. 
 
 * Users can pick which columns are returned with the "properties" argument. Available properties can be discovered with the `check_OGC_requests` function:
 
