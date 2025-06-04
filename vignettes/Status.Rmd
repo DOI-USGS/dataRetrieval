@@ -30,7 +30,7 @@ Please contact the Computational Tools team at CompTools@usgs.gov with questions
 <br>
 The USGS is in the process of creating new, [publicly available APIs](https://api.waterdata.usgs.gov/) (a.k.a. "web services") to replace the existing [WaterServices](https://waterservices.usgs.gov/). `dataRetrieval` relies upon these web services to provide monitoring location information and water quantity/quality datasets. As new web services come online, `dataRetrieval` will be furnished with new functions to accommodate these changes. 
 
-The table below shows the **existing** NWIS functions and, if applicable, their slated replacements. Note that several functions do not have direct replacements because the new services to support them do not yet exist. We will update this table as new services and functions come online. Also note that some new functions may only be available on the "develop" branch of `dataRetrieval` (`remotes::install_github("DOI-USGS/dataRetrieval", ref = "develop")`). More information on each function's specifications (complete with examples) are available in the [package index](https://doi-usgs.github.io/dataRetrieval/reference/index.html) and/or function documentation (e.g. `?read_USGS_daily`)
+The table below shows the **existing** NWIS functions and, if applicable, their slated replacements. Note that several functions do not have direct replacements because the new services to support them do not yet exist. We will update this table as new services and functions come online. Also note that some new functions may only be available on the "develop" branch of `dataRetrieval` (`remotes::install_github("DOI-USGS/dataRetrieval", ref = "develop")`). More information on each function's specifications (complete with examples) are available in the [Introduction to New USGS Services vignette](add link here), the [package index](https://doi-usgs.github.io/dataRetrieval/reference/index.html) and/or function documentation (e.g. `?read_USGS_daily`).
                
 ```{r echo=FALSE}
 df <- data.frame(
@@ -151,7 +151,7 @@ data_station <- readWQPdata(siteid = "USGS-04024315",
 
 Guidance on how to use the new web page and web services are available in the [User Guide](https://www.waterqualitydata.us/beta/portal_userguide/) and [Web Services Guide](https://www.waterqualitydata.us/beta/webservices_documentation/). Additional profiles will continue to be added over time. 
 
-## NWIS "QW" Data
+## NWIS "qw" Data
 
 As of dataRetrieval v2.7.17, `readNWISqw()` has been retired and replaced by `readWQPqw()`. The `readWQPqw()` function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characteristic names, and start/end dates. Learn more about the change and where to find the new samples data in the dataretrieval [Changes to NWIS QW services vignette](https://doi-usgs.github.io/dataRetrieval/articles/qwdata_changes.html) and the WDFN blog on [Improved Public Delivery of Water Quality and Field Samples](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
