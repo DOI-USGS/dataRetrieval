@@ -38,7 +38,7 @@ This document will introduce each new function (note as time goes on, we'll upda
 
 # New Features
 
-Each new "API endpoint" will deliver a new type of USGS data. Currently the available endpoints are "monitoring-locations", "time-series-metadata", and "daily". All of these new endpoints offer some new features that the NWIS services did not have:
+Each new "API endpoint" will deliver a new type of USGS data. Currently the available endpoints are "monitoring-locations", "time-series-metadata", and "daily". All of these endpoints offer some new features that the NWIS services did not have:
 
 * **Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQL) syntax**: any column can also be queried on! The main `dataRetrieval::read_USGS_*` functions will take vector inputs. Each query is appended as a boolean AND. For instance, if you ask for a vector of monitoring location ids and a vector of parameter codes, you will get data back for just those monitoring locations AND the specified parameter codes. Towards the bottom of this document, we'll discuss ways to make more specific queries using Contextual Query Language.
 
