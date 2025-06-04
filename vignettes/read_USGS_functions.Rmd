@@ -64,7 +64,11 @@ API_USGS_PAT = "my_super_secret_token"
 ```
 You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. 
 
-# Monitoring Location
+# New Functions
+
+As new API endpoints come online, this section will be updated with any `dataRetrieval` function that is created.
+
+## Monitoring Location
 
 The `read_USGS_monitoring_location` function replaces the `readNWISsite` function.
 
@@ -126,7 +130,7 @@ leaflet(data = sites_wi |>
 
 ```
 
-# Time Series Metadata
+## Time Series Metadata
 
 The `read_USGS_ts_meta` function replaces the `whatNWISdata` function.
 
@@ -153,7 +157,7 @@ knitr::kable(ts_available1)
 
 ```
 
-# Daily Values
+## Daily Values
 
 The `read_USGS_daily` function replaces the `readNWISdv` function.
 
@@ -169,12 +173,12 @@ library(dataRetrieval)
 daily_modern <- read_USGS_daily(monitoring_location_id = "USGS-01491000",
                           parameter_code = c("00060", "00010"),
                           statistic_id = "00003",
-                          time = c("2023-01-01", "2025-05-06"))
+                          time = c("2023-10-01", "2024-09-30"))
 
 nrow(daily_modern)
 ```
 
-The first thing you might notice is that the new service serves data in a "long" format, which means there is just a single observations per row of the data frame (see: [Pivot Data](articles/long_to_wide.html)). 
+The first thing you might notice is that the new service serves data in a "long" format, which means there is just a single observations per row of the data frame (see: [Pivot Data](articles/long_to_wide.html)). Many functions will be easier and more efficient to work with a "long" data frame. For instance, here we can see how `ggplot2` can use the parameter_code column to create a "facet" plot:
 
 ```{r}
 library(ggplot2)
@@ -186,7 +190,60 @@ ggplot(data = daily_modern) +
 
 ```
 
-# Discrete Samples
+## General Retrieval
+
+The `read_USGS_data` function replaces the `readNWISdata` function.
+
+The new APIs can handle complex requests. For those queries, users will need to construct their own request using Common Query Language. There's an excellent article <https://api.waterdata.usgs.gov/docs/ogcapi/complex-queries/>.
+
+Let's try to find sites in Wisconsin and Minnesota that have a drainage area greater than 1000 mi^2.
+
+```{r}
+cql <- '{
+  "op": "and",
+  "args": [
+    {
+      "op": "in",
+        "args": [
+          { "property": "state_name" },
+          [ "Wisconsin", "Minnesota" ]
+        ]
+    },
+    {
+      "op": ">",
+        "args": [
+          { "property": "drainage_area" },
+          1000
+        ]
+    }
+  ]
+}'
+
+sites_mn_wi <- read_USGS_data(service = "monitoring-locations", 
+                              CQL = cql)
+
+```
+
+Let's see what that looks like:
+
+```{r}
+leaflet_crs <- "+proj=longlat +datum=WGS84" #default leaflet crs
+pal <- colorNumeric("viridis", sites_mn_wi$drainage_area)
+leaflet(data = sites_mn_wi |> 
+                sf::st_transform(crs = leaflet_crs)) |> 
+    addProviderTiles("CartoDB.Positron") |> 
+    addCircleMarkers(popup = ~monitoring_location_name, 
+                     color = ~ pal(drainage_area),
+                     radius = 0.1,
+                     opacity = 1) |> 
+    addLegend(pal = pal,
+              position = "bottomleft",
+              title = "Drainage Area",
+              values = ~drainage_area)
+
+```
+
+## Discrete Samples
 
 Discrete USGS water quality can be accessed via the `read_USGS_samples` function. While this is a new, modern USGS endpoint, it is not served in the same infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html)) for information on accessing USGS discrete water quality data.
 
