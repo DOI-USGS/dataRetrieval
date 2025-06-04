@@ -40,6 +40,8 @@ navbar:
     menu:
     - text: Tutorial
       href: articles/tutorial.html
+    - text: New USGS Functions
+      href: articles/read_USGS_functions.html
     - text: Background
       href: articles/dataRetrieval.html
     - text: Pivot Data
