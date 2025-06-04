@@ -31,20 +31,18 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data OGC APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS is planning to modernize **all** web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services and deprecate functions for accessing legacy services. 
-
+As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data OGC APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS is [planning to modernize **all** web services](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/) in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services and deprecate functions for accessing the legacy services. 
 This document will introduce each new function (note as time goes on, we'll update this document to include additional functions). Scroll down for tips on what you'll need to do to convert your legacy scripts to use these modern functions. Note the timeline for the NWIS servers being shut down is currently very uncertain. We'd recommend incorporating these new functions as soon as possible to avoid future headaches.
 
 # New Features
 
-Each new "API endpoint" will deliver a new type of USGS data. Currently the available endpoints are "monitoring-locations", "time-series-metadata", and "daily". All of these new endpoints offer some new features that the NWIS services did not have:
+Each new "API endpoint" will deliver a new type of USGS data. Currently the available endpoints are "monitoring-locations", "time-series-metadata", and "daily". All of these endpoints offer some new features that the NWIS services did not have:
 
-* Any column that is returned can also be queried on! The main `dataRetrieval` functions will take vector inputs. Each query is appended as a boolean AND. For instance, if you ask for a vector of monitoring location ids and a vector of parameter codes, you will get data back for just those monitoring locations AND the specified parameter codes. Towards the bottom of this document, we'll discuss ways to make more specific queries using "Common Query Language" or CQL.
+* **Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQL) syntax**: any column can also be queried on! The main `dataRetrieval::read_USGS_*` functions will take vector inputs. Each query is appended as a boolean AND. For instance, if you ask for a vector of monitoring location ids and a vector of parameter codes, you will get data back for just those monitoring locations AND the specified parameter codes. Towards the bottom of this document, we'll discuss ways to make more specific queries using Contextual Query Language.
 
-* Data is returned with a "geometry" column, which is a simple feature object, allowing the data to be integrated with the `sf` package and associated geospatial workflows.
+* **Provides [Simple Features](https://en.wikipedia.org/wiki/Simple_Features) functionality**: data is returned with a "geometry" column, which is a simple feature object, allowing the data to be integrated with the [`sf`](https://r-spatial.github.io/sf/) package and associated geospatial workflows.
 
-* When you look at the help file for the new functions, you’ll also notice there are many more arguments. These are mostly set by default to NA. You **DO NOT** need to (and most likely should not!) specify all of these parameters. 
+* **Enables more flexible queries**: when you look at the help file for the new functions, you’ll also notice there are many more arguments. These are mostly set by default to NA. You **DO NOT** need to (and most likely should not!) specify all of these parameters. 
 
 * Users can pick which columns are returned with the "properties" argument. Available properties can be discovered with the `check_OGC_requests` function:
 
@@ -119,7 +117,9 @@ ggplot(data = sites_wi) +
 
 ```{r}
 library(leaflet)
+
 leaflet_crs <- "+proj=longlat +datum=WGS84" #default leaflet crs
+
 leaflet(data = sites_wi |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
     addProviderTiles("CartoDB.Positron") |> 
@@ -181,6 +181,7 @@ The first thing you might notice is that the new service serves data in a "long"
 
 ```{r}
 library(ggplot2)
+
 ggplot(data = daily_modern) +
   geom_point(aes(x = time, y = value, 
                  color = approval_status)) +
@@ -191,7 +192,7 @@ ggplot(data = daily_modern) +
 
 ## General Retrieval
 
-The `read_USGS_data` function replaces the `readNWISdata` function.
+The `read_USGS_data` function replaces the `readNWISdata` function. This is a lower-level, generalized function for querying any of the API endpoints.
 
 The new APIs can handle complex requests. For those queries, users will need to construct their own request using Common Query Language. There's an excellent article <https://api.waterdata.usgs.gov/docs/ogcapi/complex-queries/>.
 
@@ -227,7 +228,9 @@ Let's see what that looks like:
 
 ```{r}
 leaflet_crs <- "+proj=longlat +datum=WGS84" #default leaflet crs
+
 pal <- colorNumeric("viridis", sites_mn_wi$drainage_area)
+
 leaflet(data = sites_mn_wi |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
     addProviderTiles("CartoDB.Positron") |> 
