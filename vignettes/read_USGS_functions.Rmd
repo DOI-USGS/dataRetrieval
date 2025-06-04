@@ -119,7 +119,9 @@ ggplot(data = sites_wi) +
 
 ```{r}
 library(leaflet)
+
 leaflet_crs <- "+proj=longlat +datum=WGS84" #default leaflet crs
+
 leaflet(data = sites_wi |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
     addProviderTiles("CartoDB.Positron") |> 
