@@ -32,7 +32,7 @@ knitr::opts_chunk$set(
 ```
 
 
-As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data OGC APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS is planning to modernize **all** web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. 
+As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data OGC APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS is [planning to modernize **all** web services](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/) in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. 
 
 This document will introduce each new function (note as time goes on, we'll update this document to include additional functions). Scroll down for tips on what you'll need to do to convert your legacy scripts to use these modern functions. Note the timeline for the NWIS servers being shut down is currently very uncertain. We'd recommend incorporating these new functions as soon as possible to avoid future headaches.
 
