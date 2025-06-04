@@ -5,7 +5,7 @@ editor_options:
 output:
   rmarkdown::html_vignette:
     toc: true
-    number_sections: true
+    number_sections: false
 vignette: >
   %\VignetteIndexEntry{Introduction to New USGS Services}
   \usepackage[utf8]{inputenc}
@@ -31,20 +31,23 @@ knitr::opts_chunk$set(
 )
 ```
 
-As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data OGC APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS is [planning to modernize **all** web services](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/) in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services and deprecate functions for accessing the legacy services. 
-This document will introduce each new function (note as time goes on, we'll update this document to include additional functions). Scroll down for tips on what you'll need to do to convert your legacy scripts to use these modern functions. Note the timeline for the NWIS servers being shut down is currently very uncertain. We'd recommend incorporating these new functions as soon as possible to avoid future headaches.
+As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data OGC APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS will be modernizing [**all** of the NWIS web services](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/) in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services and deprecate functions for accessing the legacy services. 
+
+This document will introduce each new function (note as time goes on, we'll update this document to include additional functions). Note the timeline for the NWIS servers being shut down is currently very uncertain. We'd recommend incorporating these new functions as soon as possible to avoid future headaches.
 
 # New Features
 
-Each new "API endpoint" will deliver a new type of USGS data. Currently the available endpoints are "monitoring-locations", "time-series-metadata", and "daily". All of these endpoints offer some new features that the NWIS services did not have:
+Each new "API endpoint" will deliver a new type of USGS data. Currently the available endpoints are "monitoring-locations", "time-series-metadata", and "daily". All of these endpoints offer some new features that the legacy services did not have:
 
-* **Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQL) syntax**: any column can also be queried on! The main `dataRetrieval::read_USGS_*` functions will take vector inputs. Each query is appended as a boolean AND. For instance, if you ask for a vector of monitoring location ids and a vector of parameter codes, you will get data back for just those monitoring locations AND the specified parameter codes. Towards the bottom of this document, we'll discuss ways to make more specific queries using Contextual Query Language.
+## Flexible Queries
 
-* **Provides [Simple Features](https://en.wikipedia.org/wiki/Simple_Features) functionality**: data is returned with a "geometry" column, which is a simple feature object, allowing the data to be integrated with the [`sf`](https://r-spatial.github.io/sf/) package and associated geospatial workflows.
+When you look at the help file for the new functions, you’ll notice there are many more arguments. These are mostly set by default to `NA`. You **DO NOT** need to (and most likely should not!) specify all of these parameters. The requested filters are appended as Boolean "AND"s, meaning if you specify a vector of monitoring locations and parameter codes, you will only get back those specified monitoring locations with the specified parameter codes.
 
-* **Enables more flexible queries**: when you look at the help file for the new functions, you’ll also notice there are many more arguments. These are mostly set by default to NA. You **DO NOT** need to (and most likely should not!) specify all of these parameters. 
+A side bonus of this is that since all of the potential arguments are defined, your favorite integrated development environment (IDE) will almost certainly have an autocomplete feature to let you tab through the potential options.
 
-* Users can pick which columns are returned with the "properties" argument. Available properties can be discovered with the `check_OGC_requests` function:
+## Flexible Columns Returned
+
+Users can pick which columns are returned with the "properties" argument. Available properties can be discovered with the `check_OGC_requests` function:
 
 ```{r}
 daily_schema <- check_OGC_requests(endpoint = "daily", type = "schema")
@@ -52,14 +55,24 @@ names(daily_schema$properties)
 
 ```
 
-* You can register an API key for use with USGS water data APIs. There are now limits on how many queries can be requested per IP address per hour. If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
+## API Tokens
+
+You can register an API key for use with USGS water data APIs. There are now limits on how many queries can be requested per IP address per hour. If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
 
 Then save your token in your .Renviron file like this:
 
 ```
 API_USGS_PAT = "my_super_secret_token"
 ```
-You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. 
+You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. You should not add this file to git projects or generally share your API key. Anyone else using your API key will count against the number of requests available to you!
+
+## Contextual Query Language 2 Support
+
+Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQL2) syntax for flexible queries. We'll show how to use the `read_USGS_data` function to make specific queries using Contextual Query Language (2).
+
+## Simple Features
+
+Provides [Simple Features](https://en.wikipedia.org/wiki/Simple_Features) functionality. The data is returned with a "geometry" column, which is a simple feature object, allowing the data to be integrated with the [`sf`](https://r-spatial.github.io/sf/) package and associated geospatial workflows.
 
 # New Functions
 
@@ -170,11 +183,9 @@ To access these services on a web browser, go to <https://api.waterdata.usgs.gov
 library(dataRetrieval)
 
 daily_modern <- read_USGS_daily(monitoring_location_id = "USGS-01491000",
-                          parameter_code = c("00060", "00010"),
-                          statistic_id = "00003",
-                          time = c("2023-10-01", "2024-09-30"))
-
-nrow(daily_modern)
+                                parameter_code = c("00060", "00010"),
+                                statistic_id = "00003",
+                                time = c("2023-10-01", "2024-09-30"))
 ```
 
 The first thing you might notice is that the new service serves data in a "long" format, which means there is just a single observations per row of the data frame (see: [Pivot Data](articles/long_to_wide.html)). Many functions will be easier and more efficient to work with a "long" data frame. For instance, here we can see how `ggplot2` can use the parameter_code column to create a "facet" plot:
@@ -194,7 +205,7 @@ ggplot(data = daily_modern) +
 
 The `read_USGS_data` function replaces the `readNWISdata` function. This is a lower-level, generalized function for querying any of the API endpoints.
 
-The new APIs can handle complex requests. For those queries, users will need to construct their own request using Common Query Language. There's an excellent article <https://api.waterdata.usgs.gov/docs/ogcapi/complex-queries/>.
+The new APIs can handle complex requests. For those queries, users will need to construct their own request using Contextual Query Language (CQL2). There's an excellent article <https://api.waterdata.usgs.gov/docs/ogcapi/complex-queries/>.
 
 Let's try to find sites in Wisconsin and Minnesota that have a drainage area greater than 1000 mi^2.
 
@@ -263,7 +274,7 @@ Historically, we allowed users to customize their queries via the `...` argument
 
 ### Dependencies
 
-Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. Since the new services offer geospatial output, we have recommend using the `sf` package. The `whisker` package was also included to help create POST CQL2 queries. 
+Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. Since the new services offer geospatial output, we also now require the `sf` package. The `whisker` package was also included to help create POST CQL2 queries. 
 
 ## Developmental workflow
 
