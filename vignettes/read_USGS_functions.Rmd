@@ -5,7 +5,7 @@ editor_options:
 output:
   rmarkdown::html_vignette:
     toc: true
-    number_sections: true
+    number_sections: false
 vignette: >
   %\VignetteIndexEntry{Introduction to New USGS Services}
   \usepackage[utf8]{inputenc}
@@ -24,50 +24,175 @@ options(continue = " ",
 
 knitr::opts_chunk$set(
   echo = TRUE,
-  message = TRUE,
+  message = FALSE,
+  warning = FALSE,
   fig.height = 4,
   fig.width = 7
 )
 ```
 
+As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data OGC APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS will be modernizing [**all** of the NWIS web services](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/) in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services and deprecate functions for accessing the legacy services. 
 
-As we bid adieu to the NWIS web services, we welcome a new web service offering, the USGS Water Data OGC APIs.
+This document will introduce each new function (note as time goes on, we'll update this document to include additional functions). Note the timeline for the NWIS servers being shut down is currently very uncertain. We'd recommend incorporating these new functions as soon as possible to avoid future headaches.
 
-# New USGS data access
+# New Features
 
-This is a modern access point for USGS data. The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. 
+Each new "API endpoint" will deliver a new type of USGS data. Currently the available endpoints are "monitoring-locations", "time-series-metadata", and "daily". All of these endpoints offer some new features that the legacy services did not have:
 
-# Daily Values
+## Flexible Queries
+
+When you look at the help file for the new functions, you’ll notice there are many more arguments. These are mostly set by default to `NA`. You **DO NOT** need to (and most likely should not!) specify all of these parameters. The requested filters are appended as Boolean "AND"s, meaning if you specify a vector of monitoring locations and parameter codes, you will only get back those specified monitoring locations with the specified parameter codes.
+
+A side bonus of this is that since all of the potential arguments are defined, your favorite integrated development environment (IDE) will almost certainly have an autocomplete feature to let you tab through the potential options.
+
+## Flexible Columns Returned
+
+Users can pick which columns are returned with the "properties" argument. Available properties can be discovered with the `check_OGC_requests` function:
+
+```{r}
+daily_schema <- check_OGC_requests(endpoint = "daily", type = "schema")
+names(daily_schema$properties)
+
+```
+
+## API Tokens
+
+You can register an API key for use with USGS water data APIs. There are now limits on how many queries can be requested per IP address per hour. If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
+
+Then save your token in your .Renviron file like this:
+
+```
+API_USGS_PAT = "my_super_secret_token"
+```
+You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. You should not add this file to git projects or generally share your API key. Anyone else using your API key will count against the number of requests available to you!
+
+## Contextual Query Language 2 Support
+
+Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQL2) syntax for flexible queries. We'll show how to use the `read_USGS_data` function to make specific queries using Contextual Query Language (2).
+
+## Simple Features
+
+Provides [Simple Features](https://en.wikipedia.org/wiki/Simple_Features) functionality. The data is returned with a "geometry" column, which is a simple feature object, allowing the data to be integrated with the [`sf`](https://r-spatial.github.io/sf/) package and associated geospatial workflows.
+
+# New Functions
+
+As new API endpoints come online, this section will be updated with any `dataRetrieval` function that is created.
+
+## Monitoring Location
+
+The `read_USGS_monitoring_location` function replaces the `readNWISsite` function.
+
+`r dataRetrieval:::get_description("monitoring-locations")`
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations>.
+
+Here is a simple example of requesting one known USGS site:
+
+```{r}
+sites_information <- read_USGS_monitoring_location(monitoring_location_id = "USGS-01491000")
+```
+
+The output includes the following information:
+
+```{r echo=FALSE}
+knitr::kable(t(sites_information))
+```
+
+Maybe that is more information than you need. You can specify which columns get returned with the "properties" argument:
+
+```{r}
+site_info <- read_USGS_monitoring_location(monitoring_location_id = "USGS-01491000",
+                                           properties = c("monitoring_locations_id",
+                                                          "site_type",
+                                                          "drainage_area",
+                                                          "monitoring_location_name"))
+
+knitr::kable(site_info)
+
+```
+
+Any of those original outputs can also be inputs to the function! So let's say we want to find all the stream sites in Wisconsin:
+
+```{r}
+sites_wi <- read_USGS_monitoring_location(state_name = "Wisconsin", 
+                                          site_type = "Stream")
+```
+
+The returned data includes a column "geometry" which is a collection of simple feature (sf) points. This allows for seamless integration with the `sf` package. Here are 2 quick examples of using the `sf` object in ggplot2 and leaflet:
+
+```{r}
+library(ggplot2)
+
+ggplot(data = sites_wi) +
+  geom_sf() +
+  theme_minimal()
+```
+
+```{r}
+library(leaflet)
+
+leaflet_crs <- "+proj=longlat +datum=WGS84" #default leaflet crs
+
+leaflet(data = sites_wi |> 
+                sf::st_transform(crs = leaflet_crs)) |> 
+    addProviderTiles("CartoDB.Positron") |> 
+    addCircleMarkers(popup = ~monitoring_location_name, 
+                   radius = 0.1,
+                   opacity = 1)
+
+```
+
+## Time Series Metadata
+
+The `read_USGS_ts_meta` function replaces the `whatNWISdata` function.
+
+`r dataRetrieval:::get_description("time-series-metadata")`
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata>.
+
+
+```{r}
+ts_available <- read_USGS_ts_meta(monitoring_location_id = "USGS-01491000",
+                                  parameter_code = c("00060", "00010"))
+
+```
+
+The returning tables gives information on all available time series. For instance, we can pull a few columns out and see when each time series started, ended, or was last modified.
+
+```{r echo=FALSE}
+ts_available1 <- ts_available[,c("parameter_name", "statistic_id", "begin", "end", "last_modified")]
+ts_available1 <- sf::st_drop_geometry(ts_available1)
+ts_available1$begin <- as.Date(ts_available1$begin)
+ts_available1$end <- as.Date(ts_available1$end)
+ts_available1$last_modified <- as.Date(ts_available1$last_modified)
+knitr::kable(ts_available1)
+
+```
+
+## Daily Values
+
+The `read_USGS_daily` function replaces the `readNWISdv` function.
 
 `r dataRetrieval:::get_description("daily")`
 
 To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily>.
 
-The `read_USGS_daily` function will eventually replace the `readNWISdv` function. Generally, both functions look pretty similar, though we've updated argument names to align with new Water Mission Area conventions::
+
 
 ```{r}
 library(dataRetrieval)
 
-dv_legacy <- readNWISdv(siteNumbers = "01491000",
-                        parameterCd =  c("00060", "00010"),
-                        statCd = "00003", 
-                        startDate = "2023-01-01",
-                        endDate =  "2025-05-06")
-
-nrow(dv_legacy)
-
 daily_modern <- read_USGS_daily(monitoring_location_id = "USGS-01491000",
-                          parameter_code = c("00060", "00010"),
-                          statistic_id = "00003",
-                          time = c("2023-01-01", "2025-05-06"))
-
-nrow(daily_modern)
+                                parameter_code = c("00060", "00010"),
+                                statistic_id = "00003",
+                                time = c("2023-10-01", "2024-09-30"))
 ```
 
-The first thing you might notice is that the legacy service serves data in a "wide" format, which means there are multiple observations in a single row of the data frame (see: [Pivot Data](articles/long_to_wide.html)). The new services return the data in a "long" format, so that only one observation is returned per row. This follows tidy principles and is often preferred in scripting languages. We'll look at the returned data with a `ggplot2` plot to show a very simple example of the power of a long format:
+The first thing you might notice is that the new service serves data in a "long" format, which means there is just a single observations per row of the data frame (see: [Pivot Data](articles/long_to_wide.html)). Many functions will be easier and more efficient to work with a "long" data frame. For instance, here we can see how `ggplot2` can use the parameter_code column to create a "facet" plot:
 
 ```{r}
 library(ggplot2)
+
 ggplot(data = daily_modern) +
   geom_point(aes(x = time, y = value, 
                  color = approval_status)) +
@@ -76,99 +201,64 @@ ggplot(data = daily_modern) +
 
 ```
 
-## Additional new features
+## General Retrieval
 
-* Another feature of the modern returned data frame is that it has a "geometry" column which is an `sf` class and can therefore be used in `sf` processes.
+The `read_USGS_data` function replaces the `readNWISdata` function. This is a lower-level, generalized function for querying any of the API endpoints.
 
-* Flexible column selection:
+The new APIs can handle complex requests. For those queries, users will need to construct their own request using Contextual Query Language (CQL2). There's an excellent article <https://api.waterdata.usgs.gov/docs/ogcapi/complex-queries/>.
 
-```{r}
-dv_2 <- read_USGS_daily(monitoring_location_id = "USGS-01491000",
-                     parameter_code = c("00060"),
-                     properties = c("monitoring_location_id",
-                                    "value",
-                                    "time"),
-                     statistic_id = "00003",
-                     time = c("2022-10-01", "2023-10-01"))
-head(dv_2)
-```
-
-* When you look at the help file for the new function `?read_USGS_daily`, you'll also notice there are many more arguments. These are mostly set by default to NA. You DO NOT need to specify all of these parameters.
-
-* Flexible data/last_modified
-
-
-
-# Time Series Metadata
-
-`r dataRetrieval:::get_description("time-series-metadata")`
-
-To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata>.
-
-The `read_USGS_ts_meta` function will eventually replace the `whatNWISdata` function. Generally, both functions look pretty similar:
+Let's try to find sites in Wisconsin and Minnesota that have a drainage area greater than 1000 mi^2.
 
 ```{r}
-data_legacy <- whatNWISdata(siteNumbers = "01491000",
-                        parameterCd =  c("00060", "00010"))
+cql <- '{
+  "op": "and",
+  "args": [
+    {
+      "op": "in",
+        "args": [
+          { "property": "state_name" },
+          [ "Wisconsin", "Minnesota" ]
+        ]
+    },
+    {
+      "op": ">",
+        "args": [
+          { "property": "drainage_area" },
+          1000
+        ]
+    }
+  ]
+}'
+
+sites_mn_wi <- read_USGS_data(service = "monitoring-locations", 
+                              CQL = cql)
+
 ```
 
-```{r echo=FALSE}
-
-knitr::kable(data_legacy[,c("parm_cd",
-                           "stat_cd",
-                           "begin_date",
-                           "end_date",
-                           "count_nu")])
-
-```
+Let's see what that looks like:
 
 ```{r}
-data_modern <- read_USGS_ts_meta(monitoring_location_id = "USGS-01491000",
-                          parameter_code = c("00060", "00010"))
+leaflet_crs <- "+proj=longlat +datum=WGS84" #default leaflet crs
+
+pal <- colorNumeric("viridis", sites_mn_wi$drainage_area)
+
+leaflet(data = sites_mn_wi |> 
+                sf::st_transform(crs = leaflet_crs)) |> 
+    addProviderTiles("CartoDB.Positron") |> 
+    addCircleMarkers(popup = ~monitoring_location_name, 
+                     color = ~ pal(drainage_area),
+                     radius = 0.1,
+                     opacity = 1) |> 
+    addLegend(pal = pal,
+              position = "bottomleft",
+              title = "Drainage Area",
+              values = ~drainage_area)
 
 ```
 
-```{r echo=FALSE}
+## Discrete Samples
 
-knitr::kable(data_modern[,c("parameter_code",
-                           "parameter_name",
-                           "statistic_id",
-                           "computation_identifier",
-                           "begin",
-                           "end")])
-
-```
-
-# Site Information
-
-`r dataRetrieval:::get_description("monitoring-locations")`
-
-The `read_USGS_monitoring_location` function will eventually replace the `readNWISsite` function. Generally, both functions look pretty similar:
-
-```{r}
-sites_legacy <- readNWISsite(siteNumbers = "01491000")
-names(sites_legacy)
-```
-
-```{r}
-sites_modern <- read_USGS_monitoring_location(monitoring_location_id = "USGS-01491000")
-names(sites_modern)
-
-```
-
-
-# API Tokens
-
-If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
-
-Then save your token in your .Renviron file like this:
-
-```
-API_USGS_PAT = "my_super_secret_token"
-```
-
-You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. 
-
+Discrete USGS water quality can be accessed via the `read_USGS_samples` function. While this is a new, modern USGS endpoint, it is not served in the same infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html)) for information on accessing USGS discrete water quality data.
 
 # Notes on dataRetrieval development
 
@@ -176,7 +266,7 @@ You can use `usethis::edit_r_environ()` to edit find and open your .Renviron fil
 
 ### Style
 
-New functions will use a "snake case", such as "read_USGS_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
+New functions will use a "snake case", such as `read_USGS_samples`. Older functions use camel case, such as `readNWISdv`. The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
 
 ### Structure
 
@@ -184,5 +274,41 @@ Historically, we allowed users to customize their queries via the `...` argument
 
 ### Dependencies
 
-Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. Since the new services offer geospatial output, we have recommend using the `sf` package. The `whisker` package was also included to help create POST CQL2 queries. 
+Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. Since the new services offer geospatial output, we also now require the `sf` package. The `whisker` package was also included to help create POST CQL2 queries. 
+
+## Developmental workflow
+
+CRAN-stable documentation will be available on the GitHub pages:
+<https://doi-usgs.github.io/dataRetrieval/>
+
+In-development documentation will be available on the USGS GitLab pages:
+<https://water.code-pages.usgs.gov/dataRetrieval>
+
+Development of `dataRetrieval` will happen on a git branch called "develop". The "develop" branch will only move to the "main" branch when we submit to CRAN, unless there are bug fixes that pertain to the CRAN release. The "develop" branch WILL change frequently, and there are no promises of future behavior. Users must accept that they are using those functions at their own risk. If you willing to accept this risk, the installation instructions are:
+
+```{r eval=FALSE}
+library(remotes)
+
+install_github("DOI-USGS/dataRetrieval",
+               ref = "develop")
+
+```
+
+# HELP!
+
+That's a lot of new information and changes. There are certainly going to be scripts that have been passed down through the years that will start breaking once the NWIS servers are decommissioned. 
+
+Check back on the documentation often:
+<https://doi-usgs.github.io/dataRetrieval/>
+Peruse the "Additional Articles", when we find common issues people have with converting their old workflows, we will try to add articles to clarrify new workflows. 
+
+Currently, you might be interested in:
+
+* [General Tutorial](articles/Tutorial.html)
+
+* [Pivot Help](articles/long_to_wide.html)
+
+* [Joining by closest date](articles/join_by_closest.html)
+
+If you have additional questions, email comptools@usgs.gov. General questions and bug reports can be reported here: <https://github.com/DOI-USGS/dataRetrieval/issues>
 
