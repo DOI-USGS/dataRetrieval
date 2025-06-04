@@ -76,8 +76,8 @@ Functions in `dataRetrieval` look like `readNWISdv`, `readNWISuv`, `readWQPqw`, 
     + "read" will access full data sets
     + "what" will access data availability
 * _Middle_: "NWIS", "USGS", "WQP":
-    + NWIS functions get data from NWIS web services. 
-    + USGS functions are the functions that will eventually replace the NWIS functions. These pull from modern USGS API services.
+    + NWIS functions get data from legacy NWIS web services. 
+    + USGS functions are the functions that will eventually replace the legacy NWIS functions. These pull from modern USGS API services.
     + WQP functions are for discrete water-quality data from the Water Quality Portal.
 * _Suffix_: "data" or other:
     + Functions that end in "data": These are flexible, powerful functions that allow complex user queries.
@@ -91,7 +91,7 @@ There are many types of data served from NWIS. To understand how the services ar
 
 * NWIS has traditionally been the source for all USGS water data
 
-* NWIS will be retired (scheduled 2026, but uncertain):
+* Legacy NWIS services will be retired (scheduled 2026, but uncertain):
   * <https://waterdata.usgs.gov/blog/nwisweb-decommission-summary/>
   
 * USGS functions will slowly replace NWIS functions
