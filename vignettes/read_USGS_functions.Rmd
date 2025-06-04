@@ -229,7 +229,9 @@ Let's see what that looks like:
 
 ```{r}
 leaflet_crs <- "+proj=longlat +datum=WGS84" #default leaflet crs
+
 pal <- colorNumeric("viridis", sites_mn_wi$drainage_area)
+
 leaflet(data = sites_mn_wi |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
     addProviderTiles("CartoDB.Positron") |> 
