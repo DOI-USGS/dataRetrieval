@@ -1,6 +1,5 @@
 ---
 title: "Introduction to New USGS Services"
-author: Laura A. DeCicco
 editor_options: 
   chunk_output_type: console
 output:
