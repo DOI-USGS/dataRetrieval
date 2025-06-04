@@ -280,3 +280,21 @@ install_github("DOI-USGS/dataRetrieval",
 
 ```
 
+# HELP!
+
+That's a lot of new information and changes. There are certainly going to be scripts that have been passed down through the years that will start breaking once the NWIS servers are decommissioned. 
+
+Check back on the documentation often:
+<https://doi-usgs.github.io/dataRetrieval/>
+Peruse the "Additional Articles", when we find common issues people have with converting their old workflows, we will try to add articles to clarrify new workflows. 
+
+Currently, you might be interested in:
+
+* [General Tutorial](articles/Tutorial.html)
+
+* [Pivot Help](articles/long_to_wide.html)
+
+* [Joining by closest date](articles/join_by_closest.html)
+
+If you have additional questions, email comptools@usgs.gov. General questions and bug reports can be reported here: <https://github.com/DOI-USGS/dataRetrieval/issues>
+
