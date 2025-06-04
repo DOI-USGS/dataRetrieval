@@ -71,7 +71,10 @@ read_USGS_data <- function(service,
   
   if(convertType) return_list <- cleanup_cols(return_list)
   
-  return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
+  # Add other time series services when they come online
+  if(service %in% c("daily")){
+    return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
+  }
   
   return_list <- rejigger_cols(return_list, args[["properties"]], service)
   
