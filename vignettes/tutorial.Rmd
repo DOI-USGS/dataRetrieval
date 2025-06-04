@@ -5,10 +5,12 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{dataRetrieval Tutorial}
   %\VignetteDepends{dplyr}
   \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -47,7 +49,7 @@ vignette("dataRetrieval", package = "dataRetrieval")
 Additionally, each function has a help file. These can be accessed by typing a question mark, followed by the function name in the R console:
 
 ```{r echo=TRUE, eval=FALSE}
-?readNWISuv
+?read_USGS_daily
 ```
 
 Each function's help file has working examples to demonstrate the usage. The examples may have comments "## Not run". These examples CAN be run, they just are not run by the CRAN maintainers due to the external service calls.
@@ -74,8 +76,8 @@ Functions in `dataRetrieval` look like `readNWISdv`, `readNWISuv`, `readWQPqw`, 
     + "read" will access full data sets
     + "what" will access data availability
 * _Middle_: "NWIS", "USGS", "WQP":
-    + NWIS functions get data from NWIS web services. 
-    + USGS functions are the functions that will eventually replace the NWIS functions. These pull from modern USGS API services.
+    + NWIS functions get data from legacy NWIS web services. 
+    + USGS functions are the functions that will eventually replace the legacy NWIS functions. These pull from modern USGS API services.
     + WQP functions are for discrete water-quality data from the Water Quality Portal.
 * _Suffix_: "data" or other:
     + Functions that end in "data": These are flexible, powerful functions that allow complex user queries.
@@ -89,11 +91,14 @@ There are many types of data served from NWIS. To understand how the services ar
 
 * NWIS has traditionally been the source for all USGS water data
 
-* NWIS will be retired (scheduled late 2026):
+* Legacy NWIS services will be retired (scheduled 2026, but uncertain):
   * <https://waterdata.usgs.gov/blog/nwisweb-decommission-summary/>
   
 * USGS functions will slowly replace NWIS functions
-  * `read_USGS_samples` is the first replacement
+  * `read_USGS_samples` has replaced `readNWISqw`
+  * `read_USGS_daily` can replace `readNWISdv`
+  * `read_USGS_monitoring_location` can replace `readNWISsite`
+  * `read_USGS_ts_meta` can replace `whatNWISdata`
   
 * Discrete water quality data:
   * WQP functions should be used when accessing non-USGS discrete water quality data
@@ -102,19 +107,19 @@ There are many types of data served from NWIS. To understand how the services ar
 
 # NWIS Data: Current NWIS offerings
   
-| data_type_cd |Function| Data description |
+| data_type_cd |Function| Data description | Replacement Function |
 |--------|:-------|------:|-------:|
-|uv|[readNWISuv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuv.html)|Continuous data|
-|dv|[readNWISdv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdv.html)|Daily aggregated |
-|gwlevels|[readNWISgwl](https://doi-usgs.github.io/dataRetrieval/reference/readNWISgwl.html)|Groundwater levels |
-|site|[readNWISsite](https://doi-usgs.github.io/dataRetrieval/reference/readNWISsite.html)|Site metadata|
-|pcode|[readNWISpCode](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpCode.html)|Parameter code metadata |
-|stat|[readNWISstat](https://doi-usgs.github.io/dataRetrieval/reference/readNWISstat.html)| Site statistics |
-|rating|[readNWISrating](https://doi-usgs.github.io/dataRetrieval/reference/readNWISrating.html)| Rating curves|
-|peak|[readNWISpeak](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpeak.html)|Peak flow|
-|use|[readNWISuse](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuse.html)|Water Use|
-|meas|[readNWISmeas](https://doi-usgs.github.io/dataRetrieval/reference/readNWISmeas.html)|Discrete surface water|
-| | [readNWISdata](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdata.html) | General data import for NWIS|
+|uv|[readNWISuv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuv.html)|Continuous data| None yet |
+|dv|[readNWISdv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdv.html)|Daily aggregated | [read_USGS_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_USGS_daily.html) |
+|gwlevels|[readNWISgwl](https://doi-usgs.github.io/dataRetrieval/reference/readNWISgwl.html)|Groundwater levels | None yet |
+|site|[readNWISsite](https://doi-usgs.github.io/dataRetrieval/reference/readNWISsite.html)|Site metadata| [read_USGS_monitoring_location](https://doi-usgs.github.io/dataRetrieval/reference/read_USGS_monitoring_location.html) |
+|pcode|[readNWISpCode](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpCode.html)|Parameter code metadata | None yet |
+|stat|[readNWISstat](https://doi-usgs.github.io/dataRetrieval/reference/readNWISstat.html)| Site statistics | None yet |
+|rating|[readNWISrating](https://doi-usgs.github.io/dataRetrieval/reference/readNWISrating.html)| Rating curves| None yet |
+|peak|[readNWISpeak](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpeak.html)|Peak flow| None yet |
+|use|[readNWISuse](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuse.html)|Water Use| None yet |
+|meas|[readNWISmeas](https://doi-usgs.github.io/dataRetrieval/reference/readNWISmeas.html)|Discrete surface water| None yet |
+| | [readNWISdata](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdata.html) | General data import for NWIS| [read_USGS_data](https://doi-usgs.github.io/dataRetrieval/reference/read_USGS_data.html) |
 
 
 ## USGS Basic Retrievals
@@ -142,20 +147,14 @@ df <- data.frame(
 
 names(df) <- c("Parameter Codes", "Short Name")
 
-knitr::kable(df)
-```
-
-
-
-```{r echo=FALSE, eval=TRUE}
-df <- data.frame(
+df2 <- data.frame(
   pCode = c("00001", "00002", "00003", "00008"),
   shName = c("Maximum", "Minimum", "Mean", "Median")
 )
 
-names(df) <- c("Statistic Codes", "Short Name")
+names(df2) <- c("Statistic Codes", "Short Name")
 
-knitr::kable(df)
+knitr::kable(list(df, df2))
 ```
 
 
@@ -197,17 +196,14 @@ You can use the "user-friendly" functions. These functions take the same 4 input
 Let's start by asking for discharge (parameter code = 00060) at a site right next to the old USGS office in Wisconsin (Pheasant Branch Creek). 
 
 ```{r echo=TRUE, eval=TRUE}
-siteNo <- "05427948"
+siteNo <- "USGS-05427948"
 pCode <- "00060"
 start.date <- "2023-10-01"
 end.date <- "2024-09-30"
 
-pheasant <- readNWISdv(
-  siteNumbers = siteNo,
-  parameterCd = pCode,
-  startDate = start.date,
-  endDate = end.date
-)
+pheasant <- read_USGS_daily(monitoring_location_id = siteNo,
+                            parameter_code = pCode,
+                            time = c(start.date, end.date))
 ```
 
 From the Pheasant Creek example, let's look at the data. The column names are:
@@ -217,53 +213,28 @@ names(pheasant)
 ```
 
 
-The names of the columns are based on the parameter and statistic codes. In many cases, you can clean up the names with the convenience function `renameNWISColumns`:
-
-```{r echo=TRUE, eval=TRUE}
-pheasant <- renameNWISColumns(pheasant)
-names(pheasant)
-```
-
-The returned data also has several attributes attached to the data frame. To see what the attributes are:
-
-```{r echo=TRUE, eval=TRUE}
-names(attributes(pheasant))
-```
-
-Each `dataRetrieval` return should have the attributes: url, siteInfo, and variableInfo. Additional attributes are available depending on the data service.
-
-To access the attributes:
-
-```{r echo=TRUE, eval=TRUE}
-url <- attr(pheasant, "url")
-url
-```
-
-[Raw Data](`r url`)
-
-Make a simple plot to see the data:
+Let's make a simple plot to see the data:
 
 ```{r echo=TRUE, eval=TRUE, fig.height=3.5}
 library(ggplot2)
 ts <- ggplot(
   data = pheasant,
-  aes(Date, Flow)
-) +
+  aes(time, value)) +
   geom_line()
 ts
 ```
 
-Then use the attributes attached to the data frame to create better labels:
+Then we can use the `readNWISpCode` and `read_USGS_monitoring_location` functions to create better labels:
 
 
 ```{r echo=TRUE, eval=TRUE, fig.height=3.5}
-parameterInfo <- attr(pheasant, "variableInfo")
-siteInfo <- attr(pheasant, "siteInfo")
+parameterInfo <- readNWISpCode(pCode)
+siteInfo <- read_USGS_monitoring_location(siteNo)
 
 ts <- ts +
   xlab("") +
-  ylab(parameterInfo$variableDescription) +
-  ggtitle(siteInfo$station_nm)
+  ylab(parameterInfo$parameter_nm) +
+  ggtitle(siteInfo$monitoring_location_name)
 ts
 ```
 
@@ -273,25 +244,26 @@ The most common question the dataRetrieval team gets is:
 
 "I KNOW this site has data but it's not coming out of dataRetrieval! Where's my data?"
 
-The best way to verify you are calling your data correctly, use the `whatNWISdata` function to find out the data_type_cd (which will tell you the service you need to call), the parameter/stat codes available at that site, and the period of record. All rows that have "qw" in the column data_type_cd will come from the Water Quality Portal. 
+First verify that the data you think is available is actually associated with the location. For time series data, use the `read_NWIS_ts_meta` function to find out the available time series data. 
 
 ```{r echo=TRUE}
 library(dplyr)
 
-site <- "05407000"
-data_available <- whatNWISdata(siteNumber = site) 
+site <- "USGS-05407000"
+ts_data_available <- read_USGS_ts_meta(monitoring_location_id = site) 
 
-data_available_NWIS <- data_available |> 
-  select(data_type_cd, parm_cd, stat_cd, 
-         begin_date, end_date, count_nu) |> 
-  filter(!data_type_cd %in% c("qw", "ad")) |> 
-  arrange(data_type_cd)
+
+data_available <- ts_data_available |> 
+  sf::st_drop_geometry() |> 
+  mutate(begin = as.Date(begin),
+         end = as.Date(end)) |> 
+  select(parameter_name, parameter_code, statistic_id, computation_identifier,
+         begin, end) 
 ```
 
-This is the only available data from NWIS for site `r site`. 
 
 ```{r echo=FALSE}
-datatable(data_available_NWIS,
+datatable(data_available,
           rownames = FALSE,
           options = list(pageLength = 7,
                          lengthChange = FALSE,
@@ -300,41 +272,60 @@ datatable(data_available_NWIS,
 
 ```
 
-The data_type_cd can be used to figure out where to request data:
-
-```{r echo=FALSE}
-df <- data.frame(data_type_cd = c("dv", "uv", "pk", "sv", "gwl"),
-                 readNWIS = c("readNWISdv", "readNWISuv",
-                                "readNWISpeak", "readNWISmeas", "readNWISgwl"),
-                 readNWISdata = c('readNWISdata(..., service = "dv")',
-                                  'readNWISdata(..., service = "iv")',
-                                  'readNWISdata(..., service = "peak")',
-                                  'Not available',
-                                  'readNWISdata(..., service = "gwlevels")'))
-knitr::kable(df)
-```
-So to get all the NWIS data from the above site:
+The time series that have "Instantaneous" in the computation_identifier column will be available in the instantaneous data service (currently `readNWISuv`), and the rest of the data will be available in the daily service (`read_USGS_daily`).
 
 ```{r eval=FALSE, echo=TRUE}
-dv_pcodes <- data_available_NWIS$parm_cd[data_available_NWIS$data_type_cd == "dv"]
-stat_cds <- data_available_NWIS$stat_cd[data_available_NWIS$data_type_cd == "dv"]
+dv_pcodes <- data_available$parameter_code[data_available$computation_identifier != "Instantaneous"]
+stat_cds <- data_available$statistic_id[data_available$computation_identifier != "Instantaneous"]
 
-dv_data <- readNWISdv(siteNumbers = site,
-                      parameterCd = unique(dv_pcodes),
-                      statCd = unique(stat_cds))
+dv_data <- read_USGS_daily(monitoring_location_id = site,
+                           parameter_code = unique(dv_pcodes),
+                           statistic_id = unique(stat_cds))
 
-uv_pcodes <- data_available_NWIS$parm_cd[data_available_NWIS$data_type_cd == "uv"]
+uv_pcodes <- data_available$parameter_code[data_available$computation_identifier == "Instantaneous"]
 
-uv_data <- readNWISuv(siteNumbers = site,
+uv_data <- readNWISuv(siteNumbers = gsub("USGS-", "", site),
                       parameterCd = unique(uv_pcodes))
 
-peak_data <- readNWISpeak(site)
+peak_data <- readNWISpeak(gsub("USGS-", "", site))
 
 ```
+
+For discrete water quality data, use the `summarize_USGS_samples` function:
+
+```{r echo=TRUE}
+discrete_data_available_all <- summarize_USGS_samples(site) 
+
+discrete_data_available <- discrete_data_available_all |> 
+  select(parameter_name = characteristicUserSupplied, 
+         begin = firstActivity, end = mostRecentActivity,
+         count = resultCount)
+
+```
+
+```{r echo=FALSE}
+datatable(discrete_data_available,
+          rownames = FALSE,
+          options = list(pageLength = 7,
+                         lengthChange = FALSE,
+                         searching = FALSE)
+)
+
+```
+
+The discrete water quality data can be accessed with the `read_USGS_samples` function:
+
+```{r eval=FALSE, echo=TRUE}
+samples_data <- read_USGS_samples(monitoringLocationIdentifier = site, 
+                                  dataProfile = "basicphyschem")
+```
+
 
 # Water Quality Portal (WQP)
 
 `dataRetrieval` also allows users to access data from the [Water Quality Portal](http://www.waterqualitydata.us/). The WQP houses data from multiple agencies; while USGS data comes from the NWIS database, EPA data comes from the STORET database (this includes many state, tribal, NGO, and academic groups). The WQP brings data from all these organizations together and provides it in a single format that has a more verbose output than NWIS. 
+
+This tutorial will use the modern WQX3 format. This is still considered "beta", but it is the best way to get up-to-date multi-agency data.
 
 The single user-friendly function is `readWQPqw`. This function will take a site or vector of sites in the first argument "siteNumbers". USGS sites need to add "USGS-" before the site number. 
 
@@ -343,22 +334,25 @@ The 2nd argument "parameterCd". Although it is called "parameterCd", it can take
 So we could get all the water quality data for site `r site` like this:
 
 ```{r eval=FALSE, echo=TRUE}
-qw_data_all <- readWQPqw(siteNumbers = paste0("USGS-", site),
-                     parameterCd = "")
+qw_data_all <- readWQPqw(siteNumbers = site,
+                         parameterCd = "", 
+                         legacy = FALSE)
 ```
 
 or 1 parameter code:
 
 ```{r eval=FALSE, echo=TRUE}
-qw_data_00095 <- readWQPqw(siteNumbers = paste0("USGS-", site),
-                           parameterCd = "00095")
+qw_data_00095 <- readWQPqw(siteNumbers = site,
+                           parameterCd = "00095", 
+                           legacy = FALSE)
 ```
 
 or 1 characteristic name:
 
 ```{r eval=FALSE, echo=TRUE}
-qw_data_sp <- readWQPqw(siteNumbers = paste0("USGS-", site),
-                           parameterCd = "Specific conductance")
+qw_data_sp <- readWQPqw(siteNumbers = site,
+                        parameterCd = "Specific conductance", 
+                        legacy = FALSE)
 ```
 
 
@@ -366,22 +360,16 @@ qw_data_sp <- readWQPqw(siteNumbers = paste0("USGS-", site),
 
 This is all great when you know your site numbers. What do you do when you don't?
 
-There are 2 `dataRetrieval` functions that help with discover in NWIS:
+There are 2 `dataRetrieval` functions that help with USGS data discovery:
 
-*  `whatNWISsites` finds sites within a specified filter (quicker)
-*  `whatNWISdata` summarizes the data within the specified filter (more information)
+*  `read_USGS_monitoring_location` finds sites within a specified filter 
+*  `read_USGS_ts_meta` summarizes the time series meta data 
 
 And 2 functions that help with discover in WQP:
 
 *  `readWQPsummary` summarizes the data available within the WQP by year.
 *  `whatWQPdata` summarizes the data available within the WQP.
 
-There are several ways to specify the requests. The best way to discover how flexible the USGS web services are is to click on the links and see all of the filtering options:
-[http://waterservices.usgs.gov/](http://waterservices.usgs.gov/)
-
-```{r echo=FALSE, out.width = "500px"}
-knitr::include_graphics("waterservices.png")
-```
 
 Available geographic filters are individual site(s), a single state, a bounding box, or a HUC (hydrologic unit code). See examples for those services by looking at the help page for the `readNWISdata` and `readWQPdata` functions:
 
@@ -389,11 +377,9 @@ Here are a few examples:
 
 ```{r eval=FALSE}
 # Daily temperature in Ohio
-dataTemp <- readNWISdata(
-  stateCd = "OH",
-  parameterCd = "00010",
-  service = "dv"
-)
+ohio_sites <- read_USGS_monitoring_location(state_name = "Ohio")
+ohio_ts_meta <- read_USGS_ts_meta(bbox = sf::st_bbox(ohio_sites),  
+                                  parameter_code = "00010")
 
 # Real-time discharge at a site
 instFlow <- readNWISdata(
@@ -405,12 +391,6 @@ instFlow <- readNWISdata(
   tz = "America/Chicago"
 )
 
-# Temperature within a bounding box:
-bBoxEx <- readNWISdata(
-  bBox = c(-83, 36.5, -81, 38.5),
-  parameterCd = "00010"
-)
-
 # Groundwater levels within a HUC:
 groundwaterHUC <- readNWISdata(
   huc = "02070010",
@@ -418,51 +398,6 @@ groundwaterHUC <- readNWISdata(
 )
 ```
   
-
-### Arizona Example
-
-For example, let's see which sites ever measured phosphorus at least 100 times over at least 20 years in Arizona. Water quality data is exclusively found in WQP functions. 
-
-```{r az, echo=TRUE}
-AZ_sites <- readWQPsummary(
-  statecode = "AZ",
-  siteType = "Stream"
-)
-
-az_phos_summary <- AZ_sites |> 
-  mutate(ResultCount = as.numeric(ResultCount),
-         Lat = as.numeric(MonitoringLocationLatitude),
-         Lon = as.numeric(MonitoringLocationLongitude)) |> 
-  rename(Site = MonitoringLocationIdentifier) |> 
-  group_by(Site, Lat, Lon) |> 
-  summarise(min_year = min(YearSummarized),
-            max_year = max(YearSummarized),
-            count = sum(ResultCount)) |> 
-  mutate(POR = max_year - min_year) |> 
-  filter(count > 100,
-         POR >= 20) |> 
-  arrange(desc(count)) |> 
-  ungroup()
-
-```
-
-
-```{r echo=TRUE, eval=TRUE, fig.height=4}
-library(leaflet)
-
-leaflet(data = az_phos_summary) %>%
-  addProviderTiles("CartoDB.Positron") %>%
-  addCircleMarkers(~Lon, ~Lat,
-    color = "red", radius = 3, stroke = FALSE,
-    fillOpacity = 0.8, opacity = 0.8,
-    popup = ~Site
-  )
-```
-
-
-
-
-
 #  Time/Time zone discussion
 
 * The arguments for all `dataRetrieval` functions concerning dates (startDate, endDate) can be R Date objects, or character strings, as long as the string is in the form "YYYY-MM-DD".
