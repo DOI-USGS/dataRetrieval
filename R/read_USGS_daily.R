@@ -67,7 +67,6 @@ read_USGS_daily <- function(monitoring_location_id = NA_character_,
                          parameter_code = NA_character_,
                          statistic_id = NA_character_,
                          properties = NA_character_,
-                         bbox = NA,
                          time_series_id = NA_character_,
                          daily_id = NA_character_,
                          approval_status = NA_character_,
@@ -78,6 +77,7 @@ read_USGS_daily <- function(monitoring_location_id = NA_character_,
                          limit = 10000,
                          skipGeometry = NA,
                          time = NA_character_,
+                         bbox = NA,
                          convertType = TRUE){
   
   message("Function in development, use at your own risk.")

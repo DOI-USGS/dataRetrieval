@@ -11,8 +11,7 @@ retrieve the major data types of U.S. Geological Survey (USGS) hydrology
 data that are available on the Web, as well as data from the Water
 Quality Portal (WQP), which currently houses water quality data from the
 Environmental Protection Agency (EPA), U.S. Department of Agriculture
-(USDA), and USGS. Direct USGS data is obtained from a service called the
-National Water Information System (NWIS).
+(USDA), and USGS.
 
 # Introduction
 
@@ -28,18 +27,26 @@ If you have additional questions about these changes, email
 
 # What would you like to do?
 
-1.  Get instantaneous USGS discharge data. Start here: `?readNWISuv`
+1.  Get instantaneous USGS data (for example, discharge sensor data).
+    Start here: `?readNWISuv`
 
-2.  Get daily USGS discharge data. Start here: `?readNWISdv`
+2.  Get daily USGS data (for example, mean daily discharge). Start here:
+    `?read_USGS_daily`
 
 3.  Get USGS groundwater data. Start here: `?readNWISgwl`
 
-4.  Get discrete water quality data. Start here: `?readWQPdata`
+4.  Get discrete water quality data from a cooperative service that
+    integrates publicly available water-quality data from the USGS, EPA,
+    and over 400 state, federal, tribal, and local agencies. Start here:
+    `?readWQPdata`
 
-5.  Discover USGS data (not including discrete water quality data).
-    Start here: `?whatNWISdata`
+5.  Get USGS discrete water quality data. Start here:
+    `?read_USGS_samples`
 
-6.  Find Hydro Network-Linked Data Index (NLDI) data. Start here:
+6.  Get metadata about USGS time series data, including instantaneous
+    and daily data. Start here: `?read_USGS_ts_meta`
+
+7.  Find Hydro Network-Linked Data Index (NLDI) data. Start here:
     `?findNLDI`
 
 For additional tutorials, see:
@@ -67,6 +74,21 @@ install.packages("dataRetrieval")
 The USGS is planning to modernize all web services in the near future.
 For each of these updates, `dataRetrieval` will create a new function to
 access the new services.
+
+## API Token
+
+You can register an API key for use with USGS water data APIs. There are
+now limits on how many queries can be requested per IP address per hour.
+If you find yourself running into limits, you can request an API token
+here: <https://api.waterdata.usgs.gov/signup/>
+
+Then save your token in your .Renviron file like this:
+
+    API_USGS_PAT = "my_super_secret_token"
+
+You can use `usethis::edit_r_environ()` to edit find and open your
+.Renviron file. You will need to restart R for that variable to be
+recognized.
 
 ## New Features
 
@@ -170,15 +192,15 @@ NWIScitation <- create_NWIS_bib(dv)
 NWIScitation
 #> U.S. Geological Survey (2025). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Mar
-#> 25, 2025,
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jun
+#> 04, 2025,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Mar 25, 2025},
+#>   note = {Accessed Jun 04, 2025},
 #>   year = {2025},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -202,14 +224,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2025). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Mar 25, 2025,
+#> Accessed Jun 04, 2025,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Mar 25, 2025},
+#>   note = {Accessed Jun 04, 2025},
 #>   year = {2025},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }
@@ -229,8 +251,7 @@ The Water Mission Area of the USGS supports the development and
 maintenance of `dataRetrieval`, and most likely further into the future.
 Resources are available primarily for maintenance and responding to user
 questions. Priorities on the development of new features are determined
-by the `dataRetrieval` development team. This software was last released
-with USGS record: IP-147158.
+by the `dataRetrieval` development team.
 
 # Disclaimer
 
