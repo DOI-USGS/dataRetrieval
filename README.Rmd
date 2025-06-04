@@ -47,7 +47,7 @@ If you have additional questions about these changes, email CompTools@usgs.gov.
 
 5. Get USGS discrete water quality data. Start here: `?read_USGS_samples`
 
-6. Discover USGS time series data. Start here: `?read_USGS_ts_meta`
+6. Discover USGS time series metadata. Start here: `?read_USGS_ts_meta`
 
 7. Find Hydro Network-Linked Data Index (NLDI) data. Start here: `?findNLDI`
 
