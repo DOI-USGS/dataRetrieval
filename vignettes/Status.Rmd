@@ -30,7 +30,7 @@ Please contact the Computational Tools team at CompTools@usgs.gov with questions
 <br>
 The USGS is in the process of creating new, [publicly available APIs](https://api.waterdata.usgs.gov/) (a.k.a. "web services") to replace the existing [WaterServices](https://waterservices.usgs.gov/). `dataRetrieval` relies upon these web services to provide monitoring location information and water quantity/quality datasets. As new web services come online, `dataRetrieval` will be furnished with new functions to accommodate these changes. 
 
-The table below shows the **existing** NWIS functions and, if applicable, their slated replacements. Note that several functions do not have direct replacements because the new services to support them do not yet exist. We will update this table as new services and functions come online. Also note that some new functions may only be available on the "develop" branch of `dataRetrieval` (`remotes::install_github("DOI-USGS/dataRetrieval", ref = "develop")`).
+The table below shows the **existing** NWIS functions and, if applicable, their slated replacements. Note that several functions do not have direct replacements because the new services to support them do not yet exist. We will update this table as new services and functions come online. Also note that some new functions may only be available on the "develop" branch of `dataRetrieval` (`remotes::install_github("DOI-USGS/dataRetrieval", ref = "develop")`). More information on each function's specifications (complete with examples) are available in the [package index](https://doi-usgs.github.io/dataRetrieval/reference/index.html) and/or function documentation (e.g. `?read_USGS_daily`)
                
 ```{r echo=FALSE}
 df <- data.frame(
@@ -70,7 +70,7 @@ If you want to learn more about the new water data APIs, check out the ["What's 
 
 ## API Keys
 
-Do you make *a lot* of `dataRetrieval` requests per day? ...On the order of more than 50 function calls per hour? As you switch your workflows over to the new Water Data API functions, consider grabbing yourself an API key, which will bump your limit up to 1,000 requests per hour. Head to the [sign up page](https://api.waterdata.usgs.gov/signup) to get a token.
+Do you make *a lot* of `dataRetrieval` WaterServices calls (e.g. using functions like `readNWISdv`, `readNWISuv`) per day? ...On the order of more than 50 function calls per hour? As you switch your workflows over to the new Water Data API functions, consider grabbing yourself an API key, which will bump your limit up to 1,000 requests per hour. Head to the [sign up page](https://api.waterdata.usgs.gov/signup) to get a token.
 
 One you have your API key, add it to your `.Renviron` file like this:
 
@@ -78,23 +78,23 @@ One you have your API key, add it to your `.Renviron` file like this:
 API_USGS_PAT = "[your api key]"
 ```
 
-Replace [your api key] with the alphanumeric code provided by the sign-up page.
+Replace [your api key] with the alphanumeric code provided by the sign-up page. That's it! `dataRetrieval` will look for an `.Renviron` file in your directories and use it for making web service calls.
 
 # Discrete Data
 
-In March 2024, NWIS **discrete water quality** services were "frozen": any public data retrieval using `readNWISqw()` no longer included any new data. Concurrently, the main [Water Quality Portal (WQP) API](https://www.waterqualitydata.us/) stopped serving new and updated USGS data. Now, new and updated data are available from the [USGS Samples API](https://waterdata.usgs.gov/download-samples/#dataProfile=site) (for USGS data only) or in the [beta version](https://www.waterqualitydata.us/beta/) of the WQP (both USGS and non-USGS data).
+In March 2024, NWIS **discrete water quality** services were "frozen": any public data retrieval using `readNWISqw()` no longer included any new data. Concurrently, the main [Water Quality Portal (WQP) API](https://www.waterqualitydata.us/) stopped serving new and updated USGS data (we will refer to this set of web services as "legacy"). Now, new and updated data are available from the [USGS Samples API](https://waterdata.usgs.gov/download-samples/#dataProfile=site) (for USGS data only) or in the [beta version](https://www.waterqualitydata.us/beta/) of the WQP (both USGS and non-USGS data).
 
 What does this mean for water quality data users of `dataRetrieval`? Check out the sections below for more specifics.
 
 ## Samples Data
 
-There's a new set of functions that access the USGS "samples-data" services! If you are only interested in USGS discrete water quality data, you can use the `read_USGS_samples` function.  
+There's a new set of functions that access the USGS "samples-data" services! If you are **only** interested in USGS discrete water quality data, you can use the `read_USGS_samples` function.  
 
 Read more about it in the vignette, [Introducing read_USGS_samples](https://doi-usgs.github.io/dataRetrieval/articles/samples_data.html).
 
 ## WQP
 
-`dataRetrieval` WQP functions continue to default to the legacy system (that does not include post-March 2024 USGS discrete sample data). To access the most recent USGS data from the new "WQX3" services in `dataRetrieval`, use the function `readWQPqw` and set the argument `legacy=FALSE` or use the function `readWQPdata` and set the argument `service = "ResultWQX3"`. New services aren't currently set as the default because the WQP team still considers these services "beta", and therefore performance is not guaranteed. Users may encounter bugs or identify issues with the implementation of the new services: we welcome (and encourage!) your feedback to help improve these offerings, just send an email to WQX@epa.gov.
+`dataRetrieval` WQP functions continue to default to the legacy system (that does not include post-March 2024 USGS discrete sample data). The new replacement services aren't currently set as the default because the WQP team still considers these services "beta", and therefore performance is not guaranteed. Users may encounter bugs or identify issues with the implementation of the new services: we welcome (and encourage!) your feedback to help improve these offerings, just send an email to WQX@epa.gov.
 
 The table below provides a summary of the current state of WQP functions in `dataRetrieval`.
 
@@ -130,7 +130,9 @@ The beta WQP offers data in the "WQX version 3.0 format" (WQX = [Water Quality E
 | ResultWQX3      | narrow |
 | ActivityWQX3    |         |
 
-For example, if you wish to leverage a specific "ResultWQX3" data profile using the beta services, your code might look something like this, using the very flexible `readWQPdata` function:
+**Quickstart:** To access the most recent USGS data from the new services in `dataRetrieval`, use the function `readWQPqw` and set the argument `legacy=FALSE` or use the function `readWQPdata` and set the argument `service = "ResultWQX3"`.
+
+If you wish to leverage a specific "ResultWQX3" data profile using the beta services, your code might look something like this, using the very flexible `readWQPdata` function:
 
 ```{r, eval = FALSE}
 data_full <- readWQPdata(siteid = "USGS-04024315",
@@ -153,6 +155,6 @@ Guidance on how to use the new web page and web services are available in the [U
 
 As of dataRetrieval v2.7.17, `readNWISqw()` has been retired and replaced by `readWQPqw()`. The `readWQPqw()` function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characteristic names, and start/end dates. Learn more about the change and where to find the new samples data in the dataretrieval [Changes to NWIS QW services vignette](https://doi-usgs.github.io/dataRetrieval/articles/qwdata_changes.html) and the WDFN blog on [Improved Public Delivery of Water Quality and Field Samples](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
-### A note on `whatNWISdata` and "QW" data
+### A note on `whatNWISdata` and "qw" data
 
-Currently, any "QW" data summaries provided by `whatNWISdata` are very likely out of date and incorrect: do not use this function to query by `data_type_cd = "qw"`. When the NWIS services are decommissioned (likely in 2025) there will no longer be any "qw" information provided in the output of `whatNWISdata`. Discrete water-quality data will be available via WQP services and USGS Samples only. More information will be provided as we learn more.
+Currently, any "qw" data summaries provided by `whatNWISdata` are very likely out of date and incorrect: do not use this function to query by `data_type_cd = "qw"`. When the NWIS services are decommissioned (likely in 2025) there will no longer be any "qw" information provided in the output of `whatNWISdata`. Discrete water-quality data will be available via WQP services and USGS Samples only. More information will be provided as we learn more.
