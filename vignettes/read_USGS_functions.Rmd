@@ -183,6 +183,7 @@ The first thing you might notice is that the new service serves data in a "long"
 
 ```{r}
 library(ggplot2)
+
 ggplot(data = daily_modern) +
   geom_point(aes(x = time, y = value, 
                  color = approval_status)) +
