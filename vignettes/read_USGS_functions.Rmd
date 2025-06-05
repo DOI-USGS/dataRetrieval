@@ -74,6 +74,81 @@ Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQ
 
 Provides [Simple Features](https://en.wikipedia.org/wiki/Simple_Features) functionality. The data is returned with a "geometry" column, which is a simple feature object, allowing the data to be integrated with the [`sf`](https://r-spatial.github.io/sf/) package and associated geospatial workflows.
 
+# Lessons Learned
+
+This section will initially be a random stream of consciousness on lessons learned while developing these functions and playing with the services.
+
+## Query limits
+
+A semi-common way to find a lot of data in the past would have been to use a monitoring location query to get a huge list of sites, and then use that huge list of sites (maybe winnowing it down a little) to get the data. These new services return a 403 error if your request is too big ("web server understands your request but refuses to authorize it"). This is true whether or not the request is a GET or POST request (something that is taken care of under the hood), and seems to be a character limit of the overall request. Roughly, it seems like if you were requesting more than 250 monitoring locations, the response will immediately return with a 403 error. 
+
+There are at least 2 ways to deal with this. One is to manually split the data requests and bind the results together later. The other is to use the bounding box of the initial request as an input to the data request. Potentially some sites would need to be filtered out later using this method.
+
+Example:
+
+```{r}
+ohio <- read_USGS_monitoring_location(state_name = "Ohio", 
+                                      site_type_code = "ST")
+
+```
+
+There are `r nrow(ohio)` rows returned that are stream sites in Ohio. If we tried to ask for all the discharge data over the last 7 days from that list of sites:
+
+```
+ohio_discharge <- read_USGS_daily(monitoring_location_id = ohio$monitoring_location_id,
+                                  parameter_code = "00060",
+                                  time = "P7D")
+Error in `req_perform()`:
+! HTTP 403 Forbidden.
+• Query request denied. Possible reasons include query exceeding server limits.
+```
+
+We could use the fact that the `ohio` data frame contains geospatial information, create a bounding box, and ask for that data like this:
+
+```{r}
+ohio_discharge <- read_USGS_daily(bbox = sf::st_bbox(ohio),
+                                  parameter_code = "00060",
+                                  time = "P7D")
+
+```
+
+A reasonable `r nrow(ohio_discharge)` are returned with the bounding box query.
+
+Maybe you have a list of sites that are scattered around the country. The bounding box method might not be ideal. There are several ways to loop through a set of sites, here is one simple example:
+
+```{r}
+big_vector_of_sites <- ohio$monitoring_location_id
+
+site_list <- split(big_vector_of_sites, ceiling(seq_along(big_vector_of_sites)/200))
+
+data_returned <- data.frame()
+for(sites in site_list){
+  df_sites <- read_USGS_daily(monitoring_location_id = sites,
+                              parameter_code = "00060",
+                              time = "P7D")
+  if(nrow(df_sites) == 0){
+    next
+  }
+  data_returned <- rbind(data_returned, df_sites)
+}
+
+```
+
+Note there is fewer data returned in `data_returned` because those sites are already filtered down to just "Stream" sites. The bounding box results `ohio_discharge` contained other types of monitoring location types.
+
+## Result limits
+
+There's a hard cap at 50,000 rows returned per one request. This means that for 1 `dataRetrieval` request, only 50,000 rows will be returned even if there is more data! If you know you are making a big request, it will be up to you to split up your request into "reasonable" chunks. Note that sometimes you'll notice a big request gets chunked up and you can see that it actually made a bunch of requests - this is done automatically (it's called paging), and the 50,000 limit is still in effect for the total number returned from all the pages.
+
+## limit vs max_results
+
+A user can specify a `limit` or `max_results`.
+
+The `max_results` argument defines how many rows are returned (assuming the data has at least `max_results` rows to return). This can be used as a handy way to make sure you aren't requesting a ton of data, perhaps to do some initial coding or troubleshooting.
+
+The `limit` argument defines how many rows are returned per page of data, but does NOT affect the overall number of rows returned. With a good internet connection, you can probably get away with ignoring this argument. By default it will be set to the highest value that the services allow. The reason you might want to change this argument is that it might be easier on a spotty internet connection to page through smaller sets of data. 
+
+
 # New Functions
 
 As new API endpoints come online, this section will be updated with any `dataRetrieval` function that is created.
