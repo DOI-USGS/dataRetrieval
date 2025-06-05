@@ -28,7 +28,7 @@
 #' limit is 10000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param max_resuts The optional maximum number of rows to return. This value
+#' @param max_results The optional maximum number of rows to return. This value
 #' must be less than the requested limit. 
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
@@ -41,8 +41,8 @@
 #' site <- "USGS-02238500"
 #' pcode <- "00060"
 #' dv_data_sf <- read_USGS_daily(monitoring_location_id = site,
-#'                         parameter_code = "00060", 
-#'                         time = c("2021-01-01", "2022-01-01"))
+#'                               parameter_code = "00060", 
+#'                               time = c("2021-01-01", "2022-01-01"))
 #'
 #' dv_data_trim <- read_USGS_daily(monitoring_location_id = site,
 #'                           parameter_code = "00060", 
@@ -52,18 +52,18 @@
 #'                           time = c("2021-01-01", "2022-01-01"))
 #'
 #' dv_data <- read_USGS_daily(monitoring_location_id = site,
-#'                         parameter_code = "00060",
-#'                         skipGeometry = TRUE)
+#'                            parameter_code = "00060",
+#'                            skipGeometry = TRUE)
 #'                         
 #' dv_data_period <- read_USGS_daily(monitoring_location_id = site,
-#'                         parameter_code = "00060",
-#'                         time = "P7D")
+#'                                   parameter_code = "00060",
+#'                                   time = "P7D")
 #' 
 #' multi_site <- read_USGS_daily(monitoring_location_id =  c("USGS-01491000",
 #'                                                           "USGS-01645000"),
-#'                         parameter_code = c("00060", "00010"),
-#'                         limit = 500,
-#'                         time = c("2023-01-01", "2024-01-01"))
+#'                               parameter_code = c("00060", "00010"),
+#'                               limit = 500,
+#'                               time = c("2023-01-01", "2024-01-01"))
 #' 
 #' }
 read_USGS_daily <- function(monitoring_location_id = NA_character_,

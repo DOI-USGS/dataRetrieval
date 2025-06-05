@@ -150,12 +150,12 @@ limit is 10000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
+\item{max_results}{The optional maximum number of rows to return. This value
+must be less than the requested limit.}
+
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
 information.}
-
-\item{max_resuts}{The optional maximum number of rows to return. This value
-must be less than the requested limit.}
 }
 \description{
 Description Location information is basic information about the monitoring location including the name, identifier, agency responsible for data collection, and the date the location was established. It also includes information about the type of location, such as stream, lake, or groundwater, and geographic information about the location, such as state, county, latitude and longitude, and hydrologic unit code (HUC).
@@ -185,7 +185,10 @@ multi_site <- read_USGS_monitoring_location(state_name = "Wisconsin")
 
 bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
 multi_site <- read_USGS_monitoring_location(bbox = bbox_vals)
-multi_site <- read_USGS_monitoring_location(bbox = bbox_vals, max_results = 100)
+multi_site_n_100 <- read_USGS_monitoring_location(bbox = bbox_vals,
+                                                  max_results = 100)
+multi_site_limit_100 <- read_USGS_monitoring_location(bbox = bbox_vals,
+                                                      limit = 100)
 }
 \dontshow{\}) # examplesIf}
 }

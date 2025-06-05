@@ -23,8 +23,8 @@ read_USGS_ts_meta(
   web_description = NA_character_,
   skipGeometry = NA,
   limit = NA,
-  bbox = NA,
   max_results = NA,
+  bbox = NA,
   convertType = FALSE
 )
 }
@@ -83,6 +83,9 @@ limit is 10000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
+\item{max_results}{The optional maximum number of rows to return. This value
+must be less than the requested limit.}
+
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
@@ -92,9 +95,6 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
-
-\item{max_resuts}{The optional maximum number of rows to return. This value
-must be less than the requested limit.}
 }
 \description{
 Description Daily data and continuous measurements are grouped into time series, which represent a collection of observations of a single parameter, potentially aggregated using a standard statistic, at a single monitoring location. This endpoint provides metadata about those time series, including their operational thresholds, units of measurement, and when the earliest and most recent observations in a time series occurred.
@@ -107,12 +107,13 @@ site <- "USGS-02238500"
 meta_1 <- read_USGS_ts_meta(monitoring_location_id = site)
 
 meta_multi <- read_USGS_ts_meta(monitoring_location_id =  c("USGS-01491000", 
-                                                       "USGS-01645000"),
+                                                            "USGS-01645000"),
                             parameter_code = c("00060", "00010"),
                             properties = c("monitoring_location_id",
                                            "parameter_code",
                                            "begin",
-                                           "end"),
+                                           "end",
+                                           "time_series_id"),
                             skipGeometry = TRUE)
 }
 \dontshow{\}) # examplesIf}
