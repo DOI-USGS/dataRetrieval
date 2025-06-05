@@ -47,7 +47,8 @@ read_USGS_monitoring_location(
   depth_source_code = NA_character_,
   properties = NA_character_,
   bbox = NA,
-  limit = 10000,
+  limit = NA,
+  max_results = NA,
   skipGeometry = NA
 )
 }
@@ -143,14 +144,18 @@ depth). Coordinates are assumed to be in crs 4326. The expected format is a nume
 vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
 Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
-\item{limit}{The optional limit parameter limits the number of items that are
-presented in the response document. Only items are counted that are on the
-first level of the collection in the response document. Nested objects
-contained within the explicitly requested items shall not be counted.}
+\item{limit}{The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 10000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
 
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
 information.}
+
+\item{max_resuts}{The optional maximum number of rows to return. This value
+must be less than the requested limit.}
 }
 \description{
 Description Location information is basic information about the monitoring location including the name, identifier, agency responsible for data collection, and the date the location was established. It also includes information about the type of location, such as stream, lake, or groundwater, and geographic information about the location, such as state, county, latitude and longitude, and hydrologic unit code (HUC).
@@ -163,9 +168,15 @@ site <- "USGS-02238500"
 site_info <- read_USGS_monitoring_location(monitoring_location_id = site)
 
 site_slim <- read_USGS_monitoring_location(monitoring_location_id = site,
-                             properties = c("monitoring_locations_id",
+                             properties = c("monitoring_location_id",
                                             "state_name",
                                             "country_name"))
+                                            
+site_slim_no_sf_slim <- read_USGS_monitoring_location(monitoring_location_id = site,
+                                           properties = c("monitoring_location_id",
+                                                          "state_name",
+                                                          "country_name"), 
+                                           skipGeometry = TRUE)
 
 site_info_no_sf <- read_USGS_monitoring_location(monitoring_location_id = site,
                                    skipGeometry = TRUE)
@@ -174,6 +185,7 @@ multi_site <- read_USGS_monitoring_location(state_name = "Wisconsin")
 
 bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
 multi_site <- read_USGS_monitoring_location(bbox = bbox_vals)
+multi_site <- read_USGS_monitoring_location(bbox = bbox_vals, max_results = 100)
 }
 \dontshow{\}) # examplesIf}
 }

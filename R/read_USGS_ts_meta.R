@@ -27,10 +27,13 @@
 #' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric 
 #' vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
 #' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
-#' @param limit The optional limit parameter limits the number of items that are
-#' presented in the response document. Only items are counted that are on the
-#' first level of the collection in the response document. Nested objects
-#' contained within the explicitly requested items shall not be counted.
+#' @param limit The optional limit parameter is used to control the subset of the 
+#' selected features that should be returned in each page. The maximum allowable
+#' limit is 10000. It may be beneficial to set this number lower if your internet
+#' connection is spotty. The default (`NA`) will set the limit to the maximum
+#' allowable limit for the service.
+#' @param max_resuts The optional maximum number of rows to return. This value
+#' must be less than the requested limit.
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector.
 #' @param skipGeometry This option can be used to skip response geometries for
@@ -48,15 +51,14 @@
 #'                             properties = c("monitoring_location_id",
 #'                                            "parameter_code",
 #'                                            "begin",
-#'                                            "end"),
+#'                                            "end",
+#'                                            "time_series_id"),
 #'                             skipGeometry = TRUE)
 #' }
 read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                               parameter_code = NA_character_,
                               parameter_name = NA_character_,
                               properties = NA_character_,
-                              limit = 10000,
-                              bbox = NA,
                               statistic_id = NA_character_,
                               last_modified = NA_character_,
                               begin = NA_character_,
@@ -70,6 +72,9 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                               time_series_metadata_id = NA_character_,
                               web_description = NA_character_,
                               skipGeometry = NA,
+                              limit = NA,
+                              max_results = NA,
+                              bbox = NA,
                               convertType = FALSE){
   
   message("Function in development, use at your own risk.")
@@ -84,7 +89,7 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
   args[["convertType"]] <- NULL
   req_ts_meta <- do.call(construct_api_requests, args)
 
-  return_list <- walk_pages(req_ts_meta)
+  return_list <- walk_pages(req_ts_meta, max_results)
 
   return_list <- deal_with_empty(return_list, properties, service)
   
