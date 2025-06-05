@@ -52,11 +52,6 @@ construct_api_requests <- function(service,
                                type = "schema")
   all_properties <- names(schema$properties)
   
-  if(!all(is.na(properties))){
-    match.arg(properties, choices = all_properties,
-              several.ok = TRUE)    
-  }
-
   if(all(all_properties[!all_properties %in% c("id", "geometry")] %in% properties)) {
     # Cleans up URL if we're asking for everything
     properties <- NA_character_
@@ -67,6 +62,11 @@ construct_api_requests <- function(service,
                                                   "geometry",
                                                   paste0(gsub("-", "_", service), "_id"))]
     }
+  }
+  
+  if(!all(is.na(properties))){
+    match.arg(properties, choices = all_properties,
+              several.ok = TRUE)    
   }
   
   baseURL <- setup_api(service)
