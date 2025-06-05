@@ -57,7 +57,7 @@
 #' limit is 10000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param max_resuts The optional maximum number of rows to return. This value
+#' @param max_results The optional maximum number of rows to return. This value
 #' must be less than the requested limit. 
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial

@@ -32,7 +32,7 @@
 #' limit is 10000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param max_resuts The optional maximum number of rows to return. This value
+#' @param max_results The optional maximum number of rows to return. This value
 #' must be less than the requested limit.
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector.
@@ -46,7 +46,7 @@
 #' meta_1 <- read_USGS_ts_meta(monitoring_location_id = site)
 #' 
 #' meta_multi <- read_USGS_ts_meta(monitoring_location_id =  c("USGS-01491000", 
-#'                                                        "USGS-01645000"),
+#'                                                             "USGS-01645000"),
 #'                             parameter_code = c("00060", "00010"),
 #'                             properties = c("monitoring_location_id",
 #'                                            "parameter_code",
@@ -96,6 +96,8 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
   if(convertType) return_list <- cleanup_cols(return_list)
   
   return_list <- rejigger_cols(return_list, properties, service)
+  
+  names(return_list)[(names(return_list) == "time_series_metadata_id")] <- "time_series_id"
   
   return(return_list)
   

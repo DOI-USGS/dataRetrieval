@@ -87,11 +87,11 @@ limit is 10000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
+\item{max_results}{The optional maximum number of rows to return. This value
+must be less than the requested limit.}
+
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
-
-\item{max_resuts}{The optional maximum number of rows to return. This value
-must be less than the requested limit.}
 }
 \description{
 Description Daily data provide one data value to represent water conditions for the day. Throughout much of the history of the USGS, the primary water data available was daily data collected manually at the monitoring location once each day. With improved availability of computer storage and automated transmission of data, the daily data published today are generally a statistical summary or metric of the continuous data collected each day, such as the daily mean, minimum, or maximum value. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. These data have also been referred to as “daily values” or “DV”.
@@ -103,8 +103,8 @@ Description Daily data provide one data value to represent water conditions for 
 site <- "USGS-02238500"
 pcode <- "00060"
 dv_data_sf <- read_USGS_daily(monitoring_location_id = site,
-                        parameter_code = "00060", 
-                        time = c("2021-01-01", "2022-01-01"))
+                              parameter_code = "00060", 
+                              time = c("2021-01-01", "2022-01-01"))
 
 dv_data_trim <- read_USGS_daily(monitoring_location_id = site,
                           parameter_code = "00060", 
@@ -114,18 +114,18 @@ dv_data_trim <- read_USGS_daily(monitoring_location_id = site,
                           time = c("2021-01-01", "2022-01-01"))
 
 dv_data <- read_USGS_daily(monitoring_location_id = site,
-                        parameter_code = "00060",
-                        skipGeometry = TRUE)
+                           parameter_code = "00060",
+                           skipGeometry = TRUE)
                         
 dv_data_period <- read_USGS_daily(monitoring_location_id = site,
-                        parameter_code = "00060",
-                        time = "P7D")
+                                  parameter_code = "00060",
+                                  time = "P7D")
 
 multi_site <- read_USGS_daily(monitoring_location_id =  c("USGS-01491000",
-                                                       "USGS-01645000"),
-                        parameter_code = c("00060", "00010"),
-                        limit = 500,
-                        time = c("2023-01-01", "2024-01-01"))
+                                                          "USGS-01645000"),
+                              parameter_code = c("00060", "00010"),
+                              limit = 500,
+                              time = c("2023-01-01", "2024-01-01"))
 
 }
 \dontshow{\}) # examplesIf}
