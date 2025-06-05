@@ -379,11 +379,11 @@ Peruse the "Additional Articles", when we find common issues people have with co
 
 Currently, you might be interested in:
 
-* [General Tutorial](articles/Tutorial.html)
+* [General Tutorial](tutorial.html)
 
-* [Pivot Help](articles/long_to_wide.html)
+* [Pivot Help](long_to_wide.html)
 
-* [Joining by closest date](articles/join_by_closest.html)
+* [Joining by closest date](join_by_closest.html)
 
 If you have additional questions, email comptools@usgs.gov. General questions and bug reports can be reported here: <https://github.com/DOI-USGS/dataRetrieval/issues>
 
