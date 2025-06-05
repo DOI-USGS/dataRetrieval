@@ -196,9 +196,9 @@ get_resp_data <- function(resp) {
 #' 
 #' @noRd
 #' @return data.frame with attributes
-walk_pages <- function(req, max_resuts){
+walk_pages <- function(req, max_results){
   
-  if(is.na(max_resuts)){
+  if(is.na(max_results)){
     resps <- httr2::req_perform_iterative(req, 
                                           next_req = next_req_url, 
                                           max_reqs = Inf)
