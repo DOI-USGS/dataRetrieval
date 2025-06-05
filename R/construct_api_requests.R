@@ -43,7 +43,8 @@
 construct_api_requests <- function(service,
                                    properties = NA_character_,
                                    bbox = NA,
-                                   limit = 10000,
+                                   limit = NA,
+                                   max_results = NA,
                                    skipGeometry = FALSE,
                                    ...){
   
@@ -56,12 +57,6 @@ construct_api_requests <- function(service,
               several.ok = TRUE)    
   }
 
-  use_sf <- all(pkg.env$local_sf)
-  
-  if(!use_sf){
-    skipGeometry <- TRUE
-  }
-  
   if(all(all_properties[!all_properties %in% c("id", "geometry")] %in% properties)) {
     # Cleans up URL if we're asking for everything
     properties <- NA_character_
@@ -89,7 +84,19 @@ construct_api_requests <- function(service,
   get_list <- full_list[names(full_list) %in% single_params]
 
   get_list[["skipGeometry"]] <- skipGeometry
-  get_list[["limit"]] <- limit
+  
+  if(is.na(limit)){
+    if(!is.na(max_results)){
+      get_list[["limit"]] <- max_results
+    } else {
+      get_list[["limit"]] <- 10000
+    }
+  } else {
+    if(!is.na(max_results)){
+      if(limit > max_results) stop("limit cannot be greater than max_result")
+    }
+    get_list[["limit"]] <- limit
+  }
   
   post_list <- full_list[!names(full_list) %in% single_params]
   

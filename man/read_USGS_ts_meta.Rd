@@ -9,8 +9,6 @@ read_USGS_ts_meta(
   parameter_code = NA_character_,
   parameter_name = NA_character_,
   properties = NA_character_,
-  limit = 10000,
-  bbox = NA,
   statistic_id = NA_character_,
   last_modified = NA_character_,
   begin = NA_character_,
@@ -24,6 +22,9 @@ read_USGS_ts_meta(
   time_series_metadata_id = NA_character_,
   web_description = NA_character_,
   skipGeometry = NA,
+  limit = NA,
+  bbox = NA,
+  max_results = NA,
   convertType = FALSE
 )
 }
@@ -37,18 +38,6 @@ read_USGS_ts_meta(
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
 geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id, last_modified, begin, end, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description, parameter_description}
-
-\item{limit}{The optional limit parameter limits the number of items that are
-presented in the response document. Only items are counted that are on the
-first level of the collection in the response document. Nested objects
-contained within the explicitly requested items shall not be counted.}
-
-\item{bbox}{Only features that have a geometry that intersects the bounding
-box are selected.The bounding box is provided as four or six numbers, depending
-on whether the coordinate reference system includes a vertical axis (height or
-depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
-vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
-Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.}
 
@@ -88,8 +77,24 @@ Only features that have a \code{last_modified} that intersects the value of date
 each feature. The returning object will be a data frame with no spatial
 information.}
 
+\item{limit}{The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 10000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
+
+\item{bbox}{Only features that have a geometry that intersects the bounding
+box are selected.The bounding box is provided as four or six numbers, depending
+on whether the coordinate reference system includes a vertical axis (height or
+depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
+vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
+Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
+
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
+
+\item{max_resuts}{The optional maximum number of rows to return. This value
+must be less than the requested limit.}
 }
 \description{
 Description Daily data and continuous measurements are grouped into time series, which represent a collection of observations of a single parameter, potentially aggregated using a standard statistic, at a single monitoring location. This endpoint provides metadata about those time series, including their operational thresholds, units of measurement, and when the earliest and most recent observations in a time series occurred.

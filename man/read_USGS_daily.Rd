@@ -16,10 +16,11 @@ read_USGS_daily(
   qualifier = NA_character_,
   value = NA,
   last_modified = NA_character_,
-  limit = 10000,
   skipGeometry = NA,
   time = NA_character_,
   bbox = NA,
+  limit = NA,
+  max_results = NA,
   convertType = TRUE
 )
 }
@@ -58,11 +59,6 @@ Examples:
 
 Only features that have a \code{last_modified} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.}
 
-\item{limit}{The optional limit parameter limits the number of items that are
-presented in the response document. Only items are counted that are on the
-first level of the collection in the response document. Nested objects
-contained within the explicitly requested items shall not be counted.}
-
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
 information.}
@@ -85,8 +81,17 @@ depth). Coordinates are assumed to be in crs 4326. The expected format is a nume
 vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
 Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
+\item{limit}{The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 10000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
+
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
+
+\item{max_resuts}{The optional maximum number of rows to return. This value
+must be less than the requested limit.}
 }
 \description{
 Description Daily data provide one data value to represent water conditions for the day. Throughout much of the history of the USGS, the primary water data available was daily data collected manually at the monitoring location once each day. With improved availability of computer storage and automated transmission of data, the daily data published today are generally a statistical summary or metric of the continuous data collected each day, such as the daily mean, minimum, or maximum value. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. These data have also been referred to as “daily values” or “DV”.

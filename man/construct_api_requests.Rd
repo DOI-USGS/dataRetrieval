@@ -8,7 +8,8 @@ construct_api_requests(
   service,
   properties = NA_character_,
   bbox = NA,
-  limit = 10000,
+  limit = NA,
+  max_results = NA,
   skipGeometry = FALSE,
   ...
 )

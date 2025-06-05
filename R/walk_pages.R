@@ -180,12 +180,11 @@ get_resp_data <- function(resp) {
   }
   
   use_sf <- !grepl("skipGeometry=true", resp$url, ignore.case = TRUE)
+  return_df <- sf::read_sf(httr2::resp_body_string(resp))
   
-  if(use_sf){
-    return_df <- sf::read_sf(httr2::resp_body_string(resp))
-  } else {
-    return_df <- jsonlite::fromJSON(httr2::resp_body_string(resp))[["features"]][["properties"]] 
-  }
+  if(!use_sf){
+    return_df <- sf::st_drop_geometry(return_df)
+  } 
 
   return(return_df)
   
@@ -197,28 +196,33 @@ get_resp_data <- function(resp) {
 #' 
 #' @noRd
 #' @return data.frame with attributes
-walk_pages <- function(req){
+walk_pages <- function(req, max_resuts){
   
-  resps <- httr2::req_perform_iterative(req, 
-                                        next_req = next_req_url, 
-                                        max_reqs = Inf) 
-
-  ######################################
-  # So far I haven't tested this because I haven't had 
-  # individual failures
-  failures <- resps |>
-    httr2::resps_failures() |>
-    httr2::resps_requests()
-  
-  if(length(failures) > 0){
-    message("There were", length(failures), "failed requests.")
-  }
-  ######################################
-  
-  return_list <- data.frame()
-  for(resp in resps){
-    df1 <- get_resp_data(resp)
-    return_list <- rbind(return_list, df1)
+  if(is.na(max_resuts)){
+    resps <- httr2::req_perform_iterative(req, 
+                                          next_req = next_req_url, 
+                                          max_reqs = Inf)
+    ######################################
+    # So far I haven't tested this because I haven't had 
+    # individual failures
+    failures <- resps |>
+      httr2::resps_failures() |>
+      httr2::resps_requests()
+    
+    if(length(failures) > 0){
+      message("There were", length(failures), "failed requests.")
+    }
+    
+    return_list <- data.frame()
+    for(resp in resps){
+      df1 <- get_resp_data(resp)
+      return_list <- rbind(return_list, df1)
+    }
+    
+    ######################################
+  } else {
+    resps <- httr2::req_perform(req)
+    return_list <- get_resp_data(resps)
   }
 
   attr(return_list, "request") <- req

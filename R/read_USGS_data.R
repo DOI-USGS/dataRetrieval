@@ -65,7 +65,13 @@ read_USGS_data <- function(service,
     httr2::req_headers(`Content-Type` = "application/query-cql-json") |> 
     httr2::req_body_raw(CQL) 
   
-  return_list <- walk_pages(data_req)
+  if("max_results" %in% names(args)){
+    max_results <- args[["max_results"]]
+  } else {
+    max_results <- NA
+  }
+  
+  return_list <- walk_pages(data_req, max_results)
   
   return_list <- deal_with_empty(return_list, args[["properties"]], service)
   
