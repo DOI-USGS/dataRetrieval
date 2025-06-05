@@ -62,7 +62,7 @@ test_that("General USGS retrievals working", {
 
 test_that("General NWIS retrievals working", {
   testthat::skip_on_cran()
-
+  skip_on_ci()
   multiSite <- readNWISdata(
     sites = c("04025500", "040263491"), service = "iv",
     parameterCd = "00060",

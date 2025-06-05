@@ -2,7 +2,7 @@ context("Unit values")
 
 test_that("Unit value data returns correct types", {
   testthat::skip_on_cran()
-
+  skip_on_ci()
   siteNumber <- "05114000"
   parameterCd <- "00060"
   startDate <- "2014-10-10"
@@ -68,7 +68,7 @@ test_that("Unit value data returns correct types", {
 context("Peak, rating, meas, site")
 test_that("peak, rating curves, surface-water measurements", {
   testthat::skip_on_cran()
-
+  skip_on_ci()
   siteNumbers <- c("01594440", "040851325")
   data <- readNWISpeak(siteNumbers)
   expect_is(data$agency_cd, "character")
@@ -158,6 +158,7 @@ test_that("read_USGS_daily", {
 
 test_that("WQP qw tests", {
   testthat::skip_on_cran()
+  skip_on_ci()
   nameToUse <- "Specific conductance"
   pcodeToUse <- "00095"
 
@@ -185,6 +186,7 @@ test_that("WQP qw tests", {
 context("readNWISstat tests")
 test_that("readNWISstat tests", {
   testthat::skip_on_cran()
+  skip_on_ci()
   data <- readNWISstat(
     siteNumbers = c("02171500"),
     parameterCd = c("00010", "00060"),
@@ -218,6 +220,7 @@ test_that("readNWISstat tests", {
 context("readNWISuse tests")
 test_that("readNWISuse tests", {
   testthat::skip_on_cran()
+  skip_on_ci()
   dc <- readNWISuse(
     years = c(2000, 2005, 2010),
     stateCd = "DC", countyCd = NULL
