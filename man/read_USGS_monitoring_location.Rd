@@ -181,8 +181,6 @@ site_slim_no_sf_slim <- read_USGS_monitoring_location(monitoring_location_id = s
 site_info_no_sf <- read_USGS_monitoring_location(monitoring_location_id = site,
                                    skipGeometry = TRUE)
 
-multi_site <- read_USGS_monitoring_location(state_name = "Wisconsin")
-
 bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
 multi_site <- read_USGS_monitoring_location(bbox = bbox_vals)
 multi_site_n_100 <- read_USGS_monitoring_location(bbox = bbox_vals,

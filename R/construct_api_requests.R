@@ -48,27 +48,6 @@ construct_api_requests <- function(service,
                                    skipGeometry = FALSE,
                                    ...){
   
-  schema <- check_OGC_requests(endpoint = service,
-                               type = "schema")
-  all_properties <- names(schema$properties)
-  
-  if(all(all_properties[!all_properties %in% c("id", "geometry")] %in% properties)) {
-    # Cleans up URL if we're asking for everything
-    properties <- NA_character_
-  } else {
-    if(all(!is.na(properties))){
-      properties <- gsub("-", "_", properties)
-      properties <- properties[!properties %in% c("id", 
-                                                  "geometry",
-                                                  paste0(gsub("-", "_", service), "_id"))]
-    }
-  }
-  
-  if(!all(is.na(properties))){
-    match.arg(properties, choices = all_properties,
-              several.ok = TRUE)    
-  }
-  
   baseURL <- setup_api(service)
   
   POST <- FALSE
@@ -183,6 +162,111 @@ setup_api <- function(service){
     basic_request() 
   
 }
+
+#' Switch endpoint id arg
+#' 
+#' @noRd
+#' @return list
+#' @examples
+#' 
+#' l1 <- list("id" = "1234")
+#' dataRetrieval:::switch_arg_id(l1, 
+#'                               id_name = "monitoring_location_id",
+#'                               service = "monitoring-locations")
+#'                               
+#' l2 <- list("monitoring_location_id" = "1234")
+#' dataRetrieval:::switch_arg_id(l2, 
+#'                               id_name = "monitoring_location_id",
+#'                               service = "monitoring-locations")
+#'                               
+#' l3 <- list("monitoring_locations_id" = "1234")
+#' dataRetrieval:::switch_arg_id(l3, 
+#'                               id_name = "monitoring_location_id",
+#'                               service = "monitoring-locations")
+#' 
+switch_arg_id <- function(ls, id_name, service){
+
+  service_id <- paste0(gsub("-", "_", service), "_id")
+  if(!"id" %in% names(ls)){
+    if(service_id %in% names(ls)){
+      ls[["id"]] <- ls[[service_id]]
+    } else {
+      ls[["id"]] <- ls[[id_name]]
+    }
+  }
+  
+  ls[[service_id]] <- NULL
+  ls[[id_name]] <- NULL
+  return(ls)
+}
+
+#' Switch properties id
+#' 
+#' @noRd
+#' @return list
+#' @examples
+#' 
+#' properties <- c("id", "state_name", "country_name")
+#' dataRetrieval:::switch_properties_id(properties, 
+#'                               id_name = "monitoring_location_id",
+#'                               service = "monitoring-locations")
+#'                               
+#' properties2 <- c("monitoring_location_id", "state_name", "country_name")
+#' dataRetrieval:::switch_properties_id(properties2, 
+#'                               id_name = "monitoring_location_id",
+#'                               service = "monitoring-locations")
+#'                               
+#' properties3 <- c("monitoring_locations_id", "state_name", "country_name")
+#' dataRetrieval:::switch_properties_id(properties3, 
+#'                               id_name = "monitoring_location_id",
+#'                               service = "monitoring-locations")
+switch_properties_id <- function(properties, id_name, service){
+  
+  service_id <- paste0(gsub("-", "_", service), "_id")
+  
+  last_letter <- substr(service, nchar(service), nchar(service))
+  if(last_letter == "s"){
+    service_singluar <- substr(service,1, nchar(service)-1)
+    service_id_singular <- paste0(gsub("-", "_", service_singluar), "_id")
+  } else {
+    service_id_singular <- ""
+  }
+  
+  if(!"id" %in% properties){
+    if(service_id %in% properties){
+      properties[properties == service_id] <- "id"
+      
+    } else if(service_id_singular %in% properties) {
+      properties[properties == service_id_singular] <- "id"
+    } else {
+      properties[properties == id_name] <- "id"
+    }
+  }
+  
+  schema <- check_OGC_requests(endpoint = service,
+                               type = "schema")
+  all_properties <- names(schema$properties)
+  
+  if(all(all_properties[!all_properties %in% c("id", "geometry")] %in% properties)) {
+    # Cleans up URL if we're asking for everything
+    properties <- NA_character_
+  } else {
+    if(all(!is.na(properties))){
+      properties <- gsub("-", "_", properties)
+      properties <- properties[!properties %in% c("id", 
+                                                  "geometry",
+                                                  paste0(gsub("-", "_", service), "_id"))]
+    }
+  }
+  
+  if(!all(is.na(properties))){
+    match.arg(properties, choices = all_properties,
+              several.ok = TRUE)    
+  }
+  
+  return(properties)
+}
+
 
 #' Format the date request
 #' 

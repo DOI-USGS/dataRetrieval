@@ -19,7 +19,7 @@ read_USGS_ts_meta(
   thresholds = NA,
   sublocation_identifier = NA_character_,
   primary = NA_character_,
-  time_series_metadata_id = NA_character_,
+  time_series_id = NA_character_,
   web_description = NA_character_,
   skipGeometry = NA,
   limit = NA,
@@ -69,7 +69,7 @@ Only features that have a \code{last_modified} that intersects the value of date
 
 \item{primary}{A flag identifying if the time series is a "primary" time series. "Primary" time series (which have this flag) are standard observations which undergo \href{https://www.usgs.gov/survey-manual/5028-fundamental-science-practices-review-and-approval-scientific-data-release}{Bureau review and approval processes}. Non-primary time series, which will have missing values for "primary", are provisional datasets made available to meet the need for timely best science and to assist with daily operations which need real-time information. Non-primary time series data are only retained by this system for 120 days. See the \href{https://waterdata.usgs.gov/provisional-data-statement/}{USGS Provisional Data Statement} for more information.}
 
-\item{time_series_metadata_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
+\item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
 
 \item{web_description}{A description of what this time series represents, as used by WDFN and other USGS data dissemination products.}
 
