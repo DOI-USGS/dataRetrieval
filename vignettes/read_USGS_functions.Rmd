@@ -66,9 +66,9 @@ API_USGS_PAT = "my_super_secret_token"
 ```
 You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. You should not add this file to git projects or generally share your API key. Anyone else using your API key will count against the number of requests available to you!
 
-## Contextual Query Language 2 Support
+## Contextual Query Language Support
 
-Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQL2) syntax for flexible queries. We'll show how to use the `read_USGS_data` function to make specific queries using Contextual Query Language (2).
+Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQL2) syntax for flexible queries. We'll show how to use the `read_USGS_data` function to make specific CQL2 queries.
 
 ## Simple Features
 
@@ -148,6 +148,41 @@ The `max_results` argument defines how many rows are returned (assuming the data
 
 The `limit` argument defines how many rows are returned per page of data, but does NOT affect the overall number of rows returned. With a good internet connection, you can probably get away with ignoring this argument. By default it will be set to the highest value that the services allow. The reason you might want to change this argument is that it might be easier on a spotty internet connection to page through smaller sets of data. 
 
+## id
+
+Each API endpoint natively returns a column named "id". The results of the "id" column can be used as inputs into other endpoints, **HOWEVER** the input in those functions have different names. For example, the "id" column of the monitoring location endpoint is considered the "monitoring_location_id" when used as an input to any of the other functions. 
+
+Therefore, `dataRetrieval` functions will rename the "id" column to whatever it is referred to in other functions. Here are the id translations:
+
+```{r echo=FALSE}
+df <- dplyr::tibble(Function = c("read_USGS_monitoring_location",
+                              "read_USGS_ts_meta",
+                              "read_USGS_daily"),
+                 "ID returned" = c("monitoring_location_id",
+                                   "time_series_id",
+                                   "daily_id"))
+
+knitr::kable(df)
+```
+
+If a user would prefer the columns to come back as "id", they can specify that using the `properties` argument:
+
+```{r}
+site <- "USGS-02238500"
+
+site_1 <- read_USGS_monitoring_location(monitoring_location_id = site,
+                             properties = c("monitoring_location_id",
+                                            "state_name",
+                                            "country_name"))
+names(site_1)
+site_2 <- read_USGS_monitoring_location(monitoring_location_id = site,
+                             properties = c("id",
+                                            "state_name",
+                                            "country_name"))
+names(site_2)
+
+
+```
 
 # New Functions
 
@@ -177,7 +212,7 @@ Maybe that is more information than you need. You can specify which columns get 
 
 ```{r}
 site_info <- read_USGS_monitoring_location(monitoring_location_id = "USGS-01491000",
-                                           properties = c("monitoring_locations_id",
+                                           properties = c("monitoring_location_id",
                                                           "site_type",
                                                           "drainage_area",
                                                           "monitoring_location_name"))
@@ -375,7 +410,7 @@ That's a lot of new information and changes. There are certainly going to be scr
 
 Check back on the documentation often:
 <https://doi-usgs.github.io/dataRetrieval/>
-Peruse the "Additional Articles", when we find common issues people have with converting their old workflows, we will try to add articles to clarrify new workflows. 
+Peruse the "Additional Articles", when we find common issues people have with converting their old workflows, we will try to add articles to clarify new workflows. 
 
 Currently, you might be interested in:
 
