@@ -59,12 +59,18 @@ deal_with_empty <- function(return_list, properties, service){
 rejigger_cols <- function(df, properties, output_id){
 
   if(!all(is.na(properties))){
-    
     if(!"id" %in% properties){
-      names(df)[(names(df) == "id")] <- output_id
-      properties[properties == "id"] <- output_id
+      if(output_id %in% properties){
+        names(df)[(names(df) == "id")] <- output_id
+      } else {
+        # just in case users become aware of the singular/plural issue
+        # where the endpoint name is plural, but input to other endpoints are singular
+        plural <- gsub("_id", "s_id", output_id)
+        if(plural %in% properties){
+          names(df)[(names(df) == "id")] <- plural
+        }
+      }
     }
-    
     df <- df[, properties]
   } else {
     names(df)[(names(df) == "id")] <- output_id
