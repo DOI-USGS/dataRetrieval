@@ -46,19 +46,34 @@ deal_with_empty <- function(return_list, properties, service){
 #' @examples
 #' 
 #' df <- dataRetrieval:::deal_with_empty(data.frame(NULL), 
-#'                                       properties = c("time", "value", "id"),
-#'                                       service = "daily")  
+#'                                       properties = c("state_code", "county_code", "id"),
+#'                                       service = "monitoring-locations")  
 #' df2 <- dataRetrieval:::rejigger_cols(df, 
-#'                                      properties = c("value", "id", "time"),
-#'                                      service = "daily")
+#'                                      properties = c("state_code", "id", "county_code"),
+#'                                      output_id = "monitoring_location_id")
+#'                                      
+#' df3 <- dataRetrieval:::rejigger_cols(df, 
+#'                                      properties = c("state_code", "monitoring_location_id", "county_code"),
+#'                                      output_id = "monitoring_location_id")
 #' 
-rejigger_cols <- function(df, properties, service){
-  new_id <- paste0(gsub("-", "_", service), "_id")
-  names(df)[names(df) == "id"] <- new_id
-  
+rejigger_cols <- function(df, properties, output_id){
+
   if(!all(is.na(properties))){
-    properties[properties == "id"] <- new_id
+    if(!"id" %in% properties){
+      if(output_id %in% properties){
+        names(df)[(names(df) == "id")] <- output_id
+      } else {
+        # just in case users become aware of the singular/plural issue
+        # where the endpoint name is plural, but input to other endpoints are singular
+        plural <- gsub("_id", "s_id", output_id)
+        if(plural %in% properties){
+          names(df)[(names(df) == "id")] <- plural
+        }
+      }
+    }
     df <- df[, properties]
+  } else {
+    names(df)[(names(df) == "id")] <- output_id
   }
   df
 }
@@ -180,12 +195,11 @@ get_resp_data <- function(resp) {
   }
   
   use_sf <- !grepl("skipGeometry=true", resp$url, ignore.case = TRUE)
+  return_df <- sf::read_sf(httr2::resp_body_string(resp))
   
-  if(use_sf){
-    return_df <- sf::read_sf(httr2::resp_body_string(resp))
-  } else {
-    return_df <- jsonlite::fromJSON(httr2::resp_body_string(resp))[["features"]][["properties"]] 
-  }
+  if(!use_sf){
+    return_df <- sf::st_drop_geometry(return_df)
+  } 
 
   return(return_df)
   
@@ -197,28 +211,33 @@ get_resp_data <- function(resp) {
 #' 
 #' @noRd
 #' @return data.frame with attributes
-walk_pages <- function(req){
+walk_pages <- function(req, max_results){
   
-  resps <- httr2::req_perform_iterative(req, 
-                                        next_req = next_req_url, 
-                                        max_reqs = Inf) 
-
-  ######################################
-  # So far I haven't tested this because I haven't had 
-  # individual failures
-  failures <- resps |>
-    httr2::resps_failures() |>
-    httr2::resps_requests()
-  
-  if(length(failures) > 0){
-    message("There were", length(failures), "failed requests.")
-  }
-  ######################################
-  
-  return_list <- data.frame()
-  for(resp in resps){
-    df1 <- get_resp_data(resp)
-    return_list <- rbind(return_list, df1)
+  if(is.na(max_results)){
+    resps <- httr2::req_perform_iterative(req, 
+                                          next_req = next_req_url, 
+                                          max_reqs = Inf)
+    ######################################
+    # So far I haven't tested this because I haven't had 
+    # individual failures
+    failures <- resps |>
+      httr2::resps_failures() |>
+      httr2::resps_requests()
+    
+    if(length(failures) > 0){
+      message("There were", length(failures), "failed requests.")
+    }
+    
+    return_list <- data.frame()
+    for(resp in resps){
+      df1 <- get_resp_data(resp)
+      return_list <- rbind(return_list, df1)
+    }
+    
+    ######################################
+  } else {
+    resps <- httr2::req_perform(req)
+    return_list <- get_resp_data(resps)
   }
 
   attr(return_list, "request") <- req
