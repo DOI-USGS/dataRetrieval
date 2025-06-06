@@ -16,10 +16,11 @@ read_USGS_daily(
   qualifier = NA_character_,
   value = NA,
   last_modified = NA_character_,
-  limit = 10000,
   skipGeometry = NA,
   time = NA_character_,
   bbox = NA,
+  limit = NA,
+  max_results = NA,
   convertType = TRUE
 )
 }
@@ -58,11 +59,6 @@ Examples:
 
 Only features that have a \code{last_modified} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.}
 
-\item{limit}{The optional limit parameter limits the number of items that are
-presented in the response document. Only items are counted that are on the
-first level of the collection in the response document. Nested objects
-contained within the explicitly requested items shall not be counted.}
-
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
 information.}
@@ -85,6 +81,15 @@ depth). Coordinates are assumed to be in crs 4326. The expected format is a nume
 vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
 Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
+\item{limit}{The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 10000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
+
+\item{max_results}{The optional maximum number of rows to return. This value
+must be less than the requested limit.}
+
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
 }
@@ -98,8 +103,8 @@ Description Daily data provide one data value to represent water conditions for 
 site <- "USGS-02238500"
 pcode <- "00060"
 dv_data_sf <- read_USGS_daily(monitoring_location_id = site,
-                        parameter_code = "00060", 
-                        time = c("2021-01-01", "2022-01-01"))
+                              parameter_code = "00060", 
+                              time = c("2021-01-01", "2022-01-01"))
 
 dv_data_trim <- read_USGS_daily(monitoring_location_id = site,
                           parameter_code = "00060", 
@@ -109,18 +114,18 @@ dv_data_trim <- read_USGS_daily(monitoring_location_id = site,
                           time = c("2021-01-01", "2022-01-01"))
 
 dv_data <- read_USGS_daily(monitoring_location_id = site,
-                        parameter_code = "00060",
-                        skipGeometry = TRUE)
+                           parameter_code = "00060",
+                           skipGeometry = TRUE)
                         
 dv_data_period <- read_USGS_daily(monitoring_location_id = site,
-                        parameter_code = "00060",
-                        time = "P7D")
+                                  parameter_code = "00060",
+                                  time = "P7D")
 
 multi_site <- read_USGS_daily(monitoring_location_id =  c("USGS-01491000",
-                                                       "USGS-01645000"),
-                        parameter_code = c("00060", "00010"),
-                        limit = 500,
-                        time = c("2023-01-01", "2024-01-01"))
+                                                          "USGS-01645000"),
+                              parameter_code = c("00060", "00010"),
+                              limit = 500,
+                              time = c("2023-01-01", "2024-01-01"))
 
 }
 \dontshow{\}) # examplesIf}

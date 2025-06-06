@@ -52,10 +52,13 @@
 #' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric 
 #' vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
 #' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
-#' @param limit The optional limit parameter limits the number of items that are
-#' presented in the response document. Only items are counted that are on the
-#' first level of the collection in the response document. Nested objects
-#' contained within the explicitly requested items shall not be counted.
+#' @param limit The optional limit parameter is used to control the subset of the 
+#' selected features that should be returned in each page. The maximum allowable
+#' limit is 10000. It may be beneficial to set this number lower if your internet
+#' connection is spotty. The default (`NA`) will set the limit to the maximum
+#' allowable limit for the service.
+#' @param max_results The optional maximum number of rows to return. This value
+#' must be less than the requested limit. 
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
@@ -66,17 +69,25 @@
 #' site_info <- read_USGS_monitoring_location(monitoring_location_id = site)
 #' 
 #' site_slim <- read_USGS_monitoring_location(monitoring_location_id = site,
-#'                              properties = c("monitoring_locations_id",
+#'                              properties = c("monitoring_location_id",
 #'                                             "state_name",
 #'                                             "country_name"))
+#'                                             
+#' site_slim_no_sf_slim <- read_USGS_monitoring_location(monitoring_location_id = site,
+#'                                            properties = c("monitoring_location_id",
+#'                                                           "state_name",
+#'                                                           "country_name"), 
+#'                                            skipGeometry = TRUE)
 #'
 #' site_info_no_sf <- read_USGS_monitoring_location(monitoring_location_id = site,
 #'                                    skipGeometry = TRUE)
 #' 
-#' multi_site <- read_USGS_monitoring_location(state_name = "Wisconsin")
-#' 
 #' bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
 #' multi_site <- read_USGS_monitoring_location(bbox = bbox_vals)
+#' multi_site_n_100 <- read_USGS_monitoring_location(bbox = bbox_vals,
+#'                                                   max_results = 100)
+#' multi_site_limit_100 <- read_USGS_monitoring_location(bbox = bbox_vals,
+#'                                                       limit = 100)
 #' }
 read_USGS_monitoring_location <- function(monitoring_location_id = NA_character_,
                             agency_code = NA_character_,
@@ -120,24 +131,33 @@ read_USGS_monitoring_location <- function(monitoring_location_id = NA_character_
                             depth_source_code = NA_character_,
                             properties = NA_character_,
                             bbox = NA,
-                            limit = 10000,
+                            limit = NA,
+                            max_results = NA,
                             skipGeometry = NA){
   
   message("Function in development, use at your own risk.")
   
   service <- "monitoring-locations"
+  output_id <- "monitoring_location_id"
   
   args <- mget(names(formals()))
   args[["service"]] <-  service
-  args[["id"]] <- args[["monitoring_location_id"]]
-  args[["monitoring_location_id"]] <- NULL
+  
+  args <- switch_arg_id(args, 
+                        id_name = output_id, 
+                        service = service)
+  
+  args[["properties"]] <- switch_properties_id(properties, 
+                                               id_name = output_id, 
+                                               service = service)
+  
   site_req <- do.call(construct_api_requests, args)
 
-  return_list <- walk_pages(site_req)
+  return_list <- walk_pages(site_req, max_results)
   
   return_list <- deal_with_empty(return_list, properties, service)
   
-  return_list <- rejigger_cols(return_list, properties, service)
-  
+  return_list <- rejigger_cols(return_list, properties, output_id)
+
   return(return_list)
 }
