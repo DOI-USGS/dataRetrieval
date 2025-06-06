@@ -23,10 +23,13 @@
 #' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric 
 #' vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
 #' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
-#' @param limit The optional limit parameter limits the number of items that are
-#' presented in the response document. Only items are counted that are on the
-#' first level of the collection in the response document. Nested objects
-#' contained within the explicitly requested items shall not be counted.
+#' @param limit The optional limit parameter is used to control the subset of the 
+#' selected features that should be returned in each page. The maximum allowable
+#' limit is 10000. It may be beneficial to set this number lower if your internet
+#' connection is spotty. The default (`NA`) will set the limit to the maximum
+#' allowable limit for the service.
+#' @param max_results The optional maximum number of rows to return. This value
+#' must be less than the requested limit. 
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
@@ -38,8 +41,8 @@
 #' site <- "USGS-02238500"
 #' pcode <- "00060"
 #' dv_data_sf <- read_USGS_daily(monitoring_location_id = site,
-#'                         parameter_code = "00060", 
-#'                         time = c("2021-01-01", "2022-01-01"))
+#'                               parameter_code = "00060", 
+#'                               time = c("2021-01-01", "2022-01-01"))
 #'
 #' dv_data_trim <- read_USGS_daily(monitoring_location_id = site,
 #'                           parameter_code = "00060", 
@@ -49,57 +52,68 @@
 #'                           time = c("2021-01-01", "2022-01-01"))
 #'
 #' dv_data <- read_USGS_daily(monitoring_location_id = site,
-#'                         parameter_code = "00060",
-#'                         skipGeometry = TRUE)
+#'                            parameter_code = "00060",
+#'                            skipGeometry = TRUE)
 #'                         
 #' dv_data_period <- read_USGS_daily(monitoring_location_id = site,
-#'                         parameter_code = "00060",
-#'                         time = "P7D")
+#'                                   parameter_code = "00060",
+#'                                   time = "P7D")
 #' 
 #' multi_site <- read_USGS_daily(monitoring_location_id =  c("USGS-01491000",
-#'                                                        "USGS-01645000"),
-#'                         parameter_code = c("00060", "00010"),
-#'                         limit = 500,
-#'                         time = c("2023-01-01", "2024-01-01"))
+#'                                                           "USGS-01645000"),
+#'                               parameter_code = c("00060", "00010"),
+#'                               limit = 500,
+#'                               time = c("2023-01-01", "2024-01-01"))
 #' 
 #' }
 read_USGS_daily <- function(monitoring_location_id = NA_character_,
-                         parameter_code = NA_character_,
-                         statistic_id = NA_character_,
-                         properties = NA_character_,
-                         time_series_id = NA_character_,
-                         daily_id = NA_character_,
-                         approval_status = NA_character_,
-                         unit_of_measure = NA_character_,
-                         qualifier = NA_character_,
-                         value = NA,
-                         last_modified = NA_character_,
-                         limit = 10000,
-                         skipGeometry = NA,
-                         time = NA_character_,
-                         bbox = NA,
-                         convertType = TRUE){
+                            parameter_code = NA_character_,
+                            statistic_id = NA_character_,
+                            properties = NA_character_,
+                            time_series_id = NA_character_,
+                            daily_id = NA_character_,
+                            approval_status = NA_character_,
+                            unit_of_measure = NA_character_,
+                            qualifier = NA_character_,
+                            value = NA,
+                            last_modified = NA_character_,
+                            skipGeometry = NA,
+                            time = NA_character_,
+                            bbox = NA,
+                            limit = NA,
+                            max_results = NA,
+                            convertType = TRUE){
   
   message("Function in development, use at your own risk.")
 
   service <- "daily"
+  output_id <- "daily_id"
+  
   args <- mget(names(formals()))
-  args[["id"]] <- args[["daily_id"]]
-  args[["daily_id"]] <- NULL
-  args[["convertType"]] <- NULL
   args[["service"]] <-  service
+  
+  args <- switch_arg_id(args, 
+                        id_name = output_id, 
+                        service = service)
+  
+  args[["properties"]] <- switch_properties_id(properties, 
+                                               id_name = output_id, 
+                                               service = service)
+  
+  args[["convertType"]] <- NULL
+  
   dv_req <- do.call(construct_api_requests, args)
 
-  return_list <- walk_pages(dv_req)
+  return_list <- walk_pages(dv_req, max_results)
   
   return_list <- deal_with_empty(return_list, properties, service)
     
   if(convertType) return_list <- cleanup_cols(return_list,
                                               service = "daily")
+  
+  return_list <- rejigger_cols(return_list, properties, output_id)
 
   return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
-  
-  return_list <- rejigger_cols(return_list, properties, service)
   
   return(return_list)
 }

@@ -9,8 +9,6 @@ read_USGS_ts_meta(
   parameter_code = NA_character_,
   parameter_name = NA_character_,
   properties = NA_character_,
-  limit = 10000,
-  bbox = NA,
   statistic_id = NA_character_,
   last_modified = NA_character_,
   begin = NA_character_,
@@ -21,9 +19,12 @@ read_USGS_ts_meta(
   thresholds = NA,
   sublocation_identifier = NA_character_,
   primary = NA_character_,
-  time_series_metadata_id = NA_character_,
+  time_series_id = NA_character_,
   web_description = NA_character_,
   skipGeometry = NA,
+  limit = NA,
+  max_results = NA,
+  bbox = NA,
   convertType = FALSE
 )
 }
@@ -37,18 +38,6 @@ read_USGS_ts_meta(
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
 geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id, last_modified, begin, end, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description, parameter_description}
-
-\item{limit}{The optional limit parameter limits the number of items that are
-presented in the response document. Only items are counted that are on the
-first level of the collection in the response document. Nested objects
-contained within the explicitly requested items shall not be counted.}
-
-\item{bbox}{Only features that have a geometry that intersects the bounding
-box are selected.The bounding box is provided as four or six numbers, depending
-on whether the coordinate reference system includes a vertical axis (height or
-depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
-vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
-Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.}
 
@@ -80,13 +69,29 @@ Only features that have a \code{last_modified} that intersects the value of date
 
 \item{primary}{A flag identifying if the time series is a "primary" time series. "Primary" time series (which have this flag) are standard observations which undergo \href{https://www.usgs.gov/survey-manual/5028-fundamental-science-practices-review-and-approval-scientific-data-release}{Bureau review and approval processes}. Non-primary time series, which will have missing values for "primary", are provisional datasets made available to meet the need for timely best science and to assist with daily operations which need real-time information. Non-primary time series data are only retained by this system for 120 days. See the \href{https://waterdata.usgs.gov/provisional-data-statement/}{USGS Provisional Data Statement} for more information.}
 
-\item{time_series_metadata_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
+\item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
 
 \item{web_description}{A description of what this time series represents, as used by WDFN and other USGS data dissemination products.}
 
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
 information.}
+
+\item{limit}{The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 10000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
+
+\item{max_results}{The optional maximum number of rows to return. This value
+must be less than the requested limit.}
+
+\item{bbox}{Only features that have a geometry that intersects the bounding
+box are selected.The bounding box is provided as four or six numbers, depending
+on whether the coordinate reference system includes a vertical axis (height or
+depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
+vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
+Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
@@ -102,12 +107,13 @@ site <- "USGS-02238500"
 meta_1 <- read_USGS_ts_meta(monitoring_location_id = site)
 
 meta_multi <- read_USGS_ts_meta(monitoring_location_id =  c("USGS-01491000", 
-                                                       "USGS-01645000"),
+                                                            "USGS-01645000"),
                             parameter_code = c("00060", "00010"),
                             properties = c("monitoring_location_id",
                                            "parameter_code",
                                            "begin",
-                                           "end"),
+                                           "end",
+                                           "time_series_id"),
                             skipGeometry = TRUE)
 }
 \dontshow{\}) # examplesIf}

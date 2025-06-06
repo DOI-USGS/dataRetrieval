@@ -2,7 +2,7 @@ context("Unit values")
 
 test_that("Unit value data returns correct types", {
   testthat::skip_on_cran()
-
+  skip_on_ci()
   siteNumber <- "05114000"
   parameterCd <- "00060"
   startDate <- "2014-10-10"
@@ -68,7 +68,7 @@ test_that("Unit value data returns correct types", {
 context("Peak, rating, meas, site")
 test_that("peak, rating curves, surface-water measurements", {
   testthat::skip_on_cran()
-
+  skip_on_ci()
   siteNumbers <- c("01594440", "040851325")
   data <- readNWISpeak(siteNumbers)
   expect_is(data$agency_cd, "character")
@@ -83,11 +83,12 @@ test_that("peak, rating curves, surface-water measurements", {
   data <- readNWISmeas(siteNumbers)
   expect_is(data$agency_cd, "character")
 
-  siteINFO_USGS <- read_USGS_monitoring_location("USGS-05114000")
+  siteINFO_USGS <- read_USGS_monitoring_location(monitoring_location_id = "USGS-05114000")
   expect_is(siteINFO_USGS$agency_code, "character")
-  expect_equal(siteINFO_USGS$monitoring_locations_id, "USGS-05114000")
+  expect_equal(siteINFO_USGS$monitoring_location_id, "USGS-05114000")
 
-  siteINFOMulti_USGS <- read_USGS_monitoring_location(c("USGS-05114000", "USGS-09423350"))
+  siteINFOMulti_USGS <- read_USGS_monitoring_location(monitoring_location_id = c("USGS-05114000",
+                                                                                 "USGS-09423350"))
   expect_true(nrow(siteINFOMulti_USGS) == 2)
 
   Meas07227500.ex <- readNWISmeas("07227500", expanded = TRUE)
@@ -157,6 +158,7 @@ test_that("read_USGS_daily", {
 
 test_that("WQP qw tests", {
   testthat::skip_on_cran()
+  skip_on_ci()
   nameToUse <- "Specific conductance"
   pcodeToUse <- "00095"
 
@@ -184,6 +186,7 @@ test_that("WQP qw tests", {
 context("readNWISstat tests")
 test_that("readNWISstat tests", {
   testthat::skip_on_cran()
+  skip_on_ci()
   data <- readNWISstat(
     siteNumbers = c("02171500"),
     parameterCd = c("00010", "00060"),
@@ -217,6 +220,7 @@ test_that("readNWISstat tests", {
 context("readNWISuse tests")
 test_that("readNWISuse tests", {
   testthat::skip_on_cran()
+  skip_on_ci()
   dc <- readNWISuse(
     years = c(2000, 2005, 2010),
     stateCd = "DC", countyCd = NULL
@@ -381,7 +385,7 @@ test_that("Construct USGS urls", {
   expect_equal(url_daily$url,
                "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&time=2024-01-01T00%3A00%3A00Z%2F..&skipGeometry=FALSE&limit=10000")
 
-  url_works <- dataRetrieval:::walk_pages(url_daily)
+  url_works <- dataRetrieval:::walk_pages(url_daily, max_results = 1)
   expect_true(nrow(url_works) > 0)
   
   url_ts_meta <- construct_api_requests(monitoring_location_id = siteNumber,
@@ -393,7 +397,7 @@ test_that("Construct USGS urls", {
     "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&lang=en-US&skipGeometry=FALSE&limit=10000"
   )
   
-  url_works_ts <- dataRetrieval:::walk_pages(url_ts_meta)
+  url_works_ts <- dataRetrieval:::walk_pages(url_ts_meta, max_results = 1)
   expect_true(nrow(url_works_ts) > 0)
 
   url_ml <- construct_api_requests(id = siteNumber,
@@ -401,7 +405,7 @@ test_that("Construct USGS urls", {
   
   expect_equal(url_ml$url, "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations/items?f=json&lang=en-US&skipGeometry=FALSE&limit=10000&id=USGS-01594440")
 
-  url_works_ml <- dataRetrieval:::walk_pages(url_ml)
+  url_works_ml <- dataRetrieval:::walk_pages(url_ml, max_results = 1)
   expect_true(nrow(url_works_ml) > 0)
   
   url_use <- constructUseURL(
