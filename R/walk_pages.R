@@ -46,19 +46,28 @@ deal_with_empty <- function(return_list, properties, service){
 #' @examples
 #' 
 #' df <- dataRetrieval:::deal_with_empty(data.frame(NULL), 
-#'                                       properties = c("time", "value", "id"),
-#'                                       service = "daily")  
+#'                                       properties = c("state_code", "county_code", "id"),
+#'                                       service = "monitoring-locations")  
 #' df2 <- dataRetrieval:::rejigger_cols(df, 
-#'                                      properties = c("value", "id", "time"),
-#'                                      service = "daily")
+#'                                      properties = c("state_code", "id", "county_code"),
+#'                                      output_id = "monitoring_location_id")
+#'                                      
+#' df3 <- dataRetrieval:::rejigger_cols(df, 
+#'                                      properties = c("state_code", "monitoring_location_id", "county_code"),
+#'                                      output_id = "monitoring_location_id")
 #' 
-rejigger_cols <- function(df, properties, service){
-  new_id <- paste0(gsub("-", "_", service), "_id")
-  names(df)[names(df) == "id"] <- new_id
-  
+rejigger_cols <- function(df, properties, output_id){
+
   if(!all(is.na(properties))){
-    properties[properties == "id"] <- new_id
+    
+    if(!"id" %in% properties){
+      names(df)[(names(df) == "id")] <- output_id
+      properties[properties == "id"] <- output_id
+    }
+    
     df <- df[, properties]
+  } else {
+    names(df)[(names(df) == "id")] <- output_id
   }
   df
 }

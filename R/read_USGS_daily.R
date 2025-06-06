@@ -87,11 +87,21 @@ read_USGS_daily <- function(monitoring_location_id = NA_character_,
   message("Function in development, use at your own risk.")
 
   service <- "daily"
+  output_id <- "daily_id"
+  
   args <- mget(names(formals()))
-  args[["id"]] <- args[["daily_id"]]
-  args[["daily_id"]] <- NULL
-  args[["convertType"]] <- NULL
   args[["service"]] <-  service
+  
+  args <- switch_arg_id(args, 
+                        id_name = output_id, 
+                        service = service)
+  
+  args[["properties"]] <- switch_properties_id(properties, 
+                                               id_name = output_id, 
+                                               service = service)
+  
+  args[["convertType"]] <- NULL
+  
   dv_req <- do.call(construct_api_requests, args)
 
   return_list <- walk_pages(dv_req, max_results)
@@ -100,10 +110,10 @@ read_USGS_daily <- function(monitoring_location_id = NA_character_,
     
   if(convertType) return_list <- cleanup_cols(return_list,
                                               service = "daily")
+  
+  return_list <- rejigger_cols(return_list, properties, output_id)
 
   return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
-  
-  return_list <- rejigger_cols(return_list, properties, service)
   
   return(return_list)
 }

@@ -20,7 +20,7 @@
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r schema <- check_OGC_requests(endpoint = "time-series-metadata", type = "schema"); paste(names(schema$properties), collapse = ", ")`
-#' @param time_series_metadata_id `r get_params("time-series-metadata")$id`
+#' @param time_series_id `r get_params("time-series-metadata")$id`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -69,7 +69,7 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                               thresholds = NA,
                               sublocation_identifier = NA_character_,
                               primary = NA_character_,
-                              time_series_metadata_id = NA_character_,
+                              time_series_id = NA_character_,
                               web_description = NA_character_,
                               skipGeometry = NA,
                               limit = NA,
@@ -80,13 +80,19 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
   message("Function in development, use at your own risk.")
   
   service = "time-series-metadata"
+  output_id <- "time_series_id"
   
   args <- mget(names(formals()))
-  
   args[["service"]] <-  service
-  args[["id"]] <- args[["time_series_id"]]
-  args[["time_series_metadata_id"]] <- NULL
+  
+  args <- switch_arg_id(args, id_name = output_id, service = service)
+
   args[["convertType"]] <- NULL
+  
+  args[["properties"]] <- switch_properties_id(properties, 
+                                               id_name = output_id, 
+                                               service = service)
+
   req_ts_meta <- do.call(construct_api_requests, args)
 
   return_list <- walk_pages(req_ts_meta, max_results)
@@ -94,10 +100,8 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
   return_list <- deal_with_empty(return_list, properties, service)
   
   if(convertType) return_list <- cleanup_cols(return_list)
-  
-  return_list <- rejigger_cols(return_list, properties, service)
-  
-  names(return_list)[(names(return_list) == "time_series_metadata_id")] <- "time_series_id"
+
+  return_list <- rejigger_cols(return_list, properties, output_id)
   
   return(return_list)
   

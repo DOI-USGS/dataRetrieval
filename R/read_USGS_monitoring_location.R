@@ -82,8 +82,6 @@
 #' site_info_no_sf <- read_USGS_monitoring_location(monitoring_location_id = site,
 #'                                    skipGeometry = TRUE)
 #' 
-#' multi_site <- read_USGS_monitoring_location(state_name = "Wisconsin")
-#' 
 #' bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
 #' multi_site <- read_USGS_monitoring_location(bbox = bbox_vals)
 #' multi_site_n_100 <- read_USGS_monitoring_location(bbox = bbox_vals,
@@ -140,16 +138,18 @@ read_USGS_monitoring_location <- function(monitoring_location_id = NA_character_
   message("Function in development, use at your own risk.")
   
   service <- "monitoring-locations"
+  output_id <- "monitoring_location_id"
   
   args <- mget(names(formals()))
   args[["service"]] <-  service
-  args[["id"]] <- args[["monitoring_location_id"]]
-  args[["monitoring_location_id"]] <- NULL
   
-  # help with monitoring_location(s) confusion
-  # User can put in either in the property vector:
-  properties[properties == "monitoring_location_id"] <- "monitoring_locations_id"
-  args[["properties"]][args[["properties"]] == "monitoring_location_id"] <- "monitoring_locations_id"
+  args <- switch_arg_id(args, 
+                        id_name = output_id, 
+                        service = service)
+  
+  args[["properties"]] <- switch_properties_id(properties, 
+                                               id_name = output_id, 
+                                               service = service)
   
   site_req <- do.call(construct_api_requests, args)
 
@@ -157,9 +157,7 @@ read_USGS_monitoring_location <- function(monitoring_location_id = NA_character_
   
   return_list <- deal_with_empty(return_list, properties, service)
   
-  return_list <- rejigger_cols(return_list, properties, service)
-  # They will get back the singular though, to work with the other services.
-  names(return_list)[(names(return_list) == "monitoring_locations_id")] <- "monitoring_location_id"
-  
+  return_list <- rejigger_cols(return_list, properties, output_id)
+
   return(return_list)
 }
