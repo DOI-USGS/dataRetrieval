@@ -76,6 +76,16 @@ of sites that have useful data.
 
 # see ?read_USGS_ts_meta
 
+#site1 <- whatWQPsamples(siteid = "USGS-01594440")
+
+#type <- "Stream"
+
+#sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
+
+#lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
+#                                    countycode = "US:55:025")
+
+
 }
 \seealso{
 \code{\link[=read_USGS_ts_meta]{read_USGS_ts_meta()}}

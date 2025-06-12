@@ -68,6 +68,16 @@
 #' 
 #' # see ?read_USGS_ts_meta
 #' 
+#' #site1 <- whatWQPsamples(siteid = "USGS-01594440")
+#'
+#' #type <- "Stream"
+#'
+#' #sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
+#'
+#' #lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
+#' #                                    countycode = "US:55:025")
+#' 
+#' 
 whatNWISdata <- function(..., convertType = TRUE) {
   matchReturn <- convertLists(...)
 
