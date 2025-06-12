@@ -134,7 +134,7 @@ Possible values include "America/New_York","America/Chicago", "America/Denver","
 }
 \description{
 This function creates the call and gets the data for discrete water quality samples data
-service described at \url{https://waterdata.usgs.gov/download-samples}.
+service described at \url{https://waterdata.usgs.gov/download-samples/}.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
