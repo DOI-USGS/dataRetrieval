@@ -99,6 +99,11 @@ importRDB1 <- function(obs_url,
 
   tz <- match.arg(tz, OlsonNames())
 
+  if (is.character(obs_url) && 
+      grepl("(https)://[^ /$.?#].[^\\s]*", obs_url)){
+    obs_url <- httr2::request(obs_url)
+  }
+  
   if(inherits(obs_url, "httr2_request")){
 
     doc <- getWebServiceData(obs_url)
