@@ -45,18 +45,24 @@ importWQP <- function(obs_url, tz = "UTC",
     tz <- "UTC"
   }
 
+  if (is.character(obs_url) && 
+      grepl("(https)://[^ /$.?#].[^\\s]*", obs_url)){
+        obs_url <- httr2::request(obs_url)
+  }
+  
   if (inherits(obs_url, "httr2_request")) {
     doc <- getWebServiceData(obs_url)
     if (is.null(doc)) {
       return(invisible(NULL))
     }
     headerInfo <- attr(doc, "headerInfo")
-    
+
   } else {
     doc <- obs_url
   }
   
   last_chars <- as.character(substr(doc, nchar(doc)-1, nchar(doc)))
+  
   if(last_chars != c("\n")){
     doc <- paste0(doc, "\n")
   }

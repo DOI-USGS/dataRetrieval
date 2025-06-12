@@ -63,6 +63,7 @@
 #' @examples
 #' 
 #' # see ?read_USGS_monitoring_location
+#' # siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
 #' 
 readNWISsite <- function(siteNumbers) {
 

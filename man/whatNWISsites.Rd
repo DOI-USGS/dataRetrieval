@@ -38,6 +38,8 @@ Mapper format is used
 \examples{
 
 # see ?read_USGS_monitoring_location
+#siteListPhos <- whatNWISsites(stateCd = "OH", parameterCd = "00665")
+#oneSite <- whatNWISsites(sites = "05114000")
 
 }
 \seealso{

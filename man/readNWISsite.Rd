@@ -71,6 +71,7 @@ Imports data from USGS site file site. This function gets data from here: \url{h
 \examples{
 
 # see ?read_USGS_monitoring_location
+# siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
 
 }
 \seealso{

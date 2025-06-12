@@ -74,6 +74,13 @@ More information on the web service can be found here:
 
 # see ?read_USGS_daily
 
+#site_id <- "04085427"
+#startDate <- "2012-01-01"
+#endDate <- "2012-06-30"
+#pCode <- "00060"
+#
+#rawDailyQ <- readNWISdv(site_id, pCode, startDate, endDate)
+
 }
 \seealso{
 \code{\link[=read_USGS_daily]{read_USGS_daily()}}
