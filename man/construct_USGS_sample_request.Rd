@@ -130,7 +130,7 @@ data frame returned from web service call.
 }
 \description{
 This function creates the call for discrete water quality samples data
-service described at \url{https://waterdata.usgs.gov/download-samples}.
+service described at \url{https://waterdata.usgs.gov/download-samples/}.
 Note: all possible arguments are included, but it is strongly recommended
 to only use the NECESSARY arguments. Leave unnecessary arguments as the default
 NA.
