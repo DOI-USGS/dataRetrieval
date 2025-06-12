@@ -84,8 +84,6 @@ read_USGS_daily <- function(monitoring_location_id = NA_character_,
                             max_results = NA,
                             convertType = TRUE){
   
-  message("Function in development, use at your own risk.")
-
   service <- "daily"
   output_id <- "daily_id"
   
