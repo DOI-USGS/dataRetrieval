@@ -1,7 +1,7 @@
 #' Construct request for USGS Samples Data
 #' 
 #' This function creates the call for discrete water quality samples data
-#' service described at <https://waterdata.usgs.gov/download-samples>.
+#' service described at <https://waterdata.usgs.gov/download-samples/>.
 #' Note: all possible arguments are included, but it is strongly recommended
 #' to only use the NECESSARY arguments. Leave unnecessary arguments as the default
 #' NA. 
@@ -379,7 +379,7 @@ check_USGS_sample_params <- function(service = "characteristicgroup",
 #' USGS Samples Data
 #' 
 #' This function creates the call and gets the data for discrete water quality samples data
-#' service described at <https://waterdata.usgs.gov/download-samples>.
+#' service described at <https://waterdata.usgs.gov/download-samples/>.
 #'
 #' @inheritParams construct_USGS_sample_request
 #' @param tz character to set timezone attribute of datetime. Default is UTC
