@@ -76,9 +76,7 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                               max_results = NA,
                               bbox = NA,
                               convertType = FALSE){
-  
-  message("Function in development, use at your own risk.")
-  
+
   service = "time-series-metadata"
   output_id <- "time_series_id"
   

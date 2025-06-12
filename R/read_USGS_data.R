@@ -43,8 +43,6 @@ read_USGS_data <- function(service,
                            CQL,
                            ...,
                            convertType = TRUE){
-  
-  message("Function in development, use at your own risk.")
 
   query_req <- get_collection()
   

@@ -134,9 +134,7 @@ read_USGS_monitoring_location <- function(monitoring_location_id = NA_character_
                             limit = NA,
                             max_results = NA,
                             skipGeometry = NA){
-  
-  message("Function in development, use at your own risk.")
-  
+
   service <- "monitoring-locations"
   output_id <- "monitoring_location_id"
   
