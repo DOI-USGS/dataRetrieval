@@ -56,6 +56,13 @@
 #' 
 #' # see ?read_USGS_daily
 #' 
+#' #site_id <- "04085427"
+#' #startDate <- "2012-01-01"
+#' #endDate <- "2012-06-30"
+#' #pCode <- "00060"
+#' #
+#' #rawDailyQ <- readNWISdv(site_id, pCode, startDate, endDate)
+#' 
 readNWISdv <- function(siteNumbers,
                        parameterCd,
                        startDate = "",
