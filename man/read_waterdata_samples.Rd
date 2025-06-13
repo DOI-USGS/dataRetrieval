@@ -2,9 +2,36 @@
 % Please edit documentation in R/read_waterdata_samples.R
 \name{read_waterdata_samples}
 \alias{read_waterdata_samples}
+\alias{read_USGS_samples}
 \title{USGS Samples Data}
 \usage{
 read_waterdata_samples(
+  monitoringLocationIdentifier = NA,
+  siteTypeCode = NA,
+  boundingBox = NA,
+  hydrologicUnit = NA,
+  activityMediaName = NA,
+  characteristicGroup = NA,
+  characteristic = NA,
+  characteristicUserSupplied = NA,
+  activityStartDateLower = NA,
+  activityStartDateUpper = NA,
+  countryFips = NA,
+  stateFips = NA,
+  countyFips = NA,
+  projectIdentifier = NA,
+  recordIdentifierUserSupplied = NA,
+  siteTypeName = NA,
+  usgsPCode = NA,
+  pointLocationLatitude = NA,
+  pointLocationLongitude = NA,
+  pointLocationWithinMiles = NA,
+  dataType = "results",
+  dataProfile = NA,
+  tz = "UTC"
+)
+
+read_USGS_samples(
   monitoringLocationIdentifier = NA,
   siteTypeCode = NA,
   boundingBox = NA,
@@ -37,7 +64,7 @@ for example: AZ014-320821110580701, CAX01-15304600, USGS-040851385. Location
 numbers without an agency prefix are assumed to have the prefix USGS.}
 
 \item{siteTypeCode}{Site type code query parameter. See available
-options by running \code{check_USGS_sample_params("sitetype")$typeCode}.}
+options by running \code{check_waterdata_sample_params("sitetype")$typeCode}.}
 
 \item{boundingBox}{North and South are latitude values; East and West are longitude values.
 A vector of 4 (west, south, east, north) is expected.
@@ -52,11 +79,11 @@ was sampled or analyzed.}
 
 \item{characteristicGroup}{Characteristic group is a broad category describing the sample.
 See available options by running
-\code{check_USGS_sample_params("characteristicgroup")$characteristicGroup}.}
+\code{check_waterdata_sample_params("characteristicgroup")$characteristicGroup}.}
 
 \item{characteristic}{Characteristic is a specific category describing the sample.
 See available options by running
-\code{check_USGS_sample_params("characteristics")$characteristicName}.}
+\code{check_waterdata_sample_params("characteristics")$characteristicName}.}
 
 \item{characteristicUserSupplied}{Observed property is the USGS term for the
 constituent sampled and the property name gives a detailed description of what
@@ -78,17 +105,17 @@ records that match the date.}
 
 \item{countryFips}{Country query parameter. Do not set redundant parameters.
 If another query parameter contains the country information, leave this parameter
-set to the default NA. See available options by running \code{check_USGS_sample_params("countries")},
+set to the default NA. See available options by running \code{check_waterdata_sample_params("countries")},
 where the "id" field contains the value to use in the countryFips input.}
 
 \item{stateFips}{State query parameter. To get a list of available state fips,
-run \code{check_USGS_sample_params("states")}. The "fips" can be created using the function
+run \code{check_waterdata_sample_params("states")}. The "fips" can be created using the function
 \code{stateCdLookup} - for example: \code{stateCdLookup("WI", "fips")}.
 FIPs codes for states take the format:
 CountryAbbrev:StateNumber, like US:55 for Wisconsin.}
 
 \item{countyFips}{County query parameter. To get a list of available counties,
-run \code{check_USGS_sample_params("counties")}. The "Fips" can be created using the function
+run \code{check_waterdata_sample_params("counties")}. The "Fips" can be created using the function
 \code{countyCdLookup} - for example: \code{countyCdLookup("WI", "Dane", "fips")}
 for Dane County, WI.
 FIPs codes for counties take the format:
@@ -104,7 +131,7 @@ information would be needed from the data supplier.}
 options by running \code{check_param("sitetype")$typeName}.}
 
 \item{usgsPCode}{USGS parameter code. See available options by running
-\code{check_USGS_sample_params("characteristics")$parameterCode}.}
+\code{check_waterdata_sample_params("characteristics")$parameterCode}.}
 
 \item{pointLocationLatitude}{Latitude for a point/radius query (decimal degrees). Must be used
 with pointLocationLongitude and pointLocationWithinMiles.}

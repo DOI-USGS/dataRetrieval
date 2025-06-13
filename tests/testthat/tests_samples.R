@@ -10,7 +10,7 @@ test_that("General samples-data retrievals work using WQP tests", {
 
   # testing lists:
   startDate <- as.Date("2022-01-01")
-  secchi_ops <- check_USGS_sample_params("observedproperty",
+  secchi_ops <- check_waterdata_sample_params("observedproperty",
                             text = "secchi")
   
   state_fips <- paste0("US:", stateCdLookup("WI", "id"))
@@ -67,7 +67,7 @@ test_that("samples-data project working", {
 })
 
 context("summary_waterdata_samples")
-test_that("summary_USGS_samples working", {
+test_that("summary_waterdata_samples working", {
   testthat::skip_on_cran()
   
   site1 <- summarize_waterdata_samples(monitoringLocationIdentifier = "USGS-01594440")

@@ -291,10 +291,10 @@ peak_data <- readNWISpeak(gsub("USGS-", "", site))
 
 ```
 
-For discrete water quality data, use the `summarize_USGS_samples` function:
+For discrete water quality data, use the `summarize_waterdata_samples` function:
 
 ```{r echo=TRUE}
-discrete_data_available_all <- summarize_USGS_samples(site) 
+discrete_data_available_all <- summarize_waterdata_samples(site) 
 
 discrete_data_available <- discrete_data_available_all |> 
   select(parameter_name = characteristicUserSupplied, 

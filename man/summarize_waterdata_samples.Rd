@@ -2,9 +2,12 @@
 % Please edit documentation in R/read_waterdata_samples.R
 \name{summarize_waterdata_samples}
 \alias{summarize_waterdata_samples}
+\alias{summarize_USGS_samples}
 \title{USGS Samples Summary Data}
 \usage{
 summarize_waterdata_samples(monitoringLocationIdentifier)
+
+summarize_USGS_samples(monitoringLocationIdentifier)
 }
 \arguments{
 \item{monitoringLocationIdentifier}{A monitoring location identifier has two parts,
