@@ -66,11 +66,11 @@ test_that("samples-data project working", {
   expect_true(ncol(projectInfo) >= 0)
 })
 
-context("summary_USGS_samples")
+context("summary_waterdata_samples")
 test_that("summary_USGS_samples working", {
   testthat::skip_on_cran()
   
-  site1 <- summarize_USGS_samples(monitoringLocationIdentifier = "USGS-01594440")
+  site1 <- summarize_waterdata_samples(monitoringLocationIdentifier = "USGS-01594440")
   expect_is(site1, "data.frame")
 
 })

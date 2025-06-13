@@ -480,10 +480,10 @@ read_waterdata_samples <- function(monitoringLocationIdentifier = NA,
 #' \donttest{
 #' monitoringLocationIdentifier <- "USGS-04074950"
 #' 
-#' what_data <- summarize_USGS_samples(monitoringLocationIdentifier)
+#' what_data <- summarize_waterdata_samples(monitoringLocationIdentifier)
 #' 
 #' }
-summarize_USGS_samples <- function(monitoringLocationIdentifier){
+summarize_waterdata_samples <- function(monitoringLocationIdentifier){
 
   if(length(monitoringLocationIdentifier) > 1){
     stop("Summary service only available for one site at a time.")

@@ -71,7 +71,7 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #'
-#' @seealso [read_waterdata_data()]
+#' @seealso [read_waterdata()]
 #' @export
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{

@@ -112,13 +112,13 @@ And here is a link to the web service documentation:
 
 ## Retrieving data from a known site
 
-Let's say we have a USGS site. We can check the data available at that site using `summarize_USGS_samples` like this:
+Let's say we have a USGS site. We can check the data available at that site using `summarize_waterdata_samples` like this:
 
 ```{r}
 library(dataRetrieval)
 site <- "USGS-04183500"
 
-data_at_site <- summarize_USGS_samples(monitoringLocationIdentifier = site)
+data_at_site <- summarize_waterdata_samples(monitoringLocationIdentifier = site)
 
 ```
 
@@ -409,13 +409,13 @@ county_lake_sites <- read_waterdata_samples(countyFips = dane_county,
 
 ```
 
-There are only `r nrow(county_lake_sites)` lake sites measuring phosphorus in Dane County, WI. We can get a summary of the data at each site using the `summarize_USGS_samples` function. This function only accepts 1 site at a time:
+There are only `r nrow(county_lake_sites)` lake sites measuring phosphorus in Dane County, WI. We can get a summary of the data at each site using the `summarize_waterdata_samples` function. This function only accepts 1 site at a time:
 
 ```{r message=FALSE}
 all_data <- data.frame()
 
 for(i in county_lake_sites$Location_Identifier){
-  avail_i <- summarize_USGS_samples(monitoringLocationIdentifier = i)
+  avail_i <- summarize_waterdata_samples(monitoringLocationIdentifier = i)
   all_data <- avail_i |> 
     filter(characteristicUserSupplied == user_char) |> 
     bind_rows(all_data)
