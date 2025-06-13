@@ -27,12 +27,18 @@ setAccess <- function(access = "public") {
   if (access == "internal") {
     pkg.env$access <- "3"
     message("setting access to internal")
+    warning("Internal access is slated for decommision.
+Please contact comptools@usgs.gov for more information.")
   } else if (access == "cooperator") {
     pkg.env$access <- "1"
     message("setting access to cooperator")
+    warning("Cooperator access is slated for decommision.
+Please contact comptools@usgs.gov for more information.")
   } else if (access == "USGS") {
     pkg.env$access <- "2"
     message("setting access to all USGS Water Science Centers")
+    warning("Water Science Center access is slated for decommision.
+Please contact comptools@usgs.gov for more information.")
   } else {
     pkg.env$access <- NULL
     message("setting access to public")

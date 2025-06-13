@@ -26,19 +26,19 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @seealso [read_USGS_monitoring_location()]
+#' @seealso [read_waterdata_monitoring_location()]
 #'
 #' @examples
 #' 
-#' # see ?read_USGS_monitoring_location
+#' # see ?read_waterdata_monitoring_location
 #' #siteListPhos <- whatNWISsites(stateCd = "OH", parameterCd = "00665")
 #' #oneSite <- whatNWISsites(sites = "05114000")
 #' 
 whatNWISsites <- function(...) {
 
-  .Deprecated(new = "read_USGS_monitoring_location",
+  .Deprecated(new = "read_waterdata_monitoring_location",
               package = "dataRetrieval", 
-              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_monitoring_location")
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location")
   
   
   matchReturn <- convertLists(...)
