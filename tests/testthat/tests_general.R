@@ -23,7 +23,7 @@ test_that("General USGS retrievals working", {
   ]
   }'
   
-  dv_data <- read_USGS_data(service = "daily",
+  dv_data <- read_waterdata(service = "daily",
                             CQL = cql,
                             time = c("2023-01-01", "2024-01-01"))
   expect_equal(as.Date(c("2023-01-01", "2024-01-01")), 
@@ -52,7 +52,7 @@ test_that("General USGS retrievals working", {
   ]
   }'
   
-  notActiveUSGS <- read_USGS_data(CQL = cql_not_active,
+  notActiveUSGS <- read_waterdata(CQL = cql_not_active,
                                   service = "daily",
                                   time =  c("2014-01-01", "2014-01-07"))
   expect_true(nrow(notActiveUSGS) == 0)
@@ -97,14 +97,14 @@ test_that("General NWIS retrievals working", {
   expect_error(readNWISdata(), "No arguments supplied")
   expect_error(readNWISdata(siteNumber = NA), "NA's are not allowed in query")
 
-  bBox_inventory <- read_USGS_ts_meta(bbox = c(-83, 38, -82.5, 38.5), 
+  bBox_inventory <- read_waterdata_ts_meta(bbox = c(-83, 38, -82.5, 38.5), 
                                       parameter_code = "00010")
   
   expect_true(length(unique(bBox_inventory$monitoring_location_id)) > 1)
 
-  siteInfo <- read_USGS_monitoring_location(state_name = "Wisconsin")
+  siteInfo <- read_waterdata_monitoring_location(state_name = "Wisconsin")
   
-  timeseriesInfo <- read_USGS_ts_meta(bbox = sf::st_bbox(siteInfo),
+  timeseriesInfo <- read_waterdata_ts_meta(bbox = sf::st_bbox(siteInfo),
                                       parameter_code = "00010",
                                       computation_period_identifier = "Points" )
 
@@ -174,18 +174,18 @@ test_that("General NWIS retrievals working", {
     time = c("2014-05-01", endDate = "2014-05-01")
   )
   
-  daily_USGS <- do.call(read_USGS_daily, args2)
+  daily_USGS <- do.call(read_waterdata_daily, args2)
   expect_lt(nrow(daily_USGS), nrow(instData))
 
-  ohio <- read_USGS_monitoring_location(state_name = "Ohio", 
+  ohio <- read_waterdata_monitoring_location(state_name = "Ohio", 
                                         site_type_code = "ST")
   bbox <- sf::st_bbox(ohio)
-  what_sites <- read_USGS_ts_meta(parameter_code = "00665",
+  what_sites <- read_waterdata_ts_meta(parameter_code = "00665",
                                   bbox = bbox)
   expect_true(all(c("monitoring_location_id",
                 "begin", "end", "parameter_name") %in% names(what_sites)))
   
-  huc <- read_USGS_monitoring_location(hydrologic_unit_code = "02080202")
+  huc <- read_waterdata_monitoring_location(hydrologic_unit_code = "02080202")
   expect_true(nrow(huc) > 0)
 
   # Test counties:
@@ -194,11 +194,11 @@ test_that("General NWIS retrievals working", {
                                 county = "Stafford", 
                                 outputType = "id")
   state_code_va <- stateCdLookup(input = "Virginia", outputType = "id")
-  stafford <- read_USGS_monitoring_location(county_code = county_code_stafford, 
+  stafford <- read_waterdata_monitoring_location(county_code = county_code_stafford, 
                                             state_code = state_code_va)
   stafford_bbox <- sf::st_bbox(stafford)
   
-  dailyStaffordVA <- read_USGS_daily(
+  dailyStaffordVA <- read_waterdata_daily(
     bbox = stafford_bbox,
     parameter_code = "00060",
     time = c("2015-01-01", "2015-01-30")
@@ -206,7 +206,7 @@ test_that("General NWIS retrievals working", {
   expect_gt(nrow(dailyStaffordVA), 1)
 
   # America Samoa?
-  AS <- read_USGS_monitoring_location(state_name = "American Samoa")
+  AS <- read_waterdata_monitoring_location(state_name = "American Samoa")
   expect_gt(nrow(AS), 0)
 
   site_id <- "01594440"
@@ -239,9 +239,9 @@ test_that("General NWIS retrievals working", {
   )))
 
   multi_hucs <- c("07130007", "07130011")
-  multi_huc_sites <- read_USGS_monitoring_location(hydrologic_unit_code = multi_hucs)
+  multi_huc_sites <- read_waterdata_monitoring_location(hydrologic_unit_code = multi_hucs)
   
-  multi_huc <- read_USGS_daily(bbox = sf::st_bbox(multi_huc_sites),
+  multi_huc <- read_waterdata_daily(bbox = sf::st_bbox(multi_huc_sites),
                                parameter_code = "63680",
                                statistic_id = "00003",
                                time = c("2015-06-18", "2015-06-18")
@@ -261,18 +261,18 @@ test_that("General NWIS retrievals working", {
   expect_lt(nrow(peak_data), 100000)
 })
 
-test_that("read_USGS_ts_meta", {
+test_that("read_waterdata_ts_meta", {
 
   # no service specified:
-  availableData <- read_USGS_ts_meta(monitoring_location_id = "USGS-05114000")
+  availableData <- read_waterdata_ts_meta(monitoring_location_id = "USGS-05114000")
   expect_equal(ncol(availableData), 17)
 
-  uvData <- read_USGS_ts_meta(monitoring_location_id = "USGS-05114000",
+  uvData <- read_waterdata_ts_meta(monitoring_location_id = "USGS-05114000",
                               computation_period_identifier = c("Points"))
   expect_equal(unique(uvData$computation_period_identifier), "Points")
 
   # multiple services
-  uvDataMulti <- read_USGS_ts_meta(monitoring_location_id = c("USGS-05114000",
+  uvDataMulti <- read_waterdata_ts_meta(monitoring_location_id = c("USGS-05114000",
                                                               "USGS-09423350"),
                                    computation_period_identifier = c("Daily",
                                                                      "Points"))
@@ -281,8 +281,8 @@ test_that("read_USGS_ts_meta", {
                                                                            "Points")))
 
   # state codes:
-  wi_sites <- read_USGS_monitoring_location(state_name = "Wisconsin")
-  flow_and_temp <- read_USGS_ts_meta(bbox = sf::st_bbox(wi_sites),
+  wi_sites <- read_waterdata_monitoring_location(state_name = "Wisconsin")
+  flow_and_temp <- read_waterdata_ts_meta(bbox = sf::st_bbox(wi_sites),
                                      parameter_code =  c("00060", "00010"),
                                      statistic_id = "00003",
                                      computation_period_identifier = c("Daily",
@@ -426,16 +426,16 @@ test_that("whatWQPdata working", {
   expect_is(lakeSites$activityCount, "numeric")
 })
 
-context("read_USGS_ts_meta")
-test_that("read_USGS_ts_meta working", {
+context("read_waterdata_ts_meta")
+test_that("read_waterdata_ts_meta working", {
   testthat::skip_on_cran()
-  siteListOhio <- read_USGS_monitoring_location(state_name = "Ohio")
-  siteListPhos <- read_USGS_ts_meta(bbox = sf::st_bbox(siteListOhio),
+  siteListOhio <- read_waterdata_monitoring_location(state_name = "Ohio")
+  siteListPhos <- read_waterdata_ts_meta(bbox = sf::st_bbox(siteListOhio),
                                     parameter_code = "00665")
   expect_true(nrow(siteListPhos) > 0)
   expect_is(siteListPhos$begin, "POSIXct")
 
-  bboxSites <- read_USGS_ts_meta(bbox = c(-92.5, 45.4, -87, 47),
+  bboxSites <- read_waterdata_ts_meta(bbox = c(-92.5, 45.4, -87, 47),
                                  parameter_code = "00060")
   expect_true(nrow(bboxSites) > 0)
   

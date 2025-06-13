@@ -68,7 +68,7 @@ sites <- c("USGS-04027000", "USGS-04063700")
 characteristic_names <- c("Phosphorus as phosphorus, water, filtered",
                           "Orthophosphate as phosphorus, water, filtered" )
 
-nutrient_data <- read_USGS_samples(monitoringLocationIdentifier = sites,
+nutrient_data <- read_waterdata_samples(monitoringLocationIdentifier = sites,
                                    characteristicUserSupplied = characteristic_names,
                                    dataProfile = "basicphyschem")
 

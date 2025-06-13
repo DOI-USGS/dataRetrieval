@@ -1,5 +1,5 @@
 ---
-title: "Introduction to New USGS Services"
+title: "Introduction to New USGS Water Data APIs"
 editor_options: 
   chunk_output_type: console
 output:
@@ -31,13 +31,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data OGC APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS will be modernizing [**all** of the NWIS web services](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/) in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services and deprecate functions for accessing the legacy services. 
+As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS will be modernizing [all of the NWIS web services](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/) in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services and deprecate functions for accessing the legacy services. 
 
-This document will introduce each new function (note as time goes on, we'll update this document to include additional functions). Note the timeline for the NWIS servers being shut down is currently very uncertain. We'd recommend incorporating these new functions as soon as possible to avoid future headaches.
+This document will introduce each new function (note as time goes on, we'll update this document to include additional functions). The timeline for the NWIS servers being shut down is currently very uncertain. We'd recommend incorporating these new functions as soon as possible to avoid future headaches.
 
 # New Features
 
-Each new "API endpoint" will deliver a new type of USGS data. Currently the available endpoints are "monitoring-locations", "time-series-metadata", and "daily". All of these endpoints offer some new features that the legacy services did not have:
+Each new "API endpoint" will deliver a new type of USGS water data. Currently the available endpoints are "monitoring-locations", "time-series-metadata", and "daily". All of these endpoints offer some new features that the legacy services did not have:
 
 ## Flexible Queries
 
@@ -68,7 +68,7 @@ You can use `usethis::edit_r_environ()` to edit find and open your .Renviron fil
 
 ## Contextual Query Language Support
 
-Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQL2) syntax for flexible queries. We'll show how to use the `read_USGS_data` function to make specific CQL2 queries.
+Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQL2) syntax for flexible queries. We'll show how to use the `read_waterdata` function to make specific CQL2 queries.
 
 ## Simple Features
 
@@ -87,7 +87,7 @@ There are at least 2 ways to deal with this. One is to manually split the data r
 Example:
 
 ```{r}
-ohio <- read_USGS_monitoring_location(state_name = "Ohio", 
+ohio <- read_waterdata_monitoring_location(state_name = "Ohio", 
                                       site_type_code = "ST")
 
 ```
@@ -95,7 +95,7 @@ ohio <- read_USGS_monitoring_location(state_name = "Ohio",
 There are `r nrow(ohio)` rows returned that are stream sites in Ohio. If we tried to ask for all the discharge data over the last 7 days from that list of sites:
 
 ```
-ohio_discharge <- read_USGS_daily(monitoring_location_id = ohio$monitoring_location_id,
+ohio_discharge <- read_waterdata_daily(monitoring_location_id = ohio$monitoring_location_id,
                                   parameter_code = "00060",
                                   time = "P7D")
 Error in `req_perform()`:
@@ -106,7 +106,7 @@ Error in `req_perform()`:
 We could use the fact that the `ohio` data frame contains geospatial information, create a bounding box, and ask for that data like this:
 
 ```{r}
-ohio_discharge <- read_USGS_daily(bbox = sf::st_bbox(ohio),
+ohio_discharge <- read_waterdata_daily(bbox = sf::st_bbox(ohio),
                                   parameter_code = "00060",
                                   time = "P7D")
 
@@ -123,7 +123,7 @@ site_list <- split(big_vector_of_sites, ceiling(seq_along(big_vector_of_sites)/2
 
 data_returned <- data.frame()
 for(sites in site_list){
-  df_sites <- read_USGS_daily(monitoring_location_id = sites,
+  df_sites <- read_waterdata_daily(monitoring_location_id = sites,
                               parameter_code = "00060",
                               time = "P7D")
   if(nrow(df_sites) == 0){
@@ -155,9 +155,9 @@ Each API endpoint natively returns a column named "id". The results of the "id" 
 Therefore, `dataRetrieval` functions will rename the "id" column to whatever it is referred to in other functions. Here are the id translations:
 
 ```{r echo=FALSE}
-df <- dplyr::tibble(Function = c("read_USGS_monitoring_location",
-                              "read_USGS_ts_meta",
-                              "read_USGS_daily"),
+df <- dplyr::tibble(Function = c("read_waterdata_monitoring_location",
+                              "read_waterdata_ts_meta",
+                              "read_waterdata_daily"),
                  "ID returned" = c("monitoring_location_id",
                                    "time_series_id",
                                    "daily_id"))
@@ -170,12 +170,12 @@ If a user would prefer the columns to come back as "id", they can specify that u
 ```{r}
 site <- "USGS-02238500"
 
-site_1 <- read_USGS_monitoring_location(monitoring_location_id = site,
+site_1 <- read_waterdata_monitoring_location(monitoring_location_id = site,
                              properties = c("monitoring_location_id",
                                             "state_name",
                                             "country_name"))
 names(site_1)
-site_2 <- read_USGS_monitoring_location(monitoring_location_id = site,
+site_2 <- read_waterdata_monitoring_location(monitoring_location_id = site,
                              properties = c("id",
                                             "state_name",
                                             "country_name"))
@@ -190,7 +190,7 @@ As new API endpoints come online, this section will be updated with any `dataRet
 
 ## Monitoring Location
 
-The `read_USGS_monitoring_location` function replaces the `readNWISsite` function.
+The `read_waterdata_monitoring_location` function replaces the `readNWISsite` function.
 
 `r dataRetrieval:::get_description("monitoring-locations")`
 
@@ -199,7 +199,7 @@ To access these services on a web browser, go to <https://api.waterdata.usgs.gov
 Here is a simple example of requesting one known USGS site:
 
 ```{r}
-sites_information <- read_USGS_monitoring_location(monitoring_location_id = "USGS-01491000")
+sites_information <- read_waterdata_monitoring_location(monitoring_location_id = "USGS-01491000")
 ```
 
 The output includes the following information:
@@ -211,7 +211,7 @@ knitr::kable(t(sites_information))
 Maybe that is more information than you need. You can specify which columns get returned with the "properties" argument:
 
 ```{r}
-site_info <- read_USGS_monitoring_location(monitoring_location_id = "USGS-01491000",
+site_info <- read_waterdata_monitoring_location(monitoring_location_id = "USGS-01491000",
                                            properties = c("monitoring_location_id",
                                                           "site_type",
                                                           "drainage_area",
@@ -224,7 +224,7 @@ knitr::kable(site_info)
 Any of those original outputs can also be inputs to the function! So let's say we want to find all the stream sites in Wisconsin:
 
 ```{r}
-sites_wi <- read_USGS_monitoring_location(state_name = "Wisconsin", 
+sites_wi <- read_waterdata_monitoring_location(state_name = "Wisconsin", 
                                           site_type = "Stream")
 ```
 
@@ -254,7 +254,7 @@ leaflet(data = sites_wi |>
 
 ## Time Series Metadata
 
-The `read_USGS_ts_meta` function replaces the `whatNWISdata` function.
+The `read_waterdata_ts_meta` function replaces the `whatNWISdata` function.
 
 `r dataRetrieval:::get_description("time-series-metadata")`
 
@@ -262,7 +262,7 @@ To access these services on a web browser, go to <https://api.waterdata.usgs.gov
 
 
 ```{r}
-ts_available <- read_USGS_ts_meta(monitoring_location_id = "USGS-01491000",
+ts_available <- read_waterdata_ts_meta(monitoring_location_id = "USGS-01491000",
                                   parameter_code = c("00060", "00010"))
 
 ```
@@ -281,7 +281,7 @@ knitr::kable(ts_available1)
 
 ## Daily Values
 
-The `read_USGS_daily` function replaces the `readNWISdv` function.
+The `read_waterdata_daily` function replaces the `readNWISdv` function.
 
 `r dataRetrieval:::get_description("daily")`
 
@@ -292,7 +292,7 @@ To access these services on a web browser, go to <https://api.waterdata.usgs.gov
 ```{r}
 library(dataRetrieval)
 
-daily_modern <- read_USGS_daily(monitoring_location_id = "USGS-01491000",
+daily_modern <- read_waterdata_daily(monitoring_location_id = "USGS-01491000",
                                 parameter_code = c("00060", "00010"),
                                 statistic_id = "00003",
                                 time = c("2023-10-01", "2024-09-30"))
@@ -313,7 +313,7 @@ ggplot(data = daily_modern) +
 
 ## General Retrieval
 
-The `read_USGS_data` function replaces the `readNWISdata` function. This is a lower-level, generalized function for querying any of the API endpoints.
+The `read_waterdata` function replaces the `readNWISdata` function. This is a lower-level, generalized function for querying any of the API endpoints.
 
 The new APIs can handle complex requests. For those queries, users will need to construct their own request using Contextual Query Language (CQL2). There's an excellent article <https://api.waterdata.usgs.gov/docs/ogcapi/complex-queries/>.
 
@@ -340,7 +340,7 @@ cql <- '{
   ]
 }'
 
-sites_mn_wi <- read_USGS_data(service = "monitoring-locations", 
+sites_mn_wi <- read_waterdata(service = "monitoring-locations", 
                               CQL = cql)
 
 ```
@@ -368,7 +368,7 @@ leaflet(data = sites_mn_wi |>
 
 ## Discrete Samples
 
-Discrete USGS water quality can be accessed via the `read_USGS_samples` function. While this is a new, modern USGS endpoint, it is not served in the same infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html)) for information on accessing USGS discrete water quality data.
+Discrete USGS water quality can be accessed via the `read_waterdata_samples` function. While this is a new, modern USGS endpoint, it is not served in the same infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html)) for information on accessing USGS discrete water quality data.
 
 # Notes on dataRetrieval development
 
@@ -376,7 +376,7 @@ Discrete USGS water quality can be accessed via the `read_USGS_samples` function
 
 ### Style
 
-New functions will use a "snake case", such as `read_USGS_samples`. Older functions use camel case, such as `readNWISdv`. The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
+New functions will use a "snake case", such as `read_waterdata_samples`. Older functions use camel case, such as `readNWISdv`. The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
 
 ### Structure
 

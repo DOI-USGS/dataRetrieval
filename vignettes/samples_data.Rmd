@@ -1,5 +1,5 @@
 ---
-title: "Introducing read_USGS_samples"
+title: "Introducing read_waterdata_samples"
 author: Laura A. DeCicco
 editor_options: 
   chunk_output_type: console
@@ -8,7 +8,7 @@ output:
     toc: true
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Introducing read_USGS_samples}
+  %\VignetteIndexEntry{Introducing read_waterdata_samples}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -91,7 +91,7 @@ This is a modern access point for USGS discrete water quality data. The USGS is 
 
 ### Style
 
-New functions will use a "snake case", such as "read_USGS_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
+New functions will use a "snake case", such as "read_waterdata_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
 
 ### Structure
 
@@ -137,11 +137,11 @@ DT::datatable(formatted_data_at_site, rownames = FALSE)
 
 We see there's `r data_at_site$resultCount[data_at_site$characteristicUserSupplied == "Phosphorus as phosphorus, water, unfiltered"]` filtered phosphorus values available. Note that if we ask for a simple characteristic = "Phosphorus", we'd get back both filtered and unfiltered, which might not be appropriate to mix together in an analysis. "characteristicUserSupplied" allows us to query by a very specific set of data. It is similar to a long-form USGS parameter code.
 
-To get that data, use the `read_USGS_samples` function:
+To get that data, use the `read_waterdata_samples` function:
 
 ```{r}
 user_char <- "Phosphorus as phosphorus, water, unfiltered"
-phos_data <- read_USGS_samples(monitoringLocationIdentifier = site,
+phos_data <- read_waterdata_samples(monitoringLocationIdentifier = site,
                         characteristicUserSupplied = user_char)
 ```
 
@@ -150,7 +150,7 @@ Inspecting phos_data, there are `r ncol(phos_data)` columns (!). That is because
 Instead of using the "Full physical chemical" profile, we could ask for the "Narrow" profile, which contains fewer columns:
 
 ```{r}
-phos_narrow <- read_USGS_samples(monitoringLocationIdentifier = site,
+phos_narrow <- read_waterdata_samples(monitoringLocationIdentifier = site,
                         characteristicUserSupplied = user_char,
                         dataProfile = "narrow")
 ```
@@ -206,7 +206,7 @@ North and south are latitude values; east and west are longitude values. A vecto
 bbox <- c(-90.8, 44.2, -89.9, 45.0)
 user_char <- "Phosphorus as phosphorus, water, unfiltered"
 
-bbox_sites <- read_USGS_samples(boundingBox = bbox,
+bbox_sites <- read_waterdata_samples(boundingBox = bbox,
                                 characteristicUserSupplied = user_char,
                                 dataType = "locations",
                                 dataProfile = "site")
@@ -224,7 +224,7 @@ Hydrologic Unit Codes (HUCs) identify physical areas within the US that drain to
 
 ```{r}
 
-huc_sites <- read_USGS_samples(hydrologicUnit = "070700",
+huc_sites <- read_waterdata_samples(hydrologicUnit = "070700",
                                 characteristicUserSupplied = user_char,
                                 dataType = "locations",
                                 dataProfile = "site")
@@ -242,7 +242,7 @@ map_it(huc_sites)
 Location latitude (pointLocationLatitude) and longitude (pointLocationLongitude), and the radius (pointLocationWithinMiles) are required for this geographic filter:
 
 ```{r}
-point_sites <- read_USGS_samples(pointLocationLatitude = 43.074680,
+point_sites <- read_waterdata_samples(pointLocationLatitude = 43.074680,
                                  pointLocationLongitude = -89.428054,
                                  pointLocationWithinMiles = 20,
                                 characteristicUserSupplied = user_char,
@@ -265,7 +265,7 @@ run `check_USGS_sample_params("counties")`. The "Fips" values can be created usi
 dane_county <- countyCdLookup("WI", "Dane", 
                               outputType = "fips")
 
-county_sites <- read_USGS_samples(countyFips = dane_county,
+county_sites <- read_waterdata_samples(countyFips = dane_county,
                                 characteristicUserSupplied = user_char,
                                 dataType = "locations",
                                 dataProfile = "site")
@@ -286,7 +286,7 @@ run `check_USGS_sample_params("states")`. The "fips" values can be created using
 ```{r}
 state_fip <- stateCdLookup("WI", outputType = "fips")
 
-state_sites <- read_USGS_samples(stateFips = state_fip,
+state_sites <- read_waterdata_samples(stateFips = state_fip,
                                 characteristicUserSupplied = user_char,
                                 dataType = "locations",
                                 dataProfile = "site")
@@ -379,7 +379,7 @@ Specify one or both of these fields to filter on the activity start date. The se
 For instance, let's grab Wisconsin sites that measured phosphorus in October or November of 2024:
  
 ```{r}
-state_sites_recent <- read_USGS_samples(stateFips = state_fip,
+state_sites_recent <- read_waterdata_samples(stateFips = state_fip,
                                 characteristicUserSupplied = user_char,
                                 dataType = "locations",
                                 activityStartDateLower = "2024-10-01",
@@ -401,7 +401,7 @@ The above examples showed how to find sites within a geographic filter. We can u
 ```{r}
 dane_county <- countyCdLookup("WI", "Dane")
 
-county_lake_sites <- read_USGS_samples(countyFips = dane_county,
+county_lake_sites <- read_waterdata_samples(countyFips = dane_county,
                                 characteristicUserSupplied = user_char,
                                 siteTypeName = "Lake, Reservoir, Impoundment",
                                 dataType = "locations",

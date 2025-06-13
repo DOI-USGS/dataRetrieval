@@ -59,17 +59,17 @@
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' }
 #' @export
-#' @seealso [read_USGS_monitoring_location()]
+#' @seealso [read_waterdata_monitoring_location()]
 #' @examples
 #' 
-#' # see ?read_USGS_monitoring_location
+#' # see ?read_waterdata_monitoring_location
 #' # siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
 #' 
 readNWISsite <- function(siteNumbers) {
 
-  .Deprecated(new = "read_USGS_monitoring_location",
+  .Deprecated(new = "read_waterdata_monitoring_location",
               package = "dataRetrieval", 
-              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_monitoring_location")
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location")
   
   
   baseURL <- httr2::request(pkg.env[["site"]])

@@ -40,33 +40,33 @@
 #' \donttest{
 #' site <- "USGS-02238500"
 #' pcode <- "00060"
-#' dv_data_sf <- read_USGS_daily(monitoring_location_id = site,
+#' dv_data_sf <- read_waterdata_daily(monitoring_location_id = site,
 #'                               parameter_code = "00060", 
 #'                               time = c("2021-01-01", "2022-01-01"))
 #'
-#' dv_data_trim <- read_USGS_daily(monitoring_location_id = site,
+#' dv_data_trim <- read_waterdata_daily(monitoring_location_id = site,
 #'                           parameter_code = "00060", 
 #'                           properties = c("monitoring_location_id",
 #'                                          "value",
 #'                                          "time"),
 #'                           time = c("2021-01-01", "2022-01-01"))
 #'
-#' dv_data <- read_USGS_daily(monitoring_location_id = site,
+#' dv_data <- read_waterdata_daily(monitoring_location_id = site,
 #'                            parameter_code = "00060",
 #'                            skipGeometry = TRUE)
 #'                         
-#' dv_data_period <- read_USGS_daily(monitoring_location_id = site,
+#' dv_data_period <- read_waterdata_daily(monitoring_location_id = site,
 #'                                   parameter_code = "00060",
 #'                                   time = "P7D")
 #' 
-#' multi_site <- read_USGS_daily(monitoring_location_id =  c("USGS-01491000",
+#' multi_site <- read_waterdata_daily(monitoring_location_id =  c("USGS-01491000",
 #'                                                           "USGS-01645000"),
 #'                               parameter_code = c("00060", "00010"),
 #'                               limit = 500,
 #'                               time = c("2023-01-01", "2024-01-01"))
 #' 
 #' }
-read_USGS_daily <- function(monitoring_location_id = NA_character_,
+read_waterdata_daily <- function(monitoring_location_id = NA_character_,
                             parameter_code = NA_character_,
                             statistic_id = NA_character_,
                             properties = NA_character_,
