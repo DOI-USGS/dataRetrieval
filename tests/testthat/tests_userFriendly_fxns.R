@@ -126,26 +126,26 @@ test_that("read_waterdata_daily", {
   endDate <- "2012-06-30"
   pCode <- "00060"
 
-  raw_USGS_daily <- read_waterdata_daily(monitoring_location_id = siteNumber, 
+  raw_waterdata_daily <- read_waterdata_daily(monitoring_location_id = siteNumber, 
                                     parameter_code = pCode, 
                                     time = c(startDate, endDate))
-  expect_is(raw_USGS_daily$time, "Date")
+  expect_is(raw_waterdata_daily$time, "Date")
   
-  raw_USGS_TempMeanMax <- read_waterdata_daily(monitoring_location_id = siteNumber, 
+  raw_waterdata_TempMeanMax <- read_waterdata_daily(monitoring_location_id = siteNumber, 
                                           parameter_code = c("00010", "00060"),
                                           time = c(startDate, endDate),
                                           statistic_id = c("00001", "00003"))
   
-  expect_true(length(unique(raw_USGS_TempMeanMax$parameter_code)) == 2)
-  expect_true(length(unique(raw_USGS_TempMeanMax$statistic_id)) == 2)
-  expect_true(length(unique(raw_USGS_TempMeanMax$monitoring_location_id)) == 1)
+  expect_true(length(unique(raw_waterdata_TempMeanMax$parameter_code)) == 2)
+  expect_true(length(unique(raw_waterdata_TempMeanMax$statistic_id)) == 2)
+  expect_true(length(unique(raw_waterdata_TempMeanMax$monitoring_location_id)) == 1)
 
-  raw_USGS_MultiSites <- read_waterdata_daily(monitoring_location_id = c("USGS-01491000", "USGS-01645000"),
+  raw_waterdata_MultiSites <- read_waterdata_daily(monitoring_location_id = c("USGS-01491000", "USGS-01645000"),
                                          parameter_code = c("00010", "00060"),
                                          time = c(startDate, endDate),
                                          statistic_id = c("00001", "00003"))
   
-  expect_true(length(unique(raw_USGS_MultiSites$monitoring_location_id)) == 2)
+  expect_true(length(unique(raw_waterdata_MultiSites$monitoring_location_id)) == 2)
   
   site <- "05212700"
 
