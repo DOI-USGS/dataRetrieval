@@ -4,7 +4,7 @@ dataRetrieval 2.7.19
 new USGS web services.
 * Added whisker and sf as dependencies.
 * Renamed read_USGS_sample to read_waterdata_sample.
-* Renamed summarize_USGS_sample to summarize_waterdata_sample.
+* Renamed summarize_USGS_samples to summarize_waterdata_samples.
 * Added warning to setAccess for non-public endpoints.
 
 dataRetrieval 2.7.18
