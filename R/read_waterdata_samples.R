@@ -392,24 +392,24 @@ check_USGS_sample_params <- function(service = "characteristicgroup",
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
-#' ph_data <- read_USGS_samples(
+#' ph_data <- read_waterdata_samples(
 #'                monitoringLocationIdentifier = "USGS-04074950",
 #'                characteristicUserSupplied = "pH, water, unfiltered, field",
 #'                activityStartDateUpper = "2000-01-01",
 #'                dataProfile = "narrow")
 #'                
 #' nameToUse <- "pH"
-#' pHData <- read_USGS_samples(monitoringLocationIdentifier = "USGS-04024315", 
+#' pHData <- read_waterdata_samples(monitoringLocationIdentifier = "USGS-04024315", 
 #'                          characteristic = nameToUse)
 #' ncol(pHData)
 #' attr(pHData, "url")
 #' attr(pHData, "queryTime")
 #' 
-#' summary_data <- read_USGS_samples(monitoringLocationIdentifier = "USGS-04024315", 
+#' summary_data <- read_waterdata_samples(monitoringLocationIdentifier = "USGS-04024315", 
 #'                                dataType = "projects")
 #' 
 #' }
-read_USGS_samples <- function(monitoringLocationIdentifier = NA,
+read_waterdata_samples <- function(monitoringLocationIdentifier = NA,
                               siteTypeCode = NA,
                               boundingBox = NA,
                               hydrologicUnit = NA,

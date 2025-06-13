@@ -49,7 +49,7 @@ vignette("dataRetrieval", package = "dataRetrieval")
 Additionally, each function has a help file. These can be accessed by typing a question mark, followed by the function name in the R console:
 
 ```{r echo=TRUE, eval=FALSE}
-?read_USGS_daily
+?read_waterdata_daily
 ```
 
 Each function's help file has working examples to demonstrate the usage. The examples may have comments "## Not run". These examples CAN be run, they just are not run by the CRAN maintainers due to the external service calls.
@@ -95,14 +95,14 @@ There are many types of data served from NWIS. To understand how the services ar
   * <https://waterdata.usgs.gov/blog/nwisweb-decommission-summary/>
   
 * USGS functions will slowly replace NWIS functions
-  * `read_USGS_samples` has replaced `readNWISqw`
-  * `read_USGS_daily` can replace `readNWISdv`
-  * `read_USGS_monitoring_location` can replace `readNWISsite`
-  * `read_USGS_ts_meta` can replace `whatNWISdata`
+  * `read_waterdata_samples` has replaced `readNWISqw`
+  * `read_waterdata_daily` can replace `readNWISdv`
+  * `read_waterdata_monitoring_location` can replace `readNWISsite`
+  * `read_waterdata_ts_meta` can replace `whatNWISdata`
   
 * Discrete water quality data:
   * WQP functions should be used when accessing non-USGS discrete water quality data
-  * `read_USGS_samples` should be used for USGS data
+  * `read_waterdata_samples` should be used for USGS data
   
 
 # NWIS Data: Current NWIS offerings
@@ -110,16 +110,16 @@ There are many types of data served from NWIS. To understand how the services ar
 | data_type_cd |Function| Data description | Replacement Function |
 |--------|:-------|------:|-------:|
 |uv|[readNWISuv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuv.html)|Continuous data| None yet |
-|dv|[readNWISdv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdv.html)|Daily aggregated | [read_USGS_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_USGS_daily.html) |
+|dv|[readNWISdv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdv.html)|Daily aggregated | [read_waterdata_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_daily.html) |
 |gwlevels|[readNWISgwl](https://doi-usgs.github.io/dataRetrieval/reference/readNWISgwl.html)|Groundwater levels | None yet |
-|site|[readNWISsite](https://doi-usgs.github.io/dataRetrieval/reference/readNWISsite.html)|Site metadata| [read_USGS_monitoring_location](https://doi-usgs.github.io/dataRetrieval/reference/read_USGS_monitoring_location.html) |
+|site|[readNWISsite](https://doi-usgs.github.io/dataRetrieval/reference/readNWISsite.html)|Site metadata| [read_waterdata_monitoring_location](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_monitoring_location.html) |
 |pcode|[readNWISpCode](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpCode.html)|Parameter code metadata | None yet |
 |stat|[readNWISstat](https://doi-usgs.github.io/dataRetrieval/reference/readNWISstat.html)| Site statistics | None yet |
 |rating|[readNWISrating](https://doi-usgs.github.io/dataRetrieval/reference/readNWISrating.html)| Rating curves| None yet |
 |peak|[readNWISpeak](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpeak.html)|Peak flow| None yet |
 |use|[readNWISuse](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuse.html)|Water Use| None yet |
 |meas|[readNWISmeas](https://doi-usgs.github.io/dataRetrieval/reference/readNWISmeas.html)|Discrete surface water| None yet |
-| | [readNWISdata](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdata.html) | General data import for NWIS| [read_USGS_data](https://doi-usgs.github.io/dataRetrieval/reference/read_USGS_data.html) |
+| | [readNWISdata](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdata.html) | General data import for NWIS| [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) |
 
 
 ## USGS Basic Retrievals
@@ -201,7 +201,7 @@ pCode <- "00060"
 start.date <- "2023-10-01"
 end.date <- "2024-09-30"
 
-pheasant <- read_USGS_daily(monitoring_location_id = siteNo,
+pheasant <- read_waterdata_daily(monitoring_location_id = siteNo,
                             parameter_code = pCode,
                             time = c(start.date, end.date))
 ```
@@ -224,12 +224,12 @@ ts <- ggplot(
 ts
 ```
 
-Then we can use the `readNWISpCode` and `read_USGS_monitoring_location` functions to create better labels:
+Then we can use the `readNWISpCode` and `read_waterdata_monitoring_location` functions to create better labels:
 
 
 ```{r echo=TRUE, eval=TRUE, fig.height=3.5}
 parameterInfo <- readNWISpCode(pCode)
-siteInfo <- read_USGS_monitoring_location(siteNo)
+siteInfo <- read_waterdata_monitoring_location(siteNo)
 
 ts <- ts +
   xlab("") +
@@ -250,7 +250,7 @@ First verify that the data you think is available is actually associated with th
 library(dplyr)
 
 site <- "USGS-05407000"
-ts_data_available <- read_USGS_ts_meta(monitoring_location_id = site) 
+ts_data_available <- read_waterdata_ts_meta(monitoring_location_id = site) 
 
 
 data_available <- ts_data_available |> 
@@ -272,13 +272,13 @@ datatable(data_available,
 
 ```
 
-The time series that have "Instantaneous" in the computation_identifier column will be available in the instantaneous data service (currently `readNWISuv`), and the rest of the data will be available in the daily service (`read_USGS_daily`).
+The time series that have "Instantaneous" in the computation_identifier column will be available in the instantaneous data service (currently `readNWISuv`), and the rest of the data will be available in the daily service (`read_waterdata_daily`).
 
 ```{r eval=FALSE, echo=TRUE}
 dv_pcodes <- data_available$parameter_code[data_available$computation_identifier != "Instantaneous"]
 stat_cds <- data_available$statistic_id[data_available$computation_identifier != "Instantaneous"]
 
-dv_data <- read_USGS_daily(monitoring_location_id = site,
+dv_data <- read_waterdata_daily(monitoring_location_id = site,
                            parameter_code = unique(dv_pcodes),
                            statistic_id = unique(stat_cds))
 
@@ -313,10 +313,10 @@ datatable(discrete_data_available,
 
 ```
 
-The discrete water quality data can be accessed with the `read_USGS_samples` function:
+The discrete water quality data can be accessed with the `read_waterdata_samples` function:
 
 ```{r eval=FALSE, echo=TRUE}
-samples_data <- read_USGS_samples(monitoringLocationIdentifier = site, 
+samples_data <- read_waterdata_samples(monitoringLocationIdentifier = site, 
                                   dataProfile = "basicphyschem")
 ```
 
@@ -362,8 +362,8 @@ This is all great when you know your site numbers. What do you do when you don't
 
 There are 2 `dataRetrieval` functions that help with USGS data discovery:
 
-*  `read_USGS_monitoring_location` finds sites within a specified filter 
-*  `read_USGS_ts_meta` summarizes the time series meta data 
+*  `read_waterdata_monitoring_location` finds sites within a specified filter 
+*  `read_waterdata_ts_meta` summarizes the time series meta data 
 
 And 2 functions that help with discover in WQP:
 
@@ -377,8 +377,8 @@ Here are a few examples:
 
 ```{r eval=FALSE}
 # Daily temperature in Ohio
-ohio_sites <- read_USGS_monitoring_location(state_name = "Ohio")
-ohio_ts_meta <- read_USGS_ts_meta(bbox = sf::st_bbox(ohio_sites),  
+ohio_sites <- read_waterdata_monitoring_location(state_name = "Ohio")
+ohio_ts_meta <- read_waterdata_ts_meta(bbox = sf::st_bbox(ohio_sites),  
                                   parameter_code = "00010")
 
 # Real-time discharge at a site

@@ -1,4 +1,4 @@
-#' Generalized USGS data retrieval function
+#' Generalized USGS Water Data API retrieval function
 #' 
 #' Function that allows complex CQL queries. 
 #' See <https://api.waterdata.usgs.gov/docs/ogcapi/complex-queries/> 
@@ -34,12 +34,12 @@
 #' ]
 #' }'
 #' 
-#' dv_data <- read_USGS_data(service = "daily",
+#' dv_data <- read_waterdata(service = "daily",
 #'                           CQL = cql,
 #'                           time = c("2023-01-01", "2024-01-01"))
 #' 
 #' }
-read_USGS_data <- function(service, 
+read_waterdata <- function(service, 
                            CQL,
                            ...,
                            convertType = TRUE){

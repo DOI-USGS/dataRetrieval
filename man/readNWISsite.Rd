@@ -70,12 +70,12 @@ Imports data from USGS site file site. This function gets data from here: \url{h
 }
 \examples{
 
-# see ?read_USGS_monitoring_location
+# see ?read_waterdata_monitoring_location
 # siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
 
 }
 \seealso{
-\code{\link[=read_USGS_monitoring_location]{read_USGS_monitoring_location()}}
+\code{\link[=read_waterdata_monitoring_location]{read_waterdata_monitoring_location()}}
 }
 \keyword{USGS}
 \keyword{data}
