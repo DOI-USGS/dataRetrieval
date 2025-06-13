@@ -365,9 +365,7 @@ check_waterdata_sample_params <- function(service = "characteristicgroup",
     check_group_req <- httr2::req_url_query(check_group_req,
                                             !!!params)
   }
-  
-  message("GET: ", check_group_req$url) 
-  
+
   check_group <- httr2::req_perform(check_group_req) |> 
     httr2::resp_body_string() |> 
     jsonlite::fromJSON()
