@@ -288,7 +288,7 @@ stateCdLookup <- function(input,
   outputType <- match.arg(outputType, c("postal", "fullName",
                                         "id", "fips"))
   
-  states <- check_USGS_sample_params("states")
+  states <- check_waterdata_sample_params("states")
   country <- match.arg(country, choices = unique(states$countryCode), 
                        several.ok = FALSE)
   states <- states[states$countryCode == country,]
@@ -360,7 +360,7 @@ countyCdLookup <- function(state, county, outputType = "fips") {
     stop("Only one state allowed in countyCdLookup.")
   }
   
-  counties <- check_USGS_sample_params("counties")
+  counties <- check_waterdata_sample_params("counties")
   
   # first turn state into stateCd postal name
   state_postal <- stateCdLookup(state, 
