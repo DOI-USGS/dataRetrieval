@@ -91,15 +91,14 @@ get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
   # If successful ...
   if (res$status_code == 200) {
     # Interpret as text
-    d <- httr2::resp_body_string(res)
-
-    if (d == "") {
-      
+    if(length(res$body) > 0){
+      d <- httr2::resp_body_string(res)
+    } else {
       if(warn){
         warning("No data returned for: ", url, call. = FALSE)
       }
       
-      return(NULL)
+      return(NULL)      
     }
 
     if (use_sf) {
@@ -211,7 +210,8 @@ valid_ask <- function(all, type) {
 
   ### WOW! This is hacky and will hopefully be unneeded latter on....
   type <- ifelse(type == "nwis", "nwissite", type)
-  all <- rbind(all, c("flowlines", "NHDPlus comid", NA))
+  all <- rbind(all, 
+               data.frame(source = "flowlines", sourceName = "NHDPlus comid", features = NA))
 
   good <- grepl(
     paste0(tolower(type), collapse = "|"),

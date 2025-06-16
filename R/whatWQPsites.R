@@ -1,18 +1,18 @@
 #' Site Data Import from Water Quality Portal
 #'
 #' Returns a list of sites from the Water Quality Portal web service. This function
-#' gets the data from: \url{https://www.waterqualitydata.us}.
+#' gets the data from: <https://www.waterqualitydata.us>.
 #' Arguments to the function should be based on
-#' \url{https://www.waterqualitydata.us/webservices_documentation}. The return from
+#' <https://www.waterqualitydata.us/webservices_documentation>. The return from
 #' this function returns the basic metadata on WQP sites. It is
-#' generally faster than the \code{\link{whatWQPdata}} function, but does
+#' generally faster than the [whatWQPdata()] function, but does
 #' not return information on what data was collected at the site.
 #'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation}
+#' @param \dots see <https://www.waterqualitydata.us/webservices_documentation>
 #' for a complete list of options. A list of arguments can also be supplied.
 #' One way to figure out how to construct a WQP query is to go to the "Advanced" 
 #' form in the Water Quality Portal:
-#' \url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET}
+#' <https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET>
 #' Use the form to discover what parameters are available. Once the query is 
 #' set in the form, scroll down to the "Query URL". You will see the parameters
 #' after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
@@ -22,7 +22,7 @@
 #' mimeType,  and providers is optional (these arguments are picked automatically).
 #' @param legacy Logical. If TRUE, uses legacy WQP services. Default is TRUE.
 #' Setting legacy = FALSE uses WQX3.0 WQP services, which are in-development, use with caution.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the
 #' function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service
@@ -96,17 +96,17 @@ whatWQPsites <- function(..., legacy = TRUE, convertType = TRUE) {
 #' Summary of Data Available from Water Quality Portal
 #'
 #' Returns a list of sites with year-by-year information on what data is available.
-#' The function gets the data from: \url{https://www.waterqualitydata.us}.
+#' The function gets the data from: <https://www.waterqualitydata.us>.
 #' Arguments to the function should be based on
-#' \url{https://www.waterqualitydata.us/webservices_documentation}.
+#' <https://www.waterqualitydata.us/webservices_documentation>.
 #' The information returned from this function describes the
 #' available data at the WQP sites, and some metadata on the sites themselves.
 #'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation}
+#' @param \dots see <https://www.waterqualitydata.us/webservices_documentation>
 #'  for a complete list of options. A list of arguments can also be supplied.
 #' One way to figure out how to construct a WQP query is to go to the "Advanced" 
 #' form in the Water Quality Portal:
-#' \url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET}
+#' <https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET>
 #' Use the form to discover what parameters are available. Once the query is 
 #' set in the form, scroll down to the "Query URL". You will see the parameters
 #' after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"

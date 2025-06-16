@@ -1,10 +1,10 @@
 #' Site Data Import from NWIS
 #'
 #' Returns a list of sites from the NWIS web service. This function gets the data from:
-#' \url{https://waterservices.usgs.gov/docs/site-service/}.
+#' <https://waterservices.usgs.gov/docs/site-service/>.
 #' Mapper format is used
 #'
-#' @param \dots see \url{https://waterservices.usgs.gov/docs/site-service/}
+#' @param \dots see <https://waterservices.usgs.gov/docs/site-service/>
 #' for a complete list of options. A list (or lists) can also be supplied.
 #' 
 #' @return A data frame with at least the following columns:
@@ -26,15 +26,21 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
+#' @seealso [read_waterdata_monitoring_location()]
 #'
 #' @examples
-#' \donttest{
-#'
-#' siteListPhos <- whatNWISsites(stateCd = "OH", parameterCd = "00665")
-#' oneSite <- whatNWISsites(sites = "05114000")
-#' }
+#' 
+#' # see ?read_waterdata_monitoring_location
+#' #siteListPhos <- whatNWISsites(stateCd = "OH", parameterCd = "00665")
+#' #oneSite <- whatNWISsites(sites = "05114000")
+#' 
 whatNWISsites <- function(...) {
 
+  .Deprecated(new = "read_waterdata_monitoring_location",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location")
+  
+  
   matchReturn <- convertLists(...)
   if ("service" %in% names(matchReturn)) {
     service <- matchReturn$service
