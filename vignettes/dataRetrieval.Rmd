@@ -39,15 +39,14 @@ A quick workflow for USGS `dataRetrieval` functions:
 ```{r workflow, echo=TRUE,eval=FALSE}
 library(dataRetrieval)
 # Choptank River near Greensboro, MD
-siteNumber <- "01491000"
-ChoptankInfo <- readNWISsite(siteNumber)
+siteNumber <- "USGS-01491000"
+ChoptankInfo <- read_waterdata_monitoring_location(siteNumber)
 parameterCd <- "00060"
 
 # Raw daily data:
-rawDailyData <- readNWISdv(
-  siteNumber, parameterCd,
-  "1980-01-01", "2010-01-01"
-)
+rawDailyData <- read_waterdata_daily(monitoring_location_id = siteNumber,
+                                     parameter_code = parameterCd,
+                                     time = c("1980-01-01", "2010-01-01"))
 
 
 pCode <- readNWISpCode(parameterCd)
@@ -59,8 +58,8 @@ Table 1 describes the functions available in the `dataRetrieval` package.
 
 ```{r echo=FALSE}
 Functions <- c(
-  "readNWISdata",
-  "readNWISdv",
+  "read_waterdata",
+  "read_waterdata_daily",
   "readNWISuv",
   "readNWISrating",
   "readNWISmeas",
@@ -69,9 +68,11 @@ Functions <- c(
   "readNWISuse",
   "readNWISstat",
   "readNWISpCode",
-  "readNWISsite",
+  "read_waterdata_monitoring_location",
+  "read_waterdata_samples",
+  "summarize_waterdata_samples",
   "whatNWISsites",
-  "whatNWISdata",
+  "read_waterdata_ts_meta",
   "readWQPdata",
   "readWQPqw",
   "whatWQPsites",
@@ -80,27 +81,9 @@ Functions <- c(
   "whatWQPmetrics",
   "whatWQPsamples"
 )
-Arguments <- c(
-  "service, tz='UTC', ...", # readNWISdata
-  "statCd='00003'", # readNWISdv
-  "tz='UTC'", # readNWISuv
-  "type='base", # readNWISrating
-  "tz='UTC'", # readNWISmeas
-  "", # readNWISpeak
-  "tz='UTC'", # readNWISgwl
-  "stateCd, countyCd, years='ALL', categories='ALL'", # readNWISuse
-  "statReportType='daily', statType='mean'", # readNWISstat
-  "", # readNWISpCode
-  "", # readNWISsite
-  "...", # whatNWISsites
-  "service, ...", # whatNWISdata
-  "...",
-  "", # readWQPdata
-  "...",
-  "...", "...", "...", "..."
-) # whatWQPsites
+
 Description <- c(
-  "Data using user-specified queries", # readNWISdata
+  "Time series data using user-specified queries", # readNWISdata
   "Daily values", # readNWISdv
   "Instantaneous values", # readNWISuv
   "Rating table for active streamgage", # readNWISrating
@@ -110,7 +93,9 @@ Description <- c(
   "Water use", # readNWISuse
   "Statistical service", # readNWISstat
   "Parameter code information", # readNWISpCode
-  "Site information", # readNWISsite
+  "Site information", # read_waterdata_monitoring_location
+  "Discrete UGSS water quality data", # read_waterdata_samples
+  "Discrete USGS water quality summary",
   "Site search using user-specified queries",
   "Data availability",
   "User-specified queries",
@@ -121,28 +106,20 @@ Description <- c(
   "Metric availability",
   "Sample availability"
 )
-Source <- c(rep("NWIS", 13), rep("WQP", 7))
-Site <- c(
-  "opt.", rep("req.", 6), "",
-  rep("req.", 4), "opt.", "opt.", "req.", rep("opt.", 5)
-)
-parameterCd <- c(
-  "opt.", rep("req.", 2),
-  rep("", 5), "req.", "req.",
-  rep("", 2), rep("opt.", 2), "req.", rep("", 5)
-)
-start <- c(
-  "opt.", rep("req.", 2), "",
-  rep("req.", 3), "", "req.", rep("", 5), "req.", rep("opt.", 5)
-)
+Source <- c("USGS Water Data API",
+            "USGS Water Data API",
+            rep("NWIS", 8),
+            "USGS Water Data API",
+            "USGS Samples Data",
+            "USGS Samples Data",
+            "NWIS",
+            "USGS Water Data API",
+            rep("WQP", 7))
+
 
 data.df <- data.frame(
   Name = Functions,
   `Data Returned` = Description,
-  siteNumbers = Site,
-  parameterCd = parameterCd,
-  `startDate \n endDate` = start,
-  Arguments,
   Source, stringsAsFactors = FALSE
 )
 
@@ -155,7 +132,7 @@ The arguments `startDate` and `endDate` have defaults to request the maximum dat
 
 # USGS Web Retrievals
 
-In this section, examples of National Water Information System (NWIS) retrievals show how to get raw data into R. This data includes [site information](#site-information), measured [parameter information](#parameter-information), historical [daily values](#daily-data), [unit values](#unit-data) (which include real-time data but can also include other sensor data stored at regular time intervals), [groundwater level data](#groundwater-level-data), [peak flow data](#peak-flow-data), [rating curve data](#rating-curve-data),  [surface-water measurement data](#surface-water-measurement-data), [water use data](#water-use-data), and [statistics data](#statistics-data). The section [Embedded Metadata](#embedded-metadata) shows instructions for getting metadata that is attached to each returned data frame.
+In this section we'll show how to get raw data into R. This data includes [site information](#site-information), measured [parameter information](#parameter-information), historical [daily values](#daily-data), [unit values](#unit-data) (which include real-time data but can also include other sensor data stored at regular time intervals), [groundwater level data](#groundwater-level-data), [peak flow data](#peak-flow-data), [rating curve data](#rating-curve-data),  [surface-water measurement data](#surface-water-measurement-data), [water use data](#water-use-data), and [statistics data](#statistics-data). The section [Embedded Metadata](#embedded-metadata) shows instructions for getting metadata that is attached to each returned data frame.
 
 The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the `dataRetrieval` package as `siteNumber`).  Often (but not always), these ID's are 8 digits for surface-water sites and 15 digits for groundwater sites.  The first step to finding data is discovering this `siteNumber`. There are many ways to do this, one is the [National Water Information System: Mapper](https://maps.waterdata.usgs.gov/mapper/index.html).
 
@@ -206,92 +183,72 @@ There are occasions where NWIS values are not reported as numbers, instead there
 ## Site Information
 
 
-### readNWISsite
+### read_waterdata_monitoring_location
 
-Use the `readNWISsite` function to obtain all of the information available for a particular USGS site (or sites) such as full station name, drainage area, latitude, and longitude. `readNWISsite` can also access information about multiple sites with a vector input.
+Use the `read_waterdata_monitoring_location` function to obtain all of the information available for a particular USGS site (or sites) such as full station name, drainage area, latitude, and longitude. `read_waterdata_monitoring_location` can also access information about multiple sites with a vector input.
 
 
 ```{r getSite, echo=TRUE, eval=FALSE}
-siteNumbers <- c("01491000", "01645000")
-siteINFO <- readNWISsite(siteNumbers)
+siteNumbers <- c("USGS-01491000", "USGS-01645000")
+siteINFO <- read_waterdata_monitoring_location(siteNumbers)
 ```
 
 Site information is obtained from:
-[https://waterservices.usgs.gov/docs/site-service/](https://waterservices.usgs.gov/docs/site-service/)
+<https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations/items/>
 
-Information on the returned data can be found with the `comment` function as described in the [Metadata](#embedded-metadata) section.
+### read_waterdata_ts_meta
 
-```{r siteNames3, echo=TRUE, eval=FALSE}
-comment(siteINFO)
-```
+To discover what time series data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the `read_waterdata_ts_meta` function. 
 
-
-### whatNWISdata
-
-To discover what data is available for a particular USGS site, including measured parameters, period of record, and number of samples (count), use the `whatNWISdata` function. It is possible to limit the retrieval information to a subset of services. The possible choices for services are: "dv" (daily values), "uv", or "iv" (unit values), "qw" (water-quality), "sv" (sites visits), "pk" (peak measurements), "gw" (groundwater levels), "ad" (sites included in USGS Annual Water Data Reports External Link), "aw" (sites monitored by the USGS Active Groundwater Level Network External Link), and "id" (historical instantaneous values).
-
-In the following example, we limit the retrieved data to only daily data. The default for "service" is `all`, which returns all of the available data for that site. Likewise, there are arguments for parameter code (`parameterCd`) and statistic code (`statCd`) to filter the results. The default for both is to return all possible values (`all`). The returned `count_nu` for "uv" data is the count of days with returned data, not the actual count of returned values.
+In the following example, we limit the retrieved data to only daily data. 
 
 
 ```{r getSiteExtended, echo=TRUE, eval=FALSE}
 # Continuing from the previous example:
 # This pulls out just the daily, mean data:
 
-dailyDataAvailable <- whatNWISdata(
-  siteNumber = siteNumbers,
-  service = "dv",
-  statCd = "00003"
+dailyDataAvailable <- read_waterdata_ts_meta(
+  monitoring_location_id = siteNumbers, 
+  computation_period_identifier = "Daily",
+  statistic_id = "00003"
 )
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, eval=FALSE}
 
-tableData <- data.frame(
-  siteNumbers = c(
-    "01491000",
-    "01491000",
-    "01645000",
-    "01491000",
-    "01491000",
-    "01491000"
-  ),
-  srsname = c(
-    "Temperature, water",
-    "Stream flow, mean daily",
-    "Stream flow, mean daily",
-    "Specific conductance",
-    "Suspended sediment concentration (SSC)",
-    "Suspended sediment discharge"
-  ),
-  startDate = c(
-    "2010-10-01",
-    "1948-01-01",
-    "1930-09-26",
-    "2010-10-01",
-    "1980-10-01",
-    "1980-10-01"
-  ),
-  endDate = c(
-    "2012-05-09",
-    "2017-05-17",
-    "2017-05-17",
-    "2012-05-09",
-    "1991-09-30",
-    "1991-09-30"
-  ),
-  count = c("529", "25340", "31646", "527", "4017", "4017"),
-  units = c("deg C", "ft<sup>3</sup>/s", "ft<sup>3</sup>/s", "uS/cm @25C", "mg/l", "tons/day"),
-  stringsAsFactors = FALSE
-)
+tableData <- dailyDataAvailable[c("monitoring_location_id",
+                         "parameter_description",
+                         "unit_of_measure",
+                         "begin", "end")]
 
-# nolint start
-kable(tableData,
-  caption = "Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]"
-)
+tableData$begin <- as.Date(tableData$begin)
+tableData$end <- as.Date(tableData$end)
+tableData <- sf::st_drop_geometry(tableData)
+
+
+knitr::kable(tableData,
+             caption = "Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]")
+
+
 # nolint end
 ```
 
-See [Creating Tables](#creating-tables-in-microsoft-software-from-r) for instructions on converting an R data frame to a table in Microsoft&#174; software Excel or Word to display a data availability table similar to Table 4. Excel, Microsoft, PowerPoint, Windows, and Word are registered trademarks of Microsoft Corporation in the United States and other countries.
+Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]
+
+|monitoring_location_id |parameter_description                                                                                                                               |unit_of_measure |begin      |end        |
+|:----------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------|:---------------|:----------|:----------|
+|USGS-01491000          |Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius                                                          |uS/cm           |2010-10-01 |2012-05-09 |
+|USGS-01491000          |Dissolved oxygen, water, unfiltered, milligrams per liter                                                                                           |mg/l            |2023-04-21 |2025-06-15 |
+|USGS-01491000          |Discharge, cubic feet per second                                                                                                                    |ft^3/s          |1948-01-01 |2025-06-15 |
+|USGS-01645000          |Discharge, cubic feet per second                                                                                                                    |ft^3/s          |1930-09-26 |2025-06-15 |
+|USGS-01491000          |Suspended sediment concentration, milligrams per liter                                                                                              |mg/l            |1980-10-01 |1991-09-29 |
+|USGS-01491000          |Suspended sediment discharge, short tons per day                                                                                                    |tons/day        |1980-10-01 |1991-09-29 |
+|USGS-01491000          |Nitrate plus nitrite, water, in situ, milligrams per liter as nitrogen                                                                              |mg/l            |2023-08-02 |2025-06-14 |
+|USGS-01491000          |Temperature, water, degrees Celsius                                                                                                                 |degC            |2023-04-21 |2025-06-15 |
+|USGS-01491000          |Turbidity, water, unfiltered, monochrome near infra-red LED light, 780-900 nm, detection angle 90 +-2.5 degrees, formazin nephelometric units (FNU) |_FNU            |2023-04-21 |2025-06-14 |
+|USGS-01491000          |Temperature, water, degrees Celsius                                                                                                                 |degC            |2010-10-01 |2012-05-09 |
+|USGS-01491000          |Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius                                                          |uS/cm           |2023-04-21 |2025-06-14 |
+
 
 ## Parameter Information
 
@@ -313,29 +270,31 @@ The dates (start and end) must be in the format "YYYY-MM-DD" (note: the user mus
 ```{r label=getNWISDaily, echo=TRUE, eval=FALSE}
 
 # Choptank River near Greensboro, MD:
-siteNumber <- "01491000"
+siteNumber <- "USSG-01491000"
 parameterCd <- "00060" # Discharge
 startDate <- "2009-10-01"
 endDate <- "2012-09-30"
 
-discharge <- readNWISdv(siteNumber, parameterCd, startDate, endDate)
+discharge <- read_waterdata_daily(monitoring_location_id = siteNumber,
+                                  parameter_code = parameterCd, 
+                                  time = c(startDate, endDate))
 ```
 
-The column "datetime" in the returned data frame is automatically imported as a variable of class "Date" in R. Each requested parameter has a value and remark code column.  The names of these columns depend on the requested parameter and stat code combinations. USGS daily value qualification codes are often "A" (approved for publication) or "P" (provisional data subject to revision). 
+The column "time" in the returned data frame is automatically imported as a variable of class "Date" in R. 
 
 Another example would be a request for mean and maximum daily temperature and discharge in early 2012:
 
 ```{r label=getNWIStemperature, echo=TRUE, eval=FALSE}
-siteNumber <- "01491000"
+siteNumber <- "USGS-01491000"
 parameterCd <- c("00010", "00060") # Temperature and discharge
 statCd <- c("00001", "00003") # Mean and maximum
 startDate <- "2012-01-01"
 endDate <- "2012-05-01"
 
-temperatureAndFlow <- readNWISdv(siteNumber, parameterCd,
-  startDate, endDate,
-  statCd = statCd
-)
+temperatureAndFlow <- read_waterdata_daily(monitoring_location_id = siteNumber,
+                                  parameter_code = parameterCd, 
+                                  statistic_id = statCd,
+                                  time = c(startDate, endDate))
 ```
 
 ```{r label=getNWIStemperature2, echo=FALSE, eval=TRUE}
@@ -345,51 +304,34 @@ fullPath <- file.path(filePath, fileName)
 load(fullPath)
 ```
 
-The column names can be shortened and simplified using the `renameNWISColumns` function.  This is not necessary, but may streamline subsequent data analysis and presentation. Site information, daily statistic information, and measured parameter information is attached to the data frame as attributes. This is discussed further in the [metadata](#embedded-metadata) section.
-
-
-```{r label=renameColumns, echo=TRUE}
-names(temperatureAndFlow)
-
-temperatureAndFlow <- renameNWISColumns(temperatureAndFlow)
-names(temperatureAndFlow)
-```
-
-```{r label=attr1, echo=TRUE}
-# Information about the data frame attributes:
-names(attributes(temperatureAndFlow))
-
-statInfo <- attr(temperatureAndFlow, "statisticInfo")
-variableInfo <- attr(temperatureAndFlow, "variableInfo")
-siteInfo <- attr(temperatureAndFlow, "siteInfo")
-```
-
-
 
 An example of plotting the above data:
 
 ```{r}
-variableInfo <- attr(temperatureAndFlow, "variableInfo")
-siteInfo <- attr(temperatureAndFlow, "siteInfo")
+
+temperature <- temperatureAndFlow[temperatureAndFlow$parameter_code == "00010",]
+temperature <- temperature[temperature$statistic_id == "00001",]
+
+flow <- temperatureAndFlow[temperatureAndFlow$parameter_code == "00060",]
 
 par(mar = c(5, 5, 5, 5)) # sets the size of the plot window
 
-plot(temperatureAndFlow$Date, temperatureAndFlow$Wtemp_Max,
-  ylab = variableInfo$parameter_desc[1],
+plot(temperature$time, temperature$value,
+  ylab = "Maximum Temperture [C]",
   xlab = ""
 )
 par(new = TRUE)
-plot(temperatureAndFlow$Date,
-  temperatureAndFlow$Flow,
+plot(flow$time,
+  flow$value,
   col = "red", type = "l",
   xaxt = "n", yaxt = "n",
   xlab = "", ylab = "",
   axes = FALSE
 )
 axis(4, col = "red", col.axis = "red")
-mtext(variableInfo$parameter_desc[2], side = 4, line = 3, col = "red")
-title(paste(siteInfo$station_nm, "2012"))
-legend("topleft", variableInfo$param_units,
+mtext("Discharge [ft3/s]", side = 4, line = 3, col = "red")
+title("CHOPTANK RIVER NEAR GREENSBORO, MD")
+legend("topleft", unique(temperatureAndFlow$unit_of_measure),
   col = c("black", "red"), lty = c(NA, 1),
   pch = c(1, NA)
 )
@@ -639,44 +581,6 @@ The function `whatWQPmetrics` provides metric information. This is only currentl
 ```{r eval=FALSE}
 type <- "Stream"
 sites <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
-```
-
-
-# Embedded Metadata
-
-All data frames returned from the Web services have some form of associated metadata. This information is included as attributes to the data frame. All data frames will have a `url` (returning a character of the url used to obtain the data), `siteInfo` (returning a data frame with information on sites),  and `queryTime` (returning a POSIXct datetime) attributes. For example, the url and query time used to obtain the data can be found as follows:
-
-```{r meta1, eval=FALSE}
-
-attr(dischargeWI, "url")
-
-attr(dischargeWI, "queryTime")
-
-siteInfo <- attr(dischargeWI, "siteInfo")
-```
-
-Depending on the format that the data was obtained (RDB, WaterML1, etc), there will be additional information embedded in the data frame as attributes. To discover the available attributes:
-
-```{r meta2, eval=FALSE}
-names(attributes(dischargeWI))
-```
-
-For data obtained from `readNWISuv`, `readNWISdv`, `readNWISgwl` there are two attributes that are particularly useful: `siteInfo` and `variableInfo`.
-
-```{r meta3, eval=FALSE}
-
-siteInfo <- attr(dischargeWI, "siteInfo")
-
-variableInfo <- attr(dischargeWI, "variableInfo")
-```
-
-Data obtained from `readNWISpeak`, `readNWISmeas`, and `readNWISrating`, the `comment` attribute is useful.
-
-```{r meta5, eval=FALSE}
-comment(peakData)
-
-# Which is equivalent to:
-attr(peakData, "comment")
 ```
 
 
