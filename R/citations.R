@@ -2,7 +2,7 @@
 #'
 #' Uses attributes from the NWIS functions to create data citations.
 #' 
-#' See \code{?bibentry} for more information.
+#' See `?bibentry` for more information.
 #'
 #' @param x Any data returned from an NWIS function, must
 #' include "queryTime" and "url" attributes, which should
@@ -48,7 +48,7 @@ create_NWIS_bib <- function(x){
 #'
 #' Uses attributes from the WQP functions to create data citations.
 #' 
-#' See \code{?bibentry} for more information.
+#' See `?bibentry` for more information.
 #'
 #' @param x Any data returned from an NWIS function, must
 #' include "queryTime" and "url" attributes, which should

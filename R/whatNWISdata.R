@@ -1,19 +1,19 @@
 #' USGS data availability
 #'
 #' Imports a table of available parameters, period of record, and count. See
-#' \url{https://waterservices.usgs.gov/docs/site-service/}
+#' <https://waterservices.usgs.gov/docs/site-service/>
 #' for more information.
 #'
-#' @param \dots see \url{https://waterservices.usgs.gov/docs/site-service/}
+#' @param \dots see <https://waterservices.usgs.gov/docs/site-service/>
 #' for a complete list of options.  A list of arguments can also be supplied.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function will
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function will
 #' convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @keywords data import USGS web service
 #' 
 #' @details This function requires users to create their own arguments
 #' based on the NWIS web services. It is a more complicated function to use
-#' compared to other NWIS functions such as \code{\link{readNWISdv}}, \code{\link{readNWISuv}},
+#' compared to other NWIS functions such as [readNWISdv()], [readNWISuv()],
 #' etc. However, this function adds a lot of
 #' flexibility to the possible queries. If the "service" argument is included,
 #' the results will be filtered to the proper data_type_cd. This is a great
@@ -63,33 +63,30 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @examplesIf is_dataRetrieval_user()
-#' \donttest{
-#'
-#' availableData <- whatNWISdata(siteNumber = "05114000")
+#' @seealso [read_waterdata_ts_meta()]
+#' @examples
 #' 
-#' # To find just unit value ('instantaneous') data:
-#' uvData <- whatNWISdata(siteNumber = "05114000",
-#'                        service = "uv")
-#' uvDataMulti <- whatNWISdata(siteNumber = c("05114000", "09423350"),
-#'                             service = c("uv", "dv"))
-#' flowAndTemp <- whatNWISdata(
-#'   stateCd = "WI", service = "dv",
-#'   parameterCd = c("00060", "00010"),
-#'   statCd = "00003"
-#' )
-#' sites <- whatNWISdata(stateCd = "WI",
-#'                       parameterCd = "00060",
-#'                       siteType = "ST", 
-#'                       service = "site")
-#'                       
-#' sites <- whatNWISdata(stateCd = "WI",
-#'                       service = "gwlevels")
-#' }
+#' # see ?read_waterdata_ts_meta
+#' 
+#' #site1 <- whatWQPsamples(siteid = "USGS-01594440")
+#'
+#' #type <- "Stream"
+#'
+#' #sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
+#'
+#' #lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
+#' #                                    countycode = "US:55:025")
+#' 
+#' 
 whatNWISdata <- function(..., convertType = TRUE) {
   matchReturn <- convertLists(...)
 
   prewarned <- FALSE
+  
+  .Deprecated(new = "read_waterdata_ts_meta",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_ts_meta")
+  
   if ("service" %in% names(matchReturn)) {
     service <- matchReturn$service
 

@@ -4,6 +4,7 @@ pkg.env <- new.env()
   suppressMessages(setAccess("public"))
   pkg.env$nldi_base <- "https://api.water.usgs.gov/nldi/linked-data/"
   pkg.env$local_sf <- requireNamespace("sf", quietly = TRUE)
+  options("dataRetrieval" = list("api_version" = "v0"))
 }
 
 
@@ -51,3 +52,11 @@ discrete water quality data newer than March 11, 2024.
 For additional details, see:
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
 }
+
+new_nwis_message <- function(){
+  return("ALERT: All NWIS services are slated for decommission
+and new dataRetrieval functions will be added.
+For up-to-date information, see: 
+https://doi-usgs.github.io/dataRetrieval/articles/Status.html")
+}
+

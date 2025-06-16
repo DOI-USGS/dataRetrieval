@@ -1,7 +1,7 @@
 Package: dataRetrieval
 Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrology and Water Quality Data
-Version: 2.7.18.9002
+Version: 2.7.19
 Authors@R: c(
     person("Laura", "DeCicco", role = c("aut","cre"),
             email = "ldecicco@usgs.gov",
@@ -26,12 +26,20 @@ Authors@R: c(
             comment=c(ORCID = "0000-0003-2521-5043")),
     person("Lee", "Stanish", role="ctb",
             email = "lstanish@usgs.gov",
-            comment=c(ORCID = "0000-0002-9775-6861")))
+            comment=c(ORCID = "0000-0002-9775-6861")),
+    person("Joeseph", "Zemmels", role="ctb",
+            email = "jzemmels@usgs.gov",
+            comment=c(ORCID = "0009-0008-1463-6313")),
+    person("Elise", "Hinman", role="ctb",
+            email = "ehinman@usgs.gov",
+            comment=c(ORCID = "0000-0001-5396-1583")),  
+    person("Michael", "Mahoney", role="ctb",
+            email = "mjmahoney@usgs.gov",
+            comment=c(ORCID = "0000-0003-2402-304X"))  
+            )
 Description: Collection of functions to help retrieve U.S. Geological Survey
     and U.S. Environmental Protection Agency water quality and
-    hydrology data from web services. Data are discovered from 
-    National Water Information System <https://waterservices.usgs.gov/> and <https://waterdata.usgs.gov/nwis>. 
-    Water quality data are obtained from the Water Quality Portal <https://www.waterqualitydata.us/>.
+    hydrology data from web services. 
 License: CC0
 Copyright: This software is in the public domain because it contains materials
     that originally came from the United States Geological Survey, an agency of
@@ -39,23 +47,25 @@ Copyright: This software is in the public domain because it contains materials
 Depends:
     R (>= 4.1.0)
 Imports:
-    curl,
+    curl (>= 6.0.0),
     lubridate (>= 1.5.0),
     stats,
     utils,
     xml2,
     readr (>= 1.4.0),
     jsonlite,
-    httr2
+    httr2,
+    whisker,
+    sf
 Suggests:
     covr,
     dplyr,
     knitr,
     rmarkdown,
-    sf,
     testthat
 Encoding: UTF-8
 BuildVignettes: true
 VignetteBuilder: knitr
 BugReports: https://github.com/DOI-USGS/dataRetrieval/issues
 RoxygenNote: 7.3.2
+Roxygen: list(markdown = TRUE)

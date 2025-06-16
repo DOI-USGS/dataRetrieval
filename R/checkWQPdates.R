@@ -1,7 +1,7 @@
 #' Date Check for Water Quality Portal
 #'
-#' Checks date format for inputs to the Water Quality Portal. Used in \code{readWQPqw}
-#' and \code{readWQPdata}.
+#' Checks date format for inputs to the Water Quality Portal. Used in `readWQPqw`
+#' and `readWQPdata`.
 #'
 #' @param values named list with arguments to send to the Water Quality Portal
 #' @return values named list with corrected arguments to send to the Water Quality Portal

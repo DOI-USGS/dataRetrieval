@@ -15,8 +15,8 @@ a list generated from the WQP describing what data
 was returned.
 }
 \description{
-The information from this request is only available for a 
-limited time after the original query from the WQP. In the 
+The information from this request is only available for a
+limited time after the original query from the WQP. In the
 readWQPdata and readWQPqw functions, the results from this
 function will be attached as an attribute to the data.
 }
