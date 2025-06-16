@@ -194,7 +194,7 @@ siteINFO <- read_waterdata_monitoring_location(siteNumbers)
 ```
 
 Site information is obtained from:
-<https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations/items/>
+<https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations>
 
 ### read_waterdata_ts_meta
 
