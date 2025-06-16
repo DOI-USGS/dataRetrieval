@@ -74,7 +74,7 @@ of sites that have useful data.
 }
 \examples{
 
-# see ?read_USGS_ts_meta
+# see ?read_waterdata_ts_meta
 
 #site1 <- whatWQPsamples(siteid = "USGS-01594440")
 
@@ -88,7 +88,7 @@ of sites that have useful data.
 
 }
 \seealso{
-\code{\link[=read_USGS_ts_meta]{read_USGS_ts_meta()}}
+\code{\link[=read_waterdata_ts_meta]{read_waterdata_ts_meta()}}
 }
 \keyword{USGS}
 \keyword{data}

@@ -179,5 +179,5 @@ peak_data <- readNWISdata(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=read_USGS_data]{read_USGS_data()}}
+\code{\link[=read_waterdata]{read_waterdata()}}
 }

@@ -1,5 +1,5 @@
 ---
-title: "Introducing read_USGS_samples"
+title: "Introducing read_waterdata_samples"
 author: Laura A. DeCicco
 editor_options: 
   chunk_output_type: console
@@ -8,7 +8,7 @@ output:
     toc: true
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Introducing read_USGS_samples}
+  %\VignetteIndexEntry{Introducing read_waterdata_samples}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -91,7 +91,7 @@ This is a modern access point for USGS discrete water quality data. The USGS is 
 
 ### Style
 
-New functions will use a "snake case", such as "read_USGS_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
+New functions will use a "snake case", such as "read_waterdata_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
 
 ### Structure
 
@@ -112,13 +112,13 @@ And here is a link to the web service documentation:
 
 ## Retrieving data from a known site
 
-Let's say we have a USGS site. We can check the data available at that site using `summarize_USGS_samples` like this:
+Let's say we have a USGS site. We can check the data available at that site using `summarize_waterdata_samples` like this:
 
 ```{r}
 library(dataRetrieval)
 site <- "USGS-04183500"
 
-data_at_site <- summarize_USGS_samples(monitoringLocationIdentifier = site)
+data_at_site <- summarize_waterdata_samples(monitoringLocationIdentifier = site)
 
 ```
 
@@ -137,11 +137,11 @@ DT::datatable(formatted_data_at_site, rownames = FALSE)
 
 We see there's `r data_at_site$resultCount[data_at_site$characteristicUserSupplied == "Phosphorus as phosphorus, water, unfiltered"]` filtered phosphorus values available. Note that if we ask for a simple characteristic = "Phosphorus", we'd get back both filtered and unfiltered, which might not be appropriate to mix together in an analysis. "characteristicUserSupplied" allows us to query by a very specific set of data. It is similar to a long-form USGS parameter code.
 
-To get that data, use the `read_USGS_samples` function:
+To get that data, use the `read_waterdata_samples` function:
 
 ```{r}
 user_char <- "Phosphorus as phosphorus, water, unfiltered"
-phos_data <- read_USGS_samples(monitoringLocationIdentifier = site,
+phos_data <- read_waterdata_samples(monitoringLocationIdentifier = site,
                         characteristicUserSupplied = user_char)
 ```
 
@@ -150,7 +150,7 @@ Inspecting phos_data, there are `r ncol(phos_data)` columns (!). That is because
 Instead of using the "Full physical chemical" profile, we could ask for the "Narrow" profile, which contains fewer columns:
 
 ```{r}
-phos_narrow <- read_USGS_samples(monitoringLocationIdentifier = site,
+phos_narrow <- read_waterdata_samples(monitoringLocationIdentifier = site,
                         characteristicUserSupplied = user_char,
                         dataProfile = "narrow")
 ```
@@ -206,7 +206,7 @@ North and south are latitude values; east and west are longitude values. A vecto
 bbox <- c(-90.8, 44.2, -89.9, 45.0)
 user_char <- "Phosphorus as phosphorus, water, unfiltered"
 
-bbox_sites <- read_USGS_samples(boundingBox = bbox,
+bbox_sites <- read_waterdata_samples(boundingBox = bbox,
                                 characteristicUserSupplied = user_char,
                                 dataType = "locations",
                                 dataProfile = "site")
@@ -224,7 +224,7 @@ Hydrologic Unit Codes (HUCs) identify physical areas within the US that drain to
 
 ```{r}
 
-huc_sites <- read_USGS_samples(hydrologicUnit = "070700",
+huc_sites <- read_waterdata_samples(hydrologicUnit = "070700",
                                 characteristicUserSupplied = user_char,
                                 dataType = "locations",
                                 dataProfile = "site")
@@ -242,7 +242,7 @@ map_it(huc_sites)
 Location latitude (pointLocationLatitude) and longitude (pointLocationLongitude), and the radius (pointLocationWithinMiles) are required for this geographic filter:
 
 ```{r}
-point_sites <- read_USGS_samples(pointLocationLatitude = 43.074680,
+point_sites <- read_waterdata_samples(pointLocationLatitude = 43.074680,
                                  pointLocationLongitude = -89.428054,
                                  pointLocationWithinMiles = 20,
                                 characteristicUserSupplied = user_char,
@@ -259,13 +259,13 @@ map_it(point_sites)
 ### countyFips 
 
 County query parameter. To get a list of available counties,
-run `check_USGS_sample_params("counties")`. The "Fips" values can be created using the function `countyCdLookup`.
+run `check_waterdata_sample_params("counties")`. The "Fips" values can be created using the function `countyCdLookup`.
 
 ```{r}
 dane_county <- countyCdLookup("WI", "Dane", 
                               outputType = "fips")
 
-county_sites <- read_USGS_samples(countyFips = dane_county,
+county_sites <- read_waterdata_samples(countyFips = dane_county,
                                 characteristicUserSupplied = user_char,
                                 dataType = "locations",
                                 dataProfile = "site")
@@ -280,13 +280,13 @@ map_it(county_sites)
 ### stateFips 
 
 State query parameter. To get a list of available state fips values, 
-run `check_USGS_sample_params("states")`. The "fips" values can be created using the function
+run `check_waterdata_sample_params("states")`. The "fips" values can be created using the function
 `stateCdLookup`.
 
 ```{r}
 state_fip <- stateCdLookup("WI", outputType = "fips")
 
-state_sites <- read_USGS_samples(stateFips = state_fip,
+state_sites <- read_waterdata_samples(stateFips = state_fip,
                                 characteristicUserSupplied = user_char,
                                 dataType = "locations",
                                 dataProfile = "site")
@@ -307,7 +307,7 @@ Additional parameters can be included to limit the results coming back from a re
 Site type code query parameter.
 
 ```{r}
-site_type_info <- check_USGS_sample_params("sitetype")
+site_type_info <- check_waterdata_sample_params("sitetype")
 site_type_info$typeCode
 ```
 
@@ -324,7 +324,7 @@ site_type_info$typeLongName
 Sample media refers to the environmental medium that was sampled or analyzed.
 
 ```{r}
-media_info <- check_USGS_sample_params("samplemedia")
+media_info <- check_waterdata_sample_params("samplemedia")
 media_info$activityMedia
 ```
 
@@ -333,34 +333,34 @@ media_info$activityMedia
 Characteristic group is a broad category describing the sample measurement. The options for this parameter generally follow the values described in the Water Quality Portal [User Guide](https://www.waterqualitydata.us/portal_userguide), but not always.
 
 ```{r}
-group_info <- check_USGS_sample_params("characteristicgroup")
+group_info <- check_waterdata_sample_params("characteristicgroup")
 group_info$characteristicGroup
 ```
 
 ### characteristic
 
-Characteristic is a specific category describing the sample. See `check_USGS_sample_params("characteristics")` for a full list, below is a small sample:
+Characteristic is a specific category describing the sample. See `check_waterdata_sample_params("characteristics")` for a full list, below is a small sample:
 
 ```{r}
-characteristic_info <- check_USGS_sample_params("characteristics")
+characteristic_info <- check_waterdata_sample_params("characteristics")
 head(unique(characteristic_info$characteristicName))
 ```
 
 ### characteristicUserSupplied
 
-Observed property is the USGS term for the constituent sampled and the property name gives a detailed description of what was sampled. Observed Property is mapped to characteristicUserSupplied, and replaces the parameter name and pcode USGS previously used to describe discrete sample data. See `check_USGS_sample_params("observedproperty")` for a full list, below is a small sample:
+Observed property is the USGS term for the constituent sampled and the property name gives a detailed description of what was sampled. Observed Property is mapped to characteristicUserSupplied, and replaces the parameter name and pcode USGS previously used to describe discrete sample data. See `check_waterdata_sample_params("observedproperty")` for a full list, below is a small sample:
 
 ```{r}
-char_us <- check_USGS_sample_params("observedproperty")
+char_us <- check_waterdata_sample_params("observedproperty")
 head(char_us$observedProperty)
 ```
 
 ### usgsPCode
 
-USGS parameter code. See `check_USGS_sample_params("characteristics")` for a full list, below is a small sample:
+USGS parameter code. See `check_waterdata_sample_params("characteristics")` for a full list, below is a small sample:
 
 ```{r}
-characteristic_info <- check_USGS_sample_params("characteristics")
+characteristic_info <- check_waterdata_sample_params("characteristics")
 head(unique(characteristic_info$parameterCode))
 ```
 
@@ -379,7 +379,7 @@ Specify one or both of these fields to filter on the activity start date. The se
 For instance, let's grab Wisconsin sites that measured phosphorus in October or November of 2024:
  
 ```{r}
-state_sites_recent <- read_USGS_samples(stateFips = state_fip,
+state_sites_recent <- read_waterdata_samples(stateFips = state_fip,
                                 characteristicUserSupplied = user_char,
                                 dataType = "locations",
                                 activityStartDateLower = "2024-10-01",
@@ -401,7 +401,7 @@ The above examples showed how to find sites within a geographic filter. We can u
 ```{r}
 dane_county <- countyCdLookup("WI", "Dane")
 
-county_lake_sites <- read_USGS_samples(countyFips = dane_county,
+county_lake_sites <- read_waterdata_samples(countyFips = dane_county,
                                 characteristicUserSupplied = user_char,
                                 siteTypeName = "Lake, Reservoir, Impoundment",
                                 dataType = "locations",
@@ -409,13 +409,13 @@ county_lake_sites <- read_USGS_samples(countyFips = dane_county,
 
 ```
 
-There are only `r nrow(county_lake_sites)` lake sites measuring phosphorus in Dane County, WI. We can get a summary of the data at each site using the `summarize_USGS_samples` function. This function only accepts 1 site at a time:
+There are only `r nrow(county_lake_sites)` lake sites measuring phosphorus in Dane County, WI. We can get a summary of the data at each site using the `summarize_waterdata_samples` function. This function only accepts 1 site at a time:
 
 ```{r message=FALSE}
 all_data <- data.frame()
 
 for(i in county_lake_sites$Location_Identifier){
-  avail_i <- summarize_USGS_samples(monitoringLocationIdentifier = i)
+  avail_i <- summarize_waterdata_samples(monitoringLocationIdentifier = i)
   all_data <- avail_i |> 
     filter(characteristicUserSupplied == user_char) |> 
     bind_rows(all_data)

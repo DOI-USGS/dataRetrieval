@@ -1,8 +1,11 @@
 dataRetrieval 2.7.19
 ===================
-* Added read_USGS_daily, read_USGS_monitoring_location, read_USGS_ts_meta to access
+* Added read_waterdata_daily, read_waterdata_monitoring_location, read_waterdata_ts_meta to access
 new USGS web services.
 * Added whisker and sf as dependencies.
+* Renamed read_USGS_samples to read_waterdata_samples.
+* Renamed summarize_USGS_samples to summarize_waterdata_samples.
+* Added warning to setAccess for non-public endpoints.
 
 dataRetrieval 2.7.18
 ===================

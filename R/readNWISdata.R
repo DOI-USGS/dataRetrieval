@@ -71,7 +71,7 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #'
-#' @seealso [read_USGS_data()]
+#' @seealso [read_waterdata()]
 #' @export
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
@@ -189,14 +189,14 @@ for more information.
 https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.html"
     )
   } else if (service == "dv"){
-    .Deprecated(new = "read_USGS_daily",
+    .Deprecated(new = "read_waterdata_daily",
                 package = "dataRetrieval", 
-                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_daily.")
+                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_daily.")
     
   } else if (service == "site"){
-    .Deprecated(new = "read_USGS_monitoring_location",
+    .Deprecated(new = "read_waterdata_monitoring_location",
                 package = "dataRetrieval", 
-                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_monitoring_location")    
+                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location")    
   } else {
     message(new_nwis_message())
   }
@@ -288,7 +288,7 @@ stateCdLookup <- function(input,
   outputType <- match.arg(outputType, c("postal", "fullName",
                                         "id", "fips"))
   
-  states <- check_USGS_sample_params("states")
+  states <- check_waterdata_sample_params("states")
   country <- match.arg(country, choices = unique(states$countryCode), 
                        several.ok = FALSE)
   states <- states[states$countryCode == country,]
@@ -360,7 +360,7 @@ countyCdLookup <- function(state, county, outputType = "fips") {
     stop("Only one state allowed in countyCdLookup.")
   }
   
-  counties <- check_USGS_sample_params("counties")
+  counties <- check_waterdata_sample_params("counties")
   
   # first turn state into stateCd postal name
   state_postal <- stateCdLookup(state, 

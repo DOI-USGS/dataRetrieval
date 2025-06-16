@@ -43,9 +43,9 @@
 #' 
 #' \donttest{
 #' site <- "USGS-02238500"
-#' meta_1 <- read_USGS_ts_meta(monitoring_location_id = site)
+#' meta_1 <- read_waterdata_ts_meta(monitoring_location_id = site)
 #' 
-#' meta_multi <- read_USGS_ts_meta(monitoring_location_id =  c("USGS-01491000", 
+#' meta_multi <- read_waterdata_ts_meta(monitoring_location_id =  c("USGS-01491000", 
 #'                                                             "USGS-01645000"),
 #'                             parameter_code = c("00060", "00010"),
 #'                             properties = c("monitoring_location_id",
@@ -55,7 +55,7 @@
 #'                                            "time_series_id"),
 #'                             skipGeometry = TRUE)
 #' }
-read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
+read_waterdata_ts_meta <- function(monitoring_location_id = NA_character_,
                               parameter_code = NA_character_,
                               parameter_name = NA_character_,
                               properties = NA_character_,
@@ -76,9 +76,7 @@ read_USGS_ts_meta <- function(monitoring_location_id = NA_character_,
                               max_results = NA,
                               bbox = NA,
                               convertType = FALSE){
-  
-  message("Function in development, use at your own risk.")
-  
+
   service = "time-series-metadata"
   output_id <- "time_series_id"
   
