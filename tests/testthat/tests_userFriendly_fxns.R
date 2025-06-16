@@ -83,11 +83,11 @@ test_that("peak, rating curves, surface-water measurements", {
   data <- readNWISmeas(siteNumbers)
   expect_is(data$agency_cd, "character")
 
-  siteINFO_USGS <- read_USGS_monitoring_location(monitoring_location_id = "USGS-05114000")
+  siteINFO_USGS <- read_waterdata_monitoring_location(monitoring_location_id = "USGS-05114000")
   expect_is(siteINFO_USGS$agency_code, "character")
   expect_equal(siteINFO_USGS$monitoring_location_id, "USGS-05114000")
 
-  siteINFOMulti_USGS <- read_USGS_monitoring_location(monitoring_location_id = c("USGS-05114000",
+  siteINFOMulti_USGS <- read_waterdata_monitoring_location(monitoring_location_id = c("USGS-05114000",
                                                                                  "USGS-09423350"))
   expect_true(nrow(siteINFOMulti_USGS) == 2)
 
@@ -95,9 +95,9 @@ test_that("peak, rating curves, surface-water measurements", {
   expect_is(Meas07227500.ex$measurement_dt, "Date")
   expect_is(Meas07227500.ex$measurement_dateTime, "POSIXct")
 
-  expect_equal(nrow(read_USGS_ts_meta(monitoring_location_id = "USGS-10312000",
+  expect_equal(nrow(read_waterdata_ts_meta(monitoring_location_id = "USGS-10312000",
                                       parameter_code = "50286")), 0)
-  expect_equal(ncol(read_USGS_ts_meta(monitoring_location_id = "USGS-10312000", 
+  expect_equal(ncol(read_waterdata_ts_meta(monitoring_location_id = "USGS-10312000", 
                                  parameter_code = "50286",
                                  properties = c("geometry", "id",
                                                 "unit_of_measure",
@@ -118,7 +118,7 @@ test_that("peak, rating curves, surface-water measurements", {
                             convertType = FALSE))
 })
 
-test_that("read_USGS_daily", {
+test_that("read_waterdata_daily", {
   testthat::skip_on_cran()
 
   siteNumber <- "USGS-04085427"
@@ -126,30 +126,30 @@ test_that("read_USGS_daily", {
   endDate <- "2012-06-30"
   pCode <- "00060"
 
-  raw_USGS_daily <- read_USGS_daily(monitoring_location_id = siteNumber, 
+  raw_waterdata_daily <- read_waterdata_daily(monitoring_location_id = siteNumber, 
                                     parameter_code = pCode, 
                                     time = c(startDate, endDate))
-  expect_is(raw_USGS_daily$time, "Date")
+  expect_is(raw_waterdata_daily$time, "Date")
   
-  raw_USGS_TempMeanMax <- read_USGS_daily(monitoring_location_id = siteNumber, 
+  raw_waterdata_TempMeanMax <- read_waterdata_daily(monitoring_location_id = siteNumber, 
                                           parameter_code = c("00010", "00060"),
                                           time = c(startDate, endDate),
                                           statistic_id = c("00001", "00003"))
   
-  expect_true(length(unique(raw_USGS_TempMeanMax$parameter_code)) == 2)
-  expect_true(length(unique(raw_USGS_TempMeanMax$statistic_id)) == 2)
-  expect_true(length(unique(raw_USGS_TempMeanMax$monitoring_location_id)) == 1)
+  expect_true(length(unique(raw_waterdata_TempMeanMax$parameter_code)) == 2)
+  expect_true(length(unique(raw_waterdata_TempMeanMax$statistic_id)) == 2)
+  expect_true(length(unique(raw_waterdata_TempMeanMax$monitoring_location_id)) == 1)
 
-  raw_USGS_MultiSites <- read_USGS_daily(monitoring_location_id = c("USGS-01491000", "USGS-01645000"),
+  raw_waterdata_MultiSites <- read_waterdata_daily(monitoring_location_id = c("USGS-01491000", "USGS-01645000"),
                                          parameter_code = c("00010", "00060"),
                                          time = c(startDate, endDate),
                                          statistic_id = c("00001", "00003"))
   
-  expect_true(length(unique(raw_USGS_MultiSites$monitoring_location_id)) == 2)
+  expect_true(length(unique(raw_waterdata_MultiSites$monitoring_location_id)) == 2)
   
   site <- "05212700"
 
-  notActiveUSGS <- read_USGS_daily(monitoring_location_id = paste0("USGS-", site),
+  notActiveUSGS <- read_waterdata_daily(monitoring_location_id = paste0("USGS-", site),
                                    parameter_code =  "00060",
                                    time =  c("2014-01-01", "2014-01-07"))
   expect_true(nrow(notActiveUSGS) == 0)

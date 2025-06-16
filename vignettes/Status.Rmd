@@ -25,12 +25,12 @@ Please contact the Computational Tools team at CompTools@usgs.gov with questions
 
 <details>
   <summary>What is an application programming interface (API)?</summary>
-  When you run a `dataRetrieval` function like `read_USGS_samples()` or `readNWISdv()`, you are actually generating a URL that contains within it specifications of the dataset in which you are interested (e.g. which monitoring locations, characteristics, pcodes, start and end dates, etc.). The format of that URL is special: it is parsed by a USGS-specific API web service, which translates the request into a database call. It then packages the response object from the database (with the data) into a format that can be sent to and then unpacked by the user. `dataRetrieval` takes a lot of the guesswork out of this process by generating the URL, sending it to the API, and wrangling the response object into a tabular dataset.   
+  When you run a `dataRetrieval` function like `read_waterdata_samples()` or `readNWISdv()`, you are actually generating a URL that contains within it specifications of the dataset in which you are interested (e.g. which monitoring locations, characteristics, pcodes, start and end dates, etc.). The format of that URL is special: it is parsed by a USGS-specific API web service, which translates the request into a database call. It then packages the response object from the database (with the data) into a format that can be sent to and then unpacked by the user. `dataRetrieval` takes a lot of the guesswork out of this process by generating the URL, sending it to the API, and wrangling the response object into a tabular dataset.   
 </details>
 <br>
 The USGS is in the process of creating new, [publicly available APIs](https://api.waterdata.usgs.gov/) (a.k.a. "web services") to replace the existing [WaterServices](https://waterservices.usgs.gov/). `dataRetrieval` relies upon these web services to provide monitoring location information and water quantity/quality datasets. As new web services come online, `dataRetrieval` will be furnished with new functions to accommodate these changes. 
 
-The table below shows the **existing** NWIS functions and, if applicable, their slated replacements. Note that several functions do not have direct replacements because the new services to support them do not yet exist. We will update this table as new services and functions come online. Also note that some new functions may only be available on the "develop" branch of `dataRetrieval` (`remotes::install_github("DOI-USGS/dataRetrieval", ref = "develop")`). More information on each function's specifications (complete with examples) are available in the [Introduction to New USGS Services vignette](add link here), the [package index](https://doi-usgs.github.io/dataRetrieval/reference/index.html) and/or function documentation (e.g. `?read_USGS_daily`).
+The table below shows the **existing** NWIS functions and, if applicable, their slated replacements. Note that several functions do not have direct replacements because the new services to support them do not yet exist. We will update this table as new services and functions come online. Also note that some new functions may only be available on the "develop" branch of `dataRetrieval` (`remotes::install_github("DOI-USGS/dataRetrieval", ref = "develop")`). More information on each function's specifications (complete with examples) are available in the [Introduction to New USGS Services vignette](add link here), the [package index](https://doi-usgs.github.io/dataRetrieval/reference/index.html) and/or function documentation (e.g. `?read_waterdata_daily`).
                
 ```{r echo=FALSE}
 df <- data.frame(
@@ -52,11 +52,11 @@ df <- data.frame(
     "readNWISpCode"
   ),
   New = c(
-    "read_USGS_samples",
-    "read_USGS_daily",
-    "read_USGS_monitoring_location",
-    "read_USGS_ts_meta",
-    "read_USGS_data",
+    "read_waterdata_samples",
+    "read_waterdata_daily",
+    "read_waterdata_monitoring_location",
+    "read_waterdata_ts_meta",
+    "read_waterdata",
     rep("", 10)
   ),
   "Available on (branch)" = c("main (CRAN)", "develop", "develop", "develop", "develop", rep("", 10))
@@ -88,9 +88,9 @@ What does this mean for water quality data users of `dataRetrieval`? Check out t
 
 ## Samples Data
 
-There's a new set of functions that access the USGS "samples-data" services! If you are **only** interested in USGS discrete water quality data, you can use the `read_USGS_samples` function.  
+There's a new set of functions that access the USGS "samples-data" services! If you are **only** interested in USGS discrete water quality data, you can use the `read_waterdata_samples` function.  
 
-Read more about it in the vignette, [Introducing read_USGS_samples](https://doi-usgs.github.io/dataRetrieval/articles/samples_data.html).
+Read more about it in the vignette, [Introducing read_waterdata_samples](https://doi-usgs.github.io/dataRetrieval/articles/samples_data.html).
 
 ## WQP
 

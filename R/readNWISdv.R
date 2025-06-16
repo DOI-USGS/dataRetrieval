@@ -49,12 +49,12 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #'
-#' @seealso [read_USGS_daily()]
+#' @seealso [read_waterdata_daily()]
 #' @export
 #' @keywords data import USGS web service
 #' @examples
 #' 
-#' # see ?read_USGS_daily
+#' # see ?read_waterdata_daily
 #' 
 #' #site_id <- "04085427"
 #' #startDate <- "2012-01-01"
@@ -69,9 +69,9 @@ readNWISdv <- function(siteNumbers,
                        endDate = "",
                        statCd = "00003") {
   
-  .Deprecated(new = "read_USGS_daily",
+  .Deprecated(new = "read_waterdata_daily",
               package = "dataRetrieval", 
-              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_daily.")
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_daily.")
   
   url <- constructNWISURL(
     siteNumbers = siteNumbers,

@@ -96,7 +96,7 @@ NULL
 #' US State Code Lookup Table
 #'
 #' Classic lookup table for states. Has been replaced in functions with
-#' `check_USGS_sample_params("states")`.
+#' `check_waterdata_sample_params("states")`.
 #'
 #' @name stateCd
 #' @return stateCd data frame.
@@ -118,7 +118,7 @@ NULL
 #' US County Code Lookup Table
 #'
 #' Classic lookup table for counties. Has been replaced in functions with
-#' `check_USGS_sample_params("counties")`.
+#' `check_USGS_waterdata_params("counties")`.
 #'
 #' @name countyCd
 #' @return countyCd data frame.

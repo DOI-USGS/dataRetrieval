@@ -72,7 +72,7 @@ More information on the web service can be found here:
 }
 \examples{
 
-# see ?read_USGS_daily
+# see ?read_waterdata_daily
 
 #site_id <- "04085427"
 #startDate <- "2012-01-01"
@@ -83,7 +83,7 @@ More information on the web service can be found here:
 
 }
 \seealso{
-\code{\link[=read_USGS_daily]{read_USGS_daily()}}
+\code{\link[=read_waterdata_daily]{read_waterdata_daily()}}
 }
 \keyword{USGS}
 \keyword{data}

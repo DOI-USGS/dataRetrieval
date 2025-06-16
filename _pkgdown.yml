@@ -40,8 +40,8 @@ navbar:
     menu:
     - text: Tutorial
       href: articles/tutorial.html
-    - text: New USGS Functions
-      href: articles/read_USGS_functions.html
+    - text: USGS Water Data APIs
+      href: articles/read_waterdata_functions.html
     - text: Background
       href: articles/dataRetrieval.html
     - text: Pivot Data
@@ -67,16 +67,15 @@ reference:
   - title: USGS new data services
     desc: Functions to retrieve USGS data from new services.
     contents:
-      - read_USGS_samples
-      - read_USGS_daily
-      - read_USGS_ts_meta
-      - read_USGS_data
-      - read_USGS_monitoring_location
-      - read_USGS_data
-      - summarize_USGS_samples
-      - check_USGS_sample_params
+      - read_waterdata_samples
+      - read_waterdata_daily
+      - read_waterdata_ts_meta
+      - read_waterdata_monitoring_location
+      - read_waterdata
+      - summarize_waterdata_samples
+      - check_waterdata_sample_params
   - title: National Water Information System (NWIS)
-    desc:  Functions to retrieve (USGS) NWIS data. These will be slowly phased out and replaced with the read_USGS family of functions.
+    desc:  Functions to retrieve (USGS) NWIS data. These will be slowly phased out and replaced with the read_waterdata family of functions.
     contents:
       - readNWISdv
       - readNWISuv

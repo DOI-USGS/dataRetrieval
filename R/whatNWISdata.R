@@ -63,10 +63,10 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @seealso [read_USGS_ts_meta()]
+#' @seealso [read_waterdata_ts_meta()]
 #' @examples
 #' 
-#' # see ?read_USGS_ts_meta
+#' # see ?read_waterdata_ts_meta
 #' 
 #' #site1 <- whatWQPsamples(siteid = "USGS-01594440")
 #'
@@ -83,9 +83,9 @@ whatNWISdata <- function(..., convertType = TRUE) {
 
   prewarned <- FALSE
   
-  .Deprecated(new = "read_USGS_ts_meta",
+  .Deprecated(new = "read_waterdata_ts_meta",
               package = "dataRetrieval", 
-              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_USGS_ts_meta")
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_ts_meta")
   
   if ("service" %in% names(matchReturn)) {
     service <- matchReturn$service
