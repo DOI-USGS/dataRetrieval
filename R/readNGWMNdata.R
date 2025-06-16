@@ -2,14 +2,14 @@
 #'
 #' Only water level data and site locations and names are currently available through the web service.
 #' @param service char Service for the request - "observation" and "featureOfInterest" are implemented.
-#' @param \dots Other parameters to supply, namely \code{siteNumbers} or \code{bbox}
-#' @param asDateTime logical if \code{TRUE}, will convert times to POSIXct format.  Currently defaults to
-#' \code{FALSE} since time zone information is not included.
+#' @param \dots Other parameters to supply, namely `siteNumbers` or `bbox`
+#' @param asDateTime logical if `TRUE`, will convert times to POSIXct format.  Currently defaults to
+#' `FALSE` since time zone information is not included.
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
 #' Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
+#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  `OlsonNames()`
 #' for more information on time zones.
 #' @export
 #' @examplesIf is_dataRetrieval_user()
@@ -98,15 +98,15 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC") {
 #' Retrieve groundwater levels from the National Ground Water Monitoring Network.
 #'
 #' @param siteNumbers character Vector of feature IDs formatted with agency code and site number
-#' separated by a period or semicolon, e.g. \code{USGS.404159100494601}.
+#' separated by a period or semicolon, e.g. `USGS.404159100494601`.
 #' @param asDateTime logical Should dates and times be converted to date/time objects,
-#' or returned as character?  Defaults to \code{TRUE}.  Must be set to \code{FALSE} if a site
+#' or returned as character?  Defaults to `TRUE`.  Must be set to `FALSE` if a site
 #' contains non-standard dates.
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided time zone offset.
 #' Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
+#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  `OlsonNames()`
 #' for more information on time zones.
 #' @export
 #'
@@ -139,7 +139,7 @@ readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC") {
 #' Retrieve site data from the National Ground Water Monitoring Network.
 #'
 #' @param siteNumbers character Vector of feature IDs formatted with agency code and site number
-#' separated by a period or semicolon, e.g. \code{USGS.404159100494601}.
+#' separated by a period or semicolon, e.g. `USGS.404159100494601`.
 #'
 #' @export
 #' @return A data frame the following columns:

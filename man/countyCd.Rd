@@ -18,7 +18,7 @@ COUNTY_ID \tab character \tab County id \cr
 }
 \description{
 Classic lookup table for counties. Has been replaced in functions with
-\code{check_param("counties")}.
+\code{check_USGS_waterdata_params("counties")}.
 }
 \examples{
 head(countyCd)

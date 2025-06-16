@@ -1,8 +1,68 @@
 context("General functions")
 
+test_that("General USGS retrievals working", {
+  testthat::skip_on_cran()
+  
+  cql <- '{
+  "op": "and",
+  "args": [
+    {
+      "op": "in",
+      "args": [
+        { "property": "parameter_code" },
+        [ "00060", "00065" ]
+      ]
+    },
+   {
+      "op": "in",
+      "args": [
+        { "property": "monitoring_location_id" },
+        [ "USGS-07367300", "USGS-03277200" ]
+      ]
+    }
+  ]
+  }'
+  
+  dv_data <- read_waterdata(service = "daily",
+                            CQL = cql,
+                            time = c("2023-01-01", "2024-01-01"))
+  expect_equal(as.Date(c("2023-01-01", "2024-01-01")), 
+               range(dv_data$time))
+  expect_true(all(unique(dv_data$monitoring_location_id) %in%
+                    c("USGS-07367300", "USGS-03277200")))
+  
+  
+  cql_not_active <- '{
+  "op": "and",
+  "args": [
+    {
+      "op": "in",
+      "args": [
+        { "property": "parameter_code" },
+        [ "00060", "00065" ]
+      ]
+    },
+   {
+      "op": "in",
+      "args": [
+        { "property": "monitoring_location_id" },
+        [ "USGS-05212700"]
+      ]
+    }
+  ]
+  }'
+  
+  notActiveUSGS <- read_waterdata(CQL = cql_not_active,
+                                  service = "daily",
+                                  time =  c("2014-01-01", "2014-01-07"))
+  expect_true(nrow(notActiveUSGS) == 0)
+  
+
+})
+
 test_that("General NWIS retrievals working", {
   testthat::skip_on_cran()
-
+  skip_on_ci()
   multiSite <- readNWISdata(
     sites = c("04025500", "040263491"), service = "iv",
     parameterCd = "00060",
@@ -37,27 +97,18 @@ test_that("General NWIS retrievals working", {
   expect_error(readNWISdata(), "No arguments supplied")
   expect_error(readNWISdata(siteNumber = NA), "NA's are not allowed in query")
 
-  bBoxEx <- readNWISdata(bBox = c(-83, 36.5, -81, 38.5), parameterCd = "00010")
-  expect_true(length(unique(bBoxEx$site_no)) > 1)
+  bBox_inventory <- read_waterdata_ts_meta(bbox = c(-83, 38, -82.5, 38.5), 
+                                      parameter_code = "00010")
+  
+  expect_true(length(unique(bBox_inventory$monitoring_location_id)) > 1)
 
-  startDate <- as.Date("2013-10-01")
-  endDate <- as.Date("2014-09-30")
-  waterYear <- readNWISdata(
-    bBox = c(-83, 36.5, -81, 38.5),
-    parameterCd = "00010",
-    service = "dv",
-    startDate = startDate,
-    endDate = endDate
-  )
-  expect_is(waterYear$dateTime, "POSIXct")
+  siteInfo <- read_waterdata_monitoring_location(state_name = "Wisconsin")
+  
+  timeseriesInfo <- read_waterdata_ts_meta(bbox = sf::st_bbox(siteInfo),
+                                      parameter_code = "00010",
+                                      computation_period_identifier = "Points" )
 
-  siteInfo <- readNWISdata(
-    stateCd = "WI",
-    parameterCd = "00010",
-    hasDataTypeCd = "iv",
-    service = "site"
-  )
-  expect_is(siteInfo$station_nm, "character")
+  expect_is(timeseriesInfo$begin, "POSIXct")
 
   gw_data <- readNWISdata(
     stateCd = "AL",
@@ -117,30 +168,45 @@ test_that("General NWIS retrievals working", {
 
   instData <- readNWISdata(args)
 
-  args <- list(
-    sites = "05114000", service = "dv",
-    parameterCd = "00060",
-    startDate = "2014-05-01",
-    endDate = "2014-05-01"
+  args2 <- list(
+    monitoring_location_id = "USGS-05114000", 
+    parameter_code = "00060",
+    time = c("2014-05-01", endDate = "2014-05-01")
   )
+  
+  daily_USGS <- do.call(read_waterdata_daily, args2)
+  expect_lt(nrow(daily_USGS), nrow(instData))
 
-  dailyData <- readNWISdata(args)
-  expect_lt(nrow(dailyData), nrow(instData))
-  args <- list(stateCd = "OH", parameterCd = "00665")
-  sites <- whatNWISsites(args)
-  expect_type(sites, "list")
+  ohio <- read_waterdata_monitoring_location(state_name = "Ohio", 
+                                        site_type_code = "ST")
+  bbox <- sf::st_bbox(ohio)
+  what_sites <- read_waterdata_ts_meta(parameter_code = "00665",
+                                  bbox = bbox)
+  expect_true(all(c("monitoring_location_id",
+                "begin", "end", "parameter_name") %in% names(what_sites)))
+  
+  huc <- read_waterdata_monitoring_location(hydrologic_unit_code = "02080202")
+  expect_true(nrow(huc) > 0)
 
   # Test counties:
-  dailyStaffordVA <- readNWISdata(
-    stateCd = "Virginia",
-    countyCd = "Stafford",
-    parameterCd = "00060",
-    startDate = "2015-01-01",
-    endDate = "2015-01-30"
+  
+  county_code_stafford <- countyCdLookup(state = "Virginia",
+                                county = "Stafford", 
+                                outputType = "id")
+  state_code_va <- stateCdLookup(input = "Virginia", outputType = "id")
+  stafford <- read_waterdata_monitoring_location(county_code = county_code_stafford, 
+                                            state_code = state_code_va)
+  stafford_bbox <- sf::st_bbox(stafford)
+  
+  dailyStaffordVA <- read_waterdata_daily(
+    bbox = stafford_bbox,
+    parameter_code = "00060",
+    time = c("2015-01-01", "2015-01-30")
   )
   expect_gt(nrow(dailyStaffordVA), 1)
 
-  AS <- readNWISdata(stateCd = "AS", service = "site")
+  # America Samoa?
+  AS <- read_waterdata_monitoring_location(state_name = "American Samoa")
   expect_gt(nrow(AS), 0)
 
   site_id <- "01594440"
@@ -173,15 +239,14 @@ test_that("General NWIS retrievals working", {
   )))
 
   multi_hucs <- c("07130007", "07130011")
-  multi_huc <- dataRetrieval::readNWISdata(
-    huc = multi_hucs,
-    parameterCd = "63680",
-    startDate = "2015-06-18",
-    endDate = "2015-06-18",
-    service = "dv"
+  multi_huc_sites <- read_waterdata_monitoring_location(hydrologic_unit_code = multi_hucs)
+  
+  multi_huc <- read_waterdata_daily(bbox = sf::st_bbox(multi_huc_sites),
+                               parameter_code = "63680",
+                               statistic_id = "00003",
+                               time = c("2015-06-18", "2015-06-18")
   )
-  expect_equal(2, nrow(multi_huc))
-
+  expect_equal(4, length(unique(multi_huc$monitoring_location_id)))
 
   peak_data <- readNWISdata(
     service = "peak",
@@ -196,92 +261,89 @@ test_that("General NWIS retrievals working", {
   expect_lt(nrow(peak_data), 100000)
 })
 
-test_that("whatNWISdata", {
+test_that("read_waterdata_ts_meta", {
 
   # no service specified:
-  availableData <- whatNWISdata(siteNumber = "05114000")
-  expect_equal(ncol(availableData), 24)
+  availableData <- read_waterdata_ts_meta(monitoring_location_id = "USGS-05114000")
+  expect_equal(ncol(availableData), 17)
 
-  uvData <- whatNWISdata(siteNumber = "05114000", service = "uv")
-  expect_equal(unique(uvData$data_type_cd), "uv")
+  uvData <- read_waterdata_ts_meta(monitoring_location_id = "USGS-05114000",
+                              computation_period_identifier = c("Points"))
+  expect_equal(unique(uvData$computation_period_identifier), "Points")
 
   # multiple services
-  uvDataMulti <- whatNWISdata(
-    siteNumber = c("05114000", "09423350"),
-    service = c("uv", "dv")
-  )
-  expect_true(all(unique(uvDataMulti$data_type_cd) %in% c("uv", "dv")))
+  uvDataMulti <- read_waterdata_ts_meta(monitoring_location_id = c("USGS-05114000",
+                                                              "USGS-09423350"),
+                                   computation_period_identifier = c("Daily",
+                                                                     "Points"))
+  
+  expect_true(all(unique(uvDataMulti$computation_period_identifier) %in% c("Daily",
+                                                                           "Points")))
 
   # state codes:
-  flowAndTemp <- whatNWISdata(
-    stateCd = "WI", service = c("uv", "dv"),
-    parameterCd = c("00060", "00010"),
-    statCd = "00003"
-  )
-  expect_true(all(unique(flowAndTemp$data_type_cd) %in% c("uv", "dv")))
-  expect_true(all(unique(flowAndTemp$parm_cd) %in% c("00060", "00010")))
-  expect_true(all(unique(flowAndTemp$stat_cd) %in% c("00003", NA)))
+  wi_sites <- read_waterdata_monitoring_location(state_name = "Wisconsin")
+  flow_and_temp <- read_waterdata_ts_meta(bbox = sf::st_bbox(wi_sites),
+                                     parameter_code =  c("00060", "00010"),
+                                     statistic_id = "00003",
+                                     computation_period_identifier = c("Daily",
+                                                                       "Points"))
+  
+  expect_true(all(unique(flow_and_temp$computation_period_identifier) %in% c("Daily",
+                                                                             "Points")))
+  expect_true(all(unique(flow_and_temp$parameter_code) %in% c("00060", "00010")))
+  expect_true(all(unique(flow_and_temp$statistic_id) %in% c("00003")))
 
-  # site service
-  sites <- whatNWISdata(stateCd = "WI", service = "site")
-  expect_true(all(c("gw", "sv", "qw", "dv", "pk", "uv")
-                  %in% unique(sites$data_type_cd)))
 })
 
 test_that("General WQP retrievals working", {
   testthat::skip_on_cran()
   nameToUse <- "pH"
-  # pHData <- readWQPdata(siteid = "USGS-04024315", 
-  #                       characteristicName = nameToUse,
-  #                       service = "ResultWQX3")
-  # expect_is(pHData$Activity_StartDateTime, "POSIXct")
+  pHData <- readWQPdata(siteid = "USGS-04024315",
+                        characteristicName = nameToUse,
+                        service = "ResultWQX3")
+  expect_is(pHData$Activity_StartDateTime, "POSIXct")
   # 
   # # testing lists:
-  # startDate <- as.Date("2022-01-01")
-  # secchi.names <- c("Depth, Secchi disk depth",
-  # "Secchi depth",
-  # "Water transparency, Secchi disc",
-  # "Depth, Secchi disk depth (choice list)")
-  # # "Transparency, Secchi tube with disk",
-  # # "Secchi Reading Condition (choice list)",
-  # # "Depth, Secchi disk visible at bottom (Y/N) (choice list)")
-  # 
-  # args_2 <- list(
-  #   "startDateLo" = startDate,
-  #   "startDateHi" = "2024-01-01",
-  #   statecode = "WI",
-  #   characteristicName = secchi.names
-  # )
-  # 
+  startDate <- as.Date("2022-01-01")
+  secchi.names <- c("Depth, Secchi disk depth",
+  "Secchi depth",
+  "Water transparency, Secchi disc",
+  "Depth, Secchi disk depth (choice list)")
+  # "Transparency, Secchi tube with disk",
+  # "Secchi Reading Condition (choice list)",
+  # "Depth, Secchi disk visible at bottom (Y/N) (choice list)")
+
+  args_2 <- list(
+    "startDateLo" = startDate,
+    "startDateHi" = "2024-01-01",
+    statecode = "WI",
+    characteristicName = secchi.names
+  )
+
   # # Testing multiple lists:
-  # arg_3 <- list(
-  #   "startDateLo" = startDate,
-  #   "startDateHi" = "2023-12-31"
-  # )
-  # arg_4 <- list(
-  #   statecode = "WI",
-  #   characteristicName = secchi.names
-  # )
-  # 
-  # lakeData <- readWQPdata(args_2, ignore_attributes = TRUE)
-  # expect_true(nrow(lakeData) > 0)
-  # lakeSites <- whatWQPsites(args_2)
-  # expect_type(lakeSites, "list")
-  # 
-  # wqp.summary_no_atts <- readWQPdata(
-  #   siteid = "USGS-04024315",
-  #   characteristicName = nameToUse,
-  #   ignore_attributes = TRUE,
-  #   service = "ResultWQX3"
-  # )
-  # expect_true(!all(c("siteInfo", "variableInfo") %in% names(attributes(wqp.summary_no_atts))))
-  # 
-  # rawPcode <- readWQPqw("USGS-01594440", "01075", "", "", legacy = FALSE)
-  # expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
-  #                   names(attributes(rawPcode))))
-  # 
-  # # This means wqp_check_status was called:
-  # expect_true("dataProviders" %in% names(attr(rawPcode, "headerInfo")))
+  arg_3 <- list(
+    "startDateLo" = startDate,
+    "startDateHi" = "2023-12-31"
+  )
+  arg_4 <- list(
+    statecode = "WI",
+    characteristicName = secchi.names
+  )
+
+  wqp.summary_no_atts <- readWQPdata(
+    siteid = "USGS-04024315",
+    characteristicName = nameToUse,
+    ignore_attributes = TRUE,
+    service = "ResultWQX3"
+  )
+  expect_true(!all(c("siteInfo", "variableInfo") %in% names(attributes(wqp.summary_no_atts))))
+
+  rawPcode <- readWQPqw("USGS-01594440", "01075", "", "", legacy = FALSE)
+  expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
+                    names(attributes(rawPcode))))
+
+  # This means wqp_check_status was called:
+  expect_true("dataProviders" %in% names(attr(rawPcode, "headerInfo")))
   
   rawPcode2 <- readWQPqw("USGS-01594440", "01075", "", "", ignore_attributes = TRUE)
   expect_true(all(!c( "queryTime", "siteInfo") %in%
@@ -290,32 +352,32 @@ test_that("General WQP retrievals working", {
   # This means wqp_check_status wasn't called:
   expect_false("dataProviders" %in% names(attr(rawPcode2, "headerInfo")))
   
-  # pHData <- readWQPdata(siteid = "USGS-04024315",
-  #                       characteristicName = "pH",
-  #                       service = "ResultWQX3")
-  # expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
-  #                   names(attributes(pHData))))
-  # 
+  pHData <- readWQPdata(siteid = "USGS-04024315",
+                        characteristicName = "pH",
+                        service = "ResultWQX3")
+  expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
+                    names(attributes(pHData))))
+  
   # # This means wqp_check_status was called:
-  # expect_true("dataProviders" %in% names(attr(pHData, "headerInfo")))
-  # 
-  # pHData2 <- readWQPdata(siteid = "USGS-04024315",
-  #                       characteristicName = "pH",
-  #                       ignore_attributes = TRUE,
-  #                       service = "ResultWQX3")
-  # expect_true(all(!c("queryTime", "siteInfo") %in%
-  #                   names(attributes(pHData2))))
-  # 
+  expect_true("dataProviders" %in% names(attr(pHData, "headerInfo")))
+   
+  pHData2 <- readWQPdata(siteid = "USGS-04024315",
+                        characteristicName = "pH",
+                        ignore_attributes = TRUE,
+                        service = "ResultWQX3")
+  expect_true(all(!c("queryTime", "siteInfo") %in%
+                    names(attributes(pHData2))))
+
   # # This means wqp_check_status was called:
-  # expect_false("dataProviders" %in% names(attr(pHData2, "headerInfo")))
-  # 
-  # rawPcode <- readWQPqw("USGS-01594440", "01075",
-  #                       ignore_attributes = TRUE, legacy = FALSE)
-  # headerInfo <- attr(rawPcode, "headerInfo")
-  # wqp_request_id <- headerInfo$`wqp-request-id`
-  # count_info <- wqp_check_status(wqp_request_id)
-  # 
-  # expect_true("dataProviders" %in% names(count_info))
+  expect_false("dataProviders" %in% names(attr(pHData2, "headerInfo")))
+
+  rawPcode <- readWQPqw("USGS-01594440", "01075",
+                        ignore_attributes = TRUE, legacy = FALSE)
+  headerInfo <- attr(rawPcode, "headerInfo")
+  wqp_request_id <- headerInfo$`wqp-request-id`
+  count_info <- wqp_check_status(wqp_request_id)
+
+  expect_true("dataProviders" %in% names(count_info))
   
 })
 
@@ -364,21 +426,19 @@ test_that("whatWQPdata working", {
   expect_is(lakeSites$activityCount, "numeric")
 })
 
-context("whatNWISsites")
-test_that("whatNWISsites working", {
+context("read_waterdata_ts_meta")
+test_that("read_waterdata_ts_meta working", {
   testthat::skip_on_cran()
-  siteListPhos <- whatNWISsites(stateCd = "OH", parameterCd = "00665")
+  siteListOhio <- read_waterdata_monitoring_location(state_name = "Ohio")
+  siteListPhos <- read_waterdata_ts_meta(bbox = sf::st_bbox(siteListOhio),
+                                    parameter_code = "00665")
   expect_true(nrow(siteListPhos) > 0)
-  expect_true(is.numeric(siteListPhos$dec_lat_va))
+  expect_is(siteListPhos$begin, "POSIXct")
 
-  bboxSites <- whatNWISsites(bbox = c(-92.5, 45.4, -87, 47), parameterCd = "00060")
+  bboxSites <- read_waterdata_ts_meta(bbox = c(-92.5, 45.4, -87, 47),
+                                 parameter_code = "00060")
   expect_true(nrow(bboxSites) > 0)
-  expect_true(is.numeric(bboxSites$dec_lat_va))
   
-  #gwlevels:
-  info <- whatNWISsites(stateCd = "NY", service="gwlevels") 
-  expect_true(nrow(info) > 0)
-  expect_equal(attr(info, "url"), "https://waterservices.usgs.gov/nwis/site/?stateCd=NY&hasDataTypeCd=gw&format=mapper")
 })
 
 context("readWQPdots")
