@@ -22,21 +22,21 @@
 #' momentary problem with the internet connection). It is possible to safely use the "tsv" option,
 #' but the user must carefully check the results to see if the data returns matches
 #' what is expected. The default is therefore "xml".
-#' @param expanded logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional
+#' @param expanded logical defaults to `TRUE`. If `TRUE`, retrieves additional
 #' information, only applicable for qw data.
 #' @param ratingType can be "base", "corr", or "exsa". Only applies to rating curve data.
 #' @param statReportType character Only used for statistics service requests.  Time
 #' division for statistics: daily, monthly, or annual.  Default is daily.
 #' Note that daily provides statistics for each calendar day over the specified
 #' range of water years, i.e. no more than 366 data points will be returned for
-#' each site/parameter.  Use \code{readNWISdata} or \code{readNWISdv} for daily averages.
+#' each site/parameter.  Use `readNWISdata` or `readNWISdv` for daily averages.
 #' Also note that "annual" returns statistics for the calendar year.  Use
-#' \code{readNWISdata} for water years. Monthly and yearly
+#' `readNWISdata` for water years. Monthly and yearly
 #' provide statistics for each month and year within the range individually.
 #' @param statType character Only used for statistics service requests. Type(s)
 #' of statistics to output for daily values.  Default is mean, which is the only
 #' option for monthly and yearly report types. See the statistics service documentation
-#' at \url{https://waterservices.usgs.gov/docs/statistics/} for a
+#' at <https://waterservices.usgs.gov/docs/statistics/> for a
 #' full list of codes.
 #' @keywords data import USGS web service
 #' @return url string
@@ -79,8 +79,14 @@ constructNWISURL <- function(siteNumbers,
   service[service == "meas"] <- "measurements"
   service[service == "uv"] <- "iv"
   
+  POST <- nchar(paste0(siteNumbers, parameterCd, collapse = "")) > 2048
+  
   baseURL <- httr2::request(pkg.env[[service]])
   
+  if(!is.null(pkg.env$access)){
+    baseURL <-  httr2::req_url_query(baseURL, Access = pkg.env$access)
+  }
+
   if (any(!is.na(parameterCd) & parameterCd != "all")) {
     pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
     
@@ -97,43 +103,60 @@ constructNWISURL <- function(siteNumbers,
   switch(service,
          rating = {
            ratingType <- match.arg(ratingType, c("base", "corr", "exsa"))
-           url <- httr2::req_url_query(baseURL, 
-                                       site_no = siteNumbers, 
-                                       file_type = ratingType)
+           url <- get_or_post(baseURL,
+                              POST = POST, 
+                              site_no = siteNumbers, 
+                              file_type = ratingType)
          },
          peak = {
-           url <- httr2::req_url_query(baseURL,
+           url <- get_or_post(baseURL,
+                              POST = POST,
                               range_selection = "date_range",
                               format = "rdb")
-           url <- httr2::req_url_query(url, 
-                                       site_no = siteNumbers,
-                                       .multi = "comma")
+           url <- get_or_post(url,
+                              POST = POST,
+                              site_no = siteNumbers,
+                              .multi = "comma")
+           
            if (nzchar(startDate)) {
-             url <- httr2::req_url_query(url, begin_date = startDate)
+             url <- get_or_post(url,
+                                POST = POST,
+                                begin_date = startDate)
            }
            if (nzchar(endDate)) {
-             url <- httr2::req_url_query(url, end_date = endDate)
+             url <- get_or_post(url,
+                                POST = POST,
+                                end_date = endDate)
            }
          },
          measurements = {
-           url <- httr2::req_url_query(baseURL,
+           url <- get_or_post(baseURL,
+                              POST = POST,
                               site_no = siteNumbers,
                               .multi = "comma")
-           url <- httr2::req_url_query(url,
-                                       range_selection = "date_range"
+           url <- get_or_post(url,
+                              POST = POST,
+                              range_selection = "date_range"
            )
            if (nzchar(startDate)) {
-             url <- httr2::req_url_query(url,
+             url <- get_or_post(url,
+                                POST = POST,
                                 begin_date = startDate
              )
            }
            if (nzchar(endDate)) {
-             url <- httr2::req_url_query(url, end_date = endDate)
+             url <- get_or_post(url,
+                                POST = POST,
+                                end_date = endDate)
            }
            if (expanded) {
-             url <- httr2::req_url_query(url, format = "rdb_expanded")
+             url <- get_or_post(url,
+                                POST = POST,
+                                format = "rdb_expanded")
            } else {
-             url <- httr2::req_url_query(url, format = "rdb")
+             url <- get_or_post(url,
+                                POST = POST,
+                                format = "rdb")
            }
          },
          stat = { # for statistics service
@@ -158,42 +181,62 @@ constructNWISURL <- function(siteNumbers,
              stop("Start and end dates for annual statReportType can only include years")
            }
 
-           url <- httr2::req_url_query(baseURL,
+           url <- get_or_post(baseURL,
+                              POST = POST,
                               sites = siteNumbers,
                               .multi = "comma")
-           url <- httr2::req_url_query(url,
-                                       statReportType = statReportType,
-                                       .multi = "comma")
-           url <- httr2::req_url_query(url, statType = statType,
-                                       .multi = "comma")
-           url <- httr2::req_url_query(url, parameterCd = parameterCd, 
-                                       .multi = "comma")
+           url <- get_or_post(url,
+                              POST = POST,
+                              statReportType = statReportType,
+                              .multi = "comma")
+           url <- get_or_post(url,
+                              POST = POST,
+                              statType = statType,
+                              .multi = "comma")
+           url <- get_or_post(url,
+                              POST = POST, 
+                              parameterCd = parameterCd, 
+                              .multi = "comma")
                                        
            if (nzchar(startDate)) {
-             url <- httr2::req_url_query(url, startDT = startDate)
+             url <- get_or_post(url,
+                                POST = POST, 
+                                startDT = startDate)
            }
            if (nzchar(endDate)) {
-             url <- httr2::req_url_query(url, endDT = endDate)
+             url <- get_or_post(url,
+                                POST = POST, 
+                                endDT = endDate)
            }
            if (!grepl("(?i)daily", statReportType)) {
-             url <- httr2::req_url_query(url, missingData = "off")
+             url <- get_or_post(url,
+                                POST = POST, 
+                                missingData = "off")
            }
          },
          gwlevels = {
-           
-           url <- httr2::req_url_query(baseURL,
-                              site_no = siteNumbers, .multi = "comma")
-           url <- httr2::req_url_query(url,format = "rdb")
+           url <- get_or_post(baseURL,
+                              POST = POST, 
+                              site_no = siteNumbers,
+                              .multi = "comma")
+           url <- get_or_post(url,
+                              POST = POST, 
+                              format = "rdb")
            if (nzchar(startDate)) {
-             url <- httr2::req_url_query(url, begin_date = startDate)
+             url <- get_or_post(url,
+                                POST = POST, 
+                                begin_date = startDate)
            }
            if (nzchar(endDate)) {
-             url <- httr2::req_url_query(url, end_date = endDate)
+             url <- get_or_post(url,
+                                POST = POST,  
+                                end_date = endDate)
            }
-           url <- httr2::req_url_query(url, 
-                                       group_key = "NONE",
-                                       date_format = "YYYY-MM-DD",
-                                       rdb_compression = "value")
+           url <- get_or_post(url,
+                              POST = POST, 
+                              group_key = "NONE",
+                              date_format = "YYYY-MM-DD",
+                              rdb_compression = "value")
          },
          { # this will be either dv, uv, groundwater
            
@@ -207,34 +250,44 @@ constructNWISURL <- function(siteNumbers,
                                wml1 = "waterml,1.1"
            )
            
-           url <- httr2::req_url_query(baseURL,
-                                       site = siteNumbers,
-                                       .multi = "comma") 
-           url <- httr2::req_url_query(url, 
-                                       format = formatURL)
+           url <- get_or_post(baseURL,
+                              POST = POST, 
+                              site = siteNumbers,
+                              .multi = "comma") 
+           url <- get_or_post(url,
+                              POST = POST, 
+                              format = formatURL)
            
            if (!all(is.na(parameterCd))) {
-             url <- httr2::req_url_query(url, 
-                                         ParameterCd = parameterCd,
-                                         .multi = "comma")
+             url <- get_or_post(url,
+                                POST = POST, 
+                                ParameterCd = parameterCd,
+                                .multi = "comma")
            }
            
            if ("dv" == service) {
-             url <- httr2::req_url_query(url, 
-                                         StatCd = statCd,
-                                         .multi = "comma")
+             url <- get_or_post(url,
+                                POST = POST,  
+                                StatCd = statCd,
+                                .multi = "comma")
            }
            
            if (nzchar(startDate)) {
-             url <- httr2::req_url_query(url, startDT = startDate)
+             url <- get_or_post(url,
+                                POST = POST,  
+                                startDT = startDate)
            } else {
              startorgin <- "1851-01-01"
              if ("iv" == service) startorgin <- "1900-01-01"
-             url <- httr2::req_url_query(url, startDT = startorgin)
+             url <- get_or_post(url,
+                                POST = POST, 
+                                startDT = startorgin)
            }
            
            if (nzchar(endDate)) {
-             url <- httr2::req_url_query(url, endDT = endDate)
+             url <- get_or_post(url,
+                                POST = POST, 
+                                endDT = endDate)
            }
          }
   )
@@ -251,7 +304,7 @@ constructNWISURL <- function(siteNumbers,
 
 #' Construct WQP url for data retrieval
 #'
-#' Construct WQP url for data retrieval. This function gets the data from here: \url{https://www.waterqualitydata.us}
+#' Construct WQP url for data retrieval. This function gets the data from here: <https://www.waterqualitydata.us>
 #'
 #' @param siteNumbers string or vector of strings USGS site number.  
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
@@ -300,6 +353,8 @@ constructWQPURL <- function(siteNumbers,
   
   pCodeLogic <- TRUE
   
+  POST = nchar(paste0(siteNumbers, collapse = "")) > 2048
+  
   if(!allPCode){
     multiplePcodes <- length(parameterCd) > 1
     if (all(nchar(parameterCd) == 5)) {
@@ -311,11 +366,13 @@ constructWQPURL <- function(siteNumbers,
   
   if(legacy){
     baseURL <- httr2::request(pkg.env[["Result"]])
-    baseURL <- httr2::req_url_query(baseURL,
-                                    siteid = siteNumbers,
-                                    .multi = function(x) paste0(x, collapse = ";"))
-    baseURL <- httr2::req_url_query(baseURL, 
-                                    count = "no")
+    baseURL <- get_or_post(baseURL,
+                           POST = POST,
+                           siteid = siteNumbers,
+                           .multi = function(x) paste0(x, collapse = ";"))
+    baseURL <- get_or_post(baseURL,
+                           POST = POST, 
+                           count = "no")
   } else {
     baseURL <- httr2::request(pkg.env[["ResultWQX3"]])
     baseURL <- httr2::req_url_query(baseURL,
@@ -325,9 +382,10 @@ constructWQPURL <- function(siteNumbers,
 
   if(legacy & !allPCode){
     if(pCodeLogic){
-      baseURL <- httr2::req_url_query(baseURL, 
-                                      pCode = parameterCd,
-                                      .multi = function(x) paste0(x, collapse = ";"))
+      baseURL <- get_or_post(baseURL,
+                             POST = POST,
+                             pCode = parameterCd,
+                             .multi = function(x) paste0(x, collapse = ";"))
     } else {
       baseURL <- httr2::req_url_query(baseURL, 
                                       characteristicName = parameterCd,
@@ -348,17 +406,20 @@ constructWQPURL <- function(siteNumbers,
   
   if (nzchar(startDate)) {
     startDate <- format(as.Date(startDate), format = "%m-%d-%Y")
-    baseURL <- httr2::req_url_query(baseURL, 
-                                    startDateLo = startDate)
+    baseURL <- get_or_post(baseURL,
+                           POST = POST, 
+                           startDateLo = startDate)
   }
   
   if (nzchar(endDate)) {
     endDate <- format(as.Date(endDate), format = "%m-%d-%Y")
-    baseURL <- httr2::req_url_query(baseURL,
-                                    startDateHi = endDate)
+    baseURL <- get_or_post(baseURL,
+                           POST = POST,
+                           startDateHi = endDate)
   }
   
-  baseURL <- httr2::req_url_query(baseURL, mimeType = "csv")
+  baseURL <- httr2::req_url_query(baseURL, 
+                                  mimeType = "csv")
   if(!legacy){
     baseURL <- httr2::req_url_query(baseURL, 
                                     dataProfile = "basicPhysChem")
@@ -372,7 +433,7 @@ constructWQPURL <- function(siteNumbers,
 
 #' Construct URL for NWIS water use data service
 #'
-#' Reconstructs URLs to retrieve data from here: \url{https://waterdata.usgs.gov/nwis/wu}
+#' Reconstructs URLs to retrieve data from here: <https://waterdata.usgs.gov/nwis/wu>
 #'
 #' @param years integer Years for data retrieval. Must be years ending in 0 or 5,
 #' or "ALL", which retrieves all available years.

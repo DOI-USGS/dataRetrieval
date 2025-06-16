@@ -1,27 +1,27 @@
-/* ================INSTRUCTIONS=================*/ 
+/* ================INSTRUCTIONS=================*/
 /* By changing the info below, you can reduce the size of the logo or hide the search box. You can also override the standard font characteristics if you would like to use your own custom styles. In order for your changes to work though, you MUST include a reference in your HTML pages to both the common CSS file and custom CSS file in that order.
 
 Instructions are provided below for customizing these classes. */
 
-/* =============Width===============*/ 
+/* =============Width===============*/
 /* BY DEFAULT, THERE IS NO MAX WIDTH:
 If you want the want to restrict the width of the page, remove the comment out slashes and astricks surrounding the ".tmp-container  {max-width: 1170px;}". you can change the 1170px to a smaller/larger max width if you'd like */
- 
+
 /* .tmp-container {
 	max-width: 1170px;
 } */
 
-/* =============Search===============*/ 
+/* =============Search===============*/
 /* BY DEFAULT, Search box is displayed:
 If you want the to hide the search, remove the comment out slashes and astricks surrounding the ".search-box {display:none;}" below.  */
- 
+
 /*
 #search-box {
 	display: none;
 }
 */
 
-/* =============LOGO===============*/ 
+/* =============LOGO===============*/
 /* THE DEFAULT LOGO HEIGHT IS 65PX:
 If you want the logo to be smaller (50px), comment out the ".logo-header img {height 65px;}" below and remove the comment out slashes and astricks surrounding the ".logo-header img {height: 50px...margin-top: 18px;}" and the header search input (so the search box size is reduced too). 50px is the MINIMUM HEIGHT for the logo. */
  .logo-header img {
@@ -30,7 +30,7 @@ If you want the logo to be smaller (50px), comment out the ".logo-header img {he
 /*
 .logo-header img {
 	height: 50px;
-} 
+}
 .header-search input[type="search"] {
 	height: 30px;
 	margin-top: 16px;
@@ -42,7 +42,7 @@ If you want the logo to be smaller (50px), comment out the ".logo-header img {he
 }
 */
 
-/* =============STANDARD CONTENT===============*/ 
+/* =============STANDARD CONTENT===============*/
 /* TO CHANGE THE TEXT SIZE OF THE CONTENT, FONT, ETC:
 By default, USGS has set the font size, family, etc. in order to provide a consistent size for content across all pages. If you would prefer not to have any of these pre-defined formats, you can change them below. NOTE: header and footer will not be changed. */
 #maincontent {
@@ -55,19 +55,19 @@ By default, USGS has set the font size, family, etc. in order to provide a consi
 	padding-right: 15px;
 }
 
-/* =============SEARCH===============*/ 
+/* =============SEARCH===============*/
 /* THIS HIDES THE SEARCH BOX ON VERY SMALL DEVICES:
 For simplification, search bar is visible on larger screens but is hidden on small screens. If you would prefer not to have the search box at all, you can remove the "@media (max-width:500px) {" and the second closing "}". below */
 @media (max-width:500px) {
-.header-search form { 
+.header-search form {
 	display: none}
 }
 
-/* =============SOCIAL MEDIA===============*/ 
+/* =============SOCIAL MEDIA===============*/
 /* If you would prefer not to have the social media links, you can remove the comment out slashes and astricks surrounding the content below */
- /* .footer-social-links { 
+ /* .footer-social-links {
 	display: none} */
-	
+
 @charset "UTF-8";
 /* CSS Document */
 
@@ -81,7 +81,7 @@ footer, #navbar {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-}	
+}
 
 footer, header, main, nav, div {
     display: block;
@@ -109,7 +109,7 @@ footer, header, main, nav, div {
 }
 
 hr {
-	width: 100%; 
+	width: 100%;
 	margin-top: 42px;
 	clear: both;
 }
@@ -349,6 +349,10 @@ Content: "\f082";
 }
 
 .navbar-light .navbar-brand {
+  color: white !important;
+}
+
+.text-muted {
   color: white !important;
 }
 

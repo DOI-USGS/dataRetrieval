@@ -11,7 +11,7 @@ readNWISdata(..., asDateTime = TRUE, convertType = TRUE, tz = "UTC")
 a complete list of options.  A
 list of arguments can also be supplied. One important argument to include is
 "service". Possible values are "iv"
-(for instantaneous), 
+(for instantaneous),
 "dv" (for daily values), "gwlevels" (for groundwater levels),
 "site" (for site service), "measurement", and "stat" (for
 statistics service). Note: "measurement" calls go to:
@@ -39,10 +39,10 @@ Name \tab Type \tab Description \cr
 agency \tab character \tab The NWIS code for the agency reporting the data\cr
 site \tab character \tab The USGS site number \cr
 dateTime \tab POSIXct \tab The date and time (if applicable) of the measurement,
-          converted to UTC for unit value data. R only allows one time zone attribute per column. For unit data
-          spanning a time zone change, converting the data to UTC solves this problem. For daily data,
-          the time zone attribute is the time zone of the first returned measurement.
-           \cr
+converted to UTC for unit value data. R only allows one time zone attribute per column. For unit data
+spanning a time zone change, converting the data to UTC solves this problem. For daily data,
+the time zone attribute is the time zone of the first returned measurement.
+\cr
 tz_cd \tab character \tab The time zone code for dateTime column\cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
 value \tab numeric \tab The numeric value for the parameter \cr
@@ -71,17 +71,17 @@ See examples below for ideas of constructing queries.
 \details{
 This function requires users to create their own arguments
 based on the NWIS web services. It is a more complicated function to use
-compared to other NWIS functions such as \code{\link{readNWISdv}}, \code{\link{readNWISuv}},
-\code{\link{readNWISgwl}}, etc. However, this function adds a lot of
-flexibility to the possible queries. This function will also behave exactly 
+compared to other NWIS functions such as \code{\link[=readNWISdv]{readNWISdv()}}, \code{\link[=readNWISuv]{readNWISuv()}},
+\code{\link[=readNWISgwl]{readNWISgwl()}}, etc. However, this function adds a lot of
+flexibility to the possible queries. This function will also behave exactly
 as NWIS when it comes to date queries. NWIS by default will only return the latest
 value for the daily and instantaneous services. So if you do not provide
 a starting date, you will only get back the latest value. If you want
 the full period of record, you can use "startDate = '1900-01-01'". Other options
 for dates are periods, such as "period = 'P7D'" which translates to a period
 of 7 days. For period, use only a positive ISO-8601 duration format, which should
-not be expressed in periods of less than a day, or in increments of months M or years Y. 
-period returns data for a site generally from now to a time in the past. 
+not be expressed in periods of less than a day, or in increments of months M or years Y.
+period returns data for a site generally from now to a time in the past.
 Note that when period is used all data up to the most recent value are returned.
 }
 \examples{
@@ -89,7 +89,6 @@ Note that when period is used all data up to the most recent value are returned.
 \donttest{
 # Examples not run for time considerations
 
-dataTemp <- readNWISdata(stateCd = "OH", parameterCd = "00010", service = "dv")
 instFlow <- readNWISdata(
   sites = "05114000", service = "iv",
   parameterCd = "00060",
@@ -108,26 +107,7 @@ multiSite <- readNWISdata(
   service = "iv", parameterCd = "00060"
 )
 
-bBoxEx <- readNWISdata(bBox = c(-83, 36.5, -81, 38.5), parameterCd = "00010")
 
-startDate <- as.Date("2013-10-01")
-endDate <- as.Date("2014-09-30")
-waterYear <- readNWISdata(
-  bBox = c(-83, 36.5, -82.5, 36.75),
-  parameterCd = "00010",
-  service = "dv",
-  startDate = startDate,
-  endDate = endDate
-)
-
-siteInfo <- readNWISdata(
-  stateCd = "WI", parameterCd = "00010",
-  hasDataTypeCd = "iv", service = "site"
-)
-temp <- readNWISdata(
-  bBox = c(-83, 36.5, -82.5, 36.75), parameterCd = "00010", service = "site",
-  seriesCatalogOutput = TRUE
-)
 GWL <- readNWISdata(site_no = c("392725077582401", 
                                 "375907091432201"),
                     parameterCd = "62610",
@@ -172,19 +152,6 @@ arg.list <- list(
 )
 allDailyStats_2 <- readNWISdata(arg.list, service = "stat")
 
-# use county names to get data
-dailyStaffordVA <- readNWISdata(
-  stateCd = "Virginia",
-  countyCd = "Stafford",
-  parameterCd = "00060",
-  startDate = "2015-01-01",
-  endDate = "2015-01-30"
-)
-va_counties <- c("51001", "51003", "51005", "51007", "51009", "51011", "51013", "51015")
-va_counties_data <- readNWISdata(
-  startDate = "2015-01-01", endDate = "2015-12-31",
-  parameterCd = "00060", countycode = va_counties
-)
 
 site_id <- "01594440"
 rating_curve <- readNWISdata(service = "rating", site_no = site_id, file_type = "base")
@@ -212,5 +179,5 @@ peak_data <- readNWISdata(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{renameNWISColumns}},  \code{\link{importWaterML1}}, \code{\link{importRDB1}}
+\code{\link[=read_waterdata]{read_waterdata()}}
 }

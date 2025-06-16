@@ -25,7 +25,7 @@ A data frame with the following columns:
 Name \tab Type \tab Description \cr
 agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
 site_no \tab character \tab The USGS site number \cr
- \tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr
+\tab POSIXct \tab The date and time of the value converted to UTC (if asDateTime = TRUE), \cr
 \tab character \tab or raw character string (if asDateTime = FALSE) \cr
 tz_cd \tab character \tab The time zone code for  \cr
 code \tab character \tab Any codes that qualify the corresponding value\cr
@@ -107,5 +107,5 @@ importFile <- importWaterML1(fullPath, TRUE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{renameNWISColumns}}
+\code{\link[=renameNWISColumns]{renameNWISColumns()}}
 }

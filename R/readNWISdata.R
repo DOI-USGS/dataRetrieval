@@ -1,20 +1,20 @@
 #' General Data Import from NWIS
 #'
 #' Returns data from the NWIS web service.
-#' Arguments to the function should be based on \url{https://waterservices.usgs.gov} service calls.
+#' Arguments to the function should be based on <https://waterservices.usgs.gov> service calls.
 #' See examples below for ideas of constructing queries.
 #'
-#' @param asDateTime logical, if \code{TRUE} returns date and time as POSIXct, if \code{FALSE}, Date
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the
+#' @param asDateTime logical, if `TRUE` returns date and time as POSIXct, if `FALSE`, Date
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the
 #' function will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
 #' @param tz character to set timezone attribute of dateTime. Default is "UTC", and converts the
 #' date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
 #' Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
-#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
+#' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  `OlsonNames()`
 #' for more information on time zones.
-#' @param \dots see \url{https://waterservices.usgs.gov/docs/site-service/} for
+#' @param \dots see <https://waterservices.usgs.gov/docs/site-service/> for
 #' a complete list of options.  A
 #' list of arguments can also be supplied. One important argument to include is
 #' "service". Possible values are "iv"
@@ -22,14 +22,14 @@
 #' "dv" (for daily values), "gwlevels" (for groundwater levels),
 #' "site" (for site service), "measurement", and "stat" (for
 #' statistics service). Note: "measurement" calls go to:
-#' \url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
+#' <https://nwis.waterdata.usgs.gov/usa/nwis> for data requests, and use different call requests schemes.
 #' The statistics service has a limited selection of arguments
-#' (see \url{https://waterservices.usgs.gov/docs/site-service/}).
+#' (see <https://waterservices.usgs.gov/docs/site-service/>).
 #' 
 #' @details This function requires users to create their own arguments
 #' based on the NWIS web services. It is a more complicated function to use
-#' compared to other NWIS functions such as \code{\link{readNWISdv}}, \code{\link{readNWISuv}},
-#' \code{\link{readNWISgwl}}, etc. However, this function adds a lot of
+#' compared to other NWIS functions such as [readNWISdv()], [readNWISuv()],
+#' [readNWISgwl()], etc. However, this function adds a lot of
 #' flexibility to the possible queries. This function will also behave exactly 
 #' as NWIS when it comes to date queries. NWIS by default will only return the latest
 #' value for the daily and instantaneous services. So if you do not provide
@@ -71,13 +71,12 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #'
-#' @seealso \code{\link{renameNWISColumns}},  \code{\link{importWaterML1}}, \code{\link{importRDB1}}
+#' @seealso [read_waterdata()]
 #' @export
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' # Examples not run for time considerations
 #'
-#' dataTemp <- readNWISdata(stateCd = "OH", parameterCd = "00010", service = "dv")
 #' instFlow <- readNWISdata(
 #'   sites = "05114000", service = "iv",
 #'   parameterCd = "00060",
@@ -96,26 +95,7 @@
 #'   service = "iv", parameterCd = "00060"
 #' )
 #' 
-#' bBoxEx <- readNWISdata(bBox = c(-83, 36.5, -81, 38.5), parameterCd = "00010")
 #'
-#' startDate <- as.Date("2013-10-01")
-#' endDate <- as.Date("2014-09-30")
-#' waterYear <- readNWISdata(
-#'   bBox = c(-83, 36.5, -82.5, 36.75),
-#'   parameterCd = "00010",
-#'   service = "dv",
-#'   startDate = startDate,
-#'   endDate = endDate
-#' )
-#'
-#' siteInfo <- readNWISdata(
-#'   stateCd = "WI", parameterCd = "00010",
-#'   hasDataTypeCd = "iv", service = "site"
-#' )
-#' temp <- readNWISdata(
-#'   bBox = c(-83, 36.5, -82.5, 36.75), parameterCd = "00010", service = "site",
-#'   seriesCatalogOutput = TRUE
-#' )
 #' GWL <- readNWISdata(site_no = c("392725077582401", 
 #'                                 "375907091432201"),
 #'                     parameterCd = "62610",
@@ -160,19 +140,6 @@
 #' )
 #' allDailyStats_2 <- readNWISdata(arg.list, service = "stat")
 #'
-#' # use county names to get data
-#' dailyStaffordVA <- readNWISdata(
-#'   stateCd = "Virginia",
-#'   countyCd = "Stafford",
-#'   parameterCd = "00060",
-#'   startDate = "2015-01-01",
-#'   endDate = "2015-01-30"
-#' )
-#' va_counties <- c("51001", "51003", "51005", "51007", "51009", "51011", "51013", "51015")
-#' va_counties_data <- readNWISdata(
-#'   startDate = "2015-01-01", endDate = "2015-12-31",
-#'   parameterCd = "00060", countycode = va_counties
-#' )
 #'
 #' site_id <- "01594440"
 #' rating_curve <- readNWISdata(service = "rating", site_no = site_id, file_type = "base")
@@ -221,15 +188,34 @@ Please see vignette('qwdata_changes', package = 'dataRetrieval')
 for more information.
 https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.html"
     )
+  } else if (service == "dv"){
+    .Deprecated(new = "read_waterdata_daily",
+                package = "dataRetrieval", 
+                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_daily.")
+    
+  } else if (service == "site"){
+    .Deprecated(new = "read_waterdata_monitoring_location",
+                package = "dataRetrieval", 
+                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location")    
+  } else {
+    message(new_nwis_message())
   }
   
   baseURL <- httr2::request(pkg.env[[service]])
+
+  POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
+  
+  baseURL <- get_or_post(baseURL,
+                         POST = POST,  
+                         !!!values, 
+                         .multi = "comma")
+
   if (service != "rating") {
-    baseURL <- httr2::req_url_query(baseURL, format = format)
+    baseURL <- get_or_post(baseURL, 
+                           POST = POST,  
+                           format = format)
   }
-
-  baseURL <- httr2::req_url_query(baseURL, !!!values, .multi = "comma")
-
+  
   if (length(grep("rdb",  format)) > 0) {
     retval <- importRDB1(baseURL, tz = tz, asDateTime = asDateTime, convertType = convertType)
   } else {
@@ -276,8 +262,8 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
 
 #' State code look up
 #'
-#' Function to simplify finding state and state code definitions. Used in \code{readNWISdata}
-#' and \code{readWQPdata}.
+#' Function to simplify finding state and state code definitions. Used in `readNWISdata`
+#' and `readWQPdata`.
 #'
 #' @param input could be character (full name, abbreviation, id), or numeric (id)
 #' @param country description
@@ -302,7 +288,7 @@ stateCdLookup <- function(input,
   outputType <- match.arg(outputType, c("postal", "fullName",
                                         "id", "fips"))
   
-  states <- check_param("states")
+  states <- check_waterdata_sample_params("states")
   country <- match.arg(country, choices = unique(states$countryCode), 
                        several.ok = FALSE)
   states <- states[states$countryCode == country,]
@@ -340,8 +326,8 @@ stateCdLookup <- function(input,
 
 #' US county code look up
 #'
-#' Function to simplify finding county and county code definitions. Used in \code{readNWISdata}
-#' and \code{readNWISuse}. Currently only has US counties.
+#' Function to simplify finding county and county code definitions. Used in `readNWISdata`
+#' and `readNWISuse`. Currently only has US counties.
 #'
 #' @param state could be character (full name, abbreviation, id), or numeric (id)
 #' @param county could be character (name, with or without "County") or numeric (id)
@@ -374,7 +360,7 @@ countyCdLookup <- function(state, county, outputType = "fips") {
     stop("Only one state allowed in countyCdLookup.")
   }
   
-  counties <- check_param("counties")
+  counties <- check_waterdata_sample_params("counties")
   
   # first turn state into stateCd postal name
   state_postal <- stateCdLookup(state, 
@@ -420,7 +406,7 @@ countyCdLookup <- function(state, county, outputType = "fips") {
 }
 
 #'
-#' Format and organize NWIS arguments that are passed in as \code{...}.
+#' Format and organize NWIS arguments that are passed in as `...`.
 #'
 #' @keywords internal
 readNWISdots <- function(...) {

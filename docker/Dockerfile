@@ -24,7 +24,8 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-maps \
   r-cran-leaflet \
   r-cran-readxl \
-  && apt-get install -y pandoc \
+  r-cran-whisker \
+  r-cran-ggplot2 \
   && rm -rf /var/lib/apt/lists/*
 
 
