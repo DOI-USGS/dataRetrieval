@@ -365,7 +365,9 @@ check_waterdata_sample_params <- function(service = "characteristicgroup",
     check_group_req <- httr2::req_url_query(check_group_req,
                                             !!!params)
   }
-
+  
+  message("GET: ", check_group_req$url) 
+  
   check_group <- httr2::req_perform(check_group_req) |> 
     httr2::resp_body_string() |> 
     jsonlite::fromJSON()
@@ -385,6 +387,9 @@ check_waterdata_sample_params <- function(service = "characteristicgroup",
 #' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
 #' "America/Phoenix", and "America/Metlakatla"
+#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' will convert the data to dates, datetimes,
+#' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @export
 #' @rdname read_waterdata_samples
 #' @examplesIf is_dataRetrieval_user()
@@ -429,7 +434,8 @@ read_waterdata_samples <- function(monitoringLocationIdentifier = NA,
                               pointLocationWithinMiles = NA,
                               dataType = "results",
                               dataProfile = NA,
-                              tz = "UTC"){
+                              tz = "UTC",
+                              convertType = TRUE){
   
   request_url <- construct_waterdata_sample_request(monitoringLocationIdentifier = monitoringLocationIdentifier,
                                                siteTypeCode = siteTypeCode,
@@ -454,7 +460,8 @@ read_waterdata_samples <- function(monitoringLocationIdentifier = NA,
                                                dataType = dataType,
                                                dataProfile = dataProfile)
   
-  df <- importWQP(request_url, tz = tz)
+
+  df <- importWQP(request_url, tz = tz, convertType = convertType)
   attr(df, "url") <- request_url$url
   attr(df, "queryTime") <- Sys.time()
   return(df)
@@ -531,7 +538,8 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
                               pointLocationWithinMiles = NA,
                               dataType = "results",
                               dataProfile = NA,
-                              tz = "UTC"){
+                              tz = "UTC",
+                              convertType = TRUE){
   
   .Deprecated(new = "read_waterdata_samples",
               package = "dataRetrieval", 
@@ -560,7 +568,8 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
                          pointLocationWithinMiles = pointLocationWithinMiles,
                          dataType = dataType,
                          dataProfile = dataProfile,
-                         tz = tz)
+                         tz = tz,
+                         convertType = convertType)
 }
   
 
