@@ -1,6 +1,6 @@
 #' USGS Site File Data Retrieval
 #'
-#' Imports data from USGS site file site. This function gets data from here: \url{https://waterservices.usgs.gov/}
+#' Imports data from USGS site file site. This function gets data from here: <https://waterservices.usgs.gov/>
 #'
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @keywords data import USGS web service
@@ -59,22 +59,29 @@
 #' comment \tab character \tab Header comments from the RDB file \cr
 #' }
 #' @export
-#' @examplesIf is_dataRetrieval_user()
-#' \donttest{
-#'
-#' siteINFO <- readNWISsite("05114000")
-#' siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
-#' }
+#' @seealso [read_waterdata_monitoring_location()]
+#' @examples
+#' 
+#' # see ?read_waterdata_monitoring_location
+#' # siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
+#' 
 readNWISsite <- function(siteNumbers) {
 
+  .Deprecated(new = "read_waterdata_monitoring_location",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location")
+  
+  
   baseURL <- httr2::request(pkg.env[["site"]])
   urlSitefile <- httr2::req_url_query(baseURL,
                                       siteOutput = "Expanded", 
                                       format = "rdb")
 
-  urlSitefile <- httr2::req_url_query(urlSitefile, 
-                                      site = siteNumbers, 
-                                      .multi = "comma")
+  POST <- nchar(paste0(siteNumbers, collapse = "")) > 2048
+
+  urlSitefile <- get_or_post(urlSitefile, POST = POST,
+              site = siteNumbers, 
+              .multi = "comma")
 
   data <- importRDB1(urlSitefile, asDateTime = FALSE)
   # readr needs multiple lines to convert to anything but characters:

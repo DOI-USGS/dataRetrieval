@@ -31,6 +31,7 @@ variables:
   NOT_CRAN: "true"
   PAGES_OUTDIR: "$CI_PROJECT_DIR/public"
   CUSTOM_DR_UA: "GitLab_CI"
+  API_USGS_PAT: "${API_USGS_PAT}"
 
 build-image:
   stage: build
@@ -98,6 +99,7 @@ pages:
   cache: []
   script:
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
+    - Rscript -e 'file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
   artifacts:
     paths:
       - $PAGES_OUTDIR

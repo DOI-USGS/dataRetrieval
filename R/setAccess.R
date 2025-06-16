@@ -1,7 +1,7 @@
 #' Set data endpoint
 #'
 #' access Indicate which dataRetrieval access code
-#' you want to use options: \code{c('public','internal')}
+#' you want to use options: `c('public','internal')`
 #'
 #' @param access code for data access. Options are: "public","internal","cooperator", or "USGS".
 #' \itemize{
@@ -27,12 +27,18 @@ setAccess <- function(access = "public") {
   if (access == "internal") {
     pkg.env$access <- "3"
     message("setting access to internal")
+    warning("Internal access is slated for decommision.
+Please contact comptools@usgs.gov for more information.")
   } else if (access == "cooperator") {
     pkg.env$access <- "1"
     message("setting access to cooperator")
+    warning("Cooperator access is slated for decommision.
+Please contact comptools@usgs.gov for more information.")
   } else if (access == "USGS") {
     pkg.env$access <- "2"
     message("setting access to all USGS Water Science Centers")
+    warning("Water Science Center access is slated for decommision.
+Please contact comptools@usgs.gov for more information.")
   } else {
     pkg.env$access <- NULL
     message("setting access to public")

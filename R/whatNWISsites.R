@@ -1,10 +1,10 @@
 #' Site Data Import from NWIS
 #'
 #' Returns a list of sites from the NWIS web service. This function gets the data from:
-#' \url{https://waterservices.usgs.gov/docs/site-service/}.
+#' <https://waterservices.usgs.gov/docs/site-service/>.
 #' Mapper format is used
 #'
-#' @param \dots see \url{https://waterservices.usgs.gov/docs/site-service/}
+#' @param \dots see <https://waterservices.usgs.gov/docs/site-service/>
 #' for a complete list of options. A list (or lists) can also be supplied.
 #' 
 #' @return A data frame with at least the following columns:
@@ -26,22 +26,33 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
+#' @seealso [read_waterdata_monitoring_location()]
 #'
 #' @examples
-#' \donttest{
-#'
-#' siteListPhos <- whatNWISsites(stateCd = "OH", parameterCd = "00665")
-#' oneSite <- whatNWISsites(sites = "05114000")
-#' }
+#' 
+#' # see ?read_waterdata_monitoring_location
+#' #siteListPhos <- whatNWISsites(stateCd = "OH", parameterCd = "00665")
+#' #oneSite <- whatNWISsites(sites = "05114000")
+#' 
 whatNWISsites <- function(...) {
 
+  .Deprecated(new = "read_waterdata_monitoring_location",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location")
+  
+  
   matchReturn <- convertLists(...)
-  valuesList <- readNWISdots(...)
+  if ("service" %in% names(matchReturn)) {
+    service <- matchReturn$service
+    matchReturn$service <- NULL
+  } else {
+    service <- NULL
+  }
+  
+  valuesList <- readNWISdots(matchReturn)
 
   values <- valuesList[["values"]]
   values <- values[names(values) != "format"]
-  
-  values <- sapply(valuesList$values, function(x) utils::URLencode(x))
 
   #################
   # temporary gwlevels fixes
@@ -53,19 +64,28 @@ whatNWISsites <- function(...) {
 
   names(values)[names(values) == "state_cd"] <- "stateCd"
   ##################
-  
-  if("service" %in% names(matchReturn)){
-    values["hasDataTypeCd"] <- switch(valuesList$service,
-                                      "gwlevels" = "gw",
-                                      "iv" = "iv",
-                                      "dv" = "dv",
-                                      "peak" = "pk")
+
+  if(!is.null(service)){
+    service[service == "gwlevels"] <- "gw"
+    service[service == "meas"] <- "sv"
+    service[service == "peak"] <- "pk"
+    service[service == "uv"] <- "id"
+    
+    values[["hasDataTypeCd"]] <- service
   }
   
+  POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
+  
   urlCall <- httr2::request(pkg.env[["site"]])
-  urlCall <- httr2::req_url_query(urlCall, !!!values,
-                                  .multi = "comma")
-  urlCall <- httr2::req_url_query(urlCall, format = "mapper")
+ 
+  urlCall <- get_or_post(urlCall,
+                         POST = POST,
+                         !!!values,
+                         .multi = "comma")
+  
+  urlCall <- get_or_post(urlCall,
+                         POST = POST, 
+                         format = "mapper")
   
   rawData <- getWebServiceData(urlCall, encoding = "gzip")
   if (is.null(rawData)) {

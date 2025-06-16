@@ -35,7 +35,7 @@ whatWQPsamples <- function(...,
   } else {
     baseURL <- httr2::request(pkg.env[["ActivityWQX3"]])
   }
-
+  POST = FALSE
   if(!legacy){
     baseURL <- httr2::req_url_query(baseURL, !!!values, 
                                     .multi = "explode")
@@ -43,14 +43,19 @@ whatWQPsamples <- function(...,
     if("siteid" %in% names(values)){
       if(length(values[["siteid"]]) > 1){
         sites <- values[["siteid"]]
-        baseURL <- httr2::req_url_query(baseURL, 
-                                        siteid = sites,
-                                        .multi = function(x) paste0(x, collapse = ";"))
+        POST <- nchar(paste0(sites, collapse = "")) > 2048
+        
+        baseURL <- get_or_post(baseURL, POST = POST,
+                               siteid = sites,
+                               .multi = function(x) paste0(x, collapse = ";"))
+        
         values <- values[names(values) != "siteid"]
       }
     }
-    baseURL <- httr2::req_url_query(baseURL, !!!values, 
-                                    .multi = "explode")
+    baseURL <- get_or_post(baseURL, 
+                           POST = POST,
+                           !!!values, 
+                           .multi = "explode")
   }
   
   retval <- importWQP(baseURL,
@@ -97,21 +102,27 @@ whatWQPmetrics <- function(...,
   if ("service" %in% names(values)) {
     values <- values[!(names(values) %in% "service")]
   }
-
+  POST <- FALSE
   baseURL <- httr2::request(pkg.env[["ActivityMetric"]])
   
   if("siteid" %in% names(values)){
     if(length(values[["siteid"]]) > 1){
       sites <- values[["siteid"]]
-      baseURL <- httr2::req_url_query(baseURL, 
-                                      siteid = sites,
-                                      .multi = function(x) paste0(x, collapse = ";"))
+      POST <- nchar(paste0(sites, collapse = "")) > 2048
+      
+      baseURL <- get_or_post(baseURL, POST = POST,
+                             siteid = sites, 
+                             .multi = function(x) paste0(x, collapse = ";"))
+      
       values <- values[names(values) != "siteid"]
     }
   }
-  baseURL <- httr2::req_url_query(baseURL, !!!values, 
-                                  .multi = "explode")
 
+  baseURL <- get_or_post(baseURL,
+                         POST = POST,
+                         !!!values,
+                         .multi = "explode")
+  
   withCallingHandlers(
     {
       retval <- importWQP(baseURL,
@@ -124,6 +135,7 @@ whatWQPmetrics <- function(...,
       }
     }
   )
+  
   if(is.null(retval)){
     return(NULL)
   } else {
@@ -139,9 +151,9 @@ whatWQPmetrics <- function(...,
 #' Data Available from Water Quality Portal
 #'
 #' Returns a list of sites from the Water Quality Portal web service. This function gets
-#' the data from: \url{https://www.waterqualitydata.us}.
+#' the data from: <https://www.waterqualitydata.us>.
 #' Arguments to the function should be based on
-#' \url{https://www.waterqualitydata.us/webservices_documentation}.
+#' <https://www.waterqualitydata.us/webservices_documentation>.
 #' The information returned from whatWQPdata describes the
 #' available data at the WQP sites, and some metadata on the sites themselves.
 #' For example, a row is returned for each individual site that fulfills this 
@@ -149,13 +161,13 @@ whatWQPmetrics <- function(...,
 #' are available for the query. It does not break those results down by any finer 
 #' grain. For example, if you ask for "Nutrients" (characteristicGroup), you will
 #' not learn what specific nutrients are available at that site. For that 
-#' kind of data discovery see \code{readWQPsummary}.
+#' kind of data discovery see `readWQPsummary`.
 #'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for
+#' @param \dots see <https://www.waterqualitydata.us/webservices_documentation> for
 #' a complete list of options. A list of arguments can also be supplied.
 #' One way to figure out how to construct a WQP query is to go to the "Advanced" 
 #' form in the Water Quality Portal:
-#' \url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET}
+#' <https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET>
 #' Use the form to discover what parameters are available. Once the query is 
 #' set in the form, scroll down to the "Query URL". You will see the parameters
 #' after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
@@ -163,7 +175,7 @@ whatWQPmetrics <- function(...,
 #' in the Query URL. The corresponding argument for dataRetrieval is
 #' characteristicType = "Nutrient". dataRetrieval users do not need to include
 #' mimeType, and providers is optional (these arguments are picked automatically).
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service
@@ -199,25 +211,32 @@ whatWQPdata <- function(...,
   if (any(c("tz", "service", "mimeType") %in% names(values))){
     values <- values[!(names(values) %in% c("tz", "service", "mimeType"))]
   }
-
-  if("siteid" %in% names(values)){
-    if(length(values[["siteid"]]) > 1){
-      sites <- values[["siteid"]]
-      baseURL <- httr2::req_url_query(baseURL, 
-                                      siteid = sites,
-                                      .multi = function(x) paste0(x, collapse = ";"))
-      values <- values[names(values) != "siteid"]
-    }
-  }
+  POST <- FALSE
   
   baseURL <- httr2::request(pkg.env[["Station"]])
   
-  baseURL <- httr2::req_url_query(baseURL,
-                                  !!!values,
-                                  .multi = "explode")
+  if("siteid" %in% names(values)){
+    if(length(values[["siteid"]]) > 1){
+      sites <- values[["siteid"]]
 
-  baseURL <- httr2::req_url_query(baseURL, 
-                                  mimeType = "geojson")
+      POST <- nchar(paste0(sites, collapse = "")) > 2048
+        
+      baseURL <- get_or_post(baseURL, POST = POST,
+                             siteid = sites, 
+                             .multi = function(x) paste0(x, collapse = ";"))
+      
+      values <- values[names(values) != "siteid"]
+    }
+  }
+
+  baseURL <- get_or_post(req = baseURL, 
+                         POST = POST,
+                         !!!values,
+                         .multi = "explode")
+  
+  baseURL <- get_or_post(baseURL, 
+                         POST = POST,
+                         mimeType = "geojson")
   
   # Not sure if there's a geojson option with WQX3
   wqp_message()
@@ -297,3 +316,15 @@ whatWQPdata <- function(...,
   attr(y, "url") <- baseURL
   return(y)
 }
+
+get_or_post <- function(req, POST = FALSE, ...){
+  
+  if(POST){
+    req <- httr2::req_body_form(req, ...)
+
+  } else {
+    req <- httr2::req_url_query(req, ...)
+  }
+  return(req)
+}
+

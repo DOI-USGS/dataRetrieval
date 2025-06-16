@@ -48,8 +48,8 @@ be explicitly requested.}
 \item{distance_km}{numeric. Define how far to look along the navigation path in
 kilometers (default = 100)}
 
-\item{no_sf}{if available, should `sf` be used for parsing,
-defaults to `TRUE` if `sf` is locally installed}
+\item{no_sf}{if available, should \code{sf} be used for parsing,
+defaults to \code{TRUE} if \code{sf} is locally installed}
 
 \item{warn}{(default TRUE) should warnings be printed}
 }
@@ -78,8 +78,6 @@ findNLDI(comid = 101)
 ## Find feature by NWIS ID
 findNLDI(nwis = "11120000")
 
-## Find feature by WQP ID
-findNLDI(wqp = "USGS-04024315")
 
 ## Find feature by LOCATION
 findNLDI(location = c(-115, 40))
@@ -98,14 +96,14 @@ findNLDI(nwis = "11120000", nav = c("UT", "UM"))
 # Discover Features(flowlines will not be returned unless included in find)
 
 ## Find feature(s) on the upper tributary of USGS-11120000
-findNLDI(nwis = "11120000", nav = "UT", find = c("nwis", "wqp"))
+findNLDI(nwis = "11120000", nav = "UT", find = c("nwis"))
 
 ## Find upstream basin boundary and  of USGS-11120000
 findNLDI(nwis = "11120000", find = "basin")
 
 # Control Distance
 ## Limit search to 50 km
-findNLDI(comid = 101, nav = "DM", find = c("nwis", "wqp", "flowlines"), distance_km = 50)
+findNLDI(comid = 101, nav = "DM", find = c("nwis", "flowlines"), distance_km = 50)
 }
 \dontshow{\}) # examplesIf}
 }

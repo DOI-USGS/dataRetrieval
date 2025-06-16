@@ -8,17 +8,17 @@
 #' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
 #' "America/Phoenix", and "America/Metlakatla"
-#' @param csv logical. Is the data coming back with a csv or tsv format. Default is \code{FALSE}.
+#' @param csv logical. Is the data coming back with a csv or tsv format. Default is `FALSE`.
 #' Currently, the summary service does not support tsv, for other services tsv is the safer choice.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @return retval dataframe raw data returned from the Water Quality Portal. Additionally,
 #' a POSIXct dateTime column is supplied for
 #' start and end times, and converted to UTC. See
-#' \url{https://www.waterqualitydata.us/portal_userguide/} for more information.
+#' <https://www.waterqualitydata.us/portal_userguide/> for more information.
 #' @export
-#' @seealso \code{\link{readWQPdata}}, \code{\link{readWQPqw}}, \code{\link{whatWQPsites}}
+#' @seealso [readWQPdata()], [readWQPqw()], [whatWQPsites()]
 #' @examplesIf is_dataRetrieval_user()
 #' # These examples require an internet connection to run
 #'
@@ -45,18 +45,24 @@ importWQP <- function(obs_url, tz = "UTC",
     tz <- "UTC"
   }
 
+  if (is.character(obs_url) && 
+      grepl("(https)://[^ /$.?#].[^\\s]*", obs_url)){
+        obs_url <- httr2::request(obs_url)
+  }
+  
   if (inherits(obs_url, "httr2_request")) {
     doc <- getWebServiceData(obs_url)
     if (is.null(doc)) {
       return(invisible(NULL))
     }
     headerInfo <- attr(doc, "headerInfo")
-    
+
   } else {
     doc <- obs_url
   }
   
   last_chars <- as.character(substr(doc, nchar(doc)-1, nchar(doc)))
+  
   if(last_chars != c("\n")){
     doc <- paste0(doc, "\n")
   }

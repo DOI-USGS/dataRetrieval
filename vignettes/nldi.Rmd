@@ -31,7 +31,7 @@ opts_chunk$set(
 )
 ```
 
-This post will demonstrate `dataRetrieval` functions to query the [Network Linked Data Index](https://labs.waterdata.usgs.gov/about-nldi/index.html) (NLDI).
+This post will demonstrate `dataRetrieval` functions to query the [Network Linked Data Index](https://waterdata.usgs.gov/blog/nldi-intro/) (NLDI).
 
 The NLDI provides a information backbone to navigate the NHDPlusV2 network and discover features indexed to the network. This process of feature discovery mirrors web-based navigation tools like Google Maps.
 
