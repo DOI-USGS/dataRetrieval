@@ -65,7 +65,7 @@ for more information.
 \details{
 This function requires users to create their own arguments
 based on the NWIS web services. It is a more complicated function to use
-compared to other NWIS functions such as \code{\link{readNWISdv}}, \code{\link{readNWISuv}},
+compared to other NWIS functions such as \code{\link[=readNWISdv]{readNWISdv()}}, \code{\link[=readNWISuv]{readNWISuv()}},
 etc. However, this function adds a lot of
 flexibility to the possible queries. If the "service" argument is included,
 the results will be filtered to the proper data_type_cd. This is a great
@@ -73,30 +73,22 @@ function to use before a large data set, by filtering down the number
 of sites that have useful data.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
 
-availableData <- whatNWISdata(siteNumber = "05114000")
+# see ?read_waterdata_ts_meta
 
-# To find just unit value ('instantaneous') data:
-uvData <- whatNWISdata(siteNumber = "05114000",
-                       service = "uv")
-uvDataMulti <- whatNWISdata(siteNumber = c("05114000", "09423350"),
-                            service = c("uv", "dv"))
-flowAndTemp <- whatNWISdata(
-  stateCd = "WI", service = "dv",
-  parameterCd = c("00060", "00010"),
-  statCd = "00003"
-)
-sites <- whatNWISdata(stateCd = "WI",
-                      parameterCd = "00060",
-                      siteType = "ST", 
-                      service = "site")
-                      
-sites <- whatNWISdata(stateCd = "WI",
-                      service = "gwlevels")
+#site1 <- whatWQPsamples(siteid = "USGS-01594440")
+
+#type <- "Stream"
+
+#sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
+
+#lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
+#                                    countycode = "US:55:025")
+
+
 }
-\dontshow{\}) # examplesIf}
+\seealso{
+\code{\link[=read_waterdata_ts_meta]{read_waterdata_ts_meta()}}
 }
 \keyword{USGS}
 \keyword{data}

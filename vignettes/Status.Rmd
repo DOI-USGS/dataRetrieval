@@ -15,52 +15,88 @@ editor_options:
   chunk_output_type: console
 ---
 
-This page will be updated frequently with information about the status of dataRetrieval services.
-
-Contact CompTools@usgs.gov with additional questions.
-
 # Overview
 
-On March 11, 2024, NWIS **discrete water quality** services were "frozen": any public data retrieval using `readNWISqw()` did not include any new data. As of dataRetrieval v2.7.17, `readNWISqw()` has been retired and replaced by `readWQPqw()`. Learn more about the change and where to find the new samples data in our [blog](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
+Welcome to the `dataRetrieval` status page. This page will be updated frequently with information about the status of `dataRetrieval` services.
 
-If you have additional questions about the NWIS qw data service, email CompTools@usgs.gov.
+Please contact the Computational Tools team at CompTools@usgs.gov with questions.
 
-## Latest CRAN update
+# New Water Data APIs
 
-* dataRetrieval now uses `httr2` instead of `httr` under the hood for constructing web service calls. The `httr2` package is considered the modern replacement for `httr`, and has support going forward (unlike `httr`). Depending on how you perform the package updates, you may need to install `httr2`. 
+<details>
+  <summary>What is an application programming interface (API)?</summary>
+  When you run a `dataRetrieval` function like `read_waterdata_samples()` or `readNWISdv()`, you are actually generating a URL that contains within it specifications of the dataset in which you are interested (e.g. which monitoring locations, characteristics, pcodes, start and end dates, etc.). The format of that URL is special: it is parsed by a USGS-specific API web service, which translates the request into a database call. It then packages the response object from the database (with the data) into a format that can be sent to and then unpacked by the user. `dataRetrieval` takes a lot of the guesswork out of this process by generating the URL, sending it to the API, and wrangling the response object into a tabular dataset.   
+</details>
+<br>
+The USGS is in the process of creating new, [publicly available APIs](https://api.waterdata.usgs.gov/) (a.k.a. "web services") to replace the existing [WaterServices](https://waterservices.usgs.gov/). `dataRetrieval` relies upon these web services to provide monitoring location information and water quantity/quality datasets. As new web services come online, `dataRetrieval` will be furnished with new functions to accommodate these changes. 
 
-* dataRetrieval will give a message with the requested URL each time a web service call is made. These can be hidden by wrapping dataRetrieval calls with `suppressMessages`. That being said, it is very informative to see exactly where the data is coming from. 
+The table below shows the **existing** NWIS functions and, if applicable, their slated replacements. Note that several functions do not have direct replacements because the new services to support them do not yet exist. We will update this table as new services and functions come online. Also note that some new functions may only be available on the "develop" branch of `dataRetrieval` (`remotes::install_github("DOI-USGS/dataRetrieval", ref = "develop")`). More information on each function's specifications (complete with examples) are available in the [Introduction to New USGS Services vignette](add link here), the [package index](https://doi-usgs.github.io/dataRetrieval/reference/index.html) and/or function documentation (e.g. `?read_waterdata_daily`).
+               
+```{r echo=FALSE}
+df <- data.frame(
+  Legacy = c(
+    "readNWISqw (deprecated)",
+    "readNWISdv",
+    "readNWISsite",
+    "whatNWISsites",
+    "",
+    "readNWISuv",
+    "readNWISrating",
+    "readNWISstat",
+    "readNWISmeas",
+    "readNWISpeak",
+    "readNWISgwl",
+    "readNWISuse",
+    "readNWISdata",
+    "whatNWISdata",
+    "readNWISpCode"
+  ),
+  New = c(
+    "read_waterdata_samples",
+    "read_waterdata_daily",
+    "read_waterdata_monitoring_location",
+    "read_waterdata_ts_meta",
+    "read_waterdata",
+    rep("", 10)
+  ),
+  "Available on (branch)" = c("main (CRAN)", "develop", "develop", "develop", "develop", rep("", 10))
+)
 
-* The output of the "constructURL..." functions are now `httr2` requests instead of a character string. 
+knitr::kable(df, col.names = c("WaterServices (legacy) function", "Water Data (new) function", "Available on (branch name)"))
 
-* The update to `httr2` will give us more flexibility to set up the eventual replacements to the NWIS web services. Over the next year, expect to see some new and major updates to USGS data access. dataRetrieval WILL stay on the cutting edge for accessing new USGS APIs. 
+```
 
-* WQP continues to default to the legacy system (that does not include recent USGS discrete sample data). To access the most recent USGS data from the new "WQX3" services use the function `readWQPqw` and set the argument `legacy=FALSE` or use the function `readWQPdata` and set the argument `service = "ResultWQX3"`. Why aren't the new services set as default? This is because the WQP itself still considers those services "beta", and therefore performance is not guaranteed.  
+If you want to learn more about the new water data APIs, check out the ["What's new with WDFN APIs?" blog post](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/), as well as the [documentation](https://api.waterdata.usgs.gov/docs/) available on api.waterdata.usgs.gov. 
 
-* Finally, saving the best for last! There's a new set of functions that access the new USGS "samples-data" services. This is a USGS-specific service for discrete sample data. If you are only interested in USGS discrete water quality data (as opposed to USGS AND non-USGS discrete water quality data available from Water Quality Portal), you can use the `read_USGS_samples` function.  
+## API Keys
 
-Read more about it here: <https://doi-usgs.github.io/dataRetrieval/articles/samples_data.html>
+Do you make *a lot* of `dataRetrieval` WaterServices calls (e.g. using functions like `readNWISdv`, `readNWISuv`) per day? ...On the order of more than 50 function calls per hour? As you switch your workflows over to the new Water Data API functions, consider grabbing yourself an API key, which will bump your limit up to 1,000 requests per hour. Head to the [sign up page](https://api.waterdata.usgs.gov/signup) to get a token.
 
-## Locating USGS data using the Water Quality Portal
+One you have your API key, add it to your `.Renviron` file like this:
 
-New USGS data (post March 11, 2024) **are temporarily not accessible** on the **main** Water Quality Portal (WQP) page (www.waterqualitydata.us). Data are still being collected, but are not available on this webpage. This limited availability is expected to last a few months.
+```{r}
+API_USGS_PAT = "[your api key]"
+```
 
-However, new USGS data **are accessible** in a pre-release (*beta*) version of the [WQP web page](https://www.waterqualitydata.us/beta/) and new [wqx3 web services](https://waterqualitydata.us/wqx3/). Data are available in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)) for these new "Data Profiles" (how the data is formatted by the WQP):
+Replace [your api key] with the alphanumeric code provided by the sign-up page. That's it! `dataRetrieval` will look for an `.Renviron` file in your directories and use it for making web service calls.
 
-* Monitoring Location
-* Results - Narrow
-* Results - Full Physical Chemical
-* Results - Basic Physical Chemical
-* Sampling Activity
+# Discrete Data
 
-Guidance on how to use the new web page and web services are available in the [User Guide](https://www.waterqualitydata.us/beta/portal_userguide/) and [Web Services Guide](https://www.waterqualitydata.us/beta/webservices_documentation/). Additional profiles will continue to be added over time. 
+In March 2024, NWIS **discrete water quality** services were "frozen": any public data retrieval using `readNWISqw()` no longer included any new data. Concurrently, the main [Water Quality Portal (WQP) API](https://www.waterqualitydata.us/) stopped serving new and updated USGS data (we will refer to this set of web services as "legacy"). Now, new and updated data are available from the [USGS Samples API](https://waterdata.usgs.gov/download-samples/#dataProfile=site) (for USGS data only) or in the [beta version](https://www.waterqualitydata.us/beta/) of the WQP (both USGS and non-USGS data).
 
-**Disclaimer:** During the beta period, users may encounter bugs or identify issues with the implementation of the WQX 3.0 format: we welcome (and encourage!) your feedback to help improve these offerings, just send an email to WQX@epa.gov.
+What does this mean for water quality data users of `dataRetrieval`? Check out the sections below for more specifics.
 
-The current WQP data profiles (available on the main Water Quality Portal web pages and from the current web services, https://www.waterqualitydata.us) deliver data in "WQX version 2.0" (what we're referring to as the "legacy") format. These will remain available for a period of time after the rollout of version 3.0. Eventually they will be retired, but there is not yet an estimated time line.
+## Samples Data
 
-# What to expect: dataRetrieval specific
+There's a new set of functions that access the USGS "samples-data" services! If you are **only** interested in USGS discrete water quality data, you can use the `read_waterdata_samples` function.  
 
+Read more about it in the vignette, [Introducing read_waterdata_samples](https://doi-usgs.github.io/dataRetrieval/articles/samples_data.html).
+
+## WQP
+
+`dataRetrieval` WQP functions continue to default to the legacy system (that does not include post-March 2024 USGS discrete sample data). The new replacement services aren't currently set as the default because the WQP team still considers these services "beta", and therefore performance is not guaranteed. Users may encounter bugs or identify issues with the implementation of the new services: we welcome (and encourage!) your feedback to help improve these offerings, just send an email to WQX@epa.gov.
+
+The table below provides a summary of the current state of WQP functions in `dataRetrieval`.
 
 ```{r echo=FALSE}
 df <- data.frame(Function = c("readWQPdata",
@@ -69,14 +105,12 @@ df <- data.frame(Function = c("readWQPdata",
                               "whatWQPmetrics",
                               "whatWQPsamples",
                               "whatWQPdata",
-                              "readNWISqw",
                               "readWQPsummary",
                               "whatNWISdata"),
                  Status = c("Set to legacy options by default. WQX3 options available.",
                             "Set to legacy options by default. WQX3 options available.", 
                             "Set to legacy options by default. WQX3 options available.",
                             rep("Currently only available via legacy services.", 3),
-                            "Retired.",
                             "Does not have accurate information for USGS data.",
                             "Does not have accurate information for qw data."))
 
@@ -84,174 +118,43 @@ knitr::kable(df)
 
 ```
 
-## readWQPqw
+### Leveraging the beta WQP services
 
-The `readWQPqw()` function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characteristic names, and start/end dates. 
-
-As of `dataRetrieval` 2.7.17, this function will use the default WQX version 2 dataProfile, specified by the `legacy = TRUE` argument. Setting `legacy = FALSE` will return the WQX 3.0 "narrow" dataProfile. Keep in mind the 2.0 profiles will eventually be retired. For any more flexibility, users will need to use the `readWQPdata()` function.
-
-An example of a WQX 3.0 return:
-
-```{r eval=FALSE}
-library(dataRetrieval)
-rawPcode <- readWQPqw(siteNumbers = "USGS-01594440",
-                      parameterCd = "01075",
-                      legacy = FALSE)
-```
-
-Compared to using the WQX 2.0 legacy results:
-
-```{r eval=FALSE}
-rawPcode_legacy <- readWQPqw(siteNumbers = "USGS-01594440",
-                      parameterCd = "01075",
-                      legacy = TRUE)
-
-```
-
-## readWQPdata
-
-The `readWQPdata()` function is the most flexible function to get WQP data. Currently there are 11 legacy options and 5 options that use the new WQX 3.0 profiles. Note that `readWQPdata()` does not leverage a `legacy` argument to specify which profile version the user would like returned, but instead relies on the user's specification of `service` and `dataProfile` arguments.
-
-### WQX 3.0
-
-There are currently three WQX 3.0 "services" available: ResultWQX, StationWQX and ActivityWQX. The "ResultWQX" service has multiple available "dataProfiles".  
+The beta WQP offers data in the "WQX version 3.0 format" (WQX = [Water Quality Exchange](https://exchangenetwork.net/data-exchange/wqx/)) using new "data profiles" (how the data are formatted by the WQP). There are currently three WQX 3.0 "services" available on beta: ResultWQX3, StationWQX3 and ActivityWQX3. The "ResultWQX3" service has multiple available data profiles:  
 
 | Service        | dataProfile |
 | -------------- | ----------  |
-| StationWQX     |             |
-| ResultWQX      | fullPhysChem |
-| ResultWQX      | basicPhysChem |
-| ResultWQX      | narrow |
-| ActivityWQX    |         |
+| StationWQX3     |             |
+| ResultWQX3      | fullPhysChem |
+| ResultWQX3      | basicPhysChem |
+| ResultWQX3      | narrow |
+| ActivityWQX3    |         |
 
-Examples:
+**Quickstart:** To access the most recent USGS data from the new services in `dataRetrieval`, use the function `readWQPqw` and set the argument `legacy=FALSE` or use the function `readWQPdata` and set the argument `service = "ResultWQX3"`.
 
-```{r eval=FALSE}
+If you wish to leverage a specific "ResultWQX3" data profile using the beta services, your code might look something like this, using the very flexible `readWQPdata` function:
+
+```{r, eval = FALSE}
 data_full <- readWQPdata(siteid = "USGS-04024315",
                          characteristicName = "pH",
                          dataProfile = "fullPhysChem",
                          service = "ResultWQX3")
+```
 
-data_basic <- readWQPdata(siteid = "USGS-04024315",
-                          characteristicName = "pH",
-                          dataProfile = "basicPhysChem",
-                          service = "ResultWQX3")
+On the other hand, the "StationWQX3" service requires no `dataProfile` argument:
 
-data_narrow <- readWQPdata(siteid = "USGS-04024315",
+```{r, eval = FALSE}
+data_station <- readWQPdata(siteid = "USGS-04024315",
                            characteristicName = "pH",
-                           dataProfile = "narrow",
-                           service = "ResultWQX3")
-
-data_sites <- readWQPdata(siteid = "USGS-04024315",
-                          characteristicName = "pH",
-                          service = "StationWQX3")
-
+                           service = "StationWQX3")
 ```
 
-### WQX 2.0 - Legacy
+Guidance on how to use the new web page and web services are available in the [User Guide](https://www.waterqualitydata.us/beta/portal_userguide/) and [Web Services Guide](https://www.waterqualitydata.us/beta/webservices_documentation/). Additional profiles will continue to be added over time. 
 
-There are 8 services available from the legacy WQP. The Station and Result legacy services can still be accessed, but users should move to StationWQX, ResultWQX, and ActivityWQX. As other former services become available in WQX 3.0, we will update these documents.
+## NWIS "qw" Data
 
-| Service        | dataProfile | WQX 3.0 service "analog" |
-| -------------- | ----------  | ----------  |
-| Station     |             | StationWQX |
-| Result      | resultPhysChem | ResultWQX |
-| Result      | biological |
-| Result      | narrowResult | ResultWQX |
-| Activity    | activityAll  | ActivityWQX |
-| ActivityMetric |           |   |
-| Project     |            |   |
-| ProjectMonitoringLocationWeighting |           |   |
-| ResultDetectionQuantitationLimit |         |   |
-| BiologicalMetric |     |   |
+As of dataRetrieval v2.7.17, `readNWISqw()` has been retired and replaced by `readWQPqw()`. The `readWQPqw()` function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characteristic names, and start/end dates. Learn more about the change and where to find the new samples data in the dataretrieval [Changes to NWIS QW services vignette](https://doi-usgs.github.io/dataRetrieval/articles/qwdata_changes.html) and the WDFN blog on [Improved Public Delivery of Water Quality and Field Samples](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
-Examples: 
+### A note on `whatNWISdata` and "qw" data
 
-```{r eval=FALSE}
-# Data profiles: "Organization Data" (legacy)
-org_data <- readWQPdata(
-  statecode = "WI",
-  countycode = "Dane",
-  service = "Organization"
-)
-
-# Data profiles: "Project Data"  (legacy)
-project_data <- readWQPdata(
-  statecode = "WI",
-  countycode = "Dane",
-  service = "Project"
-)
-
-# Data profiles: "Project Monitoring Location Weighting Data"  (legacy)
-proj_mlwd <- readWQPdata(
-  statecode = "WI",
-  countycode = "Dane",
-  service = "ProjectMonitoringLocationWeighting"
-)
-
-# Data profiles: "Sample Results (physical/chemical metadata)"  (legacy)
-samp_data <- readWQPdata(
-  siteid = "USGS-04024315",
-  dataProfile = "resultPhysChem",
-  service = "Result"
-)
-
-# Data profiles: "Sample Results (biological metadata)"  (legacy)
-samp_bio <- readWQPdata(
-  siteid = "USGS-04024315",
-  dataProfile = "biological",
-  service = "Result"
-)
-
-# Data profiles: "Sample Results (narrow)" (legacy)
-samp_narrow <- readWQPdata(
-  siteid = "USGS-04024315",
-  dataProfile = "narrowResult",
-  service = "Result"
-)
-
-# Data profiles: "Sampling Activity"  (legacy)
-samp_activity <- readWQPdata(
-  siteid = "USGS-04024315",
-  dataProfile = "activityAll",
-  service = "Activity"
-)
-
-
-# Data profile: "Sampling Activity Metrics"  (legacy)
-act_metrics <- readWQPdata(
-  statecode = "WI",
-  countycode = "Dane",
-  service = "ActivityMetric"
-)
-
-# Data profile: "Result Detection Quantitation Limit Data"  (legacy)
-dl_data <- readWQPdata(
-  siteid = "USGS-04024315",
-  service = "ResultDetectionQuantitationLimit"
-)
-
-```
-
-## whatNWISdata
-
-
-NWIS discrete water quality services are "frozen": the returned data availability will also be frozen ONLY for "qw" data_type_cd results. All other data types should not be affected. 
-
-When the NWIS services are decommissioned (likely in 2025): there will no longer be any "qw" information provided in the output of `whatNWISdata`. Discrete water-quality availability will be available via WQP services. More information will be provided as we learn more.
-
-Here's an example of what will change:
-
-```{r eval=FALSE}
-what_NWIS <- whatNWISdata(siteNumber = "05114000")
-nrow(what_NWIS)
-[1] 407
-nrow(what_NWIS[what_NWIS$data_type_cd == "qw",])
-[1] 381
-```
-
-So for site "05114000", there are 381 NWIS qw parameters that have been measured. Since mid-March 2024, the data availability for those 381 parameters are frozen...even if new data are collected. Eventually those 381 rows of data will not be returned, only 26 rows of data will be returned (407-381). 
-
-New services/functions are being developed to replace the lost functionality so check back here for updated information.
-
-
+Currently, any "qw" data summaries provided by `whatNWISdata` are very likely out of date and incorrect: do not use this function to query by `data_type_cd = "qw"`. When the NWIS services are decommissioned (likely in 2025) there will no longer be any "qw" information provided in the output of `whatNWISdata`. Discrete water-quality data will be available via WQP services and USGS Samples only. More information will be provided as we learn more.

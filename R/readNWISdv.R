@@ -1,18 +1,18 @@
 #' Daily Value USGS NWIS Data Retrieval
 #'
 #' Imports data from NWIS daily web service. This function gets the data from here: 
-#' \url{https://waterservices.usgs.gov/docs/dv-service/daily-values-service-details/}
+#' <https://waterservices.usgs.gov/docs/dv-service/daily-values-service-details/>
 #' Inputs to this function are just USGS site ids, USGS parameter codes,
-#' USGS statistic codes, and start and end date. For a more complex query, use \code{\link{readNWISdata}},
+#' USGS statistic codes, and start and end date. For a more complex query, use [readNWISdata()],
 #' with an argument service = "dv".
 #' Data coming the daily web services are aggregates of the instantaneous
 #' (sensor) web services. Not all statistical codes are available for all data.
-#' Use the function \code{\link{whatNWISdata}} to discover what data
+#' Use the function [whatNWISdata()] to discover what data
 #' is available for a USGS site. The column data_type_cd with the values "dv"
-#' returned from \code{\link{whatNWISdata}}) are available from this service.
+#' returned from [whatNWISdata()]) are available from this service.
 #' 
 #' More information on the web service can be found here:
-#' \url{https://waterservices.usgs.gov/test-tools}, choosing the
+#' <https://waterservices.usgs.gov/test-tools>, choosing the
 #' "Daily Value Service".
 #'
 #' @param siteNumbers character USGS site number.  This is usually an 8 digit number.
@@ -49,39 +49,29 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #'
-#' @seealso \code{\link{renameNWISColumns}}, \code{\link{importWaterML1}}
+#' @seealso [read_waterdata_daily()]
 #' @export
 #' @keywords data import USGS web service
-#' @examplesIf is_dataRetrieval_user()
-#' site_id <- "04085427"
-#' startDate <- "2012-01-01"
-#' endDate <- "2012-06-30"
-#' pCode <- "00060"
-#' \donttest{
-#' rawDailyQ <- readNWISdv(site_id, pCode, startDate, endDate)
-#' rawDailyQAndTempMeanMax <- readNWISdv(site_id, c("00010", "00060"),
-#'   startDate, endDate,
-#'   statCd = c("00001", "00003")
-#' )
-#' rawDailyQAndTempMeanMax <- renameNWISColumns(rawDailyQAndTempMeanMax)
-#' rawDailyMultiSites <- readNWISdv(c("01491000", "01645000"), c("00010", "00060"),
-#'   startDate, endDate,
-#'   statCd = c("00001", "00003")
-#' )
-#' # Site with no data:
-#' x <- readNWISdv("10258500", "00060", "2014-09-08", "2014-09-14")
-#' names(attributes(x))
-#' attr(x, "siteInfo")
-#' attr(x, "variableInfo")
-#'
-#' site <- "05212700"
-#' notActive <- readNWISdv(site, "00060", "2014-01-01", "2014-01-07")
-#' }
+#' @examples
+#' 
+#' # see ?read_waterdata_daily
+#' 
+#' #site_id <- "04085427"
+#' #startDate <- "2012-01-01"
+#' #endDate <- "2012-06-30"
+#' #pCode <- "00060"
+#' #
+#' #rawDailyQ <- readNWISdv(site_id, pCode, startDate, endDate)
+#' 
 readNWISdv <- function(siteNumbers,
                        parameterCd,
                        startDate = "",
                        endDate = "",
                        statCd = "00003") {
+  
+  .Deprecated(new = "read_waterdata_daily",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_daily.")
   
   url <- constructNWISURL(
     siteNumbers = siteNumbers,

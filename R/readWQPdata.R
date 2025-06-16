@@ -1,7 +1,7 @@
 #' General Data Import from Water Quality Portal
 #'
 #' Imports data from Water Quality Portal web service. This function gets the data from here:
-#' \url{https://www.waterqualitydata.us}.
+#' <https://www.waterqualitydata.us>.
 #' 
 #' This function uses \dots as a query input, which can be very flexible, but also 
 #' has a steeper learning curve. For a quick overview, scroll down to the Examples
@@ -41,7 +41,7 @@
 #' }
 #' 
 #'
-#' @param \dots see \url{https://www.waterqualitydata.us/webservices_documentation} for a complete list of options.
+#' @param \dots see <https://www.waterqualitydata.us/webservices_documentation> for a complete list of options.
 #' A list of arguments can also be supplied. For more information see the above 
 #' description for this help file. One way to figure out how to construct a WQP query is to go to the "Advanced" 
 #' form in the Water Quality Portal. Use the form to discover what parameters are available. Once the query is 
@@ -63,11 +63,11 @@
 #' "America/Anchorage", as well as the following which do not use daylight savings
 #' time: "America/Honolulu",
 #' "America/Jamaica","America/Managua","America/Phoenix", and "America/Metlakatla".
-#' See also  \code{OlsonNames()}
+#' See also  `OlsonNames()`
 #' for more information on time zones.
 #' @param ignore_attributes logical to choose to ignore fetching site and status
-#' attributes. Default is \code{FALSE}.
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
+#' attributes. Default is `FALSE`.
+#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @keywords data import WQP web service
@@ -96,9 +96,9 @@
 #' 
 #' # WQX3:
 #' pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315", 
-#'                       characteristicName = nameToUse,
-#'                       service = "ResultWQX3",
-#'                       dataProfile = "basicPhysChem")
+#'                            characteristicName = nameToUse,
+#'                            service = "ResultWQX3",
+#'                            dataProfile = "basicPhysChem")
 #' attr(pHData_wqx3, "url")
 #'
 #' # More examples:
@@ -112,12 +112,12 @@
 #' attr(DeWitt, "url")
 #' 
 #' DeWitt_wqx3 <- readWQPdata(
-#'   statecode = "Illinois",
-#'   countycode = "DeWitt",
-#'   characteristicName = "Nitrogen",
-#'   service = "ResultWQX3",
-#'   dataProfile = "basicPhysChem",  
-#'   ignore_attributes = TRUE)
+#'    statecode = "Illinois",
+#'    countycode = "DeWitt",
+#'    characteristicName = "Nitrogen",
+#'    service = "ResultWQX3",
+#'    dataProfile = "basicPhysChem",  
+#'    ignore_attributes = TRUE)
 #' 
 #' attr(DeWitt_wqx3, "url")
 #' 
@@ -128,11 +128,11 @@
 #' )
 #' attr(activity, "url")
 #' 
-#' activity_wqx3 <- readWQPdata(
-#'   siteid = "USGS-04024315",
-#'   service = "ActivityWQX3"
-#' )
-#' attr(activity_wqx3, "url")
+#' # activity_wqx3 <- readWQPdata(
+#' #   siteid = "USGS-04024315",
+#' #   service = "ActivityWQX3"
+#' # )
+#' # attr(activity_wqx3, "url")
 #' 
 #' Dane_activity <- readWQPdata(
 #'   statecode = "Wisconsin",
@@ -143,14 +143,14 @@
 #' )
 #' attr(Dane_activity, "url")
 #' 
-#' Dane_activity_wqx3 <- readWQPdata(
-#'   statecode = "Wisconsin",
-#'   countycode = "Dane",
-#'   startDateLo = "2023-01-01",
-#'   startDateHi = "2023-12-31",
-#'   service = "ActivityWQX3"
-#' )
-#' attr(Dane_activity_wqx3, "url")
+#' # Dane_activity_wqx3 <- readWQPdata(
+#' #   statecode = "Wisconsin",
+#' #   countycode = "Dane",
+#' #   startDateLo = "2023-01-01",
+#' #   startDateHi = "2023-12-31",
+#' #   service = "ActivityWQX3"
+#' # )
+#' # attr(Dane_activity_wqx3, "url")
 #' 
 #' ########################################################
 #' # Additional examples:
@@ -199,11 +199,11 @@
 #'   dataProfile = "narrowResult"
 #' )
 #'
-#' samp_narrow_wqx3 <- readWQPdata(
-#'   siteid = "USGS-04024315",
-#'   service = "ResultWQX3",
-#'   dataProfile = "narrow"
-#' )
+#' # samp_narrow_wqx3 <- readWQPdata(
+#' #   siteid = "USGS-04024315",
+#' #   service = "ResultWQX3",
+#' #   dataProfile = "narrow"
+#' # )
 #'
 #'
 #' # Data profiles: "Sampling Activity"  
@@ -240,10 +240,10 @@
 #'                         service = "Result",
 #'                         dataProfile = "narrowResult" )
 #' 
-#' rawPHsites <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
-#'                         characteristicName = "pH",
-#'                         service = "ResultWQX3",
-#'                         dataProfile = "narrow" )
+#' # rawPHsites <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+#' #                           characteristicName = "pH",
+#' #                           service = "ResultWQX3",
+#' #                           dataProfile = "narrow" )
 #' 
 #' }
 readWQPdata <- function(...,

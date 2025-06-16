@@ -22,21 +22,21 @@
 #' momentary problem with the internet connection). It is possible to safely use the "tsv" option,
 #' but the user must carefully check the results to see if the data returns matches
 #' what is expected. The default is therefore "xml".
-#' @param expanded logical defaults to \code{TRUE}. If \code{TRUE}, retrieves additional
+#' @param expanded logical defaults to `TRUE`. If `TRUE`, retrieves additional
 #' information, only applicable for qw data.
 #' @param ratingType can be "base", "corr", or "exsa". Only applies to rating curve data.
 #' @param statReportType character Only used for statistics service requests.  Time
 #' division for statistics: daily, monthly, or annual.  Default is daily.
 #' Note that daily provides statistics for each calendar day over the specified
 #' range of water years, i.e. no more than 366 data points will be returned for
-#' each site/parameter.  Use \code{readNWISdata} or \code{readNWISdv} for daily averages.
+#' each site/parameter.  Use `readNWISdata` or `readNWISdv` for daily averages.
 #' Also note that "annual" returns statistics for the calendar year.  Use
-#' \code{readNWISdata} for water years. Monthly and yearly
+#' `readNWISdata` for water years. Monthly and yearly
 #' provide statistics for each month and year within the range individually.
 #' @param statType character Only used for statistics service requests. Type(s)
 #' of statistics to output for daily values.  Default is mean, which is the only
 #' option for monthly and yearly report types. See the statistics service documentation
-#' at \url{https://waterservices.usgs.gov/docs/statistics/} for a
+#' at <https://waterservices.usgs.gov/docs/statistics/> for a
 #' full list of codes.
 #' @keywords data import USGS web service
 #' @return url string
@@ -304,7 +304,7 @@ constructNWISURL <- function(siteNumbers,
 
 #' Construct WQP url for data retrieval
 #'
-#' Construct WQP url for data retrieval. This function gets the data from here: \url{https://www.waterqualitydata.us}
+#' Construct WQP url for data retrieval. This function gets the data from here: <https://www.waterqualitydata.us>
 #'
 #' @param siteNumbers string or vector of strings USGS site number.  
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
@@ -433,7 +433,7 @@ constructWQPURL <- function(siteNumbers,
 
 #' Construct URL for NWIS water use data service
 #'
-#' Reconstructs URLs to retrieve data from here: \url{https://waterdata.usgs.gov/nwis/wu}
+#' Reconstructs URLs to retrieve data from here: <https://waterdata.usgs.gov/nwis/wu>
 #'
 #' @param years integer Years for data retrieval. Must be years ending in 0 or 5,
 #' or "ALL", which retrieves all available years.

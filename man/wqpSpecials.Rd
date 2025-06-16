@@ -15,10 +15,10 @@ whatWQPsites(..., legacy = TRUE, convertType = TRUE)
 \arguments{
 \item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation}
 for a complete list of options. A list of arguments can also be supplied.
-One way to figure out how to construct a WQP query is to go to the "Advanced" 
+One way to figure out how to construct a WQP query is to go to the "Advanced"
 form in the Water Quality Portal:
 \url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET}
-Use the form to discover what parameters are available. Once the query is 
+Use the form to discover what parameters are available. Once the query is
 set in the form, scroll down to the "Query URL". You will see the parameters
 after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
 in the Characteristic Group dropdown, you will see characteristicType=Nutrient
@@ -45,7 +45,7 @@ gets the data from: \url{https://www.waterqualitydata.us}.
 Arguments to the function should be based on
 \url{https://www.waterqualitydata.us/webservices_documentation}. The return from
 this function returns the basic metadata on WQP sites. It is
-generally faster than the \code{\link{whatWQPdata}} function, but does
+generally faster than the \code{\link[=whatWQPdata]{whatWQPdata()}} function, but does
 not return information on what data was collected at the site.
 }
 \examples{

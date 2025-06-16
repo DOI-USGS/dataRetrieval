@@ -1,12 +1,12 @@
 #' Construct request for USGS Samples Data
 #' 
 #' This function creates the call for discrete water quality samples data
-#' service described at \url{https://waterdata.usgs.gov/download-samples}.
+#' service described at <https://waterdata.usgs.gov/download-samples/>.
 #' Note: all possible arguments are included, but it is strongly recommended
 #' to only use the NECESSARY arguments. Leave unnecessary arguments as the default
 #' NA. 
 #' 
-#' See also: \url{https://api.waterdata.usgs.gov/samples-data/docs}.
+#' See also: <https://api.waterdata.usgs.gov/samples-data/docs>.
 #'  
 #' @param monitoringLocationIdentifier A monitoring location identifier has two parts: the agency code
 #' and the location number, separated by a dash (-). Location identifiers should be separated with commas,
@@ -14,9 +14,9 @@
 #' numbers without an agency prefix are assumed to have the prefix USGS.
 #' @param activityMediaName Sample media refers to the environmental medium that
 #' was sampled or analyzed. See available options by running 
-#' \code{check_param("samplemedia")$activityMedia}.
+#' `check_waterdata_sample_params("samplemedia")$activityMedia`.
 #' @param siteTypeCode Site type code query parameter. See available
-#' options by running \code{check_param("sitetype")$typeCode}.
+#' options by running `check_waterdata_sample_params("sitetype")$typeCode`.
 #' @param boundingBox North and South are latitude values; East and West are longitude values.
 #' A vector of 4 (west, south, east, north) is expected.
 #' An example would be: c(-92.8, 44.2, -88.9, 46.0).
@@ -35,40 +35,40 @@
 #' records that match the date.
 #' @param characteristicGroup Characteristic group is a broad category describing the sample.
 #' See available options by running
-#' \code{check_param("characteristicgroup")$characteristicGroup}.
+#' `check_waterdata_sample_params("characteristicgroup")$characteristicGroup`.
 #' @param characteristicUserSupplied Observed property is the USGS term for the
 #' constituent sampled and the property name gives a detailed description of what
 #' was sampled. Observed property is mapped to characteristicUserSupplied and replaces
 #' the parameter name and pcode USGS
 #' previously used to describe discrete sample data. Find more information in the
 #' Observed Properties and Parameter Codes section of the Code Dictionary found here:
-#' \url{https://waterdata.usgs.gov/code-dictionary/}.
+#' <https://waterdata.usgs.gov/code-dictionary/>.
 #' @param characteristic Characteristic is a specific category describing the sample.
 #' See available options by running 
-#' \code{check_param("characteristics")$characteristicName}.
+#' `check_waterdata_sample_params("characteristics")$characteristicName`.
 #' @param stateFips State query parameter. To get a list of available state fips, 
-#' run \code{check_param("states")}. The "fips" can be created using the function
-#' \code{stateCdLookup} - for example: \code{stateCdLookup("WI", "fips")}. 
+#' run `check_waterdata_sample_params("states")`. The "fips" can be created using the function
+#' `stateCdLookup` - for example: `stateCdLookup("WI", "fips")`. 
 #' FIPs codes for states take the format: 
 #' CountryAbbrev:StateNumber, like US:55 for Wisconsin.
 #' @param countyFips County query parameter. To get a list of available counties,
-#' run \code{check_param("counties")}. The "Fips" can be created using the function
-#' \code{countyCdLookup} - for example: \code{countyCdLookup("WI", "Dane", "fips")} 
+#' run `check_waterdata_sample_params("counties")`. The "Fips" can be created using the function
+#' `countyCdLookup` - for example: `countyCdLookup("WI", "Dane", "fips")` 
 #' for Dane County, WI.
 #' FIPs codes for counties take the format: 
 #' CountryAbbrev:StateNumber:CountyNumber, like US:55:025 for Dane County, WI.
 #' @param countryFips Country query parameter. Do not set redundant parameters. 
 #' If another query parameter contains the country information, leave this parameter
-#' set to the default NA. See available options by running \code{check_param("countries")},
+#' set to the default NA. See available options by running `check_waterdata_sample_params("countries")`,
 #' where the "id" field contains the value to use in the countryFips input.
 #' @param projectIdentifier Project identifier query parameter. This information
 #' would be needed from prior project information. 
 #' @param recordIdentifierUserSupplied Record identifier, user supplied identifier. This
 #' information would be needed from the data supplier.
 #' @param siteTypeName Site type name query parameter. See available
-#' options by running \code{check_param("sitetype")$typeName}.
+#' options by running `check_param("sitetype")$typeName`.
 #' @param usgsPCode USGS parameter code. See available options by running 
-#' \code{check_param("characteristics")$parameterCode}.
+#' `check_waterdata_sample_params("characteristics")$parameterCode`.
 #' @param pointLocationLatitude Latitude for a point/radius query (decimal degrees). Must be used
 #' with pointLocationLongitude and pointLocationWithinMiles.
 #' @param pointLocationLongitude Longitude for a point/radius query (decimal degrees). Must be used
@@ -85,18 +85,19 @@
 #' "project" and "projectmonitoringlocationweight". Options for "organizations" are:
 #' "organization" and "count".
 #' @export
+#' @keywords internal
 #' @return data frame returned from web service call.
 #' 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
-#' req <- construct_USGS_sample_request(
+#' req <- construct_waterdata_sample_request(
 #'                monitoringLocationIdentifier = "USGS-04074950",
 #'                characteristicUserSupplied = "pH, water, unfiltered, field")
 #' rawData <- importWQP(req)
 #'
 #' }
-construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
+construct_waterdata_sample_request <- function(monitoringLocationIdentifier = NA,
                                           siteTypeCode = NA,
                                           boundingBox = NA,
                                           hydrologicUnit = NA,
@@ -175,36 +176,36 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   
   if(all(!is.na(siteTypeCode))){
     siteTypeCode <- match.arg(siteTypeCode, 
-                              check_param("sitetype")$typeCode, 
+                              check_waterdata_sample_params("sitetype")$typeCode, 
                               several.ok = TRUE)
   }
   
   if(all(!is.na(activityMediaName))){
     activityMediaName <- match.arg(activityMediaName, 
-                                   check_param("samplemedia")$activityMedia, 
+                                   check_waterdata_sample_params("samplemedia")$activityMedia, 
                                    several.ok = TRUE)
   }
   
   if(all(!is.na(characteristicGroup))){
     characteristicGroup <- match.arg(characteristicGroup, 
-                                     check_param("characteristicgroup")$characteristicGroup, 
+                                     check_waterdata_sample_params("characteristicgroup")$characteristicGroup, 
                                      several.ok = TRUE)
   }
   
   if(all(!is.na(countryFips))){
     countryFips <- match.arg(countryFips, 
-                             check_param("countries")$countryCode, 
+                             check_waterdata_sample_params("countries")$countryCode, 
                              several.ok = TRUE)
   }
   
   if(all(!is.na(siteTypeName))){
     siteTypeName <- match.arg(siteTypeName, 
-                              check_param("sitetype")$typeLongName, 
+                              check_waterdata_sample_params("sitetype")$typeLongName, 
                               several.ok = TRUE)
   }
   
   if(all(!is.na(stateFips))){
-    states <- check_param("states")
+    states <- check_waterdata_sample_params("states")
     state_codes <- paste(states$countryCode, 
                          states$fipsCode, sep = ":")
     stateFips <- match.arg(stateFips, state_codes, 
@@ -212,10 +213,10 @@ construct_USGS_sample_request <- function(monitoringLocationIdentifier = NA,
   }
   
   if(all(!is.na(countyFips))){
-    states <- check_param("states")
+    states <- check_waterdata_sample_params("states")
     state_codes <- paste(states$countryCode, 
                          states$fipsCode, sep = ":")
-    counties <- check_param("counties")
+    counties <- check_waterdata_sample_params("counties")
     state_cd <- stats::setNames(states$fipsCode,
                                 states$stateAbbrev)
     county_codes <- paste(counties$countryCode, 
@@ -317,7 +318,7 @@ explode_query <- function(baseURL, POST = FALSE, x){
 #' Check values from codeservice
 #' 
 #' Call a service to check on values from:
-#' \url{https://api.waterdata.usgs.gov/samples-data/codeservice/docs}.
+#' <https://api.waterdata.usgs.gov/samples-data/codeservice/docs>.
 #' 
 #' @param service Options are: "characteristicgroup", "states", "counties",
 #' "countries", "sitetype", "samplemedia", "characteristics", "observedproperty"
@@ -328,20 +329,20 @@ explode_query <- function(baseURL, POST = FALSE, x){
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
-#' groups <- check_param("characteristicgroup")
-#' states <- check_param("states")
-#' countries <- check_param("countries")
-#' counties <- check_param("counties")
-#' sitetypes <- check_param("sitetype")
-#' samplemedia <- check_param("samplemedia")
-#' characteristics <- check_param("characteristics",
+#' groups <- check_waterdata_sample_params("characteristicgroup")
+#' states <- check_waterdata_sample_params("states")
+#' countries <- check_waterdata_sample_params("countries")
+#' counties <- check_waterdata_sample_params("counties")
+#' sitetypes <- check_waterdata_sample_params("sitetype")
+#' samplemedia <- check_waterdata_sample_params("samplemedia")
+#' characteristics <- check_waterdata_sample_params("characteristics",
 #'                                group = "Biological")
-#' observedProperties <- check_param("observedproperty",
+#' observedProperties <- check_waterdata_sample_params("observedproperty",
 #'                                   text = "phosphorus")
 #' 
 #' }
-check_param <- function(service = "characteristicgroup",
-                        ...){
+check_waterdata_sample_params <- function(service = "characteristicgroup",
+                                     ...){
   
   service_options <- c("characteristicgroup", "states", "counties",
                        "countries", "sitetype", "samplemedia",
@@ -364,9 +365,7 @@ check_param <- function(service = "characteristicgroup",
     check_group_req <- httr2::req_url_query(check_group_req,
                                             !!!params)
   }
-  
-  message("GET: ", check_group_req$url) 
-  
+
   check_group <- httr2::req_perform(check_group_req) |> 
     httr2::resp_body_string() |> 
     jsonlite::fromJSON()
@@ -378,40 +377,37 @@ check_param <- function(service = "characteristicgroup",
 #' USGS Samples Data
 #' 
 #' This function creates the call and gets the data for discrete water quality samples data
-#' service described at \url{https://waterdata.usgs.gov/download-samples}.
+#' service described at <https://waterdata.usgs.gov/download-samples/>.
 #'
-#' @inheritParams construct_USGS_sample_request
+#' @inheritParams construct_waterdata_sample_request
 #' @param tz character to set timezone attribute of datetime. Default is UTC
 #' (properly accounting for daylight savings times based on the data's provided tz_cd column).
 #' Possible values include "America/New_York","America/Chicago", "America/Denver","America/Los_Angeles",
 #' "America/Anchorage","America/Honolulu","America/Jamaica","America/Managua",
 #' "America/Phoenix", and "America/Metlakatla"
-#' @param convertType logical, defaults to \code{TRUE}. If \code{TRUE}, the function
-#' will convert the data to dates, datetimes,
-#' numerics based on a standard algorithm. If false, everything is returned as a character.
 #' @export
-#' 
+#' @rdname read_waterdata_samples
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
-#' ph_data <- read_USGS_samples(
+#' ph_data <- read_waterdata_samples(
 #'                monitoringLocationIdentifier = "USGS-04074950",
 #'                characteristicUserSupplied = "pH, water, unfiltered, field",
 #'                activityStartDateUpper = "2000-01-01",
 #'                dataProfile = "narrow")
 #'                
 #' nameToUse <- "pH"
-#' pHData <- read_USGS_samples(monitoringLocationIdentifier = "USGS-04024315", 
+#' pHData <- read_waterdata_samples(monitoringLocationIdentifier = "USGS-04024315", 
 #'                          characteristic = nameToUse)
 #' ncol(pHData)
 #' attr(pHData, "url")
 #' attr(pHData, "queryTime")
 #' 
-#' summary_data <- read_USGS_samples(monitoringLocationIdentifier = "USGS-04024315", 
+#' summary_data <- read_waterdata_samples(monitoringLocationIdentifier = "USGS-04024315", 
 #'                                dataType = "projects")
 #' 
 #' }
-read_USGS_samples <- function(monitoringLocationIdentifier = NA,
+read_waterdata_samples <- function(monitoringLocationIdentifier = NA,
                               siteTypeCode = NA,
                               boundingBox = NA,
                               hydrologicUnit = NA,
@@ -433,10 +429,9 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
                               pointLocationWithinMiles = NA,
                               dataType = "results",
                               dataProfile = NA,
-                              tz = "UTC",
-                              convertType = TRUE){
+                              tz = "UTC"){
   
-  request_url <- construct_USGS_sample_request(monitoringLocationIdentifier = monitoringLocationIdentifier,
+  request_url <- construct_waterdata_sample_request(monitoringLocationIdentifier = monitoringLocationIdentifier,
                                                siteTypeCode = siteTypeCode,
                                                boundingBox = boundingBox,
                                                hydrologicUnit = hydrologicUnit,
@@ -459,7 +454,7 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
                                                dataType = dataType,
                                                dataProfile = dataProfile)
   
-  df <- importWQP(request_url, tz = tz, convertType = convertType)
+  df <- importWQP(request_url, tz = tz)
   attr(df, "url") <- request_url$url
   attr(df, "queryTime") <- Sys.time()
   return(df)
@@ -469,7 +464,7 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
 #' USGS Samples Summary Data
 #' 
 #' This function creates the call and gets the data for discrete water quality samples summary data
-#' service described at \url{https://api.waterdata.usgs.gov/samples-data/docs}.
+#' service described at <https://api.waterdata.usgs.gov/samples-data/docs>.
 #'
 #' @param monitoringLocationIdentifier A monitoring location identifier has two parts,
 #' separated by a dash (-): the agency code and the location number. Location identifiers should be separated with commas,
@@ -477,16 +472,16 @@ read_USGS_samples <- function(monitoringLocationIdentifier = NA,
 #' numbers without an agency prefix are assumed to have the prefix USGS.
 #' @export
 #' @return data frame with summary of data available based on the monitoringLocationIdentifier
-#' 
+#' @rdname summarize_waterdata_samples
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
 #' monitoringLocationIdentifier <- "USGS-04074950"
 #' 
-#' what_data <- summarize_USGS_samples(monitoringLocationIdentifier)
+#' what_data <- summarize_waterdata_samples(monitoringLocationIdentifier)
 #' 
 #' }
-summarize_USGS_samples <- function(monitoringLocationIdentifier){
+summarize_waterdata_samples <- function(monitoringLocationIdentifier){
 
   if(length(monitoringLocationIdentifier) > 1){
     stop("Summary service only available for one site at a time.")
@@ -510,3 +505,73 @@ summarize_USGS_samples <- function(monitoringLocationIdentifier){
   
   return(df)
 }
+
+
+#' @rdname read_waterdata_samples
+#' @export
+read_USGS_samples <- function(monitoringLocationIdentifier = NA,
+                              siteTypeCode = NA,
+                              boundingBox = NA,
+                              hydrologicUnit = NA,
+                              activityMediaName = NA,
+                              characteristicGroup = NA,
+                              characteristic = NA,
+                              characteristicUserSupplied = NA,
+                              activityStartDateLower = NA,
+                              activityStartDateUpper = NA,
+                              countryFips = NA,
+                              stateFips = NA,
+                              countyFips = NA,
+                              projectIdentifier = NA,
+                              recordIdentifierUserSupplied = NA,
+                              siteTypeName = NA,
+                              usgsPCode = NA,
+                              pointLocationLatitude = NA,
+                              pointLocationLongitude = NA,
+                              pointLocationWithinMiles = NA,
+                              dataType = "results",
+                              dataProfile = NA,
+                              tz = "UTC"){
+  
+  .Deprecated(new = "read_waterdata_samples",
+              package = "dataRetrieval", 
+              msg = "Function has been renamed. Please begin to migrate to read_waterdata_samples")
+  
+  
+  read_waterdata_samples(monitoringLocationIdentifier = monitoringLocationIdentifier,
+                         siteTypeCode = siteTypeCode,
+                         boundingBox = boundingBox,
+                         hydrologicUnit = hydrologicUnit,
+                         activityMediaName = activityMediaName,
+                         characteristicGroup = characteristicGroup,
+                         characteristic = characteristic,
+                         characteristicUserSupplied = characteristicUserSupplied,
+                         activityStartDateLower = activityStartDateLower,
+                         activityStartDateUpper = activityStartDateUpper,
+                         countryFips = countryFips,
+                         stateFips = stateFips,
+                         countyFips = countyFips,
+                         projectIdentifier = projectIdentifier,
+                         recordIdentifierUserSupplied = recordIdentifierUserSupplied,
+                         siteTypeName = siteTypeName,
+                         usgsPCode = usgsPCode,
+                         pointLocationLatitude = pointLocationLatitude,
+                         pointLocationLongitude = pointLocationLongitude,
+                         pointLocationWithinMiles = pointLocationWithinMiles,
+                         dataType = dataType,
+                         dataProfile = dataProfile,
+                         tz = tz)
+}
+  
+
+#' @rdname summarize_waterdata_samples
+#' @export
+summarize_USGS_samples <- function(monitoringLocationIdentifier){
+  
+  .Deprecated(new = "summarize_waterdata_samples",
+              package = "dataRetrieval", 
+              msg = "Function has been renamed. Please begin to migrate to summarize_waterdata_samples")
+  
+  summarize_waterdata_samples(monitoringLocationIdentifier)
+}
+
