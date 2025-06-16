@@ -59,7 +59,7 @@ df <- data.frame(
     "read_waterdata",
     rep("", 10)
   ),
-  "Available on (branch)" = c("main (CRAN)", "develop", "develop", "develop", "develop", rep("", 10))
+  "Available on (branch)" = c("main (CRAN)", "main (CRAN)", "main (CRAN)", "main (CRAN)", "main (CRAN)", rep("", 10))
 )
 
 knitr::kable(df, col.names = c("WaterServices (legacy) function", "Water Data (new) function", "Available on (branch name)"))
