@@ -7,8 +7,10 @@
 See: https://api.waterdata.usgs.gov/signup"
   }
   packageStartupMessage("dataRetrieval ", dataRetrieval_version,"
-Extended Documentation: https://doi-usgs.github.io/dataRetrieval",
-                        token_message)
+Extended Documentation: https://doi-usgs.github.io/dataRetrieval
+Learn about the new functions that are replacing NWIS functions here:
+https://water.code-pages.usgs.gov/dataRetrieval/articles/read_waterdata_functions.html",
+token_message)
 }
 
 #' Retrieval functions for USGS and EPA data
