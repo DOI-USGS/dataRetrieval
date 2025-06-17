@@ -5,6 +5,10 @@ pkg.env <- new.env()
   pkg.env$nldi_base <- "https://api.water.usgs.gov/nldi/linked-data/"
   pkg.env$local_sf <- requireNamespace("sf", quietly = TRUE)
   options("dataRetrieval" = list("api_version" = "v0"))
+  
+  query_ret <- get_collection() 
+  services <- sapply(query_ret$tags, function(x) x[["name"]])
+  pkg.env$api_endpoints <- services
 }
 
 
