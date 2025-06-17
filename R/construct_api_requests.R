@@ -243,25 +243,27 @@ switch_properties_id <- function(properties, id_name, service){
     }
   }
   
-  schema <- check_OGC_requests(endpoint = service,
-                               type = "schema")
-  all_properties <- names(schema$properties)
-  
-  if(all(all_properties[!all_properties %in% c("id", "geometry")] %in% properties)) {
-    # Cleans up URL if we're asking for everything
-    properties <- NA_character_
-  } else {
-    if(all(!is.na(properties))){
+  if(!all(is.na(properties))){
+
+    schema <- check_OGC_requests(endpoint = service,
+                                 type = "schema")
+    all_properties <- names(schema$properties)
+    
+    if(all(all_properties[!all_properties %in% c("id", "geometry")] %in% properties)) {
+      # Cleans up URL if we're asking for everything
+      properties <- NA_character_
+    } else {
       properties <- gsub("-", "_", properties)
       properties <- properties[!properties %in% c("id", 
                                                   "geometry",
                                                   paste0(gsub("-", "_", service), "_id"))]
+    
     }
-  }
-  
-  if(!all(is.na(properties))){
-    match.arg(properties, choices = all_properties,
-              several.ok = TRUE)    
+    
+    if(!all(is.na(properties))){
+      match.arg(properties, choices = all_properties,
+                several.ok = TRUE)    
+    }
   }
   
   return(properties)
@@ -408,11 +410,7 @@ check_OGC_requests <- function(endpoint = "daily",
   
   match.arg(type, c("queryables", "schema"))
   
-  query_ret <- get_collection() 
-  
-  services <- sapply(query_ret$tags, function(x) x[["name"]])
-  
-  match.arg(endpoint, services)
+  match.arg(endpoint, pkg.env$api_endpoints)
   
   req <- base_url() |> 
     httr2::req_url_path_append("collections") |> 
