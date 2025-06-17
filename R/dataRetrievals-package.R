@@ -9,7 +9,7 @@ See: https://api.waterdata.usgs.gov/signup"
   packageStartupMessage("dataRetrieval ", dataRetrieval_version,"
 Extended Documentation: https://doi-usgs.github.io/dataRetrieval
 Learn about the new functions that are replacing NWIS functions here:
-https://water.code-pages.usgs.gov/dataRetrieval/articles/read_waterdata_functions.html",
+https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html",
 token_message)
 }
 
