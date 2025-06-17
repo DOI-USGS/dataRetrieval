@@ -283,6 +283,9 @@ switch_properties_id <- function(properties, id_name, service){
 #' start_end <- c("2021-01-01", "2022-01-01")
 #' dataRetrieval:::format_api_dates(start_end)
 #' 
+#' start_end <- c("", "")
+#' dataRetrieval:::format_api_dates(start_end)
+#' 
 #' period <- "P7D"
 #' dataRetrieval:::format_api_dates(period)
 #' 
@@ -304,7 +307,7 @@ format_api_dates <- function(datetime){
     datetime[datetime == ""] <- NA
   }
   
-  if(!any(isTRUE(is.na(datetime)) | isTRUE(is.null(datetime)))){
+  if(!any(isTRUE(all(is.na(datetime))) | isTRUE(is.null(datetime)))){
     if(length(datetime) == 1){
       if(grepl("P", datetime, ignore.case = TRUE) |
          grepl("/", datetime)){
@@ -322,6 +325,8 @@ format_api_dates <- function(datetime){
     } else {
       stop("datetime should only include 1-2 values")
     }
+  } else {
+    datetime <- NA
   }
   return(datetime)
 }
