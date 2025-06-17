@@ -11,7 +11,7 @@ name: test-coverage
 jobs:
   test-coverage:
     runs-on: macOS-latest
-    
+    environment: CI_config
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       API_USGS_PAT: ${{ secrets.API_USGS_PAT }}
