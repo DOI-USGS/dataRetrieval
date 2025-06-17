@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
+    environment: CI_config
     strategy:
       fail-fast: false
       matrix:
