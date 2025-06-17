@@ -7,8 +7,10 @@
 See: https://api.waterdata.usgs.gov/signup"
   }
   packageStartupMessage("dataRetrieval ", dataRetrieval_version,"
-Extended Documentation: https://doi-usgs.github.io/dataRetrieval",
-                        token_message)
+Extended Documentation: https://doi-usgs.github.io/dataRetrieval
+Learn about the new functions that are replacing NWIS functions here:
+https://water.code-pages.usgs.gov/dataRetrieval/articles/read_waterdata_functions.html",
+token_message)
 }
 
 #' Retrieval functions for USGS and EPA data
@@ -118,7 +120,7 @@ NULL
 #' US County Code Lookup Table
 #'
 #' Classic lookup table for counties. Has been replaced in functions with
-#' `check_USGS_waterdata_params("counties")`.
+#' `check_waterdata_sample_params("counties")`.
 #'
 #' @name countyCd
 #' @return countyCd data frame.
