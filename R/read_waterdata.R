@@ -44,11 +44,7 @@ read_waterdata <- function(service,
                            ...,
                            convertType = TRUE){
 
-  query_req <- get_collection()
-  
-  endpoints <- sapply(query_req$tags, function(x) x[["name"]])
-  
-  match.arg(service, endpoints)
+  match.arg(service, pkg.env$api_endpoints)
   
   args <- list(...)
   args[["service"]] <-  service
