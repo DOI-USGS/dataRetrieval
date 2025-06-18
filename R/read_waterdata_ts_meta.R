@@ -81,25 +81,9 @@ read_waterdata_ts_meta <- function(monitoring_location_id = NA_character_,
   output_id <- "time_series_id"
   
   args <- mget(names(formals()))
-  args[["service"]] <-  service
-  
-  args <- switch_arg_id(args, id_name = output_id, service = service)
-
-  args[["convertType"]] <- NULL
-  
-  args[["properties"]] <- switch_properties_id(properties, 
-                                               id_name = output_id, 
-                                               service = service)
-
-  req_ts_meta <- do.call(construct_api_requests, args)
-
-  return_list <- walk_pages(req_ts_meta, max_results)
-
-  return_list <- deal_with_empty(return_list, properties, service)
-  
-  if(convertType) return_list <- cleanup_cols(return_list)
-
-  return_list <- rejigger_cols(return_list, properties, output_id)
+  return_list <- get_ogc_data(args,
+                              output_id, 
+                              service)
   
   return(return_list)
   
