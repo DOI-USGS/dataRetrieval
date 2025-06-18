@@ -339,21 +339,28 @@ explode_query <- function(baseURL, POST = FALSE, x){
 #'                                group = "Biological")
 #' observedProperties <- check_waterdata_sample_params("observedproperty",
 #'                                   text = "phosphorus")
-#' 
+#' ref_list <- check_waterdata_sample_params("reference-list")
 #' }
 check_waterdata_sample_params <- function(service = "characteristicgroup",
                                      ...){
   
   service_options <- c("characteristicgroup", "states", "counties",
                        "countries", "sitetype", "samplemedia",
-                       "characteristics", "observedproperty")
+                       "characteristics", "observedproperty",
+                       "reference-list")
   
   match.arg(service, choices = service_options, several.ok = FALSE)
   
   check_group_req <- httr2::request("https://api.waterdata.usgs.gov") |> 
-    httr2::req_url_path_append("samples-data",
-                               "codeservice",
-                               service) |> 
+    httr2::req_url_path_append("samples-data") 
+  
+  if(service != "reference-list"){
+    check_group_req <- check_group_req |> 
+      httr2::req_url_path_append("codeservice")
+  }
+   
+  check_group_req <- check_group_req |>
+    httr2::req_url_path_append(service) |> 
     httr2::req_user_agent(default_ua()) |> 
     httr2::req_url_query(mimeType = "application/json") 
   
@@ -365,7 +372,7 @@ check_waterdata_sample_params <- function(service = "characteristicgroup",
     check_group_req <- httr2::req_url_query(check_group_req,
                                             !!!params)
   }
-  
+
   message("GET: ", check_group_req$url) 
   
   check_group <- httr2::req_perform(check_group_req) |> 
@@ -506,7 +513,7 @@ summarize_waterdata_samples <- function(monitoringLocationIdentifier){
     df$firstActivity <- as.Date(df$firstActivity)
     df$mostRecentActivity <- as.Date(df$mostRecentActivity)
   }
-  
+
   attr(df, "url") <- baseURL$url
   attr(df, "queryTime") <- Sys.time()
   
