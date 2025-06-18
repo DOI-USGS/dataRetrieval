@@ -214,6 +214,8 @@ get_resp_data <- function(resp) {
 #' @return data.frame with attributes
 walk_pages <- function(req, max_results){
   
+  message("Requesting:\n", req$url)
+  
   if(is.na(max_results)){
     resps <- httr2::req_perform_iterative(req, 
                                           next_req = next_req_url, 
