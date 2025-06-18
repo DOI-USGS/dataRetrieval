@@ -1,22 +1,22 @@
 #' Get USGS Daily Data
 #' 
-#' Description `r get_description("daily")`
+#' Description `r get_description("latest-continuous")`
 #' 
 #' @export
-#' @param monitoring_location_id `r get_params("daily")$monitoring_location_id`
-#' @param parameter_code `r get_params("daily")$parameter_code`
-#' @param statistic_id `r get_params("daily")$statistic_id`
-#' @param time `r get_params("daily")$time`
-#' @param value `r get_params("daily")$value`
-#' @param unit_of_measure `r get_params("daily")$unit_of_measure`
-#' @param approval_status `r get_params("daily")$approval_status`
-#' @param last_modified `r get_params("daily")$last_modified`
-#' @param time_series_id `r get_params("daily")$time_series_id`
-#' @param qualifier `r get_params("daily")$qualifier`
-#' @param daily_id `r get_params("daily")$id`
+#' @param monitoring_location_id `r get_params("latest-continuous")$monitoring_location_id`
+#' @param parameter_code `r get_params("latest-continuous")$parameter_code`
+#' @param statistic_id `r get_params("latest-continuous")$statistic_id`
+#' @param time `r get_params("latest-continuous")$time`
+#' @param value `r get_params("latest-continuous")$value`
+#' @param unit_of_measure `r get_params("latest-continuous")$unit_of_measure`
+#' @param approval_status `r get_params("latest-continuous")$approval_status`
+#' @param last_modified `r get_params("latest-continuous")$last_modified`
+#' @param time_series_id `r get_params("latest-continuous")$time_series_id`
+#' @param qualifier `r get_params("latest-continuous")$qualifier`
+#' @param daily_id `r get_params("latest-continuous")$id`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "daily", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' `r schema <- check_OGC_requests(endpoint = "latest-continuous", type = "schema"); paste(names(schema$properties), collapse = ", ")`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -38,35 +38,31 @@
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
-#' site <- "USGS-02238500"
-#' pcode <- "00060"
-#' dv_data_sf <- read_waterdata_daily(monitoring_location_id = site,
-#'                               parameter_code = "00060", 
-#'                               time = c("2021-01-01", "2022-01-01"))
+#' site <- "USGS-451605097071701"
+#' pcode <- "72019"
+#' uv_data_sf <- read_waterdata_latest_continuous(monitoring_location_id = site,
+#'                               parameter_code = pcode)
 #'
-#' dv_data_trim <- read_waterdata_daily(monitoring_location_id = site,
-#'                           parameter_code = "00060", 
+#' uv_data_trim <- read_waterdata_latest_continuous(monitoring_location_id = site,
+#'                           parameter_code = pcode, 
 #'                           properties = c("monitoring_location_id",
 #'                                          "value",
-#'                                          "time"),
-#'                           time = c("2021-01-01", "2022-01-01"))
+#'                                          "time"))
 #'
-#' dv_data <- read_waterdata_daily(monitoring_location_id = site,
-#'                            parameter_code = "00060",
+#' uv_data <- read_waterdata_latest_continuous(monitoring_location_id = site,
+#'                            parameter_code = pcode,
 #'                            skipGeometry = TRUE)
 #'                         
-#' dv_data_period <- read_waterdata_daily(monitoring_location_id = site,
-#'                                   parameter_code = "00060",
+#' uv_data_period <- read_waterdata_latest_continuous(monitoring_location_id = site,
+#'                                   parameter_code = pcode,
 #'                                   time = "P7D")
 #' 
-#' multi_site <- read_waterdata_daily(monitoring_location_id =  c("USGS-01491000",
-#'                                                           "USGS-01645000"),
-#'                               parameter_code = c("00060", "00010"),
-#'                               limit = 500,
-#'                               time = c("2023-01-01", "2024-01-01"))
+#' multi_site <- read_waterdata_latest_continuous(monitoring_location_id =  c("USGS-451605097071701",
+#'                                                           "USGS-14181500"),
+#'                               parameter_code = c("00060", "72019"))
 #' 
 #' }
-read_waterdata_daily <- function(monitoring_location_id = NA_character_,
+read_waterdata_latest_continuous <- function(monitoring_location_id = NA_character_,
                             parameter_code = NA_character_,
                             statistic_id = NA_character_,
                             properties = NA_character_,
@@ -84,8 +80,8 @@ read_waterdata_daily <- function(monitoring_location_id = NA_character_,
                             max_results = NA,
                             convertType = TRUE){
   
-  service <- "daily"
-  output_id <- "daily_id"
+  service <- "latest-continuous"
+  output_id <- "latest_continuous_id"
   
   args <- mget(names(formals()))
   args[["service"]] <-  service
