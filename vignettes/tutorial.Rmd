@@ -68,16 +68,16 @@ For a longer introduction to the `dataRetrieval` package, see:
 
 * National Water Information System (NWIS)
 * Water Quality Portal (WQP)
-* USGS APIs (USGS), which are new or in-development . 
+* USGS APIs (Water Data), which are new or in-development . 
 
 Functions in `dataRetrieval` look like `readNWISdv`, `readNWISuv`, `readWQPqw`, `whatNWISdata`, etc. What does that mean? The functions are generally structured with a prefix, middle, and suffix:
 
 * _Prefix_: "read" or "what"
     + "read" will access full data sets
     + "what" will access data availability
-* _Middle_: "NWIS", "USGS", "WQP":
+* _Middle_: "NWIS", "waterdata", "WQP":
     + NWIS functions get data from legacy NWIS web services. 
-    + USGS functions are the functions that will eventually replace the legacy NWIS functions. These pull from modern USGS API services.
+    + Water Data (waterdata) functions are the functions that will eventually replace the legacy NWIS functions. These pull from modern USGS API services.
     + WQP functions are for discrete water-quality data from the Water Quality Portal.
 * _Suffix_: "data" or other:
     + Functions that end in "data": These are flexible, powerful functions that allow complex user queries.
@@ -94,7 +94,7 @@ There are many types of data served from NWIS. To understand how the services ar
 * Legacy NWIS services will be retired (scheduled 2026, but uncertain):
   * <https://waterdata.usgs.gov/blog/nwisweb-decommission-summary/>
   
-* USGS functions will slowly replace NWIS functions
+* USGS water data functions will slowly replace NWIS functions
   * `read_waterdata_samples` has replaced `readNWISqw`
   * `read_waterdata_daily` can replace `readNWISdv`
   * `read_waterdata_monitoring_location` can replace `readNWISsite`

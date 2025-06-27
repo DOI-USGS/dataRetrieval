@@ -99,3 +99,4 @@ vignettes/messyData.png
 ^docker$
 vignettes/WQX_3.Rmd
 vignettes/samples_data.Rmd
+tests/manual/*
