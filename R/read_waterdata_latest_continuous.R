@@ -1,4 +1,4 @@
-#' Get USGS Daily Data
+#' Get Latest Continuous USGS Water Data
 #' 
 #' Description `r get_description("latest-continuous")`
 #' 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_waterdata_latest_continuous.R
 \name{read_waterdata_latest_continuous}
 \alias{read_waterdata_latest_continuous}
-\title{Get USGS Daily Data}
+\title{Get Latest Continuous USGS Water Data}
 \usage{
 read_waterdata_latest_continuous(
   monitoring_location_id = NA_character_,
