@@ -13,7 +13,7 @@
 #' @param last_modified `r get_params("latest-continuous")$last_modified`
 #' @param time_series_id `r get_params("latest-continuous")$time_series_id`
 #' @param qualifier `r get_params("latest-continuous")$qualifier`
-#' @param daily_id `r get_params("latest-continuous")$id`
+#' @param latest_continuous_id `r get_params("latest-continuous")$id`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r schema <- check_OGC_requests(endpoint = "latest-continuous", type = "schema"); paste(names(schema$properties), collapse = ", ")`
@@ -67,7 +67,7 @@ read_waterdata_latest_continuous <- function(monitoring_location_id = NA_charact
                             statistic_id = NA_character_,
                             properties = NA_character_,
                             time_series_id = NA_character_,
-                            daily_id = NA_character_,
+                            latest_continuous_id = NA_character_,
                             approval_status = NA_character_,
                             unit_of_measure = NA_character_,
                             qualifier = NA_character_,
