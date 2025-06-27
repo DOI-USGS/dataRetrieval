@@ -31,7 +31,10 @@ The `dataRetrieval` package was created to simplify the process of loading hydro
 
 # Introduction
 
-:warning: USGS discrete water-quality data availability and format are changing. Beginning March 11, 2024 USGS data obtained from legacy services will not include new USGS data or recent updates to existing data. To view the status of changes in data availability and code functionality, visit: <https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
+:warning: NWIS web services (readNWIS functions) will be replaced over time by USGS Water Data APIs (read_waterdata_). Read more about it here:
+<https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html>
+
+:warning: USGS discrete water-quality data availability and format are changing. To view the status of changes in data availability and code functionality, visit: <https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
 
 If you have additional questions about these changes, email CompTools@usgs.gov.
 
