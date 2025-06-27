@@ -37,6 +37,19 @@
 #' dv_data <- read_waterdata(service = "daily",
 #'                           CQL = cql,
 #'                           time = c("2023-01-01", "2024-01-01"))
+#'
+#' # A wildcard in CQL2 is %
+#' # Here's how to get HUCs that fall within 02070010
+#' cql_huc_wildcard <- '{
+#' "op": "like",
+#' "args": [
+#'   { "property": "hydrologic_unit_code" },
+#'   "02070010%"
+#' ]
+#' }'
+#'
+#' what_huc_sites <- read_waterdata(service = "monitoring-locations",
+#'                                  CQL = cql_huc_wildcard)               
 #' 
 #' }
 read_waterdata <- function(service, 
