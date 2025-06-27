@@ -10,7 +10,7 @@ read_waterdata_latest_continuous(
   statistic_id = NA_character_,
   properties = NA_character_,
   time_series_id = NA_character_,
-  daily_id = NA_character_,
+  latest_continuous_id = NA_character_,
   approval_status = NA_character_,
   unit_of_measure = NA_character_,
   qualifier = NA_character_,
@@ -37,7 +37,7 @@ geometry, id, time_series_id, monitoring_location_id, parameter_code, statistic_
 
 \item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
 
-\item{daily_id}{A universally unique identifier (UUID) representing a single version of a record. It is not stable over time. Every time the record is refreshed in our database (which may happen as part of normal operations and does not imply any change to the data itself) a new ID will be generated. To uniquely identify a single observation over time, compare the \code{time} and \code{time_series_id} fields; each time series will only have a single observation at a given \code{time}.}
+\item{latest_continuous_id}{A universally unique identifier (UUID) representing a single version of a record. It is not stable over time. Every time the record is refreshed in our database (which may happen as part of normal operations and does not imply any change to the data itself) a new ID will be generated. To uniquely identify a single observation over time, compare the \code{time} and \code{time_series_id} fields; each time series will only have a single observation at a given \code{time}.}
 
 \item{approval_status}{Some of the data that you have obtained from this U.S. Geological Survey database may not have received Director's approval.  Any such data values are qualified as provisional and are subject to revision.  Provisional data are released on the condition that neither the USGS nor the United States Government may be held liable for any damages resulting from its use. This field reflects the approval status of each record, and is either "Approved", meaining processing review has been completed and the data is approved for publication, or "Provisional" and subject to revision. For more information about provisional data, go to \url{https://waterdata.usgs.gov/provisional-data-statement/}.}
 
