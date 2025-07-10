@@ -62,6 +62,13 @@ read_waterdata <- function(service,
   args <- list(...)
   args[["service"]] <-  service
   
+  output_id <- switch(service,
+                      "daily" = "daily_id",
+                      "time-series-metadata" = "time_series_id",
+                      "monitoring-locations" = "monitoring_location_id",
+                      "latest-continuous" = "latest_continuous_id",
+                      service)
+  
   if(!"properties" %in% names(args)){
     args[["properties"]] <- NA_character_
   }
@@ -89,7 +96,7 @@ read_waterdata <- function(service,
     return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
   }
   
-  return_list <- rejigger_cols(return_list, args[["properties"]], service)
+  return_list <- rejigger_cols(return_list, args[["properties"]], output_id)
   
   return(return_list)
 }

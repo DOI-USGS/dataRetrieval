@@ -212,25 +212,11 @@ See `?readWQPdata` to see all the ways to query data in the Water Quality Portal
 
 A table is provided on the EPA website that shows the conversions of WQX3 to the WQX2 mappings. This table may change periodically while WQP services are under active development, which is expected to last through Fall 2024.
 
+Download the latest schema_outbound_WQX3.0 (csv) from:
+<https://www.epa.gov/waterdata/water-quality-portal-quick-reference-guide>
 
-Here is an example for pulling the EPA table and comparing column names. 
-
-```{r echo=TRUE, eval=TRUE}
-schema <- readr::read_csv("https://www.epa.gov/system/files/other-files/2024-07/schema_outbound_wqx3.0.csv")
-```
 
 Within that schema table, the column "FieldName3.0" shows the column names for the new WQX3 profile. There are several "FieldName2.0.XXXX" columns that show how the older 2.0 profiles align with the newer columns.
-
-For example, the 2.0 "narrow" dataProfile match up with these new WQP3 columns:
-```{r echo=TRUE, eval=TRUE}
-sub_schema <- schema |> 
-  select(WQX3 = FieldName3.0,
-         WQX2 = FieldName2.0.Narrow) |> 
-  filter(!is.na(WQX2))
-
-knitr::kable(sub_schema)
-
-```
 
 # Disclaimer
 

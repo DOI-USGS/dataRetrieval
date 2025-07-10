@@ -121,7 +121,14 @@ uv_data_period <- read_waterdata_latest_continuous(monitoring_location_id = site
 
 multi_site <- read_waterdata_latest_continuous(monitoring_location_id =  c("USGS-451605097071701",
                                                           "USGS-14181500"),
-                              parameter_code = c("00060", "72019"))
+                              parameter_code = c("00060", "72019"),
+                              skipGeometry = TRUE)
+
+# Only return data that has been modified in last 7 days         
+multi_site2 <- read_waterdata_latest_continuous(monitoring_location_id =  c("USGS-451605097071701",
+                                                                           "USGS-14181500"),
+                                               parameter_code = c("00060", "72019"),
+                                               last_modified = "P7D")
 
 }
 \dontshow{\}) # examplesIf}

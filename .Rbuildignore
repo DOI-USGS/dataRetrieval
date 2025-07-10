@@ -100,3 +100,6 @@ vignettes/messyData.png
 vignettes/WQX_3.Rmd
 vignettes/samples_data.Rmd
 tests/manual/*
+vignettes/qwdata_changes.Rmd
+vignettes/nwisData.rds
+vignettes/wqpData.rds
