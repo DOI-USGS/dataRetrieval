@@ -110,14 +110,6 @@ dv_data_last_modified <- read_waterdata_daily(monitoring_location_id = site,
                               parameter_code = "00060",
                               last_modified = "P7D")
 
-
-
-dv_data_last_modified <- read_waterdata_daily(monitoring_location_id = site,
-                                              parameter_code = "00060",
-                                              last_modified = as.POSIXct(c("2025-07-05 12:00:00", ""),
-                                                                         format = "\%Y-\%m-\%d \%H:\%M:\%S",
-                                                                         tz = "America/New_York"))
-
 dv_data_trim <- read_waterdata_daily(monitoring_location_id = site,
                           parameter_code = "00060", 
                           properties = c("monitoring_location_id",
