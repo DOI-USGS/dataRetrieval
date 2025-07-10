@@ -7,7 +7,7 @@ pkg.env <- new.env()
   options("dataRetrieval" = list("api_version" = "v0"))
   
   services <- tryCatch({
-      sapply(dataRetrieval:::get_collection()$tags, function(x) x[["name"]])  
+      sapply(get_collection()$tags, function(x) x[["name"]])  
     }, error = function(msg){
       return(c("server", "daily", "time-series-metadata",
                "monitoring-locations", "latest-continuous"))
