@@ -49,7 +49,7 @@ rawDailyData <- read_waterdata_daily(monitoring_location_id = siteNumber,
                                      time = c("1980-01-01", "2010-01-01"))
 
 
-pCode <- readNWISpCode(parameterCd)
+pCode <- read_waterdata_parameter_codes(parameter_code = parameterCd)
 ```
 
 USGS data are made available through the National Water Information System (NWIS).
@@ -67,7 +67,7 @@ Functions <- c(
   "readNWISgwl",
   "readNWISuse",
   "readNWISstat",
-  "readNWISpCode",
+  "read_waterdata_parameter_codes",
   "read_waterdata_monitoring_location",
   "read_waterdata_samples",
   "summarize_waterdata_samples",
@@ -92,7 +92,7 @@ Description <- c(
   "Groundwater levels", # readNWISgwl
   "Water use", # readNWISuse
   "Statistical service", # readNWISstat
-  "Parameter code information", # readNWISpCode
+  "Parameter code information", # read_waterdata_parameter_codes
   "Site information", # read_waterdata_monitoring_location
   "Discrete UGSS water quality data", # read_waterdata_samples
   "Discrete USGS water quality summary",
@@ -108,7 +108,8 @@ Description <- c(
 )
 Source <- c("USGS Water Data API",
             "USGS Water Data API",
-            rep("NWIS", 8),
+            rep("NWIS", 7),
+            "USGS Water Data API",
             "USGS Water Data API",
             "USGS Samples Data",
             "USGS Samples Data",
@@ -252,12 +253,12 @@ Table 4: Reformatted version of output from the whatNWISdata function for the Ch
 
 ## Parameter Information
 
-To obtain all of the available information concerning a measured parameter (or multiple parameters), use the `readNWISpCode` function:
+To obtain all of the available information concerning a measured parameter (or multiple parameters), use the `read_waterdata_parameter_codes` function:
 
 ```{r label=getPCodeInfo, echo=TRUE, eval=FALSE}
 # Using defaults:
 parameterCd <- "00618"
-parameterINFO <- readNWISpCode(parameterCd)
+parameterINFO <- read_waterdata_parameter_codes(parameter_code = parameterCd)
 ```
 
 
@@ -596,7 +597,7 @@ At any time, you can get information about any function in R by typing a questio
 
 
 ```
-?readNWISpCode
+?read_waterdata_parameter_codes
 ```
 
 
