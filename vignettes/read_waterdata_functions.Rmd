@@ -31,162 +31,22 @@ knitr::opts_chunk$set(
 )
 ```
 
-As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS will be modernizing [all of the NWIS web services](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/) in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services and deprecate functions for accessing the legacy services. 
+As we bid adieu to the NWIS web services, we welcome a host of new web service offering: the [USGS Water Data APIs](https://api.waterdata.usgs.gov/ogcapi/v0/). This is a modern access point for USGS water data. The USGS will be modernizing all of the [NWIS web services](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/) in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services and deprecate functions for accessing the legacy services. 
 
 This document will introduce each new function (note as time goes on, we'll update this document to include additional functions). The timeline for the NWIS servers being shut down is currently very uncertain. We'd recommend incorporating these new functions as soon as possible to avoid future headaches.
 
-# New Features
+# HELP!
 
-Each new "API endpoint" will deliver a new type of USGS water data. Currently the available endpoints are "monitoring-locations", "time-series-metadata", and "daily". All of these endpoints offer some new features that the legacy services did not have:
+There's a lot of new information and changes being presented. There are certainly going to be scripts that have been passed down through the years that will start breaking once the NWIS servers are decommissioned. 
 
-## Flexible Queries
+Check back on the documentation often:
+<https://doi-usgs.github.io/dataRetrieval/>
 
-When you look at the help file for the new functions, you’ll notice there are many more arguments. These are mostly set by default to `NA`. You **DO NOT** need to (and most likely should not!) specify all of these parameters. The requested filters are appended as Boolean "AND"s, meaning if you specify a vector of monitoring locations and parameter codes, you will only get back those specified monitoring locations with the specified parameter codes.
-
-A side bonus of this is that since all of the potential arguments are defined, your favorite integrated development environment (IDE) will almost certainly have an autocomplete feature to let you tab through the potential options.
-
-## Flexible Columns Returned
-
-Users can pick which columns are returned with the "properties" argument. Available properties can be discovered with the `check_OGC_requests` function:
-
-```{r}
-daily_schema <- check_OGC_requests(endpoint = "daily", type = "schema")
-names(daily_schema$properties)
-
-```
-
-## API Tokens
-
-You can register an API key for use with USGS water data APIs. There are now limits on how many queries can be requested per IP address per hour. If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
-
-Then save your token in your .Renviron file like this:
-
-```
-API_USGS_PAT = "my_super_secret_token"
-```
-You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. You should not add this file to git projects or generally share your API key. Anyone else using your API key will count against the number of requests available to you!
-
-## Contextual Query Language Support
-
-Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQL2) syntax for flexible queries. We'll show how to use the `read_waterdata` function to make specific CQL2 queries.
-
-## Simple Features
-
-Provides [Simple Features](https://en.wikipedia.org/wiki/Simple_Features) functionality. The data is returned with a "geometry" column, which is a simple feature object, allowing the data to be integrated with the [`sf`](https://r-spatial.github.io/sf/) package and associated geospatial workflows.
-
-# Lessons Learned
-
-This section will initially be a random stream of consciousness on lessons learned while developing these functions and playing with the services.
-
-## Query limits
-
-A semi-common way to find a lot of data in the past would have been to use a monitoring location query to get a huge list of sites, and then use that huge list of sites (maybe winnowing it down a little) to get the data. These new services return a 403 error if your request is too big ("web server understands your request but refuses to authorize it"). This is true whether or not the request is a GET or POST request (something that is taken care of under the hood), and seems to be a character limit of the overall request. Roughly, it seems like if you were requesting more than 250 monitoring locations, the response will immediately return with a 403 error. 
-
-There are at least 2 ways to deal with this. One is to manually split the data requests and bind the results together later. The other is to use the bounding box of the initial request as an input to the data request. Potentially some sites would need to be filtered out later using this method.
-
-Example:
-
-```{r}
-ohio <- read_waterdata_monitoring_location(state_name = "Ohio", 
-                                      site_type_code = "ST")
-
-```
-
-There are `r nrow(ohio)` rows returned that are stream sites in Ohio. If we tried to ask for all the discharge data over the last 7 days from that list of sites:
-
-```
-ohio_discharge <- read_waterdata_daily(monitoring_location_id = ohio$monitoring_location_id,
-                                  parameter_code = "00060",
-                                  time = "P7D")
-Error in `req_perform()`:
-! HTTP 403 Forbidden.
-• Query request denied. Possible reasons include query exceeding server limits.
-```
-
-We could use the fact that the `ohio` data frame contains geospatial information, create a bounding box, and ask for that data like this:
-
-```{r}
-ohio_discharge <- read_waterdata_daily(bbox = sf::st_bbox(ohio),
-                                  parameter_code = "00060",
-                                  time = "P7D")
-
-```
-
-A reasonable `r nrow(ohio_discharge)` are returned with the bounding box query.
-
-Maybe you have a list of sites that are scattered around the country. The bounding box method might not be ideal. There are several ways to loop through a set of sites, here is one simple example:
-
-```{r}
-big_vector_of_sites <- ohio$monitoring_location_id
-
-site_list <- split(big_vector_of_sites, ceiling(seq_along(big_vector_of_sites)/200))
-
-data_returned <- data.frame()
-for(sites in site_list){
-  df_sites <- read_waterdata_daily(monitoring_location_id = sites,
-                              parameter_code = "00060",
-                              time = "P7D")
-  if(nrow(df_sites) == 0){
-    next
-  }
-  data_returned <- rbind(data_returned, df_sites)
-}
-
-```
-
-Note there is fewer data returned in `data_returned` because those sites are already filtered down to just "Stream" sites. The bounding box results `ohio_discharge` contained other types of monitoring location types.
-
-## Result limits
-
-There's a hard cap at 50,000 rows returned per one request. This means that for 1 `dataRetrieval` request, only 50,000 rows will be returned even if there is more data! If you know you are making a big request, it will be up to you to split up your request into "reasonable" chunks. Note that sometimes you'll notice a big request gets chunked up and you can see that it actually made a bunch of requests - this is done automatically (it's called paging), and the 50,000 limit is still in effect for the total number returned from all the pages.
-
-## limit vs max_results
-
-A user can specify a `limit` or `max_results`.
-
-The `max_results` argument defines how many rows are returned (assuming the data has at least `max_results` rows to return). This can be used as a handy way to make sure you aren't requesting a ton of data, perhaps to do some initial coding or troubleshooting.
-
-The `limit` argument defines how many rows are returned per page of data, but does NOT affect the overall number of rows returned. With a good internet connection, you can probably get away with ignoring this argument. By default it will be set to the highest value that the services allow. The reason you might want to change this argument is that it might be easier on a spotty internet connection to page through smaller sets of data. 
-
-## id
-
-Each API endpoint natively returns a column named "id". The results of the "id" column can be used as inputs into other endpoints, **HOWEVER** the input in those functions have different names. For example, the "id" column of the monitoring location endpoint is considered the "monitoring_location_id" when used as an input to any of the other functions. 
-
-Therefore, `dataRetrieval` functions will rename the "id" column to whatever it is referred to in other functions. Here are the id translations:
-
-```{r echo=FALSE}
-df <- dplyr::tibble(Function = c("read_waterdata_monitoring_location",
-                              "read_waterdata_ts_meta",
-                              "read_waterdata_daily"),
-                 "ID returned" = c("monitoring_location_id",
-                                   "time_series_id",
-                                   "daily_id"))
-
-knitr::kable(df)
-```
-
-If a user would prefer the columns to come back as "id", they can specify that using the `properties` argument:
-
-```{r}
-site <- "USGS-02238500"
-
-site_1 <- read_waterdata_monitoring_location(monitoring_location_id = site,
-                             properties = c("monitoring_location_id",
-                                            "state_name",
-                                            "country_name"))
-names(site_1)
-site_2 <- read_waterdata_monitoring_location(monitoring_location_id = site,
-                             properties = c("id",
-                                            "state_name",
-                                            "country_name"))
-names(site_2)
-
-
-```
+Peruse the "Additional Articles" - when we find common issues people have with converting their old workflows, we will try to add articles to clarify new workflows. If you have additional questions, email comptools@usgs.gov. General questions and bug reports can be reported here: <https://github.com/DOI-USGS/dataRetrieval/issues>
 
 # New Functions
 
-As new API endpoints come online, this section will be updated with any `dataRetrieval` function that is created.
+As new API endpoints come online, this section will be updated with any `dataRetrieval` function that are created. Currently the available endpoints are "monitoring-locations", "time-series-metadata", "daily", and "latest-continuous". In this section, we describe each new function for these endpoints. The next section will describe new features that are common to all the new functions.
 
 ## Monitoring Location
 
@@ -311,6 +171,33 @@ ggplot(data = daily_modern) +
 
 ```
 
+## Latest Continuous
+
+The `read_waterdata_latest_continuous` doesn't have an equivalent NWIS function to replace. It is used to get the latest continuous measurement
+
+`r dataRetrieval:::get_description("latest-continuous")`
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/latest-continuous>.
+
+
+```{r}
+site <- "USGS-01491000"
+pcode <- "00060"
+latest_uv_data <- read_waterdata_latest_continuous(monitoring_location_id = site,
+                              parameter_code = pcode)
+
+```
+
+The output includes the following information:
+
+```{r echo=FALSE}
+latest_uv_data <- latest_uv_data[,c("time", "value", "approval_status", "last_modified", "statistic_id", "parameter_code", "unit_of_measure")]
+latest_uv_data <- sf::st_drop_geometry(latest_uv_data)
+
+knitr::kable(t(latest_uv_data), col.names = NULL)
+
+```
+
 ## General Retrieval
 
 The `read_waterdata` function replaces the `readNWISdata` function. This is a lower-level, generalized function for querying any of the API endpoints.
@@ -366,9 +253,195 @@ leaflet(data = sites_mn_wi |>
 
 ```
 
+Another use for the general retrievals would be to use a "wildcard" which in CQL2 is the percent sign (%). When CQL sees the percent sign, it ignores any characters after the wildcard. HUCs are a great example of when you might want to use a wildcard. Let's say we want all the sites that fall within the 02070010. In the USGS data base, the hydrologic unit codes might be saved as 02070010, but also could be saved as 020700100350 (or any set of numbers after 02070010). To get all the sites that start with 02070010:
+
+
+```{r}
+# A wildcard in CQL2 is %
+# Here's how to get HUCs that fall within 02070010
+cql_huc_wildcard <- '{
+"op": "like",
+"args": [
+  { "property": "hydrologic_unit_code" },
+  "02070010%"
+]
+}'
+
+what_huc_sites <- read_waterdata(service = "monitoring-locations",
+                                 CQL = cql_huc_wildcard)
+```
+
+```{r}
+what_huc_sites$hydrologic_unit_code <- as.factor(what_huc_sites$hydrologic_unit_code)
+pal <- colorFactor("viridis", what_huc_sites$hydrologic_unit_code)
+
+leaflet(data = what_huc_sites |> 
+                sf::st_transform(crs = leaflet_crs)) |> 
+    addProviderTiles("CartoDB.Positron") |> 
+    addCircleMarkers(popup = ~monitoring_location_name, 
+                     color = ~ pal(hydrologic_unit_code),
+                     radius = 0.1,
+                     opacity = 1) 
+
+```
+
+
 ## Discrete Samples
 
 Discrete USGS water quality can be accessed via the `read_waterdata_samples` function. While this is a new, modern USGS endpoint, it is not served in the same infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html)) for information on accessing USGS discrete water quality data.
+
+
+# New Features
+
+Each new "API endpoint" delivers a new type of USGS water data. All of these endpoints offer some new features that the legacy services did not have:
+
+## Flexible Queries
+
+When you look at the help file for the new functions, you’ll notice there are many more arguments. These are mostly set by default to `NA`. You **DO NOT** need to (and most likely should not!) specify all of these parameters. The requested filters are appended as Boolean "AND"s, meaning if you specify a vector of monitoring locations and parameter codes, you will only get back those specified monitoring locations with the specified parameter codes.
+
+A side bonus of this is that since all of the potential arguments are defined, your favorite integrated development environment (IDE) will almost certainly have an autocomplete feature to let you tab through the potential options.
+
+## Flexible Columns Returned
+
+Users can pick which columns are returned with the "properties" argument. Available properties can be discovered with the `check_OGC_requests` function:
+
+```{r}
+daily_schema <- check_OGC_requests(endpoint = "daily", type = "schema")
+names(daily_schema$properties)
+
+```
+
+## API Tokens
+
+You can register an API key for use with USGS water data APIs. There are now limits on how many queries can be requested per IP address per hour. If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
+
+Then save your token in your .Renviron file like this:
+
+```
+API_USGS_PAT = "my_super_secret_token"
+```
+You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. You should not add this file to git projects or generally share your API key. Anyone else using your API key will count against the number of requests available to you!
+
+## Contextual Query Language Support
+
+Supports [Contextual Query Language](https://www.loc.gov/standards/sru/cql/) (CQL2) syntax for flexible queries. We'll show how to use the `read_waterdata` function to make specific CQL2 queries.
+
+## Simple Features
+
+Provides [Simple Features](https://en.wikipedia.org/wiki/Simple_Features) functionality. The data is returned with a "geometry" column, which is a simple feature object, allowing the data to be integrated with the [`sf`](https://r-spatial.github.io/sf/) package and associated geospatial workflows.
+
+# Lessons Learned
+
+This section will initially be a random stream of consciousness on lessons learned while developing these functions and playing with the services.
+
+## Query limits
+
+A semi-common way to find a lot of data in the past would have been to use a monitoring location query to get a huge list of sites, and then use that huge list of sites (maybe winnowing it down a little) to get the data. These new services return a 403 error if your request is too big ("web server understands your request but refuses to authorize it"). This is true whether or not the request is a GET or POST request (something that is taken care of under the hood), and seems to be a character limit of the overall request. Roughly, it seems like if you were requesting more than 250 monitoring locations, the response will immediately return with a 403 error. 
+
+There are at least 2 ways to deal with this. One is to manually split the data requests and bind the results together later. The other is to use the bounding box of the initial request as an input to the data request. Potentially some sites would need to be filtered out later using this method.
+
+Example:
+
+```{r}
+ohio <- read_waterdata_monitoring_location(state_name = "Ohio", 
+                                      site_type_code = "ST")
+
+```
+
+There are `r nrow(ohio)` rows returned that are stream sites in Ohio. If we tried to ask for all the discharge data over the last 7 days from that list of sites:
+
+```
+ohio_discharge <- read_waterdata_daily(monitoring_location_id = ohio$monitoring_location_id,
+                                  parameter_code = "00060",
+                                  time = "P7D")
+Error in `req_perform()`:
+! HTTP 403 Forbidden.
+• Query request denied. Possible reasons include query exceeding server limits.
+```
+
+We could use the fact that the `ohio` data frame contains geospatial information, create a bounding box, and ask for that data like this:
+
+```{r}
+ohio_discharge <- read_waterdata_daily(bbox = sf::st_bbox(ohio),
+                                  parameter_code = "00060",
+                                  time = "P7D")
+
+```
+
+A reasonable `r nrow(ohio_discharge)` are returned with the bounding box query.
+
+Maybe you have a list of sites that are scattered around the country. The bounding box method might not be ideal. There are several ways to loop through a set of sites, here is one simple example:
+
+```{r}
+big_vector_of_sites <- ohio$monitoring_location_id
+
+site_list <- split(big_vector_of_sites, ceiling(seq_along(big_vector_of_sites)/200))
+
+data_returned <- data.frame()
+for(sites in site_list){
+  df_sites <- read_waterdata_daily(monitoring_location_id = sites,
+                              parameter_code = "00060",
+                              time = "P7D")
+  if(nrow(df_sites) == 0){
+    next
+  }
+  data_returned <- rbind(data_returned, df_sites)
+}
+
+```
+
+Note there is fewer data returned in `data_returned` because those sites are already filtered down to just "Stream" sites. The bounding box results `ohio_discharge` contained other types of monitoring location types.
+
+## Result limits
+
+There's a hard cap at 50,000 rows returned per one request. This means that for 1 `dataRetrieval` request, only 50,000 rows will be returned even if there is more data! If you know you are making a big request, it will be up to you to split up your request into "reasonable" chunks. Note that sometimes you'll notice a big request gets chunked up and you can see that it actually made a bunch of requests - this is done automatically (it's called paging), and the 50,000 limit is still in effect for the total number returned from all the pages.
+
+## limit vs max_results
+
+A user can specify a `limit` or `max_results`.
+
+The `max_results` argument defines how many rows are returned (assuming the data has at least `max_results` rows to return). This can be used as a handy way to make sure you aren't requesting a ton of data, perhaps to do some initial coding or troubleshooting.
+
+The `limit` argument defines how many rows are returned per page of data, but does NOT affect the overall number of rows returned. With a good internet connection, you can probably get away with ignoring this argument. By default it will be set to the highest value that the services allow. The reason you might want to change this argument is that it might be easier on a spotty internet connection to page through smaller sets of data. 
+
+## id
+
+Each API endpoint natively returns a column named "id". The results of the "id" column can be used as inputs into other endpoints, **HOWEVER** the input in those functions have different names. For example, the "id" column of the monitoring location endpoint is considered the "monitoring_location_id" when used as an input to any of the other functions. 
+
+Therefore, `dataRetrieval` functions will rename the "id" column to whatever it is referred to in other functions. Here are the id translations:
+
+```{r echo=FALSE}
+df <- dplyr::tibble(Function = c("read_waterdata_monitoring_location",
+                              "read_waterdata_ts_meta",
+                              "read_waterdata_daily",
+                              "read_waterdata_latest_continuous"),
+                 "ID returned" = c("monitoring_location_id",
+                                   "time_series_id",
+                                   "daily_id",
+                                   "latest_continuous_id"))
+
+knitr::kable(df)
+```
+
+If a user would prefer the columns to come back as "id", they can specify that using the `properties` argument:
+
+```{r}
+site <- "USGS-02238500"
+
+site_1 <- read_waterdata_monitoring_location(monitoring_location_id = site,
+                             properties = c("monitoring_location_id",
+                                            "state_name",
+                                            "country_name"))
+names(site_1)
+site_2 <- read_waterdata_monitoring_location(monitoring_location_id = site,
+                             properties = c("id",
+                                            "state_name",
+                                            "country_name"))
+names(site_2)
+
+
+```
+
 
 # Notes on dataRetrieval development
 
@@ -404,13 +477,13 @@ install_github("DOI-USGS/dataRetrieval",
 
 ```
 
-# HELP!
+# MORE HELP!
 
-That's a lot of new information and changes. There are certainly going to be scripts that have been passed down through the years that will start breaking once the NWIS servers are decommissioned. 
+Just to reiterate:
 
-Check back on the documentation often:
-<https://doi-usgs.github.io/dataRetrieval/>
-Peruse the "Additional Articles", when we find common issues people have with converting their old workflows, we will try to add articles to clarify new workflows. 
+1. General questions and bug reports can be reported here: <https://github.com/DOI-USGS/dataRetrieval/issues>
+
+2. Check back often at <https://doi-usgs.github.io/dataRetrieval>, peruse the "Additional Articles"
 
 Currently, you might be interested in:
 
@@ -420,5 +493,6 @@ Currently, you might be interested in:
 
 * [Joining by closest date](join_by_closest.html)
 
-If you have additional questions, email comptools@usgs.gov. General questions and bug reports can be reported here: <https://github.com/DOI-USGS/dataRetrieval/issues>
+3. Email comptools@usgs.gov for more questions!
+
 

@@ -15,10 +15,13 @@ Environmental Protection Agency (EPA), U.S. Department of Agriculture
 
 # Introduction
 
+:warning: NWIS web services (readNWIS functions) will be replaced over
+time by USGS Water Data APIs (read_waterdata\_). Read more about it
+here:
+<https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html>
+
 :warning: USGS discrete water-quality data availability and format are
-changing. Beginning March 11, 2024 USGS data obtained from legacy
-services will not include new USGS data or recent updates to existing
-data. To view the status of changes in data availability and code
+changing. To view the status of changes in data availability and code
 functionality, visit:
 <https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
 
@@ -193,14 +196,14 @@ NWIScitation
 #> U.S. Geological Survey (2025). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
 #> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jun
-#> 13, 2025,
+#> 27, 2025,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Jun 13, 2025},
+#>   note = {Accessed Jun 27, 2025},
 #>   year = {2025},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -224,14 +227,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2025). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Jun 13, 2025,
+#> Accessed Jun 27, 2025,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Jun 13, 2025},
+#>   note = {Accessed Jun 27, 2025},
 #>   year = {2025},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }

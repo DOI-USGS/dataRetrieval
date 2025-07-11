@@ -87,9 +87,14 @@ construct_api_requests <- function(service,
   
   time_periods <- c("last_modified", "datetime", "time", "begin", "end")
   if(any(time_periods %in% names(get_list))){
+
     for(i in time_periods){
-      get_list[[i]] <- format_api_dates(get_list[[i]])
-      full_list[[i]] <- format_api_dates(full_list[[i]]) 
+      dates <- FALSE
+      if (all(service == "daily" & i != "last_modified")){
+        dates <- TRUE
+      } 
+      get_list[[i]] <- format_api_dates(get_list[[i]], date = dates)
+      full_list[[i]] <- format_api_dates(full_list[[i]], date = dates) 
     }
   }
   
@@ -275,13 +280,16 @@ switch_properties_id <- function(properties, id_name, service){
 #' Users will want to give either start/end dates or 
 #' period requests. 
 #' 
+#' @param datetime character, Date, or POSIX
+#' @param format character
 #' 
 #' @noRd
 #' @return character vector with a length of either 1 or 2.
 #' @examples
 #' 
 #' start_end <- c("2021-01-01", "2022-01-01")
-#' dataRetrieval:::format_api_dates(start_end)
+#' dataRetrieval:::format_api_dates(start_end, date = TRUE)
+#' dataRetrieval:::format_api_dates(start_end, date = FALSE)
 #' 
 #' start_end <- c("", "")
 #' dataRetrieval:::format_api_dates(start_end)
@@ -295,13 +303,26 @@ switch_properties_id <- function(properties, id_name, service){
 #' end <- c(NA, "2021-01-01")
 #' dataRetrieval:::format_api_dates(end)
 #' 
-#' start_end <- as.POSIXct(c("2021-01-01 12:15:00", "2022-01-01 16:45"))
+#' end <- c(NA, as.POSIXct("2021-01-01 12:15:00"))
+#' dataRetrieval:::format_api_dates(end)
+#' 
+#' start_end <- as.POSIXct(c("2021-01-01 12:15:00", 
+#'                           "2022-01-01 16:45"))
+#' dataRetrieval:::format_api_dates(start_end)
+#' 
+#' start_end <- as.POSIXct(c("2021-01-01 12:15:00", 
+#'                           "2022-01-01 16:45"), 
+#'                           tz = "America/New_York")
+#'                           
 #' dataRetrieval:::format_api_dates(start_end)
 #' 
 #' start_end2 <- c("2021-01-01 12:15:00", "")
 #' dataRetrieval:::format_api_dates(start_end2)
 #' 
-format_api_dates <- function(datetime){
+#' start_end2 <- c("2021-01-01T12:15:00Z", "")
+#' dataRetrieval:::format_api_dates(start_end2)
+#' 
+format_api_dates <- function(datetime, date = FALSE){
   
   if(is.character(datetime)){
     datetime[datetime == ""] <- NA
@@ -309,18 +330,27 @@ format_api_dates <- function(datetime){
   
   if(!any(isTRUE(all(is.na(datetime))) | isTRUE(is.null(datetime)))){
     if(length(datetime) == 1){
+      # If the user has "P" or the "/" we assume they know what they are doing
       if(grepl("P", datetime, ignore.case = TRUE) |
          grepl("/", datetime)){
         return(datetime)
       } else {
-        datetime <- format(datetime, format = "%Y-%m-%dT%H:%M:%SZ")
+        if(date){
+          datetime <- format(datetime, "%Y-%m-%d")
+        } else {
+          datetime <- lubridate::format_ISO8601(datetime, usetz = TRUE)
+        }
       }
     } else if (length(datetime) == 2) {
-      datetime <- as.POSIXct(datetime)
-      datetime <- paste0(vapply(datetime, FUN =  function(x) {
-        format(x, format = "%Y-%m-%dT%H:%M:%SZ")},
-        FUN.VALUE =  c(NA_character_)
-      ), collapse = "/")
+      
+      if(date){
+        datetime <- paste0(format(as.Date(datetime), "%Y-%m-%d"), collapse = "/")
+      } else {
+        datetime <- paste0(lubridate::format_ISO8601(as.POSIXct(datetime), 
+                                                     usetz = TRUE), 
+                           collapse = "/")
+      }
+
       datetime <- gsub("NA", "..", datetime)
     } else {
       stop("datetime should only include 1-2 values")

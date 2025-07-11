@@ -19,6 +19,7 @@
 #' 
 deal_with_empty <- function(return_list, properties, service){
   if(nrow(return_list) == 0){
+
     if(all(is.na(properties))){
       schema <- check_OGC_requests(endpoint = service, type = "schema")
       properties <- names(schema$properties)
@@ -160,16 +161,6 @@ next_req_url <- function(resp, req) {
     
     next_url <- links[[next_index]][["href"]]
     
-    ################################################
-    # This offset check will be going away 
-    # offset should be replaced by "cursor" eventually.
-    offset <- as.integer(sub("(?i).*?\\boffset=?\\s*(\\d+).*", "\\1", next_url))
-    if(isTRUE(offset > 40000)){
-      warning("Not all data was returned! Split up the query for best results.")
-      return(NULL)
-    }
-    ################################################
-    
     return(httr2::req_url(req = req, url = next_url))
   } else {
     return(NULL)
@@ -213,6 +204,8 @@ get_resp_data <- function(resp) {
 #' @return data.frame with attributes
 walk_pages <- function(req, max_results){
   
+  message("Requesting:\n", req$url)
+  
   if(is.na(max_results)){
     resps <- httr2::req_perform_iterative(req, 
                                           next_req = next_req_url, 
@@ -240,8 +233,50 @@ walk_pages <- function(req, max_results){
     return_list <- get_resp_data(resps)
   }
 
-  attr(return_list, "request") <- req
-  attr(return_list, "queryTime") <- Sys.time()
-  
   return(return_list)
 }
+
+
+#' Coordinate the request and retrieval of OGC calls
+#' 
+#' @param args arguments from individual functions
+#' @param output_id Name of id column to return
+#' @param service Endpoint name.
+#' @param max_results
+#' 
+#' @noRd
+#' @return data.frame with attributes
+get_ogc_data <- function(args,
+                         output_id, 
+                         service){
+  
+  args[["service"]] <-  service
+  max_results <- args[["max_results"]]
+  args[["max_results"]] <- NULL
+  args <- switch_arg_id(args, 
+                        id_name = output_id, 
+                        service = service)
+  
+  properties <- args[["properties"]]
+  args[["properties"]] <- switch_properties_id(properties, 
+                                               id_name = output_id, 
+                                               service = service)
+  convertType <- args[["convertType"]] 
+  args[["convertType"]] <- NULL
+  
+  req <- do.call(construct_api_requests, args)
+  
+  return_list <- walk_pages(req, max_results)
+  
+  return_list <- deal_with_empty(return_list, properties, service)
+  
+  if(convertType) return_list <- cleanup_cols(return_list, service = service)
+  
+  return_list <- rejigger_cols(return_list, properties, output_id)
+  
+  attr(return_list, "request") <- req
+  attr(return_list, "queryTime") <- Sys.time()
+  return(return_list)
+}
+
+

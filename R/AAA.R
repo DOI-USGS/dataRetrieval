@@ -6,8 +6,13 @@ pkg.env <- new.env()
   pkg.env$local_sf <- requireNamespace("sf", quietly = TRUE)
   options("dataRetrieval" = list("api_version" = "v0"))
   
-  query_ret <- get_collection() 
-  services <- sapply(query_ret$tags, function(x) x[["name"]])
+  services <- tryCatch({
+      sapply(get_collection()$tags, function(x) x[["name"]])  
+    }, error = function(msg){
+      return(c("server", "daily", "time-series-metadata",
+               "monitoring-locations", "latest-continuous"))
+    })
+
   pkg.env$api_endpoints <- services
 }
 
