@@ -307,7 +307,7 @@ explode_query <- function(baseURL, POST = FALSE, x){
     } else {
       baseURL <- httr2::req_url_query(baseURL,
                                       !!!x,
-                                      .multi = "comma")   
+                                      .multi = "explode")   
     }
     
   }
