@@ -19,7 +19,6 @@
 #' coordinate_accuracy_codes <- read_metadata("coordinate-accuracy-codes")
 #' coordinate_datum_codes <- read_metadata("coordinate-datum-codes")
 #' coordinate_method_codes <- read_metadata("coordinate-method-codes")
-#' hydrologic_unit_codes <- read_metadata("hydrologic-unit-codes", max_results = 500)
 #' national_aquifer_codes <- read_metadata("national-aquifer-codes")
 #' parameter_codes <- read_metadata("parameter-codes")
 #' reliability_codes <- read_metadata("reliability-codes")

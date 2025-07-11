@@ -371,15 +371,6 @@ coordinate_datum_codes <- read_metadata("coordinate-datum-codes")
 coordinate_method_codes <- read_metadata("coordinate-method-codes")
 ```
 
-### Hydrologic Unit Codes
-
-`r dataRetrieval:::get_description("hydrologic-unit-codes")`
-
-```{r}
-#| eval: false
-hydrologic_unit_codes <- read_metadata("hydrologic-unit-codes")
-```
-
 ### Medium Codes
 
 `r dataRetrieval:::get_description("medium-codes")`
