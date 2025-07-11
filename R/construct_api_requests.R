@@ -445,7 +445,8 @@ check_OGC_requests <- function(endpoint = "daily",
   
   match.arg(type, c("queryables", "schema"))
   
-  match.arg(endpoint, pkg.env$api_endpoints)
+  match.arg(endpoint, c(pkg.env$api_endpoints,
+                        pkg.env$metadata))
   
   req <- base_url() |> 
     httr2::req_url_path_append("collections") |> 
