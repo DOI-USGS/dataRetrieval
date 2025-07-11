@@ -45,10 +45,8 @@ read_waterdata_hydrologic_unit_codes <- function(hydrologic_unit_code = NA_chara
   } else {
     
     message("Current API functionality requires pulling the full hydrologic-unit-codes list.
-It is expected that updates to the API will eliminate this need, but in the meantime
-consider running read_waterdata_hydrologic_unit_codes() with no query parameters, and filtering
-in a post-processing step.")
-    
+It is expected that updates to the API will eventually eliminate this need.")
+
     return_list <- read_metadata(collection = service, 
                                  max_results = max_results,
                                  limit = limit)

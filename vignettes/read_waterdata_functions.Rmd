@@ -139,6 +139,26 @@ knitr::kable(ts_available1)
 
 ```
 
+## Parameter Codes
+
+The `read_waterdata_parameter_codes` function replaces the `readNWISpCode` function.
+
+`r dataRetrieval:::get_description("parameter-codes")`
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/parameter-codes>.
+
+Here is a simple example of requesting one known USGS site:
+
+```{r}
+pcode_info <- read_waterdata_parameter_codes(parameter_code =  "00660")
+```
+
+The output includes the following information:
+
+```{r echo=FALSE}
+knitr::kable(t(pcode_info))
+```
+
 ## Daily Values
 
 The `read_waterdata_daily` function replaces the `readNWISdv` function.
@@ -146,8 +166,6 @@ The `read_waterdata_daily` function replaces the `readNWISdv` function.
 `r dataRetrieval:::get_description("daily")`
 
 To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily>.
-
-
 
 ```{r}
 library(dataRetrieval)
@@ -283,6 +301,146 @@ leaflet(data = what_huc_sites |>
                      radius = 0.1,
                      opacity = 1) 
 
+```
+
+## Reference Tables
+
+There is a new function `read_metadata` that gives access to a wide variety of tables that have metadata information.
+
+### Agency Codes
+
+`r dataRetrieval:::get_description("agency-codes")`
+
+```{r}
+#| eval: false
+agency_codes <- read_metadata("agency-codes")
+```
+
+### Altitude Datums
+
+`r dataRetrieval:::get_description("altitude-datums")`
+
+```{r}
+#| eval: false
+altitude_datums <- read_metadata("altitude-datums")
+```
+
+
+### Aquifer Codes
+
+`r dataRetrieval:::get_description("aquifer-codes")`
+
+```{r}
+#| eval: false
+aquifer_codes <- read_metadata("aquifer-codes")
+```
+
+### Aquifer Types
+
+`r dataRetrieval:::get_description("aquifer-types")`
+
+```{r}
+#| eval: false
+aquifer_types <- read_metadata("aquifer-types")
+```
+
+### Coordinate Accuracy Codes
+
+`r dataRetrieval:::get_description("coordinate-accuracy-codes")`
+
+```{r}
+#| eval: false
+coordinate_accuracy_codes <- read_metadata("coordinate-accuracy-codes")
+```
+
+### Coordinate Datum Codes
+
+`r dataRetrieval:::get_description("coordinate-accuracy-codes")`
+
+```{r}
+#| eval: false
+coordinate_datum_codes <- read_metadata("coordinate-datum-codes")
+```
+
+### Coordinate Method Codes
+
+`r dataRetrieval:::get_description("coordinate-method-codes")`
+
+```{r}
+#| eval: false
+coordinate_method_codes <- read_metadata("coordinate-method-codes")
+```
+
+### Hydrologic Unit Codes
+
+`r dataRetrieval:::get_description("hydrologic-unit-codes")`
+
+```{r}
+#| eval: false
+hydrologic_unit_codes <- read_metadata("hydrologic-unit-codes")
+```
+
+### Medium Codes
+
+`r dataRetrieval:::get_description("medium-codes")`
+
+```{r}
+#| eval: false
+medium_codes <- read_metadata("medium-codes")
+```
+
+### National Aquifer Codes
+
+`r dataRetrieval:::get_description("national-aquifer-codes")`
+
+```{r}
+#| eval: false
+medium_codes <- read_metadata("medium-codes")
+```
+
+### Parameter Codes
+
+`r dataRetrieval:::get_description("parameter-codes")`
+
+```{r}
+#| eval: false
+parameter_codes <- read_metadata("parameter-codes")
+```
+
+### Reliability Codes
+
+`r dataRetrieval:::get_description("reliability-codes")`
+
+```{r}
+#| eval: false
+reliability_codes <- read_metadata("reliability-codes")
+```
+
+### Site Types
+
+`r dataRetrieval:::get_description("site-types")`
+
+```{r}
+#| eval: false
+site_types <- read_metadata("site-types")
+```
+
+### Topographic Codes
+
+`r dataRetrieval:::get_description("topographic-codes")`
+
+```{r}
+#| eval: false
+topographic_codes <- read_metadata("topographic-codes")
+```
+
+### Topographic Codes
+
+`r dataRetrieval:::get_description("time-zone-codes")`
+
+```{r}
+#| eval: false
+time_zone_codes <- read_metadata("time-zone-codes")
 ```
 
 
