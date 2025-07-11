@@ -34,7 +34,7 @@ characteristics <- check_waterdata_sample_params("characteristics",
                                group = "Biological")
 observedProperties <- check_waterdata_sample_params("observedproperty",
                                   text = "phosphorus")
-
+ref_list <- check_waterdata_sample_params("reference-list")
 }
 \dontshow{\}) # examplesIf}
 }

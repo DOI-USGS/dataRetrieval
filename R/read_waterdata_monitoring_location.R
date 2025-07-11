@@ -139,23 +139,10 @@ read_waterdata_monitoring_location <- function(monitoring_location_id = NA_chara
   output_id <- "monitoring_location_id"
   
   args <- mget(names(formals()))
-  args[["service"]] <-  service
-  
-  args <- switch_arg_id(args, 
-                        id_name = output_id, 
-                        service = service)
-  
-  args[["properties"]] <- switch_properties_id(properties, 
-                                               id_name = output_id, 
-                                               service = service)
-  
-  site_req <- do.call(construct_api_requests, args)
-
-  return_list <- walk_pages(site_req, max_results)
-  
-  return_list <- deal_with_empty(return_list, properties, service)
-  
-  return_list <- rejigger_cols(return_list, properties, output_id)
+  args[["convertType"]] <- FALSE
+  return_list <- get_ogc_data(args,
+                              output_id, 
+                              service)
 
   return(return_list)
 }

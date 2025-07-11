@@ -37,6 +37,19 @@
 #' dv_data <- read_waterdata(service = "daily",
 #'                           CQL = cql,
 #'                           time = c("2023-01-01", "2024-01-01"))
+#'
+#' # A wildcard in CQL2 is %
+#' # Here's how to get HUCs that fall within 02070010
+#' cql_huc_wildcard <- '{
+#' "op": "like",
+#' "args": [
+#'   { "property": "hydrologic_unit_code" },
+#'   "02070010%"
+#' ]
+#' }'
+#'
+#' what_huc_sites <- read_waterdata(service = "monitoring-locations",
+#'                                  CQL = cql_huc_wildcard)               
 #' 
 #' }
 read_waterdata <- function(service, 
@@ -48,6 +61,13 @@ read_waterdata <- function(service,
   
   args <- list(...)
   args[["service"]] <-  service
+  
+  output_id <- switch(service,
+                      "daily" = "daily_id",
+                      "time-series-metadata" = "time_series_id",
+                      "monitoring-locations" = "monitoring_location_id",
+                      "latest-continuous" = "latest_continuous_id",
+                      service)
   
   if(!"properties" %in% names(args)){
     args[["properties"]] <- NA_character_
@@ -76,7 +96,7 @@ read_waterdata <- function(service,
     return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
   }
   
-  return_list <- rejigger_cols(return_list, args[["properties"]], service)
+  return_list <- rejigger_cols(return_list, args[["properties"]], output_id)
   
   return(return_list)
 }

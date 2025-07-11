@@ -92,8 +92,14 @@ vignettes/join_by_closest.Rmd
 vignettes/wqx3_development_plan.Rmd
 vignettes/read_waterdata_functions.Rmd
 vignettes/dataretrieval_discrete_changes_images/*
+vignettes/Wide data example.xlsx
+vignettes/messyData.png
 ^ci$
 ^public$
 ^docker$
 vignettes/WQX_3.Rmd
 vignettes/samples_data.Rmd
+tests/manual/*
+vignettes/qwdata_changes.Rmd
+vignettes/nwisData.rds
+vignettes/wqpData.rds

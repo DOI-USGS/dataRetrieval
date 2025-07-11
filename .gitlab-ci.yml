@@ -43,6 +43,7 @@ build-image:
   rules:
     - changes:
       - docker/Dockerfile
+      - .gitlab-ci.yml
   script:
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
