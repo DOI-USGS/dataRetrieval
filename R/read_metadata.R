@@ -9,6 +9,13 @@
 #' "coordinate-method-codes", "hydrologic-unit-codes", "medium-codes", 
 #' "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
 #' "topographic-codes", "time-zone-codes"
+#' @param limit The optional limit parameter is used to control the subset of the 
+#' selected features that should be returned in each page. The maximum allowable
+#' limit is 10000. It may be beneficial to set this number lower if your internet
+#' connection is spotty. The default (`NA`) will set the limit to the maximum
+#' allowable limit for the service.
+#' @param max_results The optional maximum number of rows to return. This value
+#' must be less than the requested limit. 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
