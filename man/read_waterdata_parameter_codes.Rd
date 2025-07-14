@@ -58,7 +58,7 @@ allowable limit for the service.}
 must be less than the requested limit.}
 }
 \description{
-Description Parameter codes are 5-digit codes and associated descriptions used to identify the constituent measured and the units of measure. Some parameter code definitions include information about the sampling matrix, fraction, and methods used to measure the constituent. Some parameters are fixed-value (fxd) numeric codes having textual meaning (for example: parameter code 00041 is a weather code parameter, code of 60 means rain), but more commonly represent a numeric value for chemical, physical, or biological data.
+Parameter codes are 5-digit codes and associated descriptions used to identify the constituent measured and the units of measure. Some parameter code definitions include information about the sampling matrix, fraction, and methods used to measure the constituent. Some parameters are fixed-value (fxd) numeric codes having textual meaning (for example: parameter code 00041 is a weather code parameter, code of 60 means rain), but more commonly represent a numeric value for chemical, physical, or biological data.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -69,7 +69,8 @@ pcode_info <- read_waterdata_parameter_codes(parameter_code = pcode)
 
 pcodes <- read_waterdata_parameter_codes(parameter_code = c("00660", "00060"))
 
-all_pcodes <- read_waterdata_parameter_codes()
+# equivalent to read_waterdata_metadata("parameter-codes")
+all_pcodes <- read_waterdata_parameter_codes() 
 
 total_nutrients <- read_waterdata_parameter_codes(parameter_group_code = "NUT",
                                            sample_fraction = "Total")

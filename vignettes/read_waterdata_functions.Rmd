@@ -305,7 +305,7 @@ leaflet(data = what_huc_sites |>
 
 ## Reference Tables
 
-There is a new function `read_metadata` that gives access to a wide variety of tables that have metadata information.
+There is a new function `read_waterdata_metadata` that gives access to a wide variety of tables that have metadata information.
 
 ### Agency Codes
 
@@ -313,7 +313,7 @@ There is a new function `read_metadata` that gives access to a wide variety of t
 
 ```{r}
 #| eval: false
-agency_codes <- read_metadata("agency-codes")
+agency_codes <- read_waterdata_metadata("agency-codes")
 ```
 
 ### Altitude Datums
@@ -322,7 +322,7 @@ agency_codes <- read_metadata("agency-codes")
 
 ```{r}
 #| eval: false
-altitude_datums <- read_metadata("altitude-datums")
+altitude_datums <- read_waterdata_metadata("altitude-datums")
 ```
 
 
@@ -332,7 +332,7 @@ altitude_datums <- read_metadata("altitude-datums")
 
 ```{r}
 #| eval: false
-aquifer_codes <- read_metadata("aquifer-codes")
+aquifer_codes <- read_waterdata_metadata("aquifer-codes")
 ```
 
 ### Aquifer Types
@@ -341,7 +341,7 @@ aquifer_codes <- read_metadata("aquifer-codes")
 
 ```{r}
 #| eval: false
-aquifer_types <- read_metadata("aquifer-types")
+aquifer_types <- read_waterdata_metadata("aquifer-types")
 ```
 
 ### Coordinate Accuracy Codes
@@ -350,7 +350,7 @@ aquifer_types <- read_metadata("aquifer-types")
 
 ```{r}
 #| eval: false
-coordinate_accuracy_codes <- read_metadata("coordinate-accuracy-codes")
+coordinate_accuracy_codes <- read_waterdata_metadata("coordinate-accuracy-codes")
 ```
 
 ### Coordinate Datum Codes
@@ -359,7 +359,7 @@ coordinate_accuracy_codes <- read_metadata("coordinate-accuracy-codes")
 
 ```{r}
 #| eval: false
-coordinate_datum_codes <- read_metadata("coordinate-datum-codes")
+coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
 ```
 
 ### Coordinate Method Codes
@@ -368,7 +368,7 @@ coordinate_datum_codes <- read_metadata("coordinate-datum-codes")
 
 ```{r}
 #| eval: false
-coordinate_method_codes <- read_metadata("coordinate-method-codes")
+coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
 ```
 
 ### Medium Codes
@@ -377,7 +377,7 @@ coordinate_method_codes <- read_metadata("coordinate-method-codes")
 
 ```{r}
 #| eval: false
-medium_codes <- read_metadata("medium-codes")
+medium_codes <- read_waterdata_metadata("medium-codes")
 ```
 
 ### National Aquifer Codes
@@ -386,7 +386,7 @@ medium_codes <- read_metadata("medium-codes")
 
 ```{r}
 #| eval: false
-medium_codes <- read_metadata("medium-codes")
+medium_codes <- read_waterdata_metadata("medium-codes")
 ```
 
 ### Parameter Codes
@@ -395,7 +395,7 @@ medium_codes <- read_metadata("medium-codes")
 
 ```{r}
 #| eval: false
-parameter_codes <- read_metadata("parameter-codes")
+parameter_codes <- read_waterdata_metadata("parameter-codes")
 ```
 
 ### Reliability Codes
@@ -404,7 +404,7 @@ parameter_codes <- read_metadata("parameter-codes")
 
 ```{r}
 #| eval: false
-reliability_codes <- read_metadata("reliability-codes")
+reliability_codes <- read_waterdata_metadata("reliability-codes")
 ```
 
 ### Site Types
@@ -413,7 +413,7 @@ reliability_codes <- read_metadata("reliability-codes")
 
 ```{r}
 #| eval: false
-site_types <- read_metadata("site-types")
+site_types <- read_waterdata_metadata("site-types")
 ```
 
 ### Topographic Codes
@@ -422,7 +422,7 @@ site_types <- read_metadata("site-types")
 
 ```{r}
 #| eval: false
-topographic_codes <- read_metadata("topographic-codes")
+topographic_codes <- read_waterdata_metadata("topographic-codes")
 ```
 
 ### Topographic Codes
@@ -431,7 +431,7 @@ topographic_codes <- read_metadata("topographic-codes")
 
 ```{r}
 #| eval: false
-time_zone_codes <- read_metadata("time-zone-codes")
+time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 ```
 
 
