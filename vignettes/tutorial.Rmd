@@ -131,7 +131,7 @@ The USGS uses various codes for basic retrievals. These codes can have leading z
 * Parameter Code (5 digits)
     + Full list: `read_waterdata_parameter_codes()`
 * Statistic Code (for daily values)
-    + Full list: `read_metadata("statistic-codes")`
+    + Full list: `read_waterdata_metadata("statistic-codes")`
 
 
 Here are some examples of a few common parameter codes:

@@ -19,22 +19,22 @@
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
-#' agency_codes <- read_metadata("agency-codes")
-#' altitude_datums <- read_metadata("altitude-datums")
-#' aquifer_codes <- read_metadata("aquifer-codes")
-#' aquifer_types <- read_metadata("aquifer-types")
-#' coordinate_accuracy_codes <- read_metadata("coordinate-accuracy-codes")
-#' coordinate_datum_codes <- read_metadata("coordinate-datum-codes")
-#' coordinate_method_codes <- read_metadata("coordinate-method-codes")
-#' national_aquifer_codes <- read_metadata("national-aquifer-codes")
-#' parameter_codes <- read_metadata("parameter-codes")
-#' reliability_codes <- read_metadata("reliability-codes")
-#' site_types <- read_metadata("site-types")
-#' statistic_codes <- read_metadata("statistic-codes")
-#' topographic_codes <- read_metadata("topographic-codes")
-#' time_zone_codes <- read_metadata("time-zone-codes")
+#' agency_codes <- read_waterdata_metadata("agency-codes")
+#' altitude_datums <- read_waterdata_metadata("altitude-datums")
+#' aquifer_codes <- read_waterdata_metadata("aquifer-codes")
+#' aquifer_types <- read_waterdata_metadata("aquifer-types")
+#' coordinate_accuracy_codes <- read_waterdata_metadata("coordinate-accuracy-codes")
+#' coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
+#' coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
+#' national_aquifer_codes <- read_waterdata_metadata("national-aquifer-codes")
+#' parameter_codes <- read_waterdata_metadata("parameter-codes")
+#' reliability_codes <- read_waterdata_metadata("reliability-codes")
+#' site_types <- read_waterdata_metadata("site-types")
+#' statistic_codes <- read_waterdata_metadata("statistic-codes")
+#' topographic_codes <- read_waterdata_metadata("topographic-codes")
+#' time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 #' }
-read_metadata <- function(collection, 
+read_waterdata_metadata <- function(collection, 
                           max_results = NA,
                           limit = NA){
 
