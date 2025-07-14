@@ -12,7 +12,7 @@ as "parameter-codes", "agency-codes", "altitude-datums", "aquifer-codes",
 "aquifer-types", "coordinate-accuracy-codes", "coordinate-datum-codes",
 "coordinate-method-codes", "hydrologic-unit-codes", "medium-codes",
 "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
-"topographic-codes", "time-zone-codes"}
+"topographic-codes", "time-zone-codes".}
 
 \item{max_results}{The optional maximum number of rows to return. This value
 must be less than the requested limit.}
@@ -24,7 +24,8 @@ connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 }
 \description{
-Function to get metadata collections from Water Data API.
+Function to get metadata from Water Data API. These are useful to get the
+human readable words and other metadata associated with USGS codes.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

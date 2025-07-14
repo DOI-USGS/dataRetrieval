@@ -1,6 +1,7 @@
 #' Generalized USGS Water Meta Data API retrieval function
 #' 
-#' Function to get metadata collections from Water Data API.
+#' Function to get metadata from Water Data API. These are useful to get the
+#' human readable words and other metadata associated with USGS codes.
 #' 
 #' @export
 #' @param collection character, can be any existing collection such
@@ -8,7 +9,7 @@
 #' "aquifer-types", "coordinate-accuracy-codes", "coordinate-datum-codes",
 #' "coordinate-method-codes", "hydrologic-unit-codes", "medium-codes", 
 #' "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
-#' "topographic-codes", "time-zone-codes"
+#' "topographic-codes", "time-zone-codes".
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 10000. It may be beneficial to set this number lower if your internet
