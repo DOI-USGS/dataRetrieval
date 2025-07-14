@@ -1,6 +1,6 @@
 #' Get USGS Parameter Code Information
 #' 
-#' Description `r get_description("parameter-codes")`
+#' @description `r get_description("parameter-codes")`
 #' 
 #' @export
 #' @param parameter_code `r get_params("parameter-codes")$id`
@@ -32,7 +32,8 @@
 #' 
 #' pcodes <- read_waterdata_parameter_codes(parameter_code = c("00660", "00060"))
 #' 
-#' all_pcodes <- read_waterdata_parameter_codes()
+#' # equivalent to read_waterdata_metadata("parameter-codes")
+#' all_pcodes <- read_waterdata_parameter_codes() 
 #' 
 #' total_nutrients <- read_waterdata_parameter_codes(parameter_group_code = "NUT",
 #'                                            sample_fraction = "Total")
@@ -77,7 +78,7 @@ It is expected that updates to the API will eliminate this need, but in the mean
 consider running read_waterdata_parameter_code() with no query parameters, and filtering
 in a post-processing step.")
     
-    return_list <- read_metadata(collection = service, 
+    return_list <- read_waterdata_metadata(collection = service, 
                                  max_results = max_results,
                                  limit = limit)
     args[["convertType"]] <- NULL

@@ -1,6 +1,7 @@
 #' Generalized USGS Water Meta Data API retrieval function
 #' 
-#' Function to get metadata collections from Water Data API.
+#' Function to get metadata from Water Data API. These are useful to get the
+#' human readable words and other metadata associated with USGS codes.
 #' 
 #' @export
 #' @param collection character, can be any existing collection such
@@ -8,7 +9,7 @@
 #' "aquifer-types", "coordinate-accuracy-codes", "coordinate-datum-codes",
 #' "coordinate-method-codes", "hydrologic-unit-codes", "medium-codes", 
 #' "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
-#' "topographic-codes", "time-zone-codes"
+#' "topographic-codes", "time-zone-codes".
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 10000. It may be beneficial to set this number lower if your internet
@@ -19,22 +20,22 @@
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
-#' agency_codes <- read_metadata("agency-codes")
-#' altitude_datums <- read_metadata("altitude-datums")
-#' aquifer_codes <- read_metadata("aquifer-codes")
-#' aquifer_types <- read_metadata("aquifer-types")
-#' coordinate_accuracy_codes <- read_metadata("coordinate-accuracy-codes")
-#' coordinate_datum_codes <- read_metadata("coordinate-datum-codes")
-#' coordinate_method_codes <- read_metadata("coordinate-method-codes")
-#' national_aquifer_codes <- read_metadata("national-aquifer-codes")
-#' parameter_codes <- read_metadata("parameter-codes")
-#' reliability_codes <- read_metadata("reliability-codes")
-#' site_types <- read_metadata("site-types")
-#' statistic_codes <- read_metadata("statistic-codes")
-#' topographic_codes <- read_metadata("topographic-codes")
-#' time_zone_codes <- read_metadata("time-zone-codes")
+#' agency_codes <- read_waterdata_metadata("agency-codes")
+#' altitude_datums <- read_waterdata_metadata("altitude-datums")
+#' aquifer_codes <- read_waterdata_metadata("aquifer-codes")
+#' aquifer_types <- read_waterdata_metadata("aquifer-types")
+#' coordinate_accuracy_codes <- read_waterdata_metadata("coordinate-accuracy-codes")
+#' coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
+#' coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
+#' national_aquifer_codes <- read_waterdata_metadata("national-aquifer-codes")
+#' parameter_codes <- read_waterdata_metadata("parameter-codes")
+#' reliability_codes <- read_waterdata_metadata("reliability-codes")
+#' site_types <- read_waterdata_metadata("site-types")
+#' statistic_codes <- read_waterdata_metadata("statistic-codes")
+#' topographic_codes <- read_waterdata_metadata("topographic-codes")
+#' time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 #' }
-read_metadata <- function(collection, 
+read_waterdata_metadata <- function(collection, 
                           max_results = NA,
                           limit = NA){
 

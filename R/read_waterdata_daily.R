@@ -1,6 +1,6 @@
 #' Get USGS Daily Data
 #' 
-#' Description `r get_description("daily")`
+#' @description `r get_description("daily")`
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("daily")$monitoring_location_id`
