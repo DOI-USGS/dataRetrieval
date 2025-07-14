@@ -32,7 +32,10 @@
 #' }
 readNWISpCode <- function(parameterCd) {
   
-  message(new_nwis_message())
+  .Deprecated(new = "read_waterdata_parameter_codes",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_parameter_codes")
+  
   
   parameterCd.orig <- parameterCd
   parameterCd <- parameterCd[!is.na(parameterCd)]
