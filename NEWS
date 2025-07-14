@@ -2,7 +2,8 @@ dataRetrieval 2.7.20
 ===================
 * Added id transformation to read_waterdata to match other functions
 * Cleaned up time arguments in waterdata functions to allow flexible time zones
-
+* Added read_waterdata_metadata, read_waterdata_parameter_codes
+* Fixes a bug caused by httr2 update
 
 dataRetrieval 2.7.19
 ===================

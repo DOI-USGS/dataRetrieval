@@ -1,6 +1,6 @@
 #' Get Latest Continuous USGS Water Data
 #' 
-#' Description `r get_description("latest-continuous")`
+#' @description `r get_description("latest-continuous")`
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("latest-continuous")$monitoring_location_id`
