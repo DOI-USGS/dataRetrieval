@@ -158,7 +158,7 @@ each feature. The returning object will be a data frame with no spatial
 information.}
 }
 \description{
-Description Location information is basic information about the monitoring location including the name, identifier, agency responsible for data collection, and the date the location was established. It also includes information about the type of location, such as stream, lake, or groundwater, and geographic information about the location, such as state, county, latitude and longitude, and hydrologic unit code (HUC).
+Location information is basic information about the monitoring location including the name, identifier, agency responsible for data collection, and the date the location was established. It also includes information about the type of location, such as stream, lake, or groundwater, and geographic information about the location, such as state, county, latitude and longitude, and hydrologic unit code (HUC).
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -167,7 +167,9 @@ Description Location information is basic information about the monitoring locat
 site <- "USGS-02238500"
 site_info <- read_waterdata_monitoring_location(monitoring_location_id = site)
 
-site_slim <- read_waterdata_monitoring_location(monitoring_location_id = site,
+site_slim <- read_waterdata_monitoring_location(
+                             monitoring_location_id = c("USGS-05114000",
+                                                        "USGS-09423350"),
                              properties = c("monitoring_location_id",
                                             "state_name",
                                             "country_name"))

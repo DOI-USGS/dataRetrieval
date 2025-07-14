@@ -383,7 +383,7 @@ test_that("Construct USGS urls", {
   
   # nolint start: line_length_linter
   expect_equal(url_daily$url,
-               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&time=2024-01-01T00%3A00%3A00Z%2F..&skipGeometry=FALSE&limit=10000")
+               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&time=2024-01-01%2F..&skipGeometry=FALSE&limit=10000")
 
   url_works <- dataRetrieval:::walk_pages(url_daily, max_results = 1)
   expect_true(nrow(url_works) > 0)

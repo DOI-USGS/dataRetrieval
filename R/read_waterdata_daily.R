@@ -1,6 +1,6 @@
 #' Get USGS Daily Data
 #' 
-#' Description `r get_description("daily")`
+#' @description `r get_description("daily")`
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("daily")$monitoring_location_id`
@@ -43,6 +43,10 @@
 #' dv_data_sf <- read_waterdata_daily(monitoring_location_id = site,
 #'                               parameter_code = "00060", 
 #'                               time = c("2021-01-01", "2022-01-01"))
+#'                               
+#' dv_data_last_modified <- read_waterdata_daily(monitoring_location_id = site,
+#'                               parameter_code = "00060",
+#'                               last_modified = "P7D")
 #'
 #' dv_data_trim <- read_waterdata_daily(monitoring_location_id = site,
 #'                           parameter_code = "00060", 

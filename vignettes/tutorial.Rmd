@@ -99,6 +99,7 @@ There are many types of data served from NWIS. To understand how the services ar
   * `read_waterdata_daily` can replace `readNWISdv`
   * `read_waterdata_monitoring_location` can replace `readNWISsite`
   * `read_waterdata_ts_meta` can replace `whatNWISdata`
+  * `read_waterdata_parameter_codes` can replace `readNWISpCode`
   
 * Discrete water quality data:
   * WQP functions should be used when accessing non-USGS discrete water quality data
@@ -113,7 +114,7 @@ There are many types of data served from NWIS. To understand how the services ar
 |dv|[readNWISdv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdv.html)|Daily aggregated | [read_waterdata_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_daily.html) |
 |gwlevels|[readNWISgwl](https://doi-usgs.github.io/dataRetrieval/reference/readNWISgwl.html)|Groundwater levels | None yet |
 |site|[readNWISsite](https://doi-usgs.github.io/dataRetrieval/reference/readNWISsite.html)|Site metadata| [read_waterdata_monitoring_location](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_monitoring_location.html) |
-|pcode|[readNWISpCode](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpCode.html)|Parameter code metadata | None yet |
+|pcode|[readNWISpCode](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpCode.html)|Parameter code metadata | [read_waterdata_parameter_codes](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_parameter_codes.html) |
 |stat|[readNWISstat](https://doi-usgs.github.io/dataRetrieval/reference/readNWISstat.html)| Site statistics | None yet |
 |rating|[readNWISrating](https://doi-usgs.github.io/dataRetrieval/reference/readNWISrating.html)| Rating curves| None yet |
 |peak|[readNWISpeak](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpeak.html)|Peak flow| None yet |
@@ -128,10 +129,9 @@ The USGS uses various codes for basic retrievals. These codes can have leading z
 
 * Site ID (often 8 or 15-digits)
 * Parameter Code (5 digits)
-    + Full list: `readNWISpCode("all")`
+    + Full list: `read_waterdata_parameter_codes()`
 * Statistic Code (for daily values)
-    + Full list:
-    + <http://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=%25&fmt=html/>
+    + Full list: `read_waterdata_metadata("statistic-codes")`
 
 
 Here are some examples of a few common parameter codes:
@@ -159,23 +159,23 @@ knitr::kable(list(df, df2))
 
 
 
-Use the `readNWISpCode` function to get information on USGS parameter codes. You can use "all" to get a full list. Then use your favorite data analysis methods to pull out what you need. Here is one example to find all the phosphorous parameter codes:
+Use the `read_waterdata_parameter_codes` function to get information on USGS parameter codes.Then use your favorite data analysis methods to pull out what you need. Here is one example to find all the phosphorous parameter codes:
 
 ```{r echo=TRUE, eval=TRUE}
-pcode <- readNWISpCode("all")
+pcode <- read_waterdata_parameter_codes()
 
 phosCds <- pcode[grep("phosphorus",
-  pcode$parameter_nm,
+  pcode$parameter_name,
   ignore.case = TRUE
 ), ]
 
 ```
 
-Explore the wide variety of parameters that contain "phosphorus" in the parameter_nm:
+Explore the wide variety of parameters that contain "phosphorus" in the parameter_name:
 
 ```{r echo=FALSE, eval=TRUE}
 library(DT)
-datatable(phosCds[, c("parameter_cd", "parameter_nm", "parameter_units")],
+datatable(phosCds[, c("parameter_code", "parameter_name", "unit_of_measure")],
   rownames = FALSE, options = list(pageLength = 4)
 )
 ```
@@ -224,16 +224,16 @@ ts <- ggplot(
 ts
 ```
 
-Then we can use the `readNWISpCode` and `read_waterdata_monitoring_location` functions to create better labels:
+Then we can use the `read_waterdata_parameter_codes` and `read_waterdata_monitoring_location` functions to create better labels:
 
 
 ```{r echo=TRUE, eval=TRUE, fig.height=3.5}
-parameterInfo <- readNWISpCode(pCode)
+parameterInfo <- read_waterdata_parameter_codes(pCode)
 siteInfo <- read_waterdata_monitoring_location(siteNo)
 
 ts <- ts +
   xlab("") +
-  ylab(parameterInfo$parameter_nm) +
+  ylab(parameterInfo$parameter_name) +
   ggtitle(siteInfo$monitoring_location_name)
 ts
 ```
