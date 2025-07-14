@@ -1,6 +1,6 @@
 #' Get USGS Site Data
 #' 
-#' Description `r get_description("monitoring-locations")`
+#' @description `r get_description("monitoring-locations")`
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("monitoring-locations")$id`
@@ -68,7 +68,9 @@
 #' site <- "USGS-02238500"
 #' site_info <- read_waterdata_monitoring_location(monitoring_location_id = site)
 #' 
-#' site_slim <- read_waterdata_monitoring_location(monitoring_location_id = site,
+#' site_slim <- read_waterdata_monitoring_location(
+#'                              monitoring_location_id = c("USGS-05114000",
+#'                                                         "USGS-09423350"),
 #'                              properties = c("monitoring_location_id",
 #'                                             "state_name",
 #'                                             "country_name"))
