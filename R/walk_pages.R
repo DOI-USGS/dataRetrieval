@@ -160,17 +160,7 @@ next_req_url <- function(resp, req) {
     next_index <- which(sapply(links, function(x) x$rel) == "next")
     
     next_url <- links[[next_index]][["href"]]
-    
-    ################################################
-    # This offset check will be going away 
-    # offset should be replaced by "cursor" eventually.
-    offset <- as.integer(sub("(?i).*?\\boffset=?\\s*(\\d+).*", "\\1", next_url))
-    if(isTRUE(offset > 40000)){
-      warning("Not all data was returned! Split up the query for best results.")
-      return(NULL)
-    }
-    ################################################
-    
+
     return(httr2::req_url(req = req, url = next_url))
   } else {
     return(NULL)
@@ -200,6 +190,9 @@ get_resp_data <- function(resp) {
   
   if(!use_sf){
     return_df <- sf::st_drop_geometry(return_df)
+    if("AsGeoJSON(geometry)" %in% names(return_df)){
+      return_df <- return_df[, !names(return_df) %in% "AsGeoJSON(geometry)"]
+    }
   } 
 
   return(return_df)
@@ -273,7 +266,7 @@ get_ogc_data <- function(args,
                                                service = service)
   convertType <- args[["convertType"]] 
   args[["convertType"]] <- NULL
-  
+
   req <- do.call(construct_api_requests, args)
   
   return_list <- walk_pages(req, max_results)
@@ -288,5 +281,4 @@ get_ogc_data <- function(args,
   attr(return_list, "queryTime") <- Sys.time()
   return(return_list)
 }
-
 

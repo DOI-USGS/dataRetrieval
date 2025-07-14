@@ -6,9 +6,16 @@ pkg.env <- new.env()
   pkg.env$local_sf <- requireNamespace("sf", quietly = TRUE)
   options("dataRetrieval" = list("api_version" = "v0"))
   
-  query_ret <- get_collection() 
-  services <- sapply(query_ret$tags, function(x) x[["name"]])
+  services <- c("server", "daily", "time-series-metadata",
+               "monitoring-locations", "latest-continuous")
+  collections <- c("parameter-codes", "agency-codes", "altitude-datums", "aquifer-codes",
+                   "aquifer-types", "coordinate-accuracy-codes", "coordinate-datum-codes",
+                   "coordinate-method-codes", "medium-codes", 
+                   "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
+                   "topographic-codes", "time-zone-codes")
+
   pkg.env$api_endpoints <- services
+  pkg.env$metadata <- collections
 }
 
 
