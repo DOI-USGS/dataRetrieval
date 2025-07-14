@@ -1,6 +1,6 @@
 #' Get USGS Site Data
 #' 
-#' Description `r get_description("monitoring-locations")`
+#' @description `r get_description("monitoring-locations")`
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("monitoring-locations")$id`

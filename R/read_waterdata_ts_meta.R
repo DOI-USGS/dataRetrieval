@@ -1,6 +1,6 @@
 #' Get USGS Time Series Metadata
 #' 
-#' Description `r get_description("time-series-metadata")`
+#' @description `r get_description("time-series-metadata")`
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("time-series-metadata")$monitoring_location_id`

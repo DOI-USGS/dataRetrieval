@@ -1,6 +1,6 @@
 #' Get USGS Parameter Code Information
 #' 
-#' Description `r get_description("parameter-codes")`
+#' @description `r get_description("parameter-codes")`
 #' 
 #' @export
 #' @param parameter_code `r get_params("parameter-codes")$id`
