@@ -32,7 +32,7 @@
 #' 
 #' pcodes <- read_waterdata_parameter_codes(parameter_code = c("00660", "00060"))
 #' 
-#' all_pcodes <- read_waterdata_parameter_codes()
+#' all_pcodes <- read_waterdata_parameter_codes() # equivalent to read_metadata("parameter-codes")
 #' 
 #' total_nutrients <- read_waterdata_parameter_codes(parameter_group_code = "NUT",
 #'                                            sample_fraction = "Total")
