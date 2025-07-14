@@ -442,7 +442,8 @@ check_OGC_requests <- function(endpoint = "daily",
 #' 
 #' \donttest{
 #' check_collections <- dataRetrieval:::base_url() |> 
-#'   httr2::req_url_path_append("openapi?f=html#/server/getCollections") 
+#'   httr2::req_url_path_append("openapi") |> 
+#'   httr2::req_url_query(f = "html#/server/getCollections")
 #'   
 #' collect_request <- dataRetrieval:::basic_request(check_collections)
 #' query_ret <- httr2::req_perform(collect_request) 
@@ -472,7 +473,8 @@ error_body <- function(resp) {
 #' 
 #' \donttest{
 #' check_collections <- dataRetrieval:::base_url() |> 
-#'   httr2::req_url_path_append("openapi?f=html#/server/getCollections") 
+#'   httr2::req_url_path_append("openapi") |> 
+#'   httr2::req_url_query(f = "html#/server/getCollections")
 #' collect_request <- dataRetrieval:::basic_request(check_collections)
 #' collect_request
 #' }
@@ -540,7 +542,8 @@ get_description <- function(service){
 get_collection <- function(){
   
   check_collections <- base_url() |> 
-    httr2::req_url_path_append("openapi?f=html#/server/getCollections") 
+    httr2::req_url_path_append("openapi") |>
+    httr2::req_url_query(f = "html#/server/getCollections")
   
   check_endpoints_req <- basic_request(check_collections)
   
@@ -578,4 +581,3 @@ get_params <- function(service){
   params <- sapply(query_ret$properties, function(x) x[["description"]]) 
 
 }
-
