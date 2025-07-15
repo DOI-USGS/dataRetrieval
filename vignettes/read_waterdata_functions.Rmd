@@ -541,9 +541,6 @@ for(sites in site_list){
 
 Note there is fewer data returned in `data_returned` because those sites are already filtered down to just "Stream" sites. The bounding box results `ohio_discharge` contained other types of monitoring location types.
 
-## Result limits
-
-There's a hard cap at 50,000 rows returned per one request. This means that for 1 `dataRetrieval` request, only 50,000 rows will be returned even if there is more data! If you know you are making a big request, it will be up to you to split up your request into "reasonable" chunks. Note that sometimes you'll notice a big request gets chunked up and you can see that it actually made a bunch of requests - this is done automatically (it's called paging), and the 50,000 limit is still in effect for the total number returned from all the pages.
 
 ## limit vs max_results
 
