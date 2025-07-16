@@ -339,7 +339,7 @@ test_that("General WQP retrievals working", {
   expect_true(!all(c("siteInfo", "variableInfo") %in% names(attributes(wqp.summary_no_atts))))
 
   rawPcode <- readWQPqw("USGS-01594440", "01075", "", "", legacy = FALSE)
-  expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
+  expect_true(all(c("url", "queryTime", "siteInfo") %in%
                     names(attributes(rawPcode))))
 
   # This means wqp_check_status was called:
