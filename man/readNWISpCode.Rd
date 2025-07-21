@@ -27,17 +27,6 @@ parameter_units \tab character \tab Parameter units\cr
 Imports data from NWIS about measured parameter based on user-supplied parameter code or codes.
 This function gets the data from here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes}
 }
-\examples{
-
-paramINFO <- readNWISpCode(c("01075", "00060", "00931"))
-paramINFO <- readNWISpCode(c("01075", "00060", "00931", NA))
-\donttest{
-all_codes <- readNWISpCode("all")
-
-one_extra <- readNWISpCode(c("01075", "12345"))
-
-}
-}
 \seealso{
 \code{\link[=importRDB1]{importRDB1()}}
 }
