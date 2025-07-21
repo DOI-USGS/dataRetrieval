@@ -106,9 +106,9 @@ test_that("peak, rating curves, surface-water measurements", {
   url <- httr2::request("https://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000")
   x <- importRDB1(url)
 
-  siteID <- "263819081585801"
-  gwl_1 <- readNWISgwl(siteID)
-  expect_equal(unique(gwl_1$site_no), siteID)
+  siteID <- "USGS-263819081585801"
+  gwl_1 <- read_waterdata_field_measurements(monitoring_location_id = siteID)
+  expect_equal(unique(gwl_1$monitoring_location_id), siteID)
   
   # No data:
   stations <- "06011000"

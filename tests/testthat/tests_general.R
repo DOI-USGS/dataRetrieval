@@ -390,7 +390,8 @@ test_that("zeroPad handles NAs", {
 
 test_that("Dates with no days can be handled", {
   testthat::skip_on_cran()
-  empty_df <- readNWISgwl("425957088141001", startDate = "1980-01-01")
+  empty_df <- read_waterdata_field_measurements(monitoring_location_id = "USGS-425957088141001", 
+                                                time = c("1980-01-01", NA))
   expect_true(nrow(empty_df) > 0)
 })
 
