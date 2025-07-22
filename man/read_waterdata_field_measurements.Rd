@@ -116,12 +116,14 @@ gwl_data <- read_waterdata_field_measurements(monitoring_location_id = "USGS-375
                            parameter_code = "72019",
                            skipGeometry = TRUE)
                         
-gwl_data_period <- read_waterdata_field_measurements(monitoring_location_id = "USGS-375907091432201",
+gwl_data_period <- read_waterdata_field_measurements(
+                                  monitoring_location_id = "USGS-375907091432201",
                                   parameter_code = "72019",
                                   time = "P20Y")
 
-multi_site <- read_waterdata_field_measurements(monitoring_location_id =  c("USGS-451605097071701",
-                                                                            "USGS-263819081585801"),
+multi_site <- read_waterdata_field_measurements(
+                              monitoring_location_id =  c("USGS-451605097071701",
+                                                          "USGS-263819081585801"),
                               parameter_code = c("62611", "72019"))
 
 
