@@ -27,6 +27,7 @@ jobs:
       API_USGS_PAT: ${{ secrets.API_USGS_PAT }}
       R_KEEP_PKG_SOURCE: yes
       CUSTOM_DR_UA: 'GitHub_CI'
+      _R_CHECK_DONTTEST_EXAMPLES_: false
 
     steps:
       - uses: actions/checkout@9a9194f87191a7e9055e3e9b95b8cfb13023bb08
