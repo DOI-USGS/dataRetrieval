@@ -24,4 +24,6 @@ New features should include all of the following work:
 * [ ] Update _pkgdown.yml
 * [ ] Check if README needs to be update
 * [ ] Update version (for development, only bump up last 4 digits)
+* [ ] Create PR for "develop" branch on GitHub
+* [ ] Create and merge MR for "develop" branch on code.usgs.gov. This will generate development version of documentation.
 
