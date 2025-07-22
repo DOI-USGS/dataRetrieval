@@ -10,7 +10,6 @@ read_waterdata_field_measurements(
   observing_procedure_code = NA_character_,
   properties = NA_character_,
   field_visit_id = NA_character_,
-  latest_continuous_id = NA_character_,
   approval_status = NA_character_,
   unit_of_measure = NA_character_,
   qualifier = NA_character_,
