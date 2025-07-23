@@ -393,7 +393,7 @@ test_that("zeroPad handles NAs", {
 
 test_that("Dates with no days can be handled", {
   testthat::skip_on_cran()
-  testthat::skip_on_ci()
+
   empty_df <- read_waterdata_field_measurements(monitoring_location_id = "USGS-425957088141001", 
                                                 time = c("1980-01-01", NA))
   expect_true(nrow(empty_df) > 0)
@@ -434,8 +434,7 @@ test_that("whatWQPdata working", {
 context("read_waterdata_ts_meta")
 test_that("read_waterdata_ts_meta working", {
   testthat::skip_on_cran()
-  testthat::skip_on_ci()
-  
+
   siteListOhio <- read_waterdata_monitoring_location(state_name = "Ohio")
   siteListPhos <- read_waterdata_ts_meta(bbox = sf::st_bbox(siteListOhio),
                                     parameter_code = "00665")
