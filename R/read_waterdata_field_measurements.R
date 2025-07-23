@@ -58,6 +58,9 @@
 #'                               monitoring_location_id =  c("USGS-451605097071701",
 #'                                                           "USGS-263819081585801"),
 #'                               parameter_code = c("62611", "72019"))
+#'                               
+#' old_df <- read_waterdata_field_measurements(monitoring_location_id = "USGS-425957088141001", 
+#'                                               time = c("1980-01-01", NA))
 #' 
 #' 
 #' }
