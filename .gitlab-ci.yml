@@ -60,6 +60,7 @@ buildcheck:
     - build-image
   script:
     - R CMD build . --no-manual
+    - Rscript -e 'dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = "USGS-425957088141001",  time = c("1980-01-01", NA))'
     - Rscript -e 'devtools::check(document = FALSE, args = "--no-tests", check_dir = Sys.getenv("BUILD_LOGS_DIR"), vignettes = FALSE)'
 
 unittests:
