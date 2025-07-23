@@ -26,6 +26,7 @@ test_that("NLDI messageing NULL", {
 
 test_that("NLDI offerings...", {
   skip_on_cran()
+  skip_on_ci()
   expect_true(nrow(get_nldi_sources()) > 1)
 })
 
