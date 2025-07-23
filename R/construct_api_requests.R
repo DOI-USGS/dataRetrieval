@@ -85,10 +85,12 @@ construct_api_requests <- function(service,
     POST = TRUE
   }
   
+  get_list <- get_list[!is.na(get_list)]
+  
   time_periods <- c("last_modified", "datetime", "time", "begin", "end")
   if(any(time_periods %in% names(get_list))){
 
-    for(i in time_periods){
+    for(i in time_periods[time_periods %in% names(get_list)]){
       dates <- FALSE
       if (all(service == "daily" & i != "last_modified")){
         dates <- TRUE
