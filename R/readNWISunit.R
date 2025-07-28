@@ -493,22 +493,26 @@ readNWISmeas <- function(siteNumbers,
 #' @seealso [constructNWISURL()], [importRDB1()]
 #' @export
 #' @examplesIf is_dataRetrieval_user()
-#' site_id <- "434400121275801"
+#' #site_id <- "434400121275801"
 #' \donttest{
-#' data <- readNWISgwl(site_id)
-#' sites <- c("434400121275801", "375907091432201")
-#' data2 <- readNWISgwl(sites, "", "")
-#' data3 <- readNWISgwl("420125073193001", "", "")
+#' #data <- readNWISgwl(site_id)
+#' #sites <- c("434400121275801", "375907091432201")
+#' #data2 <- readNWISgwl(sites, "", "")
+#' #data3 <- readNWISgwl("420125073193001", "", "")
 #' # handling of data where date has no day
-#' data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01")
+#' #data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01")
 #'
-#' data5 <- readNWISgwl("263819081585801", parameterCd = "72019")
+#' #data5 <- readNWISgwl("263819081585801", parameterCd = "72019")
 #' }
 readNWISgwl <- function(siteNumbers,
                         startDate = "",
                         endDate = "",
                         parameterCd = NA,
                         convertType = TRUE, tz = "UTC") {
+  
+  .Deprecated(new = "read_waterdata_field_measurements.",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_field_measurements.")
   
   message(new_nwis_message())
   

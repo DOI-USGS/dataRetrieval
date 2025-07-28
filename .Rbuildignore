@@ -92,7 +92,7 @@ vignettes/join_by_closest.Rmd
 vignettes/wqx3_development_plan.Rmd
 vignettes/read_waterdata_functions.Rmd
 vignettes/dataretrieval_discrete_changes_images/*
-vignettes/Wide data example.xlsx
+vignettes/Wide_data_example.xlsx
 vignettes/messyData.png
 ^ci$
 ^public$

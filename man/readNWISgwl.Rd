@@ -84,16 +84,16 @@ See \url{https://waterservices.usgs.gov/docs/groundwater-levels/} for more infor
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-site_id <- "434400121275801"
+#site_id <- "434400121275801"
 \donttest{
-data <- readNWISgwl(site_id)
-sites <- c("434400121275801", "375907091432201")
-data2 <- readNWISgwl(sites, "", "")
-data3 <- readNWISgwl("420125073193001", "", "")
+#data <- readNWISgwl(site_id)
+#sites <- c("434400121275801", "375907091432201")
+#data2 <- readNWISgwl(sites, "", "")
+#data3 <- readNWISgwl("420125073193001", "", "")
 # handling of data where date has no day
-data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01")
+#data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01")
 
-data5 <- readNWISgwl("263819081585801", parameterCd = "72019")
+#data5 <- readNWISgwl("263819081585801", parameterCd = "72019")
 }
 \dontshow{\}) # examplesIf}
 }

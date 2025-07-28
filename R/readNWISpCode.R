@@ -20,16 +20,6 @@
 #'
 #' @export
 #' @seealso [importRDB1()]
-#' @examples
-#'
-#' paramINFO <- readNWISpCode(c("01075", "00060", "00931"))
-#' paramINFO <- readNWISpCode(c("01075", "00060", "00931", NA))
-#' \donttest{
-#' all_codes <- readNWISpCode("all")
-#' 
-#' one_extra <- readNWISpCode(c("01075", "12345"))
-#' 
-#' }
 readNWISpCode <- function(parameterCd) {
   
   .Deprecated(new = "read_waterdata_parameter_codes",

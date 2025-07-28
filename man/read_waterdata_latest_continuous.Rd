@@ -57,7 +57,7 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{last_modified} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.}
+Only features that have a \code{last_modified} that intersects the value of datetime are selected.}
 
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
