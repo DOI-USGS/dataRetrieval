@@ -87,7 +87,7 @@ whatNWISsites <- function(...) {
                          POST = POST, 
                          format = "mapper")
   
-  rawData <- getWebServiceData(urlCall, encoding = "gzip")
+  rawData <- getWebServiceData(urlCall)
   if (is.null(rawData)) {
     return(invisible(NULL))
   }
