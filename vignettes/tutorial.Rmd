@@ -112,14 +112,14 @@ There are many types of data served from NWIS. To understand how the services ar
 |--------|:-------|------:|-------:|
 |uv|[readNWISuv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuv.html)|Continuous data| None yet |
 |dv|[readNWISdv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdv.html)|Daily aggregated | [read_waterdata_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_daily.html) |
-|gwlevels|[readNWISgwl](https://doi-usgs.github.io/dataRetrieval/reference/readNWISgwl.html)|Groundwater levels | None yet |
+|gwlevels|[readNWISgwl](https://doi-usgs.github.io/dataRetrieval/reference/readNWISgwl.html)|Groundwater levels | [read_waterdata_field_measurements.html](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) |
 |site|[readNWISsite](https://doi-usgs.github.io/dataRetrieval/reference/readNWISsite.html)|Site metadata| [read_waterdata_monitoring_location](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_monitoring_location.html) |
 |pcode|[readNWISpCode](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpCode.html)|Parameter code metadata | [read_waterdata_parameter_codes](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_parameter_codes.html) |
 |stat|[readNWISstat](https://doi-usgs.github.io/dataRetrieval/reference/readNWISstat.html)| Site statistics | None yet |
 |rating|[readNWISrating](https://doi-usgs.github.io/dataRetrieval/reference/readNWISrating.html)| Rating curves| None yet |
 |peak|[readNWISpeak](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpeak.html)|Peak flow| None yet |
 |use|[readNWISuse](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuse.html)|Water Use| None yet |
-|meas|[readNWISmeas](https://doi-usgs.github.io/dataRetrieval/reference/readNWISmeas.html)|Discrete surface water| None yet |
+|meas|[readNWISmeas](https://doi-usgs.github.io/dataRetrieval/reference/readNWISmeas.html)|Discrete surface water| [read_waterdata_field_measurements.html](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html)|
 | | [readNWISdata](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdata.html) | General data import for NWIS| [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) |
 
 

@@ -85,10 +85,12 @@ construct_api_requests <- function(service,
     POST = TRUE
   }
   
+  get_list <- get_list[!is.na(get_list)]
+  
   time_periods <- c("last_modified", "datetime", "time", "begin", "end")
   if(any(time_periods %in% names(get_list))){
 
-    for(i in time_periods){
+    for(i in time_periods[time_periods %in% names(get_list)]){
       dates <- FALSE
       if (all(service == "daily" & i != "last_modified")){
         dates <- TRUE
@@ -299,6 +301,7 @@ switch_properties_id <- function(properties, id_name, service){
 #' 
 #' start <- c("2021-01-01", NA)
 #' dataRetrieval:::format_api_dates(start)
+#' dataRetrieval:::format_api_dates(start, TRUE)
 #' 
 #' end <- c(NA, "2021-01-01")
 #' dataRetrieval:::format_api_dates(end)
@@ -316,10 +319,12 @@ switch_properties_id <- function(properties, id_name, service){
 #'                           
 #' dataRetrieval:::format_api_dates(start_end)
 #' 
+#' # If you don't specify a timezone, it will assume UTC
 #' start_end2 <- c("2021-01-01 12:15:00", "")
 #' dataRetrieval:::format_api_dates(start_end2)
 #' 
-#' start_end2 <- c("2021-01-01T12:15:00Z", "")
+#' # If you do specify a timezone, it should maintain it, but convert to UTC:
+#' start_end2 <- c("2021-01-01T12:15:00-0500", "")
 #' dataRetrieval:::format_api_dates(start_end2)
 #' 
 format_api_dates <- function(datetime, date = FALSE){
@@ -336,18 +341,18 @@ format_api_dates <- function(datetime, date = FALSE){
         return(datetime)
       } else {
         if(date){
-          datetime <- format(datetime, "%Y-%m-%d")
+          datetime <- format(lubridate::as_datetime(datetime), "%Y-%m-%d")
         } else {
-          datetime <- lubridate::format_ISO8601(datetime, usetz = TRUE)
+          datetime <- lubridate::format_ISO8601(lubridate::as_datetime(datetime), usetz = "Z")
         }
       }
     } else if (length(datetime) == 2) {
       
       if(date){
-        datetime <- paste0(format(as.Date(datetime), "%Y-%m-%d"), collapse = "/")
+        datetime <- paste0(format(lubridate::as_datetime(datetime), "%Y-%m-%d"), collapse = "/")
       } else {
-        datetime <- paste0(lubridate::format_ISO8601(as.POSIXct(datetime), 
-                                                     usetz = TRUE), 
+        datetime <- paste0(lubridate::format_ISO8601(lubridate::as_datetime(datetime), 
+                                                     usetz = "Z"), 
                            collapse = "/")
       }
 

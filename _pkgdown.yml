@@ -72,8 +72,9 @@ reference:
       - read_waterdata_ts_meta
       - read_waterdata_monitoring_location
       - read_waterdata_latest_continuous
+      - read_waterdata_field_measurements
       - read_waterdata_parameter_codes
-      - read_water_data_metadata
+      - read_waterdata_metadata
       - read_waterdata
       - summarize_waterdata_samples
       - check_waterdata_sample_params

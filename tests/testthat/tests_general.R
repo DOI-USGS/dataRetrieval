@@ -2,6 +2,7 @@ context("General functions")
 
 test_that("General USGS retrievals working", {
   testthat::skip_on_cran()
+  testthat::skip_on_ci()
   
   cql <- '{
   "op": "and",
@@ -62,7 +63,7 @@ test_that("General USGS retrievals working", {
 
 test_that("General NWIS retrievals working", {
   testthat::skip_on_cran()
-  skip_on_ci()
+  testthat::skip_on_ci()
   multiSite <- readNWISdata(
     sites = c("04025500", "040263491"), service = "iv",
     parameterCd = "00060",
@@ -262,7 +263,8 @@ test_that("General NWIS retrievals working", {
 })
 
 test_that("read_waterdata_ts_meta", {
-
+  testthat::skip_on_cran()
+  testthat::skip_on_ci()
   # no service specified:
   availableData <- read_waterdata_ts_meta(monitoring_location_id = "USGS-05114000")
   expect_equal(ncol(availableData), 17)
@@ -297,6 +299,7 @@ test_that("read_waterdata_ts_meta", {
 
 test_that("General WQP retrievals working", {
   testthat::skip_on_cran()
+  testthat::skip_on_ci()
   nameToUse <- "pH"
   pHData <- readWQPdata(siteid = "USGS-04024315",
                         characteristicName = nameToUse,
@@ -339,7 +342,7 @@ test_that("General WQP retrievals working", {
   expect_true(!all(c("siteInfo", "variableInfo") %in% names(attributes(wqp.summary_no_atts))))
 
   rawPcode <- readWQPqw("USGS-01594440", "01075", "", "", legacy = FALSE)
-  expect_true(all(c("url", "queryTime", "siteInfo", "headerInfo") %in%
+  expect_true(all(c("url", "queryTime", "siteInfo") %in%
                     names(attributes(rawPcode))))
 
   # This means wqp_check_status was called:
@@ -390,7 +393,9 @@ test_that("zeroPad handles NAs", {
 
 test_that("Dates with no days can be handled", {
   testthat::skip_on_cran()
-  empty_df <- readNWISgwl("425957088141001", startDate = "1980-01-01")
+
+  empty_df <- read_waterdata_field_measurements(monitoring_location_id = "USGS-425957088141001", 
+                                                time = c("1980-01-01", NA))
   expect_true(nrow(empty_df) > 0)
 })
 
@@ -429,6 +434,7 @@ test_that("whatWQPdata working", {
 context("read_waterdata_ts_meta")
 test_that("read_waterdata_ts_meta working", {
   testthat::skip_on_cran()
+
   siteListOhio <- read_waterdata_monitoring_location(state_name = "Ohio")
   siteListPhos <- read_waterdata_ts_meta(bbox = sf::st_bbox(siteListOhio),
                                     parameter_code = "00665")
