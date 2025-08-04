@@ -65,7 +65,6 @@ buildcheck:
   
 pages:
   stage: end
-  cache: []
   dependencies:
     - build-image
     - buildcheck
@@ -73,8 +72,8 @@ pages:
     - Rscript -e 'devtools::install(quick = TRUE, upgrade = "never")'
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
-    - quarto render tutorials/changes_slides_deck.qmd --output-dir ./public/tutorials
-    - quarto render tutorials/basic_slides_deck.qmd --output-dir ./public/tutorials
+    - quarto render tutorials/changes_slides_deck.qmd --output-dir $PAGES_OUTDIR/tutorials
+    - quarto render tutorials/basic_slides_deck.qmd --output-dir $PAGES_OUTDIR/tutorials
   artifacts:
     paths:
       - $PAGES_OUTDIR
