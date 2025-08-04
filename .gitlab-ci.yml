@@ -98,6 +98,9 @@ longtest:
 pages:
   stage: end
   cache: []
+  dependencies:
+    - build-image
+    - buildcheck
   script:
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - quarto render tutorials/changes_slides_deck.qmd --output-dir public/tutorials
