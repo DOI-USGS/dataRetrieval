@@ -23,9 +23,9 @@ variables:
   _R_CHECK_FORCE_SUGGESTS_: "true"
   _R_CHECK_DONTTEST_EXAMPLES_: "false"
   R_PROFILE: "$R_HOME/etc/Rprofile.site"
+  R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
   APT_CACHE: "$CI_PROJECT_DIR/ci/lib/apt-cache"
   CRAN: "https://rpkg.chs.usgs.gov/prod-cran/latest"
-  R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
   R_LIBS: "$CI_PROJECT_DIR/ci/lib"
   BUILD_LOGS_DIR: "$CI_PROJECT_DIR/ci/logs"
   NOT_CRAN: "true"
@@ -43,7 +43,6 @@ build-image:
   rules:
     - changes:
       - docker/Dockerfile
-      - .gitlab-ci.yml
   script:
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
@@ -70,6 +69,7 @@ pages:
     - build-image
     - buildcheck
   script:
+    - Rscript -e 'devtools::install(quick = TRUE, upgrade = "never")'
     - quarto render tutorials/changes_slides_deck.qmd --output-dir public/tutorials
     - quarto render tutorials/basic_slides_deck.qmd --output-dir public/tutorials
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
