@@ -100,6 +100,8 @@ pages:
   cache: []
   script:
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
+    - quarto render tutorials/changes_slides_deck.qmd --output-dir public/tutorials
+    - quarto render tutorials/basic_slides_deck.qmd --output-dir public/tutorials
     - Rscript -e 'file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
   artifacts:
     paths:
