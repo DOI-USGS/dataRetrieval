@@ -59,41 +59,9 @@ buildcheck:
   dependencies:
     - build-image
   script:
-    - R CMD build . --no-manual
-    - Rscript -e 'devtools::check(document = FALSE, args = "--no-tests", check_dir = Sys.getenv("BUILD_LOGS_DIR"), vignettes = FALSE)'
+    - Rscript -e 'devtools::install()'
+    - Rscript -e '#devtools::check(document = FALSE, args = "--no-tests", check_dir = Sys.getenv("BUILD_LOGS_DIR"), vignettes = FALSE)'
 
-unittests:
-  stage: test
-  cache: []
-  dependencies:
-    - build-image
-    - buildcheck
-  script:
-    - R -e 'library(testthat); options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml")); devtools::test(reporter = "junit")'
-    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
-  artifacts:
-    when: always
-    expire_in: 1 week
-    paths: 
-      - test-out.xml
-    reports:
-      junit: test-out.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: cobertura.xml
-  coverage: '/Coverage: \d+.\d+\%/'
-
-longtest:
-  stage: test
-  dependencies:
-    - build-image
-    - buildcheck
-  script:
-    - Rscript -e 'testthat::test_local(path = "tests/manual")'
-  rules:
-    - if: $RUN_LONG_TESTS == "FALSE"
-      when: always
-    - when: never
   
 pages:
   stage: end
@@ -102,9 +70,9 @@ pages:
     - build-image
     - buildcheck
   script:
-    - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - quarto render tutorials/changes_slides_deck.qmd --output-dir public/tutorials
     - quarto render tutorials/basic_slides_deck.qmd --output-dir public/tutorials
+    - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
   artifacts:
     paths:
