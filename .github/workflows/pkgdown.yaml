@@ -64,11 +64,6 @@ jobs:
         with:
           # To install LaTeX to build PDF book 
           tinytex: true
-      - name: Render Quarto Project
-        uses: quarto-dev/quarto-actions/render@v2
-        with:
-          path: tutorials 
-          target: ./public/tutorials
       - name: Build site
         run: |
           pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = "public") |
