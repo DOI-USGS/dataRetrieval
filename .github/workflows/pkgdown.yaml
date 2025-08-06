@@ -65,12 +65,12 @@ jobs:
         uses: quarto-dev/quarto-actions/render@v2
         with:
           path: tutorials/basic_slides_deck.qmd
-          to: ./public/tutorials
+          to: ./public/tutorials/tutorials/basic_slides_deck.html
       - name: Render Quarto Project next
         uses: quarto-dev/quarto-actions/render@v2
         with:
           path: tutorials/changes_slides_deck.qmd
-          to: ./public/tutorials
+          to: ./public/tutorials/changes_slides_deck.html
       - name: Build site
         run: |
           pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = "public") |
