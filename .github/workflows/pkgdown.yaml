@@ -59,11 +59,8 @@ jobs:
             any::gridExtra
             local::.
           needs: website
-     - name: Set up Quarto
+      - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-        with:
-          # To install LaTeX to build PDF book 
-          tinytex: true
       - name: Build site
         run: |
           pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = "public") |
