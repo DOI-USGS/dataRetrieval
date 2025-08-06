@@ -76,12 +76,6 @@ jobs:
               run: |
                 quarto render tutorials/changes_slides_deck.qmd --output-dir ./public/tutorials 
               shell: bash
-            - name: 'render2'
-              env:
-                QUARTO_PRINT_STACK: true  
-              run: |
-                quarto render tutorials/basic_slides_deck.qmd --output-dir ./public/tutorials
-              shell: bash
       - name: Upload artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
