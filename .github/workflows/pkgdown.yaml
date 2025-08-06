@@ -61,11 +61,10 @@ jobs:
           needs: website
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-      - name: Render Quarto Project
-        uses: quarto-dev/quarto-actions/render@v2
-        with:
-          path: tutorials 
-          target: ./public/tutorials
+      - name: Build slides
+        run: |
+          quarto render tutorials/changes_slides_deck.qmd --output-dir ./public/tutorials |
+          quarto render tutorials/basic_slides_deck.qmd --output-dir ./public/tutorials
       - name: Build site
         run: |
           pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = "public") |
