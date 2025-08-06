@@ -67,15 +67,12 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
       - name: Render Quarto Project
-        uses: quarto-dev/quarto-actions/render@v2
-        with:
-          path: tutorials/basic_slides_deck.qmd
-          output-dir: ./public/tutorials/tutorials/basic_slides_deck.html
-      - name: Render Quarto Project next
-        uses: quarto-dev/quarto-actions/render@v2
-        with:
-          path: tutorials/changes_slides_deck.qmd
-          output-dir: ./public/tutorials/changes_slides_deck.html
+        env:
+          QUARTO_PRINT_STACK: true
+        run: |
+          quarto render tutorials/changes_slides_deck.qmd --output-dir ./public/tutorials |
+          quarto render tutorials/basic_slides_deck.qmd --output-dir ./public/tutorials
+        shell: bash
       - name: Upload artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
