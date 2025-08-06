@@ -59,23 +59,23 @@ jobs:
             any::gridExtra
             local::.
           needs: website
+      - name: Build site
+        run: |
+          pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = "public") |
+          file.copy(from = "./public/articles/logo.png",to = "./public/reference/logo.png")
+        shell: Rscript {0}
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
       - name: Render Quarto Project
         uses: quarto-dev/quarto-actions/render@v2
         with:
           path: tutorials/basic_slides_deck.qmd
-          to: ./public/tutorials/tutorials/basic_slides_deck.html
+          output-dir: ./public/tutorials/tutorials/basic_slides_deck.html
       - name: Render Quarto Project next
         uses: quarto-dev/quarto-actions/render@v2
         with:
           path: tutorials/changes_slides_deck.qmd
-          to: ./public/tutorials/changes_slides_deck.html
-      - name: Build site
-        run: |
-          pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = "public") |
-          file.copy(from = "./public/articles/logo.png",to = "./public/reference/logo.png")
-        shell: Rscript {0}
+          output-dir: ./public/tutorials/changes_slides_deck.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
