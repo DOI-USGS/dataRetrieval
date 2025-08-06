@@ -96,6 +96,7 @@ vignettes/Wide_data_example.xlsx
 vignettes/messyData.png
 ^ci$
 ^public$
+^tutorials$
 ^docker$
 vignettes/WQX_3.Rmd
 vignettes/samples_data.Rmd

@@ -27,6 +27,7 @@
 #' coordinate_accuracy_codes <- read_waterdata_metadata("coordinate-accuracy-codes")
 #' coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
 #' coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
+#' huc_codes <- read_waterdata_metadata("hydrologic-unit-codes")
 #' national_aquifer_codes <- read_waterdata_metadata("national-aquifer-codes")
 #' parameter_codes <- read_waterdata_metadata("parameter-codes")
 #' reliability_codes <- read_waterdata_metadata("reliability-codes")

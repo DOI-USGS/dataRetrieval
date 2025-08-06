@@ -19,6 +19,7 @@ read_waterdata_ts_meta(
   thresholds = NA,
   sublocation_identifier = NA_character_,
   primary = NA_character_,
+  parent_time_series_id = NA_character_,
   time_series_id = NA_character_,
   web_description = NA_character_,
   skipGeometry = NA,
@@ -37,7 +38,7 @@ read_waterdata_ts_meta(
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id, last_modified, begin, end, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description, parameter_description}
+geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id, last_modified, begin, end, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description, parameter_description, parent_time_series_id}
 
 \item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.}
 
@@ -88,6 +89,8 @@ Only features that have a \code{end} that intersects the value of datetime are s
 \item{sublocation_identifier}{An optional human-readable identifier used to specify where measurements are recorded at a monitoring location.}
 
 \item{primary}{A flag identifying if the time series is a "primary" time series. "Primary" time series (which have this flag) are standard observations which undergo \href{https://www.usgs.gov/survey-manual/5028-fundamental-science-practices-review-and-approval-scientific-data-release}{Bureau review and approval processes}. Non-primary time series, which will have missing values for "primary", are provisional datasets made available to meet the need for timely best science and to assist with daily operations which need real-time information. Non-primary time series data are only retained by this system for 120 days. See the \href{https://waterdata.usgs.gov/provisional-data-statement/}{USGS Provisional Data Statement} for more information.}
+
+\item{parent_time_series_id}{The unique identifier representing the parent or "upchain" time series that a daily values time series is generated from. Daily values time series have one and only one parent time series.}
 
 \item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
 
