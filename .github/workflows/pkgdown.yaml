@@ -59,15 +59,21 @@ jobs:
             any::gridExtra
             local::.
           needs: website
+     - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@e61e6c42f9039e0435e846874e420611adf19a7b
+        with:
+          # To install LaTeX to build PDF book 
+          tinytex: true
+      - name: Render Quarto Project
+        uses: quarto-dev/quarto-actions/render@e61e6c42f9039e0435e846874e420611adf19a7b
+        with:
+          path: tutorials 
+          target: ./public/tutorials
       - name: Build site
         run: |
           pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = "public") |
           file.copy(from = "./public/articles/logo.png",to = "./public/reference/logo.png")
         shell: Rscript {0}
-      - name: Build slides
-        run: |
-          quarto render tutorials/changes_slides_deck.qmd --output-dir ./public/tutorials |
-          quarto render tutorials/basic_slides_deck.qmd --output-dir ./public/tutorials
       - name: Upload artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
