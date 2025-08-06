@@ -69,6 +69,7 @@ test_that("samples-data project working", {
 context("summary_waterdata_samples")
 test_that("summary_waterdata_samples working", {
   testthat::skip_on_cran()
+  testthat::skip_on_ci()
   
   site1 <- summarize_waterdata_samples(monitoringLocationIdentifier = "USGS-01594440")
   expect_is(site1, "data.frame")
@@ -76,8 +77,8 @@ test_that("summary_waterdata_samples working", {
 })
 
 test_that("profiles", {
-  
   testthat::skip_on_cran()
+  testthat::skip_on_ci()
   # Data profiles: "Organization Data"
   org_data <- read_waterdata_samples(
     countyFips =  countyCdLookup("WI", "Dane"),

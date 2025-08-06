@@ -26,22 +26,22 @@ navbar:
     href: articles/Status.html
   - text: Function Help
     href: reference/index.html
-  - text: Water Quality Data
+  - text: Tutorials
     menu:
+    - text: Basic Tutorial
+      href: articles/tutorial.html
+    - text: Basic Tutorial (slides)
+      href: articles/basic_slides.html
+    - text: Changes to dataRetrieval (slides)
+      href: articles/changes_slides.html
+  - text: Additional Articles
+    menu:
+    - text: USGS Water Data APIs
+      href: articles/read_waterdata_functions.html
     - text: Samples Data
       href: articles/samples_data.html
     - text: Changes to QW
       href: articles/qwdata_changes.html
-    - text: USGS QW Status
-      href: articles/Status.html
-    - text: QW Development Plan
-      href: articles/wqx3_development_plan.html
-  - text: Additional Articles
-    menu:
-    - text: Tutorial
-      href: articles/tutorial.html
-    - text: USGS Water Data APIs
-      href: articles/read_waterdata_functions.html
     - text: Background
       href: articles/dataRetrieval.html
     - text: Pivot Data
