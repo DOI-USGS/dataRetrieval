@@ -60,12 +60,12 @@ jobs:
             local::.
           needs: website
      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@e61e6c42f9039e0435e846874e420611adf19a7b
+        uses: quarto-dev/quarto-actions/setup@v2
         with:
           # To install LaTeX to build PDF book 
           tinytex: true
       - name: Render Quarto Project
-        uses: quarto-dev/quarto-actions/render@e61e6c42f9039e0435e846874e420611adf19a7b
+        uses: quarto-dev/quarto-actions/render@v2
         with:
           path: tutorials 
           target: ./public/tutorials
