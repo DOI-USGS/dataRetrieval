@@ -291,10 +291,9 @@ constructNWISURL <- function(siteNumbers,
            }
          }
   )
+  
   url <- httr2::req_headers(url,
-                            `Accept-Encoding` = "--no-compressed")
-  # url <- httr2::req_headers(url,
-  #                    `Accept-Encoding` = c("compress", "gzip", "deflate")) 
+                     `Accept-Encoding` = c("compress", "gzip", "deflate"))
   
   return(url)
 }
