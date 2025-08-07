@@ -15,3 +15,5 @@ docs
 vignettes/*.html
 vignettes/*.R
 
+
+/.quarto/
