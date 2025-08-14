@@ -185,7 +185,7 @@ error: HTTP 403 Forbidden.
 
 2. Save it in a safe place (KeyPass or other password management tool)
 
-3. Add it to your .Renviorn file as API_USGS_PAT. 
+3. Add it to your .Renviron file as API_USGS_PAT. 
 
 4. Restart R 
 
