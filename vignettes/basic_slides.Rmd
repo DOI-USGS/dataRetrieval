@@ -1,0 +1,21 @@
+---
+title: "Discover and Download Data"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
+vignette: >
+  %\VignetteIndexEntry{Discover and Download Data}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+Click the slide below then "f" for full screen, and "Esc" to escape full screen.
+
+```{=html}
+<iframe src="../tutorials/basic_slides_deck.html" width="700"
+  height="400"></iframe>
+```
+

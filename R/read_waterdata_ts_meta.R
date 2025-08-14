@@ -16,6 +16,7 @@
 #' @param thresholds `r get_params("time-series-metadata")$thresholds`
 #' @param unit_of_measure `r get_params("time-series-metadata")$unit_of_measure`
 #' @param primary `r get_params("time-series-metadata")$primary`
+#' @param parent_time_series_id `r get_params("time-series-metadata")$parent_time_series_id`
 #' @param web_description `r get_params("time-series-metadata")$web_description`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
@@ -69,6 +70,7 @@ read_waterdata_ts_meta <- function(monitoring_location_id = NA_character_,
                               thresholds = NA,
                               sublocation_identifier = NA_character_,
                               primary = NA_character_,
+                              parent_time_series_id = NA_character_,
                               time_series_id = NA_character_,
                               web_description = NA_character_,
                               skipGeometry = NA,

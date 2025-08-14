@@ -1,3 +1,10 @@
+dataRetrieval 2.7.21
+===================
+* Added read_waterdata_field_measurements to access new USGS water data API.
+* Added deprecation warning to readNWISgwl and readNWISmeas.
+* Added parent_time_series_id to read_waterdata_ts_meta.
+* Updated some documentation.
+
 dataRetrieval 2.7.20
 ===================
 * Added id transformation to read_waterdata to match other functions

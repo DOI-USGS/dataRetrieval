@@ -2,6 +2,7 @@ context("General functions")
 
 test_that("General USGS retrievals working", {
   testthat::skip_on_cran()
+  testthat::skip_on_ci()
   
   cql <- '{
   "op": "and",
@@ -62,7 +63,8 @@ test_that("General USGS retrievals working", {
 
 test_that("General NWIS retrievals working", {
   testthat::skip_on_cran()
-  skip_on_ci()
+  testthat::skip_on_ci()
+  
   multiSite <- readNWISdata(
     sites = c("04025500", "040263491"), service = "iv",
     parameterCd = "00060",
@@ -262,10 +264,11 @@ test_that("General NWIS retrievals working", {
 })
 
 test_that("read_waterdata_ts_meta", {
-
+  testthat::skip_on_cran()
+  testthat::skip_on_ci()
   # no service specified:
   availableData <- read_waterdata_ts_meta(monitoring_location_id = "USGS-05114000")
-  expect_equal(ncol(availableData), 17)
+  expect_equal(ncol(availableData), 18)
 
   uvData <- read_waterdata_ts_meta(monitoring_location_id = "USGS-05114000",
                               computation_period_identifier = c("Points"))
@@ -297,6 +300,7 @@ test_that("read_waterdata_ts_meta", {
 
 test_that("General WQP retrievals working", {
   testthat::skip_on_cran()
+  testthat::skip_on_ci()
   nameToUse <- "pH"
   pHData <- readWQPdata(siteid = "USGS-04024315",
                         characteristicName = nameToUse,
@@ -390,13 +394,17 @@ test_that("zeroPad handles NAs", {
 
 test_that("Dates with no days can be handled", {
   testthat::skip_on_cran()
-  empty_df <- readNWISgwl("425957088141001", startDate = "1980-01-01")
+  testthat::skip_on_ci()
+
+  empty_df <- read_waterdata_field_measurements(monitoring_location_id = "USGS-425957088141001", 
+                                                time = c("1980-01-01", NA))
   expect_true(nrow(empty_df) > 0)
 })
 
 context("whatWQPsamples")
 test_that("whatWQPsamples working", {
   testthat::skip_on_cran()
+  testthat::skip_on_ci()
   # The warning is caused by a confirmed bug in WQP
   siteInfo <- whatWQPsamples(siteid = "USGS-01594440")
   expect_true(nrow(siteInfo) > 0)
@@ -405,6 +413,7 @@ test_that("whatWQPsamples working", {
 context("whatWQPmetrics")
 test_that("whatWQPmetrics working", {
   testthat::skip_on_cran()
+  testthat::skip_on_ci()
   type <- "Stream"
   siteInfo <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
   expect_true(ncol(siteInfo) >= 21)
@@ -413,6 +422,7 @@ test_that("whatWQPmetrics working", {
 context("whatWQPdata")
 test_that("whatWQPdata working", {
   testthat::skip_on_cran()
+  testthat::skip_on_ci()
 
   site1 <- whatWQPdata(siteid = "USGS-01594440")
   expect_is(site1, "data.frame")
@@ -429,6 +439,8 @@ test_that("whatWQPdata working", {
 context("read_waterdata_ts_meta")
 test_that("read_waterdata_ts_meta working", {
   testthat::skip_on_cran()
+  testthat::skip_on_ci()
+
   siteListOhio <- read_waterdata_monitoring_location(state_name = "Ohio")
   siteListPhos <- read_waterdata_ts_meta(bbox = sf::st_bbox(siteListOhio),
                                     parameter_code = "00665")

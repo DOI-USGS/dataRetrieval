@@ -62,9 +62,9 @@ Functions <- c(
   "read_waterdata_daily",
   "readNWISuv",
   "readNWISrating",
-  "readNWISmeas",
+  "read_waterdata_field_measurements",
   "readNWISpeak",
-  "readNWISgwl",
+  "read_waterdata_field_measurements",
   "readNWISuse",
   "readNWISstat",
   "read_waterdata_parameter_codes",
@@ -108,7 +108,11 @@ Description <- c(
 )
 Source <- c("USGS Water Data API",
             "USGS Water Data API",
-            rep("NWIS", 7),
+            rep("NWIS",2),
+            "USGS Water Data API",
+            "NWIS",
+            "USGS Water Data API",
+            rep("NWIS",2),
             "USGS Water Data API",
             "USGS Water Data API",
             "USGS Samples Data",
@@ -376,8 +380,8 @@ Data are retrieved from [https://waterservices.usgs.gov/docs/instantaneous-value
 Groundwater level measurements can be obtained with the `readNWISgwl` function. Information on the returned data can be found with the `comment` function, and attached attributes as described in the [metadata](#embedded-metadata) section.
 
 ```{r gwlexample, echo=TRUE, eval=FALSE}
-siteNumber <- "434400121275801"
-groundWater <- readNWISgwl(siteNumber)
+siteNumber <- "USGS-434400121275801"
+groundWater <- read_waterdata_field_measurements(monitoring_location_id = siteNumber)
 ```
 
 
@@ -410,7 +414,7 @@ These data are the discrete measurements of discharge that are made for the purp
 Surface-water measurement data can be obtained with the `readNWISmeas` function.
 
 ```{r surfexample, echo=TRUE, eval=FALSE}
-surfaceData <- readNWISmeas(siteNumber)
+surfaceData <- read_waterdata_field_measurements(monitoring_location_id = "USGS-01594440")
 ```
 
 
