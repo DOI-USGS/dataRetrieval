@@ -17,17 +17,37 @@
 #'                                       properties = NA,
 #'                                       service = "daily")
 #' 
-deal_with_empty <- function(return_list, properties, service){
+deal_with_empty <- function(return_list, properties, service, 
+                            skipGeometry = TRUE){
   if(nrow(return_list) == 0){
 
     if(all(is.na(properties))){
       schema <- check_OGC_requests(endpoint = service, type = "schema")
       properties <- names(schema$properties)
     }
-    return_list <- data.frame(matrix(nrow = 0, ncol = length(properties)))
+    return_list <- data.frame(matrix(nrow = 0, 
+                                     ncol = length(properties)))
+    return_list <- lapply(return_list, as.character)
     names(return_list) <- properties
+    
+    single_params <- c("datetime", "last_modified", "begin", "end", "time")
+    
+    for(i in single_params){
+      if(i %in% names(return_list)){
+        return_list[[i]] <- as.POSIXct(as.character(), origin = "1970-01-01")
+      }
+    }
+    
+    if(service == "daily"){
+      return_list$time <- as.Date(as.character())
+    }
   }
+  return_list <- data.frame(return_list)
+  return_list$geometry <- NULL
   
+  if(!skipGeometry){
+    return_list <- sf::st_as_sf(return_list, geometry = sf::st_sfc())
+  }
   return(return_list)
 }
 
@@ -271,7 +291,14 @@ get_ogc_data <- function(args,
   
   return_list <- walk_pages(req, max_results)
   
-  return_list <- deal_with_empty(return_list, properties, service)
+  if(is.na(args[["skipGeometry"]])){
+    skipGeometry <- FALSE
+  } else {
+    skipGeometry <- args[["skipGeometry"]]
+  }
+  
+  return_list <- deal_with_empty(return_list, properties, service,
+                                 skipGeometry)
   
   if(convertType) return_list <- cleanup_cols(return_list, service = service)
   
