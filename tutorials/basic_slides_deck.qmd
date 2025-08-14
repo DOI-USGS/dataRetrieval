@@ -79,7 +79,7 @@ By default will look like:
 
 ![](images/default_rstudio.png)
 
-## RStudio Appearences
+## RStudio Appearances
 
 Go to Tools -> Global Options -> Appearances to change style.
 
