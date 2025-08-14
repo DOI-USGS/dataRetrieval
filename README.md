@@ -36,7 +36,7 @@ If you have additional questions about these changes, email
 2.  Get daily USGS data (for example, mean daily discharge). Start here:
     `?read_waterdata_daily`
 
-3.  Get USGS groundwater data. Start here:
+3.  Get discrete USGS groundwater data. Start here:
     `?read_waterdata_field_measurements`
 
 4.  Get discrete water quality data from a cooperative service that
@@ -196,15 +196,15 @@ NWIScitation <- create_NWIS_bib(dv)
 NWIScitation
 #> U.S. Geological Survey (2025). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jul
-#> 21, 2025,
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Aug
+#> 14, 2025,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Jul 21, 2025},
+#>   note = {Accessed Aug 14, 2025},
 #>   year = {2025},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -228,14 +228,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2025). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Jul 21, 2025,
+#> Accessed Aug 14, 2025,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Jul 21, 2025},
+#>   note = {Accessed Aug 14, 2025},
 #>   year = {2025},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }
