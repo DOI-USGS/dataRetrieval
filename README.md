@@ -36,7 +36,8 @@ If you have additional questions about these changes, email
 2.  Get daily USGS data (for example, mean daily discharge). Start here:
     `?read_waterdata_daily`
 
-3.  Get USGS groundwater data. Start here: `?readNWISgwl`
+3.  Get USGS groundwater data. Start here:
+    `?read_waterdata_field_measurements`
 
 4.  Get discrete water quality data from a cooperative service that
     integrates publicly available water-quality data from the USGS, EPA,
@@ -160,7 +161,7 @@ citation(package = "dataRetrieval")
 #> 
 #>   De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., Johnson, M.,
 #>   2025, dataRetrieval: R packages for discovering and retrieving water
-#>   data available from Federal hydrologic web services, v.2.7.19,
+#>   data available from Federal hydrologic web services, v.2.7.20,
 #>   doi:10.5066/P9X4L3GE
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -170,7 +171,7 @@ citation(package = "dataRetrieval")
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
-#>     version = {2.7.19},
+#>     version = {2.7.20},
 #>     institution = {U.S. Geological Survey},
 #>     year = {2025},
 #>     doi = {10.5066/P9X4L3GE},
@@ -195,15 +196,15 @@ NWIScitation <- create_NWIS_bib(dv)
 NWIScitation
 #> U.S. Geological Survey (2025). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jun
-#> 27, 2025,
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jul
+#> 21, 2025,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Jun 27, 2025},
+#>   note = {Accessed Jul 21, 2025},
 #>   year = {2025},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -227,14 +228,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2025). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Jun 27, 2025,
+#> Accessed Jul 21, 2025,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Jun 27, 2025},
+#>   note = {Accessed Jul 21, 2025},
 #>   year = {2025},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }

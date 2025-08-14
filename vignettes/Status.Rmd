@@ -39,27 +39,31 @@ df <- data.frame(
     "readNWISdv",
     "readNWISsite",
     "whatNWISsites",
-    "",
+    "readNWISpCode",
+    "readNWISgwl",
+    "readNWISmeas",
+    "readNWISdata",
     "readNWISuv",
     "readNWISrating",
     "readNWISstat",
-    "readNWISmeas",
     "readNWISpeak",
-    "readNWISgwl",
     "readNWISuse",
-    "readNWISdata",
-    "whatNWISdata",
-    "readNWISpCode"
+
+    "whatNWISdata"
   ),
   New = c(
     "read_waterdata_samples",
     "read_waterdata_daily",
     "read_waterdata_monitoring_location",
     "read_waterdata_ts_meta",
+    "read_waterdata_parameter_codes",
+    "read_waterdata_field_measurements",
+    "read_waterdata_field_measurements",
     "read_waterdata",
-    rep("", 10)
+    rep("", 6)
   ),
-  "Available on (branch)" = c("main (CRAN)", "main (CRAN)", "main (CRAN)", "main (CRAN)", "main (CRAN)", rep("", 10))
+  "Available on (branch)" = c(rep("main (CRAN)", 5), 
+  "develop", "develop", "main (CRAN)",  rep("", 6))
 )
 
 knitr::kable(df, col.names = c("WaterServices (legacy) function", "Water Data (new) function", "Available on (branch name)"))

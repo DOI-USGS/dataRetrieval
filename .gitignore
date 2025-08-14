@@ -12,3 +12,8 @@ docs
 /doc/
 /Meta/
 /Temp/
+vignettes/*.html
+vignettes/*.R
+
+
+/.quarto/

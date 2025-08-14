@@ -197,19 +197,37 @@ whatWQPmetrics <- function(...,
 #' lakeSites_chars <- whatWQPdata(
 #'   siteType = "Lake, Reservoir, Impoundment",
 #'   countycode = "US:55:025", convertType = FALSE)
-#' }
+#' 
 #' 
 #' bbox <- c(-86.9736, 34.4883, -86.6135, 34.6562)
 #' what_bb <- whatWQPdata(bBox = bbox)
-#' 
+#' }
 whatWQPdata <- function(..., 
                         convertType = TRUE) {
-  values <- readWQPdots(..., legacy = TRUE)
   
+  args <- convertLists(...)
+  if("legacy" %in% names(args)){
+    if (!args$legacy) {
+      stop("There is not an equivalent 'whatWQPdata' offering for legacy=FALSE.")
+    }
+    args <- args[names(args) != "legacy"]
+  }
+  
+  values <- readWQPdots(args, legacy = TRUE)
+  service <- values[["service"]]
   values <- values[["values"]]
-
-  if (any(c("tz", "service", "mimeType") %in% names(values))){
-    values <- values[!(names(values) %in% c("tz", "service", "mimeType"))]
+  
+  # Not sure if there's a geojson option with WQX3
+  wqp_message()
+  
+  if (grepl("WQX", service)) {
+    stop("There is not an equivalent 'whatWQPdata' offering for WQX3 services.")
+  } else if (service != "Result") {
+    message("service argument is not used in whatWQPdata and will be ignored")
+  }
+  
+  if (any(c("tz", "mimeType") %in% names(values))){
+    values <- values[!(names(values) %in% c("tz", "mimeType"))]
   }
   POST <- FALSE
   
@@ -237,9 +255,6 @@ whatWQPdata <- function(...,
   baseURL <- get_or_post(baseURL, 
                          POST = POST,
                          mimeType = "geojson")
-  
-  # Not sure if there's a geojson option with WQX3
-  wqp_message()
   
   doc <- getWebServiceData(baseURL)
   

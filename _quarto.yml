@@ -1,0 +1,8 @@
+project:
+  output-dir: public
+  render:
+    - tutorials/basic_slides_deck.qmd
+    - tutorials/changes_slides_deck.qmd
+
+toc: false
+  

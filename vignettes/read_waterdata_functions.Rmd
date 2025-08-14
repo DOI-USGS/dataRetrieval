@@ -168,8 +168,6 @@ The `read_waterdata_daily` function replaces the `readNWISdv` function.
 To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily>.
 
 ```{r}
-library(dataRetrieval)
-
 daily_modern <- read_waterdata_daily(monitoring_location_id = "USGS-01491000",
                                 parameter_code = c("00060", "00010"),
                                 statistic_id = "00003",
@@ -188,6 +186,28 @@ ggplot(data = daily_modern) +
   theme_bw()
 
 ```
+
+## Field Measurements
+
+The `read_waterdata_field_measurements` replaces both the `readNWISgwl` and `readNWISmeas` functions.
+
+`r dataRetrieval:::get_description("field-measurements")`
+
+```{r}
+field_modern <- read_waterdata_field_measurements(monitoring_location_id = c("USGS-451605097071701",                                                  "USGS-263819081585801"),
+                                                  time = c("2023-10-01", "2024-09-30"))
+
+```
+
+
+```{r}
+ggplot(data = field_modern) +
+  geom_point(aes(x = time, y = value)) +
+  facet_grid(parameter_code ~ monitoring_location_id, scale = "free") +
+  theme_bw()
+
+```
+
 
 ## Latest Continuous
 
@@ -371,6 +391,16 @@ coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
 coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
 ```
 
+### Hydrologic Unit Codes
+
+`r dataRetrieval:::get_description("hydrologic-unit-codes")`
+
+```{r}
+#| eval: false
+huc_codes <- read_waterdata_metadata("hydrologic-unit-codes")
+```
+
+
 ### Medium Codes
 
 `r dataRetrieval:::get_description("medium-codes")`
@@ -437,7 +467,7 @@ time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 
 ## Discrete Samples
 
-Discrete USGS water quality can be accessed via the `read_waterdata_samples` function. While this is a new, modern USGS endpoint, it is not served in the same infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html)) for information on accessing USGS discrete water quality data.
+Discrete USGS water quality can be accessed via the `read_waterdata_samples` function. While this is a new, modern USGS endpoint, it is not served in the same OGC infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html)) for information on accessing USGS discrete water quality data.
 
 
 # New Features

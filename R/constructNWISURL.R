@@ -293,7 +293,7 @@ constructNWISURL <- function(siteNumbers,
   )
   
   url <- httr2::req_headers(url,
-                     `Accept-Encoding` = c("compress", "gzip", "deflate")) 
+                     `Accept-Encoding` = c("compress", "gzip", "deflate"))
   
   return(url)
 }
@@ -426,7 +426,7 @@ constructWQPURL <- function(siteNumbers,
   }
   
   baseURL <- httr2::req_headers(baseURL,
-                                `Accept-Encoding` = c("compress", "gzip", "deflate")) 
+                                `Accept-Encoding` = c("compress", "gzip", "deflate"))
   
   return(baseURL)
 }

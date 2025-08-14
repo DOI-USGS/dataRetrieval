@@ -56,10 +56,11 @@ lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment",
 lakeSites_chars <- whatWQPdata(
   siteType = "Lake, Reservoir, Impoundment",
   countycode = "US:55:025", convertType = FALSE)
-}
+
 
 bbox <- c(-86.9736, 34.4883, -86.6135, 34.6562)
 what_bb <- whatWQPdata(bBox = bbox)
+}
 \dontshow{\}) # examplesIf}
 }
 \seealso{
