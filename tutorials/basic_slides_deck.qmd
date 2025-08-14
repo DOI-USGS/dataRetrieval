@@ -79,7 +79,7 @@ By default will look like:
 
 ![](images/default_rstudio.png)
 
-## RStudio Appearences
+## RStudio Appearances
 
 Go to Tools -> Global Options -> Appearances to change style.
 
@@ -338,7 +338,7 @@ See next slide for a demonstration.
 
 ## USGS Water Data API Token: Example {.smaller}
 
-My favorite method to do add your token to .Renviorn is to use the `usethis` package. Let's pretend the token sent you was "abc123":
+My favorite method to do add your token to .Renviron is to use the `usethis` package. Let's pretend the token sent you was "abc123":
 
 1. Run in R:
 ```{r}

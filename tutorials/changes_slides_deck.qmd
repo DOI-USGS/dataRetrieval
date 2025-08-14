@@ -168,7 +168,7 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 ## USGS Water Data API Token 
 
-* The Water Data API limit how many queries a single IP address can make per hour
+* The Water Data APIs limit how many queries a single IP address can make per hour
 
 * You **can** run new `dataRetrieval` functions without a token
 
@@ -185,7 +185,7 @@ error: HTTP 403 Forbidden.
 
 2. Save it in a safe place (KeyPass or other password management tool)
 
-3. Add it to your .Renviorn file as API_USGS_PAT. 
+3. Add it to your .Renviron file as API_USGS_PAT. 
 
 4. Restart R 
 
@@ -204,7 +204,7 @@ See next slide for a demonstration.
 
 ## Water Data API Token: Example {.smaller}
 
-My favorite method to do add your token to .Renviorn is to use the `usethis` package. Let's pretend the token sent you was "abc123":
+My favorite method to do add your token to .Renviron is to use the `usethis` package. Let's pretend the token sent you was "abc123":
 
 1. Run in R:
 ```{r}

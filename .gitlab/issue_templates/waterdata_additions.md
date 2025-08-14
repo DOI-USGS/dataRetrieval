@@ -22,7 +22,7 @@ New features should include all of the following work:
 * [ ] Update tutorial.Rmd vignette
 * [ ] Update NEWS
 * [ ] Update _pkgdown.yml
-* [ ] Check if README needs to be update
+* [ ] Check if README needs to be updated
 * [ ] Update version (for development, only bump up last 4 digits)
 * [ ] Create PR for "develop" branch on GitHub
 * [ ] Create and merge MR for "develop" branch on code.usgs.gov. This will generate development version of documentation.
