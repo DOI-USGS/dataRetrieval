@@ -310,7 +310,7 @@ Biggest changes:
 
 ## USGS Water Data API Token 
 
-* The Water Data API limit how many queries a single IP address can make per hour
+* The Water Data APIs limit how many queries a single IP address can make per hour
 
 * You **can** run new `dataRetrieval` functions without a token
 
