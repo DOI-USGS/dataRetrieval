@@ -20,8 +20,8 @@
 #'                                       service = "daily")
 #' 
 deal_with_empty <- function(return_list, properties, service, 
-                            skipGeometry = TRUE,
-                            convertType = TRUE){
+                            skipGeometry,
+                            convertType){
   
   if(nrow(return_list) == 0){
 
