@@ -154,6 +154,12 @@ test_that("read_waterdata_daily", {
                                    parameter_code =  "00060",
                                    time =  c("2014-01-01", "2014-01-07"))
   expect_true(nrow(notActiveUSGS) == 0)
+  expect_type(notActiveUSGS$value, "double")
+  notActiveUSGS2 <- read_waterdata_daily(monitoring_location_id = paste0("USGS-", site),
+                                        parameter_code =  "00060",
+                                        convertType = FALSE,
+                                        time =  c("2014-01-01", "2014-01-07"))
+  expect_type(notActiveUSGS2$value, "character")
   
 })
 
