@@ -4,6 +4,7 @@ dataRetrieval 2.7.21
 * Added deprecation warning to readNWISgwl and readNWISmeas.
 * Added parent_time_series_id to read_waterdata_ts_meta.
 * Updated some documentation.
+* Handle waterdata empty returns better.
 
 dataRetrieval 2.7.20
 ===================
