@@ -87,7 +87,18 @@ read_waterdata <- function(service,
   
   return_list <- walk_pages(data_req, max_results)
   
-  return_list <- deal_with_empty(return_list, args[["properties"]], service)
+  if(is.null(args[["skipGeometry"]])){
+    skipGeometry <- FALSE
+  } else if (is.na(args[["skipGeometry"]])){
+    skipGeometry <- FALSE
+  } else {
+    skipGeometry <- args[["skipGeometry"]]
+  }
+  
+  return_list <- deal_with_empty(return_list, args[["properties"]],
+                                 service, 
+                                 skipGeometry,
+                                 convertType)
   
   if(convertType) return_list <- cleanup_cols(return_list)
   
