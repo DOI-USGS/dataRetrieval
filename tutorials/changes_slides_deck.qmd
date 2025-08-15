@@ -84,8 +84,6 @@ New to `dataRetrieval`? [Introduction to dataRetrieval](https://water.code-pages
 
   - Timeline is very uncertain, so we wanted to get information out on replacement functions ASAP.
   
-  - Latest rumor: not before 2026, but performance degradation happening now
-  
 * New `dataRetrieval` functions are available to replace the NWIS functions
 
   - `read_waterdata_` functions are the modern functions
@@ -123,26 +121,6 @@ The "develop" branch WILL change frequently, and there are no promises of future
 
 :::
 
-## External Documentation
-
-![](images/documentation_1.png){width="1000" height="500"}
-
-::: footer
-<https://doi-usgs.github.io/dataRetrieval>
-:::
-
-## External Documentation
-
-![](images/documentation_2.png){width="1000" height="500"}
-
-::: footer
-<https://doi-usgs.github.io/dataRetrieval/reference/index.html>
-:::
-
-## External Documentation
-
-![](images/documentation_3.png){width="1000" height="500"}
-
 ## USGS Water Data OGC APIs: Current Functions {.smaller}
 
 Open Geospatial Consortium (OGC), a non-profit international organization that develops and promotes open standards for geospatial information. OGC-compliant interfaces to USGS water data:
@@ -155,7 +133,7 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 * [read_waterdata_latest_continuous](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_latest_continuous.html) - Latest continuous data
 
-* [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) - Latest continuous data
+* [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) - Discrete field measurements (discharge, gage height, water levels)
 
 * [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) - Generalized function
 
