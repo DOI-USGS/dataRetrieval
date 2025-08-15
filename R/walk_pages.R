@@ -41,13 +41,16 @@ deal_with_empty <- function(return_list, properties, service,
     if(service == "daily"){
       return_list$time <- as.Date(as.character())
     }
+
+    return_list <- data.frame(return_list)
+    return_list$geometry <- NULL
+    
+    if(!skipGeometry){
+      return_list <- sf::st_as_sf(return_list, geometry = sf::st_sfc())
+    }
+    
   }
-  return_list <- data.frame(return_list)
-  return_list$geometry <- NULL
-  
-  if(!skipGeometry){
-    return_list <- sf::st_as_sf(return_list, geometry = sf::st_sfc())
-  }
+
   return(return_list)
 }
 
