@@ -153,8 +153,8 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 * You **might** run into errors quickly. If you (or your IP!) have exceeded the quota, you will see:
 
 ```
-error: HTTP 403 Forbidden.
-* Query request denied. Possible reasons include query exceeding server limits.
+! HTTP 429 Too Many Requests.
+  • You have exceeded your rate limit. Make sure you provided your API key from https://api.waterdata.usgs.gov/signup/, then either try again later or contact us at https://waterdata.usgs.gov/questions-comments/?referrerUrl=https://api.waterdata.usgs.gov for assistance.
 ```
 
 ## USGS Water Data API Token 
@@ -657,7 +657,7 @@ leaflet(data = sites_mn_wi |>
 
 ## read_waterdata HUCs
 
-HUCs that fall within 02070010. Use the wildcard `%`
+Sites with HUCs that fall within 02070010. Use the wildcard `%`
 
 ```{r}
 # Here's how to get 
