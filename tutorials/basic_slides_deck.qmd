@@ -171,14 +171,6 @@ library(dataRetrieval)
 
 :::
 
-## Installation Notes
-
-* Lots of R-package tips in [Best Practices](https://water.code-pages.usgs.gov/wq-visualizations-tools/training/postsbest_practices/best_practices.html#sec-packages)
-
-* **Warning messages**: usually can ignore! 
-
-* **Error messages**: can't ignore!
-
 
 ## dataRetrieval: External Documentation
 
@@ -618,7 +610,7 @@ qw_data <- read_waterdata_samples(monitoringLocationIdentifier = site,
 ncol(qw_data)
 ```
 
-That's a LOT of columns that come back. We won't look at them here, but let's jump over to RStudio to look through the results.
+That's a LOT of columns that come back. We won't look at them here, but if you run it locally, use `View` to inspect within RStudio.
 
 ::: footer
 
