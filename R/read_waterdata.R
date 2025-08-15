@@ -87,7 +87,9 @@ read_waterdata <- function(service,
   
   return_list <- walk_pages(data_req, max_results)
   
-  if(is.na(args[["skipGeometry"]])){
+  if(is.null(args[["skipGeometry"]])){
+    skipGeometry <- FALSE
+  } else if (is.na(args[["skipGeometry"]])){
     skipGeometry <- FALSE
   } else {
     skipGeometry <- args[["skipGeometry"]]
