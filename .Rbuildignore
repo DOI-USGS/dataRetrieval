@@ -104,3 +104,4 @@ tests/manual/*
 vignettes/qwdata_changes.Rmd
 vignettes/nwisData.rds
 vignettes/wqpData.rds
+_quarto.yml
