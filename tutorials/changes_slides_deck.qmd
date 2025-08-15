@@ -133,7 +133,7 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 * [read_waterdata_latest_continuous](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_latest_continuous.html) - Latest continuous data
 
-* [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) - Discrete field measurements (discharge, gage height, water levels)
+* [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) - Discrete hydrologic data (gage height, discharge, and readings of groundwater levels)
 
 * [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) - Generalized function
 
@@ -657,7 +657,7 @@ leaflet(data = sites_mn_wi |>
 
 ## read_waterdata HUCs
 
-Sites with HUCs that fall within 02070010. Use the wildcard `%`
+Let's find a list of sites with HUCs that fall within 02070010. Use the wildcard `%`
 
 ```{r}
 # Here's how to get 
@@ -754,11 +754,32 @@ In GitHub:
       API_USGS_PAT: ${{ secrets.API_USGS_PAT }}
 ```
 
-## Adding API token: Posit Connect
+## Adding API token: Posit Connect {.smaller}
 
 You'll want to add a token for any Posit Connect product (Shiny app, Quarto slides, etc.).
 
-![](images/posit_connect.png)
+:::: {.columns}
+
+::: {.column width="35%"}
+
+![](images/posit_connect.png){width=225}
+:::
+
+::: {.column width="5%"}
+OR
+:::
+
+::: {.column width="60%"}
+
+![](images/publish.png){width=600}
+
+:::
+
+::::
+
+::: footer
+
+:::
 
 ## Discrete Data {.smaller}
 
