@@ -68,7 +68,7 @@ test_that("Unit value data returns correct types", {
 context("Peak, rating, meas, site")
 test_that("peak, rating curves, surface-water measurements", {
   testthat::skip_on_cran()
-  skip_on_ci()
+  testthat::skip_on_ci()
   siteNumbers <- c("01594440", "040851325")
   data <- readNWISpeak(siteNumbers)
   expect_is(data$agency_cd, "character")
@@ -120,7 +120,8 @@ test_that("peak, rating curves, surface-water measurements", {
 
 test_that("read_waterdata_daily", {
   testthat::skip_on_cran()
-
+  testthat::skip_on_ci()
+  
   siteNumber <- "USGS-04085427"
   startDate <- "2012-01-01"
   endDate <- "2012-06-30"
@@ -153,6 +154,12 @@ test_that("read_waterdata_daily", {
                                    parameter_code =  "00060",
                                    time =  c("2014-01-01", "2014-01-07"))
   expect_true(nrow(notActiveUSGS) == 0)
+  expect_type(notActiveUSGS$value, "double")
+  notActiveUSGS2 <- read_waterdata_daily(monitoring_location_id = paste0("USGS-", site),
+                                        parameter_code =  "00060",
+                                        convertType = FALSE,
+                                        time =  c("2014-01-01", "2014-01-07"))
+  expect_type(notActiveUSGS2$value, "character")
   
 })
 
