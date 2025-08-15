@@ -4,6 +4,8 @@
 #' @param properties A vector of requested columns
 #' @param service character, can be any existing collection such
 #' as "daily", "monitoring-locations", "time-series-metadata"
+#' @param skipGeometry A logical for whether to return geometry
+#' @param convertType A logical for whether to convert value to numeric
 #' 
 #' @return data.frame
 #' @noRd
@@ -18,7 +20,9 @@
 #'                                       service = "daily")
 #' 
 deal_with_empty <- function(return_list, properties, service, 
-                            skipGeometry = TRUE){
+                            skipGeometry = TRUE,
+                            convertType = TRUE){
+  
   if(nrow(return_list) == 0){
 
     if(all(is.na(properties))){
@@ -38,8 +42,16 @@ deal_with_empty <- function(return_list, properties, service,
       }
     }
     
-    if(service == "daily"){
+    if(convertType && service == "daily"){
       return_list$time <- as.Date(as.character())
+    }
+    
+    if(convertType && "value" %in% names(return_list)){
+      return_list$value <- as.numeric()
+    }
+    
+    if(convertType && "contributing_drainage_area" %in% names(return_list)){
+      return_list$contributing_drainage_area <- as.numeric()
     }
 
     return_list <- data.frame(return_list)
@@ -301,7 +313,7 @@ get_ogc_data <- function(args,
   }
   
   return_list <- deal_with_empty(return_list, properties, service,
-                                 skipGeometry)
+                                 skipGeometry, convertType)
   
   if(convertType) return_list <- cleanup_cols(return_list, service = service)
   
