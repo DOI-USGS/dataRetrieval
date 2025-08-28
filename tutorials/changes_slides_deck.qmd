@@ -681,6 +681,29 @@ unique(what_huc_sites$hydrologic_unit_code)
 ```
 
 
+## read_waterdata_metadata {.smaller}
+
+The function `read_waterdata_metadata` gives access to the metadata collections from the USGS Water Data API. Note these do not use the CQL syntax:
+
+```{r}
+#| eval: false
+agency_codes <- read_waterdata_metadata("agency-codes")
+altitude_datums <- read_waterdata_metadata("altitude-datums")
+aquifer_codes <- read_waterdata_metadata("aquifer-codes")
+aquifer_types <- read_waterdata_metadata("aquifer-types")
+coordinate_accuracy_codes <- read_waterdata_metadata("coordinate-accuracy-codes")
+coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
+coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
+huc_codes <- read_waterdata_metadata("hydrologic-unit-codes")
+national_aquifer_codes <- read_waterdata_metadata("national-aquifer-codes")
+parameter_codes <- read_waterdata_metadata("parameter-codes")
+reliability_codes <- read_waterdata_metadata("reliability-codes")
+site_types <- read_waterdata_metadata("site-types")
+statistic_codes <- read_waterdata_metadata("statistic-codes")
+topographic_codes <- read_waterdata_metadata("topographic-codes")
+time_zone_codes <- read_waterdata_metadata("time-zone-codes")
+```
+
 ## General New Features of Water Data OGC APIs {.smaller}
 
 * Flexible Queries
