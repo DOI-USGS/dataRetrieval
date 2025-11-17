@@ -67,7 +67,7 @@ Reads surface-water measurement data from NWISweb. Data is retrieved from \url{h
 See \url{https://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 site_ids <- c("01594440", "040851325")
 \donttest{
 data <- readNWISmeas(site_ids)

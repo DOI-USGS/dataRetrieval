@@ -38,7 +38,7 @@ read_waterdata_ts_meta(
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id, last_modified, begin, end, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description, parameter_description, parent_time_series_id}
+geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id, last_modified, begin, end, begin_utc, end_utc, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description, parameter_description, parent_time_series_id}
 
 \item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.}
 
@@ -54,29 +54,9 @@ Examples:
 
 Only features that have a \code{last_modified} that intersects the value of datetime are selected.}
 
-\item{begin}{The datetime of the earliest observation in the time series. Together with \code{end}, this field represents the period of record of a time series. Note that some time series may have large gaps in their collection record. This field is currently in the local time of the monitoring location. We intend to update this \strong{in version v0} to use UTC with a time zone.
-You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
-Examples:
-\itemize{
-\item A date-time: "2018-02-12T23:20:50Z"
-\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
-\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
-\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
-}
+\item{begin}{This field contains the same information as "begin_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
 
-Only features that have a \code{begin} that intersects the value of datetime are selected.}
-
-\item{end}{The datetime of the most recent observation in the time series. Data returned by this endpoint updates at most once per day, and potentially less frequently than that, and as such there may be more recent observations within a time series than the time series \code{end} value reflects. Together with \code{begin}, this field represents the period of record of a time series. It is additionally used to determine whether a time series is "active". We intend to update this \strong{in version v0} to use UTC with a time zone.
-You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
-Examples:
-\itemize{
-\item A date-time: "2018-02-12T23:20:50Z"
-\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
-\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
-\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
-}
-
-Only features that have a \code{end} that intersects the value of datetime are selected.}
+\item{end}{This field contains the same information as "end_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
 
 \item{unit_of_measure}{A human-readable description of the units of measurement associated with an observation.}
 
@@ -123,7 +103,7 @@ will convert the data to dates and qualifier to string vector.}
 Daily data and continuous measurements are grouped into time series, which represent a collection of observations of a single parameter, potentially aggregated using a standard statistic, at a single monitoring location. This endpoint provides metadata about those time series, including their operational thresholds, units of measurement, and when the earliest and most recent observations in a time series occurred.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 
 \donttest{
 site <- "USGS-02238500"

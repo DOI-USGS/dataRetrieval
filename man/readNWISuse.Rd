@@ -54,7 +54,7 @@ Retrieves water use data from USGS Water Use Data for the Nation.  See
 more information.  All available use categories for the supplied arguments are retrieved.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 # All data for a county
 allegheny <- readNWISuse(stateCd = "Pennsylvania", countyCd = "Allegheny")

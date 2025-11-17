@@ -133,6 +133,8 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 * [read_waterdata_latest_continuous](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_latest_continuous.html) - Latest continuous data
 
+* [read_waterdata_latest_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_latest_daily.html) - Latest daily data
+
 * [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) - Discrete hydrologic data (gage height, discharge, and readings of groundwater levels)
 
 * [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) - Generalized function
@@ -548,7 +550,7 @@ Nearly all arguments can be vectors.
 
 ## read_waterdata_latest_continuous{.smaller .scrollable}
 
-Latest discharge (00060) in Dane County, WI:
+Latest discharge observation (00060) in Dane County, WI:
 
 ```{r}
 #| echo: false
@@ -565,7 +567,7 @@ dt_me(latest_dane_county |>
 
 :::
 
-## Map It: leaflet
+## Map Latest Discharge Observation: leaflet
 
 ```{r}
 #| output-location: slide
@@ -587,6 +589,38 @@ leaflet(data = latest_dane_county |>
               values = ~value)
 ```
 
+
+## read_waterdata_latest_daily {.smaller}
+
+Most recent observation for each time series of daily data. Daily data provide one data value to represent water conditions for the day. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. 
+
+```{r}
+
+latest_dane_county_daily <- read_waterdata_latest_daily(bbox = sf::st_bbox(site_info), 
+                                                       parameter_code = "00060")
+```
+
+## Map Latest Daily Discharge: leaflet
+
+```{r}
+#| output-location: slide
+pal <- colorNumeric("viridis", latest_dane_county_daily$value)
+
+leaflet(data = latest_dane_county_daily |> 
+                sf::st_transform(crs = leaflet_crs)) |> 
+    addProviderTiles("CartoDB.Positron") |> 
+    addCircleMarkers(popup = paste(latest_dane_county_daily$monitoring_location_id, "<br>",
+      latest_dane_county_daily$time, "<br>",
+      latest_dane_county_daily$value,
+      latest_dane_county_daily$unit_of_measure), 
+                     color = ~ pal(value),
+                     radius = 3,
+                     opacity = 1) |> 
+    addLegend(pal = pal,
+              position = "bottomleft",
+              title = "Latest Discharge",
+              values = ~value)
+```
 
 ## read_waterdata
 

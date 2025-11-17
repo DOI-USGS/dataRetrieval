@@ -28,7 +28,7 @@ Function to get metadata from Water Data API. These are useful to get the
 human readable words and other metadata associated with USGS codes.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 
 \donttest{
 agency_codes <- read_waterdata_metadata("agency-codes")

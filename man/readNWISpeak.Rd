@@ -75,7 +75,7 @@ needed, set the \code{asDateTime} argument to FALSE. No dates will be converted 
 R Date objects.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 site_ids <- c("01594440", "040851325")
 \donttest{
 data <- readNWISpeak(site_ids)
