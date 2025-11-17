@@ -25,7 +25,7 @@ for more information on time zones.}
 Retrieve groundwater levels from the National Ground Water Monitoring Network.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 # one site
 site <- "USGS.430427089284901"

@@ -83,7 +83,7 @@ is specified as FALSE. Sites with non-standard date formats (i.e. lacking a day)
 See \url{https://waterservices.usgs.gov/docs/groundwater-levels/} for more information.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 #site_id <- "434400121275801"
 \donttest{
 #data <- readNWISgwl(site_id)

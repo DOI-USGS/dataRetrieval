@@ -70,7 +70,7 @@ More information on the web service can be found here:
 "Instantaneous Value Service".
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 site_id <- "05114000"
 parameterCd <- "00060"
 startDate <- "2014-10-10"
