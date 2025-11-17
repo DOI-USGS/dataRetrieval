@@ -1,3 +1,7 @@
+dataRetrieval 2.7.22
+===================
+* Added read_waterdata_latest_daily to access latest daily USGS water data.
+
 dataRetrieval 2.7.21
 ===================
 * Added read_waterdata_field_measurements to access new USGS water data API.
