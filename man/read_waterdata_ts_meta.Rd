@@ -13,6 +13,8 @@ read_waterdata_ts_meta(
   last_modified = NA_character_,
   begin = NA_character_,
   end = NA_character_,
+  hydrologic_unit_code = NA_character_,
+  state_name = NA_character_,
   unit_of_measure = NA_character_,
   computation_period_identifier = NA_character_,
   computation_identifier = NA_character_,
@@ -38,7 +40,7 @@ read_waterdata_ts_meta(
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id, last_modified, begin, end, begin_utc, end_utc, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description, parameter_description, parent_time_series_id}
+geometry, id, unit_of_measure, parameter_name, parameter_code, statistic_id, hydrologic_unit_code, state_name, last_modified, begin, end, begin_utc, end_utc, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description, parameter_description, parent_time_series_id}
 
 \item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.}
 
@@ -57,6 +59,10 @@ Only features that have a \code{last_modified} that intersects the value of date
 \item{begin}{This field contains the same information as "begin_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
 
 \item{end}{This field contains the same information as "end_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
+
+\item{hydrologic_unit_code}{The United States is divided and sub-divided into successively smaller hydrologic units which are classified into four levels: regions, sub-regions, accounting units, and cataloging units. The hydrologic units are arranged within each other, from the smallest (cataloging units) to the largest (regions). Each hydrologic unit is identified by a unique hydrologic unit code (HUC) consisting of two to eight digits based on the four levels of classification in the hydrologic unit system.}
+
+\item{state_name}{The name of the state or state equivalent in which the monitoring location is located.}
 
 \item{unit_of_measure}{A human-readable description of the units of measurement associated with an observation.}
 
@@ -118,6 +124,8 @@ meta_multi <- read_waterdata_ts_meta(monitoring_location_id =  c("USGS-01491000"
                                            "end",
                                            "time_series_id"),
                             skipGeometry = TRUE)
+                            
+meta_wi <- read_waterdata_ts_meta(state_name = "Wisconsin")
 }
 \dontshow{\}) # examplesIf}
 }
