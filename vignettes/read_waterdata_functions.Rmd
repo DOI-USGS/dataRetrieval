@@ -230,7 +230,7 @@ knitr::kable(t(latest_uv_data), col.names = NULL)
 
 ```
 
-## Latest Continuous
+## Latest Daily
 
 The `read_waterdata_latest_daily` doesn't have an equivalent NWIS function to replace. It is used to get the latest daily data.
 
