@@ -13,7 +13,7 @@
 #' @param last_modified `r get_params("latest-daily")$last_modified`
 #' @param time_series_id `r get_params("latest-daily")$time_series_id`
 #' @param qualifier `r get_params("latest-daily")$qualifier`
-#' @param latest-daily_id `r get_params("latest-daily")$id`
+#' @param latest_daily_id `r get_params("latest-daily")$id`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r schema <- check_OGC_requests(endpoint = "latest-daily", type = "schema"); paste(names(schema$properties), collapse = ", ")`
