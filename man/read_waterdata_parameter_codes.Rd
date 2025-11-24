@@ -61,7 +61,7 @@ must be less than the requested limit.}
 Parameter codes are 5-digit codes and associated descriptions used to identify the constituent measured and the units of measure. Some parameter code definitions include information about the sampling matrix, fraction, and methods used to measure the constituent. Some parameters are fixed-value (fxd) numeric codes having textual meaning (for example: parameter code 00041 is a weather code parameter, code of 60 means rain), but more commonly represent a numeric value for chemical, physical, or biological data.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 
 \donttest{
 pcode <- "00060"

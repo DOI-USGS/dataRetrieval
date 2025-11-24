@@ -21,7 +21,7 @@ readWQPdata and readWQPqw functions, the results from this
 function will be attached as an attribute to the data.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 rawPcode <- readWQPqw("USGS-01594440", "01075", 
                       ignore_attributes = TRUE, legacy = FALSE)

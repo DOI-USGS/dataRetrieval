@@ -16,6 +16,10 @@ editor_options:
   chunk_output_type: console
 ---
 
+:warning: 
+This post is very old! A better way to do all these plots and calculations can be found here: <https://doi-usgs.github.io/HASP/>
+
+
 This post will show simple way to calculate moving averages, calculate historical-flow quantiles, and plot that information. The goal is to reproduce the graph at this link:
 [PA Graph](http://pa.water.usgs.gov/drought/indicators/sw/images/f30_01538000.html). The motivation for this post was inspired by a USGS colleague that that is considering creating these type of plots in R. We thought this plot provided an especially fun challenge - maybe you will, too!
 

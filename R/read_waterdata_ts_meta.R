@@ -13,6 +13,8 @@
 #' @param last_modified `r get_params("time-series-metadata")$last_modified`
 #' @param begin `r get_params("time-series-metadata")$begin`
 #' @param end `r get_params("time-series-metadata")$end`
+#' @param hydrologic_unit_code `r get_params("time-series-metadata")$hydrologic_unit_code`
+#' @param state_name `r get_params("time-series-metadata")$state_name`
 #' @param thresholds `r get_params("time-series-metadata")$thresholds`
 #' @param unit_of_measure `r get_params("time-series-metadata")$unit_of_measure`
 #' @param primary `r get_params("time-series-metadata")$primary`
@@ -55,6 +57,8 @@
 #'                                            "end",
 #'                                            "time_series_id"),
 #'                             skipGeometry = TRUE)
+#'                             
+#' meta_wi <- read_waterdata_ts_meta(state_name = "Wisconsin")
 #' }
 read_waterdata_ts_meta <- function(monitoring_location_id = NA_character_,
                               parameter_code = NA_character_,
@@ -64,6 +68,8 @@ read_waterdata_ts_meta <- function(monitoring_location_id = NA_character_,
                               last_modified = NA_character_,
                               begin = NA_character_,
                               end = NA_character_,
+                              hydrologic_unit_code = NA_character_,
+                              state_name = NA_character_,
                               unit_of_measure = NA_character_,
                               computation_period_identifier = NA_character_,
                               computation_identifier = NA_character_,

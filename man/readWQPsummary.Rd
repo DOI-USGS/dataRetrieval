@@ -33,7 +33,7 @@ The information returned from this function describes the
 available data at the WQP sites, and some metadata on the sites themselves.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 # Summary of a single site for the last 5 years:
 site_5 <- readWQPsummary(

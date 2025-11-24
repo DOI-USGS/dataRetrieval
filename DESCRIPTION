@@ -1,7 +1,7 @@
 Package: dataRetrieval
 Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrology and Water Quality Data
-Version: 2.7.21
+Version: 2.7.21.9000
 Authors@R: c(
     person("Laura", "DeCicco", role = c("aut","cre"),
             email = "ldecicco@usgs.gov",
@@ -47,7 +47,7 @@ Copyright: This software is in the public domain because it contains materials
 Depends:
     R (>= 4.1.0)
 Imports:
-    curl (>= 6.0.0),
+    curl (>= 7.0.0),
     lubridate (>= 1.5.0),
     stats,
     utils,
@@ -67,5 +67,5 @@ Encoding: UTF-8
 BuildVignettes: true
 VignetteBuilder: knitr
 BugReports: https://github.com/DOI-USGS/dataRetrieval/issues
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)

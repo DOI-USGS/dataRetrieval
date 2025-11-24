@@ -23,7 +23,7 @@ This function creates the call and gets the data for discrete water quality samp
 service described at \url{https://api.waterdata.usgs.gov/samples-data/docs}.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 
 \donttest{
 monitoringLocationIdentifier <- "USGS-04074950"

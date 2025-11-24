@@ -84,8 +84,6 @@ New to `dataRetrieval`? [Introduction to dataRetrieval](https://water.code-pages
 
   - Timeline is very uncertain, so we wanted to get information out on replacement functions ASAP.
   
-  - Latest rumor: not before 2026, but performance degradation happening now
-  
 * New `dataRetrieval` functions are available to replace the NWIS functions
 
   - `read_waterdata_` functions are the modern functions
@@ -123,26 +121,6 @@ The "develop" branch WILL change frequently, and there are no promises of future
 
 :::
 
-## External Documentation
-
-![](images/documentation_1.png){width="1000" height="500"}
-
-::: footer
-<https://doi-usgs.github.io/dataRetrieval>
-:::
-
-## External Documentation
-
-![](images/documentation_2.png){width="1000" height="500"}
-
-::: footer
-<https://doi-usgs.github.io/dataRetrieval/reference/index.html>
-:::
-
-## External Documentation
-
-![](images/documentation_3.png){width="1000" height="500"}
-
 ## USGS Water Data OGC APIs: Current Functions {.smaller}
 
 Open Geospatial Consortium (OGC), a non-profit international organization that develops and promotes open standards for geospatial information. OGC-compliant interfaces to USGS water data:
@@ -155,7 +133,9 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 * [read_waterdata_latest_continuous](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_latest_continuous.html) - Latest continuous data
 
-* [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) - Latest continuous data
+* [read_waterdata_latest_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_latest_daily.html) - Latest daily data
+
+* [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) - Discrete hydrologic data (gage height, discharge, and readings of groundwater levels)
 
 * [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) - Generalized function
 
@@ -175,8 +155,8 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 * You **might** run into errors quickly. If you (or your IP!) have exceeded the quota, you will see:
 
 ```
-error: HTTP 403 Forbidden.
-* Query request denied. Possible reasons include query exceeding server limits.
+! HTTP 429 Too Many Requests.
+  • You have exceeded your rate limit. Make sure you provided your API key from https://api.waterdata.usgs.gov/signup/, then either try again later or contact us at https://waterdata.usgs.gov/questions-comments/?referrerUrl=https://api.waterdata.usgs.gov for assistance.
 ```
 
 ## USGS Water Data API Token 
@@ -570,7 +550,7 @@ Nearly all arguments can be vectors.
 
 ## read_waterdata_latest_continuous{.smaller .scrollable}
 
-Latest discharge (00060) in Dane County, WI:
+Latest discharge observation (00060) in Dane County, WI:
 
 ```{r}
 #| echo: false
@@ -587,12 +567,12 @@ dt_me(latest_dane_county |>
 
 :::
 
-## Map It: leaflet
+## Map Latest Discharge Observation: leaflet
 
 ```{r}
 #| output-location: slide
 pal <- colorNumeric("viridis", latest_dane_county$value)
-
+leaflet_crs <- "+proj=longlat +datum=WGS84"
 leaflet(data = latest_dane_county |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
     addProviderTiles("CartoDB.Positron") |> 
@@ -609,6 +589,38 @@ leaflet(data = latest_dane_county |>
               values = ~value)
 ```
 
+
+## read_waterdata_latest_daily {.smaller}
+
+Most recent observation for each time series of daily data. Daily data provide one data value to represent water conditions for the day. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. 
+
+```{r}
+
+latest_dane_county_daily <- read_waterdata_latest_daily(bbox = sf::st_bbox(site_info), 
+                                                       parameter_code = "00060")
+```
+
+## Map Latest Daily Discharge: leaflet
+
+```{r}
+#| output-location: slide
+pal <- colorNumeric("viridis", latest_dane_county_daily$value)
+leaflet_crs <- "+proj=longlat +datum=WGS84"
+leaflet(data = latest_dane_county_daily |> 
+                sf::st_transform(crs = leaflet_crs)) |> 
+    addProviderTiles("CartoDB.Positron") |> 
+    addCircleMarkers(popup = paste(latest_dane_county_daily$monitoring_location_id, "<br>",
+      latest_dane_county_daily$time, "<br>",
+      latest_dane_county_daily$value,
+      latest_dane_county_daily$unit_of_measure), 
+                     color = ~ pal(value),
+                     radius = 3,
+                     opacity = 1) |> 
+    addLegend(pal = pal,
+              position = "bottomleft",
+              title = "Latest Discharge",
+              values = ~value)
+```
 
 ## read_waterdata
 
@@ -662,7 +674,7 @@ sites_mn_wi <- read_waterdata(service = "monitoring-locations",
 ```{r}
 #| output-location: slide
 pal <- colorNumeric("viridis", sites_mn_wi$drainage_area)
-
+leaflet_crs <- "+proj=longlat +datum=WGS84"
 leaflet(data = sites_mn_wi |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
     addProviderTiles("CartoDB.Positron") |> 
@@ -679,7 +691,7 @@ leaflet(data = sites_mn_wi |>
 
 ## read_waterdata HUCs
 
-HUCs that fall within 02070010. Use the wildcard `%`
+Let's find a list of sites with HUCs that fall within 02070010. Use the wildcard `%`
 
 ```{r}
 # Here's how to get 
@@ -702,6 +714,29 @@ what_huc_sites <- read_waterdata(service = "monitoring-locations",
 unique(what_huc_sites$hydrologic_unit_code)
 ```
 
+
+## read_waterdata_metadata {.smaller}
+
+The function `read_waterdata_metadata` gives access to the metadata collections from the USGS Water Data API. Note these do not use the CQL syntax:
+
+```{r}
+#| eval: false
+agency_codes <- read_waterdata_metadata("agency-codes")
+altitude_datums <- read_waterdata_metadata("altitude-datums")
+aquifer_codes <- read_waterdata_metadata("aquifer-codes")
+aquifer_types <- read_waterdata_metadata("aquifer-types")
+coordinate_accuracy_codes <- read_waterdata_metadata("coordinate-accuracy-codes")
+coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
+coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
+huc_codes <- read_waterdata_metadata("hydrologic-unit-codes")
+national_aquifer_codes <- read_waterdata_metadata("national-aquifer-codes")
+parameter_codes <- read_waterdata_metadata("parameter-codes")
+reliability_codes <- read_waterdata_metadata("reliability-codes")
+site_types <- read_waterdata_metadata("site-types")
+statistic_codes <- read_waterdata_metadata("statistic-codes")
+topographic_codes <- read_waterdata_metadata("topographic-codes")
+time_zone_codes <- read_waterdata_metadata("time-zone-codes")
+```
 
 ## General New Features of Water Data OGC APIs {.smaller}
 
@@ -776,11 +811,32 @@ In GitHub:
       API_USGS_PAT: ${{ secrets.API_USGS_PAT }}
 ```
 
-## Adding API token: Posit Connect
+## Adding API token: Posit Connect {.smaller}
 
 You'll want to add a token for any Posit Connect product (Shiny app, Quarto slides, etc.).
 
-![](images/posit_connect.png)
+:::: {.columns}
+
+::: {.column width="35%"}
+
+![](images/posit_connect.png){width=225}
+:::
+
+::: {.column width="5%"}
+OR
+:::
+
+::: {.column width="60%"}
+
+![](images/publish.png){width=600}
+
+:::
+
+::::
+
+::: footer
+
+:::
 
 ## Discrete Data {.smaller}
 

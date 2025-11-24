@@ -27,6 +27,7 @@ test_that("General USGS retrievals working", {
   dv_data <- read_waterdata(service = "daily",
                             CQL = cql,
                             time = c("2023-01-01", "2024-01-01"))
+  
   expect_equal(as.Date(c("2023-01-01", "2024-01-01")), 
                range(dv_data$time))
   expect_true(all(unique(dv_data$monitoring_location_id) %in%
@@ -268,7 +269,7 @@ test_that("read_waterdata_ts_meta", {
   testthat::skip_on_ci()
   # no service specified:
   availableData <- read_waterdata_ts_meta(monitoring_location_id = "USGS-05114000")
-  expect_equal(ncol(availableData), 18)
+  expect_gte(ncol(availableData), 18)
 
   uvData <- read_waterdata_ts_meta(monitoring_location_id = "USGS-05114000",
                               computation_period_identifier = c("Points"))

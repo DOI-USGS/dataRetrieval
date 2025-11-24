@@ -22,7 +22,7 @@ data frame retval with converted columns
 Takes the character results and converts to numeric and dates.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 # These examples require an internet connection to run
 rawSampleURL <- constructWQPURL("USGS-01594440", "01075", "", "")
 
