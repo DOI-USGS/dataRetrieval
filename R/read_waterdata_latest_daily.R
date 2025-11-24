@@ -41,20 +41,20 @@
 #' site <- "USGS-02238500"
 #' pcode <- "00060"
 #' dv_data_sf <- read_waterdata_latest_daily(monitoring_location_id = site,
-#'                               parameter_code = "00060")
+#'                               parameter_code = pcode)
 #'                               
 #' dv_data_last_modified <- read_waterdata_latest_daily(monitoring_location_id = site,
-#'                               parameter_code = "00060",
+#'                               parameter_code = pcode,
 #'                               last_modified = "P7D")
 #'
 #' dv_data_trim <- read_waterdata_latest_daily(monitoring_location_id = site,
-#'                           parameter_code = "00060", 
+#'                           parameter_code = pcode, 
 #'                           properties = c("monitoring_location_id",
 #'                                          "value",
 #'                                          "time"))
 #'
 #' dv_data <- read_waterdata_latest_daily(monitoring_location_id = site,
-#'                            parameter_code = "00060",
+#'                            parameter_code = pcode,
 #'                            skipGeometry = TRUE)
 #' 
 #' multi_site <- read_waterdata_latest_daily(monitoring_location_id =  c("USGS-01491000",

@@ -289,8 +289,7 @@ get_ogc_data <- function(args,
                          service){
   
   args[["service"]] <-  service
-  max_results <- args[["max_results"]]
-  args[["max_results"]] <- NULL
+
   args <- switch_arg_id(args, 
                         id_name = output_id, 
                         service = service)
@@ -303,6 +302,9 @@ get_ogc_data <- function(args,
   args[["convertType"]] <- NULL
 
   req <- do.call(construct_api_requests, args)
+  
+  max_results <- args[["max_results"]]
+  args[["max_results"]] <- NULL
   
   return_list <- walk_pages(req, max_results)
   

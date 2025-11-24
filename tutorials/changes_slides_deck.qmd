@@ -572,7 +572,7 @@ dt_me(latest_dane_county |>
 ```{r}
 #| output-location: slide
 pal <- colorNumeric("viridis", latest_dane_county$value)
-
+leaflet_crs <- "+proj=longlat +datum=WGS84"
 leaflet(data = latest_dane_county |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
     addProviderTiles("CartoDB.Positron") |> 
@@ -605,7 +605,7 @@ latest_dane_county_daily <- read_waterdata_latest_daily(bbox = sf::st_bbox(site_
 ```{r}
 #| output-location: slide
 pal <- colorNumeric("viridis", latest_dane_county_daily$value)
-
+leaflet_crs <- "+proj=longlat +datum=WGS84"
 leaflet(data = latest_dane_county_daily |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
     addProviderTiles("CartoDB.Positron") |> 
@@ -674,7 +674,7 @@ sites_mn_wi <- read_waterdata(service = "monitoring-locations",
 ```{r}
 #| output-location: slide
 pal <- colorNumeric("viridis", sites_mn_wi$drainage_area)
-
+leaflet_crs <- "+proj=longlat +datum=WGS84"
 leaflet(data = sites_mn_wi |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
     addProviderTiles("CartoDB.Positron") |> 

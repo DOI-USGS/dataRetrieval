@@ -610,7 +610,7 @@ qw_data <- read_waterdata_samples(monitoringLocationIdentifier = site,
 ncol(qw_data)
 ```
 
-That's a LOT of columns that come back. We won't look at them here, but you can use `View` in RStudio to explore on your own.
+That's a LOT of columns returned. We won't look at them here, but you can use `View` in RStudio to explore on your own.
 
 ::: footer
 
