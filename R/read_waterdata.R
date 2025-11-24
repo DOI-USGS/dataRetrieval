@@ -5,8 +5,7 @@
 #' for more information.
 #' 
 #' @export
-#' @param service character, can be any existing collection such
-#' as "daily", "monitoring-locations", "time-series-metadata"
+#' @param service character, can be any existing collection.
 #' @param CQL A string in a Common Query Language format.
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector.
@@ -64,9 +63,12 @@ read_waterdata <- function(service,
   
   output_id <- switch(service,
                       "daily" = "daily_id",
+                      "latest-daily" = "latest_daily_id",
                       "time-series-metadata" = "time_series_id",
                       "monitoring-locations" = "monitoring_location_id",
                       "latest-continuous" = "latest_continuous_id",
+                      "continuous" = "continuous_id",
+                      "field-measurements" = "field_measurement_id",
                       service)
   
   if(!"properties" %in% names(args)){

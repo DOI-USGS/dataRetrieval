@@ -7,8 +7,7 @@
 read_waterdata(service, CQL, ..., convertType = TRUE)
 }
 \arguments{
-\item{service}{character, can be any existing collection such
-as "daily", "monitoring-locations", "time-series-metadata"}
+\item{service}{character, can be any existing collection.}
 
 \item{CQL}{A string in a Common Query Language format.}
 
