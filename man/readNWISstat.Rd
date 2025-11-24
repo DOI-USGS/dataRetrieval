@@ -63,7 +63,7 @@ Retrieves site statistics from the USGS Statistics Web Service beta.
 See \url{https://waterservices.usgs.gov/docs/statistics/} for more information.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 x1 <- readNWISstat(
   siteNumbers = c("02319394"),

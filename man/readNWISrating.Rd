@@ -46,7 +46,7 @@ Not all active USGS streamgages have traditional rating curves that
 relate flow to stage.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 site_id <- "01594440"
 \donttest{
 data <- readNWISrating(site_id, "base")

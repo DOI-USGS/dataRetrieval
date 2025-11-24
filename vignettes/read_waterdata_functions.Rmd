@@ -46,7 +46,7 @@ Peruse the "Additional Articles" - when we find common issues people have with c
 
 # New Functions
 
-As new API endpoints come online, this section will be updated with any `dataRetrieval` function that are created. Currently the available endpoints are "monitoring-locations", "time-series-metadata", "daily", and "latest-continuous". In this section, we describe each new function for these endpoints. The next section will describe new features that are common to all the new functions.
+As new API endpoints come online, this section will be updated with any `dataRetrieval` function that are created. In this section, we describe each new function. The next section will describe new features that are common to all the new functions.
 
 ## Monitoring Location
 
@@ -62,13 +62,7 @@ Here is a simple example of requesting one known USGS site:
 sites_information <- read_waterdata_monitoring_location(monitoring_location_id = "USGS-01491000")
 ```
 
-The output includes the following information:
-
-```{r echo=FALSE}
-knitr::kable(t(sites_information))
-```
-
-Maybe that is more information than you need. You can specify which columns get returned with the "properties" argument:
+The output includes `r ncol(sites_information)` columns of information. Maybe that is more than you need. You can specify which columns get returned with the "properties" argument:
 
 ```{r}
 site_info <- read_waterdata_monitoring_location(monitoring_location_id = "USGS-01491000",
@@ -211,7 +205,7 @@ ggplot(data = field_modern) +
 
 ## Latest Continuous
 
-The `read_waterdata_latest_continuous` doesn't have an equivalent NWIS function to replace. It is used to get the latest continuous measurement
+The `read_waterdata_latest_continuous` doesn't have an equivalent NWIS function to replace. It is used to get the latest continuous measurement.
 
 `r dataRetrieval:::get_description("latest-continuous")`
 
@@ -233,6 +227,33 @@ latest_uv_data <- latest_uv_data[,c("time", "value", "approval_status", "last_mo
 latest_uv_data <- sf::st_drop_geometry(latest_uv_data)
 
 knitr::kable(t(latest_uv_data), col.names = NULL)
+
+```
+
+## Latest Daily
+
+The `read_waterdata_latest_daily` doesn't have an equivalent NWIS function to replace. It is used to get the latest daily data.
+
+`r dataRetrieval:::get_description("latest-daily")`
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/latest-daily>.
+
+
+```{r}
+site <- "USGS-01491000"
+pcode <- "00060"
+latest_dv_data <- read_waterdata_latest_daily(monitoring_location_id = site,
+                              parameter_code = pcode)
+
+```
+
+The output includes the following information:
+
+```{r echo=FALSE}
+latest_dv_data <- latest_dv_data[,c("time", "value", "approval_status", "last_modified", "statistic_id", "parameter_code", "unit_of_measure")]
+latest_dv_data <- sf::st_drop_geometry(latest_dv_data)
+
+knitr::kable(t(latest_dv_data), col.names = NULL)
 
 ```
 

@@ -171,14 +171,6 @@ library(dataRetrieval)
 
 :::
 
-## Installation Notes
-
-* Lots of R-package tips in [Best Practices](https://water.code-pages.usgs.gov/wq-visualizations-tools/training/postsbest_practices/best_practices.html#sec-packages)
-
-* **Warning messages**: usually can ignore! 
-
-* **Error messages**: can't ignore!
-
 
 ## dataRetrieval: External Documentation
 
@@ -498,7 +490,7 @@ dt_me(df |>
 
 ## Workflow 1: Plot Daily Data 
 
-In our next session, we will dive into using `ggplot2` to visualize the data. Here is a sneak peak at a very simple plot:
+Let's use `ggplot2` to visualize the data. 
 
 ```{r}
 #| echo: true
@@ -618,7 +610,7 @@ qw_data <- read_waterdata_samples(monitoringLocationIdentifier = site,
 ncol(qw_data)
 ```
 
-That's a LOT of columns that come back. We won't look at them here, but let's jump over to RStudio to look through the results.
+That's a LOT of columns returned. We won't look at them here, but you can use `View` in RStudio to explore on your own.
 
 ::: footer
 
@@ -657,7 +649,7 @@ dt_me(df, escape = FALSE, paging = FALSE)
 
 ## Workflow 2: Discrete data censoring 
 
-Let's pull just a few columns out and look at those:
+Let's pull a few columns out and look at those:
 
 ```{r}
 library(dplyr)
@@ -739,7 +731,7 @@ qw_data_joined <- qw_data |>
             by = c("Activity_StartDate" = "time"))
 ```
 
-* "Activity_StartDate" (on the left side data frame) and "time" (on the right side data frame) need to be the same type. 
+* "Activity_StartDate" (on the left side data frame) and "time" (on the right side data frame) need to be the same type (in this case, both are Date objects). 
   
 
 ::: footer
@@ -934,7 +926,7 @@ ggplot(data = closest_dt) +
 ```
 
 
-## Data Discovery (if enough time!)
+## Data Discovery 
 
 The process for discovering data is a bit in flux with NWIS retiring. I expect a new process will be introduced soon. For now here are some options.
 
@@ -989,8 +981,6 @@ dt_me(discrete_available |>
 
 ## characteristicUserSupplied {.smaller}
 
-* The column "characteristicUserSupplied" is internally referred to as "observed property". 
-
 * characteristicUserSupplied can be an input to `read_waterdata_sample` 
 
 ```{r}
@@ -1000,7 +990,6 @@ nrow(discrete1)
 ```
 
 
-* `summarize_waterdata_samples` may be adding a parameter code to the output in the future.
 
 ## More Information {.smaller}
 

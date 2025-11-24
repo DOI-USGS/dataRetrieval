@@ -12,7 +12,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-Click the slide below then "f" for full screen, and "Esc" to escape full screen.
+For a direct link to the slides, go [here](https://doi-usgs.github.io/dataRetrieval/tutorials/changes_slides_deck.html). Use the arrow keys to advance the slides. Or click the slide below then "f" for full screen, and "Esc" to escape full screen.
 
 ```{=html}
 <iframe src="../tutorials/changes_slides_deck.html" width="700"
