@@ -55,6 +55,9 @@ If you have additional questions about these changes, email
 7.  Find Hydro Network-Linked Data Index (NLDI) data. Start here:
     `?findNLDI`
 
+8.  Add a USGS WaterData API token to your R environment. See:
+    <https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html#api-tokens>
+
 For additional tutorials, see:
 
 [Basic
@@ -196,14 +199,14 @@ NWIScitation
 #> U.S. Geological Survey (2025). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
 #> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Nov
-#> 17, 2025,
+#> 24, 2025,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Nov 17, 2025},
+#>   note = {Accessed Nov 24, 2025},
 #>   year = {2025},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -227,14 +230,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2025). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Nov 17, 2025,
+#> Accessed Nov 24, 2025,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Nov 17, 2025},
+#>   note = {Accessed Nov 24, 2025},
 #>   year = {2025},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }

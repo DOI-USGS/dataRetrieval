@@ -54,6 +54,8 @@ If you have additional questions about these changes, email CompTools@usgs.gov.
 
 7. Find Hydro Network-Linked Data Index (NLDI) data. Start here: `?findNLDI`
 
+8. Add a USGS WaterData API token to your R environment. See: <https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html#api-tokens>
+
 For additional tutorials, see:
 
 [Basic Tutorial](https://doi-usgs.github.io/dataRetrieval/articles/tutorial.html)
