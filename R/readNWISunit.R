@@ -91,6 +91,11 @@ readNWISuv <- function(siteNumbers, parameterCd, startDate = "", endDate = "", t
     service <- "iv_recent"
   }
 
+  .Deprecated(new = "read_waterdata_continuous",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_continuous.")
+  
+  
   url <- constructNWISURL(siteNumbers,
     parameterCd,
     startDate,
@@ -360,7 +365,10 @@ readNWISmeas <- function(siteNumbers,
                          expanded = FALSE,
                          convertType = TRUE) {
 
-  message(new_nwis_message())
+  .Deprecated(new = "read_waterdata_field_measurements",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_field_measurements.")
+  
   # Doesn't seem to be a WaterML1 format option
   url <- constructNWISURL(
     siteNumbers = siteNumbers,
