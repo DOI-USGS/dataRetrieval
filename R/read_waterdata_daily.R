@@ -71,22 +71,22 @@
 #' 
 #' }
 read_waterdata_daily <- function(monitoring_location_id = NA_character_,
-                            parameter_code = NA_character_,
-                            statistic_id = NA_character_,
-                            properties = NA_character_,
-                            time_series_id = NA_character_,
-                            daily_id = NA_character_,
-                            approval_status = NA_character_,
-                            unit_of_measure = NA_character_,
-                            qualifier = NA_character_,
-                            value = NA,
-                            last_modified = NA_character_,
-                            skipGeometry = NA,
-                            time = NA_character_,
-                            bbox = NA,
-                            limit = NA,
-                            max_results = NA,
-                            convertType = TRUE){
+                                 parameter_code = NA_character_,
+                                 statistic_id = NA_character_,
+                                 properties = NA_character_,
+                                 time_series_id = NA_character_,
+                                 daily_id = NA_character_,
+                                 approval_status = NA_character_,
+                                 unit_of_measure = NA_character_,
+                                 qualifier = NA_character_,
+                                 value = NA,
+                                 last_modified = NA_character_,
+                                 skipGeometry = NA,
+                                 time = NA_character_,
+                                 bbox = NA,
+                                 limit = NA,
+                                 max_results = NA,
+                                 convertType = TRUE){
   
   service <- "daily"
   output_id <- "daily_id"
