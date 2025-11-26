@@ -437,9 +437,9 @@ We're going walk through 3 retrievals:
 
 * **Workflow 4**: Continuous Data
   
-  - Uses the NWIS web services
+  - Uses the new USGS Water Data API 
   
-  - Will be deprecated, this fall we'll have `read_waterdata_continuous`
+  - Modern data access point going forward
 
 * **Workflow 5**: Join Continuous and Discrete
 
@@ -814,10 +814,6 @@ band_instruments |>
 
 * Continuous data is the high-frequency sensor data. 
 
-* The function to get that data today is `readNWISuv`
-
-* As NWIS gets deprecated, we expect to have `read_waterdata_continuous` soon
-
 * We'll look at Suisun Bay a Van Sickle Island NR Pittsburg CA ("USGS-11455508"), with parameter code "99133" which is Nitrate plus Nitrite.
 
 ## Workflow 4: Continuous data for known site
@@ -828,15 +824,14 @@ band_instruments |>
 
 ```{r}
 #| results: markup
-site_id <- "11455508"
+site_id <- "USGS-11455508"
 p_code_rt <- "99133"
 start_date <- "2024-01-01"
 end_date <- "2024-06-01"
 
-continuous_data <- readNWISuv(site_id,
-                              p_code_rt,
-                              start_date,
-                              end_date)
+continuous_data <- read_waterdata_continuous(monitoring_location_id = site_id,
+                                             parameter_code = p_code_rt,
+                                             time = c(start_date, end_date))
                  
 names(continuous_data)
 ```
@@ -846,19 +841,17 @@ names(continuous_data)
 ::: {.column width="30%"}
 
 ```
-[1] "agency_cd"       
-[2] "site_no"         
-[3] "dateTime"        
-[4] "X_99133_00000"   
-[5] "X_99133_00000_cd"
-[6] "tz_cd" 
+ [4] "time"                   "unit_of_measure"        "parameter_code"        
+ [7] "statistic_id"           "value"                  "approval_status"       
+[10] "last_modified"          "qualifier"  
 ```
 :::
 
 ::::
 
 ```
-GET: https://nwis.waterservices.usgs.gov/nwis/iv/?site=11455508&format=waterml%2C1.1&ParameterCd=99133&startDT=2024-01-01&endDT=2024-06-01
+Requesting:
+https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&limit=40000&monitoring_location_id=USGS-11455508&parameter_code=99133&time=2024-01-01T00%3A00%3A00Z%2F2024-06-01T00%3A00%3A00Z
 ```
 
 ## Workflow 4: Inspect
@@ -866,8 +859,8 @@ GET: https://nwis.waterservices.usgs.gov/nwis/iv/?site=11455508&format=waterml%2
 ```{r}
 #| output-location: column
 ggplot(data = continuous_data) +
-  geom_point(aes(x = dateTime, 
-                 y = X_99133_00000))
+  geom_point(aes(x = time, 
+                 y = value))
 ```
 
 ## Workflow 5: Join Discrete and Continuous 
@@ -901,7 +894,7 @@ discrete_data <- read_waterdata_samples(monitoringLocationIdentifier = "USGS-114
 #| code-line-numbers: "1|2-3|5|6|1-6"
 library(data.table)
 setDT(discrete_data)[, join_date := Activity_StartDateTime]
-setDT(continuous_data)[, join_date := dateTime]
+setDT(continuous_data)[, join_date := time]
   
 closest_dt <- continuous_data[discrete_data, on = .(join_date), roll = "nearest"]  
 closest_dt <- data.frame(closest_dt)
@@ -917,7 +910,7 @@ closest_dt <- data.frame(closest_dt)
 #| output-location: column
 ggplot(data = closest_dt) +
   geom_point(aes(x = Result_Measure,
-                 y = X_99133_00000)) +
+                 y = value)) +
   geom_abline() +
   expand_limits(x = 0, y = 0) +
   xlab("Discrete") +

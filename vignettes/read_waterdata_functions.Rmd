@@ -181,6 +181,23 @@ ggplot(data = daily_modern) +
 
 ```
 
+## Continuous
+
+The `read_waterdata_continuous` function replaces the `readNWISuv` function.
+
+`r dataRetrieval:::get_description("continuous")`
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous>.
+
+```{r}
+sensor_data <- read_waterdata_continuous(monitoring_location_id = "USGS-01491000",
+                                parameter_code = c("00060", "00010"),
+                                statistic_id = "00003",
+                                time = c("2023-10-01", "2024-09-30"))
+```
+
+Currently this service only allows up to 3 years of data to be requested at once. If no time is specified in the query, the latest year of data is returned.
+
 ## Field Measurements
 
 The `read_waterdata_field_measurements` replaces both the `readNWISgwl` and `readNWISmeas` functions.

@@ -9,8 +9,8 @@ output:
 vignette: >
   %\VignetteIndexEntry{Join by closest date}
   \usepackage[utf8]{inputenc}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteDepends{dplyr}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---
@@ -40,7 +40,7 @@ Let's look at site "01646500", and a nearby site with a real-time nitrate-plus-n
 ```{r getData}
 library(dataRetrieval)
 
-site_uv <- "01646500"
+site_uv <- "USGS-01646500"
 site_qw <- "USGS-01646580"
 pcode_uv <- "99133"
 pcode_qw <- "00631"
@@ -50,31 +50,11 @@ qw_data <- readWQPqw(site_qw, pcode_qw,
                      startDate = start_date,
                      endDate = end_date)
 
-uv_data <- readNWISuv(siteNumbers = site_uv, 
-                      parameterCd = c(pcode_uv, "00060"),
-                      startDate = start_date,
-                     endDate = end_date)
+uv_data <- read_waterdata_continuous(monitoring_location_id = site_uv,
+                                     parameter_code =  c(pcode_uv),
+                                     time = c(start_date, end_date))
 ```
 
-
-The sensor data ("uv" data) at this particular site has 2 columns of data that are important. The first task is to combine those columns. This is rather unique to this particular site and probably won't need to be done generally.
-
-```{r trimUVdata}
-library(dplyr)
-
-uv_trim <- uv_data |> 
-  select(uv_date = dateTime, 
-         val1 = X_SUNA...Discontinued._99133_00000,
-         val2 = X_SUNA_99133_00000,
-         flow = X_00060_00000) |> 
-  mutate(val_uv = if_else(is.na(val1), val2, val1)) |> 
-  select(-val1, -val2)
-
-```
-
-```{r showuvTrim, echo=FALSE}
-knitr::kable(head(uv_trim))
-```
 
 Next we'll clean up the discrete water quality "qw" data to make it easy to follow in this tutorial. 
 
@@ -98,9 +78,9 @@ library(data.table)
 
 setDT(qw_trim)[, join_date := qw_date]
 
-setDT(uv_trim)[, join_date := uv_date]
+setDT(uv_data)[, join_date := time]
 
-closest_dt <- uv_trim[qw_trim, on = .(join_date), roll = "nearest"]
+closest_dt <- uv_data[qw_trim, on = .(join_date), roll = "nearest"]
 ```
 
 `closest_dt` is a `data.table` object. It similar to a data.frame, but not identical. We can convert it to a data.frame and then use `dplyr` commands. Note: the whole analysis can be done via `data.table`, but most examples in `dataRetrieval` have used `dplyr`, which is why we bring it back to data.frame. `dplyr` also has a `join_by(closest())` option, but it is more complicated because you can only specify the closeness in either the forward or backwards direction (and we want either direction).
@@ -109,9 +89,9 @@ We can calculate "delta_time" - the difference in time between the uv and qw dat
 
 ```{r}
 qw_closest <- data.frame(closest_dt) |> 
-  mutate(delta_time = difftime(qw_date, uv_date, 
+  mutate(delta_time = difftime(qw_date, time, 
                                units = "hours"),
-         val_uv = if_else(abs(as.numeric(delta_time)) >= 24, NA, val_uv)) |> 
+         val_uv = if_else(abs(as.numeric(delta_time)) >= 24, NA, value)) |> 
   select(-join_date)
 
 ```
@@ -134,21 +114,11 @@ ggplot(data = qw_closest) +
 
 ```
 
-```{r}
-ggplot(data = qw_closest) +
-  geom_point(aes(x = flow, y = val_qw)) +
-  theme_bw() +
-  xlab("Discharge") +
-  ylab("Concentration") +
-  scale_x_log10() +
-  scale_y_log10()
-
-```
 
 ```{r}
 ggplot() +
-  geom_line(data = uv_trim,
-            aes(x = uv_date, val_uv),
+  geom_line(data = uv_data,
+            aes(x = time, value),
             color = "lightgrey") +
   geom_point(data = qw_closest,
              aes(x = qw_date, y = val_qw),
