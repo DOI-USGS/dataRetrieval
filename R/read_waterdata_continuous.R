@@ -2,6 +2,10 @@
 #' 
 #' @description `r get_description("continuous")`
 #' 
+#' Currently, the services only allow 3 years of data to be requested with
+#' a single request. If no "time" is specified, the service will return the 
+#' last single year of data.
+#' 
 #' @export
 #' @param monitoring_location_id `r get_params("continuous")$monitoring_location_id`
 #' @param parameter_code `r get_params("continuous")$parameter_code`
@@ -37,8 +41,6 @@
 #' \donttest{
 #' site <- "USGS-451605097071701"
 #' pcode <- "72019"
-#' uv_data_sf <- read_waterdata_continuous(monitoring_location_id = site,
-#'                               parameter_code = pcode)
 #'
 #' uv_data_trim <- read_waterdata_continuous(monitoring_location_id = site,
 #'                           parameter_code = pcode, 
@@ -48,8 +50,7 @@
 #'
 #' uv_data <- read_waterdata_continuous(monitoring_location_id = site,
 #'                            parameter_code = pcode,
-#'                            time = "P2D",
-#'                            skipGeometry = TRUE)
+#'                            time = "P2D")
 #' 
 #' 
 #' # Only return data that has been modified in last 7 days         
@@ -70,7 +71,6 @@ read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
                                       qualifier = NA_character_,
                                       value = NA,
                                       last_modified = NA_character_,
-                                      # skipGeometry = NA,
                                       time = NA_character_,
                                       bbox = NA,
                                       limit = NA,
