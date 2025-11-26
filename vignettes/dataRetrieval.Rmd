@@ -60,7 +60,7 @@ Table 1 describes the functions available in the `dataRetrieval` package.
 Functions <- c(
   "read_waterdata",
   "read_waterdata_daily",
-  "readNWISuv",
+  "read_waterdata_continuous",
   "readNWISrating",
   "read_waterdata_field_measurements",
   "readNWISpeak",
@@ -108,7 +108,8 @@ Description <- c(
 )
 Source <- c("USGS Water Data API",
             "USGS Water Data API",
-            rep("NWIS",2),
+            "USGS Water Data API",
+            "NWIS",
             "USGS Water Data API",
             "NWIS",
             "USGS Water Data API",
@@ -352,32 +353,21 @@ Any data collected at regular time intervals (such as 15-minute or hourly) are k
 parameterCd <- "00060" # Discharge
 startDate <- "2012-05-12"
 endDate <- "2012-05-13"
-dischargeUnit <- readNWISuv(siteNumber, parameterCd, startDate, endDate)
-dischargeUnit <- renameNWISColumns(dischargeUnit)
+dischargeUnit <- read_waterdata_continuous(monitoring_location_id = siteNumber,
+                                           parameter_code = parameterCd,
+                                           time = c(startDate, endDate))
+
 ```
 
 The retrieval produces a data frame that contains 96 rows (one for every 15 minute period in the day).  They include all data collected from the `startDate` through the `endDate` (starting and ending with midnight locally-collected time). The dateTime column is converted to UTC (Coordinated Universal Time), so midnight EST will be 5 hours earlier in the dateTime column (the previous day, at 7pm).
 
-To override the UTC timezone, specify a valid timezone in the tz argument. Default is "", which will keep the dateTime column in UTC. Other valid timezones are:
 
-```
-America/New_York
-America/Chicago
-America/Denver
-America/Los_Angeles
-America/Anchorage
-America/Honolulu
-America/Jamaica
-America/Managua
-America/Phoenix
-America/Metlakatla
-```
 
-Data are retrieved from [https://waterservices.usgs.gov/docs/instantaneous-values/](https://waterservices.usgs.gov/docs/instantaneous-values/). There are occasions where NWIS values are not reported as numbers, instead a common example is "Ice".  Any value that cannot be converted to a number will be reported as NA in this package. Site information and measured parameter information is attached to the data frame as attributes. This is discussed further in [metadata](#embedded-metadata) section.
+Data are retrieved from <https://api.waterdata.usgs.gov/ogcapi/v0/>. Site information and measured parameter information is attached to the data frame as attributes. This is discussed further in [metadata](#embedded-metadata) section.
 
 ## Groundwater Level Data
 
-Groundwater level measurements can be obtained with the `readNWISgwl` function. Information on the returned data can be found with the `comment` function, and attached attributes as described in the [metadata](#embedded-metadata) section.
+Groundwater level measurements can be obtained with the `read_waterdata_field_measurements` function. 
 
 ```{r gwlexample, echo=TRUE, eval=FALSE}
 siteNumber <- "USGS-434400121275801"
@@ -411,7 +401,7 @@ attr(ratingData, "RATING")
 
 These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve.  Information on the returned data can be found with the `comment` function and attached attributes as described in the [metadata](#embedded-metadata) section.
 
-Surface-water measurement data can be obtained with the `readNWISmeas` function.
+Surface-water measurement data can be obtained with the `read_waterdata_field_measurements`` function.
 
 ```{r surfexample, echo=TRUE, eval=FALSE}
 surfaceData <- read_waterdata_field_measurements(monitoring_location_id = "USGS-01594440")
