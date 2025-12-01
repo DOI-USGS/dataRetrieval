@@ -78,7 +78,7 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
-limit is 10000. It may be beneficial to set this number lower if your internet
+limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
@@ -91,6 +91,10 @@ will convert the data to dates and qualifier to string vector.}
 \description{
 This is an early version of the continuous endpoint. It is feature-complete and provides access to the full continuous data record, and is being made available as we continue to work on performance improvements.
 Continuous data are collected via automated sensors installed at a monitoring location. They are collected at a high frequency and often at a fixed 15-minute interval. Depending on the specific monitoring location, the data may be transmitted automatically via telemetry and be available on WDFN within minutes of collection, while other times the delivery of data may be delayed if the monitoring location does not have the capacity to automatically transmit data. Continuous data are described by parameter name and parameter code (pcode). These data might also be referred to as "instantaneous values" or "IV".
+
+Currently, the services only allow 3 years of data to be requested with
+a single request. If no "time" is specified, the service will return the
+last single year of data.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
@@ -98,8 +102,6 @@ Continuous data are collected via automated sensors installed at a monitoring lo
 \donttest{
 site <- "USGS-451605097071701"
 pcode <- "72019"
-uv_data_sf <- read_waterdata_continuous(monitoring_location_id = site,
-                              parameter_code = pcode)
 
 uv_data_trim <- read_waterdata_continuous(monitoring_location_id = site,
                           parameter_code = pcode, 
@@ -109,8 +111,7 @@ uv_data_trim <- read_waterdata_continuous(monitoring_location_id = site,
 
 uv_data <- read_waterdata_continuous(monitoring_location_id = site,
                            parameter_code = pcode,
-                           time = "P2D",
-                           skipGeometry = TRUE)
+                           time = "P2D")
 
 
 # Only return data that has been modified in last 7 days         
