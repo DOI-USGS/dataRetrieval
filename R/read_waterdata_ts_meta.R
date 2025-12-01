@@ -32,7 +32,7 @@
 #' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
-#' limit is 10000. It may be beneficial to set this number lower if your internet
+#' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
 #' @param max_results The optional maximum number of rows to return. This value
