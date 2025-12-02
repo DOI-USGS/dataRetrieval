@@ -21,12 +21,6 @@
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r schema <- check_OGC_requests(endpoint = "continuous", type = "schema"); paste(names(schema$properties), collapse = ", ")`
-#' @param bbox Only features that have a geometry that intersects the bounding
-#' box are selected.The bounding box is provided as four or six numbers, depending
-#' on whether the coordinate reference system includes a vertical axis (height or
-#' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric 
-#' vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
-#' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 50000. It may be beneficial to set this number lower if your internet
@@ -72,7 +66,6 @@ read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
                                       value = NA,
                                       last_modified = NA_character_,
                                       time = NA_character_,
-                                      bbox = NA,
                                       limit = NA,
                                       max_results = NA,
                                       convertType = TRUE){
