@@ -52,7 +52,17 @@ rawDailyData <- read_waterdata_daily(monitoring_location_id = siteNumber,
 pCode <- read_waterdata_parameter_codes(parameter_code = parameterCd)
 ```
 
-USGS data are made available through the National Water Information System (NWIS).
+## USGS Data API Access Tokens
+
+USGS data are made available through the USGS water data APIs. You can register an API key for use with USGS water data APIs. There are now limits on how many queries can be requested per IP address per hour. If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
+
+Then save your token in your .Renviron file like this:
+
+```
+API_USGS_PAT = "my_super_secret_token"
+```
+
+You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. 
 
 Table 1 describes the functions available in the `dataRetrieval` package.
 
@@ -83,13 +93,13 @@ Functions <- c(
 )
 
 Description <- c(
-  "Time series data using user-specified queries", # readNWISdata
-  "Daily values", # readNWISdv
-  "Instantaneous values", # readNWISuv
+  "Time series data using user-specified queries", # read_waterdata
+  "Daily values", # read_waterdata_daily
+  "Instantaneous values", # read_waterdata_continuous
   "Rating table for active streamgage", # readNWISrating
-  "Surface-water measurements", # readNWISmeas
+  "Surface-water measurements", # read_waterdata_field_measurements
   "Peak flow", # readNWISpeak
-  "Groundwater levels", # readNWISgwl
+  "Groundwater levels", # read_waterdata_field_measurements
   "Water use", # readNWISuse
   "Statistical service", # readNWISstat
   "Parameter code information", # read_waterdata_parameter_codes
@@ -448,74 +458,6 @@ specificCond <- readWQPqw(
   "Specific conductance",
   "2011-05-01", "2011-09-30"
 )
-```
-
-
-# Generalized Retrievals
-
-The previous examples all took specific input arguments: `siteNumber`, `parameterCd` (or characteristic name), `startDate`, `endDate`, etc. However, the Web services that supply the data can accept a wide variety of additional arguments. 
-
-## NWIS 
-
-### Sites: whatNWISsites
-
-The function `whatNWISsites` can be used to discover NWIS sites based on any query that the NWIS Site Service offers. This is done by using the `...` argument, which allows the user to use any arbitrary input argument. We can then use the service [here](https://waterservices.usgs.gov/docs/site-service) to discover many options for searching for NWIS sites. For example, you may want to search for sites in a lat/lon bounding box, or only sites tidal streams, or sites with water quality samples, sites above a certain altitude, etc. The results of this site query generate a URL. For example, the tool provided a search within a specified bounding box, for sites that have daily discharge (parameter code = 00060) and temperature (parameter code = 00010). The generated URL is:
-
-[https://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv](https://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv)
-
-The following `dataRetrieval` code can be used to get those sites:
-
-```{r siteSearch, eval=FALSE}
-sites <- whatNWISsites(
-  bBox = c(-83.0, 36.5, -81.0, 38.5),
-  parameterCd = c("00010", "00060"),
-  hasDataTypeCd = "dv"
-)
-```
-
-### Data: readNWISdata
-
-For NWIS data, the function `readNWISdata` can be used. The argument listed in the R help file is `...` and `service` (only for data requests). Table 5 describes the services are available.
-
-```{r echo=FALSE}
-# nolint start
-Service <- c("dv", "iv", "gwlevels", "measurements", "peak", "stat")
-Description <- c("Daily", "Instantaneous", "Groundwater Levels", "Surface Water Measurements", "Peak Flow", "Statistics Service")
-URL <- c(
-  "<a href='https://waterservices.usgs.gov/docs/dv-service/' target='_blank'>https://waterservices.usgs.gov/docs/dv-service/<a>",
-  "<a href='https://waterservices.usgs.gov/docs/instantaneous-values/' target='_blank'>https://waterservices.usgs.gov/docs/instantaneous-values/<a>",
-  "<a href='https://waterservices.usgs.gov/docs/groundwater-levels/' target='_blank'>https://waterservices.usgs.gov/docs/groundwater-levels/<a>",
-  "<a href='https://waterdata.usgs.gov/nwis/measurements/' target='_blank'>https://waterdata.usgs.gov/nwis/measurements/<a>",
-  "<a href='https://nwis.waterdata.usgs.gov/usa/nwis/peak/' target='_blank'>https://nwis.waterdata.usgs.gov/usa/nwis/peak/<a>",
-  "<a href='https://waterservices.usgs.gov/docs/statistics/' target='_blank'>https://waterservices.usgs.gov/docs/statistics/<a>"
-)
-
-tableData <- data.frame(Service,
-  Description,
-  URL,
-  stringsAsFactors = FALSE
-)
-
-
-kable(tableData,
-  caption = "Table 5: NWIS general data calls"
-)
-# nolint end
-```
-
-
-The `...` argument allows the user to create their own queries based on the instructions found in the web links above. The links provide instructions on how to create a URL to request data. Perhaps you want sites only in Wisconsin, with a drainage area less than 50 mi<sup>2</sup>, and the most recent daily discharge data. That request would be done as follows:
-
-```{r dataExample, eval=FALSE}
-dischargeWI <- readNWISdata(
-  service = "dv",
-  stateCd = "WI",
-  parameterCd = "00060",
-  drainAreaMin = "50",
-  statCd = "00003"
-)
-
-siteInfo <- attr(dischargeWI, "siteInfo")
 ```
 
 

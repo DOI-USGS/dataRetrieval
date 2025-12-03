@@ -56,6 +56,8 @@ If you have additional questions about these changes, email CompTools@usgs.gov.
 
 8. Add a USGS WaterData API token to your R environment. See: <https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html#api-tokens>
 
+9. Get the latest status on NWIS and other data access updates. See: <https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
+
 For additional tutorials, see:
 
 [Basic Tutorial](https://doi-usgs.github.io/dataRetrieval/articles/tutorial.html)
