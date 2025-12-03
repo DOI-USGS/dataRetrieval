@@ -684,7 +684,7 @@ tar_make()
 
 Once the pipeline has completed, you can load the `ohio_discharge` data frame into your environment with `tar_load`:
 
-```{r}
+```{r eval=FALSE}
 tar_load(ohio_discharge)
 ```
 
