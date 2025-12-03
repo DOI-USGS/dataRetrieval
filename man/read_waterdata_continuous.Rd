@@ -84,9 +84,11 @@ will convert the data to dates and qualifier to string vector.}
 This is an early version of the continuous endpoint. It is feature-complete and provides access to the full continuous data record, and is being made available as we continue to work on performance improvements.
 Continuous data are collected via automated sensors installed at a monitoring location. They are collected at a high frequency and often at a fixed 15-minute interval. Depending on the specific monitoring location, the data may be transmitted automatically via telemetry and be available on WDFN within minutes of collection, while other times the delivery of data may be delayed if the monitoring location does not have the capacity to automatically transmit data. Continuous data are described by parameter name and parameter code (pcode). These data might also be referred to as "instantaneous values" or "IV".
 
-Currently, the services only allow 3 years of data to be requested with
+Currently, the services only allow up to 3 years of data to be requested with
 a single request. If no "time" is specified, the service will return the
-last single year of data.
+last single year of data. If this is a bottleneck, please check back
+for new direct download functions that are expected to be available sometime
+in 2026.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
