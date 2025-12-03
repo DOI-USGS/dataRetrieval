@@ -2,9 +2,11 @@
 #' 
 #' @description `r get_description("continuous")`
 #' 
-#' Currently, the services only allow 3 years of data to be requested with
+#' Currently, the services only allow up to 3 years of data to be requested with
 #' a single request. If no "time" is specified, the service will return the 
-#' last single year of data.
+#' last single year of data. If this is a bottleneck, please check back 
+#' for new direct download functions that are expected to be available sometime
+#' in 2026.
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("continuous")$monitoring_location_id`
