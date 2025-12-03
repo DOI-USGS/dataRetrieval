@@ -616,7 +616,7 @@ for(sites in site_list){
 
 Note there is fewer data returned in `data_returned` because those sites are already filtered down to just "Stream" sites. The bounding box results `ohio_discharge` contained other types of monitoring location types.
 
-If you run into any problems with that loop (maybe you hit your limit for an hour, maybe the internet went down, maybe there was a timeout from the services), you'll need to re-run the whole loop again and hope that it works the next time. A more robust way to do it would be to create a (`targets`)[https://books.ropensci.org/targets/] pipeline. `targets` will take care of remembering what job completed, and what job needs to be re-run. 
+If you run into any problems with that loop (maybe you hit your limit for an hour, maybe the internet went down, maybe there was a timeout from the services), you'll need to re-run the whole loop again and hope that it works the next time. A more robust way to do it would be to create a [`targets`](https://books.ropensci.org/targets/) pipeline. `targets` will take care of remembering what job completed, and what job needs to be re-run. 
 
 Here's the Ohio example using a dynamic branch with `targets`. This code would be saved in a file `_targets.R`:
 
