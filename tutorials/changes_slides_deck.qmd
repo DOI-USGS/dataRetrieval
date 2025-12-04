@@ -456,8 +456,7 @@ daily <- read_waterdata_daily(monitoring_location_id = c("USGS-05406457",
 ```{r}
 #| echo: false
 
-dt_me(daily |> 
-        select(-daily_id), 6, "0.7em")
+dt_me(daily, 6, "0.7em")
 
 ```
 
