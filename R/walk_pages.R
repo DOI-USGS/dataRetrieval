@@ -152,7 +152,7 @@ cleanup_cols <- function(df, service = "daily"){
     if(service == "daily"){
       df$time <- as.Date(df$time)
     } 
-    # by default, the data is put in POSITct and seems
+    # by default, the data is put in POSIXct and seems
     # to be pretty smart about the offset/tzone
   }
   
