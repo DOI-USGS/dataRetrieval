@@ -411,7 +411,7 @@ attr(ratingData, "RATING")
 
 These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve.  Information on the returned data can be found with the `comment` function and attached attributes as described in the [metadata](#embedded-metadata) section.
 
-Surface-water measurement data can be obtained with the `read_waterdata_field_measurements`` function.
+Surface-water measurement data can be obtained with the `read_waterdata_field_measurements` function.
 
 ```{r surfexample, echo=TRUE, eval=FALSE}
 surfaceData <- read_waterdata_field_measurements(monitoring_location_id = "USGS-01594440")
