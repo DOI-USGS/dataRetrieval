@@ -89,6 +89,10 @@ read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
   if(convertType){
     return_list <- order_results(return_list, properties)
     return_list <- return_list[, names(return_list)[names(return_list)!= output_id]]
+    if("time_series_id" %in% names(return_list)){
+      return_list <- return_list[, c( names(return_list)[names(return_list)!= "time_series_id"],
+                                      "time_series_id")]
+    }
   }
   
   return(return_list)
