@@ -137,7 +137,9 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 * [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) - Discrete hydrologic data (gage height, discharge, and readings of groundwater levels)
 
-* [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) - Generalized function
+* [read_waterdata_continuous](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_continuous.html) - Continuous data are collected via automated sensors installed at a monitoring location.
+
+* [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) - Generalized function.
 
 * [read_waterdata_metadata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_metadata.html) - Metadata 
 
@@ -454,8 +456,7 @@ daily <- read_waterdata_daily(monitoring_location_id = c("USGS-05406457",
 ```{r}
 #| echo: false
 
-dt_me(daily |> 
-        select(-daily_id), 6, "0.7em")
+dt_me(daily, 6, "0.7em")
 
 ```
 
@@ -558,8 +559,7 @@ Latest discharge observation (00060) in Dane County, WI:
 dt_me(latest_dane_county |> 
         sf::st_drop_geometry() |> 
         select(-time_series_id,
-               -statistic_id,
-               -latest_continuous_id), 6, "0.7em")
+               -statistic_id), 6, "0.7em")
 
 ```
 
@@ -621,6 +621,25 @@ leaflet(data = latest_dane_county_daily |>
               title = "Latest Discharge",
               values = ~value)
 ```
+
+## read_waterdata_continuous
+
+Replaces `readNWISuv`:
+
+```{r}
+this_week <- read_waterdata_continuous(monitoring_location_id = c("USGS-05406457",
+                                                         "USGS-05427930"),
+                              parameter_code = c("00060", "00010"),
+                              time = "P7D")
+```
+
+Currently only allows 3 years of data to be queried at once. 
+
+::: footer
+
+:::
+
+
 
 ## read_waterdata
 
