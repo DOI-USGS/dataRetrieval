@@ -68,7 +68,7 @@ For a longer introduction to the `dataRetrieval` package, see:
 
 * USGS APIs (Water Data) 
 * Water Quality Portal (WQP)
-* National Water Information System (NWIS) - Legacy system that will eventually be retired.
+* Water Services from National Water Information System (NWIS) - Legacy system that will eventually be retired.
 
 
 Functions in `dataRetrieval` look like `read_waterdata_daily`, `read_waterdata_continuous`, `readWQPqw`, `summarize_waterdata_samples`, etc. What does that mean? The functions are generally structured with a prefix, middle, and suffix:
@@ -76,10 +76,10 @@ Functions in `dataRetrieval` look like `read_waterdata_daily`, `read_waterdata_c
 * _Prefix_: "read" or "what"
     + "read" will access full data sets
     + "summarize" will access data availability
-* _Middle_: "NWIS", "waterdata", "WQP":
+* _Middle_: "waterdata", "WQP", "NWIS:
     + Water Data (waterdata) functions are the functions that get USGS water data. These pull from modern USGS API services.
     + WQP functions are for discrete water-quality data from the Water Quality Portal.
-    + NWIS functions get data from legacy NWIS web services. 
+    + NWIS functions get data from legacy NWIS water services. 
 * _Suffix_: "data" or other:
     + Functions that end in "data": These are flexible, powerful functions that allow complex user queries.
     + Functions that don't end with "data" are user-friendly functions that assume site, code, and start/end dates are known.
@@ -88,11 +88,11 @@ Functions in `dataRetrieval` look like `read_waterdata_daily`, `read_waterdata_c
 
 # Data Overview
 
-There are many types of data served from NWIS. To understand how the services are separated, it's helpful to understand that each data type is retrieved from a completely different web service or API.
+There are many types of data available from `dataRetrieval`. To understand how the services are separated, it's helpful to understand that each data type is retrieved from a completely different web service or API.
 
 * NWIS has traditionally been the source for all USGS water data
 
-* Legacy NWIS services will be retired (scheduled late 2026, but uncertain):
+* NWIS Water Services will be retired (scheduled late 2026, but uncertain):
   * <https://waterdata.usgs.gov/blog/nwisweb-decommission-summary/>
   
 * USGS water data functions will slowly replace NWIS functions
@@ -131,7 +131,7 @@ Do you regularly use `dataRetrieval`? As you switch your workflows over to the n
 One you have your API key, add it to your `.Renviron` file like this:
 
 ```{r}
-API_USGS_PAT = "[your api key]"
+API_USGS_PAT = "your api key"
 ```
 
 Replace [your api key] with the alphanumeric code provided by the sign-up page. That's it! `dataRetrieval` will look for an `.Renviron` file in your directories and use it for making web service calls.
