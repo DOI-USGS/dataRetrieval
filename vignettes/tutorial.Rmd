@@ -131,7 +131,7 @@ Do you regularly use `dataRetrieval`? As you switch your workflows over to the n
 One you have your API key, add it to your `.Renviron` file like this:
 
 ```{r}
-API_USGS_PAT = "[your api key]"
+API_USGS_PAT = "your api key"
 ```
 
 Replace [your api key] with the alphanumeric code provided by the sign-up page. That's it! `dataRetrieval` will look for an `.Renviron` file in your directories and use it for making web service calls.
