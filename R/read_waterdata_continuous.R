@@ -11,7 +11,6 @@
 #' @export
 #' @param monitoring_location_id `r get_params("continuous")$monitoring_location_id`
 #' @param parameter_code `r get_params("continuous")$parameter_code`
-#' @param statistic_id `r get_params("continuous")$statistic_id`
 #' @param time `r get_params("continuous")$time`
 #' @param value `r get_params("continuous")$value`
 #' @param unit_of_measure `r get_params("continuous")$unit_of_measure`
@@ -19,7 +18,9 @@
 #' @param last_modified `r get_params("continuous")$last_modified`
 #' @param time_series_id `r get_params("continuous")$time_series_id`
 #' @param qualifier `r get_params("continuous")$qualifier`
-#' @param continuous_id `r get_params("continuous")$id`
+#' @param statistic_id `r get_params("continuous")$statistic_id`. Note that 
+#' for continuous data, the statistic_id is almost universally 00011. 
+#' Requesting anything else will most-likely cause a timeout. 
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r schema <- check_OGC_requests(endpoint = "continuous", type = "schema"); paste(names(schema$properties), collapse = ", ")`
@@ -31,7 +32,8 @@
 #' @param max_results The optional maximum number of rows to return. This value
 #' must be less than the requested limit. 
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
-#' will convert the data to dates and qualifier to string vector.
+#' will convert the data to dates and qualifier to string vector, and sepcifically
+#' order the returning data frame by time and monitoring_location_id.
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -40,8 +42,7 @@
 #'
 #' uv_data_trim <- read_waterdata_continuous(monitoring_location_id = site,
 #'                           parameter_code = pcode, 
-#'                           properties = c("monitoring_location_id",
-#'                                          "value",
+#'                           properties = c("value",
 #'                                          "time"))
 #'
 #' uv_data <- read_waterdata_continuous(monitoring_location_id = site,
@@ -58,13 +59,12 @@
 #' }
 read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
                                       parameter_code = NA_character_,
-                                      statistic_id = NA_character_,
                                       properties = NA_character_,
                                       time_series_id = NA_character_,
-                                      continuous_id = NA_character_,
                                       approval_status = NA_character_,
                                       unit_of_measure = NA_character_,
                                       qualifier = NA_character_,
+                                      statistic_id = NA_character_,
                                       value = NA,
                                       last_modified = NA_character_,
                                       time = NA_character_,
@@ -78,14 +78,32 @@ read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
   args <- mget(names(formals()))
   args[["skipGeometry"]] <- TRUE
 
+  if(!is.na(statistic_id) & !all(statistic_id == "00011")){
+    warning("With few if any exceptions, statistic_id is always 00011 for continuous data, and requesting other statistic ids will likely return no data.")
+  }
+  
   return_list <- get_ogc_data(args,
                               output_id, 
                               service)
   
-  return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
+  if(convertType){
+    return_list <- order_results(return_list, properties)
+    return_list <- return_list[, names(return_list)[names(return_list)!= output_id]]
+  }
   
   return(return_list)
 }
 
-
+order_results <- function(return_list, properties){
+  
+  if(all(is.na(properties)) | 
+                    all(c("time", "monitoring_location_id") %in% properties)){
+    return_list <- return_list[order(return_list$time, 
+                                     return_list$monitoring_location_id), ]
+  } else if ("time" %in% properties) {
+    return_list <- return_list[order(return_list$time), ]    
+  }
+  
+  return(return_list)
+}
 
