@@ -30,11 +30,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-The `dataRetrieval` package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). 
+The `dataRetrieval` package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the USGS Water Data API. 
 
 For information on getting started in R and installing the package, see [Getting Started](#getting-started-in-r). Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
-A quick workflow for USGS `dataRetrieval` functions:
+A quick workflow using `dataRetrieval` functions:
 
 ```{r workflow, echo=TRUE,eval=FALSE}
 library(dataRetrieval)
@@ -194,7 +194,6 @@ kable(data.df,
 
 Examples for using these site numbers, parameter codes, and statistic codes will be presented in subsequent sections.
 
-There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as "Ice".  Any value that cannot be converted to a number will be reported as NA in this package (not including remark code columns), unless the user sets an argument `convertType` to `FALSE`. In that case, the data is returned as a data frame that is entirely character columns.
 
 ## Site Information
 
@@ -243,7 +242,7 @@ tableData <- sf::st_drop_geometry(tableData)
 
 
 knitr::kable(tableData,
-             caption = "Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]")
+             caption = "Table 4: Reformatted version of output from the read_waterdata_ts_meta function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]")
 
 
 # nolint end
@@ -254,16 +253,16 @@ Table 4: Reformatted version of output from the whatNWISdata function for the Ch
 |monitoring_location_id |parameter_description                                                                                                                               |unit_of_measure |begin      |end        |
 |:----------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------|:---------------|:----------|:----------|
 |USGS-01491000          |Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius                                                          |uS/cm           |2010-10-01 |2012-05-09 |
-|USGS-01491000          |Dissolved oxygen, water, unfiltered, milligrams per liter                                                                                           |mg/l            |2023-04-21 |2025-06-15 |
-|USGS-01491000          |Discharge, cubic feet per second                                                                                                                    |ft^3/s          |1948-01-01 |2025-06-15 |
-|USGS-01645000          |Discharge, cubic feet per second                                                                                                                    |ft^3/s          |1930-09-26 |2025-06-15 |
+|USGS-01491000          |Dissolved oxygen, water, unfiltered, milligrams per liter                                                                                           |mg/l            |2023-04-21 |2025-12-02 |
+|USGS-01491000          |Discharge, cubic feet per second                                                                                                                    |ft^3/s          |1948-01-01 |2025-12-02 |
+|USGS-01645000          |Discharge, cubic feet per second                                                                                                                    |ft^3/s          |1930-09-26 |2025-12-02 |
 |USGS-01491000          |Suspended sediment concentration, milligrams per liter                                                                                              |mg/l            |1980-10-01 |1991-09-29 |
 |USGS-01491000          |Suspended sediment discharge, short tons per day                                                                                                    |tons/day        |1980-10-01 |1991-09-29 |
-|USGS-01491000          |Nitrate plus nitrite, water, in situ, milligrams per liter as nitrogen                                                                              |mg/l            |2023-08-02 |2025-06-14 |
-|USGS-01491000          |Temperature, water, degrees Celsius                                                                                                                 |degC            |2023-04-21 |2025-06-15 |
-|USGS-01491000          |Turbidity, water, unfiltered, monochrome near infra-red LED light, 780-900 nm, detection angle 90 +-2.5 degrees, formazin nephelometric units (FNU) |_FNU            |2023-04-21 |2025-06-14 |
+|USGS-01491000          |Nitrate plus nitrite, water, in situ, milligrams per liter as nitrogen                                                                              |mg/l            |2023-08-02 |2025-12-02 |
+|USGS-01491000          |Temperature, water, degrees Celsius                                                                                                                 |degC            |2023-04-21 |2025-12-02 |
+|USGS-01491000          |Turbidity, water, unfiltered, monochrome near infra-red LED light, 780-900 nm, detection angle 90 +-2.5 degrees, formazin nephelometric units (FNU) |_FNU            |2023-04-21 |2025-12-02 |
 |USGS-01491000          |Temperature, water, degrees Celsius                                                                                                                 |degC            |2010-10-01 |2012-05-09 |
-|USGS-01491000          |Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius                                                          |uS/cm           |2023-04-21 |2025-06-14 |
+|USGS-01491000          |Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius                                                          |uS/cm           |2023-04-21 |2025-12-02 |
 
 
 ## Parameter Information
@@ -279,9 +278,7 @@ parameterINFO <- read_waterdata_parameter_codes(parameter_code = parameterCd)
 
 ## Daily Data
 
-To obtain daily records of USGS data, use the `readNWISdv` function. The arguments for this function are `siteNumbers`, `parameterCd`, `startDate`, `endDate`, and `statCd` (defaults to "00003").  If you want to use the default values, you do not need to list them in the function call. Daily data is pulled from [https://waterservices.usgs.gov/docs/dv-service/](https://waterservices.usgs.gov/docs/dv-service/).
-
-The dates (start and end) must be in the format "YYYY-MM-DD" (note: the user must include the quotes).  Setting the start date to "" (no space) will prompt the program to ask for the earliest date, and setting the end date to "" (no space) will prompt for the latest available date.
+To obtain daily records of USGS data, use the `read_waterdata_daily` function. 
 
 ```{r label=getNWISDaily, echo=TRUE, eval=FALSE}
 
@@ -356,7 +353,7 @@ legend("topleft", unique(temperatureAndFlow$unit_of_measure),
 
 ## Unit Data
 
-Any data collected at regular time intervals (such as 15-minute or hourly) are known as "unit values". Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function `readNWISuv`.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
+Any data collected at regular time intervals (such as 15-minute or hourly) are known as "unit values". Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function `read_waterdata_continuous`.  Here is an example of a retrieval of such data.  
 
 ```{r label=readNWISuv, eval=FALSE}
 
@@ -371,9 +368,6 @@ dischargeUnit <- read_waterdata_continuous(monitoring_location_id = siteNumber,
 
 The retrieval produces a data frame that contains 96 rows (one for every 15 minute period in the day).  They include all data collected from the `startDate` through the `endDate` (starting and ending with midnight locally-collected time). The dateTime column is converted to UTC (Coordinated Universal Time), so midnight EST will be 5 hours earlier in the dateTime column (the previous day, at 7pm).
 
-
-
-Data are retrieved from <https://api.waterdata.usgs.gov/ogcapi/v0/>. Site information and measured parameter information is attached to the data frame as attributes. This is discussed further in [metadata](#embedded-metadata) section.
 
 ## Groundwater Level Data
 
@@ -409,9 +403,7 @@ attr(ratingData, "RATING")
 
 ## Surface-Water Measurement Data
 
-These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve.  Information on the returned data can be found with the `comment` function and attached attributes as described in the [metadata](#embedded-metadata) section.
-
-Surface-water measurement data can be obtained with the `read_waterdata_field_measurements` function.
+These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve.  Surface-water measurement data can be obtained with the `read_waterdata_field_measurements` function.
 
 ```{r surfexample, echo=TRUE, eval=FALSE}
 surfaceData <- read_waterdata_field_measurements(monitoring_location_id = "USGS-01594440")
@@ -419,6 +411,7 @@ surfaceData <- read_waterdata_field_measurements(monitoring_location_id = "USGS-
 
 
 ## Water Use Data
+
 Retrieves water use data from USGS Water Use Data for the Nation.  See [https://waterdata.usgs.gov/nwis/wu](https://waterdata.usgs.gov/nwis/wu) for more information.  All available use categories for the supplied arguments are retrieved. 
 
 ```{r eval=FALSE}

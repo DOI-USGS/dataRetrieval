@@ -559,8 +559,7 @@ Latest discharge observation (00060) in Dane County, WI:
 dt_me(latest_dane_county |> 
         sf::st_drop_geometry() |> 
         select(-time_series_id,
-               -statistic_id,
-               -latest_continuous_id), 6, "0.7em")
+               -statistic_id), 6, "0.7em")
 
 ```
 
