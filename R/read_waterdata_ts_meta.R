@@ -22,7 +22,7 @@
 #' @param web_description `r get_params("time-series-metadata")$web_description`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "time-series-metadata", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' `r schema <- check_OGC_requests(endpoint = "time-series-metadata", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id")], collapse = ", ")`
 #' @param time_series_id `r get_params("time-series-metadata")$id`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
@@ -32,7 +32,7 @@
 #' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
-#' limit is 10000. It may be beneficial to set this number lower if your internet
+#' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
 #' @param max_results The optional maximum number of rows to return. This value

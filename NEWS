@@ -1,7 +1,10 @@
 dataRetrieval 2.7.22
 ===================
 * Added read_waterdata_latest_daily to access latest daily USGS water data.
+* Added read_waterdata_continuous to access continuous USGS water data.
 * Added state_name and hydrologic_unit_code to read_waterdata_ts_meta
+* Removed daily_id from read_waterdata_daily output. Currently it
+is not stable over time. 
 
 dataRetrieval 2.7.21
 ===================

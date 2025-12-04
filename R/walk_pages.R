@@ -151,8 +151,9 @@ cleanup_cols <- function(df, service = "daily"){
   if("time" %in% names(df)){
     if(service == "daily"){
       df$time <- as.Date(df$time)
-    }
-    # leave some room here for POSIXct in the other services.
+    } 
+    # by default, the data is put in POSIXct and seems
+    # to be pretty smart about the offset/tzone
   }
   
   if("value" %in% names(df)){
