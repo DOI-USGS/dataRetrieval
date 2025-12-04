@@ -99,7 +99,9 @@ read_waterdata_field_measurements <- function(monitoring_location_id = NA_charac
                               output_id, 
                               service)
   
-  return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
+  if(convertType){
+    return_list <- order_results(return_list, properties)
+  }
   
   return(return_list)
 }

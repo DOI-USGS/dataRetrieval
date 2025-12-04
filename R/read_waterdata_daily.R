@@ -13,7 +13,6 @@
 #' @param last_modified `r get_params("daily")$last_modified`
 #' @param time_series_id `r get_params("daily")$time_series_id`
 #' @param qualifier `r get_params("daily")$qualifier`
-#' @param daily_id `r get_params("daily")$id`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r schema <- check_OGC_requests(endpoint = "daily", type = "schema"); paste(names(schema$properties), collapse = ", ")`
@@ -39,7 +38,6 @@
 #' 
 #' \donttest{
 #' site <- "USGS-02238500"
-#' pcode <- "00060"
 #' dv_data_sf <- read_waterdata_daily(monitoring_location_id = site,
 #'                               parameter_code = "00060", 
 #'                               time = c("2021-01-01", "2022-01-01"))
@@ -50,8 +48,7 @@
 #'
 #' dv_data_trim <- read_waterdata_daily(monitoring_location_id = site,
 #'                           parameter_code = "00060", 
-#'                           properties = c("monitoring_location_id",
-#'                                          "value",
+#'                           properties = c("value",
 #'                                          "time"),
 #'                           time = c("2021-01-01", "2022-01-01"))
 #'
@@ -75,7 +72,6 @@ read_waterdata_daily <- function(monitoring_location_id = NA_character_,
                                  statistic_id = NA_character_,
                                  properties = NA_character_,
                                  time_series_id = NA_character_,
-                                 daily_id = NA_character_,
                                  approval_status = NA_character_,
                                  unit_of_measure = NA_character_,
                                  qualifier = NA_character_,
@@ -96,7 +92,10 @@ read_waterdata_daily <- function(monitoring_location_id = NA_character_,
                               output_id, 
                               service)
   
-  return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
+  if(convertType){
+    return_list <- order_results(return_list, properties)
+    return_list <- return_list[,names(return_list)[names(return_list)!= output_id]]
+  }
   
   return(return_list)
 }
