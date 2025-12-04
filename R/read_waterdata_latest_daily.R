@@ -13,10 +13,9 @@
 #' @param last_modified `r get_params("latest-daily")$last_modified`
 #' @param time_series_id `r get_params("latest-daily")$time_series_id`
 #' @param qualifier `r get_params("latest-daily")$qualifier`
-#' @param latest_daily_id `r get_params("latest-daily")$id`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "latest-daily", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' `r schema <- check_OGC_requests(endpoint = "latest-daily", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id")], collapse = ", ")`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -67,7 +66,6 @@ read_waterdata_latest_daily <- function(monitoring_location_id = NA_character_,
                                  statistic_id = NA_character_,
                                  properties = NA_character_,
                                  time_series_id = NA_character_,
-                                 latest_daily_id = NA_character_,
                                  approval_status = NA_character_,
                                  unit_of_measure = NA_character_,
                                  qualifier = NA_character_,
@@ -88,8 +86,14 @@ read_waterdata_latest_daily <- function(monitoring_location_id = NA_character_,
                               output_id, 
                               service)
   
-  return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
-  
+  if(convertType){
+    return_list <- order_results(return_list, properties)
+    return_list <- return_list[,names(return_list)[names(return_list)!= output_id]]
+    if("time_series_id" %in% names(return_list)){
+      return_list <- return_list[, c( names(return_list)[names(return_list)!= "time_series_id"],
+                                      "time_series_id")]
+    }
+  }  
   return(return_list)
 }
 
