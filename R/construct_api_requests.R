@@ -68,7 +68,7 @@ construct_api_requests <- function(service,
     if(!is.na(max_results)){
       get_list[["limit"]] <- max_results
     } else {
-      get_list[["limit"]] <- 10000
+      get_list[["limit"]] <- 50000
     }
   } else {
     if(!is.na(max_results)){

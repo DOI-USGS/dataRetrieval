@@ -10,7 +10,6 @@ read_waterdata_daily(
   statistic_id = NA_character_,
   properties = NA_character_,
   time_series_id = NA_character_,
-  daily_id = NA_character_,
   approval_status = NA_character_,
   unit_of_measure = NA_character_,
   qualifier = NA_character_,
@@ -33,11 +32,9 @@ read_waterdata_daily(
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, id, time_series_id, monitoring_location_id, parameter_code, statistic_id, time, value, unit_of_measure, approval_status, qualifier, last_modified}
+geometry, time_series_id, monitoring_location_id, parameter_code, statistic_id, time, value, unit_of_measure, approval_status, qualifier, last_modified}
 
 \item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
-
-\item{daily_id}{A universally unique identifier (UUID) representing a single version of a record. It is not stable over time. Every time the record is refreshed in our database (which may happen as part of normal operations and does not imply any change to the data itself) a new ID will be generated. To uniquely identify a single observation over time, compare the \code{time} and \code{time_series_id} fields; each time series will only have a single observation at a given \code{time}.}
 
 \item{approval_status}{Some of the data that you have obtained from this U.S. Geological Survey database may not have received Director's approval.  Any such data values are qualified as provisional and are subject to revision.  Provisional data are released on the condition that neither the USGS nor the United States Government may be held liable for any damages resulting from its use. This field reflects the approval status of each record, and is either "Approved", meaining processing review has been completed and the data is approved for publication, or "Provisional" and subject to revision. For more information about provisional data, go to \url{https://waterdata.usgs.gov/provisional-data-statement/}.}
 
@@ -83,7 +80,7 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
-limit is 10000. It may be beneficial to set this number lower if your internet
+limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
@@ -101,7 +98,6 @@ Daily data provide one data value to represent water conditions for the day. Thr
 
 \donttest{
 site <- "USGS-02238500"
-pcode <- "00060"
 dv_data_sf <- read_waterdata_daily(monitoring_location_id = site,
                               parameter_code = "00060", 
                               time = c("2021-01-01", "2022-01-01"))
@@ -112,8 +108,7 @@ dv_data_last_modified <- read_waterdata_daily(monitoring_location_id = site,
 
 dv_data_trim <- read_waterdata_daily(monitoring_location_id = site,
                           parameter_code = "00060", 
-                          properties = c("monitoring_location_id",
-                                         "value",
+                          properties = c("value",
                                          "time"),
                           time = c("2021-01-01", "2022-01-01"))
 

@@ -35,7 +35,7 @@ read_waterdata_field_measurements(
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, id, field_visit_id, parameter_code, monitoring_location_id, observing_procedure_code, observing_procedure, value, unit_of_measure, time, qualifier, vertical_datum, approval_status, measuring_agency, last_modified}
+geometry, field_visit_id, parameter_code, monitoring_location_id, observing_procedure_code, observing_procedure, value, unit_of_measure, time, qualifier, vertical_datum, approval_status, measuring_agency, last_modified}
 
 \item{field_visit_id}{A universally unique identifier (UUID) for the field visit. Multiple measurements may be made during a single field visit.}
 
@@ -89,7 +89,7 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
-limit is 10000. It may be beneficial to set this number lower if your internet
+limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 

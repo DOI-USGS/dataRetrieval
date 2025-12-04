@@ -18,7 +18,7 @@
 #' @param measuring_agency `r get_params("field-measurements")$measuring_agency`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "field-measurements", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' `r schema <- check_OGC_requests(endpoint = "field-measurements", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id")], collapse = ", ")`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -27,7 +27,7 @@
 #' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
-#' limit is 10000. It may be beneficial to set this number lower if your internet
+#' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
 #' @param max_results The optional maximum number of rows to return. This value
@@ -99,7 +99,14 @@ read_waterdata_field_measurements <- function(monitoring_location_id = NA_charac
                               output_id, 
                               service)
   
-  return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
+  if(convertType){
+    return_list <- order_results(return_list, properties)
+    return_list <- return_list[,names(return_list)[names(return_list)!= output_id]]
+    if("field_visit_id" %in% names(return_list)){
+      return_list <- return_list[, c( names(return_list)[names(return_list)!= "field_visit_id"],
+                                      "field_visit_id")]
+    }
+  }
   
   return(return_list)
 }
