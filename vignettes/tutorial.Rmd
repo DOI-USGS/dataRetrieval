@@ -58,10 +58,6 @@ Finally, if there are still questions that the vignette and help files don't ans
 
 <https://github.com/DOI-USGS/dataRetrieval/issues>
 
-For a longer introduction to the `dataRetrieval` package, see:
-
-<https://rconnect.usgs.gov/dataRetrieval_workshop>
-
 # Orientation
 
 `dataRetrieval` provides US water data mainly via 3 sources:
@@ -83,8 +79,6 @@ Functions in `dataRetrieval` look like `read_waterdata_daily`, `read_waterdata_c
 * _Suffix_: "data" or other:
     + Functions that end in "data": These are flexible, powerful functions that allow complex user queries.
     + Functions that don't end with "data" are user-friendly functions that assume site, code, and start/end dates are known.
-
-
 
 # Data Overview
 
