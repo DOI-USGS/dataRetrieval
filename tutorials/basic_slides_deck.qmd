@@ -851,7 +851,7 @@ names(continuous_data)
 
 ```
 Requesting:
-https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&limit=40000&monitoring_location_id=USGS-11455508&parameter_code=99133&time=2024-01-01T00%3A00%3A00Z%2F2024-06-01T00%3A00%3A00Z
+https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&limit=50000&monitoring_location_id=USGS-11455508&parameter_code=99133&time=2024-01-01T00%3A00%3A00Z%2F2024-06-01T00%3A00%3A00Z
 ```
 
 ## Workflow 4: Inspect
