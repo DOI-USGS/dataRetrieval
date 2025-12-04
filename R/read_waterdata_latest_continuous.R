@@ -5,7 +5,6 @@
 #' @export
 #' @param monitoring_location_id `r get_params("latest-continuous")$monitoring_location_id`
 #' @param parameter_code `r get_params("latest-continuous")$parameter_code`
-#' @param statistic_id `r get_params("latest-continuous")$statistic_id`
 #' @param time `r get_params("latest-continuous")$time`
 #' @param value `r get_params("latest-continuous")$value`
 #' @param unit_of_measure `r get_params("latest-continuous")$unit_of_measure`
@@ -13,10 +12,12 @@
 #' @param last_modified `r get_params("latest-continuous")$last_modified`
 #' @param time_series_id `r get_params("latest-continuous")$time_series_id`
 #' @param qualifier `r get_params("latest-continuous")$qualifier`
-#' @param latest_continuous_id `r get_params("latest-continuous")$id`
+#' @param statistic_id `r get_params("latest-continuous")$statistic_id`. Note that 
+#' for continuous data, the statistic_id is almost universally 00011. 
+#' Requesting anything else will most-likely cause a timeout. 
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "latest-continuous", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' `r schema <- check_OGC_requests(endpoint = "latest-continuous", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id")], collapse = ", ")`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -25,7 +26,7 @@
 #' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
-#' limit is 10000. It may be beneficial to set this number lower if your internet
+#' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
 #' @param max_results The optional maximum number of rows to return. This value
@@ -74,7 +75,6 @@ read_waterdata_latest_continuous <- function(monitoring_location_id = NA_charact
                             statistic_id = NA_character_,
                             properties = NA_character_,
                             time_series_id = NA_character_,
-                            latest_continuous_id = NA_character_,
                             approval_status = NA_character_,
                             unit_of_measure = NA_character_,
                             qualifier = NA_character_,
@@ -95,7 +95,14 @@ read_waterdata_latest_continuous <- function(monitoring_location_id = NA_charact
                               output_id, 
                               service)
 
-  return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
+  if(convertType){
+    return_list <- order_results(return_list, properties)
+    return_list <- return_list[, names(return_list)[names(return_list)!= output_id]]
+    if("time_series_id" %in% names(return_list)){
+      return_list <- return_list[, c( names(return_list)[names(return_list)!= "time_series_id"],
+                                      "time_series_id")]
+    }
+  }
   
   return(return_list)
 }

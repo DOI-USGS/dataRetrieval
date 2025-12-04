@@ -13,10 +13,9 @@
 #' @param last_modified `r get_params("daily")$last_modified`
 #' @param time_series_id `r get_params("daily")$time_series_id`
 #' @param qualifier `r get_params("daily")$qualifier`
-#' @param daily_id `r get_params("daily")$id`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "daily", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' `r schema <- check_OGC_requests(endpoint = "daily", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id")], collapse = ", ")`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -25,7 +24,7 @@
 #' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
-#' limit is 10000. It may be beneficial to set this number lower if your internet
+#' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
 #' @param max_results The optional maximum number of rows to return. This value
@@ -39,7 +38,6 @@
 #' 
 #' \donttest{
 #' site <- "USGS-02238500"
-#' pcode <- "00060"
 #' dv_data_sf <- read_waterdata_daily(monitoring_location_id = site,
 #'                               parameter_code = "00060", 
 #'                               time = c("2021-01-01", "2022-01-01"))
@@ -50,8 +48,7 @@
 #'
 #' dv_data_trim <- read_waterdata_daily(monitoring_location_id = site,
 #'                           parameter_code = "00060", 
-#'                           properties = c("monitoring_location_id",
-#'                                          "value",
+#'                           properties = c("value",
 #'                                          "time"),
 #'                           time = c("2021-01-01", "2022-01-01"))
 #'
@@ -71,22 +68,21 @@
 #' 
 #' }
 read_waterdata_daily <- function(monitoring_location_id = NA_character_,
-                            parameter_code = NA_character_,
-                            statistic_id = NA_character_,
-                            properties = NA_character_,
-                            time_series_id = NA_character_,
-                            daily_id = NA_character_,
-                            approval_status = NA_character_,
-                            unit_of_measure = NA_character_,
-                            qualifier = NA_character_,
-                            value = NA,
-                            last_modified = NA_character_,
-                            skipGeometry = NA,
-                            time = NA_character_,
-                            bbox = NA,
-                            limit = NA,
-                            max_results = NA,
-                            convertType = TRUE){
+                                 parameter_code = NA_character_,
+                                 statistic_id = NA_character_,
+                                 properties = NA_character_,
+                                 time_series_id = NA_character_,
+                                 approval_status = NA_character_,
+                                 unit_of_measure = NA_character_,
+                                 qualifier = NA_character_,
+                                 value = NA,
+                                 last_modified = NA_character_,
+                                 skipGeometry = NA,
+                                 time = NA_character_,
+                                 bbox = NA,
+                                 limit = NA,
+                                 max_results = NA,
+                                 convertType = TRUE){
   
   service <- "daily"
   output_id <- "daily_id"
@@ -96,7 +92,14 @@ read_waterdata_daily <- function(monitoring_location_id = NA_character_,
                               output_id, 
                               service)
   
-  return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
+  if(convertType){
+    return_list <- order_results(return_list, properties)
+    return_list <- return_list[,names(return_list)[names(return_list)!= output_id]]
+    if("time_series_id" %in% names(return_list)){
+      return_list <- return_list[, c( names(return_list)[names(return_list)!= "time_series_id"],
+                                      "time_series_id")]
+    }
+  }
   
   return(return_list)
 }
