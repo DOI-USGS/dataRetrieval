@@ -23,7 +23,7 @@
 #' Requesting anything else will most-likely cause a timeout. 
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "continuous", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' `r schema <- check_OGC_requests(endpoint = "continuous", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id", "internal_id")], collapse = ", ")`
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 50000. It may be beneficial to set this number lower if your internet

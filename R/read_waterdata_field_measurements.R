@@ -18,7 +18,7 @@
 #' @param measuring_agency `r get_params("field-measurements")$measuring_agency`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "field-measurements", type = "schema"); paste(names(schema$properties), collapse = ", ")`
+#' `r schema <- check_OGC_requests(endpoint = "field-measurements", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id")], collapse = ", ")`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -101,6 +101,11 @@ read_waterdata_field_measurements <- function(monitoring_location_id = NA_charac
   
   if(convertType){
     return_list <- order_results(return_list, properties)
+    return_list <- return_list[,names(return_list)[names(return_list)!= output_id]]
+    if("field_visit_id" %in% names(return_list)){
+      return_list <- return_list[, c( names(return_list)[names(return_list)!= "field_visit_id"],
+                                      "field_visit_id")]
+    }
   }
   
   return(return_list)
