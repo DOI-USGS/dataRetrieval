@@ -22,7 +22,8 @@
 #' @param web_description `r get_params("time-series-metadata")$web_description`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "time-series-metadata", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id")], collapse = ", ")`
+#' `r dataRetrieval:::get_properties_for_docs("time-series-metadata", "time_series_id")`.
+#' The default (`NA`) will return all columns of the data.
 #' @param time_series_id `r get_params("time-series-metadata")$id`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending

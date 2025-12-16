@@ -16,7 +16,8 @@
 #' @param epa_equivalence `r get_params("parameter-codes")$epa_equivalence`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "parameter-codes", type = "schema"); paste(names(schema$properties), collapse = ", ")`.
+#' `r dataRetrieval:::get_properties_for_docs("parameter-codes", "parameter_code_id")`.
+#' The default (`NA`) will return all columns of the data.
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 50000. It may be beneficial to set this number lower if your internet

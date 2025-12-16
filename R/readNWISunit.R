@@ -91,9 +91,9 @@ readNWISuv <- function(siteNumbers, parameterCd, startDate = "", endDate = "", t
     service <- "iv_recent"
   }
 
-  .Deprecated(new = "read_waterdata_continuous",
-              package = "dataRetrieval", 
-              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_continuous.")
+  # .Deprecated(new = "read_waterdata_continuous",
+  #             package = "dataRetrieval", 
+  #             msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_continuous.")
   
   
   url <- constructNWISURL(siteNumbers,

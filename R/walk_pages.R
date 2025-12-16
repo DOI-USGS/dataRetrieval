@@ -98,13 +98,6 @@ rejigger_cols <- function(df, properties, output_id){
     if(!"id" %in% properties){
       if(output_id %in% properties){
         names(df)[(names(df) == "id")] <- output_id
-      } else {
-        # just in case users become aware of the singular/plural issue
-        # where the endpoint name is plural, but input to other endpoints are singular
-        plural <- gsub("_id", "s_id", output_id)
-        if(plural %in% properties){
-          names(df)[(names(df) == "id")] <- plural
-        }
       }
     }
     df <- df[, properties]
@@ -186,6 +179,11 @@ next_req_url <- function(resp, req) {
 
   body <- httr2::resp_body_json(resp)
   
+  if(isTRUE(body[["code"]] == "InvalidQuery")){
+    message(body[["description"]])
+    return(NULL)
+  }
+  
   if(isTRUE(body[["numberReturned"]] == 0)){
     return(NULL)
   }
@@ -252,16 +250,14 @@ walk_pages <- function(req, max_results){
   if(is.na(max_results)){
     resps <- httr2::req_perform_iterative(req, 
                                           next_req = next_req_url, 
-                                          max_reqs = Inf)
-    ######################################
-    # So far I haven't tested this because I haven't had 
-    # individual failures
+                                          max_reqs = Inf, on_error = "return")
     failures <- resps |>
       httr2::resps_failures() |>
       httr2::resps_requests()
     
     if(length(failures) > 0){
-      message("There were", length(failures), "failed requests.")
+      message(resps[[1]][["message"]])
+      return(data.frame())
     }
     
     return_list <- data.frame()
@@ -301,8 +297,7 @@ get_ogc_data <- function(args,
   
   properties <- args[["properties"]]
   args[["properties"]] <- switch_properties_id(properties, 
-                                               id_name = output_id, 
-                                               service = service)
+                                               id = output_id)
   convertType <- args[["convertType"]] 
   args[["convertType"]] <- NULL
 
@@ -328,6 +323,7 @@ get_ogc_data <- function(args,
   
   attr(return_list, "request") <- req
   attr(return_list, "queryTime") <- Sys.time()
-  return(return_list)
+  return_list
 }
+
 
