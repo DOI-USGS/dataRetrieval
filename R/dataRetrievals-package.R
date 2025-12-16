@@ -219,7 +219,7 @@ NULL
 #   property_list[[i]] <- properties
 # }
 # rm(schema, i, services, properties)
-# save(countyCd, stateCd, parameterCdFile, pCodeToName, property_list,
+# save(countyCd, stateCd, parameterCdFile, pCodeToName, property_list, offsetLibrary,
 #      file = "R/sysdata.rda", compress = "xz")
 # 
 # # nolint end
