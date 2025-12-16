@@ -5,6 +5,8 @@ dataRetrieval 2.7.22
 * Added state_name and hydrologic_unit_code to read_waterdata_ts_meta
 * Removed daily_id from read_waterdata_daily output since it
 is not stable over time. Moved other "id" columns to end of returned data frames.
+* Changed examples for stateCd, countyCd, and parameterCdFile. Users are
+encouraged to migreate to the "read_waterdata_metadata" functions.
 
 dataRetrieval 2.7.21
 ===================

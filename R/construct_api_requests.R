@@ -109,6 +109,17 @@ construct_api_requests <- function(service,
   }
   
   if(!all(is.na(properties))){
+    available_properties <- property_list[[service]]
+    
+    if(!all(properties %in% available_properties)){
+      # Check again:
+      schema <- check_OGC_requests(endpoint = service, type = "schema")
+      properties_fresh <- names(schema$properties)
+      if(!all(properties %in% properties_fresh)){
+        stop("Invalid properties requested.")
+      }
+    }
+    
     baseURL <- httr2::req_url_query(baseURL,
                                     properties = properties,
                                     .multi = "comma")    

@@ -256,8 +256,7 @@ walk_pages <- function(req, max_results){
       httr2::resps_requests()
     
     if(length(failures) > 0){
-      message(resps[[1]][["message"]])
-      return(data.frame())
+      stop(resps[[1]][["message"]])
     }
     
     return_list <- data.frame()
