@@ -209,71 +209,78 @@ switch_arg_id <- function(ls, id_name, service){
 
 #' Switch properties id
 #' 
+#' If a user asks for either "id" or "output_id", it is only included in the 
+#' properties if that's the only column requested. "id" will always come back,
+#' so it is not needed in the properties call.
+#' 
 #' @noRd
 #' @return list
 #' @examples
 #' 
 #' properties <- c("id", "state_name", "country_name")
 #' dataRetrieval:::switch_properties_id(properties, 
-#'                               id_name = "monitoring_location_id",
-#'                               service = "monitoring-locations")
+#'                               id = "monitoring_location_id")
 #'                               
 #' properties2 <- c("monitoring_location_id", "state_name", "country_name")
 #' dataRetrieval:::switch_properties_id(properties2, 
-#'                               id_name = "monitoring_location_id",
-#'                               service = "monitoring-locations")
+#'                               id = "monitoring_location_id")
 #'                               
 #' properties3 <- c("monitoring_locations_id", "state_name", "country_name")
 #' dataRetrieval:::switch_properties_id(properties3, 
-#'                               id_name = "monitoring_location_id",
-#'                               service = "monitoring-locations")
-switch_properties_id <- function(properties, id_name, service){
-  
-  service_id <- paste0(gsub("-", "_", service), "_id")
-  
-  last_letter <- substr(service, nchar(service), nchar(service))
-  if(last_letter == "s"){
-    service_singluar <- substr(service,1, nchar(service)-1)
-    service_id_singular <- paste0(gsub("-", "_", service_singluar), "_id")
-  } else {
-    service_id_singular <- ""
-  }
-  
-  if(!"id" %in% properties){
-    if(service_id %in% properties){
-      properties[properties == service_id] <- "id"
-      
-    } else if(service_id_singular %in% properties) {
-      properties[properties == service_id_singular] <- "id"
-    } else {
-      properties[properties == id_name] <- "id"
-    }
-  }
+#'                               id = "monitoring_location_id")
+#'                               
+#' properties4 <- c("monitoring_location_id")
+#' dataRetrieval:::switch_properties_id(properties4, 
+#'                               id = "monitoring_location_id")
+#'
+switch_properties_id <- function(properties, id){
   
   if(!all(is.na(properties))){
-
-    schema <- check_OGC_requests(endpoint = service,
-                                 type = "schema")
-    all_properties <- names(schema$properties)
-    
-    if(all(all_properties[!all_properties %in% c("id", "geometry")] %in% properties)) {
-      # Cleans up URL if we're asking for everything
-      properties <- NA_character_
-    } else {
-      properties <- gsub("-", "_", properties)
-      properties <- properties[!properties %in% c("id", 
-                                                  "geometry",
-                                                  paste0(gsub("-", "_", service), "_id"))]
-    
+    if("id" %in% properties){
+      properties <- properties[properties != "id"]
+    } else if (id %in% properties){
+      properties <- properties[properties != id]
     }
     
-    if(!all(is.na(properties))){
-      match.arg(properties, choices = all_properties,
-                several.ok = TRUE)    
+    if("geometry" %in% properties){
+      properties <- properties[properties != "geometry"]
+    }
+    
+    if(length(properties) == 0){
+      properties <- "id"
     }
   }
   
   return(properties)
+}
+
+
+order_results <- function(df){
+  
+  if(all(c("time", "monitoring_location_id") %in% names(df))){
+    df <- df[order(df$time, 
+                   df$monitoring_location_id), ]
+  } else if ("time" %in% names(df)) {
+    df <- df[order(df$time), ]    
+  }
+  
+  return(df)
+}
+
+move_id_col <- function(df, output_id){
+  # you need the [] or the attributes get dropped
+  df <- df[, names(df)[names(df)!= output_id]]
+  if("time_series_id" %in% names(df)){
+    df <- df[, c(names(df)[names(df)!= "time_series_id"],
+                 "time_series_id")]
+  }
+  
+  if("field_visit_id" %in% names(df)){
+    df <- df[, c(names(df)[names(df)!= "field_visit_id"],
+                 "field_visit_id")]
+  }
+  
+  return(df)
 }
 
 
@@ -616,4 +623,31 @@ get_params <- function(service){
   
   params <- sapply(query_ret$properties, function(x) x[["description"]]) 
 
+}
+
+
+#' Get property list
+#' 
+#' This function gets a list of available properties, and
+#' renames the id column to what is used in dataRetrieval.
+#' 
+#' @param service Character, can be any of the endpoints
+#' @param output_id Character, dataRetrieval output name
+#' @return list
+#' @noRd
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' dataRetrieval:::get_properties_for_docs("monitoring-locations",
+#'                                         "monitoring_location_id")
+#' 
+#' }
+#' 
+get_properties_for_docs <- function(service, output_id){
+  
+  schema <- check_OGC_requests(endpoint = service, type = "schema")
+  properties <- names(schema$properties)
+  properties[properties == "id"] <- output_id
+  return(paste(properties, collapse = ", "))
+  
 }

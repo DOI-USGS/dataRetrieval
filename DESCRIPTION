@@ -1,7 +1,7 @@
 Package: dataRetrieval
 Type: Package
 Title: Retrieval Functions for USGS and EPA Hydrology and Water Quality Data
-Version: 2.7.21.9000
+Version: 2.7.22
 Authors@R: c(
     person("Laura", "DeCicco", role = c("aut","cre"),
             email = "ldecicco@usgs.gov",
@@ -29,7 +29,7 @@ Authors@R: c(
     person("Joeseph", "Zemmels", role="ctb",
             email = "jzemmels@usgs.gov",
             comment=c(ORCID = "0009-0008-1463-6313")),
-    person("Elise", "Hinman", role="ctb",
+    person("Elise", "Hinman", role="aut",
             email = "ehinman@usgs.gov",
             comment=c(ORCID = "0000-0001-5396-1583")),  
     person("Michael", "Mahoney", role="ctb",

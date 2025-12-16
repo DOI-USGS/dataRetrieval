@@ -15,7 +15,8 @@
 #' @param qualifier `r get_params("latest-daily")$qualifier`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "latest-daily", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id")], collapse = ", ")`
+#' `r dataRetrieval:::get_properties_for_docs("latest-daily", "latest_daily_id")`.
+#' The default (`NA`) will return all columns of the data.
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -87,12 +88,8 @@ read_waterdata_latest_daily <- function(monitoring_location_id = NA_character_,
                               service)
   
   if(convertType){
-    return_list <- order_results(return_list, properties)
-    return_list <- return_list[,names(return_list)[names(return_list)!= output_id]]
-    if("time_series_id" %in% names(return_list)){
-      return_list <- return_list[, c( names(return_list)[names(return_list)!= "time_series_id"],
-                                      "time_series_id")]
-    }
+    return_list <- order_results(return_list)
+    return_list <- move_id_col(return_list, output_id)
   }  
   return(return_list)
 }

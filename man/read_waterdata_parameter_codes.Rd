@@ -46,7 +46,8 @@ read_waterdata_parameter_codes(
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, id, parameter_name, unit_of_measure, parameter_group_code, parameter_description, medium, statistical_basis, time_basis, weight_basis, particle_size_basis, sample_fraction, temperature_basis, epa_equivalence.}
+geometry, parameter_code_id, parameter_name, unit_of_measure, parameter_group_code, parameter_description, medium, statistical_basis, time_basis, weight_basis, particle_size_basis, sample_fraction, temperature_basis, epa_equivalence.
+The default (\code{NA}) will return all columns of the data.}
 
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable

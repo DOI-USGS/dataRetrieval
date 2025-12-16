@@ -23,7 +23,8 @@
 #' Requesting anything else will most-likely cause a timeout. 
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "continuous", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id", "internal_id")], collapse = ", ")`
+#' `r dataRetrieval:::get_properties_for_docs("continuous", "continuous_id")`.
+#' The default (`NA`) will return all columns of the data.
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 50000. It may be beneficial to set this number lower if your internet
@@ -87,27 +88,12 @@ read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
                               service)
   
   if(convertType){
-    return_list <- order_results(return_list, properties)
-    return_list <- return_list[, names(return_list)[names(return_list)!= output_id]]
-    if("time_series_id" %in% names(return_list)){
-      return_list <- return_list[, c( names(return_list)[names(return_list)!= "time_series_id"],
-                                      "time_series_id")]
-    }
+    return_list <- order_results(return_list)
+    return_list <- move_id_col(return_list, output_id)
   }
   
   return(return_list)
 }
 
-order_results <- function(return_list, properties){
-  
-  if(all(is.na(properties)) | 
-                    all(c("time", "monitoring_location_id") %in% properties)){
-    return_list <- return_list[order(return_list$time, 
-                                     return_list$monitoring_location_id), ]
-  } else if ("time" %in% properties) {
-    return_list <- return_list[order(return_list$time), ]    
-  }
-  
-  return(return_list)
-}
+
 
