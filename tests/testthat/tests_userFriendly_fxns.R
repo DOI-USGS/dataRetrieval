@@ -527,3 +527,14 @@ test_that("pCode Stuff", {
   )
 })
 
+context("Smart Errors")
+test_that("bad_properties", {
+  testthat::skip_on_cran()
+  testthat::skip_on_ci()
+  
+  expect_error(read_waterdata_daily(monitoring_location_id = "USGS-02238500",
+                                  parameter_code = c("00010"),
+                                  time = c("2021-01-01", "2022-01-01"),
+                                  properties = c("value", "time", "blah")))
+})
+

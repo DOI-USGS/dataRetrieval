@@ -433,6 +433,15 @@ coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
 coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
 ```
 
+### County Identifiers
+
+`r dataRetrieval:::get_description("counties")`
+
+```{r}
+#| eval: false
+counties <- read_waterdata_metadata("counties")
+```
+
 ### Hydrologic Unit Codes
 
 `r dataRetrieval:::get_description("hydrologic-unit-codes")`
@@ -488,6 +497,25 @@ reliability_codes <- read_waterdata_metadata("reliability-codes")
 site_types <- read_waterdata_metadata("site-types")
 ```
 
+### State Identifiers
+
+`r dataRetrieval:::get_description("states")`
+
+```{r}
+#| eval: false
+states <- read_waterdata_metadata("states")
+```
+
+### Statistic Codes
+
+`r dataRetrieval:::get_description("statistic-codes")`
+
+```{r}
+#| eval: false
+statistic_codes <- read_waterdata_metadata("statistic-codes")
+```
+
+
 ### Topographic Codes
 
 `r dataRetrieval:::get_description("topographic-codes")`
@@ -497,7 +525,7 @@ site_types <- read_waterdata_metadata("site-types")
 topographic_codes <- read_waterdata_metadata("topographic-codes")
 ```
 
-### Topographic Codes
+### Time Zone Codes
 
 `r dataRetrieval:::get_description("time-zone-codes")`
 
