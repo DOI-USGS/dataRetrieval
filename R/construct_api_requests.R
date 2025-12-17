@@ -243,9 +243,14 @@ switch_arg_id <- function(ls, id_name, service){
 #' properties4 <- c("monitoring_location_id")
 #' dataRetrieval:::switch_properties_id(properties4, 
 #'                               id = "monitoring_location_id")
+#'                               
+#' properties5 <- c("monitoring_location_id", "geometry")
+#' dataRetrieval:::switch_properties_id(properties5, 
+#'                               id = "monitoring_location_id")
 #'
 switch_properties_id <- function(properties, id){
   
+  orig_properties <- properties
   if(!all(is.na(properties))){
     if("id" %in% properties){
       properties <- properties[properties != "id"]
@@ -258,6 +263,8 @@ switch_properties_id <- function(properties, id){
     }
     
     if(length(properties) == 0){
+      # If a user requested only id and/or geometry, properties would now be empty
+      # geometry is taken care of with skipGeometry
       properties <- "id"
     }
   }
@@ -279,7 +286,10 @@ order_results <- function(df){
 }
 
 move_id_col <- function(df, output_id){
-  # you need the [] or the attributes get dropped
+  # attributes get dropped 
+  req <- attr(df, "request")
+  queryTime <- attr(df, "queryTime")
+  
   df <- df[, names(df)[names(df)!= output_id]]
   if("time_series_id" %in% names(df)){
     df <- df[, c(names(df)[names(df)!= "time_series_id"],
@@ -290,6 +300,9 @@ move_id_col <- function(df, output_id){
     df <- df[, c(names(df)[names(df)!= "field_visit_id"],
                  "field_visit_id")]
   }
+  
+  attr(df, "request") <- req
+  attr(df, "queryTime") <- queryTime
   
   return(df)
 }
