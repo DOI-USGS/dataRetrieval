@@ -43,6 +43,10 @@
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
+#' @param no_paging logical, defaults to `FALSE`. If `TRUE`, the data will
+#' be requested from a native csv format. This can be dangerous because the
+#' data will cut off at 50,000 rows without indication that more data
+#' is available. Use `TRUE` with caution. 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -84,7 +88,8 @@ read_waterdata_ts_meta <- function(monitoring_location_id = NA_character_,
                               limit = NA,
                               max_results = NA,
                               bbox = NA,
-                              convertType = FALSE){
+                              convertType = FALSE,
+                              no_paging = FALSE){
 
   service = "time-series-metadata"
   output_id <- "time_series_id"

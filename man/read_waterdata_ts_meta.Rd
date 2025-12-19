@@ -28,7 +28,8 @@ read_waterdata_ts_meta(
   limit = NA,
   max_results = NA,
   bbox = NA,
-  convertType = FALSE
+  convertType = FALSE,
+  no_paging = FALSE
 )
 }
 \arguments{
@@ -105,6 +106,11 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
+
+\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+be requested from a native csv format. This can be dangerous because the
+data will cut off at 50,000 rows without indication that more data
+is available. Use \code{TRUE} with caution.}
 }
 \description{
 Daily data and continuous measurements are grouped into time series, which represent a collection of observations of a single parameter, potentially aggregated using a standard statistic, at a single monitoring location. This endpoint provides metadata about those time series, including their operational thresholds, units of measurement, and when the earliest and most recent observations in a time series occurred.

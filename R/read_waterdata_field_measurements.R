@@ -38,6 +38,10 @@
 #' information.
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector.
+#' @param no_paging logical, defaults to `FALSE`. If `TRUE`, the data will
+#' be requested from a native csv format. This can be dangerous because the
+#' data will cut off at 50,000 rows without indication that more data
+#' is available. Use `TRUE` with caution. 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -90,7 +94,8 @@ read_waterdata_field_measurements <- function(monitoring_location_id = NA_charac
                                              bbox = NA,
                                              limit = NA,
                                              max_results = NA,
-                                             convertType = TRUE){
+                                             convertType = TRUE,
+                                             no_paging = FALSE){
   
   service <- "field-measurements"
   output_id <- "field_measurement_id"

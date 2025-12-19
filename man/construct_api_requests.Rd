@@ -11,6 +11,7 @@ construct_api_requests(
   limit = NA,
   max_results = NA,
   skipGeometry = FALSE,
+  no_paging = FALSE,
   ...
 )
 }

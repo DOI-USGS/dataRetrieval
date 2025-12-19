@@ -46,9 +46,8 @@ construct_api_requests <- function(service,
                                    limit = NA,
                                    max_results = NA,
                                    skipGeometry = FALSE,
+                                   no_paging = FALSE,
                                    ...){
-  
-  baseURL <- setup_api(service)
   
   POST <- FALSE
   
@@ -60,6 +59,7 @@ construct_api_requests <- function(service,
     warning("No filtering arguments specified.")
   }
   
+  # GET list refers to arguments that will go in the URL no matter what (not POST)
   get_list <- full_list[names(full_list) %in% single_params]
 
   get_list[["skipGeometry"]] <- skipGeometry
@@ -77,6 +77,7 @@ construct_api_requests <- function(service,
     get_list[["limit"]] <- limit
   }
   
+  #POST list are the arguments that need to be in the POST body
   post_list <- full_list[!names(full_list) %in% single_params]
   
   post_params <- explode_post(post_list)
@@ -100,6 +101,9 @@ construct_api_requests <- function(service,
     }
   }
   
+  format_type <- ifelse(isTRUE(no_paging), "csv", "json")
+  
+  baseURL <- setup_api(service, format = format_type)
   baseURL <- explode_query(baseURL, POST = FALSE, get_list)
   
   if(all(!is.na(bbox))){
@@ -172,12 +176,12 @@ base_url <- function(){
 #' request <- dataRetrieval:::setup_api("daily")
 #' request
 #' }
-setup_api <- function(service){
+setup_api <- function(service, format = "json"){
   
   baseURL <- base_url() |> 
     httr2::req_url_path_append("collections") |> 
     httr2::req_url_path_append(service, "items") |> 
-    basic_request() 
+    basic_request(format = format) 
   
 }
 
@@ -217,96 +221,6 @@ switch_arg_id <- function(ls, id_name, service){
   ls[[id_name]] <- NULL
   return(ls)
 }
-
-#' Switch properties id
-#' 
-#' If a user asks for either "id" or "output_id", it is only included in the 
-#' properties if that's the only column requested. "id" will always come back,
-#' so it is not needed in the properties call.
-#' 
-#' @noRd
-#' @return list
-#' @examples
-#' 
-#' properties <- c("id", "state_name", "country_name")
-#' dataRetrieval:::switch_properties_id(properties, 
-#'                               id = "monitoring_location_id")
-#'                               
-#' properties2 <- c("monitoring_location_id", "state_name", "country_name")
-#' dataRetrieval:::switch_properties_id(properties2, 
-#'                               id = "monitoring_location_id")
-#'                               
-#' properties3 <- c("monitoring_locations_id", "state_name", "country_name")
-#' dataRetrieval:::switch_properties_id(properties3, 
-#'                               id = "monitoring_location_id")
-#'                               
-#' properties4 <- c("monitoring_location_id")
-#' dataRetrieval:::switch_properties_id(properties4, 
-#'                               id = "monitoring_location_id")
-#'                               
-#' properties5 <- c("monitoring_location_id", "geometry")
-#' dataRetrieval:::switch_properties_id(properties5, 
-#'                               id = "monitoring_location_id")
-#'
-switch_properties_id <- function(properties, id){
-  
-  orig_properties <- properties
-  if(!all(is.na(properties))){
-    if("id" %in% properties){
-      properties <- properties[properties != "id"]
-    } else if (id %in% properties){
-      properties <- properties[properties != id]
-    }
-    
-    if("geometry" %in% properties){
-      properties <- properties[properties != "geometry"]
-    }
-    
-    if(length(properties) == 0){
-      # If a user requested only id and/or geometry, properties would now be empty
-      # geometry is taken care of with skipGeometry
-      properties <- "id"
-    }
-  }
-  
-  return(properties)
-}
-
-
-order_results <- function(df){
-  
-  if(all(c("time", "monitoring_location_id") %in% names(df))){
-    df <- df[order(df$time, 
-                   df$monitoring_location_id), ]
-  } else if ("time" %in% names(df)) {
-    df <- df[order(df$time), ]    
-  }
-  
-  return(df)
-}
-
-move_id_col <- function(df, output_id){
-  # attributes get dropped 
-  req <- attr(df, "request")
-  queryTime <- attr(df, "queryTime")
-  
-  df <- df[, names(df)[names(df)!= output_id]]
-  if("time_series_id" %in% names(df)){
-    df <- df[, c(names(df)[names(df)!= "time_series_id"],
-                 "time_series_id")]
-  }
-  
-  if("field_visit_id" %in% names(df)){
-    df <- df[, c(names(df)[names(df)!= "field_visit_id"],
-                 "field_visit_id")]
-  }
-  
-  attr(df, "request") <- req
-  attr(df, "queryTime") <- queryTime
-  
-  return(df)
-}
-
 
 #' Format the date request
 #' 
@@ -456,47 +370,7 @@ cql2_param <- function(parameter){
   return(whisker::whisker.render(template, parameter_list))
 } 
 
-#' Check OGC requests
-#' 
-#' @param endpoint Character, can be any existing collection
-#' @param type Character, can be "queryables", "schema"
-#' @export
-#' @keywords internal
-#' @return list
-#' @examplesIf is_dataRetrieval_user()
-#' 
-#' \donttest{
-#' 
-#' dv_queryables <- check_OGC_requests(endpoint = "daily",
-#'                                 type = "queryables")
-#' dv_schema <- check_OGC_requests(endpoint = "daily",
-#'                             type = "schema")
-#' ts_meta_queryables <- check_OGC_requests(endpoint = "time-series-metadata",
-#'                                 type = "queryables")
-#' ts_meta_schema <- check_OGC_requests(endpoint = "time-series-metadata",
-#'                                 type = "schema")
-#' }
-check_OGC_requests <- function(endpoint = "daily",
-                               type = "queryables"){
-  
-  match.arg(type, c("queryables", "schema"))
-  
-  match.arg(endpoint, c(pkg.env$api_endpoints,
-                        pkg.env$metadata))
-  
-  req <- base_url() |> 
-    httr2::req_url_path_append("collections") |> 
-    httr2::req_url_path_append(endpoint) |> 
-    httr2::req_url_path_append(type) |> 
-    basic_request()
-  
-  query_ret <- req |> 
-    httr2::req_perform() |> 
-    httr2::resp_body_json() 
-  
-  return(query_ret)
-  
-}
+
 
 #' Custom Error Messages
 #' 
@@ -546,12 +420,12 @@ error_body <- function(resp) {
 #' collect_request
 #' }
 #' 
-basic_request <- function(url_base){
+basic_request <- function(url_base, format = "json"){
   
   req <- url_base |> 
     httr2::req_user_agent(default_ua()) |> 
     httr2::req_headers(`Accept-Encoding` = c("compress", "gzip")) |> 
-    httr2::req_url_query(f = "json",
+    httr2::req_url_query(f = format,
                          lang = "en-US") |> 
     httr2::req_error(body = error_body) 
   
@@ -566,112 +440,4 @@ basic_request <- function(url_base){
   
 }
 
-#' Create service descriptions dynamically
-#' 
-#' This function populates the parameter descriptions.
-#' 
-#' @param service Character, can be any of the endpoints
-#' @return list
-#' @noRd
-#' @examplesIf is_dataRetrieval_user()
-#' 
-#' \donttest{
-#' ml_desc <- dataRetrieval:::get_description("monitoring-locations")
-#' ml_desc
-#' }
-#' 
-get_description <- function(service){
 
-  query_ret <- get_collection() 
-  
-  tags <- query_ret[["tags"]]
-  
-  service_index <- which(sapply(tags, function(x){
-    x$name == service
-  }))
-  
-  tags[[service_index]][["description"]]
-  
-}
-
-#' Get collection response
-#' 
-#' 
-#' @return httr2 response
-#' @noRd
-#' @examplesIf is_dataRetrieval_user()
-#' 
-#' \donttest{
-#' collection <- dataRetrieval:::get_collection()
-#' collection
-#' }
-#' 
-get_collection <- function(){
-  
-  check_collections <- base_url() |> 
-    httr2::req_url_path_append("openapi") |>
-    httr2::req_url_query(f = "html#/server/getCollections")
-  
-  check_endpoints_req <- basic_request(check_collections)
-  
-  query_ret <- httr2::req_perform(check_endpoints_req) |> 
-    httr2::resp_body_json()
-  
-  return(query_ret)
-}
-
-#' Create parameter descriptions dynamically
-#' 
-#' This function populates the parameter descriptions.
-#' 
-#' @param service Character, can be any of the endpoints
-#' @return list
-#' @noRd
-#' @examplesIf is_dataRetrieval_user()
-#' 
-#' \donttest{
-#' ml <- dataRetrieval:::get_params("monitoring-locations")
-#' ml$national_aquifer_code
-#' }
-#' 
-get_params <- function(service){
-  
-  check_queryables_req <- base_url() |> 
-    httr2::req_url_path_append("collections") |> 
-    httr2::req_url_path_append(service) |> 
-    httr2::req_url_path_append("schema") |> 
-    basic_request()
-  
-  query_ret <- httr2::req_perform(check_queryables_req) |> 
-    httr2::resp_body_json() 
-  
-  params <- sapply(query_ret$properties, function(x) x[["description"]]) 
-
-}
-
-
-#' Get property list
-#' 
-#' This function gets a list of available properties, and
-#' renames the id column to what is used in dataRetrieval.
-#' 
-#' @param service Character, can be any of the endpoints
-#' @param output_id Character, dataRetrieval output name
-#' @return list
-#' @noRd
-#' @examplesIf is_dataRetrieval_user()
-#' 
-#' \donttest{
-#' dataRetrieval:::get_properties_for_docs("monitoring-locations",
-#'                                         "monitoring_location_id")
-#' 
-#' }
-#' 
-get_properties_for_docs <- function(service, output_id){
-  
-  schema <- check_OGC_requests(endpoint = service, type = "schema")
-  properties <- names(schema$properties)
-  properties[properties == "id"] <- output_id
-  return(paste(properties, collapse = ", "))
-  
-}
