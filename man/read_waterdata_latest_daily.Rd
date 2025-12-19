@@ -20,7 +20,8 @@ read_waterdata_latest_daily(
   bbox = NA,
   limit = NA,
   max_results = NA,
-  convertType = TRUE
+  convertType = TRUE,
+  no_paging = FALSE
 )
 }
 \arguments{
@@ -90,6 +91,11 @@ must be less than the requested limit.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
+
+\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+be requested from a native csv format. This can be dangerous because the
+data will cut off at 50,000 rows without indication that more data
+is available. Use \code{TRUE} with caution.}
 }
 \description{
 Daily data provide one data value to represent water conditions for the day. Throughout much of the history of the USGS, the primary water data available was daily data collected manually at the monitoring location once each day. With improved availability of computer storage and automated transmission of data, the daily data published today are generally a statistical summary or metric of the continuous data collected each day, such as the daily mean, minimum, or maximum value. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. These data have also been referred to as “daily values” or “DV”.

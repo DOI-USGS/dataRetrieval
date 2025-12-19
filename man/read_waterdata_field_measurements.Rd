@@ -23,7 +23,8 @@ read_waterdata_field_measurements(
   bbox = NA,
   limit = NA,
   max_results = NA,
-  convertType = TRUE
+  convertType = TRUE,
+  no_paging = FALSE
 )
 }
 \arguments{
@@ -99,6 +100,11 @@ must be less than the requested limit.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
+
+\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+be requested from a native csv format. This can be dangerous because the
+data will cut off at 50,000 rows without indication that more data
+is available. Use \code{TRUE} with caution.}
 }
 \description{
 Field measurements are physically measured values collected during a visit to the monitoring location. Field measurements consist of measurements of gage height and discharge, and readings of groundwater levels, and are primarily used as calibration readings for the automated sensors collecting continuous data. They are collected at a low frequency, and delivery of the data in WDFN may be delayed due to data processing time.

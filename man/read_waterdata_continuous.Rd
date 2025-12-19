@@ -18,7 +18,8 @@ read_waterdata_continuous(
   time = NA_character_,
   limit = NA,
   max_results = NA,
-  convertType = TRUE
+  convertType = TRUE,
+  no_paging = FALSE
 )
 }
 \arguments{
@@ -81,6 +82,11 @@ must be less than the requested limit.}
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector, and sepcifically
 order the returning data frame by time and monitoring_location_id.}
+
+\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+be requested from a native csv format. This can be dangerous because the
+data will cut off at 50,000 rows without indication that more data
+is available. Use \code{TRUE} with caution.}
 }
 \description{
 This is an early version of the continuous endpoint. It is feature-complete and provides access to the full continuous data record, and is being made available as we continue to work on performance improvements.

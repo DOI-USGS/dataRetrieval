@@ -59,7 +59,7 @@ read_waterdata_metadata <- function(collection,
                                                       max_results = max_results))
   
   return_list <- walk_pages(data_req, max_results)
-
+  
   return_list <- rejigger_cols(df = return_list,
                                properties =  NA,
                                output_id =  output_id)

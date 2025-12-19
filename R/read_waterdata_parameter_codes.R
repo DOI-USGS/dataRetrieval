@@ -67,6 +67,7 @@ read_waterdata_parameter_codes <- function(parameter_code = NA_character_,
   args[["convertType"]] <- FALSE
   args[["skipGeometry"]] <- TRUE
   args[["bbox"]] <- NA
+  args[["no_paging"]] <- TRUE # change if we're ever over 50,000
   
   if(all(lengths(args) == 1)){
     return_list <- suppressWarnings(get_ogc_data(args = args,
@@ -84,6 +85,7 @@ in a post-processing step.")
                                  limit = limit)
     args[["convertType"]] <- NULL
     args[["skipGeometry"]] <- NULL
+    args[["no_paging"]] <- NULL
     args_to_filter <- args[!is.na(args)]
     for(param in names(args_to_filter)){
       return_list <- return_list[return_list[[param]] %in% args_to_filter[[param]],]

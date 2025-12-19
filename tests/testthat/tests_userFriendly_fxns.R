@@ -527,7 +527,7 @@ test_that("pCode Stuff", {
   )
 })
 
-context("Smart Errors")
+context("Smart errors, warnings")
 test_that("bad_properties", {
   testthat::skip_on_cran()
   testthat::skip_on_ci()
@@ -536,5 +536,23 @@ test_that("bad_properties", {
                                   parameter_code = c("00010"),
                                   time = c("2021-01-01", "2022-01-01"),
                                   properties = c("value", "time", "blah")))
+  # Empty result:
+  expect_message(read_waterdata_daily(monitoring_location_id = "USGS-02238500",
+                                    parameter_code = c("00010"),
+                                    time = c("2021-01-01", "2022-01-01"),
+                                    no_paging = TRUE))
+  
+  empty_return <- read_waterdata_daily(monitoring_location_id = "USGS-02238500",
+                       parameter_code = c("00010"),
+                       time = c("2021-01-01", "2022-01-01"))
+  expect_true(nrow(empty_return) == 0)
+  
+  empty_return2 <- read_waterdata_daily(monitoring_location_id = "USGS-02238500",
+                                       parameter_code = c("00010"),
+                                       time = c("2021-01-01", "2022-01-01"),
+                                       no_paging = TRUE)
+  
+  expect_true(nrow(empty_return2) == 0)
+  
 })
 
