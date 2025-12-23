@@ -6,6 +6,10 @@
 #' @param monitoring_location_id `r get_params("latest-continuous")$monitoring_location_id`
 #' @param parameter_code `r get_params("latest-continuous")$parameter_code`
 #' @param time `r get_params("latest-continuous")$time`
+#' You can also use a vector of length 2: the first value being the starting date,
+#' the second value being the ending date. NA's within the vector indicate a
+#' half-bound date. For example, c("2024-01-01", NA) will return all data starting
+#' at 2024-01-01.
 #' @param value `r get_params("latest-continuous")$value`
 #' @param unit_of_measure `r get_params("latest-continuous")$unit_of_measure`
 #' @param approval_status `r get_params("latest-continuous")$approval_status`
