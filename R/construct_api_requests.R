@@ -43,15 +43,13 @@
 construct_api_requests <- function(service,
                                    properties = NA_character_,
                                    bbox = NA,
-                                   limit = NA,
-                                   max_results = NA,
                                    skipGeometry = FALSE,
                                    no_paging = FALSE,
                                    ...){
   
   POST <- FALSE
   
-  single_params <- c("datetime", "last_modified", "begin", "end", "time")
+  single_params <- c("datetime", "last_modified", "begin", "end", "time", "limit")
   
   full_list <- list(...)
   
@@ -63,19 +61,6 @@ construct_api_requests <- function(service,
   get_list <- full_list[names(full_list) %in% single_params]
 
   get_list[["skipGeometry"]] <- skipGeometry
-  
-  if(is.na(limit)){
-    if(!is.na(max_results)){
-      get_list[["limit"]] <- max_results
-    } else {
-      get_list[["limit"]] <- 50000
-    }
-  } else {
-    if(!is.na(max_results)){
-      if(limit > max_results) stop("limit cannot be greater than max_result")
-    }
-    get_list[["limit"]] <- limit
-  }
   
   #POST list are the arguments that need to be in the POST body
   post_list <- full_list[!names(full_list) %in% single_params]
@@ -148,6 +133,35 @@ construct_api_requests <- function(service,
   }
   
   return(baseURL)
+}
+
+check_limits <- function(args){
+  current_api_limit <- 50000
+  
+  if(is.na(args[["limit"]])){
+    if(!is.na(args[["max_results"]])){
+      # we can leave limit empty unless we're doing no paging and the max is > limit
+      if(args[["max_results"]] > current_api_limit){
+        args[["limit"]] <- current_api_limit
+        if(args[["no_paging"]]){
+          warning("no_paging option is capped at ", current_api_limit, " max_results")
+          args[["max_results"]] <- current_api_limit
+        }
+      } else {
+        args[["limit"]] <- args[["max_results"]]
+      }
+      
+    } else {
+      args[["limit"]] <- current_api_limit
+    }
+  } else {
+    if(!is.na(args[["max_results"]])){
+      if(args[["limit"]] > args[["max_results"]]) stop("limit cannot be greater than max_result")
+    } else if (args[["limit"]] > current_api_limit){
+      args[["limit"]] <- current_api_limit
+    }
+  }
+  return(args)
 }
 
 #' Setup the request for the OGC API requests

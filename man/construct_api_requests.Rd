@@ -8,8 +8,6 @@ construct_api_requests(
   service,
   properties = NA_character_,
   bbox = NA,
-  limit = NA,
-  max_results = NA,
   skipGeometry = FALSE,
   no_paging = FALSE,
   ...
@@ -27,16 +25,16 @@ box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
 depth).}
 
-\item{limit}{The optional limit parameter limits the number of items that are
-presented in the response document. Only items are counted that are on the
-first level of the collection in the response document. Nested objects
-contained within the explicitly requested items shall not be counted.}
-
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
 information.}
 
 \item{...}{Extra parameters from the specific services.}
+
+\item{limit}{The optional limit parameter limits the number of items that are
+presented in the response document. Only items are counted that are on the
+first level of the collection in the response document. Nested objects
+contained within the explicitly requested items shall not be counted.}
 }
 \description{
 Main documentation: \url{https://api.waterdata.usgs.gov/ogcapi/v0/},

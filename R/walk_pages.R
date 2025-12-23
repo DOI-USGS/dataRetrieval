@@ -7,8 +7,9 @@
 walk_pages <- function(req, max_results){
   
   message("Requesting:\n", req$url)
+  current_api_limit <- 50000
   
-  if(is.na(max_results)){
+  if(is.na(max_results) | max_results > current_api_limit){
     resps <- httr2::req_perform_iterative(req, 
                                           next_req = next_req_url, 
                                           max_reqs = Inf, on_error = "return")
@@ -24,6 +25,10 @@ walk_pages <- function(req, max_results){
     for(resp in resps){
       df1 <- get_resp_data(resp)
       return_list <- rbind(return_list, df1)
+    }
+    
+    if(!is.na(max_results) & max_results > current_api_limit){
+      return_list <- return_list[1:max_results, ]
     }
     
     ######################################

@@ -3,7 +3,6 @@
 #' @param args arguments from individual functions
 #' @param output_id Name of id column to return
 #' @param service Endpoint name.
-#' @param max_results
 #' 
 #' @noRd
 #' @return data.frame with attributes
@@ -17,18 +16,21 @@ get_ogc_data <- function(args,
                         id_name = output_id, 
                         service = service)
   
+  args <- check_limits(args)
+  
   properties <- args[["properties"]]
   args[["properties"]] <- switch_properties_id(properties, 
                                                id = output_id)
   convertType <- args[["convertType"]] 
   args[["convertType"]] <- NULL
   
-  req <- do.call(construct_api_requests, args)
-  
   max_results <- args[["max_results"]]
   args[["max_results"]] <- NULL
   
-  no_paging <- isTRUE(args[["no_paging"]])
+  req <- do.call(construct_api_requests, args)
+  
+  no_paging <- args[["no_paging"]]
+  args[["no_paging"]] <- NULL
   
   if(no_paging){
     return_list <- get_csv(req, max_results)
