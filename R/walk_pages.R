@@ -130,7 +130,7 @@ get_csv <- function(req, max_results){
     
     if(nrow(df) == max_results){
       warning("Missing data is probable. Use no_paging = FALSE to 
-assure all requested data is returned.")
+ensure all requested data is returned.")
     }    
   } else {
     df <- data.frame()
