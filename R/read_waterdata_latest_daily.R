@@ -7,6 +7,10 @@
 #' @param parameter_code `r get_params("latest-daily")$parameter_code`
 #' @param statistic_id `r get_params("latest-daily")$statistic_id`
 #' @param time `r get_params("latest-daily")$time`
+#' You can also use a vector of length 2: the first value being the starting date,
+#' the second value being the ending date. NA's within the vector indicate a
+#' half-bound date. For example, c("2024-01-01", NA) will return all data starting
+#' at 2024-01-01.
 #' @param value `r get_params("latest-daily")$value`
 #' @param unit_of_measure `r get_params("latest-daily")$unit_of_measure`
 #' @param approval_status `r get_params("latest-daily")$approval_status`
