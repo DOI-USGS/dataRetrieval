@@ -105,7 +105,8 @@ construct_api_requests <- function(service,
       schema <- check_OGC_requests(endpoint = service, type = "schema")
       properties_fresh <- names(schema$properties)
       if(!all(properties %in% properties_fresh)){
-        stop("Invalid properties requested.")
+        stop("Invalid properties: ", 
+             paste0(properties[!properties %in% properties_fresh], collapse = ", "))
       }
     }
     
