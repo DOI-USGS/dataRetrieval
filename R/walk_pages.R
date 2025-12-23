@@ -114,9 +114,7 @@ get_csv <- function(req, max_results){
   if(is.na(max_results)){
     max_results <- 50000
   }
-  message("Setting no_paging to TRUE will only return up to ", max_results, 
-          " rows of data with no indication of missing data")
-  
+
   message("Requesting:\n", req$url)
   skip_geo <- grepl("skipGeometry=true", req$url, ignore.case = TRUE)
   resp <- httr2::req_perform(req)
@@ -126,6 +124,9 @@ get_csv <- function(req, max_results){
     df <- suppressMessages(readr::read_csv(file = return_list))
     if(skip_geo){
       df <- df[, names(df)[!names(df) %in% c("x", "y")]]
+    } else {
+      df <- sf::st_as_sf(df, coords = c("x","y"))
+      sf::st_crs(df) <- 4269
     }
     
     if(nrow(df) == max_results){
