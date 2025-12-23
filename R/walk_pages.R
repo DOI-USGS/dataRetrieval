@@ -114,7 +114,7 @@ get_csv <- function(req, max_results){
   if(is.na(max_results)){
     max_results <- 50000
   }
-  message("Setting no_paging to TRUE will only return the first ", max_results, 
+  message("Setting no_paging to TRUE will only return up to ", max_results, 
           " rows of data with no indication of missing data")
   
   message("Requesting:\n", req$url)
