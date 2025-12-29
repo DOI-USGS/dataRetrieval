@@ -16,7 +16,8 @@
 #' @param epa_equivalence `r get_params("parameter-codes")$epa_equivalence`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "parameter-codes", type = "schema"); paste(names(schema$properties), collapse = ", ")`.
+#' `r dataRetrieval:::get_properties_for_docs("parameter-codes", "parameter_code_id")`.
+#' The default (`NA`) will return all columns of the data.
 #' @param limit The optional limit parameter is used to control the subset of the 
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 50000. It may be beneficial to set this number lower if your internet
@@ -66,6 +67,7 @@ read_waterdata_parameter_codes <- function(parameter_code = NA_character_,
   args[["convertType"]] <- FALSE
   args[["skipGeometry"]] <- TRUE
   args[["bbox"]] <- NA
+  args[["no_paging"]] <- FALSE # change if we're ever over 50,000
   
   if(all(lengths(args) == 1)){
     return_list <- suppressWarnings(get_ogc_data(args = args,
@@ -74,15 +76,14 @@ read_waterdata_parameter_codes <- function(parameter_code = NA_character_,
   } else {
     
     message("Current API functionality requires pulling the full parameter-codes list.
-It is expected that updates to the API will eliminate this need, but in the meantime
-consider running read_waterdata_parameter_code() with no query parameters, and filtering
-in a post-processing step.")
+It is expected that updates to the API will eliminate this need.")
     
     return_list <- read_waterdata_metadata(collection = service, 
                                  max_results = max_results,
                                  limit = limit)
     args[["convertType"]] <- NULL
     args[["skipGeometry"]] <- NULL
+    args[["no_paging"]] <- NULL
     args_to_filter <- args[!is.na(args)]
     for(param in names(args_to_filter)){
       return_list <- return_list[return_list[[param]] %in% args_to_filter[[param]],]

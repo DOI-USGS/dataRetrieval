@@ -7,6 +7,10 @@
 #' @param parameter_code `r get_params("daily")$parameter_code`
 #' @param statistic_id `r get_params("daily")$statistic_id`
 #' @param time `r get_params("daily")$time`
+#' You can also use a vector of length 2: the first value being the starting date,
+#' the second value being the ending date. NA's within the vector indicate a
+#' half-bound date. For example, c("2024-01-01", NA) will return all data starting
+#' at 2024-01-01.
 #' @param value `r get_params("daily")$value`
 #' @param unit_of_measure `r get_params("daily")$unit_of_measure`
 #' @param approval_status `r get_params("daily")$approval_status`
@@ -15,7 +19,8 @@
 #' @param qualifier `r get_params("daily")$qualifier`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "daily", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id")], collapse = ", ")`
+#' `r dataRetrieval:::get_properties_for_docs("daily", "daily_id")`.
+#' The default (`NA`) will return all columns of the data.
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -34,6 +39,10 @@
 #' information.
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector.
+#' @param no_paging logical, defaults to `FALSE`. If `TRUE`, the data will
+#' be requested from a native csv format. This can be dangerous because the
+#' data will cut off at 50,000 rows without indication that more data
+#' is available. Use `TRUE` with caution. 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -65,6 +74,10 @@
 #'                               parameter_code = c("00060", "00010"),
 #'                               limit = 500,
 #'                               time = c("2023-01-01", "2024-01-01"))
+#'                               
+#' dv_data_quick <- read_waterdata_daily(monitoring_location_id = site,
+#'                                    parameter_code = "00060",
+#'                                    no_paging = TRUE)
 #' 
 #' }
 read_waterdata_daily <- function(monitoring_location_id = NA_character_,
@@ -82,7 +95,8 @@ read_waterdata_daily <- function(monitoring_location_id = NA_character_,
                                  bbox = NA,
                                  limit = NA,
                                  max_results = NA,
-                                 convertType = TRUE){
+                                 convertType = TRUE,
+                                 no_paging = FALSE){
   
   service <- "daily"
   output_id <- "daily_id"
@@ -93,12 +107,8 @@ read_waterdata_daily <- function(monitoring_location_id = NA_character_,
                               service)
   
   if(convertType){
-    return_list <- order_results(return_list, properties)
-    return_list <- return_list[,names(return_list)[names(return_list)!= output_id]]
-    if("time_series_id" %in% names(return_list)){
-      return_list <- return_list[, c( names(return_list)[names(return_list)!= "time_series_id"],
-                                      "time_series_id")]
-    }
+    return_list <- order_results(return_list)
+    return_list <- move_id_col(return_list, output_id)
   }
   
   return(return_list)

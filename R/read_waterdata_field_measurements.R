@@ -7,6 +7,10 @@
 #' @param parameter_code `r get_params("field-measurements")$parameter_code`
 #' @param observing_procedure_code `r get_params("field-measurements")$observing_procedure_code`
 #' @param time `r get_params("field-measurements")$time`
+#' You can also use a vector of length 2: the first value being the starting date,
+#' the second value being the ending date. NA's within the vector indicate a
+#' half-bound date. For example, c("2024-01-01", NA) will return all data starting
+#' at 2024-01-01.
 #' @param value `r get_params("field-measurements")$value`
 #' @param unit_of_measure `r get_params("field-measurements")$unit_of_measure`
 #' @param approval_status `r get_params("field-measurements")$approval_status`
@@ -18,7 +22,8 @@
 #' @param measuring_agency `r get_params("field-measurements")$measuring_agency`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "field-measurements", type = "schema"); paste(names(schema$properties)[!names(schema$properties) %in% c("id")], collapse = ", ")`
+#' `r dataRetrieval:::get_properties_for_docs("field-measurements", "field_measurement_id")`.
+#' The default (`NA`) will return all columns of the data.
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -37,6 +42,10 @@
 #' information.
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector.
+#' @param no_paging logical, defaults to `FALSE`. If `TRUE`, the data will
+#' be requested from a native csv format. This can be dangerous because the
+#' data will cut off at 50,000 rows without indication that more data
+#' is available. Use `TRUE` with caution. 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -89,7 +98,8 @@ read_waterdata_field_measurements <- function(monitoring_location_id = NA_charac
                                              bbox = NA,
                                              limit = NA,
                                              max_results = NA,
-                                             convertType = TRUE){
+                                             convertType = TRUE,
+                                             no_paging = FALSE){
   
   service <- "field-measurements"
   output_id <- "field_measurement_id"
@@ -100,12 +110,8 @@ read_waterdata_field_measurements <- function(monitoring_location_id = NA_charac
                               service)
   
   if(convertType){
-    return_list <- order_results(return_list, properties)
-    return_list <- return_list[,names(return_list)[names(return_list)!= output_id]]
-    if("field_visit_id" %in% names(return_list)){
-      return_list <- return_list[, c( names(return_list)[names(return_list)!= "field_visit_id"],
-                                      "field_visit_id")]
-    }
+    return_list <- order_results(return_list)
+    return_list <- move_id_col(return_list, output_id)
   }
   
   return(return_list)

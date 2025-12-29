@@ -12,7 +12,8 @@ pkg.env <- new.env()
                "continuous")
   collections <- c("parameter-codes", "agency-codes", "altitude-datums", "aquifer-codes",
                    "aquifer-types", "coordinate-accuracy-codes", "coordinate-datum-codes",
-                   "coordinate-method-codes", "medium-codes", 
+                   "coordinate-method-codes", "medium-codes", "counties",
+                   "hydrologic-unit-codes", "states",
                    "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
                    "topographic-codes", "time-zone-codes")
 
