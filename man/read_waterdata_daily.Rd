@@ -20,7 +20,8 @@ read_waterdata_daily(
   bbox = NA,
   limit = NA,
   max_results = NA,
-  convertType = TRUE
+  convertType = TRUE,
+  no_paging = FALSE
 )
 }
 \arguments{
@@ -32,7 +33,8 @@ read_waterdata_daily(
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, time_series_id, monitoring_location_id, parameter_code, statistic_id, time, value, unit_of_measure, approval_status, qualifier, last_modified}
+geometry, daily_id, time_series_id, monitoring_location_id, parameter_code, statistic_id, time, value, unit_of_measure, approval_status, qualifier, last_modified.
+The default (\code{NA}) will return all columns of the data.}
 
 \item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
 
@@ -69,7 +71,12 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.}
+Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.
+
+You can also use a vector of length 2: the first value being the starting date,
+the second value being the ending date. NA's within the vector indicate a
+half-bound date. For example, c("2024-01-01", NA) will return all data starting
+at 2024-01-01.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
@@ -89,6 +96,11 @@ must be less than the requested limit.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
+
+\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+be requested from a native csv format. This can be dangerous because the
+data will cut off at 50,000 rows without indication that more data
+is available. Use \code{TRUE} with caution.}
 }
 \description{
 Daily data provide one data value to represent water conditions for the day. Throughout much of the history of the USGS, the primary water data available was daily data collected manually at the monitoring location once each day. With improved availability of computer storage and automated transmission of data, the daily data published today are generally a statistical summary or metric of the continuous data collected each day, such as the daily mean, minimum, or maximum value. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. These data have also been referred to as “daily values” or “DV”.
@@ -125,6 +137,10 @@ multi_site <- read_waterdata_daily(monitoring_location_id =  c("USGS-01491000",
                               parameter_code = c("00060", "00010"),
                               limit = 500,
                               time = c("2023-01-01", "2024-01-01"))
+                              
+dv_data_quick <- read_waterdata_daily(monitoring_location_id = site,
+                                   parameter_code = "00060",
+                                   no_paging = TRUE)
 
 }
 \dontshow{\}) # examplesIf}

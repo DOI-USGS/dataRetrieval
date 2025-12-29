@@ -37,7 +37,7 @@ test_that("Unit value data returns correct types", {
   # nolint start: line_length_linter
   expect_equal(
     attr(rawData, "request")[["url"]],
-    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&limit=50000&monitoring_location_id=USGS-05114000&parameter_code=00060&time=2014-10-10T00%3A00%3A00Z%2F2014-10-10T00%3A00%3A00Z"
+    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-05114000&parameter_code=00060&time=2014-10-10T00%3A00%3A00Z%2F2014-10-10T00%3A00%3A00Z&limit=50000"
   )
   # nolint end
   timeZoneChange <- read_waterdata_continuous(monitoring_location_id = c("04024430", "04024000"), 
@@ -50,7 +50,7 @@ test_that("Unit value data returns correct types", {
   expect_is(rawData$value, "numeric")
   # nolint start: line_length_linter
   expect_equal(attr(rawData, "request")[["url"]],
-               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&limit=50000&monitoring_location_id=USGS-05114000&parameter_code=00060&time=2014-10-10T00%3A00%3A00Z%2F2014-10-10T00%3A00%3A00Z")
+               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-05114000&parameter_code=00060&time=2014-10-10T00%3A00%3A00Z%2F2014-10-10T00%3A00%3A00Z&limit=50000")
   # nolint end
   site <- "USGS-04087170"
   pCode <- "63680"
@@ -390,7 +390,7 @@ test_that("Construct USGS urls", {
   
   # nolint start: line_length_linter
   expect_equal(url_daily$url,
-               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&time=2024-01-01%2F..&skipGeometry=FALSE&limit=50000")
+               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&time=2024-01-01%2F..&skipGeometry=FALSE")
 
   url_works <- dataRetrieval:::walk_pages(url_daily, max_results = 1)
   expect_true(nrow(url_works) > 0)
@@ -401,7 +401,7 @@ test_that("Construct USGS urls", {
   
   expect_equal(
     url_ts_meta$url,
-    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&lang=en-US&skipGeometry=FALSE&limit=50000"
+    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&lang=en-US&skipGeometry=FALSE"
   )
   
   url_works_ts <- dataRetrieval:::walk_pages(url_ts_meta, max_results = 1)
@@ -410,7 +410,7 @@ test_that("Construct USGS urls", {
   url_ml <- construct_api_requests(id = siteNumber,
                                    service = "monitoring-locations")
   
-  expect_equal(url_ml$url, "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations/items?f=json&lang=en-US&skipGeometry=FALSE&limit=50000&id=USGS-01594440")
+  expect_equal(url_ml$url, "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations/items?f=json&lang=en-US&skipGeometry=FALSE&id=USGS-01594440")
 
   url_works_ml <- dataRetrieval:::walk_pages(url_ml, max_results = 1)
   expect_true(nrow(url_works_ml) > 0)
@@ -525,5 +525,34 @@ test_that("pCode Stuff", {
     attr(paramINFO, "url"),
     "https://www.waterqualitydata.us/Codes/public_srsnames/?mimeType=json"
   )
+})
+
+context("Smart errors, warnings")
+test_that("bad_properties", {
+  testthat::skip_on_cran()
+  testthat::skip_on_ci()
+  
+  expect_error(read_waterdata_daily(monitoring_location_id = "USGS-02238500",
+                                  parameter_code = c("00010"),
+                                  time = c("2021-01-01", "2022-01-01"),
+                                  properties = c("value", "time", "blah")))
+  # Empty result:
+  expect_message(read_waterdata_daily(monitoring_location_id = "USGS-02238500",
+                                    parameter_code = c("00010"),
+                                    time = c("2021-01-01", "2022-01-01"),
+                                    no_paging = TRUE))
+  
+  empty_return <- read_waterdata_daily(monitoring_location_id = "USGS-02238500",
+                       parameter_code = c("00010"),
+                       time = c("2021-01-01", "2022-01-01"))
+  expect_true(nrow(empty_return) == 0)
+  
+  empty_return2 <- read_waterdata_daily(monitoring_location_id = "USGS-02238500",
+                                       parameter_code = c("00010"),
+                                       time = c("2021-01-01", "2022-01-01"),
+                                       no_paging = TRUE)
+  
+  expect_true(nrow(empty_return2) == 0)
+  
 })
 

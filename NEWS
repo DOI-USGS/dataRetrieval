@@ -3,8 +3,12 @@ dataRetrieval 2.7.22
 * Added read_waterdata_latest_daily to access latest daily USGS water data.
 * Added read_waterdata_continuous to access continuous USGS water data.
 * Added state_name and hydrologic_unit_code to read_waterdata_ts_meta
-* Removed daily_id from read_waterdata_daily output. Currently it
-is not stable over time. 
+* Removed daily_id from read_waterdata_daily output since it
+is not stable over time. Moved other "id" columns to end of returned data frames.
+* Changed examples for stateCd, countyCd, and parameterCdFile. Users are
+encouraged to migrate to the "read_waterdata_metadata" functions.
+* Added no_paging argument. This will make the request more efficient, but is not 
+recommended because it will silently cut off data after 50,000 rows.
 
 dataRetrieval 2.7.21
 ===================

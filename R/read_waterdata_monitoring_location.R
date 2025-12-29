@@ -45,7 +45,8 @@
 #' @param depth_source_code `r get_params("monitoring-locations")$depth_source_code`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
-#' `r schema <- check_OGC_requests(endpoint = "monitoring-locations", type = "schema"); paste(names(schema$properties), collapse = ", ")`.
+#' `r dataRetrieval:::get_properties_for_docs("monitoring-locations", "monitoring_location_id")`.
+#' The default (`NA`) will return all columns of the data.
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or

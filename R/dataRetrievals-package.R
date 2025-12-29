@@ -58,8 +58,13 @@ token_message)
 #'
 #' @docType data
 #' @export parameterCdFile
-#' @examples
-#' head(parameterCdFile[, 1:2])
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' # Please migrate to:
+#' parameterCds <- read_waterdata_metadata("parameter-codes")
+#' 
+#' }
 NULL
 
 
@@ -113,8 +118,13 @@ NULL
 #' @docType data
 #' @export stateCd
 #' @keywords USGS stateCd
-#' @examples
-#' head(stateCd)
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' # Please migrate to:
+#' stateCd <- read_waterdata_metadata("states")
+#' 
+#' }
 NULL
 
 #' US County Code Lookup Table
@@ -136,8 +146,13 @@ NULL
 #' @docType data
 #' @export countyCd
 #' @keywords USGS countyCd
-#' @examples
-#' head(countyCd)
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' # Please migrate to:
+#' countyCd <- read_waterdata_metadata("counties")
+#' 
+#' }
 NULL
 
 # nolint start: commented_code_linter
@@ -190,4 +205,21 @@ NULL
 # 
 # save(countyCd, stateCd, parameterCdFile, pCodeToName,
 #      file = "R/sysdata.rda", compress = "xz")
-# nolint end
+# 
+# services <- c("daily", "time-series-metadata",
+#               "monitoring-locations", "latest-continuous",
+#               "field-measurements", "latest-daily",
+#               "continuous")
+# 
+# property_list <- list()
+# 
+# for(i in services){
+#   schema <- check_OGC_requests(endpoint = i, type = "schema")
+#   properties <- names(schema$properties)
+#   property_list[[i]] <- properties
+# }
+# rm(schema, i, services, properties)
+# save(countyCd, stateCd, parameterCdFile, pCodeToName, property_list, offsetLibrary,
+#      file = "R/sysdata.rda", compress = "xz")
+# 
+# # nolint end

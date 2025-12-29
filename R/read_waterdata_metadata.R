@@ -39,14 +39,8 @@
 read_waterdata_metadata <- function(collection, 
                           max_results = NA,
                           limit = NA){
-
-  available <- c("parameter-codes", "agency-codes", "altitude-datums", "aquifer-codes",
-                 "aquifer-types", "coordinate-accuracy-codes", "coordinate-datum-codes",
-                 "coordinate-method-codes", "hydrologic-unit-codes", "medium-codes", 
-                 "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
-                 "topographic-codes", "time-zone-codes")
   
-  match.arg(collection, available)
+  match.arg(collection, pkg.env$metadata)
 
   output_id <- gsub("-", "_", collection)
   last_letter <- substr(output_id, 
@@ -65,7 +59,7 @@ read_waterdata_metadata <- function(collection,
                                                       max_results = max_results))
   
   return_list <- walk_pages(data_req, max_results)
-
+  
   return_list <- rejigger_cols(df = return_list,
                                properties =  NA,
                                output_id =  output_id)
