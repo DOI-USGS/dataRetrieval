@@ -36,8 +36,6 @@
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param max_results The optional maximum number of rows to return. This value
-#' must be less than the requested limit. 
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector, and sepcifically
 #' order the returning data frame by time and monitoring_location_id.
@@ -80,7 +78,6 @@ read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
                                       last_modified = NA_character_,
                                       time = NA_character_,
                                       limit = NA,
-                                      max_results = NA,
                                       convertType = TRUE,
                                       no_paging = FALSE){
   
@@ -97,12 +94,7 @@ read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
   return_list <- get_ogc_data(args,
                               output_id, 
                               service)
-  
-  if(convertType){
-    return_list <- order_results(return_list)
-    return_list <- move_id_col(return_list, output_id)
-  }
-  
+
   return(return_list)
 }
 

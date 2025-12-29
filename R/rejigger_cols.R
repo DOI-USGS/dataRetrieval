@@ -63,7 +63,7 @@ rejigger_cols <- function(df, properties, output_id){
 #'                                      service = "daily")
 #' df3 <- dataRetrieval:::cleanup_cols(df2)
 #' 
-cleanup_cols <- function(df, service = "daily"){
+cleanup_cols <- function(df, service){
   
   if("qualifier" %in% names(df)){
     if(!all(is.na(df$qualifier))){

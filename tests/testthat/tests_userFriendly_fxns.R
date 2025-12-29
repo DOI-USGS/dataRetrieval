@@ -386,33 +386,36 @@ test_that("Construct USGS urls", {
                                       monitoring_location_id = siteNumber, 
                                       parameter_code = pCode,
                                       time = c(startDate, endDate),
-                                      statistic_id = c("00003", "00001"))
+                                      statistic_id = c("00003", "00001"),
+                                      limit = 10000)
   
   # nolint start: line_length_linter
   expect_equal(url_daily$url,
-               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&time=2024-01-01%2F..&skipGeometry=FALSE")
+               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&time=2024-01-01%2F..&limit=10000&skipGeometry=FALSE")
 
-  url_works <- dataRetrieval:::walk_pages(url_daily, max_results = 1)
+  url_works <- dataRetrieval:::walk_pages(url_daily)
   expect_true(nrow(url_works) > 0)
   
   url_ts_meta <- construct_api_requests(monitoring_location_id = siteNumber,
                                      parameter_code = pCode,
-                                     service = "time-series-metadata")
+                                     service = "time-series-metadata",
+                                     limit = 10000)
   
   expect_equal(
     url_ts_meta$url,
-    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&lang=en-US&skipGeometry=FALSE"
+    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&lang=en-US&limit=10000&skipGeometry=FALSE"
   )
   
-  url_works_ts <- dataRetrieval:::walk_pages(url_ts_meta, max_results = 1)
+  url_works_ts <- dataRetrieval:::walk_pages(url_ts_meta)
   expect_true(nrow(url_works_ts) > 0)
 
   url_ml <- construct_api_requests(id = siteNumber,
-                                   service = "monitoring-locations")
+                                   service = "monitoring-locations",
+                                   limit = 50000)
   
-  expect_equal(url_ml$url, "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations/items?f=json&lang=en-US&skipGeometry=FALSE&id=USGS-01594440")
+  expect_equal(url_ml$url, "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations/items?f=json&lang=en-US&skipGeometry=FALSE&id=USGS-01594440&limit=50000")
 
-  url_works_ml <- dataRetrieval:::walk_pages(url_ml, max_results = 1)
+  url_works_ml <- dataRetrieval:::walk_pages(url_ml)
   expect_true(nrow(url_works_ml) > 0)
   
   url_use <- constructUseURL(

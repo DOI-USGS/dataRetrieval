@@ -22,7 +22,6 @@ read_waterdata_field_measurements(
   time = NA_character_,
   bbox = NA,
   limit = NA,
-  max_results = NA,
   convertType = TRUE,
   no_paging = FALSE
 )
@@ -99,9 +98,6 @@ selected features that should be returned in each page. The maximum allowable
 limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
-
-\item{max_results}{The optional maximum number of rows to return. This value
-must be less than the requested limit.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}

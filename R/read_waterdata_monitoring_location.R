@@ -1,4 +1,4 @@
-#' Get USGS Site Data
+#' Get USGS Monitoring Location Data
 #' 
 #' @description `r get_description("monitoring-locations")`
 #' 
@@ -58,8 +58,6 @@
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param max_results The optional maximum number of rows to return. This value
-#' must be less than the requested limit. 
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
@@ -87,10 +85,6 @@
 #' 
 #' bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
 #' multi_site <- read_waterdata_monitoring_location(bbox = bbox_vals)
-#' multi_site_n_100 <- read_waterdata_monitoring_location(bbox = bbox_vals,
-#'                                                   max_results = 100)
-#' multi_site_limit_100 <- read_waterdata_monitoring_location(bbox = bbox_vals,
-#'                                                       limit = 100)
 #' }
 read_waterdata_monitoring_location <- function(monitoring_location_id = NA_character_,
                             agency_code = NA_character_,
@@ -135,7 +129,6 @@ read_waterdata_monitoring_location <- function(monitoring_location_id = NA_chara
                             properties = NA_character_,
                             bbox = NA,
                             limit = NA,
-                            max_results = NA,
                             skipGeometry = NA){
 
   service <- "monitoring-locations"

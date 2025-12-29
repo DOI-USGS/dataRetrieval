@@ -4,38 +4,27 @@
 #' 
 #' @noRd
 #' @return data.frame with attributes
-walk_pages <- function(req, max_results){
+walk_pages <- function(req){
   
   message("Requesting:\n", req$url)
-  current_api_limit <- 50000
+
+  resps <- httr2::req_perform_iterative(req, 
+                                        next_req = next_req_url, 
+                                        max_reqs = Inf, on_error = "return")
+  failures <- resps |>
+    httr2::resps_failures() |>
+    httr2::resps_requests()
   
-  if(is.na(max_results) | max_results > current_api_limit){
-    resps <- httr2::req_perform_iterative(req, 
-                                          next_req = next_req_url, 
-                                          max_reqs = Inf, on_error = "return")
-    failures <- resps |>
-      httr2::resps_failures() |>
-      httr2::resps_requests()
-    
-    if(length(failures) > 0){
-      stop(resps[[1]][["message"]])
-    }
-    
-    return_list <- data.frame()
-    for(resp in resps){
-      df1 <- get_resp_data(resp)
-      return_list <- rbind(return_list, df1)
-    }
-    
-    if(!is.na(max_results) & max_results > current_api_limit){
-      return_list <- return_list[1:max_results, ]
-    }
-    
-    ######################################
-  } else {
-    resps <- httr2::req_perform(req)
-    return_list <- get_resp_data(resps)
+  if(length(failures) > 0){
+    stop(resps[[1]][["message"]])
   }
+  
+  return_list <- data.frame()
+  for(resp in resps){
+    df1 <- get_resp_data(resp)
+    return_list <- rbind(return_list, df1)
+  }
+    
   
   return(return_list)
 }
@@ -114,16 +103,17 @@ next_req_url <- function(resp, req) {
 }
 
 
-get_csv <- function(req, max_results){
-  
-  if(is.na(max_results)){
-    max_results <- 50000
-  }
+get_csv <- function(req, limit){
 
   message("Requesting:\n", req$url)
   skip_geo <- grepl("skipGeometry=true", req$url, ignore.case = TRUE)
   resp <- httr2::req_perform(req)
 
+  header_info <- httr2::resp_headers(resp)
+  if(Sys.getenv("API_USGS_PAT") != ""){
+    message("Remaining requests this hour:", header_info$`x-ratelimit-remaining`, " ")
+  }
+  
   if(httr2::resp_has_body(resp)){
     return_list <- httr2::resp_body_string(resp) 
     df <- suppressMessages(readr::read_csv(file = return_list))
@@ -134,7 +124,7 @@ get_csv <- function(req, max_results){
       sf::st_crs(df) <- 4269
     }
     
-    if(nrow(df) == max_results){
+    if(nrow(df) == limit){
       warning("Missing data is probable. Use no_paging = FALSE to 
 ensure all requested data is returned.")
     }    

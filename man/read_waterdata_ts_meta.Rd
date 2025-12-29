@@ -28,7 +28,7 @@ read_waterdata_ts_meta(
   limit = NA,
   max_results = NA,
   bbox = NA,
-  convertType = FALSE,
+  convertType = TRUE,
   no_paging = FALSE
 )
 }

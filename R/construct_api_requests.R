@@ -136,28 +136,9 @@ check_limits <- function(args){
   current_api_limit <- 50000
   
   if(is.na(args[["limit"]])){
-    if(!is.na(args[["max_results"]])){
-      # we can leave limit empty unless we're doing no paging and the max is > limit
-      if(args[["max_results"]] > current_api_limit){
-        args[["limit"]] <- current_api_limit
-        if(args[["no_paging"]]){
-          warning("no_paging option is capped at ", current_api_limit, " max_results")
-          args[["max_results"]] <- current_api_limit
-        }
-      } else {
-        args[["limit"]] <- args[["max_results"]]
-      }
-      
-    } else {
-      args[["limit"]] <- current_api_limit
-    }
-  } else {
-    if(!is.na(args[["max_results"]])){
-      if(args[["limit"]] > args[["max_results"]]) stop("limit cannot be greater than max_result")
-    } else if (args[["limit"]] > current_api_limit){
-      args[["limit"]] <- current_api_limit
-    }
-  }
+    args[["limit"]] <- current_api_limit
+  } 
+  
   return(args)
 }
 
@@ -283,6 +264,11 @@ switch_arg_id <- function(ls, id_name, service){
 #' start_end2 <- c("2021-01-01T12:15:00-0500", "")
 #' dataRetrieval:::format_api_dates(start_end2)
 #' 
+#' time = c("2014-05-01T00:00:00Z", "2014-05-01T12:00:00Z")
+#' dataRetrieval:::format_api_dates(time)
+#' 
+#' time = c("2014-05-01T00:00Z", "2014-05-01T12:00Z")
+#' dataRetrieval:::format_api_dates(time)
 format_api_dates <- function(datetime, date = FALSE){
   
   if(is.character(datetime)){
@@ -296,19 +282,31 @@ format_api_dates <- function(datetime, date = FALSE){
          grepl("/", datetime)){
         return(datetime)
       } else {
+        datetime1 <- tryCatch({
+            lubridate::as_datetime(datetime)
+          },
+          warning = function(w) {
+            strptime(datetime, format = "%Y-%m-%dT%H:%MZ", tz = "UTC")
+        })
         if(date){
-          datetime <- format(lubridate::as_datetime(datetime), "%Y-%m-%d")
+          datetime <- format(datetime1, "%Y-%m-%d")
         } else {
-          datetime <- lubridate::format_ISO8601(lubridate::as_datetime(datetime), usetz = "Z")
+          datetime <- lubridate::format_ISO8601(datetime1, usetz = "Z")
         }
       }
     } else if (length(datetime) == 2) {
       
+      datetime1 <- tryCatch({
+          lubridate::as_datetime(datetime)
+        },
+        warning = function(w) {
+          strptime(datetime, format = "%Y-%m-%dT%H:%MZ", tz = "UTC")
+      })
+      
       if(date){
-        datetime <- paste0(format(lubridate::as_datetime(datetime), "%Y-%m-%d"), collapse = "/")
+        datetime <- paste0(format(datetime1, "%Y-%m-%d"), collapse = "/")
       } else {
-        datetime <- paste0(lubridate::format_ISO8601(lubridate::as_datetime(datetime), 
-                                                     usetz = "Z"), 
+        datetime <- paste0(lubridate::format_ISO8601(datetime1, usetz = "Z"), 
                            collapse = "/")
       }
 
