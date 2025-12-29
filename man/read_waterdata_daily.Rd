@@ -19,7 +19,6 @@ read_waterdata_daily(
   time = NA_character_,
   bbox = NA,
   limit = NA,
-  max_results = NA,
   convertType = TRUE,
   no_paging = FALSE
 )
@@ -91,9 +90,6 @@ limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
-\item{max_results}{The optional maximum number of rows to return. This value
-must be less than the requested limit.}
-
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
 
@@ -135,7 +131,6 @@ dv_data_period <- read_waterdata_daily(monitoring_location_id = site,
 multi_site <- read_waterdata_daily(monitoring_location_id =  c("USGS-01491000",
                                                           "USGS-01645000"),
                               parameter_code = c("00060", "00010"),
-                              limit = 500,
                               time = c("2023-01-01", "2024-01-01"))
                               
 dv_data_quick <- read_waterdata_daily(monitoring_location_id = site,

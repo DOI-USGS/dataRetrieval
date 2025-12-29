@@ -32,8 +32,6 @@
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param max_results The optional maximum number of rows to return. This value
-#' must be less than the requested limit. 
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
@@ -72,7 +70,6 @@
 #' multi_site <- read_waterdata_daily(monitoring_location_id =  c("USGS-01491000",
 #'                                                           "USGS-01645000"),
 #'                               parameter_code = c("00060", "00010"),
-#'                               limit = 500,
 #'                               time = c("2023-01-01", "2024-01-01"))
 #'                               
 #' dv_data_quick <- read_waterdata_daily(monitoring_location_id = site,
@@ -94,7 +91,6 @@ read_waterdata_daily <- function(monitoring_location_id = NA_character_,
                                  time = NA_character_,
                                  bbox = NA,
                                  limit = NA,
-                                 max_results = NA,
                                  convertType = TRUE,
                                  no_paging = FALSE){
   
@@ -105,11 +101,6 @@ read_waterdata_daily <- function(monitoring_location_id = NA_character_,
   return_list <- get_ogc_data(args,
                               output_id, 
                               service)
-  
-  if(convertType){
-    return_list <- order_results(return_list)
-    return_list <- move_id_col(return_list, output_id)
-  }
   
   return(return_list)
 }

@@ -88,7 +88,7 @@ read_waterdata_ts_meta <- function(monitoring_location_id = NA_character_,
                               limit = NA,
                               max_results = NA,
                               bbox = NA,
-                              convertType = FALSE,
+                              convertType = TRUE,
                               no_paging = FALSE){
 
   service = "time-series-metadata"

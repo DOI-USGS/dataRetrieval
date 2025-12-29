@@ -716,13 +716,14 @@ Once the pipeline has completed, you can load the `ohio_discharge` data frame in
 tar_load(ohio_discharge)
 ```
 
-## limit vs max_results
+## limit and no_paging
 
-A user can specify a `limit` or `max_results`.
-
-The `max_results` argument defines how many rows are returned (assuming the data has at least `max_results` rows to return). This can be used as a handy way to make sure you aren't requesting a ton of data, perhaps to do some initial coding or troubleshooting.
 
 The `limit` argument defines how many rows are returned per page of data, but does NOT affect the overall number of rows returned. With a good internet connection, you can probably get away with ignoring this argument. By default it will be set to the highest value that the services allow. The reason you might want to change this argument is that it might be easier on a spotty internet connection to page through smaller sets of data. 
+
+The `no_paging` argument uses an option from the API that only returns one page of data. Therefore, the total number of rows returned will be capped at the `limit`. If no `limit` is defined, the maximum number of rows returned is 50,000, which is a hard-cap set by the API. The vast majority of users should use the default `no_paging = FALSE` to make sure they are getting all the data they asked for. `no_paging = TRUE` can be a bit more efficient since it is getting the data in a native table format (csv). However, it must be used with caution because it might not return all the requested data (`dataRetrieval` will give a warning). Because the data is coming from a csv format, the data may come back in a slightly different order (rows or columns) than the default `no_paging = FALSE` which is pulling data from a native json format. 
+
+The combination of `no_paging` and `limit` can be used to specify exactly how many rows to return.
 
 ## id
 
@@ -733,12 +734,10 @@ Therefore, `dataRetrieval` functions will rename the "id" column to whatever it 
 ```{r echo=FALSE}
 df <- dplyr::tibble(Function = c("read_waterdata_monitoring_location",
                               "read_waterdata_ts_meta",
-                              "read_waterdata_daily",
-                              "read_waterdata_latest_continuous"),
+                              "read_waterdata_parameter_codes"),
                  "ID returned" = c("monitoring_location_id",
                                    "time_series_id",
-                                   "daily_id",
-                                   "latest_continuous_id"))
+                                   "parameter_code"))
 
 knitr::kable(df)
 ```

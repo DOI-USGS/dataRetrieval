@@ -9,9 +9,7 @@
 get_ogc_data <- function(args,
                          output_id, 
                          service){
-  
-  args[["service"]] <-  service
-  
+
   args <- switch_arg_id(args, 
                         id_name = output_id, 
                         service = service)
@@ -23,9 +21,7 @@ get_ogc_data <- function(args,
                                                id = output_id)
   convertType <- args[["convertType"]] 
   args[["convertType"]] <- NULL
-  
-  max_results <- args[["max_results"]]
-  args[["max_results"]] <- NULL
+  args[["service"]] <- service
   
   req <- do.call(construct_api_requests, args)
 
@@ -37,9 +33,9 @@ get_ogc_data <- function(args,
   }
   
   if(no_paging){
-    return_list <- get_csv(req, max_results)
+    return_list <- get_csv(req, limit = args[["limit"]])
   } else {
-    return_list <- walk_pages(req, max_results)
+    return_list <- walk_pages(req)
   }
   
   if(is.na(args[["skipGeometry"]])){
@@ -51,9 +47,22 @@ get_ogc_data <- function(args,
   return_list <- deal_with_empty(return_list, properties, service,
                                  skipGeometry, convertType, no_paging)
   
-  if(convertType) return_list <- cleanup_cols(return_list, service = service)
-  
   return_list <- rejigger_cols(return_list, properties, output_id)
+  
+  if(convertType){
+    return_list <- cleanup_cols(return_list, service)
+    return_list <- order_results(return_list)
+
+    # Mostly drop the id column except ts-meta, monitoring location:
+    if(!service %in% c("monitoring-locations",
+                       "time-series-metadata",
+                       "parameter-codes")){
+      return_list <- return_list[, names(return_list)[names(return_list)!= output_id]]
+    }
+    # Move other id columns:
+    return_list <- move_id_col(return_list, 
+                               output_id)
+  }
   
   attr(return_list, "request") <- req
   attr(return_list, "queryTime") <- Sys.time()
@@ -73,11 +82,7 @@ order_results <- function(df){
 }
 
 move_id_col <- function(df, output_id){
-  # attributes get dropped 
-  req <- attr(df, "request")
-  queryTime <- attr(df, "queryTime")
-  
-  df <- df[, names(df)[names(df)!= output_id]]
+
   if("time_series_id" %in% names(df)){
     df <- df[, c(names(df)[names(df)!= "time_series_id"],
                  "time_series_id")]
@@ -87,10 +92,7 @@ move_id_col <- function(df, output_id){
     df <- df[, c(names(df)[names(df)!= "field_visit_id"],
                  "field_visit_id")]
   }
-  
-  attr(df, "request") <- req
-  attr(df, "queryTime") <- queryTime
-  
+
   return(df)
 }
 
