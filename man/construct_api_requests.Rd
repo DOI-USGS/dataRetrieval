@@ -30,11 +30,6 @@ each feature. The returning object will be a data frame with no spatial
 information.}
 
 \item{...}{Extra parameters from the specific services.}
-
-\item{limit}{The optional limit parameter limits the number of items that are
-presented in the response document. Only items are counted that are on the
-first level of the collection in the response document. Nested objects
-contained within the explicitly requested items shall not be counted.}
 }
 \description{
 Main documentation: \url{https://api.waterdata.usgs.gov/ogcapi/v0/},
