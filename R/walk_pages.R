@@ -167,36 +167,38 @@ cleanup_cols <- function(df, service = "daily"){
 }
 
 #' Next request URL
-#' 
+#'
 #' Custom function to find the "next" URL from the API response.
 #' @seealso [httr2::req_perform_iterative]
-#' 
+#'
 #' @param resp httr2 response from last request
 #' @param req httr2 request from last time
-#' 
+#'
 #' @noRd
 #' @return the url for the next request
-#' 
+#'
 next_req_url <- function(resp, req) {
-
   body <- httr2::resp_body_json(resp)
-  
+
   if(isTRUE(body[["numberReturned"]] == 0)){
     return(NULL)
   }
-  
+
   header_info <- httr2::resp_headers(resp)
   if(Sys.getenv("API_USGS_PAT") != ""){
     message("Remaining requests this hour:", header_info$`x-ratelimit-remaining`, " ")
   }
-  
-  links <- body$links
+  if ("links" %in% names(body)) {
+    links <- body$links
   if(any(sapply(links, function(x) x$rel) == "next")){
-    next_index <- which(sapply(links, function(x) x$rel) == "next")
-    
-    next_url <- links[[next_index]][["href"]]
+      next_index <- which(sapply(links, function(x) x$rel) == "next")
 
-    return(httr2::req_url(req = req, url = next_url))
+      next_url <- links[[next_index]][["href"]]
+
+      return(httr2::req_url(req = req, url = next_url))
+    }
+  } else if (!is.null(body[["next"]])) {
+    return(httr2::req_url_query(req, next_token = body[["next"]]))
   } else {
     return(NULL)
   }
