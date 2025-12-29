@@ -28,9 +28,13 @@ get_ogc_data <- function(args,
   args[["max_results"]] <- NULL
   
   req <- do.call(construct_api_requests, args)
-  
-  no_paging <- args[["no_paging"]]
-  args[["no_paging"]] <- NULL
+
+  if("no_paging" %in% names(args)){
+    no_paging <- args[["no_paging"]]
+    args[["no_paging"]] <- NULL    
+  } else {
+    no_paging <- FALSE
+  }
   
   if(no_paging){
     return_list <- get_csv(req, max_results)

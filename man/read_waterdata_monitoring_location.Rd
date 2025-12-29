@@ -49,8 +49,7 @@ read_waterdata_monitoring_location(
   bbox = NA,
   limit = NA,
   max_results = NA,
-  skipGeometry = NA,
-  no_paging = FALSE
+  skipGeometry = NA
 )
 }
 \arguments{
@@ -158,11 +157,6 @@ must be less than the requested limit.}
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
 information.}
-
-\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
-be requested from a native csv format. This can be dangerous because the
-data will cut off at 50,000 rows without indication that more data
-is available. Use \code{TRUE} with caution.}
 }
 \description{
 Location information is basic information about the monitoring location including the name, identifier, agency responsible for data collection, and the date the location was established. It also includes information about the type of location, such as stream, lake, or groundwater, and geographic information about the location, such as state, county, latitude and longitude, and hydrologic unit code (HUC).
