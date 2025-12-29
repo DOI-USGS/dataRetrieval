@@ -67,7 +67,7 @@ read_waterdata_parameter_codes <- function(parameter_code = NA_character_,
   args[["convertType"]] <- FALSE
   args[["skipGeometry"]] <- TRUE
   args[["bbox"]] <- NA
-  args[["no_paging"]] <- TRUE # change if we're ever over 50,000
+  args[["no_paging"]] <- FALSE # change if we're ever over 50,000
   
   if(all(lengths(args) == 1)){
     return_list <- suppressWarnings(get_ogc_data(args = args,
@@ -76,9 +76,7 @@ read_waterdata_parameter_codes <- function(parameter_code = NA_character_,
   } else {
     
     message("Current API functionality requires pulling the full parameter-codes list.
-It is expected that updates to the API will eliminate this need, but in the meantime
-consider running read_waterdata_parameter_code() with no query parameters, and filtering
-in a post-processing step.")
+It is expected that updates to the API will eliminate this need.")
     
     return_list <- read_waterdata_metadata(collection = service, 
                                  max_results = max_results,

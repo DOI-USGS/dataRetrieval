@@ -63,10 +63,6 @@
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
-#' @param no_paging logical, defaults to `FALSE`. If `TRUE`, the data will
-#' be requested from a native csv format. This can be dangerous because the
-#' data will cut off at 50,000 rows without indication that more data
-#' is available. Use `TRUE` with caution. 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -140,8 +136,7 @@ read_waterdata_monitoring_location <- function(monitoring_location_id = NA_chara
                             bbox = NA,
                             limit = NA,
                             max_results = NA,
-                            skipGeometry = NA,
-                            no_paging = FALSE){
+                            skipGeometry = NA){
 
   service <- "monitoring-locations"
   output_id <- "monitoring_location_id"
