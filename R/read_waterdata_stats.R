@@ -28,52 +28,52 @@
 #' @rdname get_waterdata_stats
 #' @seealso \url{https://api.waterdata.usgs.gov/statistics/v0/docs}
 read_waterdata_stats_normal <- function(
-  approval_status = NA,
-  computation_type = NA_character_,
-  country_code = NA_character_,
-  state_code = NA_character_,
-  county_code = NA_character_,
-  start_date = NA_character_,
-  end_date = NA_character_,
-  mime_type = NA_character_,
-  monitoring_location_id = NA_character_,
-  parent_time_series_id = NA_character_,
-  site_type_code = NA_character_,
-  site_type_name = NA_character_,
-  parameter_code = NA_character_,
-  next_token = NA_character_,
-  page_size = NA
+    approval_status = NA,
+    computation_type = NA_character_,
+    country_code = NA_character_,
+    state_code = NA_character_,
+    county_code = NA_character_,
+    start_date = NA_character_,
+    end_date = NA_character_,
+    mime_type = NA_character_,
+    monitoring_location_id = NA_character_,
+    parent_time_series_id = NA_character_,
+    site_type_code = NA_character_,
+    site_type_name = NA_character_,
+    parameter_code = NA_character_,
+    next_token = NA_character_,
+    page_size = NA
 ) {
   
   args <- mget(names(formals()))
-
+  
   get_statistics_data(args = args, service = "Normals")
 }
 
 #' @export
 #' @rdname get_waterdata_stats
 read_waterdata_stats_interval <- function(
-  approval_status = NA,
-  computation_type = NA_character_,
-  country_code = NA_character_,
-  state_code = NA_character_,
-  county_code = NA_character_,
-  start_date = NA_character_,
-  end_date = NA_character_,
-  mime_type = NA_character_,
-  monitoring_location_id = NA_character_,
-  next_token = NA_character_,
-  parent_time_series_id = NA_character_,
-  site_type_code = NA_character_,
-  site_type_name = NA_character_,
-  parameter_code = NA_character_,
-  page_size = NA
+    approval_status = NA,
+    computation_type = NA_character_,
+    country_code = NA_character_,
+    state_code = NA_character_,
+    county_code = NA_character_,
+    start_date = NA_character_,
+    end_date = NA_character_,
+    mime_type = NA_character_,
+    monitoring_location_id = NA_character_,
+    next_token = NA_character_,
+    parent_time_series_id = NA_character_,
+    site_type_code = NA_character_,
+    site_type_name = NA_character_,
+    parameter_code = NA_character_,
+    page_size = NA
 ){
-
+  
   args <- mget(names(formals()))
-
+  
   get_statistics_data(args = args, service = "Intervals")
-
+  
 }
 
 #' Retrieve data from /statistics API
@@ -84,15 +84,15 @@ read_waterdata_stats_interval <- function(
 #' @noRd
 #' @return data.frame with attributes
 get_statistics_data <- function(args, service) {
-
+  
   base_request <- construct_statistics_request(service = service, version = 0)
-
+  
   # TODO?: arg type checking here
-
+  
   full_request <- explode_query(base_request, POST = FALSE, x = args)
-
+  
   return_list <- walk_pages(full_request, max_results = NA)
-
+  
   # TODO?: pull the following double-for loop out to other function(s)
   return_list_tmp <- list()
   for (i in 1:nrow(return_list)) {
@@ -107,18 +107,25 @@ get_statistics_data <- function(args, service) {
       )
     }
     zz <- do.call(rbind, zz)
-
+    
     return_list_tmp[[i]] <- cbind_sf_metadata(
       subset(return_list[i, ], select = -data),
       zz
     )
   }
-
+  
   return_list <- do.call(rbind, return_list_tmp)
+  
+  if(all(c("values", "percentiles") %in% names(return_list))){
+    return_list <- combine_value_columns(return_list)
+  }
 
+  return_list$value <- as.numeric(unlist(return_list$value))
+  return_list$percentile <- as.numeric(unlist(return_list$percentile))
+  
   attr(return_list, "request") <- full_request
   attr(return_list, "queryTime") <- Sys.time()
-
+  
   return(return_list)
 }
 
@@ -131,7 +138,7 @@ get_statistics_data <- function(args, service) {
 #' 
 #' @noRd
 construct_statistics_request <- function(service = "Normals", version = 0){
- 
+  
   httr2::request("https://api.waterdata.usgs.gov/statistics/") |>
     httr2::req_url_path_append(paste0("v", version)) |>
     httr2::req_url_path_append(paste0("observation", service))
@@ -198,3 +205,49 @@ cbind_sf_metadata <- function(meta_sf, obs_df) {
   out <- cbind(meta_nogeo, obs_df)
   sf::st_sf(out, geometry = geom)
 }
+
+#' Clean up a /statistics data frame
+#'
+#' Unpacks "values" and "percentiles" nested columns to be one row per value,
+#' renames "percentiles" to "percentile", consolidates "value" and "values" into
+#' one "value" column
+#'
+#' @param df a data frame with "value" and "values" columns
+#'
+#' @return a data frame with a value column and maybe a
+#' @noRd
+combine_value_columns <- function(df) {
+  
+  split_vals <- lapply(df$values, function(x) as.numeric(unlist(x)))
+  split_pcts <- lapply(df$percentiles, function(x) as.numeric(unlist(x)))
+  
+  df$values <- NULL
+  df$percentiles <- NULL
+  
+  expanded <- lapply(seq_len(nrow(df)), function(i) {
+    
+    v <- split_vals[[i]]
+    p <- split_pcts[[i]]
+    
+    v[is.nan(v)] <- NA
+    v <- as.numeric(v)
+    p <- as.numeric(p)
+    
+    # case: single NA → scalar statistic
+    if (length(v) == 1 && is.na(v)) {
+      df$percentile <- NA_real_
+      return(df[i, , drop = FALSE])
+    }
+    
+    out <- df[rep(i, length(v)), , drop = FALSE]
+    
+    out$value <- v
+    out$percentile <- p
+    out
+  })
+  
+  out <- do.call(rbind, expanded)
+  rownames(out) <- NULL
+  out
+}
+

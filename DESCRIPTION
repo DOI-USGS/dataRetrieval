@@ -56,7 +56,8 @@ Imports:
     jsonlite,
     httr2,
     whisker,
-    sf
+    sf,
+    data.table
 Suggests:
     covr,
     dplyr,
