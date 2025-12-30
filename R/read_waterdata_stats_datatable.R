@@ -1,3 +1,4 @@
+#' 
 get_statistics_data_data_table <- function(args, service) {
   
   base_request <- construct_statistics_request(service = service, version = 0)
@@ -44,7 +45,30 @@ get_statistics_data_data_table <- function(args, service) {
   return(sf::st_as_sf(combined))
 }
 
-#' Clean up value, values, and percentiles columns in a data.table
+#' Clean up "value", "values", and "percentiles" columns in a data.table
+#' 
+#' @description
+#' If the input data.table has "values" and "percentiles" columns, then 
+#' it unnests both, making the data.table longer (one row per value)
+#' 
+#' If the input data.table *also* has a "value" column, then it consolidates with "values", yielding a single "value" column
+#' 
+#' The "percentiles" column is replaced by "percentile" (matching singularization of "value").
+#' The function also checks whether the "computation" column contains "minimum", "median", or "maximum" and 
+#' sets the corresponding "percentile" to 0, 50, or 100, respectively. Note that the percentile column might only 
+#' contain NAs if the input data.table only includes arithmetic_mean values
+#' 
+#' Lastly, the value and percentile columns are converted from character to numeric
+#'
+#' 
+#' @note
+#' This function is intended to evaluate as a data.table j expression, which is why it doesn't accept any arguments.
+#' j expressions are typically written inline with the data.table definition (e.g., DT[, { do something }]). 
+#' However, this expression would have been excessively long. Instead, an eval(quote(...)) is used so this could be 
+#' pulled out into a separate function for readability, but we still gain the computational benefits of using an expression.
+#' 
+#' @noRd
+#' @return data.table object with "value" and "percentile" columns
 clean_value_cols <- function() {
   quote({
 
