@@ -61,6 +61,12 @@
 #'   parameter code or monitoring location identifier are specified.
 #' @param page_size Return a defined number of results (default: 1000).
 #'
+#' @examplesIf is_dataRetrieval_user()
+#' 
+#' \donttest{
+#' 
+#' }
+#' 
 #' @rdname get_waterdata_stats
 #' @seealso \url{https://api.waterdata.usgs.gov/statistics/v0/docs}
 read_waterdata_stats_normal <- function(
@@ -110,6 +116,22 @@ read_waterdata_stats_interval <- function(
   
 }
 
+#' Create a request object for the /statistics service
+#' 
+#' @param service chr; "Normals" or "Intervals"
+#' @param version int; /statistics API version number (default: 0)
+#' 
+#' @return a httr2 request object
+#' 
+#' @noRd
+construct_statistics_request <- function(service = "Normals", version = 0){
+  
+  httr2::request("https://api.waterdata.usgs.gov/statistics/") |>
+    httr2::req_url_path_append(paste0("v", version)) |>
+    httr2::req_url_path_append(paste0("observation", service))
+  
+}
+
 #' Retrieve data from /statistics API
 #' 
 #' @param args arguments from individual functions.
@@ -126,6 +148,11 @@ get_statistics_data <- function(args, service) {
   full_request <- explode_query(base_request, POST = FALSE, x = args)
   
   return_list <- data.table::as.data.table(walk_pages(full_request, max_results = NA))
+  
+  if(nrow(return_list) == 0) {
+    return(deal_with_empty_stats(return_list))
+  }
+  
   return_list[, rid := .I]
   
   parsed_data <- lapply(return_list$data, jsonlite::parse_json)
@@ -133,25 +160,55 @@ get_statistics_data <- function(args, service) {
   
   combined_list <- list()
   for (i in seq_along(parsed_data)){
-    time_series_metainfo <- data.table::rbindlist(parsed_data[[i]])
+    # 1. One row per time series
+    ts_meta <- data.table::rbindlist(parsed_data[[i]], fill = TRUE)
+    ts_meta[, ts_id := .I]  # local key
     
-    observations <- data.table::rbindlist(time_series_metainfo$values, fill = TRUE)
-    observations <- observations[, .j, by = .I, env = list(.j = clean_value_cols())][, I := NULL]
-    time_series_metainfo[, values := NULL]
+    # 2. One row per observation, keyed to ts_id
+    obs <- data.table::rbindlist(ts_meta$values, fill = TRUE, idcol = "ts_id")
+    obs <- obs[, .j, by = .I, env = list(.j = clean_value_cols())][, I := NULL]
     
-    time_series_metainfo <- cbind(time_series_metainfo, observations)
-    time_series_metainfo[, rid := i]
+    # 3. Drop nested list column
+    ts_meta[, values := NULL]
     
-    combined_list[[i]] <- time_series_metainfo
+    # 4. Join
+    out <- ts_meta[obs, on = "ts_id", allow.cartesian = TRUE]
+    
+    out[, `:=`(
+      ts_id = NULL,
+      rid   = i
+    )]
+    
+    combined_list[[i]] <- out
   }
   
   combined <- data.table::rbindlist(combined_list)
-  combined <- combined[return_list, on = "rid"][, rid := NULL]
+  combined <- combined[return_list, on = "rid"]
+  combined[, rid := NULL]
+  
+  combined <- sf::st_as_sf(as.data.frame(combined))
   
   attr(combined, "request") <- full_request
   attr(combined, "queryTime") <- Sys.time()
   
-  return(sf::st_as_sf(as.data.frame(combined)))
+  return(combined)
+}
+
+#'
+normalize_value_cols <- function(x) {
+  if (!is.null(x$value)) {
+    list(
+      value       = as.numeric(x$value),
+      values      = NA_real_,
+      percentiles = NA_real_
+    )
+  } else {
+    list(
+      value       = NA_real_,
+      values      = as.numeric(x$values),
+      percentiles = as.numeric(x$percentiles)
+    )
+  }
 }
 
 #' Clean up "value", "values", and "percentiles" columns in a data.table
@@ -193,6 +250,9 @@ clean_value_cols <- function() {
     has_values      <- exists("values")
     has_percentiles <- exists("percentiles")
     
+    has_date_schema <- exists("start_date") && exists("end_date") && exists("interval_type")
+    has_toy_schema  <- exists("time_of_year") && exists("time_of_year_type")
+    
     ## ---- values ----
     vals <- if (has_values &&
                 !is.null(values[[1]]) &&
@@ -220,7 +280,7 @@ clean_value_cols <- function() {
       
       as.numeric(percentiles[[1]])
       
-    } else if (data.table::`%chin%`(computation,c("minimum", "median", "maximum"))) {
+    } else if (data.table::`%chin%`(computation, c("minimum", "median", "maximum"))) {
       
       data.table::fifelse(
         computation == "minimum", 0,
@@ -235,17 +295,81 @@ clean_value_cols <- function() {
       percs <- rep(percs, n)
     }
     
-    ## ---- expand  scalar columns ----
-    .(
-      value           = vals,
-      percentile      = percs,
-      start_date      = rep(start_date, n),
-      end_date        = rep(end_date, n),
-      interval_type   = rep(interval_type, n),
-      sample_count    = rep(sample_count, n),
-      approval_status = rep(approval_status, n),
-      computation_id  = rep(computation_id, n),
-      computation     = rep(computation, n)
+    ## ---- time columns (schema-dependent) ----
+    time_cols <- if (has_date_schema) {
+      list(
+        start_date    = rep(start_date, n),
+        end_date      = rep(end_date, n),
+        interval_type = rep(interval_type, n)
+      )
+    } else if (has_toy_schema) {
+      list(
+        time_of_year      = rep(time_of_year, n),
+        time_of_year_type = rep(time_of_year_type, n)
+      )
+    } else {
+      list()
+    }
+    
+    ## ---- assemble ----
+    c(
+      list(
+        value           = vals,
+        percentile      = percs,
+        sample_count    = rep(sample_count, n),
+        approval_status = rep(approval_status, n),
+        computation_id  = rep(computation_id, n),
+        computation     = rep(computation, n),
+        ts_id = rep(ts_id, n)
+      ),
+      time_cols
     )
   })
 }
+
+#' Handle empty responses from the /statistics service
+#'
+#' @param return_list data.frame returned from walk_pages
+#' @param properties character vector of requested columns (or NA)
+#' @param convertType logical, whether to convert numeric columns
+#'
+#' @return data.frame or sf object with expected columns
+#' @noRd
+deal_with_empty_stats <- function(return_list, properties = NA,
+                                  convertType = TRUE) {
+  
+  # Define default columns for stats service
+  default_columns <- c(
+    "monitoring_location_id", "monitoring_location_name",
+    "site_type", "site_type_code", "country_code", "state_code",
+    "county_code", "parameter_code", "unit_of_measure", "parent_time_series_id",
+    "value", "percentile", "start_date", "end_date", "interval_type",
+    "sample_count", "approval_status", "computation_id", "computation"
+  )
+  
+  if (all(is.na(properties))) {
+    properties <- default_columns
+  }
+  
+  # create empty data.frame
+  return_list <- as.data.frame(matrix(nrow = 0, ncol = length(properties)))
+  names(return_list) <- properties
+  return_list <- lapply(return_list, as.character)
+  return_list <- as.data.frame(return_list)
+  
+  # convert numeric columns if requested
+  if (convertType) {
+    numeric_cols <- c("value", "percentile", "sample_count")
+    for (col in numeric_cols) {
+      if (col %in% names(return_list)) {
+        return_list[[col]] <- as.numeric(return_list[[col]])
+      }
+    }
+  }
+  
+  # ensure geometry column exists if not skipped
+  return_list <- sf::st_as_sf(return_list, geometry = sf::st_sfc())
+  
+  return(return_list)
+}
+
