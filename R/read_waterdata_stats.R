@@ -1,30 +1,66 @@
 #' Get summary statistic data from /statistics API
-#' 
-#' @description 
-#' 
-#' \code{read_waterdata_stats_normal} fetches day- or month-of-year data from the observationNormals endpoint.
-#' 
-#' \code{read_waterdata_stats} fetches calendar month-year, calendar year, or water year data from the observationIntervals endpoint.
-#' 
+#'
+#' @description
+#'
+#' This service provides endpoints for access to computations on the historical
+#' record regarding water conditions. For more information regarding the
+#' calculation of statistics and other details, please visit the Statistics
+#' documentation page.
+#'
+#' Note: This API is under active beta development and subject to change.
+#' Improved handling of significant figures will be addressed in a future
+#' release.
+#'
+#' \code{read_waterdata_stats_normal} Returns day-of-year and month-of-year
+#' statistics matching your query.
+#'
+#' \code{read_waterdata_stats} Returns monthly and annual statistics matching
+#' your query.
+#'
 #' @export
-#' 
-#' @param approval_status asdf
-#' @param computation_type asdf
-#' @param country_code asdf 
-#' @param state_code asdf
-#' @param county_code asdf
-#' @param start_date asdf
-#' @param end_date asdf
-#' @param mime_type asdf
-#' @param monitoring_location_id asfd
-#' @param next_token asdf
-#' @param parent_time_series_id aasdf
-#' @param site_type_code asdf
-#' @param site_type_name asdf
-#' @param parameter_code asf
-#' @param next_token asdf
-#' @param page_size asdf
-#' 
+#'
+#' @param approval_status Whether to include approved and/or provisional
+#'   observations. At this time, only approved observations are returned.
+#' @param computation_type Desired statistical computation method. Available
+#'   values: "arithmetic_mean", "maximum", "median", "minimum", "percentile".
+#' @param country_code Country Query Parameter. Accepts multiple values (see
+#'   examples). If one of country, county, or state code is supplied then the
+#'   other two arguments do not need to be specified.
+#' @param state_code State Query Parameter. Accepts multiple values in a
+#'   character vector.
+#' @param county_code County Query Parameter. Accepts multiple values in a
+#'   character vector.
+#' @param start_date Start Date Query Parameter. The logic is inclusive i.e., it
+#'   will also return records that match the date. If an end date is supplied,
+#'   but no start date is supplied, then statistics will be supplied for the
+#'   entire period of record ending with the end date. If an end date is not
+#'   supplied, but a start date is supplied then statistics will be supplied for
+#'   the period of record following the start date. If no start or end date are
+#'   supplied then statistics will be supplied for the entire period of record.
+#' @param end_date End Date Query Parameter. The logic is inclusive i.e., it will
+#'   also return records that match the date.
+#' @param monitoring_location_id Each monitoring location has been assigned a
+#'   unique station number that places them in downstream order. Accepts
+#'   multiple values in a character vector.
+#' @param parent_time_series_id The parent_time_series_id returns statistics
+#'   tied to a particular database entry. Accepts multiple values in a character
+#'   vector. If no parent time series identifier is supplied, then all records
+#'   matching the rest of the provided criteria will be returned.
+#' @param site_type_code Site Type Code Query Parameter. Accepts multiple values
+#'   in a character vector. If no Site Type code is specified, statistics of all
+#'   site types with the matching Monitoring Location Identifier will be
+#'   returned.
+#' @param site_type_name Site Type Name Query Parameter. If no Site Type name is
+#'   specified, statistics of all site types with the matching Monitoring
+#'   Location Identifier will be returned.
+#' @param parameter_code USGS Parameter Code Query Parameter. Accepts multiple
+#'   values in a character vector. If no USGS parameter code is specified, but a
+#'   Monitoring Location Identifier is supplied, then all statistics and their
+#'   parameter codes with a matching monitoring location identifier will be
+#'   returned. All statistics within the period of record will be returned if no
+#'   parameter code or monitoring location identifier are specified.
+#' @param page_size Return a defined number of results (default: 1000).
+#'
 #' @rdname get_waterdata_stats
 #' @seealso \url{https://api.waterdata.usgs.gov/statistics/v0/docs}
 read_waterdata_stats_normal <- function(
@@ -35,13 +71,11 @@ read_waterdata_stats_normal <- function(
     county_code = NA_character_,
     start_date = NA_character_,
     end_date = NA_character_,
-    mime_type = NA_character_,
     monitoring_location_id = NA_character_,
     parent_time_series_id = NA_character_,
     site_type_code = NA_character_,
     site_type_name = NA_character_,
     parameter_code = NA_character_,
-    next_token = NA_character_,
     page_size = NA
 ) {
   
@@ -79,7 +113,7 @@ read_waterdata_stats_interval <- function(
 #' Retrieve data from /statistics API
 #' 
 #' @param args arguments from individual functions.
-#' @param service Ednpoint name.
+#' @param service Endpoint name.
 #' 
 #' @noRd
 #' @return data.frame with attributes
@@ -91,163 +125,127 @@ get_statistics_data <- function(args, service) {
   
   full_request <- explode_query(base_request, POST = FALSE, x = args)
   
-  return_list <- walk_pages(full_request, max_results = NA)
+  return_list <- data.table::as.data.table(walk_pages(full_request, max_results = NA))
+  return_list[, rid := .I]
   
-  # TODO?: pull the following double-for loop out to other function(s)
-  return_list_tmp <- list()
-  for (i in 1:nrow(return_list)) {
-    x <- jsonlite::parse_json(return_list$data[i])
-    z <- data.frame(rbind_fill(x))
-    zz <- list()
-    for (j in 1:nrow(z)) {
-      zz[[j]] <- cbind(
-        subset(z[j, ], select = -values),
-        rbind_fill(z$values[[j]]),
-        row.names = NULL
+  parsed_data <- lapply(return_list$data, jsonlite::parse_json)
+  return_list[, data := NULL]
+  
+  combined_list <- list()
+  for (i in seq_along(parsed_data)){
+    time_series_metainfo <- data.table::rbindlist(parsed_data[[i]])
+    
+    observations <- data.table::rbindlist(time_series_metainfo$values, fill = TRUE)
+    observations <- observations[, .j, by = .I, env = list(.j = clean_value_cols())][, I := NULL]
+    time_series_metainfo[, values := NULL]
+    
+    time_series_metainfo <- cbind(time_series_metainfo, observations)
+    time_series_metainfo[, rid := i]
+    
+    combined_list[[i]] <- time_series_metainfo
+  }
+  
+  combined <- data.table::rbindlist(combined_list)
+  combined <- combined[return_list, on = "rid"][, rid := NULL]
+  
+  attr(combined, "request") <- full_request
+  attr(combined, "queryTime") <- Sys.time()
+  
+  return(sf::st_as_sf(as.data.frame(combined)))
+}
+
+#' Clean up "value", "values", and "percentiles" columns in a data.table
+#'
+#' @description If the input data.table has "values" and "percentiles" columns,
+#'   then it unnests both, making the data.table longer (one row per value)
+#'
+#'   If the input data.table *also* has a "value" column, then it consolidates
+#'   with "values", yielding a single "value" column
+#'
+#'   The "percentiles" column is replaced by "percentile" (matching
+#'   singularization of "value"). The function also checks whether the
+#'   "computation" column contains "minimum", "median", or "maximum" and sets
+#'   the corresponding "percentile" to 0, 50, or 100, respectively. Note that
+#'   the percentile column might only contain NAs if the input data.table only
+#'   includes arithmetic_mean values.
+#'
+#'   Lastly, the value and percentile columns are converted from character to
+#'   numeric
+#'
+#' @note This function is intended to evaluate as a data.table j expression,
+#'   which is why it doesn't accept any arguments. j expressions are typically
+#'   written inline with the data.table definition (e.g., \code{DT[, { do
+#'   something }]}). However, this expression would have been excessively long.
+#'   Instead, a substitute() is used so this could be pulled out into a separate
+#'   function for readability, but we still gain the computational benefits of
+#'   using an expression.
+#'
+#' @noRd
+#' @return data.table object with "value" and "percentile" columns
+#'
+#' @seealso
+#' \url{https://stat.ethz.ch/CRAN/web/packages/data.table/vignettes/datatable-programming.html}
+clean_value_cols <- function() {
+  substitute({
+    
+    ## ---- detect column presence ----
+    has_value       <- exists("value")
+    has_values      <- exists("values")
+    has_percentiles <- exists("percentiles")
+    
+    ## ---- values ----
+    vals <- if (has_values &&
+                !is.null(values[[1]]) &&
+                length(values[[1]]) > 0) {
+      
+      v <- values[[1]]
+      if (length(v) == 1L && identical(v, "nan")) {
+        NA_real_
+      } else {
+        as.numeric(v)
+      }
+      
+    } else if (has_value) {
+      as.numeric(value)
+    } else {
+      NA_real_
+    }
+    
+    n <- length(vals)
+    
+    ## ---- percentiles ----
+    percs <- if (has_percentiles &&
+                 !is.null(percentiles[[1]]) &&
+                 length(percentiles[[1]]) > 0) {
+      
+      as.numeric(percentiles[[1]])
+      
+    } else if (data.table::`%chin%`(computation,c("minimum", "median", "maximum"))) {
+      
+      data.table::fifelse(
+        computation == "minimum", 0,
+        data.table::fifelse(computation == "median", 50, 100)
       )
+      
+    } else {
+      NA_real_
     }
-    zz <- do.call(rbind, zz)
     
-    return_list_tmp[[i]] <- cbind_sf_metadata(
-      subset(return_list[i, ], select = -data),
-      zz
+    if (length(percs) == 1L && n > 1L) {
+      percs <- rep(percs, n)
+    }
+    
+    ## ---- expand  scalar columns ----
+    .(
+      value           = vals,
+      percentile      = percs,
+      start_date      = rep(start_date, n),
+      end_date        = rep(end_date, n),
+      interval_type   = rep(interval_type, n),
+      sample_count    = rep(sample_count, n),
+      approval_status = rep(approval_status, n),
+      computation_id  = rep(computation_id, n),
+      computation     = rep(computation, n)
     )
-  }
-  
-  return_list <- do.call(rbind, return_list_tmp)
-  
-  if(all(c("values", "percentiles") %in% names(return_list))){
-    return_list <- combine_value_columns(return_list)
-  }
-
-  return_list$value <- as.numeric(unlist(return_list$value))
-  return_list$percentile <- as.numeric(unlist(return_list$percentile))
-  
-  attr(return_list, "request") <- full_request
-  attr(return_list, "queryTime") <- Sys.time()
-  
-  return(return_list)
-}
-
-#' Create a request object for the /statistics service
-#' 
-#' @param service chr; "Normals" or "Intervals"
-#' @param version int; /statistics API version number (default: 0)
-#' 
-#' @return a httr2 request object
-#' 
-#' @noRd
-construct_statistics_request <- function(service = "Normals", version = 0){
-  
-  httr2::request("https://api.waterdata.usgs.gov/statistics/") |>
-    httr2::req_url_path_append(paste0("v", version)) |>
-    httr2::req_url_path_append(paste0("observation", service))
-  
-}
-
-#' Bind a list of data frames by row
-#' 
-#' Meant to emulate data.table::rbindlist in how it handles missing data
-#' 
-#' @param dfs a list of data frames
-#' 
-#' @return a data frame
-#' 
-#' @noRd
-rbind_fill <- function(dfs) {
-  
-  # drop NULL elements
-  dfs <- Filter(Negate(is.null), dfs)
-  if (length(dfs) == 0) return(NULL)
-  
-  # union of all column names
-  all_names <- unique(unlist(lapply(dfs, names)))
-  
-  # align columns
-  dfs_aligned <- lapply(dfs, function(x) {
-    missing <- setdiff(all_names, names(x))
-    if (length(missing)) {
-      for (m in missing) x[[m]] <- NA
-    }
-    x[all_names]
   })
-  
-  # bind
-  out <- do.call(rbind, dfs_aligned)
-  rownames(out) <- NULL
-  out
 }
-
-#' Combine sf metadata with observations from /statistics
-#' 
-#' @param meta_sf a single-row sf data frame object containing metadata about observations
-#' @param obs_df a multi-row data frame of observations 
-#' 
-#' @return an sf data frame object
-#' 
-#' @noRd
-cbind_sf_metadata <- function(meta_sf, obs_df) {
-  
-  stopifnot(
-    inherits(meta_sf, "sf"),
-    nrow(meta_sf) == 1
-  )
-  
-  n <- nrow(obs_df)
-  
-  # replicate metadata rows
-  meta_rep <- meta_sf[rep(1, n), , drop = FALSE]
-  
-  # drop geometry before cbind, then restore
-  geom <- sf::st_geometry(meta_rep)
-  meta_nogeo <- sf::st_drop_geometry(meta_rep)
-  
-  out <- cbind(meta_nogeo, obs_df)
-  sf::st_sf(out, geometry = geom)
-}
-
-#' Clean up a /statistics data frame
-#'
-#' Unpacks "values" and "percentiles" nested columns to be one row per value,
-#' renames "percentiles" to "percentile", consolidates "value" and "values" into
-#' one "value" column
-#'
-#' @param df a data frame with "value" and "values" columns
-#'
-#' @return a data frame with a value column and maybe a
-#' @noRd
-combine_value_columns <- function(df) {
-  
-  split_vals <- lapply(df$values, function(x) as.numeric(unlist(x)))
-  split_pcts <- lapply(df$percentiles, function(x) as.numeric(unlist(x)))
-  
-  df$values <- NULL
-  df$percentiles <- NULL
-  
-  expanded <- lapply(seq_len(nrow(df)), function(i) {
-    
-    v <- split_vals[[i]]
-    p <- split_pcts[[i]]
-    
-    v[is.nan(v)] <- NA
-    v <- as.numeric(v)
-    p <- as.numeric(p)
-    
-    # case: single NA → scalar statistic
-    if (length(v) == 1 && is.na(v)) {
-      df$percentile <- NA_real_
-      return(df[i, , drop = FALSE])
-    }
-    
-    out <- df[rep(i, length(v)), , drop = FALSE]
-    
-    out$value <- v
-    out$percentile <- p
-    out
-  })
-  
-  out <- do.call(rbind, expanded)
-  rownames(out) <- NULL
-  out
-}
-
