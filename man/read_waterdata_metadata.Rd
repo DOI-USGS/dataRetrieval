@@ -4,7 +4,7 @@
 \alias{read_waterdata_metadata}
 \title{Generalized USGS Water Meta Data API retrieval function}
 \usage{
-read_waterdata_metadata(collection, max_results = NA, limit = NA)
+read_waterdata_metadata(collection, limit = NA)
 }
 \arguments{
 \item{collection}{character, can be any existing collection such
@@ -13,9 +13,6 @@ as "parameter-codes", "agency-codes", "altitude-datums", "aquifer-codes",
 "coordinate-method-codes", "hydrologic-unit-codes", "medium-codes",
 "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
 "topographic-codes", "time-zone-codes".}
-
-\item{max_results}{The optional maximum number of rows to return. This value
-must be less than the requested limit.}
 
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable

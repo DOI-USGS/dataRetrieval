@@ -23,8 +23,6 @@
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param max_results The optional maximum number of rows to return. This value
-#' must be less than the requested limit. 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -57,8 +55,7 @@ read_waterdata_parameter_codes <- function(parameter_code = NA_character_,
                                           temperature_basis = NA_character_,
                                           epa_equivalence = NA_character_,
                                           properties = NA_character_,
-                                          limit = NA,
-                                          max_results = NA){
+                                          limit = NA){
 
   service <- "parameter-codes"
   output_id <- "parameter_code"
@@ -67,7 +64,7 @@ read_waterdata_parameter_codes <- function(parameter_code = NA_character_,
   args[["convertType"]] <- FALSE
   args[["skipGeometry"]] <- TRUE
   args[["bbox"]] <- NA
-  args[["no_paging"]] <- FALSE # change if we're ever over 50,000
+  args[["no_paging"]] <- FALSE # drops id if TRUE
   
   if(all(lengths(args) == 1)){
     return_list <- suppressWarnings(get_ogc_data(args = args,
@@ -79,8 +76,7 @@ read_waterdata_parameter_codes <- function(parameter_code = NA_character_,
 It is expected that updates to the API will eliminate this need.")
     
     return_list <- read_waterdata_metadata(collection = service, 
-                                 max_results = max_results,
-                                 limit = limit)
+                                           limit = limit)
     args[["convertType"]] <- NULL
     args[["skipGeometry"]] <- NULL
     args[["no_paging"]] <- NULL

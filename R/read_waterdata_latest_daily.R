@@ -32,8 +32,6 @@
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param max_results The optional maximum number of rows to return. This value
-#' must be less than the requested limit. 
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
@@ -84,7 +82,6 @@ read_waterdata_latest_daily <- function(monitoring_location_id = NA_character_,
                                  time = NA_character_,
                                  bbox = NA,
                                  limit = NA,
-                                 max_results = NA,
                                  convertType = TRUE,
                                  no_paging = FALSE){
   
@@ -96,10 +93,6 @@ read_waterdata_latest_daily <- function(monitoring_location_id = NA_character_,
                               output_id, 
                               service)
   
-  if(convertType){
-    return_list <- order_results(return_list)
-    return_list <- move_id_col(return_list, output_id)
-  }  
   return(return_list)
 }
 
