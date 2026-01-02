@@ -9,7 +9,7 @@ is not stable over time. Moved other "id" columns to end of returned data frames
 encouraged to migrate to the "read_waterdata_metadata" functions.
 * Added no_paging argument. This will make the request more efficient, but is not 
 recommended because it will silently cut off data after 50,000 rows.
-* Removed max_results argument. Was confusing and redundent with the combination
+* Removed max_results argument. Was confusing and redundant with the combination
 of no_paging and limit.
 
 dataRetrieval 2.7.21
