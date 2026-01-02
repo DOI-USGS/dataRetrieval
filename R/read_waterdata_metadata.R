@@ -15,8 +15,6 @@
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param max_results The optional maximum number of rows to return. This value
-#' must be less than the requested limit. 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -37,8 +35,7 @@
 #' time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 #' }
 read_waterdata_metadata <- function(collection, 
-                          max_results = NA,
-                          limit = NA){
+                                    limit = NA){
   
   match.arg(collection, pkg.env$metadata)
 
@@ -55,10 +52,9 @@ read_waterdata_metadata <- function(collection,
   data_req <- suppressWarnings(construct_api_requests(service = collection, 
                                                       skipGeometry = TRUE, 
                                                       properties = NA,
-                                                      limit = limit, 
-                                                      max_results = max_results))
+                                                      limit = limit))
   
-  return_list <- walk_pages(data_req, max_results)
+  return_list <- walk_pages(data_req)
   
   return_list <- rejigger_cols(df = return_list,
                                properties =  NA,

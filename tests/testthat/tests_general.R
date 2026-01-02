@@ -66,36 +66,13 @@ test_that("General NWIS retrievals working", {
   testthat::skip_on_cran()
   testthat::skip_on_ci()
   
-  multiSite <- readNWISdata(
-    sites = c("04025500", "040263491"), service = "iv",
-    parameterCd = "00060",
-    startDate = "2020-11-01", endDate = "2020-11-02"
+  multiSite <- read_waterdata_continuous(
+    monitoring_location_id = c("USGS-04025500", "USGS-040263491"), 
+    parameter_code = "00060",
+    time = c("2020-11-01", "2020-11-02")
   )
-  expect_is(multiSite$dateTime, "POSIXct")
-
-  recent_uv <- readNWISdata(
-    siteNumber = "04025500", parameterCd = "00060",
-    service = "uv",
-    startDate = as.Date(Sys.Date() - 10),
-    endDate = Sys.Date()
-  )
-  expect_equal(grep(
-    x = attr(recent_uv, "url"),
-    pattern = "https://waterservices.usgs.gov/nwis/iv/"
-  ), 1)
-
-  older_uv <- readNWISdata(
-    siteNumber = "04025500",
-    parameterCd = "00060",
-    service = "uv",
-    startDate = "2016-01-01",
-    endDate = "2016-01-02"
-  )
-  expect_equal(grep(
-    x = attr(older_uv, "url"),
-    pattern = "https://nwis.waterservices.usgs.gov/nwis/iv/"
-  ), 1)
-
+  
+  expect_is(multiSite$time, "POSIXct")
 
   expect_error(readNWISdata(), "No arguments supplied")
   expect_error(readNWISdata(siteNumber = NA), "NA's are not allowed in query")
@@ -113,24 +90,6 @@ test_that("General NWIS retrievals working", {
 
   expect_is(timeseriesInfo$begin, "POSIXct")
 
-  gw_data <- readNWISdata(
-    stateCd = "AL",
-    service = "gwlevels",
-    startDate = "2024-05-01",
-    endDate = "2024-05-30") 
-  
-  expect_true(nrow(gw_data) > 0)
-  expect_equal(attr(gw_data, "url"),
-               "https://nwis.waterdata.usgs.gov/nwis/gwlevels?state_cd=AL&begin_date=2024-05-01&end_date=2024-05-30&date_format=YYYY-MM-DD&rdb_inventory_output=file&TZoutput=0&range_selection=date_range&list_of_search_criteria=state_cd&format=rdb")
-  
-  gw_data2 <- readNWISdata(
-    state_cd = "AL",
-    service = "gwlevels",
-    startDate = "2024-05-01",
-    endDate = "2024-05-30") 
-  
-  expect_equal(nrow(gw_data), nrow(gw_data2))
-  
   # nolint start: line_length_linter
   url <- httr2::request("https://waterservices.usgs.gov/nwis/dv/?site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06")
   dv <- importRDB1(url, asDateTime = FALSE)
@@ -163,24 +122,23 @@ test_that("General NWIS retrievals working", {
 
   # Test list:
   args <- list(
-    sites = "05114000", service = "iv",
-    parameterCd = "00060",
-    startDate = "2014-05-01T00:00Z",
-    endDate = "2014-05-01T12:00Z"
+    monitoring_location_id = "USGS-05114000", 
+    parameter_code = "00060",
+    time = c("2014-05-01T00:00Z", "2014-05-01T12:00Z")
   )
 
-  instData <- readNWISdata(args)
+  instData <- do.call(read_waterdata_continuous, args)
 
   args2 <- list(
     monitoring_location_id = "USGS-05114000", 
     parameter_code = "00060",
-    time = c("2014-05-01", endDate = "2014-05-01")
+    time = c("2014-05-01", "2014-05-01")
   )
   
   daily_USGS <- do.call(read_waterdata_daily, args2)
   expect_lt(nrow(daily_USGS), nrow(instData))
 
-  ohio <- read_waterdata_monitoring_location(state_name = "Ohio", 
+  ohio <- read_waterdata_monitoring_location(state_name = "Ohio",
                                         site_type_code = "ST")
   bbox <- sf::st_bbox(ohio)
   what_sites <- read_waterdata_ts_meta(parameter_code = "00665",
