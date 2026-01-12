@@ -11,8 +11,8 @@ read_waterdata_ts_meta(
   properties = NA_character_,
   statistic_id = NA_character_,
   last_modified = NA_character_,
-  begin = NA_character_,
-  end = NA_character_,
+  begin_utc = NA_character_,
+  end_utc = NA_character_,
   hydrologic_unit_code = NA_character_,
   state_name = NA_character_,
   unit_of_measure = NA_character_,
@@ -28,6 +28,8 @@ read_waterdata_ts_meta(
   limit = NA,
   max_results = NA,
   bbox = NA,
+  begin = NA_character_,
+  end = NA_character_,
   convertType = TRUE,
   no_paging = FALSE
 )
@@ -58,9 +60,29 @@ Examples:
 
 Only features that have a \code{last_modified} that intersects the value of datetime are selected.}
 
-\item{begin}{This field contains the same information as "begin_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
+\item{begin_utc}{The datetime of the earliest observation in the time series. Together with \code{end}, this field represents the period of record of a time series. Note that some time series may have large gaps in their collection record.
+You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
+Examples:
+\itemize{
+\item A date-time: "2018-02-12T23:20:50Z"
+\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
+\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
+\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
+}
 
-\item{end}{This field contains the same information as "end_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
+Only features that have a \code{begin} that intersects the value of datetime are selected.}
+
+\item{end_utc}{The datetime of the most recent observation in the time series. Data returned by this endpoint updates at most once per day, and potentially less frequently than that, and as such there may be more recent observations within a time series than the time series \code{end} value reflects. Together with \code{begin}, this field represents the period of record of a time series. It is additionally used to determine whether a time series is "active".
+You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
+Examples:
+\itemize{
+\item A date-time: "2018-02-12T23:20:50Z"
+\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
+\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
+\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
+}
+
+Only features that have a \code{end} that intersects the value of datetime are selected.}
 
 \item{hydrologic_unit_code}{The United States is divided and sub-divided into successively smaller hydrologic units which are classified into four levels: regions, sub-regions, accounting units, and cataloging units. The hydrologic units are arranged within each other, from the smallest (cataloging units) to the largest (regions). Each hydrologic unit is identified by a unique hydrologic unit code (HUC) consisting of two to eight digits based on the four levels of classification in the hydrologic unit system.}
 
@@ -104,6 +126,10 @@ depth). Coordinates are assumed to be in crs 4326. The expected format is a nume
 vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
 Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
+\item{begin}{This field contains the same information as "begin_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
+
+\item{end}{This field contains the same information as "end_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
+
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
 
@@ -127,8 +153,8 @@ meta_multi <- read_waterdata_ts_meta(monitoring_location_id =  c("USGS-01491000"
                             parameter_code = c("00060", "00010"),
                             properties = c("monitoring_location_id",
                                            "parameter_code",
-                                           "begin",
-                                           "end",
+                                           "begin_utc",
+                                           "end_utc",
                                            "time_series_id"),
                             skipGeometry = TRUE)
                             
