@@ -10,15 +10,8 @@ walk_pages <- function(req){
 
   resps <- httr2::req_perform_iterative(req, 
                                         next_req = next_req_url, 
-                                        max_reqs = Inf, on_error = "return")
-  failures <- resps |>
-    httr2::resps_failures() |>
-    httr2::resps_requests()
-  
-  if(length(failures) > 0){
-    stop(resps[[1]][["message"]])
-  }
-  
+                                        max_reqs = Inf, on_error = "stop")
+
   return_list <- data.frame()
   for(resp in resps){
     df1 <- get_resp_data(resp)
