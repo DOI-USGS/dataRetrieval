@@ -32,6 +32,8 @@ get_ogc_data <- function(args,
     no_paging <- FALSE
   }
   
+  message("Requesting:\n", req$url)
+  
   if(no_paging){
     return_list <- get_csv(req, limit = args[["limit"]])
   } else {
