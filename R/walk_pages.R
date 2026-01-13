@@ -5,8 +5,6 @@
 #' @noRd
 #' @return data.frame with attributes
 walk_pages <- function(req){
-  
-  message("Requesting:\n", req$url)
 
   resps <- httr2::req_perform_iterative(req, 
                                         next_req = next_req_url, 
@@ -98,7 +96,6 @@ next_req_url <- function(resp, req) {
 
 get_csv <- function(req, limit){
 
-  message("Requesting:\n", req$url)
   skip_geo <- grepl("skipGeometry=true", req$url, ignore.case = TRUE)
   resp <- httr2::req_perform(req)
 
