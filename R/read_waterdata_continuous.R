@@ -8,11 +8,13 @@
 #' for new direct download functions that are expected to be available sometime
 #' in 2026.
 #' 
-#' Geometry output is not supported in the continuous data API
+#' Geometry output is not supported in the continuous data API endpoint.
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("continuous")$monitoring_location_id`
+#' Multiple monitoring_location_ids can be requested as a character vector.
 #' @param parameter_code `r get_params("continuous")$parameter_code`
+#' Multiple parameter_codes can be requested as a character vector.
 #' @param time `r get_params("continuous")$time`. 
 #' You can also use a vector of length 2: the first value being the starting date,
 #' the second value being the ending date. NA's within the vector indicate a
@@ -23,6 +25,7 @@
 #' @param approval_status `r get_params("continuous")$approval_status`
 #' @param last_modified `r get_params("continuous")$last_modified`
 #' @param time_series_id `r get_params("continuous")$time_series_id`
+#' Multiple time_series_ids can be requested as a character vector.
 #' @param qualifier `r get_params("continuous")$qualifier`
 #' @param statistic_id `r get_params("continuous")$statistic_id`. Note that 
 #' for continuous data, the statistic_id is almost universally 00011. 

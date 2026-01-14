@@ -22,16 +22,22 @@ read_waterdata_continuous(
 )
 }
 \arguments{
-\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{monitoring-locations} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).}
+\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{monitoring-locations} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).
 
-\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}.}
+Multiple monitoring_location_ids can be requested as a character vector.}
+
+\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}.
+
+Multiple parameter_codes can be requested as a character vector.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
 geometry, continuous_id, internal_id, time_series_id, monitoring_location_id, parameter_code, statistic_id, time, value, unit_of_measure, approval_status, qualifier, last_modified.
 The default (\code{NA}) will return all columns of the data.}
 
-\item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
+\item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.
+
+Multiple time_series_ids can be requested as a character vector.}
 
 \item{approval_status}{Some of the data that you have obtained from this U.S. Geological Survey database may not have received Director's approval.  Any such data values are qualified as provisional and are subject to revision.  Provisional data are released on the condition that neither the USGS nor the United States Government may be held liable for any damages resulting from its use. This field reflects the approval status of each record, and is either "Approved", meaining processing review has been completed and the data is approved for publication, or "Provisional" and subject to revision. For more information about provisional data, go to \url{https://waterdata.usgs.gov/provisional-data-statement/}.}
 
@@ -99,7 +105,7 @@ last single year of data. If this is a bottleneck, please check back
 for new direct download functions that are expected to be available sometime
 in 2026.
 
-Geometry output is not supported in the continuous data API
+Geometry output is not supported in the continuous data API endpoint.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
