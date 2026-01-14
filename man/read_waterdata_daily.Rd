@@ -144,6 +144,9 @@ multi_site <- read_waterdata_daily(monitoring_location_id =  c("USGS-01491000",
 dv_data_quick <- read_waterdata_daily(monitoring_location_id = site,
                                    parameter_code = "00060",
                                    no_paging = TRUE)
+                                   
+dv_post <- read_waterdata_daily(monitoring_location_id = site,
+                                approval_status = c("Approved", "Provisional"))
 
 }
 \dontshow{\}) # examplesIf}
