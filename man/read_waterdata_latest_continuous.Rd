@@ -7,7 +7,6 @@
 read_waterdata_latest_continuous(
   monitoring_location_id = NA_character_,
   parameter_code = NA_character_,
-  statistic_id = NA_character_,
   properties = NA_character_,
   time_series_id = NA_character_,
   approval_status = NA_character_,
@@ -31,11 +30,6 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 \item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}.
 
 Multiple parameter_codes can be requested as a character vector.}
-
-\item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.
-. Note that
-for continuous data, the statistic_id is almost universally 00011.
-Requesting anything else will most-likely cause a timeout.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
