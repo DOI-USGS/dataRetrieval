@@ -12,7 +12,6 @@ read_waterdata_continuous(
   approval_status = NA_character_,
   unit_of_measure = NA_character_,
   qualifier = NA_character_,
-  statistic_id = NA_character_,
   value = NA,
   last_modified = NA_character_,
   time = NA_character_,
@@ -44,11 +43,6 @@ Multiple time_series_ids can be requested as a character vector.}
 \item{unit_of_measure}{A human-readable description of the units of measurement associated with an observation.}
 
 \item{qualifier}{This field indicates any qualifiers associated with an observation, for instance if a sensor may have been impacted by ice or if values were estimated.}
-
-\item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.
-. Note that
-for continuous data, the statistic_id is almost universally 00011.
-Requesting anything else will most-likely cause a timeout.}
 
 \item{value}{The value of the observation. Values are transmitted as strings in the JSON response format in order to preserve precision.}
 
