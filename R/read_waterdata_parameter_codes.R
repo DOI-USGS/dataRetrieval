@@ -65,26 +65,10 @@ read_waterdata_parameter_codes <- function(parameter_code = NA_character_,
   args[["skipGeometry"]] <- TRUE
   args[["bbox"]] <- NA
   args[["no_paging"]] <- FALSE # drops id if TRUE
-  
-  if(all(lengths(args) == 1)){
-    return_list <- suppressWarnings(get_ogc_data(args = args,
-                                                 output_id = output_id,
-                                                 service =  service))
-  } else {
-    
-    message("Current API functionality requires pulling the full parameter-codes list.
-It is expected that updates to the API will eliminate this need.")
-    
-    return_list <- read_waterdata_metadata(collection = service, 
-                                           limit = limit)
-    args[["convertType"]] <- NULL
-    args[["skipGeometry"]] <- NULL
-    args[["no_paging"]] <- NULL
-    args_to_filter <- args[!is.na(args)]
-    for(param in names(args_to_filter)){
-      return_list <- return_list[return_list[[param]] %in% args_to_filter[[param]],]
-    }
-  }
+
+  return_list <- get_ogc_data(args = args,
+                              output_id = output_id,
+                              service =  service)
 
   return(return_list)
 }
