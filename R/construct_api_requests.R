@@ -51,6 +51,11 @@ construct_api_requests <- function(service,
   comma_params <- c("monitoring_location_id", "parameter_code", 
                     "statistic_id", "time_series_id")
   
+  if(service %in% c("monitoring-locations", "parameter-codes", 
+                    "time-series-metadata")){
+    comma_params <- c(comma_params, "id")
+  }
+  
   full_list <- list(...)
   
   if(all(is.na(full_list)) & all(is.na(bbox))){
