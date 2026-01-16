@@ -51,7 +51,7 @@ construct_api_requests <- function(service,
   comma_params <- c("monitoring_location_id", "parameter_code", 
                     "statistic_id", "time_series_id")
   
-  if(service %in% c("monitoring-locations", "parameter-codes", 
+  if(service %in% c("monitoring-locations", #"parameter-codes", 
                     "time-series-metadata")){
     comma_params <- c(comma_params, "id")
   }
@@ -61,20 +61,19 @@ construct_api_requests <- function(service,
   if(all(is.na(full_list)) & all(is.na(bbox))){
     warning("No filtering arguments specified.")
   }
+  # Figure out if the GET request will be > 2048 characters
+  comma_params_filtered <- Filter(Negate(anyNA), full_list[comma_params])
+
+  force_post <- nchar(paste0(unlist(comma_params_filtered), collapse = ",")) > 2048
   
-  # GET list refers to arguments that will go in the URL no matter what (not POST)
-  get_list <- full_list[names(full_list) %in% c(single_params, comma_params)]
+  if(force_post){
+    get_list <- full_list[names(full_list) %in% c(single_params)]
+  } else {
+    # GET list refers to arguments that will go in the URL no matter what (not POST)
+    get_list <- full_list[names(full_list) %in% c(single_params, comma_params)]    
+  }
 
   get_list[["skipGeometry"]] <- skipGeometry
-  
-  #POST list are the arguments that need to be in the POST body
-  post_list <- full_list[!names(full_list) %in% c(single_params, comma_params)]
-  
-  post_params <- explode_post(post_list)
-  
-  if(length(post_params) > 0){
-    POST = TRUE
-  }
   
   get_list <- get_list[!is.na(get_list)]
   
@@ -119,6 +118,14 @@ construct_api_requests <- function(service,
                                     properties = properties,
                                     .multi = "comma")    
   }
+  
+  #POST list are the arguments that need to be in the POST body
+  post_list <- full_list[!names(full_list) %in% names(get_list)]
+  
+  post_params <- explode_post(post_list)
+  
+  # Should we do a POST?
+  POST = length(post_params) > 0
   
   if(POST){
     baseURL <- baseURL |>
