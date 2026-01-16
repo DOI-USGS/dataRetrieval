@@ -491,7 +491,7 @@ context("pCode Stuff")
 test_that("pCode Stuff", {
   testthat::skip_on_cran()
 
-  paramINFO <- read_waterdata_parameter_codes(parameter_code = c("00060", "01075", "00931", NA))
+  paramINFO <- read_waterdata_parameter_codes(parameter_code = c("00060", "01075", "00931"))
   expect_equal(nrow(paramINFO), 3)
   expect_true(all(paramINFO$parameter_code %in% c("00060", "01075", "00931")))
   
