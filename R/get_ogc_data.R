@@ -25,12 +25,7 @@ get_ogc_data <- function(args,
   
   req <- do.call(construct_api_requests, args)
 
-  if("no_paging" %in% names(args)){
-    no_paging <- args[["no_paging"]]
-    args[["no_paging"]] <- NULL    
-  } else {
-    no_paging <- FALSE
-  }
+  no_paging <- grepl("f=csv", req$url)
   
   message("Requesting:\n", req$url)
   
@@ -68,7 +63,7 @@ get_ogc_data <- function(args,
   
   attr(return_list, "request") <- req
   attr(return_list, "queryTime") <- Sys.time()
-  return_list
+  return(return_list)
 }
 
 order_results <- function(df){

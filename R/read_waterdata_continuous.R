@@ -8,11 +8,13 @@
 #' for new direct download functions that are expected to be available sometime
 #' in 2026.
 #' 
-#' Geometry output is not supported in the continuous data API
+#' Geometry output is not supported in the continuous data API endpoint.
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("continuous")$monitoring_location_id`
+#' Multiple monitoring_location_ids can be requested as a character vector.
 #' @param parameter_code `r get_params("continuous")$parameter_code`
+#' Multiple parameter_codes can be requested as a character vector.
 #' @param time `r get_params("continuous")$time`. 
 #' You can also use a vector of length 2: the first value being the starting date,
 #' the second value being the ending date. NA's within the vector indicate a
@@ -23,10 +25,8 @@
 #' @param approval_status `r get_params("continuous")$approval_status`
 #' @param last_modified `r get_params("continuous")$last_modified`
 #' @param time_series_id `r get_params("continuous")$time_series_id`
+#' Multiple time_series_ids can be requested as a character vector.
 #' @param qualifier `r get_params("continuous")$qualifier`
-#' @param statistic_id `r get_params("continuous")$statistic_id`. Note that 
-#' for continuous data, the statistic_id is almost universally 00011. 
-#' Requesting anything else will most-likely cause a timeout. 
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r dataRetrieval:::get_properties_for_docs("continuous", "continuous_id")`.
@@ -73,7 +73,6 @@ read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
                                       approval_status = NA_character_,
                                       unit_of_measure = NA_character_,
                                       qualifier = NA_character_,
-                                      statistic_id = NA_character_,
                                       value = NA,
                                       last_modified = NA_character_,
                                       time = NA_character_,
@@ -87,10 +86,6 @@ read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
   args <- mget(names(formals()))
   args[["skipGeometry"]] <- TRUE
 
-  if(!is.na(statistic_id) & !all(statistic_id == "00011")){
-    warning("With few if any exceptions, statistic_id is always 00011 for continuous data, and requesting other statistic ids will likely return no data.")
-  }
-  
   return_list <- get_ogc_data(args,
                               output_id, 
                               service)

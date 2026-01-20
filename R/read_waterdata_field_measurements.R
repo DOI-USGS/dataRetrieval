@@ -4,7 +4,9 @@
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("field-measurements")$monitoring_location_id`
+#' Multiple monitoring_location_ids can be requested as a character vector.
 #' @param parameter_code `r get_params("field-measurements")$parameter_code`
+#' Multiple parameter_codes can be requested as a character vector.
 #' @param observing_procedure_code `r get_params("field-measurements")$observing_procedure_code`
 #' @param time `r get_params("field-measurements")$time`
 #' You can also use a vector of length 2: the first value being the starting date,

@@ -4,7 +4,9 @@
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("latest-continuous")$monitoring_location_id`
+#' Multiple monitoring_location_ids can be requested as a character vector.
 #' @param parameter_code `r get_params("latest-continuous")$parameter_code`
+#' Multiple parameter_codes can be requested as a character vector.
 #' @param time `r get_params("latest-continuous")$time`
 #' You can also use a vector of length 2: the first value being the starting date,
 #' the second value being the ending date. NA's within the vector indicate a
@@ -15,10 +17,8 @@
 #' @param approval_status `r get_params("latest-continuous")$approval_status`
 #' @param last_modified `r get_params("latest-continuous")$last_modified`
 #' @param time_series_id `r get_params("latest-continuous")$time_series_id`
+#' Multiple time_series_ids can be requested as a character vector.
 #' @param qualifier `r get_params("latest-continuous")$qualifier`
-#' @param statistic_id `r get_params("latest-continuous")$statistic_id`. Note that 
-#' for continuous data, the statistic_id is almost universally 00011. 
-#' Requesting anything else will most-likely cause a timeout. 
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r dataRetrieval:::get_properties_for_docs("latest-continuous", "latest_continuous_id")`.
@@ -79,7 +79,6 @@
 #' }
 read_waterdata_latest_continuous <- function(monitoring_location_id = NA_character_,
                             parameter_code = NA_character_,
-                            statistic_id = NA_character_,
                             properties = NA_character_,
                             time_series_id = NA_character_,
                             approval_status = NA_character_,

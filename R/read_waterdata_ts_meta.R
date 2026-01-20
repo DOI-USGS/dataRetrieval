@@ -4,11 +4,16 @@
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("time-series-metadata")$monitoring_location_id`
+#' Multiple monitoring_location_ids can be requested as a character vector.
 #' @param parameter_code `r get_params("time-series-metadata")$parameter_code`
+#' Multiple parameter_codes can be requested as a character vector.
 #' @param parameter_name `r get_params("time-series-metadata")$parameter_name`
 #' @param statistic_id `r get_params("time-series-metadata")$statistic_id`
+#' Multiple statistic_ids can be requested as a character vector.
 #' @param computation_identifier `r get_params("time-series-metadata")$computation_identifier`
+#' Multiple computation_identifiers can be requested as a character vector.
 #' @param computation_period_identifier `r get_params("time-series-metadata")$computation_period_identifier`
+#' Multiple computation_period_identifiers can be requested as a character vector.
 #' @param sublocation_identifier `r get_params("time-series-metadata")$sublocation_identifier`
 #' @param last_modified `r get_params("time-series-metadata")$last_modified`
 #' @param begin_utc `r get_params("time-series-metadata")$begin_utc`

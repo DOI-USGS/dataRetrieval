@@ -4,6 +4,7 @@
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("monitoring-locations")$id`
+#' Multiple monitoring_location_ids can be requested as a character vector.
 #' @param agency_code `r get_params("monitoring-locations")$agency_code`
 #' @param agency_name `r get_params("monitoring-locations")$agency_name`
 #' @param monitoring_location_number `r get_params("monitoring-locations")$monitoring_location_number`

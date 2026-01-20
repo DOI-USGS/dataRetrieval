@@ -4,8 +4,11 @@
 #' 
 #' @export
 #' @param monitoring_location_id `r get_params("daily")$monitoring_location_id`
+#' Multiple monitoring_location_ids can be requested as a character vector.
 #' @param parameter_code `r get_params("daily")$parameter_code`
+#' Multiple parameter_codes can be requested as a character vector.
 #' @param statistic_id `r get_params("daily")$statistic_id`
+#' Multiple statistic_ids can be requested as a character vector.
 #' @param time `r get_params("daily")$time`
 #' You can also use a vector of length 2: the first value being the starting date,
 #' the second value being the ending date. NA's within the vector indicate a
@@ -16,6 +19,7 @@
 #' @param approval_status `r get_params("daily")$approval_status`
 #' @param last_modified `r get_params("daily")$last_modified`
 #' @param time_series_id `r get_params("daily")$time_series_id`
+#' Multiple time_series_ids can be requested as a character vector.
 #' @param qualifier `r get_params("daily")$qualifier`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
@@ -75,6 +79,9 @@
 #' dv_data_quick <- read_waterdata_daily(monitoring_location_id = site,
 #'                                    parameter_code = "00060",
 #'                                    no_paging = TRUE)
+#'                                    
+#' dv_post <- read_waterdata_daily(monitoring_location_id = site,
+#'                                 approval_status = c("Approved", "Provisional"))
 #' 
 #' }
 read_waterdata_daily <- function(monitoring_location_id = NA_character_,

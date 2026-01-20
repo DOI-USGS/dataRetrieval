@@ -45,31 +45,41 @@ construct_api_requests <- function(service,
   
   POST <- FALSE
   
-  single_params <- c("datetime", "last_modified", "begin", "end", "time", "limit")
+  single_params <- c("datetime", "last_modified", 
+                     "begin", "end", "time", "limit",
+                     "begin_utc", "end_utc")
+  comma_params <- c("monitoring_location_id", "parameter_code", 
+                    "statistic_id", "time_series_id",
+                    "computation_period_identifier",
+                    "computation_identifier")
+  
+  if(service %in% c("monitoring-locations", #"parameter-codes", 
+                    "time-series-metadata")){
+    comma_params <- c(comma_params, "id")
+  }
   
   full_list <- list(...)
   
   if(all(is.na(full_list)) & all(is.na(bbox))){
     warning("No filtering arguments specified.")
   }
+  # Figure out if the GET request will be > 2048 characters
+  comma_params_filtered <- Filter(Negate(anyNA), full_list[comma_params])
+
+  force_post <- nchar(paste0(unlist(comma_params_filtered), collapse = ",")) > 2048
   
-  # GET list refers to arguments that will go in the URL no matter what (not POST)
-  get_list <- full_list[names(full_list) %in% single_params]
+  if(force_post){
+    get_list <- full_list[names(full_list) %in% c(single_params)]
+  } else {
+    # GET list refers to arguments that will go in the URL no matter what (not POST)
+    get_list <- full_list[names(full_list) %in% c(single_params, comma_params)]    
+  }
 
   get_list[["skipGeometry"]] <- skipGeometry
   
-  #POST list are the arguments that need to be in the POST body
-  post_list <- full_list[!names(full_list) %in% single_params]
-  
-  post_params <- explode_post(post_list)
-  
-  if(length(post_params) > 0){
-    POST = TRUE
-  }
-  
   get_list <- get_list[!is.na(get_list)]
   
-  time_periods <- c("last_modified", "datetime", "time", "begin", "end")
+  time_periods <- c("last_modified", "datetime", "time", "begin", "end", "begin_utc", "end_utc")
   if(any(time_periods %in% names(get_list))){
 
     for(i in time_periods[time_periods %in% names(get_list)]){
@@ -85,7 +95,7 @@ construct_api_requests <- function(service,
   format_type <- ifelse(isTRUE(no_paging), "csv", "json")
   
   baseURL <- setup_api(service, format = format_type)
-  baseURL <- explode_query(baseURL, POST = FALSE, get_list)
+  baseURL <- explode_query(baseURL, POST = FALSE, get_list, multi = "comma")
   
   if(all(!is.na(bbox))){
     baseURL <- httr2::req_url_query(baseURL,
@@ -111,7 +121,15 @@ construct_api_requests <- function(service,
                                     .multi = "comma")    
   }
   
-  if(POST){  
+  #POST list are the arguments that need to be in the POST body
+  post_list <- full_list[!names(full_list) %in% names(get_list)]
+  
+  post_params <- explode_post(post_list)
+  
+  # Should we do a POST?
+  POST = length(post_params) > 0
+  
+  if(POST){
     baseURL <- baseURL |>
       httr2::req_headers(`Content-Type` = "application/query-cql-json") 
     
@@ -126,7 +144,7 @@ construct_api_requests <- function(service,
     baseURL <- httr2::req_body_raw(baseURL, x) 
     
   } else {
-    baseURL <- explode_query(baseURL, POST = FALSE, full_list)
+    baseURL <- explode_query(baseURL, POST = FALSE, full_list, multi = "comma")
   }
   
   return(baseURL)

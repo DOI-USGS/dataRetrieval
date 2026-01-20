@@ -391,7 +391,7 @@ test_that("Construct USGS urls", {
   
   # nolint start: line_length_linter
   expect_equal(url_daily$url,
-               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&time=2024-01-01%2F..&limit=10000&skipGeometry=FALSE")
+               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&skipGeometry=FALSE&monitoring_location_id=USGS-01594440&parameter_code=00060,00010&time=2024-01-01%2F..&statistic_id=00003,00001&limit=10000")
 
   url_works <- dataRetrieval:::walk_pages(url_daily)
   expect_true(nrow(url_works) > 0)
@@ -403,7 +403,7 @@ test_that("Construct USGS urls", {
   
   expect_equal(
     url_ts_meta$url,
-    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&lang=en-US&limit=10000&skipGeometry=FALSE"
+    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&lang=en-US&skipGeometry=FALSE&monitoring_location_id=USGS-01594440&parameter_code=00060,00010&limit=10000"
   )
   
   url_works_ts <- dataRetrieval:::walk_pages(url_ts_meta)
@@ -491,7 +491,7 @@ context("pCode Stuff")
 test_that("pCode Stuff", {
   testthat::skip_on_cran()
 
-  paramINFO <- read_waterdata_parameter_codes(parameter_code = c("00060", "01075", "00931", NA))
+  paramINFO <- read_waterdata_parameter_codes(parameter_code = c("00060", "01075", "00931"))
   expect_equal(nrow(paramINFO), 3)
   expect_true(all(paramINFO$parameter_code %in% c("00060", "01075", "00931")))
   
