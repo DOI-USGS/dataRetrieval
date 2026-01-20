@@ -11,6 +11,7 @@ encouraged to migrate to the "read_waterdata_metadata" functions.
 recommended because it will silently cut off data after 50,000 rows.
 * Removed max_results argument. Was confusing and redundant with the combination
 of no_paging and limit.
+* Increase the flexibility of read_waterdata_metadata to match other OGC functions.
 * NLDI to use agency code prefixes and should no longer be stripping the "USGS-" off the site ides.
 
 dataRetrieval 2.7.21
