@@ -3,47 +3,47 @@
 #' @description `r get_description("monitoring-locations")`
 #' 
 #' @export
-#' @param monitoring_location_id `r get_params("monitoring-locations")$id`
+#' @param monitoring_location_id `r get_ogc_params("monitoring-locations")$id`
 #' Multiple monitoring_location_ids can be requested as a character vector.
-#' @param agency_code `r get_params("monitoring-locations")$agency_code`
-#' @param agency_name `r get_params("monitoring-locations")$agency_name`
-#' @param monitoring_location_number `r get_params("monitoring-locations")$monitoring_location_number`
-#' @param monitoring_location_name `r get_params("monitoring-locations")$monitoring_location_name`
-#' @param district_code `r get_params("monitoring-locations")$district_code`
-#' @param state_name `r get_params("monitoring-locations")$state_name`
-#' @param county_code `r get_params("monitoring-locations")$county_code`
-#' @param county_name `r get_params("monitoring-locations")$county_name`
-#' @param country_code `r get_params("monitoring-locations")$country_code`
-#' @param country_name `r get_params("monitoring-locations")$country_name`
-#' @param state_code `r get_params("monitoring-locations")$state_code`
-#' @param minor_civil_division_code `r get_params("monitoring-locations")$minor_civil_division_code`
-#' @param site_type_code `r get_params("monitoring-locations")$site_type_code`
-#' @param site_type `r get_params("monitoring-locations")$site_type`
-#' @param hydrologic_unit_code `r get_params("monitoring-locations")$hydrologic_unit_code`
-#' @param basin_code `r get_params("monitoring-locations")$basin_code`
-#' @param altitude `r get_params("monitoring-locations")$altitude`
-#' @param altitude_accuracy `r get_params("monitoring-locations")$altitude_accuracy`
-#' @param altitude_method_code `r get_params("monitoring-locations")$altitude_method_code`
-#' @param altitude_method_name `r get_params("monitoring-locations")$altitude_method_name`
-#' @param vertical_datum `r get_params("monitoring-locations")$vertical_datum`
-#' @param vertical_datum_name `r get_params("monitoring-locations")$vertical_datum_name`
-#' @param horizontal_positional_accuracy_code `r get_params("monitoring-locations")$horizontal_positional_accuracy_code`
-#' @param horizontal_positional_accuracy `r get_params("monitoring-locations")$horizontal_positional_accuracy`
-#' @param horizontal_position_method_code `r get_params("monitoring-locations")$horizontal_position_method_code`
-#' @param horizontal_position_method_name `r get_params("monitoring-locations")$horizontal_position_method_name`
-#' @param original_horizontal_datum `r get_params("monitoring-locations")$original_horizontal_datum`
-#' @param original_horizontal_datum_name `r get_params("monitoring-locations")$original_horizontal_datum_name`
-#' @param drainage_area `r get_params("monitoring-locations")$drainage_area`
-#' @param contributing_drainage_area `r get_params("monitoring-locations")$contributing_drainage_area`
-#' @param time_zone_abbreviation `r get_params("monitoring-locations")$time_zone_abbreviation`
-#' @param uses_daylight_savings `r get_params("monitoring-locations")$uses_daylight_savings`
-#' @param construction_date `r get_params("monitoring-locations")$construction_date`
-#' @param aquifer_code `r get_params("monitoring-locations")$aquifer_code`
-#' @param national_aquifer_code `r get_params("monitoring-locations")$national_aquifer_code`
-#' @param aquifer_type_code `r get_params("monitoring-locations")$aquifer_type_code`
-#' @param well_constructed_depth `r get_params("monitoring-locations")$well_constructed_depth`
-#' @param hole_constructed_depth `r get_params("monitoring-locations")$hole_constructed_depth`
-#' @param depth_source_code `r get_params("monitoring-locations")$depth_source_code`
+#' @param agency_code `r get_ogc_params("monitoring-locations")$agency_code`
+#' @param agency_name `r get_ogc_params("monitoring-locations")$agency_name`
+#' @param monitoring_location_number `r get_ogc_params("monitoring-locations")$monitoring_location_number`
+#' @param monitoring_location_name `r get_ogc_params("monitoring-locations")$monitoring_location_name`
+#' @param district_code `r get_ogc_params("monitoring-locations")$district_code`
+#' @param state_name `r get_ogc_params("monitoring-locations")$state_name`
+#' @param county_code `r get_ogc_params("monitoring-locations")$county_code`
+#' @param county_name `r get_ogc_params("monitoring-locations")$county_name`
+#' @param country_code `r get_ogc_params("monitoring-locations")$country_code`
+#' @param country_name `r get_ogc_params("monitoring-locations")$country_name`
+#' @param state_code `r get_ogc_params("monitoring-locations")$state_code`
+#' @param minor_civil_division_code `r get_ogc_params("monitoring-locations")$minor_civil_division_code`
+#' @param site_type_code `r get_ogc_params("monitoring-locations")$site_type_code`
+#' @param site_type `r get_ogc_params("monitoring-locations")$site_type`
+#' @param hydrologic_unit_code `r get_ogc_params("monitoring-locations")$hydrologic_unit_code`
+#' @param basin_code `r get_ogc_params("monitoring-locations")$basin_code`
+#' @param altitude `r get_ogc_params("monitoring-locations")$altitude`
+#' @param altitude_accuracy `r get_ogc_params("monitoring-locations")$altitude_accuracy`
+#' @param altitude_method_code `r get_ogc_params("monitoring-locations")$altitude_method_code`
+#' @param altitude_method_name `r get_ogc_params("monitoring-locations")$altitude_method_name`
+#' @param vertical_datum `r get_ogc_params("monitoring-locations")$vertical_datum`
+#' @param vertical_datum_name `r get_ogc_params("monitoring-locations")$vertical_datum_name`
+#' @param horizontal_positional_accuracy_code `r get_ogc_params("monitoring-locations")$horizontal_positional_accuracy_code`
+#' @param horizontal_positional_accuracy `r get_ogc_params("monitoring-locations")$horizontal_positional_accuracy`
+#' @param horizontal_position_method_code `r get_ogc_params("monitoring-locations")$horizontal_position_method_code`
+#' @param horizontal_position_method_name `r get_ogc_params("monitoring-locations")$horizontal_position_method_name`
+#' @param original_horizontal_datum `r get_ogc_params("monitoring-locations")$original_horizontal_datum`
+#' @param original_horizontal_datum_name `r get_ogc_params("monitoring-locations")$original_horizontal_datum_name`
+#' @param drainage_area `r get_ogc_params("monitoring-locations")$drainage_area`
+#' @param contributing_drainage_area `r get_ogc_params("monitoring-locations")$contributing_drainage_area`
+#' @param time_zone_abbreviation `r get_ogc_params("monitoring-locations")$time_zone_abbreviation`
+#' @param uses_daylight_savings `r get_ogc_params("monitoring-locations")$uses_daylight_savings`
+#' @param construction_date `r get_ogc_params("monitoring-locations")$construction_date`
+#' @param aquifer_code `r get_ogc_params("monitoring-locations")$aquifer_code`
+#' @param national_aquifer_code `r get_ogc_params("monitoring-locations")$national_aquifer_code`
+#' @param aquifer_type_code `r get_ogc_params("monitoring-locations")$aquifer_type_code`
+#' @param well_constructed_depth `r get_ogc_params("monitoring-locations")$well_constructed_depth`
+#' @param hole_constructed_depth `r get_ogc_params("monitoring-locations")$hole_constructed_depth`
+#' @param depth_source_code `r get_ogc_params("monitoring-locations")$depth_source_code`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r dataRetrieval:::get_properties_for_docs("monitoring-locations", "monitoring_location_id")`.

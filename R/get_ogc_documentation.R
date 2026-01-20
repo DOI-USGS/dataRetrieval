@@ -52,21 +52,22 @@ get_collection <- function(){
   return(query_ret)
 }
 
-#' Create parameter descriptions dynamically
+#' Get parameter descriptions
 #' 
-#' This function populates the parameter descriptions.
+#' This function returns a list of properties available from an endpoint. When 
+#' available, it will also contain a description.
 #' 
-#' @param service Character, can be any of the endpoints
+#' @param service Character, can be any of the USGS Waterdata API endpoints or collections.
 #' @return list
-#' @noRd
+#' @export
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
-#' ml <- dataRetrieval:::get_params("monitoring-locations")
+#' ml <- dataRetrieval::get_ogc_params("monitoring-locations")
 #' ml$national_aquifer_code
 #' }
 #' 
-get_params <- function(service){
+get_ogc_params <- function(service){
   
   check_queryables_req <- base_url() |> 
     httr2::req_url_path_append("collections") |> 

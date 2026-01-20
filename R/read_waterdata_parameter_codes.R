@@ -3,17 +3,17 @@
 #' @description `r get_description("parameter-codes")`
 #' 
 #' @export
-#' @param parameter_code `r get_params("parameter-codes")$id`
-#' @param parameter_name `r get_params("parameter-codes")$parameter_name`
-#' @param unit_of_measure `r get_params("parameter-codes")$unit_of_measure`
-#' @param parameter_group_code `r get_params("parameter-codes")$parameter_group_code`
-#' @param parameter_description `r get_params("parameter-codes")$parameter_description`
-#' @param medium `r get_params("parameter-codes")$medium`
-#' @param statistical_basis `r get_params("parameter-codes")$statistical_basis`
-#' @param weight_basis `r get_params("parameter-codes")$weight_basis`
-#' @param sample_fraction `r get_params("parameter-codes")$sample_fraction`
-#' @param temperature_basis `r get_params("parameter-codes")$temperature_basis`
-#' @param epa_equivalence `r get_params("parameter-codes")$epa_equivalence`
+#' @param parameter_code `r get_ogc_params("parameter-codes")$id`
+#' @param parameter_name `r get_ogc_params("parameter-codes")$parameter_name`
+#' @param unit_of_measure `r get_ogc_params("parameter-codes")$unit_of_measure`
+#' @param parameter_group_code `r get_ogc_params("parameter-codes")$parameter_group_code`
+#' @param parameter_description `r get_ogc_params("parameter-codes")$parameter_description`
+#' @param medium `r get_ogc_params("parameter-codes")$medium`
+#' @param statistical_basis `r get_ogc_params("parameter-codes")$statistical_basis`
+#' @param weight_basis `r get_ogc_params("parameter-codes")$weight_basis`
+#' @param sample_fraction `r get_ogc_params("parameter-codes")$sample_fraction`
+#' @param temperature_basis `r get_ogc_params("parameter-codes")$temperature_basis`
+#' @param epa_equivalence `r get_ogc_params("parameter-codes")$epa_equivalence`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r dataRetrieval:::get_properties_for_docs("parameter-codes", "parameter_code_id")`.
