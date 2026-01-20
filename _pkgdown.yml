@@ -80,6 +80,7 @@ reference:
       - read_waterdata
       - summarize_waterdata_samples
       - check_waterdata_sample_params
+      - get_ogc_params
   - title: National Water Information System (NWIS)
     desc:  Functions to retrieve (USGS) NWIS data. These will be slowly phased out and replaced with the read_waterdata family of functions.
     contents:
