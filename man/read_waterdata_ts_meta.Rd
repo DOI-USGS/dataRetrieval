@@ -35,9 +35,13 @@ read_waterdata_ts_meta(
 )
 }
 \arguments{
-\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{monitoring-locations} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).}
+\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{monitoring-locations} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).
 
-\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}.}
+Multiple monitoring_location_ids can be requested as a character vector.}
+
+\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}.
+
+Multiple parameter_codes can be requested as a character vector.}
 
 \item{parameter_name}{A human-understandable name corresponding to \code{parameter_code}.}
 
@@ -46,7 +50,9 @@ Available options are:
 geometry, time_series_id, unit_of_measure, parameter_name, parameter_code, statistic_id, hydrologic_unit_code, state_name, last_modified, begin, end, begin_utc, end_utc, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description, parameter_description, parent_time_series_id.
 The default (\code{NA}) will return all columns of the data.}
 
-\item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.}
+\item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.
+
+Multiple statistic_ids can be requested as a character vector.}
 
 \item{last_modified}{The last time a record was refreshed in our database. This may happen due to regular operational processes and does not necessarily indicate anything about the measurement has changed.
 You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
@@ -90,9 +96,11 @@ Only features that have a \code{end} that intersects the value of datetime are s
 
 \item{unit_of_measure}{A human-readable description of the units of measurement associated with an observation.}
 
-\item{computation_period_identifier}{Indicates the period of data used for any statistical computations.}
+\item{computation_period_identifier}{Indicates the period of data used for any statistical computations.
+Multiple computation_period_identifiers can be requested as a character vector.}
 
-\item{computation_identifier}{Indicates whether the data from this time series represent a specific statistical computation.}
+\item{computation_identifier}{Indicates whether the data from this time series represent a specific statistical computation.
+Multiple computation_identifiers can be requested as a character vector.}
 
 \item{thresholds}{Thresholds represent known numeric limits for a time series, for example the historic maximum value for a parameter or a level below which a sensor is non-operative. These thresholds are sometimes used to automatically determine if an observation is erroneous due to sensor error, and therefore shouldn't be included in the time series.}
 
