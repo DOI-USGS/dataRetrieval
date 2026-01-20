@@ -96,9 +96,11 @@ Only features that have a \code{end} that intersects the value of datetime are s
 
 \item{unit_of_measure}{A human-readable description of the units of measurement associated with an observation.}
 
-\item{computation_period_identifier}{Indicates the period of data used for any statistical computations.}
+\item{computation_period_identifier}{Indicates the period of data used for any statistical computations.
+Multiple computation_period_identifiers can be requested as a character vector.}
 
-\item{computation_identifier}{Indicates whether the data from this time series represent a specific statistical computation.}
+\item{computation_identifier}{Indicates whether the data from this time series represent a specific statistical computation.
+Multiple computation_identifiers can be requested as a character vector.}
 
 \item{thresholds}{Thresholds represent known numeric limits for a time series, for example the historic maximum value for a parameter or a level below which a sensor is non-operative. These thresholds are sometimes used to automatically determine if an observation is erroneous due to sensor error, and therefore shouldn't be included in the time series.}
 
