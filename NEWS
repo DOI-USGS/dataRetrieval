@@ -13,6 +13,7 @@ recommended because it will silently cut off data after 50,000 rows.
 of no_paging and limit.
 * Increase the flexibility of read_waterdata_metadata to match other OGC functions.
 * NLDI to use agency code prefixes and should no longer be stripping the "USGS-" off the site ides.
+* Add deprecate message to readNWISuse function as data services have been retired.
 
 dataRetrieval 2.7.21
 ===================
