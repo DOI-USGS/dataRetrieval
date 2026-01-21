@@ -53,7 +53,7 @@ construct_api_requests <- function(service,
                     "computation_period_identifier",
                     "computation_identifier")
   
-  if(service %in% c("monitoring-locations", #"parameter-codes", 
+  if(service %in% c("monitoring-locations", "parameter-codes", 
                     "time-series-metadata")){
     comma_params <- c(comma_params, "id")
   }
