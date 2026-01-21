@@ -366,7 +366,7 @@ leaflet(data = what_huc_sites |>
 
 ## Reference Tables
 
-There is a new function `read_waterdata_metadata` that gives access to a wide variety of tables that have metadata information.
+There is a new function `read_waterdata_metadata` that gives access to a wide variety of tables that have metadata information. Any returned column can also be filtered on, similar to the time series functions above.
 
 ### Agency Codes
 
