@@ -711,81 +711,17 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' County and state fields will be included as appropriate.
 #'
 #' @export
-#' @examplesIf is_dataRetrieval_user()
-#' \donttest{
-#' # All data for a county
-#' allegheny <- readNWISuse(stateCd = "Pennsylvania", countyCd = "Allegheny")
-#'
-#' # Data for an entire state for certain years
-#' ohio <- readNWISuse(years = c(2000, 2005, 2010), stateCd = "OH", countyCd = NULL)
-#'
-#' # Data for an entire state, county by county
-#' pr <- readNWISuse(years = c(2000, 2005, 2010), stateCd = "PR", countyCd = "ALL")
-#'
-#' # All national-scale data, transforming data frame to named columns from named rows
-#' national <- readNWISuse(stateCd = NULL, countyCd = NULL, transform = TRUE)
-#'
-#' # Washington, DC data
-#' dc <- readNWISuse(stateCd = "DC", countyCd = NULL)
-#'
-#' # data for multiple counties, with different input formatting
-#' paData <- readNWISuse(stateCd = "42", countyCd = c("Allegheny County", "BUTLER", 1, "031"))
-#'
-#' # retrieving two specific categories for an entire state
-#' ks <- readNWISuse(stateCd = "KS", countyCd = NULL, categories = c("IT", "LI"))
-#' }
 readNWISuse <- function(stateCd,
                         countyCd,
                         years = "ALL",
                         categories = "ALL",
                         convertType = TRUE,
                         transform = FALSE) {
-  message(new_nwis_message())
-  countyID <- NULL
-  countyCd <- countyCd[countyCd != ""]
+  .Deprecated(new = "read_waterdata_use_data in development",
+              package = "dataRetrieval", 
+              msg = "NWIS servers for water use have been decommission. New functions are being developed.")
+  return(NULL)
 
-  if (exists("countyCd") && !is.null(countyCd)) {
-    if (!any(toupper(countyCd) == "ALL")) {
-      for (c in countyCd) {
-        code <- countyCdLookup(state = stateCd, county = c, outputType = "id")
-        countyID <- c(countyID, code)
-      }
-    } else {
-      countyID <- toupper(countyID)
-    }
-  }
-
-  years <- .capitalALL(years)
-  categories <- .capitalALL(categories)
-
-  url <- constructUseURL(
-    years = years,
-    stateCd = stateCd,
-    countyCd = countyID,
-    categories = categories
-  )
-  returned_data <- importRDB1(
-    obs_url = url,
-    convertType = convertType
-  )
-
-  # for total country data arriving in named rows
-  if (transform) {
-    cmmnt <- comment(returned_data)
-    returned_data <- t(returned_data)
-    colnames(returned_data) <- returned_data[1, ]
-    returned_data <- as.data.frame(returned_data[-1, ], stringsAsFactors = FALSE)
-    returned_data <- cbind(
-      Year = as.integer(substr(rownames(returned_data), 2, 5)),
-      returned_data
-    )
-    rownames(returned_data) <- NULL
-    comment(returned_data) <- cmmnt
-    if (!all(is.null(stateCd)) && all(nchar(stateCd) != 0)) {
-      warning("transform = TRUE is only intended for national data")
-    }
-  }
-  return(returned_data)
 }
 
 .capitalALL <- function(input) {

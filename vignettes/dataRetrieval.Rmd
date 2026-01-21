@@ -412,21 +412,8 @@ surfaceData <- read_waterdata_field_measurements(monitoring_location_id = "USGS-
 
 ## Water Use Data
 
-Retrieves water use data from USGS Water Use Data for the Nation.  See [https://waterdata.usgs.gov/nwis/wu](https://waterdata.usgs.gov/nwis/wu) for more information.  All available use categories for the supplied arguments are retrieved. 
+Legacy water use data services have been retired. Check back in for developments on replacement functions.
 
-```{r eval=FALSE}
-allegheny <- readNWISuse(
-  stateCd = "Pennsylvania",
-  countyCd = "Allegheny"
-)
-
-
-national <- readNWISuse(
-  stateCd = NULL,
-  countyCd = NULL,
-  transform = TRUE
-)
-```
 
 ## Statistics Data
 Retrieves site statistics from the USGS Statistics Web Service beta.  
