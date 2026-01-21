@@ -31,7 +31,7 @@ read_waterdata_field_measurements(
 
 Multiple monitoring_location_ids can be requested as a character vector.}
 
-\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}.
+\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/parameter-codes/items}.
 
 Multiple parameter_codes can be requested as a character vector.}
 
@@ -66,7 +66,7 @@ Only features that have a \code{last_modified} that intersects the value of date
 
 \item{observing_procedure}{Water measurement or water-quality observing procedure descriptions.}
 
-\item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. \href{https://help.waterdata.usgs.gov/code/alt_datum_cd_query?fmt=html}{A list of codes is available.}}
+\item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/altitude-datums/items}.}
 
 \item{measuring_agency}{The agency performing the measurement.}
 
