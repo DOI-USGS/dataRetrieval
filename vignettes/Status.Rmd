@@ -47,7 +47,7 @@ df <- data.frame(
     "readNWISrating",
     "readNWISstat",
     "readNWISpeak",
-    "readNWISuse",
+    "readNWISuse (deprecated)",
     "whatNWISdata"
   ),
   New = c(
