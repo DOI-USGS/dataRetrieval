@@ -224,31 +224,6 @@ test_that("readNWISstat tests", {
   expect_gt(nrow(annualData), 2)
 })
 
-context("readNWISuse tests")
-test_that("readNWISuse tests", {
-  testthat::skip_on_cran()
-  skip_on_ci()
-  dc <- readNWISuse(
-    years = c(2000, 2005, 2010),
-    stateCd = "DC", countyCd = NULL
-  )
-  expect_true(nrow(dc) == 3)
-  expect_is(dc$state_cd, "character")
-
-  ohio <- readNWISuse(
-    years = 2005,
-    stateCd = "OH",
-    countyCd = "ALL"
-  )
-  expect_true(nrow(ohio) == 88)
-
-  twoCounties <- readNWISuse(
-    years = 2010,
-    stateCd = "PA",
-    countyCd = c("Cambria", "Indiana")
-  )
-  expect_true(nrow(twoCounties) == 2)
-})
 
 context("state tests")
 test_that("state county tests", {

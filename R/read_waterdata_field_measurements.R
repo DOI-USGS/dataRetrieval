@@ -3,25 +3,25 @@
 #' @description `r get_description("field-measurements")`
 #' 
 #' @export
-#' @param monitoring_location_id `r get_params("field-measurements")$monitoring_location_id`
+#' @param monitoring_location_id `r get_ogc_params("field-measurements")$monitoring_location_id`
 #' Multiple monitoring_location_ids can be requested as a character vector.
-#' @param parameter_code `r get_params("field-measurements")$parameter_code`
+#' @param parameter_code `r get_ogc_params("field-measurements")$parameter_code`
 #' Multiple parameter_codes can be requested as a character vector.
-#' @param observing_procedure_code `r get_params("field-measurements")$observing_procedure_code`
-#' @param time `r get_params("field-measurements")$time`
+#' @param observing_procedure_code `r get_ogc_params("field-measurements")$observing_procedure_code`
+#' @param time `r get_ogc_params("field-measurements")$time`
 #' You can also use a vector of length 2: the first value being the starting date,
 #' the second value being the ending date. NA's within the vector indicate a
 #' half-bound date. For example, c("2024-01-01", NA) will return all data starting
 #' at 2024-01-01.
-#' @param value `r get_params("field-measurements")$value`
-#' @param unit_of_measure `r get_params("field-measurements")$unit_of_measure`
-#' @param approval_status `r get_params("field-measurements")$approval_status`
-#' @param last_modified `r get_params("field-measurements")$last_modified`
-#' @param qualifier `r get_params("field-measurements")$qualifier`
-#' @param field_visit_id `r get_params("field-measurements")$field_visit_id`
-#' @param observing_procedure `r get_params("field-measurements")$observing_procedure`
-#' @param vertical_datum `r get_params("field-measurements")$vertical_datum`
-#' @param measuring_agency `r get_params("field-measurements")$measuring_agency`
+#' @param value `r get_ogc_params("field-measurements")$value`
+#' @param unit_of_measure `r get_ogc_params("field-measurements")$unit_of_measure`
+#' @param approval_status `r get_ogc_params("field-measurements")$approval_status`
+#' @param last_modified `r get_ogc_params("field-measurements")$last_modified`
+#' @param qualifier `r get_ogc_params("field-measurements")$qualifier`
+#' @param field_visit_id `r get_ogc_params("field-measurements")$field_visit_id`
+#' @param observing_procedure `r get_ogc_params("field-measurements")$observing_procedure`
+#' @param vertical_datum `r get_ogc_params("field-measurements")$vertical_datum`
+#' @param measuring_agency `r get_ogc_params("field-measurements")$measuring_agency`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r dataRetrieval:::get_properties_for_docs("field-measurements", "field_measurement_id")`.

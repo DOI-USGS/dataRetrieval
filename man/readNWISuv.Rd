@@ -12,15 +12,13 @@ readNWISuv(siteNumbers, parameterCd, startDate = "", endDate = "", tz = "UTC")
 \item{parameterCd}{character USGS parameter code.  This is usually an 5 digit number.}
 
 \item{startDate}{character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-retrieval for the earliest possible record. Simple date arguments are specified in local time.
-See more information here: \url{https://waterservices.usgs.gov/docs/instantaneous-values/}.}
+retrieval for the earliest possible record. Simple date arguments are specified in local time.}
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
-retrieval for the latest possible record. Simple date arguments are specified in local time.
-See more information here: \url{https://waterservices.usgs.gov/docs/instantaneous-values/}.}
+retrieval for the latest possible record. Simple date arguments are specified in local time.}
 
 \item{tz}{character to set timezone attribute of dateTime. Default is "UTC", and converts the
-date times to UTC, properly accounting for daylight savings times based on the data's provided tz_cd column.
+date times to UTC, properly accounting for daylight savings times based on the data provided tz_cd column.
 Possible values to provide are "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
@@ -54,20 +52,14 @@ queryTime \tab POSIXct \tab The time the data was returned \cr
 }
 }
 \description{
-Imports data from NWIS web service. This function gets the data from here:
-\url{https://waterservices.usgs.gov/docs/instantaneous-values/instantaneous-values-details/}
-Inputs to this function are just USGS site ids, USGS parameter codes,
+Imports data from NWIS web service.
+Inputs to this function are USGS site ids, USGS parameter codes,
 and start and end date. For a more complex query, use \code{\link[=readNWISdata]{readNWISdata()}},
 including an arguement service="uv".
 Not all parameter codes are available for all data.
 Use the function \code{\link[=whatNWISdata]{whatNWISdata()}} to discover what data
 is available for a USGS site. The column data_type_cd with the values "uv"
 returned from \code{\link[=whatNWISdata]{whatNWISdata()}}) are available from this service.
-}
-\details{
-More information on the web service can be found here:
-\url{https://waterservices.usgs.gov/test-tools}, choosing the
-"Instantaneous Value Service".
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}

@@ -10,13 +10,10 @@ walk_pages <- function(req){
                                         next_req = next_req_url, 
                                         max_reqs = Inf, on_error = "stop")
 
-  return_list <- data.frame()
-  for(resp in resps){
-    df1 <- get_resp_data(resp)
-    return_list <- rbind(return_list, df1)
-  }
-    
-  
+  return_list <- resps |>
+    httr2::resps_successes() |>
+    httr2::resps_data(\(resp) get_resp_data(resp))
+
   return(return_list)
 }
 

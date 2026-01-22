@@ -192,7 +192,6 @@ To access these services on a web browser, go to <https://api.waterdata.usgs.gov
 ```{r}
 sensor_data <- read_waterdata_continuous(monitoring_location_id = "USGS-01491000",
                                 parameter_code = c("00060", "00010"),
-                                statistic_id = "00003",
                                 time = c("2023-10-01", "2024-09-30"))
 ```
 
@@ -367,7 +366,7 @@ leaflet(data = what_huc_sites |>
 
 ## Reference Tables
 
-There is a new function `read_waterdata_metadata` that gives access to a wide variety of tables that have metadata information.
+There is a new function `read_waterdata_metadata` that gives access to a wide variety of tables that have metadata information. Any returned column can also be filtered on, similar to the time series functions above.
 
 ### Agency Codes
 
