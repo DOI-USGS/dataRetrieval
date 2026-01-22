@@ -4,7 +4,7 @@
 \alias{read_waterdata_metadata}
 \title{Generalized USGS Water Meta Data API retrieval function}
 \usage{
-read_waterdata_metadata(collection, limit = NA)
+read_waterdata_metadata(collection, limit = NA, ...)
 }
 \arguments{
 \item{collection}{character, can be any existing collection such
@@ -19,6 +19,9 @@ selected features that should be returned in each page. The maximum allowable
 limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
+
+\item{\dots}{Optional arguments to pass to the query. Available parameters
+can be found with the \code{get_ogc_params} function.}
 }
 \description{
 Function to get metadata from Water Data API. These are useful to get the
@@ -32,6 +35,8 @@ agency_codes <- read_waterdata_metadata("agency-codes")
 altitude_datums <- read_waterdata_metadata("altitude-datums")
 aquifer_codes <- read_waterdata_metadata("aquifer-codes")
 aquifer_types <- read_waterdata_metadata("aquifer-types")
+counties <- read_waterdata_metadata("counties")
+us_counties <- read_waterdata_metadata("counties", country_code = "US")
 coordinate_accuracy_codes <- read_waterdata_metadata("coordinate-accuracy-codes")
 coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
 coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
@@ -40,9 +45,13 @@ national_aquifer_codes <- read_waterdata_metadata("national-aquifer-codes")
 parameter_codes <- read_waterdata_metadata("parameter-codes")
 reliability_codes <- read_waterdata_metadata("reliability-codes")
 site_types <- read_waterdata_metadata("site-types")
+states <- read_waterdata_metadata("states")
+us_states_territories <- read_waterdata_metadata("states", country_code = "US")
 statistic_codes <- read_waterdata_metadata("statistic-codes")
 topographic_codes <- read_waterdata_metadata("topographic-codes")
 time_zone_codes <- read_waterdata_metadata("time-zone-codes")
+time_zone_limited <- read_waterdata_metadata("time-zone-codes",
+                        time_zone_description = c("Alaska", "Hawaii", "Pacific North America"))
 }
 \dontshow{\}) # examplesIf}
 }

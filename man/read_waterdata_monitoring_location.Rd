@@ -56,11 +56,11 @@ read_waterdata_monitoring_location(
 
 Multiple monitoring_location_ids can be requested as a character vector.}
 
-\item{agency_code}{The agency that is reporting the data. Agency codes are fixed values assigned by the National Water Information System (NWIS). A list of agency codes is available \href{https://help.waterdata.usgs.gov/code/agency_cd_query?fmt=html}{at this link}.}
+\item{agency_code}{The agency that is reporting the data. Agency codes are fixed values assigned by the National Water Information System (NWIS). A list of agency codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/agency-codes/items}.}
 
 \item{agency_name}{The name of the agency that is reporting the data.}
 
-\item{monitoring_location_number}{Each monitoring location in the USGS data base has a unique 8- to 15-digit identification number. Monitoring location numbers are assigned \href{https://help.waterdata.usgs.gov/faq/sites/do-station-numbers-have-any-particular-meaning}{based on this logic}.}
+\item{monitoring_location_number}{Each monitoring location in the USGS data base has a unique 8- to 15-digit identification number.}
 
 \item{monitoring_location_name}{This is the official name of the monitoring location in the database. For well information this can be a district-assigned local number.}
 
@@ -74,15 +74,15 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 \item{state_name}{The name of the state or state equivalent in which the monitoring location is located.}
 
-\item{county_code}{The code for the county or county equivalent (parish, borough, etc.) in which the monitoring location is located. \href{https://help.waterdata.usgs.gov/code/county_query?fmt=html}{A list of codes is available.}}
+\item{county_code}{The code for the county or county equivalent (parish, borough, etc.) in which the monitoring location is located. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/counties/items}.}
 
-\item{county_name}{The name of the county or county equivalent (parish, borough, etc.) in which the monitoring location is located. \href{https://help.waterdata.usgs.gov/code/county_query?fmt=html}{A list of codes is available.}}
+\item{county_name}{The name of the county or county equivalent (parish, borough, etc.) in which the monitoring location is located. [A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/counties/items}.}
 
 \item{minor_civil_division_code}{Codes for primary governmental or administrative divisions of the county or county equivalent in which the monitoring location is located.}
 
-\item{site_type_code}{A code describing the hydrologic setting of the monitoring location. \href{https://help.waterdata.usgs.gov/code/site_tp_query?fmt=html}{A list of codes is available.}}
+\item{site_type_code}{A code describing the hydrologic setting of the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/site-types/items}.}
 
-\item{site_type}{A description of the hydrologic setting of the monitoring location. \href{https://help.waterdata.usgs.gov/code/site_tp_query?fmt=html}{A list of codes is available.}}
+\item{site_type}{A description of the hydrologic setting of the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/site-types/items}.}
 
 \item{hydrologic_unit_code}{The United States is divided and sub-divided into successively smaller hydrologic units which are classified into four levels: regions, sub-regions, accounting units, and cataloging units. The hydrologic units are arranged within each other, from the smallest (cataloging units) to the largest (regions). Each hydrologic unit is identified by a unique hydrologic unit code (HUC) consisting of two to eight digits based on the four levels of classification in the hydrologic unit system.}
 
@@ -92,25 +92,25 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 \item{altitude_accuracy}{Accuracy of the altitude, in feet. An accuracy of +/- 0.1 foot would be entered as “.1”. Many altitudes are interpolated from the contours on topographic maps; accuracies determined in this way are generally entered as one-half of the contour interval.}
 
-\item{altitude_method_code}{Codes representing the method used to measure altitude. \href{https://help.waterdata.usgs.gov/code/alt_meth_cd_query?fmt=html}{A list of codes is available.}}
+\item{altitude_method_code}{Codes representing the method used to measure altitude.}
 
-\item{altitude_method_name}{The name of the the method used to measure altitude. \href{https://help.waterdata.usgs.gov/code/alt_meth_cd_query?fmt=html}{A list of codes is available.}}
+\item{altitude_method_name}{The name of the the method used to measure altitude.}
 
-\item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. \href{https://help.waterdata.usgs.gov/code/alt_datum_cd_query?fmt=html}{A list of codes is available.}}
+\item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/altitude-datums/items}.}
 
-\item{vertical_datum_name}{The datum used to determine altitude and vertical position at the monitoring location. \href{https://help.waterdata.usgs.gov/code/alt_datum_cd_query?fmt=html}{A list of codes is available.}}
+\item{vertical_datum_name}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/altitude-datums/items}.}
 
-\item{horizontal_positional_accuracy_code}{Indicates the accuracy of the latitude longitude values. \href{https://help.waterdata.usgs.gov/code/coord_acy_cd_query?fmt=html}{A list of codes is available.}}
+\item{horizontal_positional_accuracy_code}{Indicates the accuracy of the latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-accuracy-codes/items}.}
 
-\item{horizontal_positional_accuracy}{Indicates the accuracy of the latitude longitude values. \href{https://help.waterdata.usgs.gov/code/coord_acy_cd_query?fmt=html}{A list of codes is available.}}
+\item{horizontal_positional_accuracy}{Indicates the accuracy of the latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-accuracy-codes/items}.}
 
-\item{horizontal_position_method_code}{Indicates the method used to determine latitude longitude values. \href{https://help.waterdata.usgs.gov/code/coord_meth_cd_query?fmt=html}{A list of codes is available.}}
+\item{horizontal_position_method_code}{Indicates the method used to determine latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-method-codes/items}.}
 
-\item{horizontal_position_method_name}{Indicates the method used to determine latitude longitude values. \href{https://help.waterdata.usgs.gov/code/coord_meth_cd_query?fmt=html}{A list of codes is available.}}
+\item{horizontal_position_method_name}{Indicates the method used to determine latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-method-codes/items}.}
 
-\item{original_horizontal_datum}{Coordinates are published in EPSG:4326 / WGS84 / World Geodetic System 1984. This field indicates the original datum used to determine coordinates before they were converted. \href{https://help.waterdata.usgs.gov/code/coord_datum_cd_query?fmt=html}{A list of codes is available.}}
+\item{original_horizontal_datum}{Coordinates are published in EPSG:4326 / WGS84 / World Geodetic System 1984. This field indicates the original datum used to determine coordinates before they were converted. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-datum-codes/items}.}
 
-\item{original_horizontal_datum_name}{Coordinates are published in EPSG:4326 / WGS84 / World Geodetic System 1984. This field indicates the original datum used to determine coordinates before they were converted. \href{https://help.waterdata.usgs.gov/code/coord_datum_cd_query?fmt=html}{A list of codes is available.}}
+\item{original_horizontal_datum_name}{Coordinates are published in EPSG:4326 / WGS84 / World Geodetic System 1984. This field indicates the original datum used to determine coordinates before they were converted. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-datum-codes/items}.}
 
 \item{drainage_area}{The area enclosed by a topographic divide from which direct surface runoff from precipitation normally drains by gravity into the stream above that point.}
 
@@ -122,17 +122,17 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 \item{construction_date}{Date the well was completed.}
 
-\item{aquifer_code}{Local aquifers in the USGS water resources data base are identified by a geohydrologic unit code (a three-digit number related to the age of the formation, followed by a 4 or 5 character abbreviation for the geologic unit or aquifer name). \href{https://help.waterdata.usgs.gov/faq/groundwater/local-aquifer-description}{Additional information is available at this link.}}
+\item{aquifer_code}{Local aquifers in the USGS water resources data base are identified by a geohydrologic unit code (a three-digit number related to the age of the formation, followed by a 4 or 5 character abbreviation for the geologic unit or aquifer name).}
 
-\item{national_aquifer_code}{National aquifers are the principal aquifers or aquifer systems in the United States, defined as regionally extensive aquifers or aquifer systems that have the potential to be used as a source of potable water. Not all groundwater monitoring locations can be associated with a National Aquifer. Such monitoring locations will not be retrieved using this search criteria. \href{https://help.waterdata.usgs.gov/code/nat_aqfr_query?fmt=html}{A list of National aquifer codes and names is available.}}
+\item{national_aquifer_code}{National aquifers are the principal aquifers or aquifer systems in the United States, defined as regionally extensive aquifers or aquifer systems that have the potential to be used as a source of potable water. Not all groundwater monitoring locations can be associated with a National Aquifer. Such monitoring locations will not be retrieved using this search criteria. A list of National aquifer codes and names is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/national-aquifer-codes/items}.}
 
-\item{aquifer_type_code}{Groundwater occurs in aquifers under two different conditions. Where water only partly fills an aquifer, the upper surface is free to rise and decline. These aquifers are referred to as unconfined (or water-table) aquifers. Where water completely fills an aquifer that is overlain by a confining bed, the aquifer is referred to as a confined (or artesian) aquifer. When a confined aquifer is penetrated by a well, the water level in the well will rise above the top of the aquifer (but not necessarily above land surface). \href{https://help.waterdata.usgs.gov/faq/groundwater/local-aquifer-description}{Additional information is available at this link.}}
+\item{aquifer_type_code}{Groundwater occurs in aquifers under two different conditions. Where water only partly fills an aquifer, the upper surface is free to rise and decline. These aquifers are referred to as unconfined (or water-table) aquifers. Where water completely fills an aquifer that is overlain by a confining bed, the aquifer is referred to as a confined (or artesian) aquifer. When a confined aquifer is penetrated by a well, the water level in the well will rise above the top of the aquifer (but not necessarily above land surface).}
 
 \item{well_constructed_depth}{The depth of the finished well, in feet below land surface datum. Note: Not all groundwater monitoring locations have information on Well Depth. Such monitoring locations will not be retrieved using this search criteria.}
 
 \item{hole_constructed_depth}{The total depth to which the hole is drilled, in feet below land surface datum. Note: Not all groundwater monitoring locations have information on Hole Depth. Such monitoring locations will not be retrieved using this search criteria.}
 
-\item{depth_source_code}{A code indicating the source of water-level data. \href{https://help.waterdata.usgs.gov/code/water_level_src_cd_query?fmt=html}{A list of codes is available.}}
+\item{depth_source_code}{A code indicating the source of water-level data.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:

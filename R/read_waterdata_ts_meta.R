@@ -3,35 +3,35 @@
 #' @description `r get_description("time-series-metadata")`
 #' 
 #' @export
-#' @param monitoring_location_id `r get_params("time-series-metadata")$monitoring_location_id`
+#' @param monitoring_location_id `r get_ogc_params("time-series-metadata")$monitoring_location_id`
 #' Multiple monitoring_location_ids can be requested as a character vector.
-#' @param parameter_code `r get_params("time-series-metadata")$parameter_code`
+#' @param parameter_code `r get_ogc_params("time-series-metadata")$parameter_code`
 #' Multiple parameter_codes can be requested as a character vector.
-#' @param parameter_name `r get_params("time-series-metadata")$parameter_name`
-#' @param statistic_id `r get_params("time-series-metadata")$statistic_id`
+#' @param parameter_name `r get_ogc_params("time-series-metadata")$parameter_name`
+#' @param statistic_id `r get_ogc_params("time-series-metadata")$statistic_id`
 #' Multiple statistic_ids can be requested as a character vector.
-#' @param computation_identifier `r get_params("time-series-metadata")$computation_identifier`
+#' @param computation_identifier `r get_ogc_params("time-series-metadata")$computation_identifier`
 #' Multiple computation_identifiers can be requested as a character vector.
-#' @param computation_period_identifier `r get_params("time-series-metadata")$computation_period_identifier`
+#' @param computation_period_identifier `r get_ogc_params("time-series-metadata")$computation_period_identifier`
 #' Multiple computation_period_identifiers can be requested as a character vector.
-#' @param sublocation_identifier `r get_params("time-series-metadata")$sublocation_identifier`
-#' @param last_modified `r get_params("time-series-metadata")$last_modified`
-#' @param begin_utc `r get_params("time-series-metadata")$begin_utc`
-#' @param end_utc `r get_params("time-series-metadata")$end_utc`
-#' @param hydrologic_unit_code `r get_params("time-series-metadata")$hydrologic_unit_code`
-#' @param state_name `r get_params("time-series-metadata")$state_name`
-#' @param thresholds `r get_params("time-series-metadata")$thresholds`
-#' @param unit_of_measure `r get_params("time-series-metadata")$unit_of_measure`
-#' @param primary `r get_params("time-series-metadata")$primary`
-#' @param parent_time_series_id `r get_params("time-series-metadata")$parent_time_series_id`
-#' @param web_description `r get_params("time-series-metadata")$web_description`
-#' @param begin `r get_params("time-series-metadata")$begin`
-#' @param end `r get_params("time-series-metadata")$end`
+#' @param sublocation_identifier `r get_ogc_params("time-series-metadata")$sublocation_identifier`
+#' @param last_modified `r get_ogc_params("time-series-metadata")$last_modified`
+#' @param begin_utc `r get_ogc_params("time-series-metadata")$begin_utc`
+#' @param end_utc `r get_ogc_params("time-series-metadata")$end_utc`
+#' @param hydrologic_unit_code `r get_ogc_params("time-series-metadata")$hydrologic_unit_code`
+#' @param state_name `r get_ogc_params("time-series-metadata")$state_name`
+#' @param thresholds `r get_ogc_params("time-series-metadata")$thresholds`
+#' @param unit_of_measure `r get_ogc_params("time-series-metadata")$unit_of_measure`
+#' @param primary `r get_ogc_params("time-series-metadata")$primary`
+#' @param parent_time_series_id `r get_ogc_params("time-series-metadata")$parent_time_series_id`
+#' @param web_description `r get_ogc_params("time-series-metadata")$web_description`
+#' @param begin `r get_ogc_params("time-series-metadata")$begin`
+#' @param end `r get_ogc_params("time-series-metadata")$end`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r dataRetrieval:::get_properties_for_docs("time-series-metadata", "time_series_id")`.
 #' The default (`NA`) will return all columns of the data.
-#' @param time_series_id `r get_params("time-series-metadata")$id`
+#' @param time_series_id `r get_ogc_params("time-series-metadata")$id`
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
