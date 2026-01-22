@@ -259,11 +259,11 @@ test_that("get_statistics_data handles empty response", {
 # High-level API tests (skipped on CRAN)
 # ------------------------------------------------------------------------------
 
-test_that("read_waterdata_stats_normal returns data", {
+test_that("read_waterdata_stats_por returns data", {
   skip_on_cran()
   skip_if_offline()
   
-  out <- read_waterdata_stats_normal(
+  out <- read_waterdata_stats_por(
     monitoring_location_id = "USGS-01646500",
     parameter_code = "00060",
     computation_type = "median",
@@ -274,11 +274,11 @@ test_that("read_waterdata_stats_normal returns data", {
   expect_true(nrow(out) > 0)
 })
 
-test_that("read_waterdata_stats_interval returns data", {
+test_that("read_waterdata_stats_daterange returns data", {
   skip_on_cran()
   skip_if_offline()
   
-  out <- read_waterdata_stats_interval(
+  out <- read_waterdata_stats_daterange(
     monitoring_location_id = "USGS-01646500",
     parameter_code = "00060",
     computation_type = "maximum",
