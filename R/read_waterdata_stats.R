@@ -6,15 +6,15 @@
 #' record regarding water conditions. For more information regarding the
 #' calculation of statistics and other details, please visit the Statistics
 #' documentation page.
-#'
-#' Note: This API is under active beta development and subject to change.
+#' 
+#' Note: The /statistics API is under active beta development and subject to change.
 #' Improved handling of significant figures will be addressed in a future
 #' release.
 #'
-#' \code{read_waterdata_stats_normal} Returns day-of-year and month-of-year
+#' \code{read_waterdata_stats_por} Returns day-of-year and month-of-year
 #' statistics matching your query.
 #'
-#' \code{read_waterdata_stats} Returns monthly and annual statistics matching
+#' \code{read_waterdata_stats_daterange} Returns monthly and annual statistics matching
 #' your query.
 #'
 #' @export
@@ -64,12 +64,45 @@
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
+#' # All day-of-year and month-of-year statistics for two sites
+#' x1 <- read_waterdata_stats_por(
+#'   monitoring_location_id = c("USGS-02319394", "USGS-02171500")
+#' )
+#' 
+#' # Request temperature percentiles for specific month-day range
+#' # Returns:
+#' # - Day-of-year temperature percentiles for each day between June 1 through June 15.
+#' # - Month-of-year percentiles for June, computed using all June data (not just June 1 through June 15).
+#' x2 <- read_waterdata_stats_por(
+#'   monitoring_location_id = c("USGS-02319394", "USGS-02171500"),
+#'   parameter_code = "00010", 
+#'   start_date = "06-01", end_date = "06-15",
+#'   computation_type = "percentile"
+#' )
+#' 
+#' # All calendar month, calendar year, and water year statistics for two sites
+#' x3 <- read_waterdata_stats_daterange(
+#'   monitoring_location_id = c("USGS-02319394", "USGS-02171500")
+#' )
+#' 
+#' # Request specific gage height and discharge summaries for a limited date range
+#' # Returns:
+#' # - calendar month summaries for each month between January, 2010 through December, 2011
+#' # - calendar year summaries for 2010 and 2011
+#' # - water year summaries for WY2010, WY2011, and WY2012
+#' # Note: 
+#' x4 <- read_waterdata_stats_daterange(
+#'   monitoring_location_id = c("USGS-02319394", "USGS-02171500"), 
+#'   parameter_code = c("00065", "00060"),
+#'   start_date = "2010-01-01", end_date = "2011-12-31",
+#'   computation_type = c("minimum", "median", "maximum")
+#' )
 #' 
 #' }
 #' 
-#' @rdname get_waterdata_stats
+#' @rdname read_waterdata_stats
 #' @seealso \url{https://api.waterdata.usgs.gov/statistics/v0/docs}
-read_waterdata_stats_normal <- function(
+read_waterdata_stats_por <- function(
     approval_status = NA,
     computation_type = NA_character_,
     country_code = NA_character_,
@@ -91,8 +124,8 @@ read_waterdata_stats_normal <- function(
 }
 
 #' @export
-#' @rdname get_waterdata_stats
-read_waterdata_stats_interval <- function(
+#' @rdname read_waterdata_stats
+read_waterdata_stats_daterange <- function(
     approval_status = NA,
     computation_type = NA_character_,
     country_code = NA_character_,
@@ -100,9 +133,7 @@ read_waterdata_stats_interval <- function(
     county_code = NA_character_,
     start_date = NA_character_,
     end_date = NA_character_,
-    mime_type = NA_character_,
     monitoring_location_id = NA_character_,
-    next_token = NA_character_,
     parent_time_series_id = NA_character_,
     site_type_code = NA_character_,
     site_type_name = NA_character_,
@@ -192,23 +223,6 @@ get_statistics_data <- function(args, service) {
   attr(combined, "queryTime") <- Sys.time()
   
   return(combined)
-}
-
-#'
-normalize_value_cols <- function(x) {
-  if (!is.null(x$value)) {
-    list(
-      value       = as.numeric(x$value),
-      values      = NA_real_,
-      percentiles = NA_real_
-    )
-  } else {
-    list(
-      value       = NA_real_,
-      values      = as.numeric(x$values),
-      percentiles = as.numeric(x$percentiles)
-    )
-  }
 }
 
 #' Clean up "value", "values", and "percentiles" columns in a data.table
