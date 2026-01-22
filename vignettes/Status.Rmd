@@ -47,8 +47,7 @@ df <- data.frame(
     "readNWISrating",
     "readNWISstat",
     "readNWISpeak",
-    "readNWISuse",
-
+    "readNWISuse (deprecated)",
     "whatNWISdata"
   ),
   New = c(
@@ -60,10 +59,11 @@ df <- data.frame(
     "read_waterdata_field_measurements",
     "read_waterdata_field_measurements",
     "read_waterdata",
-    rep("", 6)
+    "read_waterdata_continuous",
+    rep("", 5)
   ),
-  "Available on (branch)" = c(rep("main (CRAN)", 5), 
-  "develop", "develop", "main (CRAN)",  rep("", 6))
+  "Available on (branch)" = c(rep("main (CRAN)", 8), 
+  "develop",  rep("", 5))
 )
 
 knitr::kable(df, col.names = c("WaterServices (legacy) function", "Water Data (new) function", "Available on (branch name)"))
@@ -74,7 +74,7 @@ If you want to learn more about the new water data APIs, check out the ["What's 
 
 ## API Keys
 
-Do you make *a lot* of `dataRetrieval` WaterServices calls (e.g. using functions like `readNWISdv`, `readNWISuv`) per day? ...On the order of more than 50 function calls per hour? As you switch your workflows over to the new Water Data API functions, consider grabbing yourself an API key, which will bump your limit up to 1,000 requests per hour. Head to the [sign up page](https://api.waterdata.usgs.gov/signup) to get a token.
+Do you regularly use `dataRetrieval`? As you switch your workflows over to the new Water Data API functions, consider grabbing yourself an API key, which will bump your limit up to 1,000 requests per hour. Head to the [sign up page](https://api.waterdata.usgs.gov/signup) to get a token.
 
 One you have your API key, add it to your `.Renviron` file like this:
 
@@ -83,6 +83,14 @@ API_USGS_PAT = "[your api key]"
 ```
 
 Replace [your api key] with the alphanumeric code provided by the sign-up page. That's it! `dataRetrieval` will look for an `.Renviron` file in your directories and use it for making web service calls.
+
+## Large Data Pulls
+
+If you manage large data pipelines, you might notice some timeouts or errors indicating your request was too large. This will be especially true for the continuous data. Continuous data requests are only allowed up to 3 years of data in a single request. 
+
+HOWEVER, if you regularly make full period of record queries you may want to wait a few months before rewriting your workflows. We expect that a direct access to full period of record downloads will be available before the NWIS web services are shut down. We plan to make `dataRetrieval` function(s) to access that direct download access. 
+
+Maybe you are running into limitations but a full period-of-record won't necessarily help. Consider using the R package [`targets`](https://books.ropensci.org/targets/). Stay tuned as we plan to put together a collection of examples and suggestions for large data pulls as the API service offerings evolve.
 
 # Discrete Data
 

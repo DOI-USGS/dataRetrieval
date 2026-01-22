@@ -293,7 +293,7 @@ check_profile <- function(dataProfile, profile_convert){
   return(dataProfile)
 }
 
-explode_query <- function(baseURL, POST = FALSE, x){
+explode_query <- function(baseURL, POST = FALSE, x, multi = "explode"){
   
   if(!is.list(x)){
     return(baseURL)
@@ -307,7 +307,7 @@ explode_query <- function(baseURL, POST = FALSE, x){
     } else {
       baseURL <- httr2::req_url_query(baseURL,
                                       !!!x,
-                                      .multi = "explode")   
+                                      .multi = multi)   
     }
     
   }

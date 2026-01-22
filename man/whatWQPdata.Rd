@@ -44,7 +44,7 @@ not learn what specific nutrients are available at that site. For that
 kind of data discovery see \code{readWQPsummary}.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 site1 <- whatWQPdata(siteid = "USGS-01594440")
 
