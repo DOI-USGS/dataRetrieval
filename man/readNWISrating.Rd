@@ -39,7 +39,6 @@ RATING \tab character \tab Rating information \cr
 }
 \description{
 Reads current rating table for an active USGS streamgage from NWISweb.
-Data is retrieved from \url{https://waterdata.usgs.gov/nwis}.
 }
 \note{
 Not all active USGS streamgages have traditional rating curves that

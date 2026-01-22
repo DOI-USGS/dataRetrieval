@@ -49,7 +49,5 @@ statistics for the given geographic parameters.
 County and state fields will be included as appropriate.
 }
 \description{
-Retrieves water use data from USGS Water Use Data for the Nation.  See
-\url{https://waterdata.usgs.gov/nwis/wu} for
-more information.  All available use categories for the supplied arguments are retrieved.
+Retrieves water use data from USGS Water Use Data for the Nation.
 }
