@@ -22,20 +22,25 @@ read_waterdata_field_measurements(
   time = NA_character_,
   bbox = NA,
   limit = NA,
-  max_results = NA,
-  convertType = TRUE
+  convertType = TRUE,
+  no_paging = FALSE
 )
 }
 \arguments{
-\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{monitoring-locations} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).}
+\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{monitoring-locations} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).
 
-\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}.}
+Multiple monitoring_location_ids can be requested as a character vector.}
+
+\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/parameter-codes/items}.
+
+Multiple parameter_codes can be requested as a character vector.}
 
 \item{observing_procedure_code}{A short code corresponding to the observing procedure for the field measurement.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, id, field_visit_id, parameter_code, monitoring_location_id, observing_procedure_code, observing_procedure, value, unit_of_measure, time, qualifier, vertical_datum, approval_status, measuring_agency, last_modified}
+geometry, field_measurement_id, field_visit_id, parameter_code, monitoring_location_id, observing_procedure_code, observing_procedure, value, unit_of_measure, time, qualifier, vertical_datum, approval_status, measuring_agency, last_modified.
+The default (\code{NA}) will return all columns of the data.}
 
 \item{field_visit_id}{A universally unique identifier (UUID) for the field visit. Multiple measurements may be made during a single field visit.}
 
@@ -61,7 +66,7 @@ Only features that have a \code{last_modified} that intersects the value of date
 
 \item{observing_procedure}{Water measurement or water-quality observing procedure descriptions.}
 
-\item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. \href{https://help.waterdata.usgs.gov/code/alt_datum_cd_query?fmt=html}{A list of codes is available.}}
+\item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/altitude-datums/items}.}
 
 \item{measuring_agency}{The agency performing the measurement.}
 
@@ -78,7 +83,12 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.}
+Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.
+
+You can also use a vector of length 2: the first value being the starting date,
+the second value being the ending date. NA's within the vector indicate a
+half-bound date. For example, c("2024-01-01", NA) will return all data starting
+at 2024-01-01.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
@@ -89,21 +99,23 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
-limit is 10000. It may be beneficial to set this number lower if your internet
+limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
-\item{max_results}{The optional maximum number of rows to return. This value
-must be less than the requested limit.}
-
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
+
+\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+be requested from a native csv format. This can be dangerous because the
+data will cut off at 50,000 rows without indication that more data
+is available. Use \code{TRUE} with caution.}
 }
 \description{
 Field measurements are physically measured values collected during a visit to the monitoring location. Field measurements consist of measurements of gage height and discharge, and readings of groundwater levels, and are primarily used as calibration readings for the automated sensors collecting continuous data. They are collected at a low frequency, and delivery of the data in WDFN may be delayed due to data processing time.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 
 \donttest{
 site <- "USGS-02238500"

@@ -32,7 +32,7 @@ start and end times, and converted to UTC. See
 Imports data from the Water Quality Portal based on a specified url.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 # These examples require an internet connection to run
 
 ## Examples take longer than 5 seconds:

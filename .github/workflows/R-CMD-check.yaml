@@ -40,7 +40,7 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@96b1dc658a45175f93ed5f33fda2b2cebbb12ee8
+      - uses: r-lib/actions/setup-r-dependencies@6f6e5bc62fba3a704f74e7ad7ef7676c5c6a2590
         with:
           extra-packages: |
             any::rcmdcheck

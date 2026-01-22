@@ -8,12 +8,20 @@ pkg.env <- new.env()
   
   services <- c("server", "daily", "time-series-metadata",
                "monitoring-locations", "latest-continuous",
-               "field-measurements")
+               "field-measurements", "latest-daily",
+               "continuous")
   collections <- c("parameter-codes", "agency-codes", "altitude-datums", "aquifer-codes",
                    "aquifer-types", "coordinate-accuracy-codes", "coordinate-datum-codes",
-                   "coordinate-method-codes", "medium-codes", 
+                   "coordinate-method-codes", "medium-codes", "counties",
+                   "hydrologic-unit-codes", "states",
                    "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
                    "topographic-codes", "time-zone-codes")
+  names(collections) <- c("parameter_code", "agency_code", "altitude_datum", "aquifer_code",
+                          "aquifer_type", "coordinate_accuracy_code", "coordinate_datum_code",
+                          "coordinate_method_code", "medium_code", "county",
+                          "hydrologic_unit_code", "state",
+                          "national_aquifer_code", "reliability_code", "site_types", "statistic_code",
+                          "topographic_code", "time_zone_code")
 
   pkg.env$api_endpoints <- services
   pkg.env$metadata <- collections
