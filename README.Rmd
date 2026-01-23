@@ -54,6 +54,8 @@ If you have additional questions about these changes, email CompTools@usgs.gov.
 
 7. Find Hydro Network-Linked Data Index (NLDI) data. Start here: `?findNLDI`
 
+8. Get daily data statistics. Start here: `?read_waterdata_stats_por`
+
 For additional tutorials, see:
 
 [Basic Tutorial](https://doi-usgs.github.io/dataRetrieval/articles/tutorial.html)
