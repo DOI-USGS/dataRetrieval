@@ -148,7 +148,6 @@ reference:
     desc: Functions to create web queries
     contents:
       - constructNWISURL
-      - constructUseURL
       - constructWQPURL
       - getQuerySummary
       - getWebServiceData

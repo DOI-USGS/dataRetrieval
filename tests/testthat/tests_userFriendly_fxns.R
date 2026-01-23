@@ -392,14 +392,7 @@ test_that("Construct USGS urls", {
 
   url_works_ml <- dataRetrieval:::walk_pages(url_ml)
   expect_true(nrow(url_works_ml) > 0)
-  
-  url_use <- constructUseURL(
-    years = c(1990, 1995),
-    stateCd = "Ohio",
-    countyCd = c(1, 3),
-    categories = "ALL"
-  )
-  expect_equal(url_use$url, "https://waterdata.usgs.gov/OH/nwis/water_use?format=rdb&rdb_compression=value&wu_area=county&wu_county=1%2C3&wu_year=1990%2C1995&wu_category=ALL")
+
   # nolint end
 })
 
