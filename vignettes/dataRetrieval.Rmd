@@ -30,11 +30,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-The `dataRetrieval` package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the National Water Information System (NWIS). 
+The `dataRetrieval` package was created to simplify the process of loading hydrologic data into the R environment. It is designed to retrieve the major data types of U.S. Geological Survey (USGS) hydrologic data that are available on the Web, as well as data from the Water Quality Portal (WQP), which currently houses water quality data from the Environmental Protection Agency (EPA), U.S. Department of Agriculture (USDA), and USGS. Direct USGS data is obtained from a service called the USGS Water Data API. 
 
 For information on getting started in R and installing the package, see [Getting Started](#getting-started-in-r). Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
-A quick workflow for USGS `dataRetrieval` functions:
+A quick workflow using `dataRetrieval` functions:
 
 ```{r workflow, echo=TRUE,eval=FALSE}
 library(dataRetrieval)
@@ -52,7 +52,17 @@ rawDailyData <- read_waterdata_daily(monitoring_location_id = siteNumber,
 pCode <- read_waterdata_parameter_codes(parameter_code = parameterCd)
 ```
 
-USGS data are made available through the National Water Information System (NWIS).
+## USGS Data API Access Tokens
+
+USGS data are made available through the USGS water data APIs. You can register an API key for use with USGS water data APIs. There are now limits on how many queries can be requested per IP address per hour. If you find yourself running into limits, you can request an API token here: <https://api.waterdata.usgs.gov/signup/>
+
+Then save your token in your .Renviron file like this:
+
+```
+API_USGS_PAT = "my_super_secret_token"
+```
+
+You can use `usethis::edit_r_environ()` to edit find and open your .Renviron file. You will need to restart R for that variable to be recognized. 
 
 Table 1 describes the functions available in the `dataRetrieval` package.
 
@@ -60,7 +70,7 @@ Table 1 describes the functions available in the `dataRetrieval` package.
 Functions <- c(
   "read_waterdata",
   "read_waterdata_daily",
-  "readNWISuv",
+  "read_waterdata_continuous",
   "readNWISrating",
   "read_waterdata_field_measurements",
   "readNWISpeak",
@@ -83,13 +93,13 @@ Functions <- c(
 )
 
 Description <- c(
-  "Time series data using user-specified queries", # readNWISdata
-  "Daily values", # readNWISdv
-  "Instantaneous values", # readNWISuv
+  "Time series data using user-specified queries", # read_waterdata
+  "Daily values", # read_waterdata_daily
+  "Instantaneous values", # read_waterdata_continuous
   "Rating table for active streamgage", # readNWISrating
-  "Surface-water measurements", # readNWISmeas
+  "Surface-water measurements", # read_waterdata_field_measurements
   "Peak flow", # readNWISpeak
-  "Groundwater levels", # readNWISgwl
+  "Groundwater levels", # read_waterdata_field_measurements
   "Water use", # readNWISuse
   "Statistical service", # readNWISstat
   "Parameter code information", # read_waterdata_parameter_codes
@@ -108,7 +118,8 @@ Description <- c(
 )
 Source <- c("USGS Water Data API",
             "USGS Water Data API",
-            rep("NWIS",2),
+            "USGS Water Data API",
+            "NWIS",
             "USGS Water Data API",
             "NWIS",
             "USGS Water Data API",
@@ -183,7 +194,6 @@ kable(data.df,
 
 Examples for using these site numbers, parameter codes, and statistic codes will be presented in subsequent sections.
 
-There are occasions where NWIS values are not reported as numbers, instead there might be text describing a certain event such as "Ice".  Any value that cannot be converted to a number will be reported as NA in this package (not including remark code columns), unless the user sets an argument `convertType` to `FALSE`. In that case, the data is returned as a data frame that is entirely character columns.
 
 ## Site Information
 
@@ -232,7 +242,7 @@ tableData <- sf::st_drop_geometry(tableData)
 
 
 knitr::kable(tableData,
-             caption = "Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]")
+             caption = "Table 4: Reformatted version of output from the read_waterdata_ts_meta function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]")
 
 
 # nolint end
@@ -243,16 +253,16 @@ Table 4: Reformatted version of output from the whatNWISdata function for the Ch
 |monitoring_location_id |parameter_description                                                                                                                               |unit_of_measure |begin      |end        |
 |:----------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------|:---------------|:----------|:----------|
 |USGS-01491000          |Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius                                                          |uS/cm           |2010-10-01 |2012-05-09 |
-|USGS-01491000          |Dissolved oxygen, water, unfiltered, milligrams per liter                                                                                           |mg/l            |2023-04-21 |2025-06-15 |
-|USGS-01491000          |Discharge, cubic feet per second                                                                                                                    |ft^3/s          |1948-01-01 |2025-06-15 |
-|USGS-01645000          |Discharge, cubic feet per second                                                                                                                    |ft^3/s          |1930-09-26 |2025-06-15 |
+|USGS-01491000          |Dissolved oxygen, water, unfiltered, milligrams per liter                                                                                           |mg/l            |2023-04-21 |2025-12-02 |
+|USGS-01491000          |Discharge, cubic feet per second                                                                                                                    |ft^3/s          |1948-01-01 |2025-12-02 |
+|USGS-01645000          |Discharge, cubic feet per second                                                                                                                    |ft^3/s          |1930-09-26 |2025-12-02 |
 |USGS-01491000          |Suspended sediment concentration, milligrams per liter                                                                                              |mg/l            |1980-10-01 |1991-09-29 |
 |USGS-01491000          |Suspended sediment discharge, short tons per day                                                                                                    |tons/day        |1980-10-01 |1991-09-29 |
-|USGS-01491000          |Nitrate plus nitrite, water, in situ, milligrams per liter as nitrogen                                                                              |mg/l            |2023-08-02 |2025-06-14 |
-|USGS-01491000          |Temperature, water, degrees Celsius                                                                                                                 |degC            |2023-04-21 |2025-06-15 |
-|USGS-01491000          |Turbidity, water, unfiltered, monochrome near infra-red LED light, 780-900 nm, detection angle 90 +-2.5 degrees, formazin nephelometric units (FNU) |_FNU            |2023-04-21 |2025-06-14 |
+|USGS-01491000          |Nitrate plus nitrite, water, in situ, milligrams per liter as nitrogen                                                                              |mg/l            |2023-08-02 |2025-12-02 |
+|USGS-01491000          |Temperature, water, degrees Celsius                                                                                                                 |degC            |2023-04-21 |2025-12-02 |
+|USGS-01491000          |Turbidity, water, unfiltered, monochrome near infra-red LED light, 780-900 nm, detection angle 90 +-2.5 degrees, formazin nephelometric units (FNU) |_FNU            |2023-04-21 |2025-12-02 |
 |USGS-01491000          |Temperature, water, degrees Celsius                                                                                                                 |degC            |2010-10-01 |2012-05-09 |
-|USGS-01491000          |Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius                                                          |uS/cm           |2023-04-21 |2025-06-14 |
+|USGS-01491000          |Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius                                                          |uS/cm           |2023-04-21 |2025-12-02 |
 
 
 ## Parameter Information
@@ -268,9 +278,7 @@ parameterINFO <- read_waterdata_parameter_codes(parameter_code = parameterCd)
 
 ## Daily Data
 
-To obtain daily records of USGS data, use the `readNWISdv` function. The arguments for this function are `siteNumbers`, `parameterCd`, `startDate`, `endDate`, and `statCd` (defaults to "00003").  If you want to use the default values, you do not need to list them in the function call. Daily data is pulled from [https://waterservices.usgs.gov/docs/dv-service/](https://waterservices.usgs.gov/docs/dv-service/).
-
-The dates (start and end) must be in the format "YYYY-MM-DD" (note: the user must include the quotes).  Setting the start date to "" (no space) will prompt the program to ask for the earliest date, and setting the end date to "" (no space) will prompt for the latest available date.
+To obtain daily records of USGS data, use the `read_waterdata_daily` function. 
 
 ```{r label=getNWISDaily, echo=TRUE, eval=FALSE}
 
@@ -345,39 +353,25 @@ legend("topleft", unique(temperatureAndFlow$unit_of_measure),
 
 ## Unit Data
 
-Any data collected at regular time intervals (such as 15-minute or hourly) are known as "unit values". Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function `readNWISuv`.  Some of these unit values are available for many years, and some are only available for a recent time period such as 120 days.  Here is an example of a retrieval of such data.  
+Any data collected at regular time intervals (such as 15-minute or hourly) are known as "unit values". Many of these are delivered on a real time basis and very recent data (even less than an hour old in many cases) are available through the function `read_waterdata_continuous`.  Here is an example of a retrieval of such data.  
 
 ```{r label=readNWISuv, eval=FALSE}
 
 parameterCd <- "00060" # Discharge
 startDate <- "2012-05-12"
 endDate <- "2012-05-13"
-dischargeUnit <- readNWISuv(siteNumber, parameterCd, startDate, endDate)
-dischargeUnit <- renameNWISColumns(dischargeUnit)
+dischargeUnit <- read_waterdata_continuous(monitoring_location_id = siteNumber,
+                                           parameter_code = parameterCd,
+                                           time = c(startDate, endDate))
+
 ```
 
 The retrieval produces a data frame that contains 96 rows (one for every 15 minute period in the day).  They include all data collected from the `startDate` through the `endDate` (starting and ending with midnight locally-collected time). The dateTime column is converted to UTC (Coordinated Universal Time), so midnight EST will be 5 hours earlier in the dateTime column (the previous day, at 7pm).
 
-To override the UTC timezone, specify a valid timezone in the tz argument. Default is "", which will keep the dateTime column in UTC. Other valid timezones are:
-
-```
-America/New_York
-America/Chicago
-America/Denver
-America/Los_Angeles
-America/Anchorage
-America/Honolulu
-America/Jamaica
-America/Managua
-America/Phoenix
-America/Metlakatla
-```
-
-Data are retrieved from [https://waterservices.usgs.gov/docs/instantaneous-values/](https://waterservices.usgs.gov/docs/instantaneous-values/). There are occasions where NWIS values are not reported as numbers, instead a common example is "Ice".  Any value that cannot be converted to a number will be reported as NA in this package. Site information and measured parameter information is attached to the data frame as attributes. This is discussed further in [metadata](#embedded-metadata) section.
 
 ## Groundwater Level Data
 
-Groundwater level measurements can be obtained with the `readNWISgwl` function. Information on the returned data can be found with the `comment` function, and attached attributes as described in the [metadata](#embedded-metadata) section.
+Groundwater level measurements can be obtained with the `read_waterdata_field_measurements` function. 
 
 ```{r gwlexample, echo=TRUE, eval=FALSE}
 siteNumber <- "USGS-434400121275801"
@@ -409,9 +403,7 @@ attr(ratingData, "RATING")
 
 ## Surface-Water Measurement Data
 
-These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve.  Information on the returned data can be found with the `comment` function and attached attributes as described in the [metadata](#embedded-metadata) section.
-
-Surface-water measurement data can be obtained with the `readNWISmeas` function.
+These data are the discrete measurements of discharge that are made for the purpose of developing or revising the rating curve.  Surface-water measurement data can be obtained with the `read_waterdata_field_measurements` function.
 
 ```{r surfexample, echo=TRUE, eval=FALSE}
 surfaceData <- read_waterdata_field_measurements(monitoring_location_id = "USGS-01594440")
@@ -419,21 +411,9 @@ surfaceData <- read_waterdata_field_measurements(monitoring_location_id = "USGS-
 
 
 ## Water Use Data
-Retrieves water use data from USGS Water Use Data for the Nation.  See [https://waterdata.usgs.gov/nwis/wu](https://waterdata.usgs.gov/nwis/wu) for more information.  All available use categories for the supplied arguments are retrieved. 
 
-```{r eval=FALSE}
-allegheny <- readNWISuse(
-  stateCd = "Pennsylvania",
-  countyCd = "Allegheny"
-)
+Legacy water use data services have been retired. Check back in for developments on replacement functions.
 
-
-national <- readNWISuse(
-  stateCd = NULL,
-  countyCd = NULL,
-  transform = TRUE
-)
-```
 
 ## Statistics Data
 Retrieves site statistics from the USGS Statistics Web Service beta.  
@@ -458,74 +438,6 @@ specificCond <- readWQPqw(
   "Specific conductance",
   "2011-05-01", "2011-09-30"
 )
-```
-
-
-# Generalized Retrievals
-
-The previous examples all took specific input arguments: `siteNumber`, `parameterCd` (or characteristic name), `startDate`, `endDate`, etc. However, the Web services that supply the data can accept a wide variety of additional arguments. 
-
-## NWIS 
-
-### Sites: whatNWISsites
-
-The function `whatNWISsites` can be used to discover NWIS sites based on any query that the NWIS Site Service offers. This is done by using the `...` argument, which allows the user to use any arbitrary input argument. We can then use the service [here](https://waterservices.usgs.gov/docs/site-service) to discover many options for searching for NWIS sites. For example, you may want to search for sites in a lat/lon bounding box, or only sites tidal streams, or sites with water quality samples, sites above a certain altitude, etc. The results of this site query generate a URL. For example, the tool provided a search within a specified bounding box, for sites that have daily discharge (parameter code = 00060) and temperature (parameter code = 00010). The generated URL is:
-
-[https://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv](https://waterservices.usgs.gov/nwis/site/?format=rdb&bBox=-83.0,36.5,-81.0,38.5&parameterCd=00010,00060&hasDataTypeCd=dv)
-
-The following `dataRetrieval` code can be used to get those sites:
-
-```{r siteSearch, eval=FALSE}
-sites <- whatNWISsites(
-  bBox = c(-83.0, 36.5, -81.0, 38.5),
-  parameterCd = c("00010", "00060"),
-  hasDataTypeCd = "dv"
-)
-```
-
-### Data: readNWISdata
-
-For NWIS data, the function `readNWISdata` can be used. The argument listed in the R help file is `...` and `service` (only for data requests). Table 5 describes the services are available.
-
-```{r echo=FALSE}
-# nolint start
-Service <- c("dv", "iv", "gwlevels", "measurements", "peak", "stat")
-Description <- c("Daily", "Instantaneous", "Groundwater Levels", "Surface Water Measurements", "Peak Flow", "Statistics Service")
-URL <- c(
-  "<a href='https://waterservices.usgs.gov/docs/dv-service/' target='_blank'>https://waterservices.usgs.gov/docs/dv-service/<a>",
-  "<a href='https://waterservices.usgs.gov/docs/instantaneous-values/' target='_blank'>https://waterservices.usgs.gov/docs/instantaneous-values/<a>",
-  "<a href='https://waterservices.usgs.gov/docs/groundwater-levels/' target='_blank'>https://waterservices.usgs.gov/docs/groundwater-levels/<a>",
-  "<a href='https://waterdata.usgs.gov/nwis/measurements/' target='_blank'>https://waterdata.usgs.gov/nwis/measurements/<a>",
-  "<a href='https://nwis.waterdata.usgs.gov/usa/nwis/peak/' target='_blank'>https://nwis.waterdata.usgs.gov/usa/nwis/peak/<a>",
-  "<a href='https://waterservices.usgs.gov/docs/statistics/' target='_blank'>https://waterservices.usgs.gov/docs/statistics/<a>"
-)
-
-tableData <- data.frame(Service,
-  Description,
-  URL,
-  stringsAsFactors = FALSE
-)
-
-
-kable(tableData,
-  caption = "Table 5: NWIS general data calls"
-)
-# nolint end
-```
-
-
-The `...` argument allows the user to create their own queries based on the instructions found in the web links above. The links provide instructions on how to create a URL to request data. Perhaps you want sites only in Wisconsin, with a drainage area less than 50 mi<sup>2</sup>, and the most recent daily discharge data. That request would be done as follows:
-
-```{r dataExample, eval=FALSE}
-dischargeWI <- readNWISdata(
-  service = "dv",
-  stateCd = "WI",
-  parameterCd = "00060",
-  drainAreaMin = "50",
-  statCd = "00003"
-)
-
-siteInfo <- attr(dischargeWI, "siteInfo")
 ```
 
 

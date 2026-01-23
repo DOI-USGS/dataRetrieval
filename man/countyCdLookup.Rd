@@ -18,7 +18,7 @@ Function to simplify finding county and county code definitions. Used in \code{r
 and \code{readNWISuse}. Currently only has US counties.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 
 fips <- countyCdLookup(state = "WI", county = "Dane")

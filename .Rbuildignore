@@ -40,6 +40,7 @@ README.Rmd
 ^codecov\.yml$
 ^\.github$
 ^\.gitlab$
+^\.quarto$
 vignettes/tutorial.Rmd
 vignettes/phosData.rds
 vignettes/waterservices.png

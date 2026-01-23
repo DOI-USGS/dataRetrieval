@@ -21,5 +21,12 @@ parameter_units \tab character \tab Parameter units\cr
 Complete list of USGS parameter codes as of Oct. 24, 2024.
 }
 \examples{
-head(parameterCdFile[, 1:2])
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
+
+\donttest{
+# Please migrate to:
+parameterCds <- read_waterdata_metadata("parameter-codes")
+
+}
+\dontshow{\}) # examplesIf}
 }

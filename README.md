@@ -31,10 +31,13 @@ If you have additional questions about these changes, email
 # What would you like to do?
 
 1.  Get instantaneous USGS data (for example, discharge sensor data).
-    Start here: `?readNWISuv`
+    Start here: `?read_waterdata_continuous`. If you only need the
+    latest value, you can use the function:
+    `?read_waterdata_latest_continuous`.
 
 2.  Get daily USGS data (for example, mean daily discharge). Start here:
-    `?read_waterdata_daily`
+    `?read_waterdata_daily`. If you only need the latest value, you can
+    use the function: `?read_waterdata_latest_daily`.
 
 3.  Get discrete USGS groundwater data. Start here:
     `?read_waterdata_field_measurements`
@@ -53,16 +56,19 @@ If you have additional questions about these changes, email
 7.  Find Hydro Network-Linked Data Index (NLDI) data. Start here:
     `?findNLDI`
 
+8.  Add a USGS WaterData API token to your R environment. See:
+    <https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html#api-tokens>
+
+9.  Get the latest status on NWIS and other data access updates. See:
+    <https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
+
 For additional tutorials, see:
 
 [Basic
 Tutorial](https://doi-usgs.github.io/dataRetrieval/articles/tutorial.html)
 
 [dataRetrieval Introduction
-1](https://rconnect.usgs.gov/dataRetrieval_workshop)
-
-[dataRetrieval Introduction
-2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
+Slideshow](https://doi-usgs.github.io/dataRetrieval/tutorials/basic_slides_deck.html#/title-slide)
 
 # Installation of dataRetrieval
 
@@ -171,7 +177,7 @@ citation(package = "dataRetrieval")
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
-#>     version = {2.7.20},
+#>     version = {2.7.21},
 #>     institution = {U.S. Geological Survey},
 #>     year = {2025},
 #>     doi = {10.5066/P9X4L3GE},
@@ -196,15 +202,15 @@ NWIScitation <- create_NWIS_bib(dv)
 NWIScitation
 #> U.S. Geological Survey (2025). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Aug
-#> 14, 2025,
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Dec
+#> 03, 2025,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Aug 14, 2025},
+#>   note = {Accessed Dec 03, 2025},
 #>   year = {2025},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
@@ -228,14 +234,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2025). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Aug 14, 2025,
+#> Accessed Dec 03, 2025,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Aug 14, 2025},
+#>   note = {Accessed Dec 03, 2025},
 #>   year = {2025},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }

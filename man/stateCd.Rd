@@ -20,7 +20,14 @@ Classic lookup table for states. Has been replaced in functions with
 \code{check_waterdata_sample_params("states")}.
 }
 \examples{
-head(stateCd)
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
+
+\donttest{
+# Please migrate to:
+stateCd <- read_waterdata_metadata("states")
+
+}
+\dontshow{\}) # examplesIf}
 }
 \keyword{USGS}
 \keyword{stateCd}

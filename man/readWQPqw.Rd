@@ -75,7 +75,7 @@ either USGS, or other Water Quality Portal offered sites. It is required to use 
 site name, such as 'USGS-01234567'.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
 
