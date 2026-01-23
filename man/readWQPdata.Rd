@@ -101,7 +101,7 @@ Sampling Activity \tab ActivityWQX3 \tab /wqx3/Activity/search \cr
 }
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 
 # Legacy:

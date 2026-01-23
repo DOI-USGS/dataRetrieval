@@ -68,7 +68,7 @@ navigated paths. Valid starting options can be given by one of the following
 arguments: comid, nwis, huc12, wqp, location, and start.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 # Find Features / Define origin features
 

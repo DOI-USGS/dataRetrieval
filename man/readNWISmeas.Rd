@@ -48,10 +48,6 @@ measurement_dt_time column are added to the returned data frame.   \cr
 tz_cd \tab character \tab The time zone code for the measurement_dt column \cr
 }
 
-See \url{https://waterdata.usgs.gov/usa/nwis/sw} for details about surface water, and
-\url{https://waterdata.usgs.gov/nwis/help?output_formats_help}
-for help on the columns and codes.
-
 There are also several useful attributes attached to the data frame:
 \tabular{lll}{
 Name \tab Type \tab Description \cr
@@ -63,11 +59,10 @@ tz_cd_reported \tab The originally reported time zone \cr
 }
 }
 \description{
-Reads surface-water measurement data from NWISweb. Data is retrieved from \url{https://waterdata.usgs.gov/nwis}.
-See \url{https://waterdata.usgs.gov/usa/nwis/sw} for details about surface water.
+Reads surface-water measurement data from NWISweb.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 site_ids <- c("01594440", "040851325")
 \donttest{
 data <- readNWISmeas(site_ids)

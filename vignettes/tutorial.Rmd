@@ -58,40 +58,35 @@ Finally, if there are still questions that the vignette and help files don't ans
 
 <https://github.com/DOI-USGS/dataRetrieval/issues>
 
-For a longer introduction to the `dataRetrieval` package, see:
-
-<https://rconnect.usgs.gov/dataRetrieval_workshop>
-
 # Orientation
 
 `dataRetrieval` provides US water data mainly via 3 sources:
 
-* National Water Information System (NWIS)
+* USGS APIs (Water Data) 
 * Water Quality Portal (WQP)
-* USGS APIs (Water Data), which are new or in-development . 
+* Water Services from National Water Information System (NWIS) - Legacy system that will eventually be retired.
 
-Functions in `dataRetrieval` look like `readNWISdv`, `readNWISuv`, `readWQPqw`, `whatNWISdata`, etc. What does that mean? The functions are generally structured with a prefix, middle, and suffix:
+
+Functions in `dataRetrieval` look like `read_waterdata_daily`, `read_waterdata_continuous`, `readWQPqw`, `summarize_waterdata_samples`, etc. What does that mean? The functions are generally structured with a prefix, middle, and suffix:
 
 * _Prefix_: "read" or "what"
     + "read" will access full data sets
-    + "what" will access data availability
-* _Middle_: "NWIS", "waterdata", "WQP":
-    + NWIS functions get data from legacy NWIS web services. 
-    + Water Data (waterdata) functions are the functions that will eventually replace the legacy NWIS functions. These pull from modern USGS API services.
+    + "summarize" will access data availability
+* _Middle_: "waterdata", "WQP", "NWIS:
+    + Water Data (waterdata) functions are the functions that get USGS water data. These pull from modern USGS API services.
     + WQP functions are for discrete water-quality data from the Water Quality Portal.
+    + NWIS functions get data from legacy NWIS water services. 
 * _Suffix_: "data" or other:
     + Functions that end in "data": These are flexible, powerful functions that allow complex user queries.
     + Functions that don't end with "data" are user-friendly functions that assume site, code, and start/end dates are known.
 
-
-
 # Data Overview
 
-There are many types of data served from NWIS. To understand how the services are separated, it's helpful to understand that each data type is retrieved from a completely different web service or API.
+There are many types of data available from `dataRetrieval`. To understand how the services are separated, it's helpful to understand that each data type is retrieved from a completely different web service or API.
 
 * NWIS has traditionally been the source for all USGS water data
 
-* Legacy NWIS services will be retired (scheduled 2026, but uncertain):
+* NWIS Water Services will be retired (scheduled late 2026, but uncertain):
   * <https://waterdata.usgs.gov/blog/nwisweb-decommission-summary/>
   
 * USGS water data functions will slowly replace NWIS functions
@@ -100,28 +95,40 @@ There are many types of data served from NWIS. To understand how the services ar
   * `read_waterdata_monitoring_location` can replace `readNWISsite`
   * `read_waterdata_ts_meta` can replace `whatNWISdata`
   * `read_waterdata_parameter_codes` can replace `readNWISpCode`
+  * `read_waterdata_continuous` can replace `readNWISuv`
   
 * Discrete water quality data:
   * WQP functions should be used when accessing non-USGS discrete water quality data
   * `read_waterdata_samples` should be used for USGS data
   
 
-# NWIS Data: Current NWIS offerings
+# USGS Water Data APIs
   
-| data_type_cd |Function| Data description | Replacement Function |
+| data_type_cd |Legacy Function| Data description | New Function |
 |--------|:-------|------:|-------:|
-|uv|[readNWISuv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuv.html)|Continuous data| None yet |
-|dv|[readNWISdv](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdv.html)|Daily aggregated | [read_waterdata_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_daily.html) |
-|gwlevels|[readNWISgwl](https://doi-usgs.github.io/dataRetrieval/reference/readNWISgwl.html)|Groundwater levels | [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) |
-|site|[readNWISsite](https://doi-usgs.github.io/dataRetrieval/reference/readNWISsite.html)|Site metadata| [read_waterdata_monitoring_location](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_monitoring_location.html) |
-|pcode|[readNWISpCode](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpCode.html)|Parameter code metadata | [read_waterdata_parameter_codes](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_parameter_codes.html) |
-|stat|[readNWISstat](https://doi-usgs.github.io/dataRetrieval/reference/readNWISstat.html)| Site statistics | read_waterdata_stats_por, read_waterdata_stats_daterange |
-|rating|[readNWISrating](https://doi-usgs.github.io/dataRetrieval/reference/readNWISrating.html)| Rating curves| None yet |
-|peak|[readNWISpeak](https://doi-usgs.github.io/dataRetrieval/reference/readNWISpeak.html)|Peak flow| None yet |
-|use|[readNWISuse](https://doi-usgs.github.io/dataRetrieval/reference/readNWISuse.html)|Water Use| None yet |
-|meas|[readNWISmeas](https://doi-usgs.github.io/dataRetrieval/reference/readNWISmeas.html)|Discrete surface water| [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html)|
-| | [readNWISdata](https://doi-usgs.github.io/dataRetrieval/reference/readNWISdata.html) | General data import for NWIS| [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) |
+|uv|`readNWISuv`|Continuous data| `read_waterdata_continuous]` |
+|dv|`readNWISdv`|Daily aggregated | `read_waterdata_daily` |
+|gwlevels|`readNWISgwl`|Groundwater levels | `read_waterdata_field_measurements` |
+|site|`readNWISsite`|Site metadata| `read_waterdata_monitoring_location` |
+|pcode|`readNWISpCode`|Parameter code metadata | `read_waterdata_parameter_codes` |
+|stat|`readNWISstat`| Site statistics | `read_waterdata_stats_por`, `read_waterdata_stats_daterange` |
+|rating|`readNWISrating`| Rating curves| None yet |
+|peak|`readNWISpeak`|Peak flow| None yet |
+|use|`readNWISuse`|Water Use| None yet |
+|meas|`readNWISmeas`|Discrete surface water| `read_waterdata_field_measurements`|
+| | `readNWISdata` | General data import | `read_waterdata` |
 
+## Water Data API key
+
+Do you regularly use `dataRetrieval`? As you switch your workflows over to the new Water Data API functions, consider grabbing yourself an API key, which will bump your limit up to 1,000 requests per hour. Head to the [sign up page](https://api.waterdata.usgs.gov/signup) to get a token.
+
+One you have your API key, add it to your `.Renviron` file like this:
+
+```{r}
+API_USGS_PAT = "your api key"
+```
+
+Replace [your api key] with the alphanumeric code provided by the sign-up page. That's it! `dataRetrieval` will look for an `.Renviron` file in your directories and use it for making web service calls.
 
 ## USGS Basic Retrievals
 
@@ -272,20 +279,22 @@ datatable(data_available,
 
 ```
 
-The time series that have "Instantaneous" in the computation_identifier column will be available in the instantaneous data service (currently `readNWISuv`), and the rest of the data will be available in the daily service (`read_waterdata_daily`).
+The time series that have "Instantaneous" in the computation_identifier column are available in the continuous data service (`read_waterdata_continuous`), and the rest of the data will be available in the daily service (`read_waterdata_daily`).
 
 ```{r eval=FALSE, echo=TRUE}
 dv_pcodes <- data_available$parameter_code[data_available$computation_identifier != "Instantaneous"]
 stat_cds <- data_available$statistic_id[data_available$computation_identifier != "Instantaneous"]
 
+stat_cds <- unique(stat_cds[!is.na(stat_cds)])
+
 dv_data <- read_waterdata_daily(monitoring_location_id = site,
                            parameter_code = unique(dv_pcodes),
-                           statistic_id = unique(stat_cds))
+                           statistic_id = stat_cds)
 
 uv_pcodes <- data_available$parameter_code[data_available$computation_identifier == "Instantaneous"]
 
-uv_data <- readNWISuv(siteNumbers = gsub("USGS-", "", site),
-                      parameterCd = unique(uv_pcodes))
+uv_data <- read_waterdata_continuous(monitoring_location_id = site,
+                                     parameter_code = unique(uv_pcodes))
 
 peak_data <- readNWISpeak(gsub("USGS-", "", site))
 

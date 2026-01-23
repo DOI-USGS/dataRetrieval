@@ -31,10 +31,13 @@ If you have additional questions about these changes, email
 # What would you like to do?
 
 1.  Get instantaneous USGS data (for example, discharge sensor data).
-    Start here: `?readNWISuv`
+    Start here: `?read_waterdata_continuous`. If you only need the
+    latest value, you can use the function:
+    `?read_waterdata_latest_continuous`.
 
 2.  Get daily USGS data (for example, mean daily discharge). Start here:
-    `?read_waterdata_daily`
+    `?read_waterdata_daily`. If you only need the latest value, you can
+    use the function: `?read_waterdata_latest_daily`.
 
 3.  Get discrete USGS groundwater data. Start here:
     `?read_waterdata_field_measurements`
@@ -55,16 +58,19 @@ If you have additional questions about these changes, email
 
 8.  Get daily data statistics. Start here: `?read_waterdata_stats_por`
 
+9.  Add a USGS WaterData API token to your R environment. See:
+    <https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html#api-tokens>
+
+10. Get the latest status on NWIS and other data access updates. See:
+    <https://doi-usgs.github.io/dataRetrieval/articles/Status.html>
+
 For additional tutorials, see:
 
 [Basic
 Tutorial](https://doi-usgs.github.io/dataRetrieval/articles/tutorial.html)
 
 [dataRetrieval Introduction
-1](https://rconnect.usgs.gov/dataRetrieval_workshop)
-
-[dataRetrieval Introduction
-2](https://rconnect.usgs.gov/NMC_dataRetrieval_2)
+Slideshow](https://doi-usgs.github.io/dataRetrieval/tutorials/basic_slides_deck.html#/title-slide)
 
 # Installation of dataRetrieval
 
