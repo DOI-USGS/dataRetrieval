@@ -1,3 +1,14 @@
+dataRetrieval 2.7.22.9000
+===================
+* Added data.table to Imports
+* Added data.table importFrom entries to NAMESPACE
+* Added read_waterdata_stats_por and read_waterdata_stats_daterange to access USGS daily data statistics.
+* Updated vignettes, examples, and README to reflect new stats functions.
+* Added tests for read_waterdata_stats functions
+* Updated next_req_url to allow paging through /statistics API output
+* Added deprecate message to readNWISstat function.
+
+
 dataRetrieval 2.7.22
 ===================
 * Added read_waterdata_latest_daily to access latest daily USGS water data.
