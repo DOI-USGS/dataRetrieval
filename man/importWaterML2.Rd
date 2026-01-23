@@ -22,7 +22,7 @@ Returns data frame columns of all information with each time series measurement;
 Anything defined as a default, is returned as an attribute of that data frame.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 baseURL <- httr2::request("https://waterservices.usgs.gov/nwis/dv")
 baseURL <- httr2::req_url_query(baseURL,

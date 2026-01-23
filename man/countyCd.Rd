@@ -21,7 +21,14 @@ Classic lookup table for counties. Has been replaced in functions with
 \code{check_waterdata_sample_params("counties")}.
 }
 \examples{
-head(countyCd)
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
+
+\donttest{
+# Please migrate to:
+countyCd <- read_waterdata_metadata("counties")
+
+}
+\dontshow{\}) # examplesIf}
 }
 \keyword{USGS}
 \keyword{countyCd}

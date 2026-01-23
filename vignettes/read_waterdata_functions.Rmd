@@ -46,7 +46,7 @@ Peruse the "Additional Articles" - when we find common issues people have with c
 
 # New Functions
 
-As new API endpoints come online, this section will be updated with any `dataRetrieval` function that are created. Currently the available endpoints are "monitoring-locations", "time-series-metadata", "daily", and "latest-continuous". In this section, we describe each new function for these endpoints. The next section will describe new features that are common to all the new functions.
+As new API endpoints come online, this section will be updated with any `dataRetrieval` function that are created. In this section, we describe each new function. The next section will describe new features that are common to all the new functions.
 
 ## Monitoring Location
 
@@ -62,13 +62,7 @@ Here is a simple example of requesting one known USGS site:
 sites_information <- read_waterdata_monitoring_location(monitoring_location_id = "USGS-01491000")
 ```
 
-The output includes the following information:
-
-```{r echo=FALSE}
-knitr::kable(t(sites_information))
-```
-
-Maybe that is more information than you need. You can specify which columns get returned with the "properties" argument:
+The output includes `r ncol(sites_information)` columns of information. Maybe that is more than you need. You can specify which columns get returned with the "properties" argument:
 
 ```{r}
 site_info <- read_waterdata_monitoring_location(monitoring_location_id = "USGS-01491000",
@@ -187,6 +181,26 @@ ggplot(data = daily_modern) +
 
 ```
 
+## Continuous
+
+The `read_waterdata_continuous` function replaces the `readNWISuv` function.
+
+`r dataRetrieval:::get_description("continuous")`
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous>.
+
+```{r}
+sensor_data <- read_waterdata_continuous(monitoring_location_id = "USGS-01491000",
+                                parameter_code = c("00060", "00010"),
+                                time = c("2023-10-01", "2024-09-30"))
+```
+
+Currently this service only allows up to 3 years of data to be requested at once. If no time is specified in the query, the latest year of data is returned. If you manage large data pipelines, this might sound very restrictive.
+
+**HOWEVER**, if you regularly make full period of record queries you may want to wait a few months before rewriting your workflows. We expect that a direct access to full period of record downloads will be available before the NWIS web services are shut down. We plan to make `dataRetrieval` function(s) to access that direct download access. 
+
+Continuous data does not return a geometry column, and bounding box queries are not supported. 
+
 ## Field Measurements
 
 The `read_waterdata_field_measurements` replaces both the `readNWISgwl` and `readNWISmeas` functions.
@@ -211,7 +225,7 @@ ggplot(data = field_modern) +
 
 ## Latest Continuous
 
-The `read_waterdata_latest_continuous` doesn't have an equivalent NWIS function to replace. It is used to get the latest continuous measurement
+The `read_waterdata_latest_continuous` doesn't have an equivalent NWIS function to replace. It is used to get the latest continuous measurement.
 
 `r dataRetrieval:::get_description("latest-continuous")`
 
@@ -233,6 +247,33 @@ latest_uv_data <- latest_uv_data[,c("time", "value", "approval_status", "last_mo
 latest_uv_data <- sf::st_drop_geometry(latest_uv_data)
 
 knitr::kable(t(latest_uv_data), col.names = NULL)
+
+```
+
+## Latest Daily
+
+The `read_waterdata_latest_daily` doesn't have an equivalent NWIS function to replace. It is used to get the latest daily data.
+
+`r dataRetrieval:::get_description("latest-daily")`
+
+To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/latest-daily>.
+
+
+```{r}
+site <- "USGS-01491000"
+pcode <- "00060"
+latest_dv_data <- read_waterdata_latest_daily(monitoring_location_id = site,
+                              parameter_code = pcode)
+
+```
+
+The output includes the following information:
+
+```{r echo=FALSE}
+latest_dv_data <- latest_dv_data[,c("time", "value", "approval_status", "last_modified", "statistic_id", "parameter_code", "unit_of_measure")]
+latest_dv_data <- sf::st_drop_geometry(latest_dv_data)
+
+knitr::kable(t(latest_dv_data), col.names = NULL)
 
 ```
 
@@ -325,7 +366,7 @@ leaflet(data = what_huc_sites |>
 
 ## Reference Tables
 
-There is a new function `read_waterdata_metadata` that gives access to a wide variety of tables that have metadata information.
+There is a new function `read_waterdata_metadata` that gives access to a wide variety of tables that have metadata information. Any returned column can also be filtered on, similar to the time series functions above.
 
 ### Agency Codes
 
@@ -391,6 +432,15 @@ coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
 coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
 ```
 
+### County Identifiers
+
+`r dataRetrieval:::get_description("counties")`
+
+```{r}
+#| eval: false
+counties <- read_waterdata_metadata("counties")
+```
+
 ### Hydrologic Unit Codes
 
 `r dataRetrieval:::get_description("hydrologic-unit-codes")`
@@ -446,6 +496,25 @@ reliability_codes <- read_waterdata_metadata("reliability-codes")
 site_types <- read_waterdata_metadata("site-types")
 ```
 
+### State Identifiers
+
+`r dataRetrieval:::get_description("states")`
+
+```{r}
+#| eval: false
+states <- read_waterdata_metadata("states")
+```
+
+### Statistic Codes
+
+`r dataRetrieval:::get_description("statistic-codes")`
+
+```{r}
+#| eval: false
+statistic_codes <- read_waterdata_metadata("statistic-codes")
+```
+
+
 ### Topographic Codes
 
 `r dataRetrieval:::get_description("topographic-codes")`
@@ -455,7 +524,7 @@ site_types <- read_waterdata_metadata("site-types")
 topographic_codes <- read_waterdata_metadata("topographic-codes")
 ```
 
-### Topographic Codes
+### Time Zone Codes
 
 `r dataRetrieval:::get_description("time-zone-codes")`
 
@@ -587,13 +656,13 @@ This section will initially be a random stream of consciousness on lessons learn
 
 A semi-common way to find a lot of data in the past would have been to use a monitoring location query to get a huge list of sites, and then use that huge list of sites (maybe winnowing it down a little) to get the data. These new services return a 403 error if your request is too big ("web server understands your request but refuses to authorize it"). This is true whether or not the request is a GET or POST request (something that is taken care of under the hood), and seems to be a character limit of the overall request. Roughly, it seems like if you were requesting more than 250 monitoring locations, the response will immediately return with a 403 error. 
 
-There are at least 2 ways to deal with this. One is to manually split the data requests and bind the results together later. The other is to use the bounding box of the initial request as an input to the data request. Potentially some sites would need to be filtered out later using this method.
+There are several ways to deal with this. One is to manually split the data requests and bind the results together later. The other is to use the bounding box of the initial request as an input to the data request. Potentially some sites would need to be filtered out later using this method.
 
-Example:
+Example, let's get all the stream sites in Ohio:
 
 ```{r}
 ohio <- read_waterdata_monitoring_location(state_name = "Ohio", 
-                                      site_type_code = "ST")
+                                           site_type_code = "ST")
 
 ```
 
@@ -612,14 +681,14 @@ We could use the fact that the `ohio` data frame contains geospatial information
 
 ```{r}
 ohio_discharge <- read_waterdata_daily(bbox = sf::st_bbox(ohio),
-                                  parameter_code = "00060",
-                                  time = "P7D")
+                                       parameter_code = "00060",
+                                       time = "P7D")
 
 ```
 
-A reasonable `r nrow(ohio_discharge)` are returned with the bounding box query.
+A reasonable `r nrow(ohio_discharge)` are returned with the bounding box query. However, sites that are not classified as stream (site_type_code = "ST") are returned in this request, so it is not exactly the data you are looking for, and would need to be filtered to just the sites in the `ohio` data frame.
 
-Maybe you have a list of sites that are scattered around the country. The bounding box method might not be ideal. There are several ways to loop through a set of sites, here is one simple example:
+Maybe you have a list of sites that are scattered around the country. The bounding box method will not be ideal. There are several ways to loop through a set of sites, here is one simple example that chunks up the request into groups of 200 sites:
 
 ```{r}
 big_vector_of_sites <- ohio$monitoring_location_id
@@ -633,22 +702,97 @@ for(sites in site_list){
                               time = "P7D")
   if(nrow(df_sites) == 0){
     next
+  } else if(nrow(data_returned) == 0){
+    data_returned <- df_sites
+  } else {
+    data_returned <- rbind(data_returned, df_sites)
   }
-  data_returned <- rbind(data_returned, df_sites)
 }
 
 ```
 
 Note there is fewer data returned in `data_returned` because those sites are already filtered down to just "Stream" sites. The bounding box results `ohio_discharge` contained other types of monitoring location types.
 
+If you run into any problems with that loop (maybe you hit your limit for an hour, maybe the internet went down, maybe there was a timeout from the services), you'll need to re-run the whole loop again and hope that it works the next time. A more robust way to do it would be to create a [`targets`](https://books.ropensci.org/targets/) pipeline. `targets` will take care of remembering what job completed, and what job needs to be re-run. 
 
-## limit vs max_results
+Here's the Ohio example using a dynamic branch with `targets`. This code would be saved in a file `_targets.R`:
 
-A user can specify a `limit` or `max_results`.
+```{r eval=FALSE}
+# Load packages required to define the pipeline:
+library(targets)
 
-The `max_results` argument defines how many rows are returned (assuming the data has at least `max_results` rows to return). This can be used as a handy way to make sure you aren't requesting a ton of data, perhaps to do some initial coding or troubleshooting.
+# Set target options:
+tar_option_set(packages = c("dataRetrieval"))
+
+# list of targets to build
+list(
+  tar_target(name = ohio_sites,
+             command = read_waterdata_monitoring_location(state_name = "Ohio", 
+                                                          site_type_code = "ST")),
+  tar_target(name = site_chunks,
+             command = split(ohio_sites$monitoring_location_id, ceiling(seq_along(ohio_sites$monitoring_location_id)/200))),
+  tar_target(name = dv_measurements,
+             command = read_waterdata_daily(monitoring_location_id = site_chunks[[1]],
+                                                           time = "P7D",
+                                                           parameter_code = "00060"),
+             pattern = site_chunks,
+             iteration = "list"
+  ),
+  tar_target(name = remove_empties,
+             command = dv_measurements[sapply(dv_measurements, function(x) dim(x)[1]) > 0]),
+  tar_target(name = ohio_discharge,
+             command = do.call(rbind, remove_empties))
+  
+)
+```
+
+Once the _targets.R file is created, you can run:
+
+```{r eval=FALSE}
+library(targets)
+tar_make()
+```
+
+If everything went according to plan, the last several printed messages would look like this:
+
+```
+✔ dv_measurements completed [5.8s, 179.58 kB]                  
++ remove_empties dispatched                                    
+✔ remove_empties completed [0ms, 123.06 kB]                    
++ ohio_discharge dispatched                                    
+✔ ohio_discharge completed [20ms, 65.11 kB]                    
+✔ ended pipeline [16.9s, 19 completed, 0 skipped]  
+```
+
+If instead it ended with any errors, it would look like this:
+
+```
+✖ errored pipeline [9.3s, 0 completed, 21 skipped]          
+Error:
+! Error in tar_make():
+```
+
+If the errors were related to the internet, service outages, or exceeding API requests, you could re-run the pipeline and only the failed jobs would be re-run:
+
+```{r eval=FALSE}
+# Rerun:
+tar_make()
+```
+
+Once the pipeline has completed, you can load the `ohio_discharge` data frame into your environment with `tar_load`:
+
+```{r eval=FALSE}
+tar_load(ohio_discharge)
+```
+
+## limit and no_paging
+
 
 The `limit` argument defines how many rows are returned per page of data, but does NOT affect the overall number of rows returned. With a good internet connection, you can probably get away with ignoring this argument. By default it will be set to the highest value that the services allow. The reason you might want to change this argument is that it might be easier on a spotty internet connection to page through smaller sets of data. 
+
+The `no_paging` argument uses an option from the API that only returns one page of data. Therefore, the total number of rows returned will be capped at the `limit`. If no `limit` is defined, the maximum number of rows returned is 50,000, which is a hard-cap set by the API. The vast majority of users should use the default `no_paging = FALSE` to make sure they are getting all the data they asked for. `no_paging = TRUE` can be a bit more efficient since it is getting the data in a native table format (csv). However, it must be used with caution because it might not return all the requested data (`dataRetrieval` will give a warning). Because the data is coming from a csv format, the data may come back in a slightly different order (rows or columns) than the default `no_paging = FALSE` which is pulling data from a native json format. 
+
+The combination of `no_paging` and `limit` can be used to specify exactly how many rows to return.
 
 ## id
 
@@ -659,12 +803,10 @@ Therefore, `dataRetrieval` functions will rename the "id" column to whatever it 
 ```{r echo=FALSE}
 df <- dplyr::tibble(Function = c("read_waterdata_monitoring_location",
                               "read_waterdata_ts_meta",
-                              "read_waterdata_daily",
-                              "read_waterdata_latest_continuous"),
+                              "read_waterdata_parameter_codes"),
                  "ID returned" = c("monitoring_location_id",
                                    "time_series_id",
-                                   "daily_id",
-                                   "latest_continuous_id"))
+                                   "parameter_code"))
 
 knitr::kable(df)
 ```

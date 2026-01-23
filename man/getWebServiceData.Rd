@@ -21,7 +21,7 @@ This function accepts a url parameter, and returns the raw data.
 To add a custom user agent, create an environmental variable: CUSTOM_DR_UA
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 siteNumber <- "02177000"
 startDate <- "2012-09-01"
 endDate <- "2012-10-01"
