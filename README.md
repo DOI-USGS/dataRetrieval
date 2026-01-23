@@ -53,6 +53,8 @@ If you have additional questions about these changes, email
 7.  Find Hydro Network-Linked Data Index (NLDI) data. Start here:
     `?findNLDI`
 
+8.  Get daily data statistics. Start here: `?read_waterdata_stats_por`
+
 For additional tutorials, see:
 
 [Basic
@@ -171,7 +173,7 @@ citation(package = "dataRetrieval")
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
-#>     version = {2.7.20},
+#>     version = {2.7.21},
 #>     institution = {U.S. Geological Survey},
 #>     year = {2025},
 #>     doi = {10.5066/P9X4L3GE},
@@ -194,18 +196,18 @@ dv <- readNWISdv("09010500", "00060")
 NWIScitation <- create_NWIS_bib(dv)
 
 NWIScitation
-#> U.S. Geological Survey (2025). _National Water Information System data
+#> U.S. Geological Survey (2026). _National Water Information System data
 #> available on the World Wide Web (USGS Water Data for the Nation)_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Aug
-#> 14, 2025,
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jan
+#> 23, 2026,
 #> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Aug 14, 2025},
-#>   year = {2025},
+#>   note = {Accessed Jan 23, 2026},
+#>   year = {2026},
 #>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
 ```
@@ -226,17 +228,17 @@ SC <- readWQPqw(siteNumbers = "USGS-05288705",
 
 WQPcitation <- create_WQP_bib(SC)
 WQPcitation
-#> National Water Quality Monitoring Council (2025). _Water Quality
+#> National Water Quality Monitoring Council (2026). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Aug 14, 2025,
+#> Accessed Jan 23, 2026,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Aug 14, 2025},
-#>   year = {2025},
+#>   note = {Accessed Jan 23, 2026},
+#>   year = {2026},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }
 ```
