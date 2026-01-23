@@ -610,6 +610,10 @@ readNWISgwl <- function(siteNumbers,
 #' }
 readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE,
                          statReportType = "daily", statType = "mean") {
+  
+  .Deprecated(new = "read_waterdata_stats_por",
+              package = "dataRetrieval", 
+              msg = "NWIS servers are slated for decommission. Please begin to migrate to either read_waterdata_stats_por or read_waterdata_stats_daterange.")
 
   message(new_nwis_message())
   # check for NAs in site numbers
