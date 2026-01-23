@@ -178,7 +178,7 @@ get_statistics_data <- function(args, service) {
   
   full_request <- explode_query(base_request, POST = FALSE, x = args)
   
-  return_list <- data.table::as.data.table(walk_pages(full_request, max_results = NA))
+  return_list <- data.table::as.data.table(walk_pages(full_request))
   
   if(nrow(return_list) == 0) {
     return(deal_with_empty_stats(return_list))
