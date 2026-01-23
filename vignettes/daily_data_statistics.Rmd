@@ -1,0 +1,65 @@
+---
+title: "Introducing read_waterdata_stats"
+author: Joseph R. Zemmels
+editor_options: 
+  chunk_output_type: console
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Introducing read_waterdata_stats}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The `read_waterdata_stats_por` and `read_waterdata_stats_daterange` functions replace the old `readNWISstat` function.
+This replacement is necessary because the old [USGS Statistics Web Service](https://waterservices.usgs.gov/docs/statistics/) is being replaced by a new [USGS Water Data Statistics API](https://api.waterdata.usgs.gov/statistics/v0/docs) with different features and functionality.
+See [Statistics overview](https://waterdata.usgs.gov/statistics-documentation/) if you want a non-programmatic introduction to USGS daily data statistics.
+
+In this tutorial, we will discuss:
+
+* Retrieving day-of-year and month-of-year statistics using `read_waterdata_stats_por`
+* Retrieving calendar month, calendar year, and water year statistics with `read_waterdata_stats_daterange`
+* Quirks of the new statistics service that differentiate it from the other Water Data APIs.
+
+# New USGS data access
+
+This is a modern access point for USGS discrete water quality data. The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. To access these services on a web browser, go to <https://waterdata.usgs.gov/download-samples/>.
+
+## New features
+
+### Style
+
+New functions will use a "snake case", such as "read_waterdata_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
+
+### Structure
+
+Historically, we allowed users to customize their queries via the `...` argument structure. With `...`, users needed to know the exact names of query parameters before using the function. Now, the new functions will include **ALL** possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other IDEs). **Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters.** We expect this will be easier for users, but it might take some time to smooth out the documentation and test usability. There may be additional consequences, such as users won't be able to build up argument lists to pass into the function.  
+
+### Dependencies
+
+Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. 
+
+## USGS daily data statistics workflow
+
+Let's dive in to the new service.
+See <https://api.waterdata.usgs.gov/statistics/v0/docs> for the web service documentation and <https://waterdata.usgs.gov/statistics-documentation/> for a non-programmatic introduction to daily data statistics.
+
+### Retrieving data from a known site
+
+Suppose we have a USGS site and want to check what statistics data are available.
+Let's see what `read_waterdata_stats_por` returns:
+
+```{r setup}
+library(dataRetrieval)
+
+site <- "USGS-" 
+```
