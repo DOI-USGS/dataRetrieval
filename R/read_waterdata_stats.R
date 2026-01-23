@@ -1,4 +1,4 @@
-#' Get summary statistic data from /statistics API
+#' Get USGS daily data statistics data from /statistics API
 #'
 #' @description
 #'

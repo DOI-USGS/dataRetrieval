@@ -3,7 +3,7 @@
 \name{read_waterdata_stats_por}
 \alias{read_waterdata_stats_por}
 \alias{read_waterdata_stats_daterange}
-\title{Get summary statistic data from /statistics API}
+\title{Get USGS daily data statistics data from /statistics API}
 \usage{
 read_waterdata_stats_por(
   approval_status = NA,

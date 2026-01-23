@@ -467,8 +467,13 @@ time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 
 ## Discrete Samples
 
-Discrete USGS water quality can be accessed via the `read_waterdata_samples` function. While this is a new, modern USGS endpoint, it is not served in the same OGC infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html)) for information on accessing USGS discrete water quality data.
+Discrete USGS water quality can be accessed via the `read_waterdata_samples` function. While this is a new, modern USGS endpoint, it is not served in the same OGC infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html) for information on accessing USGS discrete water quality data.
 
+## Daily Data Statistics
+
+Pre-computed temporal summary statistics can be accessed via the `read_waterdata_stats_por` and `read_waterdata_stats_daterange` functions.
+This is also a modern USGS endpoint, but does not follow the same OGC standards as the other `read_waterdata` functions.
+See [Daily Data Statistics](articles/statistics_data.html) for more information on accessing USGS summary statistics.
 
 # New Features
 
