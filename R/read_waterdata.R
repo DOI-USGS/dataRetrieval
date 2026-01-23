@@ -5,8 +5,7 @@
 #' for more information.
 #' 
 #' @export
-#' @param service character, can be any existing collection such
-#' as "daily", "monitoring-locations", "time-series-metadata"
+#' @param service character, can be any existing collection.
 #' @param CQL A string in a Common Query Language format.
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector.
@@ -60,18 +59,27 @@ read_waterdata <- function(service,
   match.arg(service, pkg.env$api_endpoints)
   
   args <- list(...)
-  args[["service"]] <-  service
   
   output_id <- switch(service,
                       "daily" = "daily_id",
+                      "latest-daily" = "latest_daily_id",
                       "time-series-metadata" = "time_series_id",
                       "monitoring-locations" = "monitoring_location_id",
                       "latest-continuous" = "latest_continuous_id",
+                      "continuous" = "continuous_id",
+                      "field-measurements" = "field_measurement_id",
                       service)
   
   if(!"properties" %in% names(args)){
     args[["properties"]] <- NA_character_
   }
+  
+  if(!"limit" %in% names(args)){
+    args[["limit"]] <- NA_character_
+  }
+  
+  args[["service"]] <- service
+  args <- check_limits(args)
   
   data_req <- suppressWarnings(do.call(construct_api_requests, args))
   
@@ -79,13 +87,7 @@ read_waterdata <- function(service,
     httr2::req_headers(`Content-Type` = "application/query-cql-json") |> 
     httr2::req_body_raw(CQL) 
   
-  if("max_results" %in% names(args)){
-    max_results <- args[["max_results"]]
-  } else {
-    max_results <- NA
-  }
-  
-  return_list <- walk_pages(data_req, max_results)
+  return_list <- walk_pages(data_req)
   
   if(is.null(args[["skipGeometry"]])){
     skipGeometry <- FALSE
@@ -99,15 +101,14 @@ read_waterdata <- function(service,
                                  service, 
                                  skipGeometry,
                                  convertType)
-  
-  if(convertType) return_list <- cleanup_cols(return_list)
-  
-  # Add other time series services when they come online
-  if(service %in% c("daily")){
-    return_list <- return_list[order(return_list$time, return_list$monitoring_location_id), ]
-  }
-  
+
   return_list <- rejigger_cols(return_list, args[["properties"]], output_id)
+  
+  if(convertType){
+    return_list <- cleanup_cols(return_list, service)
+    return_list <- order_results(return_list)
+    return_list <- move_id_col(return_list, output_id)
+  }
   
   return(return_list)
 }

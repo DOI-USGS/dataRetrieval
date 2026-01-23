@@ -177,25 +177,6 @@ get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
   }
 }
 
-#' Clean NWIS NLDI ids
-#' @description The NWIS ids come as "USGS-XXXXXXXX". This is not suitable for
-#' passing to other package functions like readNWISdv.
-#' This function strips the "USGS-" from these ids.
-#' @param tmp a data.frame retrieved from get_nldi()
-#' @return the input object with potentially modified identifiers
-#' @keywords nldi internal
-#' @noRd
-clean_nwis_ids <- function(tmp) {
-  # If data.frame, and of type NWIS, then strip "USGS-" from identifiers
-  if (is.data.frame(tmp)) {
-    if ("sourceName" %in% names(tmp) &&
-      tmp$sourceName[1] == "NWIS Sites") {
-      tmp$identifier <- gsub("USGS-", "", tmp$identifier)
-    }
-  }
-  tmp
-}
-
 #' @title NLDI Validity Check
 #' @description tests if NLDI feature is available. Is vectorized and works with partial string matching.
 #' @param all a data.frame of available features (see get_nldi_sources)
@@ -386,7 +367,7 @@ findNLDI <- function(comid = NULL,
   start_url <- paste0(
     valid_ask(all = pkg.env$current_nldi, type = start_type)$good$features,
     "/",
-    utils::URLencode(as.character(ifelse(start_type == "nwis", 
+    utils::URLencode(as.character(ifelse(start_type == "nwis" & !grepl("-", starter), 
                                          paste0("USGS-", starter), starter))),
     "/"
   )
@@ -454,9 +435,6 @@ findNLDI <- function(comid = NULL,
 
   # Set the names of the parsed URL list
   names(shp) <- search$name
-
-  # Clean up NWIS ids, trim NULLs, and return ...
-  shp <- tc(lapply(shp, clean_nwis_ids))
 
   return(shp)
 }

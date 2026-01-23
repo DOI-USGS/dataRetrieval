@@ -26,7 +26,7 @@ This function accepts a url parameter for a WaterML2 getObservation. This functi
 but the general functionality is correct.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 
 params <- list(request = "GetObservation",

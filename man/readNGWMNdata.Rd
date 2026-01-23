@@ -25,7 +25,7 @@ for more information on time zones.}
 Only water level data and site locations and names are currently available through the web service.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 # one site
 site <- "USGS.430427089284901"

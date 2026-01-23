@@ -1,7 +1,6 @@
 #' USGS Parameter Data Retrieval
 #'
 #' Imports data from NWIS about measured parameter based on user-supplied parameter code or codes.
-#' This function gets the data from here: <https://nwis.waterdata.usgs.gov/nwis/pmcodes>
 #'
 #' @param parameterCd character of USGS parameter codes (or multiple parameter codes).
 #' These are 5 digit number codes. To get a complete list of all current parameter

@@ -52,7 +52,7 @@ This function accepts a url parameter that already contains the desired
 NWIS site, parameter code, statistic, startdate and enddate.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 site_id <- "02177000"
 startDate <- "2012-09-01"
 endDate <- "2012-10-01"

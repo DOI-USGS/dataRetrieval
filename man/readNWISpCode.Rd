@@ -25,7 +25,6 @@ parameter_units \tab character \tab Parameter units\cr
 }
 \description{
 Imports data from NWIS about measured parameter based on user-supplied parameter code or codes.
-This function gets the data from here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes}
 }
 \seealso{
 \code{\link[=importRDB1]{importRDB1()}}

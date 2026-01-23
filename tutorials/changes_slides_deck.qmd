@@ -133,9 +133,13 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 * [read_waterdata_latest_continuous](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_latest_continuous.html) - Latest continuous data
 
+* [read_waterdata_latest_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_latest_daily.html) - Latest daily data
+
 * [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) - Discrete hydrologic data (gage height, discharge, and readings of groundwater levels)
 
-* [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) - Generalized function
+* [read_waterdata_continuous](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_continuous.html) - Continuous data are collected via automated sensors installed at a monitoring location.
+
+* [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) - Generalized function.
 
 * [read_waterdata_metadata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_metadata.html) - Metadata 
 
@@ -452,8 +456,7 @@ daily <- read_waterdata_daily(monitoring_location_id = c("USGS-05406457",
 ```{r}
 #| echo: false
 
-dt_me(daily |> 
-        select(-daily_id), 6, "0.7em")
+dt_me(daily, 6, "0.7em")
 
 ```
 
@@ -548,7 +551,7 @@ Nearly all arguments can be vectors.
 
 ## read_waterdata_latest_continuous{.smaller .scrollable}
 
-Latest discharge (00060) in Dane County, WI:
+Latest discharge observation (00060) in Dane County, WI:
 
 ```{r}
 #| echo: false
@@ -556,8 +559,7 @@ Latest discharge (00060) in Dane County, WI:
 dt_me(latest_dane_county |> 
         sf::st_drop_geometry() |> 
         select(-time_series_id,
-               -statistic_id,
-               -latest_continuous_id), 6, "0.7em")
+               -statistic_id), 6, "0.7em")
 
 ```
 
@@ -565,12 +567,12 @@ dt_me(latest_dane_county |>
 
 :::
 
-## Map It: leaflet
+## Map Latest Discharge Observation: leaflet
 
 ```{r}
 #| output-location: slide
 pal <- colorNumeric("viridis", latest_dane_county$value)
-
+leaflet_crs <- "+proj=longlat +datum=WGS84"
 leaflet(data = latest_dane_county |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
     addProviderTiles("CartoDB.Positron") |> 
@@ -586,6 +588,57 @@ leaflet(data = latest_dane_county |>
               title = "Latest Discharge",
               values = ~value)
 ```
+
+
+## read_waterdata_latest_daily {.smaller}
+
+Most recent observation for each time series of daily data. Daily data provide one data value to represent water conditions for the day. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. 
+
+```{r}
+
+latest_dane_county_daily <- read_waterdata_latest_daily(bbox = sf::st_bbox(site_info), 
+                                                       parameter_code = "00060")
+```
+
+## Map Latest Daily Discharge: leaflet
+
+```{r}
+#| output-location: slide
+pal <- colorNumeric("viridis", latest_dane_county_daily$value)
+leaflet_crs <- "+proj=longlat +datum=WGS84"
+leaflet(data = latest_dane_county_daily |> 
+                sf::st_transform(crs = leaflet_crs)) |> 
+    addProviderTiles("CartoDB.Positron") |> 
+    addCircleMarkers(popup = paste(latest_dane_county_daily$monitoring_location_id, "<br>",
+      latest_dane_county_daily$time, "<br>",
+      latest_dane_county_daily$value,
+      latest_dane_county_daily$unit_of_measure), 
+                     color = ~ pal(value),
+                     radius = 3,
+                     opacity = 1) |> 
+    addLegend(pal = pal,
+              position = "bottomleft",
+              title = "Latest Discharge",
+              values = ~value)
+```
+
+## read_waterdata_continuous
+
+Replaces `readNWISuv`:
+
+```{r}
+this_week <- read_waterdata_continuous(monitoring_location_id = c("USGS-05406457",
+                                                         "USGS-05427930"),
+                              parameter_code = c("00060", "00010"),
+                              time = "P7D")
+```
+
+Currently only allows 3 years of data to be queried at once. 
+
+::: footer
+
+:::
+
 
 
 ## read_waterdata
@@ -640,7 +693,7 @@ sites_mn_wi <- read_waterdata(service = "monitoring-locations",
 ```{r}
 #| output-location: slide
 pal <- colorNumeric("viridis", sites_mn_wi$drainage_area)
-
+leaflet_crs <- "+proj=longlat +datum=WGS84"
 leaflet(data = sites_mn_wi |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
     addProviderTiles("CartoDB.Positron") |> 
@@ -737,13 +790,11 @@ time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 
 ## Limit Explanation
 
-* [Limits](https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html#limit-vs-max_results)
-
-  - `max_results` lets you define how many rows are returned 
-  
   - `limit` lets you define how many rows are returned **per page** of data. With a good internet connection, you can probably get away with ignoring this argument.
 
-I would ignore both most of the time.
+  - Leaving the `limit` argument to the default will return 50,000 rows per page.
+
+  - `no_paging` argument (`TRUE`/`FALSE`) will only return 1 page of data, therefore the `limit` argument will define how many rows are returned.
 
 ## Adding API token to CI jobs: GitLab
 

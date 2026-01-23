@@ -7,10 +7,8 @@
 read_waterdata_latest_continuous(
   monitoring_location_id = NA_character_,
   parameter_code = NA_character_,
-  statistic_id = NA_character_,
   properties = NA_character_,
   time_series_id = NA_character_,
-  latest_continuous_id = NA_character_,
   approval_status = NA_character_,
   unit_of_measure = NA_character_,
   qualifier = NA_character_,
@@ -20,24 +18,27 @@ read_waterdata_latest_continuous(
   time = NA_character_,
   bbox = NA,
   limit = NA,
-  max_results = NA,
-  convertType = TRUE
+  convertType = TRUE,
+  no_paging = FALSE
 )
 }
 \arguments{
-\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{monitoring-locations} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).}
+\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{monitoring-locations} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).
 
-\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}.}
+Multiple monitoring_location_ids can be requested as a character vector.}
 
-\item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://help.waterdata.usgs.gov/code/stat_cd_nm_query?stat_nm_cd=\%25&fmt=html}.}
+\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/parameter-codes/items}.
+
+Multiple parameter_codes can be requested as a character vector.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, id, time_series_id, monitoring_location_id, parameter_code, statistic_id, time, value, unit_of_measure, approval_status, qualifier, last_modified}
+geometry, latest_continuous_id, time_series_id, monitoring_location_id, parameter_code, statistic_id, time, value, unit_of_measure, approval_status, qualifier, last_modified.
+The default (\code{NA}) will return all columns of the data.}
 
-\item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
+\item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.
 
-\item{latest_continuous_id}{A universally unique identifier (UUID) representing a single version of a record. It is not stable over time. Every time the record is refreshed in our database (which may happen as part of normal operations and does not imply any change to the data itself) a new ID will be generated. To uniquely identify a single observation over time, compare the \code{time} and \code{time_series_id} fields; each time series will only have a single observation at a given \code{time}.}
+Multiple time_series_ids can be requested as a character vector.}
 
 \item{approval_status}{Some of the data that you have obtained from this U.S. Geological Survey database may not have received Director's approval.  Any such data values are qualified as provisional and are subject to revision.  Provisional data are released on the condition that neither the USGS nor the United States Government may be held liable for any damages resulting from its use. This field reflects the approval status of each record, and is either "Approved", meaining processing review has been completed and the data is approved for publication, or "Provisional" and subject to revision. For more information about provisional data, go to \url{https://waterdata.usgs.gov/provisional-data-statement/}.}
 
@@ -72,7 +73,12 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.}
+Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.
+
+You can also use a vector of length 2: the first value being the starting date,
+the second value being the ending date. NA's within the vector indicate a
+half-bound date. For example, c("2024-01-01", NA) will return all data starting
+at 2024-01-01.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
@@ -83,21 +89,23 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
-limit is 10000. It may be beneficial to set this number lower if your internet
+limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
-\item{max_results}{The optional maximum number of rows to return. This value
-must be less than the requested limit.}
-
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
+
+\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+be requested from a native csv format. This can be dangerous because the
+data will cut off at 50,000 rows without indication that more data
+is available. Use \code{TRUE} with caution.}
 }
 \description{
 This endpoint provides the most recent observation for each time series of continuous data. Continuous data are collected via automated sensors installed at a monitoring location. They are collected at a high frequency and often at a fixed 15-minute interval. Depending on the specific monitoring location, the data may be transmitted automatically via telemetry and be available on WDFN within minutes of collection, while other times the delivery of data may be delayed if the monitoring location does not have the capacity to automatically transmit data. Continuous data are described by parameter name and parameter code. These data might also be referred to as "instantaneous values" or "IV"
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 
 \donttest{
 site <- "USGS-451605097071701"
