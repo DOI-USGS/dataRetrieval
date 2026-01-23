@@ -35,9 +35,7 @@
 #' provide statistics for each month and year within the range individually.
 #' @param statType character Only used for statistics service requests. Type(s)
 #' of statistics to output for daily values.  Default is mean, which is the only
-#' option for monthly and yearly report types. See the statistics service documentation
-#' at <https://waterservices.usgs.gov/docs/statistics/> for a
-#' full list of codes.
+#' option for monthly and yearly report types. 
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
@@ -431,63 +429,4 @@ constructWQPURL <- function(siteNumbers,
   return(baseURL)
 }
 
-#' Construct URL for NWIS water use data service
-#'
-#' Reconstructs URLs to retrieve data from here: <https://waterdata.usgs.gov/nwis/wu>
-#'
-#' @param years integer Years for data retrieval. Must be years ending in 0 or 5,
-#' or "ALL", which retrieves all available years.
-#' @param stateCd could be character (full name, abbreviation, id), or numeric (id)
-#' @param countyCd could be numeric (County IDs from countyCdLookup) or character ("ALL")
-#' @param categories character Two-letter cateogory abbreviation(s)
-#' @return url string
-#' @export
-#' @examples
-#' url <- constructUseURL(
-#'   years = c(1990, 1995),
-#'   stateCd = "Ohio",
-#'   countyCd = c(1, 3),
-#'   categories = "ALL"
-#' )
-#'
-constructUseURL <- function(years, stateCd, countyCd, categories) {
-  
 
-  if (is.null(stateCd)) {
-    baseURL <- httr2::request(pkg.env[["useNat"]])
-    baseURL <- httr2::req_url_query(baseURL,
-                                    format = "rdb",
-                                    rdb_compression = "value")
-  } else {
-
-    stateCd <- stateCdLookup(input = stateCd, outputType = "postal")
-    baseURL <- httr2::request("https://waterdata.usgs.gov/")
-    baseURL <- httr2::req_url_path_append(baseURL, stateCd) 
-    baseURL <- httr2::req_url_path_append(baseURL, 
-                                          "nwis", "water_use") 
-    baseURL <- httr2::req_url_query(baseURL,
-                                    format = "rdb",
-                                    rdb_compression = "value")
-    
-    if (!(is.null(countyCd) )) {
-
-      baseURL <- httr2::req_url_query(baseURL, 
-                                      wu_area = "county")
-      baseURL <- httr2::req_url_query(baseURL,
-                                      wu_county = countyCd, 
-                                      .multi = "comma")
-    } else {
-      baseURL <- httr2::req_url_query(baseURL,
-                                      wu_area = "State Total")
-    }
-  }
-
-  baseURL <- httr2::req_url_query(baseURL, 
-                                  wu_year = years, 
-                                  .multi = "comma")
-  baseURL <- httr2::req_url_query(baseURL, 
-                                  wu_category = categories,
-                                  .multi = "comma")
-  
-  return(baseURL)
-}
