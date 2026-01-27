@@ -536,8 +536,78 @@ time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 
 ## Discrete Samples
 
-Discrete USGS water quality can be accessed via the `read_waterdata_samples` function. While this is a new, modern USGS endpoint, it is not served in the same OGC infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html)) for information on accessing USGS discrete water quality data.
+Discrete USGS water quality can be accessed via the `read_waterdata_samples` function. While this is a new, modern USGS endpoint, it is not served in the same OGC infrastructure as the rest of these new advertised functions. See [Samples Data](articles/samples_data.html) for information on accessing USGS discrete water quality data.
 
+## Daily Data Statistics
+
+Pre-computed temporal summary statistics can be accessed via the `read_waterdata_stats_por` and `read_waterdata_stats_daterange` functions.
+This is also a modern USGS endpoint, but does not follow the same OGC standards as the other `read_waterdata` functions.
+
+### Day-of-year and month-of-year statistics
+
+The `read_waterdata_stats_por` function returns day-of-year and month-of-year statistics.
+In the example below we pull the day-of-year arithmetic mean discharge value for site USGS-05428500, limiting the month-day range to include February 27 through March 2.
+Note that we've selected a subset of the columns returned in the full output for illustration.
+
+```{r states_por_pull}
+por_mean <- read_waterdata_stats_por(
+  monitoring_location_id = "USGS-05428500",
+  parameter_code = "00060",
+  start_date = "02-27",
+  end_date = "03-02",
+  computation_type = c("arithmetic_mean")
+)
+```
+
+```{r states_por_table, echo=FALSE}
+por_mean |>
+  sf::st_drop_geometry() |>
+  dplyr::select(
+    monitoring_location_id,
+    parameter_code,
+    computation,
+    time_of_year_type,
+    time_of_year,
+    value
+  ) |>
+  knitr::kable(row.names = FALSE)
+```
+
+The first row in the output below summarizes the average daily discharge value across all February 27ths in the site's period of record.
+The last row of the output contains the March month-of-year average (i.e., the average daily value across all Marches in the site's period of record). 
+This is returned if the `start_date` to `end_date` range includes the first day of a month (e.g., `03-01`).
+
+### Date range-based statistics
+
+Sometimes you want to compute summary statistics for a specific date range.
+The `read_waterdata_stats_daterange` returns daily data statistics for calendar month, calendar year, and water year.
+The example below illustrates how to pull data from October 1, 2024 through January 31, 2025.
+Again, we've selected a subset of the columns from the full output for illustration.
+
+```{r states_daterange_pull}
+daterange_mean <- read_waterdata_stats_daterange(
+  monitoring_location_id = "USGS-05428500",
+  parameter_code = "00060",
+  start_date = "2024-10-01",
+  end_date = "2025-01-31",
+  computation_type = c("arithmetic_mean")
+)
+```
+
+```{r states_daterange_table, echo=FALSE}
+daterange_mean |>
+  sf::st_drop_geometry() |>
+  dplyr::select(
+    monitoring_location_id,
+    parameter_code,
+    computation,
+    interval_type,
+    start_date,
+    end_date,
+    value
+  ) |>
+  knitr::kable(row.names = FALSE)
+```
 
 # New Features
 
