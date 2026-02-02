@@ -355,9 +355,6 @@ get_dateTime <- function(d){
     temp_date <- tryCatch({
       lubridate::as_datetime(d)
     },
-    # warning = function (w){
-    #   strptime(d, format = "%Y-%m-%dT%H:%MZ", tz = "UTC")
-    # },
     error = function(e) {
       NA
     })    
