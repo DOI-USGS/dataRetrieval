@@ -537,9 +537,10 @@ test_that("format_dates", {
   expect_equal(dataRetrieval:::format_api_dates(end, TRUE),
                "../2021-01-01")
   
-  end <- c(NA, as.POSIXct("2021-01-01 12:15:00"))
-  expect_equal(dataRetrieval:::format_api_dates(end),
-               "../2021-01-01T18:15:00Z")
+  # Bad test because it assumes a local timezone
+  # end <- c(NA, as.POSIXct("2021-01-01 12:15:00"))
+  # expect_equal(dataRetrieval:::format_api_dates(end),
+  #              "../2021-01-01T18:15:00Z")
   
   start_end <- as.POSIXct(c("2021-01-01 12:15:00",
                             "2022-01-01 16:45"))
