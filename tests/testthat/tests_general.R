@@ -536,16 +536,17 @@ test_that("format_dates", {
                "../2021-01-01T00:00:00Z")
   expect_equal(dataRetrieval:::format_api_dates(end, TRUE),
                "../2021-01-01")
-  
+  # 
   # Bad test because it assumes a local timezone
-  # end <- c(NA, as.POSIXct("2021-01-01 12:15:00"))
-  # expect_equal(dataRetrieval:::format_api_dates(end),
-  #              "../2021-01-01T18:15:00Z")
-  
-  start_end <- as.POSIXct(c("2021-01-01 12:15:00",
-                            "2022-01-01 16:45"))
-  expect_equal(dataRetrieval:::format_api_dates(start_end),
-               "2021-01-01T18:15:00Z/2022-01-01T22:45:00Z")
+  # This worked locally, but failed on a CI job
+  # # end <- c(NA, as.POSIXct("2021-01-01 12:15:00"))
+  # # expect_equal(dataRetrieval:::format_api_dates(end),
+  # #              "../2021-01-01T18:15:00Z")
+  # 
+  # start_end <- as.POSIXct(c("2021-01-01 12:15:00",
+  #                           "2022-01-01 16:45"))
+  # expect_equal(dataRetrieval:::format_api_dates(start_end),
+  #              "2021-01-01T18:15:00Z/2022-01-01T22:45:00Z")
   
   start_end <- as.POSIXct(c("2021-01-01 12:15:00",
                             "2022-01-01 16:45"),
