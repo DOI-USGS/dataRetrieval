@@ -260,6 +260,7 @@ switch_arg_id <- function(ls, id_name, service){
 #' 
 #' end <- c(NA, "2021-01-01")
 #' dataRetrieval:::format_api_dates(end)
+#' dataRetrieval:::format_api_dates(end, TRUE)
 #' 
 #' end <- c(NA, as.POSIXct("2021-01-01 12:15:00"))
 #' dataRetrieval:::format_api_dates(end)
@@ -287,56 +288,107 @@ switch_arg_id <- function(ls, id_name, service){
 #' 
 #' time = c("2014-05-01T00:00Z", "2014-05-01T12:00Z")
 #' dataRetrieval:::format_api_dates(time)
+#' 
+#' start <- "2025-10-01"
+#' end <- Sys.Date()
+#' dataRetrieval:::format_api_dates(c(start, end), date = TRUE)
 format_api_dates <- function(datetime, date = FALSE){
   
   if(is.character(datetime)){
     datetime[datetime == ""] <- NA
   }
   
-  if(!any(isTRUE(all(is.na(datetime))) | isTRUE(is.null(datetime)))){
-    if(length(datetime) == 1){
-      # If the user has "P" or the "/" we assume they know what they are doing
-      if(grepl("P", datetime, ignore.case = TRUE) |
-         grepl("/", datetime)){
-        return(datetime)
-      } else {
-        datetime1 <- tryCatch({
-            lubridate::as_datetime(datetime)
-          },
-          warning = function(w) {
-            strptime(datetime, format = "%Y-%m-%dT%H:%MZ", tz = "UTC")
-        })
-        if(date){
-          datetime <- format(datetime1, "%Y-%m-%d")
-        } else {
-          datetime <- lubridate::format_ISO8601(datetime1, usetz = "Z")
-        }
-      }
-    } else if (length(datetime) == 2) {
-      
-      datetime1 <- tryCatch({
-          lubridate::as_datetime(datetime)
-        },
-        warning = function(w) {
-          strptime(datetime, format = "%Y-%m-%dT%H:%MZ", tz = "UTC")
-      })
-      
-      if(date){
-        datetime <- paste0(format(datetime1, "%Y-%m-%d"), collapse = "/")
-      } else {
-        datetime <- paste0(lubridate::format_ISO8601(datetime1, usetz = "Z"), 
-                           collapse = "/")
-      }
-
-      datetime <- gsub("NA", "..", datetime)
-    } else {
-      stop("datetime should only include 1-2 values")
-    }
-  } else {
-    datetime <- NA
+  if(all(is.na(datetime))){
+    return(NA)
   }
+  
+  if(all(is.null(datetime))){
+    return(NA)
+  }
+  
+  if(length(datetime) > 2){
+    stop("datetime should only include 1-2 values")
+  }
+
+  if(length(datetime) == 1){
+    # If the user has "P" or the "/" we assume they know what they are doing
+    if(grepl("P", datetime, ignore.case = TRUE) |
+       grepl("/", datetime)){
+      return(datetime)
+    } else {
+
+      if(date){
+        datetime <- get_Date(datetime)
+      } else {
+        datetime1 <- get_dateTime(datetime)
+        datetime <- lubridate::format_ISO8601(datetime1, usetz = "Z")
+      }
+    }
+  } else if (length(datetime) == 2) {
+
+    if(date){
+      for(i in seq_along(datetime)){
+        datetime[i] <- get_Date(datetime[i])
+      }
+      datetime <- paste0(datetime, collapse = "/")
+    } else {
+      for(i in seq_along(datetime)){
+        datetime1 <- get_dateTime(datetime)
+      }
+      datetime <- paste0(lubridate::format_ISO8601(datetime1, usetz = "Z"), 
+                         collapse = "/")
+    }
+
+    datetime <- gsub("NA", "..", datetime)
+  } 
+  
   return(datetime)
 }
+
+get_dateTime <- function(d){
+  
+  temp_date <- tryCatch({
+    strptime(d, format = "%Y-%m-%dT%H:%MZ", tz = "UTC")
+  })
+  
+  if(all(is.na(temp_date))){
+    temp_date <- tryCatch({
+      lubridate::as_datetime(d)
+    },
+    # warning = function (w){
+    #   strptime(d, format = "%Y-%m-%dT%H:%MZ", tz = "UTC")
+    # },
+    error = function(e) {
+      NA
+    })    
+  }
+  
+  return(temp_date)
+  
+}
+
+get_Date <- function(d){
+  temp_date <- tryCatch({
+    as.Date(d)
+  },
+  error = function(e) {
+    "try again"
+  })
+  
+  if(is.na(temp_date)){
+    return("..")
+  } else if(as.character(temp_date) == "try again"){
+    temp_date <- tryCatch({
+      as.Date(as.numeric(d), origin = "1970-01-01")
+    },
+    error = function(e) {
+      "try again"
+    })        
+  }
+  
+  return(as.character(temp_date))
+}
+
 
 #' Turn request list into POST body cql
 #' 
