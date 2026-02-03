@@ -580,7 +580,7 @@ test_that("format_dates", {
                "2010-01-01T00:00:00Z/2010-01-01T05:00:00Z")
   
   start <- "2025-10-01"
-  end <- Sys.Date()
+  end <- as.Date("2026-02-02")
   
   expect_equal(dataRetrieval:::format_api_dates(c(start, end), date = TRUE),
                "2025-10-01/2026-02-02")
