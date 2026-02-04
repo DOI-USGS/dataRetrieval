@@ -72,7 +72,10 @@
 #' # Request temperature percentiles for specific month-day range
 #' # Returns:
 #' # - Day-of-year temperature percentiles for each day between June 1 through June 15.
-#' # - Month-of-year percentiles for June, computed using all June data (not just June 1 through June 15).
+#' # - Month-of-year percentiles for June, computed using 
+#' #    all June data (not just June 1 through June 15).
+#' # Note: the month-of-year percentiles are returned only when the month-day range includes 
+#' #  the beginning of the month (e.g., "06-01") 
 #' x2 <- read_waterdata_stats_por(
 #'   monitoring_location_id = c("USGS-02319394", "USGS-02171500"),
 #'   parameter_code = "00010", 
@@ -90,7 +93,6 @@
 #' # - calendar month summaries for each month between January, 2010 through December, 2011
 #' # - calendar year summaries for 2010 and 2011
 #' # - water year summaries for WY2010, WY2011, and WY2012
-#' # Note: 
 #' x4 <- read_waterdata_stats_daterange(
 #'   monitoring_location_id = c("USGS-02319394", "USGS-02171500"), 
 #'   parameter_code = c("00065", "00060"),
@@ -158,6 +160,9 @@ read_waterdata_stats_daterange <- function(
 construct_statistics_request <- function(service = "Normals", version = 0){
   
   httr2::request("https://api.waterdata.usgs.gov/statistics/") |>
+    httr2::req_user_agent(default_ua()) |>
+    httr2::req_headers(`Accept-Encoding` = "gzip") |>
+    httr2::req_timeout(seconds = 180) |>
     httr2::req_url_path_append(paste0("v", version)) |>
     httr2::req_url_path_append(paste0("observation", service))
   
@@ -197,7 +202,8 @@ get_statistics_data <- function(args, service) {
     
     # 2. One row per observation, keyed to ts_id
     obs <- data.table::rbindlist(ts_meta$values, fill = TRUE, idcol = "ts_id")
-    obs <- obs[, .j, by = .I, env = list(.j = clean_value_cols())][, I := NULL]
+
+    obs <- cleanup_cols_stats(obs)
     
     # 3. Drop nested list column
     ts_meta[, values := NULL]
@@ -256,89 +262,46 @@ get_statistics_data <- function(args, service) {
 #'
 #' @seealso
 #' \url{https://stat.ethz.ch/CRAN/web/packages/data.table/vignettes/datatable-programming.html}
-clean_value_cols <- function() {
-  substitute({
-    
-    ## ---- detect column presence ----
-    has_value       <- exists("value")
-    has_values      <- exists("values")
-    has_percentiles <- exists("percentiles")
-    
-    has_date_schema <- exists("start_date") && exists("end_date") && exists("interval_type")
-    has_toy_schema  <- exists("time_of_year") && exists("time_of_year_type")
-    
-    ## ---- values ----
-    vals <- if (has_values &&
-                !is.null(values[[1]]) &&
-                length(values[[1]]) > 0) {
-      
-      v <- values[[1]]
-      if (length(v) == 1L && identical(v, "nan")) {
-        NA_real_
-      } else {
-        as.numeric(v)
-      }
-      
-    } else if (has_value) {
-      as.numeric(value)
-    } else {
-      NA_real_
-    }
-    
-    n <- length(vals)
-    
-    ## ---- percentiles ----
-    percs <- if (has_percentiles &&
-                 !is.null(percentiles[[1]]) &&
-                 length(percentiles[[1]]) > 0) {
-      
-      as.numeric(percentiles[[1]])
-      
-    } else if (data.table::`%chin%`(computation, c("minimum", "median", "maximum"))) {
-      
-      data.table::fifelse(
-        computation == "minimum", 0,
-        data.table::fifelse(computation == "median", 50, 100)
-      )
-      
-    } else {
-      NA_real_
-    }
-    
-    if (length(percs) == 1L && n > 1L) {
-      percs <- rep(percs, n)
-    }
-    
-    ## ---- time columns (schema-dependent) ----
-    time_cols <- if (has_date_schema) {
-      list(
-        start_date    = rep(start_date, n),
-        end_date      = rep(end_date, n),
-        interval_type = rep(interval_type, n)
-      )
-    } else if (has_toy_schema) {
-      list(
-        time_of_year      = rep(time_of_year, n),
-        time_of_year_type = rep(time_of_year_type, n)
-      )
-    } else {
-      list()
-    }
-    
-    ## ---- assemble ----
-    c(
-      list(
-        value           = vals,
-        percentile      = percs,
-        sample_count    = rep(sample_count, n),
-        approval_status = rep(approval_status, n),
-        computation_id  = rep(computation_id, n),
-        computation     = rep(computation, n),
-        ts_id = rep(ts_id, n)
-      ),
-      time_cols
-    )
-  })
+cleanup_cols_stats <- function(df){
+ 
+  value <- percent <- NULL
+  ## ---- detect column presence ----
+  has_value       <- "value" %in% names(df)
+  has_values      <- "values" %in% names(df)
+  has_percentiles <- "percentiles" %in% names(df)
+
+  if(has_value){
+    df[, value := as.numeric(value)]
+  } else {
+    df[, value := NA_real_]
+  }
+  
+  if(has_percentiles){
+    df[, percent := NA_integer_]
+    df[is.na(value), percent := as.integer(percentiles)][, percentiles := NULL]
+    data.table::setnames(df, "percent", "percentile")
+  } else {
+    df[, percentile := NA_integer_]
+  }
+  
+  # value has already been created, so this will only move values if needed
+  if(has_values){
+    df[is.na(value), value := as.numeric(values)][, values := NULL]
+  }
+
+  df$value[is.nan(df$value)] <- NA_real_
+
+  ## ---- percentiles ----
+  if (any(data.table::`%chin%`(df$computation, c("minimum", "median", "maximum")))){
+    df[, percentile := data.table::fcase(
+      computation == "minimum", 0L,
+      computation == "median", 50L,
+      computation == "maximum", 100L,
+      default = percentile
+    )]
+  } 
+  
+  return(df)
 }
 
 #' Handle empty responses from the /statistics service
