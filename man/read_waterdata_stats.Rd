@@ -3,7 +3,7 @@
 \name{read_waterdata_stats_por}
 \alias{read_waterdata_stats_por}
 \alias{read_waterdata_stats_daterange}
-\title{Get USGS daily data statistics data from /statistics API}
+\title{Get USGS daily data statistics}
 \usage{
 read_waterdata_stats_por(
   approval_status = NA,
@@ -120,7 +120,10 @@ x1 <- read_waterdata_stats_por(
 # Request temperature percentiles for specific month-day range
 # Returns:
 # - Day-of-year temperature percentiles for each day between June 1 through June 15.
-# - Month-of-year percentiles for June, computed using all June data (not just June 1 through June 15).
+# - Month-of-year percentiles for June, computed using 
+#    all June data (not just June 1 through June 15).
+# Note: the month-of-year percentiles are returned only when the month-day range includes 
+#  the beginning of the month (e.g., "06-01") 
 x2 <- read_waterdata_stats_por(
   monitoring_location_id = c("USGS-02319394", "USGS-02171500"),
   parameter_code = "00010", 
@@ -138,7 +141,6 @@ x3 <- read_waterdata_stats_daterange(
 # - calendar month summaries for each month between January, 2010 through December, 2011
 # - calendar year summaries for 2010 and 2011
 # - water year summaries for WY2010, WY2011, and WY2012
-# Note: 
 x4 <- read_waterdata_stats_daterange(
   monitoring_location_id = c("USGS-02319394", "USGS-02171500"), 
   parameter_code = c("00065", "00060"),
