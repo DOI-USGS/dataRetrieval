@@ -107,3 +107,4 @@ vignettes/wqpData.rds
 _quarto.yml
 vignettes/basic_slides.Rmd
 vignettes/changes_slides.Rmd
+vignettes/daily_data_statistics.Rmd
