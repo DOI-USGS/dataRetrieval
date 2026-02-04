@@ -216,12 +216,12 @@ test_that("get_statistics_data returns sf object with attributes", {
                 start_date = "2007-07-27",
                 end_date = "2007-07-31",
                 interval_type = "month",
-                values = list("1", "2"),
-                percentiles = list("50", "100"),
+                values = c("1", "2"),
+                percentiles = c("50", "100"),
                 sample_count = 5,
                 approval_status = "approved",
                 computation_id = "4579653d-f26f-4e9f-99ea-c3fa3fc68686",
-                computation = "arithmetic_mean"
+                computation = "percentile"
               )
             )
           )
@@ -234,11 +234,15 @@ test_that("get_statistics_data returns sf object with attributes", {
     walk_pages = function(...) list(fake_page),
     {
       out <- get_statistics_data(list(), "Normals")
-      
+
       expect_s3_class(out, "sf")
       expect_true("request" %in% names(attributes(out)))
       expect_true("queryTime" %in% names(attributes(out)))
+      
       expect_equal(nrow(out), 4)
+      expect_equal(out$value, c(8032.903, 12521.667, 1, 2))
+      expect_equal(out$percentile, c(NA, NA, 50, 100))
+      expect_equal(out$sample_count, c(31, 30, 5, 5))
     }
   )
 })
