@@ -68,16 +68,20 @@ reference:
     desc: Functions to retrieve USGS Water Data.
     contents:
       - read_waterdata_samples
+      - read_waterdata_stats_por
       - read_waterdata_daily
+      - read_waterdata_continuous
       - read_waterdata_ts_meta
       - read_waterdata_monitoring_location
       - read_waterdata_latest_continuous
+      - read_waterdata_latest_daily
       - read_waterdata_field_measurements
       - read_waterdata_parameter_codes
       - read_waterdata_metadata
       - read_waterdata
       - summarize_waterdata_samples
       - check_waterdata_sample_params
+      - get_ogc_params
   - title: National Water Information System (NWIS)
     desc:  Functions to retrieve (USGS) NWIS data. These will be slowly phased out and replaced with the read_waterdata family of functions.
     contents:
@@ -145,7 +149,6 @@ reference:
     desc: Functions to create web queries
     contents:
       - constructNWISURL
-      - constructUseURL
       - constructWQPURL
       - getQuerySummary
       - getWebServiceData

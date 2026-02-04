@@ -170,7 +170,7 @@ This function creates the call and gets the data for discrete water quality samp
 service described at \url{https://waterdata.usgs.gov/download-samples/}.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 
 \donttest{
 ph_data <- read_waterdata_samples(

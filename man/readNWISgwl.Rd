@@ -61,8 +61,7 @@ siteInfo \tab data.frame \tab A data frame containing information on the request
 }
 }
 \description{
-Imports groundwater level data from NWIS web service. This function gets the data from here:
-\url{https://waterservices.usgs.gov/docs/groundwater-levels/groundwater-levels-details/}
+Imports groundwater level data from NWIS web service.
 Inputs to this function are just USGS site ids, USGS parameter codes,
 and start and end date. For a more complex query, use \code{\link[=readNWISdata]{readNWISdata()}},
 including an argument service="gwlevels".
@@ -71,19 +70,8 @@ Use the function \code{\link[=whatNWISdata]{whatNWISdata()}} to discover what da
 is available for a USGS site. The column data_type_cd with the values "gw"
 returned from \code{\link[=whatNWISdata]{whatNWISdata()}}) are available from this service.
 }
-\details{
-More information on the web service can be found here:
-\url{https://waterservices.usgs.gov/test-tools}, choosing the
-"Groundwater Levels Value Service".
-
-Mixed date/times come back from the service
-depending on the year that the data was collected. See \url{https://waterdata.usgs.gov/usa/nwis/gw}
-for details about groundwater. By default the returned dates are converted to date objects, unless convertType
-is specified as FALSE. Sites with non-standard date formats (i.e. lacking a day) can be affected (see examples).
-See \url{https://waterservices.usgs.gov/docs/groundwater-levels/} for more information.
-}
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 #site_id <- "434400121275801"
 \donttest{
 #data <- readNWISgwl(site_id)

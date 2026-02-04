@@ -75,7 +75,7 @@ knitr::include_graphics("login.png")
 
 This step only needs to be done once per computer setup. So if you've done it before you can skip this step.
 
-You'll need to set up a Personal Access Token. Go to [https://code.usgs.gov/-/profile/personal_access_tokens](https://code.usgs.gov/-/profile/personal_access_tokens) and create a new token selecting the api scope:
+You'll need to set up a Personal Access Token. Go to [https://code.usgs.gov/-/user_settings/personal_access_tokens](https://code.usgs.gov/-/user_settings/personal_access_tokens) and create a new token selecting the api scope:
 
 ```{r echo=FALSE, out.width="60%"}
 knitr::include_graphics("pat.png")

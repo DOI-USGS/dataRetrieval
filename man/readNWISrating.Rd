@@ -39,14 +39,13 @@ RATING \tab character \tab Rating information \cr
 }
 \description{
 Reads current rating table for an active USGS streamgage from NWISweb.
-Data is retrieved from \url{https://waterdata.usgs.gov/nwis}.
 }
 \note{
 Not all active USGS streamgages have traditional rating curves that
 relate flow to stage.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 site_id <- "01594440"
 \donttest{
 data <- readNWISrating(site_id, "base")

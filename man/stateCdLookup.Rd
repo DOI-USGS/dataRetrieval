@@ -18,7 +18,7 @@ Function to simplify finding state and state code definitions. Used in \code{rea
 and \code{readWQPdata}.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 
 \donttest{
 fullName <- stateCdLookup("wi", "fullName")
