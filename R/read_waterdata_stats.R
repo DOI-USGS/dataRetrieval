@@ -266,7 +266,7 @@ get_statistics_data <- function(args, service) {
 #' \url{https://stat.ethz.ch/CRAN/web/packages/data.table/vignettes/datatable-programming.html}
 cleanup_cols_stats <- function(df){
  
-  percentiles <- percentile <- values <- computation <- NULL
+  percentiles <- percentile <- values <- computation <- value <- percent <- NULL
   ## ---- detect column presence ----
   has_value       <- "value" %in% names(df)
   has_values      <- "values" %in% names(df)
