@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# clean_value_cols()
+# cleanup_cols_stats()
 # ------------------------------------------------------------------------------
 
 test_that("values column is unnested and converted to numeric", {
@@ -16,7 +16,7 @@ test_that("values column is unnested and converted to numeric", {
     computation_id = "abc"
   )
   
-  out <- DT[, .j, env = list(.j = clean_value_cols())]
+  out <- DT[, .j, env = list(.j = cleanup_cols_stats())]
   
   expect_equal(out$value, c(1.2, 3.4))
   expect_equal(out$percentile, c(10, 90))
@@ -35,7 +35,7 @@ test_that("value column is used when values is absent", {
     computation_id = "xyz"
   )
   
-  out <- DT[, .j, env = list(.j = clean_value_cols())]
+  out <- DT[, .j, env = list(.j = cleanup_cols_stats())]
   
   expect_equal(out$value, 2.5)
   expect_true(is.na(out$percentile))
@@ -54,7 +54,7 @@ test_that("'nan' values are converted to NA_real_", {
     computation_id = "nan-test"
   )
   
-  out <- DT[, .j, env = list(.j = clean_value_cols())]
+  out <- DT[, .j, env = list(.j = cleanup_cols_stats())]
   
   expect_true(is.na(out$value))
 })
@@ -72,7 +72,7 @@ test_that("percentile is inferred from computation type", {
     computation_id = 1:3
   )
   
-  out <- DT[, .j, by = computation, env = list(.j = clean_value_cols())]
+  out <- DT[, .j, by = computation, env = list(.j = cleanup_cols_stats())]
   
   expect_equal(
     out[order(computation)]$percentile,
@@ -94,7 +94,7 @@ test_that("scalar percentile is recycled to match values length", {
     computation_id = "recycle"
   )
   
-  out <- DT[, .j, env = list(.j = clean_value_cols())]
+  out <- DT[, .j, env = list(.j = cleanup_cols_stats())]
   
   expect_equal(out$percentile, c(50, 50, 50))
 })
@@ -111,7 +111,7 @@ test_that("missing value and values yields NA value", {
     computation_id = "missing"
   )
   
-  out <- DT[, .j, env = list(.j = clean_value_cols())]
+  out <- DT[, .j, env = list(.j = cleanup_cols_stats())]
   
   expect_true(is.na(out$value))
 })
