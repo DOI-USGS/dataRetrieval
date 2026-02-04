@@ -217,7 +217,7 @@ get_statistics_data <- function(args, service) {
     combined_list[[i]] <- out
   }
   
-  combined <- data.table::rbindlist(combined_list)
+  combined <- data.table::rbindlist(combined_list, use.names = TRUE)
   combined <- combined[return_list, on = "rid"]
   combined[, rid := NULL]
   
