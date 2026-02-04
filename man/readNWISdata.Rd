@@ -85,7 +85,7 @@ period returns data for a site generally from now to a time in the past.
 Note that when period is used all data up to the most recent value are returned.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 # Examples not run for time considerations
 

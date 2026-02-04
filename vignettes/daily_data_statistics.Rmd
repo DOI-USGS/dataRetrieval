@@ -1,16 +1,10 @@
 ---
-title: "Introducing read_waterdata_stats"
-author: Joseph R. Zemmels
-editor_options: 
-  chunk_output_type: console
-output:
-  rmarkdown::html_vignette:
-    toc: true
-    number_sections: true
+title: "Introducing read_waterdata_statistics_*"
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introducing read_waterdata_stats}
-  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Introducing read_waterdata_statistics_*}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -20,46 +14,217 @@ knitr::opts_chunk$set(
 )
 ```
 
-The `read_waterdata_stats_por` and `read_waterdata_stats_daterange` functions replace the old `readNWISstat` function.
-This replacement is necessary because the old [USGS Statistics Web Service](https://waterservices.usgs.gov/docs/statistics/) is being replaced by a new [USGS Water Data Statistics API](https://api.waterdata.usgs.gov/statistics/v0/docs) with different features and functionality.
-See [Statistics overview](https://waterdata.usgs.gov/statistics-documentation/) if you want a non-programmatic introduction to USGS daily data statistics.
-
-In this tutorial, we will discuss:
-
-* Retrieving day-of-year and month-of-year statistics using `read_waterdata_stats_por`
-* Retrieving calendar month, calendar year, and water year statistics with `read_waterdata_stats_daterange`
-* Quirks of the new statistics service that differentiate it from the other Water Data APIs.
-
-# New USGS data access
-
-This is a modern access point for USGS discrete water quality data. The USGS is planning to modernize all web services in the near future. For each of these updates, `dataRetrieval` will create a new function to access the new services. To access these services on a web browser, go to <https://waterdata.usgs.gov/download-samples/>.
-
-## New features
-
-### Style
-
-New functions will use a "snake case", such as "read_waterdata_samples". Older functions use camel case, such as "readNWISdv". The difference is the underscore between words. This should be a handy way to tell the difference between newer modern data access, and the older traditional functions. 
-
-### Structure
-
-Historically, we allowed users to customize their queries via the `...` argument structure. With `...`, users needed to know the exact names of query parameters before using the function. Now, the new functions will include **ALL** possible arguments that the web service APIs support. This will allow users to use tab-autocompletes (available in RStudio and other IDEs). **Users will need to understand that it is not advisable to specify all of these parameters. The systems can get bogged down with redundant query parameters.** We expect this will be easier for users, but it might take some time to smooth out the documentation and test usability. There may be additional consequences, such as users won't be able to build up argument lists to pass into the function.  
-
-### Dependencies
-
-Under the hood, `dataRetrieval` changed the dependency from `httr` to `httr2`. `httr2` is the modern R package for web requests that is actively developed/maintained. As we develop functions for the modern USGS web services, we'll continue to explore updating package dependencies. 
-
-## USGS daily data statistics workflow
-
-Let's dive in to the new service.
-See <https://api.waterdata.usgs.gov/statistics/v0/docs> for the web service documentation and <https://waterdata.usgs.gov/statistics-documentation/> for a non-programmatic introduction to daily data statistics.
-
-### Retrieving data from a known site
-
-Suppose we have a USGS site and want to check what statistics data are available.
-Let's see what `read_waterdata_stats_por` returns:
+The `read_waterdata_stats_por` and `read_waterdata_stats_daterange` functions replace the legacy `readNWISstat` function.
+This replacement is necessary because the legacy API service that `readNWISstat` will be decommissioned and replaced with a [modernized API](https://api.waterdata.usgs.gov/statistics/v0/docs).
+This new API has two available endpoints, `observationNormals` and `observationIntervals`, that appear similar at first yet have important differences we want to highlight here.
 
 ```{r setup}
 library(dataRetrieval)
 
-site <- "USGS-" 
+site1 <- "USGS-05428500"
 ```
+
+## Fetching day-of-year and month-of-year statistics
+
+Day-of-year and month-of-year statistics aggregate observations for the same calendar day or month across multiple years to describe typical seasonal conditions (e.g., all Januarys or all January 1sts).
+Consider the output below, where we request day-of-year discharge averages for January 1 and January 2.
+Note that the `start_date` and `end_date` are set in `month-year` format to describe the day-of-year range.
+
+```{r, message=FALSE, warning=FALSE}
+jan_por_mean <-
+  read_waterdata_stats_por(
+  monitoring_location_id = site1,
+  parameter_code = "00060",
+  computation = "arithmetic_mean",
+  start_date = "01-01",
+  end_date = "01-02"
+)
+
+jan_por_mean
+```
+
+The first two rows show the average discharge values, aggregated across all January 1sts and 2nds in the site's Period of Record (POR).
+But wait: what's in that third row?
+Looking at the `time_of_year` and `time_of_year_type` columns, we see the third row represents the average discharge value aggregated across all *Januarys*.
+This illustrates one quirk of the modern statistics API: any time the `start_date` to `end_date` range overlaps with the first day of a month (e.g., `"01-01"`), we will get month-of-year as well as the day-of-year summary statistics.
+You can filter these rows out of the data if you don't want them in downstream analyses:
+
+```{r}
+jan_por_mean[jan_por_mean$time_of_year_type != "month_of_year",]
+```
+
+Before we go, let's look at an example that illustrates the benefits of the statistics API.
+In the example below, we pull all day-of-year discharge percentiles for our site.
+Keep in mind that doing so *without* the statistics API would require us to download the **entire** daily period of record for this site and hand-compute these percentiles ourselves, a time- and resource-intensive process indeed.
+
+For demonstration, we filter to the output to the January 1 day-of-year percentiles, which include a set of percentiles commonly used on WDFN webpages (e.g., [Wisconsin water conditions](https://waterdata.usgs.gov/state/wisconsin/)).
+
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+full_por_percentiles <-
+  read_waterdata_stats_por(
+    monitoring_location_id = site1,
+    parameter_code = "00060",
+    computation = c("minimum", "maximum", "median", "percentile"),
+    start_date = "01-01",
+    end_date = "12-31"
+  )
+
+full_por_percentiles |>
+  filter(time_of_year == "01-01" & time_of_year_type == "day_of_year") |>
+  arrange(percentile) |>
+  select(
+    time_of_year, computation, percentile, value
+  )
+```
+
+After a bit of data manipulation, we can then visualize the percentiles as "ribbons" on a plot.
+The final visual shows the percentile bands as progressively darker ribbons, where the minima and maxima are shown as thin dashed curves and the median values as a solid gray curve.
+
+```{r, message=FALSE, warning=FALSE}
+doy_perc_bands_plt <-
+  full_por_percentiles |>
+  sf::st_drop_geometry() |>
+  dplyr::filter(time_of_year_type == "day_of_year") |>
+  select(time_of_year, percentile, value) |>
+  distinct(time_of_year, percentile, .keep_all = TRUE) |>
+  mutate(time_of_year = as.Date(time_of_year, format = "%m-%d")) |>
+  pivot_wider(names_from = percentile, values_from = value) |>
+  ggplot(aes(x = time_of_year)) +
+  geom_line(aes(y = `0`), linetype = "dashed", linewidth = .2) +
+  geom_line(aes(y = `100`), linetype = "dashed", linewidth = .2) +
+  geom_ribbon(aes(ymin = `5`, ymax = `95`), fill = "grey80") +
+  geom_ribbon(aes(ymin = `10`, ymax = `90`), fill = "grey70") +
+  geom_ribbon(aes(ymin = `25`, ymax = `75`), fill = "grey60") +
+  geom_line(aes(y = `50`), linewidth = .2, color = "gray40") +
+  scale_x_date(date_labels = "%b", date_breaks = "1 month") +
+  labs(
+    x = "Month–day",
+    y = "Value",
+    title = "Day-of-year percentile bands"
+  ) +
+  theme_minimal()
+
+doy_perc_bands_plt
+```
+
+Finally, let's overlay a specific year's daily mean data onto the plot:
+
+```{r, message=FALSE, warning=FALSE}
+daily_2024 <- read_waterdata_daily(
+  monitoring_location_id = site1,
+  parameter_code = "00060",
+  statistic_id = "00003", 
+  time = "2024-01-01/2024-12-31") |>
+  mutate(time_of_year = as.Date(format(time, "%m-%d"), format = "%m-%d"))
+
+doy_perc_bands_plt +
+  geom_line(data = daily_2024, aes(y = value), linewidth = 1) +
+  labs(
+    title = "2024 daily discharge + percentile bands"
+  )
+```
+
+## Fetching monthly and annual statistics within a date range
+
+Unlike day- or month-of-year statistics, which summarize typical seasonal conditions across many years, the `read_waterdata_stats_daterange()` function returns summaries for specific months and years within a requested date range.
+Consider the example below where we fetch the average discharge value for the month of January, 2024.
+Notice that the `start_date` and `end_date` arguments are given in `YYYY-MM-DD` format.
+
+```{r, message=FALSE, warning=FALSE}
+jan_daterange_mean <-
+  read_waterdata_stats_daterange(
+  monitoring_location_id = site1,
+  parameter_code = "00060",
+  computation = "arithmetic_mean",
+  start_date = "2024-01-01",
+  end_date = "2024-01-31"
+)
+
+jan_daterange_mean
+```
+
+Instead of `time_of_year` and `time_of_year_type` columns, this output contains `start_date`, `end_date`, and `interval_type` columns representing the daterange over which the average was calculated.
+The first row shows the average January, 2025 discharge was about 219 cubic feet per second.
+We again have extra rows: the second row contains the **calendar** year 2025 average and the third contains the **water** year 2025 average.
+
+Annual statistics will be returned for any calendar/water years than intersect with the specified date range.
+Consider the example below, where the `start_date` to `end_date` range is only 93 days yet happens to intersect with calendar **and** water years 2023 and 2024.
+We see this reflected in output containing monthly averages for September, 2023 through January, 2024 as well as 2023 and 2024 calendar and water year averages.
+
+```{r, message=FALSE, warning=FALSE}
+multiyear_daterange_mean <-
+  read_waterdata_stats_daterange(
+  monitoring_location_id = site1,
+  parameter_code = "00060",
+  computation = "arithmetic_mean",
+  start_date = "2023-09-30",
+  end_date = "2024-01-01"
+)
+
+multiyear_daterange_mean
+```
+
+Before we move on, consider the following example where we create a Monthly mean statistics table similar to what you'd find in the [Water Year Summaries](https://rconnect.chs.usgs.gov/water-year-summaries-dev/?_inputs_&render_button=1&site_no_select=%2205428500%22&wateryear_select=%222024%22).
+
+```{r, message=FALSE, warning=FALSE}
+monthly_means <-
+  read_waterdata_stats_daterange(
+    monitoring_location_id = site1,
+    parameter_code = "00060",
+    computation = "arithmetic_mean"
+  ) |>
+  dplyr::filter(interval_type == "month") |>
+  sf::st_drop_geometry()
+
+monthly_means |>
+  # filter(start_date >= "2004-10-01" & start_date < "2025-09-01") |>
+  mutate(
+    Month = lubridate::month(start_date, label = TRUE),
+    # reorder based on WY
+    Month = factor(Month, month.abb[c(10:12, 1:9)]),
+    water_year = lubridate::year(as.Date(start_date) + months(3))
+  ) |>
+  arrange(Month) |>
+  group_by(Month) |>
+  summarize(
+    `Mean` = round(mean(value), 0),
+    `Max (WY)` = paste0(
+      round(max(value), 0),
+      " (",
+      water_year[which.max(value)],
+      ")"
+    ),
+    `Min (WY)` = paste0(
+      round(min(value), 0),
+      " (",
+      water_year[which.min(value)],
+      ")"
+    ),
+    .groups = "drop"
+  ) |>
+  t() |>
+  as.data.frame() |>
+  knitr::kable(
+    col.names = NULL
+  )
+```
+
+
+
+## Statistics API quirks
+
+The `sample_count` column indicates that there were 22 observations used to compute these averages, suggesting the site's period of record is (at least) 22 years long.
+We can verify this using the timeseries-metadata API endpoint, passing in the "parent" timeseries ID used to compute the mean:
+
+```{r}
+read_waterdata_ts_meta(time_series_id =  unique(jan_por_mean$parent_time_series_id))
+```
+
+From this output, we see the begin and end dates of the POR at indeed at least 22 years apart.
+
+

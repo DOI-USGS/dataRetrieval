@@ -65,8 +65,9 @@ siteInfo \tab data.frame \tab A data frame containing information on the request
 }
 }
 \description{
-Reads peak flow from NWISweb. Data is retrieved from
-\url{https://waterdata.usgs.gov/nwis}.
+Reads peak flow from NWISweb.
+}
+\details{
 In some cases, the specific date of the peak data is not know. This function
 will default to
 converting complete dates to a "Date" object, and converting incomplete dates to
@@ -75,7 +76,7 @@ needed, set the \code{asDateTime} argument to FALSE. No dates will be converted 
 R Date objects.
 }
 \examples{
-\dontshow{if (is_dataRetrieval_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 site_ids <- c("01594440", "040851325")
 \donttest{
 data <- readNWISpeak(site_ids)
