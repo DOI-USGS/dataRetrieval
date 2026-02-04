@@ -176,7 +176,9 @@ construct_statistics_request <- function(service = "Normals", version = 0){
 #' @noRd
 #' @return data.frame with attributes
 get_statistics_data <- function(args, service) {
-  
+
+  rid <- data <- ts_id <- values <- NULL
+
   base_request <- construct_statistics_request(service = service, version = 0)
   
   full_request <- explode_query(base_request, POST = FALSE, x = args)
@@ -262,7 +264,7 @@ get_statistics_data <- function(args, service) {
 #' \url{https://stat.ethz.ch/CRAN/web/packages/data.table/vignettes/datatable-programming.html}
 cleanup_cols_stats <- function(df){
  
-  value <- percent <- NULL
+  percentiles <- percentile <- values <- computation <- NULL
   ## ---- detect column presence ----
   has_value       <- "value" %in% names(df)
   has_values      <- "values" %in% names(df)
