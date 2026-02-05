@@ -68,6 +68,7 @@ reference:
     desc: Functions to retrieve USGS Water Data.
     contents:
       - read_waterdata_samples
+      - read_waterdata_stats_por
       - read_waterdata_daily
       - read_waterdata_continuous
       - read_waterdata_ts_meta
