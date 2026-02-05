@@ -15,11 +15,14 @@ knitr::opts_chunk$set(
 ```
 
 The `read_waterdata_stats_por` and `read_waterdata_stats_daterange` functions replace the legacy `readNWISstat` function.
-This replacement is necessary because the legacy API service that `readNWISstat` will be decommissioned and replaced with a [modernized API](https://api.waterdata.usgs.gov/statistics/v0/docs).
+This replacement is necessary because the legacy API service that `readNWISstat` uses will be decommissioned and replaced with a [modernized API](https://api.waterdata.usgs.gov/statistics/v0/docs).
 This new API has two available endpoints, `observationNormals` and `observationIntervals`, that appear similar at first yet have important differences we want to highlight here.
 
 ```{r setup}
 library(dataRetrieval)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
 
 site1 <- "USGS-05428500"
 ```
@@ -53,11 +56,11 @@ You can filter these rows out of the data if you don't want them in downstream a
 jan_por_mean[jan_por_mean$time_of_year_type != "month_of_year",]
 ```
 
-Before we go, let's look at an example that illustrates the benefits of the statistics API.
+Let's now look at an example that illustrates the benefits of the statistics API.
 In the example below, we pull all day-of-year discharge percentiles for our site.
 Keep in mind that doing so *without* the statistics API would require us to download the **entire** daily period of record for this site and hand-compute these percentiles ourselves, a time- and resource-intensive process indeed.
 
-For demonstration, we filter to the output to the January 1 day-of-year percentiles, which include a set of percentiles commonly used on WDFN webpages (e.g., [Wisconsin water conditions](https://waterdata.usgs.gov/state/wisconsin/)).
+For demonstration, we filter the output to the January 1 day-of-year percentiles, which include a set of percentiles commonly used on WDFN webpages (e.g., [Wisconsin water conditions](https://waterdata.usgs.gov/state/wisconsin/)).
 
 
 ```{r, message=FALSE, warning=FALSE}
@@ -69,7 +72,7 @@ full_por_percentiles <-
   read_waterdata_stats_por(
     monitoring_location_id = site1,
     parameter_code = "00060",
-    computation = c("minimum", "maximum", "median", "percentile"),
+    computation = c("minimum", "maximum", "percentile"),
     start_date = "01-01",
     end_date = "12-31"
   )
@@ -83,7 +86,7 @@ full_por_percentiles |>
 ```
 
 After a bit of data manipulation, we can then visualize the percentiles as "ribbons" on a plot.
-The final visual shows the percentile bands as progressively darker ribbons, where the minima and maxima are shown as thin dashed curves and the median values as a solid gray curve.
+Each ribbon spans between two percentiles returned by the /statistics API (e.g., minimum to 5th, 5th to 10th, etc).
 
 ```{r, message=FALSE, warning=FALSE}
 doy_perc_bands_plt <-
@@ -91,16 +94,17 @@ doy_perc_bands_plt <-
   sf::st_drop_geometry() |>
   dplyr::filter(time_of_year_type == "day_of_year") |>
   select(time_of_year, percentile, value) |>
-  distinct(time_of_year, percentile, .keep_all = TRUE) |>
   mutate(time_of_year = as.Date(time_of_year, format = "%m-%d")) |>
   pivot_wider(names_from = percentile, values_from = value) |>
   ggplot(aes(x = time_of_year)) +
-  geom_line(aes(y = `0`), linetype = "dashed", linewidth = .2) +
-  geom_line(aes(y = `100`), linetype = "dashed", linewidth = .2) +
-  geom_ribbon(aes(ymin = `5`, ymax = `95`), fill = "grey80") +
-  geom_ribbon(aes(ymin = `10`, ymax = `90`), fill = "grey70") +
-  geom_ribbon(aes(ymin = `25`, ymax = `75`), fill = "grey60") +
-  geom_line(aes(y = `50`), linewidth = .2, color = "gray40") +
+  geom_ribbon(aes(ymin = `95`, ymax = `100`), fill = "#292f6b") +
+  geom_ribbon(aes(ymin = `90`, ymax = `95`), fill = "#5699c0") +
+  geom_ribbon(aes(ymin = `75`, ymax = `90`), fill = "#aacee0") +
+  geom_ribbon(aes(ymin = `25`, ymax = `75`), fill = "#e9e9e9") +
+  geom_ribbon(aes(ymin = `10`, ymax = `25`), fill = "#ebd6ab") +
+  geom_ribbon(aes(ymin = `5`, ymax = `10`), fill = "#dcb668") +
+  geom_ribbon(aes(ymin = `0`, ymax = `5`), fill = "#8f4f1f") +
+  geom_line(aes(y = `50`), linewidth = .2, color = "black") +
   scale_x_date(date_labels = "%b", date_breaks = "1 month") +
   labs(
     x = "Month–day",
@@ -149,8 +153,8 @@ jan_daterange_mean
 ```
 
 Instead of `time_of_year` and `time_of_year_type` columns, this output contains `start_date`, `end_date`, and `interval_type` columns representing the daterange over which the average was calculated.
-The first row shows the average January, 2025 discharge was about 219 cubic feet per second.
-We again have extra rows: the second row contains the **calendar** year 2025 average and the third contains the **water** year 2025 average.
+The first row shows the average January, 2024 discharge was about 112 cubic feet per second.
+We again have extra rows: the second row contains the **calendar** year 2024 average and the third contains the **water** year 2024 average.
 
 Annual statistics will be returned for any calendar/water years than intersect with the specified date range.
 Consider the example below, where the `start_date` to `end_date` range is only 93 days yet happens to intersect with calendar **and** water years 2023 and 2024.
@@ -182,7 +186,7 @@ monthly_means <-
   sf::st_drop_geometry()
 
 monthly_means |>
-  # filter(start_date >= "2004-10-01" & start_date < "2025-09-01") |>
+  filter(start_date >= "2004-10-01" & start_date < "2025-09-01") |>
   mutate(
     Month = lubridate::month(start_date, label = TRUE),
     # reorder based on WY
@@ -216,15 +220,17 @@ monthly_means |>
 
 
 
-## Statistics API quirks
+## Statistics API tips
 
-The `sample_count` column indicates that there were 22 observations used to compute these averages, suggesting the site's period of record is (at least) 22 years long.
-We can verify this using the timeseries-metadata API endpoint, passing in the "parent" timeseries ID used to compute the mean:
+The statistics API does not follow the same OGC standards as the <https://api.waterdata.usgs.gov/ogcapi/v0/> endpoints.
+This section will focus on important differences between the statistics and OGC-compliant APIs and other tips for working with the endpoint.
 
-```{r}
-read_waterdata_ts_meta(time_series_id =  unique(jan_por_mean$parent_time_series_id))
-```
+* **No request limit or API token**: at time of writing, the statistics API does not limit the number of requests that can be made per hour. It also does not require you sign up for an API token. Requesting data from the statistics API does not count against your total request limit to the OGC-compliant APIs.
+* **The API always returns all columns**: compared to the OGC-compliant endpoints, which come with `skipGeometry` and `properties` arguments to limit the number of columns returned by the API, there is no way to request a subset of columns from the API.
 
-From this output, we see the begin and end dates of the POR at indeed at least 22 years apart.
-
-
+* **Month-of-year statistics**: to return month-of-year statistics using `read_waterdata_stats_por`, make sure the `start_date` to `end_date` range overlaps with the first day of the month for which you want to data. For example, `start_date = "01-01"` and `end_date = "03-01"` will return the month-of-year statistics for January, February, and March (in addition to the day-of-year statistics for each month-day in this range).
+* **Monthly and annual statistics**: when using `read_waterdata_stats_daterange`, the output will return monthly and annual summaries for every calendar month, calendar year, and water year that intersects with the `start_date` to `end_date` range. For example, `start_date = 2023-12-31` and `end_date = 2024-10-01` will return monthly statistics for each month between December, 2023 through October, 2024 **and** calendar year statistics for 2023 and 2024 **and** water year statistics for WY2024 and WY2025.
+* **Median comes with percentiles**: you never need to set `computation = c("median", "percentile")` as the median is returned as the 50th percentile. If you do ask for both median and percentiles, your data set will have two rows containing the median for each `parent_time_series_id`. 
+* **Minimum and maximum do *not* come with percentiles**: minimum and maximum statistics are not returned as percentiles so use `computation = c("minimum", "maximum", "percentile")` if you want a "complete" set of order statistics.
+* **The API returns specific percentiles**: for `computation = "percentile"`, the API will only ever return the following percentiles: 5th, 10th, 25th, 50th, 75th, 90th, and 95th. If you want other percentiles, you'll need to pull the daily data period of record using `read_waterdata_daily` and compute them yourself.
+* **Pay attention to `sample_count`**: the `sample_count` column represents the number of observations used to compute the statistic. As stated in the [statistics documentation](https://waterdata.usgs.gov/statistics-documentation/#minimum-period-of-record-number-of-observations), there is no minimum requirement for the number of observations to calculate a statistic. This means reported monthly and annual statistics can be based on *one* daily observation from that month/year. In the case of a single observation, the reported `minimum`, `maximum`, `median`, and `arithmetic_mean` will all be equal to the value of that observation and any other percentiles will be `NA`.
