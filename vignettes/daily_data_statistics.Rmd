@@ -97,15 +97,13 @@ doy_perc_bands_plt <-
   mutate(time_of_year = as.Date(time_of_year, format = "%m-%d")) |>
   pivot_wider(names_from = percentile, values_from = value) |>
   ggplot(aes(x = time_of_year)) +
-  # geom_line(aes(y = `0`), linetype = "dashed", linewidth = .2) +
-  # geom_line(aes(y = `100`), linetype = "dashed", linewidth = .2) +
-  geom_ribbon(aes(ymin = `95`, ymax = `100`), fill = "#292f6b", alpha = 0.7) +
-  geom_ribbon(aes(ymin = `90`, ymax = `95`), fill = "#5699c0", alpha = 0.7) +
-  geom_ribbon(aes(ymin = `75`, ymax = `90`), fill = "#aacee0", alpha = 0.7) +
-  geom_ribbon(aes(ymin = `25`, ymax = `75`), fill = "#e9e9e9", alpha = 0.7) +
-  geom_ribbon(aes(ymin = `10`, ymax = `25`), fill = "#ebd6ab", alpha = 0.7) +
-  geom_ribbon(aes(ymin = `5`, ymax = `10`), fill = "#dcb668", alpha = 0.7) +
-  geom_ribbon(aes(ymin = `0`, ymax = `5`), fill = "#8f4f1f", alpha = 0.7) +
+  geom_ribbon(aes(ymin = `95`, ymax = `100`), fill = "#292f6b") +
+  geom_ribbon(aes(ymin = `90`, ymax = `95`), fill = "#5699c0") +
+  geom_ribbon(aes(ymin = `75`, ymax = `90`), fill = "#aacee0") +
+  geom_ribbon(aes(ymin = `25`, ymax = `75`), fill = "#e9e9e9") +
+  geom_ribbon(aes(ymin = `10`, ymax = `25`), fill = "#ebd6ab") +
+  geom_ribbon(aes(ymin = `5`, ymax = `10`), fill = "#dcb668") +
+  geom_ribbon(aes(ymin = `0`, ymax = `5`), fill = "#8f4f1f") +
   geom_line(aes(y = `50`), linewidth = .2, color = "black") +
   scale_x_date(date_labels = "%b", date_breaks = "1 month") +
   labs(
