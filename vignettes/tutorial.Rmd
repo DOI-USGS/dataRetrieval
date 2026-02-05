@@ -111,7 +111,7 @@ There are many types of data available from `dataRetrieval`. To understand how t
 |gwlevels|`readNWISgwl`|Groundwater levels | `read_waterdata_field_measurements` |
 |site|`readNWISsite`|Site metadata| `read_waterdata_monitoring_location` |
 |pcode|`readNWISpCode`|Parameter code metadata | `read_waterdata_parameter_codes` |
-|stat|`readNWISstat`| Site statistics | None yet |
+|stat|`readNWISstat`| Site statistics | `read_waterdata_stats_por`, `read_waterdata_stats_daterange` |
 |rating|`readNWISrating`| Rating curves| None yet |
 |peak|`readNWISpeak`|Peak flow| None yet |
 |use|`readNWISuse`|Water Use| None yet |
