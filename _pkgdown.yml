@@ -40,6 +40,8 @@ navbar:
       href: articles/read_waterdata_functions.html
     - text: Samples Data
       href: articles/samples_data.html
+    - text: Daily Statistics
+      href: articles/daily_data_statistics.html
     - text: Changes to QW
       href: articles/qwdata_changes.html
     - text: Background
