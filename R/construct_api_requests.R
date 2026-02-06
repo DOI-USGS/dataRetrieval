@@ -238,7 +238,7 @@ switch_arg_id <- function(ls, id_name, service){
 #' period requests. 
 #' 
 #' @param datetime character, Date, or POSIX
-#' @param format character
+#' @param date logical, whether to return Date or POSIX
 #' 
 #' @noRd
 #' @return character vector with a length of either 1 or 2.
