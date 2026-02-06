@@ -506,3 +506,85 @@ test_that("importWQP convertType", {
   )
   expect_is(lakeSites_chars$lat, "character")
 })
+
+test_that("format_dates", {
+  
+  start_end <- c("2021-01-01", "2022-01-01")
+  expect_equal(dataRetrieval:::format_api_dates(start_end, date = TRUE),
+               "2021-01-01/2022-01-01")
+  expect_equal(dataRetrieval:::format_api_dates(start_end, date = FALSE),
+               "2021-01-01T00:00:00Z/2022-01-01T00:00:00Z")
+  
+  start_end <- c("", "")
+  expect_equal(dataRetrieval:::format_api_dates(start_end),
+               NA)
+  
+  period <- "P7D"
+  
+  expect_equal(dataRetrieval:::format_api_dates(period), "P7D")
+  
+  start <- c("2021-01-01", NA)
+  
+  expect_equal(dataRetrieval:::format_api_dates(start),
+               "2021-01-01T00:00:00Z/..")
+  expect_equal(dataRetrieval:::format_api_dates(start, TRUE),
+               "2021-01-01/..")
+  
+  end <- c(NA, "2021-01-01")
+  
+  expect_equal(dataRetrieval:::format_api_dates(end),
+               "../2021-01-01T00:00:00Z")
+  expect_equal(dataRetrieval:::format_api_dates(end, TRUE),
+               "../2021-01-01")
+  # 
+  # Bad test because it assumes a local timezone
+  # This worked locally, but failed on a CI job
+  # # end <- c(NA, as.POSIXct("2021-01-01 12:15:00"))
+  # # expect_equal(dataRetrieval:::format_api_dates(end),
+  # #              "../2021-01-01T18:15:00Z")
+  # 
+  # start_end <- as.POSIXct(c("2021-01-01 12:15:00",
+  #                           "2022-01-01 16:45"))
+  # expect_equal(dataRetrieval:::format_api_dates(start_end),
+  #              "2021-01-01T18:15:00Z/2022-01-01T22:45:00Z")
+  
+  start_end <- as.POSIXct(c("2021-01-01 12:15:00",
+                            "2022-01-01 16:45"),
+                          tz = "America/New_York")
+  
+  expect_equal(dataRetrieval:::format_api_dates(start_end),
+               "2021-01-01T17:15:00Z/2022-01-01T21:45:00Z")
+  
+  # If you don't specify a timezone, it will assume UTC
+  start_end2 <- c("2021-01-01 12:15:00", "")
+  expect_equal(dataRetrieval:::format_api_dates(start_end2),
+               "2021-01-01T12:15:00Z/..")
+  
+  # If you do specify a timezone, it should maintain it, but convert to UTC:
+  start_end2 <- c("2021-01-01T12:15:00-0500", "")
+  expect_equal(dataRetrieval:::format_api_dates(start_end2),
+               "2021-01-01T17:15:00Z/..")
+  
+  time = c("2014-05-01T00:00:00Z", "2014-05-01T12:00:00Z")
+  expect_equal(dataRetrieval:::format_api_dates(time),
+               "2014-05-01T00:00:00Z/2014-05-01T12:00:00Z")
+  
+  time = c("2014-05-01T00:00Z", "2014-05-01T12:00Z")
+  expect_equal(dataRetrieval:::format_api_dates(time),
+               "2014-05-01T00:00:00Z/2014-05-01T12:00:00Z")
+  
+  expect_equal(dataRetrieval:::format_api_dates(c("2010-01-01T00:00Z", NA)),
+               "2010-01-01T00:00:00Z/..")
+  
+  expect_equal(dataRetrieval:::format_api_dates(c("2010-01-01T00:00Z", "2010-01-01T05:00Z")),
+               "2010-01-01T00:00:00Z/2010-01-01T05:00:00Z")
+  
+  start <- "2025-10-01"
+  end <- as.Date("2026-02-02")
+  
+  expect_equal(dataRetrieval:::format_api_dates(c(start, end), date = TRUE),
+               "2025-10-01/2026-02-02")
+  
+})
+
+
