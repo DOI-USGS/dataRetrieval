@@ -50,9 +50,11 @@
 #' pcode <- "72019"
 #'
 #' uv_data_trim <- read_waterdata_continuous(monitoring_location_id = site,
-#'                           parameter_code = pcode, 
-#'                           properties = c("value",
-#'                                          "time"))
+#'                            parameter_code = pcode, 
+#'                            properties = c("value", "time"),
+#'                            time = as.POSIXct(c("2026-02-07 12:00", 
+#'                                                "2026-02-08 12:00"), 
+#'                                               tz = "America/Chicago"))
 #'
 #' uv_data <- read_waterdata_continuous(monitoring_location_id = site,
 #'                            parameter_code = pcode,
@@ -90,6 +92,7 @@ read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
                               output_id, 
                               service)
 
+  attr(return_list$time, "tzone") <- "UTC"
   return(return_list)
 }
 

@@ -76,9 +76,13 @@ cleanup_cols <- function(df, service){
   if("time" %in% names(df)){
     if(service == "daily"){
       df$time <- as.Date(df$time)
-    } 
-    # by default, the data is put in POSIXct and seems
-    # to be pretty smart about the offset/tzone
+    } else {
+      attr(df$time, "tzone") <- "UTC"
+    }
+  }
+  
+  if("last_modified" %in% names(df)){
+    attr(df$time, "tzone") <- "UTC"
   }
   
   if("value" %in% names(df)){
