@@ -60,10 +60,14 @@ df <- data.frame(
     "read_waterdata_field_measurements",
     "read_waterdata",
     "read_waterdata_continuous",
-    rep("", 5)
+    "",
+    "read_waterdata_stats_por, read_waterdata_stats_daterange",
+    rep("", 3)
   ),
-  "Available on (branch)" = c(rep("main (CRAN)", 8), 
-  "develop",  rep("", 5))
+  "Available on (branch)" = c(rep("main (CRAN)", 9), 
+                              "",
+                              "develop",
+                              rep("", 3))
 )
 
 knitr::kable(df, col.names = c("WaterServices (legacy) function", "Water Data (new) function", "Available on (branch name)"))
