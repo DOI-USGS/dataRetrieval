@@ -296,6 +296,7 @@ format_api_dates <- function(datetime, date = FALSE){
   
   if(is.character(datetime)){
     datetime[datetime == ""] <- NA
+    datetime <- toupper(datetime)
   }
   
   if(all(is.na(datetime))){
