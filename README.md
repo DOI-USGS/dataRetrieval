@@ -1,7 +1,7 @@
 # dataRetrieval <img src="man/figures/hex_logo.png" class="logo"  alt="dataRetrieval" style="width:90px;height:auto;" align="right" />
 
 [![CRAN
-version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=EGRET)
+version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
 [![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
 
@@ -179,7 +179,7 @@ citation(package = "dataRetrieval")
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
-#>     version = {2.7.21},
+#>     version = {2.7.22},
 #>     institution = {U.S. Geological Survey},
 #>     year = {2025},
 #>     doi = {10.5066/P9X4L3GE},

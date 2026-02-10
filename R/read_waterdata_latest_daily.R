@@ -10,14 +10,14 @@
 #' @param statistic_id `r get_ogc_params("latest-daily")$statistic_id`
 #' Multiple statistic_ids can be requested as a character vector.
 #' @param time `r get_ogc_params("latest-daily")$time`
-#' You can also use a vector of length 2: the first value being the starting date,
-#' the second value being the ending date. NA's within the vector indicate a
-#' half-bound date. For example, c("2024-01-01", NA) will return all data starting
-#' at 2024-01-01.
+#' 
+#' See also Details below for more information.
 #' @param value `r get_ogc_params("latest-daily")$value`
 #' @param unit_of_measure `r get_ogc_params("latest-daily")$unit_of_measure`
 #' @param approval_status `r get_ogc_params("latest-daily")$approval_status`
 #' @param last_modified `r get_ogc_params("latest-daily")$last_modified`
+#' 
+#' See also Details below for more information.
 #' @param time_series_id `r get_ogc_params("latest-daily")$time_series_id`
 #' Multiple time_series_ids can be requested as a character vector.
 #' @param qualifier `r get_ogc_params("latest-daily")$qualifier`
@@ -45,6 +45,9 @@
 #' be requested from a native csv format. This can be dangerous because the
 #' data will cut off at 50,000 rows without indication that more data
 #' is available. Use `TRUE` with caution. 
+#' 
+#' @inherit read_waterdata_continuous details
+#' 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{

@@ -3,8 +3,10 @@ title: "Introducing read_waterdata_statistics_*"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introducing read_waterdata_statistics_*}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
