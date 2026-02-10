@@ -56,7 +56,9 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{last_modified} that intersects the value of datetime are selected.}
+Only features that have a \code{last_modified} that intersects the value of datetime are selected.
+
+See also Details below for more information.}
 
 \item{time}{The date an observation represents. You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
 Examples:
@@ -68,11 +70,8 @@ Examples:
 }
 
 Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.
-.
-You can also use a vector of length 2: the first value being the starting date,
-the second value being the ending date. NA's within the vector indicate a
-half-bound date. For example, c("2024-01-01", NA) will return all data starting
-at 2024-01-01.}
+
+See also Details below for more information.}
 
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
@@ -100,6 +99,22 @@ for new direct download functions that are expected to be available sometime
 in 2026.
 
 Geometry output is not supported in the continuous data API endpoint.
+}
+\details{
+You can also use a vector of length 2 for any time queries (such as time
+or last_modified). The first value is the starting date (or datetime),
+the second value is the ending date(or datetime).
+NA's within the vector indicate a half-bound date.
+For example, \code{time = c("2024-01-01", NA)} will return all data starting
+at 2024-01-01.
+\code{time = c(NA, "2024-01-01")} will return all data from the beginning of
+the timeseries until 2024-01-01.
+By default, time is assumed UTC, although time zone attributes
+will be accommodated. As an example, setting \code{time = as.POSIXct(c("2021-01-01 12:00:00",
+"2021-01-01 12:00"), tz = "America/New_York")} will request data that between
+noon and 2pm eastern time on 2021-01-01.
+All time values RETURNED from the service are UTC with the exception of
+daily data, which returns time values in local dates.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}

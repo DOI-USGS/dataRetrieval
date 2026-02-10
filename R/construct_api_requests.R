@@ -173,7 +173,7 @@ check_limits <- function(args){
 base_url <- function(){
   
   httr2::request("https://api.waterdata.usgs.gov/ogcapi/") |> 
-    httr2::req_url_path_append(getOption("dataRetrieval")$api_version) 
+    httr2::req_url_path_append(getOption("dataRetrieval.api_version")) 
 }
 
 #' Setup the request for a particular endpoint collection

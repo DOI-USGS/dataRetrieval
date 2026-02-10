@@ -1,12 +1,17 @@
 dataRetrieval 2.7.22.9000
 ===================
 * Added data.table to Imports
-* Added data.table importFrom entries to NAMESPACE
 * Added read_waterdata_stats_por and read_waterdata_stats_daterange to access USGS daily data statistics.
 * Updated vignettes, examples, and README to reflect new stats functions.
 * Added tests for read_waterdata_stats functions
 * Updated next_req_url to allow paging through /statistics API output
-* Added deprecate message to readNWISstat function.
+* Added deprecate message to readNWISstat function
+* Specify "UTC" attribute for returned time
+* Added options("dataRetrieval.attach_request" = TRUE) as default to attach the 
+request object as an attribute to the returned data frames. Setting 
+options("dataRetrieval.attach_request" = FALSE) will return a data frame without
+the request attribute
+* Improved time documentation
 
 
 dataRetrieval 2.7.22
