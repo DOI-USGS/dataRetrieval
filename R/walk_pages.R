@@ -106,7 +106,7 @@ get_csv <- function(req, limit){
   
   if(httr2::resp_has_body(resp)){
     return_list <- httr2::resp_body_string(resp) 
-    df <- suppressMessages(readr::read_csv(file = return_list))
+    df <- data.table::fread(input = return_list, data.table = FALSE)
     if(skip_geo){
       df <- df[, names(df)[!names(df) %in% c("x", "y")]]
     } else {

@@ -62,7 +62,9 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{last_modified} that intersects the value of datetime are selected.}
+Only features that have a \code{last_modified} that intersects the value of datetime are selected.
+
+See also Details below for more information.}
 
 \item{observing_procedure}{Water measurement or water-quality observing procedure descriptions.}
 
@@ -85,10 +87,7 @@ Examples:
 
 Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.
 
-You can also use a vector of length 2: the first value being the starting date,
-the second value being the ending date. NA's within the vector indicate a
-half-bound date. For example, c("2024-01-01", NA) will return all data starting
-at 2024-01-01.}
+See also Details below for more information.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
@@ -114,6 +113,22 @@ is available. Use \code{TRUE} with caution.}
 \description{
 Field measurements are physically measured values collected during a visit to the monitoring location. Field measurements consist of measurements of gage height and discharge, and readings of groundwater levels, and are primarily used as calibration readings for the automated sensors collecting continuous data. They are collected at a low frequency, and delivery of the data in WDFN may be delayed due to data processing time.
 }
+\details{
+You can also use a vector of length 2 for any time queries (such as time
+or last_modified). The first value is the starting date (or datetime),
+the second value is the ending date(or datetime).
+NA's within the vector indicate a half-bound date.
+For example, \code{time = c("2024-01-01", NA)} will return all data starting
+at 2024-01-01.
+\code{time = c(NA, "2024-01-01")} will return all data from the beginning of
+the timeseries until 2024-01-01.
+By default, time is assumed UTC, although time zone attributes
+will be accommodated. As an example, setting \code{time = as.POSIXct(c("2021-01-01 12:00:00",
+"2021-01-01 12:00"), tz = "America/New_York")} will request data that between
+noon and 2pm eastern time on 2021-01-01.
+All time values RETURNED from the service are UTC with the exception of
+daily data, which returns time values in local dates.
+}
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 
@@ -123,8 +138,11 @@ field_data_sf <- read_waterdata_field_measurements(monitoring_location_id = site
 
 groundwater <- read_waterdata_field_measurements(monitoring_location_id = "USGS-375907091432201")
 
-gwl_data <- read_waterdata_field_measurements(monitoring_location_id = "USGS-375907091432201",
-                           parameter_code = "72019",
+gwl_data <- read_waterdata_field_measurements(monitoring_location_id = "USGS-02238500",
+                           parameter_code = "00060",
+                           time = as.POSIXct(c("2024-02-26 15:00:00",
+                                               "2025-08-27 12:00:00"),
+                                             tz = "America/Chicago"),
                            skipGeometry = TRUE)
                         
 gwl_data_period <- read_waterdata_field_measurements(

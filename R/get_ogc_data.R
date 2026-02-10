@@ -61,7 +61,10 @@ get_ogc_data <- function(args,
                                output_id)
   }
   
-  attr(return_list, "request") <- req
+  if(getOption("dataRetrieval.attach_request")){
+    attr(return_list, "request") <- req
+  }
+  
   attr(return_list, "queryTime") <- Sys.time()
   return(return_list)
 }
