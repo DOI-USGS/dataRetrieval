@@ -119,8 +119,12 @@ importRDB1 <- function(obs_url,
     }
     doc <- obs_url
   } 
-
-  readr.total <- readr::read_lines(doc)
+  if(file.exists(doc)){
+    readr.total <- readr::read_lines(doc)
+  } else {
+    readr.total <- readr::read_lines(I(doc))
+  }
+  
   if(readr.total[length(readr.total)] == ""){
     readr.total <- readr.total[-length(readr.total)]
   }

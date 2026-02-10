@@ -34,7 +34,7 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@6012817847b5f064d0882d67a7b5e2ca6639afb2
 
-      - uses: r-lib/actions/setup-r@473c68190595b311a74f208fba61a8d8c0d4c247
+      - uses: r-lib/actions/setup-r@cdfe59f7d9ed0bc33451d5e5d5d9dde04246fa59
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
