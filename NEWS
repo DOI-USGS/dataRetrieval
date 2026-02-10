@@ -5,7 +5,7 @@ dataRetrieval 2.7.22.9000
 * Updated vignettes, examples, and README to reflect new stats functions.
 * Added tests for read_waterdata_stats functions
 * Updated next_req_url to allow paging through /statistics API output
-* Added deprecate message to readNWISstat function
+* Added deprecation message to readNWISstat function
 * Specify "UTC" attribute for returned time
 * Added options("dataRetrieval.attach_request" = TRUE) as default to attach the 
 request object as an attribute to the returned data frames. Setting 

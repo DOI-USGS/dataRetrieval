@@ -124,7 +124,7 @@ at 2024-01-01.
 the timeseries until 2024-01-01.
 By default, time is assumed UTC, although time zone attributes
 will be accommodated. As an example, setting \code{time = as.POSIXct(c("2021-01-01 12:00:00",
-"2021-01-01 12:00"), tz = "America/New_York")} will request data that between
+"2021-01-01 14:00"), tz = "America/New_York")} will request data that between
 noon and 2pm eastern time on 2021-01-01.
 All time values RETURNED from the service are UTC with the exception of
 daily data, which returns time values in local dates.
