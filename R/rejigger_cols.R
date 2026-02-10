@@ -82,7 +82,7 @@ cleanup_cols <- function(df, service){
   }
   
   if("last_modified" %in% names(df)){
-    attr(df$time, "tzone") <- "UTC"
+    attr(df$last_modified, "tzone") <- "UTC"
   }
   
   if("value" %in% names(df)){
