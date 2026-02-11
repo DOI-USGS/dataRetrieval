@@ -4,6 +4,7 @@
 version](http://www.r-pkg.org/badges/version/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
 [![](http://cranlogs.r-pkg.org/badges/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/dataRetrieval)](https://cran.r-project.org/package=dataRetrieval)
+[![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/DOI-USGS/dataRetrieval)
 
 The `dataRetrieval` package was created to simplify the process of
 loading hydrologic data into the R environment. It is designed to
