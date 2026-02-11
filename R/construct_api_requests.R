@@ -64,15 +64,20 @@ construct_api_requests <- function(service,
     warning("No filtering arguments specified.")
   }
   # Figure out if the GET request will be > 2048 characters
-  comma_params_filtered <- Filter(Negate(anyNA), full_list[comma_params])
-
+  # and remove NA's from the comma parameters
+  comma_params_filtered <- Filter(Negate(anyNA), lapply(full_list[comma_params], function(x) x[!is.na(x)]))
+  comma_params_filtered <- comma_params_filtered[!sapply(comma_params_filtered,is.null)]
+  
+  single_params_filtered <- Filter(Negate(anyNA), full_list[single_params])
+  single_params_filtered <- single_params_filtered[!sapply(single_params_filtered,is.null)]
+  
   force_post <- nchar(paste0(unlist(comma_params_filtered), collapse = ",")) > 2048
   
   if(force_post){
-    get_list <- full_list[names(full_list) %in% c(single_params)]
+    get_list <- single_params_filtered
   } else {
     # GET list refers to arguments that will go in the URL no matter what (not POST)
-    get_list <- full_list[names(full_list) %in% c(single_params, comma_params)]    
+    get_list <- c(single_params_filtered, comma_params_filtered)    
   }
 
   get_list[["skipGeometry"]] <- skipGeometry
