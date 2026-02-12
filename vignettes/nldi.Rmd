@@ -44,7 +44,7 @@ Imagine you want to know about UCSB using Google Maps. In asking about the entit
 <br><br>
 
 ```{r, fig.cap = "UCSB via Google Maps",  echo = FALSE}
-knitr::include_graphics("ucsb.png")
+knitr::include_graphics("images/ucsb.png")
 ```
 <br><br>
 
@@ -52,7 +52,7 @@ Imagine then that you want to travel from UCSB to UCLA and know you need gas alo
 
 <br><br>
 ```{r, fig.cap = "Gas stations between UCSB and UCLA",  echo = FALSE}
-include_graphics("nldi-gas-station-example.png")
+knitr::include_graphics("images/nldi-gas-station-example.png")
 ```
 <br><br>
 

@@ -26,7 +26,7 @@ library(ggplot2)
 library(tidyr)
 library(dplyr)
 
-site1 <- "USGS-05428500"
+site1 <- "USGS-02037500"
 ```
 
 ## Fetching day-of-year and month-of-year statistics
@@ -91,14 +91,18 @@ After a bit of data manipulation, we can then visualize the percentiles as "ribb
 Each ribbon spans between two percentiles returned by the /statistics API (e.g., minimum to 5th, 5th to 10th, etc).
 
 ```{r, message=FALSE, warning=FALSE}
-doy_perc_bands_plt <-
+doy_perc_bands <-
   full_por_percentiles |>
   sf::st_drop_geometry() |>
   dplyr::filter(time_of_year_type == "day_of_year") |>
   select(time_of_year, percentile, value) |>
   mutate(time_of_year = as.Date(time_of_year, format = "%m-%d")) |>
-  pivot_wider(names_from = percentile, values_from = value) |>
-  ggplot(aes(x = time_of_year)) +
+  pivot_wider(names_from = percentile, values_from = value) 
+
+pcode_info <- read_waterdata_parameter_codes(parameter_code = "00060")
+
+ggplot(data = doy_perc_bands, 
+       aes(x = time_of_year)) +
   geom_ribbon(aes(ymin = `95`, ymax = `100`), fill = "#292f6b") +
   geom_ribbon(aes(ymin = `90`, ymax = `95`), fill = "#5699c0") +
   geom_ribbon(aes(ymin = `75`, ymax = `90`), fill = "#aacee0") +
@@ -107,33 +111,74 @@ doy_perc_bands_plt <-
   geom_ribbon(aes(ymin = `5`, ymax = `10`), fill = "#dcb668") +
   geom_ribbon(aes(ymin = `0`, ymax = `5`), fill = "#8f4f1f") +
   geom_line(aes(y = `50`), linewidth = .2, color = "black") +
-  scale_x_date(date_labels = "%b", date_breaks = "1 month") +
+  scale_x_date(date_labels = "%b", date_breaks = "1 month",
+               expand = expand_scale(mult = c(0, 0))) +
+  scale_y_log10(breaks = scales::breaks_log(base = 10),
+                labels = scales::label_log(base = 10)) +
   labs(
-    x = "Month–day",
-    y = "Value",
+    x = "Month-day",
+    y = pcode_info$parameter_description,
     title = "Day-of-year percentile bands"
   ) +
-  theme_minimal()
+  theme_bw()
 
-doy_perc_bands_plt
 ```
 
-Finally, let's overlay a specific year's daily mean data onto the plot:
+Finally, let's overlay daily mean data onto the plot:
 
 ```{r, message=FALSE, warning=FALSE}
-daily_2024 <- read_waterdata_daily(
-  monitoring_location_id = site1,
-  parameter_code = "00060",
-  statistic_id = "00003", 
-  time = "2024-01-01/2024-12-31") |>
+range <- as.Date(c("2025-01-01", "2026-02-01"))
+
+complete_df <- data.frame(time = seq.Date(from = range[1], 
+                                          to = as.Date("2026-12-31"),
+                                          by = "day")) |>
   mutate(time_of_year = as.Date(format(time, "%m-%d"), format = "%m-%d"))
 
-doy_perc_bands_plt +
-  geom_line(data = daily_2024, aes(y = value), linewidth = 1) +
+daily_data <- complete_df |> 
+  left_join(read_waterdata_daily(
+                monitoring_location_id = site1,
+                parameter_code = "00060",
+                statistic_id = "00003", 
+                time = range),
+            by = "time") |> 
+  left_join(doy_perc_bands, by = "time_of_year")
+
+update_geom_defaults("ribbon",
+                   list(alpha = 0.5))
+
+ggplot(data = daily_data, 
+       aes(x = time)) +
+  geom_ribbon(aes(ymin = `95`, ymax = `100`), fill = "#292f6b") +
+  geom_ribbon(aes(ymin = `90`, ymax = `95`), fill = "#5699c0") +
+  geom_ribbon(aes(ymin = `75`, ymax = `90`), fill = "#aacee0") +
+  geom_ribbon(aes(ymin = `25`, ymax = `75`), fill = "#e9e9e9") +
+  geom_ribbon(aes(ymin = `10`, ymax = `25`), fill = "#ebd6ab") +
+  geom_ribbon(aes(ymin = `5`, ymax = `10`), fill = "#dcb668") +
+  geom_ribbon(aes(ymin = `0`, ymax = `5`), fill = "#8f4f1f") +
+  geom_line(aes(y = value, color = approval_status), linewidth = 1) +
+  scale_x_date(date_labels = "%b %Y",
+               date_breaks = "3 month",
+               expand = expand_scale(mult = c(0, 0)))+
+  scale_y_log10(breaks = scales::breaks_log(base = 10),
+                labels = scales::label_log(base = 10)) +
+  scale_color_manual("Status",
+                     values = c("Approved" = "black",
+                                "Provisional" = "red"), 
+                     breaks = c("Approved", "Provisional"),
+                     limits = force,
+                     drop = TRUE) +
   labs(
-    title = "2024 daily discharge + percentile bands"
-  )
+    x = "",
+    y = pcode_info$unit_of_measure,
+    title = paste0("January 1, 2025 - December 31, 2026\n",
+                   pcode_info$parameter_description)
+  ) +
+  theme_bw()
+
 ```
+
+As  <https://waterdata.usgs.gov/monitoring-location/USGS-02037500/statistical-graphs/>
+
 
 ## Fetching monthly and annual statistics within a date range
 

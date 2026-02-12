@@ -463,6 +463,10 @@ test_that("pCode Stuff", {
   expect_equal(nrow(paramINFO), 3)
   expect_true(all(paramINFO$parameter_code %in% c("00060", "01075", "00931")))
   
+  paramINFO <- read_waterdata_parameter_codes(parameter_code = c("00060", "01075", "00931", NA))
+  expect_equal(nrow(paramINFO), 3)
+  expect_true(all(paramINFO$parameter_code %in% c("00060", "01075", "00931")))
+  
   # pcode 12345 isn't a valid code:
   paramINFO <- read_waterdata_parameter_codes(c("12345"))
   expect_true(nrow(paramINFO) == 0)

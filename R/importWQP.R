@@ -73,8 +73,8 @@ importWQP <- function(obs_url, tz = "UTC",
   
   attr(retval, 'spec') <- NULL
   
-  if(any(grepl("ERROR: INCOMPLETE DATA", retval[1,]))){
-    stop(retval[[1]])
+  if(any(grepl("ERROR: INCOMPLETE DATA", retval[[1]]))){
+    stop(retval[[1]][grepl("ERROR: INCOMPLETE DATA", retval[[1]])])
   }
   
   # this is only needed for legacy
