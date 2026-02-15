@@ -36,14 +36,16 @@ get_resp_data <- function(resp) {
   }
   
   use_sf <- !grepl("skipGeometry=true", resp$url, ignore.case = TRUE)
-  return_df <- sf::read_sf(httr2::resp_body_string(resp))
+  
+  return_df <- sf::read_sf(httr2::resp_body_string(resp)) |>
+    dplyr::mutate(across(-all_of("geometry"), as.character))
   
   if(!use_sf){
     return_df <- sf::st_drop_geometry(return_df)
     if("AsGeoJSON(geometry)" %in% names(return_df)){
       return_df <- return_df[, !names(return_df) %in% "AsGeoJSON(geometry)"]
     }
-  } 
+  }
 
   return(return_df)
   
