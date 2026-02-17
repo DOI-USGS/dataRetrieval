@@ -85,17 +85,5 @@ cleanup_cols <- function(df, service){
     attr(df$last_modified, "tzone") <- "UTC"
   }
   
-  if("value" %in% names(df)){
-    df$value <- as.numeric(df$value)
-  }
-  
-  if("contributing_drainage_area" %in% names(df)){
-    df$contributing_drainage_area <- as.numeric(df$contributing_drainage_area)
-  }
-  
-  if("drainage_area" %in% names(df)){
-    df$drainage_area <- as.numeric(df$drainage_area)
-  }  
-  
   df
 }
