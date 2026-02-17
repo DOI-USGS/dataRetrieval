@@ -10,7 +10,8 @@ pkg.env <- new.env()
   services <- c("server", "daily", "time-series-metadata",
                "monitoring-locations", "latest-continuous",
                "field-measurements", "latest-daily",
-               "continuous")
+               "continuous", "field-measurements-metadata",
+               "combined-metadata", "channel-measurements")
   collections <- c("parameter-codes", "agency-codes", "altitude-datums", "aquifer-codes",
                    "aquifer-types", "coordinate-accuracy-codes", "coordinate-datum-codes",
                    "coordinate-method-codes", "medium-codes", "counties",

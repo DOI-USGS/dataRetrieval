@@ -73,11 +73,13 @@
 #'                                                         "USGS-09423350"),
 #'                              properties = c("monitoring_location_id",
 #'                                             "state_name",
+#'                                             "county_name",
 #'                                             "country_name"))
 #'                                             
-#' site_slim_no_sf_slim <- read_waterdata_monitoring_location(monitoring_location_id = site,
+#' site_slim_no_sf_slim <- read_waterdata_monitoring_location(state_name = "Wisconsin",
 #'                                            properties = c("monitoring_location_id",
 #'                                                           "state_name",
+#'                                                           "county_name",
 #'                                                           "country_name"), 
 #'                                            skipGeometry = TRUE)
 #'
