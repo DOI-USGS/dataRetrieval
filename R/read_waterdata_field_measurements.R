@@ -8,6 +8,7 @@
 #' @param parameter_code `r get_ogc_params("field-measurements")$parameter_code`
 #' Multiple parameter_codes can be requested as a character vector.
 #' @param observing_procedure_code `r get_ogc_params("field-measurements")$observing_procedure_code`
+#' @param observing_procedure `r get_ogc_params("field-measurements")$observing_procedure`
 #' @param time `r get_ogc_params("field-measurements")$time`
 #' 
 #' See also Details below for more information.
@@ -19,7 +20,6 @@
 #' See also Details below for more information.
 #' @param qualifier `r get_ogc_params("field-measurements")$qualifier`
 #' @param field_visit_id `r get_ogc_params("field-measurements")$field_visit_id`
-#' @param observing_procedure `r get_ogc_params("field-measurements")$observing_procedure`
 #' @param vertical_datum `r get_ogc_params("field-measurements")$vertical_datum`
 #' @param measuring_agency `r get_ogc_params("field-measurements")$measuring_agency`
 #' @param properties A vector of requested columns to be returned from the query.

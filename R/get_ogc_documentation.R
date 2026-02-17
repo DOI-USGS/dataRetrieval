@@ -100,11 +100,14 @@ get_ogc_params <- function(service){
 #' 
 #' }
 #' 
-get_properties_for_docs <- function(service, output_id){
+get_properties_for_docs <- function(service, output_id = NA){
   
   schema <- check_OGC_requests(endpoint = service, type = "schema")
   properties <- names(schema$properties)
-  properties[properties == "id"] <- output_id
+  if(!is.na(output_id)){
+    properties[properties == "id"] <- output_id    
+  }
+
   return(paste(properties, collapse = ", "))
   
 }
