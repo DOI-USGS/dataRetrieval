@@ -38,6 +38,12 @@ get_resp_data <- function(resp) {
   use_sf <- !grepl("skipGeometry=true", resp$url, ignore.case = TRUE)
   return_df <- sf::read_sf(httr2::resp_body_string(resp))
   
+  included_num_cols <- names(return_df)[names(return_df) %in% num_cols]
+
+  if(!all(sapply(sf::st_drop_geometry(return_df[,included_num_cols]), is.numeric))){
+    return_df[, included_num_cols] <- lapply(sf::st_drop_geometry(return_df[, included_num_cols]), as.numeric)
+  }
+  
   if(!use_sf){
     return_df <- sf::st_drop_geometry(return_df)
     if("AsGeoJSON(geometry)" %in% names(return_df)){
@@ -106,7 +112,15 @@ get_csv <- function(req, limit){
   
   if(httr2::resp_has_body(resp)){
     return_list <- httr2::resp_body_string(resp) 
-    df <- data.table::fread(input = return_list, data.table = FALSE)
+    df <- data.table::fread(input = return_list, 
+                            data.table = FALSE)
+    
+    included_num_cols <- names(df)[names(df) %in% num_cols]
+    
+    if(!all(sapply(df[,included_num_cols], is.numeric))){
+      df[, included_num_cols] <- lapply(df[, included_num_cols], as.numeric)
+    }
+    
     if(skip_geo){
       df <- df[, names(df)[!names(df) %in% c("x", "y")]]
     } else {
