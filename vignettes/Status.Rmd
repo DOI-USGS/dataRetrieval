@@ -57,17 +57,22 @@ df <- data.frame(
     "read_waterdata_ts_meta",
     "read_waterdata_parameter_codes",
     "read_waterdata_field_measurements",
-    "read_waterdata_field_measurements",
+    "read_waterdata_field_measurements, read_waterdata_channel",
     "read_waterdata",
     "read_waterdata_continuous", 
     "", #rating
     "read_waterdata_stats_por, read_waterdata_stats_daterange",
-    rep("", 3)
+    rep("", 2),
+    "read_waterdata_ts_meta, read_waterdata_field_meta, read_waterdata_combined_meta"
   ),
-  "Available on (branch)" = c(rep("main (CRAN)", 9), 
+  "Available on (branch)" = c(rep("main (CRAN)", 6), 
+                              "main (CRAN), develop",
+                              "main (CRAN)",
+                              "main (CRAN)",
                               "",
                               "develop", 
-                              rep("", 3))
+                              rep("", 2), 
+                              "main (CRAN), develop, develop")
 )
 
 knitr::kable(df, col.names = c("WaterServices (legacy) function", "Water Data (new) function", "Available on (branch name)"))
