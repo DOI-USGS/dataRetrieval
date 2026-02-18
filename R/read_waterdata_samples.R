@@ -131,6 +131,13 @@ construct_waterdata_sample_request <- function(monitoringLocationIdentifier = NA
     httr2::req_url_path_append("samples-data") |>
     httr2::req_url_query(mimeType = "text/csv")
   
+  token <- Sys.getenv("API_USGS_PAT")
+  
+  if(token != ""){
+    baseURL <- baseURL |>
+      httr2::req_headers_redacted(`X-Api-Key` = token)
+  }
+  
   switch(dataType,
          results = {
            available_profiles <- c("fullphyschem", "basicphyschem",
