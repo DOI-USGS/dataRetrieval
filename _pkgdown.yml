@@ -42,6 +42,8 @@ navbar:
       href: articles/samples_data.html
     - text: Daily Statistics
       href: articles/daily_data_statistics.html
+    - text: Continuous Data
+      href: articles/continuous_pr.html
     - text: Changes to QW
       href: articles/qwdata_changes.html
     - text: Background
@@ -84,6 +86,9 @@ reference:
       - summarize_waterdata_samples
       - check_waterdata_sample_params
       - get_ogc_params
+      - read_waterdata_channel
+      - read_waterdata_combined_meta
+      - read_waterdata_field_meta
   - title: National Water Information System (NWIS)
     desc:  Functions to retrieve (USGS) NWIS data. These will be slowly phased out and replaced with the read_waterdata family of functions.
     contents:

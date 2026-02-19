@@ -43,6 +43,12 @@ get_resp_data <- function(resp) {
   if(!all(sapply(sf::st_drop_geometry(return_df[,included_num_cols]), is.numeric))){
     return_df[, included_num_cols] <- lapply(sf::st_drop_geometry(return_df[, included_num_cols]), as.numeric)
   }
+
+  if("qualifier" %in% names(return_df)){
+    return_df$qualifier <- vapply(X = return_df$qualifier,
+                             FUN = function(x) paste(x, collapse = ", "),
+                             FUN.VALUE =  c(NA_character_)) 
+  }
   
   if(!use_sf){
     return_df <- sf::st_drop_geometry(return_df)

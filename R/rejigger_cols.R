@@ -65,14 +65,6 @@ rejigger_cols <- function(df, properties, output_id){
 #' 
 cleanup_cols <- function(df, service){
   
-  if("qualifier" %in% names(df)){
-    if(!all(is.na(df$qualifier))){
-      df$qualifier <- vapply(X = df$qualifier,
-                             FUN = function(x) paste(x, collapse = ", "),
-                             FUN.VALUE =  c(NA_character_)) 
-    }
-  }
-  
   if("time" %in% names(df)){
     if(service == "daily"){
       df$time <- as.Date(df$time)

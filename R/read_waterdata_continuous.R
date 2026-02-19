@@ -84,6 +84,38 @@
 #'                                                                      "USGS-14181500"),
 #'                                                parameter_code = c("00060", "72019"),
 #'                                                last_modified = "P7D")
+#'                                                
+#' # how to split up request into roughly 3 year chunks
+#' 
+#' site <- "USGS-0208458892"
+#' pcode <- "00095" # Specific conductance
+#' start <- as.Date("2013-01-01")  
+#' end <- as.Date("2025-12-31") 
+#' 
+#' n_days <- difftime(end, start, units = "days")
+#'
+#' # create a vector of dates that are about 3 years apart:
+#' time_chunks <- seq(from = start, 
+#'                    to = end,
+#'                    length.out = ceiling(n_days/(3*365.25)) + 1)
+#' 
+#' 
+#' # create a list where each element starts at the beginning
+#' # of a chunk, and ends the day before the next chunk:
+#' time_df <- data.frame(start = time_chunks[-length(time_chunks)],
+#'                       end = time_chunks[-1]-1)
+#'                       
+#' #all_data <- data.frame()
+#' #for(i in seq_along(time_df$start)){
+#' #   sub_df <- read_waterdata_continuous(monitoring_location_id = site,
+#' #                                       parameter_code = pcode,
+#' #                                      time = c(time_df$start[i],
+#' #                                                time_df$end[i]))
+#' #   all_data <- rbind(all_data, sub_df)
+#' }
+#' 
+#' # Set the time to Eastern:
+#' all_data$time <- lubridate::force_tz(all_data$time, "America/New_York")
 #' 
 #' }
 read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
