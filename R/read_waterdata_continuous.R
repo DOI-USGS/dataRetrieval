@@ -112,10 +112,10 @@
 #' #                                      time = c(time_df$start[i],
 #' #                                                time_df$end[i]))
 #' #   all_data <- rbind(all_data, sub_df)
-#' }
+#' # }
 #' 
 #' # Set the time to Eastern:
-#' all_data$time <- lubridate::force_tz(all_data$time, "America/New_York")
+#' # all_data$time <- lubridate::force_tz(all_data$time, "America/New_York")
 #' 
 #' }
 read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
