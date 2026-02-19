@@ -50,7 +50,7 @@ continuous_available <- read_waterdata_ts_meta(
 
 We can see the available data here:
 
-```{r echo=FALSE}
+```{r echo=FALSE, eval=TRUE}
 
 df <- continuous_available[,
                            c("parameter_name",
@@ -123,7 +123,6 @@ library(targets)
 tar_option_set(packages = c("dataRetrieval"),
                error = "trim")
 
-# ideally save this in folder somewhere and load it:
 get_time_df <- function(start, end){
   # Figure out total number of days:
   n_days <- difftime(end, start, units = "days")
@@ -161,7 +160,7 @@ list(
 )
 ```
 
-Once the _targets.R file is created, you can run:
+Once the `_targets.R` file is created, you can run:
 
 ```{r eval=FALSE}
 library(targets)
