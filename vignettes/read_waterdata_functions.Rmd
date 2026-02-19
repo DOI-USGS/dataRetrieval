@@ -197,7 +197,7 @@ sensor_data <- read_waterdata_continuous(monitoring_location_id = "USGS-01491000
 
 Currently this service only allows up to 3 years of data to be requested at once. If no time is specified in the query, the latest year of data is returned. If you manage large data pipelines, this might sound very restrictive.
 
-For more information, see [Continuous Data](articles/continuous_pr.Rmd).
+For more information, see [Continuous Data](continuous_pr.html).
 
 **HOWEVER**, if you regularly make full period of record queries you may want to wait a few months before rewriting your workflows. We expect that a direct access to full period of record downloads will be available before the NWIS web services are shut down. We plan to make `dataRetrieval` function(s) to access that direct download access. 
 
