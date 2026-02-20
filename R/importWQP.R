@@ -180,13 +180,11 @@ parse_WQP <- function(retval, tz = "UTC"){
         
       } else if(all(c(date_col, time_col_wqx3, tz_col_wqx3) %in% names(retval))){
         # WQX3
-        if(!all(is.na(retval[[date_col]]))){
           retval <- create_dateTime(retval, 
                                     date_col = date_col,
                                     time_col = time_col_wqx3,
                                     tz_col = tz_col_wqx3,
                                     tz = tz)
-        }        
       } else {
         # This is the legacy pattern:
         time_col <- gsub("Date", "Time.Time", date_col)
