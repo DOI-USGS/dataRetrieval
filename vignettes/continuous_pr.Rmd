@@ -31,9 +31,9 @@ knitr::opts_chunk$set(echo = TRUE,
 
 There is an increasing amount of continuous data available from the USGS. Continuous data are collected via automated sensors installed at a monitoring location. They are collected at a high frequency and often at a fixed 15-minute interval. Depending on the specific monitoring location, the data may be transmitted automatically via telemetry and be available on WDFN within minutes of collection, while other times the delivery of data may be delayed if the monitoring location does not have the capacity to automatically transmit data. Continuous data are described by parameter name and parameter code (pcode). These data might also be referred to as "instantaneous values" or "IV".
 
-The current service that delivers this data only allows up to 3 years of continuous data to be requested at once. We will update this article if that limitation changes, or if alternative more efficient workflows become available.
+The current service that delivers this data only allows up to 3 years of continuous data to be requested at once. We will update this article if that limitation changes, or if alternative more efficient workflows become available. In the meantime, here are two ways in which you could request full period of record set of continuous data. Let's walk through a couple of ways to get a lot of continuous data
 
-In the meantime, here are two ways in which you could request full period of record set of continuous data. Let's walk through a couple of ways to get a lot of continuous data
+If you are running on a fairly standard laptop, feel free to make requests in parallel. If you are running on a supercomputer or HPC type environment, your requests will be stopped/killed. There may be techniques to not overwhelm the system, contact comptools@usgs.gov if you need help figuring that out.
 
 First, let's look for what continuous data is available at a particular site (USGS-0208458892):
 
@@ -62,43 +62,39 @@ df$end <- as.Date(df$end)
 kable(sf::st_drop_geometry(df))
 ```
 
-Let's say we are interested in "Specific cond at 25C" and "Salinity" for the water years 2013-2025.
+Let’s say we are interested in "Specific cond at 25C" and "Salinity" for the water years 2013-2025.
 
-## Basic R script
+## Basic R scripts
+
+First, we'll create a list of beginning and ending dates that are separated in chunks. The services have been set up to be more efficient returning queries for a single calendar year, so we will set up a data frame that gives those time limits:
 
 ```{r}
-parameter_names <- c("Specific cond at 25C", "Salinity")
-parameter_codes <- continuous_available$parameter_code[
-  continuous_available$parameter_name %in% parameter_names]
 start <- as.Date("2012-10-01")
 end <- as.Date("2025-09-30")
-```
 
-First, we'll create a list of beginning and ending dates that are separated in approximately 3 year chunks:
-
-```{r}
-# Figure out total number of days:
-n_days <- difftime(end, start, units = "days")
-
-# create a vector of dates that are about 3 years apart:
-time_chunks <- seq(from = start,
-                   to = end,
-                   length.out = ceiling(n_days/(3*365.25)) + 1)
+year_range <- lubridate::year(c(start, end))
+date_ranges <- as.Date(paste0(seq(from = year_range[1], 
+                                  to = year_range[2]),
+                              "-01-01"))[-1]
+starts <- c(start, date_ranges)
+ends <- c(date_ranges - 1, end)
 
 # create a data frame where each element starts at the beginning
 # of a chunk, and ends the day before the next chunk:
-time_df <- data.frame(start = time_chunks[-length(time_chunks)],
-                      end = time_chunks[-1]-1)
+time_df <- data.frame(start = starts,
+                      end = ends)
 time_df
 ```
 
-Then we can use a for loop (if you prefer `apply` or `purrr::map` those would work too!) to get the data:
+Then we can use a `for` loop, `apply`, or `purrr` to get the data:
+
+### for Loop
 
 ```{r}
 all_data <- data.frame()
 for(i in seq_along(time_df$start)){
   sub_df <- read_waterdata_continuous(monitoring_location_id = site,
-                                      parameter_code = parameter_codes,
+                                      # parameter_code = parameter_codes,
                                       time = c(time_df$start[i],
                                                time_df$end[i]))
   all_data <- rbind(all_data, sub_df)
@@ -106,36 +102,63 @@ for(i in seq_along(time_df$start)){
 
 ```
 
+### apply
 
-That's all fine and good if everything works perfectly. What if something goes wrong in the middle of the pull?
+```{r}
+get_data_list <- apply(time_df, 1, FUN = function(x){
+  read_waterdata_continuous(monitoring_location_id = site,
+                            parameter_code = parameter_codes,
+                            time = c(x[["start"]],
+                                     x[["end"]]))
+})
+
+all_data <- do.call("rbind", get_data_list )
+
+```
+
+### purrr 
+
+```{r}
+purr_list <- time_df |> 
+  purrr::pmap(
+    \(start, end, ...) read_waterdata_continuous(
+      monitoring_location_id = site, 
+      parameter_code = parameter_codes, 
+      time = c(start, end))
+  )
+
+all_data <- purrr::list_rbind(purr_list)
+
+```
+
+That's all fine and good if everything works perfectly. What if something goes wrong in the middle of the pull? You could put some `tryCatch` statements in the above code, post process out what was missed, and re-request the missing data...OR...consider using a `targets` pipeline to take care of all of that!
 
 ## Basic "targets" pipeline
 
-We can use the [`targets`](https://books.ropensci.org/targets/) package to create a pipeline. The pipeline gets run, and only parts of the pipeline that failed can then be re-run. 
+We can use the [`targets`](https://books.ropensci.org/targets/) package to create a data pipeline.
 
-First step, save this code in a file called `_targets.R`. This code creates dynamic branches in the "get_data" target based on the ~3 year time chunks. 
+First step, save this code in a file called `_targets.R`. This code creates dynamic branches in the "get_data" target based on the annual time chunks. 
 
 ```{r eval=FALSE}
 # Load packages required to define the pipeline:
 library(targets)
+library(future)
+plan(multisession)
 
 # Set target options:
 tar_option_set(packages = c("dataRetrieval"),
                error = "trim")
 
 get_time_df <- function(start, end){
-  # Figure out total number of days:
-  n_days <- difftime(end, start, units = "days")
-  
-  # create a vector of dates that are about 3 years apart:
-  time_chunks <- seq(from = start,
-                     to = end,
-                     length.out = ceiling(n_days/(3*365.25)) + 1)
-  
-  # create a list where each element starts at the beginning
-  # of a chunk, and ends the day before the next chunk:
-  time_df <- data.frame(start = time_chunks[-length(time_chunks)],
-                        end = time_chunks[-1]-1)
+  year_range <- lubridate::year(c(start, end))
+  date_ranges <- as.Date(paste0(seq(from = year_range[1], 
+                                    to = year_range[2]),
+                                "-01-01"))[-1]
+  starts <- c(start, date_ranges)
+  ends <- c(date_ranges - 1, end)
+
+  time_df <- data.frame(start = starts,
+                        end = ends)
   
   return(time_df)
 }
@@ -150,9 +173,10 @@ list(
              command = get_time_df(start = config[["start"]],
                                    end = config[["end"]])),
   tar_target(name = get_data,
-             command = read_waterdata_continuous(monitoring_location_id = config[["site"]],
-                                                 parameter_code = config[["parameter_codes"]],
-                                                 time = c(time_df$start, time_df$end)),
+             command = read_waterdata_continuous(
+               monitoring_location_id = config[["site"]],
+               parameter_code = config[["parameter_codes"]],
+               time = c(time_df$start, time_df$end)),
              pattern = map(time_df),
              iteration = "list"),
   tar_target(name = all_data,
@@ -171,34 +195,20 @@ If everything went according to plan, the last several printed messages would lo
 
 ```
 > tar_make()
-+ time_df dispatched                         
-✔ time_df completed [0ms, 205 B]
-+ get_data declared [5 branches]
-Initiating curl with CURL_SSL_BACKEND: openssl1.4s, 1+, 1-]
++ config dispatched                          
+✔ config completed [3.8s, 178 B]                            
++ time_df dispatched                                        
+✔ time_df completed [810ms, 255 B]                          
++ get_data declared [14 branches]                           
+Initiating curl with CURL_SSL_BACKEND: openssl[4.9s, 2+, 0-]
 Requesting:
-https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-0208458892&parameter_code=00095,00480&time=2012-10-01T00%3A00%3A00Z%2F2015-05-07T09%3A36%3A00Z&limit=50000
-Remaining requests this hour:500                          
-Remaining requests this hour:499 s
-Requesting: ■■■■■■■■■■■■                     [1m 45.4s, 2+, 1-]
-https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-0208458892&parameter_code=00095,00480&time=2015-05-08T09%3A36%3A00Z%2F2017-12-11T19%3A12%3A00Z&limit=50000
-Remaining requests this hour:498                              
-Remaining requests this hour:497 s
-Requesting: ■■■■■■■■■■■■■■■■                 [3m 20.4s, 3+, 1-]
-https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-0208458892&parameter_code=00095,00480&time=2017-12-12T19%3A12%3A00Z%2F2020-07-18T04%3A48%3A00Z&limit=50000
-Remaining requests this hour:496                              
-Remaining requests this hour:495 s
-Requesting: ■■■■■■■■■■■■■■■■■■■■             [4m 8.5s, 4+, 1-] 
-https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-0208458892&parameter_code=00095,00480&time=2020-07-19T04%3A48%3A00Z%2F2023-02-22T14%3A23%3A59Z&limit=50000
-Remaining requests this hour:494                             
-Remaining requests this hour:493 s
-Requesting: ■■■■■■■■■■■■■■■■■■■■■■■          [5m 3.7s, 5+, 1-]
-https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-0208458892&parameter_code=00095,00480&time=2023-02-23T14%3A23%3A59Z%2F2025-09-29T00%3A00%3A00Z&limit=50000
-Remaining requests this hour:492                             
-Remaining requests this hour:491 
-✔ get_data completed [6m 50.1s, 1.89 MB]    
-+ all_data dispatched                                        
-✔ all_data completed [870ms, 1.81 MB]  
-✔ ended pipeline [7m 0.9s, 6 completed, 1 skipped]  
+https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-0208458892&parameter_code=00095,00480&time=2012-10-01T00%3A00%3A00Z%2F2012-12-31T00%3A00%3A00Z&limit=50000
+Remaining requests this hour:2818                           
+Requesting:s ■■■■■■                           [12.1s, 3+, 0-]
+...
+
+
+
 ```
 
 If instead it ended with any errors, it would look something like this:
@@ -222,10 +232,47 @@ To load the `all_data` target into your R environment:
 tar_load(all_data)
 ```
 
+## Run in parallel
 
-## Parallel "targets" pipeline
+### future.apply
 
-You can run the target pipeline in parallel in a few different ways (see the [targets documentation](https://books.ropensci.org/targets/)). One way is to add to the top of the `_targets.R` file:
+```{r}
+library(future.apply)
+plan(multisession)
+
+get_data_list <- future_apply(time_df, 1, FUN = function(x){
+  read_waterdata_continuous(monitoring_location_id = site,
+                            parameter_code = parameter_codes,
+                            time = c(x[["start"]],
+                                     x[["end"]]))
+})
+
+all_data <- do.call("rbind", get_data_list )
+
+```
+
+### furrr
+
+```{r}
+library(furrr)
+plan(multisession)
+
+furrr_list <- mini_time |> 
+  furrr::future_pmap(
+    \(start, end, ...) read_waterdata_continuous(
+      monitoring_location_id = site, 
+      parameter_code = parameter_codes, 
+      time = c(start, end))
+  )
+
+all_data <- purrr::list_rbind(furrr_list)
+
+```
+
+### Parallel "targets" pipeline
+
+
+You can run the target pipeline in parallel in a few different ways (see the [targets documentation](https://books.ropensci.org/targets/)). One way is to use the `future` package. We already added that to the top of the `_targets.R` file:
 
 ```{r}
 # Load packages required to define the pipeline:
@@ -234,7 +281,7 @@ library(future)
 plan(multisession)
 ```
 
-Then, when you run the pipeline, use `tar_make_future` instead of `tar_make()`:
+To run in parallel, use `tar_make_future` instead of `tar_make()`:
 
 ```
 > targets::tar_make_future()
