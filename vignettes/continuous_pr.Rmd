@@ -68,7 +68,7 @@ Let’s say we are interested in "Specific cond at 25C" and "Salinity" for the w
 
 First, we'll create a list of beginning and ending dates that are separated in chunks. The services have been set up to be more efficient returning queries for a single calendar year, so we will set up a data frame that gives those time limits:
 
-```{r}
+```{r eval=TRUE}
 start <- as.Date("2012-10-01")
 end <- as.Date("2025-09-30")
 
@@ -88,7 +88,7 @@ time_df
 
 Then we can use a `for` loop, `apply`, or `purrr` to get the data:
 
-### for Loop
+### for 
 
 ```{r}
 all_data <- data.frame()
