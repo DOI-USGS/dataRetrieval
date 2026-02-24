@@ -66,8 +66,6 @@ whatNWISsites <- function(...) {
   ##################
 
   if(!is.null(service)){
-    service[service == "gwlevels"] <- "gw"
-    service[service == "meas"] <- "sv"
     service[service == "peak"] <- "pk"
     service[service == "uv"] <- "id"
     

@@ -35,56 +35,6 @@ Possible values to provide are "America/New_York", "America/Chicago", "America/D
 "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 for more information on time zones.}
 }
-\value{
-A data frame with the following columns:
-\tabular{lll}{
-Name \tab Type \tab Description \cr
-agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
-site_no \tab character \tab The USGS site number \cr
-site_tp_cd \tab character \tab Site type code \cr
-lev_dt \tab Date \tab Date level measured\cr
-lev_tm \tab character \tab Time level measured \cr
-lev_tz_cd \tab character \tab Time datum \cr
-lev_va \tab numeric \tab Water level value in feet below land surface\cr
-sl_lev_va \tab numeric \tab Water level value in feet above specific vertical datum \cr
-lev_status_cd \tab character \tab The status of the site at the time the water level was measured \cr
-lev_agency_cd \tab character \tab The agency code of the person measuring the water level \cr
-}
-
-There are also several useful attributes attached to the data frame:
-\tabular{lll}{
-Name \tab Type \tab Description \cr
-url \tab character \tab The url used to generate the data \cr
-queryTime \tab POSIXct \tab The time the data was returned \cr
-comment \tab character \tab Header comments from the RDB file \cr
-siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
-}
-}
 \description{
-Imports groundwater level data from NWIS web service.
-Inputs to this function are just USGS site ids, USGS parameter codes,
-and start and end date. For a more complex query, use \code{\link[=readNWISdata]{readNWISdata()}},
-including an argument service="gwlevels".
-Not all parameter codes are available for all data.
-Use the function \code{\link[=whatNWISdata]{whatNWISdata()}} to discover what data
-is available for a USGS site. The column data_type_cd with the values "gw"
-returned from \code{\link[=whatNWISdata]{whatNWISdata()}}) are available from this service.
-}
-\examples{
-\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
-#site_id <- "434400121275801"
-\donttest{
-#data <- readNWISgwl(site_id)
-#sites <- c("434400121275801", "375907091432201")
-#data2 <- readNWISgwl(sites, "", "")
-#data3 <- readNWISgwl("420125073193001", "", "")
-# handling of data where date has no day
-#data4 <- readNWISgwl("425957088141001", startDate = "1980-01-01")
-
-#data5 <- readNWISgwl("263819081585801", parameterCd = "72019")
-}
-\dontshow{\}) # examplesIf}
-}
-\seealso{
-\code{\link[=constructNWISURL]{constructNWISURL()}}, \code{\link[=importRDB1]{importRDB1()}}
+Deprecated. Please see: \code{read_waterdata_field_measurements}.
 }

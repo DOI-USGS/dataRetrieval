@@ -35,44 +35,6 @@ for more information on time zones.}
 convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
 }
-\value{
-A data frame with at least the following columns:
-\tabular{lll}{
-Name \tab Type \tab Description \cr
-agency_cd \tab character \tab The NWIS code for the agency reporting the data\cr
-site_no \tab character \tab The USGS site number \cr
-measurement_dt \tab POSIXct \tab The date and time (in POSIXct) of the measurement. Unless specified
-with the tz parameter, this is converted to UTC. If the measurement_dt column is
-an incomplete, a measurement_dt_date and
-measurement_dt_time column are added to the returned data frame.   \cr
-tz_cd \tab character \tab The time zone code for the measurement_dt column \cr
-}
-
-There are also several useful attributes attached to the data frame:
-\tabular{lll}{
-Name \tab Type \tab Description \cr
-url \tab character \tab The url used to generate the data \cr
-queryTime \tab POSIXct \tab The time the data was returned \cr
-comment \tab character \tab Header comments from the RDB file \cr
-siteInfo \tab data.frame \tab A data frame containing information on the requested sites \cr
-tz_cd_reported \tab The originally reported time zone \cr
-}
-}
 \description{
-Reads surface-water measurement data from NWISweb.
-}
-\examples{
-\dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
-site_ids <- c("01594440", "040851325")
-\donttest{
-data <- readNWISmeas(site_ids)
-Meas05316840 <- readNWISmeas("05316840")
-Meas05316840.ex <- readNWISmeas("05316840", expanded = TRUE)
-Meas07227500.ex <- readNWISmeas("07227500", expanded = TRUE)
-Meas07227500.exRaw <- readNWISmeas("07227500", expanded = TRUE, convertType = FALSE)
-}
-\dontshow{\}) # examplesIf}
-}
-\seealso{
-\code{\link[=constructNWISURL]{constructNWISURL()}}, \code{\link[=importRDB1]{importRDB1()}}
+Deprecated: please see \code{read_waterdata_field_measurements}
 }
