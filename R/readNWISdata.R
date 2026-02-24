@@ -19,17 +19,16 @@
 #' list of arguments can also be supplied. One important argument to include is
 #' "service". Possible values are "iv"
 #' (for instantaneous), 
-#' "dv" (for daily values), "gwlevels" (for groundwater levels),
-#' "site" (for site service), "measurement", and "stat" (for
-#' statistics service). Note: "measurement" calls go to:
-#' <https://nwis.waterdata.usgs.gov/usa/nwis> for data requests, and use different call requests schemes.
+#' "dv" (for daily values), 
+#' "site" (for site service), and "stat" (for
+#' statistics service). 
 #' The statistics service has a limited selection of arguments
 #' (see <https://waterservices.usgs.gov/docs/site-service/>).
 #' 
 #' @details This function requires users to create their own arguments
 #' based on the NWIS web services. It is a more complicated function to use
 #' compared to other NWIS functions such as [readNWISdv()], [readNWISuv()],
-#' [readNWISgwl()], etc. However, this function adds a lot of
+#' etc. However, this function adds a lot of
 #' flexibility to the possible queries. This function will also behave exactly 
 #' as NWIS when it comes to date queries. NWIS by default will only return the latest
 #' value for the daily and instantaneous services. So if you do not provide
@@ -93,22 +92,6 @@
 #' multiSite <- readNWISdata(
 #'   sites = c("04025500", "040263491"),
 #'   service = "iv", parameterCd = "00060"
-#' )
-#' 
-#'
-#' GWL <- readNWISdata(site_no = c("392725077582401", 
-#'                                 "375907091432201"),
-#'                     parameterCd = "62610",
-#'                     service = "gwlevels")
-#'                     
-#' levels <- readNWISdata(stateCd = "WI", 
-#'                        service = "gwlevels",
-#'                        startDate = "2024-05-01",
-#'                        endDate = "2024-05-30") 
-#'                     
-#' meas <- readNWISdata(
-#'   state_cd = "WI", service = "measurements",
-#'   format = "rdb_expanded"
 #' )
 #'
 #' waterYearStat <- readNWISdata(
@@ -253,9 +236,7 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
     } else {
       retval$tz_cd <- rep(tz, nrow(retval))
     }
-  } else if("gwlevels" == service && "parameterCd" %in% names(values)){
-    retval <- retval[retval$parameter_cd %in% values[["parameterCd"]], ]
-  }
+  } 
   
   return(retval)
 }
@@ -428,8 +409,7 @@ readNWISdots <- function(...) {
   }
   
   match.arg(service, c(
-    "dv", "iv", "iv_recent", "gwlevels",
-    "site", "uv", "measurements",
+    "dv", "iv", "iv_recent", 
     "qwdata", "stat", "rating", "peak"
   ))
   
@@ -491,7 +471,7 @@ readNWISdots <- function(...) {
     }
   }
   
-  if (service %in% c("peak", "measurements", "gwlevels")) {
+  if (service %in% c("peak")) {
     format.default <- "rdb"
     
     names(values)[names(values) == "startDT"] <- "begin_date"
@@ -521,24 +501,20 @@ readNWISdots <- function(...) {
     values[["bbox"]] <- paste0(values[["bbox"]], collapse = ",")
   }
   
-  if (service %in% c("peak", "gwlevels") && "stateCd" %in% names(values)) {
+  if (service %in% c("peak") && "stateCd" %in% names(values)) {
     names(values)[names(values) == "stateCd"] <- "state_cd"
     values["list_of_search_criteria"] <- "state_cd"
   }
   
-  if (service %in% c("peak", "gwlevels") && "huc2_cd" %in% names(values)) {
+  if (service %in% c("peak") && "huc2_cd" %in% names(values)) {
     values["list_of_search_criteria"] <- "huc2_cd"
   }
   
-  if(service == "gwlevels" && "aquiferCd" %in% names(values)){
-    values["aquiferCd"] <- "nat_aqfr_cd"
-  }
-  
-  if (service %in% c("peak", "gwlevels") && "bBox" %in% names(values)) {
+  if (service %in% c("peak") && "bBox" %in% names(values)) {
     values["list_of_search_criteria"] <- "lat_long_bounding_box"
   }
   
-  if (service %in% c("site", "gwlevels", "stat", "rating", "peak")) {
+  if (service %in% c("site", "stat", "rating", "peak")) {
     format.default <- "rdb"
   }
   

@@ -30,10 +30,8 @@ retrieval for the earliest possible record.}
 retrieval for the latest possible record.}
 
 \item{service}{string USGS service to call. Possible values are "dv" (daily values),
-"uv" (unit/instantaneous values),
-"gwlevels" (groundwater),and "rating" (rating curve),
-"peak", "meas" (discrete streamflow measurements),
-"stat" (statistics web service BETA).}
+"uv" (unit/instantaneous values), and "rating" (rating curve),
+"peak", "stat" (statistics web service BETA).}
 
 \item{statCd}{string or vector USGS statistic code only used for daily value service.
 This is usually 5 digits.  Daily mean (00003) is the default.}
@@ -86,9 +84,6 @@ url_daily_tsv <- constructNWISURL(site_id, pCode, startDate, endDate, "dv",
 )
 url_rating <- constructNWISURL(site_id, service = "rating", ratingType = "base")
 url_peak <- constructNWISURL(site_id, service = "peak")
-url_meas <- constructNWISURL(site_id, service = "meas")
-url_gwl <- constructNWISURL(site_id, service = "gwlevels",
-                            startDate = "2024-05-01", endDate = "2024-05-30")
 }
 \keyword{USGS}
 \keyword{data}

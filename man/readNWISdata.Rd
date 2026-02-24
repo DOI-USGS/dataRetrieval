@@ -12,10 +12,9 @@ a complete list of options.  A
 list of arguments can also be supplied. One important argument to include is
 "service". Possible values are "iv"
 (for instantaneous),
-"dv" (for daily values), "gwlevels" (for groundwater levels),
-"site" (for site service), "measurement", and "stat" (for
-statistics service). Note: "measurement" calls go to:
-\url{https://nwis.waterdata.usgs.gov/usa/nwis} for data requests, and use different call requests schemes.
+"dv" (for daily values),
+"site" (for site service), and "stat" (for
+statistics service).
 The statistics service has a limited selection of arguments
 (see \url{https://waterservices.usgs.gov/docs/site-service/}).}
 
@@ -72,7 +71,7 @@ See examples below for ideas of constructing queries.
 This function requires users to create their own arguments
 based on the NWIS web services. It is a more complicated function to use
 compared to other NWIS functions such as \code{\link[=readNWISdv]{readNWISdv()}}, \code{\link[=readNWISuv]{readNWISuv()}},
-\code{\link[=readNWISgwl]{readNWISgwl()}}, etc. However, this function adds a lot of
+etc. However, this function adds a lot of
 flexibility to the possible queries. This function will also behave exactly
 as NWIS when it comes to date queries. NWIS by default will only return the latest
 value for the daily and instantaneous services. So if you do not provide
@@ -105,22 +104,6 @@ instFlowCDT <- readNWISdata(
 multiSite <- readNWISdata(
   sites = c("04025500", "040263491"),
   service = "iv", parameterCd = "00060"
-)
-
-
-GWL <- readNWISdata(site_no = c("392725077582401", 
-                                "375907091432201"),
-                    parameterCd = "62610",
-                    service = "gwlevels")
-                    
-levels <- readNWISdata(stateCd = "WI", 
-                       service = "gwlevels",
-                       startDate = "2024-05-01",
-                       endDate = "2024-05-30") 
-                    
-meas <- readNWISdata(
-  state_cd = "WI", service = "measurements",
-  format = "rdb_expanded"
 )
 
 waterYearStat <- readNWISdata(
