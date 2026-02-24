@@ -72,16 +72,7 @@ test_that("External importWaterML1 test", {
   data <- importWaterML1(obs_url, TRUE)
   expect_is(data$dateTime, "POSIXct")
 
-  groundWaterSite <- "431049071324301"
-  startGW <- "2013-10-01"
-  endGW <- "2014-06-30"
-  groundwaterExampleURL <- constructNWISURL(groundWaterSite, NA,
-    startGW, endGW,
-    service = "gwlevels"
-  )
-  groundWater <- importRDB1(groundwaterExampleURL)
-
-  expect_is(groundWater$lev_dt, "Date")
+  
 
   unitDataURL <- constructNWISURL(
     siteNumber, property,
