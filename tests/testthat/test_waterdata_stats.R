@@ -121,13 +121,13 @@ test_that("missing value and values yields NA value", {
 # ------------------------------------------------------------------------------
 
 test_that("construct_statistics_request builds correct URL path", {
-  req <- construct_statistics_request(service = "Normals", version = 0)
+  req <- construct_statistics_request(service = "Normals")
   
   expect_true(grepl("statistics/v0/observationNormals", req$url))
 })
 
 test_that("Intervals service path is correct", {
-  req <- construct_statistics_request(service = "Intervals", version = 0)
+  req <- construct_statistics_request(service = "Intervals")
   
   expect_true(grepl("statistics/v0/observationIntervals", req$url))
 })
@@ -143,7 +143,7 @@ test_that("arguments are passed as query parameters", {
     page_size = 10
   )
   
-  req <- construct_statistics_request("Normals", 0)
+  req <- construct_statistics_request("Normals")
   full <- explode_query(req, POST = FALSE, x = args)
   
   qs <- httr2::req_get_url(full)
