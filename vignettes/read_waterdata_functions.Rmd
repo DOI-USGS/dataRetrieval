@@ -189,15 +189,13 @@ The `read_waterdata_continuous` function replaces the `readNWISuv` function.
 
 To access these services on a web browser, go to <https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous>.
 
-```{r}
+```{r eval=FALSE}
 sensor_data <- read_waterdata_continuous(monitoring_location_id = "USGS-01491000",
                                 parameter_code = c("00060", "00010"),
                                 time = c("2023-10-01", "2024-09-30"))
 ```
 
-Currently this service only allows up to 3 years of data to be requested at once. If no time is specified in the query, the latest year of data is returned. If you manage large data pipelines, this might sound very restrictive.
-
-For more information, see [Continuous Data](continuous_pr.html).
+Currently this service only allows up to 3 years of data to be requested at once. If no time is specified in the query, the latest year of data is returned. If you manage large data pipelines, this might sound very restrictive. For more information, see [Continuous Data](continuous_pr.html).
 
 **HOWEVER**, if you regularly make full period of record queries you may want to wait a few months before rewriting your workflows. We expect that a direct access to full period of record downloads will be available before the NWIS web services are shut down. We plan to make `dataRetrieval` function(s) to access that direct download access. 
 
@@ -224,6 +222,26 @@ ggplot(data = field_modern) +
 
 ```
 
+## Channel Measurements
+
+The `read_waterdata_channel` accompanies `read_waterdata_field_measurements` to replace `readNWISgwl`.
+
+`r dataRetrieval:::get_description("channel-measurements")`
+
+```{r}
+df <- read_waterdata_channel(monitoring_location_id = "USGS-02238500")
+```
+
+
+## Field Measurement Metadata
+
+The `read_waterdata_field_meta` helps to replace the `whatNWISdata` and `whatNWISsites` functions.
+
+`r dataRetrieval:::get_description("field-measurements-metadata")`
+
+```{r eval=FALSE}
+df <- read_waterdata_field_meta(monitoring_location_id = "USGS-375907091432201")
+```
 
 ## Latest Continuous
 

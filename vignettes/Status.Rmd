@@ -35,19 +35,19 @@ The table below shows the **existing** NWIS functions and, if applicable, their 
 ```{r echo=FALSE}
 df <- data.frame(
   Legacy = c(
-    "readNWISqw (deprecated)",
+    "readNWISqw (defunct)",
     "readNWISdv",
     "readNWISsite",
     "whatNWISsites",
     "readNWISpCode",
-    "readNWISgwl (deprecated)",
-    "readNWISmeas (deprecated)",
+    "readNWISgwl (defunct)",
+    "readNWISmeas (defunct)",
     "readNWISdata",
     "readNWISuv",
     "readNWISrating",
     "readNWISstat",
     "readNWISpeak",
-    "readNWISuse (deprecated)",
+    "readNWISuse (defunct)",
     "whatNWISdata"
   ),
   New = c(
@@ -95,11 +95,7 @@ Replace [your api key] with the alphanumeric code provided by the sign-up page. 
 
 ## Large Data Pulls
 
-If you manage large data pipelines, you might notice some timeouts or errors indicating your request was too large. This will be especially true for the continuous data. Continuous data requests are only allowed up to 3 years of data in a single request. 
-
-HOWEVER, if you regularly make full period of record queries you may want to wait a few months before rewriting your workflows. We expect that a direct access to full period of record downloads will be available before the NWIS web services are shut down. We plan to make `dataRetrieval` function(s) to access that direct download access. 
-
-Maybe you are running into limitations but a full period-of-record won't necessarily help. Consider using the R package [`targets`](https://books.ropensci.org/targets/). Stay tuned as we plan to put together a collection of examples and suggestions for large data pulls as the API service offerings evolve.
+If you manage large data pipelines, you might notice some timeouts or errors indicating your request was too large. This will be especially true for the continuous data. Continuous data requests are only allowed up to 3 years of data in a single request. See [Continuous Data](continuous_pr.html) for more information.
 
 # Discrete Data
 
