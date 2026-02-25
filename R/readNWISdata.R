@@ -409,7 +409,7 @@ readNWISdots <- function(...) {
   }
   
   match.arg(service, c(
-    "dv", "iv", "iv_recent", 
+    "dv", "iv", "iv_recent", "uv", "site",
     "qwdata", "stat", "rating", "peak"
   ))
   
