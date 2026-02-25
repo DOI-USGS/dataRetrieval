@@ -138,7 +138,7 @@ field_data_sf <- read_waterdata_field_measurements(monitoring_location_id = site
 
 groundwater <- read_waterdata_field_measurements(monitoring_location_id = "USGS-375907091432201")
 
-gwl_data <- read_waterdata_field_measurements(monitoring_location_id = "USGS-02238500",
+field_data <- read_waterdata_field_measurements(monitoring_location_id = "USGS-02238500",
                            parameter_code = "00060",
                            time = as.POSIXct(c("2024-02-26 15:00:00",
                                                "2025-08-27 12:00:00"),
