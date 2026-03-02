@@ -18,6 +18,8 @@ read_waterdata_field_measurements(
   observing_procedure = NA_character_,
   vertical_datum = NA_character_,
   measuring_agency = NA_character_,
+  control_condition = NA_character_,
+  measurement_rated = NA_character_,
   skipGeometry = NA,
   time = NA_character_,
   bbox = NA,
@@ -71,6 +73,10 @@ See also Details below for more information.}
 \item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/altitude-datums/items}.}
 
 \item{measuring_agency}{The agency performing the measurement.}
+
+\item{control_condition}{}
+
+\item{measurement_rated}{}
 
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
