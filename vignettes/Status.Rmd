@@ -35,19 +35,19 @@ The table below shows the **existing** NWIS functions and, if applicable, their 
 ```{r echo=FALSE}
 df <- data.frame(
   Legacy = c(
-    "readNWISqw (deprecated)",
+    "readNWISqw (defunct)",
     "readNWISdv",
     "readNWISsite",
     "whatNWISsites",
     "readNWISpCode",
-    "readNWISgwl",
-    "readNWISmeas",
+    "readNWISgwl (defunct)",
+    "readNWISmeas (defunct)",
     "readNWISdata",
     "readNWISuv",
     "readNWISrating",
     "readNWISstat",
     "readNWISpeak",
-    "readNWISuse (deprecated)",
+    "readNWISuse (defunct)",
     "whatNWISdata"
   ),
   New = c(
@@ -57,17 +57,22 @@ df <- data.frame(
     "read_waterdata_ts_meta",
     "read_waterdata_parameter_codes",
     "read_waterdata_field_measurements",
-    "read_waterdata_field_measurements",
+    "read_waterdata_field_measurements, read_waterdata_channel",
     "read_waterdata",
     "read_waterdata_continuous", 
     "", #rating
     "read_waterdata_stats_por, read_waterdata_stats_daterange",
-    rep("", 3)
+    rep("", 2),
+    "read_waterdata_ts_meta, read_waterdata_field_meta"
   ),
-  "Available on (branch)" = c(rep("main (CRAN)", 9), 
+  "Available on (branch)" = c(rep("main (CRAN)", 6), 
+                              "main (CRAN), develop",
+                              "main (CRAN)",
+                              "main (CRAN)",
                               "",
                               "develop", 
-                              rep("", 3))
+                              rep("", 2), 
+                              "main (CRAN), develop, develop")
 )
 
 knitr::kable(df, col.names = c("WaterServices (legacy) function", "Water Data (new) function", "Available on (branch name)"))
@@ -90,11 +95,7 @@ Replace [your api key] with the alphanumeric code provided by the sign-up page. 
 
 ## Large Data Pulls
 
-If you manage large data pipelines, you might notice some timeouts or errors indicating your request was too large. This will be especially true for the continuous data. Continuous data requests are only allowed up to 3 years of data in a single request. 
-
-HOWEVER, if you regularly make full period of record queries you may want to wait a few months before rewriting your workflows. We expect that a direct access to full period of record downloads will be available before the NWIS web services are shut down. We plan to make `dataRetrieval` function(s) to access that direct download access. 
-
-Maybe you are running into limitations but a full period-of-record won't necessarily help. Consider using the R package [`targets`](https://books.ropensci.org/targets/). Stay tuned as we plan to put together a collection of examples and suggestions for large data pulls as the API service offerings evolve.
+If you manage large data pipelines, you might notice some timeouts or errors indicating your request was too large. This will be especially true for the continuous data. Continuous data requests are only allowed up to 3 years of data in a single request. See [Continuous Data](continuous_pr.html) for more information.
 
 # Discrete Data
 

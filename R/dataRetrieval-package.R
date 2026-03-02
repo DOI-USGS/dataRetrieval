@@ -202,6 +202,23 @@ NULL
 #            "AKST", "AKDT", "HAST", "HST", "UTC", "", NA, "GMT")
 # )
 # 
+# services <- c("daily", "time-series-metadata",
+#               "monitoring-locations", "latest-continuous",
+#               "field-measurements", "latest-daily",
+#               "continuous", "field-measurements-metadata",
+#               "combined-metadata", "channel-measurements")
+# 
+# property_list <- list()
+# for(service in services){
+#   property_list[[service]] <- get_properties_for_docs(service)
+# }
+# 
+# num_cols <- c("value", "contributing_drainage_area", "drainage_area",
+#               "altitude_accuracy", "well_construction_depth",
+#               "hole_construction_depth", "channel_flow", "channel_width",
+#               "channel_area", "channel_velocity", "channel_location_distance")
+# 
 # save(countyCd, stateCd, parameterCdFile, pCodeToName,
+#      offsetLibrary, num_cols, property_list,
 #      file = "R/sysdata.rda", compress = "xz")
 # nolint end

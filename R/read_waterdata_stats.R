@@ -152,20 +152,27 @@ read_waterdata_stats_daterange <- function(
 #' Create a request object for the /statistics service
 #' 
 #' @param service chr; "Normals" or "Intervals"
-#' @param version int; /statistics API version number (default: 0)
 #' 
 #' @return a httr2 request object
 #' 
 #' @noRd
-construct_statistics_request <- function(service = "Normals", version = 0){
+construct_statistics_request <- function(service = "Normals"){
   
-  httr2::request("https://api.waterdata.usgs.gov/statistics/") |>
+  base_request <- httr2::request("https://api.waterdata.usgs.gov/statistics/") |>
     httr2::req_user_agent(default_ua()) |>
     httr2::req_headers(`Accept-Encoding` = "gzip") |>
     httr2::req_timeout(seconds = 180) |>
-    httr2::req_url_path_append(paste0("v", version)) |>
+    httr2::req_url_path_append(getOption("dataRetrieval.api_version_stat")) |> 
     httr2::req_url_path_append(paste0("observation", service))
   
+  token <- Sys.getenv("API_USGS_PAT")
+  
+  if(token != ""){
+    base_request <- base_request |>
+      httr2::req_headers_redacted(`X-Api-Key` = token)
+  }
+  
+  return(base_request)
 }
 
 #' Retrieve data from /statistics API
@@ -179,7 +186,7 @@ get_statistics_data <- function(args, service) {
 
   rid <- data <- ts_id <- values <- NULL
 
-  base_request <- construct_statistics_request(service = service, version = 0)
+  base_request <- construct_statistics_request(service = service)
   
   full_request <- explode_query(base_request, POST = FALSE, x = args)
   

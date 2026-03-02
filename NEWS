@@ -12,6 +12,10 @@ request object as an attribute to the returned data frames. Setting
 options("dataRetrieval.attach_request" = FALSE) will return a data frame without
 the request attribute
 * Improved time documentation
+* Improved error handling in WQP functions
+* Added read_waterdata_field_meta, read_waterdata_combine_meta, 
+and read_waterdata_channel
+* Removed readNWISgwl and readNWISmeas as services have been turned off
 
 
 dataRetrieval 2.7.22
