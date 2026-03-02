@@ -91,7 +91,8 @@ Multiple statistic_ids can be requested as a character vector.}
 
 \item{data_type}{The computational period type of data collected at the monitoring location.}
 
-\item{computation_identifier}{Multiple computation_identifiers can be requested as a character vector.}
+\item{computation_identifier}{Indicates whether the data from this time series represent a specific statistical computation.
+Multiple computation_identifiers can be requested as a character vector.}
 
 \item{computation_period_identifier}{Multiple computation_period_identifiers can be requested as a character vector.}
 
@@ -105,11 +106,31 @@ Multiple statistic_ids can be requested as a character vector.}
 
 \item{parent_time_series_id}{The unique identifier representing the parent or "upchain" time series that a daily values time series is generated from. Daily values time series have one and only one parent time series.}
 
-\item{begin}{This field contains the same information as "begin_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.
+\item{begin}{The datetime of the earliest observation in the time series. Together with \code{end}, this field represents the period of record of a time series. Note that some time series may have large gaps in their collection record.
+You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
+Examples:
+\itemize{
+\item A date-time: "2018-02-12T23:20:50Z"
+\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
+\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
+\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
+}
+
+Only features that have a \code{begin} that intersects the value of datetime are selected.
 
 See also Details below for more information.}
 
-\item{end}{This field contains the same information as "end_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.
+\item{end}{The datetime of the most recent observation in the time series. Data returned by this endpoint updates at most once per day, and potentially less frequently than that, and as such there may be more recent observations within a time series than the time series \code{end} value reflects. Together with \code{begin}, this field represents the period of record of a time series. It is additionally used to determine whether a time series is "active".
+You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
+Examples:
+\itemize{
+\item A date-time: "2018-02-12T23:20:50Z"
+\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
+\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
+\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
+}
+
+Only features that have a \code{end} that intersects the value of datetime are selected.
 
 See also Details below for more information.}
 
@@ -165,7 +186,7 @@ See also Details below for more information.}
 
 \item{altitude_method_code}{Codes representing the method used to measure altitude.}
 
-\item{altitude_method_name}{}
+\item{altitude_method_name}{The name of the method used to measure altitude.}
 
 \item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/altitude-datums/items}.}
 
@@ -197,7 +218,7 @@ See also Details below for more information.}
 
 \item{national_aquifer_code}{National aquifers are the principal aquifers or aquifer systems in the United States, defined as regionally extensive aquifers or aquifer systems that have the potential to be used as a source of potable water. Not all groundwater monitoring locations can be associated with a National Aquifer. Such monitoring locations will not be retrieved using this search criteria. A list of National aquifer codes and names is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/national-aquifer-codes/items}.}
 
-\item{aquifer_type_code}{Groundwater occurs in aquifers under two different conditions. Where water only partly fills an aquifer, the upper surface is free to rise and decline. These aquifers are referred to as unconfined (or water-table) aquifers. Where water completely fills an aquifer that is overlain by a confining bed, the aquifer is referred to as a confined (or artesian) aquifer. When a confined aquifer is penetrated by a well, the water level in the well will rise above the top of the aquifer (but not necessarily above land surface).}
+\item{aquifer_type_code}{Describes the confinement status of an aquifer at the monitoring location.  A confined aquifer is an aquifer below the land surface that is saturated with water.  A water table--or unconfined--aquifer is an aquifer whose upper water surface (water table) is at atmospheric pressure, and thus is able to rise and fall.}
 
 \item{well_constructed_depth}{The depth of the finished well, in feet below land surface datum. Note: Not all groundwater monitoring locations have information on Well Depth. Such monitoring locations will not be retrieved using this search criteria.}
 
