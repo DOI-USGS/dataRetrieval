@@ -41,9 +41,9 @@ First, let's look for what continuous data is available at a particular site (US
 library(dataRetrieval)
 site <- "USGS-0208458892"
 
-continuous_available <- read_waterdata_ts_meta(
+continuous_available <- read_waterdata_combined_meta(
   monitoring_location_id = site,
-  computation_period_identifier = "Points"
+  data_type = "Continuous values"
 )
 
 ```
@@ -278,7 +278,7 @@ all_data <- purrr::list_rbind(furrr_list)
 ### Parallel "targets" pipeline
 
 
-You can run the target pipeline in parallel in a few different ways (see the [targets documentation](https://books.ropensci.org/targets/)). One way is to use the `future` package. We already added that to the top of the `_targets.R` file:
+You can run the target pipeline in parallel in a few different ways (see the [targets documentation](https://books.ropensci.org/targets/)). One way is to use the [`future` package](https://future.futureverse.org/). We already added that to the top of the `_targets.R` file:
 
 ```{r}
 # Load packages required to define the pipeline:
