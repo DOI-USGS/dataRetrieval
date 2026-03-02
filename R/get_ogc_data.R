@@ -53,6 +53,8 @@ get_ogc_data <- function(args,
     # Mostly drop the id column except ts-meta, monitoring location:
     if(!service %in% c("monitoring-locations",
                        "time-series-metadata",
+                       "field-measurements-metadata",
+                       "combined-metadata",
                        "parameter-codes")){
       return_list <- return_list[, names(return_list)[names(return_list)!= output_id]]
     }
@@ -88,9 +90,9 @@ move_id_col <- function(df, output_id){
                  "time_series_id")]
   }
   
-  if("field_visit_id" %in% names(df)){
-    df <- df[, c(names(df)[names(df)!= "field_visit_id"],
-                 "field_visit_id")]
+  if("field_series_id" %in% names(df)){
+    df <- df[, c(names(df)[names(df)!= "field_series_id"],
+                 "field_series_id")]
   }
 
   return(df)

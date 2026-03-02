@@ -98,7 +98,7 @@ read_waterdata_field_meta <- function(monitoring_location_id = NA_character_,
                                       no_paging = FALSE){
   
   service <- "field-measurements-metadata"
-  output_id <- "field_visit_id"
+  output_id <- "field_series_id"
   
   args <- mget(names(formals()))
   return_list <- get_ogc_data(args,
