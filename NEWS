@@ -16,6 +16,8 @@ the request attribute
 * Added read_waterdata_field_meta, read_waterdata_combine_meta, 
 and read_waterdata_channel
 * Removed readNWISgwl and readNWISmeas as services have been turned off
+* Updated CQL2 templates to allow HUC queries specifically to use a wildcard
+to get multiple inclusive HUCs.
 
 
 dataRetrieval 2.7.22
