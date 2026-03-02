@@ -11,10 +11,8 @@
 #' @param statCd string or vector USGS statistic code only used for daily value service.
 #' This is usually 5 digits.  Daily mean (00003) is the default.
 #' @param service string USGS service to call. Possible values are "dv" (daily values),
-#' "uv" (unit/instantaneous values),
-#' "gwlevels" (groundwater),and "rating" (rating curve),
-#' "peak", "meas" (discrete streamflow measurements),
-#' "stat" (statistics web service BETA).
+#' "uv" (unit/instantaneous values), and "rating" (rating curve),
+#' "peak", "stat" (statistics web service BETA).
 #' @param format string, can be "tsv" or "xml", and is only applicable for daily
 #' and unit value requests.  "tsv" returns results faster, but there is a possibility
 #' that an incomplete file is returned without warning. XML is slower,
@@ -55,9 +53,6 @@
 #' )
 #' url_rating <- constructNWISURL(site_id, service = "rating", ratingType = "base")
 #' url_peak <- constructNWISURL(site_id, service = "peak")
-#' url_meas <- constructNWISURL(site_id, service = "meas")
-#' url_gwl <- constructNWISURL(site_id, service = "gwlevels",
-#'                             startDate = "2024-05-01", endDate = "2024-05-30")
 constructNWISURL <- function(siteNumbers,
                              parameterCd = "00060",
                              startDate = "",
@@ -71,8 +66,8 @@ constructNWISURL <- function(siteNumbers,
                              statType = "mean") {
   
   service <- match.arg(service, c(
-    "dv", "uv", "iv", "iv_recent", "gwlevels",
-    "rating", "peak", "meas", "stat"))
+    "dv", "uv", "iv", "iv_recent", 
+    "rating", "peak", "stat"))
   
   service[service == "meas"] <- "measurements"
   service[service == "uv"] <- "iv"
@@ -212,31 +207,7 @@ constructNWISURL <- function(siteNumbers,
                                 missingData = "off")
            }
          },
-         gwlevels = {
-           url <- get_or_post(baseURL,
-                              POST = POST, 
-                              site_no = siteNumbers,
-                              .multi = "comma")
-           url <- get_or_post(url,
-                              POST = POST, 
-                              format = "rdb")
-           if (nzchar(startDate)) {
-             url <- get_or_post(url,
-                                POST = POST, 
-                                begin_date = startDate)
-           }
-           if (nzchar(endDate)) {
-             url <- get_or_post(url,
-                                POST = POST,  
-                                end_date = endDate)
-           }
-           url <- get_or_post(url,
-                              POST = POST, 
-                              group_key = "NONE",
-                              date_format = "YYYY-MM-DD",
-                              rdb_compression = "value")
-         },
-         { # this will be either dv, uv, groundwater
+         { # this will be either dv, uv
            
            format <- match.arg(format, c("xml", "tsv", "wml1", "wml2", "rdb"))
            

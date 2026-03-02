@@ -108,11 +108,7 @@ whatNWISdata <- function(..., convertType = TRUE) {
     service[service == "iv"] <- "uv"
   } else if (any(service == "peak")) {
     service[service == "peak"] <- "pk"
-  } else if (any(service == "measurements")) {
-    service[service == "measurements"] <- "sv"
-  } else if(any(service == "gwlevels")) {
-    service[service == "gwlevels"] <- "gw"
-  }
+  } 
   
   if ("statCd" %in% names(matchReturn)) {
     statCd <- matchReturn$statCd

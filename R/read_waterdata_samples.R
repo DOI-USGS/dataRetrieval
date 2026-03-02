@@ -131,6 +131,13 @@ construct_waterdata_sample_request <- function(monitoringLocationIdentifier = NA
     httr2::req_url_path_append("samples-data") |>
     httr2::req_url_query(mimeType = "text/csv")
   
+  token <- Sys.getenv("API_USGS_PAT")
+  
+  if(token != ""){
+    baseURL <- baseURL |>
+      httr2::req_headers_redacted(`X-Api-Key` = token)
+  }
+  
   switch(dataType,
          results = {
            available_profiles <- c("fullphyschem", "basicphyschem",
@@ -354,6 +361,13 @@ check_waterdata_sample_params <- function(service = "characteristicgroup",
   check_group_req <- httr2::request("https://api.waterdata.usgs.gov") |> 
     httr2::req_url_path_append("samples-data") 
   
+  token <- Sys.getenv("API_USGS_PAT")
+  
+  if(token != ""){
+    check_group_req <- check_group_req |>
+      httr2::req_headers_redacted(`X-Api-Key` = token)
+  }
+  
   if(service != "reference-list"){
     check_group_req <- check_group_req |> 
       httr2::req_url_path_append("codeservice")
@@ -506,6 +520,13 @@ summarize_waterdata_samples <- function(monitoringLocationIdentifier){
     httr2::req_url_path_append("summary",
                                monitoringLocationIdentifier) |>
     httr2::req_url_query(mimeType = "text/csv")
+  
+  token <- Sys.getenv("API_USGS_PAT")
+  
+  if(token != ""){
+    baseURL <- baseURL |>
+      httr2::req_headers_redacted(`X-Api-Key` = token)
+  }
   
   df <- importWQP(baseURL)
   
