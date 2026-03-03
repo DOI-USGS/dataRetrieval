@@ -12,7 +12,9 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE
 )
 
 library(dataRetrieval)
@@ -40,7 +42,7 @@ Day-of-year and month-of-year statistics aggregate observations for the same cal
 Consider the output below, where we request day-of-year discharge averages for January 1 and January 2.
 Note that the `start_date` and `end_date` are set in `month-year` format to describe the day-of-year range.
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 jan_por_mean <-
   read_waterdata_stats_por(
   monitoring_location_id = site1,
@@ -67,10 +69,10 @@ Let's now look at an example that illustrates the benefits of the statistics API
 In the example below, we pull all day-of-year discharge percentiles for our site.
 Keep in mind that doing so *without* the statistics API would require us to download the **entire** daily period of record for this site and hand-compute these percentiles ourselves, a time- and resource-intensive process indeed.
 
-For demonstration, we filter the output to the January 1 day-of-year percentiles, which include a set of percentiles commonly used on WDFN webpages (e.g., [Wisconsin water conditions](https://waterdata.usgs.gov/state/wisconsin/)).
+For demonstration, we filter the output to the January 1 day-of-year percentiles, which include a set of percentiles commonly used on the Water Data for the Nation (WDFN) webpages (e.g., [Wisconsin water conditions](https://waterdata.usgs.gov/state/wisconsin/)).
 
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 full_por_percentiles <-
   read_waterdata_stats_por(
     monitoring_location_id = site1,
@@ -91,7 +93,7 @@ full_por_percentiles |>
 After a bit of data manipulation, we can then visualize the percentiles as "ribbons" on a plot.
 Each ribbon spans between two percentiles returned by the /statistics API (e.g., minimum to 5th, 5th to 10th, etc).
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 doy_perc_bands <-
   full_por_percentiles |>
   sf::st_drop_geometry() |>
@@ -150,7 +152,7 @@ ggplot(data = doy_perc_bands,
 
 Finally, let's overlay daily mean data onto the plot:
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 range <- as.Date(c("2025-01-01", "2026-03-02"))
 
 complete_df <- data.frame(time = seq.Date(from = range[1], 
@@ -216,7 +218,7 @@ ggplot(data = daily_data,
 
 ```
 
-As  <https://waterdata.usgs.gov/monitoring-location/USGS-02037500/statistical-graphs/>
+As also seen on the WDFN pages: <https://waterdata.usgs.gov/monitoring-location/USGS-02037500/statistical-graphs/>
 
 
 ## Fetching monthly and annual statistics within a date range
@@ -225,7 +227,7 @@ Unlike day- or month-of-year statistics, which summarize typical seasonal condit
 Consider the example below where we fetch the average discharge value for the month of January, 2024.
 Notice that the `start_date` and `end_date` arguments are given in `YYYY-MM-DD` format.
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 jan_daterange_mean <-
   read_waterdata_stats_daterange(
   monitoring_location_id = site1,
@@ -238,15 +240,11 @@ jan_daterange_mean <-
 jan_daterange_mean
 ```
 
-Instead of `time_of_year` and `time_of_year_type` columns, this output contains `start_date`, `end_date`, and `interval_type` columns representing the daterange over which the average was calculated.
-The first row shows the average January, 2024 discharge was about 112 cubic feet per second.
-We again have extra rows: the second row contains the **calendar** year 2024 average and the third contains the **water** year 2024 average.
+Instead of `time_of_year` and `time_of_year_type` columns, this output contains `start_date`, `end_date`, and `interval_type` columns representing the daterange over which the average was calculated. The first row shows the average January, 2024 discharge was about 112 cubic feet per second. We again have extra rows: the second row contains the **calendar** year 2024 average and the third contains the **water** year 2024 average.
 
-Annual statistics will be returned for any calendar/water years than intersect with the specified date range.
-Consider the example below, where the `start_date` to `end_date` range is only 93 days yet happens to intersect with calendar **and** water years 2023 and 2024.
-We see this reflected in output containing monthly averages for September, 2023 through January, 2024 as well as 2023 and 2024 calendar and water year averages.
+Annual statistics will be returned for any calendar/water years than intersect with the specified date range. Consider the example below, where the `start_date` to `end_date` range is only 93 days yet happens to intersect with calendar **and** water years 2023 and 2024. We see this reflected in output containing monthly averages for September, 2023 through January, 2024 as well as 2023 and 2024 calendar and water year averages.
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 multiyear_daterange_mean <-
   read_waterdata_stats_daterange(
   monitoring_location_id = site1,
