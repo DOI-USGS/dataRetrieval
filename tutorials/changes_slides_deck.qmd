@@ -131,6 +131,9 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 * [read_waterdata_parameter_codes](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_parameter_codes.html) - Parameter code information
 
+::: footer
+
+:::
 
 ## USGS Water Data OGC APIs: Current Functions (cont.) 
 
