@@ -156,7 +156,7 @@ Finally, let's overlay daily mean data onto the plot:
 range <- as.Date(c("2025-01-01", "2026-03-02"))
 
 complete_df <- data.frame(time = seq.Date(from = range[1], 
-                                          to = as.Date("2026-12-31"),
+                                          to = range[1] + 365,
                                           by = "day")) |>
   mutate(time_of_year = as.Date(format(time, "%m-%d"), format = "%m-%d"))
 
