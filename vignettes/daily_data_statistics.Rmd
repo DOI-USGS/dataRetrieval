@@ -257,7 +257,7 @@ multiyear_daterange_mean <-
 multiyear_daterange_mean
 ```
 
-Before we move on, consider the following example where we create a Monthly mean statistics table similar to what you'd find in the [Water Year Summaries](https://rconnect.chs.usgs.gov/water-year-summaries-dev/?_inputs_&render_button=1&site_no_select=%2205428500%22&wateryear_select=%222024%22).
+Before we move on, consider the following example where we create a Monthly mean statistics table similar to what you'd find in the [Water Year Summaries](https://rconnect.chs.usgs.gov/water-year-summaries-dev/?_inputs_&render_button=1&site_no_select=%2205428500%22&wateryear_select=%222024%22). Note that the values reported here are slightly different from what you'll find in the Water Year Summary because of differences in how values are rounded.
 
 ```{r, message=FALSE, warning=FALSE}
 monthly_means <-
