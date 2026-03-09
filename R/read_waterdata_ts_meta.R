@@ -28,7 +28,14 @@
 #' @param state_name `r get_ogc_params("time-series-metadata")$state_name`
 #' @param thresholds `r get_ogc_params("time-series-metadata")$thresholds`
 #' @param unit_of_measure `r get_ogc_params("time-series-metadata")$unit_of_measure`
-#' @param primary `r get_ogc_params("time-series-metadata")$primary`
+#' @param primary 
+#' A flag identifying if the time series is a "primary" time series. "Primary" time
+#' series (which have this flag) are standard observations which undergo Bureau
+#' review and approval processes. Non-primary time series, which will have missing
+#' values for "primary", are provisional datasets made available to meet the need
+#' for timely best science and to assist with daily operations which need
+#' real-time information. Non-primary time series data are only retained by
+#' this system for 120 days. 
 #' @param parent_time_series_id `r get_ogc_params("time-series-metadata")$parent_time_series_id`
 #' @param web_description `r get_ogc_params("time-series-metadata")$web_description`
 #' @param begin `r get_ogc_params("time-series-metadata")$begin`
