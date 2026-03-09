@@ -26,7 +26,7 @@
 #' What and where the control of flow is for the gage pool.
 #' @param measurement_rated  `r get_ogc_params("field-measurements")$measurement_rated`
 #' Rated measurement based on the hydrologic/hydraulic conditions in which the measurement was made
-#' (excellent (2 percent), good (5 percent), fair (8 percent), or poor (more than 8 percent).                                                        percent), or poor (more than 8 percent)]
+#' (excellent (2 percent), good (5 percent), fair (8 percent), or poor (more than 8 percent).                                                        percent)
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r dataRetrieval:::get_properties_for_docs("field-measurements", "field_measurement_id")`.
