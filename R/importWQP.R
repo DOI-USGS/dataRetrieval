@@ -62,14 +62,12 @@ importWQP <- function(obs_url, tz = "UTC",
   }
   
   last_chars <- as.character(substr(doc, nchar(doc)-1, nchar(doc)))
-  
-  if(last_chars != c("\n")){
-    doc <- paste0(doc, "\n")
-  }
-  retval <- suppressWarnings(readr::read_delim(doc,
-                                               col_types = readr::cols(.default = "c"),
-                                               quote = ifelse(csv, '\"', ""),
-                                               delim = ifelse(csv, ",", "\t")))
+
+  retval <- data.table::fread(text = doc, data.table = FALSE,
+                              sep = ifelse(csv, ",", "\t"),
+                              fill = TRUE,
+                              quote = ifelse(csv, '\"', ""))
+
   
   attr(retval, 'spec') <- NULL
   

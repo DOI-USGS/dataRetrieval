@@ -187,16 +187,15 @@ datatable(phosCds[, c("parameter_code", "parameter_name", "unit_of_measure")],
 )
 ```
 
-### User-friendly retrievals: NWIS
+### Example Workflow
 
-Sometimes, you know exactly what you want. If you know:
+Often, you know exactly what you want. If you know:
 
 1. The type of data (groundwater, unit values, daily values,  etc..)
 2. USGS site number(s)
 3. USGS parameter code(s)
 4. Time frame (start and end date)
 
-You can use the "user-friendly" functions. These functions take the same 4 inputs (sites, parameter codes, start date, end date), and deliver data from the different NWIS services.
 
 # Pheasant Branch Creek Example
 
@@ -257,14 +256,14 @@ First verify that the data you think is available is actually associated with th
 library(dplyr)
 
 site <- "USGS-05407000"
-ts_data_available <- read_waterdata_ts_meta(monitoring_location_id = site) 
+data_available <- read_waterdata_combined_meta(monitoring_location_id = site) 
 
 
-data_available <- ts_data_available |> 
+data_available <- data_available |> 
   sf::st_drop_geometry() |> 
   mutate(begin = as.Date(begin),
          end = as.Date(end)) |> 
-  select(parameter_name, parameter_code, statistic_id, computation_identifier,
+  select(data_type, parameter_name, parameter_code, statistic_id, computation_identifier,
          begin, end) 
 ```
 
@@ -279,11 +278,11 @@ datatable(data_available,
 
 ```
 
-The time series that have "Instantaneous" in the computation_identifier column are available in the continuous data service (`read_waterdata_continuous`), and the rest of the data will be available in the daily service (`read_waterdata_daily`).
+The rows that have "Continuous values" in the data_type column are available in the continuous data service (`read_waterdata_continuous`), "Daily values" are available in the daily data service (`read_waterdata_daily`) function, and "Field measurements" are available in the field measurement service (`read_waterdata_field_measurements`).
 
 ```{r eval=FALSE, echo=TRUE}
-dv_pcodes <- data_available$parameter_code[data_available$computation_identifier != "Instantaneous"]
-stat_cds <- data_available$statistic_id[data_available$computation_identifier != "Instantaneous"]
+dv_pcodes <- data_available$parameter_code[data_available$data_type == "Daily values"]
+stat_cds <- data_available$statistic_id[data_available$data_type == "Daily values"]
 
 stat_cds <- unique(stat_cds[!is.na(stat_cds)])
 
@@ -291,12 +290,10 @@ dv_data <- read_waterdata_daily(monitoring_location_id = site,
                            parameter_code = unique(dv_pcodes),
                            statistic_id = stat_cds)
 
-uv_pcodes <- data_available$parameter_code[data_available$computation_identifier == "Instantaneous"]
+uv_pcodes <- data_available$parameter_code[data_available$data_type == "Continuous values"]
 
 uv_data <- read_waterdata_continuous(monitoring_location_id = site,
                                      parameter_code = unique(uv_pcodes))
-
-peak_data <- readNWISpeak(gsub("USGS-", "", site))
 
 ```
 

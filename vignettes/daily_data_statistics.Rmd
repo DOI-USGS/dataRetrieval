@@ -12,8 +12,15 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE
 )
+
+library(dataRetrieval)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
 ```
 
 The `read_waterdata_stats_por` and `read_waterdata_stats_daterange` functions replace the legacy `readNWISstat` function.
@@ -33,9 +40,9 @@ site1 <- "USGS-02037500"
 
 Day-of-year and month-of-year statistics aggregate observations for the same calendar day or month across multiple years to describe typical seasonal conditions (e.g., all Januarys or all January 1sts).
 Consider the output below, where we request day-of-year discharge averages for January 1 and January 2.
-Note that the `start_date` and `end_date` are set in `month-year` format to describe the day-of-year range.
+Note that the `start_date` and `end_date` are set in `month-day` format to describe the day-of-year range.
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 jan_por_mean <-
   read_waterdata_stats_por(
   monitoring_location_id = site1,
@@ -62,14 +69,10 @@ Let's now look at an example that illustrates the benefits of the statistics API
 In the example below, we pull all day-of-year discharge percentiles for our site.
 Keep in mind that doing so *without* the statistics API would require us to download the **entire** daily period of record for this site and hand-compute these percentiles ourselves, a time- and resource-intensive process indeed.
 
-For demonstration, we filter the output to the January 1 day-of-year percentiles, which include a set of percentiles commonly used on WDFN webpages (e.g., [Wisconsin water conditions](https://waterdata.usgs.gov/state/wisconsin/)).
+For demonstration, we filter the output to the January 1 day-of-year percentiles, which include a set of percentiles commonly used on the Water Data for the Nation (WDFN) webpages (e.g., [Wisconsin water conditions](https://waterdata.usgs.gov/state/wisconsin/)).
 
 
-```{r, message=FALSE, warning=FALSE}
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-
+```{r}
 full_por_percentiles <-
   read_waterdata_stats_por(
     monitoring_location_id = site1,
@@ -90,7 +93,7 @@ full_por_percentiles |>
 After a bit of data manipulation, we can then visualize the percentiles as "ribbons" on a plot.
 Each ribbon spans between two percentiles returned by the /statistics API (e.g., minimum to 5th, 5th to 10th, etc).
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 doy_perc_bands <-
   full_por_percentiles |>
   sf::st_drop_geometry() |>
@@ -101,36 +104,59 @@ doy_perc_bands <-
 
 pcode_info <- read_waterdata_parameter_codes(parameter_code = "00060")
 
+bins <- c("95 - Max", "90 - 95", "75 - 90", "25 - 75", 
+          "10 - 25", "5 - 10", "Min - 5")
+bins <- factor(bins,levels = bins)
+
+update_geom_defaults("ribbon",
+                   list(alpha = 0.6))
+
 ggplot(data = doy_perc_bands, 
        aes(x = time_of_year)) +
-  geom_ribbon(aes(ymin = `95`, ymax = `100`), fill = "#292f6b") +
-  geom_ribbon(aes(ymin = `90`, ymax = `95`), fill = "#5699c0") +
-  geom_ribbon(aes(ymin = `75`, ymax = `90`), fill = "#aacee0") +
-  geom_ribbon(aes(ymin = `25`, ymax = `75`), fill = "#e9e9e9") +
-  geom_ribbon(aes(ymin = `10`, ymax = `25`), fill = "#ebd6ab") +
-  geom_ribbon(aes(ymin = `5`, ymax = `10`), fill = "#dcb668") +
-  geom_ribbon(aes(ymin = `0`, ymax = `5`), fill = "#8f4f1f") +
-  geom_line(aes(y = `50`), linewidth = .2, color = "black") +
+  geom_ribbon(aes(ymin = `95`, ymax = `100`, fill = bins[1])) +
+  geom_ribbon(aes(ymin = `90`, ymax = `95`, fill = bins[2])) +
+  geom_ribbon(aes(ymin = `75`, ymax = `90`, fill = bins[3])) +
+  geom_ribbon(aes(ymin = `25`, ymax = `75`, fill = bins[4])) +
+  geom_ribbon(aes(ymin = `10`, ymax = `25`, fill = bins[5])) +
+  geom_ribbon(aes(ymin = `5`, ymax = `10`, fill = bins[6])) +
+  geom_ribbon(aes(ymin = `0`, ymax = `5`, fill = bins[7])) +
   scale_x_date(date_labels = "%b", date_breaks = "1 month",
                expand = expand_scale(mult = c(0, 0))) +
   scale_y_log10(breaks = scales::breaks_log(base = 10),
-                labels = scales::label_log(base = 10)) +
+                labels = scales::label_log(base = 10),
+                minor_breaks = scales::minor_breaks_log()) +
+  annotation_logticks(sides = "lr") +
   labs(
     x = "Month-day",
     y = pcode_info$parameter_description,
     title = "Day-of-year percentile bands"
   ) +
-  theme_bw()
+  theme_bw() +
+  scale_fill_manual("Historical Percentiles",
+                  values = c("95 - Max" = "#292f6b",
+                             "90 - 95" = "#5699c0",
+                             "75 - 90" = "#aacee0",
+                             "25 - 75" = "#e9e9e9",
+                             "10 - 25" = "#ebd6ab",
+                             "5 - 10" = "#dcb668",
+                             "Min - 5" = "#8f4f1f"),
+                  labels = c("95th Percentile - Max",
+                             "90th - 95th Percentile",
+                             "75th - 90th Percentile",
+                             "25th - 75th Percentile",
+                             "10th - 25th Percentile",
+                             "5th - 10th Percentile",
+                             "Min - 5th Percentile"))
 
 ```
 
 Finally, let's overlay daily mean data onto the plot:
 
-```{r, message=FALSE, warning=FALSE}
-range <- as.Date(c("2025-01-01", "2026-02-01"))
+```{r}
+range <- as.Date(c("2025-01-01", "2026-03-02"))
 
 complete_df <- data.frame(time = seq.Date(from = range[1], 
-                                          to = as.Date("2026-12-31"),
+                                          to = range[1] + 365,
                                           by = "day")) |>
   mutate(time_of_year = as.Date(format(time, "%m-%d"), format = "%m-%d"))
 
@@ -143,30 +169,45 @@ daily_data <- complete_df |>
             by = "time") |> 
   left_join(doy_perc_bands, by = "time_of_year")
 
-update_geom_defaults("ribbon",
-                   list(alpha = 0.5))
-
 ggplot(data = daily_data, 
        aes(x = time)) +
-  geom_ribbon(aes(ymin = `95`, ymax = `100`), fill = "#292f6b") +
-  geom_ribbon(aes(ymin = `90`, ymax = `95`), fill = "#5699c0") +
-  geom_ribbon(aes(ymin = `75`, ymax = `90`), fill = "#aacee0") +
-  geom_ribbon(aes(ymin = `25`, ymax = `75`), fill = "#e9e9e9") +
-  geom_ribbon(aes(ymin = `10`, ymax = `25`), fill = "#ebd6ab") +
-  geom_ribbon(aes(ymin = `5`, ymax = `10`), fill = "#dcb668") +
-  geom_ribbon(aes(ymin = `0`, ymax = `5`), fill = "#8f4f1f") +
+  geom_ribbon(aes(ymin = `95`, ymax = `100`, fill = bins[1])) +
+  geom_ribbon(aes(ymin = `90`, ymax = `95`, fill = bins[2])) +
+  geom_ribbon(aes(ymin = `75`, ymax = `90`, fill = bins[3])) +
+  geom_ribbon(aes(ymin = `25`, ymax = `75`, fill = bins[4])) +
+  geom_ribbon(aes(ymin = `10`, ymax = `25`, fill = bins[5])) +
+  geom_ribbon(aes(ymin = `5`, ymax = `10`, fill = bins[6])) +
+  geom_ribbon(aes(ymin = `0`, ymax = `5`, fill = bins[7])) +
   geom_line(aes(y = value, color = approval_status), linewidth = 1) +
   scale_x_date(date_labels = "%b %Y",
                date_breaks = "3 month",
                expand = expand_scale(mult = c(0, 0)))+
   scale_y_log10(breaks = scales::breaks_log(base = 10),
-                labels = scales::label_log(base = 10)) +
+                labels = scales::label_log(base = 10),
+                minor_breaks = scales::minor_breaks_log()) +
+  annotation_logticks(sides = "lr") +
   scale_color_manual("Status",
                      values = c("Approved" = "black",
                                 "Provisional" = "red"), 
                      breaks = c("Approved", "Provisional"),
                      limits = force,
                      drop = TRUE) +
+  scale_fill_manual("Historical Percentiles",
+                    values = c("95 - Max" = "#292f6b",
+                               "90 - 95" = "#5699c0",
+                               "75 - 90" = "#aacee0",
+                               "25 - 75" = "#e9e9e9",
+                               "10 - 25" = "#ebd6ab",
+                               "5 - 10" = "#dcb668",
+                               "Min - 5" = "#8f4f1f"),
+                    labels = c("95th Percentile - Max",
+                               "90th - 95th Percentile",
+                               "75th - 90th Percentile",
+                               "25th - 75th Percentile",
+                               "10th - 25th Percentile",
+                               "5th - 10th Percentile",
+                               "Min - 5th Percentile")) +
+
   labs(
     x = "",
     y = pcode_info$unit_of_measure,
@@ -177,7 +218,7 @@ ggplot(data = daily_data,
 
 ```
 
-As  <https://waterdata.usgs.gov/monitoring-location/USGS-02037500/statistical-graphs/>
+As also seen on the WDFN pages: <https://waterdata.usgs.gov/monitoring-location/USGS-02037500/statistical-graphs/>
 
 
 ## Fetching monthly and annual statistics within a date range
@@ -186,7 +227,7 @@ Unlike day- or month-of-year statistics, which summarize typical seasonal condit
 Consider the example below where we fetch the average discharge value for the month of January, 2024.
 Notice that the `start_date` and `end_date` arguments are given in `YYYY-MM-DD` format.
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 jan_daterange_mean <-
   read_waterdata_stats_daterange(
   monitoring_location_id = site1,
@@ -199,15 +240,11 @@ jan_daterange_mean <-
 jan_daterange_mean
 ```
 
-Instead of `time_of_year` and `time_of_year_type` columns, this output contains `start_date`, `end_date`, and `interval_type` columns representing the daterange over which the average was calculated.
-The first row shows the average January, 2024 discharge was about 112 cubic feet per second.
-We again have extra rows: the second row contains the **calendar** year 2024 average and the third contains the **water** year 2024 average.
+Instead of `time_of_year` and `time_of_year_type` columns, this output contains `start_date`, `end_date`, and `interval_type` columns representing the daterange over which the average was calculated. The first row shows the average January, 2024 discharge was about 112 cubic feet per second. We again have extra rows: the second row contains the **calendar** year 2024 average and the third contains the **water** year 2024 average.
 
-Annual statistics will be returned for any calendar/water years than intersect with the specified date range.
-Consider the example below, where the `start_date` to `end_date` range is only 93 days yet happens to intersect with calendar **and** water years 2023 and 2024.
-We see this reflected in output containing monthly averages for September, 2023 through January, 2024 as well as 2023 and 2024 calendar and water year averages.
+Annual statistics will be returned for any calendar/water years than intersect with the specified date range. Consider the example below, where the `start_date` to `end_date` range is only 93 days yet happens to intersect with calendar **and** water years 2023 and 2024. We see this reflected in output containing monthly averages for September, 2023 through January, 2024 as well as 2023 and 2024 calendar and water year averages.
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 multiyear_daterange_mean <-
   read_waterdata_stats_daterange(
   monitoring_location_id = site1,
@@ -220,7 +257,7 @@ multiyear_daterange_mean <-
 multiyear_daterange_mean
 ```
 
-Before we move on, consider the following example where we create a Monthly mean statistics table similar to what you'd find in the [Water Year Summaries](https://rconnect.chs.usgs.gov/water-year-summaries-dev/?_inputs_&render_button=1&site_no_select=%2205428500%22&wateryear_select=%222024%22).
+Before we move on, consider the following example where we create a Monthly mean statistics table similar to what you'd find in the [Water Year Summaries](https://rconnect.chs.usgs.gov/water-year-summaries-dev/?_inputs_&render_button=1&site_no_select=%2205428500%22&wateryear_select=%222024%22). Note that the values reported here are slightly different from what you'll find in the Water Year Summary because of differences in how values are rounded.
 
 ```{r, message=FALSE, warning=FALSE}
 monthly_means <-
@@ -272,12 +309,18 @@ monthly_means |>
 The statistics API does not follow the same OGC standards as the <https://api.waterdata.usgs.gov/ogcapi/v0/> endpoints.
 This section will focus on important differences between the statistics and OGC-compliant APIs and other tips for working with the endpoint.
 
-* **No request limit or API token**: at time of writing, the statistics API does not limit the number of requests that can be made per hour. It also does not require you sign up for an API token. Requesting data from the statistics API does not count against your total request limit to the OGC-compliant APIs.
+* **Higher API limits**: at time of writing, the statistics API is limited to the default limits for any api.gov service which is 4000 requests per hour per IP. The API token used for the other USGS OGC-compliant APIs is included in the request, and changes the limit to 4000 requests per hour per token. There is a chance this could make a difference if you are running code on a shared IP: for example a large office, GitHub, Gitlab, etc. 
+
 * **The API always returns all columns**: compared to the OGC-compliant endpoints, which come with `skipGeometry` and `properties` arguments to limit the number of columns returned by the API, there is no way to request a subset of columns from the API.
 
 * **Month-of-year statistics**: to return month-of-year statistics using `read_waterdata_stats_por`, make sure the `start_date` to `end_date` range overlaps with the first day of the month for which you want to data. For example, `start_date = "01-01"` and `end_date = "03-01"` will return the month-of-year statistics for January, February, and March (in addition to the day-of-year statistics for each month-day in this range).
+
 * **Monthly and annual statistics**: when using `read_waterdata_stats_daterange`, the output will return monthly and annual summaries for every calendar month, calendar year, and water year that intersects with the `start_date` to `end_date` range. For example, `start_date = 2023-12-31` and `end_date = 2024-10-01` will return monthly statistics for each month between December, 2023 through October, 2024 **and** calendar year statistics for 2023 and 2024 **and** water year statistics for WY2024 and WY2025.
+
 * **Median comes with percentiles**: you never need to set `computation = c("median", "percentile")` as the median is returned as the 50th percentile. If you do ask for both median and percentiles, your data set will have two rows containing the median for each `parent_time_series_id`. 
+
 * **Minimum and maximum do *not* come with percentiles**: minimum and maximum statistics are not returned as percentiles so use `computation = c("minimum", "maximum", "percentile")` if you want a "complete" set of order statistics.
+
 * **The API returns specific percentiles**: for `computation = "percentile"`, the API will only ever return the following percentiles: 5th, 10th, 25th, 50th, 75th, 90th, and 95th. If you want other percentiles, you'll need to pull the daily data period of record using `read_waterdata_daily` and compute them yourself.
+
 * **Pay attention to `sample_count`**: the `sample_count` column represents the number of observations used to compute the statistic. As stated in the [statistics documentation](https://waterdata.usgs.gov/statistics-documentation/#minimum-period-of-record-number-of-observations), there is no minimum requirement for the number of observations to calculate a statistic. This means reported monthly and annual statistics can be based on *one* daily observation from that month/year. In the case of a single observation, the reported `minimum`, `maximum`, `median`, and `arithmetic_mean` will all be equal to the value of that observation and any other percentiles will be `NA`.

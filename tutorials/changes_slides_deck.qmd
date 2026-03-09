@@ -1,5 +1,5 @@
 ---
-title: "Updates to dataRetrieval 2025"
+title: "Updates to dataRetrieval 2026"
 author: "Laura DeCicco"
 image: hex_logo.png
 format:
@@ -121,7 +121,7 @@ The "develop" branch WILL change frequently, and there are no promises of future
 
 :::
 
-## USGS Water Data OGC APIs: Current Functions {.smaller}
+## USGS Water Data OGC APIs: Current Functions
 
 Open Geospatial Consortium (OGC), a non-profit international organization that develops and promotes open standards for geospatial information. OGC-compliant interfaces to USGS water data:
 
@@ -129,15 +129,41 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 * [read_waterdata_ts_meta](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_ts_meta.html) - Time series availability
 
-* [read_waterdata_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_daily.html) - Daily data
+* [read_waterdata_parameter_codes](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_parameter_codes.html) - Parameter code information
 
-* [read_waterdata_latest_continuous](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_latest_continuous.html) - Latest continuous data
+::: footer
+
+:::
+
+## USGS Water Data OGC APIs: Current Functions (cont.) 
+
+* [read_waterdata_field_meta](https://water.code-pages.usgs.gov/dataRetrieval/reference/read_waterdata_field_meta.html) - Field measurement data availability
+
+* [read_waterdata_combined_meta](https://water.code-pages.usgs.gov/dataRetrieval/reference/read_waterdata_combined_meta.html) - Combined time series and field data availability
+
+* [read_waterdata_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_daily.html) - Daily data
 
 * [read_waterdata_latest_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_latest_daily.html) - Latest daily data
 
-* [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) - Discrete hydrologic data (gage height, discharge, and readings of groundwater levels)
+::: footer
+
+:::
+
+## USGS Water Data OGC APIs: Current Functions (cont.) 
 
 * [read_waterdata_continuous](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_continuous.html) - Continuous data are collected via automated sensors installed at a monitoring location.
+
+* [read_waterdata_latest_continuous](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_latest_continuous.html) - Latest continuous data
+
+* [read_waterdata_field_measurements](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_measurements.html) - Discrete hydrologic data (gage height, discharge, and readings of groundwater levels)
+
+::: footer
+
+:::
+
+## USGS Water Data OGC APIs: Current Functions (cont.)
+
+* [read_waterdata_channel](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_channel.html) - Channel measurements
 
 * [read_waterdata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata.html) - Generalized function.
 
