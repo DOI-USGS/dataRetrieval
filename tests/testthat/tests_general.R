@@ -497,8 +497,12 @@ test_that("importWQP convertType", {
   testthat::skip_on_cran()
 
   SC <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", 
+                  convertType = TRUE, legacy = TRUE)
+  expect_in("ActivityStartDateTime", names(SC))
+  
+  SC2 <- readWQPqw(siteNumbers = "USGS-05288705", parameterCd = "00300", 
                   convertType = FALSE, legacy = TRUE)
-  expect_is(SC$ResultMeasureValue, "character")
+  expect_true(!"ActivityStartDateTime" %in% names(SC2))
 
   lakeSites_chars <- whatWQPdata(
     siteType = "Lake, Reservoir, Impoundment",

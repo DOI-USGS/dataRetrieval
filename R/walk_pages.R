@@ -45,9 +45,9 @@ get_resp_data <- function(resp) {
   }
 
   if("qualifier" %in% names(return_df)){
-    return_df$qualifier <- vapply(X = return_df$qualifier,
+    return_df$qualifier <- as.character(vapply(X = return_df$qualifier,
                              FUN = function(x) paste(x, collapse = ", "),
-                             FUN.VALUE =  c(NA_character_)) 
+                             FUN.VALUE =  c(NA_character_)))
   }
   
   if(!use_sf){

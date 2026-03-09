@@ -298,10 +298,13 @@ surface_water <- read_waterdata_combined_meta(
                          monitoring_location_id = c("USGS-07069000",
                                                     "USGS-07064000",
                                                     "USGS-07068000"),
-                         #end = c("2024-07-01T00:00:00Z", NA),
+                         end = "P1M",
                          parameter_code = "00060")
 
-
+hucs <- read_waterdata_combined_meta(
+                         hydrologic_unit_code = c("11010008", "11010009"),
+                         site_type = c("Stream", "Spring")
+)
 }
 \dontshow{\}) # examplesIf}
 }

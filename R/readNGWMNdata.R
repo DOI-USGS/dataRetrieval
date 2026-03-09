@@ -38,8 +38,11 @@
 #' }
 #'
 readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC") {
-  message("DISCLAIMER: NGWMN retrieval functions are still in flux,
-              and no future behavior or output is guaranteed")
+
+  .Deprecated("", 
+              msg = "read_ngwmn_data coming soon. Check back at
+              https://doi-usgs.github.io/dataRetrieval/articles/Status.html
+              for more information")
 
   dots <- convertLists(...)
 

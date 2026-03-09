@@ -150,7 +150,7 @@ The arguments `startDate` and `endDate` have defaults to request the maximum dat
 
 In this section we'll show how to get raw data into R. This data includes [site information](#site-information), measured [parameter information](#parameter-information), historical [daily values](#daily-data), [unit values](#unit-data) (which include real-time data but can also include other sensor data stored at regular time intervals), [groundwater level data](#groundwater-level-data), [peak flow data](#peak-flow-data), [rating curve data](#rating-curve-data),  [surface-water measurement data](#surface-water-measurement-data), [water use data](#water-use-data), and [statistics data](#statistics-data). The section [Embedded Metadata](#embedded-metadata) shows instructions for getting metadata that is attached to each returned data frame.
 
-The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the `dataRetrieval` package as `siteNumber`).  Often (but not always), these ID's are 8 digits for surface-water sites and 15 digits for groundwater sites.  The first step to finding data is discovering this `siteNumber`. There are many ways to do this, one is the [National Water Information System: Mapper](https://maps.waterdata.usgs.gov/mapper/index.html).
+The USGS organizes hydrologic data in a standard structure.  Streamgages are located throughout the United States, and each streamgage has a unique ID (referred in this document and throughout the `dataRetrieval` package as `siteNumber`).  Often (but not always), these ID's are 8 digits for surface-water sites and 15 digits for groundwater sites.  The first step to finding data is discovering this `siteNumber`. 
 
 Once the `siteNumber` is known, the next required input for USGS data retrievals is the "parameter code".  This is a 5-digit code that specifies the measured parameter being requested.  For example, parameter code 00631 represents "Nitrate plus nitrite, water, filtered, milligrams per liter as nitrogen", with units of "mg/l as N". 
 
@@ -248,7 +248,7 @@ knitr::kable(tableData,
 # nolint end
 ```
 
-Table 4: Reformatted version of output from the whatNWISdata function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]
+Table 4: Reformatted version of output from the read_waterdata_ts_meta function for the Choptank River near Greensboro, MD, and from Seneca Creek at Dawsonville, MD from the daily values service [Some columns deleted for space considerations]
 
 |monitoring_location_id |parameter_description                                                                                                                               |unit_of_measure |begin      |end        |
 |:----------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------|:---------------|:----------|:----------|
@@ -548,25 +548,25 @@ citation(package = "dataRetrieval")
 
 The requested format is: 
 
-U.S. Geological Survey, 2023, National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed [April 26, 2023], at https://waterdata.usgs.gov/nwis/. https://dx.doi.org/10.5066/F7P55KJN
+U.S. Geological Survey, 2023, National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed [April 26, 2023], at https://dx.doi.org/10.5066/F7P55KJN
 
 This can be created from the attributes of the data using the `create_NWIS_bib` function:
 
 
 ```{r nwisCite, eval=FALSE}
 
-dv <- readNWISdv("09010500", "00060")
+dv <- read_waterdata_daily(monitoring_location_id = "USGS-04085427",
+                           parameter_code = "00060",
+                           time = c("2012-01-01", "2012-06-30"))
 
 NWIScitation <- create_NWIS_bib(dv)
 NWIScitation
 ```
 
 ```
-U.S. Geological Survey (2024). _National Water Information
-System data available on the World Wide Web (USGS Water Data
-for the Nation)_. doi:10.5066/F7P55KJN
-<https://doi.org/10.5066/F7P55KJN>, Accessed Feb 09, 2024,
-<https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
+U.S. Geological Survey (2026). _USGS Water Data for the Nation: U.S. Geological Survey
+National Water Information System database_. doi:10.5066/F7P55KJN
+<https://doi.org/10.5066/F7P55KJN>, Accessed Mar 09, 2026.
 ```
 Alternative output is available:
 
@@ -576,12 +576,11 @@ print(NWIScitation, style = "Bibtex")
 
 ```
 @Manual{,
-  title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
+  title = {USGS Water Data for the Nation: U.S. Geological Survey National Water Information System database},
   author = {{U.S. Geological Survey}},
   doi = {10.5066/F7P55KJN},
-  note = {Accessed Feb 09, 2024},
-  year = {2024},
-  url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml,1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
+  note = {Accessed Mar 09, 2026},
+  year = {2026},
 }
 ```
 

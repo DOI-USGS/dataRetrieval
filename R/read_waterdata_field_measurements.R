@@ -22,6 +22,11 @@
 #' @param field_visit_id `r get_ogc_params("field-measurements")$field_visit_id`
 #' @param vertical_datum `r get_ogc_params("field-measurements")$vertical_datum`
 #' @param measuring_agency `r get_ogc_params("field-measurements")$measuring_agency`
+#' @param control_condition `r get_ogc_params("field-measurements")$control_condition`
+#' What and where the control of flow is for the gage pool.
+#' @param measurement_rated  `r get_ogc_params("field-measurements")$measurement_rated`
+#' Rated measurement based on the hydrologic/hydraulic conditions in which the measurement was made
+#' (excellent (2 percent), good (5 percent), fair (8 percent), or poor (more than 8 percent).                                                        percent)
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r dataRetrieval:::get_properties_for_docs("field-measurements", "field_measurement_id")`.
@@ -100,6 +105,8 @@ read_waterdata_field_measurements <- function(monitoring_location_id = NA_charac
                                              observing_procedure = NA_character_,
                                              vertical_datum = NA_character_,
                                              measuring_agency = NA_character_,
+                                             control_condition = NA_character_,
+                                             measurement_rated = NA_character_,
                                              skipGeometry = NA,
                                              time = NA_character_,
                                              bbox = NA,

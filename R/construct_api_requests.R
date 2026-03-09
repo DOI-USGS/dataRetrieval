@@ -54,7 +54,9 @@ construct_api_requests <- function(service,
                     "computation_identifier")
   
   if(service %in% c("monitoring-locations", "parameter-codes", 
-                    "time-series-metadata")){
+                    "time-series-metadata",
+                    "field-measurements-metadata",
+                    "combined-metadata")){
     comma_params <- c(comma_params, "id")
   }
   
@@ -138,14 +140,19 @@ construct_api_requests <- function(service,
     baseURL <- baseURL |>
       httr2::req_headers(`Content-Type` = "application/query-cql-json") 
     
-    post_params <- list(
-      "params" = unname(post_params)
-    )
+    if(length(post_params) > 1){
+      post_params <- list(
+        "params" = unname(post_params)
+      )
+      
+      template_path_post <- system.file("templates/post.CQL2", package = "dataRetrieval")
+      template_post <- readChar(template_path_post, file.info(template_path_post)$size)
+      
+      x <- whisker::whisker.render(template_post, post_params)      
+    } else {
+      x <- post_params[[1]]
+    }
     
-    template_path_post <- system.file("templates/post.CQL2", package = "dataRetrieval")
-    template_post <- readChar(template_path_post, file.info(template_path_post)$size)
-    
-    x <- whisker::whisker.render(template_post, post_params)
     baseURL <- httr2::req_body_raw(baseURL, x) 
     
   } else {
@@ -442,14 +449,39 @@ explode_post <- function(ls){
 #' dataRetrieval:::cql2_param(parameter)
 #' 
 cql2_param <- function(parameter){
-  template_path <- system.file("templates/param.CQL2", package = "dataRetrieval")
-  template <- readChar(template_path, file.info(template_path)$size)
   
-  parameters <- paste0(unlist(parameter), collapse = '", "')
-  parameters <- paste0('"', parameters, '"')
-  parameter_list <- list("property" = names(parameter),
-                         "parameter" = parameters)
-  return(whisker::whisker.render(template, parameter_list))
+  # Wildcards:
+  if(names(parameter) %in% c("hydrologic_unit_code")){
+    template_path <- system.file("templates/param.CQL2.like", package = "dataRetrieval")
+    template <- readChar(template_path, file.info(template_path)$size)
+
+    params <- c()
+    for(i in parameter[[1]]){
+      parameter_list <- list("property" = names(parameter),
+                             "parameter" = i)
+      params <- c(params, 
+                  whisker::whisker.render(template, parameter_list))
+    }
+    template_path_or <- system.file("templates/post.CQL2.or", package = "dataRetrieval")
+    template_or <- readChar(template_path_or, file.info(template_path_or)$size)
+
+    post_params <- list(
+      "params" = paste0(params, collapse = ", ")
+    )
+    cql_text <- whisker::whisker.render(template_or, post_params)
+  } else { # INs
+    parameters <- paste0(unlist(parameter), collapse = '", "')
+    parameters <- paste0('"', parameters, '"')
+    parameter_list <- list("property" = names(parameter),
+                           "parameter" = parameters)
+    
+    template_path <- system.file("templates/param.CQL2", package = "dataRetrieval")
+    template <- readChar(template_path, file.info(template_path)$size)
+    
+    cql_text <- whisker::whisker.render(template, parameter_list)
+  }
+  
+  return(cql_text)
 } 
 
 

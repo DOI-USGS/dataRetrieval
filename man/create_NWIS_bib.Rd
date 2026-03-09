@@ -22,7 +22,9 @@ See \code{?bibentry} for more information.
 }
 \examples{
 \donttest{
-nwisData <- readNWISdv("04085427", "00060", "2012-01-01", "2012-06-30")
+nwisData <- read_waterdata_daily(monitoring_location_id = "USGS-04085427", 
+                                 parameter_code = "00060", 
+                                 time = c("2012-01-01", "2012-06-30"))
 nwis_citation <- create_NWIS_bib(nwisData)
 nwis_citation
 
