@@ -77,7 +77,7 @@ See also Details below for more information.}
 \item{control_condition}{What and where the control of flow is for the gage pool.}
 
 \item{measurement_rated}{Rated measurement based on the hydrologic/hydraulic conditions in which the measurement was made
-(excellent (2 percent), good (5 percent), fair (8 percent), or poor (more than 8 percent).                                                        percent), or poor (more than 8 percent)]}
+(excellent (2 percent), good (5 percent), fair (8 percent), or poor (more than 8 percent).                                                        percent)}
 
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
