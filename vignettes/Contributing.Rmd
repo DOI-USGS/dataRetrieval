@@ -68,7 +68,7 @@ code.usgs.gov is the USGS enterprise GitLab home. Some people will either refer 
 The first step to collaborating via code.usgs.gov is to log in. For USGS/DOI employees, that means using:
 
 ```{r echo=FALSE, out.width="60%"}
-knitr::include_graphics("login.png")
+knitr::include_graphics("images/login.png")
 ```
 
 ### Personal Access Token
@@ -78,12 +78,12 @@ This step only needs to be done once per computer setup. So if you've done it be
 You'll need to set up a Personal Access Token. Go to [https://code.usgs.gov/-/user_settings/personal_access_tokens](https://code.usgs.gov/-/user_settings/personal_access_tokens) and create a new token selecting the api scope:
 
 ```{r echo=FALSE, out.width="60%"}
-knitr::include_graphics("pat.png")
+knitr::include_graphics("images/pat.png")
 ```
 
 After clicking the green "Create personal access token", you will see a screen like this:
 ```{r echo=FALSE, out.width="60%"}
-knitr::include_graphics("save_pat.png")
+knitr::include_graphics("images/save_pat.png")
 ```
 
 Save your token in a safe place (KeyPass for instance) so you don’t need to constantly regenerate tokens. You will need this token for authenticating when doing a git pull (in a few steps....).
@@ -95,7 +95,7 @@ The easiest way to set up work on this package is to create a new Project within
 1. Create a new project -> Version Control -> Git
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("new_project.png")
+knitr::include_graphics("images/new_project.png")
 ```
 
 2. Navigate to the landing page for the repository to find the Repository URL.
@@ -103,20 +103,20 @@ knitr::include_graphics("new_project.png")
 From code.usgs.gov, use the "Clone" button and copy the HTTPS URL:
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("https_clone.png")
+knitr::include_graphics("images/https_clone.png")
 ```
 
 From GitHub, use the "Code" button and copy the SSH url:
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("github_code.png")
+knitr::include_graphics("images/github_code.png")
 ```
  
 
 3. Paste the HTTPS git address in Repository URL:
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("git_repository.png")
+knitr::include_graphics("images/git_repository.png")
 ```
 
 4. Logging in
@@ -126,7 +126,7 @@ You may need to log in (if you've logged in before, there will not be a log in p
 For code.usgs.gov, use your full email for your user name, and the personal access token for your password. NOT your AD password!
 
 ```{r echo=FALSE, out.width="60%"}
-knitr::include_graphics("git_login.png")
+knitr::include_graphics("images/git_login.png")
 ```
 
 If you attempt to use HTTPS and are not even prompted for a password, but you receive a failed authentication error message, then you probably at one point in the past provided an incorrect username/password and Windows (or MacOS) chose to store that password in their built-in credential manager. On Windows, this is called Credential Manager. On Mac, this is called Keychain. Clear that credential and try again.
@@ -140,13 +140,13 @@ For GitHub, see [Adding a New SSH Key](https://docs.github.com/en/authentication
 Click "Install and Restart" from Build tab in the upper right of your RStudio window. If there are packages that this package depends on and they are not installed on your computer, you will get a warning. Install those packages manually and try the "Install and Restart" again. If successful, you will see something like:
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("install.png")
+knitr::include_graphics("images/install.png")
 ```
 
 The most common problem at this stage will be that you might not have all the packages that are listed in either the Depends or Imports of the DESCRIPTION file. If you see a message like this:
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("install_error.png")
+knitr::include_graphics("images/install_error.png")
 ```
 
 Read which package is missing from your computer and install, or you can use the `remotes` package:
@@ -160,19 +160,19 @@ remotes::install_deps()
 Turn on the option to use Roxygen to build help pages. Click on the More button in the "Build" tab, then choose "Configure Build Tools". 
 
 ```{r echo=FALSE, out.width="60%"}
-knitr::include_graphics("roxygen.png")
+knitr::include_graphics("images/roxygen.png")
 ```
 
 Click the radio button to "Generate documentation with Roxygen". Then click the Configure button and check all the options:
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("doc_all.png")
+knitr::include_graphics("images/doc_all.png")
 ```
 
 If you do not have some LaTeX software installed (on Windows that would be MikTex for instance), you will want to include `--no-manual` in your check options. 
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("no_manual.png")
+knitr::include_graphics("images/no_manual.png")
 ```
 
 
@@ -195,13 +195,13 @@ A few developers have the authority to merge updates into the main branch of dat
 Before starting anything new, try to always remember to pull any changes that have happened on the repo. In the "Git" tab, click the down arrow which triggers a "git pull":
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("pull.png")
+knitr::include_graphics("images/pull.png")
 ```
 
 Create a new branch. This will let you work on your idea without risking adding in-development work into the "main" branch of the repository. As a good rule-of-thumb, consider creating a new branch for each "Issue". 
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("new_branch.png")
+knitr::include_graphics("images/new_branch.png")
 ```
 
 
@@ -242,7 +242,7 @@ my_fancy_function <- function(excited_flag){
 Check the package to make sure the function works properly, and doesn't add any new Errors, Warnings, Notes.
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("check.png")
+knitr::include_graphics("images/check.png")
 ```
 
 Note sometimes this can take a long time. The package will be checked automatically on code.usgs.gov with the CI pipeline, but it is still a good idea to run the check locally especially when setting up a new function initially.
@@ -268,7 +268,7 @@ test_that("My fancy function", {
 In the "Build" tab, under "More", test the full package
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("test.png")
+knitr::include_graphics("images/test.png")
 ```
 
 ## Adding the function to vignettes, README, report template.
@@ -288,13 +288,13 @@ This can be done in stages. If you've done everything correctly, you should be r
 2. In the same Git tab, click the radio buttons next to the files you are either adding or modifying. This should include the R script for the function, the test file(s), the Rd documentation, and the updated NAMESPACE. It could also include changes to the README, vignettes, inst/template/report.Rmd, etc. Then click the "Commit" button:
 
 ```{r echo=FALSE, out.width="75%"}
-knitr::include_graphics("commit1.png")
+knitr::include_graphics("images/commit1.png")
 ```
 
 3. Write a message to help you remember what this commit was all about. Glance at the "Diffs" shown below. When everything looks good, click "Commit". 
 
 ```{r echo=FALSE, out.width="75%"}
-knitr::include_graphics("commit2.png")
+knitr::include_graphics("images/commit2.png")
 ```
 
 4. Click the up arrow to "Push" the changes up to the feature branch in GitLab (code.usgs.gov).
@@ -304,7 +304,7 @@ knitr::include_graphics("commit2.png")
 The repository should have a file already set up called .gitlab-ci.yml. This file organizes automatic checks on the package via a "pipeline". Usually there is a setup phase that installs all the required package, then a check phase to check the package. I like to add separate testing and test coverage checks. Before the merge request is merged, the pipeline should come back with no errors:
 
 ```{r echo=FALSE, out.width="75%"}
-knitr::include_graphics("pipeline.png")
+knitr::include_graphics("images/pipeline.png")
 ```
 
 This helps assure that the changes are not causing any failures on an independent platform.
@@ -314,13 +314,13 @@ This helps assure that the changes are not causing any failures on an independen
 So far, you have pushed a specific branch up to code.usgs.gov. It's not set to go directly to the "main" branch. If you open the repository, you may see a message like this:
 
 ```{r echo=FALSE, out.width="75%"}
-knitr::include_graphics("create_merge.png")
+knitr::include_graphics("images/create_merge.png")
 ```
 
 Click on that "Create merge request" to initiate a "merge request". 
 
 ```{r echo=FALSE, out.width="75%"}
-knitr::include_graphics("merge_request.png")
+knitr::include_graphics("images/merge_request.png")
 ```
 
 Fill in some more information on what is being included in this merge request. You could assign someone to do a peer review of your code. This is a great place for review. It is a good idea to discuss with your collaborators if you want guidelines set up to decide who has the responsibility to perform the merge (that is...click the Merge button).
@@ -332,13 +332,13 @@ There are a few things to check when the pipeline has finished. The first main g
 The test coverage should be as good if not better than the coverage currently in the canonical "main" branch. In the following screenshot, the test coverage on the "main" branch is 92.11%. The pull request is set to increase that coverage by 0.11% to 92.22%. If you notice the test coverage decreasing, you will want to look at your test suite and see where you can add tests to make sure your package is working properly. This screenshot also shows where to get a full report on the tests in your package. 
 
 ```{r echo=FALSE, out.width="75%"}
-knitr::include_graphics("more_tests.png")
+knitr::include_graphics("images/more_tests.png")
 ```
 
 Another report that GitLab can produced is found in the "Changes" tab in the merge request. There are green and red vertical lines on the file diffs. These vertical lines indicate the code is covered by a test (green line), or that there is no test (thicker red line).
 
 ```{r echo=FALSE, out.width="75%"}
-knitr::include_graphics("test_included.png")
+knitr::include_graphics("images/test_included.png")
 ```
 
 This can be useful for finding parts of your code that are not covered by tests.
@@ -354,7 +354,7 @@ Congratulations, you contributed to the package! The next steps should always be
 In the upper right corner of the Git window in RStudio, you can click a dropdown to get back to the "main" branch.
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("back_to_main.png")
+knitr::include_graphics("images/back_to_main.png")
 ```
 
 ## Delete local feature branch
@@ -362,7 +362,7 @@ knitr::include_graphics("back_to_main.png")
 The way code.usgs.gov is set up, the branch should be automatically deleted *ON* code.usgs.gov. You will still want to delete the feature branch locally. Go to the Terminal in the lower left corner in RStudio, and type `git branch -d my_fancy_function` (or whatever you named your branch).
 
 ```{r echo=FALSE, out.width="50%"}
-knitr::include_graphics("delete_branch.png")
+knitr::include_graphics("images/delete_branch.png")
 ```
 
 

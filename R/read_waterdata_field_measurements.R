@@ -8,20 +8,25 @@
 #' @param parameter_code `r get_ogc_params("field-measurements")$parameter_code`
 #' Multiple parameter_codes can be requested as a character vector.
 #' @param observing_procedure_code `r get_ogc_params("field-measurements")$observing_procedure_code`
+#' @param observing_procedure `r get_ogc_params("field-measurements")$observing_procedure`
 #' @param time `r get_ogc_params("field-measurements")$time`
-#' You can also use a vector of length 2: the first value being the starting date,
-#' the second value being the ending date. NA's within the vector indicate a
-#' half-bound date. For example, c("2024-01-01", NA) will return all data starting
-#' at 2024-01-01.
+#' 
+#' See also Details below for more information.
 #' @param value `r get_ogc_params("field-measurements")$value`
 #' @param unit_of_measure `r get_ogc_params("field-measurements")$unit_of_measure`
 #' @param approval_status `r get_ogc_params("field-measurements")$approval_status`
 #' @param last_modified `r get_ogc_params("field-measurements")$last_modified`
+#' 
+#' See also Details below for more information.
 #' @param qualifier `r get_ogc_params("field-measurements")$qualifier`
 #' @param field_visit_id `r get_ogc_params("field-measurements")$field_visit_id`
-#' @param observing_procedure `r get_ogc_params("field-measurements")$observing_procedure`
 #' @param vertical_datum `r get_ogc_params("field-measurements")$vertical_datum`
 #' @param measuring_agency `r get_ogc_params("field-measurements")$measuring_agency`
+#' @param control_condition `r get_ogc_params("field-measurements")$control_condition`
+#' What and where the control of flow is for the gage pool.
+#' @param measurement_rated  `r get_ogc_params("field-measurements")$measurement_rated`
+#' Rated measurement based on the hydrologic/hydraulic conditions in which the measurement was made
+#' (excellent (2 percent), good (5 percent), fair (8 percent), or poor (more than 8 percent).                                                        percent)
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are: 
 #' `r dataRetrieval:::get_properties_for_docs("field-measurements", "field_measurement_id")`.
@@ -46,6 +51,10 @@
 #' be requested from a native csv format. This can be dangerous because the
 #' data will cut off at 50,000 rows without indication that more data
 #' is available. Use `TRUE` with caution. 
+#' 
+#' @inherit read_waterdata_continuous details
+#' 
+#' 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -54,8 +63,11 @@
 #'
 #' groundwater <- read_waterdata_field_measurements(monitoring_location_id = "USGS-375907091432201")
 #'
-#' gwl_data <- read_waterdata_field_measurements(monitoring_location_id = "USGS-375907091432201",
-#'                            parameter_code = "72019",
+#' field_data <- read_waterdata_field_measurements(monitoring_location_id = "USGS-02238500",
+#'                            parameter_code = "00060",
+#'                            time = as.POSIXct(c("2024-02-26 15:00:00",
+#'                                                "2025-08-27 12:00:00"),
+#'                                              tz = "America/Chicago"),
 #'                            skipGeometry = TRUE)
 #'                         
 #' gwl_data_period <- read_waterdata_field_measurements(
@@ -93,6 +105,8 @@ read_waterdata_field_measurements <- function(monitoring_location_id = NA_charac
                                              observing_procedure = NA_character_,
                                              vertical_datum = NA_character_,
                                              measuring_agency = NA_character_,
+                                             control_condition = NA_character_,
+                                             measurement_rated = NA_character_,
                                              skipGeometry = NA,
                                              time = NA_character_,
                                              bbox = NA,

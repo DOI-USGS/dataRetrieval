@@ -31,7 +31,7 @@ Multiple parameter_codes can be requested as a character vector.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, continuous_id, internal_id, time_series_id, monitoring_location_id, parameter_code, statistic_id, time, value, unit_of_measure, approval_status, qualifier, last_modified.
+geometry, continuous_id, time_series_id, monitoring_location_id, parameter_code, statistic_id, time, value, unit_of_measure, approval_status, qualifier, last_modified.
 The default (\code{NA}) will return all columns of the data.}
 
 \item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.
@@ -56,7 +56,9 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{last_modified} that intersects the value of datetime are selected.}
+Only features that have a \code{last_modified} that intersects the value of datetime are selected.
+
+See also Details below for more information.}
 
 \item{time}{The date an observation represents. You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
 Examples:
@@ -68,11 +70,8 @@ Examples:
 }
 
 Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.
-.
-You can also use a vector of length 2: the first value being the starting date,
-the second value being the ending date. NA's within the vector indicate a
-half-bound date. For example, c("2024-01-01", NA) will return all data starting
-at 2024-01-01.}
+
+See also Details below for more information.}
 
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
@@ -101,6 +100,22 @@ in 2026.
 
 Geometry output is not supported in the continuous data API endpoint.
 }
+\details{
+You can also use a vector of length 2 for any time queries (such as time
+or last_modified). The first value is the starting date (or datetime),
+the second value is the ending date(or datetime).
+NA's within the vector indicate a half-bound date.
+For example, \code{time = c("2024-01-01", NA)} will return all data starting
+at 2024-01-01.
+\code{time = c(NA, "2024-01-01")} will return all data from the beginning of
+the timeseries until 2024-01-01.
+By default, time is assumed UTC, although time zone attributes
+will be accommodated. As an example, setting \code{time = as.POSIXct(c("2021-01-01 12:00:00",
+"2021-01-01 14:00"), tz = "America/New_York")} will request data that between
+noon and 2pm eastern time on 2021-01-01.
+All time values RETURNED from the service are UTC with the exception of
+daily data, which returns time values in local dates.
+}
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 
@@ -109,9 +124,11 @@ site <- "USGS-451605097071701"
 pcode <- "72019"
 
 uv_data_trim <- read_waterdata_continuous(monitoring_location_id = site,
-                          parameter_code = pcode, 
-                          properties = c("value",
-                                         "time"))
+                           parameter_code = pcode, 
+                           properties = c("value", "time"),
+                           time = as.POSIXct(c("2026-02-07 12:00", 
+                                               "2026-02-08 12:00"), 
+                                              tz = "America/Chicago"))
 
 uv_data <- read_waterdata_continuous(monitoring_location_id = site,
                            parameter_code = pcode,
@@ -123,6 +140,38 @@ multi_site2 <- read_waterdata_continuous(monitoring_location_id =  c("USGS-45160
                                                                      "USGS-14181500"),
                                                parameter_code = c("00060", "72019"),
                                                last_modified = "P7D")
+                                               
+# how to split up request into roughly 3 year chunks
+
+site <- "USGS-0208458892"
+pcode <- "00095" # Specific conductance
+start <- as.Date("2013-01-01")  
+end <- as.Date("2025-12-31") 
+
+n_days <- difftime(end, start, units = "days")
+
+# create a vector of dates that are about 3 years apart:
+time_chunks <- seq(from = start, 
+                   to = end,
+                   length.out = ceiling(n_days/(3*365.25)) + 1)
+
+
+# create a list where each element starts at the beginning
+# of a chunk, and ends the day before the next chunk:
+time_df <- data.frame(start = time_chunks[-length(time_chunks)],
+                      end = time_chunks[-1]-1)
+                      
+#all_data <- data.frame()
+#for(i in seq_along(time_df$start)){
+#   sub_df <- read_waterdata_continuous(monitoring_location_id = site,
+#                                       parameter_code = pcode,
+#                                      time = c(time_df$start[i],
+#                                                time_df$end[i]))
+#   all_data <- rbind(all_data, sub_df)
+# }
+
+# Set the time to Eastern:
+# all_data$time <- lubridate::force_tz(all_data$time, "America/New_York")
 
 }
 \dontshow{\}) # examplesIf}

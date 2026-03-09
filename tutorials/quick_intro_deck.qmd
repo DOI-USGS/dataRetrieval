@@ -1,0 +1,721 @@
+---
+title: "Introduction to dataRetrieval"
+author: "Laura DeCicco"
+image: hex_logo.png
+format:
+  revealjs:
+    theme: [simple, custom.scss]
+    toc: false
+    slide-number: true
+    logo: hex_logo.png
+    footer: <https://doi-usgs.github.io/dataRetrieval/>
+    preview-links: auto
+title-slide-attributes: 
+  data-background-image: hex_logo.png
+  data-background-size: 15%
+  data-background-position: 2% 2%
+editor: source
+editor_options: 
+  chunk_output_type: console
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+```{r}
+#| echo: false
+#| include: false
+# library(dataRetrieval)
+library(ggplot2)
+library(dplyr)
+options(dplyr.summarise.inform = FALSE)
+
+dt_me <- function(x, 
+                  page_length = 8, 
+                  paging = TRUE,
+                  font = "0.7em", 
+                  escape = TRUE){
+  DT::datatable(x,
+              rownames = FALSE,
+              options = list(pageLength = page_length, 
+                             info = FALSE,
+                             searching = FALSE,
+                             paging = paging,
+                             lengthChange = FALSE,
+                             initComplete = htmlwidgets::JS(
+          "function(settings, json) {",
+          paste0("$(this.api().table().container()).css({'font-size': '", 
+                 font, "'});"),
+          "}")), escape = escape)
+}
+
+theme_set(theme_grey(base_size = 24))
+update_geom_defaults("point", list(size = 3)) 
+
+```
+
+
+## Introduction {background-image="images/hex_logo.png" background-size="15%" background-position="90% 90%" }
+
+In this ~45 minute introduction, the goal is:
+
+- Introduce the modern `dataRetrieval` workflows. 
+
+- The intended audience is someone:
+
+  - New to `dataRetrieval` 
+  
+  - Has some R experience
+  
+::: footer
+
+:::
+
+
+## dataRetrieval: R-package for US water data {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**USGS Water Data APIs * **
+
+- Surface water levels
+  
+- Groundwater levels
+    
+- Site metadata
+  
+- Peak flows
+  
+- Rating curves
+
+- Discrete water-quality data
+
+:::
+
+::: {.column width="50%"}
+
+**Water Quality Portal (WQP) Data**
+  
+- Discrete water-quality data
+
+- USGS and non-USGS data
+
+:::
+
+::::
+
+## Installation
+
+`dataRetrieval` is available on the Comprehensive R Archive Network (CRAN) repository. To install `dataRetrieval` on your computer, open RStudio and run this line of code in the Console:
+
+```{r}
+#| echo: true
+#| eval: false
+install.packages("dataRetrieval")
+
+```
+
+Then each time you open R, you'll need to load the library:
+
+```{r}
+#| message: true
+library(dataRetrieval)
+```
+
+::: footer
+
+:::
+
+
+## dataRetrieval: External Documentation
+
+![](images/documentation_1.png){width="1000" height="500"}
+
+::: footer
+<https://doi-usgs.github.io/dataRetrieval>
+:::
+
+## dataRetrieval: External Documentation
+
+![](images/documentation_2.png){width="1000" height="500"}
+
+::: footer
+<https://doi-usgs.github.io/dataRetrieval/reference/index.html>
+:::
+
+## dataRetrieval: External Documentation
+
+![](images/documentation_3.png){width="1000" height="500"}
+
+## Documentation within R: function help pages {.smaller}
+
+Within R, you can call help files for any `dataRetrieval` function:
+
+```{r}
+#| echo: true
+#| eval: false
+?readWQPdata
+```
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+Click here to open a new window:
+
+![](images/help_file_2.png)
+
+
+:::
+
+::: {.column width="50%"}
+
+Scroll down to the "Examples" to see how each function can be run.
+
+Examples
+
+```{r}
+#| eval: false
+# Legacy:
+nameToUse <- "pH"
+pHData <- readWQPdata(siteid = "USGS-04024315", 
+                      characteristicName = nameToUse)
+ncol(pHData)
+attr(pHData, "siteInfo")
+attr(pHData, "queryTime")
+attr(pHData, "url")
+```
+
+:::
+
+::::
+
+::: footer
+
+:::
+
+
+## dataRetrieval Updates {background-image="images/hex_logo.png" background-size="15%" background-position="85% 80%" }
+
+Are you a seasoned `dataRetrieval` user?
+
+Here are resources for recent major changes:
+
+* [Changes to dataRetrieval](https://doi-usgs.github.io/dataRetrieval/articles/changes_slides.html)
+
+*  [Water Data API Introduction](https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html)
+
+*  [Samples Data Introduction](https://doi-usgs.github.io/dataRetrieval/articles/samples_data.html)
+
+## What's New? {.smaller}
+
+There's been a lot of changes to `dataRetrieval` over the past year. If you'd like to see an overview of those changes, visit: [Changes to dataRetrieval](https://doi-usgs.github.io/dataRetrieval/articles/changes_slides.html)
+
+Biggest changes:
+
+* NWIS servers will be shut down, so all `readNWIS` functions will eventually stop working
+
+* `read_waterdata` functions are modern and should be used when possible
+
+* The "USGS Water Data APIs" are the new home for USGS data
+
+::: footer
+
+:::
+
+## USGS Water Data API Token 
+
+* The Water Data APIs limit how many queries a single IP address can make per hour
+
+* You **can** run new `dataRetrieval` functions without a token
+
+* You **might** run into errors quickly. If you (or your IP!) have exceeded the quota, you will see:
+
+```
+! HTTP 429 Too Many Requests.
+  • You have exceeded your rate limit. Make sure you provided your API key from https://api.waterdata.usgs.gov/signup/, then either try again later or contact us at https://waterdata.usgs.gov/questions-comments/?referrerUrl=https://api.waterdata.usgs.gov for assistance.
+```
+
+## USGS Water Data API Token 
+
+1. Request a USGS Water Data API Token: <https://api.waterdata.usgs.gov/signup/>
+
+2. Save it in a safe place (KeePass or other password management tool)
+
+3. Add it to your .Renviorn file as API_USGS_PAT. 
+
+4. Restart R 
+
+5. Check that it worked by running (you should see your token printed in the Console):
+
+```{r}
+#| eval: false
+Sys.getenv("API_USGS_PAT")
+```
+
+See next slide for a demonstration.
+
+::: footer
+
+:::
+
+## USGS Water Data API Token: Example {.smaller}
+
+My favorite method to do add your token to .Renviron is to use the `usethis` package. Let's pretend the token sent you was "abc123":
+
+1. Run in R:
+```{r}
+#| echo: true
+#| eval: false
+usethis::edit_r_environ()
+```
+
+2. Add this line to the file that opens up:
+
+```{r}
+#| eval: false
+API_USGS_PAT = "abc123"
+```
+
+3. Save that file using the save button
+
+4. Restart R/RStudio.
+
+5. Run after restarting R:
+
+```{r}
+#| eval: false
+Sys.getenv("API_USGS_PAT")
+```
+
+## USGS Water Data API Token: Example {.smaller .nostretch}
+
+![](images/save_token.png){width="50%"}
+
+After save and restart, check that it worked by running:
+
+```{r}
+#| eval: false
+Sys.getenv("API_USGS_PAT")
+```
+
+::: footer
+
+:::
+
+## USGS Basic Retrievals {.smaller}
+
+The USGS uses various codes for basic retrievals. These codes can have leading zeros, therefore they need to be a character surrounded in quotes ("00060").
+
+* Site ID (often 8 or 15-digits)
+* Parameter Code (5 digits)
+    + Full list: `read_waterdata_parameter_codes()`
+* Statistic Code (for daily values)
+    + Full list: `read_metadata("statistic-codes")`
+
+## USGS Basic Retrievals Parameter and Statistic Codes
+
+Here are some examples of a few common codes:
+
+
+```{r echo=FALSE, eval=TRUE}
+library(knitr)
+
+df <- data.frame(
+  pCode = c("00060", "00065", "00010", "00400"),
+  shName = c("Discharge", "Gage Height", "Temperature", "pH")
+)
+
+names(df) <- c("Parameter Code", "Short Name")
+
+df2 <- data.frame(
+  pCode = c("00001", "00002", "00003", "00008"),
+  shName = c("Maximum", "Minimum", "Mean", "Median")
+)
+
+names(df2) <- c("Statistic Code", "Short Name")
+
+knitr::kable(list(df, df2))
+```
+
+
+
+## Let's Go! {.smaller}
+
+We're going walk through 3 retrievals:
+
+* **Workflow 1**: Daily Data
+
+  - Uses the new USGS Water Data API 
+  
+  - Modern data access point going forward
+
+* **Workflow 2**: Discrete Data
+
+  - Uses new USGS Samples Data
+  
+  - Modern data access point going forward
+
+* **Workflow 3**: Continuous Data
+  
+  - Uses the new USGS Water Data API 
+  
+  - Modern data access point going forward
+
+
+::: footer
+
+:::
+
+## Workflow 1: Daily data for known site
+
+Let's pull daily mean discharge data for site "USGS-0940550", getting all the data from October 10, 2024 onward.
+
+```{r}
+#| message: true
+library(dataRetrieval)
+site <- "USGS-09405500"
+pcode <- "00060" # Discharge
+stat_cd <- "00003" # Mean
+range <- c("2024-10-01", NA)
+
+df <- read_waterdata_daily(monitoring_location_id = site,
+                           parameter_code = pcode,
+                           statistic_id = stat_cd,
+                           time = range)
+
+```
+
+::: footer
+
+:::
+
+## Workflow 1: Look at Daily Data {.smaller}
+
+In RStudio, click on the data frame in the upper right Environment tab to open a Viewer.
+
+```{r}
+#| echo: false
+
+dt_me(df |> 
+        sf::st_drop_geometry(),
+      page_length = 3)
+
+
+```
+
+::: footer
+
+:::
+
+## Workflow 1: Plot Daily Data 
+
+Let's use `ggplot2` to visualize the data. 
+
+```{r}
+#| echo: true
+#| output-location: column
+library(ggplot2)
+
+ggplot(data = df) +
+  geom_point(aes(x = time, 
+                 y = value,
+                 color = approval_status)) 
+
+```
+
+## Water Data API Notes: Argument input 
+
+Use your "tab" key!
+
+![](images/autocomplete.png)
+
+## Water Data API Notes: Arguments
+
+* When you look at the help file for the new functions, you’ll notice there are lots of possible inputs (arguments). 
+
+* You **DO NOT** need to (and should not!) specify **all** of these parameters. 
+
+* However, also consider what happens if you leave too many things blank. What do you suppose will be returned here?
+
+```{r}
+#| eval: false
+#| echo: true
+discharge <- read_waterdata_daily(parameter_code = "00060",
+                                  statistic_id = "00003")
+
+```
+
+::: {.fragment}
+
+::: {style="font-size: 75%;"}
+
+Since no list of sites or bounding box was defined, **ALL** the daily data in **ALL** the country with parameter code "00060" and statistic code "00003" will be returned.
+
+:::
+
+:::
+
+::: footer
+
+:::
+
+
+## Water Data API Notes: time input {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+The "time" argument has a few options:
+
+* A single date (or date-time): "2024-10-01" or "2024-10-01T23:20:50Z"
+
+* A bounded interval: c("2024-10-01", "2025-07-02")
+
+* Half-bounded intervals: c("2024-10-01", NA)
+
+* Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
+
+:::
+
+::: {.column width="50%"}
+
+Here are a bunch of valid inputs:
+
+```{r}
+#| code-line-numbers: "1-7|8-9|10-13|14-17"
+# Ask for exact times:
+time = "2025-01-01"
+time = as.Date("2025-01-01")
+time = "2025-01-01T23:20:50Z"
+time = as.POSIXct("2025-01-01T23:20:50Z", 
+                  format = "%Y-%m-%dT%H:%M:%S", 
+                  tz = "UTC")
+# Ask for specific range
+time = c("2024-01-01", "2025-01-01") # or Dates or POSIXs
+# Asking beginning of record to specific end:
+time = c(NA, "2024-01-01") # or Date or POSIX
+# Asking specific beginning to end of record:
+time = c("2024-01-01", NA) # or Date or POSIX
+# Ask for period
+time = "P1M" # past month
+time = "P7D" # past 7 days
+time = "PT12H" # past hours
+```
+
+:::
+
+::::
+
+## Workflow 2: Discrete data for known site
+
+Use your "tab" key!
+
+![](images/autocomplete_samples.png)
+
+## Workflow 2: Discrete data for known site
+
+Let's get orthophosphate ("00660") data from the Shenandoah River at Front Royal, VA ("USGS-01631000").
+
+```{r}
+#| message: true
+site <- "USGS-01631000"
+pcode <- "00660"
+
+qw_data <- read_waterdata_samples(monitoringLocationIdentifier = site,
+                                  usgsPCode = pcode, 
+                                  dataType = "results", 
+                                  dataProfile = "basicphyschem")
+ncol(qw_data)
+```
+
+That's a LOT of columns returned. We won't look at them here, but you can use `View` in RStudio to explore on your own.
+
+::: footer
+
+:::
+
+## USGS Samples Data Notes: Data Types and Profiles 
+
+* There are 2 arguments that dictate what kind of data is returned
+  - "dataType"  defines what kind of data comes back
+  - "dataProfile" defines what columns from that type come back
+
+## Data Types and Profiles {.smaller}
+
+```{r}
+#| echo: false
+
+df <- tibble(dataType = c("results", "locations", "activities", "projects", "organizations"),
+             Description = c("Results data and metadata for measures and observations matching your query",
+                             "Find monitoring locations that have data matching your query",
+                             "Information about the monitoring activities conducted that produced data",
+                             "Information on the projects that have results matching your data query",
+                             "Information about the organizations that have provided data that matches your query"),
+             dataProfile = c('fullphyschem<br>basicphyschem<br>fullbio<br> basicbio<br>narrow<br>resultdetectionquantitationlimit<br>labsampleprep<br>count',
+             'site<br>count',
+             'sampact<br>actmetric<br>actgroup<br>ncount',
+             'project<br>projectmonitoringlocationweight',
+             'organization<br>count'))
+
+dt_me(df, escape = FALSE, paging = FALSE)
+
+```
+
+::: footer
+
+:::
+
+
+## Workflow 3: Continuous data for known site
+
+* Continuous data is the high-frequency sensor data. 
+
+* We'll look at Suisun Bay a Van Sickle Island NR Pittsburg CA ("USGS-11455508"), with parameter code "99133" which is Nitrate plus Nitrite.
+
+## Workflow 3: Continuous data for known site
+
+:::: {.columns}
+
+::: {.column width="65%"}
+
+```{r}
+#| results: markup
+site_id <- "USGS-11455508"
+p_code_rt <- "99133"
+start_date <- "2024-01-01"
+end_date <- "2024-06-01"
+
+continuous_data <- read_waterdata_continuous(monitoring_location_id = site_id,
+                                             parameter_code = p_code_rt,
+                                             time = c(start_date, end_date))
+
+```
+
+:::
+
+::: {.column width="35%"}
+
+```
+ [1] "monitoring_location_id"
+ [2] "parameter_code"        
+ [3] "statistic_id"          
+ [4] "time"                  
+ [5] "value"                 
+ [6] "unit_of_measure"       
+ [7] "approval_status"       
+ [8] "last_modified"         
+ [9] "qualifier"             
+[10] "time_series_id" 
+```
+:::
+
+::::
+
+```
+Requesting:
+https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&limit=50000&monitoring_location_id=USGS-11455508&parameter_code=99133&time=2024-01-01T00%3A00%3A00Z%2F2024-06-01T00%3A00%3A00Z
+```
+
+## Workflow 3: Inspect
+
+```{r}
+#| output-location: column
+ggplot(data = continuous_data) +
+  geom_point(aes(x = time, 
+                 y = value))
+```
+
+
+## Data Discovery 
+
+
+1. `read_waterdata_ts_meta` discovers available daily and continuous time series
+
+2. `read_waterdata_field_meta` discovers available field measurement 
+
+3. **`read_waterdata_combined_meta`** combines the time series and field measurement discovery. This function also provides the most flexibility with geographic queries.
+
+2. `summarize_waterdata_samples` discovers discrete data at specific monitoring locations
+
+The next slides will demo how to use those.
+
+## Data Discovery: Time Series {.smaller}
+
+```{r}
+ts_available <- read_waterdata_combined_meta(monitoring_location_id = "USGS-04183500")
+```
+
+```{r}
+#| echo: false
+
+dt_me(ts_available |> 
+                  sf::st_drop_geometry() |> 
+                select(data_type,
+                       parameter_name, 
+                       parameter_code, statistic_id, begin, end), page_length = 6)
+
+```
+
+::: footer
+
+:::
+
+## Data Discovery: Discrete {.smaller}
+
+```{r}
+discrete_available <- summarize_waterdata_samples(monitoringLocationIdentifier = "USGS-04183500")
+
+```
+
+```{r}
+#| echo: false
+
+dt_me(discrete_available |>  
+                select(characteristicUserSupplied, 
+                       resultCount, activityCount,
+                       firstActivity, mostRecentActivity),
+      page_length = 6)
+
+```
+
+::: footer
+
+:::
+
+## characteristicUserSupplied {.smaller}
+
+* characteristicUserSupplied can be an input to `read_waterdata_sample` 
+
+```{r}
+discrete1 <- read_waterdata_samples(characteristicUserSupplied = "Phosphorus as phosphorus, water, unfiltered", 
+                                    monitoringLocationIdentifier = "USGS-04183500")
+nrow(discrete1)
+```
+
+
+
+## More Information {.smaller}
+
+- dataRetrieval repository:
+  - <https://github.com/DOI-USGS/dataRetrieval>
+  - [Documentation](https://doi-usgs.github.io/dataRetrieval)
+  - [dataRetrieval New Features](https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html)
+  - [General Tutorial](https://rconnect.usgs.gov/NMC_dataRetrieval_1/dataRetrieval_1.html)
+
+- Contact:
+  - Computational Tools Email: comptools@usgs.gov
+
+:::: footer 
+
+::: {style="font-size: 80%;"}
+
+Any use of trade, firm, or product name is for descriptive purposes only and does not imply endorsement by the U.S. Government.
+:::
+
+::::
+

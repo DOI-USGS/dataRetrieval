@@ -63,7 +63,9 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{last_modified} that intersects the value of datetime are selected.}
+Only features that have a \code{last_modified} that intersects the value of datetime are selected.
+
+See also Details below for more information.}
 
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
@@ -80,10 +82,7 @@ Examples:
 
 Only features that have a \code{time} that intersects the value of datetime are selected. If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.
 
-You can also use a vector of length 2: the first value being the starting date,
-the second value being the ending date. NA's within the vector indicate a
-half-bound date. For example, c("2024-01-01", NA) will return all data starting
-at 2024-01-01.}
+See also Details below for more information.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
@@ -108,6 +107,22 @@ is available. Use \code{TRUE} with caution.}
 }
 \description{
 Daily data provide one data value to represent water conditions for the day. Throughout much of the history of the USGS, the primary water data available was daily data collected manually at the monitoring location once each day. With improved availability of computer storage and automated transmission of data, the daily data published today are generally a statistical summary or metric of the continuous data collected each day, such as the daily mean, minimum, or maximum value. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. These data have also been referred to as “daily values” or “DV”.
+}
+\details{
+You can also use a vector of length 2 for any time queries (such as time
+or last_modified). The first value is the starting date (or datetime),
+the second value is the ending date(or datetime).
+NA's within the vector indicate a half-bound date.
+For example, \code{time = c("2024-01-01", NA)} will return all data starting
+at 2024-01-01.
+\code{time = c(NA, "2024-01-01")} will return all data from the beginning of
+the timeseries until 2024-01-01.
+By default, time is assumed UTC, although time zone attributes
+will be accommodated. As an example, setting \code{time = as.POSIXct(c("2021-01-01 12:00:00",
+"2021-01-01 14:00"), tz = "America/New_York")} will request data that between
+noon and 2pm eastern time on 2021-01-01.
+All time values RETURNED from the service are UTC with the exception of
+daily data, which returns time values in local dates.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
@@ -147,7 +162,11 @@ dv_data_quick <- read_waterdata_daily(monitoring_location_id = site,
                                    
 dv_post <- read_waterdata_daily(monitoring_location_id = site,
                                 approval_status = c("Approved", "Provisional"))
-
+# Don't attach "request" attribute:
+options("dataRetrieval.attach_request" = FALSE)
+dv_data_no_request <- read_waterdata_daily(monitoring_location_id = site,
+                              parameter_code = "00060", 
+                              time = c("2021-01-01", "2022-01-01"))
 }
 \dontshow{\}) # examplesIf}
 }

@@ -4,12 +4,15 @@ pkg.env <- new.env()
   suppressMessages(setAccess("public"))
   pkg.env$nldi_base <- "https://api.water.usgs.gov/nldi/linked-data/"
   pkg.env$local_sf <- requireNamespace("sf", quietly = TRUE)
-  options("dataRetrieval" = list("api_version" = "v0"))
+  options("dataRetrieval.api_version" = "v0")
+  options("dataRetrieval.api_version_stat" = "v0")
+  options("dataRetrieval.attach_request" = TRUE)
   
   services <- c("server", "daily", "time-series-metadata",
                "monitoring-locations", "latest-continuous",
                "field-measurements", "latest-daily",
-               "continuous")
+               "continuous", "field-measurements-metadata",
+               "combined-metadata", "channel-measurements")
   collections <- c("parameter-codes", "agency-codes", "altitude-datums", "aquifer-codes",
                    "aquifer-types", "coordinate-accuracy-codes", "coordinate-datum-codes",
                    "coordinate-method-codes", "medium-codes", "counties",

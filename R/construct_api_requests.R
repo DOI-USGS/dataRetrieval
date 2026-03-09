@@ -54,7 +54,9 @@ construct_api_requests <- function(service,
                     "computation_identifier")
   
   if(service %in% c("monitoring-locations", "parameter-codes", 
-                    "time-series-metadata")){
+                    "time-series-metadata",
+                    "field-measurements-metadata",
+                    "combined-metadata")){
     comma_params <- c(comma_params, "id")
   }
   
@@ -64,15 +66,20 @@ construct_api_requests <- function(service,
     warning("No filtering arguments specified.")
   }
   # Figure out if the GET request will be > 2048 characters
-  comma_params_filtered <- Filter(Negate(anyNA), full_list[comma_params])
-
+  # and remove NA's from the comma parameters
+  comma_params_filtered <- Filter(Negate(anyNA), lapply(full_list[comma_params], function(x) x[!is.na(x)]))
+  comma_params_filtered <- comma_params_filtered[!sapply(comma_params_filtered,is.null)]
+  
+  single_params_filtered <- Filter(Negate(anyNA), full_list[single_params])
+  single_params_filtered <- single_params_filtered[!sapply(single_params_filtered,is.null)]
+  
   force_post <- nchar(paste0(unlist(comma_params_filtered), collapse = ",")) > 2048
   
   if(force_post){
-    get_list <- full_list[names(full_list) %in% c(single_params)]
+    get_list <- single_params_filtered
   } else {
     # GET list refers to arguments that will go in the URL no matter what (not POST)
-    get_list <- full_list[names(full_list) %in% c(single_params, comma_params)]    
+    get_list <- c(single_params_filtered, comma_params_filtered)    
   }
 
   get_list[["skipGeometry"]] <- skipGeometry
@@ -133,14 +140,19 @@ construct_api_requests <- function(service,
     baseURL <- baseURL |>
       httr2::req_headers(`Content-Type` = "application/query-cql-json") 
     
-    post_params <- list(
-      "params" = unname(post_params)
-    )
+    if(length(post_params) > 1){
+      post_params <- list(
+        "params" = unname(post_params)
+      )
+      
+      template_path_post <- system.file("templates/post.CQL2", package = "dataRetrieval")
+      template_post <- readChar(template_path_post, file.info(template_path_post)$size)
+      
+      x <- whisker::whisker.render(template_post, post_params)      
+    } else {
+      x <- post_params[[1]]
+    }
     
-    template_path_post <- system.file("templates/post.CQL2", package = "dataRetrieval")
-    template_post <- readChar(template_path_post, file.info(template_path_post)$size)
-    
-    x <- whisker::whisker.render(template_post, post_params)
     baseURL <- httr2::req_body_raw(baseURL, x) 
     
   } else {
@@ -173,7 +185,7 @@ check_limits <- function(args){
 base_url <- function(){
   
   httr2::request("https://api.waterdata.usgs.gov/ogcapi/") |> 
-    httr2::req_url_path_append(getOption("dataRetrieval")$api_version) 
+    httr2::req_url_path_append(getOption("dataRetrieval.api_version")) 
 }
 
 #' Setup the request for a particular endpoint collection
@@ -238,7 +250,7 @@ switch_arg_id <- function(ls, id_name, service){
 #' period requests. 
 #' 
 #' @param datetime character, Date, or POSIX
-#' @param format character
+#' @param date logical, whether to return Date or POSIX
 #' 
 #' @noRd
 #' @return character vector with a length of either 1 or 2.
@@ -260,6 +272,7 @@ switch_arg_id <- function(ls, id_name, service){
 #' 
 #' end <- c(NA, "2021-01-01")
 #' dataRetrieval:::format_api_dates(end)
+#' dataRetrieval:::format_api_dates(end, TRUE)
 #' 
 #' end <- c(NA, as.POSIXct("2021-01-01 12:15:00"))
 #' dataRetrieval:::format_api_dates(end)
@@ -287,56 +300,105 @@ switch_arg_id <- function(ls, id_name, service){
 #' 
 #' time = c("2014-05-01T00:00Z", "2014-05-01T12:00Z")
 #' dataRetrieval:::format_api_dates(time)
+#' 
+#' start <- "2025-10-01"
+#' end <- Sys.Date()
+#' dataRetrieval:::format_api_dates(c(start, end), date = TRUE)
 format_api_dates <- function(datetime, date = FALSE){
   
   if(is.character(datetime)){
     datetime[datetime == ""] <- NA
+    datetime <- toupper(datetime)
   }
   
-  if(!any(isTRUE(all(is.na(datetime))) | isTRUE(is.null(datetime)))){
-    if(length(datetime) == 1){
-      # If the user has "P" or the "/" we assume they know what they are doing
-      if(grepl("P", datetime, ignore.case = TRUE) |
-         grepl("/", datetime)){
-        return(datetime)
-      } else {
-        datetime1 <- tryCatch({
-            lubridate::as_datetime(datetime)
-          },
-          warning = function(w) {
-            strptime(datetime, format = "%Y-%m-%dT%H:%MZ", tz = "UTC")
-        })
-        if(date){
-          datetime <- format(datetime1, "%Y-%m-%d")
-        } else {
-          datetime <- lubridate::format_ISO8601(datetime1, usetz = "Z")
-        }
-      }
-    } else if (length(datetime) == 2) {
-      
-      datetime1 <- tryCatch({
-          lubridate::as_datetime(datetime)
-        },
-        warning = function(w) {
-          strptime(datetime, format = "%Y-%m-%dT%H:%MZ", tz = "UTC")
-      })
-      
-      if(date){
-        datetime <- paste0(format(datetime1, "%Y-%m-%d"), collapse = "/")
-      } else {
-        datetime <- paste0(lubridate::format_ISO8601(datetime1, usetz = "Z"), 
-                           collapse = "/")
-      }
-
-      datetime <- gsub("NA", "..", datetime)
-    } else {
-      stop("datetime should only include 1-2 values")
-    }
-  } else {
-    datetime <- NA
+  if(all(is.na(datetime))){
+    return(NA)
   }
+  
+  if(all(is.null(datetime))){
+    return(NA)
+  }
+  
+  if(length(datetime) > 2){
+    stop("datetime should only include 1-2 values")
+  }
+
+  if(length(datetime) == 1){
+    # If the user has "P" or the "/" we assume they know what they are doing
+    if(grepl("P", datetime, ignore.case = TRUE) |
+       grepl("/", datetime)){
+      return(datetime)
+    } else {
+
+      if(date){
+        datetime <- get_Date(datetime)
+      } else {
+        datetime1 <- get_dateTime(datetime)
+        datetime <- lubridate::format_ISO8601(datetime1, usetz = "Z")
+      }
+    }
+  } else if (length(datetime) == 2) {
+
+    if(date){
+      for(i in seq_along(datetime)){
+        datetime[i] <- get_Date(datetime[i])
+      }
+      datetime <- paste0(datetime, collapse = "/")
+    } else {
+      for(i in seq_along(datetime)){
+        datetime1 <- get_dateTime(datetime)
+      }
+      datetime <- paste0(lubridate::format_ISO8601(datetime1, usetz = "Z"), 
+                         collapse = "/")
+    }
+
+    datetime <- gsub("NA", "..", datetime)
+  } 
+  
   return(datetime)
 }
+
+get_dateTime <- function(d){
+  
+  temp_date <- tryCatch({
+    strptime(d, format = "%Y-%m-%dT%H:%MZ", tz = "UTC")
+  })
+  
+  if(all(is.na(temp_date))){
+    temp_date <- tryCatch({
+      lubridate::as_datetime(d)
+    },
+    error = function(e) {
+      NA
+    })    
+  }
+  
+  return(temp_date)
+  
+}
+
+get_Date <- function(d){
+  temp_date <- tryCatch({
+    as.Date(d)
+  },
+  error = function(e) {
+    "try again"
+  })
+  
+  if(is.na(temp_date)){
+    return("..")
+  } else if(as.character(temp_date) == "try again"){
+    temp_date <- tryCatch({
+      as.Date(as.numeric(d), origin = "1970-01-01")
+    },
+    error = function(e) {
+      "try again"
+    })        
+  }
+  
+  return(as.character(temp_date))
+}
+
 
 #' Turn request list into POST body cql
 #' 
@@ -387,14 +449,39 @@ explode_post <- function(ls){
 #' dataRetrieval:::cql2_param(parameter)
 #' 
 cql2_param <- function(parameter){
-  template_path <- system.file("templates/param.CQL2", package = "dataRetrieval")
-  template <- readChar(template_path, file.info(template_path)$size)
   
-  parameters <- paste0(unlist(parameter), collapse = '", "')
-  parameters <- paste0('"', parameters, '"')
-  parameter_list <- list("property" = names(parameter),
-                         "parameter" = parameters)
-  return(whisker::whisker.render(template, parameter_list))
+  # Wildcards:
+  if(names(parameter) %in% c("hydrologic_unit_code")){
+    template_path <- system.file("templates/param.CQL2.like", package = "dataRetrieval")
+    template <- readChar(template_path, file.info(template_path)$size)
+
+    params <- c()
+    for(i in parameter[[1]]){
+      parameter_list <- list("property" = names(parameter),
+                             "parameter" = i)
+      params <- c(params, 
+                  whisker::whisker.render(template, parameter_list))
+    }
+    template_path_or <- system.file("templates/post.CQL2.or", package = "dataRetrieval")
+    template_or <- readChar(template_path_or, file.info(template_path_or)$size)
+
+    post_params <- list(
+      "params" = paste0(params, collapse = ", ")
+    )
+    cql_text <- whisker::whisker.render(template_or, post_params)
+  } else { # INs
+    parameters <- paste0(unlist(parameter), collapse = '", "')
+    parameters <- paste0('"', parameters, '"')
+    parameter_list <- list("property" = names(parameter),
+                           "parameter" = parameters)
+    
+    template_path <- system.file("templates/param.CQL2", package = "dataRetrieval")
+    template <- readChar(template_path, file.info(template_path)$size)
+    
+    cql_text <- whisker::whisker.render(template, parameter_list)
+  }
+  
+  return(cql_text)
 } 
 
 

@@ -30,6 +30,8 @@ navbar:
     menu:
     - text: Basic Tutorial
       href: articles/tutorial.html
+    - text: Quick Tutorial (slides)
+      href: articles/quick_slides.html
     - text: Basic Tutorial (slides)
       href: articles/basic_slides.html
     - text: Changes to dataRetrieval (slides)
@@ -40,6 +42,10 @@ navbar:
       href: articles/read_waterdata_functions.html
     - text: Samples Data
       href: articles/samples_data.html
+    - text: Daily Statistics
+      href: articles/daily_data_statistics.html
+    - text: Continuous Data
+      href: articles/continuous_pr.html
     - text: Changes to QW
       href: articles/qwdata_changes.html
     - text: Background
@@ -68,6 +74,7 @@ reference:
     desc: Functions to retrieve USGS Water Data.
     contents:
       - read_waterdata_samples
+      - read_waterdata_stats_por
       - read_waterdata_daily
       - read_waterdata_continuous
       - read_waterdata_ts_meta
@@ -81,6 +88,9 @@ reference:
       - summarize_waterdata_samples
       - check_waterdata_sample_params
       - get_ogc_params
+      - read_waterdata_channel
+      - read_waterdata_field_meta
+      - read_waterdata_combined_meta
   - title: National Water Information System (NWIS)
     desc:  Functions to retrieve (USGS) NWIS data. These will be slowly phased out and replaced with the read_waterdata family of functions.
     contents:
@@ -88,11 +98,9 @@ reference:
       - readNWISuv
       - readNWISsite
       - readNWISstat
-      - readNWISmeas
       - readNWISpCode
       - readNWISrating
       - readNWISpeak
-      - readNWISgwl
       - readNWISuse
       - readNWISdata
       - whatNWISsites

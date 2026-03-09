@@ -38,6 +38,18 @@ get_resp_data <- function(resp) {
   use_sf <- !grepl("skipGeometry=true", resp$url, ignore.case = TRUE)
   return_df <- sf::read_sf(httr2::resp_body_string(resp))
   
+  included_num_cols <- names(return_df)[names(return_df) %in% num_cols]
+
+  if(!all(sapply(sf::st_drop_geometry(return_df[,included_num_cols]), is.numeric))){
+    return_df[, included_num_cols] <- lapply(sf::st_drop_geometry(return_df[, included_num_cols]), as.numeric)
+  }
+
+  if("qualifier" %in% names(return_df)){
+    return_df$qualifier <- as.character(vapply(X = return_df$qualifier,
+                             FUN = function(x) paste(x, collapse = ", "),
+                             FUN.VALUE =  c(NA_character_)))
+  }
+  
   if(!use_sf){
     return_df <- sf::st_drop_geometry(return_df)
     if("AsGeoJSON(geometry)" %in% names(return_df)){
@@ -50,16 +62,16 @@ get_resp_data <- function(resp) {
 }
 
 #' Next request URL
-#' 
+#'
 #' Custom function to find the "next" URL from the API response.
 #' @seealso [httr2::req_perform_iterative]
-#' 
+#'
 #' @param resp httr2 response from last request
 #' @param req httr2 request from last time
-#' 
+#'
 #' @noRd
 #' @return the url for the next request
-#' 
+#'
 next_req_url <- function(resp, req) {
   
   body <- httr2::resp_body_json(resp)
@@ -72,19 +84,22 @@ next_req_url <- function(resp, req) {
   if(isTRUE(body[["numberReturned"]] == 0)){
     return(NULL)
   }
-  
+
   header_info <- httr2::resp_headers(resp)
   if(Sys.getenv("API_USGS_PAT") != ""){
     message("Remaining requests this hour:", header_info$`x-ratelimit-remaining`, " ")
   }
-  
-  links <- body$links
+  if ("links" %in% names(body)) {
+    links <- body$links
   if(any(sapply(links, function(x) x$rel) == "next")){
-    next_index <- which(sapply(links, function(x) x$rel) == "next")
-    
-    next_url <- links[[next_index]][["href"]]
-    
-    return(httr2::req_url(req = req, url = next_url))
+      next_index <- which(sapply(links, function(x) x$rel) == "next")
+
+      next_url <- links[[next_index]][["href"]]
+
+      return(httr2::req_url(req = req, url = next_url))
+    }
+  } else if (!is.null(body[["next"]])) {
+    return(httr2::req_url_query(req, next_token = body[["next"]]))
   } else {
     return(NULL)
   }
@@ -103,7 +118,15 @@ get_csv <- function(req, limit){
   
   if(httr2::resp_has_body(resp)){
     return_list <- httr2::resp_body_string(resp) 
-    df <- suppressMessages(readr::read_csv(file = return_list))
+    df <- data.table::fread(input = return_list, 
+                            data.table = FALSE)
+    
+    included_num_cols <- names(df)[names(df) %in% num_cols]
+    
+    if(!all(sapply(df[,included_num_cols], is.numeric))){
+      df[, included_num_cols] <- lapply(df[, included_num_cols], as.numeric)
+    }
+    
     if(skip_geo){
       df <- df[, names(df)[!names(df) %in% c("x", "y")]]
     } else {

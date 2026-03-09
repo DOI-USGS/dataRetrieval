@@ -1,5 +1,5 @@
 ---
-title: "USGS Water Quality Data<br> Introduction to dataRetrieval"
+title: "Introduction to dataRetrieval"
 author: "Laura DeCicco"
 image: hex_logo.png
 format:

@@ -16,13 +16,26 @@
 #' Multiple computation_period_identifiers can be requested as a character vector.
 #' @param sublocation_identifier `r get_ogc_params("time-series-metadata")$sublocation_identifier`
 #' @param last_modified `r get_ogc_params("time-series-metadata")$last_modified`
+#' 
+#' See also Details below for more information.
 #' @param begin_utc `r get_ogc_params("time-series-metadata")$begin_utc`
+#' #' 
+#' See also Details below for more information.
 #' @param end_utc `r get_ogc_params("time-series-metadata")$end_utc`
+#' 
+#' See also Details below for more information.
 #' @param hydrologic_unit_code `r get_ogc_params("time-series-metadata")$hydrologic_unit_code`
 #' @param state_name `r get_ogc_params("time-series-metadata")$state_name`
 #' @param thresholds `r get_ogc_params("time-series-metadata")$thresholds`
 #' @param unit_of_measure `r get_ogc_params("time-series-metadata")$unit_of_measure`
-#' @param primary `r get_ogc_params("time-series-metadata")$primary`
+#' @param primary 
+#' A flag identifying if the time series is a "primary" time series. "Primary" time
+#' series (which have this flag) are standard observations which undergo Bureau
+#' review and approval processes. Non-primary time series, which will have missing
+#' values for "primary", are provisional datasets made available to meet the need
+#' for timely best science and to assist with daily operations which need
+#' real-time information. Non-primary time series data are only retained by
+#' this system for 120 days. 
 #' @param parent_time_series_id `r get_ogc_params("time-series-metadata")$parent_time_series_id`
 #' @param web_description `r get_ogc_params("time-series-metadata")$web_description`
 #' @param begin `r get_ogc_params("time-series-metadata")$begin`
@@ -54,6 +67,9 @@
 #' be requested from a native csv format. This can be dangerous because the
 #' data will cut off at 50,000 rows without indication that more data
 #' is available. Use `TRUE` with caution. 
+#' 
+#' @inherit read_waterdata_continuous details
+#' 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{

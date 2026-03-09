@@ -59,8 +59,8 @@ context("samples-data project")
 test_that("samples-data project working", {
   testthat::skip_on_cran()
   type <- "Stream"
-  
-  projectInfo <- read_waterdata_samples(countyFips = countyCdLookup("WI", "Dane"),
+  county_fips <- countyCdLookup("WI", "Dane")
+  projectInfo <- read_waterdata_samples(countyFips = county_fips,
                                 siteTypeName = type,
                                 dataType = "projects")
   expect_true(ncol(projectInfo) >= 0)

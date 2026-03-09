@@ -35,39 +35,45 @@ The table below shows the **existing** NWIS functions and, if applicable, their 
 ```{r echo=FALSE}
 df <- data.frame(
   Legacy = c(
-    "readNWISqw (deprecated)",
+    "readNWISqw (defunct)",
     "readNWISdv",
     "readNWISsite",
     "whatNWISsites",
     "readNWISpCode",
-    "readNWISgwl",
-    "readNWISmeas",
+    "readNWISgwl (defunct)",
+    "readNWISmeas (defunct)",
     "readNWISdata",
     "readNWISuv",
     "readNWISrating",
     "readNWISstat",
     "readNWISpeak",
-    "readNWISuse (deprecated)",
+    "readNWISuse (defunct)",
     "whatNWISdata"
   ),
   New = c(
-    "read_waterdata_samples",
-    "read_waterdata_daily",
-    "read_waterdata_monitoring_location",
-    "read_waterdata_ts_meta",
-    "read_waterdata_parameter_codes",
-    "read_waterdata_field_measurements",
-    "read_waterdata_field_measurements",
-    "read_waterdata",
-    "read_waterdata_continuous",
-    "",
-    "read_waterdata_stats_por, read_waterdata_stats_daterange",
-    rep("", 3)
+    "`read_waterdata_samples`",
+    "`read_waterdata_daily`",
+    "`read_waterdata_monitoring_location`",
+    "`read_waterdata_ts_meta`",
+    "`read_waterdata_parameter_codes`",
+    "`read_waterdata_field_measurements`",
+    "`read_waterdata_field_measurements`, `read_waterdata_channel`",
+    "`read_waterdata`",
+    "`read_waterdata_continuous`", 
+    "", #rating
+    "`read_waterdata_stats_por`, `read_waterdata_stats_daterange`",
+    rep("", 2),
+    "`read_waterdata_ts_meta`, `read_waterdata_field_meta`, `read_waterdata_combined_meta`"
   ),
-  "Available on (branch)" = c(rep("main (CRAN)", 9), 
+  "Available on (branch)" = c(rep("main (CRAN)", 6), 
+                              "main (CRAN)",
+                              "main (CRAN)",
+                              "main (CRAN)",
                               "",
-                              "develop",
-                              rep("", 3))
+                              "main (CRAN)", 
+                              rep("", 2), 
+                              "main (CRAN)")
+
 )
 
 knitr::kable(df, col.names = c("WaterServices (legacy) function", "Water Data (new) function", "Available on (branch name)"))
@@ -90,11 +96,7 @@ Replace [your api key] with the alphanumeric code provided by the sign-up page. 
 
 ## Large Data Pulls
 
-If you manage large data pipelines, you might notice some timeouts or errors indicating your request was too large. This will be especially true for the continuous data. Continuous data requests are only allowed up to 3 years of data in a single request. 
-
-HOWEVER, if you regularly make full period of record queries you may want to wait a few months before rewriting your workflows. We expect that a direct access to full period of record downloads will be available before the NWIS web services are shut down. We plan to make `dataRetrieval` function(s) to access that direct download access. 
-
-Maybe you are running into limitations but a full period-of-record won't necessarily help. Consider using the R package [`targets`](https://books.ropensci.org/targets/). Stay tuned as we plan to put together a collection of examples and suggestions for large data pulls as the API service offerings evolve.
+If you manage large data pipelines, you might notice some timeouts or errors indicating your request was too large. This will be especially true for the continuous data. Continuous data requests are only allowed up to 3 years of data in a single request. See [Continuous Data](continuous_pr.html) for more information.
 
 # Discrete Data
 
@@ -169,7 +171,7 @@ Guidance on how to use the new web page and web services are available in the [U
 
 ## NWIS "qw" Data
 
-As of dataRetrieval v2.7.17, `readNWISqw()` has been retired and replaced by `readWQPqw()`. The `readWQPqw()` function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characteristic names, and start/end dates. Learn more about the change and where to find the new samples data in the dataretrieval [Changes to NWIS QW services vignette](https://doi-usgs.github.io/dataRetrieval/articles/qwdata_changes.html) and the WDFN blog on [Improved Public Delivery of Water Quality and Field Samples](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
+As of dataRetrieval v2.7.17, `readNWISqw()` has been retired and replaced by `readWQPqw()`. The `readWQPqw()` function is generally advertised as a user-friendly function since it only works with a known list of sites, parameter codes or characteristic names, and start/end dates. Learn more about the change and where to find the new samples data in dataRetrieval [Changes to NWIS QW services vignette](https://doi-usgs.github.io/dataRetrieval/articles/qwdata_changes.html) and the WDFN blog on [Improved Public Delivery of Water Quality and Field Samples](https://waterdata.usgs.gov/blog/changes-to-sample-data/).
 
 ### A note on `whatNWISdata` and "qw" data
 
