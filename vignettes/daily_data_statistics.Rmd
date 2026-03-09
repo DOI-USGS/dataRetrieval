@@ -40,7 +40,7 @@ site1 <- "USGS-02037500"
 
 Day-of-year and month-of-year statistics aggregate observations for the same calendar day or month across multiple years to describe typical seasonal conditions (e.g., all Januarys or all January 1sts).
 Consider the output below, where we request day-of-year discharge averages for January 1 and January 2.
-Note that the `start_date` and `end_date` are set in `month-year` format to describe the day-of-year range.
+Note that the `start_date` and `end_date` are set in `month-day` format to describe the day-of-year range.
 
 ```{r}
 jan_por_mean <-
@@ -257,7 +257,7 @@ multiyear_daterange_mean <-
 multiyear_daterange_mean
 ```
 
-Before we move on, consider the following example where we create a Monthly mean statistics table similar to what you'd find in the [Water Year Summaries](https://rconnect.chs.usgs.gov/water-year-summaries-dev/?_inputs_&render_button=1&site_no_select=%2205428500%22&wateryear_select=%222024%22).
+Before we move on, consider the following example where we create a Monthly mean statistics table similar to what you'd find in the [Water Year Summaries](https://rconnect.chs.usgs.gov/water-year-summaries-dev/?_inputs_&render_button=1&site_no_select=%2205428500%22&wateryear_select=%222024%22). Note that the values reported here are slightly different from what you'll find in the Water Year Summary because of differences in how values are rounded.
 
 ```{r, message=FALSE, warning=FALSE}
 monthly_means <-
