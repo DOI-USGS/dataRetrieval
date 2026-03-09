@@ -1,0 +1,21 @@
+---
+title: "Introduction Slides to dataRetrieval"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
+vignette: >
+  %\VignetteIndexEntry{Introduction Slides to dataRetrieval}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+For a direct link to the slides, go [here](https://doi-usgs.github.io/dataRetrieval/tutorials/quick_intro_deck.html). Use the arrow keys to advance the slides. Or click the slide below then "f" for full screen, and "Esc" to escape full screen.
+
+```{=html}
+<iframe src="../tutorials/quick_intro_deck.html" width="700"
+  height="400"></iframe>
+```
+
