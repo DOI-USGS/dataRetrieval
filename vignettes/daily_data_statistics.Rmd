@@ -40,7 +40,7 @@ site1 <- "USGS-02037500"
 
 Day-of-year and month-of-year statistics aggregate observations for the same calendar day or month across multiple years to describe typical seasonal conditions (e.g., all Januarys or all January 1sts).
 Consider the output below, where we request day-of-year discharge averages for January 1 and January 2.
-Note that the `start_date` and `end_date` are set in `month-year` format to describe the day-of-year range.
+Note that the `start_date` and `end_date` are set in `month-day` format to describe the day-of-year range.
 
 ```{r}
 jan_por_mean <-
