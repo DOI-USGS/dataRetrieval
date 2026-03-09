@@ -64,7 +64,9 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{last_modified} that intersects the value of datetime are selected.}
+Only features that have a \code{last_modified} that intersects the value of datetime are selected.
+
+See also Details below for more information.}
 
 \item{begin_utc}{The datetime of the earliest observation in the time series. Together with \code{end}, this field represents the period of record of a time series. Note that some time series may have large gaps in their collection record.
 You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
@@ -76,7 +78,10 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{begin} that intersects the value of datetime are selected.}
+Only features that have a \code{begin} that intersects the value of datetime are selected.
+
+#'
+See also Details below for more information.}
 
 \item{end_utc}{The datetime of the most recent observation in the time series. Data returned by this endpoint updates at most once per day, and potentially less frequently than that, and as such there may be more recent observations within a time series than the time series \code{end} value reflects. Together with \code{begin}, this field represents the period of record of a time series. It is additionally used to determine whether a time series is "active".
 You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
@@ -88,7 +93,9 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{end} that intersects the value of datetime are selected.}
+Only features that have a \code{end} that intersects the value of datetime are selected.
+
+See also Details below for more information.}
 
 \item{hydrologic_unit_code}{The United States is divided and sub-divided into successively smaller hydrologic units which are classified into four levels: regions, sub-regions, accounting units, and cataloging units. The hydrologic units are arranged within each other, from the smallest (cataloging units) to the largest (regions). Each hydrologic unit is identified by a unique hydrologic unit code (HUC) consisting of two to eight digits based on the four levels of classification in the hydrologic unit system.}
 
@@ -106,7 +113,13 @@ Multiple computation_identifiers can be requested as a character vector.}
 
 \item{sublocation_identifier}{An optional human-readable identifier used to specify where measurements are recorded at a monitoring location.}
 
-\item{primary}{A flag identifying if the time series is a "primary" time series. "Primary" time series (which have this flag) are standard observations which undergo \href{https://www.usgs.gov/survey-manual/5028-fundamental-science-practices-review-and-approval-scientific-data-release}{Bureau review and approval processes}. Non-primary time series, which will have missing values for "primary", are provisional datasets made available to meet the need for timely best science and to assist with daily operations which need real-time information. Non-primary time series data are only retained by this system for 120 days. See the \href{https://waterdata.usgs.gov/provisional-data-statement/}{USGS Provisional Data Statement} for more information.}
+\item{primary}{A flag identifying if the time series is a "primary" time series. "Primary" time
+series (which have this flag) are standard observations which undergo Bureau
+review and approval processes. Non-primary time series, which will have missing
+values for "primary", are provisional datasets made available to meet the need
+for timely best science and to assist with daily operations which need
+real-time information. Non-primary time series data are only retained by
+this system for 120 days.}
 
 \item{parent_time_series_id}{The unique identifier representing the parent or "upchain" time series that a daily values time series is generated from. Daily values time series have one and only one parent time series.}
 
@@ -148,6 +161,22 @@ is available. Use \code{TRUE} with caution.}
 }
 \description{
 Daily data and continuous measurements are grouped into time series, which represent a collection of observations of a single parameter, potentially aggregated using a standard statistic, at a single monitoring location. This endpoint provides metadata about those time series, including their operational thresholds, units of measurement, and when the earliest and most recent observations in a time series occurred.
+}
+\details{
+You can also use a vector of length 2 for any time queries (such as time
+or last_modified). The first value is the starting date (or datetime),
+the second value is the ending date(or datetime).
+NA's within the vector indicate a half-bound date.
+For example, \code{time = c("2024-01-01", NA)} will return all data starting
+at 2024-01-01.
+\code{time = c(NA, "2024-01-01")} will return all data from the beginning of
+the timeseries until 2024-01-01.
+By default, time is assumed UTC, although time zone attributes
+will be accommodated. As an example, setting \code{time = as.POSIXct(c("2021-01-01 12:00:00",
+"2021-01-01 14:00"), tz = "America/New_York")} will request data that between
+noon and 2pm eastern time on 2021-01-01.
+All time values RETURNED from the service are UTC with the exception of
+daily data, which returns time values in local dates.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}

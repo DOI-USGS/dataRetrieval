@@ -65,33 +65,17 @@ rejigger_cols <- function(df, properties, output_id){
 #' 
 cleanup_cols <- function(df, service){
   
-  if("qualifier" %in% names(df)){
-    if(!all(is.na(df$qualifier))){
-      df$qualifier <- vapply(X = df$qualifier,
-                             FUN = function(x) paste(x, collapse = ", "),
-                             FUN.VALUE =  c(NA_character_)) 
-    }
-  }
-  
   if("time" %in% names(df)){
     if(service == "daily"){
       df$time <- as.Date(df$time)
-    } 
-    # by default, the data is put in POSIXct and seems
-    # to be pretty smart about the offset/tzone
+    } else {
+      attr(df$time, "tzone") <- "UTC"
+    }
   }
   
-  if("value" %in% names(df)){
-    df$value <- as.numeric(df$value)
+  if("last_modified" %in% names(df)){
+    attr(df$last_modified, "tzone") <- "UTC"
   }
-  
-  if("contributing_drainage_area" %in% names(df)){
-    df$contributing_drainage_area <- as.numeric(df$contributing_drainage_area)
-  }
-  
-  if("drainage_area" %in% names(df)){
-    df$drainage_area <- as.numeric(df$drainage_area)
-  }  
   
   df
 }

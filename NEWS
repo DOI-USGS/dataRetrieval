@@ -1,3 +1,26 @@
+dataRetrieval 2.7.23
+===================
+* Added data.table to Imports
+* Added read_waterdata_stats_por and read_waterdata_stats_daterange to access USGS daily data statistics.
+* Updated vignettes, examples, and README to reflect new stats functions.
+* Added tests for read_waterdata_stats functions
+* Updated next_req_url to allow paging through /statistics API output
+* Added deprecation message to readNWISstat function
+* Specify "UTC" attribute for returned time
+* Added options("dataRetrieval.attach_request" = TRUE) as default to attach the 
+request object as an attribute to the returned data frames. Setting 
+options("dataRetrieval.attach_request" = FALSE) will return a data frame without
+the request attribute
+* Improved time documentation
+* Improved error handling in WQP functions
+* Added read_waterdata_field_meta, read_waterdata_combine_meta, 
+and read_waterdata_channel
+* Removed readNWISgwl and readNWISmeas as services have been turned off
+* Updated CQL2 templates to allow HUC queries specifically to use a wildcard
+to get multiple inclusive HUCs.
+* Add deprecation message to readNGWMN functions. read_ngwmn will be coming soon.
+
+
 dataRetrieval 2.7.22
 ===================
 * Added read_waterdata_latest_daily to access latest daily USGS water data.

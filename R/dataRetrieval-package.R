@@ -21,9 +21,7 @@ token_message)
 #' License: \tab Unlimited for this package, dependencies have more restrictive licensing.\cr
 #' Copyright: \tab This software is in the public domain because it contains materials
 #' that originally came from the United States Geological Survey, an agency of
-#' the United States Department of Interior. For more information, see the
-#' official USGS copyright policy at
-#' <https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits>\cr
+#' the United States Department of Interior. \cr
 #' LazyLoad: \tab yes\cr
 #' }
 #'
@@ -58,13 +56,8 @@ token_message)
 #'
 #' @docType data
 #' @export parameterCdFile
-#' @examplesIf is_dataRetrieval_user()
-#' 
-#' \donttest{
-#' # Please migrate to:
-#' parameterCds <- read_waterdata_metadata("parameter-codes")
-#' 
-#' }
+#' @examples
+#' head(parameterCdFile[, 1:2])
 NULL
 
 
@@ -118,13 +111,8 @@ NULL
 #' @docType data
 #' @export stateCd
 #' @keywords USGS stateCd
-#' @examplesIf is_dataRetrieval_user()
-#' 
-#' \donttest{
-#' # Please migrate to:
-#' stateCd <- read_waterdata_metadata("states")
-#' 
-#' }
+#' @examples
+#' head(stateCd)
 NULL
 
 #' US County Code Lookup Table
@@ -146,14 +134,23 @@ NULL
 #' @docType data
 #' @export countyCd
 #' @keywords USGS countyCd
-#' @examplesIf is_dataRetrieval_user()
-#' 
-#' \donttest{
-#' # Please migrate to:
-#' countyCd <- read_waterdata_metadata("counties")
-#' 
-#' }
+#' @examples
+#' head(countyCd)
 NULL
+
+## usethis namespace: start
+#' @importFrom data.table data.table
+#' @importFrom data.table :=
+#' @importFrom data.table .SD
+#' @importFrom data.table .BY
+#' @importFrom data.table .N
+#' @importFrom data.table .I
+#' @importFrom data.table .GRP
+#' @importFrom data.table .NGRP
+#' @importFrom data.table .EACHI
+## usethis namespace: end
+NULL
+
 
 # nolint start: commented_code_linter
 # Here's how to incorporate the state_county.json into the historic
@@ -203,23 +200,23 @@ NULL
 #            "AKST", "AKDT", "HAST", "HST", "UTC", "", NA, "GMT")
 # )
 # 
-# save(countyCd, stateCd, parameterCdFile, pCodeToName,
-#      file = "R/sysdata.rda", compress = "xz")
-# 
 # services <- c("daily", "time-series-metadata",
 #               "monitoring-locations", "latest-continuous",
 #               "field-measurements", "latest-daily",
-#               "continuous")
+#               "continuous", "field-measurements-metadata",
+#               "combined-metadata", "channel-measurements")
 # 
 # property_list <- list()
-# 
-# for(i in services){
-#   schema <- check_OGC_requests(endpoint = i, type = "schema")
-#   properties <- names(schema$properties)
-#   property_list[[i]] <- properties
+# for(service in services){
+#   property_list[[service]] <- get_properties_for_docs(service)
 # }
-# rm(schema, i, services, properties)
-# save(countyCd, stateCd, parameterCdFile, pCodeToName, property_list, offsetLibrary,
-#      file = "R/sysdata.rda", compress = "xz")
 # 
-# # nolint end
+# num_cols <- c("value", "contributing_drainage_area", "drainage_area",
+#               "altitude_accuracy", "well_construction_depth",
+#               "hole_construction_depth", "channel_flow", "channel_width",
+#               "channel_area", "channel_velocity", "channel_location_distance")
+# 
+# save(countyCd, stateCd, parameterCdFile, pCodeToName,
+#      offsetLibrary, num_cols, property_list,
+#      file = "R/sysdata.rda", compress = "xz")
+# nolint end

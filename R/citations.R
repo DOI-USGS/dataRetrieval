@@ -13,7 +13,9 @@
 #'
 #' @examples
 #' \donttest{
-#' nwisData <- readNWISdv("04085427", "00060", "2012-01-01", "2012-06-30")
+#' nwisData <- read_waterdata_daily(monitoring_location_id = "USGS-04085427", 
+#'                                  parameter_code = "00060", 
+#'                                  time = c("2012-01-01", "2012-06-30"))
 #' nwis_citation <- create_NWIS_bib(nwisData)
 #' nwis_citation
 #' 
@@ -24,16 +26,14 @@ create_NWIS_bib <- function(x){
   
   textVersion <- paste0("U.S. Geological Survey, ",
                         format(attr(x, "queryTime"), "%Y"),
-                        ", National Water Information System data available on the World Wide Web (USGS Water Data for the Nation), accessed ",
+                        ", USGS Water Data for the Nation: U.S. Geological Survey National Water Information System database, accessed ",
                         format(attr(x, "queryTime"), "%b %d, %Y"),
-                        ", at ",
-                        attr(x, "url"),
-                        ", https://dx.doi.org/10.5066/F7P55KJN")
+                        ", at https://dx.doi.org/10.5066/F7P55KJN")
   
   ref <- utils::bibentry(
     bibtype = "Manual",
     textVersion = textVersion,
-    title = "National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)",
+    title = "USGS Water Data for the Nation: U.S. Geological Survey National Water Information System database",
     author = utils::person("U.S. Geological Survey"),
     doi = "10.5066/F7P55KJN",
     note = paste("Accessed", format(attr(x, "queryTime"), "%b %d, %Y")),

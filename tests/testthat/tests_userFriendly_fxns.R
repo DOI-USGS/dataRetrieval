@@ -190,40 +190,6 @@ test_that("WQP qw tests", {
   
 })
 
-context("readNWISstat tests")
-test_that("readNWISstat tests", {
-  testthat::skip_on_cran()
-  skip_on_ci()
-  data <- readNWISstat(
-    siteNumbers = c("02171500"),
-    parameterCd = c("00010", "00060"),
-    statReportType = "daily",
-    statType = c("mean", "p75", "p25"),
-    startDate = "2000",
-    endDate = "2010"
-  )
-  expect_is(data$begin_yr, "numeric")
-  expect_true(length(data) > 3)
-
-  monthData <- readNWISstat(
-    siteNumbers = c("02171500"),
-    parameterCd = c("00010", "00060"),
-    statReportType = "monthly",
-    startDate = "2000",
-    endDate = "2010"
-  )
-  expect_is(monthData$mean_va, "numeric")
-
-  annualData <- readNWISstat(
-    siteNumbers = c("02171500"),
-    parameterCd = c("00010", "00060"),
-    statReportType = "annual",
-    startDate = "2000",
-    endDate = "2010"
-  )
-  expect_gt(nrow(annualData), 2)
-})
-
 
 context("state tests")
 test_that("state county tests", {
@@ -460,6 +426,10 @@ test_that("pCode Stuff", {
   testthat::skip_on_cran()
 
   paramINFO <- read_waterdata_parameter_codes(parameter_code = c("00060", "01075", "00931"))
+  expect_equal(nrow(paramINFO), 3)
+  expect_true(all(paramINFO$parameter_code %in% c("00060", "01075", "00931")))
+  
+  paramINFO <- read_waterdata_parameter_codes(parameter_code = c("00060", "01075", "00931", NA))
   expect_equal(nrow(paramINFO), 3)
   expect_true(all(paramINFO$parameter_code %in% c("00060", "01075", "00931")))
   

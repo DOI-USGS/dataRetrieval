@@ -15,15 +15,16 @@
 #' Multiple monitoring_location_ids can be requested as a character vector.
 #' @param parameter_code `r get_ogc_params("continuous")$parameter_code`
 #' Multiple parameter_codes can be requested as a character vector.
-#' @param time `r get_ogc_params("continuous")$time`. 
-#' You can also use a vector of length 2: the first value being the starting date,
-#' the second value being the ending date. NA's within the vector indicate a
-#' half-bound date. For example, c("2024-01-01", NA) will return all data starting
-#' at 2024-01-01.
+#' @param time `r get_ogc_params("continuous")$time`
+#' 
+#' See also Details below for more information.
+#' 
 #' @param value `r get_ogc_params("continuous")$value`
 #' @param unit_of_measure `r get_ogc_params("continuous")$unit_of_measure`
 #' @param approval_status `r get_ogc_params("continuous")$approval_status`
 #' @param last_modified `r get_ogc_params("continuous")$last_modified`
+#' 
+#' See also Details below for more information.
 #' @param time_series_id `r get_ogc_params("continuous")$time_series_id`
 #' Multiple time_series_ids can be requested as a character vector.
 #' @param qualifier `r get_ogc_params("continuous")$qualifier`
@@ -43,6 +44,23 @@
 #' be requested from a native csv format. This can be dangerous because the
 #' data will cut off at 50,000 rows without indication that more data
 #' is available. Use `TRUE` with caution. 
+#' 
+#' @details 
+#' You can also use a vector of length 2 for any time queries (such as time
+#' or last_modified). The first value is the starting date (or datetime), 
+#' the second value is the ending date(or datetime).
+#' NA's within the vector indicate a half-bound date. 
+#' For example, \code{time = c("2024-01-01", NA)} will return all data starting
+#' at 2024-01-01. 
+#' \code{time = c(NA, "2024-01-01")} will return all data from the beginning of 
+#' the timeseries until 2024-01-01.
+#' By default, time is assumed UTC, although time zone attributes
+#' will be accommodated. As an example, setting \code{time = as.POSIXct(c("2021-01-01 12:00:00",
+#' "2021-01-01 14:00"), tz = "America/New_York")} will request data that between
+#' noon and 2pm eastern time on 2021-01-01.
+#' All time values RETURNED from the service are UTC with the exception of 
+#' daily data, which returns time values in local dates.
+#' 
 #' @examplesIf is_dataRetrieval_user()
 #' 
 #' \donttest{
@@ -50,9 +68,11 @@
 #' pcode <- "72019"
 #'
 #' uv_data_trim <- read_waterdata_continuous(monitoring_location_id = site,
-#'                           parameter_code = pcode, 
-#'                           properties = c("value",
-#'                                          "time"))
+#'                            parameter_code = pcode, 
+#'                            properties = c("value", "time"),
+#'                            time = as.POSIXct(c("2026-02-07 12:00", 
+#'                                                "2026-02-08 12:00"), 
+#'                                               tz = "America/Chicago"))
 #'
 #' uv_data <- read_waterdata_continuous(monitoring_location_id = site,
 #'                            parameter_code = pcode,
@@ -64,6 +84,38 @@
 #'                                                                      "USGS-14181500"),
 #'                                                parameter_code = c("00060", "72019"),
 #'                                                last_modified = "P7D")
+#'                                                
+#' # how to split up request into roughly 3 year chunks
+#' 
+#' site <- "USGS-0208458892"
+#' pcode <- "00095" # Specific conductance
+#' start <- as.Date("2013-01-01")  
+#' end <- as.Date("2025-12-31") 
+#' 
+#' n_days <- difftime(end, start, units = "days")
+#'
+#' # create a vector of dates that are about 3 years apart:
+#' time_chunks <- seq(from = start, 
+#'                    to = end,
+#'                    length.out = ceiling(n_days/(3*365.25)) + 1)
+#' 
+#' 
+#' # create a list where each element starts at the beginning
+#' # of a chunk, and ends the day before the next chunk:
+#' time_df <- data.frame(start = time_chunks[-length(time_chunks)],
+#'                       end = time_chunks[-1]-1)
+#'                       
+#' #all_data <- data.frame()
+#' #for(i in seq_along(time_df$start)){
+#' #   sub_df <- read_waterdata_continuous(monitoring_location_id = site,
+#' #                                       parameter_code = pcode,
+#' #                                      time = c(time_df$start[i],
+#' #                                                time_df$end[i]))
+#' #   all_data <- rbind(all_data, sub_df)
+#' # }
+#' 
+#' # Set the time to Eastern:
+#' # all_data$time <- lubridate::force_tz(all_data$time, "America/New_York")
 #' 
 #' }
 read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
@@ -90,6 +142,7 @@ read_waterdata_continuous <- function(monitoring_location_id = NA_character_,
                               output_id, 
                               service)
 
+  attr(return_list$time, "tzone") <- "UTC"
   return(return_list)
 }
 

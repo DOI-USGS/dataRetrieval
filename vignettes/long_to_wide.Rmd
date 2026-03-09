@@ -277,7 +277,7 @@ To open an Excel file in R, use the `readxl` package. There are many different c
 As one example, let's say the lab returned the data looking like this:
 
 ```{r echo=FALSE}
-knitr::include_graphics("messyData.png")
+knitr::include_graphics("images/messyData.png")
 ```
 
 

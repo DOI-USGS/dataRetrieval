@@ -94,7 +94,7 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 \item{altitude_method_code}{Codes representing the method used to measure altitude.}
 
-\item{altitude_method_name}{The name of the the method used to measure altitude.}
+\item{altitude_method_name}{The name of the method used to measure altitude.}
 
 \item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/altitude-datums/items}.}
 
@@ -126,7 +126,7 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 \item{national_aquifer_code}{National aquifers are the principal aquifers or aquifer systems in the United States, defined as regionally extensive aquifers or aquifer systems that have the potential to be used as a source of potable water. Not all groundwater monitoring locations can be associated with a National Aquifer. Such monitoring locations will not be retrieved using this search criteria. A list of National aquifer codes and names is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/national-aquifer-codes/items}.}
 
-\item{aquifer_type_code}{Groundwater occurs in aquifers under two different conditions. Where water only partly fills an aquifer, the upper surface is free to rise and decline. These aquifers are referred to as unconfined (or water-table) aquifers. Where water completely fills an aquifer that is overlain by a confining bed, the aquifer is referred to as a confined (or artesian) aquifer. When a confined aquifer is penetrated by a well, the water level in the well will rise above the top of the aquifer (but not necessarily above land surface).}
+\item{aquifer_type_code}{Describes the confinement status of an aquifer at the monitoring location.  A confined aquifer is an aquifer below the land surface that is saturated with water.  A water table--or unconfined--aquifer is an aquifer whose upper water surface (water table) is at atmospheric pressure, and thus is able to rise and fall.}
 
 \item{well_constructed_depth}{The depth of the finished well, in feet below land surface datum. Note: Not all groundwater monitoring locations have information on Well Depth. Such monitoring locations will not be retrieved using this search criteria.}
 
@@ -171,11 +171,13 @@ site_slim <- read_waterdata_monitoring_location(
                                                         "USGS-09423350"),
                              properties = c("monitoring_location_id",
                                             "state_name",
+                                            "county_name",
                                             "country_name"))
                                             
-site_slim_no_sf_slim <- read_waterdata_monitoring_location(monitoring_location_id = site,
+site_slim_no_sf_slim <- read_waterdata_monitoring_location(state_name = "Wisconsin",
                                            properties = c("monitoring_location_id",
                                                           "state_name",
+                                                          "county_name",
                                                           "country_name"), 
                                            skipGeometry = TRUE)
 

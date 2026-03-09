@@ -62,19 +62,17 @@ importWQP <- function(obs_url, tz = "UTC",
   }
   
   last_chars <- as.character(substr(doc, nchar(doc)-1, nchar(doc)))
-  
-  if(last_chars != c("\n")){
-    doc <- paste0(doc, "\n")
-  }
-  retval <- suppressWarnings(readr::read_delim(doc,
-                                               col_types = readr::cols(.default = "c"),
-                                               quote = ifelse(csv, '\"', ""),
-                                               delim = ifelse(csv, ",", "\t")))
+
+  retval <- data.table::fread(text = doc, data.table = FALSE,
+                              sep = ifelse(csv, ",", "\t"),
+                              fill = TRUE,
+                              quote = ifelse(csv, '\"', ""))
+
   
   attr(retval, 'spec') <- NULL
   
-  if(any(grepl("ERROR: INCOMPLETE DATA", retval[1,]))){
-    stop(retval[[1]])
+  if(any(grepl("ERROR: INCOMPLETE DATA", retval[[1]]))){
+    stop(retval[[1]][grepl("ERROR: INCOMPLETE DATA", retval[[1]])])
   }
   
   # this is only needed for legacy
@@ -180,13 +178,11 @@ parse_WQP <- function(retval, tz = "UTC"){
         
       } else if(all(c(date_col, time_col_wqx3, tz_col_wqx3) %in% names(retval))){
         # WQX3
-        if(!all(is.na(retval[[date_col]]))){
           retval <- create_dateTime(retval, 
                                     date_col = date_col,
                                     time_col = time_col_wqx3,
                                     tz_col = tz_col_wqx3,
                                     tz = tz)
-        }        
       } else {
         # This is the legacy pattern:
         time_col <- gsub("Date", "Time.Time", date_col)

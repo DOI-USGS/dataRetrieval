@@ -17,3 +17,5 @@ vignettes/*.R
 
 
 /.quarto/
+
+**/*.quarto_ipynb
