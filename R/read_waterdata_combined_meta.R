@@ -52,7 +52,14 @@
 #' @param unit_of_measure `r get_ogc_params("combined-metadata")$unit_of_measure`
 #' @param parameter_description `r get_ogc_params("combined-metadata")$parameter_description`
 #' @param data_type `r get_ogc_params("combined-metadata")$data_type`
-#' @param primary `r get_ogc_params("combined-metadata")$primary`
+#' @param primary 
+#' A flag identifying if the time series is a "primary" time series. "Primary" time
+#' series (which have this flag) are standard observations which undergo Bureau
+#' review and approval processes. Non-primary time series, which will have missing
+#' values for "primary", are provisional datasets made available to meet the need
+#' for timely best science and to assist with daily operations which need
+#' real-time information. Non-primary time series data are only retained by
+#' this system for 120 days. 
 #' @param web_description `r get_ogc_params("combined-metadata")$web_description`
 #' @param parent_time_series_id `r get_ogc_params("combined-metadata")$parent_time_series_id`
 #' @param statistic_id `r get_ogc_params("combined-metadata")$statistic_id`

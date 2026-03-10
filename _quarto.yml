@@ -3,6 +3,7 @@ project:
   render:
     - tutorials/basic_slides_deck.qmd
     - tutorials/changes_slides_deck.qmd
+    - tutorials/quick_intro_deck.qmd
 
 toc: false
   
