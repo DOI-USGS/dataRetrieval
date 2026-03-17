@@ -30,12 +30,12 @@ walk_pages <- function(req){
 get_resp_data <- function(resp) {
   
   body <- httr2::resp_body_json(resp)
-  
+  use_sf <- !grepl("skipGeometry=true", resp$url, ignore.case = TRUE)
+
   if(isTRUE(body[["numberReturned"]] == 0)){
     return(data.frame())
   }
   
-  use_sf <- !grepl("skipGeometry=true", resp$url, ignore.case = TRUE)
   return_df <- sf::read_sf(httr2::resp_body_string(resp))
   
   included_num_cols <- names(return_df)[names(return_df) %in% num_cols]
@@ -46,7 +46,10 @@ get_resp_data <- function(resp) {
 
   if("qualifier" %in% names(return_df)){
     return_df$qualifier <- as.character(vapply(X = return_df$qualifier,
-                             FUN = function(x) paste(x, collapse = ", "),
+                             FUN = function(x) {
+                                 x[is.na(x)] <- ""
+                                 paste(x, collapse = ", ")
+                               },
                              FUN.VALUE =  c(NA_character_)))
   }
   

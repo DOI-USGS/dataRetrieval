@@ -135,6 +135,12 @@
 #'                          hydrologic_unit_code = c("11010008", "11010009"),
 #'                          site_type = c("Stream", "Spring")
 #' )
+#' 
+#' site_list <- read_waterdata_combined_meta(
+#'                          monitoring_location_id = hucs$monitoring_location_id
+#' )
+#' 
+#' 
 #' }
 read_waterdata_combined_meta <- function(monitoring_location_id = NA_character_,
                                       parameter_code = NA_character_,

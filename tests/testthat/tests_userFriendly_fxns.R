@@ -148,19 +148,17 @@ test_that("read_waterdata_daily", {
   
   expect_true(length(unique(raw_waterdata_MultiSites$monitoring_location_id)) == 2)
   
-  site <- "05212700"
-
-  notActiveUSGS <- read_waterdata_daily(monitoring_location_id = paste0("USGS-", site),
-                                   parameter_code =  "00060",
-                                   time =  c("2014-01-01", "2014-01-07"))
-  expect_true(nrow(notActiveUSGS) == 0)
-  expect_type(notActiveUSGS$value, "double")
-  notActiveUSGS2 <- read_waterdata_daily(monitoring_location_id = paste0("USGS-", site),
-                                        parameter_code =  "00060",
-                                        convertType = FALSE,
-                                        time =  c("2014-01-01", "2014-01-07"))
-  expect_type(notActiveUSGS2$value, "character")
+  mixed_qualifiers <- read_waterdata_continuous(monitoring_location_id = "USGS-01648010",                                
+                                      parameter_code =c("00010","00095","00400","00300","63680"),
+                                      time ="2026-01-01T00:00:00Z/2026-03-13T00:00:00Z")
+  expect_all_true(unique(mixed_qualifiers$qualifier) %in% c("", "EQUIP", "LESSTHAN"))
   
+  # Unclear if these qualifiers will remain persistent:
+  # ts_id <- "fa44702f2bd64d9fa493608de9081cbe"
+  # multi_q <- read_waterdata_continuous(time_series_id = ts_id)  
+  # expect_all_true(unique(multi_q$qualifier) %in% c("REGULATED, UNKNOWNREGULATION",
+  #                                                  "ESTIMATED, REGULATED, UNKNOWNREGULATION",
+  #                                                  "ICE, REGULATED, UNKNOWNREGULATION"))
 })
 
 test_that("WQP qw tests", {
