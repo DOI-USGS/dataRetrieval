@@ -21,6 +21,7 @@
 #' @param channel_velocity_unit `r get_ogc_params("channel-measurements")$channel_velocity_unit`
 #' @param channel_location_distance `r get_ogc_params("channel-measurements")$channel_location_distance`
 #' @param channel_location_distance_unit `r get_ogc_params("channel-measurements")$channel_location_distance_unit`
+#' @param channel_location_direction `r get_ogc_params("channel-measurements")$channel_location_direction`
 #' @param channel_stability `r get_ogc_params("channel-measurements")$channel_stability`
 #' @param channel_material `r get_ogc_params("channel-measurements")$channel_material`
 #' @param channel_evenness `r get_ogc_params("channel-measurements")$channel_evenness`
@@ -79,6 +80,7 @@ read_waterdata_channel <- function(monitoring_location_id = NA_character_,
                                    channel_velocity_unit = NA_character_,
                                    channel_location_distance = NA_character_,
                                    channel_location_distance_unit = NA_character_,
+                                   channel_location_direction = NA_character_,
                                    channel_stability = NA_character_,
                                    channel_material = NA_character_,
                                    channel_evenness = NA_character_,

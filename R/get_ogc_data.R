@@ -3,68 +3,97 @@
 #' @param args arguments from individual functions
 #' @param output_id Name of id column to return
 #' @param service Endpoint name.
+#' @param \dots Used to force users to fully name the details argument.
+#' @param chunk_size Number of monitoring_location_ids to chunk requests into.
 #' 
 #' @noRd
 #' @return data.frame with attributes
 get_ogc_data <- function(args,
                          output_id, 
-                         service){
+                         service,
+                         ...,
+                         chunk_size = 250){
 
-  args <- switch_arg_id(args, 
-                        id_name = output_id, 
-                        service = service)
+  rlang::check_dots_empty()
   
-  args <- check_limits(args)
-  
-  properties <- args[["properties"]]
-  args[["properties"]] <- switch_properties_id(properties, 
-                                               id = output_id)
-  convertType <- args[["convertType"]] 
-  args[["convertType"]] <- NULL
-  args[["service"]] <- service
-  
-  req <- do.call(construct_api_requests, args)
+  if(length(args[["monitoring_location_id"]]) > chunk_size){
 
-  no_paging <- grepl("f=csv", req$url)
-  
-  message("Requesting:\n", req$url)
-  
-  if(no_paging){
-    return_list <- get_csv(req, limit = args[["limit"]])
+    ml_splits <- split(args[["monitoring_location_id"]], 
+                       ceiling(seq_along(args[["monitoring_location_id"]])/chunk_size))
+    
+    rl <- lapply(ml_splits, function(x) {
+      args[["monitoring_location_id"]] <- x
+      get_ogc_data(args = args,
+                   output_id = output_id, 
+                   service = service)})
+    
+    rl_filtered <- rl[vapply(rl, 
+                             FUN = function(x) dim(x)[1],
+                             FUN.VALUE =  NA_integer_) > 0]
+
+    return_list <- data.frame(data.table::rbindlist(rl_filtered, 
+                                                    use.names = TRUE,
+                                                    ignore.attr = TRUE))
+    
   } else {
-    return_list <- walk_pages(req)
-  }
+    args[["chunk_sites_by"]] <- NULL
+    
+    args <- switch_arg_id(args, 
+                          id_name = output_id, 
+                          service = service)
+    
+    args <- check_limits(args)
+    
+    properties <- args[["properties"]]
+    args[["properties"]] <- switch_properties_id(properties, 
+                                                 id = output_id)
+    convertType <- args[["convertType"]] 
+    args[["convertType"]] <- NULL
+    args[["service"]] <- service
+    
+    req <- do.call(construct_api_requests, args)
   
-  if(is.na(args[["skipGeometry"]])){
-    skipGeometry <- FALSE
-  } else {
-    skipGeometry <- args[["skipGeometry"]]
-  }
-  
-  return_list <- deal_with_empty(return_list, properties, service,
-                                 skipGeometry, convertType, no_paging)
-  
-  return_list <- rejigger_cols(return_list, properties, output_id)
-  
-  if(convertType){
-    return_list <- cleanup_cols(return_list, service)
-    return_list <- order_results(return_list)
-
-    # Mostly drop the id column except ts-meta, monitoring location:
-    if(!service %in% c("monitoring-locations",
-                       "time-series-metadata",
-                       "field-measurements-metadata",
-                       "combined-metadata",
-                       "parameter-codes")){
-      return_list <- return_list[, names(return_list)[names(return_list)!= output_id]]
+    no_paging <- grepl("f=csv", req$url)
+    
+    message("Requesting:\n", req$url)
+    
+    if(no_paging){
+      return_list <- get_csv(req, limit = args[["limit"]])
+    } else {
+      return_list <- walk_pages(req)
     }
-    # Move other id columns:
-    return_list <- move_id_col(return_list, 
-                               output_id)
-  }
+    
+    if(is.na(args[["skipGeometry"]])){
+      skipGeometry <- FALSE
+    } else {
+      skipGeometry <- args[["skipGeometry"]]
+    }
+    
+    return_list <- deal_with_empty(return_list, properties, service,
+                                   skipGeometry, convertType, no_paging)
+    
+    return_list <- rejigger_cols(return_list, properties, output_id)
+    
+    if(convertType){
+      return_list <- cleanup_cols(return_list, service)
+      return_list <- order_results(return_list)
   
-  if(getOption("dataRetrieval.attach_request")){
-    attr(return_list, "request") <- req
+      # Mostly drop the id column except ts-meta, monitoring location:
+      if(!service %in% c("monitoring-locations",
+                         "time-series-metadata",
+                         "field-measurements-metadata",
+                         "combined-metadata",
+                         "parameter-codes")){
+        return_list <- return_list[, names(return_list)[names(return_list)!= output_id]]
+      }
+      # Move other id columns:
+      return_list <- move_id_col(return_list, 
+                                 output_id)
+    }
+    
+    if(getOption("dataRetrieval.attach_request")){
+      attr(return_list, "request") <- req
+    }
   }
   
   attr(return_list, "queryTime") <- Sys.time()

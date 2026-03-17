@@ -73,6 +73,7 @@ df <- data.frame(
                               "main (CRAN)", 
                               rep("", 2), 
                               "main (CRAN)")
+
 )
 
 knitr::kable(df, col.names = c("WaterServices (legacy) function", "Water Data (new) function", "Available on (branch name)"))
@@ -175,3 +176,12 @@ As of dataRetrieval v2.7.17, `readNWISqw()` has been retired and replaced by `re
 ### A note on `whatNWISdata` and "qw" data
 
 Currently, any "qw" data summaries provided by `whatNWISdata` are very likely out of date and incorrect: do not use this function to query by `data_type_cd = "qw"`. When the NWIS services are decommissioned (likely in 2025) there will no longer be any "qw" information provided in the output of `whatNWISdata`. Discrete water-quality data will be available via WQP services and USGS Samples only. More information will be provided as we learn more.
+
+## National Groundwater Monitoring Network
+
+Coming soon, a new new access point for the National Groundwater Monitoring Network. The original `readNGWMNdata` functions have been broken for some time. Stay tuned!
+
+
+
+
+
