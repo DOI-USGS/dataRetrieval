@@ -3,29 +3,37 @@
 #' @param args arguments from individual functions
 #' @param output_id Name of id column to return
 #' @param service Endpoint name.
-#' @param split_into Number of monitoring_location_ids to chunk requests into.
+#' @param \dots Used to force users to fully name the details argument.
+#' @param chunk_size Number of monitoring_location_ids to chunk requests into.
 #' 
 #' @noRd
 #' @return data.frame with attributes
 get_ogc_data <- function(args,
                          output_id, 
                          service,
-                         split_into = 250){
+                         ...,
+                         chunk_size = 250){
 
-
-  if(length(args[["monitoring_location_id"]]) > split_into){
+  rlang::check_dots_empty()
+  
+  if(length(args[["monitoring_location_id"]]) > chunk_size){
 
     ml_splits <- split(args[["monitoring_location_id"]], 
-                       ceiling(seq_along(args[["monitoring_location_id"]])/split_into))
+                       ceiling(seq_along(args[["monitoring_location_id"]])/chunk_size))
     
     rl <- lapply(ml_splits, function(x) {
       args[["monitoring_location_id"]] <- x
       get_ogc_data(args = args,
                    output_id = output_id, 
                    service = service)})
-    rl_filtered <- rl[sapply(rl, function(x) dim(x)[1]) > 0]
+    
+    rl_filtered <- rl[vapply(rl, 
+                             FUN = function(x) dim(x)[1],
+                             FUN.VALUE =  NA_integer_) > 0]
 
-    return_list <- do.call(rbind, rl_filtered)
+    return_list <- data.frame(data.table::rbindlist(rl_filtered, 
+                                                    use.names = TRUE,
+                                                    ignore.attr = TRUE))
     
   } else {
     args[["chunk_sites_by"]] <- NULL

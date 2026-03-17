@@ -78,7 +78,7 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 Multiple parameter_codes can be requested as a character vector.}
 
-\item{parameter_name}{\verb{r get_ogc_params("combined-metadata")$parameter_name}
+\item{parameter_name}{A human-understandable name corresponding to \code{parameter_code}.
 Multiple parameter_names can be requested as a character vector.}
 
 \item{unit_of_measure}{A human-readable description of the units of measurement associated with an observation.}

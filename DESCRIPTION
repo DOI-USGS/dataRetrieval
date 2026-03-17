@@ -56,7 +56,8 @@ Imports:
     httr2,
     whisker,
     sf,
-    data.table
+    data.table,
+    rlang
 Suggests:
     covr,
     dplyr,
