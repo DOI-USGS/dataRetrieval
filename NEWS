@@ -1,5 +1,6 @@
 dataRetrieval 2.7.24
 ===================
+* Let dataRetrieval take care of chunking up requests by monitoring_location_id.
 
 dataRetrieval 2.7.23
 ===================

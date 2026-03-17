@@ -80,11 +80,14 @@
 #'                                            properties = c("monitoring_location_id",
 #'                                                           "state_name",
 #'                                                           "county_name",
-#'                                                           "country_name"), 
+#'                                                           "country_name",
+#'                                                           "site_type"), 
+#'                                            site_type = "Well",
 #'                                            skipGeometry = TRUE)
 #'
-#' site_info_no_sf <- read_waterdata_monitoring_location(monitoring_location_id = site,
-#'                                    skipGeometry = TRUE)
+#' site_info_no_sf <- read_waterdata_monitoring_location(
+#'      monitoring_location_id = site_slim_no_sf_slim$monitoring_location_id[1:1000],
+#'      skipGeometry = TRUE)
 #' 
 #' bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
 #' multi_site <- read_waterdata_monitoring_location(bbox = bbox_vals)
@@ -139,8 +142,9 @@ read_waterdata_monitoring_location <- function(monitoring_location_id = NA_chara
   
   args <- mget(names(formals()))
   args[["convertType"]] <- FALSE
+  
   return_list <- get_ogc_data(args,
-                              output_id, 
+                              output_id,
                               service)
 
   return(return_list)

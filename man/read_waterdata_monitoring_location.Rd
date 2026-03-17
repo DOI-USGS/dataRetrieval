@@ -126,7 +126,7 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 \item{national_aquifer_code}{National aquifers are the principal aquifers or aquifer systems in the United States, defined as regionally extensive aquifers or aquifer systems that have the potential to be used as a source of potable water. Not all groundwater monitoring locations can be associated with a National Aquifer. Such monitoring locations will not be retrieved using this search criteria. A list of National aquifer codes and names is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/national-aquifer-codes/items}.}
 
-\item{aquifer_type_code}{Describes the confinement status of an aquifer at the monitoring location.  A confined aquifer is an aquifer below the land surface that is saturated with water.  A water table--or unconfined--aquifer is an aquifer whose upper water surface (water table) is at atmospheric pressure, and thus is able to rise and fall.}
+\item{aquifer_type_code}{Describes the confinement status of an aquifer at the monitoring location. A confined aquifer is an aquifer below the land surface that is saturated with water. A water table--or unconfined--aquifer is an aquifer whose upper water surface (water table) is at atmospheric pressure, and thus is able to rise and fall.}
 
 \item{well_constructed_depth}{The depth of the finished well, in feet below land surface datum. Note: Not all groundwater monitoring locations have information on Well Depth. Such monitoring locations will not be retrieved using this search criteria.}
 
@@ -178,11 +178,14 @@ site_slim_no_sf_slim <- read_waterdata_monitoring_location(state_name = "Wiscons
                                            properties = c("monitoring_location_id",
                                                           "state_name",
                                                           "county_name",
-                                                          "country_name"), 
+                                                          "country_name",
+                                                          "site_type"), 
+                                           site_type = "Well",
                                            skipGeometry = TRUE)
 
-site_info_no_sf <- read_waterdata_monitoring_location(monitoring_location_id = site,
-                                   skipGeometry = TRUE)
+site_info_no_sf <- read_waterdata_monitoring_location(
+     monitoring_location_id = site_slim_no_sf_slim$monitoring_location_id[1:1000],
+     skipGeometry = TRUE)
 
 bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
 multi_site <- read_waterdata_monitoring_location(bbox = bbox_vals)
