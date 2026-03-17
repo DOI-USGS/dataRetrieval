@@ -168,20 +168,20 @@ citation(package = "dataRetrieval")
 #> To cite dataRetrieval in publications, please use:
 #> 
 #>   De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., Johnson, M.,
-#>   2025, dataRetrieval: R packages for discovering and retrieving water
-#>   data available from Federal hydrologic web services, v.2.7.20,
-#>   doi:10.5066/P9X4L3GE
+#>   Blodgett, D.L., Hinman, E.D., Zemmels, J., 2026, dataRetrieval: R
+#>   packages for discovering and retrieving water data available from
+#>   Federal hydrologic web services, v.2.7.23, doi:10.5066/P9X4L3GE
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
-#>     author = {Laura DeCicco and Robert Hirsch and David Lorenz and Jordan Read and Jordan Walker and Lindsay Platt and David Watkins and David Blodgett and Mike Johnson and Aliesha Krall and Lee Stanish and Joeseph Zemmels and Elise Hinman and Michael Mahoney},
+#>     author = {Laura DeCicco and Robert Hirsch and David Lorenz and Jordan Read and Jordan Walker and Lindsay Platt and David Watkins and David Blodgett and Mike Johnson and Aliesha Krall and Lee Stanish and Joseph Zemmels and Elise Hinman and Michael Mahoney},
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
-#>     version = {2.7.22},
+#>     version = {2.7.23},
 #>     institution = {U.S. Geological Survey},
-#>     year = {2025},
+#>     year = {2026},
 #>     doi = {10.5066/P9X4L3GE},
 #>   }
 ```
@@ -197,24 +197,23 @@ This can be done using the `create_NWIS_bib` function:
 
 ``` r
 
-dv <- readNWISdv("09010500", "00060")
+dv <- read_waterdata_daily(monitoring_location_id = "USGS-09010500",
+                           parameter_code = "00060")
 
 NWIScitation <- create_NWIS_bib(dv)
 
 NWIScitation
-#> U.S. Geological Survey (2026). _National Water Information System data
-#> available on the World Wide Web (USGS Water Data for the Nation)_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Jan
-#> 23, 2026,
-#> <https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01>.
+#> U.S. Geological Survey (2026). _USGS Water Data for the Nation: U.S.
+#> Geological Survey National Water Information System database_.
+#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Mar
+#> 09, 2026.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
-#>   title = {National Water Information System data available on the World Wide Web (USGS Water Data for the Nation)},
+#>   title = {USGS Water Data for the Nation: U.S. Geological Survey National Water Information System database},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Jan 23, 2026},
+#>   note = {Accessed Mar 09, 2026},
 #>   year = {2026},
-#>   url = {https://waterservices.usgs.gov/nwis/dv/?site=09010500&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=1851-01-01},
 #> }
 ```
 
@@ -236,14 +235,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2026). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Jan 23, 2026,
+#> Accessed Mar 09, 2026,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Jan 23, 2026},
+#>   note = {Accessed Mar 09, 2026},
 #>   year = {2026},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }

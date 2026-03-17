@@ -89,7 +89,6 @@ data will cut off at 50,000 rows without indication that more data
 is available. Use \code{TRUE} with caution.}
 }
 \description{
-This is an early version of the continuous endpoint. It is feature-complete and provides access to the full continuous data record, and is being made available as we continue to work on performance improvements.
 Continuous data are collected via automated sensors installed at a monitoring location. They are collected at a high frequency and often at a fixed 15-minute interval. Depending on the specific monitoring location, the data may be transmitted automatically via telemetry and be available on WDFN within minutes of collection, while other times the delivery of data may be delayed if the monitoring location does not have the capacity to automatically transmit data. Continuous data are described by parameter name and parameter code (pcode). These data might also be referred to as "instantaneous values" or "IV".
 
 Currently, the services only allow up to 3 years of data to be requested with

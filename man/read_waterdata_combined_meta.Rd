@@ -100,7 +100,13 @@ Multiple computation_identifiers can be requested as a character vector.}
 
 \item{sublocation_identifier}{An optional human-readable identifier used to specify where measurements are recorded at a monitoring location.}
 
-\item{primary}{A flag identifying if the time series is a "primary" time series. "Primary" time series (which have this flag) are standard observations which undergo \href{https://www.usgs.gov/survey-manual/5028-fundamental-science-practices-review-and-approval-scientific-data-release}{Bureau review and approval processes}. Non-primary time series, which will have missing values for "primary", are provisional datasets made available to meet the need for timely best science and to assist with daily operations which need real-time information. Non-primary time series data are only retained by this system for 120 days. See the \href{https://waterdata.usgs.gov/provisional-data-statement/}{USGS Provisional Data Statement} for more information.}
+\item{primary}{A flag identifying if the time series is a "primary" time series. "Primary" time
+series (which have this flag) are standard observations which undergo Bureau
+review and approval processes. Non-primary time series, which will have missing
+values for "primary", are provisional datasets made available to meet the need
+for timely best science and to assist with daily operations which need
+real-time information. Non-primary time series data are only retained by
+this system for 120 days.}
 
 \item{web_description}{A description of what this time series represents, as used by WDFN and other USGS data dissemination products.}
 
@@ -218,7 +224,7 @@ See also Details below for more information.}
 
 \item{national_aquifer_code}{National aquifers are the principal aquifers or aquifer systems in the United States, defined as regionally extensive aquifers or aquifer systems that have the potential to be used as a source of potable water. Not all groundwater monitoring locations can be associated with a National Aquifer. Such monitoring locations will not be retrieved using this search criteria. A list of National aquifer codes and names is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/national-aquifer-codes/items}.}
 
-\item{aquifer_type_code}{Describes the confinement status of an aquifer at the monitoring location.  A confined aquifer is an aquifer below the land surface that is saturated with water.  A water table--or unconfined--aquifer is an aquifer whose upper water surface (water table) is at atmospheric pressure, and thus is able to rise and fall.}
+\item{aquifer_type_code}{Describes the confinement status of an aquifer at the monitoring location. A confined aquifer is an aquifer below the land surface that is saturated with water. A water table--or unconfined--aquifer is an aquifer whose upper water surface (water table) is at atmospheric pressure, and thus is able to rise and fall.}
 
 \item{well_constructed_depth}{The depth of the finished well, in feet below land surface datum. Note: Not all groundwater monitoring locations have information on Well Depth. Such monitoring locations will not be retrieved using this search criteria.}
 
@@ -305,6 +311,12 @@ hucs <- read_waterdata_combined_meta(
                          hydrologic_unit_code = c("11010008", "11010009"),
                          site_type = c("Stream", "Spring")
 )
+
+site_list <- read_waterdata_combined_meta(
+                         monitoring_location_id = hucs$monitoring_location_id
+)
+
+
 }
 \dontshow{\}) # examplesIf}
 }

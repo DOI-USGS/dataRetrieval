@@ -30,6 +30,8 @@ navbar:
     menu:
     - text: Basic Tutorial
       href: articles/tutorial.html
+    - text: Quick Tutorial (slides)
+      href: articles/quick_slides.html
     - text: Basic Tutorial (slides)
       href: articles/basic_slides.html
     - text: Changes to dataRetrieval (slides)
