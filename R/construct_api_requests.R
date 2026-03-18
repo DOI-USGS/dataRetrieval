@@ -45,9 +45,25 @@ construct_api_requests <- function(service,
   
   POST <- FALSE
   
+  full_list <- list(...)
+  
+  time_periods <- c("last_modified", "datetime", "time", "begin", "end", "begin_utc", "end_utc")
+  
+  if(any(time_periods %in% names(full_list))){
+    
+    for(i in time_periods[time_periods %in% names(full_list)]){
+      dates <- FALSE
+      if (all(service == "daily" & i != "last_modified")){
+        dates <- TRUE
+      } 
+      full_list[[i]] <- format_api_dates(full_list[[i]], date = dates) 
+    }
+  }
+  
   single_params <- c("datetime", "last_modified", 
                      "begin", "end", "time", "limit",
                      "begin_utc", "end_utc")
+  
   comma_params <- c("monitoring_location_id", "parameter_code", 
                     "statistic_id", "time_series_id",
                     "computation_period_identifier",
@@ -59,8 +75,6 @@ construct_api_requests <- function(service,
                     "combined-metadata")){
     comma_params <- c(comma_params, "id")
   }
-  
-  full_list <- list(...)
   
   if(all(is.na(full_list)) & all(is.na(bbox))){
     warning("No filtering arguments specified.")
@@ -86,18 +100,7 @@ construct_api_requests <- function(service,
   
   get_list <- get_list[!is.na(get_list)]
   
-  time_periods <- c("last_modified", "datetime", "time", "begin", "end", "begin_utc", "end_utc")
-  if(any(time_periods %in% names(get_list))){
 
-    for(i in time_periods[time_periods %in% names(get_list)]){
-      dates <- FALSE
-      if (all(service == "daily" & i != "last_modified")){
-        dates <- TRUE
-      } 
-      get_list[[i]] <- format_api_dates(get_list[[i]], date = dates)
-      full_list[[i]] <- format_api_dates(full_list[[i]], date = dates) 
-    }
-  }
   
   format_type <- ifelse(isTRUE(no_paging), "csv", "json")
   
