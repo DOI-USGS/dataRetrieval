@@ -106,7 +106,7 @@ Sampling Activity \tab ActivityWQX3 \tab /wqx3/Activity/search \cr
 
 # Legacy:
 nameToUse <- "pH"
-pHData <- readWQPdata(siteid = "USGS-04024315", 
+pHData <- readWQPdata(siteid = "USGS-04024315",
                       characteristicName = nameToUse)
 ncol(pHData)
 attr(pHData, "siteInfo")
@@ -114,7 +114,7 @@ attr(pHData, "queryTime")
 attr(pHData, "url")
 
 # WQX3:
-pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315", 
+pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315",
                            characteristicName = nameToUse,
                            service = "ResultWQX3",
                            dataProfile = "basicPhysChem")
@@ -135,7 +135,7 @@ DeWitt_wqx3 <- readWQPdata(
    countycode = "DeWitt",
    characteristicName = "Nitrogen",
    service = "ResultWQX3",
-   dataProfile = "basicPhysChem",  
+   dataProfile = "basicPhysChem",
    ignore_attributes = TRUE)
 
 attr(DeWitt_wqx3, "url")
@@ -174,15 +174,15 @@ attr(Dane_activity, "url")
 ########################################################
 # Additional examples:
 
- 
-# Data profiles: "Organization Data" 
+
+# Data profiles: "Organization Data"
 org_data <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
   service = "Organization"
 )
 
-# Data profiles: "Project Data"  
+# Data profiles: "Project Data"
 project_data <- readWQPdata(
   statecode = "WI",
   countycode = "Dane",
@@ -196,7 +196,7 @@ proj_mlwd <- readWQPdata(
   service = "ProjectMonitoringLocationWeighting"
 )
 
-# Data profiles: "Sample Results (physical/chemical metadata)" 
+# Data profiles: "Sample Results (physical/chemical metadata)"
 samp_data <- readWQPdata(
   siteid = "USGS-04024315",
   dataProfile = "resultPhysChem",
@@ -211,7 +211,7 @@ samp_bio <- readWQPdata(
 )
 
 
-# Data profiles: "Sample Results (narrow)" 
+# Data profiles: "Sample Results (narrow)"
 samp_narrow <- readWQPdata(
   siteid = "USGS-04024315",
   service = "Result",
@@ -225,7 +225,7 @@ samp_narrow <- readWQPdata(
 # )
 
 
-# Data profiles: "Sampling Activity"  
+# Data profiles: "Sampling Activity"
 samp_activity <- readWQPdata(
   siteid = "USGS-04024315",
   dataProfile = "activityAll",
@@ -239,7 +239,7 @@ act_metrics <- readWQPdata(
   service = "ActivityMetric"
 )
 
-# Data profile: "Result Detection Quantitation Limit Data"  
+# Data profile: "Result Detection Quantitation Limit Data"
 dl_data <- readWQPdata(
   siteid = "USGS-04024315",
   service = "ResultDetectionQuantitationLimit"
@@ -247,7 +247,7 @@ dl_data <- readWQPdata(
 
 # other options:
 Phosphorus <- readWQPdata(
-  statecode = "WI", countycode = "Dane", 
+  statecode = "WI", countycode = "Dane",
   characteristicName = "Phosphorus",
   startDateLo = "2023-01-01",
   ignore_attributes = TRUE,

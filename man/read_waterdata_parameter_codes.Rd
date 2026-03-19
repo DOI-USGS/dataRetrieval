@@ -67,11 +67,11 @@ pcode_info <- read_waterdata_parameter_codes(parameter_code = pcode)
 pcodes <- read_waterdata_parameter_codes(parameter_code = c("00660", "00060"))
 
 # equivalent to read_waterdata_metadata("parameter-codes")
-all_pcodes <- read_waterdata_parameter_codes() 
+all_pcodes <- read_waterdata_parameter_codes()
 
 total_nutrients <- read_waterdata_parameter_codes(parameter_group_code = "NUT",
                                            sample_fraction = "Total")
-                                           
+
 group_of_nutrients <- read_waterdata_parameter_codes(parameter_group_code = "NUT",
                                                     unit_of_measure = c("mg/l",
                                                     "mg/l as N", "mg/l NO3",

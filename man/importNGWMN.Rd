@@ -37,7 +37,7 @@ params <- list(request = "GetObservation",
                featureOfInterest = "VW_GWDP_GEOSERVER.USGS.403836085374401")
 
 obs_url <- httr2::request("https://cida.usgs.gov") |>
- httr2::req_url_path_append("ngwmn_cache") |> 
+ httr2::req_url_path_append("ngwmn_cache") |>
  httr2::req_url_path_append("sos") |>
  httr2::req_url_query(!!!params)
 

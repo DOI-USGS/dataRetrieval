@@ -60,7 +60,7 @@ cql_huc_wildcard <- '{
 }'
 
 what_huc_sites <- read_waterdata(service = "monitoring-locations",
-                                 CQL = cql_huc_wildcard)               
+                                 CQL = cql_huc_wildcard)
 
 }
 \dontshow{\}) # examplesIf}
