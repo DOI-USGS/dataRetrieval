@@ -15,8 +15,10 @@
 #' values <- checkWQPdates(values)
 checkWQPdates <- function(values) {
   dateNames <- c(
-    "startDateLo", "startDateHi",
-    "startDate", "endDate",
+    "startDateLo",
+    "startDateHi",
+    "startDate",
+    "endDate",
     "activityStartDateLower",
     "activityStartDateUpper"
   )
@@ -35,7 +37,8 @@ checkWQPdates <- function(values) {
         dateInput <- as.character(values[[i]])
         splitDates <- unlist(strsplit(dateInput, "-"))
         if (length(splitDates) == 3) {
-          if (nchar(splitDates[1]) == 4) { # R object
+          if (nchar(splitDates[1]) == 4) {
+            # R object
             dates <- as.Date(lubridate::parse_date_time(dateInput, "%Y-%m-%d"))
             dates <- format(dates, format = "%m-%d-%Y")
             values[i] <- dates
@@ -46,7 +49,8 @@ checkWQPdates <- function(values) {
               paste(names(values)[i], values[i], collapse = ", ")
             )
           }
-        } else { # Probably something wrong
+        } else {
+          # Probably something wrong
           warning(
             "Please check the date format for the arguments: ",
             paste(names(values)[i], values[i], collapse = ", ")

@@ -1,4 +1,3 @@
-
 #' Function to return data from the NWIS RDB 1.0 format
 #'
 #' This function accepts a url parameter that already contains the desired
@@ -89,47 +88,49 @@
 #' fullPath <- file.path(filePath, fileName)
 #' importUserRDB <- importRDB1(fullPath)
 #'
-importRDB1 <- function(obs_url,
-                       asDateTime = TRUE,
-                       convertType = TRUE,
-                       tz = "UTC") {
+importRDB1 <- function(
+  obs_url,
+  asDateTime = TRUE,
+  convertType = TRUE,
+  tz = "UTC"
+) {
   if (tz == "") {
     tz <- "UTC"
   }
 
   tz <- match.arg(tz, OlsonNames())
 
-  if (is.character(obs_url) && 
-      grepl("(https)://[^ /$.?#].[^\\s]*", obs_url)){
+  if (
+    is.character(obs_url) &&
+      grepl("(https)://[^ /$.?#].[^\\s]*", obs_url)
+  ) {
     obs_url <- httr2::request(obs_url)
   }
-  
-  if(inherits(obs_url, "httr2_request")){
 
+  if (inherits(obs_url, "httr2_request")) {
     doc <- getWebServiceData(obs_url)
 
     if (is.null(doc)) {
       return(invisible(NULL))
     }
-    
   } else {
-    if (!file.exists(obs_url)){
+    if (!file.exists(obs_url)) {
       warning("Unknown Input")
       return(NULL)
     }
     doc <- obs_url
-  } 
-  if(file.exists(doc)){
+  }
+  if (file.exists(doc)) {
     readr.total <- readr::read_lines(doc)
   } else {
     readr.total <- readr::read_lines(I(doc))
   }
-  
-  if(readr.total[length(readr.total)] == ""){
+
+  if (readr.total[length(readr.total)] == "") {
     readr.total <- readr.total[-length(readr.total)]
   }
   total.rows <- length(readr.total)
-  
+
   readr.meta <- readr.total[grep("^#", readr.total)]
   meta.rows <- length(readr.meta)
   header.names <- strsplit(readr.total[meta.rows + 1], "\t")[[1]]
@@ -147,7 +148,7 @@ importRDB1 <- function(obs_url,
 
   if (data.rows > 0) {
     args_list <- list(
-      file = doc, 
+      file = doc,
       delim = "\t",
       quote = "",
       skip = meta.rows + 2,
@@ -155,7 +156,7 @@ importRDB1 <- function(obs_url,
     )
 
     args_list[["show_col_types"]] <- FALSE
-    
+
     if (convertType) {
       args_list[["guess_max"]] <- data.rows
       args_list[["col_types"]] <- readr::cols()
@@ -164,7 +165,7 @@ importRDB1 <- function(obs_url,
     }
 
     readr.data <- suppressWarnings(do.call(readr::read_delim, args = args_list))
-     
+
     readr.data <- as.data.frame(readr.data)
 
     if (nrow(readr.data) > 0) {
@@ -173,7 +174,10 @@ importRDB1 <- function(obs_url,
       readr.data <- as.data.frame(readr.data)
 
       if (length(char.names) > 0) {
-        char.names.true <- char.names[sapply(readr.data[, char.names], is.character)]
+        char.names.true <- char.names[sapply(
+          readr.data[, char.names],
+          is.character
+        )]
         char.names <- char.names[!(char.names %in% char.names.true)]
       }
 
@@ -199,7 +203,8 @@ importRDB1 <- function(obs_url,
               },
               warning = function(cond) {
                 message(paste(
-                  "Column", i,
+                  "Column",
+                  i,
                   "contains characters that cannot be automatically converted to numeric."
                 ))
                 return(readr.data[[i]])
@@ -209,18 +214,28 @@ importRDB1 <- function(obs_url,
         }
 
         if (asDateTime && convertType) {
-          header.suffix <- sapply(strsplit(header.names, "_"), function(x) x[length(x)])
+          header.suffix <- sapply(strsplit(header.names, "_"), function(x) {
+            x[length(x)]
+          })
           header.base <- substr(header.names, 1, nchar(header.names) - 3)
 
           dt_cols <- unique(header.base[header.suffix %in% c("dt", "tm")])
 
           if (all(c("sample", "sample_end") %in% dt_cols)) {
             if ("sample_start_time_datum_cd" %in% header.names) {
-              readr.data[, "tz_cd"] <- readr.data[, "sample_start_time_datum_cd"]
+              readr.data[, "tz_cd"] <- readr.data[,
+                "sample_start_time_datum_cd"
+              ]
 
-              readr.data[, "sample_start_time_datum_cd_reported"] <- readr.data[, "sample_start_time_datum_cd"]
-              readr.data[, "sample_end_time_datum_cd_reported"] <- readr.data[, "sample_start_time_datum_cd"]
-              readr.data <- readr.data[, names(readr.data)[names(readr.data) != "sample_start_time_datum_cd"]]
+              readr.data[,
+                "sample_start_time_datum_cd_reported"
+              ] <- readr.data[, "sample_start_time_datum_cd"]
+              readr.data[, "sample_end_time_datum_cd_reported"] <- readr.data[,
+                "sample_start_time_datum_cd"
+              ]
+              readr.data <- readr.data[, names(readr.data)[
+                names(readr.data) != "sample_start_time_datum_cd"
+              ]]
             }
           }
 
@@ -228,15 +243,16 @@ importRDB1 <- function(obs_url,
             if (all(c(paste0(i, "_dt"), paste0(i, "_tm")) %in% header.names)) {
               varname <- paste0(i, "_dateTime")
 
-              varval <- suppressWarnings(lubridate::parse_date_time(paste(
-                readr.data[, paste0(i, "_dt")],
-                readr.data[, paste0(i, "_tm")]
-              ),
-              c(
-                "%Y-%m-%d %H:%M:%S",
-                "%Y-%m-%d %H:%M"
-              ),
-              tz = "UTC"
+              varval <- suppressWarnings(lubridate::parse_date_time(
+                paste(
+                  readr.data[, paste0(i, "_dt")],
+                  readr.data[, paste0(i, "_tm")]
+                ),
+                c(
+                  "%Y-%m-%d %H:%M:%S",
+                  "%Y-%m-%d %H:%M"
+                ),
+                tz = "UTC"
               ))
 
               if (!all(is.na(varval))) {
@@ -255,41 +271,65 @@ importRDB1 <- function(obs_url,
           }
 
           if ("tz_cd" %in% names(readr.data)) {
-            date.time.cols <- which(sapply(readr.data, function(x) inherits(x, "POSIXct")))
+            date.time.cols <- which(sapply(readr.data, function(x) {
+              inherits(x, "POSIXct")
+            }))
             if (length(date.time.cols) > 0) {
-              readr.data <- convertTZ(readr.data, "tz_cd", date.time.cols, tz, flip.cols = FALSE)
+              readr.data <- convertTZ(
+                readr.data,
+                "tz_cd",
+                date.time.cols,
+                tz,
+                flip.cols = FALSE
+              )
             }
           }
 
           if ("DATE" %in% header.names) {
-            readr.data[, "DATE"] <- lubridate::parse_date_time(readr.data[, "DATE"], "Ymd")
+            readr.data[, "DATE"] <- lubridate::parse_date_time(
+              readr.data[, "DATE"],
+              "Ymd"
+            )
           }
 
           if (all(c("DATE", "TIME", "TZCD") %in% header.names)) {
             varname <- "DATETIME"
-            varval <- as.POSIXct(lubridate::fast_strptime(paste(
-              readr.data[, "DATE"],
-              readr.data[, "TIME"]
-            ),
-            "%Y-%m-%d %H%M%S",
-            tz = "UTC"
+            varval <- as.POSIXct(lubridate::fast_strptime(
+              paste(
+                readr.data[, "DATE"],
+                readr.data[, "TIME"]
+              ),
+              "%Y-%m-%d %H%M%S",
+              tz = "UTC"
             ))
             readr.data[, varname] <- varval
-            readr.data <- convertTZ(readr.data, "TZCD", varname, tz, flip.cols = TRUE)
+            readr.data <- convertTZ(
+              readr.data,
+              "TZCD",
+              varname,
+              tz,
+              flip.cols = TRUE
+            )
           }
 
           if ("sample_dateTime" %in% names(readr.data)) {
-            names(readr.data)[names(readr.data) == "sample_dateTime"] <- "startDateTime"
+            names(readr.data)[
+              names(readr.data) == "sample_dateTime"
+            ] <- "startDateTime"
           }
         }
         row.names(readr.data) <- NULL
       }
     }
   } else {
-    readr.data <- data.frame(matrix(vector(), 0, length(header.names),
-      dimnames = list(c(), header.names)
-    ),
-    stringsAsFactors = FALSE
+    readr.data <- data.frame(
+      matrix(
+        vector(),
+        0,
+        length(header.names),
+        dimnames = list(c(), header.names)
+      ),
+      stringsAsFactors = FALSE
     )
   }
 
@@ -299,7 +339,10 @@ importRDB1 <- function(obs_url,
 
   if ("tz_cd_reported" %in% names(readr.data)) {
     new_order <- names(readr.data)
-    new_order <- c(new_order[!new_order %in% c("tz_cd_reported", "tz_cd")], "tz_cd")
+    new_order <- c(
+      new_order[!new_order %in% c("tz_cd_reported", "tz_cd")],
+      "tz_cd"
+    )
     readr.data <- readr.data[, new_order]
   }
 
@@ -319,7 +362,6 @@ importRDB1 <- function(obs_url,
 }
 
 convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols = TRUE) {
-
   offset <- offsetLibrary$offset[match(df[, tz.name], offsetLibrary$code)]
 
   df[, paste0(tz.name, "_reported")] <- df[, tz.name, drop = FALSE]
@@ -336,8 +378,6 @@ convertTZ <- function(df, tz.name, date.time.cols, tz, flip.cols = TRUE) {
       df[!is.na(df[, i]), tz.name] <- "UTC"
     }
   }
-
-
 
   if (flip.cols) {
     reported.col <- which(names(df) %in% paste0(tz.name, "_reported"))

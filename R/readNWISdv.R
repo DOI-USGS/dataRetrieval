@@ -1,6 +1,6 @@
 #' Daily Value USGS NWIS Data Retrieval
 #'
-#' Imports data from NWIS daily web service. This function gets the data from here: 
+#' Imports data from NWIS daily web service. This function gets the data from here:
 #' <https://waterservices.usgs.gov/docs/dv-service/daily-values-service-details/>
 #' Inputs to this function are just USGS site ids, USGS parameter codes,
 #' USGS statistic codes, and start and end date. For a more complex query, use [readNWISdata()],
@@ -10,7 +10,7 @@
 #' Use the function [whatNWISdata()] to discover what data
 #' is available for a USGS site. The column data_type_cd with the values "dv"
 #' returned from [whatNWISdata()]) are available from this service.
-#' 
+#'
 #' More information on the web service can be found here:
 #' <https://waterservices.usgs.gov/test-tools>, choosing the
 #' "Daily Value Service".
@@ -53,26 +53,29 @@
 #' @export
 #' @keywords data import USGS web service
 #' @examples
-#' 
+#'
 #' # see ?read_waterdata_daily
-#' 
+#'
 #' #site_id <- "04085427"
 #' #startDate <- "2012-01-01"
 #' #endDate <- "2012-06-30"
 #' #pCode <- "00060"
 #' #
 #' #rawDailyQ <- readNWISdv(site_id, pCode, startDate, endDate)
-#' 
-readNWISdv <- function(siteNumbers,
-                       parameterCd,
-                       startDate = "",
-                       endDate = "",
-                       statCd = "00003") {
-  
-  .Deprecated(new = "read_waterdata_daily",
-              package = "dataRetrieval", 
-              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_daily.")
-  
+#'
+readNWISdv <- function(
+  siteNumbers,
+  parameterCd,
+  startDate = "",
+  endDate = "",
+  statCd = "00003"
+) {
+  .Deprecated(
+    new = "read_waterdata_daily",
+    package = "dataRetrieval",
+    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_daily."
+  )
+
   url <- constructNWISURL(
     siteNumbers = siteNumbers,
     parameterCd = parameterCd,
