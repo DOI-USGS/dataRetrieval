@@ -61,33 +61,41 @@
 #' @export
 #' @seealso [read_waterdata_monitoring_location()]
 #' @examples
-#' 
+#'
 #' # see ?read_waterdata_monitoring_location
 #' # siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
-#' 
+#'
 readNWISsite <- function(siteNumbers) {
+  .Deprecated(
+    new = "read_waterdata_monitoring_location",
+    package = "dataRetrieval",
+    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location"
+  )
 
-  .Deprecated(new = "read_waterdata_monitoring_location",
-              package = "dataRetrieval", 
-              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location")
-  
-  
   baseURL <- httr2::request(pkg.env[["site"]])
-  urlSitefile <- httr2::req_url_query(baseURL,
-                                      siteOutput = "Expanded", 
-                                      format = "rdb")
+  urlSitefile <- httr2::req_url_query(
+    baseURL,
+    siteOutput = "Expanded",
+    format = "rdb"
+  )
 
   POST <- nchar(paste0(siteNumbers, collapse = "")) > 2048
 
-  urlSitefile <- get_or_post(urlSitefile, POST = POST,
-              site = siteNumbers, 
-              .multi = "comma")
+  urlSitefile <- get_or_post(
+    urlSitefile,
+    POST = POST,
+    site = siteNumbers,
+    .multi = "comma"
+  )
 
   data <- importRDB1(urlSitefile, asDateTime = FALSE)
   # readr needs multiple lines to convert to anything but characters:
   data[grep("_va", names(data))][data[grep("_va", names(data))] == "."] <- NA
 
-  data[, grep("_va", names(data))] <- sapply(data[, grep("_va", names(data))], as.numeric)
+  data[, grep("_va", names(data))] <- sapply(
+    data[, grep("_va", names(data))],
+    as.numeric
+  )
 
   return(data)
 }

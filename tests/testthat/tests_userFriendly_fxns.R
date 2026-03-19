@@ -8,62 +8,75 @@ test_that("Unit value data returns correct types", {
   startDate <- "2014-10-10"
   endDate <- "2014-10-10"
 
-  rawData <- read_waterdata_continuous(monitoring_location_id = siteNumber,
-                                       parameter_code =  parameterCd, 
-                                       time = c(startDate, endDate))
+  rawData <- read_waterdata_continuous(
+    monitoring_location_id = siteNumber,
+    parameter_code = parameterCd,
+    time = c(startDate, endDate)
+  )
 
-
-  spreadOver120 <- read_waterdata_continuous(monitoring_location_id = siteNumber,
-                                             parameter_code =  parameterCd,
-                                             time = c(as.Date(Sys.Date() - 200),
-                                                      Sys.Date()))
+  spreadOver120 <- read_waterdata_continuous(
+    monitoring_location_id = siteNumber,
+    parameter_code = parameterCd,
+    time = c(as.Date(Sys.Date() - 200), Sys.Date())
+  )
 
   expect_true(min(spreadOver120$time) < as.POSIXct(Sys.Date(), tz = "UTC"))
 
-  recent_uv <- read_waterdata_continuous(monitoring_location_id = siteNumber,
-                                         parameter_code = parameterCd,
-                                         time = c(as.Date(Sys.Date() - 10),
-                                                  Sys.Date()))
-  expect_equal(grep(
-    x = attr(recent_uv, "request")[["url"]],
-    pattern = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous"
-  ), 1)
-  
-  expect_equal(grep(
-    x = attr(spreadOver120, "request")[["url"]],
-    pattern = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous"
-  ), 1)
-  
+  recent_uv <- read_waterdata_continuous(
+    monitoring_location_id = siteNumber,
+    parameter_code = parameterCd,
+    time = c(as.Date(Sys.Date() - 10), Sys.Date())
+  )
+  expect_equal(
+    grep(
+      x = attr(recent_uv, "request")[["url"]],
+      pattern = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous"
+    ),
+    1
+  )
+
+  expect_equal(
+    grep(
+      x = attr(spreadOver120, "request")[["url"]],
+      pattern = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous"
+    ),
+    1
+  )
+
   # nolint start: line_length_linter
   expect_equal(
     attr(rawData, "request")[["url"]],
     "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-05114000&parameter_code=00060&time=2014-10-10T00%3A00%3A00Z%2F2014-10-10T00%3A00%3A00Z&limit=50000"
   )
   # nolint end
-  timeZoneChange <- read_waterdata_continuous(monitoring_location_id = c("04024430", "04024000"), 
-                                              parameter_code = parameterCd,
-                                              time = c("2013-11-03", "2013-11-03")
+  timeZoneChange <- read_waterdata_continuous(
+    monitoring_location_id = c("04024430", "04024000"),
+    parameter_code = parameterCd,
+    time = c("2013-11-03", "2013-11-03")
   )
-
 
   expect_is(rawData$time, "POSIXct")
   expect_is(rawData$value, "numeric")
   # nolint start: line_length_linter
-  expect_equal(attr(rawData, "request")[["url"]],
-               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-05114000&parameter_code=00060&time=2014-10-10T00%3A00%3A00Z%2F2014-10-10T00%3A00%3A00Z&limit=50000")
+  expect_equal(
+    attr(rawData, "request")[["url"]],
+    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-05114000&parameter_code=00060&time=2014-10-10T00%3A00%3A00Z%2F2014-10-10T00%3A00%3A00Z&limit=50000"
+  )
   # nolint end
   site <- "USGS-04087170"
   pCode <- "63680"
   startDate <- "2012-07-10"
   endDate <- "2012-07-17"
-  
+
   # Example that use to have YSI.6136.UP and regular
   # so now has 2 timeseries ids
-  dd_2 <- read_waterdata_continuous(monitoring_location_id = site, 
-                                    parameter_code = pCode, 
-                                    time = c(startDate, endDate))
-  
-  expect_true(length(unique(dd_2$time_series_id)) == 2 )
+  dd_2 <- read_waterdata_continuous(
+    monitoring_location_id = site,
+    parameter_code = pCode,
+    time = c(startDate, endDate)
+  )
+
+  expect_true(length(unique(dd_2$time_series_id)) == 2)
 })
 
 context("Peak, rating, meas, site")
@@ -84,78 +97,109 @@ test_that("peak, rating curves, surface-water measurements", {
   data <- read_waterdata_field_measurements(siteNumbers)
   expect_is(data$monitoring_location_id, "character")
 
-  siteINFO_USGS <- read_waterdata_monitoring_location(monitoring_location_id = "USGS-05114000")
+  siteINFO_USGS <- read_waterdata_monitoring_location(
+    monitoring_location_id = "USGS-05114000"
+  )
   expect_is(siteINFO_USGS$agency_code, "character")
   expect_equal(siteINFO_USGS$monitoring_location_id, "USGS-05114000")
 
-  siteINFOMulti_USGS <- read_waterdata_monitoring_location(monitoring_location_id = c("USGS-05114000",
-                                                                                 "USGS-09423350"))
+  siteINFOMulti_USGS <- read_waterdata_monitoring_location(
+    monitoring_location_id = c("USGS-05114000", "USGS-09423350")
+  )
   expect_true(nrow(siteINFOMulti_USGS) == 2)
 
-  Meas07227500.ex <- read_waterdata_field_measurements(monitoring_location_id = "USGS-07227500")
+  Meas07227500.ex <- read_waterdata_field_measurements(
+    monitoring_location_id = "USGS-07227500"
+  )
   expect_is(Meas07227500.ex$time, "POSIXct")
 
-  expect_equal(nrow(read_waterdata_ts_meta(monitoring_location_id = "USGS-10312000",
-                                      parameter_code = "50286")), 0)
-  expect_equal(ncol(read_waterdata_ts_meta(monitoring_location_id = "USGS-10312000", 
-                                 parameter_code = "50286",
-                                 properties = c("geometry", "id",
-                                                "unit_of_measure",
-                                                "parameter_name"))), 4)
+  expect_equal(
+    nrow(read_waterdata_ts_meta(
+      monitoring_location_id = "USGS-10312000",
+      parameter_code = "50286"
+    )),
+    0
+  )
+  expect_equal(
+    ncol(read_waterdata_ts_meta(
+      monitoring_location_id = "USGS-10312000",
+      parameter_code = "50286",
+      properties = c("geometry", "id", "unit_of_measure", "parameter_name")
+    )),
+    4
+  )
 
-  url <- httr2::request("https://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000")
+  url <- httr2::request(
+    "https://waterservices.usgs.gov/nwis/site/?format=rdb&seriesCatalogOutput=true&sites=05114000"
+  )
   x <- importRDB1(url)
 
   siteID <- "USGS-263819081585801"
   gwl_1 <- read_waterdata_field_measurements(monitoring_location_id = siteID)
   expect_equal(unique(gwl_1$monitoring_location_id), siteID)
-  
+
   # No data:
   stations <- "06011000"
-  expect_message(readNWISpeak(stations, 
-                            startDate = "2024-08-01",
-                            endDate = "2024-08-31",
-                            convertType = FALSE))
+  expect_message(readNWISpeak(
+    stations,
+    startDate = "2024-08-01",
+    endDate = "2024-08-31",
+    convertType = FALSE
+  ))
 })
 
 test_that("read_waterdata_daily", {
   testthat::skip_on_cran()
   testthat::skip_on_ci()
-  
+
   siteNumber <- "USGS-04085427"
   startDate <- "2012-01-01"
   endDate <- "2012-06-30"
   pCode <- "00060"
 
-  raw_waterdata_daily <- read_waterdata_daily(monitoring_location_id = siteNumber, 
-                                    parameter_code = pCode, 
-                                    time = c(startDate, endDate))
+  raw_waterdata_daily <- read_waterdata_daily(
+    monitoring_location_id = siteNumber,
+    parameter_code = pCode,
+    time = c(startDate, endDate)
+  )
   expect_is(raw_waterdata_daily$time, "Date")
-  
-  raw_waterdata_TempMeanMax <- read_waterdata_daily(monitoring_location_id = siteNumber, 
-                                          parameter_code = c("00010", "00060"),
-                                          time = c(startDate, endDate),
-                                          statistic_id = c("00001", "00003"))
-  
+
+  raw_waterdata_TempMeanMax <- read_waterdata_daily(
+    monitoring_location_id = siteNumber,
+    parameter_code = c("00010", "00060"),
+    time = c(startDate, endDate),
+    statistic_id = c("00001", "00003")
+  )
+
   expect_true(length(unique(raw_waterdata_TempMeanMax$parameter_code)) == 2)
   expect_true(length(unique(raw_waterdata_TempMeanMax$statistic_id)) == 2)
-  expect_true(length(unique(raw_waterdata_TempMeanMax$monitoring_location_id)) == 1)
+  expect_true(
+    length(unique(raw_waterdata_TempMeanMax$monitoring_location_id)) == 1
+  )
 
-  raw_waterdata_MultiSites <- read_waterdata_daily(monitoring_location_id = c("USGS-01491000", "USGS-01645000"),
-                                         parameter_code = c("00010", "00060"),
-                                         time = c(startDate, endDate),
-                                         statistic_id = c("00001", "00003"))
-  
-  expect_true(length(unique(raw_waterdata_MultiSites$monitoring_location_id)) == 2)
-  
-  mixed_qualifiers <- read_waterdata_continuous(monitoring_location_id = "USGS-01648010",                                
-                                      parameter_code =c("00010","00095","00400","00300","63680"),
-                                      time ="2026-01-01T00:00:00Z/2026-03-13T00:00:00Z")
-  expect_all_true(unique(mixed_qualifiers$qualifier) %in% c("", "EQUIP", "LESSTHAN"))
-  
+  raw_waterdata_MultiSites <- read_waterdata_daily(
+    monitoring_location_id = c("USGS-01491000", "USGS-01645000"),
+    parameter_code = c("00010", "00060"),
+    time = c(startDate, endDate),
+    statistic_id = c("00001", "00003")
+  )
+
+  expect_true(
+    length(unique(raw_waterdata_MultiSites$monitoring_location_id)) == 2
+  )
+
+  mixed_qualifiers <- read_waterdata_continuous(
+    monitoring_location_id = "USGS-01648010",
+    parameter_code = c("00010", "00095", "00400", "00300", "63680"),
+    time = "2026-01-01T00:00:00Z/2026-03-13T00:00:00Z"
+  )
+  expect_all_true(
+    unique(mixed_qualifiers$qualifier) %in% c("", "EQUIP", "LESSTHAN")
+  )
+
   # Unclear if these qualifiers will remain persistent:
   # ts_id <- "fa44702f2bd64d9fa493608de9081cbe"
-  # multi_q <- read_waterdata_continuous(time_series_id = ts_id)  
+  # multi_q <- read_waterdata_continuous(time_series_id = ts_id)
   # expect_all_true(unique(multi_q$qualifier) %in% c("REGULATED, UNKNOWNREGULATION",
   #                                                  "ESTIMATED, REGULATED, UNKNOWNREGULATION",
   #                                                  "ICE, REGULATED, UNKNOWNREGULATION"))
@@ -167,25 +211,37 @@ test_that("WQP qw tests", {
   nameToUse <- "Specific conductance"
   pcodeToUse <- "00095"
 
-  INFO_WQP <- readWQPqw("USGS-04024315", pcodeToUse,
-                        startDate = "", endDate = "", legacy = FALSE)
+  INFO_WQP <- readWQPqw(
+    "USGS-04024315",
+    pcodeToUse,
+    startDate = "",
+    endDate = "",
+    legacy = FALSE
+  )
   expect_is(INFO_WQP$Activity_StartDateTime, "POSIXct")
 
-  INFO2 <- readWQPqw("WIDNR_WQX-10032762", nameToUse,
-                     startDate = "", endDate = "", legacy = FALSE)
+  INFO2 <- readWQPqw(
+    "WIDNR_WQX-10032762",
+    nameToUse,
+    startDate = "",
+    endDate = "",
+    legacy = FALSE
+  )
   expect_is(INFO2$Activity_StartDateTime, "POSIXct")
 
   df <- readWQPqw("USGS-04193500", parameterCd = "00665", legacy = FALSE)
   expect_true(nrow(df) > 0)
-  
+
   df2 <- readWQPqw("USGS-05427718", parameterCd = "all")
   expect_true(nrow(df2) > 0)
-  
+
   #Empty legacy:
-  df3 <- readWQPqw(siteNumbers = "USGS-385032115220501",
-                   parameterCd = "all", legacy = TRUE)
+  df3 <- readWQPqw(
+    siteNumbers = "USGS-385032115220501",
+    parameterCd = "all",
+    legacy = TRUE
+  )
   expect_true(nrow(df3) == 0)
-  
 })
 
 
@@ -209,7 +265,11 @@ test_that("state county tests", {
   expect_equal(fip, "US:55:025")
   name <- countyCdLookup(state = "OH", county = 13, output = "fullName")
   expect_equal(name, "Belmont")
-  index <- countyCdLookup(state = "Pennsylvania", county = "ALLEGHENY COUNTY", output = "fips")
+  index <- countyCdLookup(
+    state = "Pennsylvania",
+    county = "ALLEGHENY COUNTY",
+    output = "fips"
+  )
   expect_equal(index, "US:42:003")
   fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
   expect_equal(fromIDs, "Bacon")
@@ -219,11 +279,9 @@ context("water year column")
 
 df_test <- data.frame(
   site_no = as.character(1:13),
-  dateTime = seq(as.Date("2010-01-01"),
-    as.Date("2011-01-31"),
-    by = "months"
-  ),
-  result_va = 1:13, stringsAsFactors = FALSE
+  dateTime = seq(as.Date("2010-01-01"), as.Date("2011-01-31"), by = "months"),
+  result_va = 1:13,
+  stringsAsFactors = FALSE
 )
 
 test_that("addWaterYear works with Date, POSIXct, character, but breaks with numeric", {
@@ -320,39 +378,50 @@ test_that("Construct USGS urls", {
   startDate <- "2024-01-01"
   endDate <- ""
   pCode <- c("00060", "00010")
-  
-  url_daily <- construct_api_requests(service = "daily",
-                                      monitoring_location_id = siteNumber, 
-                                      parameter_code = pCode,
-                                      time = c(startDate, endDate),
-                                      statistic_id = c("00003", "00001"),
-                                      limit = 10000)
-  
+
+  url_daily <- construct_api_requests(
+    service = "daily",
+    monitoring_location_id = siteNumber,
+    parameter_code = pCode,
+    time = c(startDate, endDate),
+    statistic_id = c("00003", "00001"),
+    limit = 10000
+  )
+
   # nolint start: line_length_linter
-  expect_equal(url_daily$url,
-               "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&skipGeometry=FALSE&monitoring_location_id=USGS-01594440&parameter_code=00060,00010&time=2024-01-01%2F..&statistic_id=00003,00001&limit=10000")
+  expect_equal(
+    url_daily$url,
+    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&skipGeometry=FALSE&monitoring_location_id=USGS-01594440&parameter_code=00060,00010&time=2024-01-01%2F..&statistic_id=00003,00001&limit=10000"
+  )
 
   url_works <- dataRetrieval:::walk_pages(url_daily)
   expect_true(nrow(url_works) > 0)
-  
-  url_ts_meta <- construct_api_requests(monitoring_location_id = siteNumber,
-                                     parameter_code = pCode,
-                                     service = "time-series-metadata",
-                                     limit = 10000)
-  
+
+  url_ts_meta <- construct_api_requests(
+    monitoring_location_id = siteNumber,
+    parameter_code = pCode,
+    service = "time-series-metadata",
+    limit = 10000
+  )
+
   expect_equal(
     url_ts_meta$url,
     "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&lang=en-US&skipGeometry=FALSE&monitoring_location_id=USGS-01594440&parameter_code=00060,00010&limit=10000"
   )
-  
+
   url_works_ts <- dataRetrieval:::walk_pages(url_ts_meta)
   expect_true(nrow(url_works_ts) > 0)
 
-  url_ml <- construct_api_requests(id = siteNumber,
-                                   service = "monitoring-locations",
-                                   limit = 50000)
-  
-  expect_equal(url_ml$url, "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations/items?f=json&lang=en-US&skipGeometry=FALSE&id=USGS-01594440&limit=50000")
+  url_ml <- construct_api_requests(
+    id = siteNumber,
+    service = "monitoring-locations",
+    limit = 50000
+  )
+
+  expect_equal(
+    url_ml$url,
+    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations/items?f=json&lang=en-US&skipGeometry=FALSE&id=USGS-01594440&limit=50000"
+  )
 
   url_works_ml <- dataRetrieval:::walk_pages(url_ml)
   expect_true(nrow(url_works_ml) > 0)
@@ -368,11 +437,14 @@ test_that("Construct WQP urls", {
   startDate <- "1985-01-01"
   endDate <- ""
   pCode <- c("00060", "00010")
-  
+
   url_wqp <- constructWQPURL(
     paste("USGS", site_id, sep = "-"),
     c("01075", "00029", "00453"),
-    startDate, endDate, legacy = FALSE)
+    startDate,
+    endDate,
+    legacy = FALSE
+  )
   # nolint start: line_length_linter
   expect_equal(
     url_wqp$url,
@@ -381,15 +453,20 @@ test_that("Construct WQP urls", {
 
   # Multiple characteristicNames
   charNames <- c(
-    "Temperature", "Temperature, sample", "Temperature, water",
+    "Temperature",
+    "Temperature, sample",
+    "Temperature, water",
     "Temperature, water, deg F"
   )
-  
+
   obs_url_orig <- constructWQPURL(
     siteNumbers = c("IIDFG-41WSSPAHS", "USGS-02352560"),
     parameterCd = charNames,
-    startDate = "", endDate =  "", legacy = FALSE)
-  
+    startDate = "",
+    endDate = "",
+    legacy = FALSE
+  )
+
   expect_equal(
     obs_url_orig$url,
     "https://www.waterqualitydata.us/wqx3/Result/search?siteid=IIDFG-41WSSPAHS&siteid=USGS-02352560&characteristicName=Temperature&characteristicName=Temperature%2C%20sample&characteristicName=Temperature%2C%20water&characteristicName=Temperature%2C%20water%2C%20deg%20F&mimeType=csv&dataProfile=basicPhysChem"
@@ -407,8 +484,11 @@ test_that("Construct WQP urls", {
   url_wqp <- constructWQPURL(
     paste("USGS", siteNumber, sep = "-"),
     c("01075", "00029", "00453"),
-    startDate, endDate,legacy = FALSE)
-  
+    startDate,
+    endDate,
+    legacy = FALSE
+  )
+
   # nolint start: line_length_linter
   expect_equal(
     url_wqp$url,
@@ -423,41 +503,44 @@ context("pCode Stuff")
 test_that("pCode Stuff", {
   testthat::skip_on_cran()
 
-  paramINFO <- read_waterdata_parameter_codes(parameter_code = c("00060", "01075", "00931"))
+  paramINFO <- read_waterdata_parameter_codes(
+    parameter_code = c("00060", "01075", "00931")
+  )
   expect_equal(nrow(paramINFO), 3)
   expect_true(all(paramINFO$parameter_code %in% c("00060", "01075", "00931")))
-  
-  paramINFO <- read_waterdata_parameter_codes(parameter_code = c("00060", "01075", "00931", NA))
+
+  paramINFO <- read_waterdata_parameter_codes(
+    parameter_code = c("00060", "01075", "00931", NA)
+  )
   expect_equal(nrow(paramINFO), 3)
   expect_true(all(paramINFO$parameter_code %in% c("00060", "01075", "00931")))
-  
+
   # pcode 12345 isn't a valid code:
   paramINFO <- read_waterdata_parameter_codes(c("12345"))
   expect_true(nrow(paramINFO) == 0)
 
   paramINFO <- read_waterdata_parameter_codes()
   expect_true(nrow(paramINFO) > 10000)
-
 })
 
 context("pCode Name Stuff")
 test_that("pCode Stuff", {
   testthat::skip_on_cran()
-  
+
   paramINFO <- pcode_to_name(c("00060", "01075", "00931", NA))
   expect_equal(nrow(paramINFO), 4)
   expect_equal(paramINFO$parm_cd, c("00060", "01075", "00931", NA))
-  
+
   # pcode 12345 isn't a valid code:
   expect_warning(paramINFO <- pcode_to_name(c("12345")))
-  expect_warning(paramINFO <- pcode_to_name(c("00060", "01075",
-                                              "12345", NA_character_)))
+  expect_warning(
+    paramINFO <- pcode_to_name(c("00060", "01075", "12345", NA_character_))
+  )
   expect_equal(nrow(paramINFO), 4)
-  expect_equal(paramINFO$parm_cd, c("00060", "01075", 
-                                    "12345", NA_character_))
-  
+  expect_equal(paramINFO$parm_cd, c("00060", "01075", "12345", NA_character_))
+
   expect_equal(paramINFO$description[3:4], c(NA_character_, NA_character_))
-  
+
   paramINFO <- pcode_to_name("all")
   expect_true(nrow(paramINFO) > 19000)
   expect_equal(
@@ -470,28 +553,34 @@ context("Smart errors, warnings")
 test_that("bad_properties", {
   testthat::skip_on_cran()
   testthat::skip_on_ci()
-  
-  expect_error(read_waterdata_daily(monitoring_location_id = "USGS-02238500",
-                                  parameter_code = c("00010"),
-                                  time = c("2021-01-01", "2022-01-01"),
-                                  properties = c("value", "time", "blah")))
-  # Empty result:
-  expect_message(read_waterdata_daily(monitoring_location_id = "USGS-02238500",
-                                    parameter_code = c("00010"),
-                                    time = c("2021-01-01", "2022-01-01"),
-                                    no_paging = TRUE))
-  
-  empty_return <- read_waterdata_daily(monitoring_location_id = "USGS-02238500",
-                       parameter_code = c("00010"),
-                       time = c("2021-01-01", "2022-01-01"))
-  expect_true(nrow(empty_return) == 0)
-  
-  empty_return2 <- read_waterdata_daily(monitoring_location_id = "USGS-02238500",
-                                       parameter_code = c("00010"),
-                                       time = c("2021-01-01", "2022-01-01"),
-                                       no_paging = TRUE)
-  
-  expect_true(nrow(empty_return2) == 0)
-  
-})
 
+  expect_error(read_waterdata_daily(
+    monitoring_location_id = "USGS-02238500",
+    parameter_code = c("00010"),
+    time = c("2021-01-01", "2022-01-01"),
+    properties = c("value", "time", "blah")
+  ))
+  # Empty result:
+  expect_message(read_waterdata_daily(
+    monitoring_location_id = "USGS-02238500",
+    parameter_code = c("00010"),
+    time = c("2021-01-01", "2022-01-01"),
+    no_paging = TRUE
+  ))
+
+  empty_return <- read_waterdata_daily(
+    monitoring_location_id = "USGS-02238500",
+    parameter_code = c("00010"),
+    time = c("2021-01-01", "2022-01-01")
+  )
+  expect_true(nrow(empty_return) == 0)
+
+  empty_return2 <- read_waterdata_daily(
+    monitoring_location_id = "USGS-02238500",
+    parameter_code = c("00010"),
+    time = c("2021-01-01", "2022-01-01"),
+    no_paging = TRUE
+  )
+
+  expect_true(nrow(empty_return2) == 0)
+})

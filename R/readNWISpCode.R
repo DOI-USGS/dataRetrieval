@@ -20,18 +20,16 @@
 #' @export
 #' @seealso [importRDB1()]
 readNWISpCode <- function(parameterCd) {
-  
-  .Deprecated(new = "read_waterdata_parameter_codes",
-              package = "dataRetrieval", 
-              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_parameter_codes")
-  
-  
+  .Deprecated(
+    new = "read_waterdata_parameter_codes",
+    package = "dataRetrieval",
+    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_parameter_codes"
+  )
+
   parameterCd.orig <- parameterCd
   parameterCd <- parameterCd[!is.na(parameterCd)]
   baseURL <- httr2::request(pkg.env[["pCode"]])
-  fullURL <- httr2::req_url_query(baseURL,
-                                  fmt = "rdb",
-                                  group_cd ="%")
+  fullURL <- httr2::req_url_query(baseURL, fmt = "rdb", group_cd = "%")
 
   if (any(parameterCd == "all")) {
     temp_df <- importRDB1(fullURL, asDateTime = FALSE)
@@ -46,19 +44,22 @@ readNWISpCode <- function(parameterCd) {
     )
     attr(parameterData, "url") <- fullURL$url
   } else {
-    parameterData <- parameterCdFile[parameterCdFile$parameter_cd %in% parameterCd, ]
+    parameterData <- parameterCdFile[
+      parameterCdFile$parameter_cd %in% parameterCd,
+    ]
 
     if (nrow(parameterData) != length(parameterCd)) {
+      parameterCd_lookup <- parameterCd[
+        !parameterCd %in% unique(parameterData$parameter_cd)
+      ]
 
-      parameterCd_lookup <- parameterCd[!parameterCd %in% unique(parameterData$parameter_cd)]
-      
-      
       if (length(parameterCd_lookup) == 1) {
         baseURL <- httr2::request(pkg.env[["pCodeSingle"]])
-        baseURL <- httr2::req_url_query(baseURL,
-                                        fmt = "rdb")
-        baseURL <- httr2::req_url_query(baseURL,
-                                        parm_nm_cd = parameterCd_lookup)
+        baseURL <- httr2::req_url_query(baseURL, fmt = "rdb")
+        baseURL <- httr2::req_url_query(
+          baseURL,
+          parm_nm_cd = parameterCd_lookup
+        )
 
         temp_df <- importRDB1(baseURL, asDateTime = FALSE)
 
@@ -71,11 +72,11 @@ readNWISpCode <- function(parameterCd) {
           parameter_units = temp_df$parm_unit,
           stringsAsFactors = FALSE
         )
-        
-        if(nrow(temp_df) > 0){
+
+        if (nrow(temp_df) > 0) {
           parameterData <- rbind(parameterData, temp_df)
         }
-        
+
         attr(parameterData, "url") <- baseURL$url
       } else {
         temp_df <- importRDB1(fullURL, asDateTime = FALSE)
@@ -103,13 +104,18 @@ readNWISpCode <- function(parameterCd) {
   }
 
   if (nrow(parameterData) != sum(is.na(parameterCd.orig))) {
-    na.params <- data.frame(matrix(ncol = ncol(parameterData), nrow = sum(is.na(parameterCd.orig))))
+    na.params <- data.frame(matrix(
+      ncol = ncol(parameterData),
+      nrow = sum(is.na(parameterCd.orig))
+    ))
     names(na.params) <- names(parameterData)
     parameterData <- rbind(parameterData, na.params)
   }
   # order by parameterCd.orig
   if (!isTRUE(parameterCd.orig == "all")) {
-    parameterData <- parameterData[match(parameterCd.orig, parameterData$parameter_cd), ]
+    parameterData <- parameterData[
+      match(parameterCd.orig, parameterData$parameter_cd),
+    ]
     parameterData$parameter_cd <- parameterCd.orig
   }
   return(parameterData)

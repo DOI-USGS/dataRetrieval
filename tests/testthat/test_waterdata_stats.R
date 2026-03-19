@@ -15,9 +15,9 @@ test_that("values column is unnested and converted to numeric", {
     approval_status = "approved",
     computation_id = "abc"
   )
-  
+
   out <- cleanup_cols_stats(DT)
-  
+
   expect_equal(out$value, c(1.2, 3.4))
   expect_equal(out$percentile, c(10, 90))
 })
@@ -34,9 +34,9 @@ test_that("value column is used when values is absent", {
     approval_status = "approved",
     computation_id = "xyz"
   )
-  
+
   out <- cleanup_cols_stats(DT)
-  
+
   expect_equal(out$value, 2.5)
   expect_true(is.na(out$percentile))
 })
@@ -53,9 +53,9 @@ test_that("'nan' values are converted to NA_real_", {
     approval_status = "approved",
     computation_id = "nan-test"
   )
-  
+
   out <- cleanup_cols_stats(DT)
-  
+
   expect_true(is.na(out$value))
 })
 
@@ -71,9 +71,9 @@ test_that("percentile is inferred from computation type", {
     approval_status = "approved",
     computation_id = 1:3
   )
-  
+
   out <- cleanup_cols_stats(DT)
-  
+
   expect_equal(
     out[order(computation)]$percentile,
     c(100, 50, 0) # maximum, median, minimum
@@ -93,9 +93,9 @@ test_that("scalar percentile is recycled to match values length", {
     approval_status = "approved",
     computation_id = "recycle"
   )
-  
+
   out <- cleanup_cols_stats(DT)
-  
+
   expect_equal(out$percentile, c(50, 50, 50))
 })
 
@@ -110,9 +110,9 @@ test_that("missing value and values yields NA value", {
     approval_status = "approved",
     computation_id = "missing"
   )
-  
+
   out <- cleanup_cols_stats(DT)
-  
+
   expect_true(is.na(out$value))
 })
 
@@ -122,13 +122,13 @@ test_that("missing value and values yields NA value", {
 
 test_that("construct_statistics_request builds correct URL path", {
   req <- construct_statistics_request(service = "Normals")
-  
+
   expect_true(grepl("statistics/v0/observationNormals", req$url))
 })
 
 test_that("Intervals service path is correct", {
   req <- construct_statistics_request(service = "Intervals")
-  
+
   expect_true(grepl("statistics/v0/observationIntervals", req$url))
 })
 
@@ -142,12 +142,12 @@ test_that("arguments are passed as query parameters", {
     computation_type = "median",
     page_size = 10
   )
-  
+
   req <- construct_statistics_request("Normals")
   full <- explode_query(req, POST = FALSE, x = args)
-  
+
   qs <- httr2::req_get_url(full)
-  
+
   expect_match(qs, "state_code=WI")
   expect_match(qs, "computation_type=median")
   expect_match(qs, "page_size=10")
@@ -176,60 +176,66 @@ test_that("get_statistics_data returns sf object with attributes", {
       ),
       data = c(
         # First site
-        jsonlite::toJSON(list(
+        jsonlite::toJSON(
           list(
-            parameter_code = "00060",
-            unit_of_measure = "ft^3/s",
-            parent_time_series_id = "1692e9a29c8c4276add4497c5da872fa",
-            values = list(
-              list(
-                start_date = "2018-10-01",
-                end_date = "2018-10-31",
-                interval_type = "month",
-                value = "8032.903",
-                sample_count = 31,
-                approval_status = "approved",
-                computation_id = "d98ebe80-d476-4144-b7ce-c6ca32f015de",
-                computation = "arithmetic_mean"
-              ),
-              list(
-                start_date = "2018-11-01",
-                end_date = "2018-11-30",
-                interval_type = "month",
-                value = "12521.667",
-                sample_count = 30,
-                approval_status = "approved",
-                computation_id = "93f45097-93ad-4b48-83d4-b27b5fc137dc",
-                computation = "arithmetic_mean"
+            list(
+              parameter_code = "00060",
+              unit_of_measure = "ft^3/s",
+              parent_time_series_id = "1692e9a29c8c4276add4497c5da872fa",
+              values = list(
+                list(
+                  start_date = "2018-10-01",
+                  end_date = "2018-10-31",
+                  interval_type = "month",
+                  value = "8032.903",
+                  sample_count = 31,
+                  approval_status = "approved",
+                  computation_id = "d98ebe80-d476-4144-b7ce-c6ca32f015de",
+                  computation = "arithmetic_mean"
+                ),
+                list(
+                  start_date = "2018-11-01",
+                  end_date = "2018-11-30",
+                  interval_type = "month",
+                  value = "12521.667",
+                  sample_count = 30,
+                  approval_status = "approved",
+                  computation_id = "93f45097-93ad-4b48-83d4-b27b5fc137dc",
+                  computation = "arithmetic_mean"
+                )
               )
             )
-          )
-        ), auto_unbox = TRUE),
+          ),
+          auto_unbox = TRUE
+        ),
         # Second site
-        jsonlite::toJSON(list(
+        jsonlite::toJSON(
           list(
-            parameter_code = "00060",
-            unit_of_measure = "ft^3/s",
-            parent_time_series_id = "7dda388ea270420dbe7324e56b6f907f",
-            values = list(
-              list(
-                start_date = "2007-07-27",
-                end_date = "2007-07-31",
-                interval_type = "month",
-                values = c("1", "2"),
-                percentiles = c("50", "100"),
-                sample_count = 5,
-                approval_status = "approved",
-                computation_id = "4579653d-f26f-4e9f-99ea-c3fa3fc68686",
-                computation = "percentile"
+            list(
+              parameter_code = "00060",
+              unit_of_measure = "ft^3/s",
+              parent_time_series_id = "7dda388ea270420dbe7324e56b6f907f",
+              values = list(
+                list(
+                  start_date = "2007-07-27",
+                  end_date = "2007-07-31",
+                  interval_type = "month",
+                  values = c("1", "2"),
+                  percentiles = c("50", "100"),
+                  sample_count = 5,
+                  approval_status = "approved",
+                  computation_id = "4579653d-f26f-4e9f-99ea-c3fa3fc68686",
+                  computation = "percentile"
+                )
               )
             )
-          )
-        ), auto_unbox = TRUE)
+          ),
+          auto_unbox = TRUE
+        )
       ),
       stringsAsFactors = FALSE
     )
-  
+
   with_mocked_bindings(
     walk_pages = function(...) list(fake_page),
     {
@@ -238,7 +244,7 @@ test_that("get_statistics_data returns sf object with attributes", {
       expect_s3_class(out, "sf")
       expect_true("request" %in% names(attributes(out)))
       expect_true("queryTime" %in% names(attributes(out)))
-      
+
       expect_equal(nrow(out), 4)
       expect_equal(out$value, c(8032.903, 12521.667, 1, 2))
       expect_equal(out$percentile, c(NA, NA, 50, 100))
@@ -252,7 +258,7 @@ test_that("get_statistics_data handles empty response", {
     walk_pages = function(...) list(),
     {
       out <- get_statistics_data(list(), "Normals")
-      
+
       expect_s3_class(out, "sf")
       expect_equal(nrow(out), 0)
     }
@@ -266,14 +272,14 @@ test_that("get_statistics_data handles empty response", {
 test_that("read_waterdata_stats_por returns data", {
   skip_on_cran()
   skip_if_offline()
-  
+
   out <- read_waterdata_stats_por(
     monitoring_location_id = "USGS-01646500",
     parameter_code = "00060",
     computation_type = "median",
     page_size = 5
   )
-  
+
   expect_s3_class(out, "sf")
   expect_true(nrow(out) > 0)
 })
@@ -281,14 +287,14 @@ test_that("read_waterdata_stats_por returns data", {
 test_that("read_waterdata_stats_daterange returns data", {
   skip_on_cran()
   skip_if_offline()
-  
+
   out <- read_waterdata_stats_daterange(
     monitoring_location_id = "USGS-01646500",
     parameter_code = "00060",
     computation_type = "maximum",
     page_size = 5
   )
-  
+
   expect_s3_class(out, "sf")
   expect_true(nrow(out) > 0)
 })

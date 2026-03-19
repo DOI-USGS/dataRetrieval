@@ -23,11 +23,22 @@
 #' wqpData <- addWaterYear(wqpData)
 #' }
 addWaterYear <- function(rawData) {
-  allowedDateColNames <- c("dateTime", "Date", "ActivityStartDate", 
-                           "ActivityEndDate", "Activity_StartDate", "Activity_EndDate")
-  allowedWYColNames <- c("waterYear", "waterYear", "ActivityStartWaterYear", 
-                         "ActivityEndWaterYear", "Activity_StartDateWaterYear",
-                         "Activity_EndDateWaterYear")
+  allowedDateColNames <- c(
+    "dateTime",
+    "Date",
+    "ActivityStartDate",
+    "ActivityEndDate",
+    "Activity_StartDate",
+    "Activity_EndDate"
+  )
+  allowedWYColNames <- c(
+    "waterYear",
+    "waterYear",
+    "ActivityStartWaterYear",
+    "ActivityEndWaterYear",
+    "Activity_StartDateWaterYear",
+    "Activity_EndDateWaterYear"
+  )
   names(allowedWYColNames) <- allowedDateColNames
   # only allow WY to be added if there is an appropriate date column
   if (all(!allowedDateColNames %in% names(rawData))) {
@@ -38,7 +49,9 @@ addWaterYear <- function(rawData) {
   # if the WY column already exists, do not add another (rm that date col
   # from the list that will be looped over)
   dateColNames <- names(rawData)[names(rawData) %in% allowedDateColNames]
-  dateColNames <- dateColNames[!allowedWYColNames[dateColNames] %in% names(rawData)]
+  dateColNames <- dateColNames[
+    !allowedWYColNames[dateColNames] %in% names(rawData)
+  ]
 
   for (dateCol in dateColNames) {
     dateColWY <- allowedWYColNames[dateCol]
@@ -50,7 +63,9 @@ addWaterYear <- function(rawData) {
     dateCol_i <- which(names(rawData) == dateCol)
     dateColWY_i <- which(names(rawData) == dateColWY)
     everything_else <- which(!(names(rawData) %in% c(dateCol, dateColWY)))
-    everything_else <- everything_else[!everything_else %in% c(1:dateCol_i, dateColWY_i)]
+    everything_else <- everything_else[
+      !everything_else %in% c(1:dateCol_i, dateColWY_i)
+    ]
 
     rawData <- rawData[, c(1:dateCol_i, dateColWY_i, everything_else)]
   }
@@ -68,7 +83,7 @@ addWaterYear <- function(rawData) {
 #' @details This function calculates a water year based on the USGS
 #' definition that a water year starts on October 1 of the year before,
 #' and ends on September 30. For example, water year 2015 started on
-#' 2014-10-01 and ended on 2015-09-30. 
+#' 2014-10-01 and ended on 2015-09-30.
 #'
 #' @return numeric vector indicating the water year
 #' @export
@@ -80,7 +95,9 @@ addWaterYear <- function(rawData) {
 #' calcWaterYear(y)
 calcWaterYear <- function(dateVec) {
   if (is.numeric(dateVec)) {
-    message("dateVec is numeric, with insufficient information to determine water year.")
+    message(
+      "dateVec is numeric, with insufficient information to determine water year."
+    )
     return(rep(NA, length(dateVec)))
   }
 
@@ -98,10 +115,12 @@ calcWaterYear <- function(dateVec) {
         }
       )
 
-
       if (any(is.na(date_vec))) {
         dateVec <- as.character(dateVec)
-        dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)] <- paste0(dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)], "-01")
+        dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)] <- paste0(
+          dateVec[grep("^(\\d{4}-\\d{2}$)", dateVec)],
+          "-01"
+        )
         dateVec <- as.Date(dateVec)
       }
       dateTimeVec <- as.POSIXlt(dateVec)

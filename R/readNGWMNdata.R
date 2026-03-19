@@ -38,11 +38,12 @@
 #' }
 #'
 readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC") {
-
-  .Deprecated("", 
-              msg = "read_ngwmn_data coming soon. Check back at
+  .Deprecated(
+    "",
+    msg = "read_ngwmn_data coming soon. Check back at
               https://doi-usgs.github.io/dataRetrieval/articles/Status.html
-              for more information")
+              for more information"
+  )
 
   dots <- convertLists(...)
 
@@ -53,7 +54,13 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC") {
     allAttrs <- data.frame()
 
     # these attributes are pulled out and saved when doing binds to be reattached
-    attrs <- c("url", "gml:identifier", "generationDate", "responsibleParty", "contact")
+    attrs <- c(
+      "url",
+      "gml:identifier",
+      "generationDate",
+      "responsibleParty",
+      "contact"
+    )
     featureID <- stats::na.omit(gsub(":", ".", dots[["siteNumbers"]]))
 
     for (f in featureID) {
@@ -133,8 +140,10 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC") {
 #' }
 readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC") {
   data <- readNGWMNdata(
-    siteNumbers = siteNumbers, service = "observation",
-    asDateTime = asDateTime, tz = tz
+    siteNumbers = siteNumbers,
+    service = "observation",
+    asDateTime = asDateTime,
+    tz = tz
   )
   return(data)
 }
@@ -163,21 +172,24 @@ readNGWMNlevels <- function(siteNumbers, asDateTime = TRUE, tz = "UTC") {
 #' #siteInfo <- readNGWMNsites(siteNumbers = site)
 #' }
 readNGWMNsites <- function(siteNumbers) {
-  sites <- readNGWMNdata(siteNumbers = siteNumbers, service = "featureOfInterest")
+  sites <- readNGWMNdata(
+    siteNumbers = siteNumbers,
+    service = "featureOfInterest"
+  )
   return(sites)
 }
 
 retrieveObservation <- function(featureID, asDateTime, attrs, tz) {
-  
   baseURL <- httr2::request(pkg.env[["NGWMN"]])
-  baseURL <- httr2::req_url_query(baseURL,
-                                  request = "GetObservation",
-                                  service = "SOS",
-                                  version = "2.0.0",
-                                  observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
-                                  responseFormat = "text/xml",
-                                  featureOfInterest = paste("VW_GWDP_GEOSERVER", featureID, sep = "."))
-
+  baseURL <- httr2::req_url_query(
+    baseURL,
+    request = "GetObservation",
+    service = "SOS",
+    version = "2.0.0",
+    observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
+    responseFormat = "text/xml",
+    featureOfInterest = paste("VW_GWDP_GEOSERVER", featureID, sep = ".")
+  )
 
   returnData <- importNGWMN(baseURL, asDateTime = asDateTime, tz = tz)
   if (nrow(returnData) == 0) {
@@ -202,28 +214,33 @@ retrieveObservation <- function(featureID, asDateTime, attrs, tz) {
 
 # retrieve feature of interest
 # could allow pass through srsName - needs to be worked in higher-up in dots
-retrieveFeatureOfInterest <- function(..., asDateTime, srsName = "urn:ogc:def:crs:EPSG::4269") {
+retrieveFeatureOfInterest <- function(
+  ...,
+  asDateTime,
+  srsName = "urn:ogc:def:crs:EPSG::4269"
+) {
   values <- convertLists(...)
 
   baseURL <- httr2::request(pkg.env[["NGWMN"]])
-  baseURL <- httr2::req_url_query(baseURL,
-                                  request = "GetFeatureOfInterest",
-                                  service = "SOS",
-                                  version = "2.0.0",
-                                  responseFormat = "text/xml")
-  
+  baseURL <- httr2::req_url_query(
+    baseURL,
+    request = "GetFeatureOfInterest",
+    service = "SOS",
+    version = "2.0.0",
+    responseFormat = "text/xml"
+  )
+
   if ("featureID" %in% names(values)) {
-    
-    features <- paste("VW_GWDP_GEOSERVER",
-                      values[["featureID"]],
-                      sep = ".")
-    
-    baseURL <- httr2::req_url_query(baseURL,
-                                    featureOfInterest = features,
-                                    .multi = "comma")
-    
+    features <- paste("VW_GWDP_GEOSERVER", values[["featureID"]], sep = ".")
+
+    baseURL <- httr2::req_url_query(
+      baseURL,
+      featureOfInterest = features,
+      .multi = "comma"
+    )
   } else if ("bbox" %in% names(values)) {
-    baseURL <- httr2::req_url_query(baseURL,
+    baseURL <- httr2::req_url_query(
+      baseURL,
       bbox = paste(values[["bbox"]], collapse = ","),
       srsName = srsName
     )
@@ -243,7 +260,8 @@ saveAttrs <- function(attrs, df) {
   attribs <- sapply(attrs, function(x) attr(df, x))
   if (is.vector(attribs)) {
     toReturn <- as.data.frame(t(attribs), stringsAsFactors = FALSE)
-  } else { # don't need to transpose
+  } else {
+    # don't need to transpose
     toReturn <- as.data.frame(attribs, stringsAsFactors = FALSE)
   }
   return(toReturn)
