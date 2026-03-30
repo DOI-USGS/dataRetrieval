@@ -67,6 +67,7 @@ importWQP <- function(obs_url, tz = "UTC", csv = TRUE, convertType = TRUE) {
     data.table = FALSE,
     sep = ifelse(csv, ",", "\t"),
     fill = TRUE,
+    colClasses = "character",
     quote = ifelse(csv, '\"', "")
   )
 
