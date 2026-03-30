@@ -6,7 +6,7 @@
 #'
 #' @param \dots see <https://waterservices.usgs.gov/docs/site-service/>
 #' for a complete list of options. A list (or lists) can also be supplied.
-#' 
+#'
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -29,18 +29,18 @@
 #' @seealso [read_waterdata_monitoring_location()]
 #'
 #' @examples
-#' 
+#'
 #' # see ?read_waterdata_monitoring_location
 #' #siteListPhos <- whatNWISsites(stateCd = "OH", parameterCd = "00665")
 #' #oneSite <- whatNWISsites(sites = "05114000")
-#' 
+#'
 whatNWISsites <- function(...) {
+  .Deprecated(
+    new = "read_waterdata_monitoring_location",
+    package = "dataRetrieval",
+    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location"
+  )
 
-  .Deprecated(new = "read_waterdata_monitoring_location",
-              package = "dataRetrieval", 
-              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location")
-  
-  
   matchReturn <- convertLists(...)
   if ("service" %in% names(matchReturn)) {
     service <- matchReturn$service
@@ -48,7 +48,7 @@ whatNWISsites <- function(...) {
   } else {
     service <- NULL
   }
-  
+
   valuesList <- readNWISdots(matchReturn)
 
   values <- valuesList[["values"]]
@@ -56,35 +56,34 @@ whatNWISsites <- function(...) {
 
   #################
   # temporary gwlevels fixes
-  values <- values[!names(values) %in% c("date_format",
-                                        "TZoutput",
-                                        "rdb_inventory_output",
-                                        "list_of_search_criteria")]
-  
+  values <- values[
+    !names(values) %in%
+      c(
+        "date_format",
+        "TZoutput",
+        "rdb_inventory_output",
+        "list_of_search_criteria"
+      )
+  ]
 
   names(values)[names(values) == "state_cd"] <- "stateCd"
   ##################
 
-  if(!is.null(service)){
+  if (!is.null(service)) {
     service[service == "peak"] <- "pk"
     service[service == "uv"] <- "id"
-    
+
     values[["hasDataTypeCd"]] <- service
   }
-  
+
   POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
-  
+
   urlCall <- httr2::request(pkg.env[["site"]])
- 
-  urlCall <- get_or_post(urlCall,
-                         POST = POST,
-                         !!!values,
-                         .multi = "comma")
-  
-  urlCall <- get_or_post(urlCall,
-                         POST = POST, 
-                         format = "mapper")
-  
+
+  urlCall <- get_or_post(urlCall, POST = POST, !!!values, .multi = "comma")
+
+  urlCall <- get_or_post(urlCall, POST = POST, format = "mapper")
+
   rawData <- getWebServiceData(urlCall)
   if (is.null(rawData)) {
     return(invisible(NULL))
@@ -103,8 +102,14 @@ whatNWISsites <- function(...) {
 
     colocated <- isTRUE(xml2::xml_name(sc) == "colocated_sites")
 
-    df <- data.frame(agency_cd, site_no, station_nm, site_tp_cd,
-      dec_lat_va, dec_long_va, colocated,
+    df <- data.frame(
+      agency_cd,
+      site_no,
+      station_nm,
+      site_tp_cd,
+      dec_lat_va,
+      dec_long_va,
+      colocated,
       stringsAsFactors = FALSE
     )
 

@@ -142,7 +142,7 @@ gwl_data <- read_waterdata_field_meta(monitoring_location_id = "USGS-02238500",
                                                "2025-08-27 12:00:00"),
                                              tz = "America/Chicago"),
                            skipGeometry = TRUE)
-                        
+
 gwl_data_period <- read_waterdata_field_meta(
                                   monitoring_location_id = "USGS-375907091432201",
                                   parameter_code = "72019",
@@ -153,7 +153,7 @@ multi_site <- read_waterdata_field_meta(
                                                           "USGS-263819081585801"),
                               parameter_code = c("62611", "72019"))
 
-                                              
+
 surface_water <- read_waterdata_field_meta(
                          monitoring_location_id = c("USGS-07069000",
                                                     "USGS-07064000",

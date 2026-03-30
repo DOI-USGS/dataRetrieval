@@ -33,6 +33,6 @@ rawSampleURL <- constructWQPURL("USGS-01594440", "01075", "", "")
 rawSample <- importWQP(rawSampleURL, convertType = FALSE)
 convertedSample <- parse_WQP(rawSample)
 
-} 
+}
 \dontshow{\}) # examplesIf}
 }

@@ -52,62 +52,62 @@
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' rawPcode <- readWQPqw("USGS-01594440", "01075", "", "")
-#' 
+#'
 #' attr(rawPcode, "siteInfo")
 #' attr(rawPcode, "queryTime")
-#' attr(rawPcode, "url") 
-#' 
+#' attr(rawPcode, "url")
+#'
 #' rawCharacteristicName <- readWQPqw("WIDNR_WQX-10032762", "Specific conductance", "", "")
 #' pHsites_legacy <- readWQPqw(c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
 #'                         "pH", "", "")
 #' ncol(pHsites_legacy)
 #' attr(pHsites_legacy, "url")
-#'  
+#'
 #' # pHsites_modern <- readWQPqw(c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
 #' #                         "pH", "", "", legacy = FALSE)
 #' # ncol(pHsites_modern)
 #' # attr(pHsites_modern, "url")
-#'           
+#'
 #' nwisEx <- readWQPqw("USGS-04024000", c("34247", "30234", "32104", "34220"), "", "2022-12-20")
 #'
-#' DO <- readWQPqw(siteNumbers = "USGS-05288705", 
+#' DO <- readWQPqw(siteNumbers = "USGS-05288705",
 #'                 parameterCd = "00300",
 #'                 convertType = FALSE)
 #' }
-readWQPqw <- function(siteNumbers,
-                      parameterCd,
-                      startDate = "",
-                      endDate = "",
-                      tz = "UTC",
-                      legacy = TRUE,
-                      querySummary = FALSE,
-                      ignore_attributes = FALSE,
-                      convertType = TRUE) {
-  
+readWQPqw <- function(
+  siteNumbers,
+  parameterCd,
+  startDate = "",
+  endDate = "",
+  tz = "UTC",
+  legacy = TRUE,
+  querySummary = FALSE,
+  ignore_attributes = FALSE,
+  convertType = TRUE
+) {
   url <- constructWQPURL(siteNumbers, parameterCd, startDate, endDate, legacy)
-  
+
   if (querySummary) {
     retquery <- getQuerySummary(url)
     return(retquery)
   } else {
-    retval <- importWQP(url, tz = tz, 
-                        convertType = convertType)
-    if(is.null(retval)){
+    retval <- importWQP(url, tz = tz, convertType = convertType)
+    if (is.null(retval)) {
       return(NULL)
     }
     attr(retval, "legacy") <- legacy
 
-    if(legacy){
+    if (legacy) {
       sites <- unique(retval$MonitoringLocationIdentifier)
     } else {
       sites <- unique(retval$Location_Identifier)
     }
-    
+
     if (!all(is.na(retval)) && !ignore_attributes) {
       retval <- suppressMessages(create_WQP_attributes(retval, siteid = sites))
-    } 
+    }
 
-    if(legacy){
+    if (legacy) {
       wqp_message()
     } else {
       wqp_message_beta()

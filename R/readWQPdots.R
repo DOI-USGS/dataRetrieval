@@ -3,7 +3,6 @@
 #'
 #' @keywords internal
 readWQPdots <- function(..., legacy = TRUE) {
-  
   if (length(list(...)) == 0) {
     stop("No arguments supplied")
   }
@@ -14,41 +13,53 @@ readWQPdots <- function(..., legacy = TRUE) {
     service <- matchReturn$service
     matchReturn$service <- NULL
   } else {
-    if(legacy){
+    if (legacy) {
       service <- "Result"
     } else {
       service <- "ResultWQX3"
     }
-    
   }
-  
+
   if ("dataProfile" %in% names(matchReturn)) {
     profile <- matchReturn$dataProfile
     if (profile == "activityAll") {
       service <- "ActivityWQX3"
       matchReturn$service <- NULL
-    } else if (profile %in% c("resultPhysChem","biological","narrowResult")) {
+    } else if (profile %in% c("resultPhysChem", "biological", "narrowResult")) {
       service <- "Result"
       matchReturn$service <- NULL
-    } else if(profile %in% c("fullPhysChem", "narrow", "basicPhysChem")){
+    } else if (profile %in% c("fullPhysChem", "narrow", "basicPhysChem")) {
       service <- "ResultWQX3"
-      matchReturn$service <- NULL      
-    } 
-  } 
-  
-  match.arg(service, c(
-    "Result", "Station", "Activity", "Organization",
-    "ActivityMetric", "SiteSummary",
-    "Project", "ProjectMonitoringLocationWeighting",
-    "ResultDetectionQuantitationLimit", "BiologicalMetric",
-    "ResultWQX3", "StationWQX3", "ActivityWQX3"
-  ))
-  
+      matchReturn$service <- NULL
+    }
+  }
+
+  match.arg(
+    service,
+    c(
+      "Result",
+      "Station",
+      "Activity",
+      "Organization",
+      "ActivityMetric",
+      "SiteSummary",
+      "Project",
+      "ProjectMonitoringLocationWeighting",
+      "ResultDetectionQuantitationLimit",
+      "BiologicalMetric",
+      "ResultWQX3",
+      "StationWQX3",
+      "ActivityWQX3"
+    )
+  )
+
   names(matchReturn)[names(matchReturn) == "bbox"] <- "bBox"
-    
+
   bbox <- "bBox" %in% names(matchReturn)
-  if(bbox){
-    matchReturn["bBox"] <- sapply(matchReturn["bBox"], function(x) as.character(paste0(eval(x), collapse = ",")))
+  if (bbox) {
+    matchReturn["bBox"] <- sapply(matchReturn["bBox"], function(x) {
+      as.character(paste0(eval(x), collapse = ","))
+    })
   }
 
   values <- matchReturn
@@ -58,7 +69,6 @@ readWQPdots <- function(..., legacy = TRUE) {
   names(values)[names(values) == "siteNumbers"] <- "siteid"
   names(values)[names(values) == "parameterCd"] <- "pCode"
   names(values)[names(values) == "USGSPCode"] <- "pCode"
-  
 
   names(values)[names(values) == "stateCd"] <- "statecode"
   if ("statecode" %in% names(values)) {
@@ -80,18 +90,17 @@ readWQPdots <- function(..., legacy = TRUE) {
     # WQP doesn't need or want both state and county code:
     values["statecode"] <- NULL
   }
-  
-  if(!"mimeType" %in% names(values)){
+
+  if (!"mimeType" %in% names(values)) {
     values["mimeType"] <- "csv"
   }
-  
-  if(legacy & !("count" %in% names(values))){
+
+  if (legacy & !("count" %in% names(values))) {
     values["count"] <- "no"
   }
-  
+
   return_list <- list()
   return_list["values"] <- list(values)
   return_list["service"] <- service
   return(return_list)
 }
-

@@ -9,23 +9,36 @@ test_that("External importRDB1 tests", {
   offering <- "00003"
   property <- "00060"
 
-  obs_url <- constructNWISURL(siteNumber, property,
-    startDate, endDate, "dv",
+  obs_url <- constructNWISURL(
+    siteNumber,
+    property,
+    startDate,
+    endDate,
+    "dv",
     format = "tsv"
   )
   data <- importRDB1(obs_url)
   expect_is(data$datetime, "Date")
 
-  urlMultiPcodes <- constructNWISURL("04085427", c("00060", "00010"),
-    startDate, endDate, "dv",
-    statCd = c("00003", "00001"), "tsv"
+  urlMultiPcodes <- constructNWISURL(
+    "04085427",
+    c("00060", "00010"),
+    startDate,
+    endDate,
+    "dv",
+    statCd = c("00003", "00001"),
+    "tsv"
   )
   multiData <- importRDB1(urlMultiPcodes)
   pCodeCols <- grep("X", colnames(multiData))
   expect_true(length(pCodeCols) / 2 > 2)
 
-  unitDataURL <- constructNWISURL(siteNumber, property,
-    "2013-11-03", "2013-11-03", "uv",
+  unitDataURL <- constructNWISURL(
+    siteNumber,
+    property,
+    "2013-11-03",
+    "2013-11-03",
+    "uv",
     format = "tsv"
   ) # includes timezone switch
   unitData <- importRDB1(unitDataURL, asDateTime = TRUE)
@@ -35,7 +48,6 @@ test_that("External importRDB1 tests", {
   #               equals(as.numeric(as.POSIXct("2013-11-03 01:00:00", tz="UTC")+60*60*5)))
 
   site <- "05427850"
-
 })
 
 context("importRDB")
@@ -72,11 +84,12 @@ test_that("External importWaterML1 test", {
   data <- importWaterML1(obs_url, TRUE)
   expect_is(data$dateTime, "POSIXct")
 
-  
-
   unitDataURL <- constructNWISURL(
-    siteNumber, property,
-    "2020-10-30", "2020-11-01", "uv"
+    siteNumber,
+    property,
+    "2020-10-30",
+    "2020-11-01",
+    "uv"
   )
   unitData <- importWaterML1(unitDataURL, TRUE)
   expect_is(unitData$dateTime, "POSIXct")
@@ -84,8 +97,11 @@ test_that("External importWaterML1 test", {
   # Two sites, two pcodes, one site has two data descriptors
   siteNumber <- c("01480015", "04085427") # one site seems to have lost it"s 2nd dd
   obs_url <- constructNWISURL(
-    siteNumber, c("00060", "00010"),
-    startDate, endDate, "dv"
+    siteNumber,
+    c("00060", "00010"),
+    startDate,
+    endDate,
+    "dv"
   )
   data <- importWaterML1(obs_url)
 
@@ -94,16 +110,22 @@ test_that("External importWaterML1 test", {
 
   inactiveSite <- "05212700"
   inactiveSite <- constructNWISURL(
-    inactiveSite, "00060",
-    "2014-01-01", "2014-01-10", "dv"
+    inactiveSite,
+    "00060",
+    "2014-01-01",
+    "2014-01-10",
+    "dv"
   )
   inactiveSite <- importWaterML1(inactiveSite)
   expect_true(nrow(inactiveSite) == 0)
 
   inactiveAndActive <- c("07334200", "05212700")
   inactiveAndActive <- constructNWISURL(
-    inactiveAndActive, "00060",
-    "2014-01-01", "2014-12-31", "dv"
+    inactiveAndActive,
+    "00060",
+    "2014-01-01",
+    "2014-12-31",
+    "dv"
   )
   inactiveAndActive <- importWaterML1(inactiveAndActive)
   #
@@ -111,8 +133,11 @@ test_that("External importWaterML1 test", {
 
   # raw XML
   url <- constructNWISURL(
-    service = "dv", siteNumber = "02319300", parameterCd = "00060",
-    startDate = "2014-01-01", endDate = "2014-01-01"
+    service = "dv",
+    siteNumber = "02319300",
+    parameterCd = "00060",
+    startDate = "2014-01-01",
+    endDate = "2014-01-01"
   )
   raw <- httr2::req_perform(url)
   raw <- httr2::resp_body_xml(raw)
@@ -121,14 +146,23 @@ test_that("External importWaterML1 test", {
   expect_true(data.class(rawParsed$X_00060_00003) == "numeric")
 
   # no data
-  url <- constructNWISURL("05212700", "00060", "2014-01-01", "2014-01-10", "dv", statCd = "00001")
+  url <- constructNWISURL(
+    "05212700",
+    "00060",
+    "2014-01-01",
+    "2014-01-10",
+    "dv",
+    statCd = "00001"
+  )
   noData <- importWaterML1(url)
   expect_true(class(attr(noData, "url")) == "character")
   expect_true(all(dim(noData) == c(0, 4)))
 
   url <- constructNWISURL(
-    service = "iv", site = c("02319300", "02171500"),
-    startDate = "2015-04-04", endDate = "2015-04-05"
+    service = "iv",
+    site = c("02319300", "02171500"),
+    startDate = "2015-04-04",
+    endDate = "2015-04-05"
   )
   data <- importWaterML1(url, tz = "America/New_York", asDateTime = TRUE)
   expect_true(data.class(data$dateTime) == "POSIXct")
@@ -142,38 +176,38 @@ test_that("External importWaterML1 test", {
   #   endDate = "2014-05-01T12:00",
   #   tz = "blah"
   # ))
-# 
-#   arg.list <- list(
-#     sites = "05114000",
-#     parameterCd = "00060",
-#     startDate = "2014-05-01T00:00",
-#     endDate = "2014-05-01T12:00"
-#   )
-# 
-#   chi_iv <- readNWISdata(arg.list,
-#     service = "iv",
-#     tz = "America/Chicago"
-#   )
-# 
-#   expect_true(all(chi_iv$tz_cd == "America/Chicago"))
-#   expect_equal(chi_iv$dateTime[1], as.POSIXct("2014-05-01T00:00",
-#     format = "%Y-%m-%dT%H:%M",
-#     tz = "America/Chicago"
-#   ))
-#   expect_equal(chi_iv$dateTime[nrow(chi_iv)], as.POSIXct("2014-05-01T12:00",
-#     format = "%Y-%m-%dT%H:%M",
-#     tz = "America/Chicago"
-#   ))
+  #
+  #   arg.list <- list(
+  #     sites = "05114000",
+  #     parameterCd = "00060",
+  #     startDate = "2014-05-01T00:00",
+  #     endDate = "2014-05-01T12:00"
+  #   )
+  #
+  #   chi_iv <- readNWISdata(arg.list,
+  #     service = "iv",
+  #     tz = "America/Chicago"
+  #   )
+  #
+  #   expect_true(all(chi_iv$tz_cd == "America/Chicago"))
+  #   expect_equal(chi_iv$dateTime[1], as.POSIXct("2014-05-01T00:00",
+  #     format = "%Y-%m-%dT%H:%M",
+  #     tz = "America/Chicago"
+  #   ))
+  #   expect_equal(chi_iv$dateTime[nrow(chi_iv)], as.POSIXct("2014-05-01T12:00",
+  #     format = "%Y-%m-%dT%H:%M",
+  #     tz = "America/Chicago"
+  #   ))
 
   # Time over daylight saving switch:
   tzURL <- constructNWISURL(
-    "04027000", c("00300", "63680"),
-    "2011-11-05", "2011-11-07", "uv"
+    "04027000",
+    c("00300", "63680"),
+    "2011-11-05",
+    "2011-11-07",
+    "uv"
   )
-  tzIssue <- importWaterML1(tzURL,
-    asDateTime = TRUE,
-    tz = "America/Chicago"
-  )
+  tzIssue <- importWaterML1(tzURL, asDateTime = TRUE, tz = "America/Chicago")
   expect_false(any(duplicated(tzIssue$dateTime)))
 })
 
@@ -194,7 +228,13 @@ context("importWQP_noCRAN")
 test_that("External WQP tests", {
   testthat::skip_on_cran()
 
-  rawSampleURL <- constructWQPURL("USGS-01594440", "01075", "", "", legacy = FALSE)
+  rawSampleURL <- constructWQPURL(
+    "USGS-01594440",
+    "01075",
+    "",
+    "",
+    legacy = FALSE
+  )
   # rawSample <- importWQP(rawSampleURL)
   # expect_is(rawSample$Activity_StartDateTime, "POSIXct")
 
@@ -202,7 +242,13 @@ test_that("External WQP tests", {
   rawSample2 <- suppressWarnings(importWQP(url2))
   expect_is(rawSample2$ActivityStartDateTime, "POSIXct")
 
-  STORETex <- constructWQPURL("WIDNR_WQX-10032762", "Specific conductance", "", "", legacy = FALSE)
+  STORETex <- constructWQPURL(
+    "WIDNR_WQX-10032762",
+    "Specific conductance",
+    "",
+    "",
+    legacy = FALSE
+  )
   # STORETdata <- importWQP(STORETex)
   # expect_is(STORETdata$Activity_StartDateTime, "POSIXct")
 })

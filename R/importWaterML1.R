@@ -72,17 +72,17 @@
 #' attr(data, "disclaimer")
 #'
 #' inactiveSite <- "05212700"
-#' inactiveSite <- constructNWISURL(inactiveSite, "00060", 
+#' inactiveSite <- constructNWISURL(inactiveSite, "00060",
 #'                                  "2014-01-01", "2014-01-10", "dv")
 #' inactiveSite <- importWaterML1(inactiveSite)
 #'
 #' inactiveAndAcitive <- c("07334200", "05212700")
-#' inactiveAndAcitive <- constructNWISURL(inactiveAndAcitive, 
+#' inactiveAndAcitive <- constructNWISURL(inactiveAndAcitive,
 #'                          "00060", "2014-01-01", "2014-01-10", "dv")
 #' inactiveAndAcitive <- importWaterML1(inactiveAndAcitive)
 #'
 #' # Timezone change with specified local timezone:
-#' tzURL <- constructNWISURL("04027000", c("00300", "63680"), 
+#' tzURL <- constructNWISURL("04027000", c("00300", "63680"),
 #'                           "2011-11-05", "2011-11-07", "uv")
 #' tzIssue <- importWaterML1(tzURL,
 #'   asDateTime = TRUE, tz = "America/Chicago"
@@ -100,16 +100,20 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
   returnedDoc <- check_if_xml(obs_url)
   raw <- !is.character(obs_url) & !("httr2_request" %in% class(obs_url))
 
-  if (tz == "") { # check tz is valid if supplied
+  if (tz == "") {
+    # check tz is valid if supplied
     tz <- "UTC"
   }
-  
+
   tz <- match.arg(tz, OlsonNames())
 
   timeSeries <- xml2::xml_find_all(returnedDoc, ".//ns1:timeSeries") # each parameter/site combo
 
   # some initial attributes
-  queryNodes <- xml2::xml_children(xml2::xml_find_all(returnedDoc, ".//ns1:queryInfo"))
+  queryNodes <- xml2::xml_children(xml2::xml_find_all(
+    returnedDoc,
+    ".//ns1:queryInfo"
+  ))
   notes <- queryNodes[xml2::xml_name(queryNodes) == "note"]
   noteTitles <- xml2::xml_attrs(notes)
   noteText <- xml2::xml_text(notes)
@@ -138,13 +142,23 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
     valParents <- xml2::xml_find_all(t, ".//ns1:values")
     obsDF <- NULL
     useMethodDesc <- FALSE
-    if (length(valParents) > 1) useMethodDesc <- TRUE # append the method description to colnames later
+    if (length(valParents) > 1) {
+      useMethodDesc <- TRUE
+    } # append the method description to colnames later
 
     sourceInfo <- xml2::xml_children(xml2::xml_find_all(t, ".//ns1:sourceInfo"))
     variable <- xml2::xml_children(xml2::xml_find_all(t, ".//ns1:variable"))
-    agency_cd <- xml2::xml_attr(sourceInfo[xml2::xml_name(sourceInfo) == "siteCode"], "agencyCode")
-    pCode <- xml2::xml_text(variable[xml2::xml_name(variable) == "variableCode"])
-    statCode <- xml2::xml_attr(xml2::xml_find_all(variable, ".//ns1:option"), "optionCode")
+    agency_cd <- xml2::xml_attr(
+      sourceInfo[xml2::xml_name(sourceInfo) == "siteCode"],
+      "agencyCode"
+    )
+    pCode <- xml2::xml_text(variable[
+      xml2::xml_name(variable) == "variableCode"
+    ])
+    statCode <- xml2::xml_attr(
+      xml2::xml_find_all(variable, ".//ns1:option"),
+      "optionCode"
+    )
 
     # site info
     srsNode <- xml2::xml_find_all(sourceInfo, ".//ns1:geogLocation")
@@ -152,21 +166,38 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
     locNodes <- xml2::xml_children(srsNode)
     locNames <- xml2::xml_name(locNodes)
     locText <- as.numeric(xml2::xml_text(locNodes))
-    names(locText) <- sub("longitude", "dec_lon_va", sub("latitude", "dec_lat_va", locNames))
+    names(locText) <- sub(
+      "longitude",
+      "dec_lon_va",
+      sub("latitude", "dec_lat_va", locNames)
+    )
     sitePropNodes <- sourceInfo[xml2::xml_name(sourceInfo) == "siteProperty"]
     siteProp <- xml2::xml_text(sitePropNodes)
     names(siteProp) <- xml2::xml_attr(sitePropNodes, "name")
-    tzInfo <- unlist(xml2::xml_attrs(xml2::xml_find_all(sourceInfo, "ns1:defaultTimeZone")))
-    siteName <- xml2::xml_text(sourceInfo[xml2::xml_name(sourceInfo) == "siteName"])
+    tzInfo <- unlist(xml2::xml_attrs(xml2::xml_find_all(
+      sourceInfo,
+      "ns1:defaultTimeZone"
+    )))
+    siteName <- xml2::xml_text(sourceInfo[
+      xml2::xml_name(sourceInfo) == "siteName"
+    ])
     siteCodeNode <- sourceInfo[xml2::xml_name(sourceInfo) == "siteCode"]
     site_no <- xml2::xml_text(siteCodeNode)
     siteCodeAtt <- unlist(xml2::xml_attrs(siteCodeNode))
-    siteDF <- cbind.data.frame(t(locText), t(tzInfo),
+    siteDF <- cbind.data.frame(
+      t(locText),
+      t(tzInfo),
       station_nm = siteName,
-      t(siteCodeAtt), srs, t(siteProp),
-      site_no, stringsAsFactors = FALSE
+      t(siteCodeAtt),
+      srs,
+      t(siteProp),
+      site_no,
+      stringsAsFactors = FALSE
     )
-    defaultTZ <- xml2::xml_attr(xml2::xml_find_all(sourceInfo, ".//ns1:defaultTimeZone"), "zoneAbbreviation")
+    defaultTZ <- xml2::xml_attr(
+      xml2::xml_find_all(sourceInfo, ".//ns1:defaultTimeZone"),
+      "zoneAbbreviation"
+    )
 
     for (v in valParents) {
       obsColName <- paste(pCode, statCode, sep = "_")
@@ -176,20 +207,32 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
       nObs <- length(values)
       qual <- xml2::xml_attr(obs, "qualifiers")
 
-
       dateTime <- xml2::xml_attr(obs, "dateTime")
       if (asDateTime) {
         numChar <- nchar(dateTime)
-        dateTime <- lubridate::parse_date_time(dateTime, c(
-          "%Y", "%Y-%m-%d", "%Y-%m-%dT%H:%M",
-          "%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M:%OS",
-          "%Y-%m-%dT%H:%M:%OS%z"
-        ), exact = TRUE)
+        dateTime <- lubridate::parse_date_time(
+          dateTime,
+          c(
+            "%Y",
+            "%Y-%m-%d",
+            "%Y-%m-%dT%H:%M",
+            "%Y-%m-%dT%H:%M:%S",
+            "%Y-%m-%dT%H:%M:%OS",
+            "%Y-%m-%dT%H:%M:%OS%z"
+          ),
+          exact = TRUE
+        )
         if (any(numChar < 20) && any(numChar > 16)) {
           # not sure there is still a case for this (no offset on times)?
-          dateTime[numChar < 20 & numChar > 16] <- dateTime[numChar < 20 & numChar > 16] +
+          dateTime[numChar < 20 & numChar > 16] <- dateTime[
+            numChar < 20 & numChar > 16
+          ] +
             offsetLibrary[offsetLibrary$code == defaultTZ, "offset"] * 60 * 60
-          warning(paste("site", site_no[1], "had data without time zone offsets, so DST could not be accounted for"))
+          warning(paste(
+            "site",
+            site_no[1],
+            "had data without time zone offsets, so DST could not be accounted for"
+          ))
         }
 
         # ^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
@@ -201,7 +244,10 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
       }
       # create column names, addressing if methodDesc is needed
       if (useMethodDesc) {
-        methodDesc <- xml2::xml_text(xml2::xml_find_all(v, ".//ns1:methodDescription"))
+        methodDesc <- xml2::xml_text(xml2::xml_find_all(
+          v,
+          ".//ns1:methodDescription"
+        ))
         # this keeps column names consistent with old version
         methodDesc <- gsub("\\[|\\]| |\\(|\\)", ".", methodDesc)
 
@@ -216,11 +262,20 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
       }
       qualColName <- paste(obsColName, "cd", sep = "_")
 
-      valParentDF <- cbind.data.frame(dateTime, values, qual, tzCol, stringsAsFactors = FALSE)
+      valParentDF <- cbind.data.frame(
+        dateTime,
+        values,
+        qual,
+        tzCol,
+        stringsAsFactors = FALSE
+      )
       names(valParentDF) <- c("dateTime", obsColName, qualColName, "tz_cd")
       # delete qual column if all NA
       if (all(is.na(valParentDF[, eval(qualColName)]))) {
-        valParentDF <- subset(valParentDF, select = c("dateTime", eval(obsColName), "tz_cd"))
+        valParentDF <- subset(
+          valParentDF,
+          select = c("dateTime", eval(obsColName), "tz_cd")
+        )
       }
       if (nrow(valParentDF) > 0) {
         if (is.null(obsDF)) {
@@ -237,7 +292,11 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
         # need column names for joining later
         # but don't overwrite:
         if (is.null(obsDF)) {
-          obsDF <- data.frame(dateTime = character(0), tz_cd = character(0), stringsAsFactors = FALSE)
+          obsDF <- data.frame(
+            dateTime = character(0),
+            tz_cd = character(0),
+            stringsAsFactors = FALSE
+          )
           if (asDateTime) {
             obsDF$dateTime <- as.POSIXct(obsDF$dateTime)
             attr(obsDF$dateTime, "tzone") <- "UTC"
@@ -255,7 +314,9 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
     # statistic info
     options <- xml2::xml_find_all(variable, "ns1:option")
     stat <- options[xml2::xml_attr(options, "name") == "Statistic"]
-    stat_nm <- xml2::xml_text(options[xml2::xml_attr(stat, "name") == "Statistic"])
+    stat_nm <- xml2::xml_text(options[
+      xml2::xml_attr(stat, "name") == "Statistic"
+    ])
     statCd <- xml2::xml_attr(stat, "optionCode")
     statDF <- cbind.data.frame(
       statisticCd = statCd,
@@ -264,7 +325,10 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
     )
 
     # variable info
-    varText <- as.data.frame(t(xml2::xml_text(variable)), stringsAsFactors = FALSE)
+    varText <- as.data.frame(
+      t(xml2::xml_text(variable)),
+      stringsAsFactors = FALSE
+    )
     varNames <- xml2::xml_name(variable)
     varNames <- sub("unit", "param_unit", varNames) # rename to stay consistent with orig importWaterMl1
     names(varText) <- varNames
@@ -281,7 +345,8 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
     df <- cbind.data.frame(
       agency_cd = rep(agency_cd, obsDFrows),
       site_no = rep(site_no, obsDFrows),
-      obsDF, stringsAsFactors = FALSE
+      obsDF,
+      stringsAsFactors = FALSE
     )
 
     # join by site no
@@ -311,17 +376,29 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
             if (all(is.na(x))) NA else stats::na.omit(x)
           }
 
-          if (any(duplicated(sameSite[, c(
-            "agency_cd", "site_no",
-            "dateTime", "tz_cd"
-          )]))) {
+          if (
+            any(duplicated(sameSite[, c(
+              "agency_cd",
+              "site_no",
+              "dateTime",
+              "tz_cd"
+            )]))
+          ) {
             types <- lapply(sameSite, class)
-            sameSite <- stats::aggregate(. ~ agency_cd + site_no + dateTime + tz_cd,
+            sameSite <- stats::aggregate(
+              . ~ agency_cd + site_no + dateTime + tz_cd,
               data = sameSite,
-              FUN = na.omit.unique, na.action = NULL
+              FUN = na.omit.unique,
+              na.action = NULL
             )
-            sameSite[, which(types == "numeric")] <- sapply(sameSite[, which(types == "numeric")], as.numeric)
-            sameSite[, which(types == "character")] <- sapply(sameSite[, which(types == "character")], as.character)
+            sameSite[, which(types == "numeric")] <- sapply(
+              sameSite[, which(types == "numeric")],
+              as.numeric
+            )
+            sameSite[, which(types == "character")] <- sapply(
+              sameSite[, which(types == "character")],
+              as.character
+            )
           }
 
           sameSite <- sameSite[order(as.Date(sameSite$dateTime)), ]
@@ -361,14 +438,34 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
   if (!is.null(mergedSite)) {
     # keep attribute df names the same as old version
     names(mergedSite) <- c(
-      "dec_lat_va", "dec_lon_va", "timeZoneOffset", "timeZoneAbbreviation",
-      "station_nm", "network", "agency_cd", "srs", "siteTypeCd",
-      "hucCd", "stateCd", "countyCd", "site_no"
+      "dec_lat_va",
+      "dec_lon_va",
+      "timeZoneOffset",
+      "timeZoneAbbreviation",
+      "station_nm",
+      "network",
+      "agency_cd",
+      "srs",
+      "siteTypeCd",
+      "hucCd",
+      "stateCd",
+      "countyCd",
+      "site_no"
     )
     mergedSite <- mergedSite[c(
-      "station_nm", "site_no", "agency_cd", "timeZoneOffset",
-      "timeZoneAbbreviation", "dec_lat_va", "dec_lon_va", "srs", "siteTypeCd",
-      "hucCd", "stateCd", "countyCd", "network"
+      "station_nm",
+      "site_no",
+      "agency_cd",
+      "timeZoneOffset",
+      "timeZoneAbbreviation",
+      "dec_lat_va",
+      "dec_lon_va",
+      "srs",
+      "siteTypeCd",
+      "hucCd",
+      "stateCd",
+      "countyCd",
+      "network"
     )]
   }
 
@@ -396,7 +493,6 @@ importWaterML1 <- function(obs_url, asDateTime = FALSE, tz = "UTC") {
 }
 
 r_bind_dr <- function(df1, df2) {
-
   # Note...this function doesn't retain factors/levels
   # That is not a problem with any dataRetrieval function
   # but, if this function gets used else-where,
@@ -428,7 +524,8 @@ empty_col <- function(column_type) {
     column_type <- "POSIXct"
   }
 
-  col_return <- switch(column_type,
+  col_return <- switch(
+    column_type,
     "numeric" = as.numeric(),
     "factor" = as.factor(),
     "list" = list(),

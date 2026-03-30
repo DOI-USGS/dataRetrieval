@@ -33,7 +33,7 @@
 #' provide statistics for each month and year within the range individually.
 #' @param statType character Only used for statistics service requests. Type(s)
 #' of statistics to output for daily values.  Default is mean, which is the only
-#' option for monthly and yearly report types. 
+#' option for monthly and yearly report types.
 #' @keywords data import USGS web service
 #' @return url string
 #' @export
@@ -53,229 +53,253 @@
 #' )
 #' url_rating <- constructNWISURL(site_id, service = "rating", ratingType = "base")
 #' url_peak <- constructNWISURL(site_id, service = "peak")
-constructNWISURL <- function(siteNumbers,
-                             parameterCd = "00060",
-                             startDate = "",
-                             endDate = "",
-                             service,
-                             statCd = "00003",
-                             format = "xml",
-                             expanded = TRUE,
-                             ratingType = "base",
-                             statReportType = "daily",
-                             statType = "mean") {
-  
-  service <- match.arg(service, c(
-    "dv", "uv", "iv", "iv_recent", 
-    "rating", "peak", "stat"))
-  
+constructNWISURL <- function(
+  siteNumbers,
+  parameterCd = "00060",
+  startDate = "",
+  endDate = "",
+  service,
+  statCd = "00003",
+  format = "xml",
+  expanded = TRUE,
+  ratingType = "base",
+  statReportType = "daily",
+  statType = "mean"
+) {
+  service <- match.arg(
+    service,
+    c(
+      "dv",
+      "uv",
+      "iv",
+      "iv_recent",
+      "rating",
+      "peak",
+      "stat"
+    )
+  )
+
   service[service == "meas"] <- "measurements"
   service[service == "uv"] <- "iv"
-  
+
   POST <- nchar(paste0(siteNumbers, parameterCd, collapse = "")) > 2048
-  
+
   baseURL <- httr2::request(pkg.env[[service]])
-  
-  if(!is.null(pkg.env$access)){
-    baseURL <-  httr2::req_url_query(baseURL, Access = pkg.env$access)
+
+  if (!is.null(pkg.env$access)) {
+    baseURL <- httr2::req_url_query(baseURL, Access = pkg.env$access)
   }
 
   if (any(!is.na(parameterCd) & parameterCd != "all")) {
-    pcodeCheck <- all(nchar(parameterCd) == 5) & all(!is.na(suppressWarnings(as.numeric(parameterCd))))
-    
+    pcodeCheck <- all(nchar(parameterCd) == 5) &
+      all(!is.na(suppressWarnings(as.numeric(parameterCd))))
+
     if (!pcodeCheck) {
-      badIndex <- which(nchar(parameterCd) != 5 | is.na(suppressWarnings(as.numeric(parameterCd))))
-      stop("The following pCodes appear mistyped:", paste(parameterCd[badIndex], collapse = ", "))
+      badIndex <- which(
+        nchar(parameterCd) != 5 |
+          is.na(suppressWarnings(as.numeric(parameterCd)))
+      )
+      stop(
+        "The following pCodes appear mistyped:",
+        paste(parameterCd[badIndex], collapse = ", ")
+      )
     }
-    
+
     if (length(parameterCd) > 200) {
-      stop("Maximum parameter codes allowed is 200, please adjust data request.")
+      stop(
+        "Maximum parameter codes allowed is 200, please adjust data request."
+      )
     }
   }
 
-  switch(service,
-         rating = {
-           ratingType <- match.arg(ratingType, c("base", "corr", "exsa"))
-           url <- get_or_post(baseURL,
-                              POST = POST, 
-                              site_no = siteNumbers, 
-                              file_type = ratingType)
-         },
-         peak = {
-           url <- get_or_post(baseURL,
-                              POST = POST,
-                              range_selection = "date_range",
-                              format = "rdb")
-           url <- get_or_post(url,
-                              POST = POST,
-                              site_no = siteNumbers,
-                              .multi = "comma")
-           
-           if (nzchar(startDate)) {
-             url <- get_or_post(url,
-                                POST = POST,
-                                begin_date = startDate)
-           }
-           if (nzchar(endDate)) {
-             url <- get_or_post(url,
-                                POST = POST,
-                                end_date = endDate)
-           }
-         },
-         measurements = {
-           url <- get_or_post(baseURL,
-                              POST = POST,
-                              site_no = siteNumbers,
-                              .multi = "comma")
-           url <- get_or_post(url,
-                              POST = POST,
-                              range_selection = "date_range"
-           )
-           if (nzchar(startDate)) {
-             url <- get_or_post(url,
-                                POST = POST,
-                                begin_date = startDate
-             )
-           }
-           if (nzchar(endDate)) {
-             url <- get_or_post(url,
-                                POST = POST,
-                                end_date = endDate)
-           }
-           if (expanded) {
-             url <- get_or_post(url,
-                                POST = POST,
-                                format = "rdb_expanded")
-           } else {
-             url <- get_or_post(url,
-                                POST = POST,
-                                format = "rdb")
-           }
-         },
-         stat = { # for statistics service
-           
-           message("Please be aware the NWIS data service feeding this function is in BETA.\n
-          Data formatting could be changed at any time, and is not guaranteed")
-           
-           # make sure only statTypes allowed for the statReportType are being requested
-           if (!grepl("(?i)daily", statReportType) &&
-               !all(grepl("(?i)mean", statType)) &&
-               !all(grepl("(?i)all", statType))) {
-             stop("Monthly and annual report types can only provide means")
-           }
-           
-           # make sure dates aren't too specific for statReportType
-           if (grepl("(?i)monthly", statReportType) &&
-               (length(unlist(gregexpr("-", startDate))) > 1 ||
-                length(unlist(gregexpr("-", endDate))) > 1)) {
-             stop("Start and end dates for monthly statReportType can only include months and years")
-           }
-           if (grepl("(?i)annual", statReportType) && (grepl("-", startDate) || grepl("-", endDate))) {
-             stop("Start and end dates for annual statReportType can only include years")
-           }
+  switch(
+    service,
+    rating = {
+      ratingType <- match.arg(ratingType, c("base", "corr", "exsa"))
+      url <- get_or_post(
+        baseURL,
+        POST = POST,
+        site_no = siteNumbers,
+        file_type = ratingType
+      )
+    },
+    peak = {
+      url <- get_or_post(
+        baseURL,
+        POST = POST,
+        range_selection = "date_range",
+        format = "rdb"
+      )
+      url <- get_or_post(
+        url,
+        POST = POST,
+        site_no = siteNumbers,
+        .multi = "comma"
+      )
 
-           url <- get_or_post(baseURL,
-                              POST = POST,
-                              sites = siteNumbers,
-                              .multi = "comma")
-           url <- get_or_post(url,
-                              POST = POST,
-                              statReportType = statReportType,
-                              .multi = "comma")
-           url <- get_or_post(url,
-                              POST = POST,
-                              statType = statType,
-                              .multi = "comma")
-           url <- get_or_post(url,
-                              POST = POST, 
-                              parameterCd = parameterCd, 
-                              .multi = "comma")
-                                       
-           if (nzchar(startDate)) {
-             url <- get_or_post(url,
-                                POST = POST, 
-                                startDT = startDate)
-           }
-           if (nzchar(endDate)) {
-             url <- get_or_post(url,
-                                POST = POST, 
-                                endDT = endDate)
-           }
-           if (!grepl("(?i)daily", statReportType)) {
-             url <- get_or_post(url,
-                                POST = POST, 
-                                missingData = "off")
-           }
-         },
-         { # this will be either dv, uv
-           
-           format <- match.arg(format, c("xml", "tsv", "wml1", "wml2", "rdb"))
-           
-           formatURL <- switch(format,
-                               xml = "waterml,1.1",
-                               rdb = "rdb,1.0",
-                               tsv = "rdb,1.0",
-                               wml2 = "waterml,2.0",
-                               wml1 = "waterml,1.1"
-           )
-           
-           url <- get_or_post(baseURL,
-                              POST = POST, 
-                              site = siteNumbers,
-                              .multi = "comma") 
-           url <- get_or_post(url,
-                              POST = POST, 
-                              format = formatURL)
-           
-           if (!all(is.na(parameterCd))) {
-             url <- get_or_post(url,
-                                POST = POST, 
-                                ParameterCd = parameterCd,
-                                .multi = "comma")
-           }
-           
-           if ("dv" == service) {
-             url <- get_or_post(url,
-                                POST = POST,  
-                                StatCd = statCd,
-                                .multi = "comma")
-           }
-           
-           if (nzchar(startDate)) {
-             url <- get_or_post(url,
-                                POST = POST,  
-                                startDT = startDate)
-           } else {
-             startorgin <- "1851-01-01"
-             if ("iv" == service) startorgin <- "1900-01-01"
-             url <- get_or_post(url,
-                                POST = POST, 
-                                startDT = startorgin)
-           }
-           
-           if (nzchar(endDate)) {
-             url <- get_or_post(url,
-                                POST = POST, 
-                                endDT = endDate)
-           }
-         }
+      if (nzchar(startDate)) {
+        url <- get_or_post(url, POST = POST, begin_date = startDate)
+      }
+      if (nzchar(endDate)) {
+        url <- get_or_post(url, POST = POST, end_date = endDate)
+      }
+    },
+    measurements = {
+      url <- get_or_post(
+        baseURL,
+        POST = POST,
+        site_no = siteNumbers,
+        .multi = "comma"
+      )
+      url <- get_or_post(url, POST = POST, range_selection = "date_range")
+      if (nzchar(startDate)) {
+        url <- get_or_post(url, POST = POST, begin_date = startDate)
+      }
+      if (nzchar(endDate)) {
+        url <- get_or_post(url, POST = POST, end_date = endDate)
+      }
+      if (expanded) {
+        url <- get_or_post(url, POST = POST, format = "rdb_expanded")
+      } else {
+        url <- get_or_post(url, POST = POST, format = "rdb")
+      }
+    },
+    stat = {
+      # for statistics service
+
+      message(
+        "Please be aware the NWIS data service feeding this function is in BETA.\n
+          Data formatting could be changed at any time, and is not guaranteed"
+      )
+
+      # make sure only statTypes allowed for the statReportType are being requested
+      if (
+        !grepl("(?i)daily", statReportType) &&
+          !all(grepl("(?i)mean", statType)) &&
+          !all(grepl("(?i)all", statType))
+      ) {
+        stop("Monthly and annual report types can only provide means")
+      }
+
+      # make sure dates aren't too specific for statReportType
+      if (
+        grepl("(?i)monthly", statReportType) &&
+          (length(unlist(gregexpr("-", startDate))) > 1 ||
+            length(unlist(gregexpr("-", endDate))) > 1)
+      ) {
+        stop(
+          "Start and end dates for monthly statReportType can only include months and years"
+        )
+      }
+      if (
+        grepl("(?i)annual", statReportType) &&
+          (grepl("-", startDate) || grepl("-", endDate))
+      ) {
+        stop(
+          "Start and end dates for annual statReportType can only include years"
+        )
+      }
+
+      url <- get_or_post(
+        baseURL,
+        POST = POST,
+        sites = siteNumbers,
+        .multi = "comma"
+      )
+      url <- get_or_post(
+        url,
+        POST = POST,
+        statReportType = statReportType,
+        .multi = "comma"
+      )
+      url <- get_or_post(
+        url,
+        POST = POST,
+        statType = statType,
+        .multi = "comma"
+      )
+      url <- get_or_post(
+        url,
+        POST = POST,
+        parameterCd = parameterCd,
+        .multi = "comma"
+      )
+
+      if (nzchar(startDate)) {
+        url <- get_or_post(url, POST = POST, startDT = startDate)
+      }
+      if (nzchar(endDate)) {
+        url <- get_or_post(url, POST = POST, endDT = endDate)
+      }
+      if (!grepl("(?i)daily", statReportType)) {
+        url <- get_or_post(url, POST = POST, missingData = "off")
+      }
+    },
+    {
+      # this will be either dv, uv
+
+      format <- match.arg(format, c("xml", "tsv", "wml1", "wml2", "rdb"))
+
+      formatURL <- switch(
+        format,
+        xml = "waterml,1.1",
+        rdb = "rdb,1.0",
+        tsv = "rdb,1.0",
+        wml2 = "waterml,2.0",
+        wml1 = "waterml,1.1"
+      )
+
+      url <- get_or_post(
+        baseURL,
+        POST = POST,
+        site = siteNumbers,
+        .multi = "comma"
+      )
+      url <- get_or_post(url, POST = POST, format = formatURL)
+
+      if (!all(is.na(parameterCd))) {
+        url <- get_or_post(
+          url,
+          POST = POST,
+          ParameterCd = parameterCd,
+          .multi = "comma"
+        )
+      }
+
+      if ("dv" == service) {
+        url <- get_or_post(url, POST = POST, StatCd = statCd, .multi = "comma")
+      }
+
+      if (nzchar(startDate)) {
+        url <- get_or_post(url, POST = POST, startDT = startDate)
+      } else {
+        startorgin <- "1851-01-01"
+        if ("iv" == service) {
+          startorgin <- "1900-01-01"
+        }
+        url <- get_or_post(url, POST = POST, startDT = startorgin)
+      }
+
+      if (nzchar(endDate)) {
+        url <- get_or_post(url, POST = POST, endDT = endDate)
+      }
+    }
   )
-  
-  url <- httr2::req_headers(url,
-                     `Accept-Encoding` = c("compress", "gzip", "deflate"))
-  
+
+  url <- httr2::req_headers(
+    url,
+    `Accept-Encoding` = c("compress", "gzip", "deflate")
+  )
+
   return(url)
 }
-
-
-
 
 
 #' Construct WQP url for data retrieval
 #'
 #' Construct WQP url for data retrieval. This function gets the data from here: <https://www.waterqualitydata.us>
 #'
-#' @param siteNumbers string or vector of strings USGS site number.  
+#' @param siteNumbers string or vector of strings USGS site number.
 #' @param parameterCd string or vector of USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the earliest possible record.
@@ -312,19 +336,20 @@ constructNWISURL <- function(siteNumbers,
 #'   startDate, ""
 #' )
 #' obs_url_orig
-constructWQPURL <- function(siteNumbers,
-                            parameterCd,
-                            startDate,
-                            endDate,
-                            legacy = TRUE) {
-  
+constructWQPURL <- function(
+  siteNumbers,
+  parameterCd,
+  startDate,
+  endDate,
+  legacy = TRUE
+) {
   allPCode <- any(toupper(parameterCd) == "ALL")
-  
+
   pCodeLogic <- TRUE
-  
+
   POST = nchar(paste0(siteNumbers, collapse = "")) > 2048
-  
-  if(!allPCode){
+
+  if (!allPCode) {
     multiplePcodes <- length(parameterCd) > 1
     if (all(nchar(parameterCd) == 5)) {
       suppressWarnings(pCodeLogic <- all(!is.na(as.numeric(parameterCd))))
@@ -332,72 +357,75 @@ constructWQPURL <- function(siteNumbers,
       pCodeLogic <- FALSE
     }
   }
-  
-  if(legacy){
+
+  if (legacy) {
     baseURL <- httr2::request(pkg.env[["Result"]])
-    baseURL <- get_or_post(baseURL,
-                           POST = POST,
-                           siteid = siteNumbers,
-                           .multi = function(x) paste0(x, collapse = ";"))
-    baseURL <- get_or_post(baseURL,
-                           POST = POST, 
-                           count = "no")
+    baseURL <- get_or_post(
+      baseURL,
+      POST = POST,
+      siteid = siteNumbers,
+      .multi = function(x) paste0(x, collapse = ";")
+    )
+    baseURL <- get_or_post(baseURL, POST = POST, count = "no")
   } else {
     baseURL <- httr2::request(pkg.env[["ResultWQX3"]])
-    baseURL <- httr2::req_url_query(baseURL,
-                                    siteid = siteNumbers,
-                                    .multi = "explode" )
+    baseURL <- httr2::req_url_query(
+      baseURL,
+      siteid = siteNumbers,
+      .multi = "explode"
+    )
   }
 
-  if(legacy & !allPCode){
-    if(pCodeLogic){
-      baseURL <- get_or_post(baseURL,
-                             POST = POST,
-                             pCode = parameterCd,
-                             .multi = function(x) paste0(x, collapse = ";"))
+  if (legacy & !allPCode) {
+    if (pCodeLogic) {
+      baseURL <- get_or_post(
+        baseURL,
+        POST = POST,
+        pCode = parameterCd,
+        .multi = function(x) paste0(x, collapse = ";")
+      )
     } else {
-      baseURL <- httr2::req_url_query(baseURL, 
-                                      characteristicName = parameterCd,
-                                      .multi = function(x) paste0(x, collapse = ";"))
+      baseURL <- httr2::req_url_query(
+        baseURL,
+        characteristicName = parameterCd,
+        .multi = function(x) paste0(x, collapse = ";")
+      )
     }
-    
-  } else if(!legacy & !allPCode){
-
-    if(pCodeLogic){
-      baseURL <- httr2::req_url_query(baseURL, pCode = parameterCd,
-                                      .multi = "explode")
+  } else if (!legacy & !allPCode) {
+    if (pCodeLogic) {
+      baseURL <- httr2::req_url_query(
+        baseURL,
+        pCode = parameterCd,
+        .multi = "explode"
+      )
     } else {
-      baseURL <- httr2::req_url_query(baseURL, 
-                                      characteristicName = parameterCd,
-                                      .multi = "explode")
+      baseURL <- httr2::req_url_query(
+        baseURL,
+        characteristicName = parameterCd,
+        .multi = "explode"
+      )
     }
   }
-  
+
   if (nzchar(startDate)) {
     startDate <- format(as.Date(startDate), format = "%m-%d-%Y")
-    baseURL <- get_or_post(baseURL,
-                           POST = POST, 
-                           startDateLo = startDate)
+    baseURL <- get_or_post(baseURL, POST = POST, startDateLo = startDate)
   }
-  
+
   if (nzchar(endDate)) {
     endDate <- format(as.Date(endDate), format = "%m-%d-%Y")
-    baseURL <- get_or_post(baseURL,
-                           POST = POST,
-                           startDateHi = endDate)
+    baseURL <- get_or_post(baseURL, POST = POST, startDateHi = endDate)
   }
-  
-  baseURL <- httr2::req_url_query(baseURL, 
-                                  mimeType = "csv")
-  if(!legacy){
-    baseURL <- httr2::req_url_query(baseURL, 
-                                    dataProfile = "basicPhysChem")
+
+  baseURL <- httr2::req_url_query(baseURL, mimeType = "csv")
+  if (!legacy) {
+    baseURL <- httr2::req_url_query(baseURL, dataProfile = "basicPhysChem")
   }
-  
-  baseURL <- httr2::req_headers(baseURL,
-                                `Accept-Encoding` = c("compress", "gzip", "deflate"))
-  
+
+  baseURL <- httr2::req_headers(
+    baseURL,
+    `Accept-Encoding` = c("compress", "gzip", "deflate")
+  )
+
   return(baseURL)
 }
-
-
