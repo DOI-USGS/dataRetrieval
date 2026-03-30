@@ -83,17 +83,17 @@ attr(data, "url")
 attr(data, "disclaimer")
 
 inactiveSite <- "05212700"
-inactiveSite <- constructNWISURL(inactiveSite, "00060", 
+inactiveSite <- constructNWISURL(inactiveSite, "00060",
                                  "2014-01-01", "2014-01-10", "dv")
 inactiveSite <- importWaterML1(inactiveSite)
 
 inactiveAndAcitive <- c("07334200", "05212700")
-inactiveAndAcitive <- constructNWISURL(inactiveAndAcitive, 
+inactiveAndAcitive <- constructNWISURL(inactiveAndAcitive,
                          "00060", "2014-01-01", "2014-01-10", "dv")
 inactiveAndAcitive <- importWaterML1(inactiveAndAcitive)
 
 # Timezone change with specified local timezone:
-tzURL <- constructNWISURL("04027000", c("00300", "63680"), 
+tzURL <- constructNWISURL("04027000", c("00300", "63680"),
                           "2011-11-05", "2011-11-07", "uv")
 tzIssue <- importWaterML1(tzURL,
   asDateTime = TRUE, tz = "America/Chicago"

@@ -18,28 +18,28 @@
 #' a complete list of options.  A
 #' list of arguments can also be supplied. One important argument to include is
 #' "service". Possible values are "iv"
-#' (for instantaneous), 
-#' "dv" (for daily values), 
+#' (for instantaneous),
+#' "dv" (for daily values),
 #' "site" (for site service), and "stat" (for
-#' statistics service). 
+#' statistics service).
 #' The statistics service has a limited selection of arguments
 #' (see <https://waterservices.usgs.gov/docs/site-service/>).
-#' 
+#'
 #' @details This function requires users to create their own arguments
 #' based on the NWIS web services. It is a more complicated function to use
 #' compared to other NWIS functions such as [readNWISdv()], [readNWISuv()],
 #' etc. However, this function adds a lot of
-#' flexibility to the possible queries. This function will also behave exactly 
+#' flexibility to the possible queries. This function will also behave exactly
 #' as NWIS when it comes to date queries. NWIS by default will only return the latest
 #' value for the daily and instantaneous services. So if you do not provide
 #' a starting date, you will only get back the latest value. If you want
 #' the full period of record, you can use "startDate = '1900-01-01'". Other options
 #' for dates are periods, such as "period = 'P7D'" which translates to a period
 #' of 7 days. For period, use only a positive ISO-8601 duration format, which should
-#' not be expressed in periods of less than a day, or in increments of months M or years Y. 
-#' period returns data for a site generally from now to a time in the past. 
-#' Note that when period is used all data up to the most recent value are returned. 
-#' 
+#' not be expressed in periods of less than a day, or in increments of months M or years Y.
+#' period returns data for a site generally from now to a time in the past.
+#' Note that when period is used all data up to the most recent value are returned.
+#'
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -147,97 +147,127 @@
 #'   huc2_cd = "20"
 #' )
 #' }
-readNWISdata <- function(..., asDateTime = TRUE, convertType = TRUE, tz = "UTC") {
+readNWISdata <- function(
+  ...,
+  asDateTime = TRUE,
+  convertType = TRUE,
+  tz = "UTC"
+) {
   tz <- match.arg(tz, OlsonNames())
-  
+
   valuesList <- readNWISdots(...)
-  
+
   values <- valuesList[["values"]]
   values <- values[names(values) != "format"]
   format <- valuesList[["values"]][["format"]]
-  
+
   service <- valuesList$service
   if (length(service) > 1) {
-    warning("Only one service value is allowed. Service: ", service[1], " will be used.")
+    warning(
+      "Only one service value is allowed. Service: ",
+      service[1],
+      " will be used."
+    )
     service <- service[1]
   }
-  
+
   if (any(service %in% c("qw", "qwdata"))) {
     .Deprecated(
-      old = "readNWISdata", package = "dataRetrieval",
+      old = "readNWISdata",
+      package = "dataRetrieval",
       new = "readWQPdata",
       msg = "NWIS qw web services are being retired.
 Please see vignette('qwdata_changes', package = 'dataRetrieval')
 for more information.
 https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.html"
     )
-  } else if (service == "dv"){
-    .Deprecated(new = "read_waterdata_daily",
-                package = "dataRetrieval", 
-                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_daily.")
-    
-  } else if (service == "site"){
-    .Deprecated(new = "read_waterdata_monitoring_location",
-                package = "dataRetrieval", 
-                msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location")    
+  } else if (service == "dv") {
+    .Deprecated(
+      new = "read_waterdata_daily",
+      package = "dataRetrieval",
+      msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_daily."
+    )
+  } else if (service == "site") {
+    .Deprecated(
+      new = "read_waterdata_monitoring_location",
+      package = "dataRetrieval",
+      msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location"
+    )
   } else {
     message(new_nwis_message())
   }
-  
+
   baseURL <- httr2::request(pkg.env[[service]])
 
   POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
-  
-  baseURL <- get_or_post(baseURL,
-                         POST = POST,  
-                         !!!values, 
-                         .multi = "comma")
+
+  baseURL <- get_or_post(baseURL, POST = POST, !!!values, .multi = "comma")
 
   if (service != "rating") {
-    baseURL <- get_or_post(baseURL, 
-                           POST = POST,  
-                           format = format)
+    baseURL <- get_or_post(baseURL, POST = POST, format = format)
   }
-  
-  if (length(grep("rdb",  format)) > 0) {
-    retval <- importRDB1(baseURL, tz = tz, asDateTime = asDateTime, convertType = convertType)
+
+  if (length(grep("rdb", format)) > 0) {
+    retval <- importRDB1(
+      baseURL,
+      tz = tz,
+      asDateTime = asDateTime,
+      convertType = convertType
+    )
   } else {
     retval <- importWaterML1(baseURL, tz = tz, asDateTime = asDateTime)
   }
-  
+
   if ("dv" == service) {
     tzLib <- stats::setNames(
       c(
-        "America/New_York", "America/New_York",
-        "America/Chicago", "America/Chicago",
-        "America/Denver", "America/Denver",
-        "America/Los_Angeles", "America/Los_Angeles",
-        "America/Anchorage", "America/Anchorage",
-        "America/Honolulu", "America/Honolulu", "UTC"
+        "America/New_York",
+        "America/New_York",
+        "America/Chicago",
+        "America/Chicago",
+        "America/Denver",
+        "America/Denver",
+        "America/Los_Angeles",
+        "America/Los_Angeles",
+        "America/Anchorage",
+        "America/Anchorage",
+        "America/Honolulu",
+        "America/Honolulu",
+        "UTC"
       ),
       c(
-        "EST", "EDT",
-        "CST", "CDT",
-        "MST", "MDT",
-        "PST", "PDT",
-        "AKST", "AKDT",
-        "HAST", "HST", "UTC"
+        "EST",
+        "EDT",
+        "CST",
+        "CDT",
+        "MST",
+        "MDT",
+        "PST",
+        "PDT",
+        "AKST",
+        "AKDT",
+        "HAST",
+        "HST",
+        "UTC"
       )
     )
     # TODO: Think about dates that cross a time zone boundary.
     if (format == "waterml,1.1" && nrow(retval) > 0) {
-      retval$dateTime <- as.POSIXct(retval$dateTime, tzLib[tz = retval$tz_cd[1]])
+      retval$dateTime <- as.POSIXct(
+        retval$dateTime,
+        tzLib[tz = retval$tz_cd[1]]
+      )
     }
   }
-  
+
   if ("iv" == service || "iv_recent" == service) {
     if (tz == "") {
       retval$tz_cd <- rep("UTC", nrow(retval))
     } else {
       retval$tz_cd <- rep(tz, nrow(retval))
     }
-  } 
-  
+  }
+
   return(retval)
 }
 
@@ -251,7 +281,7 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
 #' @param outputType character can be "postal", "fullName", "tableIndex", or "id".
 #' @export
 #' @examplesIf is_dataRetrieval_user()
-#' 
+#'
 #' \donttest{
 #' fullName <- stateCdLookup("wi", "fullName")
 #' abbriev <- stateCdLookup("Wisconsin", "postal")
@@ -262,17 +292,16 @@ https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.h
 #' mexico_st <- stateCdLookup(13, "fullName", country = "MX")
 #' stateCdLookup(c("West Virginia", "Wisconsin", 200, 55, "MN"))
 #' }
-stateCdLookup <- function(input,
-                          outputType = "postal",
-                          country = "US") {
-  
-  outputType <- match.arg(outputType, c("postal", "fullName",
-                                        "id", "fips"))
-  
+stateCdLookup <- function(input, outputType = "postal", country = "US") {
+  outputType <- match.arg(outputType, c("postal", "fullName", "id", "fips"))
+
   states <- check_waterdata_sample_params("states")
-  country <- match.arg(country, choices = unique(states$countryCode), 
-                       several.ok = FALSE)
-  states <- states[states$countryCode == country,]
+  country <- match.arg(
+    country,
+    choices = unique(states$countryCode),
+    several.ok = FALSE
+  )
+  states <- states[states$countryCode == country, ]
   retVal <- rep(NA, length(input))
   index <- 1
   for (i in input) {
@@ -283,25 +312,34 @@ stateCdLookup <- function(input,
     } else {
       out_i <- which(tolower(i) == tolower(states$stateName))
     }
-    
 
     if (length(out_i) > 0) {
-      output <- switch(outputType,
-                       postal = states$stateAbbrev[out_i],
-                       fullName = states$stateName[out_i],
-                       id = as.integer(states$fipsCode[out_i]),
-                       fips = paste(states$countryCode[out_i], states$fipsCode[out_i], sep = ":"))
+      output <- switch(
+        outputType,
+        postal = states$stateAbbrev[out_i],
+        fullName = states$stateName[out_i],
+        id = as.integer(states$fipsCode[out_i]),
+        fips = paste(
+          states$countryCode[out_i],
+          states$fipsCode[out_i],
+          sep = ":"
+        )
+      )
 
       retVal[index] <- output
     }
-    
+
     index <- index + 1
   }
-  
+
   if (length(retVal[-1]) == 0) {
-    paste("Could not find", input, "in the state lookup table. See `stateCd` for complete list.")
+    paste(
+      "Could not find",
+      input,
+      "in the state lookup table. See `stateCd` for complete list."
+    )
   }
-  
+
   return(retVal)
 }
 
@@ -316,7 +354,7 @@ stateCdLookup <- function(input,
 #' @export
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' 
+#'
 #' fips <- countyCdLookup(state = "WI", county = "Dane")
 #' id <- countyCdLookup(state = "WI", county = "Dane", outputType = "id")
 #' name <- countyCdLookup(state = "OH", county = 13, output = "fullName")
@@ -324,65 +362,78 @@ stateCdLookup <- function(input,
 #' fromIDs <- countyCdLookup(state = 13, county = 5, output = "fullName")
 #' }
 countyCdLookup <- function(state, county, outputType = "fips") {
-  outputType <- match.arg(outputType, c("fullName", 
-                                        "fullEntry",
-                                        "fips",
-                                        "id"))
-  
+  outputType <- match.arg(outputType, c("fullName", "fullEntry", "fips", "id"))
+
   if (missing(state)) {
     stop("No state code provided")
   }
-  
+
   if (missing(county)) {
     stop("No county code provided")
   }
-  
+
   if (length(state) > 1) {
     stop("Only one state allowed in countyCdLookup.")
   }
-  
+
   counties <- check_waterdata_sample_params("counties")
-  
+
   # first turn state into stateCd postal name
-  state_postal <- stateCdLookup(state, 
-                                country = unique(counties$countryCode),
-                                outputType = "postal")
+  state_postal <- stateCdLookup(
+    state,
+    country = unique(counties$countryCode),
+    outputType = "postal"
+  )
   state_counties <- counties[counties$stateAbbrev == state_postal, ]
-  
+
   if (is.numeric(county) || !is.na(suppressWarnings(as.numeric(county)))) {
-    county_i <- which(as.numeric(county) == as.numeric(state_counties$countyCode))
+    county_i <- which(
+      as.numeric(county) == as.numeric(state_counties$countyCode)
+    )
   } else {
-    county_i <- grep(tolower(gsub(" ", "", county)),
-                     tolower(gsub(" ", "", state_counties$countyName))) # takes care of questionable spaces...DeWitt vs De Witt
-    if(length(county_i) == 0){
+    county_i <- grep(
+      tolower(gsub(" ", "", county)),
+      tolower(gsub(" ", "", state_counties$countyName))
+    ) # takes care of questionable spaces...DeWitt vs De Witt
+    if (length(county_i) == 0) {
       county <- gsub(" county", "", county, ignore.case = TRUE)
-      county_i <- grep(tolower(gsub(" ", "", county)),
-                       tolower(gsub(" ", "", state_counties$countyName)))
+      county_i <- grep(
+        tolower(gsub(" ", "", county)),
+        tolower(gsub(" ", "", state_counties$countyName))
+      )
     }
   }
-  
+
   if (length(county_i) == 0) {
     stop(paste(
-      "Could not find", county, "(county), ", state_postal,
+      "Could not find",
+      county,
+      "(county), ",
+      state_postal,
       "(state) in the county lookup table. See `countyCd` for complete list."
     ))
   } else if (length(county_i) > 1) {
     stop(paste(
-      county, "(county), ", state_postal,
+      county,
+      "(county), ",
+      state_postal,
       "(state) matched more than one county. See `countyCd` for complete list."
     ))
   }
-  
-  fips_val <- paste(stateCdLookup(state_counties$stateAbbrev[county_i], 
-                                  outputType = "fips"), 
-                    state_counties$countyCode[county_i],
-                    sep = ":")
-  retVal <- switch(outputType,
-                   fullName = state_counties$countyName[county_i],
-                   fullEntry = state_counties[county_i, ],
-                   fips = fips_val,
-                   id = state_counties$countyCode[county_i])
-  
+
+  fips_val <- paste(
+    stateCdLookup(state_counties$stateAbbrev[county_i], outputType = "fips"),
+    state_counties$countyCode[county_i],
+    sep = ":"
+  )
+  retVal <- switch(
+    outputType,
+    fullName = state_counties$countyName[county_i],
+    fullEntry = state_counties[county_i, ],
+    fips = fips_val,
+    id = state_counties$countyCode[county_i]
+  )
+
   return(retVal)
 }
 
@@ -394,72 +445,85 @@ readNWISdots <- function(...) {
   if (length(list(...)) == 0) {
     stop("No arguments supplied")
   }
-  
+
   matchReturn <- convertLists(...)
-  
+
   if (anyNA(unlist(matchReturn))) {
     stop("NA's are not allowed in query")
   }
-  
+
   if ("service" %in% names(matchReturn)) {
     service <- matchReturn$service
     matchReturn$service <- NULL
   } else {
     service <- "dv"
   }
-  
-  match.arg(service, c(
-    "dv", "iv", "iv_recent", "uv", "site",
-    "qwdata", "stat", "rating", "peak"
-  ))
-  
+
+  match.arg(
+    service,
+    c(
+      "dv",
+      "iv",
+      "iv_recent",
+      "uv",
+      "site",
+      "qwdata",
+      "stat",
+      "rating",
+      "peak"
+    )
+  )
+
   if (service == "uv") {
     service <- "iv"
-  } 
-  
+  }
+
   if (length(service) > 1) {
     stop("Only one service call allowed.")
   }
-  
+
   values <- matchReturn
-  
+
   names(values)[names(values) == "startDate"] <- "startDT"
   names(values)[names(values) == "endDate"] <- "endDT"
   names(values)[names(values) == "siteNumber"] <- "sites"
   names(values)[names(values) == "siteNumbers"] <- "sites"
-  
+
   format.default <- "waterml,1.1"
-  
+
   if (service == "iv" && "startDT" %in% names(values)) {
     if (as.Date(values[["startDT"]]) >= Sys.Date() - 120) {
       service <- "iv_recent"
     }
   }
-  
+
   names(values)[names(values) == "statecode"] <- "stateCd"
   if ("stateCd" %in% names(values)) {
-    
     state <- stateCdLookup(values["stateCd"], "postal")
-    
-    if(length(state) > 1){
+
+    if (length(state) > 1) {
       stop("Multiple states are not allowed in NWIS queries.")
     }
-    
+
     values["stateCd"] <- state
     values[["stateCd"]][values["stateCd"] == "AS"] <- "AQ" # Leaving the correct abb in stateCd
     if (values["stateCd"] == "UM") {
       stop("NWIS does not include U.S. Minor Outlying Islands")
     }
   }
-  
+
   if ("parameterCd" %in% names(matchReturn)) {
-    pcodeCheck <- (nchar(matchReturn$parameterCd) == 5) & !is.na(suppressWarnings(as.numeric(matchReturn$parameterCd)))
+    pcodeCheck <- (nchar(matchReturn$parameterCd) == 5) &
+      !is.na(suppressWarnings(as.numeric(matchReturn$parameterCd)))
     if (!all(pcodeCheck)) {
       badPcode <- matchReturn$parameterCd[which(!pcodeCheck)]
-      stop("The following pCodes appear mistyped:", paste(badPcode, collapse = ", "))
+      stop(
+        "The following pCodes appear mistyped:",
+        paste(badPcode, collapse = ", ")
+      )
     }
   }
-  
+
   names(values)[names(values) == "countycode"] <- "countyCd"
   if ("countyCd" %in% names(values)) {
     if ("stateCd" %in% names(values)) {
@@ -470,14 +534,14 @@ readNWISdots <- function(...) {
       values <- values[names(values) != "stateCd"]
     }
   }
-  
+
   if (service %in% c("peak")) {
     format.default <- "rdb"
-    
+
     names(values)[names(values) == "startDT"] <- "begin_date"
     names(values)[names(values) == "endDT"] <- "end_date"
     names(values)[names(values) == "sites"] <- "site_no"
-    
+
     if ("bBox" %in% names(values)) {
       values["nw_longitude_va"] <- as.character(matchReturn$bBox[1])
       values["nw_latitude_va"] <- as.character(matchReturn$bBox[2])
@@ -486,43 +550,44 @@ readNWISdots <- function(...) {
       values["coordinate_format"] <- "decimal_degrees"
       values <- values[-which("bBox" %in% names(values))]
     }
-    
+
     values["date_format"] <- "YYYY-MM-DD"
     values["rdb_inventory_output"] <- "file"
     values["TZoutput"] <- "0"
-    
+
     if (all(c("begin_date", "end_date") %in% names(values))) {
       values["range_selection"] <- "date_range"
     }
-    
   }
-  
-  if("bbox" %in% names(values)){
+
+  if ("bbox" %in% names(values)) {
     values[["bbox"]] <- paste0(values[["bbox"]], collapse = ",")
   }
-  
+
   if (service %in% c("peak") && "stateCd" %in% names(values)) {
     names(values)[names(values) == "stateCd"] <- "state_cd"
     values["list_of_search_criteria"] <- "state_cd"
   }
-  
+
   if (service %in% c("peak") && "huc2_cd" %in% names(values)) {
     values["list_of_search_criteria"] <- "huc2_cd"
   }
-  
+
   if (service %in% c("peak") && "bBox" %in% names(values)) {
     values["list_of_search_criteria"] <- "lat_long_bounding_box"
   }
-  
+
   if (service %in% c("site", "stat", "rating", "peak")) {
     format.default <- "rdb"
   }
-  
+
   if (service == "stat") {
-    message("Please be aware the NWIS data service feeding this function is in BETA.\n
-            Data formatting could be changed at any time, and is not guaranteed")
+    message(
+      "Please be aware the NWIS data service feeding this function is in BETA.\n
+            Data formatting could be changed at any time, and is not guaranteed"
+    )
   }
-  
+
   if (!("format" %in% names(values))) {
     values["format"] <- format.default
   }

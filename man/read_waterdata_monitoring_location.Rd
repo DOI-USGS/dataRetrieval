@@ -173,13 +173,13 @@ site_slim <- read_waterdata_monitoring_location(
                                             "state_name",
                                             "county_name",
                                             "country_name"))
-                                            
+
 site_slim_no_sf_slim <- read_waterdata_monitoring_location(state_name = "Wisconsin",
                                            properties = c("monitoring_location_id",
                                                           "state_name",
                                                           "county_name",
                                                           "country_name",
-                                                          "site_type"), 
+                                                          "site_type"),
                                            site_type = "Well",
                                            skipGeometry = TRUE)
 

@@ -123,10 +123,10 @@ site <- "USGS-451605097071701"
 pcode <- "72019"
 
 uv_data_trim <- read_waterdata_continuous(monitoring_location_id = site,
-                           parameter_code = pcode, 
+                           parameter_code = pcode,
                            properties = c("value", "time"),
-                           time = as.POSIXct(c("2026-02-07 12:00", 
-                                               "2026-02-08 12:00"), 
+                           time = as.POSIXct(c("2026-02-07 12:00",
+                                               "2026-02-08 12:00"),
                                               tz = "America/Chicago"))
 
 uv_data <- read_waterdata_continuous(monitoring_location_id = site,
@@ -134,23 +134,23 @@ uv_data <- read_waterdata_continuous(monitoring_location_id = site,
                            time = "P2D")
 
 
-# Only return data that has been modified in last 7 days         
+# Only return data that has been modified in last 7 days
 multi_site2 <- read_waterdata_continuous(monitoring_location_id =  c("USGS-451605097071701",
                                                                      "USGS-14181500"),
                                                parameter_code = c("00060", "72019"),
                                                last_modified = "P7D")
-                                               
+
 # how to split up request into roughly 3 year chunks
 
 site <- "USGS-0208458892"
 pcode <- "00095" # Specific conductance
-start <- as.Date("2013-01-01")  
-end <- as.Date("2025-12-31") 
+start <- as.Date("2013-01-01")
+end <- as.Date("2025-12-31")
 
 n_days <- difftime(end, start, units = "days")
 
 # create a vector of dates that are about 3 years apart:
-time_chunks <- seq(from = start, 
+time_chunks <- seq(from = start,
                    to = end,
                    length.out = ceiling(n_days/(3*365.25)) + 1)
 
@@ -159,7 +159,7 @@ time_chunks <- seq(from = start,
 # of a chunk, and ends the day before the next chunk:
 time_df <- data.frame(start = time_chunks[-length(time_chunks)],
                       end = time_chunks[-1]-1)
-                      
+
 #all_data <- data.frame()
 #for(i in seq_along(time_df$start)){
 #   sub_df <- read_waterdata_continuous(monitoring_location_id = site,

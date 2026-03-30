@@ -67,3 +67,5 @@ vignettes/changes_slides.Rmd
 vignettes/daily_data_statistics.Rmd
 vignettes/continuous_pr.Rmd
 vignettes/quick_slides.Rmd
+^[.]?air[.]toml$
+^\.vscode$

@@ -1,35 +1,36 @@
 #' Create NWIS data citation
 #'
 #' Uses attributes from the NWIS functions to create data citations.
-#' 
+#'
 #' See `?bibentry` for more information.
 #'
 #' @param x Any data returned from an NWIS function, must
 #' include "queryTime" and "url" attributes, which should
-#' come with the data by default.  
+#' come with the data by default.
 #' @return bibentry object to use for citing the data.
-#' 
+#'
 #' @export
 #'
 #' @examples
 #' \donttest{
-#' nwisData <- read_waterdata_daily(monitoring_location_id = "USGS-04085427", 
-#'                                  parameter_code = "00060", 
+#' nwisData <- read_waterdata_daily(monitoring_location_id = "USGS-04085427",
+#'                                  parameter_code = "00060",
 #'                                  time = c("2012-01-01", "2012-06-30"))
 #' nwis_citation <- create_NWIS_bib(nwisData)
 #' nwis_citation
-#' 
+#'
 #' print(nwis_citation, style = "Bibtex")
 #' print(nwis_citation, style = "citation")
 #' }
-create_NWIS_bib <- function(x){
-  
-  textVersion <- paste0("U.S. Geological Survey, ",
-                        format(attr(x, "queryTime"), "%Y"),
-                        ", USGS Water Data for the Nation: U.S. Geological Survey National Water Information System database, accessed ",
-                        format(attr(x, "queryTime"), "%b %d, %Y"),
-                        ", at https://dx.doi.org/10.5066/F7P55KJN")
-  
+create_NWIS_bib <- function(x) {
+  textVersion <- paste0(
+    "U.S. Geological Survey, ",
+    format(attr(x, "queryTime"), "%Y"),
+    ", USGS Water Data for the Nation: U.S. Geological Survey National Water Information System database, accessed ",
+    format(attr(x, "queryTime"), "%b %d, %Y"),
+    ", at https://dx.doi.org/10.5066/F7P55KJN"
+  )
+
   ref <- utils::bibentry(
     bibtype = "Manual",
     textVersion = textVersion,
@@ -38,8 +39,9 @@ create_NWIS_bib <- function(x){
     doi = "10.5066/F7P55KJN",
     note = paste("Accessed", format(attr(x, "queryTime"), "%b %d, %Y")),
     year = format(attr(x, "queryTime"), "%Y"),
-    url = attr(x, "url"))
-  
+    url = attr(x, "url")
+  )
+
   return(ref)
 }
 
@@ -47,14 +49,14 @@ create_NWIS_bib <- function(x){
 #' Create WQP data citation
 #'
 #' Uses attributes from the WQP functions to create data citations.
-#' 
+#'
 #' See `?bibentry` for more information.
 #'
 #' @param x Any data returned from an NWIS function, must
 #' include "queryTime" and "url" attributes, which should
-#' come with the data by default.  
+#' come with the data by default.
 #' @return bibentry object to use for citing the data.
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -63,20 +65,21 @@ create_NWIS_bib <- function(x){
 #'                      parameterCd = "00300")
 #' wqp_citation <- create_WQP_bib(WQPData)
 #' wqp_citation
-#' 
+#'
 #' print(wqp_citation, style = "Bibtex")
 #' print(wqp_citation, style = "citation")
 #' }
-create_WQP_bib <- function(x){
-  
-  textVersion <- paste0("National Water Quality Monitoring Council, ",
-                        format(attr(x, "queryTime"), "%Y"),
-                        ", Water Quality Portal, accessed ",
-                        format(attr(x, "queryTime"), "%m, %d, %Y"),
-                        ", ",
-                        attr(x, "url"), 
-                        ", https://doi.org/10.5066/P9QRKUVJ.")
-  
+create_WQP_bib <- function(x) {
+  textVersion <- paste0(
+    "National Water Quality Monitoring Council, ",
+    format(attr(x, "queryTime"), "%Y"),
+    ", Water Quality Portal, accessed ",
+    format(attr(x, "queryTime"), "%m, %d, %Y"),
+    ", ",
+    attr(x, "url"),
+    ", https://doi.org/10.5066/P9QRKUVJ."
+  )
+
   ref <- utils::bibentry(
     bibtype = "Manual",
     textVersion = textVersion,
@@ -85,7 +88,8 @@ create_WQP_bib <- function(x){
     doi = "10.5066/P9QRKUVJ",
     note = paste("Accessed", format(attr(x, "queryTime"), "%b %d, %Y")),
     year = format(attr(x, "queryTime"), "%Y"),
-    url = attr(x, "url"))
-  
+    url = attr(x, "url")
+  )
+
   return(ref)
 }

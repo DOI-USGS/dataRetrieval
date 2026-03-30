@@ -129,7 +129,7 @@ uv_data_sf <- read_waterdata_latest_continuous(monitoring_location_id = site,
                               parameter_code = pcode)
 
 uv_data_trim <- read_waterdata_latest_continuous(monitoring_location_id = site,
-                          parameter_code = pcode, 
+                          parameter_code = pcode,
                           properties = c("monitoring_location_id",
                                          "value",
                                          "time"))
@@ -137,7 +137,7 @@ uv_data_trim <- read_waterdata_latest_continuous(monitoring_location_id = site,
 uv_data <- read_waterdata_latest_continuous(monitoring_location_id = site,
                            parameter_code = pcode,
                            skipGeometry = TRUE)
-                        
+
 uv_data_period <- read_waterdata_latest_continuous(monitoring_location_id = site,
                                   parameter_code = pcode,
                                   time = "P7D")
@@ -147,7 +147,7 @@ multi_site <- read_waterdata_latest_continuous(monitoring_location_id =  c("USGS
                               parameter_code = c("00060", "72019"),
                               skipGeometry = TRUE)
 
-# Only return data that has been modified in last 7 days         
+# Only return data that has been modified in last 7 days
 multi_site2 <- read_waterdata_latest_continuous(monitoring_location_id =  c("USGS-451605097071701",
                                                                            "USGS-14181500"),
                                                parameter_code = c("00060", "72019"),

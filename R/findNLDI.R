@@ -24,7 +24,9 @@ find_good_names <- function(input, type) {
     grep("comid", names(input), value = TRUE)
   } else if (type == "feature") {
     c(
-      "sourceName", "identifier", "comid",
+      "sourceName",
+      "identifier",
+      "comid",
       names(input)[names(input) %in% c("name", "reachcode", "measure")]
     )
   } else {
@@ -49,9 +51,7 @@ get_nldi_sources <- function(url = pkg.env$nldi_base) {
   res <- httr2::req_perform(res)
 
   if (res$status_code == 200) {
-    jsonlite::fromJSON(httr2::resp_body_string(res),
-    simplifyDataFrame = TRUE
-    )
+    jsonlite::fromJSON(httr2::resp_body_string(res), simplifyDataFrame = TRUE)
   } else {
     message("Error in: ", url)
   }
@@ -70,35 +70,44 @@ get_nldi_sources <- function(url = pkg.env$nldi_base) {
 #' @noRd
 #' @return a data.frame
 get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
-  
   # Query
   res <- httr2::request(url)
   res <- httr2::req_user_agent(res, default_ua())
   res <- httr2::req_error(res, is_error = \(x) FALSE)
   res <- httr2::req_perform(res)
 
-  if(!is.null(res$headers$`X-Ratelimit-Remaining`)) {
-    if((as.numeric(res$headers$`X-Ratelimit-Limit`) - as.numeric(res$headers$`X-Ratelimit-Remaining`)) / 
-       as.numeric(res$headers$`X-Ratelimit-Limit`) > 0.9) {
-      message("Approaching NLDI rate limit. ", res$headers$`X-Ratelimit-Remaining`, " of ", res$headers$`X-Ratelimit-Limit`, " remaining")
-      if(as.numeric(res$headers$`X-Ratelimit-Remaining`) < 20) {
+  if (!is.null(res$headers$`X-Ratelimit-Remaining`)) {
+    if (
+      (as.numeric(res$headers$`X-Ratelimit-Limit`) -
+        as.numeric(res$headers$`X-Ratelimit-Remaining`)) /
+        as.numeric(res$headers$`X-Ratelimit-Limit`) >
+        0.9
+    ) {
+      message(
+        "Approaching NLDI rate limit. ",
+        res$headers$`X-Ratelimit-Remaining`,
+        " of ",
+        res$headers$`X-Ratelimit-Limit`,
+        " remaining"
+      )
+      if (as.numeric(res$headers$`X-Ratelimit-Remaining`) < 20) {
         message("Sleeping to try to avoid going over rate limit.")
         Sys.sleep(3600 / ((as.numeric(res$headers$`X-Ratelimit-Limit`) / 3)))
       }
     }
   }
-  
+
   # If successful ...
   if (res$status_code == 200) {
     # Interpret as text
-    if(length(res$body) > 0){
+    if (length(res$body) > 0) {
       d <- httr2::resp_body_string(res)
     } else {
-      if(warn){
+      if (warn) {
         warning("No data returned for: ", url, call. = FALSE)
       }
-      
-      return(NULL)      
+
+      return(NULL)
     }
 
     if (use_sf) {
@@ -119,7 +128,7 @@ get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
       )
 
       if (nrow(tmp) == 0) {
-        if(warn){
+        if (warn) {
           warning("No data returned for: ", url, call. = FALSE)
         }
         return(NULL)
@@ -140,7 +149,6 @@ get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
         }
       }
 
-
       # Returning as data.frame drops the geometry column ...
       return(tmp)
     } else {
@@ -152,7 +160,7 @@ get_nldi <- function(url, type = "", use_sf = FALSE, warn = TRUE) {
       good_name <- find_good_names(input, type)
 
       if (is.null(input) && type != "basin") {
-        if(warn){
+        if (warn) {
           warning("No data returned for: ", url, call. = FALSE)
         }
         tmp <- NULL
@@ -191,8 +199,14 @@ valid_ask <- function(all, type) {
 
   ### WOW! This is hacky and will hopefully be unneeded latter on....
   type <- ifelse(type == "nwis", "nwissite", type)
-  all <- rbind(all, 
-               data.frame(source = "flowlines", sourceName = "NHDPlus comid", features = NA))
+  all <- rbind(
+    all,
+    data.frame(
+      source = "flowlines",
+      sourceName = "NHDPlus comid",
+      features = NA
+    )
+  )
 
   good <- grepl(
     paste0(tolower(type), collapse = "|"),
@@ -279,18 +293,19 @@ valid_ask <- function(all, type) {
 #' findNLDI(comid = 101, nav = "DM", find = c("nwis", "flowlines"), distance_km = 50)
 #' }
 
-findNLDI <- function(comid = NULL,
-                     nwis = NULL,
-                     wqp = NULL,
-                     huc12 = NULL,
-                     location = NULL,
-                     origin = NULL,
-                     nav = NULL,
-                     find = c("flowlines"),
-                     distance_km = 100,
-                     no_sf = FALSE,
-                     warn = TRUE) {
-
+findNLDI <- function(
+  comid = NULL,
+  nwis = NULL,
+  wqp = NULL,
+  huc12 = NULL,
+  location = NULL,
+  origin = NULL,
+  nav = NULL,
+  find = c("flowlines"),
+  distance_km = 100,
+  no_sf = FALSE,
+  warn = TRUE
+) {
   # Should sf be used? Both no_sf and pkg.env must agree
   use_sf <- all(pkg.env$local_sf, !no_sf)
 
@@ -311,7 +326,9 @@ findNLDI <- function(comid = NULL,
 
   # a single starting location must be given ...
   if (is.null(starter) || length(starter) > 1) {
-    stop("Define a single starting point. Use `find` to identify other resources.")
+    stop(
+      "Define a single starting point. Use `find` to identify other resources."
+    )
   }
 
   # Ensure nav types are valid
@@ -367,8 +384,11 @@ findNLDI <- function(comid = NULL,
   start_url <- paste0(
     valid_ask(all = pkg.env$current_nldi, type = start_type)$good$features,
     "/",
-    utils::URLencode(as.character(ifelse(start_type == "nwis" & !grepl("-", starter), 
-                                         paste0("USGS-", starter), starter))),
+    utils::URLencode(as.character(ifelse(
+      start_type == "nwis" & !grepl("-", starter),
+      paste0("USGS-", starter),
+      starter
+    ))),
     "/"
   )
 
@@ -411,7 +431,9 @@ findNLDI <- function(comid = NULL,
         "basin"
       },
       ifelse(
-        rep(find, length(nav)) == "flowlines", "nav", "feature"
+        rep(find, length(nav)) == "flowlines",
+        "nav",
+        "feature"
       )
     ),
     name = c(

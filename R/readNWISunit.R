@@ -1,6 +1,6 @@
 #' Instantaneous value data retrieval from USGS (NWIS)
 #'
-#' Imports data from NWIS web service. 
+#' Imports data from NWIS web service.
 #' Inputs to this function are USGS site ids, USGS parameter codes,
 #' and start and end date. For a more complex query, use [readNWISdata()],
 #' including an arguement service="uv".
@@ -8,7 +8,7 @@
 #' Use the function [whatNWISdata()] to discover what data
 #' is available for a USGS site. The column data_type_cd with the values "uv"
 #' returned from [whatNWISdata()]) are available from this service.
-#' 
+#'
 #'
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
 #' @param parameterCd character USGS parameter code.  This is usually an 5 digit number.
@@ -78,19 +78,29 @@
 #'   "2014-10-10T00:00Z", "2014-10-10T23:59Z"
 #' )
 #' }
-readNWISuv <- function(siteNumbers, parameterCd, startDate = "", endDate = "", tz = "UTC") {
-  if (as.character(startDate) == "" || (as.Date(startDate) <= Sys.Date() - 120)) {
+readNWISuv <- function(
+  siteNumbers,
+  parameterCd,
+  startDate = "",
+  endDate = "",
+  tz = "UTC"
+) {
+  if (
+    as.character(startDate) == "" || (as.Date(startDate) <= Sys.Date() - 120)
+  ) {
     service <- "iv"
   } else {
     service <- "iv_recent"
   }
 
-  .Deprecated(new = "read_waterdata_continuous",
-              package = "dataRetrieval",
-              msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_continuous.")
-  
-  
-  url <- constructNWISURL(siteNumbers,
+  .Deprecated(
+    new = "read_waterdata_continuous",
+    package = "dataRetrieval",
+    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_continuous."
+  )
+
+  url <- constructNWISURL(
+    siteNumbers,
     parameterCd,
     startDate,
     endDate,
@@ -105,8 +115,8 @@ readNWISuv <- function(siteNumbers, parameterCd, startDate = "", endDate = "", t
 
 #' Peak flow data from USGS (NWIS)
 #'
-#' Reads peak flow from NWISweb. 
-#' 
+#' Reads peak flow from NWISweb.
+#'
 #' In some cases, the specific date of the peak data is not know. This function
 #' will default to
 #' converting complete dates to a "Date" object, and converting incomplete dates to
@@ -168,14 +178,15 @@ readNWISuv <- function(siteNumbers, parameterCd, startDate = "", endDate = "", t
 #' stations <- c("06011000")
 #' peakdata <- readNWISpeak(stations, convertType = FALSE)
 #' }
-readNWISpeak <- function(siteNumbers,
-                         startDate = "",
-                         endDate = "",
-                         asDateTime = TRUE,
-                         convertType = TRUE) {
-
+readNWISpeak <- function(
+  siteNumbers,
+  startDate = "",
+  endDate = "",
+  asDateTime = TRUE,
+  convertType = TRUE
+) {
   message(new_nwis_message())
-  
+
   # Doesn't seem to be a peak xml service
   url <- constructNWISURL(
     siteNumbers = siteNumbers,
@@ -185,28 +196,32 @@ readNWISpeak <- function(siteNumbers,
     service = "peak"
   )
 
-  data <- importRDB1(url,
-    asDateTime = asDateTime,
-    convertType = convertType
-  )
+  data <- importRDB1(url, asDateTime = asDateTime, convertType = convertType)
 
   if (nrow(data) > 0) {
     if (asDateTime && convertType) {
       if ("peak_dt" %in% names(data)) {
-        if (any(nchar(as.character(data$peak_dt)) <= 7, na.rm = TRUE) ||
-          any(grepl("[0-9]*-[0-9]*-00", data$peak_dt), na.rm = TRUE)) {
-          stop("Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text")
+        if (
+          any(nchar(as.character(data$peak_dt)) <= 7, na.rm = TRUE) ||
+            any(grepl("[0-9]*-[0-9]*-00", data$peak_dt), na.rm = TRUE)
+        ) {
+          stop(
+            "Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text"
+          )
         } else {
           data$peak_dt <- as.Date(data$peak_dt, format = "%Y-%m-%d")
         }
         if (anyNA(data$peak_dt)) {
-          message("Some dates could not be converted to a valid date, and were returned as NA")
+          message(
+            "Some dates could not be converted to a valid date, and were returned as NA"
+          )
         }
       }
 
-      if ("ag_dt" %in% names(data)) data$ag_dt <- as.Date(data$ag_dt, format = "%Y-%m-%d")
+      if ("ag_dt" %in% names(data)) {
+        data$ag_dt <- as.Date(data$ag_dt, format = "%Y-%m-%d")
+      }
     }
-
 
     siteInfo <- suppressWarnings(readNWISsite(siteNumbers))
     siteInfo <- merge(
@@ -265,7 +280,6 @@ readNWISpeak <- function(siteNumbers,
 #' attr(data, "RATING")
 #' }
 readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
-
   message(new_nwis_message())
   # No rating xml service
   url <- constructNWISURL(siteNumber, service = "rating", ratingType = type)
@@ -273,7 +287,9 @@ readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
   data <- importRDB1(url, asDateTime = FALSE, convertType = convertType)
 
   if ("current_rating_nu" %in% names(data)) {
-    intColumns <- intColumns[!("current_rating_nu" %in% names(data)[intColumns])]
+    intColumns <- intColumns[
+      !("current_rating_nu" %in% names(data)[intColumns])
+    ]
     data$current_rating_nu <- gsub(" ", "", data$current_rating_nu)
   }
 
@@ -359,12 +375,20 @@ readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
 #'   startDate = "2000", endDate = "2010"
 #' )
 #' }
-readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "", convertType = TRUE,
-                         statReportType = "daily", statType = "mean") {
-  
-  .Deprecated(new = "read_waterdata_stats_por",
-              package = "dataRetrieval", 
-              msg = "NWIS servers are slated for decommission. Please begin to migrate to either read_waterdata_stats_por or read_waterdata_stats_daterange.")
+readNWISstat <- function(
+  siteNumbers,
+  parameterCd,
+  startDate = "",
+  endDate = "",
+  convertType = TRUE,
+  statReportType = "daily",
+  statType = "mean"
+) {
+  .Deprecated(
+    new = "read_waterdata_stats_por",
+    package = "dataRetrieval",
+    msg = "NWIS servers are slated for decommission. Please begin to migrate to either read_waterdata_stats_por or read_waterdata_stats_daterange."
+  )
 
   message(new_nwis_message())
   # check for NAs in site numbers
@@ -440,17 +464,20 @@ readNWISstat <- function(siteNumbers, parameterCd, startDate = "", endDate = "",
 #' County and state fields will be included as appropriate.
 #'
 #' @export
-readNWISuse <- function(stateCd,
-                        countyCd,
-                        years = "ALL",
-                        categories = "ALL",
-                        convertType = TRUE,
-                        transform = FALSE) {
-  .Deprecated(new = "read_waterdata_use_data in development",
-              package = "dataRetrieval", 
-              msg = "NWIS servers for water use have been decommission. New functions are being developed.")
+readNWISuse <- function(
+  stateCd,
+  countyCd,
+  years = "ALL",
+  categories = "ALL",
+  convertType = TRUE,
+  transform = FALSE
+) {
+  .Deprecated(
+    new = "read_waterdata_use_data in development",
+    package = "dataRetrieval",
+    msg = "NWIS servers for water use have been decommission. New functions are being developed."
+  )
   return(NULL)
-
 }
 
 .capitalALL <- function(input) {
