@@ -302,6 +302,9 @@ test_that("General WQP retrievals working", {
     service = "ResultWQX3"
   )
   expect_is(pHData$Activity_StartDateTime, "POSIXct")
+  expect_type(pHData$USGSpcode, "character")
+  expect_type(pHData$Result_Measure, "double")
+  expect_type(pHData$SampleCollectionMethod_Identifier, "character")
   #
   # # testing lists:
   startDate <- as.Date("2022-01-01")

@@ -164,6 +164,31 @@ test_that("read_waterdata_daily", {
   )
   expect_is(raw_waterdata_daily$time, "Date")
 
+  raw_waterdata_daily_no_start <- read_waterdata_daily(
+    monitoring_location_id = siteNumber,
+    parameter_code = pCode,
+    time = c(NA, endDate)
+  )
+  expect_equal(
+    max(raw_waterdata_daily_no_start$time),
+    max(raw_waterdata_daily$time)
+  )
+  expect_lt(
+    min(raw_waterdata_daily_no_start$time),
+    min(raw_waterdata_daily$time)
+  )
+
+  raw_waterdata_daily_no_end <- read_waterdata_daily(
+    monitoring_location_id = siteNumber,
+    parameter_code = pCode,
+    time = c(startDate, NA)
+  )
+  expect_gt(max(raw_waterdata_daily_no_end$time), max(raw_waterdata_daily$time))
+  expect_equal(
+    min(raw_waterdata_daily_no_end$time),
+    min(raw_waterdata_daily$time)
+  )
+
   raw_waterdata_TempMeanMax <- read_waterdata_daily(
     monitoring_location_id = siteNumber,
     parameter_code = c("00010", "00060"),
