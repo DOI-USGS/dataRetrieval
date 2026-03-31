@@ -1,7 +1,7 @@
 #' Get USGS Monitoring Location Data
-#' 
+#'
 #' @description `r get_description("monitoring-locations")`
-#' 
+#'
 #' @export
 #' @param monitoring_location_id `r get_ogc_params("monitoring-locations")$id`
 #' Multiple monitoring_location_ids can be requested as a character vector.
@@ -45,16 +45,16 @@
 #' @param hole_constructed_depth `r get_ogc_params("monitoring-locations")$hole_constructed_depth`
 #' @param depth_source_code `r get_ogc_params("monitoring-locations")$depth_source_code`
 #' @param properties A vector of requested columns to be returned from the query.
-#' Available options are: 
+#' Available options are:
 #' `r dataRetrieval:::get_properties_for_docs("monitoring-locations", "monitoring_location_id")`.
 #' The default (`NA`) will return all columns of the data.
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
-#' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric 
+#' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
 #' vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
 #' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
-#' @param limit The optional limit parameter is used to control the subset of the 
+#' @param limit The optional limit parameter is used to control the subset of the
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
@@ -63,11 +63,11 @@
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
 #' @examplesIf is_dataRetrieval_user()
-#' 
+#'
 #' \donttest{
 #' site <- "USGS-02238500"
 #' site_info <- read_waterdata_monitoring_location(monitoring_location_id = site)
-#' 
+#'
 #' site_slim <- read_waterdata_monitoring_location(
 #'                              monitoring_location_id = c("USGS-05114000",
 #'                                                         "USGS-09423350"),
@@ -75,73 +75,76 @@
 #'                                             "state_name",
 #'                                             "county_name",
 #'                                             "country_name"))
-#'                                             
+#'
 #' site_slim_no_sf_slim <- read_waterdata_monitoring_location(state_name = "Wisconsin",
 #'                                            properties = c("monitoring_location_id",
 #'                                                           "state_name",
 #'                                                           "county_name",
-#'                                                           "country_name"), 
+#'                                                           "country_name",
+#'                                                           "site_type"),
+#'                                            site_type = "Well",
 #'                                            skipGeometry = TRUE)
 #'
-#' site_info_no_sf <- read_waterdata_monitoring_location(monitoring_location_id = site,
-#'                                    skipGeometry = TRUE)
-#' 
+#' site_info_no_sf <- read_waterdata_monitoring_location(
+#'      monitoring_location_id = site_slim_no_sf_slim$monitoring_location_id[1:1000],
+#'      skipGeometry = TRUE)
+#'
 #' bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
 #' multi_site <- read_waterdata_monitoring_location(bbox = bbox_vals)
 #' }
-read_waterdata_monitoring_location <- function(monitoring_location_id = NA_character_,
-                            agency_code = NA_character_,
-                            agency_name = NA_character_,
-                            monitoring_location_number = NA_character_,
-                            monitoring_location_name = NA_character_,
-                            district_code = NA_character_,
-                            country_code = NA_character_,
-                            country_name = NA_character_,
-                            state_code = NA_character_,
-                            state_name = NA_character_,
-                            county_code = NA_character_,
-                            county_name = NA_character_,
-                            minor_civil_division_code = NA_character_,
-                            site_type_code = NA_character_,
-                            site_type = NA_character_,
-                            hydrologic_unit_code = NA_character_,
-                            basin_code = NA_character_,
-                            altitude = NA_character_,
-                            altitude_accuracy = NA_character_,
-                            altitude_method_code = NA_character_,
-                            altitude_method_name = NA_character_,              
-                            vertical_datum = NA_character_,
-                            vertical_datum_name = NA_character_,
-                            horizontal_positional_accuracy_code = NA_character_,
-                            horizontal_positional_accuracy = NA_character_,
-                            horizontal_position_method_code = NA_character_,
-                            horizontal_position_method_name = NA_character_,
-                            original_horizontal_datum = NA_character_,
-                            original_horizontal_datum_name = NA_character_,
-                            drainage_area = NA_character_,
-                            contributing_drainage_area = NA_character_,    
-                            time_zone_abbreviation = NA_character_,
-                            uses_daylight_savings = NA_character_,
-                            construction_date = NA_character_,
-                            aquifer_code = NA_character_,
-                            national_aquifer_code = NA_character_,
-                            aquifer_type_code = NA_character_,
-                            well_constructed_depth = NA_character_,
-                            hole_constructed_depth = NA_character_,
-                            depth_source_code = NA_character_,
-                            properties = NA_character_,
-                            bbox = NA,
-                            limit = NA,
-                            skipGeometry = NA){
-
+read_waterdata_monitoring_location <- function(
+  monitoring_location_id = NA_character_,
+  agency_code = NA_character_,
+  agency_name = NA_character_,
+  monitoring_location_number = NA_character_,
+  monitoring_location_name = NA_character_,
+  district_code = NA_character_,
+  country_code = NA_character_,
+  country_name = NA_character_,
+  state_code = NA_character_,
+  state_name = NA_character_,
+  county_code = NA_character_,
+  county_name = NA_character_,
+  minor_civil_division_code = NA_character_,
+  site_type_code = NA_character_,
+  site_type = NA_character_,
+  hydrologic_unit_code = NA_character_,
+  basin_code = NA_character_,
+  altitude = NA_character_,
+  altitude_accuracy = NA_character_,
+  altitude_method_code = NA_character_,
+  altitude_method_name = NA_character_,
+  vertical_datum = NA_character_,
+  vertical_datum_name = NA_character_,
+  horizontal_positional_accuracy_code = NA_character_,
+  horizontal_positional_accuracy = NA_character_,
+  horizontal_position_method_code = NA_character_,
+  horizontal_position_method_name = NA_character_,
+  original_horizontal_datum = NA_character_,
+  original_horizontal_datum_name = NA_character_,
+  drainage_area = NA_character_,
+  contributing_drainage_area = NA_character_,
+  time_zone_abbreviation = NA_character_,
+  uses_daylight_savings = NA_character_,
+  construction_date = NA_character_,
+  aquifer_code = NA_character_,
+  national_aquifer_code = NA_character_,
+  aquifer_type_code = NA_character_,
+  well_constructed_depth = NA_character_,
+  hole_constructed_depth = NA_character_,
+  depth_source_code = NA_character_,
+  properties = NA_character_,
+  bbox = NA,
+  limit = NA,
+  skipGeometry = NA
+) {
   service <- "monitoring-locations"
   output_id <- "monitoring_location_id"
-  
+
   args <- mget(names(formals()))
   args[["convertType"]] <- FALSE
-  return_list <- get_ogc_data(args,
-                              output_id, 
-                              service)
+
+  return_list <- get_ogc_data(args, output_id, service)
 
   return(return_list)
 }

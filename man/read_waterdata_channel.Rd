@@ -20,6 +20,7 @@ read_waterdata_channel(
   channel_velocity_unit = NA_character_,
   channel_location_distance = NA_character_,
   channel_location_distance_unit = NA_character_,
+  channel_location_direction = NA_character_,
   channel_stability = NA_character_,
   channel_material = NA_character_,
   channel_evenness = NA_character_,
@@ -79,6 +80,8 @@ Only features that have a \code{time} that intersects the value of datetime are 
 
 \item{channel_location_distance_unit}{The units for channel location distance.}
 
+\item{channel_location_direction}{Location of the measurement from the gage.}
+
 \item{channel_stability}{The stability of the channel material.}
 
 \item{channel_material}{The channel material.}
@@ -112,7 +115,7 @@ Only features that have a \code{last_modified} that intersects the value of date
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, channel_measurements_id, monitoring_location_id, field_visit_id, measurement_number, time, channel_name, channel_flow, channel_flow_unit, channel_width, channel_width_unit, channel_area, channel_area_unit, channel_velocity, channel_velocity_unit, channel_location_distance, channel_location_distance_unit, channel_stability, channel_material, channel_evenness, horizontal_velocity_description, vertical_velocity_description, longitudinal_velocity_description, measurement_type, last_modified, channel_measurement_type.
+geometry, channel_measurements_id, monitoring_location_id, field_visit_id, measurement_number, time, channel_name, channel_flow, channel_flow_unit, channel_width, channel_width_unit, channel_area, channel_area_unit, channel_velocity, channel_velocity_unit, channel_location_distance, channel_location_distance_unit, channel_stability, channel_material, channel_evenness, horizontal_velocity_description, vertical_velocity_description, longitudinal_velocity_description, measurement_type, last_modified, channel_measurement_type, channel_location_direction.
 The default (\code{NA}) will return all columns of the data.}
 
 \item{skipGeometry}{This option can be used to skip response geometries for

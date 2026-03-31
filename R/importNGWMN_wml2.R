@@ -15,16 +15,16 @@
 #' @export
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' 
+#'
 #' params <- list(request = "GetObservation",
 #'                service = "SOS",
 #'                version = "2.0.0",
 #'                observedProperty = "urn:ogc:def:property:OGC:GroundWaterLevel",
 #'                responseFormat = "text/xml",
 #'                featureOfInterest = "VW_GWDP_GEOSERVER.USGS.403836085374401")
-#' 
+#'
 #' obs_url <- httr2::request("https://cida.usgs.gov") |>
-#'  httr2::req_url_path_append("ngwmn_cache") |> 
+#'  httr2::req_url_path_append("ngwmn_cache") |>
 #'  httr2::req_url_path_append("sos") |>
 #'  httr2::req_url_query(!!!params)
 #'
@@ -32,7 +32,6 @@
 #' }
 #'
 importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
-  
   if (tz != "") {
     tz <- match.arg(tz, OlsonNames())
   } else {
@@ -40,8 +39,8 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
   }
 
   raw <- FALSE
-  
-  if(inherits(input, "httr2_request")){
+
+  if (inherits(input, "httr2_request")) {
     returnedDoc <- getWebServiceData(input)
     if (is.null(returnedDoc)) {
       return(invisible(NULL))
@@ -49,8 +48,10 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
     returnedDoc <- xml2::xml_root(returnedDoc)
   } else if (is.character(input) && file.exists(input)) {
     returnedDoc <- xml2::read_xml(input)
-  } else if (is.character(input) && 
-             grepl("(https)://[^ /$.?#].[^\\s]*", input)) {
+  } else if (
+    is.character(input) &&
+      grepl("(https)://[^ /$.?#].[^\\s]*", input)
+  ) {
     input <- httr2::request(input)
     returnedDoc <- getWebServiceData(input)
     if (is.null(returnedDoc)) {
@@ -59,11 +60,14 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
   } else if (is.raw(input)) {
     returnedDoc <- xml2::read_xml(input)
     raw <- TRUE
-  } 
+  }
 
   response <- xml2::xml_name(returnedDoc)
   if (response == "GetObservationResponse") {
-    timeSeries <- xml2::xml_find_all(returnedDoc, "//wml2:MeasurementTimeseries") # each parameter/site combo
+    timeSeries <- xml2::xml_find_all(
+      returnedDoc,
+      "//wml2:MeasurementTimeseries"
+    ) # each parameter/site combo
 
     if (0 == length(timeSeries)) {
       df <- data.frame()
@@ -101,28 +105,56 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
     nonDateCols <- grep("date", names(mergedDF), value = TRUE, invert = TRUE)
 
     if (nrow(mergedDF) > 0) {
-      mergedDF[nonDateCols][mergedDF[nonDateCols] == "" | mergedDF[nonDateCols] == -999999.0] <- NA
+      mergedDF[nonDateCols][
+        mergedDF[nonDateCols] == "" | mergedDF[nonDateCols] == -999999.0
+      ] <- NA
     }
-    attr(mergedDF, "gml:identifier") <- xml2::xml_text(xml2::xml_find_all(returnedDoc, ".//gml:identifier"))
-    attr(mergedDF, "generationDate") <- xml2::xml_text(xml2::xml_find_all(returnedDoc, ".//wml2:generationDate"))
+    attr(mergedDF, "gml:identifier") <- xml2::xml_text(xml2::xml_find_all(
+      returnedDoc,
+      ".//gml:identifier"
+    ))
+    attr(mergedDF, "generationDate") <- xml2::xml_text(xml2::xml_find_all(
+      returnedDoc,
+      ".//wml2:generationDate"
+    ))
     meta <- xml2::xml_find_all(returnedDoc, ".//gmd:contact")
     attr(mergedDF, "contact") <- xml2::xml_attr(meta, "href")
-    attr(mergedDF, "responsibleParty") <- xml2::xml_text(xml2::xml_find_all(meta, ".//gco:CharacterString"))
+    attr(mergedDF, "responsibleParty") <- xml2::xml_text(xml2::xml_find_all(
+      meta,
+      ".//gco:CharacterString"
+    ))
   } else if (response == "GetFeatureOfInterestResponse") {
     featureMembers <- xml2::xml_find_all(returnedDoc, ".//sos:featureMember")
-    site <- xml2::xml_text(xml2::xml_find_all(featureMembers, ".//gml:identifier"))
+    site <- xml2::xml_text(xml2::xml_find_all(
+      featureMembers,
+      ".//gml:identifier"
+    ))
     site <- substring(site, 8)
 
     # some sites don't have a description
-    siteDesc <- xml2::xml_text(xml2::xml_find_first(featureMembers, ".//gml:description"))
+    siteDesc <- xml2::xml_text(xml2::xml_find_first(
+      featureMembers,
+      ".//gml:description"
+    ))
 
-    siteLocs <- strsplit(xml2::xml_text(xml2::xml_find_all(featureMembers, ".//gml:pos")), " ")
-    siteLocs <- data.frame(matrix(unlist(siteLocs), nrow = length(siteLocs), byrow = TRUE), stringsAsFactors = FALSE)
+    siteLocs <- strsplit(
+      xml2::xml_text(xml2::xml_find_all(featureMembers, ".//gml:pos")),
+      " "
+    )
+    siteLocs <- data.frame(
+      matrix(unlist(siteLocs), nrow = length(siteLocs), byrow = TRUE),
+      stringsAsFactors = FALSE
+    )
     names(siteLocs) <- c("dec_lat_va", "dec_lon_va")
 
     siteLocs$dec_lat_va <- as.numeric(siteLocs$dec_lat_va)
     siteLocs$dec_lon_va <- as.numeric(siteLocs$dec_lon_va)
-    mergedDF <- cbind.data.frame(site, description = siteDesc, siteLocs, stringsAsFactors = FALSE)
+    mergedDF <- cbind.data.frame(
+      site,
+      description = siteDesc,
+      siteLocs,
+      stringsAsFactors = FALSE
+    )
   } else if (response == "ExceptionReport") {
     return(data.frame())
   } else {
@@ -155,7 +187,7 @@ importNGWMN <- function(input, asDateTime = FALSE, tz = "UTC") {
 #'                                 endDT = "2014-09-08",
 #'                                 statCd = "00003",
 #'                                 parameterCd = "00060" )
-#' 
+#'
 #' timeseries <- importWaterML2(baseURL, asDateTime = TRUE, tz = "UTC")
 #' }
 importWaterML2 <- function(input, asDateTime = FALSE, tz = "UTC") {
@@ -163,16 +195,29 @@ importWaterML2 <- function(input, asDateTime = FALSE, tz = "UTC") {
 
   gmlID <- xml2::xml_attr(returnedDoc, "id") # TODO: make this an attribute
   TVP <- xml2::xml_find_all(returnedDoc, ".//wml2:MeasurementTVP") # time-value pairs
-  if (length(TVP) == 0) { # empty nodes on some sites
+  if (length(TVP) == 0) {
+    # empty nodes on some sites
     return(data.frame(
-      site = character(0), source = character(0), date = character(0),
-      time = character(0), dateTime = character(0), value = numeric(0),
-      uom = character(0), comment = character(0), stringsAsFactors = FALSE
+      site = character(0),
+      source = character(0),
+      date = character(0),
+      time = character(0),
+      dateTime = character(0),
+      value = numeric(0),
+      uom = character(0),
+      comment = character(0),
+      stringsAsFactors = FALSE
     ))
   }
-  rawTime <- xml2::xml_text(xml2::xml_find_all(returnedDoc, ".//wml2:MeasurementTVP/wml2:time"))
+  rawTime <- xml2::xml_text(xml2::xml_find_all(
+    returnedDoc,
+    ".//wml2:MeasurementTVP/wml2:time"
+  ))
 
-  valueNodes <- xml2::xml_find_all(returnedDoc, ".//wml2:MeasurementTVP/wml2:value")
+  valueNodes <- xml2::xml_find_all(
+    returnedDoc,
+    ".//wml2:MeasurementTVP/wml2:value"
+  )
   charValues <- xml2::xml_text(valueNodes)
   nilValues <- as.logical(xml2::xml_attr(valueNodes, "nil"))
   charValues[nilValues] <- NA
@@ -182,13 +227,12 @@ importWaterML2 <- function(input, asDateTime = FALSE, tz = "UTC") {
   # df of date, time, dateTime
   oneCol <- rep(NA, nVals)
   timeDF <- data.frame(date = oneCol, time = oneCol, dateTime = oneCol)
-  splitTime <- data.frame(matrix(unlist(strsplit(rawTime, "T")),
-    nrow = nVals,
-    byrow = TRUE
-  ),
-  stringsAsFactors = FALSE
+  splitTime <- data.frame(
+    matrix(unlist(strsplit(rawTime, "T")), nrow = nVals, byrow = TRUE),
+    stringsAsFactors = FALSE
   )
-  if (ncol(splitTime) > 1) { # some sites only have a date
+  if (ncol(splitTime) > 1) {
+    # some sites only have a date
     names(splitTime) <- c("date", "time")
   } else {
     names(splitTime) <- "date"
@@ -198,19 +242,22 @@ importWaterML2 <- function(input, asDateTime = FALSE, tz = "UTC") {
   timeDF <- splitTime
   timeDF$dateTime <- NA
   logicVec <- nchar(rawTime) > 19
-  if (!all(!logicVec)) { # otherwise sets it to char <NA>
+  if (!all(!logicVec)) {
+    # otherwise sets it to char <NA>
     timeDF$dateTime[logicVec] <- rawTime[logicVec]
   }
   if (asDateTime) {
-    timeDF$dateTime <- lubridate::parse_date_time(timeDF$dateTime, c(
-      "%Y",
-      "%Y-%m-%d",
-      "%Y-%m-%dT%H:%M",
-      "%Y-%m-%dT%H:%M:%S",
-      "%Y-%m-%dT%H:%M:%OS",
-      "%Y-%m-%dT%H:%M:%OS%z"
-    ),
-    exact = TRUE
+    timeDF$dateTime <- lubridate::parse_date_time(
+      timeDF$dateTime,
+      c(
+        "%Y",
+        "%Y-%m-%d",
+        "%Y-%m-%dT%H:%M",
+        "%Y-%m-%dT%H:%M:%S",
+        "%Y-%m-%dT%H:%M:%OS",
+        "%Y-%m-%dT%H:%M:%OS%z"
+      ),
+      exact = TRUE
     )
     # ^^setting tz in as.POSIXct just sets the attribute, does not convert the time!
     attr(timeDF$dateTime, "tzone") <- tz
@@ -230,17 +277,34 @@ importWaterML2 <- function(input, asDateTime = FALSE, tz = "UTC") {
     "./wml2:point/wml2:MeasurementTVP/wml2:metadata/wml2:comment"
   ))
 
-  defaultMeta <- xml2::xml_find_all(returnedDoc, ".//wml2:DefaultTVPMeasurementMetadata")
-  defaultQuals <- xml2::xml_text(xml2::xml_find_all(defaultMeta, ".//swe:description"))
-  defaultUOM <- xml2::xml_attr(xml2::xml_find_all(defaultMeta, ".//wml2:uom"), "title", default = NA)
+  defaultMeta <- xml2::xml_find_all(
+    returnedDoc,
+    ".//wml2:DefaultTVPMeasurementMetadata"
+  )
+  defaultQuals <- xml2::xml_text(xml2::xml_find_all(
+    defaultMeta,
+    ".//swe:description"
+  ))
+  defaultUOM <- xml2::xml_attr(
+    xml2::xml_find_all(defaultMeta, ".//wml2:uom"),
+    "title",
+    default = NA
+  )
 
   df_vars <- list(
-    source = source, timeDF, value = values,
-    uom = uom, comment = comment
+    source = source,
+    timeDF,
+    value = values,
+    uom = uom,
+    comment = comment
   )
-  df_use <- df_vars[sapply(df_vars, function(x) length(x) > 0 && !all(is.na(x)))]
+  df_use <- df_vars[sapply(df_vars, function(x) {
+    length(x) > 0 && !all(is.na(x))
+  })]
   df <- data.frame(df_use, stringsAsFactors = FALSE)
-  if (!"value" %in% names(df)) df$value <- NA_real_
+  if (!"value" %in% names(df)) {
+    df$value <- NA_real_
+  }
   # from the default metadata section
   # append to existing attributes if they aren't empty
   mdAttribs <- list(

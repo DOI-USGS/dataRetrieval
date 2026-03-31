@@ -130,15 +130,15 @@ daily data, which returns time values in local dates.
 \donttest{
 site <- "USGS-02238500"
 dv_data_sf <- read_waterdata_daily(monitoring_location_id = site,
-                              parameter_code = "00060", 
+                              parameter_code = "00060",
                               time = c("2021-01-01", "2022-01-01"))
-                              
+
 dv_data_last_modified <- read_waterdata_daily(monitoring_location_id = site,
                               parameter_code = "00060",
                               last_modified = "P7D")
 
 dv_data_trim <- read_waterdata_daily(monitoring_location_id = site,
-                          parameter_code = "00060", 
+                          parameter_code = "00060",
                           properties = c("value",
                                          "time"),
                           time = c("2021-01-01", "2022-01-01"))
@@ -146,7 +146,7 @@ dv_data_trim <- read_waterdata_daily(monitoring_location_id = site,
 dv_data <- read_waterdata_daily(monitoring_location_id = site,
                            parameter_code = "00060",
                            skipGeometry = TRUE)
-                        
+
 dv_data_period <- read_waterdata_daily(monitoring_location_id = site,
                                   parameter_code = "00060",
                                   time = "P7D")
@@ -155,17 +155,17 @@ multi_site <- read_waterdata_daily(monitoring_location_id =  c("USGS-01491000",
                                                           "USGS-01645000"),
                               parameter_code = c("00060", "00010"),
                               time = c("2023-01-01", "2024-01-01"))
-                              
+
 dv_data_quick <- read_waterdata_daily(monitoring_location_id = site,
                                    parameter_code = "00060",
                                    no_paging = TRUE)
-                                   
+
 dv_post <- read_waterdata_daily(monitoring_location_id = site,
                                 approval_status = c("Approved", "Provisional"))
 # Don't attach "request" attribute:
 options("dataRetrieval.attach_request" = FALSE)
 dv_data_no_request <- read_waterdata_daily(monitoring_location_id = site,
-                              parameter_code = "00060", 
+                              parameter_code = "00060",
                               time = c("2021-01-01", "2022-01-01"))
 }
 \dontshow{\}) # examplesIf}
