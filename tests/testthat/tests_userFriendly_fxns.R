@@ -585,6 +585,18 @@ test_that("bad_properties", {
     time = c("2021-01-01", "2022-01-01"),
     properties = c("value", "time", "blah")
   ))
+
+  # No paging
+  dv_data_quick <- read_waterdata_daily(
+    monitoring_location_id = site,
+    parameter_code = "00060",
+    no_paging = TRUE
+  )
+
+  expect_type(dv_data_quick$parameter_code, "character")
+  expect_is(dv_data_quick$time, "Date")
+  expect_equal(dv_data_quick$parameter_code[1], "00060")
+
   # Empty result:
   expect_message(read_waterdata_daily(
     monitoring_location_id = "USGS-02238500",

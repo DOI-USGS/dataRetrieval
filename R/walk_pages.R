@@ -137,7 +137,11 @@ get_csv <- function(req, limit) {
 
   if (httr2::resp_has_body(resp)) {
     return_list <- httr2::resp_body_string(resp)
-    df <- data.table::fread(input = return_list, data.table = FALSE)
+    df <- data.table::fread(
+      input = return_list,
+      data.table = FALSE,
+      colClasses = "text"
+    )
 
     included_num_cols <- names(df)[names(df) %in% num_cols]
 
@@ -148,8 +152,10 @@ get_csv <- function(req, limit) {
     if (skip_geo) {
       df <- df[, names(df)[!names(df) %in% c("x", "y")]]
     } else {
-      df <- sf::st_as_sf(df, coords = c("x", "y"))
-      sf::st_crs(df) <- 4269
+      if (all(c("x", "y") %in% names(df))) {
+        df <- sf::st_as_sf(df, coords = c("x", "y"))
+        sf::st_crs(df) <- 4269
+      }
     }
 
     if (nrow(df) == limit) {
