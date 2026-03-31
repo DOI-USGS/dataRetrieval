@@ -1,16 +1,22 @@
 .onAttach <- function(libname, pkgname) {
-  if (!interactive()) return()
+  if (!interactive()) {
+    return()
+  }
   dataRetrieval_version <- utils::packageVersion("dataRetrieval")
   token_message <- ""
-  if(Sys.getenv("API_USGS_PAT") == ""){
+  if (Sys.getenv("API_USGS_PAT") == "") {
     token_message <- "\nConsider adding an API_USGS_PAT for new USGS functions.
 See: https://api.waterdata.usgs.gov/signup"
   }
-  packageStartupMessage("dataRetrieval ", dataRetrieval_version,"
+  packageStartupMessage(
+    "dataRetrieval ",
+    dataRetrieval_version,
+    "
 Extended Documentation: https://doi-usgs.github.io/dataRetrieval
 Learn about the new functions that are replacing NWIS functions here:
 https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html",
-token_message)
+    token_message
+  )
 }
 
 #' Retrieval functions for USGS and EPA data
@@ -33,7 +39,7 @@ token_message)
 #' @aliases dataRetrieval-package
 #' @docType package
 #' @author Laura De Cicco \email{ldecicco@@usgs.gov}
-#' @keywords internal 
+#' @keywords internal
 "_PACKAGE"
 
 #' List of USGS parameter codes
@@ -59,8 +65,6 @@ token_message)
 #' @examples
 #' head(parameterCdFile[, 1:2])
 NULL
-
-
 
 
 #' Data to convert USGS parameter code to characteristic names
@@ -151,7 +155,6 @@ NULL
 ## usethis namespace: end
 NULL
 
-
 # nolint start: commented_code_linter
 # Here's how to incorporate the state_county.json into the historic
 # sysdata.rda. The original data included some IDs that aren't in the json
@@ -193,29 +196,29 @@ NULL
 #
 # countyCd <- county_df_full
 # stateCd <- state_df
-# 
+#
 # offsetLibrary <- data.frame(
 #   offset = c(5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 10, 0, 0, 0, 0),
 #   code = c("EST", "EDT", "CST", "CDT", "MST", "MDT", "PST", "PDT",
 #            "AKST", "AKDT", "HAST", "HST", "UTC", "", NA, "GMT")
 # )
-# 
+#
 # services <- c("daily", "time-series-metadata",
 #               "monitoring-locations", "latest-continuous",
 #               "field-measurements", "latest-daily",
 #               "continuous", "field-measurements-metadata",
 #               "combined-metadata", "channel-measurements")
-# 
+#
 # property_list <- list()
 # for(service in services){
 #   property_list[[service]] <- get_properties_for_docs(service)
 # }
-# 
+#
 # num_cols <- c("value", "contributing_drainage_area", "drainage_area",
 #               "altitude_accuracy", "well_construction_depth",
 #               "hole_construction_depth", "channel_flow", "channel_width",
 #               "channel_area", "channel_velocity", "channel_location_distance")
-# 
+#
 # save(countyCd, stateCd, parameterCdFile, pCodeToName,
 #      offsetLibrary, num_cols, property_list,
 #      file = "R/sysdata.rda", compress = "xz")

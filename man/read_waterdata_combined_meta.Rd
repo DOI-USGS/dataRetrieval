@@ -224,7 +224,7 @@ See also Details below for more information.}
 
 \item{national_aquifer_code}{National aquifers are the principal aquifers or aquifer systems in the United States, defined as regionally extensive aquifers or aquifer systems that have the potential to be used as a source of potable water. Not all groundwater monitoring locations can be associated with a National Aquifer. Such monitoring locations will not be retrieved using this search criteria. A list of National aquifer codes and names is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/national-aquifer-codes/items}.}
 
-\item{aquifer_type_code}{Describes the confinement status of an aquifer at the monitoring location.  A confined aquifer is an aquifer below the land surface that is saturated with water.  A water table--or unconfined--aquifer is an aquifer whose upper water surface (water table) is at atmospheric pressure, and thus is able to rise and fall.}
+\item{aquifer_type_code}{Describes the confinement status of an aquifer at the monitoring location. A confined aquifer is an aquifer below the land surface that is saturated with water. A water table--or unconfined--aquifer is an aquifer whose upper water surface (water table) is at atmospheric pressure, and thus is able to rise and fall.}
 
 \item{well_constructed_depth}{The depth of the finished well, in feet below land surface datum. Note: Not all groundwater monitoring locations have information on Well Depth. Such monitoring locations will not be retrieved using this search criteria.}
 
@@ -299,7 +299,7 @@ multi_site <- read_waterdata_combined_meta(
                                                           "USGS-263819081585801"),
                               parameter_code = c("62611", "72019"))
 
-                                              
+
 surface_water <- read_waterdata_combined_meta(
                          monitoring_location_id = c("USGS-07069000",
                                                     "USGS-07064000",
@@ -311,6 +311,12 @@ hucs <- read_waterdata_combined_meta(
                          hydrologic_unit_code = c("11010008", "11010009"),
                          site_type = c("Stream", "Spring")
 )
+
+site_list <- read_waterdata_combined_meta(
+                         monitoring_location_id = hucs$monitoring_location_id
+)
+
+
 }
 \dontshow{\}) # examplesIf}
 }

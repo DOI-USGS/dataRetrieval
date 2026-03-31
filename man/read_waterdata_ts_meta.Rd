@@ -185,7 +185,7 @@ daily data, which returns time values in local dates.
 site <- "USGS-02238500"
 meta_1 <- read_waterdata_ts_meta(monitoring_location_id = site)
 
-meta_multi <- read_waterdata_ts_meta(monitoring_location_id =  c("USGS-01491000", 
+meta_multi <- read_waterdata_ts_meta(monitoring_location_id =  c("USGS-01491000",
                                                             "USGS-01645000"),
                             parameter_code = c("00060", "00010"),
                             properties = c("monitoring_location_id",
@@ -194,7 +194,7 @@ meta_multi <- read_waterdata_ts_meta(monitoring_location_id =  c("USGS-01491000"
                                            "end_utc",
                                            "time_series_id"),
                             skipGeometry = TRUE)
-                            
+
 meta_wi <- read_waterdata_ts_meta(state_name = "Wisconsin")
 }
 \dontshow{\}) # examplesIf}

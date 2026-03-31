@@ -10,10 +10,10 @@
 #'
 #' @param \dots see <https://www.waterqualitydata.us/webservices_documentation>
 #' for a complete list of options. A list of arguments can also be supplied.
-#' One way to figure out how to construct a WQP query is to go to the "Advanced" 
+#' One way to figure out how to construct a WQP query is to go to the "Advanced"
 #' form in the Water Quality Portal:
 #' <https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET>
-#' Use the form to discover what parameters are available. Once the query is 
+#' Use the form to discover what parameters are available. Once the query is
 #' set in the form, scroll down to the "Query URL". You will see the parameters
 #' after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
 #' in the Characteristic Group dropdown, you will see characteristicType=Nutrient
@@ -50,45 +50,42 @@ whatWQPsites <- function(..., legacy = TRUE, convertType = TRUE) {
 
   values <- values[["values"]]
 
-  if (any(c("tz", "service") %in% names(values))){
+  if (any(c("tz", "service") %in% names(values))) {
     values <- values[!(names(values) %in% c("tz", "service"))]
   }
   POST = FALSE
-  
-  if(legacy){
+
+  if (legacy) {
     baseURL <- httr2::request(pkg.env[["Station"]])
-    
-    if("siteid" %in% names(values)){
-      if(length(values[["siteid"]]) > 1){
+
+    if ("siteid" %in% names(values)) {
+      if (length(values[["siteid"]]) > 1) {
         sites <- values[["siteid"]]
         POST <- nchar(paste0(sites, collapse = "")) > 2048
 
-        baseURL <- get_or_post(baseURL, 
-                               POST = POST,         
-                               siteid = sites,
-                               .multi = function(x) paste0(x, collapse = ";"))  
+        baseURL <- get_or_post(
+          baseURL,
+          POST = POST,
+          siteid = sites,
+          .multi = function(x) paste0(x, collapse = ";")
+        )
 
         values <- values[names(values) != "siteid"]
       }
     }
-
   } else {
     baseURL <- httr2::request(pkg.env[["StationWQX3"]])
   }
 
-  baseURL <- get_or_post(baseURL, 
-                         POST = POST,
-                         !!!values,
-                         .multi = "explode")    
-
+  baseURL <- get_or_post(baseURL, POST = POST, !!!values, .multi = "explode")
 
   retval <- importWQP(baseURL, convertType = convertType)
-  
-  if(!is.null(retval)){
+
+  if (!is.null(retval)) {
     attr(retval, "queryTime") <- Sys.time()
     attr(retval, "url") <- baseURL$url
   }
-  
+
   return(retval)
 }
 
@@ -104,10 +101,10 @@ whatWQPsites <- function(..., legacy = TRUE, convertType = TRUE) {
 #'
 #' @param \dots see <https://www.waterqualitydata.us/webservices_documentation>
 #'  for a complete list of options. A list of arguments can also be supplied.
-#' One way to figure out how to construct a WQP query is to go to the "Advanced" 
+#' One way to figure out how to construct a WQP query is to go to the "Advanced"
 #' form in the Water Quality Portal:
 #' <https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET>
-#' Use the form to discover what parameters are available. Once the query is 
+#' Use the form to discover what parameters are available. Once the query is
 #' set in the form, scroll down to the "Query URL". You will see the parameters
 #' after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
 #' in the Characteristic Group dropdown, you will see characteristicType=Nutrient
@@ -153,39 +150,37 @@ whatWQPsites <- function(..., legacy = TRUE, convertType = TRUE) {
 #' )
 #' }
 readWQPsummary <- function(...) {
-
   wqp_message()
-  
+
   values <- readWQPdots(...)
-  
+
   values <- values[["values"]]
 
-  if (any(c("tz", "service") %in% names(values))){
+  if (any(c("tz", "service") %in% names(values))) {
     values <- values[!(names(values) %in% c("tz", "service"))]
   }
 
   if (!"dataProfile" %in% names(values)) {
     values[["dataProfile"]] <- "periodOfRecord"
   }
-  
+
   baseURL <- httr2::request(pkg.env[["SiteSummary"]])
 
-  if(length(values[["siteid"]]) > 1){
+  if (length(values[["siteid"]]) > 1) {
     sites <- values[["siteid"]]
-    baseURL <- httr2::req_url_query(baseURL, 
-                                    siteid = sites,
-                                    .multi = function(x) paste0(x, collapse = ";"))
+    baseURL <- httr2::req_url_query(
+      baseURL,
+      siteid = sites,
+      .multi = function(x) paste0(x, collapse = ";")
+    )
     values <- values[names(values) != "siteid"]
   }
-  
-  baseURL <- httr2::req_url_query(baseURL,
-                                  !!!values,
-                                  .multi = "explode")
-  
+
+  baseURL <- httr2::req_url_query(baseURL, !!!values, .multi = "explode")
+
   withCallingHandlers(
     {
-      retval <- importWQP(baseURL, 
-                          csv = TRUE)
+      retval <- importWQP(baseURL, csv = TRUE)
     },
     warning = function(w) {
       if (any(grepl("Number of rows returned not matched in header", w))) {
@@ -193,11 +188,11 @@ readWQPsummary <- function(...) {
       }
     }
   )
-  
-  if(!is.null(retval)){
+
+  if (!is.null(retval)) {
     attr(retval, "queryTime") <- Sys.time()
     attr(retval, "url") <- baseURL$url
   }
-  
+
   return(retval)
 }

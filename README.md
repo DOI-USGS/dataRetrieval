@@ -206,13 +206,13 @@ NWIScitation
 #> U.S. Geological Survey (2026). _USGS Water Data for the Nation: U.S.
 #> Geological Survey National Water Information System database_.
 #> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>, Accessed Mar
-#> 09, 2026.
+#> 30, 2026.
 print(NWIScitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {USGS Water Data for the Nation: U.S. Geological Survey National Water Information System database},
 #>   author = {{U.S. Geological Survey}},
 #>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Mar 09, 2026},
+#>   note = {Accessed Mar 30, 2026},
 #>   year = {2026},
 #> }
 ```
@@ -235,14 +235,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2026). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>,
-#> Accessed Mar 09, 2026,
+#> Accessed Mar 30, 2026,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Mar 09, 2026},
+#>   note = {Accessed Mar 30, 2026},
 #>   year = {2026},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }

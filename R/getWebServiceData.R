@@ -1,7 +1,7 @@
 #' Function to return data from web services
 #'
-#' This function accepts a url parameter, and returns the raw data. 
-#' 
+#' This function accepts a url parameter, and returns the raw data.
+#'
 #' To add a custom user agent, create an environmental variable: CUSTOM_DR_UA
 #'
 #' @param obs_url character containing the url for the retrieval
@@ -19,44 +19,45 @@
 #' rawData <- getWebServiceData(obs_url)
 #' }
 getWebServiceData <- function(obs_url, ...) {
-  
-  if (!has_internet_2(obs_url)){
+  if (!has_internet_2(obs_url)) {
     message("No internet connection.")
     return(invisible(NULL))
   }
-  
-  if(is.character(obs_url)){
+
+  if (is.character(obs_url)) {
     obs_url <- httr2::request(obs_url)
   }
-  
+
   obs_url <- httr2::req_user_agent(obs_url, default_ua())
-  obs_url <- httr2::req_throttle(obs_url, rate = 30 / 60) 
-  obs_url <- httr2::req_retry(obs_url, 
-                              max_tries = 3, 
-                              max_seconds = 180) 
-  obs_url <- httr2::req_headers(obs_url,
-                                `Accept-Encoding` = c("compress", "gzip"))
-  
+  obs_url <- httr2::req_throttle(obs_url, rate = 30 / 60)
+  obs_url <- httr2::req_retry(obs_url, max_tries = 3, max_seconds = 180)
+  obs_url <- httr2::req_headers(
+    obs_url,
+    `Accept-Encoding` = c("compress", "gzip")
+  )
+
   url_method <- "GET"
-  if(!is.null(obs_url$body)){
+  if (!is.null(obs_url$body)) {
     url_method <- "POST"
   }
-  message(url_method, ": ", obs_url$url) 
+  message(url_method, ": ", obs_url$url)
   returnedList <- httr2::req_perform(obs_url)
 
   good <- check_non_200s(returnedList)
-  
+
   return_readLines <- c("text/html", "text/html;charset=utf-8")
 
-  return_content <- c("text/tab-separated-values;charset=utf-8",
-                      "text/csv;charset=utf-8",
-                      "text/csv",
-                      "text/plain",
-                      "text/plain;charset=utf-8")
-  
+  return_content <- c(
+    "text/tab-separated-values;charset=utf-8",
+    "text/csv;charset=utf-8",
+    "text/csv",
+    "text/plain",
+    "text/plain;charset=utf-8"
+  )
+
   return_json <- c("application/vnd.geo+json;charset=utf-8")
-  
-  if(good){
+
+  if (good) {
     headerInfo <- httr2::resp_headers(returnedList)
     content <- gsub(" ", "", tolower(headerInfo$`content-type`))
     if (content %in% return_content) {
@@ -65,11 +66,16 @@ getWebServiceData <- function(obs_url, ...) {
       returnedList <- httr2::resp_body_string(returnedList)
       message(returnedList)
       returnedDoc <- returnedList
-    } else if (content %in% return_json){
+    } else if (content %in% return_json) {
       returnedDoc <- httr2::resp_body_json(returnedList)
     } else {
       returnedDoc <- httr2::resp_body_xml(returnedList, encoding = "UTF-8")
-      if (all(grepl("No sites/data found using the selection criteria specified", returnedDoc))) {
+      if (
+        all(grepl(
+          "No sites/data found using the selection criteria specified",
+          returnedDoc
+        ))
+      ) {
         message(returnedDoc)
       }
     }
@@ -82,13 +88,10 @@ getWebServiceData <- function(obs_url, ...) {
   }
 }
 
-check_non_200s <- function(returnedList){
-    
+check_non_200s <- function(returnedList) {
   status <- httr2::resp_status(returnedList)
-  
-  return(status == 200)
-  
 
+  return(status == 200)
 }
 
 #' Create user agent
@@ -114,28 +117,27 @@ default_ua <- function() {
 #'
 #' Function to check for internet even if the user
 #' is behind a proxy
-#' 
+#'
 #' If this is giving you problems, override the false negative:
 #' Sys.setenv("OVERRIDE_INTERNET_TEST" = TRUE)
 #'
 #' @keywords internal
 #' @param obs_url character obs_url to check
 has_internet_2 <- function(obs_url) {
-  
   if (nzchar(Sys.getenv("OVERRIDE_INTERNET_TEST"))) {
-    if(Sys.getenv("OVERRIDE_INTERNET_TEST") == "FALSE"){
+    if (Sys.getenv("OVERRIDE_INTERNET_TEST") == "FALSE") {
       return(FALSE)
     } else {
       return(TRUE)
     }
   }
-  
-  if("url" %in% names(obs_url)){
+
+  if ("url" %in% names(obs_url)) {
     url <- obs_url$url
   } else {
     url <- obs_url
   }
-  
+
   host <- gsub("^https://(?:www[.])?([^/]*).*$", "\\1", url)
 
   !is.null(curl::nslookup(host, error = FALSE))
@@ -146,14 +148,16 @@ has_internet_2 <- function(obs_url) {
 #' @param url the query url
 getQuerySummary <- function(url) {
   wqp_message()
-  
-  queryHEAD <- httr2::req_method(req = url ,
-                                 method =  "HEAD")
+
+  queryHEAD <- httr2::req_method(req = url, method = "HEAD")
   queryHEAD <- httr2::req_perform(queryHEAD)
   headerInfo <- httr2::resp_headers(queryHEAD)
   retquery <- data.frame(t(unlist(headerInfo)))
   names(retquery) <- gsub("\\.", "-", names(retquery))
-  retquery[,grep("-count", names(retquery))] <- as.numeric(retquery[grep("-count", names(retquery))])
+  retquery[, grep("-count", names(retquery))] <- as.numeric(retquery[grep(
+    "-count",
+    names(retquery)
+  )])
 
   if ("date" %in% names(retquery)) {
     retquery$date <- as.Date(retquery$date, format = "%a, %d %b %Y %H:%M:%S")
@@ -161,5 +165,3 @@ getQuerySummary <- function(url) {
 
   return(retquery)
 }
-
-

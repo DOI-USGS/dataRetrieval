@@ -1,7 +1,7 @@
 #' Get USGS Parameter Code Information
-#' 
+#'
 #' @description `r get_description("parameter-codes")`
-#' 
+#'
 #' @export
 #' @param parameter_code `r get_ogc_params("parameter-codes")$id`
 #' @param parameter_name `r get_ogc_params("parameter-codes")$parameter_name`
@@ -15,61 +15,63 @@
 #' @param temperature_basis `r get_ogc_params("parameter-codes")$temperature_basis`
 #' @param epa_equivalence `r get_ogc_params("parameter-codes")$epa_equivalence`
 #' @param properties A vector of requested columns to be returned from the query.
-#' Available options are: 
+#' Available options are:
 #' `r dataRetrieval:::get_properties_for_docs("parameter-codes", "parameter_code_id")`.
 #' The default (`NA`) will return all columns of the data.
-#' @param limit The optional limit parameter is used to control the subset of the 
+#' @param limit The optional limit parameter is used to control the subset of the
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
 #' @examplesIf is_dataRetrieval_user()
-#' 
+#'
 #' \donttest{
 #' pcode <- "00060"
 #' pcode_info <- read_waterdata_parameter_codes(parameter_code = pcode)
-#' 
+#'
 #' pcodes <- read_waterdata_parameter_codes(parameter_code = c("00660", "00060"))
-#' 
+#'
 #' # equivalent to read_waterdata_metadata("parameter-codes")
-#' all_pcodes <- read_waterdata_parameter_codes() 
-#' 
+#' all_pcodes <- read_waterdata_parameter_codes()
+#'
 #' total_nutrients <- read_waterdata_parameter_codes(parameter_group_code = "NUT",
 #'                                            sample_fraction = "Total")
-#'                                            
+#'
 #' group_of_nutrients <- read_waterdata_parameter_codes(parameter_group_code = "NUT",
 #'                                                     unit_of_measure = c("mg/l",
 #'                                                     "mg/l as N", "mg/l NO3",
 #'                                                     "mg/l asNO2"))
-#' 
+#'
 #' }
-read_waterdata_parameter_codes <- function(parameter_code = NA_character_,
-                                          parameter_name = NA_character_,
-                                          unit_of_measure = NA_character_,
-                                          parameter_group_code = NA_character_,
-                                          parameter_description = NA_character_,
-                                          medium = NA_character_,
-                                          statistical_basis = NA_character_,
-                                          weight_basis = NA_character_,
-                                          sample_fraction = NA_character_,
-                                          temperature_basis = NA_character_,
-                                          epa_equivalence = NA_character_,
-                                          properties = NA_character_,
-                                          limit = NA){
-
+read_waterdata_parameter_codes <- function(
+  parameter_code = NA_character_,
+  parameter_name = NA_character_,
+  unit_of_measure = NA_character_,
+  parameter_group_code = NA_character_,
+  parameter_description = NA_character_,
+  medium = NA_character_,
+  statistical_basis = NA_character_,
+  weight_basis = NA_character_,
+  sample_fraction = NA_character_,
+  temperature_basis = NA_character_,
+  epa_equivalence = NA_character_,
+  properties = NA_character_,
+  limit = NA
+) {
   service <- "parameter-codes"
   output_id <- "parameter_code"
-  
+
   args <- mget(names(formals()))
   args[["convertType"]] <- FALSE
   args[["skipGeometry"]] <- TRUE
   args[["bbox"]] <- NA
   args[["no_paging"]] <- FALSE # drops id if TRUE
 
-  return_list <- get_ogc_data(args = args,
-                              output_id = output_id,
-                              service =  service)
+  return_list <- get_ogc_data(
+    args = args,
+    output_id = output_id,
+    service = service
+  )
 
   return(return_list)
 }
-

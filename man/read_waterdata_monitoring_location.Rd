@@ -126,7 +126,7 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 \item{national_aquifer_code}{National aquifers are the principal aquifers or aquifer systems in the United States, defined as regionally extensive aquifers or aquifer systems that have the potential to be used as a source of potable water. Not all groundwater monitoring locations can be associated with a National Aquifer. Such monitoring locations will not be retrieved using this search criteria. A list of National aquifer codes and names is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/national-aquifer-codes/items}.}
 
-\item{aquifer_type_code}{Describes the confinement status of an aquifer at the monitoring location.  A confined aquifer is an aquifer below the land surface that is saturated with water.  A water table--or unconfined--aquifer is an aquifer whose upper water surface (water table) is at atmospheric pressure, and thus is able to rise and fall.}
+\item{aquifer_type_code}{Describes the confinement status of an aquifer at the monitoring location. A confined aquifer is an aquifer below the land surface that is saturated with water. A water table--or unconfined--aquifer is an aquifer whose upper water surface (water table) is at atmospheric pressure, and thus is able to rise and fall.}
 
 \item{well_constructed_depth}{The depth of the finished well, in feet below land surface datum. Note: Not all groundwater monitoring locations have information on Well Depth. Such monitoring locations will not be retrieved using this search criteria.}
 
@@ -136,7 +136,7 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, monitoring_location_id, agency_code, agency_name, monitoring_location_number, monitoring_location_name, district_code, country_code, country_name, state_code, state_name, county_code, county_name, minor_civil_division_code, site_type_code, site_type, hydrologic_unit_code, basin_code, altitude, altitude_accuracy, altitude_method_code, altitude_method_name, vertical_datum, vertical_datum_name, horizontal_positional_accuracy_code, horizontal_positional_accuracy, horizontal_position_method_code, horizontal_position_method_name, original_horizontal_datum, original_horizontal_datum_name, drainage_area, contributing_drainage_area, time_zone_abbreviation, uses_daylight_savings, construction_date, aquifer_code, national_aquifer_code, aquifer_type_code, well_constructed_depth, hole_constructed_depth, depth_source_code.
+geometry, monitoring_location_id, agency_code, agency_name, monitoring_location_number, monitoring_location_name, district_code, country_code, country_name, state_code, state_name, county_code, county_name, minor_civil_division_code, site_type_code, site_type, hydrologic_unit_code, basin_code, altitude, altitude_accuracy, altitude_method_code, altitude_method_name, vertical_datum, vertical_datum_name, horizontal_positional_accuracy_code, horizontal_positional_accuracy, horizontal_position_method_code, horizontal_position_method_name, original_horizontal_datum, original_horizontal_datum_name, drainage_area, contributing_drainage_area, time_zone_abbreviation, uses_daylight_savings, construction_date, aquifer_code, national_aquifer_code, aquifer_type_code, well_constructed_depth, hole_constructed_depth, depth_source_code, revision_note, revision_created, revision_modified.
 The default (\code{NA}) will return all columns of the data.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
@@ -173,16 +173,19 @@ site_slim <- read_waterdata_monitoring_location(
                                             "state_name",
                                             "county_name",
                                             "country_name"))
-                                            
+
 site_slim_no_sf_slim <- read_waterdata_monitoring_location(state_name = "Wisconsin",
                                            properties = c("monitoring_location_id",
                                                           "state_name",
                                                           "county_name",
-                                                          "country_name"), 
+                                                          "country_name",
+                                                          "site_type"),
+                                           site_type = "Well",
                                            skipGeometry = TRUE)
 
-site_info_no_sf <- read_waterdata_monitoring_location(monitoring_location_id = site,
-                                   skipGeometry = TRUE)
+site_info_no_sf <- read_waterdata_monitoring_location(
+     monitoring_location_id = site_slim_no_sf_slim$monitoring_location_id[1:1000],
+     skipGeometry = TRUE)
 
 bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
 multi_site <- read_waterdata_monitoring_location(bbox = bbox_vals)
