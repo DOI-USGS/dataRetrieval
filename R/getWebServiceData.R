@@ -98,6 +98,10 @@ check_non_200s <- function(returnedList) {
 #'
 #' @keywords internal
 default_ua <- function() {
+  if (!is.null(pkg.env$ua)) {
+    return(pkg.env$ua)
+  }
+
   versions <- c(
     libcurl = curl::curl_version()$version,
     httr2 = as.character(utils::packageVersion("httr2")),
@@ -110,6 +114,7 @@ default_ua <- function() {
     ua <- paste0(ua, "/", Sys.getenv("CUSTOM_DR_UA"))
   }
 
+  pkg.env$ua <- ua
   return(ua)
 }
 
