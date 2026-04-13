@@ -276,23 +276,3 @@ create_dateTime <- function(df, date_col, time_col, tz_col, tz) {
   return(df)
 }
 
-post_url <- function(obs_url, csv = FALSE) {
-  split <- strsplit(obs_url, "?", fixed = TRUE)
-
-  url <- split[[1]][1]
-  if (csv) {
-    url <- paste0(url, "?mimeType=csv")
-  } else {
-    url <- paste0(url, "?mimeType=tsv")
-  }
-
-  if (grepl("sorted", split[[1]][2])) {
-    url <- paste0(
-      url,
-      "&sorted=",
-      strsplit(split[[1]][2], "sorted=", fixed = TRUE)[[1]][2]
-    )
-  }
-
-  return(url)
-}

@@ -144,26 +144,6 @@ constructNWISURL <- function(
         url <- get_or_post(url, POST = POST, end_date = endDate)
       }
     },
-    measurements = {
-      url <- get_or_post(
-        baseURL,
-        POST = POST,
-        site_no = siteNumbers,
-        .multi = "comma"
-      )
-      url <- get_or_post(url, POST = POST, range_selection = "date_range")
-      if (nzchar(startDate)) {
-        url <- get_or_post(url, POST = POST, begin_date = startDate)
-      }
-      if (nzchar(endDate)) {
-        url <- get_or_post(url, POST = POST, end_date = endDate)
-      }
-      if (expanded) {
-        url <- get_or_post(url, POST = POST, format = "rdb_expanded")
-      } else {
-        url <- get_or_post(url, POST = POST, format = "rdb")
-      }
-    },
     stat = {
       # for statistics service
 
