@@ -549,8 +549,12 @@ summarize_waterdata_samples <- function(monitoringLocationIdentifier) {
 }
 
 
-#' @rdname read_waterdata_samples
+#' @title Deprecated: Use \code{read_waterdata_samples} instead
+#' @description This function has been renamed to \code{\link{read_waterdata_samples}}.
+#' @param ... Arguments passed to \code{\link{read_waterdata_samples}}.
+#' @return data frame returned from web service call.
 #' @export
+#' @keywords internal
 read_USGS_samples <- function(...) {
   .Deprecated(
     new = "read_waterdata_samples",
