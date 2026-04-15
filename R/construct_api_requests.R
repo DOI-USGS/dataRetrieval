@@ -597,6 +597,7 @@ basic_request <- function(url_base, format = "json") {
     httr2::req_headers(`Accept-Encoding` = c("compress", "gzip")) |>
     httr2::req_url_query(f = format, lang = "en-US") |>
     httr2::req_error(body = error_body) |>
+    httr2::req_retry(max_tries = 3, retry_on_failure = TRUE) |>
     httr2::req_timeout(seconds = 180)
 
   token <- Sys.getenv("API_USGS_PAT")

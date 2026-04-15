@@ -588,7 +588,7 @@ test_that("bad_properties", {
 
   # No paging
   dv_data_quick <- read_waterdata_daily(
-    monitoring_location_id = site,
+    monitoring_location_id = "USGS-02238500",
     parameter_code = "00060",
     no_paging = TRUE
   )

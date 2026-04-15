@@ -11,6 +11,12 @@
 get_ogc_data <- function(args, output_id, service, ..., chunk_size = 250) {
   rlang::check_dots_empty()
 
+  if (is.na(args[["skipGeometry"]])) {
+    skipGeometry <- FALSE
+  } else {
+    skipGeometry <- args[["skipGeometry"]]
+  }
+
   if (length(args[["monitoring_location_id"]]) > chunk_size) {
     ml_splits <- split(
       args[["monitoring_location_id"]],
@@ -56,12 +62,6 @@ get_ogc_data <- function(args, output_id, service, ..., chunk_size = 250) {
       return_list <- walk_pages(req)
     }
 
-    if (is.na(args[["skipGeometry"]])) {
-      skipGeometry <- FALSE
-    } else {
-      skipGeometry <- args[["skipGeometry"]]
-    }
-
     return_list <- deal_with_empty(
       return_list,
       properties,
@@ -99,6 +99,10 @@ get_ogc_data <- function(args, output_id, service, ..., chunk_size = 250) {
     if (getOption("dataRetrieval.attach_request")) {
       attr(return_list, "request") <- req
     }
+  }
+
+  if (!skipGeometry & "geometry" %in% names(return_list)) {
+    return_list <- sf::st_as_sf(return_list)
   }
 
   attr(return_list, "queryTime") <- Sys.time()
