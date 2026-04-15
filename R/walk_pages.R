@@ -9,7 +9,7 @@ walk_pages <- function(req) {
     req,
     next_req = next_req_url,
     max_reqs = Inf,
-    on_error = "stop"
+    on_error = "return"
   )
 
   return_list <- resps |>
