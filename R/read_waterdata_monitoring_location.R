@@ -65,11 +65,6 @@
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
-#' @param no_paging logical, defaults to `r getOption("dataRetrieval.no_paging")`.
-#' If `TRUE`, the data will
-#' be requested from a native csv format. This can be dangerous because the
-#' data will cut off at 50,000 rows without indication that more data
-#' is available. Use `TRUE` with caution.
 #' @param chunk_size Number of monitoring_location_ids to chunk requests into.
 #' Default is `r getOption("dataRetrieval.dataRetrieval.site_chunk_size_meta")`.
 #' Setting to `NA` will eliminate any site chunking, giving users external control.
@@ -147,7 +142,7 @@ read_waterdata_monitoring_location <- function(
   properties = NA_character_,
   bbox = NA,
   limit = NA,
-  convertType = getOption("dataRetrieval.convertType"),
+  skipGeometry = NA,
   chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
 ) {
   service <- "monitoring-locations"

@@ -110,6 +110,10 @@ limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
+\item{convertType}{logical, defaults to TRUE.
+If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
+vector and reorder the returned data frame.}
+
 \item{no_paging}{logical, defaults to FALSE.
 If \code{TRUE}, the data will
 be requested from a native csv format. This can be dangerous because the

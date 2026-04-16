@@ -45,6 +45,9 @@
 #' be requested from a native csv format. This can be dangerous because the
 #' data will cut off at 50,000 rows without indication that more data
 #' is available. Use `TRUE` with caution.
+#' @param convertType logical, defaults to `r getOption("dataRetrieval.convertType")`.
+#' If `TRUE`, the function will convert the data to dates, any qualifiers to string
+#' vector and reorder the returned data frame.
 #' @param chunk_size Number of monitoring_location_ids to chunk requests into.
 #' Default is `r getOption("dataRetrieval.dataRetrieval.site_chunk_size_meta")`.
 #' Setting to `NA` will eliminate any site chunking, giving users external control.
