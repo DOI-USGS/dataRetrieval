@@ -62,9 +62,8 @@
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
-#' @param skipGeometry This option can be used to skip response geometries for
-#' each feature. The returning object will be a data frame with no spatial
-#' information.
+#' @param \dots Not used. Included to help differentiate official Water Data API arguments
+#' from more seldom used, optional dataRetrieval-specific arguments.
 #' @param chunk_size Number of monitoring_location_ids to chunk requests into.
 #' Default is `r getOption("dataRetrieval.dataRetrieval.site_chunk_size_meta")`.
 #' Setting to `NA` will eliminate any site chunking, giving users external control.
@@ -97,6 +96,8 @@
 #'
 #' bbox_vals = c(-94.00, 35.0, -93.5, 35.5)
 #' multi_site <- read_waterdata_monitoring_location(bbox = bbox_vals)
+#'
+#'
 #' }
 read_waterdata_monitoring_location <- function(
   monitoring_location_id = NA_character_,
@@ -143,10 +144,12 @@ read_waterdata_monitoring_location <- function(
   bbox = NA,
   limit = NA,
   skipGeometry = NA,
+  ...,
   chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
 ) {
   service <- "monitoring-locations"
   output_id <- "monitoring_location_id"
+  rlang::check_dots_empty()
 
   args <- mget(names(formals()))
   args[["convertType"]] <- FALSE

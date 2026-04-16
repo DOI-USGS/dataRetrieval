@@ -39,6 +39,8 @@
 #' @param skipGeometry This optional parameter can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
+#' @param \dots Not used. Included to help differentiate official Water Data API arguments
+#' from more seldom used, optional dataRetrieval-specific arguments.
 #' @param convertType logical, defaults to `r getOption("dataRetrieval.convertType")`.
 #' If `TRUE`, the function will convert the data to dates, any qualifiers to string
 #' vector and reorder the returned data frame.
@@ -111,12 +113,14 @@ read_waterdata_daily <- function(
   time = NA_character_,
   bbox = NA,
   limit = NA,
+  ...,
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
   chunk_size = getOption("dataRetrieval.site_chunk_size_data")
 ) {
   service <- "daily"
   output_id <- "daily_id"
+  rlang::check_dots_empty()
 
   args <- mget(names(formals()))
   return_list <- get_ogc_data(args, output_id, service)

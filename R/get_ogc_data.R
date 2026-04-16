@@ -3,13 +3,10 @@
 #' @param args arguments from individual functions
 #' @param output_id Name of id column to return
 #' @param service Endpoint name.
-#' @param \dots Used to force users to fully name the details argument.
 #'
 #' @noRd
 #' @return data.frame with attributes
-get_ogc_data <- function(args, output_id, service, ...) {
-  rlang::check_dots_empty()
-
+get_ogc_data <- function(args, output_id, service) {
   if (is.na(args[["skipGeometry"]])) {
     skipGeometry <- FALSE
   } else {
@@ -17,9 +14,11 @@ get_ogc_data <- function(args, output_id, service, ...) {
   }
 
   chunk_size <- args[["chunk_size"]]
-  args[["chunk_size"]] <- NULL
 
-  if (length(args[["monitoring_location_id"]]) > chunk_size) {
+  args[["..."]] <- NULL
+  if (
+    !is.na(chunk_size) & length(args[["monitoring_location_id"]]) > chunk_size
+  ) {
     ml_splits <- split(
       args[["monitoring_location_id"]],
       ceiling(seq_along(args[["monitoring_location_id"]]) / chunk_size)
@@ -40,8 +39,7 @@ get_ogc_data <- function(args, output_id, service, ...) {
       ignore.attr = TRUE
     ))
   } else {
-    args[["chunk_sites_by"]] <- NULL
-
+    args[["chunk_size"]] <- NULL
     args <- switch_arg_id(args, id_name = output_id, service = service)
 
     args <- check_limits(args)

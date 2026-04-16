@@ -29,6 +29,7 @@ read_waterdata_ts_meta(
   bbox = NA,
   begin = NA_character_,
   end = NA_character_,
+  ...,
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
   chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
@@ -143,6 +144,9 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 \item{begin}{This field contains the same information as "begin_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
 
 \item{end}{This field contains the same information as "end_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
+
+\item{\dots}{Not used. Included to help differentiate official Water Data API arguments
+from more seldom used, optional dataRetrieval-specific arguments.}
 
 \item{convertType}{logical, defaults to TRUE.
 If \code{TRUE}, the function will convert the data to dates, any qualifiers to string

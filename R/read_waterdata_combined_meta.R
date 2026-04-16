@@ -96,6 +96,8 @@
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
+#' @param \dots Not used. Included to help differentiate official Water Data API arguments
+#' from more seldom used, optional dataRetrieval-specific arguments.
 #' @param no_paging logical, defaults to `r getOption("dataRetrieval.no_paging")`.
 #' If `TRUE`, the data will
 #' be requested from a native csv format. This can be dangerous because the
@@ -208,12 +210,14 @@ read_waterdata_combined_meta <- function(
   skipGeometry = NA,
   bbox = NA,
   limit = NA,
+  ...,
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
   chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
 ) {
   service <- "combined-metadata"
   output_id <- "combined_meta_id"
+  rlang::check_dots_empty()
 
   args <- mget(names(formals()))
   return_list <- get_ogc_data(args, output_id, service)

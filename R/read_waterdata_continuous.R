@@ -37,6 +37,8 @@
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
+#' @param \dots Not used. Included to help differentiate official Water Data API arguments
+#' from more seldom used, optional dataRetrieval-specific arguments.
 #' @param convertType logical, defaults to `r getOption("dataRetrieval.convertType")`.
 #' If `TRUE`, the function will convert the data to dates, any qualifiers to string
 #' vector and reorder the returned data frame.
@@ -134,12 +136,14 @@ read_waterdata_continuous <- function(
   last_modified = NA_character_,
   time = NA_character_,
   limit = NA,
+  ...,
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
   chunk_size = getOption("dataRetrieval.site_chunk_size_data")
 ) {
   service <- "continuous"
   output_id <- "continuous_id"
+  rlang::check_dots_empty()
 
   args <- mget(names(formals()))
   args[["skipGeometry"]] <- TRUE

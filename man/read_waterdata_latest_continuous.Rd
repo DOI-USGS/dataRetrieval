@@ -18,6 +18,7 @@ read_waterdata_latest_continuous(
   time = NA_character_,
   bbox = NA,
   limit = NA,
+  ...,
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
   chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
@@ -92,6 +93,9 @@ selected features that should be returned in each page. The maximum allowable
 limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
+
+\item{\dots}{Not used. Included to help differentiate official Water Data API arguments
+from more seldom used, optional dataRetrieval-specific arguments.}
 
 \item{convertType}{logical, defaults to TRUE.
 If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
