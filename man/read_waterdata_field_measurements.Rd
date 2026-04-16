@@ -24,8 +24,9 @@ read_waterdata_field_measurements(
   time = NA_character_,
   bbox = NA,
   limit = NA,
-  convertType = TRUE,
-  no_paging = FALSE
+  convertType = getOption("dataRetrieval.convertType"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data")
 )
 }
 \arguments{
@@ -109,13 +110,15 @@ limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
-\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
-will convert the data to dates and qualifier to string vector.}
-
-\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+\item{no_paging}{logical, defaults to FALSE.
+If \code{TRUE}, the data will
 be requested from a native csv format. This can be dangerous because the
 data will cut off at 50,000 rows without indication that more data
 is available. Use \code{TRUE} with caution.}
+
+\item{chunk_size}{Number of monitoring_location_ids to chunk requests into.
+Default is .
+Setting to \code{NA} will eliminate any site chunking, giving users external control.}
 }
 \description{
 Field measurements are physically measured values collected during a visit to the monitoring location. Field measurements consist of measurements of gage height and discharge, and readings of groundwater levels, and are primarily used as calibration readings for the automated sensors collecting continuous data. They are collected at a low frequency, and delivery of the data in WDFN may be delayed due to data processing time.
