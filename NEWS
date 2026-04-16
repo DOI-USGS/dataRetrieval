@@ -1,3 +1,10 @@
+dataRetrieval 2.7.25
+===================
+* Increase flexibility of chunking by monitoring_location_id by 
+including it as an argument in each relevant function.
+* Clean up deprecated code.
+
+
 dataRetrieval 2.7.24
 ===================
 * Let dataRetrieval take care of chunking up requests by monitoring_location_id.
