@@ -38,12 +38,20 @@
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
-#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
-#' will convert the data to dates and qualifier to string vector.
-#' @param no_paging logical, defaults to `FALSE`. If `TRUE`, the data will
+#' @param skipGeometry This option can be used to skip response geometries for
+#' each feature. The returning object will be a data frame with no spatial
+#' information.
+#' @param no_paging logical, defaults to `r getOption("dataRetrieval.no_paging")`.
+#' If `TRUE`, the data will
 #' be requested from a native csv format. This can be dangerous because the
 #' data will cut off at 50,000 rows without indication that more data
 #' is available. Use `TRUE` with caution.
+#' @param convertType logical, defaults to `r getOption("dataRetrieval.convertType")`.
+#' If `TRUE`, the function will convert the data to dates, any qualifiers to string
+#' vector and reorder the returned data frame.
+#' @param chunk_size Number of monitoring_location_ids to chunk requests into.
+#' Default is `r getOption("dataRetrieval.dataRetrieval.site_chunk_size_meta")`.
+#' Setting to `NA` will eliminate any site chunking, giving users external control.
 #'
 #' @inherit read_waterdata_continuous details
 #'
@@ -95,8 +103,9 @@ read_waterdata_field_meta <- function(
   skipGeometry = NA,
   bbox = NA,
   limit = NA,
-  convertType = TRUE,
-  no_paging = FALSE
+  convertType = getOption("dataRetrieval.convertType"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
 ) {
   service <- "field-measurements-metadata"
   output_id <- "field_series_id"

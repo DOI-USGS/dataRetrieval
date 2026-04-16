@@ -16,8 +16,9 @@ read_waterdata_continuous(
   last_modified = NA_character_,
   time = NA_character_,
   limit = NA,
-  convertType = TRUE,
-  no_paging = FALSE
+  convertType = getOption("dataRetrieval.convertType"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data")
 )
 }
 \arguments{
@@ -79,14 +80,19 @@ limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
-\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
-will convert the data to dates and qualifier to string vector, and sepcifically
-order the returning data frame by time and monitoring_location_id.}
+\item{convertType}{logical, defaults to TRUE.
+If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
+vector and reorder the returned data frame.}
 
-\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+\item{no_paging}{logical, defaults to FALSE.
+If \code{TRUE}, the data will
 be requested from a native csv format. This can be dangerous because the
 data will cut off at 50,000 rows without indication that more data
 is available. Use \code{TRUE} with caution.}
+
+\item{chunk_size}{Number of monitoring_location_ids to chunk requests into.
+Default is .
+Setting to \code{NA} will eliminate any site chunking, giving users external control.}
 }
 \description{
 Continuous data are collected via automated sensors installed at a monitoring location. They are collected at a high frequency and often at a fixed 15-minute interval. Depending on the specific monitoring location, the data may be transmitted automatically via telemetry and be available on WDFN within minutes of collection, while other times the delivery of data may be delayed if the monitoring location does not have the capacity to automatically transmit data. Continuous data are described by parameter name and parameter code (pcode). These data might also be referred to as "instantaneous values" or "IV".

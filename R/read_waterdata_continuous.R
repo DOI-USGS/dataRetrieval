@@ -37,13 +37,17 @@
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
-#' will convert the data to dates and qualifier to string vector, and sepcifically
-#' order the returning data frame by time and monitoring_location_id.
-#' @param no_paging logical, defaults to `FALSE`. If `TRUE`, the data will
+#' @param convertType logical, defaults to `r getOption("dataRetrieval.convertType")`.
+#' If `TRUE`, the function will convert the data to dates, any qualifiers to string
+#' vector and reorder the returned data frame.
+#' @param no_paging logical, defaults to `r getOption("dataRetrieval.no_paging")`.
+#' If `TRUE`, the data will
 #' be requested from a native csv format. This can be dangerous because the
 #' data will cut off at 50,000 rows without indication that more data
 #' is available. Use `TRUE` with caution.
+#' @param chunk_size Number of monitoring_location_ids to chunk requests into.
+#' Default is `r getOption("dataRetrieval.dataRetrieval.site_chunk_size_data")`.
+#' Setting to `NA` will eliminate any site chunking, giving users external control.
 #'
 #' @details
 #' You can also use a vector of length 2 for any time queries (such as time
@@ -130,8 +134,9 @@ read_waterdata_continuous <- function(
   last_modified = NA_character_,
   time = NA_character_,
   limit = NA,
-  convertType = TRUE,
-  no_paging = FALSE
+  convertType = getOption("dataRetrieval.convertType"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data")
 ) {
   service <- "continuous"
   output_id <- "continuous_id"

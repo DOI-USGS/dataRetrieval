@@ -26,12 +26,12 @@ read_waterdata_ts_meta(
   web_description = NA_character_,
   skipGeometry = NA,
   limit = NA,
-  max_results = NA,
   bbox = NA,
   begin = NA_character_,
   end = NA_character_,
-  convertType = TRUE,
-  no_paging = FALSE
+  convertType = getOption("dataRetrieval.convertType"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
 )
 }
 \arguments{
@@ -127,18 +127,11 @@ this system for 120 days.}
 
 \item{web_description}{A description of what this time series represents, as used by WDFN and other USGS data dissemination products.}
 
-\item{skipGeometry}{This option can be used to skip response geometries for
-each feature. The returning object will be a data frame with no spatial
-information.}
-
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
 limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
-
-\item{max_results}{The optional maximum number of rows to return. This value
-must be less than the requested limit.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
@@ -151,13 +144,19 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{end}{This field contains the same information as "end_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
 
-\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
-will convert the data to dates and qualifier to string vector.}
+\item{convertType}{logical, defaults to TRUE.
+If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
+vector and reorder the returned data frame.}
 
-\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+\item{no_paging}{logical, defaults to FALSE.
+If \code{TRUE}, the data will
 be requested from a native csv format. This can be dangerous because the
 data will cut off at 50,000 rows without indication that more data
 is available. Use \code{TRUE} with caution.}
+
+\item{chunk_size}{Number of monitoring_location_ids to chunk requests into.
+Default is .
+Setting to \code{NA} will eliminate any site chunking, giving users external control.}
 }
 \description{
 Daily data and continuous measurements are grouped into time series, which represent a collection of observations of a single parameter, potentially aggregated using a standard statistic, at a single monitoring location. This endpoint provides metadata about those time series, including their operational thresholds, units of measurement, and when the earliest and most recent observations in a time series occurred.

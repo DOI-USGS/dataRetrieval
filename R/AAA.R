@@ -7,6 +7,10 @@ pkg.env <- new.env()
   options("dataRetrieval.api_version" = "v0")
   options("dataRetrieval.api_version_stat" = "v0")
   options("dataRetrieval.attach_request" = TRUE)
+  options("dataRetrieval.convertType" = TRUE)
+  options("dataRetrieval.no_paging" = FALSE)
+  options("dataRetrieval.site_chunk_size_meta" = 250)
+  options("dataRetrieval.site_chunk_size_data" = 10)
 
   services <- c(
     "server",

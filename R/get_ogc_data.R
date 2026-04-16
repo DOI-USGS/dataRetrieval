@@ -4,11 +4,10 @@
 #' @param output_id Name of id column to return
 #' @param service Endpoint name.
 #' @param \dots Used to force users to fully name the details argument.
-#' @param chunk_size Number of monitoring_location_ids to chunk requests into.
 #'
 #' @noRd
 #' @return data.frame with attributes
-get_ogc_data <- function(args, output_id, service, ..., chunk_size = 250) {
+get_ogc_data <- function(args, output_id, service, ...) {
   rlang::check_dots_empty()
 
   if (is.na(args[["skipGeometry"]])) {
@@ -16,6 +15,9 @@ get_ogc_data <- function(args, output_id, service, ..., chunk_size = 250) {
   } else {
     skipGeometry <- args[["skipGeometry"]]
   }
+
+  chunk_size <- args[["chunk_size"]]
+  args[["chunk_size"]] <- NULL
 
   if (length(args[["monitoring_location_id"]]) > chunk_size) {
     ml_splits <- split(
