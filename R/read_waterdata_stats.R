@@ -163,12 +163,7 @@ construct_statistics_request <- function(service = "Normals") {
     httr2::req_url_path_append(getOption("dataRetrieval.api_version_stat")) |>
     httr2::req_url_path_append(paste0("observation", service))
 
-  token <- Sys.getenv("API_USGS_PAT")
-
-  if (token != "") {
-    base_request <- base_request |>
-      httr2::req_headers_redacted(`X-Api-Key` = token)
-  }
+  base_request <- add_api_token(base_request)
 
   return(base_request)
 }

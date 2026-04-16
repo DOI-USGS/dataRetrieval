@@ -385,11 +385,9 @@ format_api_dates <- function(datetime, date = FALSE) {
       }
       datetime <- paste0(datetime, collapse = "/")
     } else {
-      for (i in seq_along(datetime)) {
-        datetime1 <- get_dateTime(datetime)
-      }
+      datetime1 <- lapply(datetime, get_dateTime)
       datetime <- paste0(
-        lubridate::format_ISO8601(datetime1, usetz = "Z"),
+        vapply(datetime1, lubridate::format_ISO8601, character(1), usetz = "Z"),
         collapse = "/"
       )
     }
@@ -600,12 +598,16 @@ basic_request <- function(url_base, format = "json") {
     httr2::req_retry(max_tries = 3, retry_on_failure = TRUE) |>
     httr2::req_timeout(seconds = 180)
 
-  token <- Sys.getenv("API_USGS_PAT")
+  req <- add_api_token(req)
 
+  return(req)
+}
+
+add_api_token <- function(req) {
+  token <- Sys.getenv("API_USGS_PAT")
   if (token != "") {
     req <- req |>
       httr2::req_headers_redacted(`X-Api-Key` = token)
   }
-
-  return(req)
+  req
 }
