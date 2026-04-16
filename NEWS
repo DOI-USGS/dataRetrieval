@@ -3,6 +3,7 @@ dataRetrieval 2.7.25
 * Increase flexibility of chunking by monitoring_location_id by 
 including it as an argument in each relevant function.
 * Clean up deprecated code.
+* Updated retry strategy to include retry_on_failure = TRUE.
 
 
 dataRetrieval 2.7.24

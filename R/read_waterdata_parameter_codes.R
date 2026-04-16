@@ -23,6 +23,8 @@
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
+#' @param \dots Not used. Included to help differentiate official Water Data API arguments
+#' from more seldom used, optional dataRetrieval-specific arguments.
 #' @examplesIf is_dataRetrieval_user()
 #'
 #' \donttest{
@@ -56,16 +58,19 @@ read_waterdata_parameter_codes <- function(
   temperature_basis = NA_character_,
   epa_equivalence = NA_character_,
   properties = NA_character_,
-  limit = NA
+  limit = NA,
+  ...
 ) {
   service <- "parameter-codes"
   output_id <- "parameter_code"
+  rlang::check_dots_empty()
 
   args <- mget(names(formals()))
   args[["convertType"]] <- FALSE
   args[["skipGeometry"]] <- TRUE
   args[["bbox"]] <- NA
   args[["no_paging"]] <- FALSE # drops id if TRUE
+  args[["chunk_size"]] <- NA
 
   return_list <- get_ogc_data(
     args = args,

@@ -9,8 +9,10 @@ walk_pages <- function(req) {
     req,
     next_req = next_req_url,
     max_reqs = Inf,
-    on_error = "return"
+    on_error = "stop"
   )
+
+  failures <- resps |> httr2::resps_failures()
 
   return_list <- resps |>
     httr2::resps_successes() |>
@@ -143,7 +145,9 @@ ensure all requested data is returned."
 
 coerce_num_cols <- function(df, is_sf = FALSE) {
   included_num_cols <- names(df)[names(df) %in% num_cols]
-  if (length(included_num_cols) == 0) return(df)
+  if (length(included_num_cols) == 0) {
+    return(df)
+  }
 
   check_df <- if (is_sf) {
     sf::st_drop_geometry(df[, included_num_cols, drop = FALSE])
