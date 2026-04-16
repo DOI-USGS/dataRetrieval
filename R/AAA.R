@@ -90,20 +90,6 @@ wqp_message_beta <- function() {
   message("WQX3 services are in-development, use with caution.")
 }
 
-only_legacy <- function(service) {
-  legacy <- service %in%
-    c(
-      "Organization",
-      "ActivityMetric",
-      "SiteSummary",
-      "Project",
-      "ProjectMonitoringLocationWeighting",
-      "ResultDetectionQuantitationLimit",
-      "BiologicalMetric"
-    )
-  return(legacy)
-}
-
 is_legacy <- function(service) {
   legacy <- service %in%
     c(

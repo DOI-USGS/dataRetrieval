@@ -287,9 +287,6 @@ readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
   data <- importRDB1(url, asDateTime = FALSE, convertType = convertType)
 
   if ("current_rating_nu" %in% names(data)) {
-    intColumns <- intColumns[
-      !("current_rating_nu" %in% names(data)[intColumns])
-    ]
     data$current_rating_nu <- gsub(" ", "", data$current_rating_nu)
   }
 
@@ -480,9 +477,3 @@ readNWISuse <- function(
   return(NULL)
 }
 
-.capitalALL <- function(input) {
-  if (any(grepl("(?i)all", input))) {
-    input <- toupper(input)
-  }
-  return(input)
-}
