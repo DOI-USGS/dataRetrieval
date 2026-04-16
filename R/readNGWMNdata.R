@@ -50,9 +50,6 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC") {
   match.arg(service, c("observation", "featureOfInterest"))
 
   if (service == "observation") {
-    allObs <- data.frame()
-    allAttrs <- data.frame()
-
     # these attributes are pulled out and saved when doing binds to be reattached
     attrs <- c(
       "url",
@@ -63,13 +60,17 @@ readNGWMNdata <- function(service, ..., asDateTime = TRUE, tz = "UTC") {
     )
     featureID <- stats::na.omit(gsub(":", ".", dots[["siteNumbers"]]))
 
-    for (f in featureID) {
-      obsFID <- retrieveObservation(featureID = f, asDateTime, attrs, tz = tz)
-      obsFIDattr <- saveAttrs(attrs, obsFID)
-      obsFID <- removeAttrs(attrs, obsFID)
-      allObs <- r_bind_dr(allObs, obsFID)
-      allAttrs <- r_bind_dr(allAttrs, obsFIDattr)
+    obs_list <- vector("list", length(featureID))
+    attr_list <- vector("list", length(featureID))
+    for (idx in seq_along(featureID)) {
+      obsFID <- retrieveObservation(
+        featureID = featureID[idx], asDateTime, attrs, tz = tz
+      )
+      attr_list[[idx]] <- saveAttrs(attrs, obsFID)
+      obs_list[[idx]] <- removeAttrs(attrs, obsFID)
     }
+    allObs <- Reduce(r_bind_dr, obs_list, init = data.frame())
+    allAttrs <- Reduce(r_bind_dr, attr_list, init = data.frame())
 
     allSites <- tryCatch(
       {
