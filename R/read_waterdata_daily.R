@@ -113,7 +113,7 @@ read_waterdata_daily <- function(
   output_id <- "daily_id"
 
   args <- mget(names(formals()))
-  return_list <- get_ogc_data(args, output_id, service)
+  return_list <- get_ogc_data(args, output_id, service, chunk_size = 20)
 
   return(return_list)
 }
