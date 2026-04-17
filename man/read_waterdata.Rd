@@ -4,7 +4,14 @@
 \alias{read_waterdata}
 \title{Generalized USGS Water Data API retrieval function}
 \usage{
-read_waterdata(service, CQL, ..., convertType = TRUE)
+read_waterdata(
+  service,
+  CQL,
+  ...,
+  convertType = getOption("dataRetrieval.convertType"),
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
+)
 }
 \arguments{
 \item{service}{character, can be any existing collection.}

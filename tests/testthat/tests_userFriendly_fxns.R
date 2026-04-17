@@ -44,10 +44,38 @@ test_that("Unit value data returns correct types", {
   )
 
   # nolint start: line_length_linter
-  expect_equal(
-    attr(rawData, "request")[["url"]],
-    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-05114000&parameter_code=00060&time=2014-10-10T00%3A00%3A00Z%2F2014-10-10T00%3A00%3A00Z&limit=50000"
+  expect_true(
+    grepl(
+      x = attr(rawData, "request")[["url"]],
+      pattern = "monitoring_location_id=USGS-05114000"
+    )
   )
+
+  expect_true(
+    grepl(
+      x = attr(rawData, "request")[["url"]],
+      pattern = "time=2014-10-10T00%3A00%3A00Z%2F2014-10-10T00%3A00%3A00Z"
+    )
+  )
+
+  expect_true(
+    grepl(
+      x = attr(rawData, "request")[["url"]],
+      pattern = "parameter_code=00060"
+    )
+  )
+
+  expect_true(
+    grepl(
+      x = attr(rawData, "request")[["url"]],
+      pattern = paste0(
+        "https://api.waterdata.usgs.gov/ogcapi/",
+        getOption("dataRetrieval.api_version"),
+        "/collections/continuous/items"
+      )
+    )
+  )
+
   # nolint end
   timeZoneChange <- read_waterdata_continuous(
     monitoring_location_id = c("04024430", "04024000"),
@@ -58,9 +86,11 @@ test_that("Unit value data returns correct types", {
   expect_is(rawData$time, "POSIXct")
   expect_is(rawData$value, "numeric")
   # nolint start: line_length_linter
-  expect_equal(
-    attr(rawData, "request")[["url"]],
-    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&monitoring_location_id=USGS-05114000&parameter_code=00060&time=2014-10-10T00%3A00%3A00Z%2F2014-10-10T00%3A00%3A00Z&limit=50000"
+  expect_true(
+    grepl(
+      x = attr(rawData, "request")[["url"]],
+      pattern = "time=2014-10-10T00%3A00%3A00Z%2F2014-10-10T00%3A00%3A00Z"
+    )
   )
   # nolint end
   site <- "USGS-04087170"

@@ -48,25 +48,8 @@
 #' Available options are:
 #' `r dataRetrieval:::get_properties_for_docs("monitoring-locations", "monitoring_location_id")`.
 #' The default (`NA`) will return all columns of the data.
-#' @param bbox Only features that have a geometry that intersects the bounding
-#' box are selected.The bounding box is provided as four or six numbers, depending
-#' on whether the coordinate reference system includes a vertical axis (height or
-#' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
-#' vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
-#' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
-#' @param limit The optional limit parameter is used to control the subset of the
-#' selected features that should be returned in each page. The maximum allowable
-#' limit is 50000. It may be beneficial to set this number lower if your internet
-#' connection is spotty. The default (`NA`) will set the limit to the maximum
-#' allowable limit for the service.
-#' @param skipGeometry This option can be used to skip response geometries for
-#' each feature. The returning object will be a data frame with no spatial
-#' information.
-#' @param \dots Not used. Included to help differentiate official Water Data API arguments
-#' from more seldom used, optional dataRetrieval-specific arguments.
-#' @param chunk_size Number of monitoring_location_ids to chunk requests into.
-#' Default is `r getOption("dataRetrieval.dataRetrieval.site_chunk_size_meta")`.
-#' Setting to `NA` will eliminate any site chunking, giving users external control.
+#' @inheritParams check_arguments_api
+#' @inheritParams check_arguments_non_api
 #' @examplesIf is_dataRetrieval_user()
 #'
 #' \donttest{
@@ -142,10 +125,12 @@ read_waterdata_monitoring_location <- function(
   depth_source_code = NA_character_,
   properties = NA_character_,
   bbox = NA,
-  limit = NA,
   skipGeometry = NA,
   ...,
-  chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
+  limit = getOption("dataRetrieval.limit"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
   service <- "monitoring-locations"
   output_id <- "monitoring_location_id"

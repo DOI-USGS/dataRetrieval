@@ -4,32 +4,21 @@
 \alias{construct_api_requests}
 \title{Create API url}
 \usage{
-construct_api_requests(
-  service,
-  properties = NA_character_,
-  bbox = NA,
-  skipGeometry = FALSE,
-  no_paging = FALSE,
-  ...
-)
+construct_api_requests(service, bbox = NA, ...)
 }
 \arguments{
 \item{service}{Which service available on \url{https://api.waterdata.usgs.gov/ogcapi/v0/}.}
-
-\item{properties}{The properties that should be included for each feature. The
-parameter value is a comma-separated list of property names which depend on the
-service being called.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
 depth).}
 
-\item{skipGeometry}{This option can be used to skip response geometries for
-each feature. The returning object will be a data frame with no spatial
-information.}
-
 \item{...}{Extra parameters from the specific services.}
+
+\item{properties}{The properties that should be included for each feature. The
+parameter value is a comma-separated list of property names which depend on the
+service being called.}
 }
 \description{
 Main documentation: \url{https://api.waterdata.usgs.gov/ogcapi/v0/},

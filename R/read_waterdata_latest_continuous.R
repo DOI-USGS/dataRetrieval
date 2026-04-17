@@ -23,36 +23,8 @@
 #' Available options are:
 #' `r dataRetrieval:::get_properties_for_docs("latest-continuous", "latest_continuous_id")`.
 #' The default (`NA`) will return all columns of the data.
-#' @param bbox Only features that have a geometry that intersects the bounding
-#' box are selected.The bounding box is provided as four or six numbers, depending
-#' on whether the coordinate reference system includes a vertical axis (height or
-#' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
-#' vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
-#' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
-#' @param limit The optional limit parameter is used to control the subset of the
-#' selected features that should be returned in each page. The maximum allowable
-#' limit is 50000. It may be beneficial to set this number lower if your internet
-#' connection is spotty. The default (`NA`) will set the limit to the maximum
-#' allowable limit for the service.
-#' @param skipGeometry This option can be used to skip response geometries for
-#' each feature. The returning object will be a data frame with no spatial
-#' information.
-#' @param skipGeometry This option can be used to skip response geometries for
-#' each feature. The returning object will be a data frame with no spatial
-#' information.
-#' @param \dots Not used. Included to help differentiate official Water Data API arguments
-#' from more seldom used, optional dataRetrieval-specific arguments.
-#' @param no_paging logical, defaults to `r getOption("dataRetrieval.no_paging")`.
-#' If `TRUE`, the data will
-#' be requested from a native csv format. This can be dangerous because the
-#' data will cut off at 50,000 rows without indication that more data
-#' is available. Use `TRUE` with caution.
-#' @param convertType logical, defaults to `r getOption("dataRetrieval.convertType")`.
-#' If `TRUE`, the function will convert the data to dates, any qualifiers to string
-#' vector and reorder the returned data frame.
-#' @param chunk_size Number of monitoring_location_ids to chunk requests into.
-#' Default is `r getOption("dataRetrieval.dataRetrieval.site_chunk_size_meta")`.
-#' Setting to `NA` will eliminate any site chunking, giving users external control.
+#' @inheritParams check_arguments_api
+#' @inheritParams check_arguments_non_api
 #'
 #' @inherit read_waterdata_continuous details
 #' @examplesIf is_dataRetrieval_user()
@@ -102,11 +74,12 @@ read_waterdata_latest_continuous <- function(
   skipGeometry = NA,
   time = NA_character_,
   bbox = NA,
-  limit = NA,
   ...,
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
-  chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
+  chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
   service <- "latest-continuous"
   output_id <- "latest_continuous_id"

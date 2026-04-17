@@ -85,9 +85,9 @@ Available options are:
 geometry, field_measurement_id, monitoring_location_id, parameter_code, parameter_name, parameter_description, begin, end, last_modified.
 The default (\code{NA}) will return all columns of the data.}
 
-\item{skipGeometry}{This option can be used to skip response geometries for
+\item{skipGeometry}{This parameter can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
-information.}
+information. The default \code{NA} will not specify the argument in the request.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
@@ -96,13 +96,13 @@ depth). Coordinates are assumed to be in crs 4326. The expected format is a nume
 vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
 Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
-\item{limit}{The optional limit parameter is used to control the subset of the
+\item{limit}{numeric, The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
 limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
-\item{\dots}{Not used. Included to help differentiate official Water Data API arguments
+\item{...}{Not used. Included to help differentiate official Water Data API arguments
 from more seldom used, optional dataRetrieval-specific arguments.}
 
 \item{convertType}{logical, defaults to TRUE.
@@ -116,8 +116,11 @@ data will cut off at 50,000 rows without indication that more data
 is available. Use \code{TRUE} with caution.}
 
 \item{chunk_size}{Number of monitoring_location_ids to chunk requests into.
-Default is .
-Setting to \code{NA} will eliminate any site chunking, giving users external control.}
+The default for functions that don't generally return long-term data records
+is 250, while
+the default for time series functions is
+10.
+Setting to \code{NA} will eliminate site chunking, giving users full control.}
 }
 \description{
 This endpoint provides metadata about field measurement collections, including when the earliest and most recent observations for a parameter occurred at a monitoring location and its units.

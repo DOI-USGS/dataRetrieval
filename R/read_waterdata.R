@@ -51,12 +51,26 @@
 #'                                  CQL = cql_huc_wildcard)
 #'
 #' }
-read_waterdata <- function(service, CQL, ..., convertType = TRUE) {
+read_waterdata <- function(
+  service,
+  CQL,
+  ...,
+  convertType = getOption("dataRetrieval.convertType"),
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
+) {
   match.arg(service, pkg.env$api_endpoints)
 
   args <- list(...)
 
-  output_id <- switch(
+  args[["convertType"]] <- convertType
+  args[["limit"]] <- limit
+  args[["attach_request"]] <- attach_request
+  args[["bbox"]] <- NA
+  args[["no_paging"]] <- FALSE # drops id if TRUE
+  args[["chunk_size"]] <- NA # Chunking doesn't make sense.
+
+  args[["output_id"]] <- switch(
     service,
     "daily" = "daily_id",
     "latest-daily" = "latest_daily_id",
@@ -72,12 +86,7 @@ read_waterdata <- function(service, CQL, ..., convertType = TRUE) {
     args[["properties"]] <- NA_character_
   }
 
-  if (!"limit" %in% names(args)) {
-    args[["limit"]] <- NA_character_
-  }
-
   args[["service"]] <- service
-  args <- check_limits(args)
 
   data_req <- suppressWarnings(do.call(construct_api_requests, args))
 
@@ -87,28 +96,24 @@ read_waterdata <- function(service, CQL, ..., convertType = TRUE) {
 
   return_list <- walk_pages(data_req)
 
-  if (is.null(args[["skipGeometry"]])) {
-    skipGeometry <- FALSE
-  } else if (is.na(args[["skipGeometry"]])) {
-    skipGeometry <- FALSE
-  } else {
-    skipGeometry <- args[["skipGeometry"]]
-  }
-
   return_list <- deal_with_empty(
     return_list,
     args[["properties"]],
     service,
-    skipGeometry,
+    isTRUE(args[["skipGeometry"]]),
     convertType
   )
 
-  return_list <- rejigger_cols(return_list, args[["properties"]], output_id)
+  return_list <- rejigger_cols(
+    return_list,
+    args[["properties"]],
+    args[["output_id"]]
+  )
 
   if (convertType) {
     return_list <- cleanup_cols(return_list, service)
     return_list <- order_results(return_list)
-    return_list <- move_id_col(return_list, output_id)
+    return_list <- move_id_col(return_list, args[["output_id"]])
   }
 
   return(return_list)

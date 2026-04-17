@@ -17,8 +17,9 @@ read_waterdata_parameter_codes(
   temperature_basis = NA_character_,
   epa_equivalence = NA_character_,
   properties = NA_character_,
-  limit = NA,
-  ...
+  ...,
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
 )
 }
 \arguments{
@@ -49,14 +50,18 @@ Available options are:
 geometry, parameter_code_id, parameter_name, unit_of_measure, parameter_group_code, parameter_description, medium, statistical_basis, time_basis, weight_basis, particle_size_basis, sample_fraction, temperature_basis, epa_equivalence.
 The default (\code{NA}) will return all columns of the data.}
 
+\item{\dots}{Not used. Included to help differentiate official Water Data API arguments
+from more seldom used, optional dataRetrieval-specific arguments.}
+
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
 limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
-\item{\dots}{Not used. Included to help differentiate official Water Data API arguments
-from more seldom used, optional dataRetrieval-specific arguments.}
+\item{attach_request}{logical, defaults to TRUE.
+If set to \code{TRUE}, the full request sent to the Water Data API is attached
+as an attribute to the data set.}
 }
 \description{
 Parameter codes are 5-digit codes and associated descriptions used to identify the constituent measured and the units of measure. Some parameter code definitions include information about the sampling matrix, fraction, and methods used to measure the constituent. Some parameters are fixed-value (fxd) numeric codes having textual meaning (for example: parameter code 00041 is a weather code parameter, code of 60 means rain), but more commonly represent a numeric value for chemical, physical, or biological data.

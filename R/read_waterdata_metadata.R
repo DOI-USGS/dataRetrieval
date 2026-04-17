@@ -10,13 +10,16 @@
 #' "coordinate-method-codes", "hydrologic-unit-codes", "medium-codes",
 #' "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
 #' "topographic-codes", "time-zone-codes".
+#' @param \dots Optional arguments to pass to the query. Available parameters
+#' can be found with the \code{get_ogc_params} function.
 #' @param limit The optional limit parameter is used to control the subset of the
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param \dots Optional arguments to pass to the query. Available parameters
-#' can be found with the \code{get_ogc_params} function.
+#' @param attach_request logical, defaults to `r getOption("dataRetrieval.attach_request")`.
+#' If set to `TRUE`, the full request sent to the Water Data API is attached
+#' as an attribute to the data set.
 #' @examplesIf is_dataRetrieval_user()
 #'
 #' \donttest{
@@ -42,7 +45,12 @@
 #' time_zone_limited <- read_waterdata_metadata("time-zone-codes",
 #'                         time_zone_description = c("Alaska", "Hawaii", "Pacific North America"))
 #' }
-read_waterdata_metadata <- function(collection, limit = NA, ...) {
+read_waterdata_metadata <- function(
+  collection,
+  ...,
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
+) {
   match.arg(collection, pkg.env$metadata)
 
   output_id <- names(pkg.env$metadata)[pkg.env$metadata == collection]
@@ -57,12 +65,13 @@ read_waterdata_metadata <- function(collection, limit = NA, ...) {
       stop(paste0("Unknown argument: ", wrong_args))
     }
   }
-
+  args[["attach_request"]] <- attach_request
   args[["limit"]] <- limit
   args[["convertType"]] <- FALSE
-  args[["skipGeometry"]] <- TRUE
+  args[["skipGeometry"]] <- NA
   args[["bbox"]] <- NA
   args[["no_paging"]] <- FALSE # drops id if TRUE
+  args[["chunk_size"]] <- NA # Chunking doesn't make sense.
 
   return_list <- get_ogc_data(
     args = args,
