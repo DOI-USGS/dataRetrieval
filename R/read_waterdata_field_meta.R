@@ -81,7 +81,8 @@ read_waterdata_field_meta <- function(
   ...,
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
-  chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
+  chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
   service <- "field-measurements-metadata"
   output_id <- "field_series_id"
