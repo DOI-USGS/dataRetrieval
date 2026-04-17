@@ -10,6 +10,8 @@
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector.
 #' @param \dots Additional arguments to send to the request.
+#' @inheritParams check_arguments_non_api
+#'
 #' @examplesIf is_dataRetrieval_user()
 #'
 #' \donttest{

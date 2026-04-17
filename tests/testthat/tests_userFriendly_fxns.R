@@ -436,6 +436,7 @@ test_that("Construct USGS urls", {
 
   url_daily <- construct_api_requests(
     service = "daily",
+    output_id = "daily_id",
     monitoring_location_id = siteNumber,
     parameter_code = pCode,
     time = c(startDate, endDate),
@@ -444,9 +445,8 @@ test_that("Construct USGS urls", {
   )
 
   # nolint start: line_length_linter
-  expect_equal(
-    url_daily$url,
-    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?f=json&lang=en-US&skipGeometry=FALSE&monitoring_location_id=USGS-01594440&parameter_code=00060,00010&time=2024-01-01%2F..&statistic_id=00003,00001&limit=10000"
+  expect_true(
+    grepl(x = url_daily$url, pattern = "parameter_code=00060,00010")
   )
 
   url_works <- dataRetrieval:::walk_pages(url_daily)

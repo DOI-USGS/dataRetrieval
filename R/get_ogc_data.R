@@ -184,7 +184,7 @@ switch_properties_id <- function(properties, id) {
 #' is available. Use `TRUE` with caution.
 #' @param limit numeric, The optional limit parameter is used to control the subset of the
 #' selected features that should be returned in each page. The maximum allowable
-#' limit is 50000. It may be beneficial to set this number lower if your internet
+#' limit is 50,000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
 #' @param attach_request logical, defaults to `r getOption("dataRetrieval.attach_request")`.
@@ -207,24 +207,34 @@ check_arguments_non_api <- function(
   chunk_size,
   ...
 ) {
-  if (!is.na(convertType) & !is.logical(convertType)) {
-    stop("convertType should be a logical TRUE/FALSE")
+  if (!is.null(convertType)) {
+    if (!is.na(convertType) & !is.logical(convertType)) {
+      stop("convertType should be a logical TRUE/FALSE")
+    }
   }
 
-  if (!is.na(no_paging) & !is.logical(no_paging)) {
-    stop("no_paging should be a logical TRUE/FALSE")
+  if (!is.null(no_paging)) {
+    if (!is.na(no_paging) & !is.logical(no_paging)) {
+      stop("no_paging should be a logical TRUE/FALSE")
+    }
   }
 
-  if (!is.na(attach_request) & !is.logical(attach_request)) {
-    stop("attach_request should be a logical TRUE/FALSE")
+  if (!is.null(attach_request)) {
+    if (!is.na(attach_request) & !is.logical(attach_request)) {
+      stop("attach_request should be a logical TRUE/FALSE")
+    }
   }
 
-  if (!is.na(limit) & !is.numeric(limit)) {
-    stop("limit should be an integer")
+  if (!is.null(limit)) {
+    if (!is.na(limit) & !is.numeric(limit)) {
+      stop("limit should be an integer")
+    }
   }
 
-  if (!is.na(chunk_size) & !is.numeric(chunk_size)) {
-    stop("chunk_size should be an integer")
+  if (!is.null(chunk_size)) {
+    if (!is.na(chunk_size) & !is.numeric(chunk_size)) {
+      stop("chunk_size should be an integer")
+    }
   }
 }
 
@@ -244,13 +254,17 @@ check_arguments_non_api <- function(
 #'
 #' @keywords internal
 check_arguments_api <- function(bbox, skipGeometry, ...) {
-  if (!is.na(skipGeometry) & !is.logical(skipGeometry)) {
-    stop("skipGeometry should be a logical TRUE/FALSE")
+  if (!is.null(skipGeometry)) {
+    if (!is.na(skipGeometry) & !is.logical(skipGeometry)) {
+      stop("skipGeometry should be a logical TRUE/FALSE")
+    }
   }
 
-  if (!all(is.na(bbox))) {
-    if (!length(bbox) %in% c(1, 4)) {
-      stop("bbox is not set up correctly")
+  if (!is.null(bbox)) {
+    if (!all(is.na(bbox))) {
+      if (!length(bbox) %in% c(1, 4)) {
+        stop("bbox is not set up correctly")
+      }
     }
   }
 }

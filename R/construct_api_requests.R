@@ -5,23 +5,27 @@
 #'
 #' @export
 #' @param service Which service available on <https://api.waterdata.usgs.gov/ogcapi/v0/>.
+#' @param output_id Name of id column to return
 #' @param ... Extra parameters from the specific services.
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
 #' depth).
-#' @param properties The properties that should be included for each feature. The
-#' parameter value is a comma-separated list of property names which depend on the
-#' service being called.
 #' @keywords internal
+#'
+#' @inheritParams check_arguments_api
+#' @inheritParams check_arguments_non_api
+#'
 #' @examples
 #' site <- "USGS-02238500"
 #' pcode <- "00060"
 #' req_dv <- construct_api_requests("daily",
+#'                                  output_id = "daily_id",
 #'                                  monitoring_location_id = site,
 #'                                  parameter_code = "00060")
 #'
 #' req_dv <- construct_api_requests("daily",
+#'                                  output_id = "daily_id",
 #'                                  monitoring_location_id = site,
 #'                                  parameter_code = c("00060", "00065"))
 #'
@@ -29,21 +33,39 @@
 #' start_date <- "2018-01-01"
 #' end_date <- "2022-01-01"
 #' req_dv <- construct_api_requests("daily",
-#'                                 monitoring_location_id = sites,
-#'                                 parameter_code = c("00060", "00065"),
-#'                                 datetime = c(start_date, end_date))
+#'                                  output_id = "daily_id",
+#'                                  monitoring_location_id = sites,
+#'                                  parameter_code = c("00060", "00065"),
+#'                                  datetime = c(start_date, end_date))
 #'
 construct_api_requests <- function(
   service,
+  output_id,
+  ...,
   bbox = NA,
-  ...
+  convertType = getOption("dataRetrieval.convertType"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data"),
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
   POST <- FALSE
 
   full_list <- list(...)
+  full_list[["limit"]] <- limit
 
-  do.call(check_arguments_non_api, full_list)
-  do.call(check_arguments_api, full_list)
+  check_arguments_non_api(
+    convertType = convertType,
+    no_paging = no_paging,
+    limit = full_list[["limit"]],
+    attach_request = attach_request,
+    chunk_size = chunk_size
+  )
+
+  check_arguments_api(
+    bbox = full_list[["bbox"]],
+    skipGeometry = full_list[["skipGeometry"]]
+  )
 
   time_periods <- c(
     "last_modified",
@@ -57,22 +79,17 @@ construct_api_requests <- function(
 
   full_list <- switch_arg_id(
     full_list,
-    id_name = full_list[["output_id"]],
+    id_name = output_id,
     service = service
   )
 
   # Clean out non-API arguments:
   properties <- switch_properties_id(
     properties = full_list[["properties"]],
-    id = full_list[["output_id"]]
+    id = output_id
   )
+
   full_list[["properties"]] <- NULL
-  full_list[["output_id"]] <- NULL
-  full_list[["chunk_size"]] <- NULL
-  full_list[["convertType"]] <- NULL
-  full_list[["attach_request"]] <- NULL
-  no_paging <- full_list[["no_paging"]]
-  full_list[["no_paging"]] <- NULL
 
   if (any(time_periods %in% names(full_list))) {
     for (i in time_periods[time_periods %in% names(full_list)]) {
