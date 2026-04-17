@@ -25,14 +25,15 @@ read_waterdata_ts_meta(
   time_series_id = NA_character_,
   web_description = NA_character_,
   skipGeometry = NA,
-  limit = NA,
   bbox = NA,
   begin = NA_character_,
   end = NA_character_,
   ...,
+  limit = getOption("dataRetrieval.limit"),
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
-  chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
+  chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
+  attach_request = getOption("dataRetrieval.attach_request")
 )
 }
 \arguments{
@@ -128,11 +129,9 @@ this system for 120 days.}
 
 \item{web_description}{A description of what this time series represents, as used by WDFN and other USGS data dissemination products.}
 
-\item{limit}{The optional limit parameter is used to control the subset of the
-selected features that should be returned in each page. The maximum allowable
-limit is 50000. It may be beneficial to set this number lower if your internet
-connection is spotty. The default (\code{NA}) will set the limit to the maximum
-allowable limit for the service.}
+\item{skipGeometry}{This parameter can be used to skip response geometries for
+each feature. The returning object will be a data frame with no spatial
+information. The default \code{NA} will not specify the argument in the request.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
@@ -145,8 +144,14 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{end}{This field contains the same information as "end_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
 
-\item{\dots}{Not used. Included to help differentiate official Water Data API arguments
+\item{...}{Not used. Included to help differentiate official Water Data API arguments
 from more seldom used, optional dataRetrieval-specific arguments.}
+
+\item{limit}{numeric, The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 50000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
 
 \item{convertType}{logical, defaults to TRUE.
 If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
@@ -159,8 +164,15 @@ data will cut off at 50,000 rows without indication that more data
 is available. Use \code{TRUE} with caution.}
 
 \item{chunk_size}{Number of monitoring_location_ids to chunk requests into.
-Default is .
-Setting to \code{NA} will eliminate any site chunking, giving users external control.}
+The default for functions that don't generally return long-term data records
+is 250, while
+the default for time series functions is
+10.
+Setting to \code{NA} will eliminate site chunking, giving users full control.}
+
+\item{attach_request}{logical, defaults to TRUE.
+If set to \code{TRUE}, the full request sent to the Water Data API is attached
+as an attribute to the data set.}
 }
 \description{
 Daily data and continuous measurements are grouped into time series, which represent a collection of observations of a single parameter, potentially aggregated using a standard statistic, at a single monitoring location. This endpoint provides metadata about those time series, including their operational thresholds, units of measurement, and when the earliest and most recent observations in a time series occurred.
@@ -189,7 +201,7 @@ site <- "USGS-02238500"
 meta_1 <- read_waterdata_ts_meta(monitoring_location_id = site)
 
 meta_multi <- read_waterdata_ts_meta(monitoring_location_id =  c("USGS-01491000",
-                                                            "USGS-01645000"),
+                                                                 "USGS-01645000"),
                             parameter_code = c("00060", "00010"),
                             properties = c("monitoring_location_id",
                                            "parameter_code",

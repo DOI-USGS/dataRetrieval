@@ -18,13 +18,16 @@
 #' Available options are:
 #' `r dataRetrieval:::get_properties_for_docs("parameter-codes", "parameter_code_id")`.
 #' The default (`NA`) will return all columns of the data.
+#' @param \dots Not used. Included to help differentiate official Water Data API arguments
+#' from more seldom used, optional dataRetrieval-specific arguments.
 #' @param limit The optional limit parameter is used to control the subset of the
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param \dots Not used. Included to help differentiate official Water Data API arguments
-#' from more seldom used, optional dataRetrieval-specific arguments.
+#' @param attach_request logical, defaults to `r getOption("dataRetrieval.attach_request")`.
+#' If set to `TRUE`, the full request sent to the Water Data API is attached
+#' as an attribute to the data set.
 #' @examplesIf is_dataRetrieval_user()
 #'
 #' \donttest{
@@ -58,8 +61,9 @@ read_waterdata_parameter_codes <- function(
   temperature_basis = NA_character_,
   epa_equivalence = NA_character_,
   properties = NA_character_,
-  limit = NA,
-  ...
+  ...,
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
   service <- "parameter-codes"
   output_id <- "parameter_code"
@@ -67,7 +71,7 @@ read_waterdata_parameter_codes <- function(
 
   args <- mget(names(formals()))
   args[["convertType"]] <- FALSE
-  args[["skipGeometry"]] <- TRUE
+  args[["skipGeometry"]] <- NA
   args[["bbox"]] <- NA
   args[["no_paging"]] <- FALSE # drops id if TRUE
   args[["chunk_size"]] <- NA

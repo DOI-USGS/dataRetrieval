@@ -4,7 +4,12 @@
 \alias{read_waterdata_metadata}
 \title{Generalized USGS Water Meta Data API retrieval function}
 \usage{
-read_waterdata_metadata(collection, limit = NA, ...)
+read_waterdata_metadata(
+  collection,
+  ...,
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
+)
 }
 \arguments{
 \item{collection}{character, can be any existing collection such
@@ -14,14 +19,18 @@ as "parameter-codes", "agency-codes", "altitude-datums", "aquifer-codes",
 "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
 "topographic-codes", "time-zone-codes".}
 
+\item{\dots}{Optional arguments to pass to the query. Available parameters
+can be found with the \code{get_ogc_params} function.}
+
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
 limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
-\item{\dots}{Optional arguments to pass to the query. Available parameters
-can be found with the \code{get_ogc_params} function.}
+\item{attach_request}{logical, defaults to TRUE.
+If set to \code{TRUE}, the full request sent to the Water Data API is attached
+as an attribute to the data set.}
 }
 \description{
 Function to get metadata from Water Data API. These are useful to get the

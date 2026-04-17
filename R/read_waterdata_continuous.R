@@ -32,24 +32,9 @@
 #' Available options are:
 #' `r dataRetrieval:::get_properties_for_docs("continuous", "continuous_id")`.
 #' The default (`NA`) will return all columns of the data.
-#' @param limit The optional limit parameter is used to control the subset of the
-#' selected features that should be returned in each page. The maximum allowable
-#' limit is 50000. It may be beneficial to set this number lower if your internet
-#' connection is spotty. The default (`NA`) will set the limit to the maximum
-#' allowable limit for the service.
 #' @param \dots Not used. Included to help differentiate official Water Data API arguments
 #' from more seldom used, optional dataRetrieval-specific arguments.
-#' @param convertType logical, defaults to `r getOption("dataRetrieval.convertType")`.
-#' If `TRUE`, the function will convert the data to dates, any qualifiers to string
-#' vector and reorder the returned data frame.
-#' @param no_paging logical, defaults to `r getOption("dataRetrieval.no_paging")`.
-#' If `TRUE`, the data will
-#' be requested from a native csv format. This can be dangerous because the
-#' data will cut off at 50,000 rows without indication that more data
-#' is available. Use `TRUE` with caution.
-#' @param chunk_size Number of monitoring_location_ids to chunk requests into.
-#' Default is `r getOption("dataRetrieval.dataRetrieval.site_chunk_size_data")`.
-#' Setting to `NA` will eliminate any site chunking, giving users external control.
+#' @inheritParams check_arguments_non_api
 #'
 #' @details
 #' You can also use a vector of length 2 for any time queries (such as time
@@ -135,11 +120,12 @@ read_waterdata_continuous <- function(
   value = NA,
   last_modified = NA_character_,
   time = NA_character_,
-  limit = NA,
   ...,
   convertType = getOption("dataRetrieval.convertType"),
+  limit = getOption("dataRetrieval.limit"),
   no_paging = getOption("dataRetrieval.no_paging"),
-  chunk_size = getOption("dataRetrieval.site_chunk_size_data")
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
   service <- "continuous"
   output_id <- "continuous_id"

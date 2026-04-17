@@ -18,11 +18,12 @@ read_waterdata_daily(
   skipGeometry = NA,
   time = NA_character_,
   bbox = NA,
-  limit = NA,
   ...,
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
-  chunk_size = getOption("dataRetrieval.site_chunk_size_data")
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data"),
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
 )
 }
 \arguments{
@@ -69,9 +70,9 @@ Only features that have a \code{last_modified} that intersects the value of date
 
 See also Details below for more information.}
 
-\item{skipGeometry}{This optional parameter can be used to skip response geometries for
+\item{skipGeometry}{This parameter can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
-information.}
+information. The default \code{NA} will not specify the argument in the request.}
 
 \item{time}{The date an observation represents. You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
 Examples:
@@ -93,13 +94,7 @@ depth). Coordinates are assumed to be in crs 4326. The expected format is a nume
 vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
 Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
-\item{limit}{The optional limit parameter is used to control the subset of the
-selected features that should be returned in each page. The maximum allowable
-limit is 50000. It may be beneficial to set this number lower if your internet
-connection is spotty. The default (\code{NA}) will set the limit to the maximum
-allowable limit for the service.}
-
-\item{\dots}{Not used. Included to help differentiate official Water Data API arguments
+\item{...}{Not used. Included to help differentiate official Water Data API arguments
 from more seldom used, optional dataRetrieval-specific arguments.}
 
 \item{convertType}{logical, defaults to TRUE.
@@ -113,8 +108,21 @@ data will cut off at 50,000 rows without indication that more data
 is available. Use \code{TRUE} with caution.}
 
 \item{chunk_size}{Number of monitoring_location_ids to chunk requests into.
-Default is .
-Setting to \code{NA} will eliminate any site chunking, giving users external control.}
+The default for functions that don't generally return long-term data records
+is 250, while
+the default for time series functions is
+10.
+Setting to \code{NA} will eliminate site chunking, giving users full control.}
+
+\item{limit}{numeric, The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 50000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
+
+\item{attach_request}{logical, defaults to TRUE.
+If set to \code{TRUE}, the full request sent to the Water Data API is attached
+as an attribute to the data set.}
 }
 \description{
 Daily data provide one data value to represent water conditions for the day. Throughout much of the history of the USGS, the primary water data available was daily data collected manually at the monitoring location once each day. With improved availability of computer storage and automated transmission of data, the daily data published today are generally a statistical summary or metric of the continuous data collected each day, such as the daily mean, minimum, or maximum value. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. These data have also been referred to as “daily values” or “DV”.

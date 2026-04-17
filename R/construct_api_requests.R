@@ -13,9 +13,6 @@
 #' @param properties The properties that should be included for each feature. The
 #' parameter value is a comma-separated list of property names which depend on the
 #' service being called.
-#' @param skipGeometry This option can be used to skip response geometries for
-#' each feature. The returning object will be a data frame with no spatial
-#' information.
 #' @keywords internal
 #' @examples
 #' site <- "USGS-02238500"
@@ -38,15 +35,15 @@
 #'
 construct_api_requests <- function(
   service,
-  properties = NA_character_,
   bbox = NA,
-  skipGeometry = FALSE,
-  no_paging = FALSE,
   ...
 ) {
   POST <- FALSE
 
   full_list <- list(...)
+
+  do.call(check_arguments_non_api, full_list)
+  do.call(check_arguments_api, full_list)
 
   time_periods <- c(
     "last_modified",
@@ -57,6 +54,25 @@ construct_api_requests <- function(
     "begin_utc",
     "end_utc"
   )
+
+  full_list <- switch_arg_id(
+    full_list,
+    id_name = full_list[["output_id"]],
+    service = service
+  )
+
+  # Clean out non-API arguments:
+  properties <- switch_properties_id(
+    properties = full_list[["properties"]],
+    id = full_list[["output_id"]]
+  )
+  full_list[["properties"]] <- NULL
+  full_list[["output_id"]] <- NULL
+  full_list[["chunk_size"]] <- NULL
+  full_list[["convertType"]] <- NULL
+  full_list[["attach_request"]] <- NULL
+  no_paging <- full_list[["no_paging"]]
+  full_list[["no_paging"]] <- NULL
 
   if (any(time_periods %in% names(full_list))) {
     for (i in time_periods[time_periods %in% names(full_list)]) {
@@ -74,9 +90,10 @@ construct_api_requests <- function(
     "begin",
     "end",
     "time",
-    "limit",
     "begin_utc",
-    "end_utc"
+    "end_utc",
+    "limit",
+    "skipGeometry"
   )
 
   comma_params <- c(
@@ -110,6 +127,7 @@ construct_api_requests <- function(
     Negate(anyNA),
     lapply(full_list[comma_params], function(x) x[!is.na(x)])
   )
+
   comma_params_filtered <- comma_params_filtered[
     !sapply(comma_params_filtered, is.null)
   ]
@@ -128,8 +146,6 @@ construct_api_requests <- function(
     # GET list refers to arguments that will go in the URL no matter what (not POST)
     get_list <- c(single_params_filtered, comma_params_filtered)
   }
-
-  get_list[["skipGeometry"]] <- skipGeometry
 
   get_list <- get_list[!is.na(get_list)]
 
@@ -207,15 +223,6 @@ construct_api_requests <- function(
   return(baseURL)
 }
 
-check_limits <- function(args) {
-  current_api_limit <- 50000
-
-  if (is.na(args[["limit"]])) {
-    args[["limit"]] <- current_api_limit
-  }
-
-  return(args)
-}
 
 #' Setup the request for the OGC API requests
 #'

@@ -45,32 +45,8 @@
 #' `r dataRetrieval:::get_properties_for_docs("time-series-metadata", "time_series_id")`.
 #' The default (`NA`) will return all columns of the data.
 #' @param time_series_id `r get_ogc_params("time-series-metadata")$id`
-#' @param bbox Only features that have a geometry that intersects the bounding
-#' box are selected.The bounding box is provided as four or six numbers, depending
-#' on whether the coordinate reference system includes a vertical axis (height or
-#' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
-#' vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
-#' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
-#' @param limit The optional limit parameter is used to control the subset of the
-#' selected features that should be returned in each page. The maximum allowable
-#' limit is 50000. It may be beneficial to set this number lower if your internet
-#' connection is spotty. The default (`NA`) will set the limit to the maximum
-#' allowable limit for the service.
-#' @param \dots Not used. Included to help differentiate official Water Data API arguments
-#' from more seldom used, optional dataRetrieval-specific arguments.
-#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
-#' will convert the data to dates and qualifier to string vector.
-#' @param no_paging logical, defaults to `r getOption("dataRetrieval.no_paging")`.
-#' If `TRUE`, the data will
-#' be requested from a native csv format. This can be dangerous because the
-#' data will cut off at 50,000 rows without indication that more data
-#' is available. Use `TRUE` with caution.
-#' @param convertType logical, defaults to `r getOption("dataRetrieval.convertType")`.
-#' If `TRUE`, the function will convert the data to dates, any qualifiers to string
-#' vector and reorder the returned data frame.
-#' @param chunk_size Number of monitoring_location_ids to chunk requests into.
-#' Default is `r getOption("dataRetrieval.dataRetrieval.site_chunk_size_meta")`.
-#' Setting to `NA` will eliminate any site chunking, giving users external control.
+#' @inheritParams check_arguments_api
+#' @inheritParams check_arguments_non_api
 #'
 #' @inherit read_waterdata_continuous details
 #'
@@ -81,7 +57,7 @@
 #' meta_1 <- read_waterdata_ts_meta(monitoring_location_id = site)
 #'
 #' meta_multi <- read_waterdata_ts_meta(monitoring_location_id =  c("USGS-01491000",
-#'                                                             "USGS-01645000"),
+#'                                                                  "USGS-01645000"),
 #'                             parameter_code = c("00060", "00010"),
 #'                             properties = c("monitoring_location_id",
 #'                                            "parameter_code",
@@ -113,16 +89,17 @@ read_waterdata_ts_meta <- function(
   time_series_id = NA_character_,
   web_description = NA_character_,
   skipGeometry = NA,
-  limit = NA,
   bbox = NA,
   begin = NA_character_,
   end = NA_character_,
   ...,
+  limit = getOption("dataRetrieval.limit"),
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
-  chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
+  chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
-  service = "time-series-metadata"
+  service <- "time-series-metadata"
   output_id <- "time_series_id"
   rlang::check_dots_empty()
 

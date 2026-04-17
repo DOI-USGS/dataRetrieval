@@ -15,11 +15,12 @@ read_waterdata_continuous(
   value = NA,
   last_modified = NA_character_,
   time = NA_character_,
-  limit = NA,
   ...,
   convertType = getOption("dataRetrieval.convertType"),
+  limit = getOption("dataRetrieval.limit"),
   no_paging = getOption("dataRetrieval.no_paging"),
-  chunk_size = getOption("dataRetrieval.site_chunk_size_data")
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data"),
+  attach_request = getOption("dataRetrieval.attach_request")
 )
 }
 \arguments{
@@ -75,18 +76,18 @@ Only features that have a \code{time} that intersects the value of datetime are 
 
 See also Details below for more information.}
 
-\item{limit}{The optional limit parameter is used to control the subset of the
-selected features that should be returned in each page. The maximum allowable
-limit is 50000. It may be beneficial to set this number lower if your internet
-connection is spotty. The default (\code{NA}) will set the limit to the maximum
-allowable limit for the service.}
-
 \item{\dots}{Not used. Included to help differentiate official Water Data API arguments
 from more seldom used, optional dataRetrieval-specific arguments.}
 
 \item{convertType}{logical, defaults to TRUE.
 If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
 vector and reorder the returned data frame.}
+
+\item{limit}{numeric, The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 50000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
 
 \item{no_paging}{logical, defaults to FALSE.
 If \code{TRUE}, the data will
@@ -95,8 +96,15 @@ data will cut off at 50,000 rows without indication that more data
 is available. Use \code{TRUE} with caution.}
 
 \item{chunk_size}{Number of monitoring_location_ids to chunk requests into.
-Default is .
-Setting to \code{NA} will eliminate any site chunking, giving users external control.}
+The default for functions that don't generally return long-term data records
+is 250, while
+the default for time series functions is
+10.
+Setting to \code{NA} will eliminate site chunking, giving users full control.}
+
+\item{attach_request}{logical, defaults to TRUE.
+If set to \code{TRUE}, the full request sent to the Water Data API is attached
+as an attribute to the data set.}
 }
 \description{
 Continuous data are collected via automated sensors installed at a monitoring location. They are collected at a high frequency and often at a fixed 15-minute interval. Depending on the specific monitoring location, the data may be transmitted automatically via telemetry and be available on WDFN within minutes of collection, while other times the delivery of data may be delayed if the monitoring location does not have the capacity to automatically transmit data. Continuous data are described by parameter name and parameter code (pcode). These data might also be referred to as "instantaneous values" or "IV".
