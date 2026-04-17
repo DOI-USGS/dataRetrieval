@@ -19,7 +19,8 @@ read_waterdata_field_meta(
   ...,
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
-  chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
+  chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
+  attach_request = getOption("dataRetrieval.attach_request")
 )
 }
 \arguments{
@@ -121,6 +122,10 @@ is 250, while
 the default for time series functions is
 10.
 Setting to \code{NA} will eliminate site chunking, giving users full control.}
+
+\item{attach_request}{logical, defaults to TRUE.
+If set to \code{TRUE}, the full request sent to the Water Data API is attached
+as an attribute to the data set.}
 }
 \description{
 This endpoint provides metadata about field measurement collections, including when the earliest and most recent observations for a parameter occurred at a monitoring location and its units.
