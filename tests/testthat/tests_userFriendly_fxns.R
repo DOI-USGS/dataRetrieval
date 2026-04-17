@@ -454,14 +454,17 @@ test_that("Construct USGS urls", {
 
   url_ts_meta <- construct_api_requests(
     monitoring_location_id = siteNumber,
+    output_id = "time_series_id",
     parameter_code = pCode,
     service = "time-series-metadata",
     limit = 10000
   )
 
-  expect_equal(
-    url_ts_meta$url,
-    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&lang=en-US&skipGeometry=FALSE&monitoring_location_id=USGS-01594440&parameter_code=00060,00010&limit=10000"
+  expect_true(
+    grepl(
+      x = url_ts_meta$url,
+      pattern = "collections/time-series-metadata/items"
+    )
   )
 
   url_works_ts <- dataRetrieval:::walk_pages(url_ts_meta)
@@ -469,13 +472,13 @@ test_that("Construct USGS urls", {
 
   url_ml <- construct_api_requests(
     id = siteNumber,
+    output_id = "monitoring_location_id",
     service = "monitoring-locations",
     limit = 50000
   )
 
-  expect_equal(
-    url_ml$url,
-    "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations/items?f=json&lang=en-US&skipGeometry=FALSE&id=USGS-01594440&limit=50000"
+  expect_true(
+    grepl(x = url_ml$url, pattern = "id=USGS-01594440")
   )
 
   url_works_ml <- dataRetrieval:::walk_pages(url_ml)

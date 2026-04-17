@@ -58,7 +58,7 @@ buildcheck:
   dependencies:
     - build-image
   script:
-    - Rscript -e 'devtools::install(quick = TRUE, upgrade = "never")'
+    - Rscript -e 'devtools::install(quick = TRUE, upgrade = TRUE)'
     - Rscript -e 'devtools::check(document = FALSE, args = "--no-tests", check_dir = Sys.getenv("BUILD_LOGS_DIR"), vignettes = FALSE)'
 
 unittests:

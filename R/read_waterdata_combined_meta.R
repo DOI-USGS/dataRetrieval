@@ -187,7 +187,8 @@ read_waterdata_combined_meta <- function(
   convertType = getOption("dataRetrieval.convertType"),
   limit = getOption("dataRetrieval.limit"),
   no_paging = getOption("dataRetrieval.no_paging"),
-  chunk_size = getOption("dataRetrieval.site_chunk_size_meta")
+  chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
   service <- "combined-metadata"
   output_id <- "combined_meta_id"
