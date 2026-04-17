@@ -80,7 +80,8 @@ read_waterdata_channel <- function(
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
   limit = getOption("dataRetrieval.limit"),
-  chunk_size = getOption("dataRetrieval.site_chunk_size_data")
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
   service <- "channel-measurements"
   output_id <- "channel_measurements_id"

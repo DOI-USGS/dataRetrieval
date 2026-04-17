@@ -116,7 +116,7 @@ get_csv <- function(req, limit) {
     df <- data.table::fread(
       input = return_list,
       data.table = FALSE,
-      colClasses = "text"
+      colClasses = "character"
     )
 
     df <- coerce_num_cols(df)

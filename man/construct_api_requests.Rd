@@ -4,21 +4,56 @@
 \alias{construct_api_requests}
 \title{Create API url}
 \usage{
-construct_api_requests(service, bbox = NA, ...)
+construct_api_requests(
+  service,
+  output_id,
+  ...,
+  bbox = NA,
+  convertType = getOption("dataRetrieval.convertType"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data"),
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
+)
 }
 \arguments{
 \item{service}{Which service available on \url{https://api.waterdata.usgs.gov/ogcapi/v0/}.}
+
+\item{output_id}{Name of id column to return}
+
+\item{...}{Extra parameters from the specific services.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
 depth).}
 
-\item{...}{Extra parameters from the specific services.}
+\item{convertType}{logical, defaults to TRUE.
+If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
+vector and reorder the returned data frame.}
 
-\item{properties}{The properties that should be included for each feature. The
-parameter value is a comma-separated list of property names which depend on the
-service being called.}
+\item{no_paging}{logical, defaults to FALSE.
+If \code{TRUE}, the data will
+be requested from a native csv format. This can be dangerous because the
+data will cut off at 50,000 rows without indication that more data
+is available. Use \code{TRUE} with caution.}
+
+\item{chunk_size}{Number of monitoring_location_ids to chunk requests into.
+The default for functions that don't generally return long-term data records
+is 250, while
+the default for time series functions is
+10.
+Setting to \code{NA} will eliminate site chunking, giving users full control.}
+
+\item{limit}{numeric, The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 50,000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
+
+\item{attach_request}{logical, defaults to TRUE.
+If set to \code{TRUE}, the full request sent to the Water Data API is attached
+as an attribute to the data set.}
 }
 \description{
 Main documentation: \url{https://api.waterdata.usgs.gov/ogcapi/v0/},
@@ -28,10 +63,12 @@ Swagger docs: \url{https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html}.
 site <- "USGS-02238500"
 pcode <- "00060"
 req_dv <- construct_api_requests("daily",
+                                 output_id = "daily_id",
                                  monitoring_location_id = site,
                                  parameter_code = "00060")
 
 req_dv <- construct_api_requests("daily",
+                                 output_id = "daily_id",
                                  monitoring_location_id = site,
                                  parameter_code = c("00060", "00065"))
 
@@ -39,9 +76,10 @@ sites <- c("USGS-01491000", "USGS-01645000")
 start_date <- "2018-01-01"
 end_date <- "2022-01-01"
 req_dv <- construct_api_requests("daily",
-                                monitoring_location_id = sites,
-                                parameter_code = c("00060", "00065"),
-                                datetime = c(start_date, end_date))
+                                 output_id = "daily_id",
+                                 monitoring_location_id = sites,
+                                 parameter_code = c("00060", "00065"),
+                                 datetime = c(start_date, end_date))
 
 }
 \keyword{internal}
