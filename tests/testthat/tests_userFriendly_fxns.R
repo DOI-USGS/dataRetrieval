@@ -429,6 +429,106 @@ test_that("Construct USGS urls", {
   # nolint end
 })
 
+context("CQL filter passthrough")
+test_that("filter is forwarded verbatim as a query parameter", {
+  expr <- paste0(
+    "(time >= '2023-01-06T16:00:00Z' AND time <= '2023-01-06T18:00:00Z') ",
+    "OR (time >= '2023-01-10T18:00:00Z' AND time <= '2023-01-10T20:00:00Z')"
+  )
+  req <- construct_api_requests(
+    service = "continuous",
+    monitoring_location_id = "USGS-07374525",
+    parameter_code = "72255",
+    filter = expr
+  )
+  qs <- httr2::url_parse(req$url)$query
+  expect_equal(qs[["filter"]], expr)
+})
+
+test_that("filter_lang is sent as the hyphenated URL key filter-lang", {
+  req <- construct_api_requests(
+    service = "continuous",
+    monitoring_location_id = "USGS-07374525",
+    parameter_code = "72255",
+    filter = "time >= '2023-01-01T00:00:00Z'",
+    filter_lang = "cql-text"
+  )
+  qs <- httr2::url_parse(req$url)$query
+  expect_equal(qs[["filter-lang"]], "cql-text")
+  expect_false("filter_lang" %in% names(qs))
+})
+
+test_that("filter passthrough works for every OGC collection endpoint", {
+  services <- c(
+    "daily",
+    "continuous",
+    "monitoring-locations",
+    "time-series-metadata",
+    "latest-continuous",
+    "latest-daily",
+    "field-measurements",
+    "channel-measurements"
+  )
+  for (service in services) {
+    req <- construct_api_requests(
+      service = service,
+      filter = "value > 0",
+      filter_lang = "cql-text"
+    )
+    qs <- httr2::url_parse(req$url)$query
+    expect_equal(qs[["filter"]], "value > 0", info = service)
+    expect_equal(qs[["filter-lang"]], "cql-text", info = service)
+  }
+})
+
+test_that("split_top_level_or splits at top-level OR only", {
+  expect_equal(dataRetrieval:::split_top_level_or("A OR B OR C"), c("A", "B", "C"))
+  # case-insensitive
+  expect_equal(dataRetrieval:::split_top_level_or("A or B Or C"), c("A", "B", "C"))
+  # parens are respected
+  expect_equal(
+    dataRetrieval:::split_top_level_or("(A OR B) OR (C OR D)"),
+    c("(A OR B)", "(C OR D)")
+  )
+  # quotes are respected
+  expect_equal(
+    dataRetrieval:::split_top_level_or("name = 'foo OR bar' OR id = 1"),
+    c("name = 'foo OR bar'", "id = 1")
+  )
+  # single clause is returned as-is
+  expect_equal(
+    dataRetrieval:::split_top_level_or("time >= '2023-01-01T00:00:00Z'"),
+    "time >= '2023-01-01T00:00:00Z'"
+  )
+})
+
+test_that("chunk_cql_or keeps short expressions as-is", {
+  expr <- "time >= '2023-01-01T00:00:00Z'"
+  expect_equal(dataRetrieval:::chunk_cql_or(expr, max_len = 1000), expr)
+})
+
+test_that("chunk_cql_or splits a long top-level OR chain into fitting chunks", {
+  clause <- "(time >= '2023-01-01T00:00:00Z' AND time <= '2023-01-01T00:30:00Z')"
+  expr <- paste(rep(clause, 200), collapse = " OR ")
+  chunks <- dataRetrieval:::chunk_cql_or(expr, max_len = 1000)
+  expect_true(length(chunks) > 1)
+  expect_true(all(nchar(chunks) <= 1000))
+  rejoined_clauses <- sum(lengths(strsplit(chunks, " OR ", fixed = TRUE)))
+  expect_equal(rejoined_clauses, 200)
+})
+
+test_that("chunk_cql_or returns input unchanged when it cannot be split losslessly", {
+  # A single AND-heavy expression with no top-level OR should be sent as-is
+  # so the server decides, rather than us mangling it.
+  big <- paste0("value > 0 AND ", paste(rep("A", 4000), collapse = " "))
+  expect_equal(dataRetrieval:::chunk_cql_or(big, max_len = 1000), big)
+
+  # Similarly, when a single clause alone already exceeds the budget.
+  huge_clause <- paste0("(value > ", paste(rep("9", 6000), collapse = ""), ")")
+  expr <- paste(huge_clause, "OR (value > 0)")
+  expect_equal(dataRetrieval:::chunk_cql_or(expr, max_len = 1000), expr)
+})
+
 context("Construct WQP urls")
 test_that("Construct WQP urls", {
   testthat::skip_on_cran()

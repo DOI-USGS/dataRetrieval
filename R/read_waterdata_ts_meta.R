@@ -67,6 +67,15 @@
 #' be requested from a native csv format. This can be dangerous because the
 #' data will cut off at 50,000 rows without indication that more data
 #' is available. Use `TRUE` with caution.
+#' @param filter A CQL text or JSON expression passed through to the OGC
+#' API `filter` query parameter. At the time of writing the server accepts
+#' `cql-text` (default) and `cql-json`; `cql2-text` / `cql2-json` are not
+#' yet supported. A long expression made up of a top-level `OR` chain is
+#' transparently split into multiple requests that each fit under the
+#' server's URI length limit; the results are concatenated and
+#' deduplicated by id.
+#' @param filter_lang Language of the `filter` expression, for example
+#' `cql-text` (default) or `cql-json`. Sent as `filter-lang` in the URL.
 #'
 #' @inherit read_waterdata_continuous details
 #'
@@ -114,6 +123,8 @@ read_waterdata_ts_meta <- function(
   bbox = NA,
   begin = NA_character_,
   end = NA_character_,
+  filter = NA_character_,
+  filter_lang = NA_character_,
   convertType = TRUE,
   no_paging = FALSE
 ) {

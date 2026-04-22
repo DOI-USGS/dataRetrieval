@@ -35,6 +35,22 @@ information.}
 Main documentation: \url{https://api.waterdata.usgs.gov/ogcapi/v0/},
 Swagger docs: \url{https://api.waterdata.usgs.gov/ogcapi/v0/openapi?f=html}.
 }
+\details{
+Two arguments forwarded via \code{...} deserve a callout:
+\itemize{
+\item \code{filter} — a CQL text or JSON expression passed through to the
+OGC API \code{filter} query parameter. Commonly used to OR several time
+ranges into a single request. At the time of writing the server
+accepts \code{cql-text} (default) and \code{cql-json}; \code{cql2-text} /
+\code{cql2-json} are not yet supported. A long expression made up of a
+top-level \code{OR} chain is automatically split into multiple requests
+that each fit under the server's URI length limit (handled in
+\code{get_ogc_data}); the results are concatenated and deduplicated by id.
+\item \code{filter_lang} — language of the \code{filter} expression, for
+example \code{cql-text} (default) or \code{cql-json}. Sent as \code{filter-lang}
+in the URL.
+}
+}
 \examples{
 site <- "USGS-02238500"
 pcode <- "00060"

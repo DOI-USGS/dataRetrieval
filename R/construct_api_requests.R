@@ -17,6 +17,21 @@
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
 #' @keywords internal
+#' @details
+#' Two arguments forwarded via `...` deserve a callout:
+#' \itemize{
+#'   \item `filter` — a CQL text or JSON expression passed through to the
+#'     OGC API `filter` query parameter. Commonly used to OR several time
+#'     ranges into a single request. At the time of writing the server
+#'     accepts `cql-text` (default) and `cql-json`; `cql2-text` /
+#'     `cql2-json` are not yet supported. A long expression made up of a
+#'     top-level `OR` chain is automatically split into multiple requests
+#'     that each fit under the server's URI length limit (handled in
+#'     `get_ogc_data`); the results are concatenated and deduplicated by id.
+#'   \item `filter_lang` — language of the `filter` expression, for
+#'     example `cql-text` (default) or `cql-json`. Sent as `filter-lang`
+#'     in the URL.
+#' }
 #' @examples
 #' site <- "USGS-02238500"
 #' pcode <- "00060"
@@ -48,6 +63,13 @@ construct_api_requests <- function(
 
   full_list <- list(...)
 
+  # Translate the Python-style underscore name to the hyphenated URL key
+  # the OGC API expects. R doesn't allow hyphens in formal argument names,
+  # so callers pass `filter_lang`; the URL needs `filter-lang`.
+  if ("filter_lang" %in% names(full_list)) {
+    names(full_list)[names(full_list) == "filter_lang"] <- "filter-lang"
+  }
+
   time_periods <- c(
     "last_modified",
     "datetime",
@@ -76,7 +98,9 @@ construct_api_requests <- function(
     "time",
     "limit",
     "begin_utc",
-    "end_utc"
+    "end_utc",
+    "filter",
+    "filter-lang"
   )
 
   comma_params <- c(
