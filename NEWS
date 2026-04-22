@@ -1,5 +1,7 @@
 dataRetrieval 2.7.25
 ===================
+* Added read_waterdata_ratings to access USGS rating curves with
+new modern endpoint.
 * Increase flexibility of chunking by monitoring_location_id by 
 including it as an argument in each relevant function.
 * Clean up deprecated code.
