@@ -118,9 +118,12 @@ test_that("peak, rating curves, surface-water measurements", {
   expect_is(data$agency_cd, "character")
 
   # Rating curvs:
-  siteNumber <- "01594440"
-  data <- readNWISrating(siteNumber, "base")
-  expect_that(length(attr(data, "RATING")), equals(7))
+  siteNumber <- "USGS-01594440"
+  data <- read_waterdata_ratings(
+    monitoring_location_id = siteNumber,
+    file_type = "base"
+  )
+  expect_gt(length(comment(data[[1]])), 1)
 
   # Surface meas:
   siteNumbers <- c("USGS-01594440", "USGS-040851325")

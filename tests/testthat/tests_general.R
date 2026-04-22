@@ -190,37 +190,20 @@ test_that("General NWIS retrievals working", {
   AS <- read_waterdata_monitoring_location(state_name = "American Samoa")
   expect_gt(nrow(AS), 0)
 
-  site_id <- "01594440"
-  rating_curve <- readNWISdata(
-    service = "rating",
-    site_no = site_id,
+  site_id <- "USGS-01594440"
+  rating_curve <- read_waterdata_ratings(
+    monitoring_location_id = site_id,
     file_type = "base"
   )
-  rating_curve2 <- readNWISrating(
-    siteNumber = site_id,
-    type = "base"
-  )
-  expect_equal(
-    attr(rating_curve, "url"),
-    "https://waterdata.usgs.gov/nwisweb/get_ratings/?site_no=01594440&file_type=base"
-  )
-  expect_equal(rating_curve$INDEP, rating_curve2$INDEP)
 
-  state_rating_list <- readNWISdata(
-    service = "rating",
-    file_type = "base",
-    period = 24
+  expect_equal(names(rating_curve), "USGS-01594440.base.rdb")
+
+  state_rating_list <- read_waterdata_ratings(
+    datetime = c(Sys.Date() - 1, NA),
+    download_and_parse = FALSE
   )
-  expect_true(all(
-    names(state_rating_list) %in%
-      c(
-        "agency_cd",
-        "site_no",
-        "type",
-        "update_time",
-        "url"
-      )
-  ))
+
+  expect_true(length(state_rating_list) > 0)
 
   multi_hucs <- c("07130007", "07130011")
   multi_huc_sites <- read_waterdata_monitoring_location(

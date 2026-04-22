@@ -280,7 +280,12 @@ readNWISpeak <- function(
 #' attr(data, "RATING")
 #' }
 readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
-  message(new_nwis_message())
+  .Deprecated(
+    new = "read_waterdata_ratings",
+    package = "dataRetrieval",
+    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_ratings."
+  )
+
   # No rating xml service
   url <- constructNWISURL(siteNumber, service = "rating", ratingType = type)
 
@@ -476,4 +481,3 @@ readNWISuse <- function(
   )
   return(NULL)
 }
-
