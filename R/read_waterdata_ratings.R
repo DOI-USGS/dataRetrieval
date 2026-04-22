@@ -21,6 +21,13 @@
 #' @param datetime Only return items that have a temporal property that
 #' intersects this value. Either a date-time or an interval, open or closed.
 #' See Details below.
+#' @param bbox Only features that have a geometry that intersects the bounding
+#' box are selected.The bounding box is provided as four or six numbers, depending
+#' on whether the coordinate reference system includes a vertical axis (height or
+#' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
+#' vector structured: c(xmin,ymin,xmax,ymax).
+#' Another way to think of it is c(Western-most longitude,
+#' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
 #' @param \dots Not used.
 #' @param limit Limits the number of results that are included in each page of
 #' the response (capped at the default 10,000).
@@ -124,7 +131,7 @@ read_waterdata_ratings <- function(
 
   request <- request |>
     httr2::req_url_query(limit = limit) |>
-    dataRetrieval:::basic_request()
+    basic_request()
 
   resp <- httr2::req_perform(request)
   features <- httr2::resp_body_json(resp)[["features"]]
@@ -152,7 +159,7 @@ download_convert <- function(feature, file_path, file_type) {
 
   if (any(sapply(file_type, function(x) grepl(x, url)))) {
     full_file_path <- file.path(file_path, id)
-    download.file(url = url, destfile = full_file_path)
+    utils::download.file(url = url, destfile = full_file_path)
     rating <- dataRetrieval::importRDB1(full_file_path)
     return(rating)
   }

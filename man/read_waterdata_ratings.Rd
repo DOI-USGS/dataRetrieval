@@ -35,6 +35,14 @@ for that value; and CORRINDEP, the corrected value for CORR.}
 \item{file_path}{Path to save the rating curve rdb files. The
 default is \code{tempdir()}, which will wipe out the files.}
 
+\item{bbox}{Only features that have a geometry that intersects the bounding
+box are selected.The bounding box is provided as four or six numbers, depending
+on whether the coordinate reference system includes a vertical axis (height or
+depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
+vector structured: c(xmin,ymin,xmax,ymax).
+Another way to think of it is c(Western-most longitude,
+Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
+
 \item{datetime}{Only return items that have a temporal property that
 intersects this value. Either a date-time or an interval, open or closed.
 See Details below.}
