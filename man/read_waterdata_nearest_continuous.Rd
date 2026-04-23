@@ -8,7 +8,7 @@ read_waterdata_nearest_continuous(
   targets,
   monitoring_location_id = NA_character_,
   parameter_code = NA_character_,
-  window = "07:30",
+  window = "PT7M30S",
   on_tie = c("first", "last", "mean"),
   ...
 )
@@ -38,10 +38,10 @@ Multiple parameter_codes can be requested as a character vector.}
 \code{lubridate::Duration}.
 }
 
-Defaults to \code{"07:30"} (7.5 minutes), which is half of the
-typical 15-minute continuous cadence — most targets' windows
-contain exactly one observation. Widen for irregular cadences or
-resilience to data gaps.}
+Defaults to \code{"PT7M30S"} (7.5 minutes, ISO 8601), which is half
+of the typical 15-minute continuous cadence — most targets'
+windows contain exactly one observation. Widen for irregular
+cadences or resilience to data gaps.}
 
 \item{on_tie}{How to resolve ties when two observations are exactly
 equidistant from a target (which happens when the target falls at
@@ -114,7 +114,7 @@ near_wide <- read_waterdata_nearest_continuous(
   targets = targets,
   monitoring_location_id = "USGS-02238500",
   parameter_code = "00060",
-  window = "30:00",
+  window = "PT30M",
   on_tie = "mean"
 )
 }

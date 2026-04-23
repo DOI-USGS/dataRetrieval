@@ -30,10 +30,10 @@
 #'   * a number of seconds, a `difftime`, or a `lubridate::Period` /
 #'     `lubridate::Duration`.
 #'
-#'   Defaults to `"07:30"` (7.5 minutes), which is half of the
-#'   typical 15-minute continuous cadence — most targets' windows
-#'   contain exactly one observation. Widen for irregular cadences or
-#'   resilience to data gaps.
+#'   Defaults to `"PT7M30S"` (7.5 minutes, ISO 8601), which is half
+#'   of the typical 15-minute continuous cadence — most targets'
+#'   windows contain exactly one observation. Widen for irregular
+#'   cadences or resilience to data gaps.
 #' @param on_tie How to resolve ties when two observations are exactly
 #'   equidistant from a target (which happens when the target falls at
 #'   the midpoint between grid points — e.g. target 10:22:30 for a
@@ -87,7 +87,7 @@
 #'   targets = targets,
 #'   monitoring_location_id = "USGS-02238500",
 #'   parameter_code = "00060",
-#'   window = "30:00",
+#'   window = "PT30M",
 #'   on_tie = "mean"
 #' )
 #' }
@@ -95,7 +95,7 @@ read_waterdata_nearest_continuous <- function(
   targets,
   monitoring_location_id = NA_character_,
   parameter_code = NA_character_,
-  window = "07:30",
+  window = "PT7M30S",
   on_tie = c("first", "last", "mean"),
   ...
 ) {
