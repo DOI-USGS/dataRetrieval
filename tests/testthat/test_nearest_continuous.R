@@ -245,9 +245,14 @@ test_that("on_tie is validated", {
   )
 })
 
-test_that("window accepts several input shapes", {
+test_that("window accepts HH:MM:SS strings and programmatic forms", {
+  expect_equal(dataRetrieval:::as_window_seconds("00:07:30"), 450)
+  expect_equal(dataRetrieval:::as_window_seconds("00:15:00"), 900)
+  expect_equal(dataRetrieval:::as_window_seconds("01:00:00"), 3600)
+  # Fractional seconds are allowed.
+  expect_equal(dataRetrieval:::as_window_seconds("00:00:01.5"), 1.5)
+  # Programmatic forms.
   expect_equal(dataRetrieval:::as_window_seconds(450), 450)
-  expect_equal(dataRetrieval:::as_window_seconds("7.5 mins"), 450)
   expect_equal(
     dataRetrieval:::as_window_seconds(as.difftime(5, units = "mins")),
     300
@@ -256,4 +261,7 @@ test_that("window accepts several input shapes", {
     dataRetrieval:::as_window_seconds(lubridate::minutes(10)),
     600
   )
+  # Reject garbage with a clear message.
+  expect_error(dataRetrieval:::as_window_seconds("7.5 mins"), "HH:MM:SS")
+  expect_error(dataRetrieval:::as_window_seconds("bogus"), "HH:MM:SS")
 })

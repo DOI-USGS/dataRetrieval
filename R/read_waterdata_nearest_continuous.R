@@ -21,12 +21,14 @@
 #'   Multiple monitoring_location_ids can be requested as a character vector.
 #' @param parameter_code `r get_ogc_params("continuous")$parameter_code`
 #'   Multiple parameter_codes can be requested as a character vector.
-#' @param window Half-window around each target. Accepts a `difftime`, a
-#'   `lubridate::Period`/`Duration`, or a string coercible to one (e.g.
-#'   `"7.5 mins"`). Defaults to `450` seconds (7.5 minutes), which is
-#'   half of the typical 15-minute continuous cadence — most targets'
-#'   windows contain exactly one observation. Widen (e.g. `"15 mins"`)
-#'   for irregular cadences or resilience to data gaps.
+#' @param window Half-window around each target, given as an
+#'   `"HH:MM:SS"` string. Defaults to `"00:07:30"` (7.5 minutes), which
+#'   is half of the typical 15-minute continuous cadence — most
+#'   targets' windows contain exactly one observation. Widen (e.g.
+#'   `"00:15:00"`, `"00:30:00"`, `"01:00:00"`) for irregular cadences
+#'   or resilience to data gaps. For programmatic use, also accepts a
+#'   number of seconds, a `difftime`, or a `lubridate::Period` /
+#'   `lubridate::Duration`.
 #' @param on_tie How to resolve ties when two observations are exactly
 #'   equidistant from a target (which happens when the target falls at
 #'   the midpoint between grid points — e.g. target 10:22:30 for a
@@ -80,7 +82,7 @@
 #'   targets = targets,
 #'   monitoring_location_id = "USGS-02238500",
 #'   parameter_code = "00060",
-#'   window = "30 mins",
+#'   window = "00:30:00",
 #'   on_tie = "mean"
 #' )
 #' }
@@ -88,7 +90,7 @@ read_waterdata_nearest_continuous <- function(
   targets,
   monitoring_location_id = NA_character_,
   parameter_code = NA_character_,
-  window = 450,
+  window = "00:07:30",
   on_tie = c("first", "last", "mean"),
   ...
 ) {
@@ -221,6 +223,10 @@ to_utc_posixct <- function(x) {
 
 #' Coerce `window` to a number of seconds
 #'
+#' Primary form is an `"HH:MM:SS"` string; also accepts a plain number
+#' of seconds, a `difftime`, or a `lubridate::Period` / `Duration` for
+#' programmatic callers.
+#'
 #' @noRd
 as_window_seconds <- function(window) {
   if (inherits(window, "difftime")) {
@@ -229,30 +235,20 @@ as_window_seconds <- function(window) {
   if (inherits(window, c("Period", "Duration"))) {
     return(as.numeric(lubridate::as.duration(window), units = "secs"))
   }
-  if (is.numeric(window)) {
+  if (is.numeric(window) && length(window) == 1L) {
     return(as.numeric(window))
   }
-  if (is.character(window)) {
-    # Accept things like "7.5 mins", "15 mins", "30s", "PT1H".
-    parsed <- tryCatch(
-      as.numeric(lubridate::duration(window), units = "secs"),
-      error = function(e) NA_real_
-    )
-    if (!is.na(parsed)) return(parsed)
-    # Fall back to difftime-style parsing (e.g. "7.5 mins").
-    parts <- strsplit(trimws(window), "\\s+")[[1L]]
-    if (length(parts) == 2L) {
-      val <- suppressWarnings(as.numeric(parts[1L]))
-      if (!is.na(val)) {
-        return(as.numeric(
-          as.difftime(val, units = parts[2L]),
-          units = "secs"
-        ))
-      }
-    }
+  if (
+    is.character(window) &&
+      length(window) == 1L &&
+      grepl("^\\d+:\\d{1,2}:\\d{1,2}(\\.\\d+)?$", window)
+  ) {
+    parts <- as.numeric(strsplit(window, ":", fixed = TRUE)[[1L]])
+    return(parts[1L] * 3600 + parts[2L] * 60 + parts[3L])
   }
   stop(
-    "Could not interpret `window` as a duration: ",
+    "`window` must be an 'HH:MM:SS' string, a number of seconds, a ",
+    "difftime, or a lubridate Period/Duration; got: ",
     paste(format(window), collapse = " "),
     call. = FALSE
   )
