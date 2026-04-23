@@ -529,6 +529,56 @@ test_that("chunk_cql_or returns input unchanged when it cannot be split lossless
   expect_equal(dataRetrieval:::chunk_cql_or(expr, max_len = 1000), expr)
 })
 
+test_that("split_top_level_or handles doubled single-quote CQL escape", {
+  # In CQL-text, a single quote inside a literal is written as '' (two
+  # consecutive single quotes). The scanner's toggle-on-quote logic
+  # handles this because there is no content between the two quotes to
+  # misclassify, but lock the behavior in so a future refactor can't
+  # regress it.
+  expr <- "name = 'It''s hot' OR id = 1"
+  expect_equal(
+    dataRetrieval:::split_top_level_or(expr),
+    c("name = 'It''s hot'", "id = 1")
+  )
+})
+
+test_that("effective_filter_budget keeps every produced chunk under the URL byte limit", {
+  limit <- dataRetrieval:::.WATERDATA_URL_BYTE_LIMIT
+  args <- list(
+    service = "continuous",
+    monitoring_location_id = "USGS-02238500",
+    parameter_code = "00060"
+  )
+  clause <- "(time >= '2023-01-01T00:00:00Z' AND time <= '2023-01-01T00:30:00Z')"
+  expr <- paste(rep(clause, 300), collapse = " OR ")
+  budget <- dataRetrieval:::effective_filter_budget(args, expr)
+  chunks <- dataRetrieval:::chunk_cql_or(expr, max_len = budget)
+  expect_gt(length(chunks), 1L)
+  url_bytes <- vapply(chunks, function(ch) {
+    a <- args
+    a[["filter"]] <- ch
+    nchar(do.call(construct_api_requests, a)$url)
+  }, integer(1))
+  expect_true(all(url_bytes <= limit))
+})
+
+test_that("non cql-text filter is passed through without chunking", {
+  # The splitter is cql-text-only; chunking a cql-json expression would
+  # corrupt it. `construct_api_requests` forwards whatever we give it,
+  # so the resulting URL has the full filter as a single value.
+  huge <- paste0("{\"op\":\"or\",\"args\":[", paste(rep("{}", 3000), collapse = ","), "]}")
+  req <- construct_api_requests(
+    service = "continuous",
+    monitoring_location_id = "USGS-02238500",
+    parameter_code = "00060",
+    filter = huge,
+    filter_lang = "cql-json"
+  )
+  qs <- httr2::url_parse(req$url)$query
+  expect_equal(qs[["filter-lang"]], "cql-json")
+  expect_equal(qs[["filter"]], huge)
+})
+
 context("Construct WQP urls")
 test_that("Construct WQP urls", {
   testthat::skip_on_cran()

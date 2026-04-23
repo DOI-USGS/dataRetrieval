@@ -11,8 +11,6 @@
 get_ogc_data <- function(args, output_id, service, ..., chunk_size = 250) {
   rlang::check_dots_empty()
 
-  filter_chunks <- chunkable_filter(args[["filter"]])
-
   if (length(args[["monitoring_location_id"]]) > chunk_size) {
     ml_splits <- split(
       args[["monitoring_location_id"]],
@@ -33,29 +31,6 @@ get_ogc_data <- function(args, output_id, service, ..., chunk_size = 250) {
       use.names = TRUE,
       ignore.attr = TRUE
     ))
-  } else if (length(filter_chunks) > 1) {
-    rl <- lapply(filter_chunks, function(chunk) {
-      sub_args <- args
-      sub_args[["filter"]] <- chunk
-      get_ogc_data(args = sub_args, output_id = output_id, service = service)
-    })
-
-    rl_filtered <- rl[
-      vapply(rl, FUN = function(x) dim(x)[1], FUN.VALUE = NA_integer_) > 0
-    ]
-
-    return_list <- data.frame(data.table::rbindlist(
-      rl_filtered,
-      use.names = TRUE,
-      ignore.attr = TRUE
-    ))
-
-    if (output_id %in% names(return_list)) {
-      return_list <- return_list[
-        !duplicated(return_list[[output_id]]), ,
-        drop = FALSE
-      ]
-    }
   } else {
     args[["chunk_sites_by"]] <- NULL
 
@@ -69,16 +44,72 @@ get_ogc_data <- function(args, output_id, service, ..., chunk_size = 250) {
     args[["convertType"]] <- NULL
     args[["service"]] <- service
 
-    req <- do.call(construct_api_requests, args)
-
-    no_paging <- grepl("f=csv", req$url)
-
-    message("Requesting:\n", req$url)
-
-    if (no_paging) {
-      return_list <- get_csv(req, limit = args[["limit"]])
+    # Only cql-text filters can be safely chunked by splitting on top-level
+    # OR: the splitter is text- and single-quote-aware and would corrupt
+    # cql-json. Non-cql-text filters (if any) are sent as-is.
+    filter_expr <- args[["filter"]]
+    filter_lang <- args[["filter_lang"]]
+    should_chunk_filter <- is.character(filter_expr) &&
+      length(filter_expr) == 1L &&
+      !is.na(filter_expr) &&
+      nzchar(filter_expr) &&
+      (is.null(filter_lang) ||
+        is.na(filter_lang) ||
+        identical(filter_lang, "cql-text"))
+    if (should_chunk_filter) {
+      raw_budget <- effective_filter_budget(args, filter_expr)
+      filter_chunks <- chunk_cql_or(filter_expr, max_len = raw_budget)
     } else {
-      return_list <- walk_pages(req)
+      filter_chunks <- list(NULL)
+    }
+
+    if (length(filter_chunks) > 1L) {
+      frames <- vector("list", length(filter_chunks))
+      last_req <- NULL
+      for (i in seq_along(filter_chunks)) {
+        chunk_args <- args
+        chunk_args[["filter"]] <- filter_chunks[[i]]
+        chunk_req <- do.call(construct_api_requests, chunk_args)
+        message("Requesting:\n", chunk_req$url)
+        if (grepl("f=csv", chunk_req$url)) {
+          frames[[i]] <- get_csv(chunk_req, limit = chunk_args[["limit"]])
+        } else {
+          frames[[i]] <- walk_pages(chunk_req)
+        }
+        last_req <- chunk_req
+      }
+      # Drop empty frames before concatenation. An empty frame from
+      # walk_pages is a plain data.frame with no geometry; rbinding it
+      # first would downgrade a later sf result back to a plain frame and
+      # silently drop geometry/CRS.
+      non_empty <- Filter(function(df) nrow(df) > 0L, frames)
+      if (length(non_empty) == 0L) {
+        return_list <- frames[[1L]]
+      } else if (length(non_empty) == 1L) {
+        return_list <- non_empty[[1L]]
+      } else {
+        return_list <- do.call(rbind, non_empty)
+        # Dedup on the pre-rename feature "id" (always present at this
+        # stage; rejigger_cols renames it later) to catch overlapping
+        # user-supplied OR clauses across chunks.
+        if ("id" %in% names(return_list)) {
+          return_list <- return_list[
+            !duplicated(return_list$id), ,
+            drop = FALSE
+          ]
+        }
+      }
+      req <- last_req
+      no_paging <- grepl("f=csv", req$url)
+    } else {
+      req <- do.call(construct_api_requests, args)
+      no_paging <- grepl("f=csv", req$url)
+      message("Requesting:\n", req$url)
+      if (no_paging) {
+        return_list <- get_csv(req, limit = args[["limit"]])
+      } else {
+        return_list <- walk_pages(req)
+      }
     }
 
     if (is.na(args[["skipGeometry"]])) {
@@ -205,28 +236,61 @@ switch_properties_id <- function(properties, id) {
   return(properties)
 }
 
-# Conservative budget (characters) for a single CQL `filter` query parameter
-# before the URL risks exceeding the server's URI length limit. The continuous
-# endpoint has been observed to return HTTP 414 around ~7 KB of filter text;
-# 5000 leaves headroom for URL encoding and the other query parameters.
+# Conservative fallback budget (characters) for a single CQL `filter` query
+# parameter, used when `chunk_cql_or` is called directly without a `max_len`.
+# `get_ogc_data` computes a tighter per-request budget from
+# `.WATERDATA_URL_BYTE_LIMIT` below.
 .CQL_FILTER_CHUNK_LEN <- 5000L
 
+# Total URL byte limit the Water Data API will accept before replying
+# HTTP 414 (Request-URI Too Large). Empirically the cliff sits at
+# ~8,200 bytes of full URL, which lines up with nginx's default
+# `large_client_header_buffers` of 8 KB (8192). 8000 leaves ~200 bytes of
+# headroom for request-line framing and any intermediate proxy variance.
+.WATERDATA_URL_BYTE_LIMIT <- 8000L
 
-#' Decide whether a `filter` arg can be split into smaller OR-chunks
+
+#' Compute the raw CQL byte budget for `filter_expr` in this request
 #'
-#' Returns the (possibly singleton) list of chunks. The caller chunks
-#' the request when this returns more than one element.
+#' The server limits total URL length (see `.WATERDATA_URL_BYTE_LIMIT`),
+#' not raw CQL length. To derive a raw-byte budget we can hand to
+#' `chunk_cql_or`:
+#'
+#' 1. Probe the URL space consumed by the other query params by building
+#'    the request with a 1-byte placeholder filter.
+#' 2. Subtract from the URL limit to get the bytes available for the
+#'    encoded filter value.
+#' 3. Convert back to raw CQL bytes using the *maximum* per-clause
+#'    encoding ratio, not the whole-filter average. A chunk can end up
+#'    containing only the heavier-encoding clauses (e.g. heavy ones
+#'    clustered at one end of the filter), so budgeting against the
+#'    average lets such a chunk overflow the URL limit.
 #'
 #' @noRd
-chunkable_filter <- function(filter_expr) {
-  if (
-    !is.character(filter_expr) ||
-      length(filter_expr) != 1 ||
-      is.na(filter_expr)
-  ) {
-    return(filter_expr)
+effective_filter_budget <- function(args, filter_expr) {
+  probe_args <- args
+  probe_args[["filter"]] <- "x"
+  probe_req <- do.call(construct_api_requests, probe_args)
+  non_filter_url_bytes <- nchar(probe_req$url) - 1L
+  available_url_bytes <- .WATERDATA_URL_BYTE_LIMIT - non_filter_url_bytes
+  if (available_url_bytes <= 0L) {
+    # The non-filter URL already exceeds the byte limit, so no chunk we
+    # could produce would fit. Return a budget larger than the filter so
+    # chunk_cql_or passes it through unchanged -- one clear 414 from the
+    # server is better feedback than a burst of N failing sub-requests.
+    return(nchar(filter_expr) + 1L)
   }
-  chunk_cql_or(filter_expr)
+  parts <- split_top_level_or(filter_expr)
+  if (length(parts) == 0L) parts <- filter_expr
+  parts <- parts[nzchar(parts)]
+  # Include the " OR " joiner: it is 4 raw bytes but encodes to
+  # "%20OR%20" (8 bytes, ratio 2.0). For inputs whose clauses encode
+  # lighter than that (e.g. time-interval clauses at ~1.6), the joiner
+  # is what pushes the full URL past the limit -- leaving it out made
+  # the budget too loose.
+  ratio <- function(p) nchar(utils::URLencode(p, reserved = TRUE)) / nchar(p)
+  encoding_ratio <- max(vapply(c(parts, " OR "), ratio, numeric(1)))
+  max(100L, as.integer(available_url_bytes / encoding_ratio))
 }
 
 

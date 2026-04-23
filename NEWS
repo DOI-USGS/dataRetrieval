@@ -6,10 +6,10 @@ dataRetrieval 2.7.24
   ts_meta, latest_continuous, latest_daily, channel). These are forwarded
   to the OGC API's CQL `filter` / `filter-lang` query parameters, enabling
   server-side filtering that isn't expressible via the other arguments --
-  most commonly, OR'ing multiple time ranges into a single request. A long
-  top-level `OR` chain is transparently split into multiple sub-requests
-  that each fit under the server's URI length limit; results are
-  concatenated and deduplicated by id.
+  most commonly, OR'ing multiple time ranges into a single request. For
+  `cql-text` filters, a long top-level `OR` chain is transparently split
+  into multiple sub-requests sized to stay under the server's 8 KB URL
+  byte limit; results are concatenated and deduplicated by id.
 
 dataRetrieval 2.7.23
 ===================
