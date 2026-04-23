@@ -37,6 +37,16 @@
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
+#' @param filter A CQL text or JSON expression passed through to the OGC
+#' API `filter` query parameter. Commonly used to OR several time ranges
+#' into a single request. At the time of writing the server accepts
+#' `cql-text` (default) and `cql-json`; `cql2-text` / `cql2-json` are not
+#' yet supported. A long expression made up of a top-level `OR` chain is
+#' transparently split into multiple requests that each fit under the
+#' server's URI length limit; the results are concatenated and
+#' deduplicated by id.
+#' @param filter_lang Language of the `filter` expression, for example
+#' `cql-text` (default) or `cql-json`. Sent as `filter-lang` in the URL.
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector.
 #' @param no_paging logical, defaults to `FALSE`. If `TRUE`, the data will
@@ -93,6 +103,8 @@ read_waterdata_latest_continuous <- function(
   time = NA_character_,
   bbox = NA,
   limit = NA,
+  filter = NA_character_,
+  filter_lang = NA_character_,
   convertType = TRUE,
   no_paging = FALSE
 ) {

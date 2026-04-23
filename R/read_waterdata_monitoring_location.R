@@ -62,6 +62,15 @@
 #' @param skipGeometry This option can be used to skip response geometries for
 #' each feature. The returning object will be a data frame with no spatial
 #' information.
+#' @param filter A CQL text or JSON expression passed through to the OGC
+#' API `filter` query parameter. At the time of writing the server accepts
+#' `cql-text` (default) and `cql-json`; `cql2-text` / `cql2-json` are not
+#' yet supported. A long expression made up of a top-level `OR` chain is
+#' transparently split into multiple requests that each fit under the
+#' server's URI length limit; the results are concatenated and
+#' deduplicated by id.
+#' @param filter_lang Language of the `filter` expression, for example
+#' `cql-text` (default) or `cql-json`. Sent as `filter-lang` in the URL.
 #' @examplesIf is_dataRetrieval_user()
 #'
 #' \donttest{
@@ -136,7 +145,9 @@ read_waterdata_monitoring_location <- function(
   properties = NA_character_,
   bbox = NA,
   limit = NA,
-  skipGeometry = NA
+  skipGeometry = NA,
+  filter = NA_character_,
+  filter_lang = NA_character_
 ) {
   service <- "monitoring-locations"
   output_id <- "monitoring_location_id"

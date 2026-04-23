@@ -30,6 +30,8 @@ read_waterdata_ts_meta(
   bbox = NA,
   begin = NA_character_,
   end = NA_character_,
+  filter = NA_character_,
+  filter_lang = NA_character_,
   convertType = TRUE,
   no_paging = FALSE
 )
@@ -150,6 +152,17 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 \item{begin}{This field contains the same information as "begin_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
 
 \item{end}{This field contains the same information as "end_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
+
+\item{filter}{A CQL text or JSON expression passed through to the OGC
+API \code{filter} query parameter. At the time of writing the server accepts
+\code{cql-text} (default) and \code{cql-json}; \code{cql2-text} / \code{cql2-json} are not
+yet supported. A long expression made up of a top-level \code{OR} chain is
+transparently split into multiple requests that each fit under the
+server's URI length limit; the results are concatenated and
+deduplicated by id.}
+
+\item{filter_lang}{Language of the \code{filter} expression, for example
+\code{cql-text} (default) or \code{cql-json}. Sent as \code{filter-lang} in the URL.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}

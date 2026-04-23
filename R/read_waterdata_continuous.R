@@ -37,6 +37,16 @@
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
+#' @param filter A CQL text or JSON expression passed through to the OGC
+#' API `filter` query parameter. Commonly used to OR several time ranges
+#' into a single request. At the time of writing the server accepts
+#' `cql-text` (default) and `cql-json`; `cql2-text` / `cql2-json` are not
+#' yet supported. A long expression made up of a top-level `OR` chain is
+#' transparently split into multiple requests that each fit under the
+#' server's URI length limit; the results are concatenated and
+#' deduplicated by id.
+#' @param filter_lang Language of the `filter` expression, for example
+#' `cql-text` (default) or `cql-json`. Sent as `filter-lang` in the URL.
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates and qualifier to string vector, and sepcifically
 #' order the returning data frame by time and monitoring_location_id.
@@ -117,6 +127,32 @@
 #' # Set the time to Eastern:
 #' # all_data$time <- lubridate::force_tz(all_data$time, "America/New_York")
 #'
+#' # The `time` argument accepts a single instant or a single interval.
+#' # To pull several disjoint windows in one call, pass a CQL-text `filter`:
+#' two_windows <- read_waterdata_continuous(
+#'   monitoring_location_id = "USGS-02238500",
+#'   parameter_code = "00060",
+#'   filter = paste(
+#'     "(time >= '2023-06-01T12:00:00Z' AND time <= '2023-06-01T13:00:00Z')",
+#'     "OR",
+#'     "(time >= '2023-06-15T12:00:00Z' AND time <= '2023-06-15T13:00:00Z')"
+#'   ),
+#'   filter_lang = "cql-text"
+#' )
+#'
+#' # Long top-level OR chains (e.g. one short window per discrete-measurement
+#' # timestamp) are built up the same way. If the resulting URL would exceed
+#' # the server's length limit, the client transparently splits it into
+#' # multiple sub-requests and returns the concatenated, deduplicated result.
+#' windows <- sprintf(
+#'   "(time >= '2023-%02d-15T00:00:00Z' AND time <= '2023-%02d-15T00:30:00Z')",
+#'   1:12, 1:12
+#' )
+#' many_windows <- read_waterdata_continuous(
+#'   monitoring_location_id = "USGS-02238500",
+#'   parameter_code = "00060",
+#'   filter = paste(windows, collapse = " OR ")
+#' )
 #' }
 read_waterdata_continuous <- function(
   monitoring_location_id = NA_character_,
@@ -130,6 +166,8 @@ read_waterdata_continuous <- function(
   last_modified = NA_character_,
   time = NA_character_,
   limit = NA,
+  filter = NA_character_,
+  filter_lang = NA_character_,
   convertType = TRUE,
   no_paging = FALSE
 ) {

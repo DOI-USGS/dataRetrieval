@@ -16,6 +16,8 @@ read_waterdata_continuous(
   last_modified = NA_character_,
   time = NA_character_,
   limit = NA,
+  filter = NA_character_,
+  filter_lang = NA_character_,
   convertType = TRUE,
   no_paging = FALSE
 )
@@ -78,6 +80,18 @@ selected features that should be returned in each page. The maximum allowable
 limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
+
+\item{filter}{A CQL text or JSON expression passed through to the OGC
+API \code{filter} query parameter. Commonly used to OR several time ranges
+into a single request. At the time of writing the server accepts
+\code{cql-text} (default) and \code{cql-json}; \code{cql2-text} / \code{cql2-json} are not
+yet supported. A long expression made up of a top-level \code{OR} chain is
+transparently split into multiple requests that each fit under the
+server's URI length limit; the results are concatenated and
+deduplicated by id.}
+
+\item{filter_lang}{Language of the \code{filter} expression, for example
+\code{cql-text} (default) or \code{cql-json}. Sent as \code{filter-lang} in the URL.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector, and sepcifically
@@ -172,6 +186,32 @@ time_df <- data.frame(start = time_chunks[-length(time_chunks)],
 # Set the time to Eastern:
 # all_data$time <- lubridate::force_tz(all_data$time, "America/New_York")
 
+# The `time` argument accepts a single instant or a single interval.
+# To pull several disjoint windows in one call, pass a CQL-text `filter`:
+two_windows <- read_waterdata_continuous(
+  monitoring_location_id = "USGS-02238500",
+  parameter_code = "00060",
+  filter = paste(
+    "(time >= '2023-06-01T12:00:00Z' AND time <= '2023-06-01T13:00:00Z')",
+    "OR",
+    "(time >= '2023-06-15T12:00:00Z' AND time <= '2023-06-15T13:00:00Z')"
+  ),
+  filter_lang = "cql-text"
+)
+
+# Long top-level OR chains (e.g. one short window per discrete-measurement
+# timestamp) are built up the same way. If the resulting URL would exceed
+# the server's length limit, the client transparently splits it into
+# multiple sub-requests and returns the concatenated, deduplicated result.
+windows <- sprintf(
+  "(time >= '2023-\%02d-15T00:00:00Z' AND time <= '2023-\%02d-15T00:30:00Z')",
+  1:12, 1:12
+)
+many_windows <- read_waterdata_continuous(
+  monitoring_location_id = "USGS-02238500",
+  parameter_code = "00060",
+  filter = paste(windows, collapse = " OR ")
+)
 }
 \dontshow{\}) # examplesIf}
 }

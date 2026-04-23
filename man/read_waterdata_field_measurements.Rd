@@ -24,6 +24,8 @@ read_waterdata_field_measurements(
   time = NA_character_,
   bbox = NA,
   limit = NA,
+  filter = NA_character_,
+  filter_lang = NA_character_,
   convertType = TRUE,
   no_paging = FALSE
 )
@@ -41,7 +43,7 @@ Multiple parameter_codes can be requested as a character vector.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, field_measurement_id, field_visit_id, parameter_code, monitoring_location_id, observing_procedure_code, observing_procedure, value, unit_of_measure, time, qualifier, vertical_datum, approval_status, measuring_agency, last_modified, control_condition, measurement_rated.
+geometry, field_measurement_id, field_measurements_series_id, field_visit_id, parameter_code, monitoring_location_id, observing_procedure_code, observing_procedure, value, unit_of_measure, time, qualifier, vertical_datum, approval_status, measuring_agency, last_modified, control_condition, measurement_rated.
 The default (\code{NA}) will return all columns of the data.}
 
 \item{field_visit_id}{A universally unique identifier (UUID) for the field visit. Multiple measurements may be made during a single field visit.}
@@ -108,6 +110,18 @@ selected features that should be returned in each page. The maximum allowable
 limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
+
+\item{filter}{A CQL text or JSON expression passed through to the OGC
+API \code{filter} query parameter. Commonly used to OR several time ranges
+into a single request. At the time of writing the server accepts
+\code{cql-text} (default) and \code{cql-json}; \code{cql2-text} / \code{cql2-json} are not
+yet supported. A long expression made up of a top-level \code{OR} chain is
+transparently split into multiple requests that each fit under the
+server's URI length limit; the results are concatenated and
+deduplicated by id.}
+
+\item{filter_lang}{Language of the \code{filter} expression, for example
+\code{cql-text} (default) or \code{cql-json}. Sent as \code{filter-lang} in the URL.}
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}

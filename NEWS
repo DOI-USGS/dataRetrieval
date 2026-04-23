@@ -1,6 +1,21 @@
 dataRetrieval 2.7.24
 ===================
 * Let dataRetrieval take care of chunking up requests by monitoring_location_id.
+* Added `read_waterdata_nearest_continuous()` which, given a vector of
+  target timestamps, returns the single continuous observation nearest
+  each target, fetched in one HTTP round-trip (auto-chunked when the
+  underlying CQL filter gets long). Knobs include `window` (half-window
+  around each target, default 7.5 minutes to match the 15-minute
+  continuous cadence) and `on_tie` (`"first"` / `"last"` / `"mean"`).
+* Added `filter` and `filter_lang` arguments to the OGC `read_waterdata_*`
+  functions (continuous, daily, field_measurements, monitoring_location,
+  ts_meta, latest_continuous, latest_daily, channel). These are forwarded
+  to the OGC API's CQL `filter` / `filter-lang` query parameters, enabling
+  server-side filtering that isn't expressible via the other arguments --
+  most commonly, OR'ing multiple time ranges into a single request. For
+  `cql-text` filters, a long top-level `OR` chain is transparently split
+  into multiple sub-requests sized to stay under the server's 8 KB URL
+  byte limit; results are concatenated and deduplicated by id.
 
 dataRetrieval 2.7.23
 ===================

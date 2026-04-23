@@ -48,7 +48,9 @@ read_waterdata_monitoring_location(
   properties = NA_character_,
   bbox = NA,
   limit = NA,
-  skipGeometry = NA
+  skipGeometry = NA,
+  filter = NA_character_,
+  filter_lang = NA_character_
 )
 }
 \arguments{
@@ -155,6 +157,17 @@ allowable limit for the service.}
 \item{skipGeometry}{This option can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
 information.}
+
+\item{filter}{A CQL text or JSON expression passed through to the OGC
+API \code{filter} query parameter. At the time of writing the server accepts
+\code{cql-text} (default) and \code{cql-json}; \code{cql2-text} / \code{cql2-json} are not
+yet supported. A long expression made up of a top-level \code{OR} chain is
+transparently split into multiple requests that each fit under the
+server's URI length limit; the results are concatenated and
+deduplicated by id.}
+
+\item{filter_lang}{Language of the \code{filter} expression, for example
+\code{cql-text} (default) or \code{cql-json}. Sent as \code{filter-lang} in the URL.}
 }
 \description{
 Location information is basic information about the monitoring location including the name, identifier, agency responsible for data collection, and the date the location was established. It also includes information about the type of location, such as stream, lake, or groundwater, and geographic information about the location, such as state, county, latitude and longitude, and hydrologic unit code (HUC).
