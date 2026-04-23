@@ -8,7 +8,7 @@ read_waterdata_nearest_continuous(
   targets,
   monitoring_location_id = NA_character_,
   parameter_code = NA_character_,
-  window = "00:07:30",
+  window = "07:30",
   on_tie = c("first", "last", "mean"),
   ...
 )
@@ -27,14 +27,21 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 Multiple parameter_codes can be requested as a character vector.}
 
-\item{window}{Half-window around each target, given as an
-\code{"HH:MM:SS"} string. Defaults to \code{"00:07:30"} (7.5 minutes), which
-is half of the typical 15-minute continuous cadence — most
-targets' windows contain exactly one observation. Widen (e.g.
-\code{"00:15:00"}, \code{"00:30:00"}, \code{"01:00:00"}) for irregular cadences
-or resilience to data gaps. For programmatic use, also accepts a
-number of seconds, a \code{difftime}, or a \code{lubridate::Period} /
-\code{lubridate::Duration}.}
+\item{window}{Half-window around each target. Accepts:
+\itemize{
+\item a \code{"MM:SS"} or \code{"HH:MM:SS"} string (e.g. \code{"07:30"}, \code{"15:00"},
+\code{"00:30:00"}, \code{"01:00:00"});
+\item an ISO 8601 duration string (e.g. \code{"PT7M30S"}, \code{"PT15M"},
+\code{"PT1H"}) or any other string \code{lubridate::duration()} parses
+(e.g. \code{"7 minutes 30 seconds"});
+\item a number of seconds, a \code{difftime}, or a \code{lubridate::Period} /
+\code{lubridate::Duration}.
+}
+
+Defaults to \code{"07:30"} (7.5 minutes), which is half of the
+typical 15-minute continuous cadence — most targets' windows
+contain exactly one observation. Widen for irregular cadences or
+resilience to data gaps.}
 
 \item{on_tie}{How to resolve ties when two observations are exactly
 equidistant from a target (which happens when the target falls at
@@ -107,7 +114,7 @@ near_wide <- read_waterdata_nearest_continuous(
   targets = targets,
   monitoring_location_id = "USGS-02238500",
   parameter_code = "00060",
-  window = "00:30:00",
+  window = "30:00",
   on_tie = "mean"
 )
 }

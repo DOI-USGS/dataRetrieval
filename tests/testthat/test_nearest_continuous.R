@@ -245,12 +245,24 @@ test_that("on_tie is validated", {
   )
 })
 
-test_that("window accepts HH:MM:SS strings and programmatic forms", {
+test_that("window accepts clock strings, ISO 8601, and programmatic forms", {
+  # MM:SS
+  expect_equal(dataRetrieval:::as_window_seconds("07:30"), 450)
+  expect_equal(dataRetrieval:::as_window_seconds("15:00"), 900)
+  # HH:MM:SS
   expect_equal(dataRetrieval:::as_window_seconds("00:07:30"), 450)
-  expect_equal(dataRetrieval:::as_window_seconds("00:15:00"), 900)
   expect_equal(dataRetrieval:::as_window_seconds("01:00:00"), 3600)
   # Fractional seconds are allowed.
-  expect_equal(dataRetrieval:::as_window_seconds("00:00:01.5"), 1.5)
+  expect_equal(dataRetrieval:::as_window_seconds("00:01.5"), 1.5)
+  # ISO 8601 duration.
+  expect_equal(dataRetrieval:::as_window_seconds("PT7M30S"), 450)
+  expect_equal(dataRetrieval:::as_window_seconds("PT15M"), 900)
+  expect_equal(dataRetrieval:::as_window_seconds("PT1H"), 3600)
+  # Natural-language forms lubridate also accepts.
+  expect_equal(
+    dataRetrieval:::as_window_seconds("7 minutes 30 seconds"),
+    450
+  )
   # Programmatic forms.
   expect_equal(dataRetrieval:::as_window_seconds(450), 450)
   expect_equal(
@@ -262,6 +274,5 @@ test_that("window accepts HH:MM:SS strings and programmatic forms", {
     600
   )
   # Reject garbage with a clear message.
-  expect_error(dataRetrieval:::as_window_seconds("7.5 mins"), "HH:MM:SS")
-  expect_error(dataRetrieval:::as_window_seconds("bogus"), "HH:MM:SS")
+  expect_error(dataRetrieval:::as_window_seconds("bogus"), "MM:SS")
 })

@@ -21,14 +21,19 @@
 #'   Multiple monitoring_location_ids can be requested as a character vector.
 #' @param parameter_code `r get_ogc_params("continuous")$parameter_code`
 #'   Multiple parameter_codes can be requested as a character vector.
-#' @param window Half-window around each target, given as an
-#'   `"HH:MM:SS"` string. Defaults to `"00:07:30"` (7.5 minutes), which
-#'   is half of the typical 15-minute continuous cadence — most
-#'   targets' windows contain exactly one observation. Widen (e.g.
-#'   `"00:15:00"`, `"00:30:00"`, `"01:00:00"`) for irregular cadences
-#'   or resilience to data gaps. For programmatic use, also accepts a
-#'   number of seconds, a `difftime`, or a `lubridate::Period` /
-#'   `lubridate::Duration`.
+#' @param window Half-window around each target. Accepts:
+#'   * a `"MM:SS"` or `"HH:MM:SS"` string (e.g. `"07:30"`, `"15:00"`,
+#'     `"00:30:00"`, `"01:00:00"`);
+#'   * an ISO 8601 duration string (e.g. `"PT7M30S"`, `"PT15M"`,
+#'     `"PT1H"`) or any other string `lubridate::duration()` parses
+#'     (e.g. `"7 minutes 30 seconds"`);
+#'   * a number of seconds, a `difftime`, or a `lubridate::Period` /
+#'     `lubridate::Duration`.
+#'
+#'   Defaults to `"07:30"` (7.5 minutes), which is half of the
+#'   typical 15-minute continuous cadence — most targets' windows
+#'   contain exactly one observation. Widen for irregular cadences or
+#'   resilience to data gaps.
 #' @param on_tie How to resolve ties when two observations are exactly
 #'   equidistant from a target (which happens when the target falls at
 #'   the midpoint between grid points — e.g. target 10:22:30 for a
@@ -82,7 +87,7 @@
 #'   targets = targets,
 #'   monitoring_location_id = "USGS-02238500",
 #'   parameter_code = "00060",
-#'   window = "00:30:00",
+#'   window = "30:00",
 #'   on_tie = "mean"
 #' )
 #' }
@@ -90,7 +95,7 @@ read_waterdata_nearest_continuous <- function(
   targets,
   monitoring_location_id = NA_character_,
   parameter_code = NA_character_,
-  window = "00:07:30",
+  window = "07:30",
   on_tie = c("first", "last", "mean"),
   ...
 ) {
@@ -223,9 +228,10 @@ to_utc_posixct <- function(x) {
 
 #' Coerce `window` to a number of seconds
 #'
-#' Primary form is an `"HH:MM:SS"` string; also accepts a plain number
-#' of seconds, a `difftime`, or a `lubridate::Period` / `Duration` for
-#' programmatic callers.
+#' Accepts a `"MM:SS"` or `"HH:MM:SS"` clock-style string, an ISO 8601
+#' duration string (or anything `lubridate::duration()` parses), a
+#' plain number of seconds, a `difftime`, or a `lubridate::Period` /
+#' `Duration`.
 #'
 #' @noRd
 as_window_seconds <- function(window) {
@@ -238,17 +244,29 @@ as_window_seconds <- function(window) {
   if (is.numeric(window) && length(window) == 1L) {
     return(as.numeric(window))
   }
-  if (
-    is.character(window) &&
-      length(window) == 1L &&
-      grepl("^\\d+:\\d{1,2}:\\d{1,2}(\\.\\d+)?$", window)
-  ) {
-    parts <- as.numeric(strsplit(window, ":", fixed = TRUE)[[1L]])
-    return(parts[1L] * 3600 + parts[2L] * 60 + parts[3L])
+  if (is.character(window) && length(window) == 1L) {
+    # MM:SS or HH:MM:SS (with optional fractional seconds).
+    if (grepl("^\\d+:\\d{1,2}(:\\d{1,2})?(\\.\\d+)?$", window)) {
+      parts <- as.numeric(strsplit(window, ":", fixed = TRUE)[[1L]])
+      if (length(parts) == 2L) {
+        return(parts[1L] * 60 + parts[2L])
+      }
+      return(parts[1L] * 3600 + parts[2L] * 60 + parts[3L])
+    }
+    # ISO 8601 duration ("PT7M30S", "PT1H", "P1D", ...) or a natural-
+    # language form that `lubridate::duration` recognises.
+    parsed <- suppressWarnings(tryCatch(
+      lubridate::duration(window),
+      error = function(e) NULL
+    ))
+    if (!is.null(parsed) && !is.na(parsed)) {
+      return(as.numeric(parsed, units = "secs"))
+    }
   }
   stop(
-    "`window` must be an 'HH:MM:SS' string, a number of seconds, a ",
-    "difftime, or a lubridate Period/Duration; got: ",
+    "`window` must be a clock-style 'MM:SS'/'HH:MM:SS' string, an ISO ",
+    "8601 duration (e.g. 'PT7M30S'), a number of seconds, a difftime, ",
+    "or a lubridate Period/Duration; got: ",
     paste(format(window), collapse = " "),
     call. = FALSE
   )
