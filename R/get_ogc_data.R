@@ -44,73 +44,11 @@ get_ogc_data <- function(args, output_id, service, ..., chunk_size = 250) {
     args[["convertType"]] <- NULL
     args[["service"]] <- service
 
-    # Only cql-text filters can be safely chunked by splitting on top-level
-    # OR: the splitter is text- and single-quote-aware and would corrupt
-    # cql-json. Non-cql-text filters (if any) are sent as-is.
-    filter_expr <- args[["filter"]]
-    filter_lang <- args[["filter_lang"]]
-    should_chunk_filter <- is.character(filter_expr) &&
-      length(filter_expr) == 1L &&
-      !is.na(filter_expr) &&
-      nzchar(filter_expr) &&
-      (is.null(filter_lang) ||
-        is.na(filter_lang) ||
-        identical(filter_lang, "cql-text"))
-    if (should_chunk_filter) {
-      raw_budget <- effective_filter_budget(args, filter_expr)
-      filter_chunks <- chunk_cql_or(filter_expr, max_len = raw_budget)
-    } else {
-      filter_chunks <- list(NULL)
-    }
-
-    if (length(filter_chunks) > 1L) {
-      frames <- vector("list", length(filter_chunks))
-      last_req <- NULL
-      for (i in seq_along(filter_chunks)) {
-        chunk_args <- args
-        chunk_args[["filter"]] <- filter_chunks[[i]]
-        chunk_req <- do.call(construct_api_requests, chunk_args)
-        message("Requesting:\n", chunk_req$url)
-        if (grepl("f=csv", chunk_req$url)) {
-          frames[[i]] <- get_csv(chunk_req, limit = chunk_args[["limit"]])
-        } else {
-          frames[[i]] <- walk_pages(chunk_req)
-        }
-        last_req <- chunk_req
-      }
-      # Drop empty frames before concatenation. An empty frame from
-      # walk_pages is a plain data.frame with no geometry; rbinding it
-      # first would downgrade a later sf result back to a plain frame and
-      # silently drop geometry/CRS.
-      non_empty <- Filter(function(df) nrow(df) > 0L, frames)
-      if (length(non_empty) == 0L) {
-        return_list <- frames[[1L]]
-      } else if (length(non_empty) == 1L) {
-        return_list <- non_empty[[1L]]
-      } else {
-        return_list <- do.call(rbind, non_empty)
-        # Dedup on the pre-rename feature "id" (always present at this
-        # stage; rejigger_cols renames it later) to catch overlapping
-        # user-supplied OR clauses across chunks.
-        if ("id" %in% names(return_list)) {
-          return_list <- return_list[
-            !duplicated(return_list$id), ,
-            drop = FALSE
-          ]
-        }
-      }
-      req <- last_req
-      no_paging <- grepl("f=csv", req$url)
-    } else {
-      req <- do.call(construct_api_requests, args)
-      no_paging <- grepl("f=csv", req$url)
-      message("Requesting:\n", req$url)
-      if (no_paging) {
-        return_list <- get_csv(req, limit = args[["limit"]])
-      } else {
-        return_list <- walk_pages(req)
-      }
-    }
+    chunks <- plan_filter_chunks(args)
+    fetched <- fetch_chunks(args, chunks)
+    return_list <- combine_chunk_frames(fetched$frames)
+    req <- fetched$req
+    no_paging <- grepl("f=csv", req$url)
 
     if (is.na(args[["skipGeometry"]])) {
       skipGeometry <- FALSE
@@ -248,6 +186,93 @@ switch_properties_id <- function(properties, id) {
 # `large_client_header_buffers` of 8 KB (8192). 8000 leaves ~200 bytes of
 # headroom for request-line framing and any intermediate proxy variance.
 .WATERDATA_URL_BYTE_LIMIT <- 8000L
+
+
+#' Decide how to fan `args[["filter"]]` out across HTTP calls
+#'
+#' Returns one entry per request to send. A `NULL` entry means "send
+#' `args` as-is" -- either there is no filter, or the filter language
+#' is not one we can safely split (only cql-text top-level `OR` chains
+#' are chunkable). Otherwise each character entry is a chunked cql-text
+#' expression that replaces `args[["filter"]]` for its sub-request.
+#' Overlapping user OR-clauses are deduplicated by feature id later in
+#' [combine_chunk_frames].
+#'
+#' @noRd
+plan_filter_chunks <- function(args) {
+  filter_expr <- args[["filter"]]
+  filter_lang <- args[["filter_lang"]]
+  chunkable <- is.character(filter_expr) &&
+    length(filter_expr) == 1L &&
+    !is.na(filter_expr) &&
+    nzchar(filter_expr) &&
+    (is.null(filter_lang) ||
+      is.na(filter_lang) ||
+      identical(filter_lang, "cql-text"))
+  if (!chunkable) {
+    return(list(NULL))
+  }
+  raw_budget <- effective_filter_budget(args, filter_expr)
+  as.list(chunk_cql_or(filter_expr, max_len = raw_budget))
+}
+
+
+#' Send one request per chunk; return per-chunk frames and the request
+#'
+#' A `NULL` chunk means "send `args` as-is" (no filter override). The
+#' returned `req` is the *first* sub-request, which is the
+#' representative URL to attach as the `request` attribute when the
+#' caller asked for one.
+#'
+#' @noRd
+fetch_chunks <- function(args, chunks) {
+  frames <- vector("list", length(chunks))
+  first_req <- NULL
+  for (i in seq_along(chunks)) {
+    chunk_args <- if (is.null(chunks[[i]])) {
+      args
+    } else {
+      replace(args, "filter", list(chunks[[i]]))
+    }
+    chunk_req <- do.call(construct_api_requests, chunk_args)
+    message("Requesting:\n", chunk_req$url)
+    if (grepl("f=csv", chunk_req$url)) {
+      frames[[i]] <- get_csv(chunk_req, limit = chunk_args[["limit"]])
+    } else {
+      frames[[i]] <- walk_pages(chunk_req)
+    }
+    if (i == 1L) {
+      first_req <- chunk_req
+    }
+  }
+  list(frames = frames, req = first_req)
+}
+
+
+#' Concatenate per-chunk frames, handling the edge cases
+#'
+#' Drops empty frames before concat: `walk_pages` returns a plain
+#' empty `data.frame` on no-feature responses, which would downgrade
+#' a concat of real `sf` results back to a plain frame and strip
+#' geometry / CRS. Also dedups on the pre-rename feature `id` so
+#' overlapping user-supplied OR-clauses don't produce duplicate rows
+#' across chunks.
+#'
+#' @noRd
+combine_chunk_frames <- function(frames) {
+  non_empty <- Filter(function(df) nrow(df) > 0L, frames)
+  if (length(non_empty) == 0L) {
+    return(frames[[1L]])
+  }
+  if (length(non_empty) == 1L) {
+    return(non_empty[[1L]])
+  }
+  combined <- do.call(rbind, non_empty)
+  if ("id" %in% names(combined)) {
+    combined <- combined[!duplicated(combined$id), , drop = FALSE]
+  }
+  combined
+}
 
 
 #' Compute the raw CQL byte budget for `filter_expr` in this request
