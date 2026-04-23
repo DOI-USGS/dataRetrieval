@@ -6,6 +6,8 @@ new modern endpoint.
 including it as an argument in each relevant function.
 * Clean up deprecated code.
 * Updated retry strategy to include retry_on_failure = TRUE.
+* Added countries, methods, method-categories, method-citations, and
+citations to possible values in read_waterdata_metadata.
 
 
 dataRetrieval 2.7.24

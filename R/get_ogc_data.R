@@ -87,8 +87,15 @@ get_ogc_data <- function(args, output_id, service) {
     }
   }
 
-  if (!isTRUE(args[["skipGeometry"]]) & "geometry" %in% names(return_list)) {
-    return_list <- sf::st_as_sf(return_list)
+  if (
+    !isTRUE(args[["skipGeometry"]]) &
+      "geometry" %in% names(return_list)
+  ) {
+    if (all(sf::st_is_empty(return_list[["geometry"]]))) {
+      return_list <- sf::st_drop_geometry(return_list)
+    } else {
+      return_list <- sf::st_as_sf(return_list)
+    }
   }
 
   attr(return_list, "queryTime") <- Sys.time()

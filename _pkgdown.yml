@@ -46,6 +46,8 @@ navbar:
       href: articles/daily_data_statistics.html
     - text: Continuous Data
       href: articles/continuous_pr.html
+    - text: USGS Reference Lists
+      href: articles/Reference_Lists.html
     - text: Changes to QW
       href: articles/qwdata_changes.html
     - text: Background
