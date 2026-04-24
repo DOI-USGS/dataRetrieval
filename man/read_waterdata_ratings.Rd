@@ -6,7 +6,7 @@
 \usage{
 read_waterdata_ratings(
   monitoring_location_id = NA_character_,
-  file_type = "exsa",
+  file_type = c("exsa", "base", "corr"),
   file_path = tempdir(),
   bbox = NA,
   datetime = NA_character_,
