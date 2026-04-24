@@ -151,6 +151,8 @@ read_waterdata_ratings <- function(
     basic_request()
 
   resp <- httr2::req_perform(request)
+  log_rate_limit(resp)
+
   features <- httr2::resp_body_json(resp)[["features"]]
 
   if (download_and_parse) {
