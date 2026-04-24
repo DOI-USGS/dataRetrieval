@@ -261,7 +261,7 @@ check_arguments_non_api <- function(
 #' information. The default `NA` will not specify the argument in the request.
 #'
 #' @keywords internal
-check_arguments_api <- function(bbox, skipGeometry, ...) {
+check_arguments_api <- function(bbox, skipGeometry) {
   if (!is.null(skipGeometry)) {
     if (!is.na(skipGeometry) & !is.logical(skipGeometry)) {
       stop("skipGeometry should be a logical TRUE/FALSE")

@@ -4,7 +4,7 @@
 \alias{check_arguments_api}
 \title{Check other arguments}
 \usage{
-check_arguments_api(bbox, skipGeometry, ...)
+check_arguments_api(bbox, skipGeometry)
 }
 \arguments{
 \item{bbox}{Only features that have a geometry that intersects the bounding
