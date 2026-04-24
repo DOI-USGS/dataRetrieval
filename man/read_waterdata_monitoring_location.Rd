@@ -56,7 +56,7 @@ read_waterdata_monitoring_location(
 )
 }
 \arguments{
-\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{id} field in the \code{monitoring-locations} endpoint. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).
+\item{monitoring_location_id}{A unique identifier representing a single monitoring location. This corresponds to the \code{monitoring_location_id} field in other endpoints. Monitoring location IDs are created by combining the agency code of the agency responsible for the monitoring location (e.g. USGS) with the ID number of the monitoring location (e.g. 02238500), separated by a hyphen (e.g. USGS-02238500).
 
 Multiple monitoring_location_ids can be requested as a character vector.}
 
