@@ -1,6 +1,7 @@
 #' Get USGS Rating Curve Data
 #'
-#' Reads current rating table for an active USGS streamgages.
+#' Reads current rating table for an active USGS streamgages. More information
+#' can be found at https://api.waterdata.usgs.gov/docs/stac/.
 #'
 #' @param monitoring_location_id A unique identifier representing a single
 #' monitoring location. Monitoring location IDs are created by combining the

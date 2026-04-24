@@ -60,7 +60,8 @@ just a list of available rating curve files (\code{FALSE}). Default is \code{TRU
 List of data frames which contain the requested rating curves.
 }
 \description{
-Reads current rating table for an active USGS streamgages.
+Reads current rating table for an active USGS streamgages. More information
+can be found at https://api.waterdata.usgs.gov/docs/stac/.
 }
 \details{
 You can also use a vector of length 2 for any time queries (such as time
