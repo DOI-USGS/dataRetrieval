@@ -74,7 +74,7 @@
 #'}
 read_waterdata_ratings <- function(
   monitoring_location_id = NA_character_,
-  file_type = "exsa",
+  file_type = c("exsa", "base", "corr"),
   file_path = tempdir(),
   bbox = NA,
   datetime = NA_character_,
@@ -92,6 +92,8 @@ read_waterdata_ratings <- function(
   request <- httr2::request("https://api.waterdata.usgs.gov/stac/v0/") |>
     httr2::req_url_path_append("search")
 
+  filter <- NA_character_
+
   if (!all(is.na(monitoring_location_id))) {
     if (length(monitoring_location_id) > 1) {
       monitoring_location_id <- paste0(
@@ -100,13 +102,27 @@ read_waterdata_ratings <- function(
       )
     }
 
+    filter <- sprintf(
+      "monitoring_location_id IN ('%s')",
+      monitoring_location_id
+    )
+  }
+
+  if (length(file_type) != 3) {
+    # there are 3 types
+    if (length(file_type) > 1) {
+      file_type <- paste0(file_type, collapse = "', '")
+    }
+    filter <- sprintf("%s AND file_type IN ('%s')", filter, file_type)
+  }
+
+  if (!is.na(filter)) {
+    if (substr(filter, 1, 3) == "AND") {
+      filter <- substr(filter, 4, nchar(filter))
+    }
+
     request <- request |>
-      httr2::req_url_query(
-        filter = sprintf(
-          "monitoring_location_id IN ('%s')",
-          monitoring_location_id
-        )
-      )
+      httr2::req_url_query(filter = filter)
   }
 
   if (!all(is.na(datetime))) {
