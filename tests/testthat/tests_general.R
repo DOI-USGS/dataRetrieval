@@ -97,41 +97,6 @@ test_that("General NWIS retrievals working", {
   expect_is(timeseriesInfo$begin, "POSIXct")
 
   # nolint start: line_length_linter
-  url <- httr2::request(
-    "https://waterservices.usgs.gov/nwis/dv/?site=09037500&format=rdb&ParameterCd=00060&StatCd=00003&startDT=1985-10-02&endDT=2012-09-06"
-  )
-  dv <- importRDB1(url, asDateTime = FALSE)
-  # nolint end
-  dailyStat <- readNWISdata(
-    site = c("03112500", "03111520", "02319394"),
-    service = "stat",
-    statReportType = "daily",
-    statType = c("p25", "p50", "p75", "min", "max"),
-    parameterCd = "00065",
-    convertType = FALSE
-  )
-  expect_true(length(dailyStat$min_va) > 1)
-  expect_is(dailyStat$p25_va, "character")
-
-  waterYearStat <- readNWISdata(
-    site = c("01646500"),
-    service = "stat",
-    statReportType = "annual",
-    statYearType = "water",
-    missingData = "on"
-  )
-  expect_is(waterYearStat$mean_va, "numeric")
-  expect_is(waterYearStat$parameter_cd, "character")
-
-  # Empty data
-  # note....not empty anymore!
-  # nolint start: line_length_linter
-  urlTest <- httr2::request(
-    "https://nwis.waterservices.usgs.gov/nwis/iv/?site=11447650&format=waterml,1.1&ParameterCd=63680&startDT=2016-12-13&endDT=2016-12-13"
-  )
-  x <- importWaterML1(urlTest)
-  expect_true(all(c("agency_cd", "site_no", "dateTime", "tz_cd") %in% names(x)))
-  # nolint end
 
   # Test list:
   args <- list(

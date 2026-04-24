@@ -8,6 +8,9 @@ including it as an argument in each relevant function.
 * Updated retry strategy to include retry_on_failure = TRUE.
 * Added countries, methods, method-categories, method-citations, and
 citations to possible values in read_waterdata_metadata.
+* Added field_measurements_series_id argument to read_waterdata_field_measurement
+* Removed NWIS tests
+
 
 
 dataRetrieval 2.7.24
