@@ -91,7 +91,10 @@ get_ogc_data <- function(args, output_id, service) {
     !isTRUE(args[["skipGeometry"]]) &
       "geometry" %in% names(return_list)
   ) {
-    if (all(sf::st_is_empty(return_list[["geometry"]]))) {
+    if (
+      all(sf::st_is_empty(return_list[["geometry"]])) &
+        !"geometry" %in% args[["properties"]]
+    ) {
       return_list <- sf::st_drop_geometry(return_list)
     } else {
       return_list <- sf::st_as_sf(return_list)
