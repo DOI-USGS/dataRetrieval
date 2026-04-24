@@ -62,6 +62,7 @@
 #' rating_2 <- read_waterdata_ratings(
 #'       monitoring_location_id = monitoring_location_id,
 #'       file_type = c("corr", "exsa"))
+#' names(rating_2)
 #'
 #' bbox <- c(-95.00, 40.0, -92.0, 42)
 #'
@@ -109,12 +110,8 @@ read_waterdata_ratings <- function(
     )
   }
 
-  if (length(file_type) != 3) {
-    # there are 3 types
-    if (length(file_type) > 1) {
-      file_type <- paste0(file_type, collapse = "', '")
-    }
-    filter <- sprintf("%s AND file_type IN ('%s')", filter, file_type)
+  if (length(file_type) == 1) {
+    filter <- sprintf("%s AND file_type = '%s'", filter, file_type)
   }
 
   if (!is.na(filter)) {
@@ -176,9 +173,13 @@ download_convert <- function(feature, file_path, file_type) {
   id <- feature$id
   url <- feature$assets$data$href
 
+  req <- httr2::request(url) |>
+    basic_request()
+
   if (any(sapply(file_type, function(x) grepl(x, url)))) {
     full_file_path <- file.path(file_path, id)
-    utils::download.file(url = url, destfile = full_file_path)
+    message("Requesting: \n", url)
+    resp <- httr2::req_perform(req, path = full_file_path)
     rating <- importRDB1(full_file_path)
     return(rating)
   }
