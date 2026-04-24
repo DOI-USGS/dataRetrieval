@@ -20,6 +20,7 @@
 #' See also Details below for more information.
 #' @param qualifier `r get_ogc_params("field-measurements")$qualifier`
 #' @param field_visit_id `r get_ogc_params("field-measurements")$field_visit_id`
+#' @param field_measurements_series_id `r get_ogc_params("field-measurements")$field_measurements_series_id`
 #' @param vertical_datum `r get_ogc_params("field-measurements")$vertical_datum`
 #' @param measuring_agency `r get_ogc_params("field-measurements")$measuring_agency`
 #' @param control_condition `r get_ogc_params("field-measurements")$control_condition`
@@ -83,6 +84,7 @@ read_waterdata_field_measurements <- function(
   observing_procedure_code = NA_character_,
   properties = NA_character_,
   field_visit_id = NA_character_,
+  field_measurements_series_id = NA_character_,
   approval_status = NA_character_,
   unit_of_measure = NA_character_,
   qualifier = NA_character_,
