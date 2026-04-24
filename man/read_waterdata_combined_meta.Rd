@@ -94,7 +94,7 @@ Multiple statistic_ids can be requested as a character vector.}
 
 \item{data_type}{The computational period type of data collected at the monitoring location.}
 
-\item{computation_identifier}{Indicates whether the data from this time series represent a specific statistical computation.
+\item{computation_identifier}{Indicates the computation performed to calculate this time series. Values of "Instantaneous" reflect point measurements.
 Multiple computation_identifiers can be requested as a character vector.}
 
 \item{computation_period_identifier}{Multiple computation_period_identifiers can be requested as a character vector.}
@@ -111,11 +111,11 @@ for timely best science and to assist with daily operations which need
 real-time information. Non-primary time series data are only retained by
 this system for 120 days.}
 
-\item{web_description}{A description of what this time series represents, as used by WDFN and other USGS data dissemination products.}
+\item{web_description}{An optional description of the time series. WDFN and other USGS data dissemination products use this field, in combination with sublocation_identifier, to distinguish the differences between multiple time series for the same parameter code, statistic code, and monitoring location.}
 
 \item{parent_time_series_id}{The unique identifier representing the parent or "upchain" time series that a daily values time series is generated from. Daily values time series have one and only one parent time series.}
 
-\item{begin}{The datetime of the earliest observation in the time series. Together with \code{end}, this field represents the period of record of a time series. Note that some time series may have large gaps in their collection record.
+\item{begin}{The datetime of the earliest observation in the time series. Together with \code{end_utc}, this field represents the period of record of a time series. Note that some time series may have large gaps in their collection record.
 You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
 Examples:
 \itemize{
@@ -125,11 +125,11 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{begin} that intersects the value of datetime are selected.
+Only features that have a \code{begin_utc} that intersects the value of datetime are selected.
 
 See also Details below for more information.}
 
-\item{end}{The datetime of the most recent observation in the time series. Data returned by this endpoint updates at most once per day, and potentially less frequently than that, and as such there may be more recent observations within a time series than the time series \code{end} value reflects. Together with \code{begin}, this field represents the period of record of a time series. It is additionally used to determine whether a time series is "active".
+\item{end}{The datetime of the most recent observation in the time series. Data returned by this endpoint updates at most once per day, and potentially less frequently than that, and as such there may be more recent observations within a time series than the time series \code{end_utc} value reflects. Together with \code{begin_utc}, this field represents the period of record of a time series. It is additionally used to determine whether a time series is "active".
 You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
 Examples:
 \itemize{
@@ -139,7 +139,7 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{end} that intersects the value of datetime are selected.
+Only features that have a \code{end_utc} that intersects the value of datetime are selected.
 
 See also Details below for more information.}
 
