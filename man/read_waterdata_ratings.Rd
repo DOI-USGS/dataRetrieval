@@ -102,6 +102,7 @@ comment(ratings_corr[["USGS-01104460.corr.rdb"]])[1:15]
 rating_2 <- read_waterdata_ratings(
       monitoring_location_id = monitoring_location_id,
       file_type = c("corr", "exsa"))
+names(rating_2)
 
 bbox <- c(-95.00, 40.0, -92.0, 42)
 
