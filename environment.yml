@@ -11,3 +11,4 @@ dependencies:
   - dataretrieval
   - pandas
   - geopandas
+prefix: /home/user/miniforge3/envs/dataretrieval
