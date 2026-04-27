@@ -12,10 +12,8 @@ docs
 /doc/
 /Meta/
 /Temp/
+/public/
 vignettes/*.html
 vignettes/*.R
-
-
 /.quarto/
-
 **/*.quarto_ipynb

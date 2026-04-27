@@ -70,3 +70,4 @@ vignettes/quick_slides.Rmd
 vignettes/Reference_Lists.Rmd
 ^[.]?air[.]toml$
 ^\.vscode$
+environment.yml
