@@ -47,7 +47,7 @@ build-image:
   script:
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
-    - docker build --cache-from ${CI_REGISTRY_IMAGE}:latest -t 
+    - docker build 
         ${CI_REGISTRY_IMAGE}:latest -t 
         ${CI_REGISTRY_IMAGE}:BUILD_${CI_COMMIT_SHORT_SHA} -f docker/Dockerfile
         .
