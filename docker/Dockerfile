@@ -33,8 +33,6 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       wget \
-      python3 \
-      python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 # Change the name of this environment to something which pleases you, if you

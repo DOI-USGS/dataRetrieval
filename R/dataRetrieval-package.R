@@ -211,7 +211,7 @@ NULL
 #
 # property_list <- list()
 # for(service in services){
-#   property_list[[service]] <- get_properties_for_docs(service)
+#   property_list[[service]] <- dataRetrieval:::get_properties_for_docs(service)
 # }
 #
 # num_cols <- c("value", "contributing_drainage_area", "drainage_area",
