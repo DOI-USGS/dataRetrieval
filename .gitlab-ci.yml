@@ -42,6 +42,7 @@ build-image:
     alias: docker
   rules:
     - changes:
+      - .gitlab-ci.yml
       - docker/Dockerfile
       - environment.yml
   script:
