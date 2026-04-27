@@ -37,10 +37,6 @@ RUN apt-get update && \
       python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# Disable the annoying bell on WSL2
-RUN sed -i 's/^# set bell-style none$/set bell-style none/' /etc/inputrc
-RUN echo 'set visualbell' >> /root/.vimrc
-
 # Change the name of this environment to something which pleases you, if you
 # so please. But the name will not be relevant for most cases, as reticulate
 # will be pointed to the environment no matter what it is named.
