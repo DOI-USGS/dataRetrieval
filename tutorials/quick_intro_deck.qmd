@@ -577,9 +577,13 @@ Use your "tab" key!
 
 ![](images/autocomplete_samples.png)
 
-## Workflow 2: Discrete data for known site
+## Workflow 2: Discrete data for known site {.smaller}
 
 Let's get orthophosphate ("00660") data from the Shenandoah River at Front Royal, VA ("USGS-01631000").
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| message: true
@@ -594,6 +598,24 @@ qw_data <- read_waterdata_samples(
 )
 ncol(qw_data)
 ```
+
+### Python
+```{python}
+#| message: true
+site = "USGS-01631000"
+pcode = "00660"
+
+qw_data = waterdata.get_samples(
+    monitoringLocationIdentifier=site,
+    usgsPCode=pcode,
+    service="results",
+    profile="basicphyschem",
+)
+
+qw_data[0].shape[1]
+```
+
+:::
 
 That's a LOT of columns returned. We won't look at them here, but you can use `View` in RStudio to explore on your own.
 
