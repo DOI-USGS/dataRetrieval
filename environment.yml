@@ -1,11 +1,9 @@
 name: dataretrieval
 channels:
   - conda-forge
-  - nodefaults
 dependencies:
   # required
   - python=3.12
-  - pip
   - numpy
   - matplotlib
   - dataretrieval

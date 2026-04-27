@@ -15,6 +15,7 @@ title-slide-attributes:
   data-background-size: 15%
   data-background-position: 2% 2%
 editor: source
+engine: knitr
 editor_options: 
   chunk_output_type: console
 execute:
@@ -26,33 +27,45 @@ execute:
 ```{r}
 #| echo: false
 #| include: false
-# library(dataRetrieval)
+#| # library(dataRetrieval)
 library(ggplot2)
 library(dplyr)
+library(reticulate)
+py_require("dataretrieval")
 options(dplyr.summarise.inform = FALSE)
 
-dt_me <- function(x, 
-                  page_length = 8, 
-                  paging = TRUE,
-                  font = "0.7em", 
-                  escape = TRUE){
-  DT::datatable(x,
-              rownames = FALSE,
-              options = list(pageLength = page_length, 
-                             info = FALSE,
-                             searching = FALSE,
-                             paging = paging,
-                             lengthChange = FALSE,
-                             initComplete = htmlwidgets::JS(
-          "function(settings, json) {",
-          paste0("$(this.api().table().container()).css({'font-size': '", 
-                 font, "'});"),
-          "}")), escape = escape)
+dt_me <- function(
+  x,
+  page_length = 8,
+  paging = TRUE,
+  font = "0.7em",
+  escape = TRUE
+) {
+  DT::datatable(
+    x,
+    rownames = FALSE,
+    options = list(
+      pageLength = page_length,
+      info = FALSE,
+      searching = FALSE,
+      paging = paging,
+      lengthChange = FALSE,
+      initComplete = htmlwidgets::JS(
+        "function(settings, json) {",
+        paste0(
+          "$(this.api().table().container()).css({'font-size': '",
+          font,
+          "'});"
+        ),
+        "}"
+      )
+    ),
+    escape = escape
+  )
 }
 
 theme_set(theme_grey(base_size = 24))
-update_geom_defaults("point", list(size = 3)) 
-
+update_geom_defaults("point", list(size = 3))
 ```
 
 
@@ -111,11 +124,14 @@ In this ~45 minute introduction, the goal is:
 
 `dataRetrieval` is available on the Comprehensive R Archive Network (CRAN) repository. To install `dataRetrieval` on your computer, open RStudio and run this line of code in the Console:
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 #| echo: true
 #| eval: false
 install.packages("dataRetrieval")
-
 ```
 
 Then each time you open R, you'll need to load the library:
@@ -124,6 +140,23 @@ Then each time you open R, you'll need to load the library:
 #| message: true
 library(dataRetrieval)
 ```
+
+### Python
+
+```{bash}
+#| echo: true
+#| eval: false
+pip install dataretrieval
+
+```
+
+Then each time you open Python, you'll need to load the library:
+
+```{python}
+from dataretrieval import waterdata
+```
+
+:::
 
 ::: footer
 
@@ -157,7 +190,7 @@ Within R, you can call help files for any `dataRetrieval` function:
 ```{r}
 #| echo: true
 #| eval: false
-?readWQPdata
+?read_waterdata_daily
 ```
 
 :::: {.columns}
@@ -179,14 +212,12 @@ Examples
 
 ```{r}
 #| eval: false
-# Legacy:
-nameToUse <- "pH"
-pHData <- readWQPdata(siteid = "USGS-04024315", 
-                      characteristicName = nameToUse)
-ncol(pHData)
-attr(pHData, "siteInfo")
-attr(pHData, "queryTime")
-attr(pHData, "url")
+site <- "USGS-02238500"
+dv_data_sf <- read_waterdata_daily(
+  monitoring_location_id = site,
+  parameter_code = "00060",
+  time = c("2021-01-01", "2022-01-01")
+)
 ```
 
 :::
@@ -370,9 +401,13 @@ We're going walk through 3 retrievals:
 
 :::
 
-## Workflow 1: Daily data for known site
+## Workflow 1: Daily data for known site {.smaller}
 
 Let's pull daily mean discharge data for site "USGS-0940550", getting all the data from October 10, 2024 onward.
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| message: true
@@ -382,12 +417,38 @@ pcode <- "00060" # Discharge
 stat_cd <- "00003" # Mean
 range <- c("2024-10-01", NA)
 
-df <- read_waterdata_daily(monitoring_location_id = site,
-                           parameter_code = pcode,
-                           statistic_id = stat_cd,
-                           time = range)
+df <- read_waterdata_daily(
+  monitoring_location_id = site,
+  parameter_code = pcode,
+  statistic_id = stat_cd,
+  time = range
+)
 
+nrow(df)
 ```
+
+### Python
+
+```{python}
+
+from dataretrieval import waterdata
+
+site = "USGS-09405500"
+pcode = "00060"  # Discharge
+stat_cd = "00003"  # Mean
+
+df = waterdata.get_daily(
+    monitoring_location_id=site,
+    parameter_code=pcode,
+    statistic_id=stat_cd,
+    time="2024-10-01/..",
+)
+
+df[0].shape[0]
+```
+
+
+:::
 
 ::: footer
 
@@ -399,12 +460,11 @@ In RStudio, click on the data frame in the upper right Environment tab to open a
 
 ```{r}
 #| echo: false
-
-dt_me(df |> 
-        sf::st_drop_geometry(),
-      page_length = 3)
-
-
+dt_me(
+  df |>
+    sf::st_drop_geometry(),
+  page_length = 3
+)
 ```
 
 ::: footer
@@ -421,10 +481,7 @@ Let's use `ggplot2` to visualize the data.
 library(ggplot2)
 
 ggplot(data = df) +
-  geom_point(aes(x = time, 
-                 y = value,
-                 color = approval_status)) 
-
+  geom_point(aes(x = time, y = value, color = approval_status))
 ```
 
 ## Water Data API Notes: Argument input 
@@ -444,9 +501,10 @@ Use your "tab" key!
 ```{r}
 #| eval: false
 #| echo: true
-discharge <- read_waterdata_daily(parameter_code = "00060",
-                                  statistic_id = "00003")
-
+discharge <- read_waterdata_daily(
+  parameter_code = "00060",
+  statistic_id = "00003"
+)
 ```
 
 ::: {.fragment}
@@ -492,9 +550,11 @@ Here are a bunch of valid inputs:
 time = "2025-01-01"
 time = as.Date("2025-01-01")
 time = "2025-01-01T23:20:50Z"
-time = as.POSIXct("2025-01-01T23:20:50Z", 
-                  format = "%Y-%m-%dT%H:%M:%S", 
-                  tz = "UTC")
+time = as.POSIXct(
+  "2025-01-01T23:20:50Z",
+  format = "%Y-%m-%dT%H:%M:%S",
+  tz = "UTC"
+)
 # Ask for specific range
 time = c("2024-01-01", "2025-01-01") # or Dates or POSIXs
 # Asking beginning of record to specific end:
@@ -526,10 +586,12 @@ Let's get orthophosphate ("00660") data from the Shenandoah River at Front Royal
 site <- "USGS-01631000"
 pcode <- "00660"
 
-qw_data <- read_waterdata_samples(monitoringLocationIdentifier = site,
-                                  usgsPCode = pcode, 
-                                  dataType = "results", 
-                                  dataProfile = "basicphyschem")
+qw_data <- read_waterdata_samples(
+  monitoringLocationIdentifier = site,
+  usgsPCode = pcode,
+  dataType = "results",
+  dataProfile = "basicphyschem"
+)
 ncol(qw_data)
 ```
 
@@ -549,21 +611,31 @@ That's a LOT of columns returned. We won't look at them here, but you can use `V
 
 ```{r}
 #| echo: false
-
-df <- tibble(dataType = c("results", "locations", "activities", "projects", "organizations"),
-             Description = c("Results data and metadata for measures and observations matching your query",
-                             "Find monitoring locations that have data matching your query",
-                             "Information about the monitoring activities conducted that produced data",
-                             "Information on the projects that have results matching your data query",
-                             "Information about the organizations that have provided data that matches your query"),
-             dataProfile = c('fullphyschem<br>basicphyschem<br>fullbio<br> basicbio<br>narrow<br>resultdetectionquantitationlimit<br>labsampleprep<br>count',
-             'site<br>count',
-             'sampact<br>actmetric<br>actgroup<br>ncount',
-             'project<br>projectmonitoringlocationweight',
-             'organization<br>count'))
+df <- tibble(
+  dataType = c(
+    "results",
+    "locations",
+    "activities",
+    "projects",
+    "organizations"
+  ),
+  Description = c(
+    "Results data and metadata for measures and observations matching your query",
+    "Find monitoring locations that have data matching your query",
+    "Information about the monitoring activities conducted that produced data",
+    "Information on the projects that have results matching your data query",
+    "Information about the organizations that have provided data that matches your query"
+  ),
+  dataProfile = c(
+    'fullphyschem<br>basicphyschem<br>fullbio<br> basicbio<br>narrow<br>resultdetectionquantitationlimit<br>labsampleprep<br>count',
+    'site<br>count',
+    'sampact<br>actmetric<br>actgroup<br>ncount',
+    'project<br>projectmonitoringlocationweight',
+    'organization<br>count'
+  )
+)
 
 dt_me(df, escape = FALSE, paging = FALSE)
-
 ```
 
 ::: footer
@@ -590,10 +662,11 @@ p_code_rt <- "99133"
 start_date <- "2024-01-01"
 end_date <- "2024-06-01"
 
-continuous_data <- read_waterdata_continuous(monitoring_location_id = site_id,
-                                             parameter_code = p_code_rt,
-                                             time = c(start_date, end_date))
-
+continuous_data <- read_waterdata_continuous(
+  monitoring_location_id = site_id,
+  parameter_code = p_code_rt,
+  time = c(start_date, end_date)
+)
 ```
 
 :::
@@ -626,8 +699,7 @@ https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lan
 ```{r}
 #| output-location: column
 ggplot(data = continuous_data) +
-  geom_point(aes(x = time, 
-                 y = value))
+  geom_point(aes(x = time, y = value))
 ```
 
 
@@ -647,18 +719,19 @@ The next slides will demo how to use those.
 ## Data Discovery: Time Series {.smaller}
 
 ```{r}
-ts_available <- read_waterdata_combined_meta(monitoring_location_id = "USGS-04183500")
+ts_available <- read_waterdata_combined_meta(
+  monitoring_location_id = "USGS-04183500"
+)
 ```
 
 ```{r}
 #| echo: false
-
-dt_me(ts_available |> 
-                  sf::st_drop_geometry() |> 
-                select(data_type,
-                       parameter_name, 
-                       parameter_code, statistic_id, begin, end), page_length = 6)
-
+dt_me(
+  ts_available |>
+    sf::st_drop_geometry() |>
+    select(data_type, parameter_name, parameter_code, statistic_id, begin, end),
+  page_length = 6
+)
 ```
 
 ::: footer
@@ -668,19 +741,24 @@ dt_me(ts_available |>
 ## Data Discovery: Discrete {.smaller}
 
 ```{r}
-discrete_available <- summarize_waterdata_samples(monitoringLocationIdentifier = "USGS-04183500")
-
+discrete_available <- summarize_waterdata_samples(
+  monitoringLocationIdentifier = "USGS-04183500"
+)
 ```
 
 ```{r}
 #| echo: false
-
-dt_me(discrete_available |>  
-                select(characteristicUserSupplied, 
-                       resultCount, activityCount,
-                       firstActivity, mostRecentActivity),
-      page_length = 6)
-
+dt_me(
+  discrete_available |>
+    select(
+      characteristicUserSupplied,
+      resultCount,
+      activityCount,
+      firstActivity,
+      mostRecentActivity
+    ),
+  page_length = 6
+)
 ```
 
 ::: footer
@@ -692,8 +770,10 @@ dt_me(discrete_available |>
 * characteristicUserSupplied can be an input to `read_waterdata_sample` 
 
 ```{r}
-discrete1 <- read_waterdata_samples(characteristicUserSupplied = "Phosphorus as phosphorus, water, unfiltered", 
-                                    monitoringLocationIdentifier = "USGS-04183500")
+discrete1 <- read_waterdata_samples(
+  characteristicUserSupplied = "Phosphorus as phosphorus, water, unfiltered",
+  monitoringLocationIdentifier = "USGS-04183500"
+)
 nrow(discrete1)
 ```
 
