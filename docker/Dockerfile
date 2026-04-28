@@ -15,6 +15,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     wget \
     curl \
     libssl-dev \
+    openssl \
     zlib1g-dev \
     libncurses5-dev \
     libncursesw5-dev \
