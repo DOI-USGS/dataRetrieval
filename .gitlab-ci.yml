@@ -66,6 +66,11 @@ buildcheck:
           error_on = 'warning'
         )
       "
+  artifacts:
+    paths:
+      - "*.tar.gz"
+    expire_in: 1 week
+
 
 unittests:
   stage: test
@@ -114,7 +119,11 @@ pages:
     - build-image
     - buildcheck
   script:
-    - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
+    - |
+      Rscript -e '
+        source_file <- list.files()[grep(".tar.gz", list.files())]
+        install.packages(source_file, type = "source", dependencies = FALSE)
+        pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
     - quarto render
   artifacts:
