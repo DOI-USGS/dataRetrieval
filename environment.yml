@@ -1,0 +1,8 @@
+name: dataretrieval
+channels:
+  - conda-forge
+dependencies:
+  # required
+  - python=3.12
+  - dataretrieval
+prefix: /home/user/miniforge3/envs/dataretrieval

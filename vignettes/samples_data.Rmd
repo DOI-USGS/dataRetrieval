@@ -202,7 +202,7 @@ Let's say we don't know a USGS site number, but we do have an area of interest. 
 
 North and south are latitude values; east and west are longitude values. A vector of 4 (west, south, east, north) is expected. 
 
-```{r}
+```{r eval=FALSE}
 bbox <- c(-90.8, 44.2, -89.9, 45.0)
 user_char <- "Phosphorus as phosphorus, water, unfiltered"
 
@@ -214,9 +214,6 @@ bbox_sites <- read_waterdata_samples(boundingBox = bbox,
 ```
 
 
-```{r echo=FALSE, message=FALSE}
-map_it(bbox_sites)
-```
 
 ### Hydrologic Unit Codes (HUCs)
 

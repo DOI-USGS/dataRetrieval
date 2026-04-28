@@ -25,13 +25,15 @@ read_waterdata_ts_meta(
   time_series_id = NA_character_,
   web_description = NA_character_,
   skipGeometry = NA,
-  limit = NA,
-  max_results = NA,
   bbox = NA,
   begin = NA_character_,
   end = NA_character_,
-  convertType = TRUE,
-  no_paging = FALSE
+  ...,
+  limit = getOption("dataRetrieval.limit"),
+  convertType = getOption("dataRetrieval.convertType"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
+  attach_request = getOption("dataRetrieval.attach_request")
 )
 }
 \arguments{
@@ -68,7 +70,7 @@ Only features that have a \code{last_modified} that intersects the value of date
 
 See also Details below for more information.}
 
-\item{begin_utc}{The datetime of the earliest observation in the time series. Together with \code{end}, this field represents the period of record of a time series. Note that some time series may have large gaps in their collection record.
+\item{begin_utc}{The datetime of the earliest observation in the time series. Together with \code{end_utc}, this field represents the period of record of a time series. Note that some time series may have large gaps in their collection record.
 You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
 Examples:
 \itemize{
@@ -78,12 +80,12 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{begin} that intersects the value of datetime are selected.
+Only features that have a \code{begin_utc} that intersects the value of datetime are selected.
 
 #'
 See also Details below for more information.}
 
-\item{end_utc}{The datetime of the most recent observation in the time series. Data returned by this endpoint updates at most once per day, and potentially less frequently than that, and as such there may be more recent observations within a time series than the time series \code{end} value reflects. Together with \code{begin}, this field represents the period of record of a time series. It is additionally used to determine whether a time series is "active".
+\item{end_utc}{The datetime of the most recent observation in the time series. Data returned by this endpoint updates at most once per day, and potentially less frequently than that, and as such there may be more recent observations within a time series than the time series \code{end_utc} value reflects. Together with \code{begin_utc}, this field represents the period of record of a time series. It is additionally used to determine whether a time series is "active".
 You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
 Examples:
 \itemize{
@@ -93,7 +95,7 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{end} that intersects the value of datetime are selected.
+Only features that have a \code{end_utc} that intersects the value of datetime are selected.
 
 See also Details below for more information.}
 
@@ -106,7 +108,7 @@ See also Details below for more information.}
 \item{computation_period_identifier}{Indicates the period of data used for any statistical computations.
 Multiple computation_period_identifiers can be requested as a character vector.}
 
-\item{computation_identifier}{Indicates whether the data from this time series represent a specific statistical computation.
+\item{computation_identifier}{Indicates the computation performed to calculate this time series. Values of "Instantaneous" reflect point measurements.
 Multiple computation_identifiers can be requested as a character vector.}
 
 \item{thresholds}{Thresholds represent known numeric limits for a time series, for example the historic maximum value for a parameter or a level below which a sensor is non-operative. These thresholds are sometimes used to automatically determine if an observation is erroneous due to sensor error, and therefore shouldn't be included in the time series.}
@@ -123,41 +125,55 @@ this system for 120 days.}
 
 \item{parent_time_series_id}{The unique identifier representing the parent or "upchain" time series that a daily values time series is generated from. Daily values time series have one and only one parent time series.}
 
-\item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.}
+\item{time_series_id}{A unique identifier representing a single time series. This corresponds to the "time_series_id" field in other endpoints.}
 
-\item{web_description}{A description of what this time series represents, as used by WDFN and other USGS data dissemination products.}
+\item{web_description}{An optional description of the time series. WDFN and other USGS data dissemination products use this field, in combination with sublocation_identifier, to distinguish the differences between multiple time series for the same parameter code, statistic code, and monitoring location.}
 
-\item{skipGeometry}{This option can be used to skip response geometries for
+\item{skipGeometry}{This parameter can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
-information.}
-
-\item{limit}{The optional limit parameter is used to control the subset of the
-selected features that should be returned in each page. The maximum allowable
-limit is 50000. It may be beneficial to set this number lower if your internet
-connection is spotty. The default (\code{NA}) will set the limit to the maximum
-allowable limit for the service.}
-
-\item{max_results}{The optional maximum number of rows to return. This value
-must be less than the requested limit.}
+information. The default \code{NA} will not specify the argument in the request.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
 depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
-vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
+vector structured: c(xmin,ymin,xmax,ymax).
+Another way to think of it is c(Western-most longitude,
 Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
 \item{begin}{This field contains the same information as "begin_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
 
 \item{end}{This field contains the same information as "end_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
 
-\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
-will convert the data to dates and qualifier to string vector.}
+\item{...}{Not used. Included to help differentiate official Water Data API arguments
+from more seldom used, optional dataRetrieval-specific arguments.}
 
-\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+\item{limit}{numeric, The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 50,000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
+
+\item{convertType}{logical, defaults to TRUE.
+If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
+vector and reorder the returned data frame.}
+
+\item{no_paging}{logical, defaults to FALSE.
+If \code{TRUE}, the data will
 be requested from a native csv format. This can be dangerous because the
 data will cut off at 50,000 rows without indication that more data
 is available. Use \code{TRUE} with caution.}
+
+\item{chunk_size}{Number of monitoring_location_ids to chunk requests into.
+The default for functions that don't generally return long-term data records
+is 250, while
+the default for time series functions is
+10.
+Setting to \code{NA} will eliminate site chunking, giving users full control.}
+
+\item{attach_request}{logical, defaults to TRUE.
+If set to \code{TRUE}, the full request sent to the Water Data API is attached
+as an attribute to the data set.}
 }
 \description{
 Daily data and continuous measurements are grouped into time series, which represent a collection of observations of a single parameter, potentially aggregated using a standard statistic, at a single monitoring location. This endpoint provides metadata about those time series, including their operational thresholds, units of measurement, and when the earliest and most recent observations in a time series occurred.
@@ -186,7 +202,7 @@ site <- "USGS-02238500"
 meta_1 <- read_waterdata_ts_meta(monitoring_location_id = site)
 
 meta_multi <- read_waterdata_ts_meta(monitoring_location_id =  c("USGS-01491000",
-                                                            "USGS-01645000"),
+                                                                 "USGS-01645000"),
                             parameter_code = c("00060", "00010"),
                             properties = c("monitoring_location_id",
                                            "parameter_code",

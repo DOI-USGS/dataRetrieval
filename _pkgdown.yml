@@ -46,6 +46,8 @@ navbar:
       href: articles/daily_data_statistics.html
     - text: Continuous Data
       href: articles/continuous_pr.html
+    - text: USGS Reference Lists
+      href: articles/Reference_Lists.html
     - text: Changes to QW
       href: articles/qwdata_changes.html
     - text: Background
@@ -58,12 +60,8 @@ navbar:
       href: articles/wqp_large_pull_script.html
     - text: Large Request Pipeline Approach
       href: articles/wqp_large_pull_targets.html
-    - text: Stat Service
-      href: articles/statsServiceMap.html
     - text: NLDI Interface
       href: articles/nldi.html
-    - text: Moving Averages
-      href: articles/movingAverages.html
     - text: How to Contribute
       href: articles/Contributing.html
   right:
@@ -91,6 +89,7 @@ reference:
       - read_waterdata_channel
       - read_waterdata_field_meta
       - read_waterdata_combined_meta
+      - read_waterdata_ratings
   - title: National Water Information System (NWIS)
     desc:  Functions to retrieve (USGS) NWIS data. These will be slowly phased out and replaced with the read_waterdata family of functions.
     contents:

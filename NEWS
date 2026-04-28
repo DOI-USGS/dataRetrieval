@@ -1,6 +1,24 @@
+dataRetrieval 2.7.25
+===================
+* Added read_waterdata_ratings to access USGS rating curves with
+new modern endpoint.
+* Increase flexibility of chunking by monitoring_location_id by 
+including it as an argument in each relevant function.
+* Clean up deprecated code.
+* Updated retry strategy to include retry_on_failure = TRUE.
+* Added countries, methods, method-categories, method-citations, and
+citations to possible values in read_waterdata_metadata.
+* Added field_measurements_series_id argument to read_waterdata_field_measurement
+* Removed NWIS tests
+
+
+
 dataRetrieval 2.7.24
 ===================
 * Let dataRetrieval take care of chunking up requests by monitoring_location_id.
+* Fixed bug causing some character columns in importWQP to be numeric
+* Fixed bug causing open ended date requests in waterdata funcitons to 
+return full period of record.
 
 dataRetrieval 2.7.23
 ===================

@@ -82,27 +82,8 @@
 #' Available options are:
 #' `r dataRetrieval:::get_properties_for_docs("combined-metadata", "field_measurement_id")`.
 #' The default (`NA`) will return all columns of the data.
-#' @param bbox Only features that have a geometry that intersects the bounding
-#' box are selected.The bounding box is provided as four or six numbers, depending
-#' on whether the coordinate reference system includes a vertical axis (height or
-#' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
-#' vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
-#' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
-#' @param limit The optional limit parameter is used to control the subset of the
-#' selected features that should be returned in each page. The maximum allowable
-#' limit is 50000. It may be beneficial to set this number lower if your internet
-#' connection is spotty. The default (`NA`) will set the limit to the maximum
-#' allowable limit for the service.
-#' @param skipGeometry This option can be used to skip response geometries for
-#' each feature. The returning object will be a data frame with no spatial
-#' information.
-#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
-#' will convert the data to dates and qualifier to string vector.
-#' @param no_paging logical, defaults to `FALSE`. If `TRUE`, the data will
-#' be requested from a native csv format. This can be dangerous because the
-#' data will cut off at 50,000 rows without indication that more data
-#' is available. Use `TRUE` with caution.
-#'
+#' @inheritParams check_arguments_api
+#' @inheritParams check_arguments_non_api
 #' @inherit read_waterdata_continuous details
 #'
 #'
@@ -202,12 +183,16 @@ read_waterdata_combined_meta <- function(
   properties = NA_character_,
   skipGeometry = NA,
   bbox = NA,
-  limit = NA,
-  convertType = TRUE,
-  no_paging = FALSE
+  ...,
+  convertType = getOption("dataRetrieval.convertType"),
+  limit = getOption("dataRetrieval.limit"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
   service <- "combined-metadata"
   output_id <- "combined_meta_id"
+  rlang::check_dots_empty()
 
   args <- mget(names(formals()))
   return_list <- get_ogc_data(args, output_id, service)

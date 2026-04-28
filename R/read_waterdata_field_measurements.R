@@ -20,6 +20,7 @@
 #' See also Details below for more information.
 #' @param qualifier `r get_ogc_params("field-measurements")$qualifier`
 #' @param field_visit_id `r get_ogc_params("field-measurements")$field_visit_id`
+#' @param field_measurements_series_id `r get_ogc_params("field-measurements")$field_measurements_series_id`
 #' @param vertical_datum `r get_ogc_params("field-measurements")$vertical_datum`
 #' @param measuring_agency `r get_ogc_params("field-measurements")$measuring_agency`
 #' @param control_condition `r get_ogc_params("field-measurements")$control_condition`
@@ -31,26 +32,8 @@
 #' Available options are:
 #' `r dataRetrieval:::get_properties_for_docs("field-measurements", "field_measurement_id")`.
 #' The default (`NA`) will return all columns of the data.
-#' @param bbox Only features that have a geometry that intersects the bounding
-#' box are selected.The bounding box is provided as four or six numbers, depending
-#' on whether the coordinate reference system includes a vertical axis (height or
-#' depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
-#' vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
-#' Southern-most latitude, Eastern-most longitude, Northern-most longitude).
-#' @param limit The optional limit parameter is used to control the subset of the
-#' selected features that should be returned in each page. The maximum allowable
-#' limit is 50000. It may be beneficial to set this number lower if your internet
-#' connection is spotty. The default (`NA`) will set the limit to the maximum
-#' allowable limit for the service.
-#' @param skipGeometry This option can be used to skip response geometries for
-#' each feature. The returning object will be a data frame with no spatial
-#' information.
-#' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
-#' will convert the data to dates and qualifier to string vector.
-#' @param no_paging logical, defaults to `FALSE`. If `TRUE`, the data will
-#' be requested from a native csv format. This can be dangerous because the
-#' data will cut off at 50,000 rows without indication that more data
-#' is available. Use `TRUE` with caution.
+#' @inheritParams check_arguments_api
+#' @inheritParams check_arguments_non_api
 #'
 #' @inherit read_waterdata_continuous details
 #'
@@ -83,6 +66,9 @@
 #' old_df <- read_waterdata_field_measurements(monitoring_location_id = "USGS-425957088141001",
 #'                                               time = c("1980-01-01", NA))
 #'
+#' new_df <- read_waterdata_field_measurements(monitoring_location_id = "USGS-425957088141001",
+#'                                               time = c(NA, "2020-01-01"))
+#'
 #' surface_water <- read_waterdata_field_measurements(
 #'                          monitoring_location_id = c("USGS-07069000",
 #'                                                     "USGS-07064000",
@@ -98,6 +84,7 @@ read_waterdata_field_measurements <- function(
   observing_procedure_code = NA_character_,
   properties = NA_character_,
   field_visit_id = NA_character_,
+  field_measurements_series_id = NA_character_,
   approval_status = NA_character_,
   unit_of_measure = NA_character_,
   qualifier = NA_character_,
@@ -111,12 +98,16 @@ read_waterdata_field_measurements <- function(
   skipGeometry = NA,
   time = NA_character_,
   bbox = NA,
-  limit = NA,
-  convertType = TRUE,
-  no_paging = FALSE
+  ...,
+  convertType = getOption("dataRetrieval.convertType"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  limit = getOption("dataRetrieval.limit"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
   service <- "field-measurements"
   output_id <- "field_measurement_id"
+  rlang::check_dots_empty()
 
   args <- mget(names(formals()))
   return_list <- get_ogc_data(args, output_id, service)

@@ -46,11 +46,9 @@ jobs:
             any::pkgdown
             any::rcmdcheck
             any::DT
-            any::data.table
             any::dplyr
             any::tidyr
             any::ggplot2
-            any::zoo
             any::sf
             any::patchwork
             any::maps
@@ -59,6 +57,12 @@ jobs:
             any::gridExtra
             local::.
           needs: website
+      - name: Setup Micromamba
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: environment.yml
+          cache-environment: false
+          cache-downloads: false
       - name: Create public directory
         run: |
           mkdir public

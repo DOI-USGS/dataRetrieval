@@ -42,14 +42,13 @@ build-image:
     alias: docker
   rules:
     - changes:
+      - .gitlab-ci.yml
       - docker/Dockerfile
+      - environment.yml
   script:
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
-    - cd docker
-    - docker build
-        -t ${CI_REGISTRY_IMAGE}:latest
-        .
+    - docker build --cache-from ${CI_REGISTRY_IMAGE}:latest -t ${CI_REGISTRY_IMAGE}:latest -t ${CI_REGISTRY_IMAGE}:BUILD_${CI_COMMIT_SHORT_SHA} -f docker/Dockerfile .
     - docker push --all-tags ${CI_REGISTRY_IMAGE}
 
 buildcheck:
@@ -58,8 +57,15 @@ buildcheck:
   dependencies:
     - build-image
   script:
-    - Rscript -e 'devtools::install(quick = TRUE, upgrade = "never")'
-    - Rscript -e 'devtools::check(document = FALSE, args = "--no-tests", check_dir = Sys.getenv("BUILD_LOGS_DIR"), vignettes = FALSE)'
+    - |
+      Rscript -e "
+        rcmdcheck::rcmdcheck(
+          args = c('--no-manual', '--no-tests'),
+          build_args = c('--no-manual', '--no-resave-data'),
+          check_dir = '.',
+          error_on = 'warning'
+        )
+      "
 
 unittests:
   stage: test
@@ -68,8 +74,16 @@ unittests:
     - build-image
     - buildcheck
   script:
-    - R -e 'library(testthat); options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml")); devtools::test(reporter = "junit")'
-    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
+    - |
+      Rscript -e '
+        library(testthat)
+        options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml"))
+        test_local(reporter = "junit")'
+    - |
+      Rscript -e '
+        x <- covr::package_coverage()
+        covr::to_cobertura(x)
+        x'
   artifacts:
     when: always
     expire_in: 1 week
@@ -100,11 +114,9 @@ pages:
     - build-image
     - buildcheck
   script:
-    - Rscript -e 'devtools::install(quick = TRUE, upgrade = "never")'
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
     - quarto render
-
   artifacts:
     paths:
       - $PAGES_OUTDIR
