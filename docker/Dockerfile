@@ -10,6 +10,7 @@ ENV PATH=$CONDA_DIR/bin:$PATH
 ENV SSL_CERT_DIR="/etc/ssl/certs/"
 ENV SSL_CERT_FILE="/etc/ssl/cert.pem"
 ENV REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+ENV CURL_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
 
 COPY environment.yml /
 
