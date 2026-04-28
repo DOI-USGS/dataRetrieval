@@ -12,6 +12,7 @@ COPY environment.yml /
 # Necessary R libraries
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   wget \
+  libssl-dev \
   r-cran-rcmdcheck \
   r-cran-testthat \
   r-cran-pkgdown \
