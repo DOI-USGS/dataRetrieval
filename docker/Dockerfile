@@ -19,7 +19,10 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-knitr \
   r-cran-dt \
   r-cran-data.table \
-  r-cran-tidyverse \
+  r-cran-dplyr \
+  r-cran-purrr \
+  r-cran-lubridate \
+  r-cran-tidyr \
   r-cran-jsonlite \
   r-cran-readr \
   r-cran-xml2 \

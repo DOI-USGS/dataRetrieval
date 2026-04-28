@@ -4,9 +4,5 @@ channels:
 dependencies:
   # required
   - python=3.12
-  - numpy
-  - matplotlib
   - dataretrieval
-  - pandas
-  - geopandas
 prefix: /home/user/miniforge3/envs/dataretrieval
