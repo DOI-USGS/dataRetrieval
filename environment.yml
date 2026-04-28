@@ -2,7 +2,35 @@ name: dataretrieval
 channels:
   - conda-forge
 dependencies:
-  # required
-  - python=3.12
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=2_gnu
+  - bzip2=1.0.8=hda65f42_8
+  - ca-certificates=2025.8.3=hbd8a1cb_0
+  - ld_impl_linux-64=2.44=h1423503_1
+  - libexpat=2.7.1=hecca717_0
+  - libffi=3.4.6=h2dba641_1
+  - libgcc=15.1.0=h767d61c_5
+  - libgcc-ng=15.1.0=h69a702a_5
+  - libgomp=15.1.0=h767d61c_5
+  - liblzma=5.8.1=hb9d3cd8_2
+  - liblzma-devel=5.8.1=hb9d3cd8_2
+  - libnsl=2.0.1=hb9d3cd8_1
+  - libsqlite=3.50.4=h0c1763c_0
+  - libuuid=2.41.1=he9a06e4_0
+  - libxcrypt=4.4.36=hd590300_1
+  - libzlib=1.3.1=hb9d3cd8_2
+  - ncurses=6.5=h2d0b736_3
+  - openssl=3.5.3=h26f9b46_0
+  - pip=25.2=pyh8b19718_0
+  - python=3.11.8=hab00c5b_0_cpython
+  - readline=8.2=h8c095d6_2
+  - scipy
+  - setuptools=80.9.0=pyhff2d567_0
+  - tk=8.6.13=noxft_hd72426e_102
+  - tzdata=2025b=h78e105d_0
+  - wheel=0.45.1=pyhd8ed1ab_1
+  - xz=5.8.1=hbcc6ac9_2
+  - xz-gpl-tools=5.8.1=hbcc6ac9_2
+  - xz-tools=5.8.1=hb9d3cd8_2
   - dataretrieval
 prefix: /home/user/miniforge3/envs/dataretrieval
