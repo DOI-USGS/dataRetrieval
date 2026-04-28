@@ -74,8 +74,16 @@ unittests:
     - build-image
     - buildcheck
   script:
-    - R -e 'library(testthat); options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml")); devtools::test(reporter = "junit")'
-    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
+    - |
+      Rscript -e '
+        library(testthat)
+        options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml"))
+        test_local(reporter = "junit")'
+    - |
+      Rscript -e '
+        x <- covr::package_coverage()
+        covr::to_cobertura(x)
+        x'
   artifacts:
     when: always
     expire_in: 1 week
