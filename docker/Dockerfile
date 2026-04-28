@@ -19,7 +19,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     wget \
     curl \
     libssl-dev \
-    openssl-1.1.1t \
+    openssl \
     zlib1g-dev \
     libncurses5-dev \
     libncursesw5-dev \
