@@ -7,6 +7,11 @@ pkg.env <- new.env()
   options("dataRetrieval.api_version" = "v0")
   options("dataRetrieval.api_version_stat" = "v0")
   options("dataRetrieval.attach_request" = TRUE)
+  options("dataRetrieval.convertType" = TRUE)
+  options("dataRetrieval.no_paging" = FALSE)
+  options("dataRetrieval.site_chunk_size_meta" = 250)
+  options("dataRetrieval.site_chunk_size_data" = 10)
+  options("dataRetrieval.limit" = 50000)
 
   services <- c(
     "server",
@@ -32,7 +37,12 @@ pkg.env <- new.env()
     "coordinate-method-codes",
     "medium-codes",
     "counties",
+    "countries",
     "hydrologic-unit-codes",
+    "methods",
+    "method-categories",
+    "method-citations",
+    "citations",
     "states",
     "national-aquifer-codes",
     "reliability-codes",
@@ -52,7 +62,12 @@ pkg.env <- new.env()
     "coordinate_method_code",
     "medium_code",
     "county",
+    "country",
     "hydrologic_unit_code",
+    "methods",
+    "method_categories",
+    "method_citations",
+    "citations",
     "state",
     "national_aquifer_code",
     "reliability_code",

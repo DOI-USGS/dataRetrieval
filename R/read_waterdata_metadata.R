@@ -10,13 +10,16 @@
 #' "coordinate-method-codes", "hydrologic-unit-codes", "medium-codes",
 #' "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
 #' "topographic-codes", "time-zone-codes".
+#' @param \dots Optional arguments to pass to the query. Available parameters
+#' can be found with the \code{get_ogc_params} function.
 #' @param limit The optional limit parameter is used to control the subset of the
 #' selected features that should be returned in each page. The maximum allowable
 #' limit is 50000. It may be beneficial to set this number lower if your internet
 #' connection is spotty. The default (`NA`) will set the limit to the maximum
 #' allowable limit for the service.
-#' @param \dots Optional arguments to pass to the query. Available parameters
-#' can be found with the \code{get_ogc_params} function.
+#' @param attach_request logical, defaults to `r getOption("dataRetrieval.attach_request")`.
+#' If set to `TRUE`, the full request sent to the Water Data API is attached
+#' as an attribute to the data set.
 #' @examplesIf is_dataRetrieval_user()
 #'
 #' \donttest{
@@ -25,11 +28,16 @@
 #' aquifer_codes <- read_waterdata_metadata("aquifer-codes")
 #' aquifer_types <- read_waterdata_metadata("aquifer-types")
 #' counties <- read_waterdata_metadata("counties")
+#' countries <- read_waterdata_metadata("countries")
 #' us_counties <- read_waterdata_metadata("counties", country_code = "US")
 #' coordinate_accuracy_codes <- read_waterdata_metadata("coordinate-accuracy-codes")
 #' coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
 #' coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
 #' huc_codes <- read_waterdata_metadata("hydrologic-unit-codes")
+#' methods <- read_waterdata_metadata("methods")
+#' method_categories <- read_waterdata_metadata("method-categories")
+#' method_citations <- read_waterdata_metadata("method-citations")
+#' citations <- read_waterdata_metadata("citations")
 #' national_aquifer_codes <- read_waterdata_metadata("national-aquifer-codes")
 #' parameter_codes <- read_waterdata_metadata("parameter-codes")
 #' reliability_codes <- read_waterdata_metadata("reliability-codes")
@@ -42,7 +50,12 @@
 #' time_zone_limited <- read_waterdata_metadata("time-zone-codes",
 #'                         time_zone_description = c("Alaska", "Hawaii", "Pacific North America"))
 #' }
-read_waterdata_metadata <- function(collection, limit = NA, ...) {
+read_waterdata_metadata <- function(
+  collection,
+  ...,
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
+) {
   match.arg(collection, pkg.env$metadata)
 
   output_id <- names(pkg.env$metadata)[pkg.env$metadata == collection]
@@ -57,12 +70,13 @@ read_waterdata_metadata <- function(collection, limit = NA, ...) {
       stop(paste0("Unknown argument: ", wrong_args))
     }
   }
-
+  args[["attach_request"]] <- attach_request
   args[["limit"]] <- limit
   args[["convertType"]] <- FALSE
-  args[["skipGeometry"]] <- TRUE
+  args[["skipGeometry"]] <- NA
   args[["bbox"]] <- NA
   args[["no_paging"]] <- FALSE # drops id if TRUE
+  args[["chunk_size"]] <- NA # Chunking doesn't make sense.
 
   return_list <- get_ogc_data(
     args = args,

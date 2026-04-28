@@ -12,6 +12,8 @@ walk_pages <- function(req) {
     on_error = "stop"
   )
 
+  failures <- resps |> httr2::resps_failures()
+
   return_list <- resps |>
     httr2::resps_successes() |>
     httr2::resps_data(\(resp) get_resp_data(resp))
@@ -111,15 +113,21 @@ get_csv <- function(req, limit) {
 
   if (httr2::resp_has_body(resp)) {
     return_list <- httr2::resp_body_string(resp)
-    df <- data.table::fread(input = return_list, data.table = FALSE)
+    df <- data.table::fread(
+      input = return_list,
+      data.table = FALSE,
+      colClasses = "character"
+    )
 
     df <- coerce_num_cols(df)
 
     if (skip_geo) {
       df <- df[, names(df)[!names(df) %in% c("x", "y")]]
     } else {
-      df <- sf::st_as_sf(df, coords = c("x", "y"))
-      sf::st_crs(df) <- 4269
+      if (all(c("x", "y") %in% names(df))) {
+        df <- sf::st_as_sf(df, coords = c("x", "y"))
+        sf::st_crs(df) <- 4269
+      }
     }
 
     if (nrow(df) == limit) {
@@ -137,7 +145,9 @@ ensure all requested data is returned."
 
 coerce_num_cols <- function(df, is_sf = FALSE) {
   included_num_cols <- names(df)[names(df) %in% num_cols]
-  if (length(included_num_cols) == 0) return(df)
+  if (length(included_num_cols) == 0) {
+    return(df)
+  }
 
   check_df <- if (is_sf) {
     sf::st_drop_geometry(df[, included_num_cols, drop = FALSE])
