@@ -11,31 +11,48 @@ COPY environment.yml /
 
 # Necessary R libraries
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
-  wget \
-  r-cran-rcmdcheck \
-  r-cran-testthat \
-  r-cran-pkgdown \
-  r-cran-rmarkdown \
-  r-cran-knitr \
-  r-cran-dt \
-  r-cran-data.table \
-  r-cran-dplyr \
-  r-cran-purrr \
-  r-cran-lubridate \
-  r-cran-tidyr \
-  r-cran-jsonlite \
-  r-cran-readr \
-  r-cran-xml2 \
-  r-cran-httr2 \
-  r-cran-covr \
-  r-cran-sf \
-  r-cran-patchwork \
-  r-cran-leaflet \
-  r-cran-readxl \
-  r-cran-whisker \
-  r-cran-ggplot2 \
-  r-cran-reticulate \
-  && rm -rf /var/lib/apt/lists/* 
+    build-essential \
+    wget \
+    curl \
+    libssl-dev \
+    zlib1g-dev \
+    libncurses5-dev \
+    libncursesw5-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libgdbm-dev \
+    libdb5.3-dev \
+    libbz2-dev \
+    libexpat1-dev \
+    liblzma-dev \
+    tk-dev \
+    libffi-dev \
+    uuid-dev \
+    ca-certificates \
+    r-cran-rcmdcheck \
+    r-cran-testthat \
+    r-cran-pkgdown \
+    r-cran-rmarkdown \
+    r-cran-knitr \
+    r-cran-dt \
+    r-cran-data.table \
+    r-cran-dplyr \
+    r-cran-purrr \
+    r-cran-lubridate \
+    r-cran-tidyr \
+    r-cran-jsonlite \
+    r-cran-readr \
+    r-cran-xml2 \
+    r-cran-httr2 \
+    r-cran-covr \
+    r-cran-sf \
+    r-cran-patchwork \
+    r-cran-leaflet \
+    r-cran-readxl \
+    r-cran-whisker \
+    r-cran-ggplot2 \
+    r-cran-reticulate \
+    && rm -rf /var/lib/apt/lists/* 
   
 RUN wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" &&  \
     bash Miniforge3.sh -b -p "${HOME}/conda" && \
