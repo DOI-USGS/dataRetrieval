@@ -19,7 +19,6 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-knitr \
   r-cran-dt \
   r-cran-data.table \
-  r-cran-gridextra \
   r-cran-tidyverse \
   r-cran-jsonlite \
   r-cran-readr \
@@ -33,10 +32,14 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-whisker \
   r-cran-ggplot2 \
   r-cran-reticulate \
-  wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" &&  \
-  bash Miniforge3.sh -b -p "${HOME}/conda" && \
-  rm Miniforge3.sh && \
-  conda env create -n ${CONDA_ENVIRONMENT_NAME} -f /environment.yml && conda clean -a -y \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* 
+  
+RUN wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" &&  \
+    bash Miniforge3.sh -b -p "${HOME}/conda" && \
+    rm Miniforge3.sh
+ENV CONDA_DIR="/root/conda"
+ENV PATH=$CONDA_DIR/bin:$PATH
+COPY environment.yml /
+RUN conda env create -n ${CONDA_ENVIRONMENT_NAME} -f /environment.yml && conda clean -a -y
 
 ENV RETICULATE_PYTHON=/root/conda/envs/${CONDA_ENVIRONMENT_NAME}/bin/python
