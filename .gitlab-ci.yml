@@ -109,7 +109,6 @@ pages:
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
     - quarto render
-
   artifacts:
     paths:
       - $PAGES_OUTDIR
