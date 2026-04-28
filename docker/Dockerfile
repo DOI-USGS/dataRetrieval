@@ -7,10 +7,10 @@ ARG CONDA_ENVIRONMENT_NAME=dataretrieval
 
 ENV CONDA_DIR="/root/conda"
 ENV PATH=$CONDA_DIR/bin:$PATH
-ENV SSL_CERT_DIR="/etc/ssl/certs/"
-ENV SSL_CERT_FILE="/etc/ssl/cert.pem"
-ENV REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
-ENV CURL_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+ENV SSL_CERT_DIR="/var/resources"
+ENV SSL_CERT_FILE="/var/resources/cert.pem"
+ENV REQUESTS_CA_BUNDLE="/var/resources/DOIRootCA2.crt"
+ENV CURL_CA_BUNDLE="/var/resources/DOIRootCA2.crt"
 
 COPY environment.yml /
 
