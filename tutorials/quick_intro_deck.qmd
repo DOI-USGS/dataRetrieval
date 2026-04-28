@@ -22,6 +22,8 @@ execute:
   echo: true
   warning: false
   message: false
+params:
+  run_python: true
 ---
 
 ```{r}
@@ -33,6 +35,8 @@ library(dplyr)
 library(reticulate)
 py_require("dataretrieval")
 options(dplyr.summarise.inform = FALSE)
+
+evaluate_python <- params$run_python
 
 dt_me <- function(
   x,
@@ -153,6 +157,7 @@ pip install dataretrieval
 Then each time you open Python, you'll need to load the library:
 
 ```{python}
+#| eval: !expr evaluate_python
 from dataretrieval import waterdata
 ```
 
@@ -430,7 +435,7 @@ nrow(df)
 ### Python
 
 ```{python}
-
+#| eval: !expr evaluate_python
 from dataretrieval import waterdata
 
 site = "USGS-09405500"
@@ -601,7 +606,7 @@ ncol(qw_data)
 
 ### Python
 ```{python}
-#| message: true
+#| eval: !expr evaluate_python
 site = "USGS-01631000"
 pcode = "00660"
 

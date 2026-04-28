@@ -60,12 +60,8 @@ navbar:
       href: articles/wqp_large_pull_script.html
     - text: Large Request Pipeline Approach
       href: articles/wqp_large_pull_targets.html
-    - text: Stat Service
-      href: articles/statsServiceMap.html
     - text: NLDI Interface
       href: articles/nldi.html
-    - text: Moving Averages
-      href: articles/movingAverages.html
     - text: How to Contribute
       href: articles/Contributing.html
   right:
