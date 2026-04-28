@@ -7,6 +7,10 @@ ARG CONDA_ENVIRONMENT_NAME=dataretrieval
 
 ENV CONDA_DIR="/root/conda"
 ENV PATH=$CONDA_DIR/bin:$PATH
+ENV SSL_CERT_DIR="/etc/ssl/certs/"
+ENV SSL_CERT_FILE="/etc/ssl/cert.pem"
+ENV REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+
 COPY environment.yml /
 
 # Necessary R libraries
@@ -15,7 +19,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     wget \
     curl \
     libssl-dev \
-    openssl \
+    openssl-1.1.1t \
     zlib1g-dev \
     libncurses5-dev \
     libncursesw5-dev \
