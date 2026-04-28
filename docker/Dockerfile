@@ -7,7 +7,6 @@ ARG CONDA_ENVIRONMENT_NAME=dataretrieval
 
 ENV CONDA_DIR="/root/conda"
 ENV PATH=$CONDA_DIR/bin:$PATH
-ENV CURL_CA_BUNDLE="/var/resources/DOIRootCA2.crt"
 
 COPY environment.yml /
 
