@@ -53,13 +53,23 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     r-cran-ggplot2 \
     r-cran-reticulate \
     && rm -rf /var/lib/apt/lists/* 
-  
-RUN wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" &&  \
-    bash Miniforge3.sh -b -p "${HOME}/conda" && \
-    rm Miniforge3.sh
-ENV CONDA_DIR="/root/conda"
-ENV PATH=$CONDA_DIR/bin:$PATH
-COPY environment.yml /
-RUN conda env create -n ${CONDA_ENVIRONMENT_NAME} -f /environment.yml && conda clean -a -y
 
-ENV RETICULATE_PYTHON=/root/conda/envs/${CONDA_ENVIRONMENT_NAME}/bin/python
+# Install specific Python version from source
+ENV PYTHON_VERSION=3.11.8
+
+RUN cd /usr/src && \
+    wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz && \
+    tar xzf Python-${PYTHON_VERSION}.tgz && \
+    cd Python-${PYTHON_VERSION} && \
+    ./configure --enable-optimizations && \
+    make -j"$(nproc)" && \
+    make altinstall && \
+    ln -s /usr/local/bin/python3.11 /usr/bin/python3 && \
+    ln -s /usr/local/bin/pip3.11 /usr/bin/pip3 && \
+    cd / && rm -rf /usr/src/Python-${PYTHON_VERSION}*
+
+# Install Python packages
+RUN pip3 install --no-cache-dir \
+    dataretrieval 
+
+ENV RETICULATE_PYTHON=/usr/local/bin/python3.11
