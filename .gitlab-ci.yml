@@ -48,7 +48,8 @@ build-image:
   script:
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
-    - docker build --cache-from ${CI_REGISTRY_IMAGE}:latest -t ${CI_REGISTRY_IMAGE}:latest -t ${CI_REGISTRY_IMAGE}:BUILD_${CI_COMMIT_SHORT_SHA} -f docker/Dockerfile .
+    - docker build 
+        -f docker/Dockerfile -t ${CI_REGISTRY_IMAGE}:latest .
     - docker push --all-tags ${CI_REGISTRY_IMAGE}
 
 buildcheck:
@@ -66,6 +67,10 @@ buildcheck:
           error_on = 'warning'
         )
       "
+  artifacts:
+    paths:
+      - "*.tar.gz"
+    expire_in: 1 week
 
 unittests:
   stage: test
@@ -107,15 +112,19 @@ longtest:
     - if: $RUN_LONG_TESTS == "FALSE"
       when: always
     - when: never
-  
+
 pages:
   stage: end
   dependencies:
     - build-image
     - buildcheck
   script:
-    - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
-    - Rscript -e 'file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
+    - |
+      Rscript -e '
+        source_file <- list.files()[grep(".tar.gz", list.files())]
+        install.packages(source_file, type = "source", dependencies = FALSE)
+        pkgdown::build_site(override = list(destination = "public"))
+        file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
     - quarto render
   artifacts:
     paths:
