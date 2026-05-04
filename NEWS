@@ -12,6 +12,9 @@ including it as an argument in each relevant waterdata OGC function.
 citations to possible values in read_waterdata_metadata.
 * Added field_measurements_series_id argument to read_waterdata_field_measurement
 * Removed NWIS tests
+* Introduce an error if user inputs a numeric to any of the "time" arguments.
+Because it is impossible to tell if they intended Dates or POSIX, we cannot
+know for sure and therefore could add incorrect filters to the query.
 
 
 

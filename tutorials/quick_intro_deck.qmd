@@ -33,6 +33,7 @@ params:
 library(ggplot2)
 library(dplyr)
 library(reticulate)
+
 py_require("dataretrieval")
 py_require("panda")
 py_require("matplotlib")
@@ -129,11 +130,11 @@ In this ~45 minute introduction, the goal is:
 
 ## Installation
 
-`dataRetrieval` is available on the Comprehensive R Archive Network (CRAN) repository. To install `dataRetrieval` on your computer, open RStudio and run this line of code in the Console:
-
 ::: {.panel-tabset}
 
 ### R
+
+`dataRetrieval` is available on the Comprehensive R Archive Network (CRAN) repository. To install `dataRetrieval` on your computer, open RStudio and run this line of code in the Console:
 
 ```{r}
 #| echo: true
@@ -150,11 +151,18 @@ library(dataRetrieval)
 
 ### Python
 
+Whether you are a user or developer we recommend installing `dataretrieval` in a virtual environment. This can be done using something like virtualenv or conda. 
+
 ```{bash}
 #| echo: true
 #| eval: false
 pip install dataretrieval
+```
 
+```{bash}
+#| echo: true
+#| eval: false
+conda -c conda-forge install dataretrieval
 ```
 
 Then each time you open Python, you'll need to load the library:
@@ -210,7 +218,7 @@ Within R, you can call help files for any `dataRetrieval` function:
 Within Python, you can call help for any `dataRetrieval` function:
 
 ```{python}
-#| eval: !expr evaluate_python
+#| eval: FALSE
 help(waterdata.get_daily)
 ```
 
