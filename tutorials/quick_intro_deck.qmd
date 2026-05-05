@@ -71,9 +71,6 @@ dt_me <- function(
     escape = escape
   )
 }
-
-theme_set(theme_grey(base_size = 24))
-update_geom_defaults("point", list(size = 3))
 ```
 
 
@@ -213,22 +210,11 @@ Within R, you can call help files for any `dataRetrieval` function:
 ?read_waterdata_daily
 ```
 
-### Python
-
-Within Python, you can call help for any `dataRetrieval` function:
-
-```{python}
-#| eval: FALSE
-help(waterdata.get_daily)
-```
-
-:::
-
 :::: {.columns}
 
 ::: {.column width="50%"}
 
-Click here to open a new window:
+Click here to open a new window in RStudio:
 
 ![](images/help_file_2.png)
 
@@ -241,10 +227,6 @@ Scroll down to the "Examples" to see how each function can be run.
 
 Examples
 
-::: {.panel-tabset}
-
-### R
-
 ```{r}
 #| eval: false
 site <- "USGS-02238500"
@@ -255,23 +237,21 @@ dv_data_sf <- read_waterdata_daily(
 )
 ```
 
+:::
+
+::::
+
 ### Python
 
-```{python}
-#| eval: false
-df, md = waterdata.get_daily(
+Within Python, you can call help for any `dataretrieval` function:
 
-    monitoring_location_id="USGS-02238500",
-    parameter_code="00060",
-    time="2021-01-01T00:00:00Z/2022-01-01T00:00:00Z",
-)
+```{python}
+#| eval: !expr evaluate_python
+help(waterdata.get_daily)
 ```
 
 :::
 
-:::
-
-::::
 
 ::: footer
 
@@ -533,6 +513,11 @@ Let's use `ggplot2` to visualize the data.
 #| output-location: column
 library(ggplot2)
 
+theme_set(theme_bw(base_size = 24))
+update_geom_defaults("point", list(size = 3, color = "steelblue"))
+options(ggplot2.discrete.colour = "viridis")
+options(ggplot2.discrete.fill = "viridis")
+
 ggplot(data = df) +
   geom_point(aes(x = time, y = value, color = approval_status))
 ```
@@ -547,9 +532,13 @@ Let's use `matplotlib` to visualize the data.
 import matplotlib.pyplot as plt
 import pandas as pd
 
-df["approval_status"] = pd.Categorical(df["approval_status"]).codes
+plt.rcParams["font.size"] = 20
 
-plt.scatter(x=df.time, y=df.value, c=df.approval_status)
+levels, categories = pd.factorize(df["approval_status"])
+
+fig, ax = plt.subplots()
+scatter = ax.scatter(x=df.time, y=df.value, c=levels)
+fig.legend(scatter.legend_elements()[0], categories, title="Status")
 ```
 
 
@@ -616,7 +605,7 @@ The "time" argument has a few options:
 Here are a bunch of valid inputs:
 
 ```{r}
-#| code-line-numbers: "1-7|8-9|10-13|14-17"
+#| code-line-numbers: "1-9|10-11|12-15|16-19"
 # Ask for exact times:
 time = "2025-01-01"
 time = as.Date("2025-01-01")
@@ -766,7 +755,6 @@ continuous_data <- read_waterdata_continuous(
   parameter_code = p_code_rt,
   time = c(start_date, end_date)
 )
-nrow(continuous_data)
 ```
 
 ### Python
@@ -778,12 +766,8 @@ p_code_rt = "99133"
 date_range = "2024-01-01/2024-06-01"
 
 continuous_data, md_cont = waterdata.get_continuous(
-  monitoring_location_id = site_id,
-  parameter_code = p_code_rt,
-  time = date_range
+    monitoring_location_id=site_id, parameter_code=p_code_rt, time=date_range
 )
-continuous_data.shape[0]
-
 ```
 
 :::
@@ -815,11 +799,26 @@ https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lan
 
 ## Workflow 3: Inspect
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 #| output-location: column
 ggplot(data = continuous_data) +
   geom_point(aes(x = time, y = value))
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+#| output-location: column
+plt.figure()
+plt.scatter(x=continuous_data.time, y=continuous_data.value)
+```
+
+:::
 
 
 ## Data Discovery 

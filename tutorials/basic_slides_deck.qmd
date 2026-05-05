@@ -69,9 +69,6 @@ dt_me <- function(
     escape = escape
   )
 }
-
-theme_set(theme_grey(base_size = 24))
-update_geom_defaults("point", list(size = 3))
 ```
 
 
@@ -255,22 +252,11 @@ Within R, you can call help files for any `dataRetrieval` function:
 ?read_waterdata_daily
 ```
 
-### Python
-
-Within Python, you can call help for any `dataRetrieval` function:
-
-```{python}
-#| eval: FALSE
-help(waterdata.get_daily)
-```
-
-:::
-
 :::: {.columns}
 
 ::: {.column width="50%"}
 
-Click here to open a new window:
+Click here to open a new window in RStudio:
 
 ![](images/help_file_2.png)
 
@@ -283,10 +269,6 @@ Scroll down to the "Examples" to see how each function can be run.
 
 Examples
 
-:::: {.panel-tabset}
-
-### R
-
 ```{r}
 #| eval: false
 site <- "USGS-02238500"
@@ -297,23 +279,21 @@ dv_data_sf <- read_waterdata_daily(
 )
 ```
 
-### Python
-
-```{python}
-#| eval: false
-df, md = waterdata.get_daily(
-
-    monitoring_location_id="USGS-02238500",
-    parameter_code="00060",
-    time="2021-01-01T00:00:00Z/2022-01-01T00:00:00Z",
-)
-```
-
-::::
-
 :::
 
 ::::
+
+### Python
+
+Within Python, you can call help for any `dataretrieval` function:
+
+```{python}
+#| eval: !expr evaluate_python
+help(waterdata.get_daily)
+```
+
+:::
+
 
 ::: footer
 
@@ -527,9 +507,13 @@ We're going walk through 3 retrievals:
 
 :::
 
-## Workflow 1: Daily data for known site
+## Workflow 1: Daily data for known site {.smaller}
 
-Let's pull daily mean discharge data for site "USGS-0940550", getting all the data from October 10, 2024 onward.
+Let's pull daily mean discharge data for site "USGS-0940550", getting all the data from the last year.
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| message: true
@@ -537,15 +521,37 @@ library(dataRetrieval)
 site <- "USGS-09405500"
 pcode <- "00060" # Discharge
 stat_cd <- "00003" # Mean
-range <- c("2024-10-01", NA)
 
 df <- read_waterdata_daily(
   monitoring_location_id = site,
   parameter_code = pcode,
   statistic_id = stat_cd,
-  time = range
+  time = "P365D"
 )
+nrow(df)
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+from dataretrieval import waterdata
+
+site = "USGS-09405500"
+pcode = "00060"  # Discharge
+stat_cd = "00003"  # Mean
+
+df, md = waterdata.get_daily(
+    monitoring_location_id=site,
+    parameter_code=pcode,
+    statistic_id=stat_cd,
+    time="P365D",
+)
+
+df.shape[0]
+```
+
+:::
 
 ::: footer
 
@@ -570,24 +576,56 @@ dt_me(
 
 ## Workflow 1: Plot Daily Data 
 
+::: {.panel-tabset}
+
+### R
+
 Let's use `ggplot2` to visualize the data. 
 
 ```{r}
 #| echo: true
 #| output-location: column
 library(ggplot2)
+theme_set(theme_bw(base_size = 24))
+update_geom_defaults("point", list(size = 3, color = "steelblue"))
+options(ggplot2.discrete.colour = "viridis")
 
 ggplot(data = df) +
   geom_point(aes(x = time, y = value, color = approval_status))
 ```
 
-## Water Data API Notes: Argument input 
+### Python
+
+Let's use `matplotlib` to visualize the data.
+
+```{python}
+#| echo: true
+#| output-location: column
+import matplotlib.pyplot as plt
+import pandas as pd
+
+plt.rcParams["font.size"] = 20
+
+levels, categories = pd.factorize(df["approval_status"])
+
+fig, ax = plt.subplots()
+scatter = ax.scatter(x=df.time, y=df.value, c=levels)
+fig.legend(scatter.legend_elements()[0], categories, title="Status")
+```
+
+:::
+
+::: footer
+
+:::
+
+## Water Data API Notes: Argument input
 
 Use your "tab" key!
 
 ![](images/autocomplete.png)
 
-## Water Data API Notes: Arguments
+## Water Data API Notes: Arguments {.smaller}
 
 * When you look at the help file for the new functions, you’ll notice there are lots of possible inputs (arguments). 
 
@@ -642,7 +680,7 @@ The "time" argument has a few options:
 Here are a bunch of valid inputs:
 
 ```{r}
-#| code-line-numbers: "1-7|8-9|10-13|14-17"
+#| code-line-numbers: "1-9|10-11|12-15|16-19"
 # Ask for exact times:
 time = "2025-01-01"
 time = as.Date("2025-01-01")
@@ -674,9 +712,13 @@ Use your "tab" key!
 
 ![](images/autocomplete_samples.png)
 
-## Workflow 2: Discrete data for known site
+## Workflow 2: Discrete data for known site {.smaller}
 
 Let's get orthophosphate ("00660") data from the Shenandoah River at Front Royal, VA ("USGS-01631000").
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| message: true
@@ -691,6 +733,27 @@ qw_data <- read_waterdata_samples(
 )
 ncol(qw_data)
 ```
+
+R generates a few POSIXct columns to combine date, time, timezone information.
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+site = "USGS-01631000"
+pcode = "00660"
+
+qw_data, md_qw = waterdata.get_samples(
+    monitoringLocationIdentifier = site,
+    usgsPCode = pcode,
+    service = "results",
+    profile = "basicphyschem",
+)
+
+qw_data.shape[1]
+```
+
+:::
 
 That's a LOT of columns returned. We won't look at them here, but you can use `View` in RStudio to explore on your own.
 
@@ -739,9 +802,13 @@ dt_me(df, escape = FALSE, paging = FALSE)
 
 :::
 
-## Workflow 2: Discrete data censoring 
+## Workflow 2: Discrete data censoring {.smaller}
 
 Let's pull a few columns out and look at those:
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 library(dplyr)
@@ -762,6 +829,35 @@ qw_data_slim <- qw_data |>
 ```
 
 * What is `|>`? It's a pipe! It says take 'this thing' and put it in 'that thing'. You'll also see `%>%` in code, it is also a pipe - they are basically the same. 
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+import numpy as np
+
+qw_data_slim = (
+    qw_data.rename(
+        columns={
+            "Activity_StartDate": "Date",
+            "Result_ResultDetectionCondition": "DL_cond",
+            "DetectionLimit_MeasureA": "DL_val",
+            "DetectionLimit_TypeA": "DL_type",
+        }
+    )[["Date", "Result_Measure", "DL_cond", "DL_val", "DL_type"]]
+    .assign(
+        Result=lambda x: np.where(
+            x["DL_cond"].notna(), x["DL_val"], x["Result_Measure"]
+        )
+    )
+    .assign(
+        Detected=lambda x: np.where(x["DL_cond"].notna(), "Not Detected", "Detected")
+    )
+    .sort_values(by="Detected", ascending=False)
+)
+```
+
+:::
 
 ::: footer
 
@@ -790,7 +886,11 @@ dt_me(qw_data_slim, page_length = 8, font = "0.7em")
 <https://dplyr.tidyverse.org/reference/mutate-joins.html>
 :::
 
-## Step 1: Get the data
+## Step 1: Get the data {.smaller}
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 site <- "USGS-04183500"
@@ -816,11 +916,47 @@ dv_data <- read_waterdata_daily(
 )
 ```
 
-## Step 2: Join 
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+site = "USGS-04183500"
+p_code_dv = "00060"
+stat_cd = "00003"
+p_code_qw = "00665"
+start_date = "2015-07-03"
+end_date = "2025-07-03"
+
+qw_data, md_qw = waterdata.get_samples(
+    monitoringLocationIdentifier=site,
+    usgsPCode=p_code_qw,
+    activityStartDateLower=start_date,
+    activityStartDateUpper=end_date,
+    profile="basicphyschem",
+)
+
+dv_data, md_dv = waterdata.get_daily(
+    monitoring_location_id=site,
+    parameter_code=p_code_dv,
+    statistic_id=stat_cd,
+    time=(start_date + "/" + end_date),
+)
+```
+
+
+:::
+
+::: footer
+
+:::
+
+## Step 2: Join
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
-library(dplyr)
-
 little_dv <- dv_data |>
   select(time, Flow = value, monitoring_location_id)
 
@@ -831,6 +967,25 @@ qw_data_joined <- qw_data |>
 * "Activity_StartDate" (on the left side data frame) and "time" (on the right side data frame) need to be the same type (in this case, both are Date objects). 
   
 
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+little_dv = dv_data.rename(columns={"value": "Flow"})[
+    ["time", "Flow", "monitoring_location_id"]
+]
+
+qw_data["Activity_StartDate"] = pd.to_datetime(
+    qw_data["Activity_StartDate"], format="%Y-%m-%d"
+)
+
+qw_data_joined = pd.merge(
+    qw_data, little_dv, left_on="Activity_StartDate", right_on="time", how="left"
+)
+```
+
+:::
+
 ::: footer
 
 :::
@@ -838,6 +993,10 @@ qw_data_joined <- qw_data |>
 ## Step 2: Join (cont.)
 
 * You could join on multiple columns:
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| eval: false
@@ -853,6 +1012,21 @@ qw_data <- qw_data |>
 
 See `dplyr` documentation for lots of joining options, but I find `left_join` my "go-to" for straightforward joins.
 
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+qw_data = pd.merge(
+    qw_data,
+    little_dv,
+    left_on=["Activity_StartDate", "Location_Identifier"],
+    right_on=["time", "monitoring_location_id"],
+    how="left",
+)
+```
+
+:::
+
 ::: footer
 <https://dplyr.tidyverse.org/reference/mutate-joins.html>
 :::
@@ -861,12 +1035,27 @@ See `dplyr` documentation for lots of joining options, but I find `left_join` my
 
 Let's take a quick peak:
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 #| output-location: column
 ggplot(data = qw_data_joined) +
   geom_point(aes(x = Flow, y = Result_Measure))
 ```
 
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+#| output-location: column
+plt.figure()
+plt.scatter(x=qw_data_joined.Flow, y=qw_data_joined.Result_Measure)
+```
+
+
+:::
 
 ## Exercise 2: Joins {.smaller}
 
@@ -913,14 +1102,17 @@ band_instruments |>
 
 * We'll look at Suisun Bay a Van Sickle Island NR Pittsburg CA ("USGS-11455508"), with parameter code "99133" which is Nitrate plus Nitrite.
 
-## Workflow 4: Continuous data for known site
+## Workflow 4: Continuous data for known site {.smaller}
 
 :::: {.columns}
 
-::: {.column width="70%"}
+::: {.column width="65%"}
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
-#| results: markup
 site_id <- "USGS-11455508"
 p_code_rt <- "99133"
 start_date <- "2024-01-01"
@@ -931,29 +1123,57 @@ continuous_data <- read_waterdata_continuous(
   parameter_code = p_code_rt,
   time = c(start_date, end_date)
 )
-
-names(continuous_data)
 ```
-
-:::
-
-::: {.column width="30%"}
-
-```
- [4] "time"                   "unit_of_measure"        "parameter_code"        
- [7] "statistic_id"           "value"                  "approval_status"       
-[10] "last_modified"          "qualifier"  
-```
-:::
-
-::::
 
 ```
 Requesting:
 https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&limit=50000&monitoring_location_id=USGS-11455508&parameter_code=99133&time=2024-01-01T00%3A00%3A00Z%2F2024-06-01T00%3A00%3A00Z
 ```
 
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+site_id = "USGS-11455508"
+p_code_rt = "99133"
+date_range = "2024-01-01/2024-06-01"
+
+continuous_data, md_cont = waterdata.get_continuous(
+  monitoring_location_id = site_id,
+  parameter_code = p_code_rt,
+  time = date_range
+)
+```
+
+:::
+
+:::
+
+::: {.column width="35%"}
+
+```
+ [1] "monitoring_location_id"
+ [2] "parameter_code"        
+ [3] "statistic_id"          
+ [4] "time"                  
+ [5] "value"                 
+ [6] "unit_of_measure"       
+ [7] "approval_status"       
+ [8] "last_modified"         
+ [9] "qualifier"             
+[10] "time_series_id" 
+```
+:::
+
+::::
+
+
+
 ## Workflow 4: Inspect
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| output-location: column
@@ -961,9 +1181,24 @@ ggplot(data = continuous_data) +
   geom_point(aes(x = time, y = value))
 ```
 
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+#| output-location: column
+plt.figure()
+plt.scatter(x=continuous_data.time, y=continuous_data.value)
+```
+
+:::
+
 ## Workflow 5: Join Discrete and Continuous 
 
 That same site also measures discrete Nitrate plus Nitrite, which is parameter code "00631". Let's first grab that data:
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| message: true
@@ -975,6 +1210,21 @@ discrete_data <- read_waterdata_samples(
   dataProfile = "basicphyschem"
 )
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+discrete_data, md_qw = waterdata.get_samples(
+  monitoringLocationIdentifier = "USGS-11455508",
+  usgsPCode = "00631",
+  activityStartDateLower = start_date,
+  activityStartDateUpper = end_date,
+  profile = "basicphyschem"
+)
+```
+
+:::
 
 ## Workflow 5: Join Discrete and Continuous
 
