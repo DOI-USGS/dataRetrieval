@@ -963,9 +963,7 @@ little_dv <- dv_data |>
 qw_data_joined <- qw_data |>
   left_join(little_dv, by = c("Activity_StartDate" = "time"))
 ```
-
-* "Activity_StartDate" (on the left side data frame) and "time" (on the right side data frame) need to be the same type (in this case, both are Date objects). 
-  
+ 
 
 ### Python
 
@@ -985,6 +983,8 @@ qw_data_joined = pd.merge(
 ```
 
 :::
+
+* "Activity_StartDate" (on the left side data frame) and "time" (on the right side data frame) need to be the same type (in this case, both are Date objects). 
 
 ::: footer
 
@@ -1282,9 +1282,21 @@ The next slides will demo how to use those.
 
 ## Data Discovery: Time Series {.smaller}
 
+::: {.panel-tabset}
+
+### R
 ```{r}
 ts_available <- read_waterdata_ts_meta(monitoring_location_id = "USGS-04183500")
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+ts_avail, ts_me = waterdata.get_time_series_metadata(monitoring_location_id="USGS-04183500")
+```
+
+:::
 
 ```{r}
 #| echo: false
@@ -1309,11 +1321,18 @@ dt_me(
 
 ## Data Discovery: Discrete {.smaller}
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 discrete_available <- summarize_waterdata_samples(
   monitoringLocationIdentifier = "USGS-04183500"
 )
 ```
+
+
+:::
 
 ```{r}
 #| echo: false
@@ -1338,6 +1357,10 @@ dt_me(
 
 * characteristicUserSupplied can be an input to `read_waterdata_sample` 
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 discrete1 <- read_waterdata_samples(
   characteristicUserSupplied = "Phosphorus as phosphorus, water, unfiltered",
@@ -1346,15 +1369,29 @@ discrete1 <- read_waterdata_samples(
 nrow(discrete1)
 ```
 
+### Python
 
+```{python}
+#| eval: !expr evaluate_python
+discrete1, discrete1_me = waterdata.get_samples(
+  characteristicUserSupplied = "Phosphorus as phosphorus, water, unfiltered",
+  monitoringLocationIdentifier = "USGS-04183500"
+)
+discrete1.shape[1]
+```
+
+:::
 
 ## More Information {.smaller}
 
-- dataRetrieval repository:
+- dataRetrieval R repository:
   - <https://github.com/DOI-USGS/dataRetrieval>
   - [Documentation](https://doi-usgs.github.io/dataRetrieval)
   - [dataRetrieval New Features](https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html)
-  - [General Tutorial](https://rconnect.usgs.gov/NMC_dataRetrieval_1/dataRetrieval_1.html)
+
+- dataretrieval Python repository:
+  - <https://github.com/DOI-USGS/dataretrieval-python>
+  - [Documentation](https://doi-usgs.github.io/dataretrieval-python/)
 
 - Contact:
   - Computational Tools Email: comptools@usgs.gov

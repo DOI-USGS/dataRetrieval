@@ -899,11 +899,14 @@ nrow(discrete1)
 
 ## More Information {.smaller}
 
-- dataRetrieval repository:
+- dataRetrieval R repository:
   - <https://github.com/DOI-USGS/dataRetrieval>
   - [Documentation](https://doi-usgs.github.io/dataRetrieval)
   - [dataRetrieval New Features](https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html)
-  - [General Tutorial](https://rconnect.usgs.gov/NMC_dataRetrieval_1/dataRetrieval_1.html)
+
+- dataretrieval Python repository:
+  - <https://github.com/DOI-USGS/dataretrieval-python>
+  - [Documentation](https://doi-usgs.github.io/dataretrieval-python/)
 
 - Contact:
   - Computational Tools Email: comptools@usgs.gov
