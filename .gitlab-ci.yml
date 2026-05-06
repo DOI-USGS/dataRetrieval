@@ -131,17 +131,17 @@ pages:
     expire_in: 1 hour
     
 Validate Inventory:
-    stage: end
-    only: 
-      - main
-    image: ${INTERNAL_REGISTRY}software/software-management:latest
-    script:
-      - software-management review
-        --project "${CI_PROJECT_PATH}"
-        --ref "${CI_COMMIT_BRANCH}"
-        --type "provisional"
-        --token "${GIT_TOKEN_CUSTOM}"
-    tags:
-        - chs-shared
+  stage: end
+  only: 
+    - main
+  image: ${INTERNAL_REGISTRY}software/software-management:latest
+  script:
+    - software-management review
+      --project "${CI_PROJECT_PATH}"
+      --ref "${CI_COMMIT_BRANCH}"
+      --type "provisional"
+      --token "${GIT_TOKEN_CUSTOM}"
+  tags:
+      - chs-shared
   artifacts:
     expire_in: 5 minutes
