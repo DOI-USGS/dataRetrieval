@@ -47,7 +47,7 @@ build-image:
         -f docker/Dockerfile -t ${CI_REGISTRY_IMAGE}:latest .
     - docker push --all-tags ${CI_REGISTRY_IMAGE}
   artifacts:
-    paths: []
+    expire_in: 5 minutes
 
 buildcheck:
   stage: check
@@ -110,7 +110,7 @@ longtest:
       when: always
     - when: never
   artifacts:
-    paths: []
+    expire_in: 5 minutes
 
 pages:
   stage: end
@@ -144,4 +144,4 @@ Validate Inventory:
     tags:
         - chs-shared
   artifacts:
-    paths: []
+    expire_in: 5 minutes
