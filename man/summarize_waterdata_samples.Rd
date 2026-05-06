@@ -10,10 +10,13 @@ summarize_waterdata_samples(monitoringLocationIdentifier)
 summarize_USGS_samples(monitoringLocationIdentifier)
 }
 \arguments{
-\item{monitoringLocationIdentifier}{A monitoring location identifier has two parts,
-separated by a dash (-): the agency code and the location number. Location identifiers should be separated with commas,
-for example: AZ014-320821110580701, CAX01-15304600, USGS-040851385. Location
-numbers without an agency prefix are assumed to have the prefix USGS.}
+\item{monitoringLocationIdentifier}{A single monitoring location identifier
+with two parts, separated by a dash (-): the agency code and the location
+number. Examples: USGS-040851385, AZ014-320821110580701, CAX01-15304600.
+The summary service accepts only one site at a time; supplying a vector of
+length > 1 raises an error. The agency prefix is required: bare location
+numbers (e.g. "040851385") are accepted by the service but return an empty
+result.}
 }
 \value{
 data frame with summary of data available based on the monitoringLocationIdentifier

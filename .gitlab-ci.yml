@@ -1,5 +1,3 @@
-image: ${CI_REGISTRY_IMAGE}:latest
-
 workflow:
   rules:
     - if: $CI_COMMIT_TAG
@@ -50,6 +48,7 @@ build-image:
     when: never
 
 buildcheck:
+  image: ${CI_REGISTRY_IMAGE}:latest
   stage: check
   cache: []
   dependencies:
@@ -70,6 +69,7 @@ buildcheck:
     expire_in: 1 hour
 
 unittests:
+  image: ${CI_REGISTRY_IMAGE}:latest
   stage: test
   cache: []
   dependencies:
@@ -99,6 +99,7 @@ unittests:
   coverage: '/Coverage: \d+.\d+\%/'
 
 longtest:
+  image: ${CI_REGISTRY_IMAGE}:latest
   stage: test
   dependencies:
     - build-image
@@ -113,6 +114,7 @@ longtest:
     when: never
 
 pages:
+  image: ${CI_REGISTRY_IMAGE}:latest
   stage: end
   dependencies:
     - build-image
