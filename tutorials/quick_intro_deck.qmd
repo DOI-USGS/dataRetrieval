@@ -735,16 +735,16 @@ dt_me(df, escape = FALSE, paging = FALSE)
 
 ## Workflow 3: Continuous data for known site {.smaller}
 
-:::: {.columns}
-
-::: {.column width="65%"}
-
 ::: {.panel-tabset}
 
 ### R
 
+:::: {.columns}
+
+::: {.column width="65%"}
+
 ```{r}
-#| results: markup
+#| eval: false
 site_id <- "USGS-11455508"
 p_code_rt <- "99133"
 start_date <- "2024-01-01"
@@ -755,12 +755,41 @@ continuous_data <- read_waterdata_continuous(
   parameter_code = p_code_rt,
   time = c(start_date, end_date)
 )
+names(continuous_data)
 ```
+
+:::
+
+::: {.column width="35%"}
+
+```{r}
+#| results: markup
+#| echo: false
+site_id <- "USGS-11455508"
+p_code_rt <- "99133"
+start_date <- "2024-01-01"
+end_date <- "2024-06-01"
+
+continuous_data <- read_waterdata_continuous(
+  monitoring_location_id = site_id,
+  parameter_code = p_code_rt,
+  time = c(start_date, end_date)
+)
+names(continuous_data)
+```
+
+:::
+
+::::
 
 ### Python
 
+:::: {.columns}
+
+::: {.column width="65%"}
+
 ```{python}
-#| eval: !expr evaluate_python
+#| eval: false
 site_id = "USGS-11455508"
 p_code_rt = "99133"
 date_range = "2024-01-01/2024-06-01"
@@ -772,30 +801,27 @@ continuous_data, md_cont = waterdata.get_continuous(
 
 :::
 
-:::
-
 ::: {.column width="35%"}
 
+```{python}
+#| eval: !expr evaluate_python
+#| results: markup
+#| echo: false
+site_id = "USGS-11455508"
+p_code_rt = "99133"
+date_range = "2024-01-01/2024-06-01"
+
+continuous_data, md_cont = waterdata.get_continuous(
+    monitoring_location_id=site_id, parameter_code=p_code_rt, time=date_range
+)
 ```
- [1] "monitoring_location_id"
- [2] "parameter_code"        
- [3] "statistic_id"          
- [4] "time"                  
- [5] "value"                 
- [6] "unit_of_measure"       
- [7] "approval_status"       
- [8] "last_modified"         
- [9] "qualifier"             
-[10] "time_series_id" 
-```
+
 :::
 
 ::::
 
-```
-Requesting:
-https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&limit=50000&monitoring_location_id=USGS-11455508&parameter_code=99133&time=2024-01-01T00%3A00%3A00Z%2F2024-06-01T00%3A00%3A00Z
-```
+:::
+
 
 ## Workflow 3: Inspect
 

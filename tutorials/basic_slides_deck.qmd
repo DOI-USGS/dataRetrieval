@@ -1218,8 +1218,8 @@ discrete_data <- read_waterdata_samples(
 discrete_data, md_qw = waterdata.get_samples(
   monitoringLocationIdentifier = "USGS-11455508",
   usgsPCode = "00631",
-  activityStartDateLower = start_date,
-  activityStartDateUpper = end_date,
+  activityStartDateLower = "2024-01-01",
+  activityStartDateUpper = "2024-06-01",
   profile = "basicphyschem"
 )
 ```
@@ -1238,9 +1238,12 @@ discrete_data, md_qw = waterdata.get_samples(
 
 ## Workflow 5: Join Discrete and Continuous
 
+::: {.panel-tabset}
+
+### R
 
 ```{r}
-#| code-line-numbers: "1|2-3|5|6|1-6"
+#| code-line-numbers: "1|2-3|5-10"
 library(data.table)
 setDT(discrete_data)[, join_date := Activity_StartDateTime]
 setDT(continuous_data)[, join_date := time]
@@ -1252,6 +1255,8 @@ closest_dt <- continuous_data[
 ]
 closest_dt <- data.frame(closest_dt)
 ```
+
+:::
 
 ::: footer
 <https://doi-usgs.github.io/dataRetrieval/articles/join_by_closest.html>
