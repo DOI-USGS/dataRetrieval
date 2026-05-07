@@ -145,10 +145,8 @@ Then each time you open R, you'll need to load the library:
 #| message: true
 library(dataRetrieval)
 ```
+### Python 
 
-### Python
-
-Whether you are a user or developer we recommend installing `dataretrieval` in a virtual environment. This can be done using something like [virtualenv](https://docs.python.org/3/tutorial/venv.html) or [conda](https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html). 
 
 ```{bash}
 #| echo: true
@@ -765,6 +763,7 @@ names(continuous_data)
 ```{r}
 #| results: markup
 #| echo: false
+options(width = 30)
 site_id <- "USGS-11455508"
 p_code_rt <- "99133"
 start_date <- "2024-01-01"
@@ -807,6 +806,7 @@ continuous_data, md_cont = waterdata.get_continuous(
 #| eval: !expr evaluate_python
 #| results: markup
 #| echo: false
+pd.set_option("display.width", 30)
 site_id = "USGS-11455508"
 p_code_rt = "99133"
 date_range = "2024-01-01/2024-06-01"
@@ -814,6 +814,7 @@ date_range = "2024-01-01/2024-06-01"
 continuous_data, md_cont = waterdata.get_continuous(
     monitoring_location_id=site_id, parameter_code=p_code_rt, time=date_range
 )
+continuous_data.columns
 ```
 
 :::
@@ -859,6 +860,10 @@ plt.scatter(x=continuous_data.time, y=continuous_data.value)
 2. `summarize_waterdata_samples` discovers discrete data at specific monitoring locations
 
 The next slides will demo how to use those.
+
+::: footer
+
+:::
 
 ## Data Discovery: Time Series {.smaller}
 
