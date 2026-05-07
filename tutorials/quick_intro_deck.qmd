@@ -148,7 +148,7 @@ library(dataRetrieval)
 
 ### Python
 
-Whether you are a user or developer we recommend installing `dataretrieval` in a virtual environment. This can be done using something like virtualenv or conda. 
+Whether you are a user or developer we recommend installing `dataretrieval` in a virtual environment. This can be done using something like [virtualenv](https://docs.python.org/3/tutorial/venv.html) or [conda](https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html). 
 
 ```{bash}
 #| echo: true
