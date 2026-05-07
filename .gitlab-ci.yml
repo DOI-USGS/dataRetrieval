@@ -32,7 +32,6 @@ variables:
   PAGES_OUTDIR: "$CI_PROJECT_DIR/public"
   CUSTOM_DR_UA: "GitLab_CI"
   API_USGS_PAT: "${API_USGS_PAT}"
-  RETICULATE_PYTHON: "$CI_PROJECT_DIR/root/conda/envs/dataretrieval/bin/python"
 
 build-image:
   stage: build
@@ -120,7 +119,6 @@ pages:
     - buildcheck
   script:
     - |
-      conda env create -n dataretrieval -f environment.yml && conda clean -a -y
       Rscript -e '
         source_file <- list.files()[grep(".tar.gz", list.files())]
         install.packages(source_file, type = "source", dependencies = FALSE)
