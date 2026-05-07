@@ -119,7 +119,7 @@ pages:
     - buildcheck
   script:
     - |
-      conda env create -n dataretrieval -f /environment.yml && conda clean -a -y
+      conda env create -n dataretrieval -f environment.yml && conda clean -a -y
       Rscript -e '
         source_file <- list.files()[grep(".tar.gz", list.files())]
         install.packages(source_file, type = "source", dependencies = FALSE)
