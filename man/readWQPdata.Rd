@@ -105,47 +105,47 @@ Sampling Activity \tab ActivityWQX3 \tab /wqx3/Activity/search \cr
 \donttest{
 
 # Legacy:
-nameToUse <- "pH"
-pHData <- readWQPdata(siteid = "USGS-04024315",
-                      characteristicName = nameToUse)
-ncol(pHData)
-attr(pHData, "siteInfo")
-attr(pHData, "queryTime")
-attr(pHData, "url")
+#nameToUse <- "pH"
+#pHData <- readWQPdata(siteid = "USGS-04024315",
+#                       characteristicName = nameToUse)
+#ncol(pHData)
+#attr(pHData, "siteInfo")
+#attr(pHData, "queryTime")
+#attr(pHData, "url")
 
 # WQX3:
-pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315",
-                           characteristicName = nameToUse,
-                           service = "ResultWQX3",
-                           dataProfile = "basicPhysChem")
-attr(pHData_wqx3, "url")
+#pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315",
+#                            characteristicName = nameToUse,
+#                            service = "ResultWQX3",
+#                            dataProfile = "basicPhysChem")
+# attr(pHData_wqx3, "url")
 
 # More examples:
 # querying by county
-DeWitt <- readWQPdata(
-  statecode = "Illinois",
-  countycode = "DeWitt",
-  characteristicName = "Nitrogen"
-)
+#DeWitt <- readWQPdata(
+#   statecode = "Illinois",
+#   countycode = "DeWitt",
+#   characteristicName = "Nitrogen"
+# )
 
-attr(DeWitt, "url")
+#attr(DeWitt, "url")
 
-DeWitt_wqx3 <- readWQPdata(
-   statecode = "Illinois",
-   countycode = "DeWitt",
-   characteristicName = "Nitrogen",
-   service = "ResultWQX3",
-   dataProfile = "basicPhysChem",
-   ignore_attributes = TRUE)
+#DeWitt_wqx3 <- readWQPdata(
+#    statecode = "Illinois",
+#    countycode = "DeWitt",
+#    characteristicName = "Nitrogen",
+#    service = "ResultWQX3",
+#    dataProfile = "basicPhysChem",
+#    ignore_attributes = TRUE)
 
-attr(DeWitt_wqx3, "url")
+#attr(DeWitt_wqx3, "url")
 
 # Data profile: "Sampling Activity"
-activity <- readWQPdata(
-  siteid = "USGS-04024315",
-  service = "Activity"
-)
-attr(activity, "url")
+#activity <- readWQPdata(
+#   siteid = "USGS-04024315",
+#   service = "Activity"
+#)
+#attr(activity, "url")
 
 # activity_wqx3 <- readWQPdata(
 #   siteid = "USGS-04024315",
@@ -153,14 +153,14 @@ attr(activity, "url")
 # )
 # attr(activity_wqx3, "url")
 
-Dane_activity <- readWQPdata(
-  statecode = "Wisconsin",
-  countycode = "Dane",
-  startDateLo = "2023-01-01",
-  startDateHi = "2023-12-31",
-  service = "Activity"
-)
-attr(Dane_activity, "url")
+#Dane_activity <- readWQPdata(
+#   statecode = "Wisconsin",
+#   countycode = "Dane",
+#   startDateLo = "2023-01-01",
+#   startDateHi = "2023-12-31",
+#   service = "Activity"
+# )
+#attr(Dane_activity, "url")
 
 # Dane_activity_wqx3 <- readWQPdata(
 #   statecode = "Wisconsin",
@@ -176,47 +176,47 @@ attr(Dane_activity, "url")
 
 
 # Data profiles: "Organization Data"
-org_data <- readWQPdata(
-  statecode = "WI",
-  countycode = "Dane",
-  service = "Organization"
-)
+#org_data <- readWQPdata(
+#   statecode = "WI",
+#   countycode = "Dane",
+#   service = "Organization"
+# )
 
 # Data profiles: "Project Data"
-project_data <- readWQPdata(
-  statecode = "WI",
-  countycode = "Dane",
-  service = "Project"
-)
+#project_data <- readWQPdata(
+#   statecode = "WI",
+#   countycode = "Dane",
+#   service = "Project"
+# )
 
 # Data profiles: "Project Monitoring Location Weighting Data"
-proj_mlwd <- readWQPdata(
-  statecode = "WI",
-  countycode = "Dane",
-  service = "ProjectMonitoringLocationWeighting"
-)
+#proj_mlwd <- readWQPdata(
+#   statecode = "WI",
+#   countycode = "Dane",
+#   service = "ProjectMonitoringLocationWeighting"
+# )
 
 # Data profiles: "Sample Results (physical/chemical metadata)"
-samp_data <- readWQPdata(
-  siteid = "USGS-04024315",
-  dataProfile = "resultPhysChem",
-  service = "Result"
-)
+# samp_data <- readWQPdata(
+#   siteid = "USGS-04024315",
+#   dataProfile = "resultPhysChem",
+#   service = "Result"
+# )
 
 # Data profiles: "Sample Results (biological metadata)"
-samp_bio <- readWQPdata(
-  siteid = "USGS-04024315",
-  dataProfile = "biological",
-  service = "Result"
-)
+#samp_bio <- readWQPdata(
+#   siteid = "USGS-04024315",
+#   dataProfile = "biological",
+#   service = "Result"
+# )
 
 
 # Data profiles: "Sample Results (narrow)"
-samp_narrow <- readWQPdata(
-  siteid = "USGS-04024315",
-  service = "Result",
-  dataProfile = "narrowResult"
-)
+# samp_narrow <- readWQPdata(
+#   siteid = "USGS-04024315",
+#   service = "Result",
+#   dataProfile = "narrowResult"
+# )
 
 # samp_narrow_wqx3 <- readWQPdata(
 #   siteid = "USGS-04024315",
@@ -226,38 +226,38 @@ samp_narrow <- readWQPdata(
 
 
 # Data profiles: "Sampling Activity"
-samp_activity <- readWQPdata(
-  siteid = "USGS-04024315",
-  dataProfile = "activityAll",
-  service = "Activity"
-)
+#samp_activity <- readWQPdata(
+#   siteid = "USGS-04024315",
+#   dataProfile = "activityAll",
+#   service = "Activity"
+#  )
 
 # Data profile: "Sampling Activity Metrics"
-act_metrics <- readWQPdata(
-  statecode = "WI",
-  countycode = "Dane",
-  service = "ActivityMetric"
-)
+# act_metrics <- readWQPdata(
+#   statecode = "WI",
+#   countycode = "Dane",
+#   service = "ActivityMetric"
+# )
 
 # Data profile: "Result Detection Quantitation Limit Data"
-dl_data <- readWQPdata(
-  siteid = "USGS-04024315",
-  service = "ResultDetectionQuantitationLimit"
-)
+# dl_data <- readWQPdata(
+#   siteid = "USGS-04024315",
+#   service = "ResultDetectionQuantitationLimit"
+# )
 
 # other options:
-Phosphorus <- readWQPdata(
-  statecode = "WI", countycode = "Dane",
-  characteristicName = "Phosphorus",
-  startDateLo = "2023-01-01",
-  ignore_attributes = TRUE,
-  convertType = FALSE
-)
+# Phosphorus <- readWQPdata(
+#   statecode = "WI", countycode = "Dane",
+#   characteristicName = "Phosphorus",
+#   startDateLo = "2023-01-01",
+#   ignore_attributes = TRUE,
+#   convertType = FALSE
+# )
 
-rawPHsites_legacy <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
-                        characteristicName = "pH",
-                        service = "Result",
-                        dataProfile = "narrowResult" )
+#rawPHsites_legacy <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
+#                         characteristicName = "pH",
+#                         service = "Result",
+#                         dataProfile = "narrowResult" )
 
 # rawPHsites <- readWQPdata(siteid = c("USGS-05406450", "USGS-05427949", "WIDNR_WQX-133040"),
 #                           characteristicName = "pH",

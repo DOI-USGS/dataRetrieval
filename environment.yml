@@ -24,7 +24,7 @@ dependencies:
   - pip=25.2=pyh8b19718_0
   - python=3.11.8=hab00c5b_0_cpython
   - readline=8.2=h8c095d6_2
-  - scipy
+  - matplotlib
   - setuptools=80.9.0=pyhff2d567_0
   - tk=8.6.13=noxft_hd72426e_102
   - tzdata=2025b=h78e105d_0

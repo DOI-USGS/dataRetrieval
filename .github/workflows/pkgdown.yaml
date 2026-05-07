@@ -51,7 +51,7 @@ jobs:
             any::ggplot2
             any::sf
             any::patchwork
-            any::maps
+            any::reticulate
             any::leaflet
             any::readxl
             any::gridExtra

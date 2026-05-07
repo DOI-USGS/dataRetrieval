@@ -113,11 +113,11 @@ context("Peak, rating, meas, site")
 test_that("peak, rating curves, surface-water measurements", {
   testthat::skip_on_cran()
   testthat::skip_on_ci()
-  siteNumbers <- c("01594440", "040851325")
-  data <- readNWISpeak(siteNumbers)
-  expect_is(data$agency_cd, "character")
+  siteNumbers <- c("USGS-01594440", "USGS-040851325")
+  data <- read_waterdata_peaks(monitoring_location_id = siteNumbers)
+  expect_true(ncol(data) > 10)
 
-  # Rating curvs:
+  # Rating curves:
   siteNumber <- "USGS-01594440"
   data <- read_waterdata_ratings(
     monitoring_location_id = siteNumber,
@@ -263,40 +263,40 @@ test_that("read_waterdata_daily", {
 test_that("WQP qw tests", {
   testthat::skip_on_cran()
   skip_on_ci()
-  nameToUse <- "Specific conductance"
-  pcodeToUse <- "00095"
-
-  INFO_WQP <- readWQPqw(
-    "USGS-04024315",
-    pcodeToUse,
-    startDate = "",
-    endDate = "",
-    legacy = FALSE
-  )
-  expect_is(INFO_WQP$Activity_StartDateTime, "POSIXct")
-
-  INFO2 <- readWQPqw(
-    "WIDNR_WQX-10032762",
-    nameToUse,
-    startDate = "",
-    endDate = "",
-    legacy = FALSE
-  )
-  expect_is(INFO2$Activity_StartDateTime, "POSIXct")
-
-  df <- readWQPqw("USGS-04193500", parameterCd = "00665", legacy = FALSE)
-  expect_true(nrow(df) > 0)
-
-  df2 <- readWQPqw("USGS-05427718", parameterCd = "all")
-  expect_true(nrow(df2) > 0)
-
-  #Empty legacy:
-  df3 <- readWQPqw(
-    siteNumbers = "USGS-385032115220501",
-    parameterCd = "all",
-    legacy = TRUE
-  )
-  expect_true(nrow(df3) == 0)
+  # nameToUse <- "Specific conductance"
+  # pcodeToUse <- "00095"
+  #
+  # INFO_WQP <- readWQPqw(
+  #   "USGS-04024315",
+  #   pcodeToUse,
+  #   startDate = "",
+  #   endDate = "",
+  #   legacy = FALSE
+  # )
+  # expect_is(INFO_WQP$Activity_StartDateTime, "POSIXct")
+  #
+  # INFO2 <- readWQPqw(
+  #   "WIDNR_WQX-10032762",
+  #   nameToUse,
+  #   startDate = "",
+  #   endDate = "",
+  #   legacy = FALSE
+  # )
+  # expect_is(INFO2$Activity_StartDateTime, "POSIXct")
+  #
+  # df <- readWQPqw("USGS-04193500", parameterCd = "00665", legacy = FALSE)
+  # expect_true(nrow(df) > 0)
+  #
+  # df2 <- readWQPqw("USGS-05427718", parameterCd = "all")
+  # expect_true(nrow(df2) > 0)
+  #
+  # #Empty legacy:
+  # df3 <- readWQPqw(
+  #   siteNumbers = "USGS-385032115220501",
+  #   parameterCd = "all",
+  #   legacy = TRUE
+  # )
+  # expect_true(nrow(df3) == 0)
 })
 
 

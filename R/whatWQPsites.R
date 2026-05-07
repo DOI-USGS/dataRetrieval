@@ -36,14 +36,14 @@
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #'
-#' site1 <- whatWQPsites(siteid = "USGS-01594440")
+#' #site1 <- whatWQPsites(siteid = "USGS-01594440")
 #'
-#' type <- "Stream"
-#' sites <- whatWQPsites(
-#'   countycode = "US:55:025",
-#'   characteristicName = "Phosphorus",
-#'   siteType = type
-#' )
+#' #type <- "Stream"
+#' #sites <- whatWQPsites(
+#' #   countycode = "US:55:025",
+#' #  characteristicName = "Phosphorus",
+#' #   siteType = type
+#' #)
 #' }
 whatWQPsites <- function(..., legacy = TRUE, convertType = TRUE) {
   values <- readWQPdots(..., legacy = legacy)
@@ -118,36 +118,36 @@ whatWQPsites <- function(..., legacy = TRUE, convertType = TRUE) {
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
 #' # Summary of a single site for the last 5 years:
-#' site_5 <- readWQPsummary(
-#'   siteid = "USGS-07144100",
-#'   summaryYears = 5
-#' )
+#' #site_5 <- readWQPsummary(
+#' #   siteid = "USGS-07144100",
+#' #   summaryYears = 5
+#'#  )
 #'
 #' # Summary of a single site for the full period of record:
-#' site_all <- readWQPsummary(
-#'   siteid = "USGS-07144100",
-#'   summaryYears = "all"
-#' )
+#' #site_all <- readWQPsummary(
+#' #   siteid = "USGS-07144100",
+#' #   summaryYears = "all"
+#' # )
 #'
 #' # Summary of the data available from streams in a single county:
-#' dane_county_data <- readWQPsummary(
-#'   countycode = "US:55:025",
-#'   summaryYears = 5,
-#'   siteType = "Stream"
-#' )
+#' # dane_county_data <- readWQPsummary(
+#' #   countycode = "US:55:025",
+#' #   summaryYears = 5,
+#' #   siteType = "Stream"
+#' # )
 #'
 #' # Summary of the data all available from lakes in a single county:
-#' lake_sites <- readWQPsummary(
-#'   siteType = "Lake, Reservoir, Impoundment",
-#'   countycode = "US:55:025"
-#' )
+#' # lake_sites <- readWQPsummary(
+#' #   siteType = "Lake, Reservoir, Impoundment",
+#' #   countycode = "US:55:025"
+#' # )
 #'
 #' # Summary of the data available for the last 5 years in New Jersey:
-#' state1 <- readWQPsummary(
-#'   statecode = "NJ",
-#'   summaryYears = 5,
-#'   siteType = "Stream"
-#' )
+#' #state1 <- readWQPsummary(
+#' #   statecode = "NJ",
+#' #   summaryYears = 5,
+#' #    siteType = "Stream"
+#' # )
 #' }
 readWQPsummary <- function(...) {
   wqp_message()

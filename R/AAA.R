@@ -24,7 +24,8 @@ pkg.env <- new.env()
     "continuous",
     "field-measurements-metadata",
     "combined-metadata",
-    "channel-measurements"
+    "channel-measurements",
+    "peaks"
   )
   collections <- c(
     "parameter-codes",

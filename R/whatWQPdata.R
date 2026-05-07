@@ -6,14 +6,14 @@
 #' @examples
 #' \donttest{
 #'
-#' site1 <- whatWQPsamples(siteid = "USGS-01594440")
+#' #site1 <- whatWQPsamples(siteid = "USGS-01594440")
 #'
-#' type <- "Stream"
+#' #type <- "Stream"
 #'
-#' sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
+#' #sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
 #'
-#' lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
-#'                                     countycode = "US:55:025")
+#' #lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
+#' #                                   countycode = "US:55:025")
 #' }
 whatWQPsamples <- function(..., convertType = TRUE, legacy = TRUE) {
   values <- readWQPdots(..., legacy = legacy)
@@ -81,11 +81,11 @@ whatWQPsamples <- function(..., convertType = TRUE, legacy = TRUE) {
 #' @examples
 #' \donttest{
 #'
-#' type <- "Stream"
+#' #type <- "Stream"
 #'
-#' sites <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
-#' lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment",
-#'                                     countycode = "US:55:025")
+#' #sites <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
+#' #lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment",
+#' #                                   countycode = "US:55:025")
 #' }
 whatWQPmetrics <- function(..., convertType = TRUE) {
   values <- readWQPdots(..., legacy = TRUE)
@@ -182,20 +182,20 @@ whatWQPmetrics <- function(..., convertType = TRUE) {
 #' @seealso whatWQPsites readWQPsummary readWQPdata
 #' @examplesIf is_dataRetrieval_user()
 #' \donttest{
-#' site1 <- whatWQPdata(siteid = "USGS-01594440")
+#' #site1 <- whatWQPdata(siteid = "USGS-01594440")
 #'
-#' type <- "Stream"
-#' sites <- whatWQPdata(countycode = "US:55:025", siteType = type)
+#' #type <- "Stream"
+#' #sites <- whatWQPdata(countycode = "US:55:025", siteType = type)
 #'
-#' lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment",
-#'                          countycode = "US:55:025")
-#' lakeSites_chars <- whatWQPdata(
-#'   siteType = "Lake, Reservoir, Impoundment",
-#'   countycode = "US:55:025", convertType = FALSE)
+#' #lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment",
+#' #                        countycode = "US:55:025")
+#' #lakeSites_chars <- whatWQPdata(
+#' #   siteType = "Lake, Reservoir, Impoundment",
+#' #   countycode = "US:55:025", convertType = FALSE)
 #'
 #'
-#' bbox <- c(-86.9736, 34.4883, -86.6135, 34.6562)
-#' what_bb <- whatWQPdata(bBox = bbox)
+#' #bbox <- c(-86.9736, 34.4883, -86.6135, 34.6562)
+#' #what_bb <- whatWQPdata(bBox = bbox)
 #' }
 whatWQPdata <- function(..., convertType = TRUE) {
   args <- convertLists(...)

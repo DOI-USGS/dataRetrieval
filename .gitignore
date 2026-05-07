@@ -17,3 +17,4 @@ vignettes/*.html
 vignettes/*.R
 /.quarto/
 **/*.quarto_ipynb
+.positai

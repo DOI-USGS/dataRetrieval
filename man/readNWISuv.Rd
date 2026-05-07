@@ -69,25 +69,10 @@ startDate <- "2014-10-10"
 endDate <- "2014-10-10"
 \donttest{
 
-rawData <- readNWISuv(site_id, parameterCd, startDate, endDate)
+#rawData <- readNWISuv(site_id, parameterCd, startDate, endDate)
 
-rawData_today <- readNWISuv(site_id, parameterCd, Sys.Date(), Sys.Date())
+#rawData_today <- readNWISuv(site_id, parameterCd, Sys.Date(), Sys.Date())
 
-timeZoneChange <- readNWISuv(
-  c("04024430", "04024000"), parameterCd,
-  "2013-11-03", "2013-11-03"
-)
-
-centralTime <- readNWISuv(site_id, parameterCd,
-  "2014-10-10T12:00", "2014-10-10T23:59",
-  tz = "America/Chicago"
-)
-
-# Adding 'Z' to the time indicates to the web service to call the data with UTC time:
-GMTdata <- readNWISuv(
-  site_id, parameterCd,
-  "2014-10-10T00:00Z", "2014-10-10T23:59Z"
-)
 }
 \dontshow{\}) # examplesIf}
 }

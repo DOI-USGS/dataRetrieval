@@ -207,7 +207,7 @@ NULL
 #               "monitoring-locations", "latest-continuous",
 #               "field-measurements", "latest-daily",
 #               "continuous", "field-measurements-metadata",
-#               "combined-metadata", "channel-measurements")
+#               "combined-metadata", "channel-measurements", "peaks")
 #
 # property_list <- list()
 # for(service in services){

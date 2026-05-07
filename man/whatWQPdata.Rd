@@ -46,20 +46,20 @@ kind of data discovery see \code{readWQPsummary}.
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
-site1 <- whatWQPdata(siteid = "USGS-01594440")
+#site1 <- whatWQPdata(siteid = "USGS-01594440")
 
-type <- "Stream"
-sites <- whatWQPdata(countycode = "US:55:025", siteType = type)
+#type <- "Stream"
+#sites <- whatWQPdata(countycode = "US:55:025", siteType = type)
 
-lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment",
-                         countycode = "US:55:025")
-lakeSites_chars <- whatWQPdata(
-  siteType = "Lake, Reservoir, Impoundment",
-  countycode = "US:55:025", convertType = FALSE)
+#lakeSites <- whatWQPdata(siteType = "Lake, Reservoir, Impoundment",
+#                        countycode = "US:55:025")
+#lakeSites_chars <- whatWQPdata(
+#   siteType = "Lake, Reservoir, Impoundment",
+#   countycode = "US:55:025", convertType = FALSE)
 
 
-bbox <- c(-86.9736, 34.4883, -86.6135, 34.6562)
-what_bb <- whatWQPdata(bBox = bbox)
+#bbox <- c(-86.9736, 34.4883, -86.6135, 34.6562)
+#what_bb <- whatWQPdata(bBox = bbox)
 }
 \dontshow{\}) # examplesIf}
 }

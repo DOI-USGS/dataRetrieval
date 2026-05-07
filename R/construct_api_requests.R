@@ -340,7 +340,7 @@ switch_arg_id <- function(ls, id_name, service) {
 #' dataRetrieval:::format_api_dates(end)
 #' dataRetrieval:::format_api_dates(end, TRUE)
 #'
-#' end <- c(NA, as.POSIXct("2021-01-01 12:15:00"))
+#' end <- as.POSIXct(c(NA, "2021-01-01 12:15:00"))
 #' dataRetrieval:::format_api_dates(end)
 #'
 #' start_end <- as.POSIXct(c("2021-01-01 12:15:00",
@@ -370,22 +370,41 @@ switch_arg_id <- function(ls, id_name, service) {
 #' start <- "2025-10-01"
 #' end <- Sys.Date()
 #' dataRetrieval:::format_api_dates(c(start, end), date = TRUE)
+#'
+#' # This is a problem because the first value forces the
+#' # vector to be numeric, and then we don't really
+#' # know if the 2nd value is a Date (number of days since 1970)
+#' # or if it's a date/time (number of seconds..)
+#' half_range <- c(NA, as.Date("2025-01-01"))
+#' # Will error:
+#' #dataRetrieval:::format_api_dates(half_range, date = FALSE)
+#' # Better way to do it:
+#' better_half <- as.Date(c(NA, "2025-01-01"))
+#' dataRetrieval:::format_api_dates(better_half, date = FALSE)
 format_api_dates <- function(datetime, date = FALSE) {
   if (is.character(datetime)) {
     datetime[datetime == ""] <- NA
     datetime <- toupper(datetime)
   }
 
-  if (all(is.na(datetime))) {
-    return(NA)
-  }
-
-  if (all(is.null(datetime))) {
+  if (all(is.na(datetime)) | all(is.null(datetime))) {
     return(NA)
   }
 
   if (length(datetime) > 2) {
     stop("datetime should only include 1-2 values")
+  }
+
+  if (is.numeric(datetime)) {
+    # Until we can figure out a way to know if the
+    # original input was suppose to be Date or Posix
+    # We can't determine what the user meant.
+    stop(
+      "A time query was entered as numeric. This could lead to errors.
+Check any time queries that might have been automatically converted to numeric.
+This could happen if you use c(NA, as.Date(Sys.Date())) instead of
+as.Date(c(NA, Sys.Date()) for example."
+    )
   }
 
   if (length(datetime) == 1) {
@@ -395,13 +414,13 @@ format_api_dates <- function(datetime, date = FALSE) {
         grepl("/", datetime)
     ) {
       return(datetime)
+    }
+
+    if (date) {
+      datetime <- get_Date(datetime)
     } else {
-      if (date) {
-        datetime <- get_Date(datetime)
-      } else {
-        datetime1 <- get_dateTime(datetime)
-        datetime <- lubridate::format_ISO8601(datetime1, usetz = "Z")
-      }
+      datetime1 <- get_dateTime(datetime)
+      datetime <- lubridate::format_ISO8601(datetime1, usetz = "Z")
     }
   } else if (length(datetime) == 2) {
     if (date) {

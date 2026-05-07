@@ -51,34 +51,34 @@ not return information on what data was collected at the site.
 \examples{
 \donttest{
 
-site1 <- whatWQPsamples(siteid = "USGS-01594440")
+#site1 <- whatWQPsamples(siteid = "USGS-01594440")
 
-type <- "Stream"
+#type <- "Stream"
 
-sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
+#sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
 
-lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
-                                    countycode = "US:55:025")
+#lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
+#                                   countycode = "US:55:025")
 }
 \donttest{
 
-type <- "Stream"
+#type <- "Stream"
 
-sites <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
-lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment",
-                                    countycode = "US:55:025")
+#sites <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
+#lakeSites_metrics <- whatWQPmetrics(siteType = "Lake, Reservoir, Impoundment",
+#                                   countycode = "US:55:025")
 }
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
 
-site1 <- whatWQPsites(siteid = "USGS-01594440")
+#site1 <- whatWQPsites(siteid = "USGS-01594440")
 
-type <- "Stream"
-sites <- whatWQPsites(
-  countycode = "US:55:025",
-  characteristicName = "Phosphorus",
-  siteType = type
-)
+#type <- "Stream"
+#sites <- whatWQPsites(
+#   countycode = "US:55:025",
+#  characteristicName = "Phosphorus",
+#   siteType = type
+#)
 }
 \dontshow{\}) # examplesIf}
 }

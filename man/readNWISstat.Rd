@@ -62,28 +62,28 @@ Retrieves site statistics from the USGS Statistics Web Service beta.
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 \donttest{
-x1 <- readNWISstat(
-  siteNumbers = c("02319394"),
-  parameterCd = c("00060"),
-  statReportType = "annual"
-)
+# x1 <- readNWISstat(
+#   siteNumbers = c("02319394"),
+#   parameterCd = c("00060"),
+#   statReportType = "annual"
+# )
 
 # all the annual mean discharge data for two sites
-x2 <- readNWISstat(
-  siteNumbers = c("02319394", "02171500"),
-  parameterCd = c("00010", "00060"),
-  statReportType = "annual"
-)
+#x2 <- readNWISstat(
+#   siteNumbers = c("02319394", "02171500"),
+#   parameterCd = c("00010", "00060"),
+#   statReportType = "annual"
+# )
 
 # Request p25, p75, and mean values for temperature and discharge for the 2000s
 # Note that p25 and p75 were not available for temperature, and return NAs
-x <- readNWISstat(
-  siteNumbers = c("02171500"),
-  parameterCd = c("00010", "00060"),
-  statReportType = "daily",
-  statType = c("mean", "median"),
-  startDate = "2000", endDate = "2010"
-)
+#x <- readNWISstat(
+#   siteNumbers = c("02171500"),
+#   parameterCd = c("00010", "00060"),
+#   statReportType = "daily",
+#   statType = c("mean", "median"),
+#   startDate = "2000", endDate = "2010"
+# )
 }
 \dontshow{\}) # examplesIf}
 }

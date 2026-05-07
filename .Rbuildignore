@@ -71,3 +71,5 @@ vignettes/Reference_Lists.Rmd
 ^[.]?air[.]toml$
 ^\.vscode$
 environment.yml
+^\.positai$
+^\.claude$

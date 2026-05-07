@@ -66,7 +66,7 @@
 #' @param recordIdentifierUserSupplied Record identifier, user supplied identifier. This
 #' information would be needed from the data supplier.
 #' @param siteTypeName Site type name query parameter. See available
-#' options by running `check_param("sitetype")$typeName`.
+#' options by running `check_waterdata_sample_params("sitetype")$typeName`.
 #' @param usgsPCode USGS parameter code. See available options by running
 #' `check_waterdata_sample_params("characteristics")$parameterCode`.
 #' @param pointLocationLatitude Latitude for a point/radius query (decimal degrees). Must be used

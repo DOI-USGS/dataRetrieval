@@ -33,7 +33,11 @@ params:
 library(ggplot2)
 library(dplyr)
 library(reticulate)
+
 py_require("dataretrieval")
+py_require("panda")
+py_require("matplotlib")
+
 options(dplyr.summarise.inform = FALSE)
 
 evaluate_python <- params$run_python
@@ -67,9 +71,6 @@ dt_me <- function(
     escape = escape
   )
 }
-
-theme_set(theme_grey(base_size = 24))
-update_geom_defaults("point", list(size = 3))
 ```
 
 
@@ -126,11 +127,11 @@ In this ~45 minute introduction, the goal is:
 
 ## Installation
 
-`dataRetrieval` is available on the Comprehensive R Archive Network (CRAN) repository. To install `dataRetrieval` on your computer, open RStudio and run this line of code in the Console:
-
 ::: {.panel-tabset}
 
 ### R
+
+`dataRetrieval` is available on the Comprehensive R Archive Network (CRAN) repository. To install `dataRetrieval` on your computer, open RStudio and run this line of code in the Console:
 
 ```{r}
 #| echo: true
@@ -144,14 +145,19 @@ Then each time you open R, you'll need to load the library:
 #| message: true
 library(dataRetrieval)
 ```
+### Python 
 
-### Python
 
 ```{bash}
 #| echo: true
 #| eval: false
 pip install dataretrieval
+```
 
+```{bash}
+#| echo: true
+#| eval: false
+conda -c conda-forge install dataretrieval
 ```
 
 Then each time you open Python, you'll need to load the library:
@@ -190,6 +196,10 @@ from dataretrieval import waterdata
 
 ## Documentation within R: function help pages {.smaller}
 
+::: {.panel-tabset}
+
+### R
+
 Within R, you can call help files for any `dataRetrieval` function:
 
 ```{r}
@@ -202,7 +212,7 @@ Within R, you can call help files for any `dataRetrieval` function:
 
 ::: {.column width="50%"}
 
-Click here to open a new window:
+Click here to open a new window in RStudio:
 
 ![](images/help_file_2.png)
 
@@ -228,6 +238,18 @@ dv_data_sf <- read_waterdata_daily(
 :::
 
 ::::
+
+### Python
+
+Within Python, you can call help for any `dataretrieval` function:
+
+```{python}
+#| eval: !expr evaluate_python
+help(waterdata.get_daily)
+```
+
+:::
+
 
 ::: footer
 
@@ -408,7 +430,7 @@ We're going walk through 3 retrievals:
 
 ## Workflow 1: Daily data for known site {.smaller}
 
-Let's pull daily mean discharge data for site "USGS-0940550", getting all the data from October 10, 2024 onward.
+Let's pull daily mean discharge data for site "USGS-0940550", getting all the data from October 10, 2025 onward.
 
 ::: {.panel-tabset}
 
@@ -420,7 +442,7 @@ library(dataRetrieval)
 site <- "USGS-09405500"
 pcode <- "00060" # Discharge
 stat_cd <- "00003" # Mean
-range <- c("2024-10-01", NA)
+range <- c("2025-10-01", NA)
 
 df <- read_waterdata_daily(
   monitoring_location_id = site,
@@ -442,14 +464,14 @@ site = "USGS-09405500"
 pcode = "00060"  # Discharge
 stat_cd = "00003"  # Mean
 
-df = waterdata.get_daily(
+df, md = waterdata.get_daily(
     monitoring_location_id=site,
     parameter_code=pcode,
     statistic_id=stat_cd,
-    time="2024-10-01/..",
+    time="2025-10-01/..",
 )
 
-df[0].shape[0]
+df.shape[0]
 ```
 
 
@@ -478,6 +500,10 @@ dt_me(
 
 ## Workflow 1: Plot Daily Data 
 
+::: {.panel-tabset}
+
+### R
+
 Let's use `ggplot2` to visualize the data. 
 
 ```{r}
@@ -485,9 +511,36 @@ Let's use `ggplot2` to visualize the data.
 #| output-location: column
 library(ggplot2)
 
+theme_set(theme_bw(base_size = 24))
+update_geom_defaults("point", list(size = 3, color = "steelblue"))
+options(ggplot2.discrete.colour = "viridis")
+options(ggplot2.discrete.fill = "viridis")
+
 ggplot(data = df) +
   geom_point(aes(x = time, y = value, color = approval_status))
 ```
+
+### Python
+
+Let's use `matplotlib` to visualize the data.
+
+```{python}
+#| echo: true
+#| output-location: column
+import matplotlib.pyplot as plt
+import pandas as pd
+
+plt.rcParams["font.size"] = 20
+
+levels, categories = pd.factorize(df["approval_status"])
+
+fig, ax = plt.subplots()
+scatter = ax.scatter(x=df.time, y=df.value, c=levels)
+fig.legend(scatter.legend_elements()[0], categories, title="Status")
+```
+
+
+:::
 
 ## Water Data API Notes: Argument input 
 
@@ -550,7 +603,7 @@ The "time" argument has a few options:
 Here are a bunch of valid inputs:
 
 ```{r}
-#| code-line-numbers: "1-7|8-9|10-13|14-17"
+#| code-line-numbers: "1-9|10-11|12-15|16-19"
 # Ask for exact times:
 time = "2025-01-01"
 time = as.Date("2025-01-01")
@@ -604,20 +657,22 @@ qw_data <- read_waterdata_samples(
 ncol(qw_data)
 ```
 
+R generates a few POSIXct columns to combine date, time, timezone information.
+
 ### Python
 ```{python}
 #| eval: !expr evaluate_python
 site = "USGS-01631000"
 pcode = "00660"
 
-qw_data = waterdata.get_samples(
-    monitoringLocationIdentifier=site,
-    usgsPCode=pcode,
-    service="results",
-    profile="basicphyschem",
+qw_data, md_qw = waterdata.get_samples(
+    monitoringLocationIdentifier = site,
+    usgsPCode = pcode,
+    service = "results",
+    profile = "basicphyschem",
 )
 
-qw_data[0].shape[1]
+qw_data.shape[1]
 ```
 
 :::
@@ -676,14 +731,18 @@ dt_me(df, escape = FALSE, paging = FALSE)
 
 * We'll look at Suisun Bay a Van Sickle Island NR Pittsburg CA ("USGS-11455508"), with parameter code "99133" which is Nitrate plus Nitrite.
 
-## Workflow 3: Continuous data for known site
+## Workflow 3: Continuous data for known site {.smaller}
+
+::: {.panel-tabset}
+
+### R
 
 :::: {.columns}
 
 ::: {.column width="65%"}
 
 ```{r}
-#| results: markup
+#| eval: false
 site_id <- "USGS-11455508"
 p_code_rt <- "99133"
 start_date <- "2024-01-01"
@@ -694,40 +753,99 @@ continuous_data <- read_waterdata_continuous(
   parameter_code = p_code_rt,
   time = c(start_date, end_date)
 )
+names(continuous_data)
 ```
 
 :::
 
 ::: {.column width="35%"}
 
+```{r}
+#| results: markup
+#| echo: false
+options(width = 30)
+site_id <- "USGS-11455508"
+p_code_rt <- "99133"
+start_date <- "2024-01-01"
+end_date <- "2024-06-01"
+
+continuous_data <- read_waterdata_continuous(
+  monitoring_location_id = site_id,
+  parameter_code = p_code_rt,
+  time = c(start_date, end_date)
+)
+names(continuous_data)
 ```
- [1] "monitoring_location_id"
- [2] "parameter_code"        
- [3] "statistic_id"          
- [4] "time"                  
- [5] "value"                 
- [6] "unit_of_measure"       
- [7] "approval_status"       
- [8] "last_modified"         
- [9] "qualifier"             
-[10] "time_series_id" 
-```
+
 :::
 
 ::::
 
-```
-Requesting:
-https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&limit=50000&monitoring_location_id=USGS-11455508&parameter_code=99133&time=2024-01-01T00%3A00%3A00Z%2F2024-06-01T00%3A00%3A00Z
+### Python
+
+:::: {.columns}
+
+::: {.column width="65%"}
+
+```{python}
+#| eval: false
+site_id = "USGS-11455508"
+p_code_rt = "99133"
+date_range = "2024-01-01/2024-06-01"
+
+continuous_data, md_cont = waterdata.get_continuous(
+    monitoring_location_id=site_id, parameter_code=p_code_rt, time=date_range
+)
 ```
 
+:::
+
+::: {.column width="35%"}
+
+```{python}
+#| eval: !expr evaluate_python
+#| results: markup
+#| echo: false
+pd.set_option("display.width", 30)
+site_id = "USGS-11455508"
+p_code_rt = "99133"
+date_range = "2024-01-01/2024-06-01"
+
+continuous_data, md_cont = waterdata.get_continuous(
+    monitoring_location_id=site_id, parameter_code=p_code_rt, time=date_range
+)
+continuous_data.columns
+```
+
+:::
+
+::::
+
+:::
+
+
 ## Workflow 3: Inspect
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| output-location: column
 ggplot(data = continuous_data) +
   geom_point(aes(x = time, y = value))
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+#| output-location: column
+plt.figure()
+plt.scatter(x=continuous_data.time, y=continuous_data.value)
+```
+
+:::
 
 
 ## Data Discovery 
@@ -742,6 +860,10 @@ ggplot(data = continuous_data) +
 2. `summarize_waterdata_samples` discovers discrete data at specific monitoring locations
 
 The next slides will demo how to use those.
+
+::: footer
+
+:::
 
 ## Data Discovery: Time Series {.smaller}
 
@@ -808,11 +930,14 @@ nrow(discrete1)
 
 ## More Information {.smaller}
 
-- dataRetrieval repository:
+- dataRetrieval R repository:
   - <https://github.com/DOI-USGS/dataRetrieval>
   - [Documentation](https://doi-usgs.github.io/dataRetrieval)
   - [dataRetrieval New Features](https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html)
-  - [General Tutorial](https://rconnect.usgs.gov/NMC_dataRetrieval_1/dataRetrieval_1.html)
+
+- dataretrieval Python repository:
+  - <https://github.com/DOI-USGS/dataretrieval-python>
+  - [Documentation](https://doi-usgs.github.io/dataretrieval-python/)
 
 - Contact:
   - Computational Tools Email: comptools@usgs.gov

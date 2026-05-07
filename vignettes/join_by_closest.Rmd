@@ -46,9 +46,13 @@ pcode_uv <- "99133"
 pcode_samples <- "00631"
 start_date <- as.Date("2018-01-01")
 end_date <- as.Date("2020-01-01")
-samples_data <- readWQPqw(site_samples, pcode_samples, 
-                     startDate = start_date,
-                     endDate = end_date)
+
+samples_data <- read_waterdata_samples(
+  monitoringLocationIdentifier = site_samples,
+  usgsPCode = pcode_samples, 
+  activityStartDateUpper = end_date,
+  activityStartDateLower = start_date,
+  dataProfile = "fullphyschem")
 
 uv_data <- read_waterdata_continuous(monitoring_location_id = site_uv,
                                      parameter_code =  c(pcode_uv),
@@ -60,11 +64,11 @@ Next we'll clean up the discrete water quality data to make it easy to follow in
 
 ```{r trimsamplesdata}
 samples_trim <- samples_data |> 
-  filter(ActivityTypeCode == "Sample-Routine",
-         !is.na(ActivityStartDateTime)) |> 
-  select(samples_date = ActivityStartDateTime,
-         val_samples = ResultMeasureValue,
-         det_txt = ResultDetectionConditionText)
+  filter(Activity_TypeCode == "Sample-Routine",
+         !is.na(Activity_StartDateTime)) |> 
+  select(samples_date = Activity_StartDateTime,
+         val_samples = Result_Measure,
+         det_txt = Result_ResultDetectionCondition)
 ```
 
 ```{r showsamplestrim, echo=FALSE}

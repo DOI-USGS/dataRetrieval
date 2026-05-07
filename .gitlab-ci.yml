@@ -40,17 +40,14 @@ build-image:
   services:
   - name: ${DEVOPS_REGISTRY}usgs/docker:20-dind
     alias: docker
-  rules:
-    - changes:
-      - .gitlab-ci.yml
-      - docker/Dockerfile
-      - environment.yml
   script:
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
     - docker build 
         -f docker/Dockerfile -t ${CI_REGISTRY_IMAGE}:latest .
     - docker push --all-tags ${CI_REGISTRY_IMAGE}
+  artifacts:
+    expire_in: 5 minutes
 
 buildcheck:
   stage: check
@@ -70,7 +67,7 @@ buildcheck:
   artifacts:
     paths:
       - "*.tar.gz"
-    expire_in: 1 week
+    expire_in: 1 hour
 
 unittests:
   stage: test
@@ -91,7 +88,7 @@ unittests:
         x'
   artifacts:
     when: always
-    expire_in: 1 week
+    expire_in: 1 hour
     paths: 
       - test-out.xml
     reports:
@@ -112,6 +109,8 @@ longtest:
     - if: $RUN_LONG_TESTS == "FALSE"
       when: always
     - when: never
+  artifacts:
+    expire_in: 5 minutes
 
 pages:
   stage: end
@@ -129,18 +128,20 @@ pages:
   artifacts:
     paths:
       - $PAGES_OUTDIR
-    expire_in: 1 week
+    expire_in: 1 hour
     
 Validate Inventory:
-    stage: end
-    only: 
-      - main
-    image: ${INTERNAL_REGISTRY}software/software-management:latest
-    script:
-      - software-management review
-        --project "${CI_PROJECT_PATH}"
-        --ref "${CI_COMMIT_BRANCH}"
-        --type "provisional"
-        --token "${GIT_TOKEN_CUSTOM}"
-    tags:
-        - chs-shared
+  stage: end
+  only: 
+    - main
+  image: ${INTERNAL_REGISTRY}software/software-management:latest
+  script:
+    - software-management review
+      --project "${CI_PROJECT_PATH}"
+      --ref "${CI_COMMIT_BRANCH}"
+      --type "provisional"
+      --token "${GIT_TOKEN_CUSTOM}"
+  tags:
+      - chs-shared
+  artifacts:
+    expire_in: 5 minutes

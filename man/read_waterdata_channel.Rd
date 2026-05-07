@@ -111,8 +111,7 @@ Examples:
 
 Only features that have a \code{last_modified} that intersects the value of datetime are selected.
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{                               field_visit_id = NA_character_,
-}\if{html}{\out{</div>}}}
+field_visit_id = NA_character_,}
 
 \item{channel_measurement_type}{The channel measurement type.}
 
