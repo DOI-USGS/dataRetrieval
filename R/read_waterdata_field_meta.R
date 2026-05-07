@@ -85,7 +85,7 @@ read_waterdata_field_meta <- function(
   attach_request = getOption("dataRetrieval.attach_request")
 ) {
   service <- "field-measurements-metadata"
-  output_id <- "field_series_id"
+  output_id <- "field_measurements_series_id"
   rlang::check_dots_empty()
 
   args <- mget(names(formals()))

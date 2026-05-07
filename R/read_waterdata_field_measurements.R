@@ -20,7 +20,12 @@
 #' See also Details below for more information.
 #' @param qualifier `r get_ogc_params("field-measurements")$qualifier`
 #' @param field_visit_id `r get_ogc_params("field-measurements")$field_visit_id`
-#' @param field_measurements_series_id `r get_ogc_params("field-measurements")$field_measurements_series_id`
+#' @param field_measurements_series_id A unique identifier representing a single
+#' collection series. This corresponds to the `field_measurements_series_id` field in the
+#' `read_waterdata_field_meta` endpoint. Collection series are defined as the
+#' set of field measurements at a given monitoring location for a single parameter
+#' code using a single reading type.
+#'
 #' @param vertical_datum `r get_ogc_params("field-measurements")$vertical_datum`
 #' @param measuring_agency `r get_ogc_params("field-measurements")$measuring_agency`
 #' @param control_condition `r get_ogc_params("field-measurements")$control_condition`

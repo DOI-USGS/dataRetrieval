@@ -50,7 +50,11 @@ The default (\code{NA}) will return all columns of the data.}
 
 \item{field_visit_id}{A universally unique identifier (UUID) for the field visit. Multiple measurements may be made during a single field visit.}
 
-\item{field_measurements_series_id}{A unique identifier representing a single collection series. This corresponds to the \code{id} field in the \code{field-measurements-metadata} endpoint. Collection series are defined as the set of field measurements at a given monitoring location for a single parameter code using a single reading type.}
+\item{field_measurements_series_id}{A unique identifier representing a single
+collection series. This corresponds to the \code{field_measurements_series_id} field in the
+\code{read_waterdata_field_meta} endpoint. Collection series are defined as the
+set of field measurements at a given monitoring location for a single parameter
+code using a single reading type.}
 
 \item{approval_status}{Some of the data that you have obtained from this U.S. Geological Survey database may not have received Director's approval.  Any such data values are qualified as provisional and are subject to revision.  Provisional data are released on the condition that neither the USGS nor the United States Government may be held liable for any damages resulting from its use. This field reflects the approval status of each record, and is either "Approved", meaining processing review has been completed and the data is approved for publication, or "Provisional" and subject to revision. For more information about provisional data, go to \url{https://waterdata.usgs.gov/provisional-data-statement/}.}
 

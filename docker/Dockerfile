@@ -43,4 +43,3 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     r-cran-reticulate \
     && rm -rf /var/lib/apt/lists/* 
 
-ENV RETICULATE_PYTHON=/root/conda/envs/${CONDA_ENVIRONMENT_NAME}/bin/python

@@ -15,6 +15,8 @@ citations to possible values in read_waterdata_metadata.
 * Introduce an error if user inputs a numeric to any of the "time" arguments.
 Because it is impossible to tell if they intended Dates or POSIX, we cannot
 know for sure and therefore could add incorrect filters to the query.
+* The "id" column that comes back from read_waterdata_fiel_meta was changed to
+field_measurements_series_id to match the expectation of `read_waterdata_field_measurements`
 
 
 

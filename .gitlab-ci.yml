@@ -32,6 +32,7 @@ variables:
   PAGES_OUTDIR: "$CI_PROJECT_DIR/public"
   CUSTOM_DR_UA: "GitLab_CI"
   API_USGS_PAT: "${API_USGS_PAT}"
+  RETICULATE_PYTHON: "$CI_PROJECT_DIR/root/conda/envs/dataretrieval/bin/python"
 
 build-image:
   stage: build
