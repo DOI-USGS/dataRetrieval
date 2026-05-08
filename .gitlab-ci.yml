@@ -8,7 +8,6 @@ workflow:
 default:
   tags:
     - chs-shared
-    - dind
 
 stages:
   - build
@@ -36,9 +35,12 @@ variables:
 build-image:
   stage: build
   cache: []
-  image: ${DEVOPS_REGISTRY}usgs/docker:20
+  tags:
+    - chs-shared
+    - dind
+  image: ${DEVOPS_REGISTRY}usgs/docker:29
   services:
-  - name: ${DEVOPS_REGISTRY}usgs/docker:20-dind
+  - name: ${DEVOPS_REGISTRY}usgs/docker:29-dind
     alias: docker
   script:
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin $CI_REGISTRY
