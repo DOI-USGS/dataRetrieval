@@ -101,7 +101,7 @@
 #'   monitoring_location_id = c("USGS-02319394", "USGS-02171500")
 #' )
 #'
-#' # Request only calendary year statistics
+#' # Request only calendar year statistics
 #' x3 <- read_waterdata_stats_daterange(
 #'   monitoring_location_id = c("USGS-02319394", "USGS-02171500"),
 #'   interval_type = "CY"
