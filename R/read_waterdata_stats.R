@@ -360,8 +360,6 @@ deal_with_empty_stats <- function(
     "percentile",
     "start_date",
     "end_date",
-    "interval_type",
-    "normal_type",
     "sample_count",
     "approval_status",
     "computation_id",
