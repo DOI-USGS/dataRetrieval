@@ -39,6 +39,13 @@
 #'   supplied then statistics will be supplied for the entire period of record.
 #' @param end_date End Date Query Parameter. The logic is inclusive i.e., it will
 #'   also return records that match the date.
+#' @param normal_type Normal Type Query Parameter. If unspecified, all matching data
+#'   will be returned. Otherwise, it will filter the results to one of the following
+#'   normals: day-of-year, month-of-year. Available values: "DOY", "MOY".
+#' @param interval_type Interval Type Query Parameter. If unspecified, all matching
+#'   data will be returned. Otherwise, it will filter the results to one or more of
+#'   the following intervals: month, calendar year, water year.
+#'   Available values: "M", "CY", "WY".
 #' @param monitoring_location_id Each monitoring location has been assigned a
 #'   unique station number that places them in downstream order. Accepts
 #'   multiple values in a character vector.
@@ -69,6 +76,12 @@
 #'   monitoring_location_id = c("USGS-02319394", "USGS-02171500")
 #' )
 #'
+#' # Request only month-of-year statistics using normal_type arg
+#' x1 <- read_waterdata_stats_por(
+#'   monitoring_location_id = c("USGS-02319394", "USGS-02171500"),
+#'   normal_type = "MOY"
+#' )
+#'
 #' # Request temperature percentiles for specific month-day range
 #' # Returns:
 #' # - Day-of-year temperature percentiles for each day between June 1 through June 15.
@@ -86,6 +99,12 @@
 #' # All calendar month, calendar year, and water year statistics for two sites
 #' x3 <- read_waterdata_stats_daterange(
 #'   monitoring_location_id = c("USGS-02319394", "USGS-02171500")
+#' )
+#'
+#' # Request only calendary year statistics
+#' x3 <- read_waterdata_stats_daterange(
+#'   monitoring_location_id = c("USGS-02319394", "USGS-02171500"),
+#'   interval_type = "CY"
 #' )
 #'
 #' # Request specific gage height and discharge summaries for a limited date range
@@ -112,6 +131,7 @@ read_waterdata_stats_por <- function(
   county_code = NA_character_,
   start_date = NA_character_,
   end_date = NA_character_,
+  normal_type = NA_character_,
   monitoring_location_id = NA_character_,
   parent_time_series_id = NA_character_,
   site_type_code = NA_character_,
@@ -134,6 +154,7 @@ read_waterdata_stats_daterange <- function(
   county_code = NA_character_,
   start_date = NA_character_,
   end_date = NA_character_,
+  interval_type = NA_character_,
   monitoring_location_id = NA_character_,
   parent_time_series_id = NA_character_,
   site_type_code = NA_character_,
@@ -333,11 +354,14 @@ deal_with_empty_stats <- function(
     "parameter_code",
     "unit_of_measure",
     "parent_time_series_id",
+    "parent_statistics_id",
+    "parent_statistics_name",
     "value",
     "percentile",
     "start_date",
     "end_date",
     "interval_type",
+    "normal_type",
     "sample_count",
     "approval_status",
     "computation_id",
