@@ -734,8 +734,6 @@ qw_data <- read_waterdata_samples(
 ncol(qw_data)
 ```
 
-R generates a few POSIXct columns to combine date, time, timezone information.
-
 ### Python
 
 ```{python}
