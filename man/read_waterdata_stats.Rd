@@ -13,6 +13,7 @@ read_waterdata_stats_por(
   county_code = NA_character_,
   start_date = NA_character_,
   end_date = NA_character_,
+  normal_type = NA_character_,
   monitoring_location_id = NA_character_,
   parent_time_series_id = NA_character_,
   site_type_code = NA_character_,
@@ -29,6 +30,7 @@ read_waterdata_stats_daterange(
   county_code = NA_character_,
   start_date = NA_character_,
   end_date = NA_character_,
+  interval_type = NA_character_,
   monitoring_location_id = NA_character_,
   parent_time_series_id = NA_character_,
   site_type_code = NA_character_,
@@ -65,6 +67,10 @@ supplied then statistics will be supplied for the entire period of record.}
 \item{end_date}{End Date Query Parameter. The logic is inclusive i.e., it will
 also return records that match the date.}
 
+\item{normal_type}{Normal Type Query Parameter. If unspecified, all matching data
+will be returned. Otherwise, it will filter the results to one of the following
+normals: day-of-year, month-of-year. Available values: "DOY", "MOY".}
+
 \item{monitoring_location_id}{Each monitoring location has been assigned a
 unique station number that places them in downstream order. Accepts
 multiple values in a character vector.}
@@ -91,6 +97,11 @@ returned. All statistics within the period of record will be returned if no
 parameter code or monitoring location identifier are specified.}
 
 \item{page_size}{Return a defined number of results (default: 1000).}
+
+\item{interval_type}{Interval Type Query Parameter. If unspecified, all matching
+data will be returned. Otherwise, it will filter the results to one or more of
+the following intervals: month, calendar year, water year.
+Available values: "M", "CY", "WY".}
 }
 \description{
 This service provides endpoints for access to computations on the historical
@@ -117,6 +128,12 @@ x1 <- read_waterdata_stats_por(
   monitoring_location_id = c("USGS-02319394", "USGS-02171500")
 )
 
+# Request only month-of-year statistics using normal_type arg
+x1 <- read_waterdata_stats_por(
+  monitoring_location_id = c("USGS-02319394", "USGS-02171500"),
+  normal_type = "MOY"
+)
+
 # Request temperature percentiles for specific month-day range
 # Returns:
 # - Day-of-year temperature percentiles for each day between June 1 through June 15.
@@ -134,6 +151,12 @@ x2 <- read_waterdata_stats_por(
 # All calendar month, calendar year, and water year statistics for two sites
 x3 <- read_waterdata_stats_daterange(
   monitoring_location_id = c("USGS-02319394", "USGS-02171500")
+)
+
+# Request only calendar year statistics
+x3 <- read_waterdata_stats_daterange(
+  monitoring_location_id = c("USGS-02319394", "USGS-02171500"),
+  interval_type = "CY"
 )
 
 # Request specific gage height and discharge summaries for a limited date range
