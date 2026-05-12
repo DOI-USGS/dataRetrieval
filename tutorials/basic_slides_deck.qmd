@@ -1322,7 +1322,7 @@ ts_available <- read_waterdata_ts_meta(monitoring_location_id = "USGS-04183500")
 
 ```{python}
 #| eval: false
-#| ts_avail, ts_me = waterdata.get_time_series_metadata(
+ts_avail, ts_me = waterdata.get_time_series_metadata(
     monitoring_location_id="USGS-04183500"
 )
 ```
