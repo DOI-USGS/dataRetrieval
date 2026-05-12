@@ -17,7 +17,10 @@ Because it is impossible to tell if they intended Dates or POSIX, we cannot
 know for sure and therefore could add incorrect filters to the query.
 * The "id" column that comes back from read_waterdata_fiel_meta was changed to
 field_measurements_series_id to match the expectation of `read_waterdata_field_measurements`
-
+* New argument added to read_waterdata_stats_por: "normal_type" accepts
+"DOY" and "MOY"
+* New argument added to read_waterdata_stats_daterange: "interval_type" accepts
+"M" (month), "CY" (calendar year), and "WY" (water year).
 
 
 dataRetrieval 2.7.24
