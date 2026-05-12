@@ -201,7 +201,7 @@ or
 ```{bash}
 #| echo: true
 #| eval: false
-conda -c conda-forge install dataretrieval
+conda install conda-forge::dataretrieval
 ```
 
 Then each time you open Python, you'll need to load the library:
@@ -1321,8 +1321,10 @@ ts_available <- read_waterdata_ts_meta(monitoring_location_id = "USGS-04183500")
 ### Python
 
 ```{python}
-#| eval: !expr evaluate_python
-ts_avail, ts_me = waterdata.get_time_series_metadata(monitoring_location_id="USGS-04183500")
+#| eval: false
+#| ts_avail, ts_me = waterdata.get_time_series_metadata(
+    monitoring_location_id="USGS-04183500"
+)
 ```
 
 :::
