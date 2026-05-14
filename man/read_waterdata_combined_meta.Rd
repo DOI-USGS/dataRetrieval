@@ -343,7 +343,7 @@ sites_inst <- read_waterdata_combined_meta(
 )
 
 # parse individual thresholds lists:
-threshold_1 <- jsonlite::fromJSON(sites_inst$thresholds[1])
+threshold_1 <- jsonlite::fromJSON(sites_inst$thresholds[3])
 
 }
 \dontshow{\}) # examplesIf}
