@@ -4,7 +4,7 @@
 \alias{get_nldi_sources}
 \title{Get current NLDI offerings}
 \usage{
-get_nldi_sources(url = pkg.env$nldi_base)
+get_nldi_sources(url = getOption("dataRetrieval.nldi_base"))
 }
 \arguments{
 \item{url}{URL for NLDI sources. Default is supplied by package environment.}
