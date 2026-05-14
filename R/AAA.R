@@ -2,8 +2,8 @@ pkg.env <- new.env()
 
 .onLoad <- function(libname, pkgname) {
   suppressMessages(setAccess("public"))
-  pkg.env$nldi_base <- "https://api.water.usgs.gov/nldi/linked-data/"
   pkg.env$local_sf <- requireNamespace("sf", quietly = TRUE)
+  options("dataRetrieval.nldi_base" = "https://api.water.usgs.gov/nldi/linked-data/")
   options("dataRetrieval.api_version" = "v0")
   options("dataRetrieval.api_version_stat" = "v0")
   options("dataRetrieval.attach_request" = TRUE)
