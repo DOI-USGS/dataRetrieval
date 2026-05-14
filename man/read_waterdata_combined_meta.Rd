@@ -337,15 +337,13 @@ site_list <- read_waterdata_combined_meta(
 )
 
 # Query for instantaneous nitrate data for sites in Iowa
-ia_sites_inst <- read_waterdata_combined_meta(
-  state_name = "Iowa",
-  parameter_code = "99133",
-  statistic_id = "00011",
-  site_type = "Stream"
+sites_inst <- read_waterdata_combined_meta(
+  monitoring_location_id = "USGS-05418400",
+  parameter_code = "00065"
 )
 
-# parse individual thresholds:
-threshold_1 <- jsonlite::fromJSON(ia_sites_inst$thresholds[1])
+# parse individual thresholds lists:
+threshold_1 <- jsonlite::fromJSON(sites_inst$thresholds[1])
 
 }
 \dontshow{\}) # examplesIf}
