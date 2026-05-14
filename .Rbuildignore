@@ -73,3 +73,7 @@ vignettes/Reference_Lists.Rmd
 environment.yml
 ^\.positai$
 ^\.claude$
+requirements.txt
+^\.venv$
+.env
+
