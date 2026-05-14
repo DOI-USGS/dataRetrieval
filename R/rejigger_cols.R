@@ -71,8 +71,10 @@ cleanup_cols <- function(df, service) {
     }
   }
 
-  if ("last_modified" %in% names(df)) {
-    attr(df$last_modified, "tzone") <- "UTC"
+  for (time_period_columns in time_periods) {
+    if (time_period_columns %in% names(df)) {
+      attr(df[[time_period_columns]], "tzone") <- "UTC"
+    }
   }
 
   df

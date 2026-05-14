@@ -121,6 +121,16 @@
 #'                          monitoring_location_id = hucs$monitoring_location_id
 #' )
 #'
+#' # Query for instantaneous nitrate data for sites in Iowa
+#' ia_sites_inst <- read_waterdata_combined_meta(
+#'   state_name = "Iowa",
+#'   parameter_code = "99133",
+#'   statistic_id = "00011",
+#'   site_type = "Stream"
+#' )
+#'
+#' # parse individual thresholds:
+#' threshold_1 <- jsonlite::fromJSON(ia_sites_inst$thresholds[1])
 #'
 #' }
 read_waterdata_combined_meta <- function(
