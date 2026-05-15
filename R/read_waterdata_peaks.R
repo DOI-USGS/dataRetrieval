@@ -30,13 +30,11 @@
 #' @param allow_incomplete_dates Specifically in the peaks data, exact peak dates
 #' are not always known. Sometimes peaks are known just for the year, sometimes
 #' they are known to the year and month, and and sometimes to the exact date.
-#' This argument determines if incomplete dates + fake month/day values are
-#' allowed in the "time" column so that it can be a Date object (`TRUE`), or whether
-#' to use only the available year, month, day to get a character value (`FALSE`).
-#' Default is `FALSE`. If set to `FALSE` but all dates are
-#' complete, the "time" column will be returned as a Date object.
-#' If this argument is set to `TRUE`, fake days or months are injected into the
-#' "time" column.
+#' This argument determines if incomplete dates + uncertain month/day values are
+#' allowed in the "time" column so that it can be a complete Date object (`TRUE`),
+#' or whether to set those dates to `NA` (`FALSE`). Peaks with uncertain days
+#' are stored on the first of the month, and those with uncertain
+#' month stored on January 1. Default is `FALSE`.
 #' @inheritParams check_arguments_api
 #' @inheritParams check_arguments_non_api
 #'
@@ -55,9 +53,15 @@
 #'                monitoring_location_id = wi_peaks$monitoring_location_id[1],
 #'                parameter_code = "00060")
 #'
-#' incomplete_dates <- read_waterdata_peaks(
+#' incomplete_dates_not_allowed <- read_waterdata_peaks(
 #'                monitoring_location_id = "USGS-06334330",
 #'                parameter_code = "00060")
+#' incomplete_dates_not_allowed$time
+#' incomplete_dates_allowed <- read_waterdata_peaks(
+#'                monitoring_location_id = "USGS-06334330",
+#'                parameter_code = "00060",
+#'                allow_incomplete_dates = TRUE)
+#' incomplete_dates_allowed$time
 #'
 #' }
 read_waterdata_peaks <- function(
@@ -97,18 +101,8 @@ read_waterdata_peaks <- function(
     if (allow_incomplete_dates) {
       warning("Incomplete dates are included in time column.")
     } else {
-      parse_time <- as.character(return_list$year)
-      parse_time[!is.na(return_list$month)] <- paste(
-        parse_time[!is.na(return_list$month)],
-        zeroPad(return_list$month[!is.na(return_list$month)], 2),
-        sep = "-"
-      )
-      parse_time[!is.na(return_list$day)] <- paste(
-        parse_time[!is.na(return_list$day)],
-        zeroPad(return_list$day[!is.na(return_list$day)], 2),
-        sep = "-"
-      )
-      return_list$time <- parse_time
+      return_list$time[is.na(return_list$month)] <- NA
+      return_list$time[is.na(return_list$day)] <- NA
     }
   }
 

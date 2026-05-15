@@ -107,13 +107,11 @@ from more seldom used, optional dataRetrieval-specific arguments.}
 \item{allow_incomplete_dates}{Specifically in the peaks data, exact peak dates
 are not always known. Sometimes peaks are known just for the year, sometimes
 they are known to the year and month, and and sometimes to the exact date.
-This argument determines if incomplete dates + fake month/day values are
-allowed in the "time" column so that it can be a Date object (\code{TRUE}), or whether
-to use only the available year, month, day to get a character value (\code{FALSE}).
-Default is \code{FALSE}. If set to \code{FALSE} but all dates are
-complete, the "time" column will be returned as a Date object.
-If this argument is set to \code{TRUE}, fake days or months are injected into the
-"time" column.}
+This argument determines if incomplete dates + uncertain month/day values are
+allowed in the "time" column so that it can be a complete Date object (\code{TRUE}),
+or whether to set those dates to \code{NA} (\code{FALSE}). Peaks with uncertain days
+are stored on the first of the month, and those with uncertain
+month stored on January 1. Default is \code{FALSE}.}
 
 \item{convertType}{logical, defaults to TRUE.
 If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
@@ -175,9 +173,15 @@ dv_data_sf <- read_waterdata_peaks(
                monitoring_location_id = wi_peaks$monitoring_location_id[1],
                parameter_code = "00060")
 
-incomplete_dates <- read_waterdata_peaks(
+incomplete_dates_not_allowed <- read_waterdata_peaks(
                monitoring_location_id = "USGS-06334330",
                parameter_code = "00060")
+incomplete_dates_not_allowed$time
+incomplete_dates_allowed <- read_waterdata_peaks(
+               monitoring_location_id = "USGS-06334330",
+               parameter_code = "00060",
+               allow_incomplete_dates = TRUE)
+incomplete_dates_allowed$time
 
 }
 \dontshow{\}) # examplesIf}
