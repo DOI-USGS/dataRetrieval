@@ -121,7 +121,7 @@
 #'                          monitoring_location_id = hucs$monitoring_location_id
 #' )
 #'
-#' # Query for instantaneous nitrate data for sites in Iowa
+#' # Query for instantaneous gage height data for a site in Iowa
 #' sites_inst <- read_waterdata_combined_meta(
 #'   monitoring_location_id = "USGS-05418400",
 #'   parameter_code = "00065"
