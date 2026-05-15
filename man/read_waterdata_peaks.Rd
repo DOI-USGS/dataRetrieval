@@ -22,6 +22,7 @@ read_waterdata_peaks(
   time = NA_character_,
   bbox = NA,
   ...,
+  allow_incomplete_dates = FALSE,
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
   chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
@@ -103,6 +104,17 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 \item{...}{Not used. Included to help differentiate official Water Data API arguments
 from more seldom used, optional dataRetrieval-specific arguments.}
 
+\item{allow_incomplete_dates}{Specifically in the peaks data, exact peak dates
+are not always known. Sometimes peaks are known just for the year, sometimes
+they are known to the year and month, and and sometimes to the exact date.
+This argument determines if incomplete dates + fake month/day values are
+allowed in the "time" column so that it can be a Date object (\code{TRUE}), or whether
+to use only the available year, month, day to get a character value (\code{FALSE}).
+Default is \code{FALSE}. If set to \code{FALSE} but all dates are
+complete, the "time" column will be returned as a Date object.
+If this argument is set to \code{TRUE}, fake days or months are injected into the
+"time" column.}
+
 \item{convertType}{logical, defaults to TRUE.
 If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
 vector and reorder the returned data frame.}
@@ -161,6 +173,10 @@ wi_peaks <- read_waterdata_combined_meta(
 
 dv_data_sf <- read_waterdata_peaks(
                monitoring_location_id = wi_peaks$monitoring_location_id[1],
+               parameter_code = "00060")
+
+incomplete_dates <- read_waterdata_peaks(
+               monitoring_location_id = "USGS-06334330",
                parameter_code = "00060")
 
 }

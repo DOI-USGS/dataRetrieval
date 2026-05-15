@@ -67,16 +67,6 @@ construct_api_requests <- function(
     skipGeometry = full_list[["skipGeometry"]]
   )
 
-  time_periods <- c(
-    "last_modified",
-    "datetime",
-    "time",
-    "begin",
-    "end",
-    "begin_utc",
-    "end_utc"
-  )
-
   full_list <- switch_arg_id(
     full_list,
     id_name = output_id,
@@ -655,3 +645,14 @@ add_api_token <- function(req) {
   }
   req
 }
+
+# Treat these columns as time:
+time_periods <- c(
+  "last_modified",
+  "datetime",
+  "time",
+  "begin",
+  "end",
+  "begin_utc",
+  "end_utc"
+)

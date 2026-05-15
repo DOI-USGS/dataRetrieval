@@ -27,6 +27,16 @@
 #' `r dataRetrieval:::get_properties_for_docs("peaks", "peak_id")`.
 #' The default (`NA`) will return all columns of the data.
 #'
+#' @param allow_incomplete_dates Specifically in the peaks data, exact peak dates
+#' are not always known. Sometimes peaks are known just for the year, sometimes
+#' they are known to the year and month, and and sometimes to the exact date.
+#' This argument determines if incomplete dates + fake month/day values are
+#' allowed in the "time" column so that it can be a Date object (`TRUE`), or whether
+#' to use only the available year, month, day to get a character value (`FALSE`).
+#' Default is `FALSE`. If set to `FALSE` but all dates are
+#' complete, the "time" column will be returned as a Date object.
+#' If this argument is set to `TRUE`, fake days or months are injected into the
+#' "time" column.
 #' @inheritParams check_arguments_api
 #' @inheritParams check_arguments_non_api
 #'
@@ -43,6 +53,10 @@
 #'
 #' dv_data_sf <- read_waterdata_peaks(
 #'                monitoring_location_id = wi_peaks$monitoring_location_id[1],
+#'                parameter_code = "00060")
+#'
+#' incomplete_dates <- read_waterdata_peaks(
+#'                monitoring_location_id = "USGS-06334330",
 #'                parameter_code = "00060")
 #'
 #' }
@@ -64,6 +78,7 @@ read_waterdata_peaks <- function(
   time = NA_character_,
   bbox = NA,
   ...,
+  allow_incomplete_dates = FALSE,
   convertType = getOption("dataRetrieval.convertType"),
   no_paging = getOption("dataRetrieval.no_paging"),
   chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
@@ -75,7 +90,27 @@ read_waterdata_peaks <- function(
   rlang::check_dots_empty()
 
   args <- mget(names(formals()))
+  args[["allow_incomplete_dates"]] <- NULL
   return_list <- get_ogc_data(args, output_id, service)
+
+  if (anyNA(return_list[, c("year", "month", "day")])) {
+    if (allow_incomplete_dates) {
+      warning("Incomplete dates are included in time column.")
+    } else {
+      parse_time <- as.character(return_list$year)
+      parse_time[!is.na(return_list$month)] <- paste(
+        parse_time[!is.na(return_list$month)],
+        zeroPad(return_list$month[!is.na(return_list$month)], 2),
+        sep = "-"
+      )
+      parse_time[!is.na(return_list$day)] <- paste(
+        parse_time[!is.na(return_list$day)],
+        zeroPad(return_list$day[!is.na(return_list$day)], 2),
+        sep = "-"
+      )
+      return_list$time <- parse_time
+    }
+  }
 
   return(return_list)
 }

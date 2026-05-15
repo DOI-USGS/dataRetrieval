@@ -1,8 +1,4 @@
-FROM code.chs.usgs.gov:5001/ctek/docker/r-lang/r-base:4.5
-
-# Disable the annoying bell on WSL2
-RUN sed -i 's/^# set bell-style none$/set bell-style none/' /etc/inputrc
-RUN echo 'set visualbell' >> /root/.vimrc
+FROM code.chs.usgs.gov:5001/ctek/docker/r-lang/r-base:4.6
 
 # Change the name of this environment to something which pleases you, if you
 # so please. But the name will not be relevant for most cases, as reticulate

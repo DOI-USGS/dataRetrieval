@@ -157,7 +157,7 @@ pip install dataretrieval
 ```{bash}
 #| echo: true
 #| eval: false
-conda -c conda-forge install dataretrieval
+conda install conda-forge::dataretrieval
 ```
 
 Then each time you open Python, you'll need to load the library:
