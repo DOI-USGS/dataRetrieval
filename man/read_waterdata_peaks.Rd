@@ -104,11 +104,16 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 \item{...}{Not used. Included to help differentiate official Water Data API arguments
 from more seldom used, optional dataRetrieval-specific arguments.}
 
-\item{allow_incomplete_dates}{Logical whether to allow incomplete dates
-in the "time" column to be converted to date objects (\code{TRUE}), or whether
-to use the available year, month, day to get a character date only using
-known values (\code{FALSE}). Default is \code{FALSE}. If \code{FALSE} but all dates are
-complete the "time" column will remain a Date object.}
+\item{allow_incomplete_dates}{Specifically in the peaks data, exact peak dates
+are not always known. Sometimes peaks are known just for the year, sometimes
+they are known to the year and month, and and sometimes to the exact date.
+This argument determines if incomplete dates + fake month/day values are
+allowed in the "time" column so that it can be a Date object (\code{TRUE}), or whether
+to use only the available year, month, day to get a character value (\code{FALSE}).
+Default is \code{FALSE}. If set to \code{FALSE} but all dates are
+complete, the "time" column will be returned as a Date object.
+If this argument is set to \code{TRUE}, fake days or months are injected into the
+"time" column.}
 
 \item{convertType}{logical, defaults to TRUE.
 If \code{TRUE}, the function will convert the data to dates, any qualifiers to string

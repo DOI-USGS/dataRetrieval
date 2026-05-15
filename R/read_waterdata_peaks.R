@@ -27,11 +27,16 @@
 #' `r dataRetrieval:::get_properties_for_docs("peaks", "peak_id")`.
 #' The default (`NA`) will return all columns of the data.
 #'
-#' @param allow_incomplete_dates Logical whether to allow incomplete dates
-#' in the "time" column to be converted to date objects (`TRUE`), or whether
-#' to use the available year, month, day to get a character date only using
-#' known values (`FALSE`). Default is `FALSE`. If `FALSE` but all dates are
-#' complete the "time" column will remain a Date object.
+#' @param allow_incomplete_dates Specifically in the peaks data, exact peak dates
+#' are not always known. Sometimes peaks are known just for the year, sometimes
+#' they are known to the year and month, and and sometimes to the exact date.
+#' This argument determines if incomplete dates + fake month/day values are
+#' allowed in the "time" column so that it can be a Date object (`TRUE`), or whether
+#' to use only the available year, month, day to get a character value (`FALSE`).
+#' Default is `FALSE`. If set to `FALSE` but all dates are
+#' complete, the "time" column will be returned as a Date object.
+#' If this argument is set to `TRUE`, fake days or months are injected into the
+#' "time" column.
 #' @inheritParams check_arguments_api
 #' @inheritParams check_arguments_non_api
 #'
