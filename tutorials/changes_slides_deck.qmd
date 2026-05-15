@@ -316,7 +316,7 @@ Replaces `readNWISsite`:
 
 :::
 
-## read_waterdata_monitoring_location 
+## read_waterdata_monitoring_location {.smaller}
 
 Let's get all the monitoring locations for Dane County, Wisconsin:
 
@@ -330,7 +330,6 @@ site_info <- read_waterdata_monitoring_location(
   state_name = "Wisconsin",
   county_name = "Dane County"
 )
-nrow(site_info)
 ```
 
 ### Python
@@ -370,9 +369,13 @@ dt_me(site_info, 7, "0.6em")
 
 :::
 
-## read_waterdata_monitoring_location
+## read_waterdata_monitoring_location {.smaller}
 
 Now that we've seen the whole data set, maybe we realize in the future we can ask for just stream sites, and we only really need a few of those columns:
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| message: true
@@ -388,6 +391,25 @@ site_info_refined <- read_waterdata_monitoring_location(
   )
 )
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+site_info_refined, md = waterdata.get_monitoring_locations(
+    state_name="Wisconsin",
+    county_name="Dane County",
+    site_type="Stream",
+    properties=[
+        "monitoring_location_id",
+        "monitoring_location_name",
+        "drainage_area",
+        "geometry",
+    ],
+)
+```
+
+:::
 
 ::: footer
 
@@ -424,7 +446,7 @@ leaflet(
   addCircleMarkers(popup = ~monitoring_location_name, radius = 3, opacity = 1)
 ```
 
-## Removing `sf`
+## Removing `sf` {.smaller}
 
 * You can post-process the "geometry" column out, or convert it to lat/lon with the `sf` package:
 
