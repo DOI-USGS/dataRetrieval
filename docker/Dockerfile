@@ -28,6 +28,8 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     r-cran-data.table \
     r-cran-jsonlite \
     r-cran-readr \
+    r-cran-knitr \
+    r-cran-rmarkdown \
     && rm -rf /var/lib/apt/lists/* 
 
 ENV RETICULATE_PYTHON=/root/conda/envs/${CONDA_ENVIRONMENT_NAME}/bin/python

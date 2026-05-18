@@ -34,6 +34,10 @@ library(leaflet)
 library(DT)
 library(reticulate)
 
+theme_set(theme_bw(base_size = 24))
+update_geom_defaults("point", list(size = 3, color = "steelblue"))
+options(ggplot2.discrete.colour = "viridis")
+
 py_require("dataretrieval")
 py_require("panda")
 py_require("matplotlib")
@@ -41,7 +45,7 @@ py_require("matplotlib")
 evaluate_python <- params$run_python
 
 options(dplyr.summarise.inform = FALSE)
-theme_set(theme_grey(base_size = 24))
+theme_set(theme_grey(base_size = 20))
 update_geom_defaults("point", list(size = 3))
 
 dt_me <- function(
@@ -345,10 +349,13 @@ Use your "tab" key!
 
 ### Python
 
-![](images/autocomplete_python.png){width="70%"}
+![](images/autocomplete_python.png){width="60%"}
 
 :::
 
+::: footer
+
+:::
 
 ## read_waterdata_monitoring_location 
 
@@ -465,16 +472,34 @@ site_info_refined, md = waterdata.get_monitoring_locations(
 
 :::
 
-## Map It: ggplot2
+## Map It {.smaller}
+
+::: {.panel-tabset}
+
+### R: ggplot2
 
 "geometry" column means it's an `sf` object, and makes mapping easy!
 
 ```{r}
 #| output-location: default
 library(ggplot2)
+
 ggplot(data = site_info_refined) +
   geom_sf()
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+import matplotlib.pyplot as plt
+import geopandas as gpd
+
+site_info_refined.plot()
+
+```
+
+:::
 
 ::: footer
 
@@ -510,6 +535,10 @@ latitude <- sf::st_coordinates(site_info_refined)[, 2]
 
 * You can declare `skipGeometry=TRUE` in the query to return a plain data frame with no geometry:
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 #| eval: false
 no_sf <- read_waterdata_monitoring_location(
@@ -519,6 +548,20 @@ no_sf <- read_waterdata_monitoring_location(
   skipGeometry = TRUE
 )
 ```
+
+### Python
+
+```{python}
+#| eval: false
+no_sf, md = waterdata.get_monitoring_locations(
+  state_name = "Wisconsin",
+  county_name = "Dane County",
+  site_type = "Stream",
+  skipGeometry = True
+)
+```
+
+:::
 
 ::: footer
 
@@ -714,10 +757,6 @@ single_ts <- read_waterdata_latest_continuous(
   time_series_id = "202345d175874d2c814648ac9bea5deb"
 )
 ```
-
-::: {.callout-note}
-Nearly all arguments can be vectors.
-:::
 
 
 ::: footer
