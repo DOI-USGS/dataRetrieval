@@ -1216,7 +1216,7 @@ That's a LOT of columns that come back.
 <https://doi-usgs.github.io/dataRetrieval/articles/samples_data.html>
 :::
 
-## Discrete data censoring 
+## Discrete data censoring {.smaller}
 
 Let's pull just a few columns out and look at those:
 
@@ -1346,6 +1346,14 @@ pHData_wqx3 <- readWQPdata(
 ::: footer
 
 :::
+
+## Additional New Features:
+
+* [Daily Statistics API](https://doi-usgs.github.io/dataRetrieval/articles/daily_data_statistics.html)
+
+* Updated National Groundwater Monitoring Location Network
+
+* [HASP](https://doi-usgs.github.io/HASP/)
 
 ## More Information {.smaller}
 

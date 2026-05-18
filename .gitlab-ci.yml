@@ -53,6 +53,70 @@ build-image:
   artifacts:
     expire_in: 45 minutes
 
+# buildcheck:
+#   stage: check
+#   cache: []
+#   dependencies:
+#     - build-image
+#   script:
+#     - |
+#       Rscript -e "
+#         rcmdcheck::rcmdcheck(
+#           args = c('--no-manual', '--no-tests'),
+#           build_args = c('--no-manual', '--no-resave-data'),
+#           check_dir = '.',
+#           error_on = 'warning'
+#         )
+#       "
+#   artifacts:
+#     paths:
+#       - "*.tar.gz"
+#     expire_in: 1 hour
+
+# unittests:
+#   stage: test
+#   cache: []
+#   dependencies:
+#     - build-image
+#     - buildcheck
+#   script:
+#     - |
+#       Rscript -e '
+#         library(testthat)
+#         options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml"))
+#         test_local(reporter = "junit")'
+#     - |
+#       Rscript -e '
+#         x <- covr::package_coverage()
+#         covr::to_cobertura(x)
+#         x'
+#   artifacts:
+#     when: always
+#     expire_in: 1 hour
+#     paths: 
+#       - test-out.xml
+#     reports:
+#       junit: test-out.xml
+#       coverage_report:
+#         coverage_format: cobertura
+#         path: cobertura.xml
+#   coverage: '/Coverage: \d+.\d+\%/'
+
+# longtest:
+#   stage: test
+#   dependencies:
+#     - build-image
+#     - buildcheck
+#   script:
+#     - |
+#       Rscript -e '
+#         testthat::test_local(path = "tests/manual")'
+#   rules:
+#     - if: $RUN_LONG_TESTS == "FALSE"
+#       when: always
+#     - when: never
+#   artifacts:
+#     expire_in: 5 minutes
 
 pages:
   stage: end

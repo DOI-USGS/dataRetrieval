@@ -44,4 +44,9 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     r-cran-purrr \
     && rm -rf /var/lib/apt/lists/* 
 
+RUN set -eux; \
+    R CMD INSTALL /tmp/pkg.tar.gz && \
+    Rscript -e "suppressPackageStartupMessages(library('${CI_PROJECT_NAME}', character.only = TRUE))" && \
+    rm -f /tmp/*.tar.gz
+
 ENV RETICULATE_PYTHON=/root/conda/envs/${CONDA_ENVIRONMENT_NAME}/bin/python
