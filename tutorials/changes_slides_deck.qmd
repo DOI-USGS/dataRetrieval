@@ -214,15 +214,14 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 * [read_waterdata_metadata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_metadata.html) - Metadata 
 
+* [read_waterdata_rating](https://water.code-pages.usgs.gov/dataRetrieval/reference/read_waterdata_ratings.html) - Rating Curve Data
+
+* [read_waterdata_peaks](https://water.code-pages.usgs.gov/dataRetrieval/reference/read_waterdata_peaks.html) - Peak Data
+
 ::: footer
 
 :::
 
-## USGS Water Data OGC APIs: Current Functions (cont.)
-
-* [read_waterdata_rating](https://water.code-pages.usgs.gov/dataRetrieval/reference/read_waterdata_ratings.html) - Rating Curve Data
-
-* [read_waterdata_peaks](https://water.code-pages.usgs.gov/dataRetrieval/reference/read_waterdata_peaks.html) - Peak Data
 
 ## USGS Water Data API Token 
 
@@ -243,16 +242,9 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 2. Save it in a safe place (KeyPass or other password management tool)
 
-3. Add it to your .Renviron file as API_USGS_PAT. 
+3. Add it as environment variable
 
-4. Restart R 
-
-5. Run after restarting R:
-
-```{r}
-#| eval: false
-Sys.getenv("API_USGS_PAT")
-```
+4. Restart 
 
 See next slide for a demonstration.
 
@@ -262,7 +254,11 @@ See next slide for a demonstration.
 
 ## Water Data API Token: Example {.smaller}
 
-My favorite method to do add your token to .Renviron is to use the `usethis` package. Let's pretend the token sent you was "abc123":
+Let's pretend the token sent you was "abc123"
+
+::: {.panel-tabset}
+
+### R
 
 1. Run in R:
 ```{r}
@@ -288,16 +284,70 @@ API_USGS_PAT = "abc123"
 Sys.getenv("API_USGS_PAT")
 ```
 
+::: {.callout-note collapse="true"}
+Your .Renviorn file should never be pushed to a public repository.
+:::
+
+### Python
+
+1. Create a file in your working directory .env
+
+2. Add this line to the .env file:
+
+```
+API_USGS_PAT = "abc123"
+```
+4. Restart your python session
+
+5. Check that it worked by running (you should see your token printed in the Console):
+
+```{python}
+#| echo: true
+#| eval: false
+import os
+os.getenv("API_USGS_PAT")
+'abc123'
+```
+
+::: {.callout-note collapse="true"}
+Make sure to add .env file to .gitignore to make sure you do not accidently push it to a public repository.
+:::
+
+:::
+
+::: footer
+
+:::
+
 ## Water Data API Token: Example 
 
-![](images/save_token.png)
+::: {.panel-tabset}
+
+### R
+
+![](images/save_token.png){width="50%"}
+
+### Python
+
+![](images/save_env_token.png)
+
+:::
 
 ## Water Data APIs: Initial Tips 
 
 Use your "tab" key!
 
+::: {.panel-tabset}
+
+### R
+
 ![](images/autocomplete.png)
 
+### Python
+
+![](images/autocomplete_python.png){width="70%"}
+
+:::
 
 
 ## read_waterdata_monitoring_location 
@@ -619,7 +669,7 @@ The "time" argument has a few options:
 Here are a bunch of valid inputs:
 
 ```{r}
-#| code-line-numbers: "1-7|8-9|10-13|14-17"
+#| code-line-numbers: "1-9|10-11|12-15|16-19"
 # Ask for exact times:
 time = "2025-01-01"
 time = as.Date("2025-01-01")
