@@ -22,26 +22,7 @@ RUN conda env create -n ${CONDA_ENVIRONMENT_NAME} -f /environment.yml && conda c
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     r-cran-rcmdcheck \
     r-cran-testthat \
-    r-cran-pkgdown \
-    r-cran-rmarkdown \
-    r-cran-knitr \
-    r-cran-dt \
-    r-cran-data.table \
-    r-cran-dplyr \
-    r-cran-purrr \
-    r-cran-lubridate \
-    r-cran-tidyr \
-    r-cran-jsonlite \
-    r-cran-readr \
-    r-cran-xml2 \
-    r-cran-httr2 \
     r-cran-covr \
-    r-cran-sf \
-    r-cran-patchwork \
-    r-cran-leaflet \
-    r-cran-readxl \
-    r-cran-whisker \
-    r-cran-ggplot2 \
     r-cran-reticulate \
     && rm -rf /var/lib/apt/lists/* 
 

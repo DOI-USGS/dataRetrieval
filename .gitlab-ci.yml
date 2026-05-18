@@ -59,6 +59,7 @@ buildcheck:
   script:
     - |
       Rscript -e "
+        install.packages(c("rcmdcheck"))
         rcmdcheck::rcmdcheck(
           args = c('--no-manual', '--no-tests'),
           build_args = c('--no-manual', '--no-resave-data'),
@@ -80,6 +81,7 @@ unittests:
   script:
     - |
       Rscript -e '
+        install.packages(c("testthat", "covr"))
         library(testthat)
         options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml"))
         test_local(reporter = "junit")'
@@ -106,7 +108,10 @@ longtest:
     - build-image
     - buildcheck
   script:
-    - Rscript -e 'testthat::test_local(path = "tests/manual")'
+    - |
+      Rscript -e '
+        install.packages(c("testthat"))
+        testthat::test_local(path = "tests/manual")'
   rules:
     - if: $RUN_LONG_TESTS == "FALSE"
       when: always
@@ -122,6 +127,7 @@ pages:
   script:
     - |
       Rscript -e '
+        install.packages(c("tidyverse", "pkgdown", "readxl", "leaflet", "DT"))
         source_file <- list.files()[grep(".tar.gz", list.files())]
         install.packages(source_file, type = "source", dependencies = FALSE)
         pkgdown::build_site(override = list(destination = "public"))
