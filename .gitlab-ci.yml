@@ -53,25 +53,25 @@ build-image:
   artifacts:
     expire_in: 45 minutes
 
-# buildcheck:
-#   stage: check
-#   cache: []
-#   dependencies:
-#     - build-image
-#   script:
-#     - |
-#       Rscript -e "
-#         rcmdcheck::rcmdcheck(
-#           args = c('--no-manual', '--no-tests'),
-#           build_args = c('--no-manual', '--no-resave-data'),
-#           check_dir = '.',
-#           error_on = 'warning'
-#         )
-#       "
-#   artifacts:
-#     paths:
-#       - "*.tar.gz"
-#     expire_in: 1 hour
+buildcheck:
+  stage: check
+  cache: []
+  dependencies:
+    - build-image
+  script:
+    - |
+      Rscript -e "
+        rcmdcheck::rcmdcheck(
+          args = c('--no-manual', '--no-tests'),
+          build_args = c('--no-manual', '--no-resave-data'),
+          check_dir = '.',
+          error_on = 'warning'
+        )
+      "
+  artifacts:
+    paths:
+      - "*.tar.gz"
+    expire_in: 1 hour
 
 # unittests:
 #   stage: test
@@ -124,12 +124,10 @@ pages:
     - conda env create -n dataretrieval -f environment.yml
   dependencies:
     - build-image
-    # - buildcheck
+    - buildcheck
   script:
     - |
       Rscript -e '
-        source_file <- list.files()[grep(".tar.gz", list.files())]
-        install.packages(source_file, type = "source", dependencies = FALSE)
         pkgdown::build_site(override = list(destination = "public"))
         file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
     - quarto render
