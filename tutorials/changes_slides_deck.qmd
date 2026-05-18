@@ -744,7 +744,9 @@ time = "PT12H" # past hours
 
 ## read_waterdata_latest_continuous{.smaller}
 
-Most recent observation for each time series of continuous data. Continuous data are collected via automated sensors installed at a monitoring location. They are collected at a high frequency and often at a fixed 15-minute interval.
+Most recent observation for each time series of continuous data. 
+
+Continuous data are collected via automated sensors installed at a monitoring location. They are collected at a high frequency and often at a fixed 15-minute interval.
 
 ```{r}
 latest_uv_data <- read_waterdata_latest_continuous(
@@ -819,9 +821,9 @@ leaflet(
 ```
 
 
-## read_waterdata_latest_daily {.smaller}
+## read_waterdata_latest_daily 
 
-Most recent observation for each time series of daily data. Daily data provide one data value to represent water conditions for the day. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. 
+Most recent observation for each time series of daily data. 
 
 ```{r}
 latest_dane_county_daily <- read_waterdata_latest_daily(
@@ -877,8 +879,10 @@ this_week <- read_waterdata_continuous(
 
 Currently only allows 3 years of data to be queried at once. 
 
+More information <https://water.code-pages.usgs.gov/dataRetrieval/articles/continuous_pr.html>
+
 ::: footer
-<https://water.code-pages.usgs.gov/dataRetrieval/articles/continuous_pr.html>
+
 :::
 
 

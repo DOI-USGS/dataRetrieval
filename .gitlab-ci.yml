@@ -45,11 +45,13 @@ build-image:
   script:
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
-    - docker build 
-        -f docker/Dockerfile -t ${CI_REGISTRY_IMAGE}:latest .
+    - cd docker
+    - docker build
+        -t ${CI_REGISTRY_IMAGE}:latest
+        .
     - docker push --all-tags ${CI_REGISTRY_IMAGE}
   artifacts:
-    expire_in: 5 minutes
+    expire_in: 45 minutes
 
 buildcheck:
   stage: check
