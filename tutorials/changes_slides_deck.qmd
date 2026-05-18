@@ -1219,6 +1219,7 @@ That's a LOT of columns that come back.
 ## Discrete data censoring 
 
 Let's pull just a few columns out and look at those:
+
 ::: {.panel-tabset}
 
 ### R

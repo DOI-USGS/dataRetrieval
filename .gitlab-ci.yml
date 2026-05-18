@@ -64,7 +64,6 @@ pages:
   script:
     - |
       Rscript -e '
-        install.packages(c("tidyverse", "pkgdown", "readxl", "leaflet", "DT"))
         source_file <- list.files()[grep(".tar.gz", list.files())]
         install.packages(source_file, type = "source", dependencies = FALSE)
         pkgdown::build_site(override = list(destination = "public"))

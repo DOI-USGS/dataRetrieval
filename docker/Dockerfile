@@ -35,6 +35,13 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     r-cran-readr \
     r-cran-knitr \
     r-cran-rmarkdown \
+    r-cran-dt \
+    r-cran-leaflet \
+    r-cran-readxl \
+    r-cran-pkgdown \
+    r-cran-ggplot2 \
+    r-cran-tidyr \
+    r-cran-purrr \
     && rm -rf /var/lib/apt/lists/* 
 
 ENV RETICULATE_PYTHON=/root/conda/envs/${CONDA_ENVIRONMENT_NAME}/bin/python
