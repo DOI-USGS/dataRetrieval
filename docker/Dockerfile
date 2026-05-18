@@ -10,6 +10,9 @@ RUN apt-get update \
   wget \
   && rm -rf /var/lib/apt/lists/*
   
+ENV CONDA_DIR="/root/conda"
+ENV PATH=$CONDA_DIR/bin:$PATH
+
 RUN wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" &&  \
     bash Miniforge3.sh -b -p "${HOME}/conda" && \
     rm Miniforge3.sh
