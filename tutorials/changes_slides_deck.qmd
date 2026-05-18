@@ -960,7 +960,11 @@ leaflet(
 
 ## read_waterdata_metadata {.smaller}
 
-The function `read_waterdata_metadata` gives access to the metadata collections from the USGS Water Data API. Note these do not use the CQL syntax:
+The function `read_waterdata_metadata` gives access to the metadata collections from the USGS Water Data API.
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| eval: false
@@ -982,6 +986,35 @@ statistic_codes <- read_waterdata_metadata("statistic-codes")
 topographic_codes <- read_waterdata_metadata("topographic-codes")
 time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 ```
+
+### Python
+
+```{python}
+#| eval: false
+agency_codes, md1 = waterdata.get_reference_table("agency-codes")
+altitude_datums, md2 = waterdata.get_reference_table("altitude-datums")
+aquifer_codes, md3 = waterdata.get_reference_table("aquifer-codes")
+aquifer_types, md4 = waterdata.get_reference_table("aquifer-types")
+coordinate_accuracy_codes, md1 = waterdata.get_reference_table(
+    "coordinate-accuracy-codes"
+)
+coordinate_datum_codes, md1 = waterdata.get_reference_table("coordinate-datum-codes")
+coordinate_method_codes, md1 = waterdata.get_reference_table("coordinate-method-codes")
+huc_codes, md1 = waterdata.get_reference_table("hydrologic-unit-codes")
+national_aquifer_codes, md1 = waterdata.get_reference_table("national-aquifer-codes")
+parameter_codes, md1 = waterdata.get_reference_table("parameter-codes")
+reliability_codes, md1 = waterdata.get_reference_table("reliability-codes")
+site_types, md1 = waterdata.get_reference_tablea("site-types")
+statistic_codes, md1 = waterdata.get_reference_table("statistic-codes")
+topographic_codes, md1 = waterdata.get_reference_table("topographic-codes")
+time_zone_codes, md1 = waterdata.get_reference_table("time-zone-codes")
+```
+
+:::
+
+::: footer
+
+:::
 
 ## General New Features of Water Data OGC APIs {.smaller}
 
