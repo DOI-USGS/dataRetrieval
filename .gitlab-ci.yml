@@ -122,9 +122,8 @@ pages:
     - build-image
     - buildcheck
   script:
-    - |
-      'conda env create -n dataretrieval -f environment.yml
-       conda clean -a -y'
+    - conda env create -n dataretrieval -f environment.yml
+    - conda clean -a -y
     - |
       Rscript -e '
         install.packages(c("tidyverse", "pkgdown", "readxl", "leaflet", "DT"))

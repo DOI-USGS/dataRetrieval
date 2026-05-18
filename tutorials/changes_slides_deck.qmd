@@ -578,6 +578,7 @@ site_ts <- read_waterdata_combined_meta(
 )
 ```
 
+
 ::: footer
 
 :::
@@ -952,32 +953,6 @@ leaflet(
   )
 ```
 
-## read_waterdata HUCs
-
-Let's find a list of sites with HUCs that fall within 02070010. Use the wildcard `%`
-
-```{r}
-# Here's how to get
-cql_huc_wildcard <- '{
-"op": "like",
-"args": [
-  { "property": "hydrologic_unit_code" },
-  "02070010%"
-]
-}'
-
-what_huc_sites <- read_waterdata(
-  service = "monitoring-locations",
-  CQL = cql_huc_wildcard
-)
-```
-
-## read_waterdata HUCs
-
-```{r}
-unique(what_huc_sites$hydrologic_unit_code)
-```
-
 
 ## read_waterdata_metadata {.smaller}
 
@@ -1031,17 +1006,8 @@ time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 
   - There is a character limit to how big your query can be
   
-  - Possible alternatives to large site lists are bounding box queries, or loops/applys/etc to chunk up the request
+  - `dataRetrieval` v2.7.25 will automatically chunk up requests of long lists of monitoring_location_id.
   
-  - Need to balance the character size of the request with the requests per hour limit.
-
-## Limit Explanation
-
-  - `limit` lets you define how many rows are returned **per page** of data. With a good internet connection, you can probably get away with ignoring this argument.
-
-  - Leaving the `limit` argument to the default will return 50,000 rows per page.
-
-  - `no_paging` argument (`TRUE`/`FALSE`) will only return 1 page of data, therefore the `limit` argument will define how many rows are returned.
 
 ## Adding API token to CI jobs: GitLab
 
@@ -1122,8 +1088,6 @@ OR
 
 Replaces `readNWISqw`
 
-`read_waterdata_samples` is the **SAME** as `read_USGS_samples`, but going forward we want to use waterdata for consistent branding.
-
 ![](images/read_samples.png)
 
 ::: footer
@@ -1174,6 +1138,10 @@ dt_me(df, escape = FALSE, paging = FALSE)
 
 ## read_waterdata_samples
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 site <- "USGS-01631000"
 pcode <- "00660"
@@ -1187,6 +1155,24 @@ qw_data <- read_waterdata_samples(
 ncol(qw_data)
 ```
 
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+site = "USGS-01631000"
+pcode = "00660"
+
+qw_data, md = waterdata.get_samples(
+    monitoringLocationIdentifier=site,
+    usgsPCode=pcode,
+    service="results",
+    profile="basicphyschem",
+)
+qw_data.shape[1]
+```
+
+:::
+
 That's a LOT of columns that come back. 
 
 ::: footer
@@ -1196,6 +1182,9 @@ That's a LOT of columns that come back.
 ## Discrete data censoring 
 
 Let's pull just a few columns out and look at those:
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 library(dplyr)
@@ -1205,15 +1194,46 @@ qw_data_slim <- qw_data |>
     Date = Activity_StartDate,
     Result_Measure,
     DL_cond = Result_ResultDetectionCondition,
-    DL_val_A = DetectionLimit_MeasureA,
-    DL_type_A = DetectionLimit_TypeA
+    DL_val = DetectionLimit_MeasureA,
+    DL_type = DetectionLimit_TypeA
   ) |>
   mutate(
-    Result = if_else(!is.na(DL_cond), DL_val_A, Result_Measure),
+    Result = if_else(!is.na(DL_cond), DL_val, Result_Measure),
     Detected = if_else(!is.na(DL_cond), "Not Detected", "Detected")
   ) |>
   arrange(Detected)
 ```
+
+* What is `|>`? It's a pipe! It says take 'this thing' and put it in 'that thing'. You'll also see `%>%` in code, it is also a pipe - they are basically the same. 
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+import numpy as np
+
+qw_data_slim = (
+    qw_data.rename(
+        columns={
+            "Activity_StartDate": "Date",
+            "Result_ResultDetectionCondition": "DL_cond",
+            "DetectionLimit_MeasureA": "DL_val",
+            "DetectionLimit_TypeA": "DL_type",
+        }
+    )[["Date", "Result_Measure", "DL_cond", "DL_val", "DL_type"]]
+    .assign(
+        Result=lambda x: np.where(
+            x["DL_cond"].notna(), x["DL_val"], x["Result_Measure"]
+        )
+    )
+    .assign(
+        Detected=lambda x: np.where(x["DL_cond"].notna(), "Not Detected", "Detected")
+    )
+    .sort_values(by="Detected", ascending=False)
+)
+```
+
+:::
 
 ::: footer
 
