@@ -472,13 +472,12 @@ site_info_refined, md = waterdata.get_monitoring_locations(
 
 :::
 
-## Map It {.smaller}
+## Map It with geometry {.smaller}
 
 ::: {.panel-tabset}
 
 ### R: ggplot2
 
-"geometry" column means it's an `sf` object, and makes mapping easy!
 
 ```{r}
 #| output-location: default
@@ -554,10 +553,10 @@ no_sf <- read_waterdata_monitoring_location(
 ```{python}
 #| eval: false
 no_sf, md = waterdata.get_monitoring_locations(
-  state_name = "Wisconsin",
-  county_name = "Dane County",
-  site_type = "Stream",
-  skipGeometry = True
+    state_name="Wisconsin",
+    county_name="Dane County",
+    site_type="Stream",
+    skip_geometry=True,
 )
 ```
 
