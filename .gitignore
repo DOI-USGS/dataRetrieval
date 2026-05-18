@@ -19,4 +19,4 @@ vignettes/*.R
 **/*.quarto_ipynb
 .positai
 /.venv/
-/.env/
+.env

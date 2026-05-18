@@ -59,6 +59,8 @@ buildcheck:
   script:
     - |
       Rscript -e "
+        remotes::install_deps(upgrade = 'always',
+                              dependencies = TRUE)
         rcmdcheck::rcmdcheck(
           args = c('--no-manual', '--no-tests'),
           build_args = c('--no-manual', '--no-resave-data'),
