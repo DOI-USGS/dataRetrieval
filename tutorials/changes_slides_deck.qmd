@@ -34,7 +34,7 @@ library(leaflet)
 library(DT)
 library(reticulate)
 
-theme_set(theme_bw(base_size = 24))
+theme_set(theme_bw(base_size = 20))
 update_geom_defaults("point", list(size = 3, color = "steelblue"))
 options(ggplot2.discrete.colour = "viridis")
 
@@ -487,7 +487,7 @@ ggplot(data = site_info_refined) +
   geom_sf()
 ```
 
-### Python
+### Python: matplotlib
 
 ```{python}
 #| eval: !expr evaluate_python
@@ -748,7 +748,7 @@ Most recent observation for each time series of continuous data. Continuous data
 ```{r}
 latest_uv_data <- read_waterdata_latest_continuous(
   monitoring_location_id = "USGS-01491000",
-  parameter_code = "00060"
+  parameter_code = "00060",
 )
 
 latest_dane_county <- read_waterdata_latest_continuous(
@@ -825,7 +825,8 @@ Most recent observation for each time series of daily data. Daily data provide o
 ```{r}
 latest_dane_county_daily <- read_waterdata_latest_daily(
   bbox = sf::st_bbox(site_info),
-  parameter_code = "00060"
+  parameter_code = "00060",
+  time = "P14D"
 )
 ```
 
@@ -876,7 +877,7 @@ this_week <- read_waterdata_continuous(
 Currently only allows 3 years of data to be queried at once. 
 
 ::: footer
-
+<https://water.code-pages.usgs.gov/dataRetrieval/articles/continuous_pr.html>
 :::
 
 
