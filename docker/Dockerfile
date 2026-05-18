@@ -1,5 +1,10 @@
 FROM code.chs.usgs.gov:5001/ctek/docker/r-lang/r-base:4.6
 
+# Change the name of this environment to something which pleases you, if you
+# so please. But the name will not be relevant for most cases, as reticulate
+# will be pointed to the environment no matter what it is named.
+ARG CONDA_ENVIRONMENT_NAME=dataretrieval
+
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
   wget \
