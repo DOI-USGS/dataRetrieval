@@ -25,6 +25,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     r-cran-xml2 \
     r-cran-httr2 \
     r-cran-whisker \
+    r-cran-dplyr \
     r-cran-sf \
     r-cran-data.table \
     r-cran-jsonlite \

@@ -45,7 +45,7 @@ py_require("matplotlib")
 evaluate_python <- params$run_python
 
 options(dplyr.summarise.inform = FALSE)
-theme_set(theme_grey(base_size = 20))
+theme_set(theme_bw(base_size = 20))
 update_geom_defaults("point", list(size = 3))
 
 dt_me <- function(
@@ -566,14 +566,14 @@ no_sf, md = waterdata.get_monitoring_locations(
 
 :::
 
-## read_waterdata_ts_meta
+## read_waterdata_combined_meta
 
-Time-Series Metadata. *Kind of* replaces `whatNWISdata`:
+Combined Time-Series Metadata. *Kind of* replaces `whatNWISdata`:
 
 ![](images/read_ts_meta.png)
 
 ```{r}
-site_ts <- read_waterdata_ts_meta(
+site_ts <- read_waterdata_combined_meta(
   monitoring_location_id = "USGS-02238500"
 )
 ```
@@ -582,7 +582,7 @@ site_ts <- read_waterdata_ts_meta(
 
 :::
 
-## read_waterdata_ts_meta {.smaller .scrollable}
+## read_waterdata_combined_meta {.smaller .scrollable}
 
 ```{r}
 #| echo: false
@@ -590,11 +590,14 @@ dt_me(
   site_ts |>
     sf::st_drop_geometry() |>
     select(
-      -web_description,
-      -parameter_description,
-      -monitoring_location_id,
-      -thresholds,
-      -computation_identifier
+      monitoring_location_id,
+      parameter_code,
+      statistic_id,
+      last_modified,
+      begin,
+      end,
+      data_type,
+      combined_meta_id
     ),
   6,
   "0.7em"
@@ -605,29 +608,30 @@ dt_me(
 
 :::
 
-## read_waterdata_ts_meta
+## read_waterdata_combined_meta {.smaller}
 
 Let's get all the time series in Dane County, WI with daily mean (statistic_id = "00003") discharge (parameter code = "00060) or temperature (parameter code = "00010):
 
 ```{r}
-sites_available <- read_waterdata_ts_meta(
-  bbox = sf::st_bbox(site_info),
+sites_available <- read_waterdata_combined_meta(
+  state_name = "Wisconsin",
+  county_name = "Dane County",
   parameter_code = c("00060", "00010"),
   statistic_id = c("00003")
 )
 ```
 
 ::: {.callout-tip}
-Geographic filters are limited to monitoring_location_id and bbox in "waterdata" functions *other* than `read_waterdata_monitoring_location`.
+Geographic filters are limited to monitoring_location_id and bbox in "waterdata" functions *other* than `read_waterdata_monitoring_location` and `read_waterdata_combined_meta`.
 
 Using `sf::st_bbox()` is a convenient way to take advantage of the spatial features integration.
 :::
 
 ::: footer
-<https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_ts_meta.html>
+
 :::
 
-## read_waterdata_ts_meta {.smaller .scrollable}
+## read_waterdata_combined_meta {.smaller .scrollable}
 
 ```{r}
 #| echo: false
