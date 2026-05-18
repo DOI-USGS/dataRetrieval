@@ -126,6 +126,9 @@ pages:
     - buildcheck
   script:
     - |
+      'conda env create -n dataretrieval -f /environment.yml &&
+       conda clean -a -y'
+    - |
       Rscript -e '
         install.packages(c("tidyverse", "pkgdown", "readxl", "leaflet", "DT"))
         source_file <- list.files()[grep(".tar.gz", list.files())]

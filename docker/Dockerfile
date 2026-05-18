@@ -1,10 +1,5 @@
 FROM code.chs.usgs.gov:5001/ctek/docker/r-lang/r-base:4.6
 
-# Change the name of this environment to something which pleases you, if you
-# so please. But the name will not be relevant for most cases, as reticulate
-# will be pointed to the environment no matter what it is named.
-ARG CONDA_ENVIRONMENT_NAME=dataretrieval
-
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
   wget \
@@ -13,10 +8,6 @@ RUN apt-get update \
 RUN wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" &&  \
     bash Miniforge3.sh -b -p "${HOME}/conda" && \
     rm Miniforge3.sh
-ENV CONDA_DIR="/root/conda"
-ENV PATH=$CONDA_DIR/bin:$PATH
-COPY environment.yml /
-RUN conda env create -n ${CONDA_ENVIRONMENT_NAME} -f /environment.yml && conda clean -a -y
 
 # Necessary R libraries
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
