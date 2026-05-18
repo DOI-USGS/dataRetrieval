@@ -123,7 +123,7 @@ pages:
     - buildcheck
   script:
     - |
-      'conda env create -n dataretrieval -f environment.yml && \
+      'conda env create -n dataretrieval -f environment.yml
        conda clean -a -y'
     - |
       Rscript -e '
