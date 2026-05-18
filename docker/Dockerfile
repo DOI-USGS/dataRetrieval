@@ -20,7 +20,14 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     r-cran-testthat \
     r-cran-covr \
     r-cran-reticulate \
-    r-cran-remotes \
+    r-cran-curl \
+    r-cran-lubridate \
+    r-cran-xml2 \
+    r-cran-httr2 \
+    r-cran-sf \
+    r-cran-data.table \
+    r-cran-jsonlite \
+    r-cran-readr \
     && rm -rf /var/lib/apt/lists/* 
 
 ENV RETICULATE_PYTHON=/root/conda/envs/${CONDA_ENVIRONMENT_NAME}/bin/python
