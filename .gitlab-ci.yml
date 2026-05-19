@@ -1,5 +1,3 @@
-image: ${CI_REGISTRY_IMAGE}:latest
-
 workflow:
   rules:
     - if: $CI_COMMIT_TAG
@@ -10,6 +8,7 @@ default:
     - chs-shared
 
 stages:
+  - build-package
   - build
   - check
   # - test
@@ -31,6 +30,17 @@ variables:
   PAGES_OUTDIR: "$CI_PROJECT_DIR/public"
   CUSTOM_DR_UA: "GitLab_CI"
   API_USGS_PAT: "${API_USGS_PAT}"
+
+build-package:
+  stage: build-package
+  image: code.chs.usgs.gov:5001/ctek/docker/r-lang/r-base:4.6
+  script:
+    - set -euo pipefail
+    - R CMD build .
+  artifacts:
+    paths:
+      - "*.tar.gz"
+    expire_in: 1 day
 
 build-image:
   stage: build
@@ -54,6 +64,7 @@ build-image:
     expire_in: 45 minutes
 
 buildcheck:
+  image: ${CI_REGISTRY_IMAGE}:latest
   stage: check
   cache: []
   dependencies:
@@ -119,6 +130,7 @@ buildcheck:
 #     expire_in: 5 minutes
 
 pages:
+  image: ${CI_REGISTRY_IMAGE}:latest
   stage: end
   before_script:
     - conda env create -n dataretrieval -f environment.yml
@@ -126,6 +138,7 @@ pages:
     - build-image
     - buildcheck
   script:
+    - 
     - |
       Rscript -e '
         source_file <- list.files()[grep(".tar.gz", list.files())]

@@ -5,6 +5,8 @@ FROM code.chs.usgs.gov:5001/ctek/docker/r-lang/r-base:4.6
 # will be pointed to the environment no matter what it is named.
 ARG CONDA_ENVIRONMENT_NAME=dataretrieval
 
+COPY *.tar.gz /tmp/pkg.tar.gz
+
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
   wget \
@@ -45,3 +47,8 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     && rm -rf /var/lib/apt/lists/* 
 
 ENV RETICULATE_PYTHON=/root/conda/envs/${CONDA_ENVIRONMENT_NAME}/bin/python
+
+RUN set -eux; \
+    R CMD INSTALL /tmp/pkg.tar.gz && \
+    Rscript -e "suppressPackageStartupMessages(library('${CI_PROJECT_NAME}', character.only = TRUE))" && \
+    rm -f /tmp/*.tar.gz
