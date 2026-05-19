@@ -1351,7 +1351,7 @@ pHData_wqx3 <- readWQPdata(
 
 * [Daily Statistics API](https://doi-usgs.github.io/dataRetrieval/articles/daily_data_statistics.html)
 
-* Updated National Groundwater Monitoring Location Network
+* [Updated National Groundwater Monitoring Location Network](https://api.waterdata.usgs.gov/ngwmn/ogcapi/collections)
 
 * [HASP](https://doi-usgs.github.io/HASP/)
 
