@@ -33,5 +33,4 @@ dependencies:
   - xz-gpl-tools=5.8.1=hbcc6ac9_2
   - xz-tools=5.8.1=hb9d3cd8_2
   - dataretrieval
-  - geopandas
 prefix: /home/user/miniforge3/envs/dataretrieval
