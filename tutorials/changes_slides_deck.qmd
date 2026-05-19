@@ -1236,7 +1236,7 @@ qw_data_slim <- qw_data |>
     DL_type = DetectionLimit_TypeA
   ) |>
   mutate(
-    Result = if_else(!is.na(DL_cond), DL_val, Result_Measure),
+    nwis_value = if_else(!is.na(DL_cond), DL_val, Result_Measure),
     Detected = if_else(!is.na(DL_cond), "Not Detected", "Detected")
   ) |>
   arrange(Detected)
@@ -1260,7 +1260,7 @@ qw_data_slim = (
         }
     )[["Date", "Result_Measure", "DL_cond", "DL_val", "DL_type"]]
     .assign(
-        Result=lambda x: np.where(
+        nwis_value=lambda x: np.where(
             x["DL_cond"].notna(), x["DL_val"], x["Result_Measure"]
         )
     )
