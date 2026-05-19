@@ -48,6 +48,7 @@ ENV RETICULATE_PYTHON=/root/conda/envs/${CONDA_ENVIRONMENT_NAME}/bin/python
 
 COPY *.tar.gz /tmp/pkg.tar.gz
 
-RUN R CMD INSTALL /tmp/pkg.tar.gz && \
+RUN set -eux; \
+    R CMD INSTALL /tmp/pkg.tar.gz && \
     Rscript -e "suppressPackageStartupMessages(library('${CI_PROJECT_NAME}', character.only = TRUE))" && \
     rm -f /tmp/*.tar.gz
