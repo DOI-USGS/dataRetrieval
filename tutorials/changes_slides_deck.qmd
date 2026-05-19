@@ -1236,8 +1236,8 @@ qw_data_slim <- qw_data |>
     DL_type = DetectionLimit_TypeA
   ) |>
   mutate(
-    nwis_value = if_else(!is.na(DL_cond), DL_val, Result_Measure),
-    Detected = if_else(!is.na(DL_cond), "Not Detected", "Detected")
+    nwis_value = if_else(DL_cond == "", DL_val, Result_Measure),
+    Detected = if_else(DL_cond == "", "Not Detected", "Detected")
   ) |>
   arrange(Detected)
 ```

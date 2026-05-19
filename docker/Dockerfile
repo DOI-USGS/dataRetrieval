@@ -50,5 +50,5 @@ COPY *.tar.gz /tmp/pkg.tar.gz
 
 RUN set -eux; \
     R CMD INSTALL /tmp/pkg.tar.gz && \
-    Rscript -e "suppressPackageStartupMessages(library('${CI_PROJECT_NAME}', character.only = TRUE))" && \
+    Rscript -e "library(dataRetrieval)" && \
     rm -f /tmp/*.tar.gz
