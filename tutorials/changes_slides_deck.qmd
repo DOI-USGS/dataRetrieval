@@ -490,7 +490,7 @@ ggplot(data = site_info_refined) +
 ### Python: matplotlib
 
 ```{python}
-#| eval: !expr evaluate_python
+#| eval: false
 import matplotlib.pyplot as plt
 import geopandas as gpd
 
