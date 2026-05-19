@@ -128,6 +128,8 @@ pages:
   script:
     - |
       Rscript -e '
+        source_file <- list.files()[grep(".tar.gz", list.files())]
+        install.packages(source_file, type = "source", dependencies = FALSE)
         pkgdown::build_site(override = list(destination = "public"))
         file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
     - quarto render
