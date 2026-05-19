@@ -33,7 +33,7 @@ variables:
 
 build-package:
   stage: build-package
-  image: code.chs.usgs.gov:5001/ctek/docker/r-lang/r-base:4.6
+  image: ${CI_REGISTRY_IMAGE}:latest
   script:
     - set -euo pipefail
     - R CMD build .
