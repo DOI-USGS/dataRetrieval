@@ -11,7 +11,7 @@ stages:
   - build-package
   - build
   - check
-  # - test
+  - test
   - end
   - deploy
 
@@ -88,6 +88,7 @@ buildcheck:
 # unittests:
 #   stage: test
 #   cache: []
+#   image: ${CI_REGISTRY_IMAGE}:latest
 #   dependencies:
 #     - build-image
 #     - buildcheck
@@ -114,21 +115,22 @@ buildcheck:
 #         path: cobertura.xml
 #   coverage: '/Coverage: \d+.\d+\%/'
 
-# longtest:
-#   stage: test
-#   dependencies:
-#     - build-image
-#     - buildcheck
-#   script:
-#     - |
-#       Rscript -e '
-#         testthat::test_local(path = "tests/manual")'
-#   rules:
-#     - if: $RUN_LONG_TESTS == "FALSE"
-#       when: always
-#     - when: never
-#   artifacts:
-#     expire_in: 5 minutes
+longtest:
+  stage: test
+  image: ${CI_REGISTRY_IMAGE}:latest
+  dependencies:
+    - build-image
+    - buildcheck
+  script:
+    - |
+      Rscript -e '
+        testthat::test_local(path = "tests/manual")'
+  rules:
+    - if: $RUN_LONG_TESTS == "FALSE"
+      when: always
+    - when: never
+  artifacts:
+    expire_in: 5 minutes
 
 pages:
   image: ${CI_REGISTRY_IMAGE}:latest
