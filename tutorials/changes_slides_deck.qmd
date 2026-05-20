@@ -41,6 +41,7 @@ options(ggplot2.discrete.colour = "viridis")
 py_require("dataretrieval")
 py_require("panda")
 py_require("matplotlib")
+py_require("geopandas")
 
 evaluate_python <- params$run_python
 
@@ -490,7 +491,7 @@ ggplot(data = site_info_refined) +
 ### Python: matplotlib
 
 ```{python}
-#| eval: false
+#| eval: !expr evaluate_python
 import matplotlib.pyplot as plt
 import geopandas as gpd
 
