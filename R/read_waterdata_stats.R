@@ -224,8 +224,12 @@ get_statistics_data <- function(args, service) {
 
     # 2. One row per observation, keyed to ts_id
     obs <- data.table::rbindlist(ts_meta$values, fill = TRUE, idcol = "ts_id")
-
-    obs <- cleanup_cols_stats(obs)
+    # Some stats responses contain 0 values, which need to be treated differently
+    if (nrow(obs) > 0) {
+      obs <- cleanup_cols_stats(obs)
+    } else {
+      obs <- data.table::data.table(ts_id = unique(ts_meta$ts_id))
+    }
 
     # 3. Drop nested list column
     ts_meta[, values := NULL]
@@ -241,7 +245,11 @@ get_statistics_data <- function(args, service) {
     combined_list[[i]] <- out
   }
 
-  combined <- data.table::rbindlist(combined_list, use.names = TRUE)
+  combined <- data.table::rbindlist(
+    combined_list,
+    use.names = TRUE,
+    fill = TRUE # needed if any response has 0 values
+  )
   combined <- combined[return_list, on = "rid"]
   combined[, rid := NULL]
 
@@ -387,7 +395,11 @@ deal_with_empty_stats <- function(
   }
 
   # ensure geometry column exists if not skipped
-  return_list <- sf::st_as_sf(return_list, geometry = sf::st_sfc())
+  return_list <- sf::st_as_sf(
+    return_list,
+    geometry = sf::st_sfc(),
+    crs = sf::st_crs("EPSG:4326")
+  )
 
   return(return_list)
 }
