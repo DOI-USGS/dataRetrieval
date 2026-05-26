@@ -27,7 +27,9 @@ find_good_names <- function(input, type) {
       "sourceName",
       "identifier",
       "comid",
-      names(input)[names(input) %in% c("name", "reachcode", "measure")]
+      names(input)[
+        names(input) %in% c("name", "reachcode", "measure", "mainstem")
+      ]
     )
   } else {
     NULL
@@ -44,7 +46,7 @@ find_good_names <- function(input, type) {
 #' \donttest{
 #' get_nldi_sources()
 #' }
-get_nldi_sources <- function(url = pkg.env$nldi_base) {
+get_nldi_sources <- function(url = getOption("dataRetrieval.nldi_base")) {
   res <- httr2::request(url)
   res <- httr2::req_user_agent(res, default_ua())
   res <- httr2::req_error(res, is_error = \(x) FALSE)
@@ -357,7 +359,7 @@ findNLDI <- function(
 
     # Must convert location to COMID for tracing and discovery ...
     tmp_url <- paste0(
-      pkg.env$nldi_base,
+      getOption("dataRetrieval.nldi_base"),
       "comid/position?f=json&coords=POINT%28",
       location[1],
       "%20",
@@ -374,8 +376,15 @@ findNLDI <- function(
   # Reset (if needed)
   start_type <- names(starter)
 
-  if (is.null(pkg.env$current_nldi)) {
+  if (
+    is.null(pkg.env$current_nldi) ||
+      !identical(
+        pkg.env$current_nldi_base,
+        getOption("dataRetrieval.nldi_base")
+      )
+  ) {
     pkg.env$current_nldi <- get_nldi_sources()
+    pkg.env$current_nldi_base <- getOption("dataRetrieval.nldi_base")
   }
 
   # Defining the origin URL.

@@ -15,12 +15,15 @@ title-slide-attributes:
   data-background-size: 15%
   data-background-position: 2% 2%
 editor: source
+engine: knitr
 editor_options: 
   chunk_output_type: console
 execute:
   echo: true
   warning: false
   message: false
+params:
+  run_python: true
 ---
 
 ```{r}
@@ -29,30 +32,43 @@ execute:
 # library(dataRetrieval)
 library(ggplot2)
 library(dplyr)
+library(reticulate)
+py_require("dataretrieval")
+py_require("panda")
+py_require("matplotlib")
 options(dplyr.summarise.inform = FALSE)
 
-dt_me <- function(x, 
-                  page_length = 8, 
-                  paging = TRUE,
-                  font = "0.7em", 
-                  escape = TRUE){
-  DT::datatable(x,
-              rownames = FALSE,
-              options = list(pageLength = page_length, 
-                             info = FALSE,
-                             searching = FALSE,
-                             paging = paging,
-                             lengthChange = FALSE,
-                             initComplete = htmlwidgets::JS(
-          "function(settings, json) {",
-          paste0("$(this.api().table().container()).css({'font-size': '", 
-                 font, "'});"),
-          "}")), escape = escape)
+evaluate_python <- params$run_python
+
+dt_me <- function(
+  x,
+  page_length = 8,
+  paging = TRUE,
+  font = "0.7em",
+  escape = TRUE
+) {
+  DT::datatable(
+    x,
+    rownames = FALSE,
+    options = list(
+      pageLength = page_length,
+      info = FALSE,
+      searching = FALSE,
+      paging = paging,
+      lengthChange = FALSE,
+      initComplete = htmlwidgets::JS(
+        "function(settings, json) {",
+        paste0(
+          "$(this.api().table().container()).css({'font-size': '",
+          font,
+          "'});"
+        ),
+        "}"
+      )
+    ),
+    escape = escape
+  )
 }
-
-theme_set(theme_grey(base_size = 24))
-update_geom_defaults("point", list(size = 3)) 
-
 ```
 
 
@@ -151,13 +167,16 @@ Go to Tools -> Global Options -> Appearances to change style.
 
 ## Installation
 
+::: {.panel-tabset}
+
+### R
+
 `dataRetrieval` is available on the Comprehensive R Archive Network (CRAN) repository. To install `dataRetrieval` on your computer, open RStudio and run this line of code in the Console:
 
 ```{r}
 #| echo: true
 #| eval: false
 install.packages("dataRetrieval")
-
 ```
 
 Then each time you open R, you'll need to load the library:
@@ -166,6 +185,33 @@ Then each time you open R, you'll need to load the library:
 #| message: true
 library(dataRetrieval)
 ```
+
+### Python
+
+Whether you are a user or developer we recommend installing `dataretrieval` in a virtual environment. This can be done using something like virtualenv or conda. 
+
+```{bash}
+#| echo: true
+#| eval: false
+pip install dataretrieval
+```
+
+or
+
+```{bash}
+#| echo: true
+#| eval: false
+conda install conda-forge::dataretrieval
+```
+
+Then each time you open Python, you'll need to load the library:
+
+```{python}
+#| eval: !expr evaluate_python
+from dataretrieval import waterdata
+```
+
+:::
 
 ::: footer
 
@@ -194,19 +240,23 @@ library(dataRetrieval)
 
 ## Documentation within R: function help pages {.smaller}
 
+::: {.panel-tabset}
+
+### R
+
 Within R, you can call help files for any `dataRetrieval` function:
 
 ```{r}
 #| echo: true
 #| eval: false
-?readWQPdata
+?read_waterdata_daily
 ```
 
 :::: {.columns}
 
 ::: {.column width="50%"}
 
-Click here to open a new window:
+Click here to open a new window in RStudio:
 
 ![](images/help_file_2.png)
 
@@ -221,19 +271,29 @@ Examples
 
 ```{r}
 #| eval: false
-# Legacy:
-nameToUse <- "pH"
-pHData <- readWQPdata(siteid = "USGS-04024315", 
-                      characteristicName = nameToUse)
-ncol(pHData)
-attr(pHData, "siteInfo")
-attr(pHData, "queryTime")
-attr(pHData, "url")
+site <- "USGS-02238500"
+dv_data_sf <- read_waterdata_daily(
+  monitoring_location_id = site,
+  parameter_code = "00060",
+  time = c("2021-01-01", "2022-01-01")
+)
 ```
 
 :::
 
 ::::
+
+### Python
+
+Within Python, you can call help for any `dataretrieval` function:
+
+```{python}
+#| eval: !expr evaluate_python
+help(waterdata.get_daily)
+```
+
+:::
+
 
 ::: footer
 
@@ -447,9 +507,13 @@ We're going walk through 3 retrievals:
 
 :::
 
-## Workflow 1: Daily data for known site
+## Workflow 1: Daily data for known site {.smaller}
 
-Let's pull daily mean discharge data for site "USGS-0940550", getting all the data from October 10, 2024 onward.
+Let's pull daily mean discharge data for site "USGS-0940550", getting all the data from the last year.
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| message: true
@@ -457,14 +521,37 @@ library(dataRetrieval)
 site <- "USGS-09405500"
 pcode <- "00060" # Discharge
 stat_cd <- "00003" # Mean
-range <- c("2024-10-01", NA)
 
-df <- read_waterdata_daily(monitoring_location_id = site,
-                           parameter_code = pcode,
-                           statistic_id = stat_cd,
-                           time = range)
-
+df <- read_waterdata_daily(
+  monitoring_location_id = site,
+  parameter_code = pcode,
+  statistic_id = stat_cd,
+  time = "P365D"
+)
+nrow(df)
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+from dataretrieval import waterdata
+
+site = "USGS-09405500"
+pcode = "00060"  # Discharge
+stat_cd = "00003"  # Mean
+
+df, md = waterdata.get_daily(
+    monitoring_location_id=site,
+    parameter_code=pcode,
+    statistic_id=stat_cd,
+    time="P365D",
+)
+
+df.shape[0]
+```
+
+:::
 
 ::: footer
 
@@ -476,12 +563,11 @@ In RStudio, click on the data frame in the upper right Environment tab to open a
 
 ```{r}
 #| echo: false
-
-dt_me(df |> 
-        sf::st_drop_geometry(),
-      page_length = 3)
-
-
+dt_me(
+  df |>
+    sf::st_drop_geometry(),
+  page_length = 3
+)
 ```
 
 ::: footer
@@ -490,27 +576,56 @@ dt_me(df |>
 
 ## Workflow 1: Plot Daily Data 
 
+::: {.panel-tabset}
+
+### R
+
 Let's use `ggplot2` to visualize the data. 
 
 ```{r}
 #| echo: true
 #| output-location: column
 library(ggplot2)
+theme_set(theme_bw(base_size = 24))
+update_geom_defaults("point", list(size = 3, color = "steelblue"))
+options(ggplot2.discrete.colour = "viridis")
 
 ggplot(data = df) +
-  geom_point(aes(x = time, 
-                 y = value,
-                 color = approval_status)) 
-
+  geom_point(aes(x = time, y = value, color = approval_status))
 ```
 
-## Water Data API Notes: Argument input 
+### Python
+
+Let's use `matplotlib` to visualize the data.
+
+```{python}
+#| echo: true
+#| output-location: column
+import matplotlib.pyplot as plt
+import pandas as pd
+
+plt.rcParams["font.size"] = 20
+
+levels, categories = pd.factorize(df["approval_status"])
+
+fig, ax = plt.subplots()
+scatter = ax.scatter(x=df.time, y=df.value, c=levels)
+fig.legend(scatter.legend_elements()[0], categories, title="Status")
+```
+
+:::
+
+::: footer
+
+:::
+
+## Water Data API Notes: Argument input
 
 Use your "tab" key!
 
 ![](images/autocomplete.png)
 
-## Water Data API Notes: Arguments
+## Water Data API Notes: Arguments {.smaller}
 
 * When you look at the help file for the new functions, you’ll notice there are lots of possible inputs (arguments). 
 
@@ -521,9 +636,10 @@ Use your "tab" key!
 ```{r}
 #| eval: false
 #| echo: true
-discharge <- read_waterdata_daily(parameter_code = "00060",
-                                  statistic_id = "00003")
-
+discharge <- read_waterdata_daily(
+  parameter_code = "00060",
+  statistic_id = "00003"
+)
 ```
 
 ::: {.fragment}
@@ -564,14 +680,16 @@ The "time" argument has a few options:
 Here are a bunch of valid inputs:
 
 ```{r}
-#| code-line-numbers: "1-7|8-9|10-13|14-17"
+#| code-line-numbers: "1-9|10-11|12-15|16-19"
 # Ask for exact times:
 time = "2025-01-01"
 time = as.Date("2025-01-01")
 time = "2025-01-01T23:20:50Z"
-time = as.POSIXct("2025-01-01T23:20:50Z", 
-                  format = "%Y-%m-%dT%H:%M:%S", 
-                  tz = "UTC")
+time = as.POSIXct(
+  "2025-01-01T23:20:50Z",
+  format = "%Y-%m-%dT%H:%M:%S",
+  tz = "UTC"
+)
 # Ask for specific range
 time = c("2024-01-01", "2025-01-01") # or Dates or POSIXs
 # Asking beginning of record to specific end:
@@ -594,21 +712,46 @@ Use your "tab" key!
 
 ![](images/autocomplete_samples.png)
 
-## Workflow 2: Discrete data for known site
+## Workflow 2: Discrete data for known site {.smaller}
 
 Let's get orthophosphate ("00660") data from the Shenandoah River at Front Royal, VA ("USGS-01631000").
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| message: true
 site <- "USGS-01631000"
 pcode <- "00660"
 
-qw_data <- read_waterdata_samples(monitoringLocationIdentifier = site,
-                                  usgsPCode = pcode, 
-                                  dataType = "results", 
-                                  dataProfile = "basicphyschem")
+qw_data <- read_waterdata_samples(
+  monitoringLocationIdentifier = site,
+  usgsPCode = pcode,
+  dataType = "results",
+  dataProfile = "basicphyschem"
+)
 ncol(qw_data)
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+site = "USGS-01631000"
+pcode = "00660"
+
+qw_data, md_qw = waterdata.get_samples(
+    monitoringLocationIdentifier = site,
+    usgsPCode = pcode,
+    service = "results",
+    profile = "basicphyschem",
+)
+
+qw_data.shape[1]
+```
+
+:::
 
 That's a LOT of columns returned. We won't look at them here, but you can use `View` in RStudio to explore on your own.
 
@@ -626,47 +769,93 @@ That's a LOT of columns returned. We won't look at them here, but you can use `V
 
 ```{r}
 #| echo: false
-
-df <- tibble(dataType = c("results", "locations", "activities", "projects", "organizations"),
-             Description = c("Results data and metadata for measures and observations matching your query",
-                             "Find monitoring locations that have data matching your query",
-                             "Information about the monitoring activities conducted that produced data",
-                             "Information on the projects that have results matching your data query",
-                             "Information about the organizations that have provided data that matches your query"),
-             dataProfile = c('fullphyschem<br>basicphyschem<br>fullbio<br> basicbio<br>narrow<br>resultdetectionquantitationlimit<br>labsampleprep<br>count',
-             'site<br>count',
-             'sampact<br>actmetric<br>actgroup<br>ncount',
-             'project<br>projectmonitoringlocationweight',
-             'organization<br>count'))
+df <- tibble(
+  dataType = c(
+    "results",
+    "locations",
+    "activities",
+    "projects",
+    "organizations"
+  ),
+  Description = c(
+    "Results data and metadata for measures and observations matching your query",
+    "Find monitoring locations that have data matching your query",
+    "Information about the monitoring activities conducted that produced data",
+    "Information on the projects that have results matching your data query",
+    "Information about the organizations that have provided data that matches your query"
+  ),
+  dataProfile = c(
+    'fullphyschem<br>basicphyschem<br>fullbio<br> basicbio<br>narrow<br>resultdetectionquantitationlimit<br>labsampleprep<br>count',
+    'site<br>count',
+    'sampact<br>actmetric<br>actgroup<br>ncount',
+    'project<br>projectmonitoringlocationweight',
+    'organization<br>count'
+  )
+)
 
 dt_me(df, escape = FALSE, paging = FALSE)
-
 ```
 
 ::: footer
 
 :::
 
-## Workflow 2: Discrete data censoring 
+## Workflow 2: Discrete data censoring {.smaller}
 
 Let's pull a few columns out and look at those:
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 library(dplyr)
 
-qw_data_slim <- qw_data |> 
-  select(Date = Activity_StartDate,
-         Result_Measure,
-         DL_cond = Result_ResultDetectionCondition,
-         DL_val = DetectionLimit_MeasureA,
-         DL_type = DetectionLimit_TypeA) |> 
-  mutate(Result = if_else(!is.na(DL_cond), DL_val, Result_Measure),
-         Detected = if_else(!is.na(DL_cond), "Not Detected", "Detected")) |> 
+qw_data_slim <- qw_data |>
+  select(
+    Date = Activity_StartDate,
+    Result_Measure,
+    DL_cond = Result_ResultDetectionCondition,
+    DL_val = DetectionLimit_MeasureA,
+    DL_type = DetectionLimit_TypeA
+  ) |>
+  mutate(
+    Result = if_else(DL_cond != "", DL_val, Result_Measure),
+    Detected = if_else(DL_cond != "", "Not Detected", "Detected")
+  ) |>
   arrange(Detected)
-
 ```
 
 * What is `|>`? It's a pipe! It says take 'this thing' and put it in 'that thing'. You'll also see `%>%` in code, it is also a pipe - they are basically the same. 
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+import numpy as np
+
+qw_data_slim = (
+    qw_data.rename(
+        columns={
+            "Activity_StartDate": "Date",
+            "Result_ResultDetectionCondition": "DL_cond",
+            "DetectionLimit_MeasureA": "DL_val",
+            "DetectionLimit_TypeA": "DL_type",
+        }
+    )[["Date", "Result_Measure", "DL_cond", "DL_val", "DL_type"]]
+    .assign(
+        Result=lambda x: np.where(
+            x["DL_cond"].notna(), x["DL_val"], x["Result_Measure"]
+        )
+    )
+    .assign(
+        Detected=lambda x: np.where(x["DL_cond"].notna(), "Not Detected", "Detected")
+    )
+    .sort_values(by="Detected", ascending=False)
+)
+```
+
+:::
 
 ::: footer
 
@@ -676,8 +865,7 @@ qw_data_slim <- qw_data |>
 
 ```{r}
 #| echo: false
-
-dt_me(qw_data_slim, page_length = 8, font =  "0.7em")
+dt_me(qw_data_slim, page_length = 8, font = "0.7em")
 ```
 
 ::: footer
@@ -696,7 +884,11 @@ dt_me(qw_data_slim, page_length = 8, font =  "0.7em")
 <https://dplyr.tidyverse.org/reference/mutate-joins.html>
 :::
 
-## Step 1: Get the data
+## Step 1: Get the data {.smaller}
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 site <- "USGS-04183500"
@@ -706,33 +898,91 @@ p_code_qw <- "00665"
 start_date <- "2015-07-03"
 end_date <- "2025-07-03"
 
-qw_data <- read_waterdata_samples(monitoringLocationIdentifier = site,
-                             usgsPCode = p_code_qw, 
-                             activityStartDateLower = start_date,
-                             activityStartDateUpper = end_date,
-                             dataProfile = "basicphyschem")
+qw_data <- read_waterdata_samples(
+  monitoringLocationIdentifier = site,
+  usgsPCode = p_code_qw,
+  activityStartDateLower = start_date,
+  activityStartDateUpper = end_date,
+  dataProfile = "basicphyschem"
+)
 
-dv_data <- read_waterdata_daily(monitoring_location_id = site, 
-                      parameter_code = p_code_dv,
-                      statistic_id = stat_cd,
-                      time = c(start_date, end_date))
+dv_data <- read_waterdata_daily(
+  monitoring_location_id = site,
+  parameter_code = p_code_dv,
+  statistic_id = stat_cd,
+  time = c(start_date, end_date)
+)
 ```
 
-## Step 2: Join 
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+site = "USGS-04183500"
+p_code_dv = "00060"
+stat_cd = "00003"
+p_code_qw = "00665"
+start_date = "2015-07-03"
+end_date = "2025-07-03"
+
+qw_data, md_qw = waterdata.get_samples(
+    monitoringLocationIdentifier=site,
+    usgsPCode=p_code_qw,
+    activityStartDateLower=start_date,
+    activityStartDateUpper=end_date,
+    profile="basicphyschem",
+)
+
+dv_data, md_dv = waterdata.get_daily(
+    monitoring_location_id=site,
+    parameter_code=p_code_dv,
+    statistic_id=stat_cd,
+    time=(start_date + "/" + end_date),
+)
+```
+
+
+:::
+
+::: footer
+
+:::
+
+## Step 2: Join
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
-library(dplyr)
-
 little_dv <- dv_data |>
   select(time, Flow = value, monitoring_location_id)
 
-qw_data_joined <- qw_data |> 
-  left_join(little_dv, 
-            by = c("Activity_StartDate" = "time"))
+qw_data_joined <- qw_data |>
+  left_join(little_dv, by = c("Activity_StartDate" = "time"))
+```
+ 
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+little_dv = dv_data.rename(columns={"value": "Flow"})[
+    ["time", "Flow", "monitoring_location_id"]
+]
+
+qw_data["Activity_StartDate"] = pd.to_datetime(
+    qw_data["Activity_StartDate"], format="%Y-%m-%d"
+)
+
+qw_data_joined = pd.merge(
+    qw_data, little_dv, left_on="Activity_StartDate", right_on="time", how="left"
+)
 ```
 
+:::
+
 * "Activity_StartDate" (on the left side data frame) and "time" (on the right side data frame) need to be the same type (in this case, both are Date objects). 
-  
 
 ::: footer
 
@@ -742,16 +992,38 @@ qw_data_joined <- qw_data |>
 
 * You could join on multiple columns:
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 #| eval: false
-qw_data <- qw_data |> 
-  left_join(little_dv, 
-            by = c("Activity_StartDate" = "time",
-                   "Location_Identifier" = "monitoring_location_id"))
-
+qw_data <- qw_data |>
+  left_join(
+    little_dv,
+    by = c(
+      "Activity_StartDate" = "time",
+      "Location_Identifier" = "monitoring_location_id"
+    )
+  )
 ```
 
 See `dplyr` documentation for lots of joining options, but I find `left_join` my "go-to" for straightforward joins.
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+qw_data = pd.merge(
+    qw_data,
+    little_dv,
+    left_on=["Activity_StartDate", "Location_Identifier"],
+    right_on=["time", "monitoring_location_id"],
+    how="left",
+)
+```
+
+:::
 
 ::: footer
 <https://dplyr.tidyverse.org/reference/mutate-joins.html>
@@ -761,14 +1033,27 @@ See `dplyr` documentation for lots of joining options, but I find `left_join` my
 
 Let's take a quick peak:
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 #| output-location: column
 ggplot(data = qw_data_joined) +
-  geom_point(aes(x = Flow, 
-                 y = Result_Measure))
-
+  geom_point(aes(x = Flow, y = Result_Measure))
 ```
 
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+#| output-location: column
+plt.figure()
+plt.scatter(x=qw_data_joined.Flow, y=qw_data_joined.Result_Measure)
+```
+
+
+:::
 
 ## Exercise 2: Joins {.smaller}
 
@@ -794,12 +1079,11 @@ band_instruments <- band_instruments
 
 
 ```{r}
-band_members |> 
+band_members |>
   left_join(band_instruments, by = "name")
 
-band_instruments |> 
+band_instruments |>
   left_join(band_members, by = "name")
-
 ```
 
 
@@ -816,66 +1100,155 @@ band_instruments |>
 
 * We'll look at Suisun Bay a Van Sickle Island NR Pittsburg CA ("USGS-11455508"), with parameter code "99133" which is Nitrate plus Nitrite.
 
-## Workflow 4: Continuous data for known site
+## Workflow 4: Continuous data for known site {.smaller}
+
+::: {.panel-tabset}
+
+### R
 
 :::: {.columns}
 
-::: {.column width="70%"}
+::: {.column width="65%"}
 
 ```{r}
-#| results: markup
+#| eval: false
 site_id <- "USGS-11455508"
 p_code_rt <- "99133"
 start_date <- "2024-01-01"
 end_date <- "2024-06-01"
 
-continuous_data <- read_waterdata_continuous(monitoring_location_id = site_id,
-                                             parameter_code = p_code_rt,
-                                             time = c(start_date, end_date))
-                 
+continuous_data <- read_waterdata_continuous(
+  monitoring_location_id = site_id,
+  parameter_code = p_code_rt,
+  time = c(start_date, end_date)
+)
 names(continuous_data)
 ```
 
 :::
 
-::: {.column width="30%"}
+::: {.column width="35%"}
 
+```{r}
+#| results: markup
+#| echo: false
+options(width = 30)
+site_id <- "USGS-11455508"
+p_code_rt <- "99133"
+start_date <- "2024-01-01"
+end_date <- "2024-06-01"
+
+continuous_data <- read_waterdata_continuous(
+  monitoring_location_id = site_id,
+  parameter_code = p_code_rt,
+  time = c(start_date, end_date)
+)
+names(continuous_data)
 ```
- [4] "time"                   "unit_of_measure"        "parameter_code"        
- [7] "statistic_id"           "value"                  "approval_status"       
-[10] "last_modified"          "qualifier"  
-```
+
 :::
 
 ::::
 
-```
-Requesting:
-https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?f=json&lang=en-US&skipGeometry=TRUE&limit=50000&monitoring_location_id=USGS-11455508&parameter_code=99133&time=2024-01-01T00%3A00%3A00Z%2F2024-06-01T00%3A00%3A00Z
+### Python
+
+:::: {.columns}
+
+::: {.column width="65%"}
+
+```{python}
+#| eval: false
+site_id = "USGS-11455508"
+p_code_rt = "99133"
+date_range = "2024-01-01/2024-06-01"
+
+continuous_data, md_cont = waterdata.get_continuous(
+    monitoring_location_id=site_id, parameter_code=p_code_rt, time=date_range
+)
 ```
 
+:::
+
+::: {.column width="35%"}
+
+```{python}
+#| eval: !expr evaluate_python
+#| results: markup
+#| echo: false
+pd.set_option("display.width", 30)
+site_id = "USGS-11455508"
+p_code_rt = "99133"
+date_range = "2024-01-01/2024-06-01"
+
+continuous_data, md_cont = waterdata.get_continuous(
+    monitoring_location_id=site_id, parameter_code=p_code_rt, time=date_range
+)
+continuous_data.columns
+```
+
+:::
+
+::::
+
+:::
+
+
 ## Workflow 4: Inspect
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| output-location: column
 ggplot(data = continuous_data) +
-  geom_point(aes(x = time, 
-                 y = value))
+  geom_point(aes(x = time, y = value))
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+#| output-location: column
+plt.figure()
+plt.scatter(x=continuous_data.time, y=continuous_data.value)
+```
+
+:::
 
 ## Workflow 5: Join Discrete and Continuous 
 
 That same site also measures discrete Nitrate plus Nitrite, which is parameter code "00631". Let's first grab that data:
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 #| message: true
-discrete_data <- read_waterdata_samples(monitoringLocationIdentifier = "USGS-11455508",
-                                        usgsPCode = "00631",
-                                        activityStartDateLower = start_date,
-                                        activityStartDateUpper = end_date,
-                                        dataProfile = "basicphyschem")
-
+discrete_data <- read_waterdata_samples(
+  monitoringLocationIdentifier = "USGS-11455508",
+  usgsPCode = "00631",
+  activityStartDateLower = start_date,
+  activityStartDateUpper = end_date,
+  dataProfile = "basicphyschem"
+)
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+discrete_data, md_qw = waterdata.get_samples(
+  monitoringLocationIdentifier = "USGS-11455508",
+  usgsPCode = "00631",
+  activityStartDateLower = "2024-01-01",
+  activityStartDateUpper = "2024-06-01",
+  profile = "basicphyschem"
+)
+```
+
+:::
 
 ## Workflow 5: Join Discrete and Continuous
 
@@ -889,16 +1262,25 @@ discrete_data <- read_waterdata_samples(monitoringLocationIdentifier = "USGS-114
 
 ## Workflow 5: Join Discrete and Continuous
 
+::: {.panel-tabset}
+
+### R
 
 ```{r}
-#| code-line-numbers: "1|2-3|5|6|1-6"
+#| code-line-numbers: "1|2-3|5-10"
 library(data.table)
 setDT(discrete_data)[, join_date := Activity_StartDateTime]
 setDT(continuous_data)[, join_date := time]
-  
-closest_dt <- continuous_data[discrete_data, on = .(join_date), roll = "nearest"]  
+
+closest_dt <- continuous_data[
+  discrete_data,
+  on = .(join_date),
+  roll = "nearest"
+]
 closest_dt <- data.frame(closest_dt)
 ```
+
+:::
 
 ::: footer
 <https://doi-usgs.github.io/dataRetrieval/articles/join_by_closest.html>
@@ -909,13 +1291,11 @@ closest_dt <- data.frame(closest_dt)
 ```{r}
 #| output-location: column
 ggplot(data = closest_dt) +
-  geom_point(aes(x = Result_Measure,
-                 y = value)) +
+  geom_point(aes(x = Result_Measure, y = value)) +
   geom_abline() +
   expand_limits(x = 0, y = 0) +
   xlab("Discrete") +
   ylab("Continuous")
-
 ```
 
 
@@ -931,19 +1311,39 @@ The next slides will demo how to use those.
 
 ## Data Discovery: Time Series {.smaller}
 
+::: {.panel-tabset}
+
+### R
 ```{r}
 ts_available <- read_waterdata_ts_meta(monitoring_location_id = "USGS-04183500")
 ```
 
+### Python
+
+```{python}
+#| eval: false
+ts_avail, ts_me = waterdata.get_time_series_metadata(
+    monitoring_location_id="USGS-04183500"
+)
+```
+
+:::
+
 ```{r}
 #| echo: false
-
-dt_me(ts_available |> 
-                  sf::st_drop_geometry() |> 
-                select(parameter_name, 
-                       parameter_code, statistic_id, begin, end,
-                       computation_identifier), page_length = 6)
-
+dt_me(
+  ts_available |>
+    sf::st_drop_geometry() |>
+    select(
+      parameter_name,
+      parameter_code,
+      statistic_id,
+      begin,
+      end,
+      computation_identifier
+    ),
+  page_length = 6
+)
 ```
 
 ::: footer
@@ -952,20 +1352,32 @@ dt_me(ts_available |>
 
 ## Data Discovery: Discrete {.smaller}
 
-```{r}
-discrete_available <- summarize_waterdata_samples(monitoringLocationIdentifier = "USGS-04183500")
+::: {.panel-tabset}
 
+### R
+
+```{r}
+discrete_available <- summarize_waterdata_samples(
+  monitoringLocationIdentifier = "USGS-04183500"
+)
 ```
+
+
+:::
 
 ```{r}
 #| echo: false
-
-dt_me(discrete_available |>  
-                select(characteristicUserSupplied, 
-                       resultCount, activityCount,
-                       firstActivity, mostRecentActivity),
-      page_length = 6)
-
+dt_me(
+  discrete_available |>
+    select(
+      characteristicUserSupplied,
+      resultCount,
+      activityCount,
+      firstActivity,
+      mostRecentActivity
+    ),
+  page_length = 6
+)
 ```
 
 ::: footer
@@ -976,21 +1388,41 @@ dt_me(discrete_available |>
 
 * characteristicUserSupplied can be an input to `read_waterdata_sample` 
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
-discrete1 <- read_waterdata_samples(characteristicUserSupplied = "Phosphorus as phosphorus, water, unfiltered", 
-                                    monitoringLocationIdentifier = "USGS-04183500")
+discrete1 <- read_waterdata_samples(
+  characteristicUserSupplied = "Phosphorus as phosphorus, water, unfiltered",
+  monitoringLocationIdentifier = "USGS-04183500"
+)
 nrow(discrete1)
 ```
 
+### Python
 
+```{python}
+#| eval: !expr evaluate_python
+discrete1, discrete1_me = waterdata.get_samples(
+  characteristicUserSupplied = "Phosphorus as phosphorus, water, unfiltered",
+  monitoringLocationIdentifier = "USGS-04183500"
+)
+discrete1.shape[1]
+```
+
+:::
 
 ## More Information {.smaller}
 
-- dataRetrieval repository:
+- dataRetrieval R repository:
   - <https://github.com/DOI-USGS/dataRetrieval>
   - [Documentation](https://doi-usgs.github.io/dataRetrieval)
   - [dataRetrieval New Features](https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html)
-  - [General Tutorial](https://rconnect.usgs.gov/NMC_dataRetrieval_1/dataRetrieval_1.html)
+
+- dataretrieval Python repository:
+  - <https://github.com/DOI-USGS/dataretrieval-python>
+  - [Documentation](https://doi-usgs.github.io/dataretrieval-python/)
 
 - Contact:
   - Computational Tools Email: comptools@usgs.gov

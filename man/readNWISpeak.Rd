@@ -77,12 +77,12 @@ R Date objects.
 }
 \examples{
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
-site_ids <- c("01594440", "040851325")
+#site_ids <- c("01594440", "040851325")
 \donttest{
-data <- readNWISpeak(site_ids)
-data2 <- readNWISpeak(site_ids, asDateTime = FALSE)
-stations <- c("06011000")
-peakdata <- readNWISpeak(stations, convertType = FALSE)
+#data <- readNWISpeak(site_ids)
+#data2 <- readNWISpeak(site_ids, asDateTime = FALSE)
+#stations <- c("06011000")
+#peakdata <- readNWISpeak(stations, convertType = FALSE)
 }
 \dontshow{\}) # examplesIf}
 }

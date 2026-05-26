@@ -2,37 +2,9 @@
 % Please edit documentation in R/read_waterdata_samples.R
 \name{read_waterdata_samples}
 \alias{read_waterdata_samples}
-\alias{read_USGS_samples}
 \title{USGS Samples Data}
 \usage{
 read_waterdata_samples(
-  monitoringLocationIdentifier = NA,
-  siteTypeCode = NA,
-  boundingBox = NA,
-  hydrologicUnit = NA,
-  activityMediaName = NA,
-  characteristicGroup = NA,
-  characteristic = NA,
-  characteristicUserSupplied = NA,
-  activityStartDateLower = NA,
-  activityStartDateUpper = NA,
-  countryFips = NA,
-  stateFips = NA,
-  countyFips = NA,
-  projectIdentifier = NA,
-  recordIdentifierUserSupplied = NA,
-  siteTypeName = NA,
-  usgsPCode = NA,
-  pointLocationLatitude = NA,
-  pointLocationLongitude = NA,
-  pointLocationWithinMiles = NA,
-  dataType = "results",
-  dataProfile = NA,
-  tz = "UTC",
-  convertType = TRUE
-)
-
-read_USGS_samples(
   monitoringLocationIdentifier = NA,
   siteTypeCode = NA,
   boundingBox = NA,
@@ -130,7 +102,7 @@ would be needed from prior project information.}
 information would be needed from the data supplier.}
 
 \item{siteTypeName}{Site type name query parameter. See available
-options by running \code{check_param("sitetype")$typeName}.}
+options by running \code{check_waterdata_sample_params("sitetype")$typeName}.}
 
 \item{usgsPCode}{USGS parameter code. See available options by running
 \code{check_waterdata_sample_params("characteristics")$parameterCode}.}

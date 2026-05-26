@@ -64,15 +64,17 @@ rejigger_cols <- function(df, properties, output_id) {
 #'
 cleanup_cols <- function(df, service) {
   if ("time" %in% names(df)) {
-    if (service == "daily") {
+    if (service %in% c("daily", "peaks")) {
       df$time <- as.Date(df$time)
     } else {
       attr(df$time, "tzone") <- "UTC"
     }
   }
 
-  if ("last_modified" %in% names(df)) {
-    attr(df$last_modified, "tzone") <- "UTC"
+  for (time_period_columns in time_periods) {
+    if (time_period_columns %in% names(df)) {
+      attr(df[[time_period_columns]], "tzone") <- "UTC"
+    }
   }
 
   df

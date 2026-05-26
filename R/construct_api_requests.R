@@ -5,26 +5,27 @@
 #'
 #' @export
 #' @param service Which service available on <https://api.waterdata.usgs.gov/ogcapi/v0/>.
+#' @param output_id Name of id column to return
 #' @param ... Extra parameters from the specific services.
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
 #' depth).
-#' @param properties The properties that should be included for each feature. The
-#' parameter value is a comma-separated list of property names which depend on the
-#' service being called.
-#' @param skipGeometry This option can be used to skip response geometries for
-#' each feature. The returning object will be a data frame with no spatial
-#' information.
 #' @keywords internal
+#'
+#' @inheritParams check_arguments_api
+#' @inheritParams check_arguments_non_api
+#'
 #' @examples
 #' site <- "USGS-02238500"
 #' pcode <- "00060"
 #' req_dv <- construct_api_requests("daily",
+#'                                  output_id = "daily_id",
 #'                                  monitoring_location_id = site,
 #'                                  parameter_code = "00060")
 #'
 #' req_dv <- construct_api_requests("daily",
+#'                                  output_id = "daily_id",
 #'                                  monitoring_location_id = site,
 #'                                  parameter_code = c("00060", "00065"))
 #'
@@ -32,31 +33,53 @@
 #' start_date <- "2018-01-01"
 #' end_date <- "2022-01-01"
 #' req_dv <- construct_api_requests("daily",
-#'                                 monitoring_location_id = sites,
-#'                                 parameter_code = c("00060", "00065"),
-#'                                 datetime = c(start_date, end_date))
+#'                                  output_id = "daily_id",
+#'                                  monitoring_location_id = sites,
+#'                                  parameter_code = c("00060", "00065"),
+#'                                  datetime = c(start_date, end_date))
 #'
 construct_api_requests <- function(
   service,
-  properties = NA_character_,
+  output_id,
+  ...,
   bbox = NA,
-  skipGeometry = FALSE,
-  no_paging = FALSE,
-  ...
+  convertType = getOption("dataRetrieval.convertType"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data"),
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
 ) {
   POST <- FALSE
 
   full_list <- list(...)
+  full_list[["limit"]] <- limit
 
-  time_periods <- c(
-    "last_modified",
-    "datetime",
-    "time",
-    "begin",
-    "end",
-    "begin_utc",
-    "end_utc"
+  check_arguments_non_api(
+    convertType = convertType,
+    no_paging = no_paging,
+    limit = full_list[["limit"]],
+    attach_request = attach_request,
+    chunk_size = chunk_size
   )
+
+  check_arguments_api(
+    bbox = full_list[["bbox"]],
+    skipGeometry = full_list[["skipGeometry"]]
+  )
+
+  full_list <- switch_arg_id(
+    full_list,
+    id_name = output_id,
+    service = service
+  )
+
+  # Clean out non-API arguments:
+  properties <- switch_properties_id(
+    properties = full_list[["properties"]],
+    id = output_id
+  )
+
+  full_list[["properties"]] <- NULL
 
   if (any(time_periods %in% names(full_list))) {
     for (i in time_periods[time_periods %in% names(full_list)]) {
@@ -74,9 +97,10 @@ construct_api_requests <- function(
     "begin",
     "end",
     "time",
-    "limit",
     "begin_utc",
-    "end_utc"
+    "end_utc",
+    "limit",
+    "skipGeometry"
   )
 
   comma_params <- c(
@@ -85,7 +109,8 @@ construct_api_requests <- function(
     "statistic_id",
     "time_series_id",
     "computation_period_identifier",
-    "computation_identifier"
+    "computation_identifier",
+    "data_type"
   )
 
   if (
@@ -110,6 +135,7 @@ construct_api_requests <- function(
     Negate(anyNA),
     lapply(full_list[comma_params], function(x) x[!is.na(x)])
   )
+
   comma_params_filtered <- comma_params_filtered[
     !sapply(comma_params_filtered, is.null)
   ]
@@ -128,8 +154,6 @@ construct_api_requests <- function(
     # GET list refers to arguments that will go in the URL no matter what (not POST)
     get_list <- c(single_params_filtered, comma_params_filtered)
   }
-
-  get_list[["skipGeometry"]] <- skipGeometry
 
   get_list <- get_list[!is.na(get_list)]
 
@@ -207,15 +231,6 @@ construct_api_requests <- function(
   return(baseURL)
 }
 
-check_limits <- function(args) {
-  current_api_limit <- 50000
-
-  if (is.na(args[["limit"]])) {
-    args[["limit"]] <- current_api_limit
-  }
-
-  return(args)
-}
 
 #' Setup the request for the OGC API requests
 #'
@@ -315,7 +330,7 @@ switch_arg_id <- function(ls, id_name, service) {
 #' dataRetrieval:::format_api_dates(end)
 #' dataRetrieval:::format_api_dates(end, TRUE)
 #'
-#' end <- c(NA, as.POSIXct("2021-01-01 12:15:00"))
+#' end <- as.POSIXct(c(NA, "2021-01-01 12:15:00"))
 #' dataRetrieval:::format_api_dates(end)
 #'
 #' start_end <- as.POSIXct(c("2021-01-01 12:15:00",
@@ -345,22 +360,41 @@ switch_arg_id <- function(ls, id_name, service) {
 #' start <- "2025-10-01"
 #' end <- Sys.Date()
 #' dataRetrieval:::format_api_dates(c(start, end), date = TRUE)
+#'
+#' # This is a problem because the first value forces the
+#' # vector to be numeric, and then we don't really
+#' # know if the 2nd value is a Date (number of days since 1970)
+#' # or if it's a date/time (number of seconds..)
+#' half_range <- c(NA, as.Date("2025-01-01"))
+#' # Will error:
+#' #dataRetrieval:::format_api_dates(half_range, date = FALSE)
+#' # Better way to do it:
+#' better_half <- as.Date(c(NA, "2025-01-01"))
+#' dataRetrieval:::format_api_dates(better_half, date = FALSE)
 format_api_dates <- function(datetime, date = FALSE) {
   if (is.character(datetime)) {
     datetime[datetime == ""] <- NA
     datetime <- toupper(datetime)
   }
 
-  if (all(is.na(datetime))) {
-    return(NA)
-  }
-
-  if (all(is.null(datetime))) {
+  if (all(is.na(datetime)) | all(is.null(datetime))) {
     return(NA)
   }
 
   if (length(datetime) > 2) {
     stop("datetime should only include 1-2 values")
+  }
+
+  if (is.numeric(datetime)) {
+    # Until we can figure out a way to know if the
+    # original input was suppose to be Date or Posix
+    # We can't determine what the user meant.
+    stop(
+      "A time query was entered as numeric. This could lead to errors.
+Check any time queries that might have been automatically converted to numeric.
+This could happen if you use c(NA, as.Date(Sys.Date())) instead of
+as.Date(c(NA, Sys.Date()) for example."
+    )
   }
 
   if (length(datetime) == 1) {
@@ -370,13 +404,13 @@ format_api_dates <- function(datetime, date = FALSE) {
         grepl("/", datetime)
     ) {
       return(datetime)
+    }
+
+    if (date) {
+      datetime <- get_Date(datetime)
     } else {
-      if (date) {
-        datetime <- get_Date(datetime)
-      } else {
-        datetime1 <- get_dateTime(datetime)
-        datetime <- lubridate::format_ISO8601(datetime1, usetz = "Z")
-      }
+      datetime1 <- get_dateTime(datetime)
+      datetime <- lubridate::format_ISO8601(datetime1, usetz = "Z")
     }
   } else if (length(datetime) == 2) {
     if (date) {
@@ -385,11 +419,9 @@ format_api_dates <- function(datetime, date = FALSE) {
       }
       datetime <- paste0(datetime, collapse = "/")
     } else {
-      for (i in seq_along(datetime)) {
-        datetime1 <- get_dateTime(datetime)
-      }
+      datetime1 <- lapply(datetime, get_dateTime)
       datetime <- paste0(
-        lubridate::format_ISO8601(datetime1, usetz = "Z"),
+        vapply(datetime1, lubridate::format_ISO8601, character(1), usetz = "Z"),
         collapse = "/"
       )
     }
@@ -597,14 +629,30 @@ basic_request <- function(url_base, format = "json") {
     httr2::req_headers(`Accept-Encoding` = c("compress", "gzip")) |>
     httr2::req_url_query(f = format, lang = "en-US") |>
     httr2::req_error(body = error_body) |>
+    httr2::req_retry(max_tries = 3, retry_on_failure = TRUE) |>
     httr2::req_timeout(seconds = 180)
 
-  token <- Sys.getenv("API_USGS_PAT")
+  req <- add_api_token(req)
 
+  return(req)
+}
+
+add_api_token <- function(req) {
+  token <- Sys.getenv("API_USGS_PAT")
   if (token != "") {
     req <- req |>
       httr2::req_headers_redacted(`X-Api-Key` = token)
   }
-
-  return(req)
+  req
 }
+
+# Treat these columns as time:
+time_periods <- c(
+  "last_modified",
+  "datetime",
+  "time",
+  "begin",
+  "end",
+  "begin_utc",
+  "end_utc"
+)

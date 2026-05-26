@@ -156,12 +156,12 @@ readNWISuv <- function(
 #' @seealso [constructNWISURL()], [importRDB1()]
 #' @export
 #' @examplesIf is_dataRetrieval_user()
-#' site_ids <- c("01594440", "040851325")
+#' #site_ids <- c("01594440", "040851325")
 #' \donttest{
-#' data <- readNWISpeak(site_ids)
-#' data2 <- readNWISpeak(site_ids, asDateTime = FALSE)
-#' stations <- c("06011000")
-#' peakdata <- readNWISpeak(stations, convertType = FALSE)
+#' #data <- readNWISpeak(site_ids)
+#' #data2 <- readNWISpeak(site_ids, asDateTime = FALSE)
+#' #stations <- c("06011000")
+#' #peakdata <- readNWISpeak(stations, convertType = FALSE)
 #' }
 readNWISpeak <- function(
   siteNumbers,
@@ -170,8 +170,11 @@ readNWISpeak <- function(
   asDateTime = TRUE,
   convertType = TRUE
 ) {
-  message(new_nwis_message())
-
+  .Deprecated(
+    new = "read_waterdata_peaks",
+    package = "dataRetrieval",
+    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_peaks."
+  )
   # Doesn't seem to be a peak xml service
   url <- constructNWISURL(
     siteNumbers = siteNumbers,
@@ -261,20 +264,22 @@ readNWISpeak <- function(
 #' @examplesIf is_dataRetrieval_user()
 #' site_id <- "01594440"
 #' \donttest{
-#' data <- readNWISrating(site_id, "base")
-#' attr(data, "RATING")
+#' #data <- readNWISrating(site_id, "base")
+#' #attr(data, "RATING")
 #' }
 readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
-  message(new_nwis_message())
+  .Deprecated(
+    new = "read_waterdata_ratings",
+    package = "dataRetrieval",
+    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_ratings."
+  )
+
   # No rating xml service
   url <- constructNWISURL(siteNumber, service = "rating", ratingType = type)
 
   data <- importRDB1(url, asDateTime = FALSE, convertType = convertType)
 
   if ("current_rating_nu" %in% names(data)) {
-    intColumns <- intColumns[
-      !("current_rating_nu" %in% names(data)[intColumns])
-    ]
     data$current_rating_nu <- gsub(" ", "", data$current_rating_nu)
   }
 
@@ -463,11 +468,4 @@ readNWISuse <- function(
     msg = "NWIS servers for water use have been decommission. New functions are being developed."
   )
   return(NULL)
-}
-
-.capitalALL <- function(input) {
-  if (any(grepl("(?i)all", input))) {
-    input <- toupper(input)
-  }
-  return(input)
 }

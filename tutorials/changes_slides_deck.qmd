@@ -20,6 +20,8 @@ editor_options:
 execute:
   echo: true
   warning: false
+params:
+  run_python: true
 ---
 
 ```{r}
@@ -30,29 +32,52 @@ library(ggplot2)
 library(dplyr)
 library(leaflet)
 library(DT)
+library(reticulate)
+
+theme_set(theme_bw(base_size = 20))
+update_geom_defaults("point", list(size = 3, color = "steelblue"))
+options(ggplot2.discrete.colour = "viridis")
+
+py_require("dataretrieval")
+py_require("panda")
+py_require("matplotlib")
+py_require("geopandas")
+
+evaluate_python <- params$run_python
+
 options(dplyr.summarise.inform = FALSE)
-theme_set(theme_grey(base_size = 24))
-update_geom_defaults("point", list(size = 3)) 
+theme_set(theme_bw(base_size = 20))
+update_geom_defaults("point", list(size = 3))
 
-dt_me <- function(x, 
-                  page_length = 8, 
-                  font = "0.7em", 
-                  escape = TRUE,
-                  paging = TRUE){
-  DT::datatable(x,
-              rownames = FALSE,
-              options = list(pageLength = page_length, 
-                             info = FALSE,
-                             searching = FALSE,
-                             paging = paging,
-                             lengthChange = FALSE,
-                             initComplete = htmlwidgets::JS(
-          "function(settings, json) {",
-          paste0("$(this.api().table().container()).css({'font-size': '", 
-                 font, "'});"),
-          "}")), escape = escape)
+dt_me <- function(
+  x,
+  page_length = 8,
+  font = "0.7em",
+  escape = TRUE,
+  paging = TRUE
+) {
+  DT::datatable(
+    x,
+    rownames = FALSE,
+    options = list(
+      pageLength = page_length,
+      info = FALSE,
+      searching = FALSE,
+      paging = paging,
+      lengthChange = FALSE,
+      initComplete = htmlwidgets::JS(
+        "function(settings, json) {",
+        paste0(
+          "$(this.api().table().container()).css({'font-size': '",
+          font,
+          "'});"
+        ),
+        "}"
+      )
+    ),
+    escape = escape
+  )
 }
-
 ```
 
 
@@ -94,28 +119,53 @@ New to `dataRetrieval`? [Introduction to dataRetrieval](https://water.code-pages
 
 :::
 
-## Installation {.smaller}
+## Installation
 
-The features shown in this presentation are available on the most recent CRAN update:
+::: {.panel-tabset}
+
+### R
+
+`dataRetrieval` is available on the Comprehensive R Archive Network (CRAN) repository. To install `dataRetrieval` on your computer, open RStudio and run this line of code in the Console:
 
 ```{r}
 #| echo: true
 #| eval: false
 install.packages("dataRetrieval")
-
 ```
 
-Functions added when new API endpoints are introduced will initially be pushed to the "develop" branch on GitHub. To test those updates, using the `remotes` packages:
+Then each time you open R, you'll need to load the library:
 
 ```{r}
-#| echo: true
-#| eval: false
-library(remotes)
-install_github("DOI-USGS/dataRetrieval@develop")
-
+#| message: true
+library(dataRetrieval)
 ```
 
-The "develop" branch WILL change frequently, and there are no promises of future behavior.
+### Python
+
+Whether you are a user or developer we recommend installing `dataretrieval` in a virtual environment. This can be done using something like virtualenv or conda. 
+
+```{bash}
+#| echo: true
+#| eval: false
+pip install dataretrieval
+```
+
+or
+
+```{bash}
+#| echo: true
+#| eval: false
+conda install conda-forge::dataretrieval
+```
+
+Then each time you open Python, you'll need to load the library:
+
+```{python}
+#| eval: !expr evaluate_python
+from dataretrieval import waterdata
+```
+
+:::
 
 ::: footer
 
@@ -137,9 +187,9 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 ## USGS Water Data OGC APIs: Current Functions (cont.) 
 
-* [read_waterdata_field_meta](https://water.code-pages.usgs.gov/dataRetrieval/reference/read_waterdata_field_meta.html) - Field measurement data availability
+* [read_waterdata_field_meta](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_field_meta.html) - Field measurement data availability
 
-* [read_waterdata_combined_meta](https://water.code-pages.usgs.gov/dataRetrieval/reference/read_waterdata_combined_meta.html) - Combined time series and field data availability
+* [read_waterdata_combined_meta](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_combined_meta.html) - Combined time series and field data availability
 
 * [read_waterdata_daily](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_daily.html) - Daily data
 
@@ -169,6 +219,10 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 * [read_waterdata_metadata](https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_metadata.html) - Metadata 
 
+* [read_waterdata_rating](https://water.code-pages.usgs.gov/dataRetrieval/reference/read_waterdata_ratings.html) - Rating Curve Data
+
+* [read_waterdata_peaks](https://water.code-pages.usgs.gov/dataRetrieval/reference/read_waterdata_peaks.html) - Peak Data
+
 ::: footer
 
 :::
@@ -193,16 +247,9 @@ Open Geospatial Consortium (OGC), a non-profit international organization that d
 
 2. Save it in a safe place (KeyPass or other password management tool)
 
-3. Add it to your .Renviron file as API_USGS_PAT. 
+3. Add it as environment variable
 
-4. Restart R 
-
-5. Run after restarting R:
-
-```{r}
-#| eval: false
-Sys.getenv("API_USGS_PAT")
-```
+4. Restart 
 
 See next slide for a demonstration.
 
@@ -212,7 +259,11 @@ See next slide for a demonstration.
 
 ## Water Data API Token: Example {.smaller}
 
-My favorite method to do add your token to .Renviron is to use the `usethis` package. Let's pretend the token sent you was "abc123":
+Let's pretend the token sent you was "abc123"
+
+::: {.panel-tabset}
+
+### R
 
 1. Run in R:
 ```{r}
@@ -238,17 +289,74 @@ API_USGS_PAT = "abc123"
 Sys.getenv("API_USGS_PAT")
 ```
 
+::: {.callout-note collapse="true"}
+Your .Renviorn file should never be pushed to a public repository.
+:::
+
+### Python
+
+1. Create a file in your working directory .env
+
+2. Add this line to the .env file:
+
+```
+API_USGS_PAT = "abc123"
+```
+4. Restart your python session
+
+5. Check that it worked by running (you should see your token printed in the Console):
+
+```{python}
+#| echo: true
+#| eval: false
+import os
+os.getenv("API_USGS_PAT")
+'abc123'
+```
+
+::: {.callout-note collapse="true"}
+Make sure to add .env file to .gitignore to make sure you do not accidently push it to a public repository.
+:::
+
+:::
+
+::: footer
+
+:::
+
 ## Water Data API Token: Example 
 
-![](images/save_token.png)
+::: {.panel-tabset}
+
+### R
+
+![](images/save_token.png){width="50%"}
+
+### Python
+
+![](images/save_env_token.png)
+
+:::
 
 ## Water Data APIs: Initial Tips 
 
 Use your "tab" key!
 
+::: {.panel-tabset}
+
+### R
+
 ![](images/autocomplete.png)
 
+### Python
 
+![](images/autocomplete_python.png){width="60%"}
+
+:::
+
+::: footer
+
+:::
 
 ## read_waterdata_monitoring_location 
 
@@ -266,16 +374,34 @@ Replaces `readNWISsite`:
 
 :::
 
-## read_waterdata_monitoring_location 
+## read_waterdata_monitoring_location {.smaller}
 
 Let's get all the monitoring locations for Dane County, Wisconsin:
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 #| message: true
-site_info <- read_waterdata_monitoring_location(state_name = "Wisconsin",
-                                                county_name = "Dane County")
-nrow(site_info)
+site_info <- read_waterdata_monitoring_location(
+  state_name = "Wisconsin",
+  county_name = "Dane County"
+)
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+
+site_info, md = waterdata.get_monitoring_locations(
+    state_name="Wisconsin", county_name="Dane County"
+)
+```
+
+:::
+
 
 ::: {.callout-note collapse="true"}
 ## Note on county names
@@ -294,45 +420,86 @@ counties <- check_waterdata_sample_params(service = "counties")
 
 ```{r}
 #| echo: false
-
 dt_me(site_info, 7, "0.6em")
-
 ```
 
 ::: footer
 
 :::
 
-## read_waterdata_monitoring_location
+## read_waterdata_monitoring_location {.smaller}
 
 Now that we've seen the whole data set, maybe we realize in the future we can ask for just stream sites, and we only really need a few of those columns:
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| message: true
 site_info_refined <- read_waterdata_monitoring_location(
   state_name = "Wisconsin",
-  county_name = "Dane County", 
+  county_name = "Dane County",
   site_type = "Stream",
-  properties = c("monitoring_location_id",
-                 "monitoring_location_name",
-                 "drainage_area",
-                 "geometry"))
+  properties = c(
+    "monitoring_location_id",
+    "monitoring_location_name",
+    "drainage_area",
+    "geometry"
+  )
+)
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+site_info_refined, md = waterdata.get_monitoring_locations(
+    state_name="Wisconsin",
+    county_name="Dane County",
+    site_type="Stream",
+    properties=[
+        "monitoring_location_id",
+        "monitoring_location_name",
+        "drainage_area",
+        "geometry",
+    ],
+)
+```
+
+:::
 
 ::: footer
 
 :::
 
-## Map It: ggplot2
+## Map It with geometry {.smaller}
 
-"geometry" column means it's an `sf` object, and makes mapping easy!
+::: {.panel-tabset}
+
+### R: ggplot2
+
 
 ```{r}
 #| output-location: default
 library(ggplot2)
+
 ggplot(data = site_info_refined) +
-  geom_sf() 
+  geom_sf()
 ```
+
+### Python: matplotlib
+
+```{python}
+#| eval: !expr evaluate_python
+import matplotlib.pyplot as plt
+import geopandas as gpd
+
+site_info_refined.plot()
+
+```
+
+:::
 
 ::: footer
 
@@ -346,112 +513,138 @@ library(leaflet)
 #default leaflet crs:
 leaflet_crs <- "+proj=longlat +datum=WGS84"
 
-leaflet(data = site_info_refined |> 
-                sf::st_transform(crs = leaflet_crs)) |> 
-    addProviderTiles("CartoDB.Positron") |> 
-    addCircleMarkers(popup = ~monitoring_location_name, 
-                   radius = 3,
-                   opacity = 1)
+leaflet(
+  data = site_info_refined |>
+    sf::st_transform(crs = leaflet_crs)
+) |>
+  addProviderTiles("CartoDB.Positron") |>
+  addCircleMarkers(popup = ~monitoring_location_name, radius = 3, opacity = 1)
 ```
 
-## Removing `sf`
+## Removing `sf` {.smaller}
 
 * You can post-process the "geometry" column out, or convert it to lat/lon with the `sf` package:
 
 ```{r}
-no_sf_1 <- site_info_refined |> 
+no_sf_1 <- site_info_refined |>
   sf::st_drop_geometry()
 
-longitude <- sf::st_coordinates(site_info_refined)[,1]
-latitude <- sf::st_coordinates(site_info_refined)[,2]
-
+longitude <- sf::st_coordinates(site_info_refined)[, 1]
+latitude <- sf::st_coordinates(site_info_refined)[, 2]
 ```
 
 * You can declare `skipGeometry=TRUE` in the query to return a plain data frame with no geometry:
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| eval: false
 no_sf <- read_waterdata_monitoring_location(
   state_name = "Wisconsin",
-  county_name = "Dane County", 
+  county_name = "Dane County",
   site_type = "Stream",
-  skipGeometry = TRUE)
+  skipGeometry = TRUE
+)
 ```
+
+### Python
+
+```{python}
+#| eval: false
+no_sf, md = waterdata.get_monitoring_locations(
+    state_name="Wisconsin",
+    county_name="Dane County",
+    site_type="Stream",
+    skip_geometry=True,
+)
+```
+
+:::
 
 ::: footer
 
 :::
 
-## read_waterdata_ts_meta
+## read_waterdata_combined_meta
 
-Time-Series Metadata. *Kind of* replaces `whatNWISdata`:
+Combined Time-Series Metadata. *Kind of* replaces `whatNWISdata`:
 
 ![](images/read_ts_meta.png)
 
 ```{r}
-site_ts <- read_waterdata_ts_meta(
-  monitoring_location_id = "USGS-02238500")
-
+site_ts <- read_waterdata_combined_meta(
+  monitoring_location_id = "USGS-02238500"
+)
 ```
+
 
 ::: footer
 
 :::
 
-## read_waterdata_ts_meta {.smaller .scrollable}
+## read_waterdata_combined_meta {.smaller .scrollable}
 
 ```{r}
 #| echo: false
-
-dt_me(site_ts |> 
-        sf::st_drop_geometry() |> 
-        select(-web_description,
-               -parameter_description,
-               -monitoring_location_id,
-               -thresholds,
-               -computation_identifier), 6, "0.7em")
-
+dt_me(
+  site_ts |>
+    sf::st_drop_geometry() |>
+    select(
+      monitoring_location_id,
+      parameter_code,
+      statistic_id,
+      last_modified,
+      begin,
+      end,
+      data_type,
+      combined_meta_id
+    ),
+  6,
+  "0.7em"
+)
 ```
 
 ::: footer
 
 :::
 
-## read_waterdata_ts_meta
+## read_waterdata_combined_meta {.smaller}
 
 Let's get all the time series in Dane County, WI with daily mean (statistic_id = "00003") discharge (parameter code = "00060) or temperature (parameter code = "00010):
 
 ```{r}
-sites_available <- read_waterdata_ts_meta(
-  bbox = sf::st_bbox(site_info),
+sites_available <- read_waterdata_combined_meta(
+  state_name = "Wisconsin",
+  county_name = "Dane County",
   parameter_code = c("00060", "00010"),
-  statistic_id = c("00003"))
-
+  statistic_id = c("00003")
+)
 ```
 
 ::: {.callout-tip}
-Geographic filters are limited to monitoring_location_id and bbox in "waterdata" functions *other* than `read_waterdata_monitoring_location`.
+Geographic filters are limited to monitoring_location_id and bbox in "waterdata" functions *other* than `read_waterdata_monitoring_location` and `read_waterdata_combined_meta`.
 
 Using `sf::st_bbox()` is a convenient way to take advantage of the spatial features integration.
 :::
 
 ::: footer
-<https://doi-usgs.github.io/dataRetrieval/reference/read_waterdata_ts_meta.html>
+
 :::
 
-## read_waterdata_ts_meta {.smaller .scrollable}
+## read_waterdata_combined_meta {.smaller .scrollable}
 
 ```{r}
 #| echo: false
-
-dt_me(sites_available |> 
-        sf::st_drop_geometry() |> 
-        filter(!is.na(begin)) |> # public, but "grade" set to unusable
-        select(monitoring_location_id,
-               parameter_name,
-               parameter_code,
-               begin, end), 6, "0.7em")
-
+dt_me(
+  sites_available |>
+    sf::st_drop_geometry() |>
+    filter(!is.na(begin)) |> # public, but "grade" set to unusable
+    select(monitoring_location_id, parameter_name, parameter_code, begin, end),
+  6,
+  "0.7em"
+)
 ```
 
 ::: footer
@@ -466,11 +659,12 @@ Replaces `readNWISdv`:
 ![](images/read_dv.png)
 
 ```{r}
-daily <- read_waterdata_daily(monitoring_location_id = c("USGS-05406457",
-                                                         "USGS-05427930"),
-                              parameter_code = c("00060", "00010"),
-                              statistic_id = "00003",
-                              time = c("2024-10-01", "2025-07-07"))
+daily <- read_waterdata_daily(
+  monitoring_location_id = c("USGS-05406457", "USGS-05427930"),
+  parameter_code = c("00060", "00010"),
+  statistic_id = "00003",
+  time = c("2024-10-01", "2025-07-07")
+)
 ```
 
 ::: footer
@@ -481,9 +675,7 @@ daily <- read_waterdata_daily(monitoring_location_id = c("USGS-05406457",
 
 ```{r}
 #| echo: false
-
 dt_me(daily, 6, "0.7em")
-
 ```
 
 ::: footer
@@ -494,11 +686,8 @@ dt_me(daily, 6, "0.7em")
 
 ```{r}
 ggplot(data = daily) +
-  geom_point(aes(x = time, y = value, 
-                 color = approval_status)) +
-  facet_grid(parameter_code ~ monitoring_location_id,
-             scale = "free")
-
+  geom_point(aes(x = time, y = value, color = approval_status)) +
+  facet_grid(parameter_code ~ monitoring_location_id, scale = "free")
 ```
 
 ::: footer
@@ -528,14 +717,16 @@ The "time" argument has a few options:
 Here are a bunch of valid inputs:
 
 ```{r}
-#| code-line-numbers: "1-7|8-9|10-13|14-17"
+#| code-line-numbers: "1-9|10-11|12-15|16-19"
 # Ask for exact times:
 time = "2025-01-01"
 time = as.Date("2025-01-01")
 time = "2025-01-01T23:20:50Z"
-time = as.POSIXct("2025-01-01T23:20:50Z", 
-                  format = "%Y-%m-%dT%H:%M:%S", 
-                  tz = "UTC")
+time = as.POSIXct(
+  "2025-01-01T23:20:50Z",
+  format = "%Y-%m-%dT%H:%M:%S",
+  tz = "UTC"
+)
 # Ask for specific range
 time = c("2024-01-01", "2025-01-01") # or Dates or POSIXs
 # Asking beginning of record to specific end:
@@ -554,21 +745,25 @@ time = "PT12H" # past hours
 
 ## read_waterdata_latest_continuous{.smaller}
 
-Most recent observation for each time series of continuous data. Continuous data are collected via automated sensors installed at a monitoring location. They are collected at a high frequency and often at a fixed 15-minute interval.
+Most recent observation for each time series of continuous data. 
+
+Continuous data are collected via automated sensors installed at a monitoring location. They are collected at a high frequency and often at a fixed 15-minute interval.
 
 ```{r}
-latest_uv_data <- read_waterdata_latest_continuous(monitoring_location_id = "USGS-01491000",
-                                                   parameter_code = "00060")
+latest_uv_data <- read_waterdata_latest_continuous(
+  monitoring_location_id = "USGS-01491000",
+  parameter_code = "00060",
+)
 
-latest_dane_county <- read_waterdata_latest_continuous(bbox = sf::st_bbox(site_info), 
-                                                       parameter_code = "00060")
+latest_dane_county <- read_waterdata_latest_continuous(
+  bbox = sf::st_bbox(site_info),
+  parameter_code = "00060"
+)
 
-single_ts <- read_waterdata_latest_continuous(time_series_id = "202345d175874d2c814648ac9bea5deb")
+single_ts <- read_waterdata_latest_continuous(
+  time_series_id = "202345d175874d2c814648ac9bea5deb"
+)
 ```
-
-::: {.callout-note}
-Nearly all arguments can be vectors.
-:::
 
 
 ::: footer
@@ -581,12 +776,13 @@ Latest discharge observation (00060) in Dane County, WI:
 
 ```{r}
 #| echo: false
-
-dt_me(latest_dane_county |> 
-        sf::st_drop_geometry() |> 
-        select(-time_series_id,
-               -statistic_id), 6, "0.7em")
-
+dt_me(
+  latest_dane_county |>
+    sf::st_drop_geometry() |>
+    select(-time_series_id, -statistic_id),
+  6,
+  "0.7em"
+)
 ```
 
 ::: footer
@@ -599,31 +795,43 @@ dt_me(latest_dane_county |>
 #| output-location: slide
 pal <- colorNumeric("viridis", latest_dane_county$value)
 leaflet_crs <- "+proj=longlat +datum=WGS84"
-leaflet(data = latest_dane_county |> 
-                sf::st_transform(crs = leaflet_crs)) |> 
-    addProviderTiles("CartoDB.Positron") |> 
-    addCircleMarkers(popup = paste(latest_dane_county$monitoring_location_id, "<br>",
-                                    latest_dane_county$time, "<br>",
-                                    latest_dane_county$value,
-                                    latest_dane_county$unit_of_measure), 
-                     color = ~ pal(value),
-                     radius = 3,
-                     opacity = 1) |> 
-    addLegend(pal = pal,
-              position = "bottomleft",
-              title = "Latest Discharge",
-              values = ~value)
+leaflet(
+  data = latest_dane_county |>
+    sf::st_transform(crs = leaflet_crs)
+) |>
+  addProviderTiles("CartoDB.Positron") |>
+  addCircleMarkers(
+    popup = paste(
+      latest_dane_county$monitoring_location_id,
+      "<br>",
+      latest_dane_county$time,
+      "<br>",
+      latest_dane_county$value,
+      latest_dane_county$unit_of_measure
+    ),
+    color = ~ pal(value),
+    radius = 3,
+    opacity = 1
+  ) |>
+  addLegend(
+    pal = pal,
+    position = "bottomleft",
+    title = "Latest Discharge",
+    values = ~value
+  )
 ```
 
 
-## read_waterdata_latest_daily {.smaller}
+## read_waterdata_latest_daily 
 
-Most recent observation for each time series of daily data. Daily data provide one data value to represent water conditions for the day. Daily data are automatically calculated from the continuous data of the same parameter code and are described by parameter code and a statistic code. 
+Most recent observation for each time series of daily data. 
 
 ```{r}
-
-latest_dane_county_daily <- read_waterdata_latest_daily(bbox = sf::st_bbox(site_info), 
-                                                       parameter_code = "00060")
+latest_dane_county_daily <- read_waterdata_latest_daily(
+  bbox = sf::st_bbox(site_info),
+  parameter_code = "00060",
+  time = "P14D"
+)
 ```
 
 ## Map Latest Daily Discharge: leaflet
@@ -632,20 +840,30 @@ latest_dane_county_daily <- read_waterdata_latest_daily(bbox = sf::st_bbox(site_
 #| output-location: slide
 pal <- colorNumeric("viridis", latest_dane_county_daily$value)
 leaflet_crs <- "+proj=longlat +datum=WGS84"
-leaflet(data = latest_dane_county_daily |> 
-                sf::st_transform(crs = leaflet_crs)) |> 
-    addProviderTiles("CartoDB.Positron") |> 
-    addCircleMarkers(popup = paste(latest_dane_county_daily$monitoring_location_id, "<br>",
-      latest_dane_county_daily$time, "<br>",
+leaflet(
+  data = latest_dane_county_daily |>
+    sf::st_transform(crs = leaflet_crs)
+) |>
+  addProviderTiles("CartoDB.Positron") |>
+  addCircleMarkers(
+    popup = paste(
+      latest_dane_county_daily$monitoring_location_id,
+      "<br>",
+      latest_dane_county_daily$time,
+      "<br>",
       latest_dane_county_daily$value,
-      latest_dane_county_daily$unit_of_measure), 
-                     color = ~ pal(value),
-                     radius = 3,
-                     opacity = 1) |> 
-    addLegend(pal = pal,
-              position = "bottomleft",
-              title = "Latest Discharge",
-              values = ~value)
+      latest_dane_county_daily$unit_of_measure
+    ),
+    color = ~ pal(value),
+    radius = 3,
+    opacity = 1
+  ) |>
+  addLegend(
+    pal = pal,
+    position = "bottomleft",
+    title = "Latest Discharge",
+    values = ~value
+  )
 ```
 
 ## read_waterdata_continuous
@@ -653,13 +871,16 @@ leaflet(data = latest_dane_county_daily |>
 Replaces `readNWISuv`:
 
 ```{r}
-this_week <- read_waterdata_continuous(monitoring_location_id = c("USGS-05406457",
-                                                         "USGS-05427930"),
-                              parameter_code = c("00060", "00010"),
-                              time = "P7D")
+this_week <- read_waterdata_continuous(
+  monitoring_location_id = c("USGS-05406457", "USGS-05427930"),
+  parameter_code = c("00060", "00010"),
+  time = "P7D"
+)
 ```
 
 Currently only allows 3 years of data to be queried at once. 
+
+More information <https://water.code-pages.usgs.gov/dataRetrieval/articles/continuous_pr.html>
 
 ::: footer
 
@@ -705,9 +926,7 @@ cql <- '{
   ]
 }'
 
-sites_mn_wi <- read_waterdata(service = "monitoring-locations", 
-                              CQL = cql)
-
+sites_mn_wi <- read_waterdata(service = "monitoring-locations", CQL = cql)
 ```
 
 ::: footer
@@ -720,49 +939,33 @@ sites_mn_wi <- read_waterdata(service = "monitoring-locations",
 #| output-location: slide
 pal <- colorNumeric("viridis", sites_mn_wi$drainage_area)
 leaflet_crs <- "+proj=longlat +datum=WGS84"
-leaflet(data = sites_mn_wi |> 
-                sf::st_transform(crs = leaflet_crs)) |> 
-    addProviderTiles("CartoDB.Positron") |> 
-    addCircleMarkers(popup = ~monitoring_location_name, 
-                     color = ~ pal(drainage_area),
-                     radius = 3,
-                     opacity = 1) |> 
-    addLegend(pal = pal,
-              position = "bottomleft",
-              title = "Drainage Area",
-              values = ~drainage_area)
-
-```
-
-## read_waterdata HUCs
-
-Let's find a list of sites with HUCs that fall within 02070010. Use the wildcard `%`
-
-```{r}
-# Here's how to get 
-cql_huc_wildcard <- '{
-"op": "like",
-"args": [
-  { "property": "hydrologic_unit_code" },
-  "02070010%"
-]
-}'
-
-what_huc_sites <- read_waterdata(service = "monitoring-locations",
-                                 CQL = cql_huc_wildcard)
-
-```
-
-## read_waterdata HUCs
-
-```{r}
-unique(what_huc_sites$hydrologic_unit_code)
+leaflet(
+  data = sites_mn_wi |>
+    sf::st_transform(crs = leaflet_crs)
+) |>
+  addProviderTiles("CartoDB.Positron") |>
+  addCircleMarkers(
+    popup = ~monitoring_location_name,
+    color = ~ pal(drainage_area),
+    radius = 3,
+    opacity = 1
+  ) |>
+  addLegend(
+    pal = pal,
+    position = "bottomleft",
+    title = "Drainage Area",
+    values = ~drainage_area
+  )
 ```
 
 
 ## read_waterdata_metadata {.smaller}
 
-The function `read_waterdata_metadata` gives access to the metadata collections from the USGS Water Data API. Note these do not use the CQL syntax:
+The function `read_waterdata_metadata` gives access to the metadata collections from the USGS Water Data API.
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 #| eval: false
@@ -770,7 +973,9 @@ agency_codes <- read_waterdata_metadata("agency-codes")
 altitude_datums <- read_waterdata_metadata("altitude-datums")
 aquifer_codes <- read_waterdata_metadata("aquifer-codes")
 aquifer_types <- read_waterdata_metadata("aquifer-types")
-coordinate_accuracy_codes <- read_waterdata_metadata("coordinate-accuracy-codes")
+coordinate_accuracy_codes <- read_waterdata_metadata(
+  "coordinate-accuracy-codes"
+)
 coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
 coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
 huc_codes <- read_waterdata_metadata("hydrologic-unit-codes")
@@ -782,6 +987,35 @@ statistic_codes <- read_waterdata_metadata("statistic-codes")
 topographic_codes <- read_waterdata_metadata("topographic-codes")
 time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 ```
+
+### Python
+
+```{python}
+#| eval: false
+agency_codes, md1 = waterdata.get_reference_table("agency-codes")
+altitude_datums, md2 = waterdata.get_reference_table("altitude-datums")
+aquifer_codes, md3 = waterdata.get_reference_table("aquifer-codes")
+aquifer_types, md4 = waterdata.get_reference_table("aquifer-types")
+coordinate_accuracy_codes, md1 = waterdata.get_reference_table(
+    "coordinate-accuracy-codes"
+)
+coordinate_datum_codes, md1 = waterdata.get_reference_table("coordinate-datum-codes")
+coordinate_method_codes, md1 = waterdata.get_reference_table("coordinate-method-codes")
+huc_codes, md1 = waterdata.get_reference_table("hydrologic-unit-codes")
+national_aquifer_codes, md1 = waterdata.get_reference_table("national-aquifer-codes")
+parameter_codes, md1 = waterdata.get_reference_table("parameter-codes")
+reliability_codes, md1 = waterdata.get_reference_table("reliability-codes")
+site_types, md1 = waterdata.get_reference_tablea("site-types")
+statistic_codes, md1 = waterdata.get_reference_table("statistic-codes")
+topographic_codes, md1 = waterdata.get_reference_table("topographic-codes")
+time_zone_codes, md1 = waterdata.get_reference_table("time-zone-codes")
+```
+
+:::
+
+::: footer
+
+:::
 
 ## General New Features of Water Data OGC APIs {.smaller}
 
@@ -810,17 +1044,8 @@ time_zone_codes <- read_waterdata_metadata("time-zone-codes")
 
   - There is a character limit to how big your query can be
   
-  - Possible alternatives to large site lists are bounding box queries, or loops/applys/etc to chunk up the request
+  - `dataRetrieval` v2.7.25 will automatically chunk up requests of long lists of monitoring_location_id.
   
-  - Need to balance the character size of the request with the requests per hour limit.
-
-## Limit Explanation
-
-  - `limit` lets you define how many rows are returned **per page** of data. With a good internet connection, you can probably get away with ignoring this argument.
-
-  - Leaving the `limit` argument to the default will return 50,000 rows per page.
-
-  - `no_paging` argument (`TRUE`/`FALSE`) will only return 1 page of data, therefore the `limit` argument will define how many rows are returned.
 
 ## Adding API token to CI jobs: GitLab
 
@@ -901,8 +1126,6 @@ OR
 
 Replaces `readNWISqw`
 
-`read_waterdata_samples` is the **SAME** as `read_USGS_samples`, but going forward we want to use waterdata for consistent branding.
-
 ![](images/read_samples.png)
 
 ::: footer
@@ -919,21 +1142,31 @@ Replaces `readNWISqw`
 
 ```{r}
 #| echo: false
+df <- tibble(
+  dataType = c(
+    "results",
+    "locations",
+    "activities",
+    "projects",
+    "organizations"
+  ),
+  Description = c(
+    "Results data and metadata for measures and observations matching your query",
+    "Find monitoring locations that have data matching your query",
+    "Information about the monitoring activities conducted that produced data",
+    "Information on the projects that have results matching your data query",
+    "Information about the organizations that have provided data that matches your query"
+  ),
+  dataProfile = c(
+    'fullphyschem<br>basicphyschem<br>fullbio<br> basicbio<br>narrow<br>resultdetectionquantitationlimit<br>labsampleprep<br>count',
+    'site<br>count',
+    'sampact<br>actmetric<br>actgroup<br>ncount',
+    'project<br>projectmonitoringlocationweight',
+    'organization<br>count'
+  )
+)
 
-df <- tibble(dataType = c("results", "locations", "activities", "projects", "organizations"),
-             Description = c("Results data and metadata for measures and observations matching your query",
-                             "Find monitoring locations that have data matching your query",
-                             "Information about the monitoring activities conducted that produced data",
-                             "Information on the projects that have results matching your data query",
-                             "Information about the organizations that have provided data that matches your query"),
-             dataProfile = c('fullphyschem<br>basicphyschem<br>fullbio<br> basicbio<br>narrow<br>resultdetectionquantitationlimit<br>labsampleprep<br>count',
-             'site<br>count',
-             'sampact<br>actmetric<br>actgroup<br>ncount',
-             'project<br>projectmonitoringlocationweight',
-             'organization<br>count'))
-
-dt_me(df, escape = FALSE, paging=FALSE)
-
+dt_me(df, escape = FALSE, paging = FALSE)
 ```
 
 
@@ -943,16 +1176,40 @@ dt_me(df, escape = FALSE, paging=FALSE)
 
 ## read_waterdata_samples
 
+::: {.panel-tabset}
+
+### R
+
 ```{r}
 site <- "USGS-01631000"
 pcode <- "00660"
 
-qw_data <- read_waterdata_samples(monitoringLocationIdentifier = site,
-                                  usgsPCode = pcode, 
-                                  dataType = "results", 
-                                  dataProfile = "basicphyschem")
+qw_data <- read_waterdata_samples(
+  monitoringLocationIdentifier = site,
+  usgsPCode = pcode,
+  dataType = "results",
+  dataProfile = "basicphyschem"
+)
 ncol(qw_data)
 ```
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+site = "USGS-01631000"
+pcode = "00660"
+
+qw_data, md = waterdata.get_samples(
+    monitoringLocationIdentifier=site,
+    usgsPCode=pcode,
+    service="results",
+    profile="basicphyschem",
+)
+qw_data.shape[1]
+```
+
+:::
 
 That's a LOT of columns that come back. 
 
@@ -960,24 +1217,62 @@ That's a LOT of columns that come back.
 <https://doi-usgs.github.io/dataRetrieval/articles/samples_data.html>
 :::
 
-## Discrete data censoring 
+## Discrete data censoring {.smaller}
 
 Let's pull just a few columns out and look at those:
+
+::: {.panel-tabset}
+
+### R
 
 ```{r}
 library(dplyr)
 
-qw_data_slim <- qw_data |> 
-  select(Date = Activity_StartDate,
-         Result_Measure,
-         DL_cond = Result_ResultDetectionCondition,
-         DL_val_A = DetectionLimit_MeasureA,
-         DL_type_A = DetectionLimit_TypeA) |> 
-  mutate(Result = if_else(!is.na(DL_cond), DL_val_A, Result_Measure),
-         Detected = if_else(!is.na(DL_cond), "Not Detected", "Detected")) |> 
+qw_data_slim <- qw_data |>
+  select(
+    Date = Activity_StartDate,
+    Result_Measure,
+    DL_cond = Result_ResultDetectionCondition,
+    DL_val = DetectionLimit_MeasureA,
+    DL_type = DetectionLimit_TypeA
+  ) |>
+  mutate(
+    nwis_value = if_else(DL_cond != "", DL_val, Result_Measure),
+    Detected = if_else(DL_cond != "", "Not Detected", "Detected")
+  ) |>
   arrange(Detected)
-
 ```
+
+* What is `|>`? It's a pipe! It says take 'this thing' and put it in 'that thing'. You'll also see `%>%` in code, it is also a pipe - they are basically the same. 
+
+### Python
+
+```{python}
+#| eval: !expr evaluate_python
+import numpy as np
+
+qw_data_slim = (
+    qw_data.rename(
+        columns={
+            "Activity_StartDate": "Date",
+            "Result_ResultDetectionCondition": "DL_cond",
+            "DetectionLimit_MeasureA": "DL_val",
+            "DetectionLimit_TypeA": "DL_type",
+        }
+    )[["Date", "Result_Measure", "DL_cond", "DL_val", "DL_type"]]
+    .assign(
+        nwis_value=lambda x: np.where(
+            x["DL_cond"].notna(), x["DL_val"], x["Result_Measure"]
+        )
+    )
+    .assign(
+        Detected=lambda x: np.where(x["DL_cond"].notna(), "Not Detected", "Detected")
+    )
+    .sort_values(by="Detected", ascending=False)
+)
+```
+
+:::
 
 ::: footer
 
@@ -987,8 +1282,7 @@ qw_data_slim <- qw_data |>
 
 ```{r}
 #| echo: false
-
-dt_me(qw_data_slim, page_length = 8, font =  "0.7em")
+dt_me(qw_data_slim, page_length = 8, font = "0.7em")
 ```
 
 ::: footer
@@ -1001,15 +1295,18 @@ dt_me(qw_data_slim, page_length = 8, font =  "0.7em")
 A summary service exists for 1 site at a time (so in this case, monitoringLocationIdentifier cannot be a vector of sites):
 
 ```{r}
-data_at_site <- summarize_waterdata_samples(monitoringLocationIdentifier = "USGS-04183500")
-
+data_at_site <- summarize_waterdata_samples(
+  monitoringLocationIdentifier = "USGS-04183500"
+)
 ```
 
 ```{r}
 #| echo: false
-
-dt_me(data_at_site |> 
-        arrange(desc(resultCount)), page_length = 4)
+dt_me(
+  data_at_site |>
+    arrange(desc(resultCount)),
+  page_length = 4
+)
 ```
 
 ::: footer
@@ -1022,18 +1319,19 @@ If you use `readWQPqw`, add "legacy=FALSE" to get modern USGS data:
 
 ```{r}
 #| eval: false
-pHsites_legacy <- readWQPqw("USGS-05406450", "pH", 
-                            legacy = FALSE)
+pHsites_legacy <- readWQPqw("USGS-05406450", "pH", legacy = FALSE)
 ```
 
 If you use `readWQPdata`, add 'service = "ResultWQX3"':
 
 ```{r}
 #| eval: false
-pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315", 
-                           characteristicName = "pH",
-                           service = "ResultWQX3",
-                           dataProfile = "basicPhysChem")
+pHData_wqx3 <- readWQPdata(
+  siteid = "USGS-04024315",
+  characteristicName = "pH",
+  service = "ResultWQX3",
+  dataProfile = "basicPhysChem"
+)
 ```
 
 ## HELP! {.smaller}
@@ -1049,6 +1347,14 @@ pHData_wqx3 <- readWQPdata(siteid = "USGS-04024315",
 ::: footer
 
 :::
+
+## Additional New Features:
+
+* [Daily Statistics API](https://doi-usgs.github.io/dataRetrieval/articles/daily_data_statistics.html)
+
+* [Updated National Groundwater Monitoring Location Network](https://api.waterdata.usgs.gov/ngwmn/ogcapi/collections)
+
+* [HASP](https://doi-usgs.github.io/HASP/)
 
 ## More Information {.smaller}
 

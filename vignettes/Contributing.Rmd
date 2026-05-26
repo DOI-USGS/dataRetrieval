@@ -15,9 +15,7 @@ editor_options:
 ```{r setup, include=FALSE}
 library(knitr)
 
-opts_chunk$set(echo = TRUE,
-               warning = FALSE,
-               message = FALSE)
+opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 
@@ -387,6 +385,45 @@ git pull codeusgs main
 ```
 
 In general, create a pull request to push to the DOI-USGS/dataRetrieval main branch or a merge request to push to the main branch of code.usgs.gov/water/dataRetrieval. 
+
+# Setting up Quarto Slides
+
+Slide decks are produced using Quarto in the "tutorials" folder. They require both R and Python to be installed. To install, download and install Miniforge. For Windows, open the "Miniforge Prompt", for MacOS and Linux open a terminal. Navigate to the dataRetrieval directory and type the following:
+
+```
+mamba env create -f environment.yml
+```
+
+Then activate the environment (still in Miniforge) using `conda`:
+```
+conda activate pyclass
+```
+The slides will use the R package `reticulate` to manage flipping back and forth between R and Python. To help `reticulate` know where Python is installed, you will need to add an envionmnental variable to your .Renviorn file "RETICULATE_PYTHON". Run `usethis::edit_r_environ()`, then add the path to your Python installation, and restart R. RStudio can render both the R and Python in the Quarto slides. However, if you want to do troubleshooting on individual code chunks, you might want to switch to Positron which allows seamless transition between R and Python consoles.
+
+Let's say you need to update to a new version of dataretrieval:
+
+1. Open the Miniforge prompt
+
+2. Navigate to dataRetrieval directory
+
+3. Activate pyclass:
+```
+conda activate pyclass
+```
+
+4. Update package:
+```
+conda install conda-forge::dataretrieval
+```
+
+5. Restart your python session.
+
+
+Let's say you want to update all packages. In step 4 above, run:
+```
+mamba update
+```
+
 
 
 # References

@@ -10,6 +10,7 @@ read_waterdata_field_measurements(
   observing_procedure_code = NA_character_,
   properties = NA_character_,
   field_visit_id = NA_character_,
+  field_measurements_series_id = NA_character_,
   approval_status = NA_character_,
   unit_of_measure = NA_character_,
   qualifier = NA_character_,
@@ -23,9 +24,12 @@ read_waterdata_field_measurements(
   skipGeometry = NA,
   time = NA_character_,
   bbox = NA,
-  limit = NA,
-  convertType = TRUE,
-  no_paging = FALSE
+  ...,
+  convertType = getOption("dataRetrieval.convertType"),
+  no_paging = getOption("dataRetrieval.no_paging"),
+  limit = getOption("dataRetrieval.limit"),
+  chunk_size = getOption("dataRetrieval.site_chunk_size_data"),
+  attach_request = getOption("dataRetrieval.attach_request")
 )
 }
 \arguments{
@@ -45,6 +49,12 @@ geometry, field_measurement_id, field_measurements_series_id, field_visit_id, pa
 The default (\code{NA}) will return all columns of the data.}
 
 \item{field_visit_id}{A universally unique identifier (UUID) for the field visit. Multiple measurements may be made during a single field visit.}
+
+\item{field_measurements_series_id}{A unique identifier representing a single
+collection series. This corresponds to the \code{field_measurements_series_id} field in the
+\code{read_waterdata_field_meta} endpoint. Collection series are defined as the
+set of field measurements at a given monitoring location for a single parameter
+code using a single reading type.}
 
 \item{approval_status}{Some of the data that you have obtained from this U.S. Geological Survey database may not have received Director's approval.  Any such data values are qualified as provisional and are subject to revision.  Provisional data are released on the condition that neither the USGS nor the United States Government may be held liable for any damages resulting from its use. This field reflects the approval status of each record, and is either "Approved", meaining processing review has been completed and the data is approved for publication, or "Provisional" and subject to revision. For more information about provisional data, go to \url{https://waterdata.usgs.gov/provisional-data-statement/}.}
 
@@ -83,9 +93,9 @@ What and where the control of flow is for the gage pool.}
 Rated measurement based on the hydrologic/hydraulic conditions in which the measurement was made
 (excellent (2 percent), good (5 percent), fair (8 percent), or poor (more than 8 percent).                                                        percent)}
 
-\item{skipGeometry}{This option can be used to skip response geometries for
+\item{skipGeometry}{This parameter can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial
-information.}
+information. The default \code{NA} will not specify the argument in the request.}
 
 \item{time}{The date an observation represents. You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
 Examples:
@@ -104,22 +114,39 @@ See also Details below for more information.}
 box are selected.The bounding box is provided as four or six numbers, depending
 on whether the coordinate reference system includes a vertical axis (height or
 depth). Coordinates are assumed to be in crs 4326. The expected format is a numeric
-vector structured: c(xmin,ymin,xmax,ymax). Another way to think of it is c(Western-most longitude,
+vector structured: c(xmin,ymin,xmax,ymax).
+Another way to think of it is c(Western-most longitude,
 Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
-\item{limit}{The optional limit parameter is used to control the subset of the
-selected features that should be returned in each page. The maximum allowable
-limit is 50000. It may be beneficial to set this number lower if your internet
-connection is spotty. The default (\code{NA}) will set the limit to the maximum
-allowable limit for the service.}
+\item{...}{Not used. Included to help differentiate official Water Data API arguments
+from more seldom used, optional dataRetrieval-specific arguments.}
 
-\item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
-will convert the data to dates and qualifier to string vector.}
+\item{convertType}{logical, defaults to TRUE.
+If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
+vector and reorder the returned data frame.}
 
-\item{no_paging}{logical, defaults to \code{FALSE}. If \code{TRUE}, the data will
+\item{no_paging}{logical, defaults to FALSE.
+If \code{TRUE}, the data will
 be requested from a native csv format. This can be dangerous because the
 data will cut off at 50,000 rows without indication that more data
 is available. Use \code{TRUE} with caution.}
+
+\item{limit}{numeric, The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 50,000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
+
+\item{chunk_size}{Number of monitoring_location_ids to chunk requests into.
+The default for functions that don't generally return long-term data records
+is 250, while
+the default for time series functions is
+10.
+Setting to \code{NA} will eliminate site chunking, giving users full control.}
+
+\item{attach_request}{logical, defaults to TRUE.
+If set to \code{TRUE}, the full request sent to the Water Data API is attached
+as an attribute to the data set.}
 }
 \description{
 Field measurements are physically measured values collected during a visit to the monitoring location. Field measurements consist of measurements of gage height and discharge, and readings of groundwater levels, and are primarily used as calibration readings for the automated sensors collecting continuous data. They are collected at a low frequency, and delivery of the data in WDFN may be delayed due to data processing time.
@@ -168,6 +195,9 @@ multi_site <- read_waterdata_field_measurements(
 
 old_df <- read_waterdata_field_measurements(monitoring_location_id = "USGS-425957088141001",
                                               time = c("1980-01-01", NA))
+
+new_df <- read_waterdata_field_measurements(monitoring_location_id = "USGS-425957088141001",
+                                              time = c(NA, "2020-01-01"))
 
 surface_water <- read_waterdata_field_measurements(
                          monitoring_location_id = c("USGS-07069000",

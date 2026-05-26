@@ -51,6 +51,7 @@ test_that("NLDI starting sources...", {
         "identifier",
         "comid",
         "name",
+        "mainstem",
         "reachcode",
         "measure",
         "X",

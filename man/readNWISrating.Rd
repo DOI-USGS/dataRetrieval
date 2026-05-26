@@ -48,8 +48,8 @@ relate flow to stage.
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 site_id <- "01594440"
 \donttest{
-data <- readNWISrating(site_id, "base")
-attr(data, "RATING")
+#data <- readNWISrating(site_id, "base")
+#attr(data, "RATING")
 }
 \dontshow{\}) # examplesIf}
 }

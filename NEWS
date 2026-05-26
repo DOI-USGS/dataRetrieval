@@ -1,3 +1,28 @@
+dataRetrieval 2.7.25
+===================
+* Added read_waterdata_ratings to access USGS rating curves with
+new modern endpoint.
+* Added read_waterdata_peaks to access USGS peak data with
+new modern endpoint.
+* Increase flexibility of chunking by monitoring_location_id by 
+including it as an argument in each relevant waterdata OGC function.
+* Clean up deprecated code.
+* Updated retry strategy to include retry_on_failure = TRUE.
+* Added countries, methods, method-categories, method-citations, and
+citations to possible values in read_waterdata_metadata.
+* Added field_measurements_series_id argument to read_waterdata_field_measurement
+* Removed NWIS tests
+* Introduce an error if user inputs a numeric to any of the "time" arguments.
+Because it is impossible to tell if they intended Dates or POSIX, we cannot
+know for sure and therefore could add incorrect filters to the query.
+* The "id" column that comes back from read_waterdata_field_meta was changed to
+field_measurements_series_id to match the expectation of `read_waterdata_field_measurements`
+* New argument added to read_waterdata_stats_por: "normal_type" accepts
+"DOY" and "MOY"
+* New argument added to read_waterdata_stats_daterange: "interval_type" accepts
+"M" (month), "CY" (calendar year), and "WY" (water year).
+
+
 dataRetrieval 2.7.24
 ===================
 * Let dataRetrieval take care of chunking up requests by monitoring_location_id.

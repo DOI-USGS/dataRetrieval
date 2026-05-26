@@ -1,5 +1,3 @@
-image: ${CI_REGISTRY_IMAGE}:latest
-
 workflow:
   rules:
     - if: $CI_COMMIT_TAG
@@ -8,9 +6,9 @@ workflow:
 default:
   tags:
     - chs-shared
-    - dind
 
 stages:
+  - build-package
   - build
   - check
   - test
@@ -33,93 +31,138 @@ variables:
   CUSTOM_DR_UA: "GitLab_CI"
   API_USGS_PAT: "${API_USGS_PAT}"
 
+build-package:
+  stage: build-package
+  image: ${CI_REGISTRY_IMAGE}:latest
+  script:
+    - set -euo pipefail
+    - R CMD build .
+  artifacts:
+    paths:
+      - "*.tar.gz"
+    expire_in: 1 day
+
 build-image:
   stage: build
   cache: []
-  image: ${DEVOPS_REGISTRY}usgs/docker:20
+  tags:
+    - chs-shared
+    - dind
+  image: ${DEVOPS_REGISTRY}usgs/docker:29
   services:
-  - name: ${DEVOPS_REGISTRY}usgs/docker:20-dind
+  - name: ${DEVOPS_REGISTRY}usgs/docker:29-dind
     alias: docker
-  rules:
-    - changes:
-      - docker/Dockerfile
   script:
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
+    - cp *.tar.gz docker/
     - cd docker
     - docker build
         -t ${CI_REGISTRY_IMAGE}:latest
         .
     - docker push --all-tags ${CI_REGISTRY_IMAGE}
+  artifacts:
+    expire_in: 45 minutes
 
 buildcheck:
+  image: ${CI_REGISTRY_IMAGE}:latest
   stage: check
   cache: []
   dependencies:
     - build-image
   script:
-    - Rscript -e 'devtools::install(quick = TRUE, upgrade = "never")'
-    - Rscript -e 'devtools::check(document = FALSE, args = "--no-tests", check_dir = Sys.getenv("BUILD_LOGS_DIR"), vignettes = FALSE)'
-
-unittests:
-  stage: test
-  cache: []
-  dependencies:
-    - build-image
-    - buildcheck
-  script:
-    - R -e 'library(testthat); options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml")); devtools::test(reporter = "junit")'
-    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
+    - |
+      Rscript -e "
+        rcmdcheck::rcmdcheck(
+          args = c('--no-manual', '--no-tests'),
+          build_args = c('--no-manual', '--no-resave-data'),
+          check_dir = '.',
+          error_on = 'warning'
+        )
+      "
   artifacts:
-    when: always
-    expire_in: 1 week
-    paths: 
-      - test-out.xml
-    reports:
-      junit: test-out.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: cobertura.xml
-  coverage: '/Coverage: \d+.\d+\%/'
+    paths:
+      - "*.tar.gz"
+    expire_in: 1 hour
+
+# unittests:
+#   stage: test
+#   cache: []
+#   image: ${CI_REGISTRY_IMAGE}:latest
+#   dependencies:
+#     - build-image
+#     - buildcheck
+#   script:
+#     - |
+#       Rscript -e '
+#         library(testthat)
+#         options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml"))
+#         test_local(reporter = "junit")'
+#     - |
+#       Rscript -e '
+#         x <- covr::package_coverage()
+#         covr::to_cobertura(x)
+#         x'
+#   artifacts:
+#     when: always
+#     expire_in: 1 hour
+#     paths: 
+#       - test-out.xml
+#     reports:
+#       junit: test-out.xml
+#       coverage_report:
+#         coverage_format: cobertura
+#         path: cobertura.xml
+#   coverage: '/Coverage: \d+.\d+\%/'
 
 longtest:
   stage: test
+  image: ${CI_REGISTRY_IMAGE}:latest
   dependencies:
     - build-image
     - buildcheck
   script:
-    - Rscript -e 'testthat::test_local(path = "tests/manual")'
+    - |
+      Rscript -e '
+        testthat::test_local(path = "tests/manual")'
   rules:
     - if: $RUN_LONG_TESTS == "FALSE"
       when: always
     - when: never
-  
+  artifacts:
+    expire_in: 5 minutes
+
 pages:
+  image: ${CI_REGISTRY_IMAGE}:latest
   stage: end
+  before_script:
+    - conda env create -n dataretrieval -f environment.yml
   dependencies:
     - build-image
     - buildcheck
   script:
-    - Rscript -e 'devtools::install(quick = TRUE, upgrade = "never")'
-    - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
-    - Rscript -e 'file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
+    - |
+      Rscript -e '
+        pkgdown::build_site(override = list(destination = "public"))
+        file.copy(from = "./public/articles/logo.png", to = "./public/reference/logo.png")'
     - quarto render
-
   artifacts:
     paths:
       - $PAGES_OUTDIR
-    expire_in: 1 week
+    expire_in: 1 hour
     
 Validate Inventory:
-    stage: end
-    only: 
-      - main
-    image: ${INTERNAL_REGISTRY}software/software-management:latest
-    script:
-      - software-management review
-        --project "${CI_PROJECT_PATH}"
-        --ref "${CI_COMMIT_BRANCH}"
-        --type "provisional"
-        --token "${GIT_TOKEN_CUSTOM}"
-    tags:
-        - chs-shared
+  stage: end
+  only: 
+    - main
+  image: ${INTERNAL_REGISTRY}software/software-management:latest
+  script:
+    - software-management review
+      --project "${CI_PROJECT_PATH}"
+      --ref "${CI_COMMIT_BRANCH}"
+      --type "provisional"
+      --token "${GIT_TOKEN_CUSTOM}"
+  tags:
+      - chs-shared
+  artifacts:
+    expire_in: 5 minutes

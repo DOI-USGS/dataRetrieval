@@ -4,7 +4,12 @@
 \alias{read_waterdata_metadata}
 \title{Generalized USGS Water Meta Data API retrieval function}
 \usage{
-read_waterdata_metadata(collection, limit = NA, ...)
+read_waterdata_metadata(
+  collection,
+  ...,
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
+)
 }
 \arguments{
 \item{collection}{character, can be any existing collection such
@@ -14,14 +19,18 @@ as "parameter-codes", "agency-codes", "altitude-datums", "aquifer-codes",
 "national-aquifer-codes", "reliability-codes", "site-types", "statistic-codes",
 "topographic-codes", "time-zone-codes".}
 
+\item{\dots}{Optional arguments to pass to the query. Available parameters
+can be found with the \code{get_ogc_params} function.}
+
 \item{limit}{The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable
 limit is 50000. It may be beneficial to set this number lower if your internet
 connection is spotty. The default (\code{NA}) will set the limit to the maximum
 allowable limit for the service.}
 
-\item{\dots}{Optional arguments to pass to the query. Available parameters
-can be found with the \code{get_ogc_params} function.}
+\item{attach_request}{logical, defaults to TRUE.
+If set to \code{TRUE}, the full request sent to the Water Data API is attached
+as an attribute to the data set.}
 }
 \description{
 Function to get metadata from Water Data API. These are useful to get the
@@ -36,11 +45,16 @@ altitude_datums <- read_waterdata_metadata("altitude-datums")
 aquifer_codes <- read_waterdata_metadata("aquifer-codes")
 aquifer_types <- read_waterdata_metadata("aquifer-types")
 counties <- read_waterdata_metadata("counties")
+countries <- read_waterdata_metadata("countries")
 us_counties <- read_waterdata_metadata("counties", country_code = "US")
 coordinate_accuracy_codes <- read_waterdata_metadata("coordinate-accuracy-codes")
 coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
 coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
 huc_codes <- read_waterdata_metadata("hydrologic-unit-codes")
+methods <- read_waterdata_metadata("methods")
+method_categories <- read_waterdata_metadata("method-categories")
+method_citations <- read_waterdata_metadata("method-citations")
+citations <- read_waterdata_metadata("citations")
 national_aquifer_codes <- read_waterdata_metadata("national-aquifer-codes")
 parameter_codes <- read_waterdata_metadata("parameter-codes")
 reliability_codes <- read_waterdata_metadata("reliability-codes")

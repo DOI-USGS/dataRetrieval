@@ -12,6 +12,8 @@ walk_pages <- function(req) {
     on_error = "stop"
   )
 
+  failures <- resps |> httr2::resps_failures()
+
   return_list <- resps |>
     httr2::resps_successes() |>
     httr2::resps_data(\(resp) get_resp_data(resp))
@@ -39,19 +41,7 @@ get_resp_data <- function(resp) {
 
   return_df <- sf::read_sf(httr2::resp_body_string(resp))
 
-  included_num_cols <- names(return_df)[names(return_df) %in% num_cols]
-
-  if (
-    !all(sapply(
-      sf::st_drop_geometry(return_df[, included_num_cols]),
-      is.numeric
-    ))
-  ) {
-    return_df[, included_num_cols] <- lapply(
-      sf::st_drop_geometry(return_df[, included_num_cols]),
-      as.numeric
-    )
-  }
+  return_df <- coerce_num_cols(return_df, is_sf = TRUE)
 
   if ("qualifier" %in% names(return_df)) {
     return_df$qualifier <- as.character(vapply(
@@ -97,14 +87,7 @@ next_req_url <- function(resp, req) {
     return(NULL)
   }
 
-  header_info <- httr2::resp_headers(resp)
-  if (Sys.getenv("API_USGS_PAT") != "") {
-    message(
-      "Remaining requests this hour:",
-      header_info$`x-ratelimit-remaining`,
-      " "
-    )
-  }
+  log_rate_limit(resp)
   if ("links" %in% names(body)) {
     links <- body$links
     if (any(sapply(links, function(x) x$rel) == "next")) {
@@ -126,30 +109,25 @@ get_csv <- function(req, limit) {
   skip_geo <- grepl("skipGeometry=true", req$url, ignore.case = TRUE)
   resp <- httr2::req_perform(req)
 
-  header_info <- httr2::resp_headers(resp)
-  if (Sys.getenv("API_USGS_PAT") != "") {
-    message(
-      "Remaining requests this hour:",
-      header_info$`x-ratelimit-remaining`,
-      " "
-    )
-  }
+  log_rate_limit(resp)
 
   if (httr2::resp_has_body(resp)) {
     return_list <- httr2::resp_body_string(resp)
-    df <- data.table::fread(input = return_list, data.table = FALSE)
+    df <- data.table::fread(
+      input = return_list,
+      data.table = FALSE,
+      colClasses = "character"
+    )
 
-    included_num_cols <- names(df)[names(df) %in% num_cols]
-
-    if (!all(sapply(df[, included_num_cols], is.numeric))) {
-      df[, included_num_cols] <- lapply(df[, included_num_cols], as.numeric)
-    }
+    df <- coerce_num_cols(df)
 
     if (skip_geo) {
       df <- df[, names(df)[!names(df) %in% c("x", "y")]]
     } else {
-      df <- sf::st_as_sf(df, coords = c("x", "y"))
-      sf::st_crs(df) <- 4269
+      if (all(c("x", "y") %in% names(df))) {
+        df <- sf::st_as_sf(df, coords = c("x", "y"))
+        sf::st_crs(df) <- 4269
+      }
     }
 
     if (nrow(df) == limit) {
@@ -163,4 +141,33 @@ ensure all requested data is returned."
   }
 
   return(df)
+}
+
+coerce_num_cols <- function(df, is_sf = FALSE) {
+  included_num_cols <- names(df)[names(df) %in% num_cols]
+  if (length(included_num_cols) == 0) {
+    return(df)
+  }
+
+  check_df <- if (is_sf) {
+    sf::st_drop_geometry(df[, included_num_cols, drop = FALSE])
+  } else {
+    df[, included_num_cols, drop = FALSE]
+  }
+
+  if (!all(vapply(check_df, is.numeric, logical(1)))) {
+    df[, included_num_cols] <- lapply(check_df, as.numeric)
+  }
+  df
+}
+
+log_rate_limit <- function(resp) {
+  if (Sys.getenv("API_USGS_PAT") != "") {
+    header_info <- httr2::resp_headers(resp)
+    message(
+      "Remaining requests this hour:",
+      header_info$`x-ratelimit-remaining`,
+      " "
+    )
+  }
 }

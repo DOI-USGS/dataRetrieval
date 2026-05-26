@@ -1,0 +1,243 @@
+---
+title: "USGS Reference Lists"
+editor_options: 
+  chunk_output_type: console
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
+vignette: >
+  %\VignetteIndexEntry{USGS Reference Lists}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+
+```{r setup, include=FALSE, message=FALSE}
+library(knitr)
+library(dataRetrieval)
+
+options(continue = " ",
+        width = 50)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.height = 4,
+  fig.width = 7
+)
+```
+
+## USGS Reference Lists
+
+### Agency Codes
+
+`r dataRetrieval:::get_description("agency-codes")`
+
+```{r}
+agency_codes <- read_waterdata_metadata("agency-codes")
+head(agency_codes)
+```
+
+### Altitude Datums
+
+`r dataRetrieval:::get_description("altitude-datums")`
+
+```{r}
+altitude_datums <- read_waterdata_metadata("altitude-datums")
+head(altitude_datums)
+```
+
+
+### Aquifer Codes
+
+`r dataRetrieval:::get_description("aquifer-codes")`
+
+```{r}
+aquifer_codes <- read_waterdata_metadata("aquifer-codes")
+head(aquifer_codes)
+```
+
+### Aquifer Types
+
+`r dataRetrieval:::get_description("aquifer-types")`
+
+```{r}
+aquifer_types <- read_waterdata_metadata("aquifer-types")
+head(aquifer_types)
+```
+
+### Coordinate Accuracy Codes
+
+`r dataRetrieval:::get_description("coordinate-accuracy-codes")`
+
+```{r}
+coordinate_accuracy_codes <- read_waterdata_metadata("coordinate-accuracy-codes")
+head(coordinate_accuracy_codes)
+```
+
+### Coordinate Datum Codes
+
+`r dataRetrieval:::get_description("coordinate-accuracy-codes")`
+
+```{r}
+coordinate_datum_codes <- read_waterdata_metadata("coordinate-datum-codes")
+head(coordinate_datum_codes)
+```
+
+### Coordinate Method Codes
+
+`r dataRetrieval:::get_description("coordinate-method-codes")`
+
+```{r}
+coordinate_method_codes <- read_waterdata_metadata("coordinate-method-codes")
+head(coordinate_method_codes)
+```
+
+### Country Identifiers
+
+`r dataRetrieval:::get_description("countries")`
+
+```{r}
+countries <- read_waterdata_metadata("countries")
+head(countries)
+```
+
+### County Identifiers
+
+`r dataRetrieval:::get_description("counties")`
+
+```{r}
+counties <- read_waterdata_metadata("counties")
+head(counties)
+```
+
+### Hydrologic Unit Codes
+
+`r dataRetrieval:::get_description("hydrologic-unit-codes")`
+
+```{r}
+huc_codes <- read_waterdata_metadata("hydrologic-unit-codes")
+head(huc_codes)
+```
+
+
+### Medium Codes
+
+`r dataRetrieval:::get_description("medium-codes")`
+
+```{r}
+medium_codes <- read_waterdata_metadata("medium-codes")
+head(medium_codes)
+```
+
+### Methods
+
+`r dataRetrieval:::get_description("methods")`
+
+```{r}
+methods <- read_waterdata_metadata("methods")
+head(methods)
+```
+
+### Method Categories
+
+`r dataRetrieval:::get_description("method-categories")`
+
+```{r}
+method_categories <- read_waterdata_metadata("method-categories")
+head(method_categories)
+```
+
+### Method Citations
+
+`r dataRetrieval:::get_description("method-citations")`
+
+```{r}
+method_citations <- read_waterdata_metadata("method-citations")
+head(method_citations)
+```
+
+### Citations
+
+`r dataRetrieval:::get_description("citations")`
+
+```{r}
+citations <- read_waterdata_metadata("citations")
+head(citations)
+```
+
+
+### National Aquifer Codes
+
+`r dataRetrieval:::get_description("national-aquifer-codes")`
+
+```{r}
+medium_codes <- read_waterdata_metadata("medium-codes")
+head(medium_codes)
+```
+
+### Parameter Codes
+
+`r dataRetrieval:::get_description("parameter-codes")`
+
+```{r}
+parameter_codes <- read_waterdata_metadata("parameter-codes")
+head(parameter_codes)
+```
+
+### Reliability Codes
+
+`r dataRetrieval:::get_description("reliability-codes")`
+
+```{r}
+reliability_codes <- read_waterdata_metadata("reliability-codes")
+head(reliability_codes)
+```
+
+### Site Types
+
+`r dataRetrieval:::get_description("site-types")`
+
+```{r}
+site_types <- read_waterdata_metadata("site-types")
+head(site_types)
+```
+
+### State Identifiers
+
+`r dataRetrieval:::get_description("states")`
+
+```{r}
+states <- read_waterdata_metadata("states")
+head(states)
+```
+
+### Statistic Codes
+
+`r dataRetrieval:::get_description("statistic-codes")`
+
+```{r}
+statistic_codes <- read_waterdata_metadata("statistic-codes")
+head(statistic_codes)
+```
+
+
+### Topographic Codes
+
+`r dataRetrieval:::get_description("topographic-codes")`
+
+```{r}
+topographic_codes <- read_waterdata_metadata("topographic-codes")
+head(topographic_codes)
+```
+
+### Time Zone Codes
+
+`r dataRetrieval:::get_description("time-zone-codes")`
+
+```{r}
+time_zone_codes <- read_waterdata_metadata("time-zone-codes")
+head(time_zone_codes)
+```

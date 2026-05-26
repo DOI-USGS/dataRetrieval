@@ -4,7 +4,14 @@
 \alias{read_waterdata}
 \title{Generalized USGS Water Data API retrieval function}
 \usage{
-read_waterdata(service, CQL, ..., convertType = TRUE)
+read_waterdata(
+  service,
+  CQL,
+  ...,
+  convertType = getOption("dataRetrieval.convertType"),
+  limit = getOption("dataRetrieval.limit"),
+  attach_request = getOption("dataRetrieval.attach_request")
+)
 }
 \arguments{
 \item{service}{character, can be any existing collection.}
@@ -15,6 +22,16 @@ read_waterdata(service, CQL, ..., convertType = TRUE)
 
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates and qualifier to string vector.}
+
+\item{limit}{numeric, The optional limit parameter is used to control the subset of the
+selected features that should be returned in each page. The maximum allowable
+limit is 50,000. It may be beneficial to set this number lower if your internet
+connection is spotty. The default (\code{NA}) will set the limit to the maximum
+allowable limit for the service.}
+
+\item{attach_request}{logical, defaults to TRUE.
+If set to \code{TRUE}, the full request sent to the Water Data API is attached
+as an attribute to the data set.}
 }
 \description{
 Function that allows complex CQL queries.

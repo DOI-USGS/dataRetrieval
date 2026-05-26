@@ -284,6 +284,24 @@ test_that("read_waterdata_stats_por returns data", {
   expect_true(nrow(out) > 0)
 })
 
+test_that("normal_type arg works in read_waterdata_stats_por", {
+  skip_on_cran()
+  skip_if_offline()
+
+  out <- read_waterdata_stats_por(
+    monitoring_location_id = "USGS-01646500",
+    parameter_code = "00060",
+    computation_type = "median",
+    page_size = 5,
+    normal_type = "MOY"
+  )
+
+  expect_s3_class(out, "sf")
+  expect_true(nrow(out) > 0)
+  # time_of_year should have 12 months of data
+  expect_true(length(out$time_of_year) == 12)
+})
+
 test_that("read_waterdata_stats_daterange returns data", {
   skip_on_cran()
   skip_if_offline()
@@ -297,4 +315,15 @@ test_that("read_waterdata_stats_daterange returns data", {
 
   expect_s3_class(out, "sf")
   expect_true(nrow(out) > 0)
+
+  # setting interval_type arg returns fewer rows than unset
+  out1 <- read_waterdata_stats_daterange(
+    monitoring_location_id = "USGS-01646500",
+    parameter_code = "00060",
+    computation_type = "maximum",
+    interval_type = "CY",
+    page_size = 5
+  )
+
+  expect_true(nrow(out1) < nrow(out))
 })

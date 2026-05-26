@@ -66,7 +66,7 @@
 #' @param recordIdentifierUserSupplied Record identifier, user supplied identifier. This
 #' information would be needed from the data supplier.
 #' @param siteTypeName Site type name query parameter. See available
-#' options by running `check_param("sitetype")$typeName`.
+#' options by running `check_waterdata_sample_params("sitetype")$typeName`.
 #' @param usgsPCode USGS parameter code. See available options by running
 #' `check_waterdata_sample_params("characteristics")$parameterCode`.
 #' @param pointLocationLatitude Latitude for a point/radius query (decimal degrees). Must be used
@@ -129,14 +129,8 @@ construct_waterdata_sample_request <- function(
 
   baseURL <- httr2::request("https://api.waterdata.usgs.gov") |>
     httr2::req_url_path_append("samples-data") |>
-    httr2::req_url_query(mimeType = "text/csv")
-
-  token <- Sys.getenv("API_USGS_PAT")
-
-  if (token != "") {
-    baseURL <- baseURL |>
-      httr2::req_headers_redacted(`X-Api-Key` = token)
-  }
+    httr2::req_url_query(mimeType = "text/csv") |>
+    add_api_token()
 
   switch(
     dataType,
@@ -387,14 +381,8 @@ check_waterdata_sample_params <- function(
   match.arg(service, choices = service_options, several.ok = FALSE)
 
   check_group_req <- httr2::request("https://api.waterdata.usgs.gov") |>
-    httr2::req_url_path_append("samples-data")
-
-  token <- Sys.getenv("API_USGS_PAT")
-
-  if (token != "") {
-    check_group_req <- check_group_req |>
-      httr2::req_headers_redacted(`X-Api-Key` = token)
-  }
+    httr2::req_url_path_append("samples-data") |>
+    add_api_token()
 
   if (service != "reference-list") {
     check_group_req <- check_group_req |>
@@ -521,10 +509,13 @@ read_waterdata_samples <- function(
 #' This function creates the call and gets the data for discrete water quality samples summary data
 #' service described at <https://api.waterdata.usgs.gov/samples-data/docs>.
 #'
-#' @param monitoringLocationIdentifier A monitoring location identifier has two parts,
-#' separated by a dash (-): the agency code and the location number. Location identifiers should be separated with commas,
-#' for example: AZ014-320821110580701, CAX01-15304600, USGS-040851385. Location
-#' numbers without an agency prefix are assumed to have the prefix USGS.
+#' @param monitoringLocationIdentifier A single monitoring location identifier
+#' with two parts, separated by a dash (-): the agency code and the location
+#' number. Examples: USGS-040851385, AZ014-320821110580701, CAX01-15304600.
+#' The summary service accepts only one site at a time; supplying a vector of
+#' length > 1 raises an error. The agency prefix is required: bare location
+#' numbers (e.g. "040851385") are accepted by the service but return an empty
+#' result.
 #' @export
 #' @return data frame with summary of data available based on the monitoringLocationIdentifier
 #' @rdname summarize_waterdata_samples
@@ -544,14 +535,8 @@ summarize_waterdata_samples <- function(monitoringLocationIdentifier) {
   baseURL <- httr2::request("https://api.waterdata.usgs.gov") |>
     httr2::req_url_path_append("samples-data") |>
     httr2::req_url_path_append("summary", monitoringLocationIdentifier) |>
-    httr2::req_url_query(mimeType = "text/csv")
-
-  token <- Sys.getenv("API_USGS_PAT")
-
-  if (token != "") {
-    baseURL <- baseURL |>
-      httr2::req_headers_redacted(`X-Api-Key` = token)
-  }
+    httr2::req_url_query(mimeType = "text/csv") |>
+    add_api_token()
 
   df <- importWQP(baseURL)
 
@@ -567,66 +552,20 @@ summarize_waterdata_samples <- function(monitoringLocationIdentifier) {
 }
 
 
-#' @rdname read_waterdata_samples
+#' @title Deprecated: Use \code{read_waterdata_samples} instead
+#' @description This function has been renamed to \code{\link{read_waterdata_samples}}.
+#' @param ... Arguments passed to \code{\link{read_waterdata_samples}}.
+#' @return data frame returned from web service call.
 #' @export
-read_USGS_samples <- function(
-  monitoringLocationIdentifier = NA,
-  siteTypeCode = NA,
-  boundingBox = NA,
-  hydrologicUnit = NA,
-  activityMediaName = NA,
-  characteristicGroup = NA,
-  characteristic = NA,
-  characteristicUserSupplied = NA,
-  activityStartDateLower = NA,
-  activityStartDateUpper = NA,
-  countryFips = NA,
-  stateFips = NA,
-  countyFips = NA,
-  projectIdentifier = NA,
-  recordIdentifierUserSupplied = NA,
-  siteTypeName = NA,
-  usgsPCode = NA,
-  pointLocationLatitude = NA,
-  pointLocationLongitude = NA,
-  pointLocationWithinMiles = NA,
-  dataType = "results",
-  dataProfile = NA,
-  tz = "UTC",
-  convertType = TRUE
-) {
+#' @keywords internal
+read_USGS_samples <- function(...) {
   .Deprecated(
     new = "read_waterdata_samples",
     package = "dataRetrieval",
     msg = "Function has been renamed. Please begin to migrate to read_waterdata_samples"
   )
 
-  read_waterdata_samples(
-    monitoringLocationIdentifier = monitoringLocationIdentifier,
-    siteTypeCode = siteTypeCode,
-    boundingBox = boundingBox,
-    hydrologicUnit = hydrologicUnit,
-    activityMediaName = activityMediaName,
-    characteristicGroup = characteristicGroup,
-    characteristic = characteristic,
-    characteristicUserSupplied = characteristicUserSupplied,
-    activityStartDateLower = activityStartDateLower,
-    activityStartDateUpper = activityStartDateUpper,
-    countryFips = countryFips,
-    stateFips = stateFips,
-    countyFips = countyFips,
-    projectIdentifier = projectIdentifier,
-    recordIdentifierUserSupplied = recordIdentifierUserSupplied,
-    siteTypeName = siteTypeName,
-    usgsPCode = usgsPCode,
-    pointLocationLatitude = pointLocationLatitude,
-    pointLocationLongitude = pointLocationLongitude,
-    pointLocationWithinMiles = pointLocationWithinMiles,
-    dataType = dataType,
-    dataProfile = dataProfile,
-    tz = tz,
-    convertType = convertType
-  )
+  read_waterdata_samples(...)
 }
 
 

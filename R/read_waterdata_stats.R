@@ -39,6 +39,13 @@
 #'   supplied then statistics will be supplied for the entire period of record.
 #' @param end_date End Date Query Parameter. The logic is inclusive i.e., it will
 #'   also return records that match the date.
+#' @param normal_type Normal Type Query Parameter. If unspecified, all matching data
+#'   will be returned. Otherwise, it will filter the results to one of the following
+#'   normals: day-of-year, month-of-year. Available values: "DOY", "MOY".
+#' @param interval_type Interval Type Query Parameter. If unspecified, all matching
+#'   data will be returned. Otherwise, it will filter the results to one or more of
+#'   the following intervals: month, calendar year, water year.
+#'   Available values: "M", "CY", "WY".
 #' @param monitoring_location_id Each monitoring location has been assigned a
 #'   unique station number that places them in downstream order. Accepts
 #'   multiple values in a character vector.
@@ -69,6 +76,12 @@
 #'   monitoring_location_id = c("USGS-02319394", "USGS-02171500")
 #' )
 #'
+#' # Request only month-of-year statistics using normal_type arg
+#' x1 <- read_waterdata_stats_por(
+#'   monitoring_location_id = c("USGS-02319394", "USGS-02171500"),
+#'   normal_type = "MOY"
+#' )
+#'
 #' # Request temperature percentiles for specific month-day range
 #' # Returns:
 #' # - Day-of-year temperature percentiles for each day between June 1 through June 15.
@@ -86,6 +99,12 @@
 #' # All calendar month, calendar year, and water year statistics for two sites
 #' x3 <- read_waterdata_stats_daterange(
 #'   monitoring_location_id = c("USGS-02319394", "USGS-02171500")
+#' )
+#'
+#' # Request only calendar year statistics
+#' x3 <- read_waterdata_stats_daterange(
+#'   monitoring_location_id = c("USGS-02319394", "USGS-02171500"),
+#'   interval_type = "CY"
 #' )
 #'
 #' # Request specific gage height and discharge summaries for a limited date range
@@ -112,6 +131,7 @@ read_waterdata_stats_por <- function(
   county_code = NA_character_,
   start_date = NA_character_,
   end_date = NA_character_,
+  normal_type = NA_character_,
   monitoring_location_id = NA_character_,
   parent_time_series_id = NA_character_,
   site_type_code = NA_character_,
@@ -134,6 +154,7 @@ read_waterdata_stats_daterange <- function(
   county_code = NA_character_,
   start_date = NA_character_,
   end_date = NA_character_,
+  interval_type = NA_character_,
   monitoring_location_id = NA_character_,
   parent_time_series_id = NA_character_,
   site_type_code = NA_character_,
@@ -163,12 +184,7 @@ construct_statistics_request <- function(service = "Normals") {
     httr2::req_url_path_append(getOption("dataRetrieval.api_version_stat")) |>
     httr2::req_url_path_append(paste0("observation", service))
 
-  token <- Sys.getenv("API_USGS_PAT")
-
-  if (token != "") {
-    base_request <- base_request |>
-      httr2::req_headers_redacted(`X-Api-Key` = token)
-  }
+  base_request <- add_api_token(base_request)
 
   return(base_request)
 }
@@ -208,8 +224,12 @@ get_statistics_data <- function(args, service) {
 
     # 2. One row per observation, keyed to ts_id
     obs <- data.table::rbindlist(ts_meta$values, fill = TRUE, idcol = "ts_id")
-
-    obs <- cleanup_cols_stats(obs)
+    # Some stats responses contain 0 values, which need to be treated differently
+    if (nrow(obs) > 0) {
+      obs <- cleanup_cols_stats(obs)
+    } else {
+      obs <- data.table::data.table(ts_id = unique(ts_meta$ts_id))
+    }
 
     # 3. Drop nested list column
     ts_meta[, values := NULL]
@@ -225,7 +245,11 @@ get_statistics_data <- function(args, service) {
     combined_list[[i]] <- out
   }
 
-  combined <- data.table::rbindlist(combined_list, use.names = TRUE)
+  combined <- data.table::rbindlist(
+    combined_list,
+    use.names = TRUE,
+    fill = TRUE # needed if any response has 0 values
+  )
   combined <- combined[return_list, on = "rid"]
   combined[, rid := NULL]
 
@@ -338,11 +362,12 @@ deal_with_empty_stats <- function(
     "parameter_code",
     "unit_of_measure",
     "parent_time_series_id",
+    "parent_statistics_id",
+    "parent_statistics_name",
     "value",
     "percentile",
     "start_date",
     "end_date",
-    "interval_type",
     "sample_count",
     "approval_status",
     "computation_id",
@@ -370,7 +395,11 @@ deal_with_empty_stats <- function(
   }
 
   # ensure geometry column exists if not skipped
-  return_list <- sf::st_as_sf(return_list, geometry = sf::st_sfc())
+  return_list <- sf::st_as_sf(
+    return_list,
+    geometry = sf::st_sfc(),
+    crs = sf::st_crs("EPSG:4326")
+  )
 
   return(return_list)
 }

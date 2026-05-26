@@ -2,11 +2,16 @@ pkg.env <- new.env()
 
 .onLoad <- function(libname, pkgname) {
   suppressMessages(setAccess("public"))
-  pkg.env$nldi_base <- "https://api.water.usgs.gov/nldi/linked-data/"
   pkg.env$local_sf <- requireNamespace("sf", quietly = TRUE)
+  options("dataRetrieval.nldi_base" = "https://api.water.usgs.gov/nldi/linked-data/")
   options("dataRetrieval.api_version" = "v0")
   options("dataRetrieval.api_version_stat" = "v0")
   options("dataRetrieval.attach_request" = TRUE)
+  options("dataRetrieval.convertType" = TRUE)
+  options("dataRetrieval.no_paging" = FALSE)
+  options("dataRetrieval.site_chunk_size_meta" = 250)
+  options("dataRetrieval.site_chunk_size_data" = 10)
+  options("dataRetrieval.limit" = 50000)
 
   services <- c(
     "server",
@@ -19,7 +24,8 @@ pkg.env <- new.env()
     "continuous",
     "field-measurements-metadata",
     "combined-metadata",
-    "channel-measurements"
+    "channel-measurements",
+    "peaks"
   )
   collections <- c(
     "parameter-codes",
@@ -32,7 +38,12 @@ pkg.env <- new.env()
     "coordinate-method-codes",
     "medium-codes",
     "counties",
+    "countries",
     "hydrologic-unit-codes",
+    "methods",
+    "method-categories",
+    "method-citations",
+    "citations",
     "states",
     "national-aquifer-codes",
     "reliability-codes",
@@ -52,7 +63,12 @@ pkg.env <- new.env()
     "coordinate_method_code",
     "medium_code",
     "county",
+    "country",
     "hydrologic_unit_code",
+    "methods",
+    "method_categories",
+    "method_citations",
+    "citations",
     "state",
     "national_aquifer_code",
     "reliability_code",
@@ -88,20 +104,6 @@ https://doi-usgs.github.io/dataRetrieval/articles/Status.html"
 
 wqp_message_beta <- function() {
   message("WQX3 services are in-development, use with caution.")
-}
-
-only_legacy <- function(service) {
-  legacy <- service %in%
-    c(
-      "Organization",
-      "ActivityMetric",
-      "SiteSummary",
-      "Project",
-      "ProjectMonitoringLocationWeighting",
-      "ResultDetectionQuantitationLimit",
-      "BiologicalMetric"
-    )
-  return(legacy)
 }
 
 is_legacy <- function(service) {

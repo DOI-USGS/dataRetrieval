@@ -60,18 +60,20 @@ df <- data.frame(
     "`read_waterdata_field_measurements`, `read_waterdata_channel`",
     "`read_waterdata`",
     "`read_waterdata_continuous`", 
-    "", #rating
+    "`read_waterdata_rating`", #rating
     "`read_waterdata_stats_por`, `read_waterdata_stats_daterange`",
-    rep("", 2),
+    "`read_waterdata_peaks`",
+    "",
     "`read_waterdata_ts_meta`, `read_waterdata_field_meta`, `read_waterdata_combined_meta`"
   ),
   "Available on (branch)" = c(rep("main (CRAN)", 6), 
                               "main (CRAN)",
                               "main (CRAN)",
                               "main (CRAN)",
-                              "",
+                              "develop",
                               "main (CRAN)", 
-                              rep("", 2), 
+                              "develop",
+                              "",
                               "main (CRAN)")
 
 )
