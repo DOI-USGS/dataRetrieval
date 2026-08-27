@@ -464,7 +464,8 @@ readNWISuse <- function(
 ) {
   .Deprecated(
     package = "dataRetrieval",
-    msg = "NWIS servers for water use have been decommissioned. New functions are being developed."
+    new = "read_wateruse",
+    msg = "NWIS servers for water use have been decommissioned."
   )
   return(NULL)
 }

@@ -135,6 +135,10 @@ reference:
     contents:
       - findNLDI
       - get_nldi_sources
+  - title: National Water Availability Assessment Data
+    desc: Functions to get Water Use data
+    contents:
+      - read_wateruse
   - title: Import data
     desc: Functions to import different data formats
     contents:
